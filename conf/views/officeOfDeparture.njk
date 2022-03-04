@@ -1,0 +1,78 @@
+{% extends "includes/layout.njk" %}
+
+{% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
+{% from "macros/selectWithParagraph.njk"           import selectWithParagraph as selectWithParagraphMacro %}
+{% from "govuk/components/button/macro.njk"        import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "macros/title.njk"                         import title %}
+
+{% block pageTitle %}
+  {{ title(messages("officeOfDeparture.title"), form.errors) }}
+{% endblock %}
+
+{% block pageHead %}
+  <!--[if gt IE 8]><!-->
+  <link href="{{ routes.controllers.Assets.versioned("stylesheets/accessible-autocomplete.min.css").url }}" media="screen" rel="stylesheet" type="text/css" />
+  <!--<![endif]-->
+{% endblock %}
+
+{% block mainContent %}
+
+  {{ govukBackLink({
+    text: messages("site.back")
+  }) }}
+
+  <div class="govuk-main-wrapper">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        {% if form.errors.length > 0 %}
+          {{ govukErrorSummary({
+            "titleText": messages("error.summary.title"),
+            "errorList": form.errors
+          }) }}
+        {% endif %}
+
+        <span class="govuk-caption-xl">{{messages('routeDetails.preHeading')}}</span>
+
+        <form action="{{ routes.controllers.OfficeOfDepartureController.onSubmit(lrn, mode).url }}" method="post">
+
+          {{ csrf() | safe }}
+
+          {{ selectWithParagraphMacro({
+              label: {
+                text: messages('officeOfDeparture.heading'),
+                isPageHeading: true,
+                classes: "govuk-label--xl govuk-!-padding-bottom-5"
+              },
+              paragraph: {
+                text:  messages('officeOfDeparture.label'),
+                classes: "hint-as-label"
+              },
+              hint: {
+                text:  messages('officeOfDeparture.hintText')
+              },
+              classes: "govuk-input--width-20
+              autocomplete",
+              id: "value",
+              name: "value",
+              value: form.value.value,
+              errorMessage: form.value.error,
+              items: customsOffices
+          }) }}
+
+          {{ govukButton({
+            text: messages("site.continue"),
+            attributes: {id:"submit"}
+          }) }}
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="{{ routes.controllers.Assets.versioned("javascripts/accessible-autocomplete.js").url }}"></script>
+{% endblock %}

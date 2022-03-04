@@ -1,0 +1,49 @@
+# microservice specific routes
+
+GET        /assets/*file                                  controllers.Assets.versioned(path="/public", file: Asset)
+
+GET        /this-service-has-been-reset                   controllers.SessionExpiredController.onPageLoad()
+
+GET        /keep-alive                                    controllers.KeepAliveController.keepAlive(lrn: Option[LocalReferenceNumber] = None)
+GET        /:lrn/keep-alive                               controllers.KeepAliveController.keepAlive(lrn: Option[LocalReferenceNumber])
+
+GET        /unauthorised                                  controllers.UnauthorisedController.onPageLoad()
+
+GET        /local-reference-number                        controllers.LocalReferenceNumberController.onPageLoad()
+POST       /local-reference-number                        controllers.LocalReferenceNumberController.onSubmit()
+
+GET        /:lrn/add-security-details                     controllers.AddSecurityDetailsController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/add-security-details                     controllers.AddSecurityDetailsController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/change-add-security-details              controllers.AddSecurityDetailsController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/change-add-security-details              controllers.AddSecurityDetailsController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/task-list                                controllers.DeclarationSummaryController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/task-list                                controllers.DeclarationSummaryController.onSubmit(lrn: LocalReferenceNumber)
+
+GET        /:lrn/office-of-departure                      controllers.OfficeOfDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/office-of-departure                      controllers.OfficeOfDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/change-office-of-departure               controllers.OfficeOfDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/change-office-of-departure               controllers.OfficeOfDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/procedure-type                           controllers.ProcedureTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/procedure-type                           controllers.ProcedureTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/change-procedure-type                    controllers.ProcedureTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/change-procedure-type                    controllers.ProcedureTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/declaration-type                         controllers.DeclarationTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/declaration-type                         controllers.DeclarationTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/change-declaration-type                  controllers.DeclarationTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/change-declaration-type                  controllers.DeclarationTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/submission-confirmation                  controllers.SubmissionConfirmationController.onPageLoad(lrn: LocalReferenceNumber)
+
+GET        /:departureId/guarantee-rejection              controllers.GuaranteeNotValidController.onPageLoad(departureId: DepartureId)
+
+GET        /:departureId/departure-declaration-fail       controllers.DeclarationRejectionController.onPageLoad(departureId: DepartureId)
+
+GET        /:departureId/cancellation-decision-update     controllers.CancellationDecisionUpdateController.onPageLoad(departureId: DepartureId)
+
+GET        /:lrn/goods-summary/loading-place              controllers.LoadingPlaceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/goods-summary/loading-place              controllers.LoadingPlaceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/goods-summary/change-loading-place       controllers.LoadingPlaceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/goods-summary/change-loading-place       controllers.LoadingPlaceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

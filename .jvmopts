@@ -1,0 +1,4 @@
+-Xmx2G
+-XX:MetaspaceSize=512m
+-XX:MaxMetaspaceSize=1G
+-Xss6m
