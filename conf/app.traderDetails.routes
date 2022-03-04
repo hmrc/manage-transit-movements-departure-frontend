@@ -1,0 +1,76 @@
+GET        /:lrn/trader-details/is-principal-eori-known                        controllers.traderDetails.IsPrincipalEoriKnownController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/is-principal-eori-known                        controllers.traderDetails.IsPrincipalEoriKnownController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-is-principal-eori-known                  controllers.traderDetails.IsPrincipalEoriKnownController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-is-principal-eori-known                  controllers.traderDetails.IsPrincipalEoriKnownController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/principal-name                        controllers.traderDetails.PrincipalNameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/principal-name                        controllers.traderDetails.PrincipalNameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-principal-name                 controllers.traderDetails.PrincipalNameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-principal-name                 controllers.traderDetails.PrincipalNameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/what-is-principal-eori                        controllers.traderDetails.WhatIsPrincipalEoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/what-is-principal-eori                        controllers.traderDetails.WhatIsPrincipalEoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-what-is-principal-eori                 controllers.traderDetails.WhatIsPrincipalEoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-what-is-principal-eori                 controllers.traderDetails.WhatIsPrincipalEoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/principal-address                        controllers.traderDetails.PrincipalAddressController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/principal-address                        controllers.traderDetails.PrincipalAddressController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-principal-address                  controllers.traderDetails.PrincipalAddressController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-principal-address                 controllers.traderDetails.PrincipalAddressController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/consignor-same-for-all-items                        controllers.traderDetails.AddConsignorController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/consignor-same-for-all-items                        controllers.traderDetails.AddConsignorController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-consignor-same-for-all-items                  controllers.traderDetails.AddConsignorController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-consignor-same-for-all-items                  controllers.traderDetails.AddConsignorController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/is-consignor-eori-known                        controllers.traderDetails.IsConsignorEoriKnownController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/is-consignor-eori-known                         controllers.traderDetails.IsConsignorEoriKnownController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-is-consignor-eori-known                   controllers.traderDetails.IsConsignorEoriKnownController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-is-consignor-eori-known                   controllers.traderDetails.IsConsignorEoriKnownController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/consignor-eori                          controllers.traderDetails.ConsignorEoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/consignor-eori                         controllers.traderDetails.ConsignorEoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-consignor-eori                  controllers.traderDetails.ConsignorEoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-consignor-eori                  controllers.traderDetails.ConsignorEoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/is-consignee-eori-known                        controllers.traderDetails.IsConsigneeEoriKnownController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/is-consignee-eori-known                           controllers.traderDetails.IsConsigneeEoriKnownController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-is-consignee-eori-known                     controllers.traderDetails.IsConsigneeEoriKnownController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-is-consignee-eori-known                     controllers.traderDetails.IsConsigneeEoriKnownController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/consignor-name                        controllers.traderDetails.ConsignorNameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/consignor-name                        controllers.traderDetails.ConsignorNameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-consignor-name                  controllers.traderDetails.ConsignorNameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-consignor-name                  controllers.traderDetails.ConsignorNameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/consignee-same-for-all-items                        controllers.traderDetails.AddConsigneeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/consignee-same-for-all-items                        controllers.traderDetails.AddConsigneeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-consignee-same-for-all-items                  controllers.traderDetails.AddConsigneeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-consignee-same-for-all-items                  controllers.traderDetails.AddConsigneeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/what-is-consignee-eori                        controllers.traderDetails.WhatIsConsigneeEoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/what-is-consignee-eori                        controllers.traderDetails.WhatIsConsigneeEoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-what-is-consignee-eori                  controllers.traderDetails.WhatIsConsigneeEoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-what-is-consignee-eori                  controllers.traderDetails.WhatIsConsigneeEoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/consignee-name                        controllers.traderDetails.ConsigneeNameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/consignee-name                        controllers.traderDetails.ConsigneeNameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-consignee-name                  controllers.traderDetails.ConsigneeNameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-consignee-name                  controllers.traderDetails.ConsigneeNameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/consignor-address                        controllers.traderDetails.ConsignorAddressController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/consignor-address                        controllers.traderDetails.ConsignorAddressController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-consignor-address                  controllers.traderDetails.ConsignorAddressController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-consignor-address                  controllers.traderDetails.ConsignorAddressController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/consignee-address                        controllers.traderDetails.ConsigneeAddressController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/consignee-address                        controllers.traderDetails.ConsigneeAddressController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-consignee-address                  controllers.traderDetails.ConsigneeAddressController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-consignee-address                  controllers.traderDetails.ConsigneeAddressController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/check-answers                       controllers.traderDetails.TraderDetailsCheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
+
+GET        /:lrn/trader-details/principal-tir-holder-id                        controllers.traderDetails.PrincipalTirHolderIdController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/principal-tir-holder-id                        controllers.traderDetails.PrincipalTirHolderIdController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-principal-tir-holder-id                 controllers.traderDetails.PrincipalTirHolderIdController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-principal-tir-holder-id                 controllers.traderDetails.PrincipalTirHolderIdController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

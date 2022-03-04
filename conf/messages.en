@@ -1,0 +1,1339 @@
+site.day.capitalized = Day
+site.month.capitalized = Month
+site.year.capitalized = Year
+site.hour.capitalized = Hour
+site.minute.capitalized = Minute
+site.minute.amOrPm = am or pm
+
+site.edit = Change
+site.back = Back
+site.delete = Remove
+site.change = Change
+site.delete.hidden = Remove {0}
+site.edit.hidden = Change {0}
+site.no = No
+site.yes = Yes
+site.accepted = Accepted
+site.rejected = Rejected
+site.taskList.add = Add
+site.taskList.edit = Edit
+site.continue = Save and continue
+site.notStarted = Not started
+site.inProgress = In Progress
+site.completed = Completed
+site.cannotStartYet = Cannot start yet
+site.service_name =  Manage your transit movements
+site.textarea.char_limit = (Limit is {0} characters)
+site.title.suffix = -  Manage your transit movements - GOV.UK
+site.youMust = You must
+
+error.title.prefix = Error:
+error.summary.title = There is a problem
+
+footer.links.support_links = Support links
+footer.links.help = Help using GOV.UK
+footer.links.cookies = Cookies
+footer.links.accessibility = Accessibility statement
+footer.links.privacy = Privacy policy
+footer.links.terms = Terms and conditions
+
+language.cymraeg = Cymraeg
+language.change.cymraeg = Newid yr iaith i’r Gymraeg
+language.english = English
+language.change.english = Change the language to English
+language.switcher = Language switcher
+
+phaseBanner.1 = This is a new service – your
+phaseBanner.2 = feedback
+phaseBanner.3 = will help us to improve it.
+
+pageNotFound.title = Page not found
+pageNotFound.heading = Page not found
+pageNotFound.paragraph1 = If you typed the web address, check it is correct.
+pageNotFound.paragraph2 = If you pasted the web address, check you copied the entire address.
+pageNotFound.paragraph3Start = If the web address is correct or you selected a link or button,
+pageNotFound.contactLink=contact the New Computerised Transit System(NCTS) helpdesk if you need to speak to someone about your transit movement (opens in a new tab)
+
+checkYourAnswers.title = Check your answers
+checkYourAnswers.heading = Check your answers
+
+index.title = Manage your transit movements - GOV.UK
+index.heading =  Manage your transit movements
+index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
+
+movementDetails.preHeading = General information
+traderDetails.preHeading = Trader’s details
+routeDetails.preHeading = Route details
+transportDetails.preHeading = Transport details
+goodsSummary.preHeading = Goods summary
+guaranteeDetails.preHeading = Guarantee details
+items.preHeading = Items
+safetyAndSecurity.preHeading = Safety and security
+
+package.preHeading = Packages
+specialMention.preHeading = Special mentions
+document.preHeading = Produced documents and work certificates
+reference.preHeading = Previous administrative references
+
+routeDetailsCheckYourAnswers.heading = Check your answers
+routeDetailsCheckYourAnswers.title = Check your answers
+
+traderDetailsCheckYourAnswers.heading = Check your answers
+traderDetailsCheckYourAnswers.title = Check your answers
+
+postcode = Postcode
+postcodeExample = Like, AB1 1AB.
+
+session_expired.title = For your security, we signed you out
+session_expired.heading = For your security, we signed you out
+session_expired.guidance = We did not save your answers.
+session_expired.button = Sign in
+
+unauthorisedWithGroupAccess.title = You cannot use this service authorisation
+unauthorisedWithGroupAccess.heading = You cannot use this service
+unauthorisedWithGroupAccess.p = If you already have access, you must contact your group administrator to update your access rights.
+
+unauthorised.title = You can’t access this service with this account
+unauthorised.heading = You can’t access this service with this account
+
+technicalDifficulties.title = Sorry, there is a problem with the service
+technicalDifficulties.heading = Sorry, there is a problem with the service
+technicalDifficulties.tryAgain = Try again later.
+technicalDifficulties.savedAnswers = We saved your answers. They will be available for up to 28 days.
+technicalDifficulties.contact = You can
+technicalDifficulties.contact.link = contact the New Computerised Transit System helpdesk if you need to speak to someone about your transit movement(opens in a new tab).
+
+concurrent.officeOfTransit = office of transit
+concurrent.remove.error.title = Sorry, there is a problem with this {0}
+concurrent.remove.error.heading = Sorry, there is a problem with this {0}
+concurrent.remove.error.paragraph = You will need to answer some questions again.
+concurrent.remove.error.noOfficeOfTransit.link.text = Go back to did any events happen on the journey?
+concurrent.remove.error.multipleOfficeOfTransit.link.text = Go back to you have added office of transit
+
+localReferenceNumber.title = What is the local reference number (LRN)?
+localReferenceNumber.heading = What is the local reference number (LRN)?
+localReferenceNumber.error.required = Enter the local reference number
+localReferenceNumber.error.length = Local reference number must be 22 characters or less
+localReferenceNumber.error.invalidCharacters = Local reference number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
+
+addSecurityDetails.title = Do you need to add safety and security details?
+addSecurityDetails.heading = Do you need to add safety and security details?
+addSecurityDetails.paragraph = These details are usually sent as an entry summary declaration. Some countries will allow you to send these details as part of a departures declaration. You must check the countries the goods will be travelling through.
+addSecurityDetails.error.required = Select yes if you need to add safety and security details
+
+declarationSummary.title = Declaration summary
+declarationSummary.heading = Declaration summary
+declarationSummary.departureDetails = Departure details
+declarationSummary.p = You can save your declaration and come back later. You have 28 days from the first time you save to complete this declaration or your information will be deleted.
+declarationSummary.section.movementDetails = {0} general information
+declarationSummary.section.routes = {0} route
+declarationSummary.section.transport = {0} transport
+declarationSummary.section.transport.cannotStart = Transport
+declarationSummary.section.tradersDetails = {0} trader’s details
+declarationSummary.section.goodsSummary = {0} goods summary
+declarationSummary.section.goodsSummary.cannotStart = Goods summary
+declarationSummary.section.guarantee = {0} guarantee
+declarationSummary.section.guarantee.cannotStart = Guarantee
+declarationSummary.section.safetyAndSecurity = {0} safety and security details
+declarationSummary.section.safetyAndSecurity.cannotStart = Safety and security details
+declarationSummary.section.addItems.cannotStart = Items
+declarationSummary.section.addItems = {0} items
+declarationSummary.backToTransitMovements = Back to transit movements
+
+declarationSummary.submissionSubheader = Now send your departure declaration
+declarationSummary.submissionHonestyPledge = By sending this you are confirming that the details you are providing are correct, to the best of your knowledge.
+declarationSummary.confirmAndSend = Confirm and send
+
+declarationType.title = What declaration do you want to create?
+declarationType.heading = What declaration do you want to create?
+declarationType.option1 = T1 (goods originating outside the EU, such as GB)
+declarationType.option2 = T2 (goods originating inside the EU, such as NI)
+declarationType.option3 = T2F (goods moving to, from or between the EU special territories)
+declarationType.option4 = TIR (goods moving under the cover of TIR Carnet)
+declarationType.paragraph = For mixed consignments, you will need to create separate T1 and T2 declarations.
+declarationType.checkYourAnswersLabel = Declaration type
+declarationType.error.required = Select the declaration you want to create
+
+containersUsed.title = Have you used any containers?
+containersUsed.heading = Have you used any containers?
+containersUsed.checkYourAnswersLabel = Containers used
+containersUsed.error.required = Select yes if you have used any containers
+
+procedureType.title = What type of procedure are you using?
+procedureType.heading = What type of procedure are you using?
+procedureType.normal = Normal (customs-approved location)
+procedureType.simplified = Simplified (authorised consignor’s location)
+procedureType.error.required = Select which type of procedure you are using
+
+declarationPlace.title = What is the postcode for the place of declaration?
+declarationPlace.heading = What is the postcode for the place of declaration?
+declarationPlace.checkYourAnswersLabel = Place of declaration
+declarationPlace.paragraph = This is where you are making the declaration.
+declarationPlace.error.required = Enter the postcode for the place of declaration
+declarationPlace.error.length = The postcode for the place of declaration must be 9 characters or less
+declarationPlace.error.invalid = The postcode for the place of declaration must only include letters a to z without accents, numbers 0 to 9 or blank spaces
+
+declarationForSomeoneElse.title = Are you acting as a representative?
+declarationForSomeoneElse.heading = Are you acting as a representative?
+declarationForSomeoneElse.checkYourAnswersLabel = Are you acting as a representative?
+declarationForSomeoneElse.paragraph = You are a representative if you are moving the goods for someone else or you are completing the declaration on behalf of a trader.
+declarationForSomeoneElse.error.required = Select yes if you are acting as a representative
+
+representativeName.title = What is your company’s name?
+representativeName.heading = What is your company’s name?
+representativeName.checkYourAnswersLabel = Representative name
+representativeName.error.required = Enter your company’s name
+representativeName.error.length = Your company’s name must be 35 characters or less
+representativeName.error.invalid = Your company’s name must only include letters a to z without accents or numbers 0 to 9
+
+representativeCapacity.title = What is your capacity?
+representativeCapacity.heading = What is your capacity?
+representativeCapacity.direct = Direct (principal solely liable)
+representativeCapacity.indirect = Indirect (principal and agent jointly liable)
+representativeCapacity.checkYourAnswersLabel = Representative capacity
+representativeCapacity.error.required = Select your capacity
+
+movementDetailsCheckYourAnswers.title = Check your answers
+movementDetailsCheckYourAnswers.heading = Check your answers
+
+isPrincipalEoriKnown.title =  Do you know the principal’s EORI number?
+isPrincipalEoriKnown.heading =  Do you know the principal’s EORI number?
+isPrincipalEoriKnown.checkYourAnswersLabel =  Know principal’s EORI number?
+isPrincipalEoriKnown.error.required = Select yes if you know the principal’s EORI number
+
+principalName.title =  What is the principal’s name?
+principalName.heading =  What is the principal’s name?
+principal.cya.section.heading = Principal
+principalName.checkYourAnswersLabel =  Principal’s name
+principalName.error.required =  Enter the principal’s name
+principalName.error.length = PrincipalName must be 35 characters or less
+principalName.error.invalidCharacters =  The principal’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks, underscores, and greater than (>) and less than (<) signs
+
+whatIsPrincipalEori.title = What is the principal’s EORI number?
+whatIsPrincipalEori.heading = What is the principal’s EORI number?
+whatIsPrincipalEori.checkYourAnswersLabel = Principal’s EORI number
+whatIsPrincipalEori.error.required = Enter the principal’s EORI number
+whatIsPrincipalEori.error.length = The principal’s EORI number must be 17 characters or less
+whatIsPrincipalEori.error.invalidCharacters = The principal’s EORI number must only include letters a to z without accents and numbers 0 to 9
+whatIsPrincipalEori.error.invalidFormat = Enter the principal’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+whatIsPrincipalEori.error.prefix = Principal’s EORI number must start with {0}
+whatIsPrincipalEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
+
+principalAddress.title = What is the principal’s address?
+principalAddress.heading = What is {0}’s address?
+principalAddress.checkYourAnswersLabel =  Principal’s address
+
+addConsignor.title = Is there a consignor for all items?
+addConsignor.heading = Is there a consignor for all items?
+addConsignor.checkYourAnswersLabel = Consignor for all the items?
+addConsignor.error.required = Select yes if you need to add a consignor for all items
+
+isConsignorEoriKnown.title = Do you know the consignor’s EORI number?
+isConsignorEoriKnown.heading = Do you know the consignor’s EORI number?
+isConsignorEoriKnown.checkYourAnswersLabel = Know consignor’s EORI number?
+isConsignorEoriKnown.error.required = Select yes if you know the consignor’s EORI number
+
+consignorName.title = What is the consignor’s name?
+consignorName.heading = What is the consignor’s name?
+consignor.cya.section.heading = Consignor
+consignorName.checkYourAnswersLabel = Consignor’s name
+consignorName.error.required = Enter the consignor’s name
+consignorName.error.length = Consignor’s name must be 35 characters or less
+consignorName.error.invalid = Consignor’s name must only include letters a to z without accents and numbers 0 to 9 or blank spaces
+
+consignorEori.title = What is the consignor’s EORI number?
+consignorEori.heading = What is the consignor’s EORI number?
+consignorEori.checkYourAnswersLabel = Consignor’s EORI number
+consignorEori.error.required = Enter the consignor’s EORI number
+consignorEori.error.length = Consignor’s Eori number must be 17 characters or less
+consignorEori.error.invalidCharacters = The consignor’s EORI number must only include letters a to z without accents and numbers 0 to 9
+consignorEori.error.invalidFormat = Enter the consignor’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+consignorEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
+
+isConsigneeEoriKnown.title = Do you know the consignee’s EORI number?
+isConsigneeEoriKnown.heading = Do you know the consignee’s EORI number?
+isConsigneeEoriKnown.checkYourAnswersLabel = Know consignee’s EORI number?
+isConsigneeEoriKnown.error.required = Select yes if you know the consignee’s EORI number
+
+addConsignee.title = Is there a consignee for all items?
+addConsignee.heading = Is there a consignee for all items?
+addConsignee.checkYourAnswersLabel = Consignee for all the items?
+addConsignee.error.required = Select yes if you need to add a consignee for all items
+
+consigneeName.title = What is the consignee’s name?
+consigneeName.heading = What is the consignee’s name?
+consignee.cya.section.heading = Consignee
+consigneeName.checkYourAnswersLabel = Consignee’s name
+consigneeName.error.required = Enter the consignee’s name
+consigneeName.error.length = The consignee’s name must be 35 characters or less
+consigneeName.error.invalid = The consignee’s name must only include letters a to z without accents and numbers 0 to 9 or blank spaces
+
+whatIsConsigneeEori.title = What is the consignee’s EORI number?
+whatIsConsigneeEori.heading = What is the consignee’s EORI number?
+whatIsConsigneeEori.checkYourAnswersLabel = What is the consignee’s EORI number?
+whatIsConsigneeEori.error.required = Enter the consignee’s EORI number
+whatIsConsigneeEori.error.length = The consignee’s EORI number must be 17 characters or less
+whatIsConsigneeEori.error.invalidCharacters = The consignee’s EORI number must only include letters a to z without accents and numbers 0 to 9
+whatIsConsigneeEori.error.invalidFormat = Enter the consignee’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+whatIsConsigneeEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
+
+consignorAddress.title = What is the consignor’s address?
+consignorAddress.heading = What is {0}’s address?
+consignorAddress.checkYourAnswersLabel = Consignor’s address
+
+commonAddress.title = What is the consignor’s address?
+commonAddress.heading = What is {0}’s address?
+commonAddress.AddressLine1 = Address line 1
+commonAddress.AddressLine2 = Address line 2
+commonAddress.postalCode = Postal code
+commonAddress.AddressLine4 = Country
+commonAddress.checkYourAnswersLabel = Consignor’s address
+commonAddress.error.AddressLine1.required = Enter address line 1 for {0}’s address
+commonAddress.error.AddressLine2.required = Enter address line 2 for {0}’s address
+commonAddress.error.postalCode.required = Enter the postal code for {0}’s address
+commonAddress.error.country.required = Enter the country for {0}’s address
+commonAddress.error.AddressLine1.length = The address line 1 for {0}’s address must be 35 characters or less
+commonAddress.error.AddressLine2.length = The address line 2 for {0}’s address must be 35 characters or less
+commonAddress.error.postalCode.length = The postal code for {0}’s address must be 9 characters or less
+commonAddress.error.AddressLine1.invalidCharacters= The address line 1 for {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+commonAddress.error.AddressLine2.invalidCharacters= The address line 2 for {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+commonAddress.error.postalCode.invalidCharacters= The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
+
+countryOfDispatch.title = What is the country of dispatch?
+countryOfDispatch.heading = What is the country of dispatch?
+countryOfDispatch.checkYourAnswersLabel = Country of dispatch
+countryOfDispatch.label = This is the country where the goods originated. This may not be where the transit movement started.
+countryOfDispatch.error.required = Enter the country of dispatch
+
+officeOfDeparture.title = Where is the office of departure?
+officeOfDeparture.heading = Where is the office of departure?
+officeOfDeparture.error.required = Select the office of departure
+officeOfDeparture.hintText = Give the office location or code. Like, Dover or GB000060.
+officeOfDeparture.label = This is the Customs office where the transit movement starts.
+
+destinationCountry.title = What country are the goods ending in?
+destinationCountry.heading = What country are the goods ending in?
+destinationCountry.checkYourAnswersLabel = Country goods are ending
+destinationCountry.label = This may not be where the transit movement ends.
+destinationCountry.error.required = Enter the country the goods are ending in
+
+consigneeAddress.title = What is the consignee’s address?
+consigneeAddress.heading = What is {0}’s address?
+consigneeAddress.checkYourAnswersLabel = Consignee’s address
+
+idAtDeparture.title = What is the name, registration or reference of the vehicle at departure?
+idAtDeparture.heading = What is the name, registration or reference of the vehicle at departure?
+idAtDeparture.checkYourAnswersLabel = Name, registration or reference at departure
+idAtDeparture.error.required = Enter the name, registration or reference of the vehicle at departure
+idAtDeparture.error.length = The name, registration or reference of the vehicle at departure must be 27 characters or less
+idAtDeparture.error.invalidCharacters = The name, registration or reference of the vehicle at departure must only include letters a to z without accents, numbers 0 to 9 and blank spaces
+
+nationalityAtDeparture.title = What is the nationality at departure?
+nationalityAtDeparture.heading = What is the nationality at departure?
+nationalityAtDeparture.checkYourAnswersLabel = Nationality at departure
+nationalityAtDeparture.error.required = Select the nationality at departure
+
+idCrossingBorder.title = What is the name, registration or reference of the vehicle crossing the border?
+idCrossingBorder.heading = What is the name, registration or reference of the vehicle crossing the border?
+idCrossingBorder.checkYourAnswersLabel = Name, registration or reference of the vehicle crossing the border
+idCrossingBorder.error.required = Enter the name, registration or reference of the vehicle crossing the border
+idCrossingBorder.error.length = The name, registration or reference of the vehicle crossing the border must be 27 characters or less
+idCrossingBorder.error.invalidCharacters = The name, registration or reference of the vehicle crossing the border must only include letters a to z without accents, numbers 0 to 9 and blank spaces
+
+changeAtBorder.title = Will these details change at the border?
+changeAtBorder.heading = Will these details change at the border?
+changeAtBorder.checkYourAnswersLabel = Details change at border
+changeAtBorder.error.required = Select yes if these details will change at the border
+
+addIdAtDeparture.title = Do you need to add the name, registration or reference of the vehicle at departure?
+addIdAtDeparture.heading = Do you need to add the name, registration or reference of the vehicle at departure?
+addIdAtDeparture.hint = You need approval from the NCTS helpdesk before you can leave out these details.
+addIdAtDeparture.checkYourAnswersLabel = Add the name, registration or reference of the vehicle at departure
+addIdAtDeparture.error.required = Select yes if you need to add the name, registration or reference of the vehicle at departure
+
+addIdAtDepartureLater.title = Name, registration or reference of the vehicle at departure must be added later
+addIdAtDepartureLater.heading = Name, registration or reference of the vehicle at departure must be added later
+addIdAtDepartureLater.paragraph = This must be manually recorded on the transit accompanying document (TAD) box 55.
+
+destinationOffice.title = What office in {0} is the transit movement ending in?
+destinationOffice.heading = What office in {0} is the transit movement ending in?
+destinationOffice.label = This is the office where the transit movement is ending.
+destinationOffice.checkYourAnswersLabel = Destination office
+destinationOffice.error.required = Enter the office in {0} the transit movement is ending in
+
+nationalityCrossingBorder.title = What is the nationality crossing the border?
+nationalityCrossingBorder.heading = What is the nationality crossing the border?
+nationalityCrossingBorder.checkYourAnswersLabel = Nationality crossing the border
+nationalityCrossingBorder.error.required = Select the nationality crossing the border
+nationalityCrossingBorder.error.length = The nationality crossing the border must be 35 characters or less
+
+inlandMode.title = What is the inland mode?
+inlandMode.heading = What is the inland mode?
+inlandMode.checkYourAnswersLabel = Inland mode
+inlandMode.error.required = Select the inland mode
+inlandMode.error.length = The inland mode must be 100 characters or less
+
+modeCrossingBorder.title = What is the mode crossing the border?
+modeCrossingBorder.heading = What is the mode crossing the border?
+modeCrossingBorder.checkYourAnswersLabel = Mode crossing the border
+modeCrossingBorder.error.required = Select the mode crossing the border
+modeCrossingBorder.error.length = Mode crossing border must be 100 characters or less
+
+modeAtBorder.title = What is the mode at the border?
+modeAtBorder.heading = What is the mode at the border?
+modeAtBorder.checkYourAnswersLabel = Mode at the border
+modeAtBorder.error.required = Select the mode at the border
+modeAtBorder.error.length = The mode at the border must be 100 characters or less
+
+addTransitOffice.title.singular = You have added {0} office of transit
+addTransitOffice.title.plural = You have added {0} offices of transit
+addTransitOffice.heading.singular = You have added {0} office of transit
+addTransitOffice.heading.plural = You have added {0} offices of transit
+addTransitOffice.paragraph = Do you need to add another office of transit?
+addTransitOffice.checkYourAnswersLabel = Add another office of transit
+addTransitOffice.error.required = Select yes if you want to add another office of transit
+addTransitOffice.maxLimit.label = You cannot add any more offices of transit.
+
+officesOfTransit.checkYourAnswersLabel = Offices of transit
+addOrRemoveOfficesOfTransit.checkYourAnswersLabel = Add or remove offices of transit
+
+addAnotherTransitOffice.title = What office of transit in {0} do you want to add?
+addAnotherTransitOffice.heading = What office of transit in {0} do you want to add?
+addAnotherTransitOffice.checkYourAnswersLabel = Office of transit {0}
+addAnotherTransitOffice.paragraph = If there is no office of transit, enter the office of destination or port of arrival.
+addAnotherTransitOffice.error.required = Enter the office of transit in {0} that you want to add
+
+totalGrossMass.title = What is the total gross mass in kilograms?
+totalGrossMass.heading = What is the total gross mass in kilograms?
+totalGrossMass.checkYourAnswersLabel = What is the total gross mass in kilograms?
+totalGrossMass.error.required = Enter the total gross mass in kilograms
+totalGrossMass.error.length = The total gross mass in kilograms must be 99,999,999,999.999 or less
+totalGrossMass.error.minimum = The total gross mass in kilograms must be 0.001 or more.
+totalGrossMass.paragraph = Amount can have up to 3 decimal places.
+totalGrossMass.error.invalidCharacters = The total gross mass in kilograms must be 11 numbers or less and up to 3 decimal places, like 1000000.000
+
+authorisedLocationCode.title = What is the authorised location code?
+authorisedLocationCode.heading = What is the authorised location code?
+authorisedLocationCode.checkYourAnswersLabel = What is the authorised location code?
+authorisedLocationCode.paragraph = The code can be found in the registration documents.
+authorisedLocationCode.error.required = Enter the authorised location code
+authorisedLocationCode.error.length = The authorised location code must be 17 characters or less
+authorisedLocationCode.error.invalidCharacters = The authorised location code must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+
+customsApprovedLocation.title = Where is the Customs-approved location?
+customsApprovedLocation.heading = Where is the Customs-approved location?
+customsApprovedLocation.checkYourAnswersLabel = Where is the Customs-approved location?
+customsApprovedLocation.error.required = Enter the Customs-approved location
+customsApprovedLocation.error.length = The Customs-approved location must be 17 characters or less
+customsApprovedLocation.error.invalidCharacters = The Customs-approved location must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+
+addCustomsApprovedLocation.title = Do you need to add a Customs-approved location?
+addCustomsApprovedLocation.heading = Do you need to add a Customs-approved location?
+addCustomsApprovedLocation.checkYourAnswersLabel = Do you need to add a Customs-approved location?
+addCustomsApprovedLocation.error.required = Select yes if you need to add a Customs-approved location
+
+sealIdDetails.title = What is the new official customs seal number?
+sealIdDetails.heading = What is the new official customs seal number?
+sealIdDetails.singular.checkYourAnswersLabel = Official customs seal number
+sealIdDetails.plural.checkYourAnswersLabel = Official customs seal numbers
+sealIdDetails.error.required = Enter the new official customs seal number
+sealIdDetails.error.length = The new official customs seal number must be 20 characters or less
+sealIdDetails.error.invalidCharacters = The new official customs seal number must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+
+addSeals.title = Do you need to add official customs seals numbers?
+addSeals.heading = Do you need to add official customs seals numbers?
+addSeals.checkYourAnswersLabel = Do you need to add official customs seals numbers?
+addSeals.error.required = Select yes if you need to add official customs seals numbers
+
+addSealsLater.title = Official customs seals may be added later
+addSealsLater.heading = Official customs seals may be added later
+
+arrivalDatesAtOffice.title = When do you expect the transit to arrive at the office of transit?
+arrivalDatesAtOffice.heading = When do you expect the transit to arrive at the office of transit?
+arrivalDatesAtOffice.hint = Like, 14 1 2020.
+arrivalDatesAtOffice.checkYourAnswersLabel = Arrival date at office of transit {0}
+arrivalDatesAtOffice.error.past.date = The date you expect the transit to arrive at {0} must be after {1}
+arrivalDatesAtOffice.error.future.date = The date you expect the transit to arrive at {0} must be before {1}
+arrivalDatesAtOffice.error.required.date = Enter the date you expect the transit to arrive at {0}
+arrivalDatesAtOffice.error.required.two = The date you expect the transit to arrive at {0} must include {1} and {2}
+arrivalDatesAtOffice.error.invalid.date = Enter a real Date
+
+controlResultDateLimit.title = What is the control result date limit?
+controlResultDateLimit.heading = What is the control result date limit?
+controlResultDateLimit.hint = Like, 14 1 2020
+controlResultDateLimit.checkYourAnswersLabel = Control result date limit
+controlResultDateLimit.error.required.all = Enter the control result date limit
+controlResultDateLimit.error.required.two = The control result date limit must include {0} and {1}
+controlResultDateLimit.error.required = The control result date limit must include {0}
+controlResultDateLimit.error.invalid = Enter a real control result date limit
+controlResultDateLimit.paragraph1 = This is the date the transit movement is expected to be processed by the office of destination.
+controlResultDateLimit.paragraph2 = You cannot enter a date that is more than 14 days in advance. You must
+controlResultDateLimit.error.max.date = The control result date limit must be before {0}
+controlResultDateLimit.error.min.date = The control result date limit must be today or in the future
+
+goodsSummaryCheckYourAnswers.title = Check your answers
+goodsSummaryCheckYourAnswers.heading = Check your answers
+
+maximumSealsInformation.paragraph = You cannot add any more official customs seals.
+maximumPackagesInformation.paragraph = You cannot add any more packages.
+maximumContainers.paragraph = You cannot add any more containers.
+maximumDocuments.paragraph = You cannot add any more documents.
+maximumPreviousReferences.paragraph = You cannot add any more previous administrative references.
+
+sealsInformation.title.singular = You have added {0} official customs seal
+sealsInformation.title.plural = You have added {0} official customs seals
+sealsInformation.heading.singular = You have added {0} official customs seal
+sealsInformation.heading.plural = You have added {0} official customs seals
+sealsInformation.radio.label = Do you need to add another official customs seal?
+sealsInformation.checkYourAnswersLabel = You have added {0} official customs seals
+sealsInformation.error.required = Select yes if you need to add another official customs seal
+sealsInformation.sealList.heading = Official customs seals
+sealsInformation.sealList.label = Official customs seal {0}
+sealsInformation.sealList.change.hidden = official customs seal {0}
+sealsInformation.sealList.delete.hidden = official customs seal {0}
+
+confirmRemoveSeal.title = Are you sure you want to remove the official customs seal {0}?
+confirmRemoveSeal.heading = Are you sure you want to remove the official customs seal {0}?
+confirmRemoveSeal.error.required = Select yes if you are sure you want to remove the official customs seal {0}
+sealIdentity.error.duplicate = Enter an official customs seal number or mark you have not given before
+
+confirmRemoveOfficeOfTransit.title = Are you sure you want to remove this office of transit?
+confirmRemoveOfficeOfTransit.heading = Are you sure you want to remove this office of transit?
+confirmRemoveOfficeOfTransit.Label = Office of transit
+confirmRemoveOfficeOfTransit.error.required = Select yes if you are sure you want to remove this office of transit
+
+confirmRemoveSeals.title = Are you sure you want to remove the official customs seals you have added?
+confirmRemoveSeals.heading = Are you sure you want to remove the customs official customs seals you have added?
+confirmRemoveSeals.checkYourAnswersLabel = Are you sure you want to remove the customs seals you have added?
+confirmRemoveSeals.paragraph = Any customs official customs seals you have entered will be deleted.
+confirmRemoveSeals.error.required = Select yes if you are sure you want to remove the official customs seals you have added
+
+guaranteeReference.title = What is the guarantee reference number?
+guaranteeReference.heading = What is the guarantee reference number?
+guaranteeReference.checkYourAnswersLabel = Guarantee reference number
+guaranteeReference.paragraph = You must make sure this reference is up to date.
+guaranteeReference.error.required = Enter the guarantee reference number
+guaranteeReference.error.invalid = The guarantee reference number must only include letters a to z without accents and numbers 0 to 9
+guaranteeReference.error.length = Guarantee reference number must be {0} characters or less
+
+liabilityAmount.title = How much is the liability amount, in pounds?
+liabilityAmount.heading = How much is the liability amount, in pounds?
+liabilityAmount.checkYourAnswersLabel = Liability amount
+liabilityAmount.error.required = Enter the liability amount
+liabilityAmount.error.length = Liability amount must be 100 characters or less
+liabilityAmount.error.characters = The liability amount must only include numbers 0 to 9 and a decimal place
+liabilityAmount.paragraph = Amount can have up to 2 decimal places.
+liabilityAmount.error.invalidFormat = Enter the liability amount in the right format, like 1234.95
+liabilityAmount.error.greaterThanZero = The liability amount must be 1 or more
+
+otherReference.title = What is the reference for the guarantee?
+otherReference.heading = What is the reference for the guarantee?
+otherReference.checkYourAnswersLabel = Reference for the guarantee
+otherReference.paragraph = You must make sure this reference is up to date.
+otherReference.error.required = Enter the reference for the guarantee
+otherReference.error.length = The reference for the guarantee must be 35 characters or less
+otherReference.error.invalid = The reference for the guarantee must only include letters a to z and numbers 0 to 9
+
+guaranteeType.title = Which type of guarantee is being used?
+guaranteeType.heading = Which type of guarantee is being used?
+guaranteeType.GuaranteeWaiver = (0) Guarantee waiver
+guaranteeType.ComprehensiveGuarantee = (1) Comprehensive guarantee
+guaranteeType.IndividualGuarantee = (2) Individual guarantee
+guaranteeType.FlatRateVoucher = (4) Flat-rate voucher
+guaranteeType.CashDepositGuarantee = (3) Cash deposit guarantee
+guaranteeType.GuaranteeNotRequired = (7) Guarantee not required for the journey between the office of departure and the office of transit
+guaranteeType.GuaranteeWaivedRedirect = (6) Guarantee waived redirect
+guaranteeType.GuaranteeWaiverByAgreement = (A) Guarantee waiver by agreement
+guaranteeType.GuaranteeWaiverSecured = (5) Guarantee waiver, secured amount not greater than 500 Euros
+guaranteeType.IndividualGuaranteeMultiple = (9) Individual guarantee with multiple usage
+guaranteeType.TIR = (B) TIR
+guaranteeType.checkYourAnswersLabel = Which type of guarantee is being used?
+guaranteeType.error.required = Select which type of guarantee is being used
+
+defaultAmount.title = Do you want to use the default amount of EUR10,000?
+defaultAmount.heading = Do you want to use the default amount of EUR10,000?
+defaultAmount.error.required = Select yes if you want to use the default amount of EUR10,000
+defaultAmount.checkYourAnswersLabel =  Do you want to use the default amount of EUR10,000?
+
+accessCode.title = What is the access code?
+accessCode.heading = What is the access code?
+accessCode.checkYourAnswersLabel = Access code
+accessCode.error.required = Enter the access code
+accessCode.error.length = Access code must be 4 characters
+accessCode.error.invalidCharacters = Access code must only include letters a to z without accents and numbers 0 to 9
+
+
+guaranteeDetailsCheckYourAnswers.title = Check your answers
+guaranteeDetailsCheckYourAnswers.heading = Check your answers
+guaranteeDetailsCheckYourAnswers.defaultLiabilityAmount = EUR 10,000
+
+itemDescription.title = What is the description of item {0}?
+itemDescription.heading = What is the description of item {0}?
+itemDescription.checkYourAnswersLabel = Description of item {0}
+itemDescription.error.required = Enter item description of item {0}
+itemDescription.error.length =  Description of item {0} must be 280 characters or less
+itemDescription.paragraph = Give a brief summary of the item.
+itemDescription.error.invalid =  Description of item {0} must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+
+preLodgeDeclaration.title = Will you be pre-lodging this declaration?
+preLodgeDeclaration.heading = Will you be pre-lodging this declaration?
+preLodgeDeclaration.checkYourAnswersLabel = Pre-lodging?
+preLodgeDeclaration.error.required = Select yes if you are pre-lodging this declaration
+itemsCheckYourAnswers.title = Check your answers
+itemsCheckYourAnswers.heading = Check your answers
+
+addTotalNetMass.title = Do you need to declare the total net mass for item {0}?
+addTotalNetMass.heading = Do you need to declare the total net mass for item {0}?
+addTotalNetMass.checkYourAnswersLabel = Declare total net mass for item {0}?
+addTotalNetMass.error.required =  Select yes if you need to declare the total net mass for item {0}
+
+itemTotalGrossMass.title = What is the total gross mass for item {0} in kilograms?
+itemTotalGrossMass.heading = What is the total gross mass for item {0} in kilograms?
+itemTotalGrossMass.checkYourAnswersLabel = Total gross mass for item {0}
+itemTotalGrossMass.hintText = Amount can have up to 3 decimal places.
+itemTotalGrossMass.error.required = Enter the total gross mass for item {0} in kilograms
+itemTotalGrossMass.error.length =  The total gross mass for item {0} in kilograms must be 99,999,999,999.999 or less
+itemTotalGrossMass.error.minimum =  The total gross mass for item {0} in  kilograms must be 0.001 or more
+itemTotalGrossMass.error.invalidCharacters =  The total gross mass for item {0} in kilograms must only include numbers 0 to 9 and a decimal place
+itemTotalGrossMass.error.invalidFormat =  The total gross mass for item {0} in kilograms must have up to 3 decimal places, like 1000.985
+
+totalNetMass.title = What is the total net mass for item {0} in kilograms?
+totalNetMass.heading = What is the total net mass for item {0} in kilograms?
+totalNetMass.checkYourAnswersLabel = Total net mass for item {0}
+totalNetMass.hintText = Amount can have up to 3 decimal places.
+totalNetMass.error.required = Enter the total net mass for item {0} in kilograms
+totalNetMass.error.length =  The total net mass for item {0} in kilograms must be 99,999,999,999.999 or less
+totalNetMass.error.minimum =  The total net mass for item {0} in kilograms must be 0.001 or more
+totalNetMass.error.invalidCharacters =  The total net mass for item {0} in kilograms must only include numbers 0 to 9 and a decimal place
+totalNetMass.error.invalidFormat =  The total net mass for item {0} in kilograms must have up to 3 decimal places, like 1000.985
+
+packageType.title = What package type has been used?
+packageType.heading = What package type has been used?
+packageType.error.required = Enter the package type that has been used
+packageType.checkYourAnswersLabel = Package type
+
+totalPieces.title = How many pieces have been used for item {0}?
+totalPieces.heading = How many pieces have been used for item {0}?
+totalPieces.error.nonNumeric = How many pieces have been used for item {0} must only include numbers 0 to 9
+totalPieces.error.required = Enter how many pieces have been used for item {0}
+totalPieces.error.wholeNumber = How many pieces have been used for item {0} using whole numbers
+totalPieces.error.outOfRange = The pieces used for item {0} must be between {1} and {2}
+totalPieces.checkYourAnswersLabel = Number of pieces
+
+addMark.title = Do you need to add a mark or number for package {0}?
+addMark.heading = Do you need to add a mark or number for package {0}?
+addMark.checkYourAnswersLabel = Add a mark?
+addMark.error.required = Select yes if you need to add a mark or number for package {0}
+
+declareMark.title = What is the mark or number for package {0}?
+declareMark.heading = What is the mark or number for package {0}?
+declareMark.checkYourAnswersLabel = Mark or number
+declareMark.error.required = Enter the mark or number for package {0}
+declareMark.error.length = The mark or number for package {0} must be {1} characters or less
+declareMark.error.emptyNumberOfPackages = Mark or number for package {0} must be 1 or more
+declareMark.error.format = The mark or number for package {0} must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
+addAnotherPackage.title.plural = You have added {0} packages
+addAnotherPackage.title.singular = You have added {0} package
+addAnotherPackage.heading.plural = You have added {0} packages
+addAnotherPackage.heading.singular = You have added {0} package
+addAnotherPackage.yesNo = Do you need to add another package?
+addAnotherPackage.error.required = Select yes if you need to add another package
+addAnotherPackage.change.hidden = Change {0}
+addAnotherPackage.packageList.label = Package {0}
+
+commodityCode.title = What is the commodity code for item {0}?
+commodityCode.heading = What is the commodity code for item {0}?
+commodityCode.checkYourAnswersLabel = Commodity code for item {0}
+commodityCode.error.required = Enter the commodity code for item {0}
+commodityCode.error.length = Enter the commodity code for item {0} in the right format, like 000000 or 00000000
+commodityCode.hintText = Only enter the first 6 or 8 numbers.
+commodityCode.errors.invalidCharacters = The commodity code for item {0} must only include numbers 0 to 9
+commodityCode.errors.invalidFormat =  Enter the commodity code for item {0} in the right format, like 000000 or 00000000
+
+isCommodityCodeKnown.title = Do you know the commodity code for item {0}?
+isCommodityCodeKnown.heading = Do you know the commodity code for item {0}?
+isCommodityCodeKnown.checkYourAnswersLabel = Do you know the commodity code for item {0}?
+isCommodityCodeKnown.error.required = Select yes if you know the commodity code for item {0}
+
+howManyPackages.title = How many packages have been used for item {0}?
+howManyPackages.heading = How many packages have been used for item {0}?
+howManyPackages.checkYourAnswersLabel = Number of packages
+howManyPackages.error.nonNumeric = How many packages have been used for item {0} must only include numbers 0 to 9
+howManyPackages.error.required = Enter how many packages have been used for item {0}
+howManyPackages.error.wholeNumber = Enter how many packages have been used for item {0} using whole numbers
+howManyPackages.error.outOfRange = The packages used for item {0} must be between {1} and {2}
+
+packageCheckYourAnswers.title = Check your answers
+packageCheckYourAnswers.heading = Check your answers
+
+removePackage.title = Are you sure you want to remove package {0}?
+removePackage.heading = Are you sure you want to remove package {0}?
+removePackage.error.required = Select yes if you want to remove package {0}
+
+traderDetailsConsigneeAddress.title = What is the consignee’s address for item {0}
+traderDetailsConsigneeAddress.heading = What is {0}’s address?
+traderDetailsConsigneeAddress.checkYourAnswersLabel = {0}’s address
+traderDetailsConsigneeAddress.checkYourAnswersLabel.fallback = Consignee
+
+
+traderDetailsConsigneeEoriKnown.title = Do you know the consignee’s EORI number for item {0}?
+traderDetailsConsigneeEoriKnown.heading = Do you know the consignee’s EORI number for item {0}?
+traderDetailsConsigneeEoriKnown.checkYourAnswersLabel = Know the consignee’s EORI number for item {0}?
+traderDetailsConsigneeEoriKnown.error.required = Select yes if you know the consignee’s EORI number for item {0}
+
+traderDetailsConsigneeEoriNumber.title = What is the consignee’s EORI number for item {0}?
+traderDetailsConsigneeEoriNumber.heading = What is the consignee’s EORI number for item {0}?
+traderDetailsConsigneeEoriNumber.checkYourAnswersLabel = Consignee’s EORI number for item {0}
+traderDetailsConsigneeEoriNumber.error.required = Enter the consignee’s EORI number for item {0}
+traderDetailsConsigneeEoriNumber.error.length = The consignee’s EORI number must be {0} characters or less
+traderDetailsConsigneeEoriNumber.error.invalid = The consignee’s EORI number for must only include letters a to z without accents and numbers 0 to 9
+traderDetailsConsigneeEoriNumber.error.invalidFormat = Enter the consignee’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+traderDetailsConsigneeEoriNumber.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
+
+traderDetailsConsigneeName.title = What is the consignee’s name for item {0}?
+traderDetailsConsigneeName.heading = What is the consignee’s name for item {0}?
+traderDetailsConsigneeName.checkYourAnswersLabel = Consignee’s name for item {0}
+traderDetailsConsigneeName.error.required =  Enter the consignee’s name for item {0}
+traderDetailsConsigneeName.error.length = The consignee’s name for item {0} must be {1} characters or less
+traderDetailsConsigneeName.error.invalid = The consignee’s name for item {0} must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+
+traderDetailsConsignorAddress.title = What is the consignor’s address for item {0}
+traderDetailsConsignorAddress.heading = What is {0}’s address?
+traderDetailsConsignorAddress.checkYourAnswersLabel = {0}’s address
+traderDetailsConsignorAddress.checkYourAnswersLabel.fallback = Consignor
+
+traderDetailsConsignorEoriKnown.title = Do you know the consignor’s EORI number for item {0}?
+traderDetailsConsignorEoriKnown.heading = Do you know the consignor’s EORI number for item {0}?
+traderDetailsConsignorEoriKnown.checkYourAnswersLabel = Know the consignor’s EORI number for item {0}?
+traderDetailsConsignorEoriKnown.error.required = Select yes if you know the consignor’s EORI number for item {0}
+
+traderDetailsConsignorEoriNumber.title = What is the consignor’s EORI number for item {0}?
+traderDetailsConsignorEoriNumber.heading = What is the consignor’s EORI number for item {0}?
+traderDetailsConsignorEoriNumber.checkYourAnswersLabel = Consignor’s EORI number for item {0}
+traderDetailsConsignorEoriNumber.error.required = Enter the consignor’s EORI number for item {0}
+traderDetailsConsignorEoriNumber.error.length = The consignor’s EORI number must be 17 characters or less
+traderDetailsConsignorEoriNumber.error.invalid = The consignor’s EORI number must only include letters a to z without accents and numbers 0 to 9
+traderDetailsConsignorEoriNumber.error.invalidFormat = Enter the consignor’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+traderDetailsConsignorEoriNumber.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
+
+traderDetailsConsignorName.title = What is the consignor’s name for item {0}?
+traderDetailsConsignorName.heading = What is the consignor’s name for item {0}?
+traderDetailsConsignorName.checkYourAnswersLabel = Consignor’s name for item {0}
+traderDetailsConsignorName.error.required =  Enter the consignor’s name for item {0}
+traderDetailsConsignorName.error.length = The consignor’s name for item {0} must be {1} characters or less
+traderDetailsConsignorName.error.invalid = The consignor’s name for item {0} must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+
+removeItem.title = Are you sure you want to remove this item?
+removeItem.heading = Are you sure you want to remove this item?
+removeItem.error.required = Select yes if you are sure you want to remove this item
+
+addItems.checkYourAnswersLabel.safetyAndSecurity = Security details
+addItems.checkYourAnswersLabel.security = Security trader details
+addItemsSameConsigneeForAllItems.title = addItemsSameConsigneeForAllItems
+addItemsSameConsigneeForAllItems.heading = addItemsSameConsigneeForAllItems
+addItemsSameConsigneeForAllItems.checkYourAnswersLabel = addItemsSameConsigneeForAllItems
+addItemsSameConsigneeForAllItems.error.required = Select yes if addItemsSameConsigneeForAllItems
+
+addItemsSameConsignorForAllItems.title = addItemsSameConsignorForAllItems
+addItemsSameConsignorForAllItems.heading = addItemsSameConsignorForAllItems
+addItemsSameConsignorForAllItems.checkYourAnswersLabel = addItemsSameConsignorForAllItems
+addItemsSameConsignorForAllItems.error.required = Select yes if addItemsSameConsignorForAllItems
+
+addAnotherItem.title.singular = You have added {0} item
+addAnotherItem.title.plural = You have added {0} items
+addAnotherItem.heading.singular = You have added {0} item
+addAnotherItem.heading.plural = You have added {0} items
+addAnotherItem.error.required = Select yes if you need to add another item
+addAnotherItem.paragraph = Do you need to add another item?
+addAnotherItem.maxLimit.label = You cannot add any more items.
+
+addItems.checkYourAnswersLabel.itemDetails = Item details
+addItems.checkYourAnswersLabel.traderDetails = Trader details
+addItems.checkYourAnswersLabel.traderDetails.consignor = Consignor
+addItems.checkYourAnswersLabel.traderDetails.consignee = Consignee
+addItems.checkYourAnswersLabel.traderDetails = Trader details
+addItems.checkYourAnswersLabel.packages = Packages
+addItems.checkYourAnswersLabel.packages.addRemove = Add or remove packages
+addItems.checkYourAnswersLabel.containers = Containers
+addItems.checkYourAnswersLabel.containers.addRemove = Add or remove containers
+addItems.checkYourAnswersLabel.specialMentions = Special mentions
+addItems.checkYourAnswersLabel.specialMentions.addRemove = Add or remove special mentions
+addItems.checkYourAnswersLabel.certificates = Produced documents and work certificates
+addItems.checkYourAnswersLabel.references = Previous administrative references
+addItems.checkYourAnswersLabel.references.addRemove = Add or remove previous administrative references
+addItems.checkYourAnswersLabel.documents = Produced documents and work certificates
+addItems.checkYourAnswersLabel.documents.addRemove = Add or remove documents
+
+addAdministrativeReference.title = Do you have a document to prove the customs status of item {0}?
+addAdministrativeReference.heading = Do you have a document to prove the customs status of item {0}?
+addAdministrativeReference.checkYourAnswersLabel = Add previous administrative reference?
+addAdministrativeReference.error.required = Select yes if you have a proof of customs status document for any goods in this movement
+addAdministrativeReference.administrativeReferenceList.label = Proof of customs status document {0}
+
+referenceType.title = What type of reference do you want to add?
+referenceType.heading = What type of reference do you want to add?
+referenceType.checkYourAnswersLabel = Reference type
+referenceType.error.required = Enter the type of reference you want to add
+
+previousReference.title = What is the previous document reference?
+previousReference.heading = What is the previous document reference?
+previousReference.checkYourAnswersLabel = Previous document reference
+previousReference.error.required = Enter the previous document reference
+previousReference.error.invalidCharacters = The previous document reference must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+previousReference.error.length = The previous document reference must be 35 characters or less
+
+addExtraInformation.title = Do you need to add any extra information for this document?
+addExtraInformation.heading = Do you need to add any extra information for this document?
+addExtraInformation.checkYourAnswersLabel = Add extra information?
+addExtraInformation.error.required = Select yes if you need to add any extra information for this document
+
+addAnotherPreviousAdministrativeReference.title.singular = You have added 1 previous administrative reference
+addAnotherPreviousAdministrativeReference.title.plural = You have added {0} previous administrative references
+addAnotherPreviousAdministrativeReference.heading.singular = You have added 1 previous administrative reference
+addAnotherPreviousAdministrativeReference.heading.plural = You have added {0} previous administrative references
+addAnotherPreviousAdministrativeReference.paragraph = Do you need to add another previous administrative reference?
+addAnotherPreviousAdministrativeReference.error.required = Select yes if you need to add another previous administrative reference
+
+extraInformation.title = What extra information for this document do you need to add?
+extraInformation.heading = What extra information for this document do you need to add?
+extraInformation.checkYourAnswersLabel = Extra information
+extraInformation.error.required = Enter the extra information for this document
+extraInformation.error.length = The extra information for this document must be 26 characters or less
+extraInformation.error.invalid = The extra information for this document must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+
+referenceCheckYourAnswers.title = Check your answers
+referenceCheckYourAnswers.heading = Check your answers
+
+confirmRemovePreviousAdministrativeReference.title = Are you sure you want to remove this previous administrative reference?
+confirmRemovePreviousAdministrativeReference.heading = Are you sure you want to remove this previous administrative reference?
+confirmRemovePreviousAdministrativeReference.checkYourAnswersLabel = confirmRemovePreviousAdministrativeReference
+confirmRemovePreviousAdministrativeReference.error.required = Select yes if you want to remove this previous administrative reference
+
+addSpecialMention.title = Does the movement contain EU goods?
+addSpecialMention.heading = Does the movement contain EU goods?
+addSpecialMention.paragraph = This is when the goods have originated in the EU or the duty has been paid in the EU (T2). You will need to provide details of the Data Group 2 (DG2).
+addSpecialMention.checkYourAnswersLabel = Does the movement contain EU goods?
+addSpecialMention.error.required = Select yes if the movement contains EU goods
+
+specialMentionType.title = What type of special mention do you want to add for item {0}?
+specialMentionType.heading = What type of special mention do you want to add for item {0}?
+specialMentionType.error.required = Enter the type of special mention that you want to add for item {0}
+specialMentionType.error.length = SpecialMentionType must be 100 characters or less
+specialMentionType.checkYourAnswersLabel = Special mention type
+
+specialMentionAdditionalInfo.title = What information do you need to add for special mention {0} for item {1}?
+specialMentionAdditionalInfo.heading = What information do you need to add for special mention {0} for item {1}?
+specialMentionAdditionalInfo.error.required = Enter the information you need to add for special mention {0} for item {1}
+specialMentionAdditionalInfo.error.length = The information you need to add for special mention {0} for item {1} must be 70 characters or less
+specialMentionAdditionalInfo.error.invalid = The information you need to add for special mention {0} for item {1} must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+specialMentionAdditionalInfo.checkYourAnswersLabel = Additional information
+
+specialMentionCheckYourAnswers.title = Check your answers
+specialMentionCheckYourAnswers.heading = Check your answers
+
+addAnotherSpecialMention.title.singular = You have added 1 special mention for item {0}
+addAnotherSpecialMention.title.plural = You have added {0} special mentions for item {1}
+addAnotherSpecialMention.heading.singular = You have added 1 special mention for item {0}
+addAnotherSpecialMention.heading.plural = You have added {0} special mentions for item {1}
+addAnotherSpecialMention.addAnother = Do you need to add another special mention?
+addAnotherSpecialMention.specialMentionList.label = Special mention {0}
+addAnotherSpecialMention.maxLimit.label = You cannot add any more special mentions.
+
+addAnotherSpecialMention.checkYourAnswersLabel = addAnotherSpecialMention
+addAnotherSpecialMention.error.required = Select yes if you need to add another special mention
+
+removeSpecialMention.title = Are you sure you want to remove this special mention?
+removeSpecialMention.heading = Are you sure you want to remove this special mention?
+removeSpecialMention.checkYourAnswersLabel = removeSpecialMention
+removeSpecialMention.error.required = Select yes if you want to remove this special mention
+
+containerNumber.title = What is the shipping container number?
+containerNumber.heading = What is the shipping container number?
+containerNumber.checkYourAnswersLabel = Shipping container
+containerNumber.error.required = Enter the shipping container number
+containerNumber.error.length = The shipping container number must be {0} characters or less
+containerNumber.error.invalid = The shipping container number must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+
+addAnotherContainer.title.singular = You have added {0} shipping container
+addAnotherContainer.title.plural = You have added {0} shipping containers
+addAnotherContainer.heading = Do you need to add another shipping container?
+addAnotherContainer.checkYourAnswersLabel.singular = Container
+addAnotherContainer.checkYourAnswersLabel.plural = Containers
+addAnotherContainer.error.required = Select yes if you need to add another shipping container
+addAnotherContainer.containerList.label = Shipping container {0}
+
+addExtraDocumentInformation.title = Do you need to add any extra information for document {0}?
+addExtraDocumentInformation.heading = Do you need to add any extra information for document {0}?
+addExtraDocumentInformation.error.required = Select yes if you need to add any extra information for document {0}
+addExtraDocumentInformation.checkYourAnswersLabel = Add extra information?
+
+addDocuments.title = Do you need to add any produced documents or work certificates for item {0}?
+addDocuments.heading = Do you need to add any produced documents or work certificates for item {0}?
+addDocuments.paragraph = These include certificates of origin, authorised economic operator (AEO) certificates, or transit GB (TGB) documents for domestic goods moving between GB and NI.
+addDocuments.checkYourAnswersLabel = Do you need to add any produced documents or work certificates for item {0}?
+addDocuments.error.required = Select yes if you need to add any produced documents or work certificates for item {0}
+addDocuments.documentList.label = Document {0}
+
+documentReference.title = What is the document reference?
+documentReference.heading = What is the document reference?
+documentReference.checkYourAnswersLabel = Document reference
+documentReference.error.required = Enter the document reference
+documentReference.error.invalidCharacters = The document reference must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+documentReference.error.length = The document reference must be 35 characters or less
+
+documentExtraInformation.title = What extra information do you need to add for document {0}?
+documentExtraInformation.heading = What extra information do you need to add for document {0}?
+documentExtraInformation.checkYourAnswersLabel = Extra information
+documentExtraInformation.error.required = Enter the extra information for document {0}
+documentExtraInformation.error.length = Document extra information must be 26 characters or less
+documentExtraInformation.error.invalid = The extra information for this document must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+
+addAnotherDocument.title.singular = You have added {0} produced document or certificate
+addAnotherDocument.title.plural = You have added {0} produced documents or certificates
+addAnotherDocument.heading.singular = You have added {0} produced document or certificate
+addAnotherDocument.heading.plural = You have added {0} produced documents or certificates
+addAnotherDocument.paragraph = Do you need to add another produced document or work certificate?
+addAnotherDocument.error.required = Select yes if you want to add another produced document or work certificate
+addAnotherDocument.documentList.heading = Documents
+addAnotherDocument.documentList.label = Document {0}
+addAnotherDocument.documentList.change.hidden = Document {0}
+addAnotherDocument.documentList.delete.hidden = Document {0}
+
+documentType.title = What type of document do you need to add?
+documentType.heading = What type of document do you need to add?
+documentType.checkYourAnswersLabel = Document type
+documentType.error.required = Enter the type of document you need to add
+
+documentCheckYourAnswers.title = Check your answers
+documentCheckYourAnswers.heading = Check your answers
+
+submissionConfirmation.title = Departure declaration sent
+submissionConfirmation.heading = Departure declaration sent
+submissionConfirmation.submissionText = for local reference number
+submissionConfirmation.subHeading = What happens next
+submissionConfirmation.link.pretext = You can:
+submissionConfirmation.link.option1 = manage your departure declarations
+submissionConfirmation.link.option2 = make another departure declaration
+
+confirmRemoveDocument.title = Are you sure you want to remove this document?
+confirmRemoveDocument.heading = Are you sure you want to remove this document?
+confirmRemoveDocument.error.required = Select yes if you want to remove this document
+
+confirmRemoveContainer.title = Are you sure you want to remove this shipping container?
+confirmRemoveContainer.heading = Are you sure you want to remove this shipping container?
+confirmRemoveContainer.error.required = Select yes if you want to remove this shipping container
+
+transportCharges.title = What payment method are you using for the transport charges?
+transportCharges.heading = What payment method are you using for the transport charges?
+transportCharges.checkYourAnswersLabel = Payment method for transport charges
+transportCharges.error.required = Enter the payment method you are using for the transport charges
+
+usingSameCommercialReference.title = Are you using the same commercial reference number across all items?
+usingSameCommercialReference.heading = Are you using the same commercial reference number across all items?
+usingSameCommercialReference.checkYourAnswersLabel = Using same commercial reference number?
+usingSameCommercialReference.error.required = Select yes if you are using the same commercial reference number
+
+commercialReferenceNumber.title = What is the commercial reference number?
+commercialReferenceNumber.heading = What is the commercial reference number?
+commercialReferenceNumber.checkYourAnswersLabel = Commercial reference number
+commercialReferenceNumber.error.required = Enter the commercial reference number
+commercialReferenceNumber.error.invalidCharacters = The commercial reference number must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+commercialReferenceNumber.error.length = The commercial reference number must be 70 characters or less
+
+addDangerousGoodsCode.title = Do you know the United Nations number for dangerous goods?
+addDangerousGoodsCode.heading = Do you know the United Nations number for dangerous goods?
+addDangerousGoodsCode.checkYourAnswersLabel = Know the United Nations number for dangerous goods?
+addDangerousGoodsCode.error.required = Select yes if you know the United Nations number for dangerous goods
+
+dangerousGoodsCode.title = What is the United Nations number for dangerous goods?
+dangerousGoodsCode.heading = What is the United Nations number for dangerous goods?
+dangerousGoodsCode.checkYourAnswersLabel = United Nations number for dangerous goods
+dangerousGoodsCode.error.required = Enter the United Nations number for dangerous goods
+dangerousGoodsCode.error.length = United Nations number for dangerous goods must be 4 characters or less
+
+guaranteeNotValid.title = There is a problem with the guarantee for this departure declaration
+guaranteeNotValid.heading = There is a problem with the guarantee for this departure declaration
+guaranteeNotValid.errorCode = Error code
+guaranteeNotValid.reason = Reason
+guaranteeNotValid.review = You must review the error and
+guaranteeNotValid.sendDeparture = send a new departure declaration with the right guarantee information
+guaranteeNotValid.youCan = You can
+guaranteeNotValid.contact = contact the New Computerised Transit System helpdesk if you need help understanding the error (opens in a new tab)
+guaranteeNotValid.mrn = Movement reference number
+guaranteeNotValid.guaranteeRefNumber = Guarantee Reference number
+guaranteeNotValid.you.must = You must
+
+usingSameMethodOfPayment.title = Are you using the same payment method for all items?
+usingSameMethodOfPayment.heading = Are you using the same payment method for all items?
+usingSameMethodOfPayment.checkYourAnswersLabel = Same payment method for all items?
+usingSameMethodOfPayment.error.required = Select yes if you are using the same payment method for all items
+
+useTradersDetails.title = Do you want to use this trader’s details for the security information?
+useTradersDetails.heading = Do you want to use this trader’s details for the security information?
+useTradersDetails.checkYourAnswersLabel = Use this trader’s details for the security information?
+useTradersDetails.error.required = Select yes if you want to use this trader’s details for the security information
+
+addSecurityConsignorsEori.title = Do you know the security consignor’s EORI number?
+addSecurityConsignorsEori.heading = Do you know the security consignor’s EORI number?
+addSecurityConsignorsEori.checkYourAnswersLabel = Know the security consignor’s EORI number?
+addSecurityConsignorsEori.error.required = Select yes if you know the security consignor’s EORI number
+
+addSecurityConsigneesEori.title = Do you know the security consignee’s EORI number?
+addSecurityConsigneesEori.heading = Do you know the security consignee’s EORI number?
+addSecurityConsigneesEori.checkYourAnswersLabel = Know the security consignee’s EORI number?
+addSecurityConsigneesEori.error.required = Select yes if you know the security consignee’s EORI number
+
+securityConsigneeAllItems.title = Is there a security consignee for all the items?
+securityConsigneeAllItems.heading = Is there a security consignee for all the items?
+securityConsigneeAllItems.checkYourAnswersLabel = Security consignee for all items
+securityConsigneeAllItems.error.required = Select yes if there is a security consignee for all the items
+
+securityConsignorEori.title = What is the security consignor’s EORI number?
+securityConsignorEori.heading = What is the security consignor’s EORI number?
+securityConsignorEori.checkYourAnswersLabel = Security consignor’s EORI number
+securityConsignorEori.error.required = Enter the security consignor’s EORI number
+securityConsignorEori.error.length = The security consignor’s EORI number must be 17 characters or less
+securityConsignorEori.error.invalid = The security consignor’s EORI number must only include letters a to z without accents and numbers 0 to 9
+securityConsignorEori.error.invalidFormat = Enter the security consignor’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+securityConsignorEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
+
+securityConsigneeEori.title = What is the security consignee’s EORI number?
+securityConsigneeEori.heading = What is the security consignee’s EORI number?
+securityConsigneeEori.checkYourAnswersLabel = Security consignee’s EORI number
+securityConsigneeEori.error.required = Enter the security consignee’s EORI number
+securityConsigneeEori.error.length = The security consignee’s EORI number must be 17 characters or less
+securityConsigneeEori.error.invalid = The security consignee’s EORI number must only include letters a to z without accents and numbers 0 to 9
+securityConsigneeEori.error.invalidFormat = Enter the security consignee’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+securityConsigneeEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
+
+securityConsignorAddress.title = What is the security consignor’s address
+securityConsignorAddress.heading = What is {0}’s address?
+securityConsignorAddress.checkYourAnswersLabel = Consignor address
+
+
+securityConsigneeAddress.title = What is the security consignee’s address
+securityConsigneeAddress.heading = What is {0}’s address?
+securityConsigneeAddress.checkYourAnswersLabel = Consignee address
+
+
+declarationRejection.title = There is a problem with this departure declaration
+declarationRejection.heading = There is a problem with this departure declaration
+declarationRejection.date = Rejection date
+declarationRejection.localReferenceNumber = Local reference number
+declarationRejection.rejectionReason = Rejection reason
+declarationRejection.code =  Error code
+declarationRejection.pointer =  Error pointer
+declarationRejection.reason =  Reason
+declarationRejection.declarationDetails = Departure details
+declarationRejection.rejectionDetails = Rejection details
+
+declarationRejection.review = You must review the error and
+declarationRejection.newDeparture = send a new departure declaration with the right information
+declarationRejection.youCan = You can
+declarationRejection.contact = contact the New Computerised Transit System helpdesk if you need help understanding the error (opens in a new tab)
+
+addCircumstanceIndicator.title =  Do you need to add a specific circumstance indicator?
+addCircumstanceIndicator.heading = Do you need to add a specific circumstance indicator?
+addCircumstanceIndicator.checkYourAnswersLabel = Add specific circumstance indicator?
+addCircumstanceIndicator.error.required = Select yes if you need to add a specific circumstance indicator
+
+addTransportChargesPaymentMethod.title =  Do you need to add a payment method for the transport charges for all items?
+addTransportChargesPaymentMethod.heading =  Do you need to add a payment method for the transport charges for all items?
+addTransportChargesPaymentMethod.checkYourAnswersLabel = Add payment method for transport charges?
+addTransportChargesPaymentMethod.error.required = Select yes if you need to add a payment method for the transport charges
+
+addCommercialReferenceNumber.title =  Does this movement have a commercial reference number?
+addCommercialReferenceNumber.heading = Does this movement have a commercial reference number?
+addCommercialReferenceNumber.checkYourAnswersLabel = Add commercial reference number?
+addCommercialReferenceNumber.error.required = Select yes if you need to add a commercial reference number
+
+circumstanceIndicator.title = What specific circumstances indicator do you want to add?
+circumstanceIndicator.heading = What specific circumstances indicator do you want to add?
+circumstanceIndicator.checkYourAnswersLabel = Specific circumstances indicator
+circumstanceIndicator.error.required = Enter the specific circumstances indicator you want to add
+circumstanceIndicator.error.length = CircumstanceIndicator must be 2 characters or less
+
+transportChargesPaymentMethod.title = What payment method are you using for the transport charges for all items?
+transportChargesPaymentMethod.heading = What payment method are you using for the transport charges for all items?
+transportChargesPaymentMethod.checkYourAnswersLabel = Payment method for transport charges
+transportChargesPaymentMethod.error.required = Enter the payment method you are using for the transport charges
+transportChargesPaymentMethod.error.length = TransportChargesPaymentMethod must be 2 characters or less
+
+addCommercialReferenceNumberAllItems.title = Are you using the same commercial reference number for all the items?
+addCommercialReferenceNumberAllItems.heading = Are you using the same commercial reference number for all the items?
+addCommercialReferenceNumberAllItems.checkYourAnswersLabel = Same commercial reference number for all items?
+addCommercialReferenceNumberAllItems.error.required = Select yes if you are using the same commercial reference number for all the items
+
+commercialReferenceNumberAllItems.title =  What is the commercial reference number for all the items?
+commercialReferenceNumberAllItems.heading =  What is the commercial reference number for all the items?
+commercialReferenceNumberAllItems.checkYourAnswersLabel = Commercial reference number for all items
+commercialReferenceNumberAllItems.error.required = Enter the commercial reference number for all the items
+commercialReferenceNumberAllItems.error.invalid =  must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+commercialReferenceNumberAllItems.error.length =  The commercial reference number must be 70 characters or less
+
+addConveyancerReferenceNumber.title = Do you need to add a Conveyance Reference Number (CRN)?
+addConveyancerReferenceNumber.heading = Do you need to add a Conveyance Reference Number (CRN)?
+addConveyancerReferenceNumber.checkYourAnswersLabel = Add Conveyance Reference Number?
+addConveyancerReferenceNumber.error.required = Select yes if you need to add a Conveyance Reference Number
+
+conveyanceReferenceNumber.title = What is the Conveyance Reference Number (CRN)?
+conveyanceReferenceNumber.heading = What is the Conveyance Reference Number (CRN)?
+conveyanceReferenceNumber.checkYourAnswersLabel = Conveyance Reference Number
+conveyanceReferenceNumber.error.required = Enter the Conveyance Reference Number
+conveyanceReferenceNumber.error.invalid = The Conveyance Reference Number must only include letters a to z without accents and numbers 0 to 9
+conveyanceReferenceNumber.error.minLength =  The Conveyance Reference Number must be 7 characters or more
+conveyanceReferenceNumber.error.maxLength = The Conveyance Reference Number must be 8 characters or less
+
+addPlaceOfUnloadingCode.title = Do you need to add a place of unloading code?
+addPlaceOfUnloadingCode.heading = Do you need to add a place of unloading code?
+addPlaceOfUnloadingCode.checkYourAnswersLabel = Add a place of unloading code?
+addPlaceOfUnloadingCode.error.required = Select yes if you need to add a place of unloading code
+
+placeOfUnloadingCode.title = What is the place of unloading code?
+placeOfUnloadingCode.heading = What is the place of unloading code?
+placeOfUnloadingCode.checkYourAnswersLabel =  Place of unloading code
+placeOfUnloadingCode.error.required = Enter the place of unloading code
+placeOfUnloadingCode.error.length = The place of unloading code must be 35 characters or less
+placeOfUnloadingCode.error.invalid = The place of unloading code must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+
+countryOfRouting.title =  What is the country of routing?
+countryOfRouting.heading =  What is the country of routing?
+countryOfRouting.checkYourAnswersLabel = Country of routing
+countryOfRouting.error.required = Enter the country of routing
+addOrRemoveCountryOfRouting.checkYourAnswersLabel = Add or remove countries of routing
+
+addAnotherCountryOfRouting.title.singular = You have added {0} country of routing
+addAnotherCountryOfRouting.title.plural = You have added {0} countries of routing
+addAnotherCountryOfRouting.heading.singular = You have added {0} country of routing
+addAnotherCountryOfRouting.heading.plural = You have added {0} countries of routing
+addAnotherCountryOfRouting.h2 = Do you need to add another country of routing?
+addAnotherCountryOfRouting.error.required = Select yes if you need to add another country of routing
+addAnotherCountryOfRouting.countryOfRoutingList.label = Country of routing {0}
+addAnotherCountryOfRouting.maxLimit.label = You cannot add any more countries of routing.
+
+addSafetyAndSecurityConsignor.title = Is there a security consignor for all items?
+addSafetyAndSecurityConsignor.heading = Is there a security consignor for all items?
+addSafetyAndSecurityConsignor.checkYourAnswersLabel = Security consignor for all items?
+addSafetyAndSecurityConsignor.error.required = Select yes if there is a security consignor for all items
+
+addSafetyAndSecurityConsignorEori.title = Do you know the security consignor’s EORI number?
+addSafetyAndSecurityConsignorEori.heading = Do you know the security consignor’s EORI number?
+addSafetyAndSecurityConsignorEori.checkYourAnswersLabel = Know the security consignor’s EORI number?
+addSafetyAndSecurityConsignorEori.error.required = Select yes if you know the security consignor’s EORI number
+
+safetyAndSecurityConsignorAddress.title = What is {0}’s address?
+safetyAndSecurityConsignorAddress.heading = What is {0}’s address?
+safetyAndSecurityConsignorAddress.checkYourAnswersLabel = Security consignor’s address
+
+safetyAndSecurityConsignorEori.title = What is the security consignor’s EORI number?
+safetyAndSecurityConsignorEori.heading = What is the security consignor’s EORI number?
+safetyAndSecurityConsignorEori.checkYourAnswersLabel = Security consignor’s EORI number
+safetyAndSecurityConsignorEori.error.required = Enter the security consignor’s EORI number
+safetyAndSecurityConsignorEori.error.length = The security consignor’s EORI number must be 17 characters or less
+safetyAndSecurityConsignorEori.error.invalid = The security consignor’s EORI number must only include letters a to z without accents and numbers 0 to 9
+safetyAndSecurityConsignorEori.error.country.required = Enter the country of the security consignor’s address
+safetyAndSecurityConsignorEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
+
+safetyAndSecurityConsignorName.title = What is the security consignor’s name?
+safetyAndSecurityConsignorName.heading = What is the security consignor’s name?
+safetyAndSecurityConsignorName.checkYourAnswersLabel = Security consignor’s name
+safetyAndSecurityConsignorName.error.required = Enter the security consignor’s name
+safetyAndSecurityConsignorName.error.length = The security consignor’s name must be 35 characters or less
+safetyAndSecurityConsignorName.error.invalid = The security consignor’s name must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+
+addSafetyAndSecurityConsignee.title =  Is there a security consignee for all items?
+addSafetyAndSecurityConsignee.heading = Is there a security consignee for all items?
+addSafetyAndSecurityConsignee.checkYourAnswersLabel = Security consignee for all items?
+addSafetyAndSecurityConsignee.error.required = Select yes if there is a the security consignee for all items
+
+addSafetyAndSecurityConsigneeEori.title =  Do you know the security consignee’s EORI number?
+addSafetyAndSecurityConsigneeEori.heading =  Do you know the security consignee’s EORI number?
+addSafetyAndSecurityConsigneeEori.checkYourAnswersLabel = Know the security consignee’s EORI number?
+addSafetyAndSecurityConsigneeEori.error.required = Select yes if you know the security consignee’s EORI number
+
+safetyAndSecurityConsigneeAddress.title = What is {0}’s address?
+safetyAndSecurityConsigneeAddress.heading = What is {0}’s address?
+safetyAndSecurityConsigneeAddress.checkYourAnswersLabel = Security consignee’s address
+
+safetyAndSecurityConsigneeEori.title = What is the security consignee’s EORI number?
+safetyAndSecurityConsigneeEori.heading = What is the security consignee’s EORI number?
+safetyAndSecurityConsigneeEori.checkYourAnswersLabel = Security consignee’s EORI number
+safetyAndSecurityConsigneeEori.error.required = Enter the security consignee’s EORI number
+safetyAndSecurityConsigneeEori.error.length = The security consignee’s EORI number must be 17 characters or less
+safetyAndSecurityConsigneeEori.error.invalid = The security consignee’s EORI number must only include letters a to z without accents and numbers 0 to 9
+safetyAndSecurityConsigneeEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
+
+safetyAndSecurityConsigneeName.title = What is the security consignee’s name?
+safetyAndSecurityConsigneeName.heading = What is the security consignee’s name?
+safetyAndSecurityConsigneeName.checkYourAnswersLabel = Security consignee’s name
+safetyAndSecurityConsigneeName.error.required = Enter the security consignee’s name
+safetyAndSecurityConsigneeName.error.length = The security consignee’s name must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+safetyAndSecurityConsigneeName.error.invalid = The security consignee’s name must be 35 characters or less
+
+addCarrierEori.title =  Do you know the carrier’s EORI number?
+addCarrierEori.heading = Do you know the carrier’s EORI number?
+addCarrierEori.checkYourAnswersLabel =  Know the carrier’s EORI number?
+addCarrierEori.error.required =  Enter the carrier’s EORI number
+
+addCarrier.title =  Do you need to add a carrier?
+addCarrier.heading =  Do you need to add a carrier?
+addCarrier.checkYourAnswersLabel = Add a carrier?
+addCarrier.error.required = Select yes if you need to add a carrier
+
+carrierAddress.title = What is {0}’s address?
+carrierAddress.heading = What is {0}’s address?
+carrierAddress.checkYourAnswersLabel = Carrier’s address
+carrierAddress.error.required = Enter carrierAddress
+
+carrierEori.title = What is the carrier’s EORI number?
+carrierEori.heading = What is the carrier’s EORI number?
+carrierEori.checkYourAnswersLabel = Carrier’s EORI number
+carrierEori.error.required = Enter the carrier’s EORI number
+carrierEori.error.length =  The carrier’s EORI number must be 17 characters or less
+carrierEori.error.invalidCharacters = The carrier’s EORI number must only include letters a to z without accents and numbers 0 to 9
+carrierEori.error.invalidFormat = Enter the carrier’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+carrierEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
+
+carrierName.title =  What is the carrier’s name?
+carrierName.heading = What is the carrier’s name?
+carrierName.checkYourAnswersLabel =  Carrier’s name
+carrierName.error.required =  Enter the carrier’s name
+carrierName.error.length = carrier’s name must be 35 characters or less
+carrierName.error.invalidCharacters = The carrier’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+
+cancellationDecision.cancellationRejected.title = Cancellation rejected
+cancellationDecision.cancellationRejected.heading = Cancellation rejected
+cancellationDecision.declarationCancelled.title = Declaration cancelled
+cancellationDecision.declarationCancelled.heading = Declaration cancelled
+
+cancellationDecisionUpdate.mrn = Movement reference number
+cancellationDecisionUpdate.cancellationRequestDate = Date of request
+cancellationDecisionUpdate.initiatedByCustoms = Initiated by customs?
+cancellationDecisionUpdate.cancellationDecision = Status
+cancellationDecisionUpdate.cancellationDecisionDate = Date of decision
+cancellationDecisionUpdate.cancellationJustification = Reason
+cancellationDecisionUpdate.contact.p = You must
+cancellationDecisionUpdate.contact.link = contact the New Computerised Transit System helpdesk to get this fixed (opens in a new tab)
+
+safetyAndSecurityCheckYourAnswers.title = Check your answers
+safetyAndSecurityCheckYourAnswers.heading = Check your answers
+safetyAndSecurity.checkYourAnswersLabel.countriesOfRouting = Countries of routing
+safetyAndSecurity.checkYourAnswersLabel.securityTraderDetails = Security trader
+safetyAndSecurity.checkYourAnswersLabel.subTitle.securityConsignor = Security consignor
+safetyAndSecurity.checkYourAnswersLabel.subTitle.securityConsignee = Security consignee
+safetyAndSecurity.checkYourAnswersLabel.subTitle.carrier = Carrier
+
+securityConsignorName.title = What is the security consignor’s name?
+securityConsignorName.heading = What is the security consignor’s name?
+securityConsignorName.checkYourAnswersLabel = Security consignor’s name
+securityConsignorName.error.required = Enter the security consignor’s name
+securityConsignorName.error.length = The security consignor’s name must be 35 characters or less
+securityConsignorName.error.invalid = The security consignor’s name must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+
+securityConsigneeName.title = What is the security consignee’s name?
+securityConsigneeName.heading = What is the security consignee’s name?
+securityConsigneeName.checkYourAnswersLabel =  Security consignee’s name
+securityConsigneeName.error.required = Enter the security consignee’s name
+securityConsigneeName.error.length =  The security consignee’s name must be 35 characters or less
+securityConsigneeName.error.invalid = The security consignee’s name must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+
+confirmRemoveCountry.title = Are you sure you want to remove this country?
+confirmRemoveCountry.heading = Are you sure you want to remove this country?
+confirmRemoveCountry.checkYourAnswersLabel = confirmRemoveCountry
+confirmRemoveCountry.error.required = Select yes if you want to remove the country
+
+addAnotherGuarantee.title.singular = You have added 1 guarantee
+addAnotherGuarantee.title.plural = You have added {0} guarantees
+addAnotherGuarantee.heading.singular = You have added 1 guarantee
+addAnotherGuarantee.heading.plural = You have added {0} guarantees
+addAnotherGuarantee.radio.heading = Do you need to add another guarantee?
+addAnotherGuarantee.error.required = Select yes if you need to add another guarantee
+addAnotherGuarantee.guarantee.change.hidden = guarantee {0}
+addAnotherGuarantee.guarantee.delete.hidden = guarantee {0}
+addAnotherGuarantee.maxLimit.label = You cannot add any more guarantees.
+
+addAnotherGuarantee.tir.title.singular = You have added 1 TIR Carnet
+addAnotherGuarantee.tir.title.plural = You have added {0} TIR Carnets
+addAnotherGuarantee.tir.heading.singular = You have added 1 TIR Carnet
+addAnotherGuarantee.tir.heading.plural = You have added {0} TIR Carnets
+addAnotherGuarantee.tir.radio.heading = Do you need to add another TIR Carnet
+addAnotherGuarantee.tir.error.required = Select yes if you need to add another TIR Carnet
+
+
+confirmRemoveGuarantee.title =  Are you sure you want to remove this guarantee?
+confirmRemoveGuarantee.heading =  Are you sure you want to remove this guarantee?
+confirmRemoveGuarantee.error.required = Select yes if you want to remove this guarantee
+
+movementDestinationCountry.title = What country is the transit movement ending in?
+movementDestinationCountry.heading = What country is the transit movement ending in?
+movementDestinationCountry.checkYourAnswersLabel = Country transit movement is ending
+movementDestinationCountry.error.required = Enter the country the transit movement is ending in
+
+addNationalityAtDeparture.title = Do you need to add the nationality at departure?
+addNationalityAtDeparture.heading = Do you need to add the nationality at departure?
+addNationalityAtDeparture.checkYourAnswersLabel = Add the nationality at departure
+addNationalityAtDeparture.error.required = Select yes if you need to add the nationality at departure
+addNationalityAtDeparture.checkYourAnswersLabel = Add nationality at departure?
+
+loadingPlace.title = Where is the loading place?
+loadingPlace.heading = Where is the loading place?
+loadingPlace.checkYourAnswersLabel = Loading place
+loadingPlace.error.required = Enter the loading place
+loadingPlace.error.length = The loading place must be 35 characters or less
+loadingPlace.error.invalid = The loading place must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+loadingPlace.paragraph = This is where the goods will be loaded onto the vehicle that will transport them. You can use the postcode or the location code (unlocode).
+
+officeOfTransitCountry.title = Which country is the office of transit in?
+officeOfTransitCountry.heading = Which country is the office of transit in?
+officeOfTransitCountry.checkYourAnswersLabel = officeOfTransitCountry
+officeOfTransitCountry.paragraph = This is where the goods and accompanying documents are presented. If there is no office of transit, enter the office of destination or port of arrival.
+officeOfTransitCountry.error.required = Enter the country the office of transit is in
+officeOfTransitCountry.error.noTransitOffice=You cannot use this country as it does not have any offices of transit
+addAgreedLocationOfGoods.title = Do you need to add an agreed location for the goods?
+addAgreedLocationOfGoods.heading = Do you need to add an agreed location for the goods?
+addAgreedLocationOfGoods.checkYourAnswersLabel = Add an agreed location for the goods
+addAgreedLocationOfGoods.error.required = Select yes if you need to add an agreed location for the goods
+
+agreedLocationOfGoods.title =  What is the agreed location for the goods?
+agreedLocationOfGoods.heading =  What is the agreed location for the goods?
+agreedLocationOfGoods.checkYourAnswersLabel =  Agreed location for the goods
+agreedLocationOfGoods.error.required = Enter the agreed location for the goods
+agreedLocationOfGoods.error.length = The agreed location for the goods must be 35 characters or less
+agreedLocationOfGoods.error.invalid = The agreed location for the goods must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
+principalTirHolderId.title =  What is the principal’s TIR holder identification?
+principalTirHolderId.heading =  What is the principal’s TIR holder identification?
+principalTirHolderId.hintText =  Like GBR/xxx/xxxxxxx or NIR/xxx/xxxxxxx.
+principalTirHolderId.checkYourAnswersLabel = Principal’s TIR holder identification
+principalTirHolderId.error.required = Enter  Enter the principal’s TIR holder identification
+principalTirHolderId.error.length = Principal’s TIR holder identification must be 35 characters or less
+principalTirHolderId.error.format = Enter the principal’s TIR holder identification in the right format
+principalTirHolderId.error.characters = The principal’s TIR holder identification must only include letters a to z, numbers 0 to 9 and forward slashes
+
+tirCarnetReference.title = What is the TIR Carnet reference?
+tirCarnetReference.heading = What is the TIR Carnet reference?
+tirCarnetReference.checkYourAnswersLabel = TIR Carnet reference
+tirCarnetReference.error.required = Enter the reference for the TIR carnet
+tirCarnetReference.error.maxLength = The reference for the TIR Carnet must be 11 characters or less
+tirCarnetReference.error.minLength = The reference for the TIR Carnet must be 10 characters or more
+tirCarnetReference.error.invalidCharacters = The reference for the TIR Carnet must only include letters a to z and numbers 0 to 9
+
+addOfficeOfTransit.title = Do you need to add an office of transit?
+addOfficeOfTransit.heading = Do you need to add an office of transit?
+addOfficeOfTransit.checkYourAnswersLabel = Do you need to add an office of transit?
+addOfficeOfTransit.error.required = Select yes if you need to add an office of transit
+
+tirGuaranteeReference.title = What is the reference for the TIR guarantee?
+tirGuaranteeReference.heading = What is the reference for the TIR guarantee?
+tirGuaranteeReference.checkYourAnswersLabel = TIR guarantee reference
+tirGuaranteeReference.error.required = Enter the reference for the TIR guarantee
+tirGuaranteeReference.error.length = The reference for the TIR guarantee must be 35 characters or less
+tirGuaranteeReference.error.invalid = The reference for the TIR guarantee must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
+confirmStartAddItems.title = Are you ready to start adding items?
+confirmStartAddItems.heading = Are you ready to start adding items?
+confirmStartAddItems.info.nonSafety = Make sure the answers in general information, route, and trader details sections are correct. Changing any answers in these sections will reset this section.
+confirmStartAddItems.info.safety = Make sure the answers in general information, route, trader details, and safety and security sections are correct. Changing any answers in these sections will reset this section.
+confirmStartAddItems.error.required = Select yes if you are ready to start adding items
+

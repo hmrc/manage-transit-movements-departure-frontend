@@ -1,0 +1,30 @@
+{% from "govuk/components/summary-list/macro.njk"  import govukSummaryList %}
+
+{% macro section(sectionTitle, rows, addAnother, sectionSubTitle) %}
+
+  {% if rows | length %}
+
+    <div class="govuk-summary-sectionRows__row">
+  
+      {% if sectionTitle %}
+        <h2 class="govuk-heading-m">{{ sectionTitle }}</h2>
+      {%  endif %}
+
+      {% if sectionSubTitle %}
+        <h3 class="govuk-heading-s">{{ sectionSubTitle }}</h3>
+      {%  endif %}
+
+      {{ govukSummaryList({
+        rows: rows,
+        classes:"govuk-summary-list govuk-!-margin-bottom-9"
+      }) }}
+
+      {% if addAnother %}
+        <p class="govuk-body">
+            <a class="govuk-link" href={{ addAnother.href }}>{{ addAnother.content }}</a>
+        </p>
+      {%  endif %}
+    </div>
+  
+  {% endif %}
+{% endmacro %}

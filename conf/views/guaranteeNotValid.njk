@@ -1,0 +1,61 @@
+{% extends "includes/layout.njk" %}
+
+{% from "govuk/components/back-link/macro.njk"        import govukBackLink %}
+{% from "macros/title.njk"                            import title %}
+{% from "govuk/components/button/macro.njk"           import govukButton %}
+{% from "govuk/components/summary-list/macro.njk"     import govukSummaryList %}
+{% from "govuk/components/button/macro.njk"           import govukButton %}
+
+{% block pageTitle %}
+  {{ title(messages("guaranteeNotValid.title")) }}
+{% endblock %}
+
+{% block mainContent %}
+
+  {{ govukBackLink({
+    text: messages("site.back")
+  }) }}
+
+  <div class="govuk-main-wrapper">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        <h1 class="govuk-heading-xl">
+          {{ messages("guaranteeNotValid.heading") }}
+        </h1>
+
+        {% for reasonCode in guaranteeNotValidMessage.reasonCodes %}
+          <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                {{ messages("guaranteeNotValid.errorCode") }}
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ reasonCode.code.value }}
+              </dd>
+            </div>
+            {% if reasonCode.reason  %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  {{ messages("guaranteeNotValid.reason") }}
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ reasonCode.reason }}
+                </dd>
+              </div>
+            {% endif %}
+          </dl>
+        {% endfor %}
+
+        <p class="govuk-body">{{ messages("guaranteeNotValid.review") }}
+            <a class="govuk-link" href={{departureUrl}} >{{ messages("guaranteeNotValid.sendDeparture") }}</a>.
+        </p>
+
+        <p class="govuk-body">{{ messages("guaranteeNotValid.you.must") }}
+            <a class="govuk-link" href={{contactUrl}} target="_blank" rel="noopener noreferrer">{{ messages("guaranteeNotValid.contact") }}</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

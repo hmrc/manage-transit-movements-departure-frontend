@@ -1,0 +1,47 @@
+GET        /:lrn/guarantee-details/:index/guarantee-reference                       controllers.guaranteeDetails.GuaranteeReferenceController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+POST       /:lrn/guarantee-details/:index/guarantee-reference                       controllers.guaranteeDetails.GuaranteeReferenceController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+GET        /:lrn/guarantee-details/:index/change-guarantee-reference                controllers.guaranteeDetails.GuaranteeReferenceController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+POST       /:lrn/guarantee-details/:index/change-guarantee-reference                controllers.guaranteeDetails.GuaranteeReferenceController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+
+GET        /:lrn/guarantee-details/:index/other-reference                           controllers.guaranteeDetails.OtherReferenceController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+POST       /:lrn/guarantee-details/:index/other-reference                           controllers.guaranteeDetails.OtherReferenceController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+GET        /:lrn/guarantee-details/:index/change-other-reference                    controllers.guaranteeDetails.OtherReferenceController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+POST       /:lrn/guarantee-details/:index/change-other-reference                    controllers.guaranteeDetails.OtherReferenceController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+
+GET        /:lrn/guarantee-details/:index/guarantee-type                            controllers.guaranteeDetails.GuaranteeTypeController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+POST       /:lrn/guarantee-details/:index/guarantee-type                            controllers.guaranteeDetails.GuaranteeTypeController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+GET        /:lrn/guarantee-details/:index/change-guarantee-type                     controllers.guaranteeDetails.GuaranteeTypeController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+POST       /:lrn/guarantee-details/:index/change-guarantee-type                     controllers.guaranteeDetails.GuaranteeTypeController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+
+GET        /:lrn/guarantee-details/:index/access-code                               controllers.guaranteeDetails.AccessCodeController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+POST       /:lrn/guarantee-details/:index/access-code                               controllers.guaranteeDetails.AccessCodeController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+GET        /:lrn/guarantee-details/:index/change-access-code                        controllers.guaranteeDetails.AccessCodeController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+POST       /:lrn/guarantee-details/:index/change-access-code                        controllers.guaranteeDetails.AccessCodeController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+
+GET        /:lrn/guarantee-details/:index/default-amount                            controllers.guaranteeDetails.DefaultAmountController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+POST       /:lrn/guarantee-details/:index/default-amount                            controllers.guaranteeDetails.DefaultAmountController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+GET        /:lrn/guarantee-details/:index/change-default-amount                     controllers.guaranteeDetails.DefaultAmountController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+POST       /:lrn/guarantee-details/:index/change-default-amount                     controllers.guaranteeDetails.DefaultAmountController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+
+GET        /:lrn/guarantee-details/:index/gb-liability-amount                       controllers.guaranteeDetails.LiabilityAmountController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+POST       /:lrn/guarantee-details/:index/gb-liability-amount                       controllers.guaranteeDetails.LiabilityAmountController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+GET        /:lrn/guarantee-details/:index/change-gb-liability-amount                controllers.guaranteeDetails.LiabilityAmountController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+POST       /:lrn/guarantee-details/:index/change-gb-liability-amount                controllers.guaranteeDetails.LiabilityAmountController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+
+GET        /:lrn/guarantee-details/:index/check-your-answers                        controllers.guaranteeDetails.GuaranteeDetailsCheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
+
+GET        /:lrn/guarantee-details/:index/liability-amount                          controllers.guaranteeDetails.OtherReferenceLiabilityAmountController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+POST       /:lrn/guarantee-details/:index/liability-amount                          controllers.guaranteeDetails.OtherReferenceLiabilityAmountController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+GET        /:lrn/guarantee-details/:index/change-liability-amount                   controllers.guaranteeDetails.OtherReferenceLiabilityAmountController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+POST       /:lrn/guarantee-details/:index/change-liability-amount                   controllers.guaranteeDetails.OtherReferenceLiabilityAmountController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+
+GET        /:lrn/guarantee-details/add-another-guarantee                            controllers.guaranteeDetails.AddAnotherGuaranteeController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/guarantee-details/add-another-guarantee                            controllers.guaranteeDetails.AddAnotherGuaranteeController.onSubmit(lrn: LocalReferenceNumber)
+
+GET        /:lrn/guarantee-details/:index/confirm-remove-guarantee                  controllers.guaranteeDetails.ConfirmRemoveGuaranteeController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
+POST       /:lrn/guarantee-details/:index/confirm-remove-guarantee                  controllers.guaranteeDetails.ConfirmRemoveGuaranteeController.onSubmit(lrn: LocalReferenceNumber, index: Index)
+
+GET        /:lrn/guarantee-details/:index/tir-guarantee-reference                   controllers.guaranteeDetails.TIRGuaranteeReferenceController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+POST       /:lrn/guarantee-details/:index/tir-guarantee-reference                   controllers.guaranteeDetails.TIRGuaranteeReferenceController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+GET        /:lrn/guarantee-details/:index/change-tir-guarantee-reference            controllers.guaranteeDetails.TIRGuaranteeReferenceController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+POST       /:lrn/guarantee-details/:index/change-tir-guarantee-reference            controllers.guaranteeDetails.TIRGuaranteeReferenceController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)

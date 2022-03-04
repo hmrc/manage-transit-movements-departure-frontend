@@ -1,0 +1,41 @@
+{% extends "includes/layout.njk" %}
+
+{% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
+{% from "govuk/components/button/macro.njk"        import govukButton %}
+{% from "macros/title.njk"                         import title %}
+
+{% block pageTitle %}
+  {{ title(messages("addIdAtDepartureLater.title")) }}
+{% endblock %}
+
+{% block mainContent %}
+
+  {{ govukBackLink({
+      text: messages("site.back")
+    }) }}
+
+  <div class="govuk-main-wrapper">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        <span class="govuk-caption-xl">{{messages('transportDetails.preHeading')}}</span>
+
+        <h1 class="govuk-heading-xl">
+          {{ messages("addIdAtDepartureLater.heading") }}
+        </h1>
+
+        <p class="govuk-body">
+          {{ messages("addIdAtDepartureLater.paragraph") }}
+        </p>
+
+        {{ govukButton({
+                    text: messages("site.continue"),
+                    href: nextPageUrl,
+                    attributes: {id:"submit"}
+                  }) }}
+
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
