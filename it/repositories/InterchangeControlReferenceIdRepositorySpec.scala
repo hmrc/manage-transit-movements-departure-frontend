@@ -17,27 +17,26 @@
 package repositories
 
 import itSpecBase.ItSpecBase
-import itUtils.MockDateTimeService
 import models.messages.InterchangeControlReference
+import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
+import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
-import reactivemongo.play.json.collection.Helpers.idWrites
-import reactivemongo.play.json.collection.JSONCollection
 import services.DateTimeService
-
-import scala.concurrent.ExecutionContext.Implicits.global
+import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 
 class InterchangeControlReferenceIdRepositorySpec
     extends ItSpecBase
-    with ItMongoSuite
     with BeforeAndAfterEach
     with GuiceOneAppPerSuite
-    with MockDateTimeService
-    with FailOnUnindexedQueries {
+    with DefaultPlayMongoRepositorySupport[InterchangeControlReference] {
+
+  private val mockTimeService: DateTimeService = mock[DateTimeService]
+
+  override protected def repository = new InterchangeControlReferenceIdRepository(mongoComponent, mockTimeService)
 
   implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .overrides(
@@ -47,50 +46,35 @@ class InterchangeControlReferenceIdRepositorySpec
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    database.flatMap(_.drop()).futureValue
+    reset(mockTimeService)
   }
-
-  val service: InterchangeControlReferenceIdRepository = app.injector.instanceOf[InterchangeControlReferenceIdRepository]
 
   "InterchangeControlReferenceIdRepository" - {
 
     "must generate correct InterchangeControlReference when no record exists within the database" in {
 
-      mockDateFormatted("20190101")
+      when(mockTimeService.dateFormatted).thenReturn("20190101")
 
-      val first = service.nextInterchangeControlReferenceId().futureValue
+      val first = repository.nextInterchangeControlReferenceId().futureValue
 
       first mustBe InterchangeControlReference("20190101", 1)
 
-      val second = service.nextInterchangeControlReferenceId().futureValue
+      val second = repository.nextInterchangeControlReferenceId().futureValue
 
       second mustBe InterchangeControlReference("20190101", 2)
     }
 
     "must generate correct InterchangeControlReference when the collection already has a document in the database" in {
 
-      mockDateFormatted("20190101")
+      when(mockTimeService.dateFormatted).thenReturn("20190101")
 
-      database.flatMap {
-        db =>
-          db.collection[JSONCollection]("interchange-control-reference-ids")
-            .insert(ordered = false)
-            .one(
-              Json.obj(
-                "_id"        -> mockTimeService.dateFormatted,
-                "last-index" -> 1
-              )
-            )
-      }.futureValue
+      insert(InterchangeControlReference(mockTimeService.dateFormatted, 1)).futureValue
 
-      val first  = service.nextInterchangeControlReferenceId().futureValue
-      val second = service.nextInterchangeControlReferenceId().futureValue
+      val first  = repository.nextInterchangeControlReferenceId().futureValue
+      val second = repository.nextInterchangeControlReferenceId().futureValue
 
       first.index mustEqual 2
       second.index mustEqual 3
-
     }
-
   }
-
 }
