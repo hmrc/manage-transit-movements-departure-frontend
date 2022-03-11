@@ -49,24 +49,26 @@ class InterchangeControlReferenceIdRepositorySpec
     reset(mockTimeService)
   }
 
+  private val date: String = "20190101"
+
   "InterchangeControlReferenceIdRepository" - {
 
     "must generate correct InterchangeControlReference when no record exists within the database" in {
 
-      when(mockTimeService.dateFormatted).thenReturn("20190101")
+      when(mockTimeService.dateFormatted).thenReturn(date)
 
       val first = repository.nextInterchangeControlReferenceId().futureValue
 
-      first mustBe InterchangeControlReference("20190101", 1)
+      first mustBe InterchangeControlReference(date, 1)
 
       val second = repository.nextInterchangeControlReferenceId().futureValue
 
-      second mustBe InterchangeControlReference("20190101", 2)
+      second mustBe InterchangeControlReference(date, 2)
     }
 
     "must generate correct InterchangeControlReference when the collection already has a document in the database" in {
 
-      when(mockTimeService.dateFormatted).thenReturn("20190101")
+      when(mockTimeService.dateFormatted).thenReturn(date)
 
       insert(InterchangeControlReference(mockTimeService.dateFormatted, 1)).futureValue
 
