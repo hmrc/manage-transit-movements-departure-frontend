@@ -25,7 +25,7 @@ import org.scalatest.concurrent.IntegrationPatience
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
-import utils.{MockDateTimeService, XMLComparatorSpec, XSDSchemaValidationSpec}
+import utils.{XMLComparatorSpec, XSDSchemaValidationSpec}
 import xml.XMLWrites._
 
 import java.time.LocalDateTime
@@ -38,10 +38,11 @@ class UserAnswersToXmlConversionSpec
     with UserAnswersSpecHelper
     with XMLComparatorSpec
     with XSDSchemaValidationSpec
-    with IntegrationPatience
-    with MockDateTimeService {
+    with IntegrationPatience {
 
   private val mockInterchangeControlReference = mock[InterchangeControlReferenceIdRepository]
+
+  private val mockTimeService: DateTimeService = mock[DateTimeService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder = super
     .guiceApplicationBuilder()
