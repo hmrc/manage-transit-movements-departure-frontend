@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode, TransportMode}
-import models.{CountryList, LocalReferenceNumber, TransportModeList}
+import models.{CountryList, TransportModeList}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
@@ -29,7 +29,6 @@ import pages.InlandModePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -38,8 +37,6 @@ import services.{CountriesService, TransportModesService}
 import scala.concurrent.Future
 
 class TransportDetailsCheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with JsonMatchers {
-
-  def onwardRoute(lrn: LocalReferenceNumber) = Call("GET", s"/manage-transit-movements-departures/$lrn/task-list")
 
   lazy val transportDetailsRoute: String               = routes.TransportDetailsCheckYourAnswersController.onPageLoad(lrn).url
   val mockTransportModesService: TransportModesService = mock[TransportModesService]
