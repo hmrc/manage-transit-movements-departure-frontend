@@ -57,22 +57,25 @@ class TemplatesCompileSpec extends ItSpecBase with GuiceOneAppPerSuite {
     templates.map {
       filename =>
         note(s"Render $filename...")
-        val path = filename.toPath
+        val path            = filename.toPath
         val pathInsideViews = path.subpath(2, path.getNameCount)
-        val result = renderer.render(pathInsideViews.toString, Json.obj(
-          "mode" -> normalMode,
-          "lrn" -> "testLrn",
-          "index" -> "testIndex",
-          "documentIndex" -> "testDocumentIndex",
-          "itemIndex" -> "testItemIndex",
-          "packageIndex" -> "testPackageIndex",
-          "referenceIndex" -> "testReferenceIndex",
-          "sealIndex" -> "testSealIndex",
-          "onSubmitUrl" -> "testOnSubmitUrl"
-        ))
+        val result = renderer.render(
+          pathInsideViews.toString,
+          Json.obj(
+            "mode"           -> normalMode,
+            "lrn"            -> "testLrn",
+            "index"          -> "testIndex",
+            "documentIndex"  -> "testDocumentIndex",
+            "itemIndex"      -> "testItemIndex",
+            "packageIndex"   -> "testPackageIndex",
+            "referenceIndex" -> "testReferenceIndex",
+            "sealIndex"      -> "testSealIndex",
+            "onSubmitUrl"    -> "testOnSubmitUrl"
+          )
+        )
         val html: Html = result.futureValue
         html mustBe an[Html]
-        val document = Jsoup.parse(html.toString())
+        val document        = Jsoup.parse(html.toString())
         val forms: Elements = document.getElementsByTag("form")
         asScalaBuffer(forms).map {
           form =>

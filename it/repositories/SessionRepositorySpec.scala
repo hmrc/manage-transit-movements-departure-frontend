@@ -16,56 +16,48 @@
 
 package repositories
 
+import config.FrontendAppConfig
 import itSpecBase.ItSpecBase
-import itUtils.MockDateTimeService
-import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
+import models.{EoriNumber, Id, LocalReferenceNumber, UserAnswers}
+import org.mongodb.scala.MongoWriteException
+import org.mongodb.scala.model.Filters
 import org.scalatest.concurrent.IntegrationPatience
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json.Json
-import reactivemongo.api.indexes.IndexType
-import reactivemongo.core.errors.DatabaseException
-import reactivemongo.play.json.collection.JSONCollection
+import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class SessionRepositorySpec extends ItSpecBase
-  with ItMongoSuite
-  with BeforeAndAfterEach
-  with GuiceOneAppPerSuite
-  with MockDateTimeService
-  with FailOnUnindexedQueries
-  with OptionValues
-  with IntegrationPatience {
+class SessionRepositorySpec
+    extends ItSpecBase
+    with BeforeAndAfterEach
+    with GuiceOneAppPerSuite
+    with OptionValues
+    with IntegrationPatience
+    with DefaultPlayMongoRepositorySupport[UserAnswers] {
 
-  private val service = app.injector.instanceOf[SessionRepository]
+  private val config: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-  private val userAnswer1 = UserAnswers(LocalReferenceNumber("ABCD1111111111111").get, EoriNumber("EoriNumber1"), Json.obj("foo" -> "bar"))
-  private val userAnswer2 = UserAnswers(LocalReferenceNumber("ABCD2222222222222").get, EoriNumber("EoriNumber2"), Json.obj("bar" -> "foo"))
+  override protected def repository = new SessionRepository(mongoComponent, config)
 
-  val eoriIndex = SimpleMongoIndexConfig(
-    key = Seq("eoriNumber" -> IndexType.Ascending, "lrn" -> IndexType.Ascending),
-    name = Some("eoriNumber-lrn-index")
-  )
+  private lazy val userAnswers1 = UserAnswers(LocalReferenceNumber("ABCD1111111111111").get, EoriNumber("EoriNumber1"))
+  private lazy val userAnswers2 = UserAnswers(LocalReferenceNumber("ABCD2222222222222").get, EoriNumber("EoriNumber2"))
+  private lazy val userAnswers3 = UserAnswers(LocalReferenceNumber("ABCD3333333333333").get, EoriNumber("EoriNumber3"))
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    database.flatMap {
-      db =>
-        val jsonCollection = db.collection[JSONCollection]("user-answers")
-        jsonCollection.indexesManager.create(eoriIndex).flatMap {
-          _ =>
-            jsonCollection
-              .insert(ordered = false)
-              .many(Seq(userAnswer1, userAnswer2))
-        }
-    }.futureValue
+    insert(userAnswers1).futureValue
+    insert(userAnswers2).futureValue
   }
 
-  override def afterEach(): Unit = {
-    super.afterEach()
-    database.flatMap(_.drop())
-  }
+  private def findOne(lrn: LocalReferenceNumber, eoriNumber: EoriNumber): Option[UserAnswers] =
+    find(
+      Filters.and(
+        Filters.eq("lrn", lrn.value),
+        Filters.eq("eoriNumber", eoriNumber.value)
+      )
+    ).futureValue.headOption
 
   "SessionRepository" - {
 
@@ -73,23 +65,23 @@ class SessionRepositorySpec extends ItSpecBase
 
       "must return UserAnswers when given an LocalReferenceNumber and EoriNumber" in {
 
-        val result = service.get(LocalReferenceNumber("ABCD1111111111111").get, EoriNumber("EoriNumber1")).futureValue
+        val result = repository.get(userAnswers1.lrn, userAnswers1.eoriNumber).futureValue
 
-        result.value.lrn        mustBe userAnswer1.lrn
-        result.value.eoriNumber mustBe userAnswer1.eoriNumber
-        result.value.data       mustBe userAnswer1.data
+        result.value.lrn mustBe userAnswers1.lrn
+        result.value.eoriNumber mustBe userAnswers1.eoriNumber
+        result.value.data mustBe userAnswers1.data
       }
 
       "must return None when no UserAnswers match LocalReferenceNumber" in {
 
-        val result = service.get(LocalReferenceNumber("ABCD3333333333333").get, EoriNumber("EoriNumber1")).futureValue
+        val result = repository.get(userAnswers3.lrn, userAnswers1.eoriNumber).futureValue
 
         result mustBe None
       }
 
       "must return None when no UserAnswers match EoriNumber" in {
 
-        val result = service.get(LocalReferenceNumber("ABCD1111111111111").get, EoriNumber("InvalidEori")).futureValue
+        val result = repository.get(userAnswers1.lrn, userAnswers3.eoriNumber).futureValue
 
         result mustBe None
       }
@@ -99,28 +91,43 @@ class SessionRepositorySpec extends ItSpecBase
 
       "must create new document when given valid UserAnswers" in {
 
-        val userAnswer = UserAnswers(LocalReferenceNumber("ABCD3333333333333").get, EoriNumber("EoriNumber3"), Json.obj("foo" -> "bar"))
+        findOne(userAnswers3.lrn, userAnswers3.eoriNumber) must not be defined
 
-        val setResult = service.set(userAnswer).futureValue
+        val setResult = repository.set(userAnswers3).futureValue
 
-        val getResult = service.get(LocalReferenceNumber("ABCD3333333333333").get, EoriNumber("EoriNumber3")).futureValue.value
+        setResult mustBe true
 
+        val getResult = findOne(userAnswers3.lrn, userAnswers3.eoriNumber).get
 
-        setResult            mustBe true
-        getResult.lrn        mustBe userAnswer.lrn
-        getResult.eoriNumber mustBe userAnswer.eoriNumber
-        getResult.data       mustBe userAnswer.data
+        getResult.lrn mustBe userAnswers3.lrn
+        getResult.eoriNumber mustBe userAnswers3.eoriNumber
+        getResult.data mustBe userAnswers3.data
       }
 
-      "must fail when attempting to create using an existing id" in {
+      "must update document when it already exists" in {
 
-        val userAnswer = UserAnswers(LocalReferenceNumber("ABCD1111111111111").get, EoriNumber("EoriNumber1"), Json.obj("foo" -> "bar"))
+        val firstGet = findOne(userAnswers1.lrn, userAnswers1.eoriNumber).get
 
-        val setResult = service.set(userAnswer)
+        val setResult = repository.set(userAnswers1.copy(data = Json.obj("foo" -> "bar"))).futureValue
+
+        setResult mustBe true
+
+        val secondGet = findOne(userAnswers1.lrn, userAnswers1.eoriNumber).get
+
+        firstGet.id mustBe secondGet.id
+        firstGet.lrn mustBe secondGet.lrn
+        firstGet.eoriNumber mustBe secondGet.eoriNumber
+        firstGet.data mustNot equal(secondGet.data)
+        firstGet.lastUpdated isBefore secondGet.lastUpdated mustBe true
+      }
+
+      "must fail when attempting to set using an existing LocalReferenceNumber and EoriNumber with a different Id" in {
+
+        val setResult = repository.set(userAnswers1.copy(id = Id()))
 
         whenReady(setResult.failed) {
           e =>
-            e mustBe an[DatabaseException]
+            e mustBe a[MongoWriteException]
         }
       }
     }
@@ -129,11 +136,22 @@ class SessionRepositorySpec extends ItSpecBase
 
       "must remove document when given a valid LocalReferenceNumber and EoriNumber" in {
 
-        service.get(LocalReferenceNumber("ABCD1111111111111").get, EoriNumber("EoriNumber1")).futureValue mustBe defined
+        findOne(userAnswers1.lrn, userAnswers1.eoriNumber) mustBe defined
 
-        service.remove(LocalReferenceNumber("ABCD1111111111111").get, EoriNumber("EoriNumber1")).futureValue
+        val removeResult = repository.remove(userAnswers1.lrn, userAnswers1.eoriNumber).futureValue
 
-        service.get(LocalReferenceNumber("ABCD1111111111111").get, EoriNumber("EoriNumber1")).futureValue must not be defined
+        removeResult mustBe true
+
+        findOne(userAnswers1.lrn, userAnswers1.eoriNumber) must not be defined
+      }
+
+      "must not fail if document does not exist" in {
+
+        findOne(userAnswers3.lrn, userAnswers3.eoriNumber) must not be defined
+
+        val removeResult = repository.remove(userAnswers3.lrn, userAnswers3.eoriNumber).futureValue
+
+        removeResult mustBe true
       }
     }
   }
