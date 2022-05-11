@@ -78,7 +78,10 @@ lazy val root = (project in file("."))
   .settings(
     // ***************
     // Use the silencer plugin to suppress warnings
-    scalacOptions += "-P:silencer:pathFilters=routes",
+    scalacOptions ++= Seq(
+      "-feature",
+      "-P:silencer:pathFilters=routes;views"
+    ),
     libraryDependencies ++= Seq(
       compilerPlugin(
         "com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full
