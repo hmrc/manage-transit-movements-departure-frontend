@@ -34,10 +34,14 @@ lazy val root = (project in file("."))
     TwirlKeys.templateImports ++= Seq(
       "play.twirl.api.HtmlFormat",
       "play.twirl.api.HtmlFormat._",
-      "uk.gov.hmrc.play.views.html.helpers._",
-      "uk.gov.hmrc.play.views.html.layouts._",
+      "uk.gov.hmrc.govukfrontend.views.html.components._",
+      "uk.gov.hmrc.hmrcfrontend.views.html.components._",
+      "uk.gov.hmrc.hmrcfrontend.views.html.helpers._",
       "models.Mode",
-      "controllers.routes._"
+      "controllers.routes._",
+      "views.html.helper.CSPNonce",
+      "viewModels.{InputSize, LabelSize, LegendSize}",
+      "templates._"
     ),
     PlayKeys.playDefaultPort := 10120,
     ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;.*repositories.*;" +
@@ -63,19 +67,21 @@ lazy val root = (project in file("."))
       Resolver.jcenterRepo
     ),
     Concat.groups := Seq(
-      "javascripts/application.js" -> group(
-        Seq("lib/govuk-frontend/govuk/all.js", "lib/hmrc-frontend/hmrc/all.js", "javascripts/ctc.js")
-      )
+      "javascripts/application.js" -> group(Seq("javascripts/ctc.js", "javascripts/accessible-autocomplete.js", "javascripts/autocomplete.js"))
     ),
-    uglifyCompressOptions          := Seq("unused=false", "dead_code=false", "warnings=false"),
-    pipelineStages in Assets       := Seq(concat, uglify),
-    useSuperShell in ThisBuild     := false,
-    scalafmtOnCompile in ThisBuild := true
+    uglifyCompressOptions := Seq("unused=false", "dead_code=false", "warnings=false"),
+    Assets / pipelineStages := Seq(digest, concat, uglify),
+    ThisBuild / useSuperShell := false,
+    uglify / includeFilter := GlobFilter("application.js"),
+    ThisBuild / scalafmtOnCompile := true
   )
   .settings(
     // ***************
     // Use the silencer plugin to suppress warnings
-    scalacOptions += "-P:silencer:pathFilters=routes",
+    scalacOptions ++= Seq(
+      "-feature",
+      "-P:silencer:pathFilters=routes;views"
+    ),
     libraryDependencies ++= Seq(
       compilerPlugin(
         "com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full

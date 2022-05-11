@@ -16,6 +16,7 @@
 
 package handlers
 
+import javax.inject.{Inject, Singleton}
 import models.requests.DataRequest
 import play.api.http.HeaderNames.CACHE_CONTROL
 import play.api.http.HttpErrorHandler
@@ -23,14 +24,13 @@ import play.api.http.Status._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.Results._
-import play.api.mvc.{AnyContent, RequestHeader, Result, Results}
+import play.api.mvc.{AnyContent, RequestHeader, Result}
 import play.api.{Logging, PlayException}
 import renderer.Renderer
 import uk.gov.hmrc.nunjucks.NunjucksSupport
 import uk.gov.hmrc.play.bootstrap.frontend.http.ApplicationException
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 // NOTE: There should be changes to bootstrap to make this easier, the API in bootstrap should allow a `Future[Html]` rather than just an `Html`
@@ -44,19 +44,15 @@ class ErrorHandler @Inject() (
     with NunjucksSupport
     with Logging {
 
-  override def onClientError(request: RequestHeader, statusCode: Int, message: String = ""): Future[Result] = {
-
-    implicit val rh: RequestHeader = request
-
+  override def onClientError(request: RequestHeader, statusCode: Int, message: String = ""): Future[Result] =
     statusCode match {
       case NOT_FOUND =>
-        renderer.render("notFound.njk", Json.obj()).map(NotFound(_))
+        Future.successful(Redirect(controllers.routes.ErrorController.notFound()))
       case result if isClientError(result) =>
-        renderer.render("badRequest.njk").map(Results.Status(statusCode)(_))
+        Future.successful(Redirect(controllers.routes.ErrorController.badRequest()))
       case _ =>
-        renderer.render("technicalDifficulties.njk").map(Results.Status(statusCode)(_))
+        Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
     }
-  }
 
   override def onServerError(request: RequestHeader, exception: Throwable): Future[Result] = {
 

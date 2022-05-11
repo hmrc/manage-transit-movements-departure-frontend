@@ -17,7 +17,7 @@
 package views.safetyAndSecurity
 
 import play.api.libs.json.Json
-import views.SingleViewSpec
+import views.base.SingleViewSpec
 
 class AddAnotherCountryOfRoutingViewSpec extends SingleViewSpec("safetyAndSecurity/addAnotherCountryOfRouting.njk") {
 

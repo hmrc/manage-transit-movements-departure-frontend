@@ -25,20 +25,20 @@ class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderCo
   val contactHost: String                  = configuration.get[String]("contact-frontend.host")
   val contactFormServiceIdentifier: String = "CTCTraders"
 
-  override val betaFeedbackUnauthenticatedUrl: String = s"$contactHost/contact/beta-feedback-unauthenticated"
+  override val betaFeedbackUnauthenticatedUrl: String = s"$contactHost/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
 
   override val signOutUrl: String = configuration.get[String]("urls.logoutContinue") + configuration.get[String]("urls.feedback")
 
-  override def timeoutSeconds: String = configuration.get[String]("session.timeoutSeconds")
+  override def timeoutSeconds: Int = configuration.get[Int]("session.timeoutSeconds")
 
-  override def countdownSeconds: String = configuration.get[String]("session.countdownSeconds")
+  override def countdownSeconds: Int = configuration.get[Int]("session.countdownSeconds")
 }
 
 trait RenderConfig {
   def betaFeedbackUnauthenticatedUrl: String
   def signOutUrl: String
-  def timeoutSeconds: String
-  def countdownSeconds: String
+  def timeoutSeconds: Int
+  def countdownSeconds: Int
   def contactFormServiceIdentifier: String
   def contactHost: String
 }
