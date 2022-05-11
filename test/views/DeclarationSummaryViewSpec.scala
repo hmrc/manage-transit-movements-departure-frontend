@@ -19,6 +19,7 @@ package views
 import models.LocalReferenceNumber
 import play.api.libs.json.Json
 import viewModels.DeclarationSummaryViewModel
+import views.base.SingleViewSpec
 
 class DeclarationSummaryViewSpec extends SingleViewSpec("declarationSummary.njk") {
 

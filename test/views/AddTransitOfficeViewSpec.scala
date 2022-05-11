@@ -17,6 +17,7 @@
 package views
 
 import play.api.libs.json.Json
+import views.base.SingleViewSpec
 
 class AddTransitOfficeViewSpec extends SingleViewSpec("addTransitOffice.njk") {
 

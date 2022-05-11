@@ -17,7 +17,7 @@
 package views.guaranteeDetails
 
 import play.api.libs.json.Json
-import views.SingleViewSpec
+import views.base.SingleViewSpec
 
 class AddAnotherGuaranteeViewSpec extends SingleViewSpec("guaranteeDetails/addAnotherGuarantee.njk") {
 

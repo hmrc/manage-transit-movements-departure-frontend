@@ -44,19 +44,15 @@ class ErrorHandler @Inject() (
     with NunjucksSupport
     with Logging {
 
-  override def onClientError(request: RequestHeader, statusCode: Int, message: String = ""): Future[Result] = {
-
-    implicit val rh: RequestHeader = request
-
+  override def onClientError(request: RequestHeader, statusCode: Int, message: String = ""): Future[Result] =
     statusCode match {
       case NOT_FOUND =>
-        renderer.render("notFound.njk", Json.obj()).map(NotFound(_))
+        Future.successful(Redirect(controllers.routes.ErrorController.notFound()))
       case result if isClientError(result) =>
-        renderer.render("badRequest.njk").map(Results.Status(statusCode)(_))
+        Future.successful(Redirect(controllers.routes.ErrorController.badRequest()))
       case _ =>
-        renderer.render("technicalDifficulties.njk").map(Results.Status(statusCode)(_))
+        Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
     }
-  }
 
   override def onServerError(request: RequestHeader, exception: Throwable): Future[Result] = {
 

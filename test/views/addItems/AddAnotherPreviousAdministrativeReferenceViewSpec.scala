@@ -17,7 +17,7 @@
 package views.addItems
 
 import play.api.libs.json.Json
-import views.SingleViewSpec
+import views.base.SingleViewSpec
 
 class AddAnotherPreviousAdministrativeReferenceViewSpec extends SingleViewSpec("addItems/addAnotherPreviousAdministrativeReference.njk") {
 

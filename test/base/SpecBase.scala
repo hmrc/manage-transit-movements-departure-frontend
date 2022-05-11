@@ -27,10 +27,12 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.{EitherValues, OptionValues, TryValues}
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.Messages
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.i18n.{Messages, MessagesApi}
+import play.api.inject.Injector
 import play.api.libs.json.Json
 import play.api.mvc.AnyContentAsEmpty
-import play.api.test.{FakeRequest, Helpers}
+import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 
 trait SpecBase
@@ -38,6 +40,7 @@ trait SpecBase
     with Matchers
     with OptionValues
     with EitherValues
+    with GuiceOneAppPerSuite
     with TryValues
     with ScalaFutures
     with IntegrationPatience
@@ -78,7 +81,10 @@ trait SpecBase
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  implicit def messages: Messages = Helpers.stubMessages()
+  def injector: Injector = app.injector
+
+  def messagesApi: MessagesApi    = injector.instanceOf[MessagesApi]
+  implicit def messages: Messages = messagesApi.preferred(fakeRequest)
 
   implicit class UserAnswerReaderResultOps[R](userAnswersReaderResult: EitherType[R]) {
 
