@@ -26,17 +26,14 @@ import models.reference.{CountryCode, CustomsOffice}
 import models.{DeclarationType, DeclarationTypeViewModel, NormalMode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{times, verify, when}
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import views.html.DeclarationTypeView
 
@@ -90,10 +87,6 @@ class DeclarationTypeControllerSpec
       status(result) mustEqual OK
 
       val filledForm = form.bind(Map("value" -> DeclarationType.values.head.toString))
-
-      val updatedAnswers = emptyUserAnswers
-        .unsafeSetVal(ProcedureTypePage)(Normal)
-        .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
 
       val view = injector.instanceOf[DeclarationTypeView]
 

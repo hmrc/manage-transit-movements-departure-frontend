@@ -19,16 +19,18 @@ package models
 import models.ProcedureType.{Normal, Simplified}
 import models.reference.CountryCode
 
-sealed abstract class DeclarationType(val code: String, asString: String) extends WithName(asString)
+sealed trait DeclarationType
 
-object DeclarationType extends Enumerable.Implicits {
+object DeclarationType extends RadioModel[DeclarationType] {
 
-  case object Option1 extends DeclarationType("T1", "option1")
-  case object Option2 extends DeclarationType("T2", "option2")
-  case object Option3 extends DeclarationType("T2F", "option3")
-  case object Option4 extends DeclarationType("TIR", "option4")
+  case object Option1 extends WithName("T1") with DeclarationType
+  case object Option2 extends WithName("T2") with DeclarationType
+  case object Option3 extends WithName("T2F") with DeclarationType
+  case object Option4 extends WithName("TIR") with DeclarationType
 
   val t2Options = Seq(Option2, Option3)
+
+  override val messageKeyPrefix: String = "declarationType"
 
   val values: Seq[DeclarationType] = Seq(
     Option1,
@@ -43,11 +45,4 @@ object DeclarationType extends Enumerable.Implicits {
       case (Some(CountryCode("XI")), Some(Normal))     => Seq(Option1, Option2, Option3, Option4)
       case _                                           => Seq(Option1, Option2)
     }
-
-  implicit val enumerable: Enumerable[DeclarationType] =
-    Enumerable(
-      values.map(
-        v => v.toString -> v
-      ): _*
-    )
 }

@@ -67,19 +67,19 @@ class DeclarationTypeSpec
       "Must return the correct number of radios" - {
         "When Office of Departure is 'GB'" in {
           val radios   = DeclarationType.chooseValues(Some(CountryCode("GB")), None)
-          val expected = Seq(Option1.code, Option2.code)
-          radios.map(_.code) mustBe expected
+          val expected = Seq(Option1, Option2)
+          radios mustBe expected
 
         }
         "When Office of Departure is 'XI' and the departure type is Simplified" in {
           val radios   = DeclarationType.chooseValues(Some(CountryCode("XI")), Some(ProcedureType.Simplified))
-          val expected = Seq(Option1.code, Option2.code, Option3.code)
-          radios.map(_.code) mustBe expected
+          val expected = Seq(Option1, Option2, Option3)
+          radios mustBe expected
         }
         "When Office of Departure is 'XI' and the departure type is Normal" in {
           val radios   = DeclarationType.chooseValues(Some(CountryCode("XI")), Some(ProcedureType.Normal))
-          val expected = Seq(Option1.code, Option2.code, Option3.code, Option4.code)
-          radios.map(_.code) mustBe expected
+          val expected = Seq(Option1, Option2, Option3, Option4)
+          radios mustBe expected
         }
       }
     }
