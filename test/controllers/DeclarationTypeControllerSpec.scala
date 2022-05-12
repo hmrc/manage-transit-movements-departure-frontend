@@ -23,7 +23,7 @@ import forms.DeclarationTypeFormProvider
 import matchers.JsonMatchers
 import models.ProcedureType.Normal
 import models.reference.{CountryCode, CustomsOffice}
-import models.{DeclarationType, NormalMode}
+import models.{DeclarationType, DeclarationTypeViewModel, NormalMode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentCaptor
@@ -38,6 +38,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
+import views.html.DeclarationTypeView
 
 import scala.concurrent.Future
 
@@ -54,6 +55,7 @@ class DeclarationTypeControllerSpec
   val formProvider    = new DeclarationTypeFormProvider()
   val form            = formProvider()
   val gbCustomsOffice = CustomsOffice("Id", "Name", CountryCode("GB"), None)
+  private val mode         = NormalMode
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -64,32 +66,15 @@ class DeclarationTypeControllerSpec
 
     "must return OK and the correct view for a GET" in {
       setUserAnswers(Some(emptyUserAnswers))
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
 
-      val request                                = FakeRequest(GET, declarationTypeRoute)
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
-
+      val request = FakeRequest(GET, declarationTypeRoute)
+      val view = injector.instanceOf[DeclarationTypeView]
       val result = route(app, request).value
 
       status(result) mustEqual OK
 
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
-      val updatedAnswers = emptyUserAnswers
-        .unsafeSetVal(ProcedureTypePage)(Normal)
-        .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
-
-      val expectedJson = Json.obj(
-        "form"   -> form,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> DeclarationType.radios(form, updatedAnswers)()
-      )
-
-      templateCaptor.getValue mustEqual "declarationType.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
+      contentAsString(result) mustEqual
+        view(form, DeclarationTypeViewModel(emptyUserAnswers).radioItems,  lrn,  mode)(request, messages).toString
 
     }
 
