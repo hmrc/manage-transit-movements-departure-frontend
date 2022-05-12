@@ -29,7 +29,7 @@ class $className;format="cap"$Controller @Inject()(
 
   private val form = formProvider()
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get($className$Page) match {
@@ -44,7 +44,7 @@ class $className;format="cap"$Controller @Inject()(
     implicit request =>
 
       form.bindFromRequest().fold(
-        formWithErrors => formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set($className$Page, value))

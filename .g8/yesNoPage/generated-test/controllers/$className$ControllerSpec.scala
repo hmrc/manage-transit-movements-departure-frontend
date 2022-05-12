@@ -1,33 +1,28 @@
 package controllers
 
-import forms.$className$FormProvider
+import base.{SpecBase, AppWithDefaultMockFixtures}
 import models.{NormalMode, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
-import navigation.annotations.$navRoute$
-import org.mockito.ArgumentCaptor
+import navigation.Navigator
+import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{times, verify, when}
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.$className$Page
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.twirl.api.Html
-import repositories.SessionRepository
-import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
+import forms.$className$FormProvider
 import views.html.$className$View
+import pages.$className$Page
 
 import scala.concurrent.Future
 
-class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
+class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
   private val formProvider = new $className$FormProvider()
   private val form = formProvider()
-
-  lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, NormalMode).url
+  private val mode         = NormalMode
+  private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
