@@ -18,7 +18,6 @@ package models
 
 import models.ProcedureType.{Normal, Simplified}
 import models.reference.CountryCode
-import pages.{OfficeOfDeparturePage, ProcedureTypePage}
 
 sealed abstract class DeclarationType(val code: String, asString: String) extends WithName(asString)
 
@@ -51,16 +50,4 @@ object DeclarationType extends Enumerable.Implicits {
         v => v.toString -> v
       ): _*
     )
-}
-
-case class DeclarationTypeViewModel(userAnswers: UserAnswers) extends RadioModel[DeclarationType] {
-
-  override val messageKeyPrefix: String = "declarationType"
-
-  override val values: Seq[DeclarationType] = {
-    val countryCode   = userAnswers.get(OfficeOfDeparturePage).map(_.countryId)
-    val procedureType = userAnswers.get(ProcedureTypePage)
-    DeclarationType.chooseValues(countryCode, procedureType)
-  }
-
 }
