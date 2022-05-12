@@ -18,32 +18,30 @@ package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.ProcedureTypeFormProvider
-import matchers.JsonMatchers
 import models.{NormalMode, ProcedureType}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{times, verify, when}
-import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.Mockito.when
 import pages.ProcedureTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.twirl.api.Html
-import uk.gov.hmrc.viewmodels.NunjucksSupport
+import views.html.ProcedureTypeView
 
 import scala.concurrent.Future
 
-class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
+class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  lazy val procedureTypeRoute =
-    routes.ProcedureTypeController.onPageLoad(lrn, NormalMode).url
+  private val mode = NormalMode
 
-  val formProvider = new ProcedureTypeFormProvider()
-  val form         = formProvider()
+  private lazy val procedureTypeRoute =
+    routes.ProcedureTypeController.onPageLoad(lrn, mode).url
+
+  private val formProvider = new ProcedureTypeFormProvider()
+  private val form         = formProvider()
+  private val validAnswer  = ProcedureType.values.head
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -56,66 +54,40 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
 
       setUserAnswers(Some(emptyUserAnswers))
 
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
+      val request = FakeRequest(GET, procedureTypeRoute)
 
-      val request                                = FakeRequest(GET, procedureTypeRoute)
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+      val view = injector.instanceOf[ProcedureTypeView]
 
       val result = route(app, request).value
 
       status(result) mustEqual OK
 
-      verify(mockRenderer, times(1))
-        .render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
-      val expectedJson = Json.obj(
-        "form"   -> form,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> ProcedureType.radios(form)
-      )
-
-      templateCaptor.getValue mustEqual "procedureType.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
+      contentAsString(result) mustEqual
+        view(form, ProcedureType.radioItems, lrn, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(ProcedureTypePage, ProcedureType.values.head)
+        .set(ProcedureTypePage, validAnswer)
         .success
         .value
 
       setUserAnswers(Some(userAnswers))
 
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
-
-      val request                                = FakeRequest(GET, procedureTypeRoute)
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+      val request = FakeRequest(GET, procedureTypeRoute)
 
       val result = route(app, request).value
 
-      status(result) mustEqual OK
+      val view = injector.instanceOf[ProcedureTypeView]
 
-      verify(mockRenderer, times(1))
-        .render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      status(result) mustEqual OK
 
       val filledForm =
         form.bind(Map("value" -> ProcedureType.values.head.toString))
 
-      val expectedJson = Json.obj(
-        "form"   -> filledForm,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> ProcedureType.radios(filledForm)
-      )
-
-      templateCaptor.getValue mustEqual "procedureType.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
+      contentAsString(result) mustEqual
+        view(filledForm, ProcedureType.radioItems, lrn, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -139,31 +111,19 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
 
       setUserAnswers(Some(emptyUserAnswers))
 
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
-
       val request = FakeRequest(POST, procedureTypeRoute)
         .withFormUrlEncodedBody(("value", "invalid value"))
-      val boundForm                              = form.bind(Map("value" -> "invalid value"))
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+
+      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(app, request).value
 
+      val view = injector.instanceOf[ProcedureTypeView]
+
       status(result) mustEqual BAD_REQUEST
 
-      verify(mockRenderer, times(1))
-        .render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
-      val expectedJson = Json.obj(
-        "form"   -> boundForm,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> ProcedureType.radios(boundForm)
-      )
-
-      templateCaptor.getValue mustEqual "procedureType.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
+      contentAsString(result) mustEqual
+        view(boundForm, ProcedureType.radioItems, lrn, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
