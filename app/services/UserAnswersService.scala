@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +12,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this()
+package services
 
-@(caption: String, styleClass: String = "govuk-caption-xl", id: String = "heading-caption")
+import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
+import repositories.SessionRepository
 
-<span class=@styleClass id=@id>@caption</span>
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
+
+class UserAnswersService @Inject() (
+  sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext) {
+
+  def getOrCreateUserAnswers(eoriNumber: EoriNumber, localReferenceNumber: LocalReferenceNumber): Future[UserAnswers] =
+    sessionRepository.get(localReferenceNumber, eoriNumber) map {
+      _ getOrElse UserAnswers(localReferenceNumber, eoriNumber)
+    }
+}

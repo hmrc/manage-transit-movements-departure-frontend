@@ -18,27 +18,25 @@ package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.LocalReferenceNumberFormProvider
-import matchers.JsonMatchers
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{times, verify, when}
-import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.Mockito.{reset, when}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.twirl.api.Html
-import uk.gov.hmrc.viewmodels.NunjucksSupport
+import services.UserAnswersService
+import views.html.LocalReferenceNumberView
 
 import scala.concurrent.Future
 
-class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
+class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   val formProvider = new LocalReferenceNumberFormProvider()
   val form         = formProvider()
+
+  private lazy val mockUserAnswersService = mock[UserAnswersService]
 
   lazy val localReferenceNumberRoute: String =
     routes.LocalReferenceNumberController.onPageLoad.url
@@ -47,45 +45,41 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
+      .overrides(bind[UserAnswersService].toInstance(mockUserAnswersService))
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(mockUserAnswersService)
+  }
 
   "LocalReferenceNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      setUserAnswers(Some(emptyUserAnswers))
+      setNoExistingUserAnswers()
 
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
-
-      val request                                = FakeRequest(GET, localReferenceNumberRoute)
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+      val request = FakeRequest(GET, localReferenceNumberRoute)
 
       val result = route(app, request).value
 
+      val view = injector.instanceOf[LocalReferenceNumberView]
+
       status(result) mustEqual OK
 
-      verify(mockRenderer, times(1))
-        .render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
-      val expectedJson = Json.obj("form" -> form)
-
-      templateCaptor.getValue mustEqual "localReferenceNumber.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
+      contentAsString(result) mustEqual
+        view(form)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
-      setUserAnswers(Some(emptyUserAnswers))
-
-      when(mockSessionRepository.get(any(), any())) thenReturn Future
-        .successful(Some(emptyUserAnswers))
+      setNoExistingUserAnswers()
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockUserAnswersService.getOrCreateUserAnswers(any(), any())) thenReturn Future.successful(emptyUserAnswers)
 
       val request =
         FakeRequest(POST, localReferenceNumberRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+          .withFormUrlEncodedBody(("value", lrn.toString))
 
       val result = route(app, request).value
 
@@ -97,26 +91,21 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
       setUserAnswers(Some(emptyUserAnswers))
 
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
+      val invalidAnswer = ""
 
       val request = FakeRequest(POST, localReferenceNumberRoute)
-        .withFormUrlEncodedBody(("value", ""))
-      val boundForm                              = form.bind(Map("value" -> ""))
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+        .withFormUrlEncodedBody(("value", invalidAnswer))
+
+      val filledForm = form.bind(Map("value" -> invalidAnswer))
 
       val result = route(app, request).value
 
+      val view = injector.instanceOf[LocalReferenceNumberView]
+
       status(result) mustEqual BAD_REQUEST
 
-      verify(mockRenderer, times(1))
-        .render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
-      val expectedJson = Json.obj("form" -> boundForm)
-
-      templateCaptor.getValue mustEqual "localReferenceNumber.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
+      contentAsString(result) mustEqual
+        view(filledForm)(request, messages).toString
     }
   }
 }
