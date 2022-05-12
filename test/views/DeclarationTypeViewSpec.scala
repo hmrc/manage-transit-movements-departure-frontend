@@ -34,10 +34,12 @@ class DeclarationTypeViewSpec extends RadioViewBehaviours[DeclarationType] {
 
   override val prefix: String = "declarationType"
 
-  override def radioItems(fieldId: String, checkedValue: Option[DeclarationType] = None): Seq[RadioItem] =
-    DeclarationTypeViewModel(emptyUserAnswers).radioItems(fieldId, checkedValue)
+  private val declarationTypeViewModel = DeclarationTypeViewModel(emptyUserAnswers)
 
-  override def values: Seq[DeclarationType] = Seq(Option1, Option2)
+  override def radioItems(fieldId: String, checkedValue: Option[DeclarationType] = None): Seq[RadioItem] =
+    declarationTypeViewModel.radioItems(fieldId, checkedValue)
+
+  override def values: Seq[DeclarationType] = declarationTypeViewModel.values
 
   behave like pageWithTitle()
 
