@@ -18,19 +18,18 @@ package controllers
 
 import controllers.actions._
 import forms.DeclarationTypeFormProvider
-import models.{DeclarationType, LocalReferenceNumber, Mode}
+import javax.inject.Inject
+import models.{DeclarationTypeViewModel, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import pages.DeclarationTypePage
+import pages.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
+import views.html.DeclarationTypeView
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DeclarationTypeController @Inject() (
@@ -42,7 +41,7 @@ class DeclarationTypeController @Inject() (
   requireData: DataRequiredAction,
   formProvider: DeclarationTypeFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  view: DeclarationTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -50,21 +49,14 @@ class DeclarationTypeController @Inject() (
 
   private val form = formProvider()
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData) {
     implicit request =>
       val preparedForm = request.userAnswers.get(DeclarationTypePage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      val json = Json.obj(
-        "form"   -> preparedForm,
-        "mode"   -> mode,
-        "lrn"    -> lrn,
-        "radios" -> DeclarationType.radios(preparedForm, request.userAnswers)()
-      )
-
-      renderer.render("declarationType.njk", json).map(Ok(_))
+      Ok(view(preparedForm, DeclarationTypeViewModel(request.userAnswers).radioItems, lrn, mode))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
@@ -72,17 +64,7 @@ class DeclarationTypeController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => {
-
-            val json = Json.obj(
-              "form"   -> formWithErrors,
-              "mode"   -> mode,
-              "lrn"    -> lrn,
-              "radios" -> DeclarationType.radios(formWithErrors, request.userAnswers)()
-            )
-
-            renderer.render("declarationType.njk", json).map(BadRequest(_))
-          },
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationTypeViewModel(request.userAnswers).radioItems, lrn, mode))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(DeclarationTypePage, value))
