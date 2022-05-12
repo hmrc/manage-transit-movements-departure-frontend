@@ -41,6 +41,8 @@ class DeclarationTypeViewSpec extends RadioViewBehaviours[DeclarationType] {
 
   override def values: Seq[DeclarationType] = declarationTypeViewModel.values
 
+  override val urlContainsLrn: Boolean = true
+
   behave like pageWithTitle()
 
   behave like pageWithBackLink
@@ -49,5 +51,5 @@ class DeclarationTypeViewSpec extends RadioViewBehaviours[DeclarationType] {
 
   behave like pageWithRadioItems()
 
-  behave like pageWithSubmitButton("Continue")
+  behave like pageWithSubmitButton("Save and continue")
 }
