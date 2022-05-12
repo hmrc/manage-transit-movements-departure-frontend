@@ -20,14 +20,23 @@ import models.ProcedureType.{Normal, Simplified}
 import models.reference.CountryCode
 import pages.{OfficeOfDeparturePage, ProcedureTypePage}
 
-trait DeclarationType
+sealed abstract class DeclarationType(val code: String, asString: String) extends WithName(asString)
 
-object DeclarationType {
+object DeclarationType extends Enumerable.Implicits {
 
-  case object Option1 extends WithName("T1") with DeclarationType
-  case object Option2 extends WithName("T2") with DeclarationType
-  case object Option3 extends WithName("T2F") with DeclarationType
-  case object Option4 extends WithName("TIR") with DeclarationType
+  case object Option1 extends DeclarationType("T1", "option1")
+  case object Option2 extends DeclarationType("T2", "option2")
+  case object Option3 extends DeclarationType("T2F", "option3")
+  case object Option4 extends DeclarationType("TIR", "option4")
+
+  val t2Options = Seq(Option2, Option3)
+
+  val values: Seq[DeclarationType] = Seq(
+    Option1,
+    Option2,
+    Option3,
+    Option4
+  )
 
   def chooseValues(countryCode: Option[CountryCode], procedureType: Option[ProcedureType]): Seq[DeclarationType] =
     (countryCode, procedureType) match {
@@ -35,6 +44,13 @@ object DeclarationType {
       case (Some(CountryCode("XI")), Some(Normal))     => Seq(Option1, Option2, Option3, Option4)
       case _                                           => Seq(Option1, Option2)
     }
+
+  implicit val enumerable: Enumerable[DeclarationType] =
+    Enumerable(
+      values.map(
+        v => v.toString -> v
+      ): _*
+    )
 }
 
 case class DeclarationTypeViewModel(userAnswers: UserAnswers) extends RadioModel[DeclarationType] {

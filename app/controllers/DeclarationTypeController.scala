@@ -22,7 +22,7 @@ import javax.inject.Inject
 import models.{DeclarationTypeViewModel, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import pages.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage}
+import pages.DeclarationTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
