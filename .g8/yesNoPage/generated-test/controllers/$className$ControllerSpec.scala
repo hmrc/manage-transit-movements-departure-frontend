@@ -3,7 +3,7 @@ package controllers
 import base.{SpecBase, AppWithDefaultMockFixtures}
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.annotations.$navRoute$
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
