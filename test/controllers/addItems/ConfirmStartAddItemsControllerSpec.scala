@@ -20,6 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.ConfirmStartAddItemsFormProvider
 import matchers.JsonMatchers
+import models.SecurityDetailsType.EntryAndExitSummaryDeclarationSecurityDetails
 import models.UserAnswers
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsItemDetails
@@ -53,7 +54,7 @@ class ConfirmStartAddItemsControllerSpec extends SpecBase with AppWithDefaultMoc
 
   "ConfirmStartAddItem controller" - {
     "must return OK and the correct view for a GET" in {
-      val updatedUserAnswers = emptyUserAnswers.set(AddSecurityDetailsPage, true).success.value
+      val updatedUserAnswers = emptyUserAnswers.set(AddSecurityDetailsPage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
 
       setUserAnswers(Some(updatedUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
@@ -87,7 +88,7 @@ class ConfirmStartAddItemsControllerSpec extends SpecBase with AppWithDefaultMoc
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-      val updatedUserAnswers                             = emptyUserAnswers.set(AddSecurityDetailsPage, true).success.value
+      val updatedUserAnswers                             = emptyUserAnswers.set(AddSecurityDetailsPage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
 
       setUserAnswers(Some(updatedUserAnswers))
 
@@ -105,7 +106,7 @@ class ConfirmStartAddItemsControllerSpec extends SpecBase with AppWithDefaultMoc
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      val updatedUserAnswers = emptyUserAnswers.set(AddSecurityDetailsPage, true).success.value
+      val updatedUserAnswers = emptyUserAnswers.set(AddSecurityDetailsPage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
       setUserAnswers(Some(updatedUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))

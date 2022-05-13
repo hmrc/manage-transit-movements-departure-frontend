@@ -18,6 +18,7 @@ package models.journeyDomain.addItems
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
+import models.SecurityDetailsType.{EntryAndExitSummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models.reference.{Country, CountryCode, CustomsOffice, MethodOfPayment}
 import models.{CommonAddress, EoriNumber}
 import org.scalacheck.Gen
@@ -30,7 +31,7 @@ import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage, QuestionPage}
 class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 
   private val itemSecurityTraderDetailsUa = emptyUserAnswers
-    .unsafeSetVal(AddSecurityDetailsPage)(true)
+    .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
     .unsafeSetVal(AddDangerousGoodsCodePage(index))(false)
     .unsafeSetVal(AddTransportChargesPaymentMethodPage)(true)
     .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
@@ -101,7 +102,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
       }
 
       "when add security details is false" in {
-        val userAnswers = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(false)
+        val userAnswers = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
 
         val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).value
 

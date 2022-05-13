@@ -21,6 +21,7 @@ import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
 import models.DeclarationType.Option1
 import models.Index
+import models.SecurityDetailsType.EntryAndExitSummaryDeclarationSecurityDetails
 import models.journeyDomain.Packages.UnpackedPackages
 import models.journeyDomain.addItems.ItemsSecurityTraderDetails
 import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice, PackageType}
@@ -59,7 +60,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
     //SpecialMention
     .unsafeSetVal(AddSpecialMentionPage(itemIndex))(false)
     //ProducedDocuments
-    .unsafeSetVal(AddSecurityDetailsPage)(true)
+    .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
     .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
     .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
     .unsafeSetVal(AddDocumentsPage(index))(false)
@@ -210,7 +211,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
           //SpecialMention
           .unsafeSetVal(AddSpecialMentionPage(Index(1)))(false)
           //ProducedDocuments
-          .unsafeSetVal(AddSecurityDetailsPage)(true)
+          .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
           .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
           .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
           .unsafeSetVal(AddDocumentsPage(Index(1)))(false)

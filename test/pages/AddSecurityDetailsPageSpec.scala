@@ -16,16 +16,19 @@
 
 package pages
 
+import base.SpecBase
+import commonTestUtils.UserAnswersSpecHelper
+import models.SecurityDetailsType
 import pages.behaviours.PageBehaviours
 
-class AddSecurityDetailsPageSpec extends PageBehaviours {
+class AddSecurityDetailsPageSpec extends PageBehaviours with SpecBase with UserAnswersSpecHelper {
 
   "AddSecurityDetailsPage" - {
 
-    beRetrievable[Boolean](AddSecurityDetailsPage)
+    beRetrievable[SecurityDetailsType](AddSecurityDetailsPage)
 
-    beSettable[Boolean](AddSecurityDetailsPage)
+    beSettable[SecurityDetailsType](AddSecurityDetailsPage)
 
-    beRemovable[Boolean](AddSecurityDetailsPage)
+    beRemovable[SecurityDetailsType](AddSecurityDetailsPage)
   }
 }

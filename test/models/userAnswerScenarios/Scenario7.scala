@@ -36,6 +36,7 @@ import cats.data.NonEmptyList
 import models.DeclarationType.Option4
 import models.ProcedureType.Normal
 import models.RepresentativeCapacity.Direct
+import models.SecurityDetailsType.EntryAndExitSummaryDeclarationSecurityDetails
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.GoodSummaryNormalDetailsWithoutPreLodge
 import models.journeyDomain.GuaranteeDetails.GuaranteeTIR
@@ -75,7 +76,7 @@ case object Scenario7 extends UserAnswerScenario {
 
   val userAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj())
     .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
-    .unsafeSetVal(pages.AddSecurityDetailsPage)(true)
+    .unsafeSetVal(pages.AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
     .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None))
     .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option4)
     /*
@@ -282,7 +283,12 @@ case object Scenario7 extends UserAnswerScenario {
     .unsafeSetVal(pages.guaranteeDetails.TIRGuaranteeReferencePage(Index(1)))("GUA2Ref")
 
   private val preTaskListDetails =
-    PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None), Option4, true)
+    PreTaskListDetails(lrn,
+                       Normal,
+                       CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None),
+                       Option4,
+                       EntryAndExitSummaryDeclarationSecurityDetails
+    )
 
   private val movementDetails = NormalMovementDetails(false, true, "XX1 1XX", DeclarationForSomeoneElse("John Doe", Direct))
 

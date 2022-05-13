@@ -19,30 +19,29 @@ package controllers
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.AddSecurityDetailsFormProvider
 import matchers.JsonMatchers
-import models.{NormalMode, UserAnswers}
+import models.SecurityDetailsType.NoSecurityDetails
+import models.{NormalMode, SecurityDetailsType, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{times, verify, when}
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.AddSecurityDetailsPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.twirl.api.Html
-import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
+import uk.gov.hmrc.viewmodels.NunjucksSupport
+import views.html.AddSecurityDetailsView
 
 import scala.concurrent.Future
 
 class AddSecurityDetailsControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  val formProvider = new AddSecurityDetailsFormProvider()
-  val form         = formProvider()
-
-  lazy val addSecurityDetailsRoute = routes.AddSecurityDetailsController.onPageLoad(lrn, NormalMode).url
+  private val formProvider         = new AddSecurityDetailsFormProvider()
+  private val form                 = formProvider()
+  private val mode                 = NormalMode
+  lazy val addSecurityDetailsRoute = routes.AddSecurityDetailsController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -54,57 +53,32 @@ class AddSecurityDetailsControllerSpec extends SpecBase with AppWithDefaultMockF
     "must return OK and the correct view for a GET" in {
       setUserAnswers(Some(emptyUserAnswers))
 
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
-
-      val request                                = FakeRequest(GET, addSecurityDetailsRoute)
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+      val request = FakeRequest(GET, addSecurityDetailsRoute)
 
       val result = route(app, request).value
 
+      val view = injector.instanceOf[AddSecurityDetailsView]
       status(result) mustEqual OK
 
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
-      val expectedJson = Json.obj(
-        "form"   -> form,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> Radios.yesNo(form("value"))
-      )
-
-      templateCaptor.getValue mustEqual "addSecurityDetails.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
+      contentAsString(result) mustEqual
+        view(form, SecurityDetailsType.radioItems, lrn, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(AddSecurityDetailsPage, true).success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(AddSecurityDetailsPage, NoSecurityDetails).success.value
       setUserAnswers(Some(userAnswers))
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
 
-      val request                                = FakeRequest(GET, addSecurityDetailsRoute)
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+      val request = FakeRequest(GET, addSecurityDetailsRoute)
 
       val result = route(app, request).value
 
-      status(result) mustEqual OK
-
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
       val filledForm = form.bind(Map("value" -> "true"))
 
-      val expectedJson = Json.obj(
-        "form"   -> filledForm,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> Radios.yesNo(filledForm("value"))
-      )
+      val view = injector.instanceOf[AddSecurityDetailsView]
+      status(result) mustEqual OK
 
-      templateCaptor.getValue mustEqual "addSecurityDetails.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
+      contentAsString(result) mustEqual
+        view(filledForm, SecurityDetailsType.radioItems, lrn, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -123,29 +97,18 @@ class AddSecurityDetailsControllerSpec extends SpecBase with AppWithDefaultMockF
 
     "must return a Bad Request and errors when invalid data is submitted" in {
       setUserAnswers(Some(emptyUserAnswers))
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
 
-      val request                                = FakeRequest(POST, addSecurityDetailsRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm                              = form.bind(Map("value" -> ""))
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+      val request   = FakeRequest(POST, addSecurityDetailsRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      val view = injector.instanceOf[AddSecurityDetailsView]
 
-      val expectedJson = Json.obj(
-        "form"   -> boundForm,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> Radios.yesNo(boundForm("value"))
-      )
-
-      templateCaptor.getValue mustEqual "addSecurityDetails.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
+      contentAsString(result) mustEqual
+        view(boundForm, SecurityDetailsType.radioItems, lrn, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

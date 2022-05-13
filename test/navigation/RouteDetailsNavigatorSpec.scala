@@ -21,6 +21,7 @@ import commonTestUtils.UserAnswersSpecHelper
 import controllers.routeDetails.routes
 import controllers.{routes => mainRoutes}
 import generators.Generators
+import models.SecurityDetailsType.{EntryAndExitSummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models._
 import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
@@ -166,7 +167,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
           forAll(arbitrary[UserAnswers]) {
             answers =>
-              val updatedUserAnswers = answers.set(AddSecurityDetailsPage, true).toOption.value
+              val updatedUserAnswers = answers.set(AddSecurityDetailsPage, EntryAndExitSummaryDeclarationSecurityDetails).toOption.value
 
               navigator
                 .nextPage(AddAnotherTransitOfficePage(index), NormalMode, updatedUserAnswers)
@@ -178,7 +179,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
           forAll(arbitrary[UserAnswers]) {
             answers =>
-              val updatedUserAnswers = answers.set(AddSecurityDetailsPage, false).toOption.value
+              val updatedUserAnswers = answers.set(AddSecurityDetailsPage, NoSecurityDetails).toOption.value
 
               navigator
                 .nextPage(AddAnotherTransitOfficePage(index), NormalMode, updatedUserAnswers)

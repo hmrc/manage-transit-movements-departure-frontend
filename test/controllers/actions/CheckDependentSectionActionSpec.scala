@@ -22,6 +22,7 @@ import generators.Generators
 import models.DeclarationType.Option1
 import models.ProcedureType.Normal
 import models.RepresentativeCapacity.Direct
+import models.SecurityDetailsType.NoSecurityDetails
 import models.reference.{CountryCode, CustomsOffice}
 import models.requests.DataRequest
 import models.{DependentSection, EoriNumber, UserAnswers}
@@ -58,7 +59,7 @@ class CheckDependentSectionActionSpec extends SpecBase with GuiceOneAppPerSuite 
         // PreTaskList
         .unsafeSetVal(ProcedureTypePage)(Normal)
         .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
-        .unsafeSetVal(AddSecurityDetailsPage)(false)
+        .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
         .unsafeSetVal(DeclarationTypePage)(Option1)
         // MovementDetails
         .unsafeSetVal(ProcedureTypePage)(Normal)
