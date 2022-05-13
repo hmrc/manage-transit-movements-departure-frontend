@@ -16,12 +16,12 @@
 
 package models
 
-import models.ProcedureType.{Normal, Simplified}
+import models.ProcedureType.Normal
 import models.reference.CountryCode
 
 sealed trait DeclarationType
 
-object DeclarationType extends RadioModel[DeclarationType] {
+object DeclarationType {
 
   case object Option1 extends WithName("T1") with DeclarationType
   case object Option2 extends WithName("T2") with DeclarationType
@@ -30,8 +30,6 @@ object DeclarationType extends RadioModel[DeclarationType] {
   case object Option5 extends WithName("TIR") with DeclarationType
 
   val t2Options = Seq(Option2, Option3)
-
-  override val messageKeyPrefix: String = "declarationType"
 
   val values: Seq[DeclarationType] = Seq(
     Option1,
