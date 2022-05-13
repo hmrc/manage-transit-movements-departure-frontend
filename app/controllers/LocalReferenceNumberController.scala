@@ -18,17 +18,16 @@ package controllers
 
 import controllers.actions._
 import forms.LocalReferenceNumberFormProvider
-import models.{EoriNumber, LocalReferenceNumber, NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import pages.LocalReferenceNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import renderer.Renderer
 import repositories.SessionRepository
+import services.UserAnswersService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.NunjucksSupport
+import views.html.LocalReferenceNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,21 +37,19 @@ class LocalReferenceNumberController @Inject() (
   sessionRepository: SessionRepository,
   @PreTaskListDetails navigator: Navigator,
   identify: IdentifierAction,
+  userAnswersService: UserAnswersService,
   formProvider: LocalReferenceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  view: LocalReferenceNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
-    with I18nSupport
-    with NunjucksSupport {
+    with I18nSupport {
 
   private val form = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = identify.async {
+  def onPageLoad(): Action[AnyContent] = identify {
     implicit request =>
-      val json = Json.obj("form" -> form)
-
-      renderer.render("localReferenceNumber.njk", json).map(Ok(_))
+      Ok(view(form))
   }
 
   def onSubmit(): Action[AnyContent] = identify.async {
@@ -60,28 +57,12 @@ class LocalReferenceNumberController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => {
-
-            val json = Json.obj(
-              "form" -> formWithErrors
-            )
-
-            renderer.render("localReferenceNumber.njk", json).map(BadRequest(_))
-          },
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
           value =>
             for {
-              userAnswers <- getOrCreateUserAnswers(request.eoriNumber, value)
+              userAnswers <- userAnswersService.getOrCreateUserAnswers(request.eoriNumber, value)
               _           <- sessionRepository.set(userAnswers)
             } yield Redirect(navigator.nextPage(LocalReferenceNumberPage, NormalMode, userAnswers))
         )
-  }
-
-  def getOrCreateUserAnswers(eoriNumber: EoriNumber, value: LocalReferenceNumber): Future[UserAnswers] = {
-    val initialUserAnswers = UserAnswers(lrn = value, eoriNumber = eoriNumber)
-
-    sessionRepository.get(lrn = value, eoriNumber = eoriNumber) map {
-      userAnswers =>
-        userAnswers getOrElse initialUserAnswers
-    }
   }
 }
