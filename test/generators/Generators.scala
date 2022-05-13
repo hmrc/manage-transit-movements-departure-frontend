@@ -24,9 +24,11 @@ import org.scalacheck.{Arbitrary, Gen, Shrink}
 import java.time._
 
 // TODO: Move away from mixing style to using objects
-trait Generators extends UserAnswersGenerator with ModelGenerators {
+trait Generators extends UserAnswersGenerator with ModelGenerators with ViewModelGenerators {
 
   lazy val stringMaxLength = 36
+
+  lazy val maxListLength = 10
 
   require(stringMaxLength > 1, "Value for `stringMaxLength` must be greater than 1")
 
@@ -194,7 +196,7 @@ trait Generators extends UserAnswersGenerator with ModelGenerators {
   def nonEmptyListOf[A](maxLength: Int)(implicit a: Arbitrary[A]): Gen[NonEmptyList[A]] =
     listWithMaxLength[A](maxLength).map(NonEmptyList.fromListUnsafe _)
 
-  def listWithMaxLength[A](maxLength: Int)(implicit a: Arbitrary[A]): Gen[List[A]] =
+  def listWithMaxLength[A](maxLength: Int = maxListLength)(implicit a: Arbitrary[A]): Gen[List[A]] =
     for {
       length <- choose(1, maxLength)
       seq    <- listOfN(length, arbitrary[A])

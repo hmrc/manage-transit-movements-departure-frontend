@@ -75,6 +75,9 @@ specialMention.preHeading = Special mentions
 document.preHeading = Produced documents and work certificates
 reference.preHeading = Previous administrative references
 
+preTaskList.checkYourAnswers.heading = Check your answers
+preTaskList.checkYourAnswers.title = Check your answers
+
 routeDetailsCheckYourAnswers.heading = Check your answers
 routeDetailsCheckYourAnswers.title = Check your answers
 

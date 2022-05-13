@@ -1,5 +1,6 @@
 # Add all the application routes to the app.routes file
 ->         /manage-transit-movements/departure                   app.Routes
+->         /manage-transit-movements/departure                   app.preTaskList.Routes
 ->         /manage-transit-movements/departure                   app.addItems.Routes
 ->         /manage-transit-movements/departure                   app.goodsSummary.Routes
 ->         /manage-transit-movements/departure                   app.guaranteeDetails.Routes
