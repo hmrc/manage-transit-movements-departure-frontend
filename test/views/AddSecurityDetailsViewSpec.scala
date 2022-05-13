@@ -31,7 +31,7 @@ class AddSecurityDetailsViewSpec extends RadioViewBehaviours[SecurityDetailsType
   override def applyView(form: Form[SecurityDetailsType]): HtmlFormat.Appendable =
     injector.instanceOf[AddSecurityDetailsView].apply(form, radioItems, lrn, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "addSecurityDetail"
+  override val prefix: String = "addSecurityDetails"
 
   override def radioItems(fieldId: String, checkedValue: Option[SecurityDetailsType] = None): Seq[RadioItem] =
     SecurityDetailsType.radioItems(fieldId, checkedValue)

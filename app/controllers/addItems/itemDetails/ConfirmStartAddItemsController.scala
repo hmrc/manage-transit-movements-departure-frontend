@@ -31,8 +31,9 @@ import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
-
 import javax.inject.Inject
+import models.SecurityDetailsType.NoSecurityDetails
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmStartAddItemsController @Inject() (
@@ -67,7 +68,7 @@ class ConfirmStartAddItemsController @Inject() (
             val json = Json.obj(
               "form"   -> form,
               "lrn"    -> lrn,
-              "safety" -> safetyAndSecurity,
+              "safety" -> (safetyAndSecurity != NoSecurityDetails),
               "radios" -> Radios.yesNo(form("value"))
             )
 
@@ -96,7 +97,7 @@ class ConfirmStartAddItemsController @Inject() (
                   val json = Json.obj(
                     "form"   -> formWithErrors,
                     "lrn"    -> lrn,
-                    "safety" -> safetyAndSecurity,
+                    "safety" -> (safetyAndSecurity != NoSecurityDetails),
                     "radios" -> Radios.yesNo(formWithErrors("value"))
                   )
 

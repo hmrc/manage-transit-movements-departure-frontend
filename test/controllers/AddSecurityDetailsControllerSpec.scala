@@ -72,7 +72,7 @@ class AddSecurityDetailsControllerSpec extends SpecBase with AppWithDefaultMockF
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> "true"))
+      val filledForm = form.bind(Map("value" -> NoSecurityDetails.toString))
 
       val view = injector.instanceOf[AddSecurityDetailsView]
       status(result) mustEqual OK
@@ -85,9 +85,10 @@ class AddSecurityDetailsControllerSpec extends SpecBase with AppWithDefaultMockF
       setUserAnswers(Some(emptyUserAnswers))
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
+      val selectedValue = SecurityDetailsType.values.head
       val request =
         FakeRequest(POST, addSecurityDetailsRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+          .withFormUrlEncodedBody(("value", selectedValue.toString))
 
       val result = route(app, request).value
 
