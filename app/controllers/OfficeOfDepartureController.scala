@@ -32,6 +32,7 @@ import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils._
+import views.html.OfficeOfDepartureView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -47,54 +48,37 @@ class OfficeOfDepartureController @Inject() (
   countriesService: CountriesService,
   customsOfficesService: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  view: OfficeOfDepartureView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
-    with I18nSupport
-    with NunjucksSupport {
+    with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       customsOfficesService.getCustomsOfficesOfDeparture.flatMap {
-        customsOffices =>
-          val form = formProvider(customsOffices)
+        customsOfficeList =>
+          val form = formProvider(customsOfficeList)
           val preparedForm = request.userAnswers
             .get(OfficeOfDeparturePage)
             .flatMap(
-              x => customsOffices.getCustomsOffice(x.id)
+              x => customsOfficeList.getCustomsOffice(x.id)
             )
             .map(form.fill)
             .getOrElse(form)
 
-          val json = Json.obj(
-            "form"           -> preparedForm,
-            "lrn"            -> lrn,
-            "customsOffices" -> getCustomsOfficesAsJson(preparedForm.value, customsOffices.getAll),
-            "mode"           -> mode
-          )
-
-          renderer.render("officeOfDeparture.njk", json).map(Ok(_))
+          Future.successful(Ok(view(preparedForm, lrn, customsOfficeList.customsOffices, mode)))
       }
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       customsOfficesService.getCustomsOfficesOfDeparture.flatMap {
-        customsOffices =>
-          val form = formProvider(customsOffices)
+        customsOfficeList =>
+          val form = formProvider(customsOfficeList)
           form
             .bindFromRequest()
             .fold(
-              formWithErrors => {
-                val json = Json.obj(
-                  "form"           -> formWithErrors,
-                  "lrn"            -> lrn,
-                  "customsOffices" -> getCustomsOfficesAsJson(form.value, customsOffices.getAll),
-                  "mode"           -> mode
-                )
-
-                renderer.render("officeOfDeparture.njk", json).map(BadRequest(_))
-              },
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
               value =>
                 for {
                   getNonEuCountries: CountryList <- countriesService.getNonEuTransitCountries()

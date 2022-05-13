@@ -25,20 +25,18 @@ import models.reference.{Country, CountryCode, CustomsOffice}
 import models.{CountryList, CustomsOfficeList, NormalMode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, times, verify, when}
+import org.mockito.Mockito.{reset, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.OfficeOfDeparturePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.twirl.api.Html
 import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.viewmodels.NunjucksSupport
+import views.html.OfficeOfDepartureView
 
 import scala.concurrent.Future
 
@@ -53,11 +51,12 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
   val nonEuTransitCountriesList: CountryList = CountryList(nonEuTransitCountries)
   val gbForm                                 = new OfficeOfDepartureFormProvider()(customsOffices)
   val xiForm                                 = new OfficeOfDepartureFormProvider()(xiCustomsOffices)
+  val mode                                   = NormalMode
 
   private val mockFrontendAppConfig: FrontendAppConfig         = mock[FrontendAppConfig]
   private val mockCountriesService: CountriesService           = mock[CountriesService]
   private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
-  lazy val officeOfDepartureRoute: String                      = routes.OfficeOfDepartureController.onPageLoad(lrn, NormalMode).url
+  lazy val officeOfDepartureRoute: String                      = routes.OfficeOfDepartureController.onPageLoad(lrn, mode).url
 
   override def beforeEach(): Unit = {
     reset(mockFrontendAppConfig, mockCountriesService, mockCustomsOfficesService)
@@ -75,35 +74,18 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
 
     "must return OK and the correct view for a GET" in {
       setUserAnswers(Some(emptyUserAnswers))
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
       when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
 
-      val request                                = FakeRequest(GET, officeOfDepartureRoute)
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+      val request = FakeRequest(GET, officeOfDepartureRoute)
 
       val result = route(app, request).value
 
+      val view = injector.instanceOf[OfficeOfDepartureView]
+
       status(result) mustEqual OK
 
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
-      val expectedCustomsOfficeJson = Seq(
-        Json.obj("value" -> "", "text"         -> "Select"),
-        Json.obj("value" -> "officeId", "text" -> "someName (officeId)", "selected" -> false),
-        Json.obj("value" -> "id", "text"       -> "name (id)", "selected"           -> false)
-      )
-
-      val expectedJson = Json.obj(
-        "form"           -> gbForm,
-        "mode"           -> NormalMode,
-        "lrn"            -> lrn,
-        "customsOffices" -> expectedCustomsOfficeJson
-      )
-
-      templateCaptor.getValue mustEqual "officeOfDeparture.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
+      contentAsString(result) mustEqual
+        view(gbForm, lrn, customsOffices.customsOffices, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
@@ -112,37 +94,21 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
         .success
         .value
       setUserAnswers(Some(userAnswers))
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
+
       when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
 
-      val request                                = FakeRequest(GET, officeOfDepartureRoute)
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+      val request = FakeRequest(GET, officeOfDepartureRoute)
 
       val result = route(app, request).value
 
-      status(result) mustEqual OK
+      val view = injector.instanceOf[OfficeOfDepartureView]
 
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      status(result) mustEqual OK
 
       val filledForm = gbForm.bind(Map("value" -> "officeId"))
 
-      val expectedCustomsOfficeJson = Seq(
-        Json.obj("value" -> "", "text"         -> "Select"),
-        Json.obj("value" -> "officeId", "text" -> "someName (officeId)", "selected" -> true),
-        Json.obj("value" -> "id", "text"       -> "name (id)", "selected"           -> false)
-      )
-
-      val expectedJson = Json.obj(
-        "form"           -> filledForm,
-        "lrn"            -> lrn,
-        "mode"           -> NormalMode,
-        "customsOffices" -> expectedCustomsOfficeJson
-      )
-
-      templateCaptor.getValue mustEqual "officeOfDeparture.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
+      contentAsString(result) mustEqual
+        view(filledForm, lrn, customsOffices.customsOffices, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -163,29 +129,19 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
 
     "must return a Bad Request and errors when invalid data is submitted" in {
       setUserAnswers(Some(emptyUserAnswers))
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
       when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
 
-      val request                                = FakeRequest(POST, officeOfDepartureRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm                              = gbForm.bind(Map("value" -> ""))
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+      val request   = FakeRequest(POST, officeOfDepartureRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm = gbForm.bind(Map("value" -> ""))
 
       val result = route(app, request).value
 
+      val view = injector.instanceOf[OfficeOfDepartureView]
+
       status(result) mustEqual BAD_REQUEST
 
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
-      val expectedJson = Json.obj(
-        "form" -> boundForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
-      )
-
-      templateCaptor.getValue mustEqual "officeOfDeparture.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
+      contentAsString(result) mustEqual
+        view(boundForm, lrn, customsOffices.customsOffices, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
