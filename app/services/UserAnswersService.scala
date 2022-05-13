@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package models
+package services
 
-sealed trait ProcedureType
+import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
+import repositories.SessionRepository
 
-object ProcedureType extends RadioModel[ProcedureType] {
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
-  case object Normal extends WithName("normal") with ProcedureType
-  case object Simplified extends WithName("simplified") with ProcedureType
+class UserAnswersService @Inject() (
+  sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext) {
 
-  override val messageKeyPrefix: String = "procedureType"
-
-  override val values: Seq[ProcedureType] = Seq(
-    Normal,
-    Simplified
-  )
+  def getOrCreateUserAnswers(eoriNumber: EoriNumber, localReferenceNumber: LocalReferenceNumber): Future[UserAnswers] =
+    sessionRepository.get(localReferenceNumber, eoriNumber) map {
+      _ getOrElse UserAnswers(localReferenceNumber, eoriNumber)
+    }
 }

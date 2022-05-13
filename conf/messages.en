@@ -113,8 +113,8 @@ concurrent.remove.error.multipleOfficeOfTransit.link.text = Go back to you have 
 localReferenceNumber.title = What is the local reference number (LRN)?
 localReferenceNumber.heading = What is the local reference number (LRN)?
 localReferenceNumber.error.required = Enter the local reference number
-localReferenceNumber.error.length = Local reference number must be 22 characters or less
-localReferenceNumber.error.invalidCharacters = Local reference number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
+localReferenceNumber.error.length = The local reference number must be 22 characters or less
+localReferenceNumber.error.invalidCharacters = The local reference number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
 
 addSecurityDetails.title = Do you need to add safety and security details?
 addSecurityDetails.heading = Do you need to add safety and security details?

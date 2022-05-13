@@ -23,12 +23,10 @@ import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import pages.ProcedureTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.NunjucksSupport
+import views.html.ProcedureTypeView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -37,52 +35,32 @@ class ProcedureTypeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @PreTaskListDetails navigator: Navigator,
-  identify: IdentifierAction,
-  getData: DataRetrievalActionProvider,
-  requireData: DataRequiredAction,
+  actions: Actions,
   formProvider: ProcedureTypeFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  view: ProcedureTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
-    with I18nSupport
-    with NunjucksSupport {
+    with I18nSupport {
 
   private val form = formProvider()
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
       val preparedForm = request.userAnswers.get(ProcedureTypePage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      val json = Json.obj(
-        "form"   -> preparedForm,
-        "mode"   -> mode,
-        "lrn"    -> lrn,
-        "radios" -> ProcedureType.radios(preparedForm)
-      )
-
-      renderer.render("procedureType.njk", json).map(Ok(_))
+      Ok(view(preparedForm, ProcedureType.radioItems, lrn, mode))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => {
-
-            val json = Json.obj(
-              "form"   -> formWithErrors,
-              "mode"   -> mode,
-              "lrn"    -> lrn,
-              "radios" -> ProcedureType.radios(formWithErrors)
-            )
-
-            renderer.render("procedureType.njk", json).map(BadRequest(_))
-          },
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, ProcedureType.radioItems, lrn, mode))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(ProcedureTypePage, value))
