@@ -19,7 +19,7 @@ package models.journeyDomain
 import cats.data.ReaderT
 import cats.implicits._
 import models.reference.CustomsOffice
-import models.{DeclarationType, LocalReferenceNumber, ProcedureType, UserAnswers}
+import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType, UserAnswers}
 import pages.{AddSecurityDetailsPage, DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage}
 
 case class PreTaskListDetails(
@@ -27,7 +27,7 @@ case class PreTaskListDetails(
   procedureType: ProcedureType,
   officeOfDeparture: CustomsOffice,
   declarationType: DeclarationType,
-  addSecurityDetails: Boolean
+  addSecurityDetails: SecurityDetailsType
 )
 
 object PreTaskListDetails {

@@ -20,6 +20,7 @@ import cats.data.{NonEmptyList, ReaderT}
 import cats.implicits._
 import derivable.DeriveNumberOfDocuments
 import models.DeclarationType.Option4
+import models.SecurityDetailsType.NoSecurityDetails
 import models.reference.CircumstanceIndicator
 import models.{Index, UserAnswers}
 import pages.addItems._
@@ -49,7 +50,7 @@ object ProducedDocument {
 
   private def producedDocumentsWithConditionalIndicator(itemIndex: Index): ReaderT[EitherType, UserAnswers, Option[NonEmptyList[ProducedDocument]]] =
     AddSecurityDetailsPage
-      .filterMandatoryDependent(identity) {
+      .filterMandatoryDependent(_ != NoSecurityDetails) {
         AddCommercialReferenceNumberPage.filterMandatoryDependent(_ == false) {
           AddCircumstanceIndicatorPage.filterMandatoryDependent(_ == true) {
             CircumstanceIndicatorPage.filterMandatoryDependent(
@@ -70,7 +71,7 @@ object ProducedDocument {
 
   private def producedDocumentsWithoutConditionalIndicator(itemIndex: Index): ReaderT[EitherType, UserAnswers, Option[NonEmptyList[ProducedDocument]]] =
     AddSecurityDetailsPage
-      .filterMandatoryDependent(identity) {
+      .filterMandatoryDependent(_ != NoSecurityDetails) {
         AddCommercialReferenceNumberPage.filterMandatoryDependent(_ == false) {
           AddCircumstanceIndicatorPage.filterMandatoryDependent(_ == false) {
             DeriveNumberOfDocuments(itemIndex).mandatoryNonEmptyListReader.flatMap {

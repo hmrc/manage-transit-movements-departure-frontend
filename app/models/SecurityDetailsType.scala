@@ -17,19 +17,21 @@
 package models
 
 sealed trait SecurityDetailsType
+sealed trait SecurityDetailsNeededType extends SecurityDetailsType
 
 object SecurityDetailsType extends RadioModel[SecurityDetailsType] {
 
   case object NoSecurityDetails extends WithName("noSecurity") with SecurityDetailsType
-  case object EntrySummaryDeclarationSecurityDetails extends WithName("entrySummaryDeclaration") with SecurityDetailsType
-  case object EntryAndExitSummaryDeclarationSecurityDetails extends WithName("entryAndExitSummaryDeclaration") with SecurityDetailsType
+  case object EntrySummaryDeclarationSecurityDetails extends WithName("entrySummaryDeclaration") with SecurityDetailsNeededType
+  case object ExitSummaryDeclarationSecurityDetails extends WithName("exitSummaryDeclaration") with SecurityDetailsNeededType
+  case object EntryAndExitSummaryDeclarationSecurityDetails extends WithName("entryAndExitSummaryDeclaration") with SecurityDetailsNeededType
 
-  override val messageKeyPrefix: String = "securityType"
+  override val messageKeyPrefix: String = "addSecurityDetails"
 
   override val values: Seq[SecurityDetailsType] = Seq(
     NoSecurityDetails,
     EntrySummaryDeclarationSecurityDetails,
+    ExitSummaryDeclarationSecurityDetails,
     EntryAndExitSummaryDeclarationSecurityDetails
   )
 }
-

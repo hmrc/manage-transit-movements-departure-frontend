@@ -21,10 +21,11 @@ import cats.implicits._
 import models.DeclarationType.Option4
 import models.DependentSection._
 import models.ProcedureType.{Normal, Simplified}
+import models.SecurityDetailsType.NoSecurityDetails
 import models.journeyDomain.RouteDetails._
 import models.journeyDomain.traderDetails.TraderDetails
 import models.journeyDomain.{UserAnswersReader, _}
-import models.{DependentSection, Index, NormalMode, ProcedureType, UserAnswers}
+import models.{DependentSection, Index, NormalMode, ProcedureType, SecurityDetailsNeededType, SecurityDetailsType, UserAnswers}
 import pages._
 import pages.generalInformation.{ContainersUsedPage, PreLodgeDeclarationPage}
 import pages.guaranteeDetails.{GuaranteeTypePage, TIRGuaranteeReferencePage}
@@ -136,27 +137,31 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
       )
       .ifNotStarted(controllers.addItems.itemDetails.routes.ConfirmStartAddItemsController.onPageLoad(userAnswers.lrn).url)
 
-  private def goodsSummaryStartPage(procedureType: Option[ProcedureType], safetyAndSecurity: Option[Boolean], prelodgedDeclaration: Option[Boolean]): String =
+  private def goodsSummaryStartPage(procedureType: Option[ProcedureType],
+                                    safetyAndSecurity: Option[SecurityDetailsType],
+                                    prelodgedDeclaration: Option[Boolean]
+  ): String =
     (procedureType, safetyAndSecurity, prelodgedDeclaration) match {
-      case (_, Some(true), _) => controllers.routes.LoadingPlaceController.onPageLoad(userAnswers.lrn, NormalMode).url
-      case (Some(Normal), Some(false), Some(false)) =>
+      case (_, Some(_: SecurityDetailsNeededType), _) => controllers.routes.LoadingPlaceController.onPageLoad(userAnswers.lrn, NormalMode).url
+      case (Some(Normal), Some(NoSecurityDetails), Some(false)) =>
         controllers.goodsSummary.routes.AddCustomsApprovedLocationController.onPageLoad(userAnswers.lrn, NormalMode).url
-      case (Some(Normal), Some(false), Some(true)) =>
+      case (Some(Normal), Some(NoSecurityDetails), Some(true)) =>
         controllers.goodsSummary.routes.AddAgreedLocationOfGoodsController.onPageLoad(userAnswers.lrn, NormalMode).url
-      case (Some(Simplified), Some(false), _) => controllers.goodsSummary.routes.AuthorisedLocationCodeController.onPageLoad(userAnswers.lrn, NormalMode).url
-      case _                                  => controllers.routes.SessionExpiredController.onPageLoad().url
+      case (Some(Simplified), Some(NoSecurityDetails), _) =>
+        controllers.goodsSummary.routes.AuthorisedLocationCodeController.onPageLoad(userAnswers.lrn, NormalMode).url
+      case _ => controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
   private def goodsSummaryInProgressReader(procedureType: Option[ProcedureType],
-                                           safetyAndSecurity: Option[Boolean],
+                                           safetyAndSecurity: Option[SecurityDetailsType],
                                            prelodgedDeclaration: Option[Boolean]
   ): UserAnswersReader[_] =
     (procedureType, safetyAndSecurity, prelodgedDeclaration) match {
-      case (_, Some(true), _)                       => LoadingPlacePage.reader
-      case (Some(Normal), Some(false), Some(false)) => AddCustomsApprovedLocationPage.reader
-      case (Some(Normal), Some(false), Some(true))  => AddAgreedLocationOfGoodsPage.reader
-      case (Some(Simplified), Some(false), _)       => AuthorisedLocationCodePage.reader.map(_.nonEmpty)
-      case _                                        => AddSealsPage.reader
+      case (_, Some(_: SecurityDetailsNeededType), _)           => LoadingPlacePage.reader
+      case (Some(Normal), Some(NoSecurityDetails), Some(false)) => AddCustomsApprovedLocationPage.reader
+      case (Some(Normal), Some(NoSecurityDetails), Some(true))  => AddAgreedLocationOfGoodsPage.reader
+      case (Some(Simplified), Some(NoSecurityDetails), _)       => AuthorisedLocationCodePage.reader.map(_.nonEmpty)
+      case _                                                    => AddSealsPage.reader
     }
 
   private val goodsSummaryDetails =
@@ -205,7 +210,7 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
       .ifNotStarted(guaranteeDetailsStartPage(userAnswers))
 
   private val safetyAndSecurityDetails = userAnswers.get(AddSecurityDetailsPage) match {
-    case Some(true) =>
+    case Some(_: SecurityDetailsNeededType) =>
       Seq(
         taskListDsl
           .sectionName("declarationSummary.section.safetyAndSecurity")

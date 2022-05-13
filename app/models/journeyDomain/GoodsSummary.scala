@@ -23,8 +23,9 @@ import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.GoodSummaryDetails
 import pages._
 import pages.generalInformation.PreLodgeDeclarationPage
-
 import java.time.LocalDate
+
+import models.SecurityDetailsType.NoSecurityDetails
 
 case class GoodsSummary(
   loadingPlace: Option[String],
@@ -36,7 +37,7 @@ object GoodsSummary {
 
   implicit val parser: UserAnswersReader[GoodsSummary] =
     (
-      AddSecurityDetailsPage.filterOptionalDependent(identity)(LoadingPlacePage.optionalReader).map(_.flatten),
+      AddSecurityDetailsPage.filterOptionalDependent(_ != NoSecurityDetails)(LoadingPlacePage.optionalReader).map(_.flatten),
       UserAnswersReader[GoodSummaryDetails],
       DeriveNumberOfSeals.reader orElse List.empty[SealDomain].pure[UserAnswersReader]
     ).tupled.map((GoodsSummary.apply _).tupled)

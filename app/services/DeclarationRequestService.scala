@@ -41,12 +41,13 @@ import models.messages.guarantee.{Guarantee, GuaranteeReferenceWithGrn, Guarante
 import models.messages.header.{Header, Transport}
 import models.messages.safetyAndSecurity._
 import models.messages.trader._
-import models.{CommonAddress, EoriNumber, UserAnswers}
+import models.{CommonAddress, EoriNumber, SecurityDetailsType, UserAnswers}
 import play.api.Logging
 import repositories.InterchangeControlReferenceIdRepository
 import java.time.LocalDateTime
 
 import javax.inject.Inject
+import models.SecurityDetailsType.NoSecurityDetails
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -291,7 +292,7 @@ class DeclarationRequestService @Inject() (
         case _                                    => None
       }
 
-    def safetyAndSecurityFlag(boolFlag: Boolean): Int = if (boolFlag) 1 else 0
+    def safetyAndSecurityFlag(securityDetailsType: SecurityDetailsType): Int = if (securityDetailsType == NoSecurityDetails) 0 else 1
 
     def safetyAndSecurityConsignee(securityTraderDetails: Option[SecurityTraderDetails]): Option[SafetyAndSecurityConsignee] =
       securityTraderDetails
@@ -385,7 +386,7 @@ class DeclarationRequestService @Inject() (
         speCirIndHEA1 = safetyAndSecurity.flatMap(_.circumstanceIndicator),
         traChaMetOfPayHEA1 = safetyAndSecurity.flatMap(_.paymentMethod.map(_.code)) orElse headerPaymentMethodFromItemDetails(journeyDomain.itemDetails),
         comRefNumHEA = safetyAndSecurity.flatMap(_.commercialReferenceNumber) orElse headerCommercialReferenceNumberFromItemDetails(journeyDomain.itemDetails),
-        secHEA358 = if (preTaskList.addSecurityDetails) {
+        secHEA358 = if (preTaskList.addSecurityDetails != NoSecurityDetails) {
           Some(safetyAndSecurityFlag(preTaskList.addSecurityDetails))
         } else {
           None

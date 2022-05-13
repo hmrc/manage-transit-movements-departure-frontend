@@ -18,19 +18,18 @@ package controllers
 
 import controllers.actions._
 import forms.AddSecurityDetailsFormProvider
-import models.{LocalReferenceNumber, Mode}
+import javax.inject.Inject
+import models.{LocalReferenceNumber, Mode, SecurityDetailsType}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import pages.AddSecurityDetailsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
+import uk.gov.hmrc.viewmodels.NunjucksSupport
+import views.html.AddSecurityDetailsView
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddSecurityDetailsController @Inject() (
@@ -42,7 +41,7 @@ class AddSecurityDetailsController @Inject() (
   requireData: DataRequiredAction,
   formProvider: AddSecurityDetailsFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  view: AddSecurityDetailsView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -50,21 +49,13 @@ class AddSecurityDetailsController @Inject() (
 
   private val form = formProvider()
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData) {
     implicit request =>
       val preparedForm = request.userAnswers.get(AddSecurityDetailsPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
-
-      val json = Json.obj(
-        "form"   -> preparedForm,
-        "mode"   -> mode,
-        "lrn"    -> lrn,
-        "radios" -> Radios.yesNo(preparedForm("value"))
-      )
-
-      renderer.render("addSecurityDetails.njk", json).map(Ok(_))
+      Ok(view(preparedForm, SecurityDetailsType.radioItems, lrn, mode))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
@@ -72,17 +63,7 @@ class AddSecurityDetailsController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => {
-
-            val json = Json.obj(
-              "form"   -> formWithErrors,
-              "mode"   -> mode,
-              "lrn"    -> lrn,
-              "radios" -> Radios.yesNo(formWithErrors("value"))
-            )
-
-            renderer.render("addSecurityDetails.njk", json).map(BadRequest(_))
-          },
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, SecurityDetailsType.radioItems, lrn, mode))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(AddSecurityDetailsPage, value))

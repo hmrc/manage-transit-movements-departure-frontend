@@ -38,13 +38,13 @@ object DependentSection {
       routeDetails <- UserAnswersReader[RouteDetails]
     } yield routeDetails
 
-    if (userAnswers.get(AddSecurityDetailsPage).contains(true)) {
-      for {
-        _     <- commonSection
-        sAndS <- UserAnswersReader[SafetyAndSecurity]
-      } yield sAndS
-    } else {
-      commonSection
+    userAnswers.get(AddSecurityDetailsPage) match {
+      case Some(_: SecurityDetailsNeededType) =>
+        for {
+          _     <- commonSection
+          sAndS <- UserAnswersReader[SafetyAndSecurity]
+        } yield sAndS
+      case _ => commonSection
     }
   }
 

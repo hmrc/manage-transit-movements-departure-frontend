@@ -18,6 +18,7 @@ package models.journeyDomain
 
 import cats.data._
 import cats.implicits._
+import models.SecurityDetailsType.NoSecurityDetails
 import models.journeyDomain.traderDetails.TraderDetails
 import models.reference.CountryCode
 import pages.AddSecurityDetailsPage
@@ -67,8 +68,8 @@ object JourneyDomain {
 
     val safetyAndSecurityReader: UserAnswersReader[Option[SafetyAndSecurity]] = AddSecurityDetailsPage.reader
       .flatMap {
-        case true  => UserAnswersReader[SafetyAndSecurity].map(_.some)
-        case false => none[SafetyAndSecurity].pure[UserAnswersReader]
+        case NoSecurityDetails => none[SafetyAndSecurity].pure[UserAnswersReader]
+        case _                 => UserAnswersReader[SafetyAndSecurity].map(_.some)
       }
 
     for {

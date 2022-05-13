@@ -24,8 +24,9 @@ import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import models.{DeclarationType, Index, UserAnswers}
 import pages._
 import pages.routeDetails._
-
 import java.time.LocalDateTime
+
+import models.SecurityDetailsType.NoSecurityDetails
 
 trait RouteDetails {
 
@@ -66,7 +67,7 @@ object RouteDetailsWithTransitInformation {
   private def addOfficeOfTransit = AddSecurityDetailsPage.reader
     .flatMap {
       addSecurityDetailsFlag =>
-        if (addSecurityDetailsFlag) {
+        if (addSecurityDetailsFlag != NoSecurityDetails) {
           DeriveNumberOfOfficeOfTransits.mandatoryNonEmptyListReader.flatMap {
             _.zipWithIndex.traverse({
               case (_, index) =>

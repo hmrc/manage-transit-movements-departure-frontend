@@ -77,8 +77,8 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
 
   private def redirectToAddTransitOfficeNextPage(ua: UserAnswers, index: Index, mode: Mode): Call =
     ua.get(AddSecurityDetailsPage) match {
-      case Some(isSelected) if isSelected => routes.ArrivalDatesAtOfficeController.onPageLoad(ua.lrn, index, mode)
-      case _                              => routes.AddTransitOfficeController.onPageLoad(ua.lrn, mode)
+      case Some(_: SecurityDetailsNeededType) => routes.ArrivalDatesAtOfficeController.onPageLoad(ua.lrn, index, mode)
+      case _                                  => routes.AddTransitOfficeController.onPageLoad(ua.lrn, mode)
     }
 
   private def isRouteDetailsSectionPage(page: Page): Boolean =
