@@ -101,7 +101,7 @@ class TIRCarnetReferenceController @Inject() (
                   } yield Redirect(navigator.nextPage(TIRCarnetReferencePage(documentIndex, itemIndex), mode, ua2))
               )
           case Some(otherOption) =>
-            logger.warn(s"[Controller][TIRCarnetReference][onPageLoad] Cannot create TIR carnet reference for ${otherOption.code}")
+            logger.warn(s"[Controller][TIRCarnetReference][onPageLoad] Cannot create TIR carnet reference for $otherOption")
             Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
           case None =>
             logger.warn(s"[Controller][TIRCarnetReference][onPageLoad] DeclarationTypePage is missing")

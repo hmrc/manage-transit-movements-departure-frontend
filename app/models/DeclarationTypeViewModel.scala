@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package models.reference
+package models
 
-import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
+import pages.{OfficeOfDeparturePage, ProcedureTypePage}
 
-case class CustomsOffice(id: String, name: String, countryId: CountryCode, phoneNumber: Option[String]) extends Selectable {
-  override def toString: String = s"$name ($id)"
+case class DeclarationTypeViewModel(userAnswers: UserAnswers) extends RadioModel[DeclarationType] {
 
-  override def toSelectItem(selected: Boolean): SelectItem = SelectItem(Some(id), this.toString, selected)
-}
+  override val messageKeyPrefix: String = "declarationType"
 
-object CustomsOffice {
-  implicit val format: OFormat[CustomsOffice] = Json.format[CustomsOffice]
+  override val values: Seq[DeclarationType] = {
+    val countryCode   = userAnswers.get(OfficeOfDeparturePage).map(_.countryId)
+    val procedureType = userAnswers.get(ProcedureTypePage)
+    DeclarationType.chooseValues(countryCode, procedureType)
+  }
+
 }

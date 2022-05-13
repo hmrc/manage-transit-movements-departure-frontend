@@ -1303,7 +1303,7 @@ class UserAnswersToXmlConversionSpec
       <MesTypMES20>GB015B</MesTypMES20>
       <HEAHEA>
         <RefNumHEA4>ABCD1234567890123</RefNumHEA4>
-        <TypOfDecHEA24>TIR</TypOfDecHEA24>
+        <TypOfDecHEA24>T</TypOfDecHEA24>
         <CouOfDesCodHEA30>DC</CouOfDesCodHEA30>
         <PlaOfLoaCodHEA46>LoadPLace</PlaOfLoaCodHEA46>
         <CouOfDisCodHEA55>SC</CouOfDisCodHEA55>
