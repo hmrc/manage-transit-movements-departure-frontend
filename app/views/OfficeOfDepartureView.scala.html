@@ -1,0 +1,72 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.html.components.{Button, ErrorSummary, InputSelect}
+@import models.LocalReferenceNumber
+@import models.reference.{CustomsOffice, Selectable}
+@import models.reference.Selectable._
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+
+@this(
+    mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    select: GovukSelect,
+    hint: GovukHint,
+    label: GovukLabel,
+    button: Button,
+    formHelper: FormWithCSRF
+)
+
+@(form: Form[CustomsOffice], lrn: LocalReferenceNumber, customsOffices: Seq[CustomsOffice], mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@mainTemplate(
+    title = messages("officeOfDeparture.title"),
+    showBackLink = true,
+    lrn = Some(lrn)
+) {
+
+    @formHelper(action = routes.OfficeOfDepartureController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+
+        @errorSummary(form.errors)
+
+        <div class="govuk-form-group">
+          @label(
+            Label(
+              content = Text(messages("officeOfDeparture.heading")),
+              isPageHeading = true,
+              classes = "govuk-label--xl govuk-!-padding-bottom-5"
+              )
+            )
+          <p id="value-paragraph" class="govuk-body">@messages("officeOfDeparture.label")</p>
+
+          @select(
+            Select(
+              hint = Some(Hint(content = Text(messages("officeOfDeparture.hintText")))),
+              items = SelectItem(value = None, text = "") +: customsOffices.toSelectItems(form.value),
+              formGroupClasses = "autocomplete-wrapper",
+              attributes = Map("data-autocomplete" -> ""),
+              errorMessage = form("value").error.map { e =>
+                ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(e.message, e.args: _*)))
+              },
+              classes = "govuk-!-width-two-thirds"
+            )
+            .withFormField(form("value"))
+          )
+        </div>
+
+      @button(attributes = Map("id" -> "submit"))
+    }
+}
