@@ -26,7 +26,7 @@ object SecurityDetailsType extends RadioModel[SecurityDetailsType] {
   case object ExitSummaryDeclarationSecurityDetails extends WithName("exitSummaryDeclaration") with SecurityDetailsNeededType
   case object EntryAndExitSummaryDeclarationSecurityDetails extends WithName("entryAndExitSummaryDeclaration") with SecurityDetailsNeededType
 
-  override val messageKeyPrefix: String = "addSecurityDetails"
+  override val messageKeyPrefix: String = "securityDetailsType"
 
   override val values: Seq[SecurityDetailsType] = Seq(
     NoSecurityDetails,

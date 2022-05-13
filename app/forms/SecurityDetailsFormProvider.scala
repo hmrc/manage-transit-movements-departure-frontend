@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import base.SpecBase
-import commonTestUtils.UserAnswersSpecHelper
+import forms.mappings.Mappings
+import play.api.data.Form
+import javax.inject.Inject
 import models.SecurityDetailsType
-import pages.behaviours.PageBehaviours
 
-class AddSecurityDetailsPageSpec extends PageBehaviours with SpecBase with UserAnswersSpecHelper {
+class SecurityDetailsFormProvider @Inject() extends Mappings {
 
-  "AddSecurityDetailsPage" - {
-
-    beRetrievable[SecurityDetailsType](AddSecurityDetailsPage)
-
-    beSettable[SecurityDetailsType](AddSecurityDetailsPage)
-
-    beRemovable[SecurityDetailsType](AddSecurityDetailsPage)
-  }
+  def apply(): Form[SecurityDetailsType] =
+    Form(
+      "value" -> enumerable[SecurityDetailsType]("securityDetailsType.error.required")
+    )
 }

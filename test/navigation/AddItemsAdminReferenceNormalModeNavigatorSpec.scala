@@ -28,7 +28,7 @@ import navigation.annotations.addItemsNavigators.AddItemsAdminReferenceNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.{AddSecurityDetailsPage, DeclarationTypePage}
+import pages.{DeclarationTypePage, SecurityDetailsTypePage}
 import pages.addItems._
 import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddTransportChargesPaymentMethodPage}
 import queries.PreviousReferencesQuery
@@ -111,7 +111,7 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
             val updatedAnswer = answers
               .remove(PreviousReferencesQuery(itemIndex)).success.value
               .set(AddAnotherPreviousAdministrativeReferencePage(itemIndex), false).success.value
-              .set(AddSecurityDetailsPage, NoSecurityDetails).success.value
+              .set(SecurityDetailsTypePage, NoSecurityDetails).success.value
 
             navigator
               .nextPage(AddAnotherPreviousAdministrativeReferencePage(itemIndex), NormalMode, updatedAnswer)
@@ -166,7 +166,7 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddSecurityDetailsPage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
+              .set(SecurityDetailsTypePage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
               .set(AddTransportChargesPaymentMethodPage, false).success.value
               .set(AddAdministrativeReferencePage(itemIndex), false).success.value
 
@@ -181,7 +181,7 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
           answers =>
             val updatedAnswers = answers
               .set(AddAdministrativeReferencePage(itemIndex), false).success.value
-              .set(AddSecurityDetailsPage, NoSecurityDetails).success.value
+              .set(SecurityDetailsTypePage, NoSecurityDetails).success.value
             navigator
               .nextPage(AddAdministrativeReferencePage(itemIndex), NormalMode, updatedAnswers)
               .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, itemIndex))
@@ -193,7 +193,7 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddSecurityDetailsPage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
+              .set(SecurityDetailsTypePage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
               .set(AddTransportChargesPaymentMethodPage, true).success.value
               .set(AddCommercialReferenceNumberAllItemsPage, false).success.value
               .set(AddAdministrativeReferencePage(itemIndex), false).success.value
@@ -209,7 +209,7 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddSecurityDetailsPage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
+              .set(SecurityDetailsTypePage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
               .set(AddTransportChargesPaymentMethodPage, true).success.value
               .set(AddCommercialReferenceNumberAllItemsPage, true).success.value
               .set(AddAdministrativeReferencePage(itemIndex), false).success.value
@@ -225,7 +225,7 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddSecurityDetailsPage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
+              .set(SecurityDetailsTypePage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
               .set(AddTransportChargesPaymentMethodPage, false).success.value
               .set(AddAnotherPreviousAdministrativeReferencePage(itemIndex), false).success.value
 
@@ -240,7 +240,7 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
           answers =>
             val updatedAnswers = answers
               .set(AddAnotherPreviousAdministrativeReferencePage(itemIndex), false).success.value
-              .set(AddSecurityDetailsPage, NoSecurityDetails).success.value
+              .set(SecurityDetailsTypePage, NoSecurityDetails).success.value
             navigator
               .nextPage(AddAnotherPreviousAdministrativeReferencePage(itemIndex), NormalMode, updatedAnswers)
               .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, itemIndex))
@@ -252,7 +252,7 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddSecurityDetailsPage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
+              .set(SecurityDetailsTypePage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
               .set(AddTransportChargesPaymentMethodPage, true).success.value
               .set(AddCommercialReferenceNumberAllItemsPage, false).success.value
               .set(AddAnotherPreviousAdministrativeReferencePage(itemIndex), false).success.value
@@ -268,7 +268,7 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddSecurityDetailsPage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
+              .set(SecurityDetailsTypePage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
               .set(AddTransportChargesPaymentMethodPage, true).success.value
               .set(AddCommercialReferenceNumberAllItemsPage, true).success.value
               .set(AddAnotherPreviousAdministrativeReferencePage(itemIndex), false).success.value

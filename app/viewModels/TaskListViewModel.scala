@@ -175,11 +175,11 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         controllers.goodsSummary.routes.GoodsSummaryCheckYourAnswersController.onPageLoad(lrn).url
       )
       .ifInProgress(
-        goodsSummaryInProgressReader(userAnswers.get(ProcedureTypePage), userAnswers.get(AddSecurityDetailsPage), userAnswers.get(PreLodgeDeclarationPage)),
-        goodsSummaryStartPage(userAnswers.get(ProcedureTypePage), userAnswers.get(AddSecurityDetailsPage), userAnswers.get(PreLodgeDeclarationPage))
+        goodsSummaryInProgressReader(userAnswers.get(ProcedureTypePage), userAnswers.get(SecurityDetailsTypePage), userAnswers.get(PreLodgeDeclarationPage)),
+        goodsSummaryStartPage(userAnswers.get(ProcedureTypePage), userAnswers.get(SecurityDetailsTypePage), userAnswers.get(PreLodgeDeclarationPage))
       )
       .ifNotStarted(
-        goodsSummaryStartPage(userAnswers.get(ProcedureTypePage), userAnswers.get(AddSecurityDetailsPage), userAnswers.get(PreLodgeDeclarationPage))
+        goodsSummaryStartPage(userAnswers.get(ProcedureTypePage), userAnswers.get(SecurityDetailsTypePage), userAnswers.get(PreLodgeDeclarationPage))
       )
 
   private def guaranteeDetailsInProgressReader(userAnswers: UserAnswers) =
@@ -209,7 +209,7 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
       )
       .ifNotStarted(guaranteeDetailsStartPage(userAnswers))
 
-  private val safetyAndSecurityDetails = userAnswers.get(AddSecurityDetailsPage) match {
+  private val safetyAndSecurityDetails = userAnswers.get(SecurityDetailsTypePage) match {
     case Some(_: SecurityDetailsNeededType) =>
       Seq(
         taskListDsl

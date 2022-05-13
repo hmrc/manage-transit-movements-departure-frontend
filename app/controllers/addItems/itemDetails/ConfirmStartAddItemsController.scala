@@ -21,7 +21,7 @@ import forms.ConfirmStartAddItemsFormProvider
 import models.{DependentSection, LocalReferenceNumber, NormalMode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsItemDetails
-import pages.AddSecurityDetailsPage
+import pages.SecurityDetailsTypePage
 import pages.addItems.ConfirmStartAddItemsPage
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -62,7 +62,7 @@ class ConfirmStartAddItemsController @Inject() (
     andThen checkDependentSection(DependentSection.ItemDetails)).async {
     implicit request =>
       request.userAnswers
-        .get(AddSecurityDetailsPage)
+        .get(SecurityDetailsTypePage)
         .map {
           safetyAndSecurity =>
             val json = Json.obj(
@@ -75,7 +75,7 @@ class ConfirmStartAddItemsController @Inject() (
             renderer.render(template, json).map(Ok(_))
         }
         .getOrElse {
-          logger.warn("[onPageLoad] redirecting to session expired controller because AddSecurityDetailsPage not answered")
+          logger.warn("[onPageLoad] redirecting to session expired controller because SecurityDetailsTypePage not answered")
           Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
         }
   }
@@ -86,7 +86,7 @@ class ConfirmStartAddItemsController @Inject() (
     andThen checkDependentSection(DependentSection.ItemDetails)).async {
     implicit request =>
       request.userAnswers
-        .get(AddSecurityDetailsPage)
+        .get(SecurityDetailsTypePage)
         .map {
           safetyAndSecurity =>
             form
@@ -111,7 +111,7 @@ class ConfirmStartAddItemsController @Inject() (
               )
         }
         .getOrElse {
-          logger.warn("[onSubmit] redirecting to session expired controller because AddSecurityDetailsPage not answered")
+          logger.warn("[onSubmit] redirecting to session expired controller because SecurityDetailsTypePage not answered")
           Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
         }
   }

@@ -74,7 +74,7 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           answers =>
             navigator
               .nextPage(DeclarationTypePage, NormalMode, answers)
-              .mustBe(routes.AddSecurityDetailsController.onPageLoad(answers.lrn, NormalMode))
+              .mustBe(routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, NormalMode))
         }
       }
     }

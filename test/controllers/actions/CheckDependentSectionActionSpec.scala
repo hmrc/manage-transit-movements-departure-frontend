@@ -59,7 +59,7 @@ class CheckDependentSectionActionSpec extends SpecBase with GuiceOneAppPerSuite 
         // PreTaskList
         .unsafeSetVal(ProcedureTypePage)(Normal)
         .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
-        .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+        .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
         .unsafeSetVal(DeclarationTypePage)(Option1)
         // MovementDetails
         .unsafeSetVal(ProcedureTypePage)(Normal)

@@ -30,7 +30,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems.specialMentions._
 import pages.addItems.{AddExtraDocumentInformationPage, DocumentExtraInformationPage, DocumentReferencePage, DocumentTypePage}
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
-import pages.{AddSecurityDetailsPage, DeclarationTypePage}
+import pages.{DeclarationTypePage, SecurityDetailsTypePage}
 
 class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
 
@@ -68,7 +68,7 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
           "its not the first document on the first item" in {
 
             val userAnswers = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
               .unsafeSetVal(DeclarationTypePage)(Option4)
 
             navigator
@@ -82,7 +82,7 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
           "its the first document but not the first item" in {
 
             val userAnswers = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
               .unsafeSetVal(DocumentTypePage(itemIndex, referenceIndex))("documentType")
               .unsafeSetVal(DocumentReferencePage(itemIndex, referenceIndex))("documentReference")
               .unsafeSetVal(AddExtraDocumentInformationPage(itemIndex, referenceIndex))(true)
@@ -95,10 +95,10 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
           }
 
         "to AddDocuments when set to false and safety " +
-          "and security is selected as 'No'" in {
+          "and security is selected as 'NoSecurityDetails'" in {
 
             val userAnswers = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
               .unsafeSetVal(DeclarationTypePage)(Option1)
 
             navigator
@@ -107,14 +107,14 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
           }
 
         "to DocumentType when set to false " +
-          "and AddSecurityDetailsPage is 'Yes' " +
-          "and  AddCircumstanceIndicatorPage is 'No' " +
+          "and SecurityDetailsTypePage is 'EntryAndExitSummaryDeclarationSecurityDetails' " +
+          "and AddCircumstanceIndicatorPage is 'No' " +
           "and it is the first Item " +
           "and AddCommercialReferenceNumberPage is false" in {
 
             val userAnswers = emptyUserAnswers
               .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
-              .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
               .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
               .unsafeSetVal(DeclarationTypePage)(Option1)
 
@@ -131,7 +131,7 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
 
             val userAnswers = emptyUserAnswers
               .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
-              .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
               .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
               .unsafeSetVal(DeclarationTypePage)(Option1)
 
@@ -149,7 +149,7 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
             val userAnswers = emptyUserAnswers
               .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
               .unsafeSetVal(CircumstanceIndicatorPage)(circumstanceIndicator)
-              .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
               .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
               .unsafeSetVal(DeclarationTypePage)(Option1)
 
@@ -165,7 +165,7 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
             val userAnswers = emptyUserAnswers
               .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
               .unsafeSetVal(CircumstanceIndicatorPage)("something")
-              .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
               .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
               .unsafeSetVal(DeclarationTypePage)(Option1)
 
@@ -224,7 +224,7 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
         "to AddDocuments when set to false and safeTye and security is selected as 'No'" in {
 
           val userAnswers = emptyUserAnswers
-            .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+            .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
             .unsafeSetVal(AddAnotherSpecialMentionPage(itemIndex))(false)
             .unsafeSetVal(DeclarationTypePage)(Option1)
 
@@ -237,7 +237,7 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
 
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
-            .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
             .unsafeSetVal(AddAnotherSpecialMentionPage(itemIndex))(false)
             .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
             .unsafeSetVal(DeclarationTypePage)(Option1)
@@ -252,7 +252,7 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
 
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
-            .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
             .unsafeSetVal(AddAnotherSpecialMentionPage(itemIndex))(false)
             .unsafeSetVal(AddAnotherSpecialMentionPage(nextIndex))(false)
             .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
@@ -270,7 +270,7 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
             .unsafeSetVal(CircumstanceIndicatorPage)(circumstanceIndicator)
-            .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
             .unsafeSetVal(AddAnotherSpecialMentionPage(itemIndex))(false)
             .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
             .unsafeSetVal(DeclarationTypePage)(Option1)
@@ -285,7 +285,7 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
             .unsafeSetVal(CircumstanceIndicatorPage)("something")
-            .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
             .unsafeSetVal(AddAnotherSpecialMentionPage(itemIndex))(false)
             .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
             .unsafeSetVal(DeclarationTypePage)(Option1)

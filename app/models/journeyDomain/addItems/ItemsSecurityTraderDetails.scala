@@ -22,7 +22,7 @@ import models.SecurityDetailsType.NoSecurityDetails
 import models.journeyDomain.addItems.SecurityTraderDetails._
 import models.journeyDomain.{UserAnswersReader, _}
 import models.reference.MethodOfPayment
-import pages.AddSecurityDetailsPage
+import pages.SecurityDetailsTypePage
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
 import pages.safetyAndSecurity._
 
@@ -37,7 +37,7 @@ final case class ItemsSecurityTraderDetails(
 object ItemsSecurityTraderDetails {
 
   def parser(index: Index): UserAnswersReader[Option[ItemsSecurityTraderDetails]] =
-    AddSecurityDetailsPage.filterOptionalDependent(_ != NoSecurityDetails) {
+    SecurityDetailsTypePage.filterOptionalDependent(_ != NoSecurityDetails) {
       (
         methodOfPaymentPage(index),
         commercialReferenceNumberPage(index),

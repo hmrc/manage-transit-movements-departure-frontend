@@ -25,7 +25,7 @@ import models.reference.CircumstanceIndicator
 import models.{Index, UserAnswers}
 import pages.addItems._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
-import pages.{AddSecurityDetailsPage, DeclarationTypePage}
+import pages.{DeclarationTypePage, SecurityDetailsTypePage}
 
 sealed trait ProducedDocument
 
@@ -49,7 +49,7 @@ object ProducedDocument {
       .map(_.some)
 
   private def producedDocumentsWithConditionalIndicator(itemIndex: Index): ReaderT[EitherType, UserAnswers, Option[NonEmptyList[ProducedDocument]]] =
-    AddSecurityDetailsPage
+    SecurityDetailsTypePage
       .filterMandatoryDependent(_ != NoSecurityDetails) {
         AddCommercialReferenceNumberPage.filterMandatoryDependent(_ == false) {
           AddCircumstanceIndicatorPage.filterMandatoryDependent(_ == true) {
@@ -70,7 +70,7 @@ object ProducedDocument {
       .map(_.some)
 
   private def producedDocumentsWithoutConditionalIndicator(itemIndex: Index): ReaderT[EitherType, UserAnswers, Option[NonEmptyList[ProducedDocument]]] =
-    AddSecurityDetailsPage
+    SecurityDetailsTypePage
       .filterMandatoryDependent(_ != NoSecurityDetails) {
         AddCommercialReferenceNumberPage.filterMandatoryDependent(_ == false) {
           AddCircumstanceIndicatorPage.filterMandatoryDependent(_ == false) {

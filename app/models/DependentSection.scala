@@ -19,7 +19,7 @@ package models
 import cats.implicits._
 import models.journeyDomain.traderDetails.TraderDetails
 import models.journeyDomain.{MovementDetails, RouteDetails, SafetyAndSecurity, TransportDetails, UserAnswersReader}
-import pages.AddSecurityDetailsPage
+import pages.SecurityDetailsTypePage
 
 sealed trait DependentSection
 
@@ -38,7 +38,7 @@ object DependentSection {
       routeDetails <- UserAnswersReader[RouteDetails]
     } yield routeDetails
 
-    userAnswers.get(AddSecurityDetailsPage) match {
+    userAnswers.get(SecurityDetailsTypePage) match {
       case Some(_: SecurityDetailsNeededType) =>
         for {
           _     <- commonSection

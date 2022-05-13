@@ -23,7 +23,7 @@ import models.reference._
 import models.{CommonAddress, EoriNumber}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
-import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage}
+import pages.{OfficeOfDeparturePage, SecurityDetailsTypePage}
 
 class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
@@ -34,7 +34,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
       "when add security details is 'No' then consignee should be None" in {
 
         val ua = emptyUserAnswers
-          .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
 
         val result = SecurityTraderDetails.consigneeDetails(index).run(ua).value
 
@@ -45,7 +45,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
         "when the consignee for all items is 'Yes' should be None" in {
 
           val ua = emptyUserAnswers
-            .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
             .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
 
           val result = SecurityTraderDetails.consigneeDetails(index).run(ua).value
@@ -57,7 +57,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
           "when the eori is known" - {
             "and user has select 'Yes' for add circumstanceIndicator and did not select E for circumstanceIndicatorPage then the security consignee is read" in {
               val ua = emptyUserAnswers
-                .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+                .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
                 .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
                 .unsafeSetVal(CircumstanceIndicatorPage)("A")
                 .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
@@ -72,7 +72,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
 
             "and user has select 'Yes' for add circumstanceIndicator and did select E for circumstanceIndicatorPage then the security consignee is read" in {
               val ua = emptyUserAnswers
-                .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+                .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
                 .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
                 .unsafeSetVal(CircumstanceIndicatorPage)("E")
                 .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
@@ -86,7 +86,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
 
             "and user has select 'No' for add circumstanceIndicator then the security consignee is read" in {
               val ua = emptyUserAnswers
-                .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+                .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
                 .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
                 .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
                 .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(true)
@@ -105,7 +105,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
               val consigneeAddress = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
 
               val ua = emptyUserAnswers
-                .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+                .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
                 .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
                 .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
                 .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(false)
@@ -124,7 +124,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
               val consigneeAddress = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
 
               val ua = emptyUserAnswers
-                .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+                .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
                 .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
                 .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
                 .unsafeSetVal(CircumstanceIndicatorPage)("A")
@@ -143,7 +143,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
             "when the user selects 'Yes' for add circumstance indicator page and does select 'E' for circumstance indicator then the consignee is read" in {
 
               val ua = emptyUserAnswers
-                .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+                .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
                 .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
                 .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
                 .unsafeSetVal(CircumstanceIndicatorPage)("E")
@@ -167,7 +167,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
       "when add security details is 'No' then consignor should be None" in {
 
         val ua = emptyUserAnswers
-          .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
 
         val result = SecurityTraderDetails.consignorDetails(index).run(ua).value
 
@@ -178,7 +178,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
         "when the consignor for all items is 'Yes' should be None" in {
 
           val ua = emptyUserAnswers
-            .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
             .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
 
           val result = SecurityTraderDetails.consignorDetails(index).run(ua).value
@@ -190,7 +190,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
           "when the eori is known" in {
 
             val ua = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
               .unsafeSetVal(AddSecurityConsignorsEoriPage(index))(true)
               .unsafeSetVal(SecurityConsignorEoriPage(index))("testEori")
               .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
@@ -212,7 +212,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
             val consigneeAddress = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
 
             val ua = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
               .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
               .unsafeSetVal(AddSecurityConsignorsEoriPage(index))(false)
               .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))

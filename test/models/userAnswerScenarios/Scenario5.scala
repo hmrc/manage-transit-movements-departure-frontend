@@ -67,7 +67,7 @@ case object Scenario5 extends UserAnswerScenario {
 
   val userAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj())
     .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
-    .unsafeSetVal(pages.AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+    .unsafeSetVal(pages.SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
     .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None))
     .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
     /*

@@ -17,31 +17,31 @@
 package controllers
 
 import controllers.actions._
-import forms.AddSecurityDetailsFormProvider
+import forms.SecurityDetailsFormProvider
 import javax.inject.Inject
 import models.{LocalReferenceNumber, Mode, SecurityDetailsType}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import pages.AddSecurityDetailsPage
+import pages.SecurityDetailsTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
-import views.html.AddSecurityDetailsView
+import views.html.SecurityDetailsTypeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddSecurityDetailsController @Inject() (
+class SecurityDetailsTypeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @PreTaskListDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: AddSecurityDetailsFormProvider,
+  formProvider: SecurityDetailsFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: AddSecurityDetailsView
+  view: SecurityDetailsTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -51,7 +51,7 @@ class AddSecurityDetailsController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(AddSecurityDetailsPage) match {
+      val preparedForm = request.userAnswers.get(SecurityDetailsTypePage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -66,9 +66,9 @@ class AddSecurityDetailsController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, SecurityDetailsType.radioItems, lrn, mode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(AddSecurityDetailsPage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(SecurityDetailsTypePage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(AddSecurityDetailsPage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(SecurityDetailsTypePage, mode, updatedAnswers))
         )
   }
 }

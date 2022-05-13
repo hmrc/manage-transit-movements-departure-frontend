@@ -28,7 +28,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.AddSecurityDetailsPage
+import pages.SecurityDetailsTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -54,7 +54,7 @@ class ConfirmStartAddItemsControllerSpec extends SpecBase with AppWithDefaultMoc
 
   "ConfirmStartAddItem controller" - {
     "must return OK and the correct view for a GET" in {
-      val updatedUserAnswers = emptyUserAnswers.set(AddSecurityDetailsPage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
+      val updatedUserAnswers = emptyUserAnswers.set(SecurityDetailsTypePage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
 
       setUserAnswers(Some(updatedUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
@@ -88,7 +88,7 @@ class ConfirmStartAddItemsControllerSpec extends SpecBase with AppWithDefaultMoc
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-      val updatedUserAnswers                             = emptyUserAnswers.set(AddSecurityDetailsPage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
+      val updatedUserAnswers                             = emptyUserAnswers.set(SecurityDetailsTypePage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
 
       setUserAnswers(Some(updatedUserAnswers))
 
@@ -106,7 +106,7 @@ class ConfirmStartAddItemsControllerSpec extends SpecBase with AppWithDefaultMoc
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      val updatedUserAnswers = emptyUserAnswers.set(AddSecurityDetailsPage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
+      val updatedUserAnswers = emptyUserAnswers.set(SecurityDetailsTypePage, EntryAndExitSummaryDeclarationSecurityDetails).success.value
       setUserAnswers(Some(updatedUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))

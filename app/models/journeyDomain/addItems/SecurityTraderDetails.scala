@@ -23,7 +23,7 @@ import models.reference.{CountryCode, CustomsOffice}
 import models.{CommonAddress, EoriNumber, Index}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
-import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage}
+import pages.{OfficeOfDeparturePage, SecurityDetailsTypePage}
 
 sealed trait SecurityTraderDetails
 
@@ -51,7 +51,7 @@ object SecurityTraderDetails {
           case (name, address) => SecurityTraderDetails(name, address)
         }
 
-    AddSecurityDetailsPage
+    SecurityDetailsTypePage
       .filterOptionalDependent[Option[SecurityTraderDetails]](_ != NoSecurityDetails) {
         AddSafetyAndSecurityConsignorPage.filterOptionalDependent(_ == false) {
           (AddCircumstanceIndicatorPage.reader, CircumstanceIndicatorPage.optionalReader, OfficeOfDeparturePage.reader).tupled.flatMap {
@@ -84,7 +84,7 @@ object SecurityTraderDetails {
             SecurityTraderDetails(name, address)
         }
 
-    AddSecurityDetailsPage
+    SecurityDetailsTypePage
       .filterOptionalDependent[Option[SecurityTraderDetails]](_ != NoSecurityDetails) {
         AddSafetyAndSecurityConsigneePage
           .filterOptionalDependent(_ == false) {

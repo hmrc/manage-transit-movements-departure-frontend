@@ -67,7 +67,7 @@ class AddItemsAdminReferenceNavigator @Inject() () extends Navigator {
   }
 
   private def matchSecurityDetailsAndAddTransportCharges(itemIndex: Index, ua: UserAnswers): Option[Call] =
-    (ua.get(AddSecurityDetailsPage), ua.get(AddTransportChargesPaymentMethodPage)) match {
+    (ua.get(SecurityDetailsTypePage), ua.get(AddTransportChargesPaymentMethodPage)) match {
       case (Some(_: SecurityDetailsNeededType), Some(false)) =>
         Some(controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(ua.lrn, itemIndex, NormalMode))
       case (Some(_: SecurityDetailsNeededType), Some(true)) => addCommercialRefNumberAllItems(itemIndex, ua)
@@ -89,7 +89,7 @@ class AddItemsAdminReferenceNavigator @Inject() () extends Navigator {
   }
 
   private def securityDetailsAndTransportCharges(itemIndex: Index, ua: UserAnswers) =
-    (ua.get(AddSecurityDetailsPage), ua.get(AddTransportChargesPaymentMethodPage)) match {
+    (ua.get(SecurityDetailsTypePage), ua.get(AddTransportChargesPaymentMethodPage)) match {
       case (Some(_: SecurityDetailsNeededType), Some(false)) =>
         controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(ua.lrn, itemIndex, NormalMode)
       case (Some(_: SecurityDetailsNeededType), Some(true)) => addReferenceNumberAllItems(itemIndex, ua)

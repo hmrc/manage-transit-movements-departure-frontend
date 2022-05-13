@@ -24,7 +24,7 @@ import models.{CheckMode, Index, Mode, NormalMode, SecurityDetailsNeededType, Us
 import navigation.Navigator
 import pages.addItems.specialMentions._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
-import pages.{AddSecurityDetailsPage, DeclarationTypePage, Page}
+import pages.{DeclarationTypePage, Page, SecurityDetailsTypePage}
 import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
 
@@ -105,7 +105,7 @@ class AddItemsSpecialMentionsNavigator @Inject() () extends Navigator {
   }
 
   private def showDocumentTypePage(userAnswers: UserAnswers, itemIndex: Index): Option[Boolean] =
-    (userAnswers.get(AddSecurityDetailsPage),
+    (userAnswers.get(SecurityDetailsTypePage),
      userAnswers.get(AddCircumstanceIndicatorPage),
      userAnswers.get(AddCommercialReferenceNumberPage),
      itemIndex.position == 0

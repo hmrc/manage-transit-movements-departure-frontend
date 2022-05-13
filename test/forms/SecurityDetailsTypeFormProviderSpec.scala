@@ -20,11 +20,11 @@ import forms.behaviours.OptionFieldBehaviours
 import models.SecurityDetailsType
 import play.api.data.FormError
 
-class AddSecurityDetailsFormProviderSpec extends OptionFieldBehaviours {
+class SecurityDetailsTypeFormProviderSpec extends OptionFieldBehaviours {
 
-  private val requiredKey = "addSecurityDetails.error.required"
+  private val requiredKey = "securityDetailsType.error.required"
   private val invalidKey  = "error.invalid"
-  private val form        = new AddSecurityDetailsFormProvider()()
+  private val form        = new SecurityDetailsFormProvider()()
 
   ".value" - {
 

@@ -46,7 +46,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
       val userAnswers = emptyUserAnswers
         .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
-        .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+        .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
         .unsafeSetVal(DestinationOfficePage)(CustomsOffice("GB", "Name", CountryCode("GB"), None))
         .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
         .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
@@ -97,7 +97,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
-          .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+          .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
           .unsafeSetVal(DestinationOfficePage)(CustomsOffice("GB", "Name", CountryCode("GB"), None))
           .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
           .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
@@ -121,7 +121,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
-          .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+          .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
           .unsafeSetVal(DestinationOfficePage)(CustomsOffice("XI", "name", CountryCode("XI"), None))
           .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
           .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
@@ -143,7 +143,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
-          .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
           .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
           .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
@@ -161,7 +161,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
       "when safetyAndSecurityFlag is true and a mandatory page is missing" in {
 
         val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-          AddSecurityDetailsPage,
+          SecurityDetailsTypePage,
           CountryOfDispatchPage,
           DestinationCountryPage,
           DestinationOfficePage,
@@ -175,7 +175,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
             val userAnswers = emptyUserAnswers
               .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
-              .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
               .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
               .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
               .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
@@ -193,7 +193,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
       "when safetyAndSecurityFlag is false and a mandatory page is missing" in {
 
         val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-          AddSecurityDetailsPage,
+          SecurityDetailsTypePage,
           CountryOfDispatchPage,
           DestinationCountryPage,
           DestinationOfficePage,
@@ -204,7 +204,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           mandatoryPage =>
             val userAnswers = emptyUserAnswers
               .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
-              .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
               .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
               .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
               .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))

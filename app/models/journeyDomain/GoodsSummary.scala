@@ -37,7 +37,7 @@ object GoodsSummary {
 
   implicit val parser: UserAnswersReader[GoodsSummary] =
     (
-      AddSecurityDetailsPage.filterOptionalDependent(_ != NoSecurityDetails)(LoadingPlacePage.optionalReader).map(_.flatten),
+      SecurityDetailsTypePage.filterOptionalDependent(_ != NoSecurityDetails)(LoadingPlacePage.optionalReader).map(_.flatten),
       UserAnswersReader[GoodSummaryDetails],
       DeriveNumberOfSeals.reader orElse List.empty[SealDomain].pure[UserAnswersReader]
     ).tupled.map((GoodsSummary.apply _).tupled)

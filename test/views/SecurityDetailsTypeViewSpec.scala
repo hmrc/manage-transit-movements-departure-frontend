@@ -16,22 +16,22 @@
 
 package views
 
-import forms.{AddSecurityDetailsFormProvider}
+import forms.{SecurityDetailsFormProvider}
 import models.{NormalMode, SecurityDetailsType}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.RadioViewBehaviours
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
-import views.html.AddSecurityDetailsView
+import views.html.SecurityDetailsTypeView
 
-class AddSecurityDetailsViewSpec extends RadioViewBehaviours[SecurityDetailsType] {
+class SecurityDetailsTypeViewSpec extends RadioViewBehaviours[SecurityDetailsType] {
 
-  override def form: Form[SecurityDetailsType] = new AddSecurityDetailsFormProvider()()
+  override def form: Form[SecurityDetailsType] = new SecurityDetailsFormProvider()()
 
   override def applyView(form: Form[SecurityDetailsType]): HtmlFormat.Appendable =
-    injector.instanceOf[AddSecurityDetailsView].apply(form, radioItems, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[SecurityDetailsTypeView].apply(form, radioItems, lrn, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "addSecurityDetails"
+  override val prefix: String = "securityDetailsType"
 
   override def radioItems(fieldId: String, checkedValue: Option[SecurityDetailsType] = None): Seq[RadioItem] =
     SecurityDetailsType.radioItems(fieldId, checkedValue)

@@ -105,7 +105,7 @@ class DeclarationRequestServiceSpec
 
               result.isRight mustBe true
 
-              if (userAnswerScenario.toModel.preTaskList.addSecurityDetails != NoSecurityDetails) {
+              if (userAnswerScenario.toModel.preTaskList.securityDetailsType != NoSecurityDetails) {
                 result.value.header.secHEA358 mustBe Some(1)
               } else {
                 result.value.header.secHEA358 mustBe None

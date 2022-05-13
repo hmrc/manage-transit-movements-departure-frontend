@@ -30,7 +30,7 @@ class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with UserAnswer
   private val preTaskListUa = emptyUserAnswers
     .unsafeSetVal(ProcedureTypePage)(Normal)
     .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
-    .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+    .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
     .unsafeSetVal(DeclarationTypePage)(Option1)
 
   "PreTaskListDetails" - {
@@ -56,7 +56,7 @@ class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with UserAnswer
       val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
         ProcedureTypePage,
         OfficeOfDeparturePage,
-        AddSecurityDetailsPage
+        SecurityDetailsTypePage
       )
 
       "when an answer is missing" in {

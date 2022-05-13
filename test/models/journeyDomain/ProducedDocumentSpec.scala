@@ -26,7 +26,7 @@ import models.reference.CircumstanceIndicator
 import org.scalacheck.Gen
 import pages.addItems._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
-import pages.{AddSecurityDetailsPage, DeclarationTypePage, QuestionPage}
+import pages.{DeclarationTypePage, QuestionPage, SecurityDetailsTypePage}
 
 class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
@@ -153,7 +153,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
           val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
 
           val userAnswers = producedDocumentUa
-            .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
             .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
             .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
 
@@ -177,7 +177,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
           val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
 
           val userAnswers = producedDocumentUa
-            .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
             .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
             .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
             .unsafeSetVal(CircumstanceIndicatorPage)(validCircumstanceIndicator)
@@ -195,7 +195,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
         val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
 
         val userAnswers = producedDocumentUa
-          .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
           .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
           .unsafeSetVal(AddDocumentsPage(index))(true)
@@ -213,7 +213,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
         val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
 
         val userAnswers = producedDocumentUa
-          .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+          .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
           .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
           .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
           .unsafeSetVal(AddDocumentsPage(index))(true)
@@ -228,7 +228,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
         val expectedResult = NonEmptyList(StandardDocument("documentType", "documentReference", None), List.empty)
 
         val userAnswers = producedDocumentUa
-          .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+          .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
           .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
           .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
           .unsafeSetVal(AddDocumentsPage(Index(1)))(true)
@@ -262,7 +262,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
           val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
 
           val userAnswers = producedDocumentUa
-            .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
             .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
             .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
             .unsafeSetVal(CircumstanceIndicatorPage)(invalidCircumstanceIndicator)
@@ -289,7 +289,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
             .value
 
           val userAnswers = producedDocumentUa
-            .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
             .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
             .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
             .unsafeSetVal(CircumstanceIndicatorPage)(invalidCircumstanceIndicator)
@@ -303,7 +303,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
       "must return None when AddSecurityDetailsPage is false and AddDocumentsPage is false" in {
 
         val userAnswers = producedDocumentUa
-          .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
           .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
           .unsafeSetVal(AddDocumentsPage(index))(false)
@@ -316,7 +316,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
       "must return None when AddCommercialReferenceNumberPage is true and addDocumentsPage is false" in {
 
         val userAnswers = producedDocumentUa
-          .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+          .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
           .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
           .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
           .unsafeSetVal(AddDocumentsPage(index))(false)
@@ -329,7 +329,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
       "must return None when Index position is not 0 and AddDocumentsPage is false" in {
 
         val userAnswers = producedDocumentUa
-          .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+          .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
           .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
           .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
           .unsafeSetVal(AddDocumentsPage(index))(false)

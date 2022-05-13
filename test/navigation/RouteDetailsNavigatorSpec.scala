@@ -167,7 +167,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
           forAll(arbitrary[UserAnswers]) {
             answers =>
-              val updatedUserAnswers = answers.set(AddSecurityDetailsPage, EntryAndExitSummaryDeclarationSecurityDetails).toOption.value
+              val updatedUserAnswers = answers.set(SecurityDetailsTypePage, EntryAndExitSummaryDeclarationSecurityDetails).toOption.value
 
               navigator
                 .nextPage(AddAnotherTransitOfficePage(index), NormalMode, updatedUserAnswers)
@@ -179,7 +179,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
           forAll(arbitrary[UserAnswers]) {
             answers =>
-              val updatedUserAnswers = answers.set(AddSecurityDetailsPage, NoSecurityDetails).toOption.value
+              val updatedUserAnswers = answers.set(SecurityDetailsTypePage, NoSecurityDetails).toOption.value
 
               navigator
                 .nextPage(AddAnotherTransitOfficePage(index), NormalMode, updatedUserAnswers)

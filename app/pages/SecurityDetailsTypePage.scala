@@ -19,9 +19,9 @@ package pages
 import models.SecurityDetailsType
 import play.api.libs.json.JsPath
 
-case object AddSecurityDetailsPage extends QuestionPage[SecurityDetailsType] {
+case object SecurityDetailsTypePage extends QuestionPage[SecurityDetailsType] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "addSecurityDetails"
+  override def toString: String = "securityDetailsType"
 }

@@ -527,7 +527,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
       "section task" - {
         "is included when user has chosen to add Security Details" in {
-          val useranswers = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+          val useranswers = emptyUserAnswers.unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
 
           val viewModel = TaskListViewModel(useranswers)
 
@@ -535,7 +535,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
         }
 
         "is not included when user has chosen to not add Security Details" in {
-          val useranswers = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+          val useranswers = emptyUserAnswers.unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
 
           val viewModel = TaskListViewModel(useranswers)
 
@@ -547,7 +547,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
         "when dependent section is incomplete" - {
           "is Cannot start yet, when the dependent section is incomplete" in {
             val userAnswers = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
 
             val viewModel = TaskListViewModel(userAnswers)
 
@@ -560,7 +560,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
           "is Not started when there are no answers for the section" in {
 
             val transportDetailsUa = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
               .unsafeSetVal(InlandModePage)("1")
               .unsafeSetVal(AddIdAtDeparturePage)(false)
               .unsafeSetVal(ChangeAtBorderPage)(false)
@@ -573,7 +573,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
           "is InProgress when the first question for the section has been answered" in {
 
             val updatedUserAnswers = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
               .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
               .unsafeSetVal(InlandModePage)("1")
               .unsafeSetVal(AddIdAtDeparturePage)(false)
@@ -599,7 +599,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
           "when the status is cannot start yet, no link should be provided to start the journey" in {
             val updatedUserAnswers = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
 
             val viewModel = TaskListViewModel(updatedUserAnswers)
 
@@ -611,7 +611,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
           "when the status is Not started, links to the first page" in {
 
             val transportDetailsUa = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
               .unsafeSetVal(InlandModePage)("1")
               .unsafeSetVal(AddIdAtDeparturePage)(false)
               .unsafeSetVal(ChangeAtBorderPage)(false)
@@ -626,7 +626,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
           "when the status is InProgress, links to the first page" in {
 
             val updatedUserAnswers = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
               .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
               .unsafeSetVal(InlandModePage)("1")
               .unsafeSetVal(AddIdAtDeparturePage)(false)
@@ -706,7 +706,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
           "when procedure is Normal and safety and security is true" in {
 
             val userAnswers = dependantSections
-              .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
               .unsafeSetVal(ProcedureTypePage)(Normal)
               .unsafeSetVal(ItemDescriptionPage(Index(0)))("description")
 
@@ -718,7 +718,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
           "when procedure is Normal and safety and security is false" in {
 
             val userAnswers = dependantSections
-              .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
               .unsafeSetVal(ProcedureTypePage)(Normal)
               .unsafeSetVal(ItemDescriptionPage(Index(0)))("description")
 
@@ -729,7 +729,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
           "when procedure is Simplified and safety and security page is true" in {
             val userAnswers = dependantSections
-              .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
               .unsafeSetVal(ProcedureTypePage)(Simplified)
               .unsafeSetVal(ItemDescriptionPage(Index(0)))("description")
 
@@ -740,7 +740,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
           "when procedure is Simplified and safety and security page is false" in {
             val userAnswers = dependantSections
-              .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
               .unsafeSetVal(ProcedureTypePage)(Simplified)
               .unsafeSetVal(ItemDescriptionPage(Index(0)))("description")
 
@@ -782,7 +782,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
         "when the status is Not started, links to the confirm start add item page" in {
 
           val userAnswers = dependantSections
-            .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
 
           val viewModel = TaskListViewModel(userAnswers)
 
@@ -794,7 +794,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
         "when the status is InProgress, links to the item description page" in {
 
           val updatedUserAnswers = dependantSections
-            .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
             .unsafeSetVal(ItemDescriptionPage(Index(0)))("description")
 
           val viewModel = TaskListViewModel(updatedUserAnswers)
@@ -869,7 +869,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
           forAll(arb[String]) {
             pageAnswer =>
               val userAnswers = emptyUserAnswers
-                .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+                .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
                 .unsafeSetVal(LoadingPlacePage)(pageAnswer)
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
 
@@ -892,7 +892,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
                 .unsafeSetVal(DeclarationForSomeoneElsePage)(true)
                 .unsafeSetVal(RepresentativeNamePage)("repName")
                 .unsafeSetVal(RepresentativeCapacityPage)(Direct)
-                .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+                .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
                 .unsafeSetVal(AddCustomsApprovedLocationPage)(pageAnswer)
 
               val viewModel = TaskListViewModel(movementDetailsUa)
@@ -915,7 +915,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
                 .unsafeSetVal(DeclarationForSomeoneElsePage)(true)
                 .unsafeSetVal(RepresentativeNamePage)("repName")
                 .unsafeSetVal(RepresentativeCapacityPage)(Direct)
-                .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+                .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
                 .unsafeSetVal(AddAgreedLocationOfGoodsPage)(true)
 
               val viewModel = TaskListViewModel(movementDetailsUa)
@@ -929,7 +929,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
           forAll(arb[String]) {
             pageAnswer =>
               val userAnswers = emptyUserAnswers
-                .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+                .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
                 .unsafeSetVal(AuthorisedLocationCodePage)(pageAnswer)
 
@@ -947,7 +947,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
           val normalGoodsSummary = dependantSections
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(PreLodgeDeclarationPage)(false)
-            .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
             .unsafeSetVal(LoadingPlacePage)("loadingPlace")
             .unsafeSetVal(AddCustomsApprovedLocationPage)(true)
             .unsafeSetVal(CustomsApprovedLocationPage)("approvedLocation")
@@ -963,7 +963,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
           val simplfiedGoodsSummary = dependantSections
             .unsafeSetVal(ProcedureTypePage)(Simplified)
-            .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+            .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
             .unsafeSetVal(AuthorisedLocationCodePage)("authLocation")
             .unsafeSetVal(ControlResultDateLimitPage)(LocalDate.now)
             .unsafeSetVal(AddSealsPage)(false)
@@ -981,7 +981,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
       "when the status is not started" - {
         "safety and security is yes, links to the loading place page" in {
 
-          val answers = dependantSections.unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+          val answers = dependantSections.unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
 
           val viewModel = TaskListViewModel(answers)
 
@@ -994,7 +994,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
           "mode is simplified, links to the Authorised Location Code page" in {
             val userAnswers = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+              .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
               .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
             val viewModel = TaskListViewModel(userAnswers)
 
@@ -1006,7 +1006,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
           "mode is normal" - {
             "pre-lodges is no, links to the Add Custom Approved Location page" in {
 
-              val answers = dependantSections.unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails).unsafeSetVal(PreLodgeDeclarationPage)(false)
+              val answers = dependantSections.unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails).unsafeSetVal(PreLodgeDeclarationPage)(false)
 
               val viewModel = TaskListViewModel(answers)
 
@@ -1017,7 +1017,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
             "pre-lodges is yes, links to the Add Agreed Location of Goods page" in {
 
-              val answers = dependantSections.unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails).unsafeSetVal(PreLodgeDeclarationPage)(true)
+              val answers = dependantSections.unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails).unsafeSetVal(PreLodgeDeclarationPage)(true)
 
               val viewModel = TaskListViewModel(answers)
 
@@ -1035,7 +1035,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
           forAll(arb[String]) {
             pageAnswer =>
               val userAnswers = emptyUserAnswers
-                .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+                .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
                 .unsafeSetVal(LoadingPlacePage)(pageAnswer)
               val viewModel = TaskListViewModel(userAnswers)
 
@@ -1051,7 +1051,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
             forAll(arb[String]) {
               pageAnswer =>
                 val userAnswers = emptyUserAnswers
-                  .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+                  .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
                   .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
                   .unsafeSetVal(AuthorisedLocationCodePage)(pageAnswer)
                 val viewModel = TaskListViewModel(userAnswers)
@@ -1064,7 +1064,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
           "mode is normal" - {
             "pre-lodges is no, links to the Add Custom Approved Location page" in {
-              val answers = dependantSections.unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails).unsafeSetVal(PreLodgeDeclarationPage)(false)
+              val answers = dependantSections.unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails).unsafeSetVal(PreLodgeDeclarationPage)(false)
 
               forAll(arb[Boolean]) {
                 pageAnswer =>
@@ -1080,7 +1080,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
             }
 
             "pre-lodges is yes, links to the Add Agreed Location of Goods page" in {
-              val answers = dependantSections.unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails).unsafeSetVal(PreLodgeDeclarationPage)(true)
+              val answers = dependantSections.unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails).unsafeSetVal(PreLodgeDeclarationPage)(true)
 
               forAll(arb[String]) {
                 pageAnswer =>
@@ -1103,7 +1103,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
         val userAnswers = dependantSections
           .unsafeSetVal(ProcedureTypePage)(Simplified)
           .unsafeSetVal(TotalPackagesPage)(1)
-          .unsafeSetVal(AddSecurityDetailsPage)(NoSecurityDetails)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(AuthorisedLocationCodePage)("authLocation")
           .unsafeSetVal(ControlResultDateLimitPage)(LocalDate.now)
           .unsafeSetVal(AddSealsPage)(false)
@@ -1122,7 +1122,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
     val dependentSection = emptyUserAnswers
       .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("Id", "name", CountryCode("GB"), None))
-      .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+      .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
       .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
       .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
       .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))

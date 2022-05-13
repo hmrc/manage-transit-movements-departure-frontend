@@ -60,7 +60,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
     //SpecialMention
     .unsafeSetVal(AddSpecialMentionPage(itemIndex))(false)
     //ProducedDocuments
-    .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+    .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
     .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
     .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
     .unsafeSetVal(AddDocumentsPage(index))(false)
@@ -211,7 +211,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
           //SpecialMention
           .unsafeSetVal(AddSpecialMentionPage(Index(1)))(false)
           //ProducedDocuments
-          .unsafeSetVal(AddSecurityDetailsPage)(EntryAndExitSummaryDeclarationSecurityDetails)
+          .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
           .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
           .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
           .unsafeSetVal(AddDocumentsPage(Index(1)))(false)

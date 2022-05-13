@@ -19,10 +19,10 @@ GET        /unauthorised                                  controllers.Unauthoris
 GET        /local-reference-number                        controllers.LocalReferenceNumberController.onPageLoad()
 POST       /local-reference-number                        controllers.LocalReferenceNumberController.onSubmit()
 
-GET        /:lrn/add-security-details                     controllers.AddSecurityDetailsController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/add-security-details                     controllers.AddSecurityDetailsController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/change-add-security-details              controllers.AddSecurityDetailsController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/change-add-security-details              controllers.AddSecurityDetailsController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/security-details-type                    controllers.SecurityDetailsTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/asecurity-details-type                   controllers.SecurityDetailsTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/change-security-details-type             controllers.SecurityDetailsTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/change-security-details-type             controllers.SecurityDetailsTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/task-list                                controllers.DeclarationSummaryController.onPageLoad(lrn: LocalReferenceNumber)
 POST       /:lrn/task-list                                controllers.DeclarationSummaryController.onSubmit(lrn: LocalReferenceNumber)

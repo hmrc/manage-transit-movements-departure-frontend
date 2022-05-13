@@ -64,10 +64,10 @@ object RouteDetailsWithTransitInformation {
     arrivalDate: Option[LocalDateTime]
   )
 
-  private def addOfficeOfTransit = AddSecurityDetailsPage.reader
+  private def addOfficeOfTransit = SecurityDetailsTypePage.reader
     .flatMap {
-      addSecurityDetailsFlag =>
-        if (addSecurityDetailsFlag != NoSecurityDetails) {
+      securityDetailsType =>
+        if (securityDetailsType != NoSecurityDetails) {
           DeriveNumberOfOfficeOfTransits.mandatoryNonEmptyListReader.flatMap {
             _.zipWithIndex.traverse({
               case (_, index) =>
