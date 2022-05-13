@@ -16,7 +16,7 @@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 
-@this(govukSelect: GovukSelect)
+@this(govukSelect: GovukSelect, govukLabel: GovukLabel)
 
 @(
     field: Field,
@@ -24,7 +24,17 @@
     hint: Option[String] = None,
     placeholder: Option[String] = None,
     selectItems: Seq[SelectItem]
-)(implicit messages: Messages)
+)(html: Html = Html(""))(implicit messages: Messages)
+
+@govukLabel(
+  Label(
+    content = Text(label),
+    isPageHeading = true,
+    classes = "govuk-label--xl govuk-!-padding-bottom-5"
+  )
+)
+
+@html
 
 @govukSelect(
     Select(
@@ -38,5 +48,4 @@
         classes = "govuk-!-width-two-thirds"
     )
     .withFormField(field)
-    .withHeading(heading = Text(label))
 )

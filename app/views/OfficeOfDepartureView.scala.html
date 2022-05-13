@@ -23,9 +23,7 @@
 @this(
     mainTemplate: MainTemplate,
     errorSummary: ErrorSummary,
-    select: GovukSelect,
-    hint: GovukHint,
-    label: GovukLabel,
+    select: InputSelect,
     button: Button,
     formHelper: FormWithCSRF
 )
@@ -42,30 +40,14 @@
 
         @errorSummary(form.errors)
 
-        <div class="govuk-form-group">
-          @label(
-            Label(
-              content = Text(messages("officeOfDeparture.heading")),
-              isPageHeading = true,
-              classes = "govuk-label--xl govuk-!-padding-bottom-5"
-              )
-            )
-          <p id="value-paragraph" class="govuk-body">@messages("officeOfDeparture.label")</p>
-
-          @select(
-            Select(
-              hint = Some(Hint(content = Text(messages("officeOfDeparture.hintText")))),
-              items = SelectItem(value = None, text = "") +: customsOffices.toSelectItems(form.value),
-              formGroupClasses = "autocomplete-wrapper",
-              attributes = Map("data-autocomplete" -> ""),
-              errorMessage = form("value").error.map { e =>
-                ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(e.message, e.args: _*)))
-              },
-              classes = "govuk-!-width-two-thirds"
-            )
-            .withFormField(form("value"))
-          )
-        </div>
+        @select(
+            field = form("value"),
+            label = messages("officeOfDeparture.heading"),
+            hint = Some(messages("officeOfDeparture.hintText")),
+            selectItems = customsOffices.toSelectItems(form.value)
+        ) {
+               <p id="value-paragraph" class="govuk-body">@messages("officeOfDeparture.label")</p>
+          }
 
       @button(attributes = Map("id" -> "submit"))
     }
