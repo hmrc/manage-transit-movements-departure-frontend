@@ -192,6 +192,10 @@ trait ModelGenerators {
       } yield MethodOfPayment(code.toUpperCase, description)
     }
 
+  implicit lazy val arbitraryMode: Arbitrary[Mode] = Arbitrary {
+    Gen.oneOf(NormalMode, CheckMode)
+  }
+
 }
 
 object ModelGenerators extends ModelGenerators with Generators

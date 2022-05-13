@@ -26,6 +26,8 @@ sealed abstract class DeclarationType(val code: String, asString: String) extend
 
 object DeclarationType extends Enumerable.Implicits {
 
+  val messageKeyPrefix = "declarationType"
+
   case object Option1 extends DeclarationType("T1", "option1")
   case object Option2 extends DeclarationType("T2", "option2")
   case object Option3 extends DeclarationType("T2F", "option3")
@@ -44,19 +46,19 @@ object DeclarationType extends Enumerable.Implicits {
 
     val field = form("value")
     val itemsGB = Seq(
-      Radios.Radio(msg"declarationType.option1", Option1.toString),
-      Radios.Radio(msg"declarationType.option2", Option2.toString)
+      Radios.Radio(msg"$messageKeyPrefix.option1", Option1.toString),
+      Radios.Radio(msg"$messageKeyPrefix.option2", Option2.toString)
     )
     val itemsNISimplified = Seq(
-      Radios.Radio(msg"declarationType.option1", Option1.toString),
-      Radios.Radio(msg"declarationType.option2", Option2.toString),
-      Radios.Radio(msg"declarationType.option3", Option3.toString)
+      Radios.Radio(msg"$messageKeyPrefix.option1", Option1.toString),
+      Radios.Radio(msg"$messageKeyPrefix.option2", Option2.toString),
+      Radios.Radio(msg"$messageKeyPrefix.option3", Option3.toString)
     )
     val itemsNINormal = Seq(
-      Radios.Radio(msg"declarationType.option1", Option1.toString),
-      Radios.Radio(msg"declarationType.option2", Option2.toString),
-      Radios.Radio(msg"declarationType.option3", Option3.toString),
-      Radios.Radio(msg"declarationType.option4", Option4.toString)
+      Radios.Radio(msg"$messageKeyPrefix.option1", Option1.toString),
+      Radios.Radio(msg"$messageKeyPrefix.option2", Option2.toString),
+      Radios.Radio(msg"$messageKeyPrefix.option3", Option3.toString),
+      Radios.Radio(msg"$messageKeyPrefix.option4", Option4.toString)
     )
     val countryCode = userAnswers.get(OfficeOfDeparturePage).map(_.countryId)
     val items = (countryCode, userAnswers.get(ProcedureTypePage)) match {

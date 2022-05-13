@@ -16,36 +16,46 @@
 
 package utils
 
-import controllers.goodsSummary.routes
 import models.reference.CustomsOffice
-import models.{Mode, UserAnswers}
+import models.{DeclarationType, Mode, ProcedureType, UserAnswers}
 import pages._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 
 class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers) {
 
-  def localReferenceNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
-    page = AgreedLocationOfGoodsPage,
-    formatAnswer = formatAsLiteral,
-    prefix = "agreedLocationOfGoods",
+  def localReferenceNumber: SummaryListRow = buildRow(
+    prefix = "localReferenceNumber",
+    answer = formatAsLiteral(lrn),
     id = None,
-    call = routes.AgreedLocationOfGoodsController.onPageLoad(lrn, mode)
+    call = controllers.routes.LocalReferenceNumberController.onPageLoad()
   )
 
   def officeOfDeparture: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
     page = OfficeOfDeparturePage,
     formatAnswer = formatAsLiteral,
-    prefix = "agreedLocationOfGoods",
+    prefix = "officeOfDeparture",
     id = None,
-    call = routes.AgreedLocationOfGoodsController.onPageLoad(lrn, mode)
+    call = controllers.routes.OfficeOfDepartureController.onPageLoad(lrn, mode)
   )
 
-  def procedureType: Option[SummaryListRow] = ???
+  def procedureType: Option[SummaryListRow] = getAnswerAndBuildRow[ProcedureType](
+    page = ProcedureTypePage,
+    formatAnswer = formatAsEnum(_, ProcedureType.messageKeyPrefix),
+    prefix = "procedureType",
+    id = None,
+    call = controllers.routes.ProcedureTypeController.onPageLoad(lrn, mode)
+  )
 
-  def declarationType: Option[SummaryListRow] = ???
+  def declarationType: Option[SummaryListRow] = getAnswerAndBuildRow[DeclarationType](
+    page = DeclarationTypePage,
+    formatAnswer = formatAsEnum(_, DeclarationType.messageKeyPrefix),
+    prefix = "declarationType",
+    id = None,
+    call = controllers.routes.DeclarationTypeController.onPageLoad(lrn, mode)
+  )
 
-  def tirCarnet: Option[SummaryListRow] = ???
+  def tirCarnet: Option[SummaryListRow] = None // TODO
 
-  def securityType: Option[SummaryListRow] = ???
+  def securityType: Option[SummaryListRow] = None // TODO
 }

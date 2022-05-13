@@ -118,6 +118,8 @@ localReferenceNumber.heading = What is the local reference number (LRN)?
 localReferenceNumber.error.required = Enter the local reference number
 localReferenceNumber.error.length = The local reference number must be 22 characters or less
 localReferenceNumber.error.invalidCharacters = The local reference number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
+localReferenceNumber.checkYourAnswersLabel = Local reference number
+localReferenceNumber.change.hidden = the local reference number
 
 addSecurityDetails.title = Do you need to add safety and security details?
 addSecurityDetails.heading = Do you need to add safety and security details?
@@ -156,6 +158,7 @@ declarationType.option4 = TIR (goods moving under the cover of TIR Carnet)
 declarationType.paragraph = For mixed consignments, you will need to create separate T1 and T2 declarations.
 declarationType.checkYourAnswersLabel = Declaration type
 declarationType.error.required = Select the declaration you want to create
+declarationType.change.hidden = the declaration type
 
 containersUsed.title = Have you used any containers?
 containersUsed.heading = Have you used any containers?
@@ -164,9 +167,11 @@ containersUsed.error.required = Select yes if you have used any containers
 
 procedureType.title = What type of procedure are you using?
 procedureType.heading = What type of procedure are you using?
+procedureType.checkYourAnswersLabel = Type of procedure
 procedureType.normal = Normal (customs-approved location)
 procedureType.simplified = Simplified (authorised consignor’s location)
 procedureType.error.required = Select which type of procedure you are using
+procedureType.change.hidden = the type of procedure
 
 declarationPlace.title = What is the postcode for the place of declaration?
 declarationPlace.heading = What is the postcode for the place of declaration?
@@ -310,9 +315,11 @@ countryOfDispatch.error.required = Enter the country of dispatch
 
 officeOfDeparture.title = Where is the office of departure?
 officeOfDeparture.heading = Where is the office of departure?
+officeOfDeparture.checkYourAnswersLabel = Office of departure
 officeOfDeparture.error.required = Select the office of departure
 officeOfDeparture.hintText = Give the office location or code. Like, Dover or GB000060.
 officeOfDeparture.label = This is the Customs office where the transit movement starts.
+officeOfDeparture.change.hidden = the office of departure
 
 destinationCountry.title = What country are the goods ending in?
 destinationCountry.heading = What country are the goods ending in?
