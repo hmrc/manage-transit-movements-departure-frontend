@@ -21,7 +21,7 @@ import models.reference.CountryCode
 
 sealed trait DeclarationType
 
-object DeclarationType {
+object DeclarationType extends Enumerable.Implicits {
 
   case object Option1 extends WithName("T1") with DeclarationType
   case object Option2 extends WithName("T2") with DeclarationType
@@ -41,7 +41,14 @@ object DeclarationType {
 
   def chooseValues(countryCode: Option[CountryCode], procedureType: Option[ProcedureType]): Seq[DeclarationType] =
     (countryCode, procedureType) match {
-      case (Some(CountryCode("XI")), Some(Normal)) => Seq(Option1, Option2, Option3, Option4, Option5)
+      case (Some(CountryCode("XI")), Some(Normal)) => values
       case _                                       => Seq(Option1, Option2, Option3, Option4)
     }
+
+  implicit def enumerable: Enumerable[DeclarationType] =
+    Enumerable(
+      values.map(
+        v => v.toString -> v
+      ): _*
+    )
 }
