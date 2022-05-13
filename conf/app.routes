@@ -20,7 +20,7 @@ GET        /local-reference-number                        controllers.LocalRefer
 POST       /local-reference-number                        controllers.LocalReferenceNumberController.onSubmit()
 
 GET        /:lrn/security-details-type                    controllers.SecurityDetailsTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/asecurity-details-type                   controllers.SecurityDetailsTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/security-details-type                    controllers.SecurityDetailsTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/change-security-details-type             controllers.SecurityDetailsTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/change-security-details-type             controllers.SecurityDetailsTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
