@@ -146,9 +146,9 @@ declarationSummary.confirmAndSend = Confirm and send
 
 declarationType.title = What declaration do you want to create?
 declarationType.heading = What declaration do you want to create?
-declarationType.option1 = T1 (goods originating outside the EU, such as GB)
-declarationType.option2 = T2 (goods originating inside the EU, such as NI)
-declarationType.option3 = T2F (goods moving to, from or between the EU special territories)
+declarationType.option1 = T1 (goods originating outside the European Union, such as Great Britain)
+declarationType.option2 = T2 (goods originating inside the European Union, such as Northern Ireland)
+declarationType.option3 = T2F (goods moving to, from or between the European Union special territories)
 declarationType.option4 = TIR (goods moving under the cover of TIR Carnet)
 declarationType.paragraph = For mixed consignments, you will need to create separate T1 and T2 declarations.
 declarationType.checkYourAnswersLabel = Declaration type
