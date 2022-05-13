@@ -21,7 +21,6 @@ import commonTestUtils.UserAnswersSpecHelper
 import controllers.{routes => mainRoutes}
 import forms.DeclarationTypeFormProvider
 import matchers.JsonMatchers
-import models.ProcedureType.Normal
 import models.reference.{CountryCode, CustomsOffice}
 import models.{DeclarationType, DeclarationTypeViewModel, NormalMode}
 import navigation.Navigator
@@ -29,7 +28,7 @@ import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage}
+import pages.DeclarationTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest

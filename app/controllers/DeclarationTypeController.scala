@@ -44,8 +44,7 @@ class DeclarationTypeController @Inject() (
   view: DeclarationTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
-    with I18nSupport
-    with NunjucksSupport {
+    with I18nSupport {
 
   private val form = formProvider()
 

@@ -19,7 +19,7 @@ package models
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
-import models.DeclarationType.{Option1, Option2, Option3, Option4}
+import models.DeclarationType.{Option1, Option2, Option3, Option4, Option5}
 import models.reference.CountryCode
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.OptionValues
@@ -64,20 +64,20 @@ class DeclarationTypeSpec
     }
 
     "Radio options" - {
-      "Must return the correct number of radios" - {
-        "When Office of Departure is 'GB'" in {
-          val radios   = DeclarationType.chooseValues(Some(CountryCode("GB")), None)
-          val expected = Seq(Option1, Option2)
-          radios mustBe expected
 
-        }
-        "When Office of Departure is 'XI' and the departure type is Simplified" in {
-          val radios   = DeclarationType.chooseValues(Some(CountryCode("XI")), Some(ProcedureType.Simplified))
-          val expected = Seq(Option1, Option2, Option3)
-          radios mustBe expected
-        }
+      "Must return the correct number of radios" - {
         "When Office of Departure is 'XI' and the departure type is Normal" in {
           val radios   = DeclarationType.chooseValues(Some(CountryCode("XI")), Some(ProcedureType.Normal))
+          val expected = Seq(Option1, Option2, Option3, Option4, Option5)
+          radios mustBe expected
+        }
+        "When Office of Departure is 'GB'" in {
+          val radios   = DeclarationType.chooseValues(Some(CountryCode("GB")), None)
+          val expected = Seq(Option1, Option2, Option3, Option4)
+          radios mustBe expected
+        }
+        "When Office of Departure is 'XI' and Simplified" in {
+          val radios   = DeclarationType.chooseValues(Some(CountryCode("XI")), Some(ProcedureType.Simplified))
           val expected = Seq(Option1, Option2, Option3, Option4)
           radios mustBe expected
         }
