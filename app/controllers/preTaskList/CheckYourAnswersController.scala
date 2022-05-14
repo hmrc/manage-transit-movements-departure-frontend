@@ -22,25 +22,27 @@ import models.LocalReferenceNumber
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-
-import scala.concurrent.ExecutionContext
+import viewModels.PreTaskListViewModel
+import views.html.preTaskList.CheckYourAnswersView
 
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
-  val controllerComponents: MessagesControllerComponents
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+  val controllerComponents: MessagesControllerComponents,
+  view: CheckYourAnswersView,
+  viewModel: PreTaskListViewModel
+) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
+  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      ???
+      val section = viewModel(request.userAnswers)
+      Ok(view(lrn, Seq(section)))
   }
 
-  def onSubmit(mrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(mrn) {
+  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     _ =>
-      ???
+      Redirect(controllers.routes.DeclarationSummaryController.onPageLoad(lrn))
   }
 
 }

@@ -45,8 +45,8 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
               key = Key("Local reference number".toText, classes = "govuk-!-width-one-half"),
               value = Value(s"$lrn".toText),
               actions = Some(
-                Actions(items =
-                  List(
+                Actions(
+                  items = List(
                     ActionItem(
                       content = "Change".toText,
                       href = controllers.routes.LocalReferenceNumberController.onPageLoad().url,
@@ -87,8 +87,8 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                   key = Key("Office of departure".toText, classes = "govuk-!-width-one-half"),
                   value = Value(s"$customsOffice".toText),
                   actions = Some(
-                    Actions(items =
-                      List(
+                    Actions(
+                      items = List(
                         ActionItem(
                           content = "Change".toText,
                           href = controllers.routes.OfficeOfDepartureController.onPageLoad(answers.lrn, mode).url,
@@ -131,8 +131,8 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                   key = Key("Type of procedure".toText, classes = "govuk-!-width-one-half"),
                   value = Value(messages(s"procedureType.$procedureType").toText),
                   actions = Some(
-                    Actions(items =
-                      List(
+                    Actions(
+                      items = List(
                         ActionItem(
                           content = "Change".toText,
                           href = controllers.routes.ProcedureTypeController.onPageLoad(answers.lrn, mode).url,
@@ -175,8 +175,8 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                   key = Key("Declaration type".toText, classes = "govuk-!-width-one-half"),
                   value = Value(messages(s"declarationType.$declarationType").toText),
                   actions = Some(
-                    Actions(items =
-                      List(
+                    Actions(
+                      items = List(
                         ActionItem(
                           content = "Change".toText,
                           href = controllers.routes.DeclarationTypeController.onPageLoad(answers.lrn, mode).url,

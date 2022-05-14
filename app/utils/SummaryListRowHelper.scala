@@ -70,8 +70,8 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
       key = Key(label, classes = "govuk-!-width-one-half"),
       value = Value(answer),
       actions = Some(
-        Actions(items =
-          List(
+        Actions(
+          items = List(
             ActionItem(
               content = messages("site.edit").toText,
               href = call.url,
