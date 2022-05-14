@@ -21,23 +21,20 @@ import commonTestUtils.UserAnswersSpecHelper
 import controllers.{routes => mainRoutes}
 import forms.DeclarationTypeFormProvider
 import matchers.JsonMatchers
-import models.ProcedureType.Normal
 import models.reference.{CountryCode, CustomsOffice}
 import models.{DeclarationType, NormalMode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{times, verify, when}
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage}
+import pages.DeclarationTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
+import views.html.DeclarationTypeView
 
 import scala.concurrent.Future
 
@@ -54,6 +51,7 @@ class DeclarationTypeControllerSpec
   val formProvider    = new DeclarationTypeFormProvider()
   val form            = formProvider()
   val gbCustomsOffice = CustomsOffice("Id", "Name", CountryCode("GB"), None)
+  private val mode    = NormalMode
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -64,69 +62,35 @@ class DeclarationTypeControllerSpec
 
     "must return OK and the correct view for a GET" in {
       setUserAnswers(Some(emptyUserAnswers))
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
 
-      val request                                = FakeRequest(GET, declarationTypeRoute)
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
-
-      val result = route(app, request).value
+      val request = FakeRequest(GET, declarationTypeRoute)
+      val view    = injector.instanceOf[DeclarationTypeView]
+      val result  = route(app, request).value
 
       status(result) mustEqual OK
 
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
-      val updatedAnswers = emptyUserAnswers
-        .unsafeSetVal(ProcedureTypePage)(Normal)
-        .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
-
-      val expectedJson = Json.obj(
-        "form"   -> form,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> DeclarationType.radios(form, updatedAnswers)()
-      )
-
-      templateCaptor.getValue mustEqual "declarationType.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
+      contentAsString(result) mustEqual
+        view(form, DeclarationType.radioItemsU(emptyUserAnswers), lrn, mode)(request, messages).toString
 
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
-
       val userAnswers = emptyUserAnswers.set(DeclarationTypePage, DeclarationType.values.head).success.value
       setUserAnswers(Some(userAnswers))
 
-      val request                                = FakeRequest(GET, declarationTypeRoute)
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+      val request = FakeRequest(GET, declarationTypeRoute)
 
       val result = route(app, request).value
 
       status(result) mustEqual OK
 
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
       val filledForm = form.bind(Map("value" -> DeclarationType.values.head.toString))
 
-      val updatedAnswers = emptyUserAnswers
-        .unsafeSetVal(ProcedureTypePage)(Normal)
-        .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
+      val view = injector.instanceOf[DeclarationTypeView]
 
-      val expectedJson = Json.obj(
-        "form"   -> filledForm,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> DeclarationType.radios(filledForm, updatedAnswers)()
-      )
-
-      templateCaptor.getValue mustEqual "declarationType.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
-
+      contentAsString(result) mustEqual
+        view(filledForm, DeclarationType.radioItemsU(emptyUserAnswers), lrn, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -135,9 +99,10 @@ class DeclarationTypeControllerSpec
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      val request =
-        FakeRequest(POST, declarationTypeRoute)
-          .withFormUrlEncodedBody(("value", DeclarationType.values.head.toString))
+      val selectedValue = DeclarationType.values.head
+
+      val request = FakeRequest(POST, declarationTypeRoute)
+        .withFormUrlEncodedBody(("value", selectedValue.toString))
 
       val result = route(app, request).value
 
@@ -150,33 +115,16 @@ class DeclarationTypeControllerSpec
     "must return a Bad Request and errors when invalid data is submitted" in {
       setUserAnswers(Some(emptyUserAnswers))
 
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
-
-      val request                                = FakeRequest(POST, declarationTypeRoute).withFormUrlEncodedBody(("value", "invalid value"))
-      val boundForm                              = form.bind(Map("value" -> "invalid value"))
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
-
-      val result = route(app, request).value
+      val request   = FakeRequest(POST, declarationTypeRoute).withFormUrlEncodedBody(("value", "invalid value"))
+      val boundForm = form.bind(Map("value" -> "invalid value"))
+      val result    = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      val view = injector.instanceOf[DeclarationTypeView]
 
-      val updatedAnswers = emptyUserAnswers
-        .unsafeSetVal(ProcedureTypePage)(Normal)
-        .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
-
-      val expectedJson = Json.obj(
-        "form"   -> boundForm,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> DeclarationType.radios(boundForm, updatedAnswers)()
-      )
-
-      templateCaptor.getValue mustEqual "declarationType.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
+      contentAsString(result) mustEqual
+        view(boundForm, DeclarationType.radioItemsU(emptyUserAnswers), lrn, mode)(request, messages).toString
 
     }
 
@@ -197,9 +145,8 @@ class DeclarationTypeControllerSpec
 
       setUserAnswers(None)
 
-      val request =
-        FakeRequest(POST, declarationTypeRoute)
-          .withFormUrlEncodedBody(("value", DeclarationType.values.head.toString))
+      val request = FakeRequest(POST, declarationTypeRoute)
+        .withFormUrlEncodedBody(("value", DeclarationType.values.head.toString))
 
       val result = route(app, request).value
 

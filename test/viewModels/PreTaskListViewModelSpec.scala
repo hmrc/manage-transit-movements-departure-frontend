@@ -54,7 +54,7 @@ class PreTaskListViewModelSpec extends SpecBase with UserAnswersSpecHelper {
         section.rows.head.value.content.asHtml.toString() mustBe "1234567890"
         section.rows(1).value.content.asHtml.toString() mustBe "name (id)"
         section.rows(2).value.content.asHtml.toString() mustBe "Normal (customs-approved location)"
-        section.rows(3).value.content.asHtml.toString() mustBe "T1 (goods originating outside the EU, such as GB)"
+        section.rows(3).value.content.asHtml.toString() mustBe "T1 (goods originating outside the European Union, such as Great Britain)"
       }
     }
   }
