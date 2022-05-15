@@ -38,8 +38,14 @@
 
     @answerSections(sections)
 
+    <h2 class="govuk-heading-m">@messages("preTaskList.checkYourAnswers.h2")</h2>
+    <p class="govuk-body">@messages("preTaskList.checkYourAnswers.p")</p>
+
     @formHelper(action = routes.CheckYourAnswersController.onSubmit(lrn), 'autoComplete -> "off") {
-        @button(attributes = Map("id" -> "submit"))
+        @button(
+            messageKey = "site.confirm",
+            attributes = Map("id" -> "submit")
+        )
     }
 
 }

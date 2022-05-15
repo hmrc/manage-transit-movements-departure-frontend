@@ -18,6 +18,7 @@ site.rejected = Rejected
 site.taskList.add = Add
 site.taskList.edit = Edit
 site.continue = Save and continue
+site.confirm = Confirm and continue
 site.notStarted = Not started
 site.inProgress = In Progress
 site.completed = Completed
@@ -77,6 +78,8 @@ reference.preHeading = Previous administrative references
 
 preTaskList.checkYourAnswers.heading = Check your answers
 preTaskList.checkYourAnswers.title = Check your answers
+preTaskList.checkYourAnswers.h2 = Before you continue
+preTaskList.checkYourAnswers.p = Once you have confirmed these details you will not be able to change them.
 
 routeDetailsCheckYourAnswers.heading = Check your answers
 routeDetailsCheckYourAnswers.title = Check your answers

@@ -1,2 +1,2 @@
-GET        /:lrn/pre-task-list/check-your-answers                           controllers.preTaskList.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
-POST       /:lrn/pre-task-list/check-your-answers                           controllers.preTaskList.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)
+GET        /:lrn/pre-task-list/check-answers                           controllers.preTaskList.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/pre-task-list/check-answers                           controllers.preTaskList.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)

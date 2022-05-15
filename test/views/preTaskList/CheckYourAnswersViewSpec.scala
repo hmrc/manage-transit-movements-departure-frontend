@@ -41,6 +41,10 @@ class CheckYourAnswersViewSpec extends CheckYourAnswersViewBehaviours {
 
   behave like pageWithFormAction(routes.CheckYourAnswersController.onSubmit(lrn).url)
 
-  behave like pageWithSubmitButton("Save and continue")
+  behave like pageWithContent("h2", "Before you continue")
+
+  behave like pageWithContent("p", "Once you have confirmed these details you will not be able to change them.")
+
+  behave like pageWithSubmitButton("Confirm and continue")
 
 }
