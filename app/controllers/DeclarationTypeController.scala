@@ -18,8 +18,7 @@ package controllers
 
 import controllers.actions._
 import forms.DeclarationTypeFormProvider
-import javax.inject.Inject
-import models.{DeclarationTypeViewModel, LocalReferenceNumber, Mode}
+import models.{DeclarationType, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import pages.DeclarationTypePage
@@ -29,6 +28,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.DeclarationTypeView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DeclarationTypeController @Inject() (
@@ -54,7 +54,7 @@ class DeclarationTypeController @Inject() (
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, DeclarationTypeViewModel(request.userAnswers).radioItems, lrn, mode))
+      Ok(view(preparedForm, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
@@ -62,7 +62,7 @@ class DeclarationTypeController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationTypeViewModel(request.userAnswers).radioItems, lrn, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(DeclarationTypePage, value))

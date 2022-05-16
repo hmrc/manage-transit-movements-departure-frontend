@@ -17,8 +17,7 @@
 package views
 
 import forms.DeclarationTypeFormProvider
-import models.DeclarationType.{Option1, Option2}
-import models.{DeclarationType, DeclarationTypeViewModel, NormalMode}
+import models.{DeclarationType, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
@@ -34,14 +33,12 @@ class DeclarationTypeViewSpec extends RadioViewBehaviours[DeclarationType] {
 
   override val prefix: String = "declarationType"
 
-  private val declarationTypeViewModel = DeclarationTypeViewModel(emptyUserAnswers)
+  private val userAnswers = emptyUserAnswers
 
   override def radioItems(fieldId: String, checkedValue: Option[DeclarationType] = None): Seq[RadioItem] =
-    declarationTypeViewModel.radioItems(fieldId, checkedValue)
+    DeclarationType.radioItemsU(userAnswers)(fieldId, checkedValue)
 
-  override def values: Seq[DeclarationType] = declarationTypeViewModel.values
-
-  override val urlContainsLrn: Boolean = true
+  override def values: Seq[DeclarationType] = DeclarationType.valuesU(userAnswers)
 
   behave like pageWithTitle()
 

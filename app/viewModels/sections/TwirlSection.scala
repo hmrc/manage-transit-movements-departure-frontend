@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package forms
+package viewModels.sections
 
-object Constants {
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 
-  lazy val maxLengthEoriNumber: Int       = 17
-  lazy val vehicleIdMaxLength             = 27
-  lazy val consigneeNameMaxLength: Int    = 35
-  lazy val addressMaxLength: Int          = 35
-  lazy val loadingPlaceMaxLength: Int     = 35
-  lazy val maxLengthAgreedLocationOfGoods = 35
-  lazy val tirCarnetReferenceMaxLength    = 12
-  lazy val tirCarnetReferenceMinLength    = 2
-  lazy val tirGuaranteeReferenceMaxLength = 35
+case class TwirlSection(sectionTitle: Option[String], rows: Seq[SummaryListRow])
+
+object TwirlSection {
+  def apply(sectionTitle: String, rows: Seq[SummaryListRow]): TwirlSection = new TwirlSection(Some(sectionTitle), rows)
+  def apply(rows: Seq[SummaryListRow]): TwirlSection                       = new TwirlSection(None, rows)
 }

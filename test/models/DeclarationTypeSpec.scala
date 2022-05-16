@@ -20,12 +20,13 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.DeclarationType.{Option1, Option2, Option3, Option4, Option5}
-import models.reference.CountryCode
+import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.{OfficeOfDeparturePage, ProcedureTypePage}
 import play.api.libs.json.{JsError, JsString, Json}
 
 class DeclarationTypeSpec
@@ -67,18 +68,26 @@ class DeclarationTypeSpec
 
       "Must return the correct number of radios" - {
         "When Office of Departure is 'XI' and the departure type is Normal" in {
-          val radios   = DeclarationType.chooseValues(Some(CountryCode("XI")), Some(ProcedureType.Normal))
+          val answers = emptyUserAnswers
+            .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+            .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+          val radios   = DeclarationType.valuesU(answers)
           val expected = Seq(Option1, Option2, Option3, Option4, Option5)
           radios mustBe expected
         }
         "When Office of Departure is 'GB'" in {
-          val radios   = DeclarationType.chooseValues(Some(CountryCode("GB")), None)
-          val expected = Seq(Option1, Option2, Option3, Option4)
+          val answers = emptyUserAnswers
+            .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+          val radios   = DeclarationType.valuesU(answers)
+          val expected = Seq(Option1, Option2, Option3, Option5)
           radios mustBe expected
         }
         "When Office of Departure is 'XI' and Simplified" in {
-          val radios   = DeclarationType.chooseValues(Some(CountryCode("XI")), Some(ProcedureType.Simplified))
-          val expected = Seq(Option1, Option2, Option3, Option4)
+          val answers = emptyUserAnswers
+            .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+            .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+          val radios   = DeclarationType.valuesU(answers)
+          val expected = Seq(Option1, Option2, Option3, Option5)
           radios mustBe expected
         }
       }

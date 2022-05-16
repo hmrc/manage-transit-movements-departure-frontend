@@ -22,7 +22,7 @@ import controllers.{routes => mainRoutes}
 import forms.DeclarationTypeFormProvider
 import matchers.JsonMatchers
 import models.reference.{CountryCode, CustomsOffice}
-import models.{DeclarationType, DeclarationTypeViewModel, NormalMode}
+import models.{DeclarationType, NormalMode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentMatchers.any
@@ -70,7 +70,7 @@ class DeclarationTypeControllerSpec
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, DeclarationTypeViewModel(emptyUserAnswers).radioItems, lrn, mode)(request, messages).toString
+        view(form, DeclarationType.radioItemsU(emptyUserAnswers), lrn, mode)(request, messages).toString
 
     }
 
@@ -90,7 +90,7 @@ class DeclarationTypeControllerSpec
       val view = injector.instanceOf[DeclarationTypeView]
 
       contentAsString(result) mustEqual
-        view(filledForm, DeclarationTypeViewModel(emptyUserAnswers).radioItems, lrn, mode)(request, messages).toString
+        view(filledForm, DeclarationType.radioItemsU(emptyUserAnswers), lrn, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -99,11 +99,10 @@ class DeclarationTypeControllerSpec
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      val selectedValue = DeclarationTypeViewModel(emptyUserAnswers).values.head
+      val selectedValue = DeclarationType.values.head
 
-      val request =
-        FakeRequest(POST, declarationTypeRoute)
-          .withFormUrlEncodedBody(("value", selectedValue.toString))
+      val request = FakeRequest(POST, declarationTypeRoute)
+        .withFormUrlEncodedBody(("value", selectedValue.toString))
 
       val result = route(app, request).value
 
@@ -125,7 +124,7 @@ class DeclarationTypeControllerSpec
       val view = injector.instanceOf[DeclarationTypeView]
 
       contentAsString(result) mustEqual
-        view(boundForm, DeclarationTypeViewModel(emptyUserAnswers).radioItems, lrn, mode)(request, messages).toString
+        view(boundForm, DeclarationType.radioItemsU(emptyUserAnswers), lrn, mode)(request, messages).toString
 
     }
 
@@ -146,9 +145,8 @@ class DeclarationTypeControllerSpec
 
       setUserAnswers(None)
 
-      val request =
-        FakeRequest(POST, declarationTypeRoute)
-          .withFormUrlEncodedBody(("value", DeclarationType.values.head.toString))
+      val request = FakeRequest(POST, declarationTypeRoute)
+        .withFormUrlEncodedBody(("value", DeclarationType.values.head.toString))
 
       val result = route(app, request).value
 
