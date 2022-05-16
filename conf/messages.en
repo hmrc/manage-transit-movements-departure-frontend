@@ -124,14 +124,14 @@ localReferenceNumber.error.invalidCharacters = The local reference number must o
 localReferenceNumber.checkYourAnswersLabel = Local reference number
 localReferenceNumber.change.hidden = the local reference number
 
-securityDetailsType.title = Select which type of security details you need to add
-securityDetailsType.heading = Select which type of security details you need to add
+securityDetailsType.title = Select which type of safety and security details you need to add
+securityDetailsType.heading = Select which type of safety and security details you need to add
 securityDetailsType.noSecurity = No security
 securityDetailsType.entrySummaryDeclaration = Entry summary declaration (ENS)
 securityDetailsType.exitSummaryDeclaration = Exit summary declaration (EXS)
-securityDetailsType.entryAndExitSummaryDeclaration =  Both entry and exit summary declarations (ENS and EXS)
-securityDetailsType.checkYourAnswersLabel = Security details added
-securityDetailsType.error.required = Select the type of security details you need to add
+securityDetailsType.entryAndExitSummaryDeclaration = Both entry and exit summary declarations (ENS and EXS)
+securityDetailsType.checkYourAnswersLabel = Safety and security details added
+securityDetailsType.error.required = Select the type of safety and security details you need to add
 securityDetailsType.checkYourAnswersLabel = Type of security details
 securityDetailsType.change.hidden = the type of security details
 
