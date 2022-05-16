@@ -16,16 +16,16 @@
 
 package models
 
-import pages.{OfficeOfDeparturePage, ProcedureTypePage}
+import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 
-case class DeclarationTypeViewModel(userAnswers: UserAnswers) extends RadioModel[DeclarationType] {
+trait RadioModelU[T] extends RadioModel[T] {
 
-  override val messageKeyPrefix: String = "declarationType"
+  def valuesU(userAnswers: UserAnswers): Seq[T]
 
-  override val values: Seq[DeclarationType] = {
-    val countryCode   = userAnswers.get(OfficeOfDeparturePage).map(_.countryId)
-    val procedureType = userAnswers.get(ProcedureTypePage)
-    DeclarationType.chooseValues(countryCode, procedureType)
-  }
-
+  def radioItemsU(userAnswers: UserAnswers)(
+    formKey: String = "value",
+    checkedValue: Option[T] = None
+  )(implicit messages: Messages): Seq[RadioItem] =
+    radioItems(valuesU(userAnswers), formKey, checkedValue)
 }

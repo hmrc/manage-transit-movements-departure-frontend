@@ -18,20 +18,23 @@ package models
 
 import models.ProcedureType.Normal
 import models.reference.CountryCode
+import pages.{OfficeOfDeparturePage, ProcedureTypePage}
 
 sealed trait DeclarationType
 
-object DeclarationType extends Enumerable.Implicits {
+object DeclarationType extends RadioModelU[DeclarationType] {
+
+  override val messageKeyPrefix = "declarationType"
 
   case object Option1 extends WithName("T1") with DeclarationType
   case object Option2 extends WithName("T2") with DeclarationType
   case object Option3 extends WithName("T2F") with DeclarationType
-  case object Option4 extends WithName("T") with DeclarationType
-  case object Option5 extends WithName("TIR") with DeclarationType
+  case object Option4 extends WithName("TIR") with DeclarationType
+  case object Option5 extends WithName("T") with DeclarationType
 
   val t2Options = Seq(Option2, Option3)
 
-  val values: Seq[DeclarationType] = Seq(
+  override val values: Seq[DeclarationType] = Seq(
     Option1,
     Option2,
     Option3,
@@ -39,16 +42,12 @@ object DeclarationType extends Enumerable.Implicits {
     Option5
   )
 
-  def chooseValues(countryCode: Option[CountryCode], procedureType: Option[ProcedureType]): Seq[DeclarationType] =
-    (countryCode, procedureType) match {
+  override def valuesU(userAnswers: UserAnswers): Seq[DeclarationType] =
+    (
+      userAnswers.get(OfficeOfDeparturePage).map(_.countryId),
+      userAnswers.get(ProcedureTypePage)
+    ) match {
       case (Some(CountryCode("XI")), Some(Normal)) => values
-      case _                                       => Seq(Option1, Option2, Option3, Option4)
+      case _                                       => values.filterNot(_ == Option4)
     }
-
-  implicit def enumerable: Enumerable[DeclarationType] =
-    Enumerable(
-      values.map(
-        v => v.toString -> v
-      ): _*
-    )
 }

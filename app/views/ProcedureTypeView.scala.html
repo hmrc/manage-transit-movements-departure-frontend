@@ -29,7 +29,8 @@
 
 @mainTemplate(
     title = messages("procedureType.title"),
-    showBackLink = true
+    showBackLink = true,
+    lrn = Some(lrn)
 ) {
 
     @formHelper(action = routes.ProcedureTypeController.onSubmit(lrn, mode), 'autoComplete -> "off") {

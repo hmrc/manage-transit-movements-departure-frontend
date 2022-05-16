@@ -25,6 +25,8 @@ trait SummaryListViewBehaviours extends ViewBehaviours {
 
   def summaryLists: Seq[SummaryList]
 
+  override val urlContainsLrn: Boolean = true
+
   // scalastyle:off method.length
   def pageWithSummaryLists(): Unit =
     "page with summary lists" - {
