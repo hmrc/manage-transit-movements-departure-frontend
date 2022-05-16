@@ -56,7 +56,13 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
     call = DeclarationTypeController.onPageLoad(lrn, mode)
   )
 
-  def tirCarnet: Option[SummaryListRow] = None // TODO
+  def tirCarnet: Option[SummaryListRow] = getAnswerAndBuildRow[String](
+    page = TIRCarnetReferencePage,
+    formatAnswer = formatAsLiteral,
+    prefix = "tirCarnetReference",
+    id = None,
+    call = TIRCarnetReferenceController.onPageLoad(lrn, mode)
+  )
 
   def securityType: Option[SummaryListRow] = getAnswerAndBuildRow[SecurityDetailsType](
     page = SecurityDetailsTypePage,
