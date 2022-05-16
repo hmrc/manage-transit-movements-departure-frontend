@@ -147,6 +147,11 @@ trait ModelGenerators {
       Gen.oneOf(DeclarationType.values)
     }
 
+  implicit lazy val arbitrarySecurityDetailsType: Arbitrary[SecurityDetailsType] =
+    Arbitrary {
+      Gen.oneOf(SecurityDetailsType.values)
+    }
+
   implicit lazy val arbitraryLocalReferenceNumber: Arbitrary[LocalReferenceNumber] =
     Arbitrary {
       for {

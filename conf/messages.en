@@ -124,10 +124,14 @@ localReferenceNumber.error.invalidCharacters = The local reference number must o
 localReferenceNumber.checkYourAnswersLabel = Local reference number
 localReferenceNumber.change.hidden = the local reference number
 
-addSecurityDetails.title = Do you need to add safety and security details?
-addSecurityDetails.heading = Do you need to add safety and security details?
-addSecurityDetails.paragraph = These details are usually sent as an entry summary declaration. Some countries will allow you to send these details as part of a departures declaration. You must check the countries the goods will be travelling through.
-addSecurityDetails.error.required = Select yes if you need to add safety and security details
+securityDetailsType.title = Select which type of security details you need to add
+securityDetailsType.heading = Select which type of security details you need to add
+securityDetailsType.noSecurity = No security
+securityDetailsType.entrySummaryDeclaration = Entry summary declaration (ENS)
+securityDetailsType.exitSummaryDeclaration = Exit summary declaration (EXS)
+securityDetailsType.entryAndExitSummaryDeclaration =  Both entry and exit summary declarations (ENS and EXS)
+securityDetailsType.checkYourAnswersLabel = Security details added
+securityDetailsType.error.required = Select the type of security details you need to add
 
 declarationSummary.title = Declaration summary
 declarationSummary.heading = Declaration summary

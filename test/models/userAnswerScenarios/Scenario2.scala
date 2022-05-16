@@ -32,8 +32,9 @@ import models.journeyDomain.{GoodsSummary, ItemDetails, ItemSection, JourneyDoma
 import models.reference._
 import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, UserAnswers}
 import play.api.libs.json.Json
-
 import java.time.{LocalDate, LocalDateTime}
+
+import models.SecurityDetailsType.NoSecurityDetails
 
 case object Scenario2 extends UserAnswerScenario {
 
@@ -43,7 +44,7 @@ case object Scenario2 extends UserAnswerScenario {
 
   val userAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj())
     .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Simplified)
-    .unsafeSetVal(pages.AddSecurityDetailsPage)(false)
+    .unsafeSetVal(pages.SecurityDetailsTypePage)(NoSecurityDetails)
     .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None))
     .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
     /*
@@ -128,7 +129,7 @@ case object Scenario2 extends UserAnswerScenario {
     .unsafeSetVal(pages.AddAnotherGuaranteePage)(false)
 
   private val preTaskList =
-    PreTaskListDetails(lrn, Simplified, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None), Option2, false)
+    PreTaskListDetails(lrn, Simplified, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None), Option2, NoSecurityDetails)
 
   private val guarantee = NonEmptyList(GuaranteeOther(GuaranteeType.CashDepositGuarantee, "GUA1Reference"), List.empty)
 

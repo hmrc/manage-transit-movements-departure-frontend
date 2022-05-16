@@ -18,23 +18,19 @@ package controllers
 
 import controllers.actions._
 import forms.OfficeOfDepartureFormProvider
+import javax.inject.Inject
 import models.{CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import pages.OfficeOfDeparturePage
 import pages.addItems.IsNonEuOfficePage
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import renderer.Renderer
 import repositories.SessionRepository
 import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.NunjucksSupport
-import utils._
 import views.html.OfficeOfDepartureView
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class OfficeOfDepartureController @Inject() (

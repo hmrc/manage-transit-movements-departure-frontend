@@ -16,6 +16,8 @@
 
 package services
 
+import java.time.LocalDateTime
+
 import base.{AppWithDefaultMockFixtures, GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.UserAnswersGenerator
@@ -39,7 +41,6 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
 
-import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -103,7 +104,7 @@ class DeclarationRequestServiceSpec
 
               result.isRight mustBe true
 
-              if (userAnswerScenario.toModel.preTaskList.addSecurityDetails) {
+              if (userAnswerScenario.toModel.preTaskList.securityDetailsType.requiresSecurityDetails) {
                 result.value.header.secHEA358 mustBe Some(1)
               } else {
                 result.value.header.secHEA358 mustBe None

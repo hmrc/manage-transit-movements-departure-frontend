@@ -19,6 +19,7 @@ package navigation.annotations.addItemsNavigators
 import controllers.addItems.previousReferences.{routes => previousReferencesRoutes}
 import controllers.addItems.{routes => addItemsRoutes}
 import derivable._
+import javax.inject.{Inject, Singleton}
 import models.DeclarationType.t2Options
 import models._
 import navigation.Navigator
@@ -26,8 +27,6 @@ import pages._
 import pages.addItems._
 import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddTransportChargesPaymentMethodPage}
 import play.api.mvc.Call
-
-import javax.inject.{Inject, Singleton}
 
 @Singleton
 class AddItemsAdminReferenceNavigator @Inject() () extends Navigator {
@@ -68,10 +67,11 @@ class AddItemsAdminReferenceNavigator @Inject() () extends Navigator {
   }
 
   private def matchSecurityDetailsAndAddTransportCharges(itemIndex: Index, ua: UserAnswers): Option[Call] =
-    (ua.get(AddSecurityDetailsPage), ua.get(AddTransportChargesPaymentMethodPage)) match {
-      case (Some(true), Some(false)) => Some(controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(ua.lrn, itemIndex, NormalMode))
-      case (Some(true), Some(true))  => addCommercialRefNumberAllItems(itemIndex, ua)
-      case _                         => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
+    (ua.get(SecurityDetailsTypePage), ua.get(AddTransportChargesPaymentMethodPage)) match {
+      case (Some(_: SecurityDetailsNeededType), Some(false)) =>
+        Some(controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(ua.lrn, itemIndex, NormalMode))
+      case (Some(_: SecurityDetailsNeededType), Some(true)) => addCommercialRefNumberAllItems(itemIndex, ua)
+      case _                                                => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
     }
 
   private def addCommercialRefNumberAllItems(itemIndex: Index, ua: UserAnswers): Option[Call] =
@@ -89,10 +89,11 @@ class AddItemsAdminReferenceNavigator @Inject() () extends Navigator {
   }
 
   private def securityDetailsAndTransportCharges(itemIndex: Index, ua: UserAnswers) =
-    (ua.get(AddSecurityDetailsPage), ua.get(AddTransportChargesPaymentMethodPage)) match {
-      case (Some(true), Some(false)) => controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(ua.lrn, itemIndex, NormalMode)
-      case (Some(true), Some(true))  => addReferenceNumberAllItems(itemIndex, ua)
-      case _                         => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex)
+    (ua.get(SecurityDetailsTypePage), ua.get(AddTransportChargesPaymentMethodPage)) match {
+      case (Some(_: SecurityDetailsNeededType), Some(false)) =>
+        controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(ua.lrn, itemIndex, NormalMode)
+      case (Some(_: SecurityDetailsNeededType), Some(true)) => addReferenceNumberAllItems(itemIndex, ua)
+      case _                                                => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex)
     }
 
   private def addAnotherPreviousAdministrativeReferenceNormalModeRoute(itemIndex: Index, ua: UserAnswers): Option[Call] = {

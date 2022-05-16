@@ -1081,11 +1081,11 @@ trait UserAnswersEntryGenerators {
       } yield (DeclarationTypePage, value)
     }
 
-  implicit lazy val arbitraryAddSecurityDetailsUserAnswersEntry: Arbitrary[(AddSecurityDetailsPage.type, JsValue)] =
+  implicit lazy val arbitraryAddSecurityDetailsUserAnswersEntry: Arbitrary[(SecurityDetailsTypePage.type, JsValue)] =
     Arbitrary {
       for {
         value <- arbitrary[Boolean].map(Json.toJson(_))
-      } yield (AddSecurityDetailsPage, value)
+      } yield (SecurityDetailsTypePage, value)
     }
 
   implicit lazy val arbitraryLocalReferenceNumberUserAnswersEntry: Arbitrary[(LocalReferenceNumberPage.type, JsValue)] =

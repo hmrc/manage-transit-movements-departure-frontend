@@ -18,13 +18,13 @@ package forms
 
 import forms.mappings.Mappings
 import play.api.data.Form
-
 import javax.inject.Inject
+import models.SecurityDetailsType
 
-class AddSecurityDetailsFormProvider @Inject() extends Mappings {
+class SecurityDetailsFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Boolean] =
+  def apply(): Form[SecurityDetailsType] =
     Form(
-      "value" -> boolean("addSecurityDetails.error.required")
+      "value" -> enumerable[SecurityDetailsType]("securityDetailsType.error.required")
     )
 }

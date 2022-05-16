@@ -22,13 +22,14 @@ import controllers.addItems.previousReferences.{routes => previousReferenceRoute
 import controllers.addItems.routes
 import generators.Generators
 import models.DeclarationType.t2Options
+import models.SecurityDetailsType.NoSecurityDetails
 import models.{CheckMode, DeclarationType, UserAnswers}
 import navigation.annotations.addItemsNavigators.AddItemsAdminReferenceNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems._
-import pages.{AddSecurityDetailsPage, DeclarationTypePage}
+import pages.{DeclarationTypePage, SecurityDetailsTypePage}
 import queries.PreviousReferencesQuery
 
 class AddItemsAdminReferenceCheckModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
@@ -43,7 +44,7 @@ class AddItemsAdminReferenceCheckModeNavigatorSpec extends SpecBase with ScalaCh
         answers =>
           val updatedAnswers = answers
             .set(AddAdministrativeReferencePage(itemIndex), false).success.value
-            .set(AddSecurityDetailsPage, false).success.value
+            .set(SecurityDetailsTypePage, NoSecurityDetails).success.value
           navigator
             .nextPage(AddAdministrativeReferencePage(itemIndex), CheckMode, updatedAnswers)
             .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, itemIndex))
