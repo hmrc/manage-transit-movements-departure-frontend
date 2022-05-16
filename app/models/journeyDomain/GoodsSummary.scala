@@ -25,8 +25,6 @@ import pages._
 import pages.generalInformation.PreLodgeDeclarationPage
 import java.time.LocalDate
 
-import models.SecurityDetailsType.NoSecurityDetails
-
 case class GoodsSummary(
   loadingPlace: Option[String],
   goodSummaryDetails: GoodSummaryDetails,
@@ -37,7 +35,7 @@ object GoodsSummary {
 
   implicit val parser: UserAnswersReader[GoodsSummary] =
     (
-      SecurityDetailsTypePage.filterOptionalDependent(_ != NoSecurityDetails)(LoadingPlacePage.optionalReader).map(_.flatten),
+      SecurityDetailsTypePage.filterOptionalDependent(_.requiresSecurityDetails)(LoadingPlacePage.optionalReader).map(_.flatten),
       UserAnswersReader[GoodSummaryDetails],
       DeriveNumberOfSeals.reader orElse List.empty[SealDomain].pure[UserAnswersReader]
     ).tupled.map((GoodsSummary.apply _).tupled)

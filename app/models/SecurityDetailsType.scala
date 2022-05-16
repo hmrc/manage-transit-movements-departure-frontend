@@ -16,12 +16,19 @@
 
 package models
 
-sealed trait SecurityDetailsType
-sealed trait SecurityDetailsNeededType extends SecurityDetailsType
+sealed trait SecurityDetailsType {
+  def requiresSecurityDetails: Boolean
+}
+
+sealed trait SecurityDetailsNeededType extends SecurityDetailsType {
+  override def requiresSecurityDetails: Boolean = true
+}
 
 object SecurityDetailsType extends RadioModel[SecurityDetailsType] {
 
-  case object NoSecurityDetails extends WithName("noSecurity") with SecurityDetailsType
+  case object NoSecurityDetails extends WithName("noSecurity") with SecurityDetailsType {
+    override def requiresSecurityDetails: Boolean = false
+  }
   case object EntrySummaryDeclarationSecurityDetails extends WithName("entrySummaryDeclaration") with SecurityDetailsNeededType
   case object ExitSummaryDeclarationSecurityDetails extends WithName("exitSummaryDeclaration") with SecurityDetailsNeededType
   case object EntryAndExitSummaryDeclarationSecurityDetails extends WithName("entryAndExitSummaryDeclaration") with SecurityDetailsNeededType

@@ -18,7 +18,6 @@ package models.journeyDomain.addItems
 
 import cats.implicits._
 import models.Index
-import models.SecurityDetailsType.NoSecurityDetails
 import models.journeyDomain.addItems.SecurityTraderDetails._
 import models.journeyDomain.{UserAnswersReader, _}
 import models.reference.MethodOfPayment
@@ -37,7 +36,7 @@ final case class ItemsSecurityTraderDetails(
 object ItemsSecurityTraderDetails {
 
   def parser(index: Index): UserAnswersReader[Option[ItemsSecurityTraderDetails]] =
-    SecurityDetailsTypePage.filterOptionalDependent(_ != NoSecurityDetails) {
+    SecurityDetailsTypePage.filterOptionalDependent(_.requiresSecurityDetails) {
       (
         methodOfPaymentPage(index),
         commercialReferenceNumberPage(index),

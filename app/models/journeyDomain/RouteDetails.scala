@@ -16,6 +16,8 @@
 
 package models.journeyDomain
 
+import java.time.LocalDateTime
+
 import cats.data._
 import cats.implicits._
 import derivable.DeriveNumberOfOfficeOfTransits
@@ -24,9 +26,6 @@ import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import models.{DeclarationType, Index, UserAnswers}
 import pages._
 import pages.routeDetails._
-import java.time.LocalDateTime
-
-import models.SecurityDetailsType.NoSecurityDetails
 
 trait RouteDetails {
 
@@ -67,7 +66,7 @@ object RouteDetailsWithTransitInformation {
   private def addOfficeOfTransit = SecurityDetailsTypePage.reader
     .flatMap {
       securityDetailsType =>
-        if (securityDetailsType != NoSecurityDetails) {
+        if (securityDetailsType.requiresSecurityDetails) {
           DeriveNumberOfOfficeOfTransits.mandatoryNonEmptyListReader.flatMap {
             _.zipWithIndex.traverse({
               case (_, index) =>
