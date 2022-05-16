@@ -32,6 +32,7 @@ class PreTaskListNavigator @Inject() () extends Navigator {
     case OfficeOfDeparturePage    => ua => Some(ProcedureTypeController.onPageLoad(ua.lrn, NormalMode))
     case ProcedureTypePage        => ua => Some(DeclarationTypeController.onPageLoad(ua.lrn, NormalMode))
     case DeclarationTypePage      => ua => Some(SecurityDetailsTypeController.onPageLoad(ua.lrn, NormalMode))
+    case TIRCarnetReferencePage   => ua => ??? // TODO
     case SecurityDetailsTypePage  => ua => Some(CheckYourAnswersController.onPageLoad(ua.lrn))
   }
 

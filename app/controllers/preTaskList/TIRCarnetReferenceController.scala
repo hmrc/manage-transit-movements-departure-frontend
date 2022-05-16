@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package controllers.addItems.documents
+package controllers.preTaskList
 
 import controllers.actions._
 import forms.addItems.TIRCarnetReferenceFormProvider
 import models.DeclarationType.Option4
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItems.AddItemsDocument
-import pages.addItems.{DocumentTypePage, TIRCarnetReferencePage}
-import pages.preTaskList.DeclarationTypePage
+import navigation.annotations.PreTaskListDetails
+import pages.addItems.DocumentTypePage
+import pages.preTaskList.{DeclarationTypePage, TIRCarnetReferencePage}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.TirCarnetReferenceView
+import views.html.preTaskList.TirCarnetReferenceView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -37,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class TIRCarnetReferenceController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItemsDocument navigator: Navigator,
+  @PreTaskListDetails navigator: Navigator,
   actions: Actions,
   formProvider: TIRCarnetReferenceFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -49,18 +49,18 @@ class TIRCarnetReferenceController @Inject() (
 
   private val form = formProvider()
 
-  def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
     actions.requireData(lrn) {
       implicit request =>
-        val preparedForm = request.userAnswers.get(TIRCarnetReferencePage(itemIndex, documentIndex)) match {
+        val preparedForm = request.userAnswers.get(TIRCarnetReferencePage) match {
           case None        => form
           case Some(value) => form.fill(value)
         }
 
-        Ok(view(preparedForm, lrn, mode, itemIndex, documentIndex))
+        Ok(view(preparedForm, lrn, mode))
     }
 
-  def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
     actions.requireData(lrn).async {
       implicit request =>
         request.userAnswers.get(DeclarationTypePage) match {
@@ -68,13 +68,13 @@ class TIRCarnetReferenceController @Inject() (
             form
               .bindFromRequest()
               .fold(
-                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, itemIndex, documentIndex))),
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
                 value =>
                   for {
-                    ua1 <- Future.fromTry(request.userAnswers.set(TIRCarnetReferencePage(documentIndex, itemIndex), value))
+                    ua1 <- Future.fromTry(request.userAnswers.set(TIRCarnetReferencePage, value))
                     ua2 <- Future.fromTry(ua1.set(DocumentTypePage(Index(0), Index(0)), "952"))
                     _   <- sessionRepository.set(ua2)
-                  } yield Redirect(navigator.nextPage(TIRCarnetReferencePage(documentIndex, itemIndex), mode, ua2))
+                  } yield Redirect(navigator.nextPage(TIRCarnetReferencePage, mode, ua2))
               )
           case Some(otherOption) =>
             logger.warn(s"[Controller][TIRCarnetReference][onPageLoad] Cannot create TIR carnet reference for $otherOption")

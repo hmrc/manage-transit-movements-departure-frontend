@@ -118,6 +118,14 @@ declarationType.checkYourAnswersLabel = Declaration type
 declarationType.error.required = Select the declaration you want to create
 declarationType.change.hidden = the declaration type
 
+tirCarnetReference.title = What is the TIR Carnet reference?
+tirCarnetReference.heading = What is the TIR Carnet reference?
+tirCarnetReference.checkYourAnswersLabel = TIR Carnet reference
+tirCarnetReference.error.required = Enter the reference for the TIR carnet
+tirCarnetReference.error.maxLength = The reference for the TIR Carnet must be 12 characters or less
+tirCarnetReference.error.minLength = The reference for the TIR Carnet must be 2 characters or more
+tirCarnetReference.error.invalidCharacters = The reference for the TIR Carnet must only include letters a to z and numbers 0 to 9
+
 securityDetailsType.title = Select which type of safety and security details you need to add
 securityDetailsType.heading = Select which type of safety and security details you need to add
 securityDetailsType.noSecurity = No security
@@ -1331,14 +1339,6 @@ principalTirHolderId.error.required = Enter  Enter the principal’s TIR holder 
 principalTirHolderId.error.length = Principal’s TIR holder identification must be 35 characters or less
 principalTirHolderId.error.format = Enter the principal’s TIR holder identification in the right format
 principalTirHolderId.error.characters = The principal’s TIR holder identification must only include letters a to z, numbers 0 to 9 and forward slashes
-
-tirCarnetReference.title = What is the TIR Carnet reference?
-tirCarnetReference.heading = What is the TIR Carnet reference?
-tirCarnetReference.checkYourAnswersLabel = TIR Carnet reference
-tirCarnetReference.error.required = Enter the reference for the TIR carnet
-tirCarnetReference.error.maxLength = The reference for the TIR Carnet must be 11 characters or less
-tirCarnetReference.error.minLength = The reference for the TIR Carnet must be 10 characters or more
-tirCarnetReference.error.invalidCharacters = The reference for the TIR Carnet must only include letters a to z and numbers 0 to 9
 
 addOfficeOfTransit.title = Do you need to add an office of transit?
 addOfficeOfTransit.heading = Do you need to add an office of transit?

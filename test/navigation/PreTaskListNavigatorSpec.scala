@@ -94,9 +94,9 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
     "in Check mode" - {
 
-      val mode = NormalMode
+      val mode = CheckMode
 
-      "must go from a page that doesn't exist in the edit route map  to Check Your Answers" in {
+      "must go from a page that doesn't exist in the edit route map to Check Your Answers" in {
 
         case object UnknownPage extends Page
 
