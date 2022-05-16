@@ -19,11 +19,11 @@ package utils
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
-import models.{DeclarationType, LocalReferenceNumber, Mode, ProcedureType}
 import models.reference.CustomsOffice
+import models.{DeclarationType, LocalReferenceNumber, Mode, ProcedureType, SecurityDetailsType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage}
+import pages.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
@@ -181,6 +181,52 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                           content = "Change".toText,
                           href = controllers.routes.DeclarationTypeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the declaration type"),
+                          attributes = Map()
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "tirCarnet" - {}
+
+    "securityType" - {
+      "must return None" - {
+        "when SecurityDetailsTypePage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new PreTaskListCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.securityType
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when SecurityDetailsTypePage defined" in {
+          forAll(arbitrary[SecurityDetailsType], arbitrary[Mode]) {
+            (securityDetailsType, mode) =>
+              val answers = emptyUserAnswers.unsafeSetVal(SecurityDetailsTypePage)(securityDetailsType)
+
+              val helper = new PreTaskListCheckYourAnswersHelper(answers, mode)
+              val result = helper.securityType
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Type of security details".toText, classes = "govuk-!-width-one-half"),
+                  value = Value(messages(s"securityDetailsType.$securityDetailsType").toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = controllers.routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("the type of security details"),
                           attributes = Map()
                         )
                       )

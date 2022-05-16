@@ -17,7 +17,7 @@
 package utils
 
 import models.reference.CustomsOffice
-import models.{DeclarationType, Mode, ProcedureType, UserAnswers}
+import models.{DeclarationType, Mode, ProcedureType, SecurityDetailsType, UserAnswers}
 import pages._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
@@ -41,7 +41,7 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
 
   def procedureType: Option[SummaryListRow] = getAnswerAndBuildRow[ProcedureType](
     page = ProcedureTypePage,
-    formatAnswer = formatAsEnum(_, ProcedureType.messageKeyPrefix),
+    formatAnswer = formatAsEnum(ProcedureType.messageKeyPrefix),
     prefix = "procedureType",
     id = None,
     call = controllers.routes.ProcedureTypeController.onPageLoad(lrn, mode)
@@ -49,7 +49,7 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
 
   def declarationType: Option[SummaryListRow] = getAnswerAndBuildRow[DeclarationType](
     page = DeclarationTypePage,
-    formatAnswer = formatAsEnum(_, DeclarationType.messageKeyPrefix),
+    formatAnswer = formatAsEnum(DeclarationType.messageKeyPrefix),
     prefix = "declarationType",
     id = None,
     call = controllers.routes.DeclarationTypeController.onPageLoad(lrn, mode)
@@ -57,5 +57,11 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
 
   def tirCarnet: Option[SummaryListRow] = None // TODO
 
-  def securityType: Option[SummaryListRow] = None // TODO
+  def securityType: Option[SummaryListRow] = getAnswerAndBuildRow[SecurityDetailsType](
+    page = SecurityDetailsTypePage,
+    formatAnswer = formatAsEnum(SecurityDetailsType.messageKeyPrefix),
+    prefix = "securityDetailsType",
+    id = None,
+    call = controllers.routes.SecurityDetailsTypeController.onPageLoad(lrn, mode)
+  )
 }

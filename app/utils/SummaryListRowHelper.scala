@@ -37,7 +37,7 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
 
   def formatAsLiteral[T](answer: T): Content = s"$answer".toText
 
-  def formatAsEnum[T](answer: T, messageKeyPrefix: String): Content = messages(s"$messageKeyPrefix.$answer").toText
+  def formatAsEnum[T](messageKeyPrefix: String)(answer: T): Content = messages(s"$messageKeyPrefix.$answer").toText
 
   def formatAsCountry(countryList: CountryList)(answer: CountryCode): Content =
     s"${countryList.getCountry(answer).map(_.description).getOrElse(answer.code)}".toText

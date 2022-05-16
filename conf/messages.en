@@ -132,6 +132,8 @@ securityDetailsType.exitSummaryDeclaration = Exit summary declaration (EXS)
 securityDetailsType.entryAndExitSummaryDeclaration =  Both entry and exit summary declarations (ENS and EXS)
 securityDetailsType.checkYourAnswersLabel = Security details added
 securityDetailsType.error.required = Select the type of security details you need to add
+securityDetailsType.checkYourAnswersLabel = Type of security details
+securityDetailsType.change.hidden = the type of security details
 
 declarationSummary.title = Declaration summary
 declarationSummary.heading = Declaration summary
