@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package forms.preTaskList
 
 import forms.mappings.Mappings
-import models.ProcedureType
+import models.LocalReferenceNumber
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class ProcedureTypeFormProvider @Inject() extends Mappings {
+class LocalReferenceNumberFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[ProcedureType] =
+  def apply(): Form[LocalReferenceNumber] =
     Form(
-      "value" -> enumerable[ProcedureType]("procedureType.error.required")
+      "value" -> lrn("localReferenceNumber.error.required", "localReferenceNumber.error.length", "localReferenceNumber.error.invalidCharacters")
     )
 }

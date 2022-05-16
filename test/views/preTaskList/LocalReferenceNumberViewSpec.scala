@@ -16,7 +16,7 @@
 
 package views.preTaskList
 
-import forms.LocalReferenceNumberFormProvider
+import forms.preTaskList.LocalReferenceNumberFormProvider
 import models.LocalReferenceNumber
 import org.scalacheck.Arbitrary
 import play.api.data.Form

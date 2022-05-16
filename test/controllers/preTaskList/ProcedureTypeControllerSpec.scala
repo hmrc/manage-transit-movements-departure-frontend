@@ -17,7 +17,7 @@
 package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.ProcedureTypeFormProvider
+import forms.preTaskList.ProcedureTypeFormProvider
 import models.{NormalMode, ProcedureType}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails

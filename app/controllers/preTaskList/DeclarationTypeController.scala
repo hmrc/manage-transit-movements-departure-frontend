@@ -17,7 +17,7 @@
 package controllers.preTaskList
 
 import controllers.actions._
-import forms.DeclarationTypeFormProvider
+import forms.preTaskList.DeclarationTypeFormProvider
 import models.{DeclarationType, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails

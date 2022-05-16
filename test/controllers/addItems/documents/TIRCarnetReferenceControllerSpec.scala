@@ -18,7 +18,7 @@ package controllers.addItems.documents
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import forms.addItems.TIRCarnetReferenceFormProvider
+import forms.preTaskList.TIRCarnetReferenceFormProvider
 import models.DeclarationType.{Option1, Option4}
 import models.NormalMode
 import navigation.Navigator

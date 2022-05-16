@@ -16,7 +16,7 @@
 
 package views.preTaskList
 
-import forms.ProcedureTypeFormProvider
+import forms.preTaskList.ProcedureTypeFormProvider
 import models.{NormalMode, ProcedureType}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat

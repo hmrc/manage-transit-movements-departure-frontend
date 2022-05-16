@@ -19,7 +19,7 @@ package controllers.preTaskList
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import config.FrontendAppConfig
 import controllers.{routes => mainRoutes}
-import forms.OfficeOfDepartureFormProvider
+import forms.preTaskList.OfficeOfDepartureFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode, CustomsOffice}
 import models.{CountryList, CustomsOfficeList, NormalMode}

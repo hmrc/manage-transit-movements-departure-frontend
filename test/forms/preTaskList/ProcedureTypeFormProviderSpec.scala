@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package forms
+package forms.preTaskList
 
 import forms.behaviours.OptionFieldBehaviours
-import models.DeclarationType
+import models.ProcedureType
 import play.api.data.FormError
 
-class DeclarationTypeFormProviderSpec extends OptionFieldBehaviours {
+class ProcedureTypeFormProviderSpec extends OptionFieldBehaviours {
 
-  private val form = new DeclarationTypeFormProvider()()
+  private val form = new ProcedureTypeFormProvider()()
 
   ".value" - {
 
     val fieldName   = "value"
-    val requiredKey = "declarationType.error.required"
+    val requiredKey = "procedureType.error.required"
 
-    behave like optionsField[DeclarationType](
+    behave like optionsField[ProcedureType](
       form,
       fieldName,
-      validValues = DeclarationType.values,
+      validValues = ProcedureType.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 

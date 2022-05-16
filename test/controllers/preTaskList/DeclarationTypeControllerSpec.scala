@@ -19,7 +19,7 @@ package controllers.preTaskList
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.{routes => mainRoutes}
-import forms.DeclarationTypeFormProvider
+import forms.preTaskList.DeclarationTypeFormProvider
 import matchers.JsonMatchers
 import models.reference.{CountryCode, CustomsOffice}
 import models.{DeclarationType, NormalMode}

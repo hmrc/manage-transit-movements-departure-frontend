@@ -17,6 +17,7 @@
 package navigation
 
 import base.SpecBase
+import commonTestUtils.UserAnswersSpecHelper
 import controllers.preTaskList.routes
 import generators.Generators
 import models._
@@ -25,7 +26,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.preTaskList._
 
-class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
 
   private val navigator = new PreTaskListNavigator
 
@@ -73,11 +74,45 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
       }
 
-      "must go from Declaration Type page to Security Details Type page" in {
+      "must go from Declaration Type page" - {
+        "to Security Details Type page" - {
+          "when not Normal procedure type and TIR declaration type" in {
+            forAll(arbitrary[(UserAnswers, DeclarationType, ProcedureType)].suchThat {
+              case (_, declarationType, procedureType) => !(declarationType == DeclarationType.Option4 && procedureType == ProcedureType.Normal)
+            }) {
+              case (answers, declarationType, procedureType) =>
+                val updatedAnswers = answers
+                  .unsafeSetVal(ProcedureTypePage)(procedureType)
+                  .unsafeSetVal(DeclarationTypePage)(declarationType)
+
+                navigator
+                  .nextPage(DeclarationTypePage, mode, updatedAnswers)
+                  .mustBe(routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, mode))
+            }
+          }
+        }
+
+        "to TIR Carnet Reference page" - {
+          "when Normal procedure type and TIR declaration type" in {
+            forAll(arbitrary[UserAnswers]) {
+              answers =>
+                val updatedAnswers = answers
+                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                  .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
+
+                navigator
+                  .nextPage(DeclarationTypePage, mode, updatedAnswers)
+                  .mustBe(routes.TIRCarnetReferenceController.onPageLoad(answers.lrn, mode))
+            }
+          }
+        }
+      }
+
+      "must go from TIR Carnet Reference page to Security Details Type page" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             navigator
-              .nextPage(DeclarationTypePage, mode, answers)
+              .nextPage(TIRCarnetReferencePage, mode, answers)
               .mustBe(routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, mode))
         }
       }
@@ -96,7 +131,7 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       val mode = CheckMode
 
-      "must go from a page that doesn't exist in the edit route map to Check Your Answers" in {
+      "must go to Check Your Answers page" in {
 
         case object UnknownPage extends Page
 
@@ -104,7 +139,7 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           answers =>
             navigator
               .nextPage(UnknownPage, mode, answers)
-              .mustBe(controllers.routes.SessionExpiredController.onPageLoad())
+              .mustBe(routes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
     }

@@ -31,13 +31,21 @@ class PreTaskListNavigator @Inject() () extends Navigator {
     case LocalReferenceNumberPage => ua => Some(OfficeOfDepartureController.onPageLoad(ua.lrn, NormalMode))
     case OfficeOfDeparturePage    => ua => Some(ProcedureTypeController.onPageLoad(ua.lrn, NormalMode))
     case ProcedureTypePage        => ua => Some(DeclarationTypeController.onPageLoad(ua.lrn, NormalMode))
-    case DeclarationTypePage      => ua => Some(SecurityDetailsTypeController.onPageLoad(ua.lrn, NormalMode))
-    case TIRCarnetReferencePage   => ua => ??? // TODO
+    case DeclarationTypePage      => ua => declarationTypeRoute(ua)
+    case TIRCarnetReferencePage   => ua => Some(SecurityDetailsTypeController.onPageLoad(ua.lrn, NormalMode))
     case SecurityDetailsTypePage  => ua => Some(CheckYourAnswersController.onPageLoad(ua.lrn))
   }
 
   override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case _ => _ => None
+    case _ => ua => Some(CheckYourAnswersController.onPageLoad(ua.lrn))
   }
+
+  private def declarationTypeRoute(ua: UserAnswers): Option[Call] =
+    (ua.get(ProcedureTypePage), ua.get(DeclarationTypePage)) match {
+      case (Some(ProcedureType.Normal), Some(DeclarationType.Option4)) =>
+        Some(TIRCarnetReferenceController.onPageLoad(ua.lrn, NormalMode))
+      case _ =>
+        Some(SecurityDetailsTypeController.onPageLoad(ua.lrn, NormalMode))
+    }
 
 }

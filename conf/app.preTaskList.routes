@@ -1,5 +1,5 @@
-GET        /local-reference-number                                  controllers.preTaskList.LocalReferenceNumberController.onPageLoad()
-POST       /local-reference-number                                  controllers.preTaskList.LocalReferenceNumberController.onSubmit()
+GET        /pre-task-list/local-reference-number                    controllers.preTaskList.LocalReferenceNumberController.onPageLoad()
+POST       /pre-task-list/local-reference-number                    controllers.preTaskList.LocalReferenceNumberController.onSubmit()
 
 GET        /:lrn/pre-task-list/office-of-departure                  controllers.preTaskList.OfficeOfDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/pre-task-list/office-of-departure                  controllers.preTaskList.OfficeOfDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)

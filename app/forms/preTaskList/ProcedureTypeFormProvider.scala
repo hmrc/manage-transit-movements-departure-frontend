@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package forms.preTaskList
 
 import forms.mappings.Mappings
+import models.ProcedureType
 import play.api.data.Form
+
 import javax.inject.Inject
-import models.SecurityDetailsType
 
-class SecurityDetailsFormProvider @Inject() extends Mappings {
+class ProcedureTypeFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[SecurityDetailsType] =
+  def apply(): Form[ProcedureType] =
     Form(
-      "value" -> enumerable[SecurityDetailsType]("securityDetailsType.error.required")
+      "value" -> enumerable[ProcedureType]("procedureType.error.required")
     )
 }

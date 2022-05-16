@@ -31,7 +31,7 @@ import pages.routeDetails._
 import pages.safetyAndSecurity._
 import pages.traderDetails._
 import pages._
-import pages.preTaskList._
+import pages.preTaskList.{DeclarationTypePage, LocalReferenceNumberPage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators {

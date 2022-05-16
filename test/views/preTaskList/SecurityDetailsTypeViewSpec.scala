@@ -16,7 +16,7 @@
 
 package views.preTaskList
 
-import forms.SecurityDetailsFormProvider
+import forms.preTaskList.SecurityDetailsFormProvider
 import models.{NormalMode, SecurityDetailsType}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat

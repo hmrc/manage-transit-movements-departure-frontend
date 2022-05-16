@@ -17,7 +17,7 @@
 package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.SecurityDetailsFormProvider
+import forms.preTaskList.SecurityDetailsFormProvider
 import matchers.JsonMatchers
 import models.SecurityDetailsType.NoSecurityDetails
 import models.{NormalMode, SecurityDetailsType, UserAnswers}

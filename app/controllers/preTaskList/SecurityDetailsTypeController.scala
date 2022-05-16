@@ -17,7 +17,7 @@
 package controllers.preTaskList
 
 import controllers.actions._
-import forms.SecurityDetailsFormProvider
+import forms.preTaskList.SecurityDetailsFormProvider
 import models.{LocalReferenceNumber, Mode, SecurityDetailsType}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails

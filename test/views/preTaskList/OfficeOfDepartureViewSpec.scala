@@ -16,7 +16,7 @@
 
 package views.preTaskList
 
-import forms.OfficeOfDepartureFormProvider
+import forms.preTaskList.OfficeOfDepartureFormProvider
 import generators.Generators
 import models.reference.{CountryCode, CustomsOffice}
 import models.{CustomsOfficeList, NormalMode}
