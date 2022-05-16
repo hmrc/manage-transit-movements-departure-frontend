@@ -14,14 +14,8 @@
  * limitations under the License.
  */
 
-package pages
+package pages.preTaskList
 
-import models.SecurityDetailsType
-import play.api.libs.json.JsPath
+import pages.Page
 
-case object SecurityDetailsTypePage extends QuestionPage[SecurityDetailsType] {
-
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "securityDetailsType"
-}
+case object LocalReferenceNumberPage extends Page

@@ -23,7 +23,9 @@ import models.ProcedureType.{Normal, Simplified}
 import models._
 import pages._
 import pages.generalInformation.PreLodgeDeclarationPage
+import pages.preTaskList.ProcedureTypePage
 import play.api.mvc.Call
+
 import javax.inject.{Inject, Singleton}
 
 @Singleton

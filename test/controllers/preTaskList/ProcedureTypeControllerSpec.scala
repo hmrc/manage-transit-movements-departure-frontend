@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.ProcedureTypeFormProvider
@@ -23,12 +23,12 @@ import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.ProcedureTypePage
+import pages.preTaskList.ProcedureTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.ProcedureTypeView
+import views.html.preTaskList.ProcedureTypeView
 
 import scala.concurrent.Future
 
@@ -135,7 +135,7 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
@@ -150,7 +150,7 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
   }
 }

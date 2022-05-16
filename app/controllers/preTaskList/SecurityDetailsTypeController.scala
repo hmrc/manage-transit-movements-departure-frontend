@@ -14,58 +14,61 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.preTaskList
 
 import controllers.actions._
-import forms.ProcedureTypeFormProvider
-import models.{LocalReferenceNumber, Mode, ProcedureType}
+import forms.SecurityDetailsFormProvider
+import models.{LocalReferenceNumber, Mode, SecurityDetailsType}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import pages.ProcedureTypePage
+import pages.preTaskList.SecurityDetailsTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.ProcedureTypeView
+import uk.gov.hmrc.viewmodels.NunjucksSupport
+import views.html.preTaskList.SecurityDetailsTypeView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ProcedureTypeController @Inject() (
+class SecurityDetailsTypeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @PreTaskListDetails navigator: Navigator,
-  actions: Actions,
-  formProvider: ProcedureTypeFormProvider,
+  identify: IdentifierAction,
+  getData: DataRetrievalActionProvider,
+  requireData: DataRequiredAction,
+  formProvider: SecurityDetailsFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ProcedureTypeView
+  view: SecurityDetailsTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
-    with I18nSupport {
+    with I18nSupport
+    with NunjucksSupport {
 
   private val form = formProvider()
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(ProcedureTypePage) match {
+      val preparedForm = request.userAnswers.get(SecurityDetailsTypePage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
-
-      Ok(view(preparedForm, ProcedureType.radioItems, lrn, mode))
+      Ok(view(preparedForm, SecurityDetailsType.radioItems, lrn, mode))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, ProcedureType.radioItems, lrn, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, SecurityDetailsType.radioItems, lrn, mode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(ProcedureTypePage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(SecurityDetailsTypePage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(ProcedureTypePage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(SecurityDetailsTypePage, mode, updatedAnswers))
         )
   }
 }

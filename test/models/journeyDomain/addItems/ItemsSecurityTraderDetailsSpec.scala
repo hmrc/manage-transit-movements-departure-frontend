@@ -25,8 +25,9 @@ import org.scalacheck.Gen
 import org.scalatest.TryValues
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
 import pages.addItems.traderSecurityDetails._
+import pages.preTaskList.{OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.safetyAndSecurity._
-import pages.{OfficeOfDeparturePage, QuestionPage, SecurityDetailsTypePage}
+import pages.QuestionPage
 
 class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 

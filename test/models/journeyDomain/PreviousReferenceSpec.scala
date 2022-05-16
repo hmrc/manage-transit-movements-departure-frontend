@@ -23,7 +23,8 @@ import models.DeclarationType.{Option1, Option2, Option3}
 import models.{DeclarationType, Index}
 import org.scalacheck.Gen
 import pages.addItems._
-import pages.{DeclarationTypePage, QuestionPage}
+import pages.QuestionPage
+import pages.preTaskList.DeclarationTypePage
 
 class PreviousReferenceSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 

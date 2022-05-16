@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.preTaskList
 
-import forms.{SecurityDetailsFormProvider}
+import forms.SecurityDetailsFormProvider
 import models.{NormalMode, SecurityDetailsType}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.RadioViewBehaviours
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
-import views.html.SecurityDetailsTypeView
+import views.behaviours.RadioViewBehaviours
+import views.html.preTaskList.SecurityDetailsTypeView
 
 class SecurityDetailsTypeViewSpec extends RadioViewBehaviours[SecurityDetailsType] {
 

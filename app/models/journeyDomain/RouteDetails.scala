@@ -16,16 +16,16 @@
 
 package models.journeyDomain
 
-import java.time.LocalDateTime
-
 import cats.data._
 import cats.implicits._
 import derivable.DeriveNumberOfOfficeOfTransits
 import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
 import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import models.{DeclarationType, Index, UserAnswers}
-import pages._
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails._
+
+import java.time.LocalDateTime
 
 trait RouteDetails {
 

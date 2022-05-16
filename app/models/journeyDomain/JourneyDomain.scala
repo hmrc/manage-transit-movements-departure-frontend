@@ -21,7 +21,7 @@ import cats.implicits._
 import models.SecurityDetailsType.NoSecurityDetails
 import models.journeyDomain.traderDetails.TraderDetails
 import models.reference.CountryCode
-import pages.SecurityDetailsTypePage
+import pages.preTaskList.SecurityDetailsTypePage
 
 case class ItemSections(itemDetails: NonEmptyList[ItemSection]) {
 

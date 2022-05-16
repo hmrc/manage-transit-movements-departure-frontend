@@ -14,6 +14,19 @@
  * limitations under the License.
  */
 
-package pages
+package pages.preTaskList
 
-case object LocalReferenceNumberPage extends Page
+import models.reference.CustomsOffice
+import pages.behaviours.PageBehaviours
+
+class OfficeOfDeparturePageSpec extends PageBehaviours {
+
+  "OfficeOfDeparturePage" - {
+
+    beRetrievable[CustomsOffice](OfficeOfDeparturePage)
+
+    beSettable[CustomsOffice](OfficeOfDeparturePage)
+
+    beRemovable[CustomsOffice](OfficeOfDeparturePage)
+  }
+}

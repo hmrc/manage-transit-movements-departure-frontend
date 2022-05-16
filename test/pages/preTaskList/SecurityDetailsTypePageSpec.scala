@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package pages
+package pages.preTaskList
 
-import models.reference.CustomsOffice
+import base.SpecBase
+import commonTestUtils.UserAnswersSpecHelper
+import models.SecurityDetailsType
 import pages.behaviours.PageBehaviours
 
-class OfficeOfDeparturePageSpec extends PageBehaviours {
+class SecurityDetailsTypePageSpec extends PageBehaviours with SpecBase with UserAnswersSpecHelper {
 
-  "OfficeOfDeparturePage" - {
+  "SecurityDetailsTypePage" - {
 
-    beRetrievable[CustomsOffice](OfficeOfDeparturePage)
+    beRetrievable[SecurityDetailsType](SecurityDetailsTypePage)
 
-    beSettable[CustomsOffice](OfficeOfDeparturePage)
+    beSettable[SecurityDetailsType](SecurityDetailsTypePage)
 
-    beRemovable[CustomsOffice](OfficeOfDeparturePage)
+    beRemovable[SecurityDetailsType](SecurityDetailsTypePage)
   }
 }

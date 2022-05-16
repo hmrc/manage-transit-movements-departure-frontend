@@ -25,6 +25,7 @@ import models.journeyDomain.DefaultLiabilityAmount._
 import models.{GuaranteeType, Index}
 import pages._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
+import pages.preTaskList.DeclarationTypePage
 
 sealed trait GuaranteeDetails
 

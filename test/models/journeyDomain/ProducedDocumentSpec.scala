@@ -25,8 +25,9 @@ import models.SecurityDetailsType.{EntryAndExitSummaryDeclarationSecurityDetails
 import models.reference.CircumstanceIndicator
 import org.scalacheck.Gen
 import pages.addItems._
+import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
-import pages.{DeclarationTypePage, QuestionPage, SecurityDetailsTypePage}
+import pages.QuestionPage
 
 class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 

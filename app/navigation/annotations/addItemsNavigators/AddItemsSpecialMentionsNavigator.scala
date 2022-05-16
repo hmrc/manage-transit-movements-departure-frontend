@@ -23,9 +23,11 @@ import models.reference.CircumstanceIndicator
 import models.{CheckMode, Index, Mode, NormalMode, SecurityDetailsNeededType, UserAnswers}
 import navigation.Navigator
 import pages.addItems.specialMentions._
+import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
-import pages.{DeclarationTypePage, Page, SecurityDetailsTypePage}
+import pages.Page
 import play.api.mvc.Call
+
 import javax.inject.{Inject, Singleton}
 
 @Singleton

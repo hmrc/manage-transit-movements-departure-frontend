@@ -38,6 +38,7 @@ import pages.addItems.containers.ContainerNumberPage
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
 import pages.addItems.traderDetails._
 import pages.addItems.traderSecurityDetails._
+import pages.preTaskList.DeclarationTypePage
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels.Text.Literal
 import uk.gov.hmrc.viewmodels.{Html, MessageInterpolators}

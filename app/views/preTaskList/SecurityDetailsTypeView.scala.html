@@ -14,8 +14,9 @@
  * limitations under the License.
  *@
 
+@import controllers.preTaskList.routes
 @import views.html.components.{Button, ErrorSummary, InputRadio}
-@import models.{LocalReferenceNumber, ProcedureType}
+@import models.{LocalReferenceNumber, SecurityDetailsType}
 
 @this(
     mainTemplate: MainTemplate,
@@ -25,21 +26,21 @@
     errorSummary: ErrorSummary
 )
 
-@(form: Form[ProcedureType], radios: (String, Option[ProcedureType]) => Seq[RadioItem], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[SecurityDetailsType], radios: (String, Option[SecurityDetailsType]) => Seq[RadioItem], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("procedureType.title"),
+    title = messages("securityDetailsType.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.ProcedureTypeController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.SecurityDetailsTypeController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputRadio(
             field = form("value"),
-            legend = messages("procedureType.heading"),
+            legend = messages("securityDetailsType.heading"),
             radioItems = fieldId => radios(fieldId, form.value)
         )
 

@@ -18,7 +18,7 @@ package models
 
 import models.ProcedureType.Normal
 import models.reference.CountryCode
-import pages.{OfficeOfDeparturePage, ProcedureTypePage}
+import pages.preTaskList.{OfficeOfDeparturePage, ProcedureTypePage}
 
 sealed trait DeclarationType
 

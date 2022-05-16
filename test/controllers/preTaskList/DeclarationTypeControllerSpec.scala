@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
@@ -28,13 +28,13 @@ import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.DeclarationTypePage
+import pages.preTaskList.DeclarationTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.viewmodels.NunjucksSupport
-import views.html.DeclarationTypeView
+import views.html.preTaskList.DeclarationTypeView
 
 import scala.concurrent.Future
 

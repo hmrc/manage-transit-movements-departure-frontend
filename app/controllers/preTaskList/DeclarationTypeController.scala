@@ -14,48 +14,47 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.preTaskList
 
 import controllers.actions._
-import forms.SecurityDetailsFormProvider
-import javax.inject.Inject
-import models.{LocalReferenceNumber, Mode, SecurityDetailsType}
+import forms.DeclarationTypeFormProvider
+import models.{DeclarationType, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import pages.SecurityDetailsTypePage
+import pages.preTaskList.DeclarationTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.NunjucksSupport
-import views.html.SecurityDetailsTypeView
+import views.html.preTaskList.DeclarationTypeView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SecurityDetailsTypeController @Inject() (
+class DeclarationTypeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @PreTaskListDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: SecurityDetailsFormProvider,
+  formProvider: DeclarationTypeFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: SecurityDetailsTypeView
+  view: DeclarationTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
-    with I18nSupport
-    with NunjucksSupport {
+    with I18nSupport {
 
   private val form = formProvider()
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(SecurityDetailsTypePage) match {
+      val preparedForm = request.userAnswers.get(DeclarationTypePage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
-      Ok(view(preparedForm, SecurityDetailsType.radioItems, lrn, mode))
+
+      Ok(view(preparedForm, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
@@ -63,12 +62,12 @@ class SecurityDetailsTypeController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, SecurityDetailsType.radioItems, lrn, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(SecurityDetailsTypePage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(DeclarationTypePage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(SecurityDetailsTypePage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(DeclarationTypePage, mode, updatedAnswers))
         )
   }
 }

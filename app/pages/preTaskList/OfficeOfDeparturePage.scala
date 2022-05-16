@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package pages
+package pages.preTaskList
 
-import base.SpecBase
-import commonTestUtils.UserAnswersSpecHelper
-import models.SecurityDetailsType
-import pages.behaviours.PageBehaviours
+import models.reference.CustomsOffice
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class SecurityDetailsTypePageSpec extends PageBehaviours with SpecBase with UserAnswersSpecHelper {
+case object OfficeOfDeparturePage extends QuestionPage[CustomsOffice] {
 
-  "SecurityDetailsTypePage" - {
+  override def path: JsPath = JsPath \ toString
 
-    beRetrievable[SecurityDetailsType](SecurityDetailsTypePage)
-
-    beSettable[SecurityDetailsType](SecurityDetailsTypePage)
-
-    beRemovable[SecurityDetailsType](SecurityDetailsTypePage)
-  }
+  override def toString: String = "officeOfDeparture"
 }

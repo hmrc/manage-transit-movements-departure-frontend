@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages
+package pages.preTaskList
 
 import models.ProcedureType._
 import models.{ProcedureType, UserAnswers}

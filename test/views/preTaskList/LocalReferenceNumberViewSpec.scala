@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.preTaskList
 
 import forms.LocalReferenceNumberFormProvider
 import models.LocalReferenceNumber
@@ -23,7 +23,7 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.LocalReferenceNumberView
+import views.html.preTaskList.LocalReferenceNumberView
 
 class LocalReferenceNumberViewSpec extends InputTextViewBehaviours[LocalReferenceNumber] {
 

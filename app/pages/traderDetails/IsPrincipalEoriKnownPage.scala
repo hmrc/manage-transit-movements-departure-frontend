@@ -18,7 +18,8 @@ package pages.traderDetails
 
 import models.ProcedureType.Simplified
 import models.UserAnswers
-import pages.{ClearAllAddItems, ProcedureTypePage, QuestionPage}
+import pages.preTaskList.ProcedureTypePage
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
 import scala.util.{Success, Try}

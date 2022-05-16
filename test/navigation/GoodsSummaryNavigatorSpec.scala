@@ -28,10 +28,11 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.generalInformation.PreLodgeDeclarationPage
 import queries.SealsQuery
-import java.time.LocalDate
 
+import java.time.LocalDate
 import config.FrontendAppConfig
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import pages.preTaskList.ProcedureTypePage
 
 class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with GuiceOneAppPerSuite {
 

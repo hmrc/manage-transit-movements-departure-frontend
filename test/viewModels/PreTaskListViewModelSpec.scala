@@ -20,7 +20,7 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import models.reference.{CountryCode, CustomsOffice}
 import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}
-import pages.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 
 class PreTaskListViewModelSpec extends SpecBase with UserAnswersSpecHelper {
 

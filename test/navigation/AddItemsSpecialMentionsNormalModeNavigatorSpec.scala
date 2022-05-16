@@ -30,7 +30,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems.specialMentions._
 import pages.addItems.{AddExtraDocumentInformationPage, DocumentExtraInformationPage, DocumentReferencePage, DocumentTypePage}
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
-import pages.{DeclarationTypePage, SecurityDetailsTypePage}
+import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 
 class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
 

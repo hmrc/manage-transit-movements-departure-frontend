@@ -25,9 +25,10 @@ import models.journeyDomain.GoodsSummary.{GoodSummaryNormalDetailsWithPreLodge, 
 import org.scalacheck.Gen
 import pages._
 import pages.generalInformation.PreLodgeDeclarationPage
-import java.time.LocalDate
 
+import java.time.LocalDate
 import models.SecurityDetailsType.{EntryAndExitSummaryDeclarationSecurityDetails, NoSecurityDetails}
+import pages.preTaskList.{ProcedureTypePage, SecurityDetailsTypePage}
 
 class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 

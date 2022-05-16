@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package pages
+package pages.preTaskList
 
 import derivable.DeriveNumberOfGuarantees
 import models.{DeclarationType, GuaranteeType, Index, UserAnswers}
+import pages.QuestionPage
 import pages.guaranteeDetails.GuaranteeTypePage
 import play.api.libs.json.JsPath
 import queries.GuaranteesQuery

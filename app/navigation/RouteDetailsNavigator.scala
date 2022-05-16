@@ -23,6 +23,7 @@ import models.DeclarationType.Option4
 import models._
 import models.reference.CountryCode
 import pages._
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails._
 import play.api.mvc.Call
 

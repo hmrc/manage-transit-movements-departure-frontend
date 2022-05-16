@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages
+package pages.preTaskList
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
@@ -23,6 +23,7 @@ import models.{DeclarationType, GuaranteeType, Index}
 import org.scalacheck.Gen
 import pages.behaviours.PageBehaviours
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
+import pages.{AccessCodePage, LiabilityAmountPage}
 
 class DeclarationTypeSpec extends PageBehaviours with SpecBase with UserAnswersSpecHelper {
 

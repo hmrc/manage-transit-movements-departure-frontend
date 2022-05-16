@@ -32,6 +32,7 @@ import pages.addItems.containers.ContainerNumberPage
 import pages.addItems.securityDetails.AddDangerousGoodsCodePage
 import pages.addItems.specialMentions.{AddSpecialMentionPage, SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
 import pages.generalInformation.ContainersUsedPage
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails.CountryOfDispatchPage
 import pages.safetyAndSecurity._
 import pages.traderDetails.{AddConsigneePage, AddConsignorPage}

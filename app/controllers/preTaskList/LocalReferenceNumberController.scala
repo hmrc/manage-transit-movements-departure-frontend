@@ -14,60 +14,55 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.preTaskList
 
 import controllers.actions._
-import forms.DeclarationTypeFormProvider
-import models.{DeclarationType, LocalReferenceNumber, Mode}
+import forms.LocalReferenceNumberFormProvider
+import models.NormalMode
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import pages.DeclarationTypePage
+import pages.preTaskList.LocalReferenceNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.UserAnswersService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.DeclarationTypeView
+import views.html.preTaskList.LocalReferenceNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DeclarationTypeController @Inject() (
+class LocalReferenceNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @PreTaskListDetails navigator: Navigator,
   identify: IdentifierAction,
-  getData: DataRetrievalActionProvider,
-  requireData: DataRequiredAction,
-  formProvider: DeclarationTypeFormProvider,
+  userAnswersService: UserAnswersService,
+  formProvider: LocalReferenceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: DeclarationTypeView
+  view: LocalReferenceNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   private val form = formProvider()
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData) {
+  def onPageLoad(): Action[AnyContent] = identify {
     implicit request =>
-      val preparedForm = request.userAnswers.get(DeclarationTypePage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))
+      Ok(view(form))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
+  def onSubmit(): Action[AnyContent] = identify.async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(DeclarationTypePage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(DeclarationTypePage, mode, updatedAnswers))
+              userAnswers <- userAnswersService.getOrCreateUserAnswers(request.eoriNumber, value)
+              _           <- sessionRepository.set(userAnswers)
+            } yield Redirect(navigator.nextPage(LocalReferenceNumberPage, NormalMode, userAnswers))
         )
   }
 }

@@ -1,2 +1,25 @@
-GET        /:lrn/pre-task-list/check-answers                           controllers.preTaskList.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
-POST       /:lrn/pre-task-list/check-answers                           controllers.preTaskList.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)
+GET        /local-reference-number                        controllers.preTaskList.LocalReferenceNumberController.onPageLoad()
+POST       /local-reference-number                        controllers.preTaskList.LocalReferenceNumberController.onSubmit()
+
+GET        /:lrn/office-of-departure                      controllers.preTaskList.OfficeOfDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/office-of-departure                      controllers.preTaskList.OfficeOfDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/change-office-of-departure               controllers.preTaskList.OfficeOfDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/change-office-of-departure               controllers.preTaskList.OfficeOfDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/procedure-type                           controllers.preTaskList.ProcedureTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/procedure-type                           controllers.preTaskList.ProcedureTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/change-procedure-type                    controllers.preTaskList.ProcedureTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/change-procedure-type                    controllers.preTaskList.ProcedureTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/declaration-type                         controllers.preTaskList.DeclarationTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/declaration-type                         controllers.preTaskList.DeclarationTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/change-declaration-type                  controllers.preTaskList.DeclarationTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/change-declaration-type                  controllers.preTaskList.DeclarationTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/security-details                         controllers.preTaskList.SecurityDetailsTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/security-details                         controllers.preTaskList.SecurityDetailsTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/change-security-details                  controllers.preTaskList.SecurityDetailsTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/change-security-details                  controllers.preTaskList.SecurityDetailsTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/pre-task-list/check-answers              controllers.preTaskList.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/pre-task-list/check-answers              controllers.preTaskList.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)

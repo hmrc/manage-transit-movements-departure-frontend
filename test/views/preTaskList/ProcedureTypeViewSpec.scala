@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.preTaskList
 
 import forms.ProcedureTypeFormProvider
 import models.{NormalMode, ProcedureType}
@@ -22,7 +22,7 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import views.behaviours.RadioViewBehaviours
-import views.html.ProcedureTypeView
+import views.html.preTaskList.ProcedureTypeView
 
 class ProcedureTypeViewSpec extends RadioViewBehaviours[ProcedureType] {
 

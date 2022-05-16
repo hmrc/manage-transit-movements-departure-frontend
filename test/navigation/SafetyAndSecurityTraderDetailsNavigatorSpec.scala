@@ -23,7 +23,7 @@ import models.reference.{CountryCode, CustomsOffice}
 import models.{CheckMode, CommonAddress, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.OfficeOfDeparturePage
+import pages.preTaskList.OfficeOfDeparturePage
 import pages.safetyAndSecurity._
 
 class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {

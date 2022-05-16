@@ -28,8 +28,8 @@ import navigation.annotations.addItemsNavigators.AddItemsAdminReferenceNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.{DeclarationTypePage, SecurityDetailsTypePage}
 import pages.addItems._
+import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddTransportChargesPaymentMethodPage}
 import queries.PreviousReferencesQuery
 

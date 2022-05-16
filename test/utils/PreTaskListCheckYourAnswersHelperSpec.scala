@@ -16,6 +16,7 @@
 
 package utils
 
+import controllers.preTaskList.routes
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
@@ -23,7 +24,7 @@ import models.reference.CustomsOffice
 import models.{DeclarationType, LocalReferenceNumber, Mode, ProcedureType, SecurityDetailsType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
@@ -49,7 +50,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                   items = List(
                     ActionItem(
                       content = "Change".toText,
-                      href = controllers.routes.LocalReferenceNumberController.onPageLoad().url,
+                      href = routes.LocalReferenceNumberController.onPageLoad().url,
                       visuallyHiddenText = Some("the local reference number"),
                       attributes = Map()
                     )
@@ -91,7 +92,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = controllers.routes.OfficeOfDepartureController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.OfficeOfDepartureController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the office of departure"),
                           attributes = Map()
                         )
@@ -135,7 +136,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = controllers.routes.ProcedureTypeController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.ProcedureTypeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the type of procedure"),
                           attributes = Map()
                         )
@@ -179,7 +180,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = controllers.routes.DeclarationTypeController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.DeclarationTypeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the declaration type"),
                           attributes = Map()
                         )
@@ -225,7 +226,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = controllers.routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the type of security details"),
                           attributes = Map()
                         )

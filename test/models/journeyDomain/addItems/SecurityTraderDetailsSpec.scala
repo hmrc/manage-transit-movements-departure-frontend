@@ -23,7 +23,7 @@ import models.reference._
 import models.{CommonAddress, EoriNumber}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
-import pages.{OfficeOfDeparturePage, SecurityDetailsTypePage}
+import pages.preTaskList.{OfficeOfDeparturePage, SecurityDetailsTypePage}
 
 class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 

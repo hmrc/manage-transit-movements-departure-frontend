@@ -62,7 +62,7 @@ class DeclarationRejectionController @Inject() (
           val json = Json.obj(
             "errorsSection" -> errorSections(message),
             "contactUrl"    -> appConfig.nctsEnquiriesUrl,
-            "departureUrl"  -> routes.LocalReferenceNumberController.onPageLoad().url
+            "departureUrl"  -> controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad().url
           )
           renderer.render("declarationRejection.njk", json).map(Ok(_))
         case _ =>

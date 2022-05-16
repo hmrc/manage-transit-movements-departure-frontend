@@ -69,9 +69,10 @@ import models.journeyDomain.{
 import models.reference._
 import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
 import play.api.libs.json.Json
-import java.time.LocalDateTime
 
+import java.time.LocalDateTime
 import models.SecurityDetailsType.EntryAndExitSummaryDeclarationSecurityDetails
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 
 case object Scenario6 extends UserAnswerScenario {
 
@@ -81,10 +82,10 @@ case object Scenario6 extends UserAnswerScenario {
   private val lrn: LocalReferenceNumber = LocalReferenceNumber("ABCD1234567890123").get
 
   val userAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj())
-    .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
-    .unsafeSetVal(pages.SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
-    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None))
-    .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
+    .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+    .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
+    .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None))
+    .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option2)
     /*
      * General Information Section
      * */

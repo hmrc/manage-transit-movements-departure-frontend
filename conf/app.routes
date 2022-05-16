@@ -16,31 +16,8 @@ GET        /:lrn/keep-alive                               controllers.KeepAliveC
 
 GET        /unauthorised                                  controllers.UnauthorisedController.onPageLoad()
 
-GET        /local-reference-number                        controllers.LocalReferenceNumberController.onPageLoad()
-POST       /local-reference-number                        controllers.LocalReferenceNumberController.onSubmit()
-
-GET        /:lrn/security-details                         controllers.SecurityDetailsTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/security-details                         controllers.SecurityDetailsTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/change-security-details                  controllers.SecurityDetailsTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/change-security-details                  controllers.SecurityDetailsTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-
 GET        /:lrn/task-list                                controllers.DeclarationSummaryController.onPageLoad(lrn: LocalReferenceNumber)
 POST       /:lrn/task-list                                controllers.DeclarationSummaryController.onSubmit(lrn: LocalReferenceNumber)
-
-GET        /:lrn/office-of-departure                      controllers.OfficeOfDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/office-of-departure                      controllers.OfficeOfDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/change-office-of-departure               controllers.OfficeOfDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/change-office-of-departure               controllers.OfficeOfDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-
-GET        /:lrn/procedure-type                           controllers.ProcedureTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/procedure-type                           controllers.ProcedureTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/change-procedure-type                    controllers.ProcedureTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/change-procedure-type                    controllers.ProcedureTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-
-GET        /:lrn/declaration-type                         controllers.DeclarationTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/declaration-type                         controllers.DeclarationTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/change-declaration-type                  controllers.DeclarationTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/change-declaration-type                  controllers.DeclarationTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/submission-confirmation                  controllers.SubmissionConfirmationController.onPageLoad(lrn: LocalReferenceNumber)
 

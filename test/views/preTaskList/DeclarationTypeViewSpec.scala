@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.preTaskList
 
 import forms.DeclarationTypeFormProvider
 import models.{DeclarationType, NormalMode}
@@ -22,7 +22,7 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import views.behaviours.RadioViewBehaviours
-import views.html.DeclarationTypeView
+import views.html.preTaskList.DeclarationTypeView
 
 class DeclarationTypeViewSpec extends RadioViewBehaviours[DeclarationType] {
 

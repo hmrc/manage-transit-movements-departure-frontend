@@ -23,6 +23,8 @@ import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.GoodSummaryDetails
 import pages._
 import pages.generalInformation.PreLodgeDeclarationPage
+import pages.preTaskList.{ProcedureTypePage, SecurityDetailsTypePage}
+
 import java.time.LocalDate
 
 case class GoodsSummary(

@@ -19,7 +19,7 @@ package models
 import cats.implicits._
 import models.journeyDomain.traderDetails.TraderDetails
 import models.journeyDomain.{MovementDetails, RouteDetails, SafetyAndSecurity, TransportDetails, UserAnswersReader}
-import pages.SecurityDetailsTypePage
+import pages.preTaskList.SecurityDetailsTypePage
 
 sealed trait DependentSection
 

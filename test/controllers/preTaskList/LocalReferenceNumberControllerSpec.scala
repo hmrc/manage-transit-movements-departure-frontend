@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.LocalReferenceNumberFormProvider
@@ -27,7 +27,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserAnswersService
-import views.html.LocalReferenceNumberView
+import views.html.preTaskList.LocalReferenceNumberView
 
 import scala.concurrent.Future
 

@@ -25,9 +25,10 @@ import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import org.scalacheck.Gen
 import pages._
 import pages.routeDetails._
-import java.time.LocalDateTime
 
+import java.time.LocalDateTime
 import models.SecurityDetailsType.{EntryAndExitSummaryDeclarationSecurityDetails, NoSecurityDetails}
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, SecurityDetailsTypePage}
 
 class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 

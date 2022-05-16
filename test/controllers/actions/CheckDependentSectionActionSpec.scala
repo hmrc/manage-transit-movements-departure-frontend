@@ -27,8 +27,8 @@ import models.reference.{CountryCode, CustomsOffice}
 import models.requests.DataRequest
 import models.{DependentSection, EoriNumber, UserAnswers}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import pages._
 import pages.generalInformation._
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 import play.api.mvc.{AnyContent, Request, Result, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

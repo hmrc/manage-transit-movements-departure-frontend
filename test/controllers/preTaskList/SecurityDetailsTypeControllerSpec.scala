@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.SecurityDetailsFormProvider
@@ -26,13 +26,13 @@ import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.SecurityDetailsTypePage
+import pages.preTaskList.SecurityDetailsTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.viewmodels.NunjucksSupport
-import views.html.SecurityDetailsTypeView
+import views.html.preTaskList.SecurityDetailsTypeView
 
 import scala.concurrent.Future
 
@@ -121,7 +121,7 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
@@ -135,7 +135,7 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
     }
   }

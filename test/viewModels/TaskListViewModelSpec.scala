@@ -33,9 +33,10 @@ import pages.routeDetails._
 import pages.safetyAndSecurity._
 import pages.traderDetails.{AddConsigneePage, AddConsignorPage, IsPrincipalEoriKnownPage, WhatIsPrincipalEoriPage}
 import play.api.libs.json.{JsObject, Json}
-import java.time.{LocalDate, LocalDateTime}
 
+import java.time.{LocalDate, LocalDateTime}
 import models.SecurityDetailsType.{EntryAndExitSummaryDeclarationSecurityDetails, NoSecurityDetails}
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 
 class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper with UserAnswersGenerator with ModelGenerators {
 

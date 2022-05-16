@@ -58,35 +58,6 @@ pageNotFound.contactLink=contact the New Computerised Transit System(NCTS) helpd
 checkYourAnswers.title = Check your answers
 checkYourAnswers.heading = Check your answers
 
-index.title = Manage your transit movements - GOV.UK
-index.heading =  Manage your transit movements
-index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
-
-movementDetails.preHeading = General information
-traderDetails.preHeading = Trader’s details
-routeDetails.preHeading = Route details
-transportDetails.preHeading = Transport details
-goodsSummary.preHeading = Goods summary
-guaranteeDetails.preHeading = Guarantee details
-items.preHeading = Items
-safetyAndSecurity.preHeading = Safety and security
-
-package.preHeading = Packages
-specialMention.preHeading = Special mentions
-document.preHeading = Produced documents and work certificates
-reference.preHeading = Previous administrative references
-
-preTaskList.checkYourAnswers.heading = Check your answers
-preTaskList.checkYourAnswers.title = Check your answers
-preTaskList.checkYourAnswers.h2 = Before you continue
-preTaskList.checkYourAnswers.p = Once you have confirmed these details you will not be able to change them.
-
-routeDetailsCheckYourAnswers.heading = Check your answers
-routeDetailsCheckYourAnswers.title = Check your answers
-
-traderDetailsCheckYourAnswers.heading = Check your answers
-traderDetailsCheckYourAnswers.title = Check your answers
-
 postcode = Postcode
 postcodeExample = Like, AB1 1AB.
 
@@ -109,12 +80,7 @@ technicalDifficulties.savedAnswers = We saved your answers. They will be availab
 technicalDifficulties.contact = You can
 technicalDifficulties.contact.link = contact the New Computerised Transit System helpdesk if you need to speak to someone about your transit movement(opens in a new tab).
 
-concurrent.officeOfTransit = office of transit
-concurrent.remove.error.title = Sorry, there is a problem with this {0}
-concurrent.remove.error.heading = Sorry, there is a problem with this {0}
-concurrent.remove.error.paragraph = You will need to answer some questions again.
-concurrent.remove.error.noOfficeOfTransit.link.text = Go back to did any events happen on the journey?
-concurrent.remove.error.multipleOfficeOfTransit.link.text = Go back to you have added office of transit
+# Pre- task list
 
 localReferenceNumber.title = What is the local reference number (LRN)?
 localReferenceNumber.heading = What is the local reference number (LRN)?
@@ -123,6 +89,34 @@ localReferenceNumber.error.length = The local reference number must be 22 charac
 localReferenceNumber.error.invalidCharacters = The local reference number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
 localReferenceNumber.checkYourAnswersLabel = Local reference number
 localReferenceNumber.change.hidden = the local reference number
+
+officeOfDeparture.title = Where is the office of departure?
+officeOfDeparture.heading = Where is the office of departure?
+officeOfDeparture.checkYourAnswersLabel = Office of departure
+officeOfDeparture.error.required = Select the office of departure
+officeOfDeparture.hintText = Give the office location or code. Like, Dover or GB000060.
+officeOfDeparture.label = This is the Customs office where the transit movement starts.
+officeOfDeparture.change.hidden = the office of departure
+
+procedureType.title = What type of procedure are you using?
+procedureType.heading = What type of procedure are you using?
+procedureType.checkYourAnswersLabel = Type of procedure
+procedureType.normal = Normal (customs-approved location)
+procedureType.simplified = Simplified (authorised consignor’s location)
+procedureType.error.required = Select which type of procedure you are using
+procedureType.change.hidden = the type of procedure
+
+declarationType.title = What declaration do you want to create?
+declarationType.heading = What declaration do you want to create?
+declarationType.T1 = T1 (goods originating outside the European Union, such as Great Britain)
+declarationType.T2 = T2 (goods originating inside the European Union, such as Northern Ireland)
+declarationType.T2F = T2F (goods moving to, from or between the European Union special territories)
+declarationType.TIR = TIR (goods moving under the cover of TIR Carnet)
+declarationType.T = T (mixed consignments, for goods originating inside and outside the European Union)
+declarationType.paragraph = For mixed consignments, you will need to create separate T1 and T2 declarations.
+declarationType.checkYourAnswersLabel = Declaration type
+declarationType.error.required = Select the declaration you want to create
+declarationType.change.hidden = the declaration type
 
 securityDetailsType.title = Select which type of safety and security details you need to add
 securityDetailsType.heading = Select which type of safety and security details you need to add
@@ -134,6 +128,41 @@ securityDetailsType.checkYourAnswersLabel = Safety and security details added
 securityDetailsType.error.required = Select the type of safety and security details you need to add
 securityDetailsType.checkYourAnswersLabel = Type of security details
 securityDetailsType.change.hidden = the type of security details
+
+preTaskList.checkYourAnswers.heading = Check your answers
+preTaskList.checkYourAnswers.title = Check your answers
+preTaskList.checkYourAnswers.h2 = Before you continue
+preTaskList.checkYourAnswers.p = Once you have confirmed these details you will not be able to change them.
+
+###################################################################################################################
+# Phase 4
+
+movementDetails.preHeading = General information
+traderDetails.preHeading = Trader’s details
+routeDetails.preHeading = Route details
+transportDetails.preHeading = Transport details
+goodsSummary.preHeading = Goods summary
+guaranteeDetails.preHeading = Guarantee details
+items.preHeading = Items
+safetyAndSecurity.preHeading = Safety and security
+
+package.preHeading = Packages
+specialMention.preHeading = Special mentions
+document.preHeading = Produced documents and work certificates
+reference.preHeading = Previous administrative references
+
+routeDetailsCheckYourAnswers.heading = Check your answers
+routeDetailsCheckYourAnswers.title = Check your answers
+
+traderDetailsCheckYourAnswers.heading = Check your answers
+traderDetailsCheckYourAnswers.title = Check your answers
+
+concurrent.officeOfTransit = office of transit
+concurrent.remove.error.title = Sorry, there is a problem with this {0}
+concurrent.remove.error.heading = Sorry, there is a problem with this {0}
+concurrent.remove.error.paragraph = You will need to answer some questions again.
+concurrent.remove.error.noOfficeOfTransit.link.text = Go back to did any events happen on the journey?
+concurrent.remove.error.multipleOfficeOfTransit.link.text = Go back to you have added office of transit
 
 declarationSummary.title = Declaration summary
 declarationSummary.heading = Declaration summary
@@ -158,30 +187,10 @@ declarationSummary.submissionSubheader = Now send your departure declaration
 declarationSummary.submissionHonestyPledge = By sending this you are confirming that the details you are providing are correct, to the best of your knowledge.
 declarationSummary.confirmAndSend = Confirm and send
 
-declarationType.title = What declaration do you want to create?
-declarationType.heading = What declaration do you want to create?
-declarationType.T1 = T1 (goods originating outside the European Union, such as Great Britain)
-declarationType.T2 = T2 (goods originating inside the European Union, such as Northern Ireland)
-declarationType.T2F = T2F (goods moving to, from or between the European Union special territories)
-declarationType.TIR = TIR (goods moving under the cover of TIR Carnet)
-declarationType.T = T (mixed consignments, for goods originating inside and outside the European Union)
-declarationType.paragraph = For mixed consignments, you will need to create separate T1 and T2 declarations.
-declarationType.checkYourAnswersLabel = Declaration type
-declarationType.error.required = Select the declaration you want to create
-declarationType.change.hidden = the declaration type
-
 containersUsed.title = Have you used any containers?
 containersUsed.heading = Have you used any containers?
 containersUsed.checkYourAnswersLabel = Containers used
 containersUsed.error.required = Select yes if you have used any containers
-
-procedureType.title = What type of procedure are you using?
-procedureType.heading = What type of procedure are you using?
-procedureType.checkYourAnswersLabel = Type of procedure
-procedureType.normal = Normal (customs-approved location)
-procedureType.simplified = Simplified (authorised consignor’s location)
-procedureType.error.required = Select which type of procedure you are using
-procedureType.change.hidden = the type of procedure
 
 declarationPlace.title = What is the postcode for the place of declaration?
 declarationPlace.heading = What is the postcode for the place of declaration?
@@ -322,14 +331,6 @@ countryOfDispatch.heading = What is the country of dispatch?
 countryOfDispatch.checkYourAnswersLabel = Country of dispatch
 countryOfDispatch.label = This is the country where the goods originated. This may not be where the transit movement started.
 countryOfDispatch.error.required = Enter the country of dispatch
-
-officeOfDeparture.title = Where is the office of departure?
-officeOfDeparture.heading = Where is the office of departure?
-officeOfDeparture.checkYourAnswersLabel = Office of departure
-officeOfDeparture.error.required = Select the office of departure
-officeOfDeparture.hintText = Give the office location or code. Like, Dover or GB000060.
-officeOfDeparture.label = This is the Customs office where the transit movement starts.
-officeOfDeparture.change.hidden = the office of departure
 
 destinationCountry.title = What country are the goods ending in?
 destinationCountry.heading = What country are the goods ending in?

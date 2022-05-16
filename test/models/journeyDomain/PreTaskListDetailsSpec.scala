@@ -24,6 +24,7 @@ import models.SecurityDetailsType.NoSecurityDetails
 import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Gen
 import pages._
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 
 class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 

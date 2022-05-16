@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.preTaskList
 
 import controllers.actions._
 import forms.OfficeOfDepartureFormProvider
-import javax.inject.Inject
 import models.{CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import pages.OfficeOfDeparturePage
 import pages.addItems.IsNonEuOfficePage
+import pages.preTaskList.OfficeOfDeparturePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.OfficeOfDepartureView
+import views.html.preTaskList.OfficeOfDepartureView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class OfficeOfDepartureController @Inject() (

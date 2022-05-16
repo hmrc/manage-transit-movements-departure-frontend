@@ -16,9 +16,10 @@
 
 package navigation
 
-import controllers.routes
+import controllers.preTaskList.routes._
 import models._
 import pages._
+import pages.preTaskList._
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -27,11 +28,11 @@ import javax.inject.{Inject, Singleton}
 class PreTaskListNavigator @Inject() () extends Navigator {
 
   override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case LocalReferenceNumberPage => ua => Some(routes.OfficeOfDepartureController.onPageLoad(ua.lrn, NormalMode))
-    case OfficeOfDeparturePage    => ua => Some(routes.ProcedureTypeController.onPageLoad(ua.lrn, NormalMode))
-    case ProcedureTypePage        => ua => Some(routes.DeclarationTypeController.onPageLoad(ua.lrn, NormalMode))
-    case DeclarationTypePage      => ua => Some(routes.SecurityDetailsTypeController.onPageLoad(ua.lrn, NormalMode))
-    case SecurityDetailsTypePage  => ua => Some(routes.DeclarationSummaryController.onPageLoad(ua.lrn))
+    case LocalReferenceNumberPage => ua => Some(OfficeOfDepartureController.onPageLoad(ua.lrn, NormalMode))
+    case OfficeOfDeparturePage    => ua => Some(ProcedureTypeController.onPageLoad(ua.lrn, NormalMode))
+    case ProcedureTypePage        => ua => Some(DeclarationTypeController.onPageLoad(ua.lrn, NormalMode))
+    case DeclarationTypePage      => ua => Some(SecurityDetailsTypeController.onPageLoad(ua.lrn, NormalMode))
+    case SecurityDetailsTypePage  => ua => Some(CheckYourAnswersController.onPageLoad(ua.lrn))
   }
 
   override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.preTaskList
 
 import forms.OfficeOfDepartureFormProvider
 import generators.Generators
@@ -23,7 +23,7 @@ import models.{CustomsOfficeList, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.InputSelectViewBehaviours
-import views.html.OfficeOfDepartureView
+import views.html.preTaskList.OfficeOfDepartureView
 
 class OfficeOfDepartureViewSpec extends InputSelectViewBehaviours[CustomsOffice] with Generators {
 

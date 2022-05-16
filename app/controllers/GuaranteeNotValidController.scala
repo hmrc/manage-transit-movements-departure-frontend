@@ -49,7 +49,7 @@ class GuaranteeNotValidController @Inject() (
           val json = Json.obj(
             "guaranteeNotValidMessage" -> Json.toJson(message),
             "contactUrl"               -> appConfig.nctsEnquiriesUrl,
-            "departureUrl"             -> routes.LocalReferenceNumberController.onPageLoad().url
+            "departureUrl"             -> controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad().url
           )
 
           renderer.render("guaranteeNotValid.njk", json).map(Ok(_))

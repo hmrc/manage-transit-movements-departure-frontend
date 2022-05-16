@@ -21,8 +21,8 @@ import cats.implicits._
 import derivable.DeriveNumberOfPreviousAdministrativeReferences
 import models.DeclarationType.{Option2, Option3}
 import models.Index
-import pages.DeclarationTypePage
 import pages.addItems._
+import pages.preTaskList.DeclarationTypePage
 
 final case class PreviousReferences(
   referenceType: String,

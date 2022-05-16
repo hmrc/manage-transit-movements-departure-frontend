@@ -22,7 +22,7 @@ import models.SecurityDetailsType.NoSecurityDetails
 import models.reference.CountryCode
 import models.requests.DataRequest
 import models.{Index, NormalMode}
-import pages.SecurityDetailsTypePage
+import pages.preTaskList.SecurityDetailsTypePage
 import pages.routeDetails.{AddAnotherTransitOfficePage, OfficeOfTransitCountryPage}
 import play.api.mvc.Result
 import play.api.mvc.Results._
