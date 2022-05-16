@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import controllers.preTaskList.routes
 @import views.html.components.{Button, ErrorSummary, InputText, HeadingCaption}
 @import models.LocalReferenceNumber
 
@@ -26,7 +27,7 @@
     errorSummary: ErrorSummary
 )
 
-@(form: Form[_], lrn: LocalReferenceNumber, mode: Mode, itemIndex: Index, documentIndex: Index)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("tirCarnetReference.title"),
@@ -34,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = addItems.documents.routes.TIRCarnetReferenceController.onSubmit(lrn, itemIndex, documentIndex, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.TIRCarnetReferenceController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
