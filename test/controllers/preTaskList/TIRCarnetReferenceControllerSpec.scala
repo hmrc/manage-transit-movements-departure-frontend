@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.addItems.documents
+package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
@@ -27,12 +27,12 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.DeclarationTypePage
-import pages.addItems.TIRCarnetReferencePage
+import pages.preTaskList.TIRCarnetReferencePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.TirCarnetReferenceView
+import views.html.preTaskList.TirCarnetReferenceView
 
 import scala.concurrent.Future
 
@@ -42,7 +42,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
   private val form         = formProvider()
   private val mode         = NormalMode
 
-  private lazy val tirCarnetReferenceRoute = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, index, NormalMode).url
+  private lazy val tirCarnetReferenceRoute = routes.TIRCarnetReferenceController.onPageLoad(lrn, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -64,13 +64,13 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode, itemIndex, documentIndex)(request, messages).toString
+        view(form, lrn, mode)(request, messages).toString
 
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(TIRCarnetReferencePage(index, index), "1234567890").success.value
+      val userAnswers = emptyUserAnswers.set(TIRCarnetReferencePage, "1234567890").success.value
       setUserAnswers(Some(userAnswers))
 
       val request = FakeRequest(GET, tirCarnetReferenceRoute)
@@ -84,7 +84,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
       val view = injector.instanceOf[TirCarnetReferenceView]
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, itemIndex, documentIndex)(request, messages).toString
+        view(filledForm, lrn, mode)(request, messages).toString
 
     }
 
@@ -160,7 +160,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
       val view = injector.instanceOf[TirCarnetReferenceView]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, mode, itemIndex, documentIndex)(request, messages).toString
+        view(boundForm, lrn, mode)(request, messages).toString
 
     }
 

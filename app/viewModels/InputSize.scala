@@ -31,6 +31,7 @@ object InputSize {
   case object Width4 extends InputSize("govuk-input--width-4")
   case object Width3 extends InputSize("govuk-input--width-3")
   case object Width2 extends InputSize("govuk-input--width-2")
+  case object ThreeQuarterWidth extends InputSize("govuk-!-width-three-quarters")
 
   implicit def sizeToOptionString(size: InputSize): Option[String] = Some(size.toString)
 }
