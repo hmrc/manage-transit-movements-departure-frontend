@@ -19,15 +19,15 @@ package models.journeyDomain
 import cats.data.ReaderT
 import cats.implicits._
 import models.reference.CustomsOffice
-import models.{DeclarationType, LocalReferenceNumber, ProcedureType, UserAnswers}
-import pages.{AddSecurityDetailsPage, DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage}
+import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType, UserAnswers}
+import pages.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 
 case class PreTaskListDetails(
   lrn: LocalReferenceNumber,
   procedureType: ProcedureType,
   officeOfDeparture: CustomsOffice,
   declarationType: DeclarationType,
-  addSecurityDetails: Boolean
+  securityDetailsType: SecurityDetailsType
 )
 
 object PreTaskListDetails {
@@ -43,6 +43,6 @@ object PreTaskListDetails {
       ProcedureTypePage.reader,
       OfficeOfDeparturePage.reader,
       DeclarationTypePage.reader,
-      AddSecurityDetailsPage.reader
+      SecurityDetailsTypePage.reader
     ).tupled.map((PreTaskListDetails.apply _).tupled)
 }

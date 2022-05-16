@@ -20,6 +20,7 @@ import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import models.DeclarationType.Option1
 import models.ProcedureType.Normal
+import models.SecurityDetailsType.NoSecurityDetails
 import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Gen
 import pages._
@@ -29,7 +30,7 @@ class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with UserAnswer
   private val preTaskListUa = emptyUserAnswers
     .unsafeSetVal(ProcedureTypePage)(Normal)
     .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
-    .unsafeSetVal(AddSecurityDetailsPage)(false)
+    .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
     .unsafeSetVal(DeclarationTypePage)(Option1)
 
   "PreTaskListDetails" - {
@@ -42,7 +43,7 @@ class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with UserAnswer
           Normal,
           CustomsOffice("id", "name", CountryCode("code"), None),
           Option1,
-          false
+          NoSecurityDetails
         )
 
         val result: EitherType[PreTaskListDetails] = UserAnswersReader[PreTaskListDetails].run(preTaskListUa)
@@ -55,7 +56,7 @@ class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with UserAnswer
       val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
         ProcedureTypePage,
         OfficeOfDeparturePage,
-        AddSecurityDetailsPage
+        SecurityDetailsTypePage
       )
 
       "when an answer is missing" in {

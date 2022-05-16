@@ -30,8 +30,8 @@ class PreTaskListNavigator @Inject() () extends Navigator {
     case LocalReferenceNumberPage => ua => Some(routes.OfficeOfDepartureController.onPageLoad(ua.lrn, NormalMode))
     case OfficeOfDeparturePage    => ua => Some(routes.ProcedureTypeController.onPageLoad(ua.lrn, NormalMode))
     case ProcedureTypePage        => ua => Some(routes.DeclarationTypeController.onPageLoad(ua.lrn, NormalMode))
-    case DeclarationTypePage      => ua => Some(controllers.routes.AddSecurityDetailsController.onPageLoad(ua.lrn, NormalMode))
-    case AddSecurityDetailsPage   => ua => Some(routes.DeclarationSummaryController.onPageLoad(ua.lrn))
+    case DeclarationTypePage      => ua => Some(routes.SecurityDetailsTypeController.onPageLoad(ua.lrn, NormalMode))
+    case SecurityDetailsTypePage  => ua => Some(routes.DeclarationSummaryController.onPageLoad(ua.lrn))
   }
 
   override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {

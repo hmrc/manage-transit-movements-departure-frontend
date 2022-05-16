@@ -17,32 +17,31 @@
 package controllers
 
 import controllers.actions._
-import forms.AddSecurityDetailsFormProvider
-import models.{LocalReferenceNumber, Mode}
+import forms.SecurityDetailsFormProvider
+import javax.inject.Inject
+import models.{LocalReferenceNumber, Mode, SecurityDetailsType}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import pages.AddSecurityDetailsPage
+import pages.SecurityDetailsTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
+import uk.gov.hmrc.viewmodels.NunjucksSupport
+import views.html.SecurityDetailsTypeView
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddSecurityDetailsController @Inject() (
+class SecurityDetailsTypeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @PreTaskListDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: AddSecurityDetailsFormProvider,
+  formProvider: SecurityDetailsFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  view: SecurityDetailsTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -50,21 +49,13 @@ class AddSecurityDetailsController @Inject() (
 
   private val form = formProvider()
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(AddSecurityDetailsPage) match {
+      val preparedForm = request.userAnswers.get(SecurityDetailsTypePage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
-
-      val json = Json.obj(
-        "form"   -> preparedForm,
-        "mode"   -> mode,
-        "lrn"    -> lrn,
-        "radios" -> Radios.yesNo(preparedForm("value"))
-      )
-
-      renderer.render("addSecurityDetails.njk", json).map(Ok(_))
+      Ok(view(preparedForm, SecurityDetailsType.radioItems, lrn, mode))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
@@ -72,22 +63,12 @@ class AddSecurityDetailsController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => {
-
-            val json = Json.obj(
-              "form"   -> formWithErrors,
-              "mode"   -> mode,
-              "lrn"    -> lrn,
-              "radios" -> Radios.yesNo(formWithErrors("value"))
-            )
-
-            renderer.render("addSecurityDetails.njk", json).map(BadRequest(_))
-          },
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, SecurityDetailsType.radioItems, lrn, mode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(AddSecurityDetailsPage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(SecurityDetailsTypePage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(AddSecurityDetailsPage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(SecurityDetailsTypePage, mode, updatedAnswers))
         )
   }
 }

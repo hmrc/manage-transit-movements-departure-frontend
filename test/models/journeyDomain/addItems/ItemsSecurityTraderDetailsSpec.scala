@@ -18,6 +18,7 @@ package models.journeyDomain.addItems
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
+import models.SecurityDetailsType.{EntryAndExitSummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models.reference.{Country, CountryCode, CustomsOffice, MethodOfPayment}
 import models.{CommonAddress, EoriNumber}
 import org.scalacheck.Gen
@@ -25,12 +26,12 @@ import org.scalatest.TryValues
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity._
-import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage, QuestionPage}
+import pages.{OfficeOfDeparturePage, QuestionPage, SecurityDetailsTypePage}
 
 class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 
   private val itemSecurityTraderDetailsUa = emptyUserAnswers
-    .unsafeSetVal(AddSecurityDetailsPage)(true)
+    .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
     .unsafeSetVal(AddDangerousGoodsCodePage(index))(false)
     .unsafeSetVal(AddTransportChargesPaymentMethodPage)(true)
     .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
@@ -101,7 +102,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
       }
 
       "when add security details is false" in {
-        val userAnswers = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(false)
+        val userAnswers = emptyUserAnswers.unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
 
         val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).value
 
@@ -114,7 +115,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
       "when a mandatory page is missing" in {
 
         val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-          AddSecurityDetailsPage,
+          SecurityDetailsTypePage,
           AddDangerousGoodsCodePage(index),
           AddTransportChargesPaymentMethodPage,
           AddSafetyAndSecurityConsignorPage,

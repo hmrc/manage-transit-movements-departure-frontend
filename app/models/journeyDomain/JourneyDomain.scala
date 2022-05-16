@@ -18,9 +18,10 @@ package models.journeyDomain
 
 import cats.data._
 import cats.implicits._
+import models.SecurityDetailsType.NoSecurityDetails
 import models.journeyDomain.traderDetails.TraderDetails
 import models.reference.CountryCode
-import pages.AddSecurityDetailsPage
+import pages.SecurityDetailsTypePage
 
 case class ItemSections(itemDetails: NonEmptyList[ItemSection]) {
 
@@ -65,10 +66,10 @@ object JourneyDomain {
 
   implicit def userAnswersReader: UserAnswersReader[JourneyDomain] = {
 
-    val safetyAndSecurityReader: UserAnswersReader[Option[SafetyAndSecurity]] = AddSecurityDetailsPage.reader
+    val safetyAndSecurityReader: UserAnswersReader[Option[SafetyAndSecurity]] = SecurityDetailsTypePage.reader
       .flatMap {
-        case true  => UserAnswersReader[SafetyAndSecurity].map(_.some)
-        case false => none[SafetyAndSecurity].pure[UserAnswersReader]
+        case NoSecurityDetails => none[SafetyAndSecurity].pure[UserAnswersReader]
+        case _                 => UserAnswersReader[SafetyAndSecurity].map(_.some)
       }
 
     for {

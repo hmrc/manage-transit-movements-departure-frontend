@@ -24,7 +24,7 @@ import models.Index
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
 import models.reference.PackageType
 import models.userAnswerScenarios.Scenario1
-import pages.{AddSecurityDetailsPage, ItemTotalGrossMassPage}
+import pages.{ItemTotalGrossMassPage, SecurityDetailsTypePage}
 
 class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGenerator with UserAnswersSpecHelper {
 
@@ -47,11 +47,11 @@ class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGene
           forAll(genUserAnswerScenario) {
             userAnswerScenario =>
               val userAnswers = userAnswerScenario.userAnswers
-                .unsafeRemove(AddSecurityDetailsPage)
+                .unsafeRemove(SecurityDetailsTypePage)
 
               val result = UserAnswersReader[JourneyDomain].run(userAnswers).left.value
 
-              result.page mustBe AddSecurityDetailsPage
+              result.page mustBe SecurityDetailsTypePage
           }
         }
       }
