@@ -116,14 +116,14 @@ localReferenceNumber.error.required = Enter the local reference number
 localReferenceNumber.error.length = The local reference number must be 22 characters or less
 localReferenceNumber.error.invalidCharacters = The local reference number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
 
-securityDetailsType.title = Select which type of safety and security you need to add
-securityDetailsType.heading = Select which type of safety and security you need to add
+securityDetailsType.title = Select which type of safety and security details you need to add
+securityDetailsType.heading = Select which type of safety and security details you need to add
 securityDetailsType.noSecurity = No security
 securityDetailsType.entrySummaryDeclaration = Entry summary declaration (ENS)
 securityDetailsType.exitSummaryDeclaration = Exit summary declaration (EXS)
 securityDetailsType.entryAndExitSummaryDeclaration = Both entry and exit summary declarations (ENS and EXS)
-securityDetailsType.checkYourAnswersLabel = Safety and security added
-securityDetailsType.error.required = Select the type of safety and security you need to add
+securityDetailsType.checkYourAnswersLabel = Safety and security details added
+securityDetailsType.error.required = Select the type of safety and security details you need to add
 
 declarationSummary.title = Declaration summary
 declarationSummary.heading = Declaration summary
