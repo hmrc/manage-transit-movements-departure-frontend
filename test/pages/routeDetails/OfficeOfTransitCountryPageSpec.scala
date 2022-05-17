@@ -16,13 +16,10 @@
 
 package pages.routeDetails
 
-import models.Index
 import models.reference.CountryCode
 import pages.behaviours.PageBehaviours
 
 class OfficeOfTransitCountryPageSpec extends PageBehaviours {
-
-  val index = Index(0)
 
   "OfficeOfTransitCountryPage" - {
 

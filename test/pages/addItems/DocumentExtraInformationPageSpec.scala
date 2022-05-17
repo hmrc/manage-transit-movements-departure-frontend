@@ -16,10 +16,9 @@
 
 package pages.addItems
 
-import models.Index
 import pages.behaviours.PageBehaviours
 
-class DocumentExtraInformationPageSpec(index: Index, documentIndex: Index) extends PageBehaviours {
+class DocumentExtraInformationPageSpec extends PageBehaviours {
 
   "DocumentExtraInformationPage" - {
 

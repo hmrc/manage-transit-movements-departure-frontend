@@ -16,14 +16,9 @@
 
 package pages.addItems
 
-import generators.UserAnswersGenerator
-import models.Index
 import pages.behaviours.PageBehaviours
 
-class DocumentTypePageSpec extends PageBehaviours with UserAnswersGenerator {
-
-  private val index         = Index(0)
-  private val documentIndex = Index(0)
+class DocumentTypePageSpec extends PageBehaviours {
 
   "DocumentTypePage" - {
 

@@ -16,8 +16,8 @@
 
 package pages.preTaskList
 
+import models.ProcedureType
 import models.ProcedureType._
-import models.{ProcedureType, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
@@ -35,9 +35,9 @@ class ProcedureTypePageSpec extends PageBehaviours {
 
       "must remove TIRCarnetReferencePage" - {
         "when Simplified selected" in {
-          forAll(arbitrary[UserAnswers], arbitrary[String]) {
-            (userAnswers, carnetReference) =>
-              val preChange  = userAnswers.unsafeSetVal(TIRCarnetReferencePage)(carnetReference)
+          forAll(arbitrary[String]) {
+            carnetReference =>
+              val preChange  = emptyUserAnswers.unsafeSetVal(TIRCarnetReferencePage)(carnetReference)
               val postChange = preChange.set(ProcedureTypePage, Simplified).success.value
 
               postChange.get(TIRCarnetReferencePage) mustNot be(defined)
@@ -47,9 +47,9 @@ class ProcedureTypePageSpec extends PageBehaviours {
 
       "must not remove TIRCarnetReferencePage" - {
         "when Normal selected" in {
-          forAll(arbitrary[UserAnswers], arbitrary[String]) {
-            (userAnswers, carnetReference) =>
-              val preChange  = userAnswers.unsafeSetVal(TIRCarnetReferencePage)(carnetReference)
+          forAll(arbitrary[String]) {
+            carnetReference =>
+              val preChange  = emptyUserAnswers.unsafeSetVal(TIRCarnetReferencePage)(carnetReference)
               val postChange = preChange.set(ProcedureTypePage, Normal).success.value
 
               postChange.get(TIRCarnetReferencePage) must be(defined)

@@ -16,10 +16,9 @@
 
 package pages.addItems
 
-import models.Index
 import pages.behaviours.PageBehaviours
 
-class ConfirmRemovePreviousAdministrativeReferencePageSpec(index: Index, referenceIndex: Index) extends PageBehaviours {
+class ConfirmRemovePreviousAdministrativeReferencePageSpec extends PageBehaviours {
 
   "ConfirmRemovePreviousAdministrativeReferencePage" - {
 

@@ -16,20 +16,17 @@
 
 package pages
 
-import models.Index
 import pages.addItems.ExtraInformationPage
 import pages.behaviours.PageBehaviours
 
 class ExtraInformationPageSpec extends PageBehaviours {
 
-  private val index = Index(0)
-
   "ExtraInformationPage" - {
 
-    beRetrievable[String](ExtraInformationPage(index, index))
+    beRetrievable[String](ExtraInformationPage(index, referenceIndex))
 
-    beSettable[String](ExtraInformationPage(index, index))
+    beSettable[String](ExtraInformationPage(index, referenceIndex))
 
-    beRemovable[String](ExtraInformationPage(index, index))
+    beRemovable[String](ExtraInformationPage(index, referenceIndex))
   }
 }

@@ -16,13 +16,10 @@
 
 package pages.addItems
 
-import models.Index
 import pages.behaviours.PageBehaviours
 
 class AddAnotherPreviousAdministrativeReferencePageSpec extends PageBehaviours {
 
-  val index          = Index(0)
-  val referenceIndex = Index(0)
   "AddAnotherPreviousAdministrativeReferencePage" - {
 
     beRetrievable[Boolean](AddAnotherPreviousAdministrativeReferencePage(index))
