@@ -21,7 +21,6 @@ import models.NormalMode
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
 import views.html.TirCarnetReferenceView
 
@@ -40,11 +39,11 @@ class TIRCarnetReferenceViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink
 
-  behave like pageWithCaption(messages("items.preHeading"))
+  behave like pageWithCaption("Items")
 
   behave like pageWithHeading()
 
-  behave like pageWithInputText(Some(InputSize.ThreeQuarterWidth))
+  behave like pageWithInputText()
 
   behave like pageWithSubmitButton("Save and continue")
 }

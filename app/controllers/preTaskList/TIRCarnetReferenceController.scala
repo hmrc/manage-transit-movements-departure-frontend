@@ -19,10 +19,9 @@ package controllers.preTaskList
 import controllers.actions._
 import forms.preTaskList.TIRCarnetReferenceFormProvider
 import models.DeclarationType.Option4
-import models.{Index, LocalReferenceNumber, Mode}
+import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import pages.addItems.DocumentTypePage
 import pages.preTaskList.{DeclarationTypePage, TIRCarnetReferencePage}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -71,16 +70,15 @@ class TIRCarnetReferenceController @Inject() (
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
                 value =>
                   for {
-                    ua1 <- Future.fromTry(request.userAnswers.set(TIRCarnetReferencePage, value))
-                    ua2 <- Future.fromTry(ua1.set(DocumentTypePage(Index(0), Index(0)), "952"))
-                    _   <- sessionRepository.set(ua2)
-                  } yield Redirect(navigator.nextPage(TIRCarnetReferencePage, mode, ua2))
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(TIRCarnetReferencePage, value))
+                    _              <- sessionRepository.set(updatedAnswers)
+                  } yield Redirect(navigator.nextPage(TIRCarnetReferencePage, mode, updatedAnswers))
               )
           case Some(otherOption) =>
-            logger.warn(s"[Controller][TIRCarnetReference][onPageLoad] Cannot create TIR carnet reference for $otherOption")
+            logger.warn(s"[TIRCarnetReferenceController][onSubmit] Cannot create TIR carnet reference for $otherOption")
             Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
           case None =>
-            logger.warn(s"[Controller][TIRCarnetReference][onPageLoad] DeclarationTypePage is missing")
+            logger.warn(s"[TIRCarnetReferenceController][onSubmit] DeclarationTypePage is missing")
             Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
         }
     }

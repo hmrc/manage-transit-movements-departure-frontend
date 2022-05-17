@@ -48,5 +48,5 @@ class DeclarationTypeViewSpec extends RadioViewBehaviours[DeclarationType] {
 
   behave like pageWithRadioItems()
 
-  behave like pageWithSubmitButton("Save and continue")
+  behave like pageWithSubmitButton("Continue")
 }

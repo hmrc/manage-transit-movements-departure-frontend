@@ -56,5 +56,5 @@ class OfficeOfDepartureViewSpec extends InputSelectViewBehaviours[CustomsOffice]
 
   behave like pageWithContent("p", "This is the Customs office where the transit movement starts.")
 
-  behave like pageWithSubmitButton("Save and continue")
+  behave like pageWithSubmitButton("Continue")
 }

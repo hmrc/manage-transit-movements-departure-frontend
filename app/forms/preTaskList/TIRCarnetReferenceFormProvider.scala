@@ -16,9 +16,9 @@
 
 package forms.preTaskList
 
-import forms.Constants.{tirCarnetReferenceMaxLength, tirCarnetReferenceMinLength}
+import forms.Constants.tirCarnetReferenceMaxLength
 import forms.mappings.Mappings
-import models.domain.StringFieldRegex.alphaNumericWithSpaceRegex
+import models.domain.StringFieldRegex.alphaNumericRegex
 import play.api.data.Form
 
 import javax.inject.Inject
@@ -30,9 +30,8 @@ class TIRCarnetReferenceFormProvider @Inject() extends Mappings {
       "value" -> trimmedText("tirCarnetReference.error.required")
         .verifying(
           forms.StopOnFirstFail[String](
-            minLength(tirCarnetReferenceMinLength, "tirCarnetReference.error.minLength", tirCarnetReferenceMinLength),
             maxLength(tirCarnetReferenceMaxLength, "tirCarnetReference.error.maxLength", tirCarnetReferenceMaxLength),
-            regexp(alphaNumericWithSpaceRegex, "tirCarnetReference.error.invalidCharacters")
+            regexp(alphaNumericRegex, "tirCarnetReference.error.invalidCharacters")
           )
         )
     )

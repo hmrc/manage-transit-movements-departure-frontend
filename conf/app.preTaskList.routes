@@ -16,10 +16,10 @@ POST       /:lrn/pre-task-list/declaration-type                     controllers.
 GET        /:lrn/pre-task-list/change-declaration-type              controllers.preTaskList.DeclarationTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/pre-task-list/change-declaration-type              controllers.preTaskList.DeclarationTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/pre-task-list/tir-carnet-reference                 controllers.preTaskList.TIRCarnetReferenceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/pre-task-list/tir-carnet-reference                 controllers.preTaskList.TIRCarnetReferenceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/pre-task-list/change-tir-carnet-reference          controllers.preTaskList.TIRCarnetReferenceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/pre-task-list/change-tir-carnet-reference          controllers.preTaskList.TIRCarnetReferenceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/pre-task-list/tir-carnet                           controllers.preTaskList.TIRCarnetReferenceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/pre-task-list/tir-carnet                           controllers.preTaskList.TIRCarnetReferenceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/pre-task-list/change-tir-carnet                    controllers.preTaskList.TIRCarnetReferenceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/pre-task-list/change-tir-carnet                    controllers.preTaskList.TIRCarnetReferenceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/pre-task-list/security-details                     controllers.preTaskList.SecurityDetailsTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/pre-task-list/security-details                     controllers.preTaskList.SecurityDetailsTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)

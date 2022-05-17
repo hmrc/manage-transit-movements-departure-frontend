@@ -42,10 +42,9 @@
 
         @inputText(
             field = form("value"),
-            label = messages("tirCarnetReference.heading"),
-            inputClass = InputSize.ThreeQuarterWidth
+            label = messages("tirCarnetReference.heading")
         )
 
-        @button(attributes = Map("id" -> "submit"))
+        @button(messageKey = "site.continue", attributes = Map("id" -> "submit"))
     }
 }
