@@ -40,11 +40,9 @@ class TIRCarnetReferenceViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink
 
-  behave like pageWithCaption(messages("items.preHeading"))
-
   behave like pageWithHeading()
 
-  behave like pageWithInputText(Some(InputSize.ThreeQuarterWidth))
+  behave like pageWithInputText(Some(InputSize.Width10))
 
-  behave like pageWithSubmitButton("Save and continue")
+  behave like pageWithSubmitButton("Continue")
 }

@@ -16,19 +16,17 @@
 
 package forms.preTaskList
 
-import forms.Constants.{tirCarnetReferenceMaxLength, tirCarnetReferenceMinLength}
+import forms.Constants.tirCarnetReferenceMaxLength
 import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
 
 class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey  = "tirCarnetReference.error.required"
-  val maxLengthKey = "tirCarnetReference.error.maxLength"
-  val minLengthKey = "tirCarnetReference.error.minLength"
-  val invalidKey   = "tirCarnetReference.error.invalidCharacters"
-  val maxLength    = tirCarnetReferenceMaxLength
-  val minLength    = tirCarnetReferenceMinLength
-  val form         = new TIRCarnetReferenceFormProvider()()
+  private val requiredKey  = "tirCarnetReference.error.required"
+  private val maxLengthKey = "tirCarnetReference.error.maxLength"
+  private val invalidKey   = "tirCarnetReference.error.invalidCharacters"
+  private val maxLength    = tirCarnetReferenceMaxLength
+  private val form         = new TIRCarnetReferenceFormProvider()()
 
   ".value" - {
 
@@ -45,13 +43,6 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
       fieldName,
       maxLength = maxLength,
       lengthError = FormError(fieldName, maxLengthKey, Seq(maxLength))
-    )
-
-    behave like fieldWithMinLength(
-      form,
-      fieldName,
-      minLength = minLength,
-      lengthError = FormError(fieldName, minLengthKey, Seq(minLength))
     )
 
     behave like mandatoryField(

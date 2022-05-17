@@ -15,7 +15,7 @@
  *@
 
 @import controllers.preTaskList.routes
-@import views.html.components.{Button, ErrorSummary, InputText, HeadingCaption}
+@import views.html.components.{Button, ErrorSummary, InputText}
 @import models.LocalReferenceNumber
 
 @this(
@@ -23,7 +23,6 @@
     formHelper: FormWithCSRF,
     button: Button,
     inputText: InputText,
-    caption: HeadingCaption,
     errorSummary: ErrorSummary
 )
 
@@ -39,12 +38,10 @@
 
         @errorSummary(form.errors)
 
-        @caption(messages("items.preHeading"))
-
         @inputText(
             field = form("value"),
             label = messages("tirCarnetReference.heading"),
-            inputClass = InputSize.ThreeQuarterWidth
+            inputClass = InputSize.Width10
         )
 
         @button(attributes = Map("id" -> "submit"))

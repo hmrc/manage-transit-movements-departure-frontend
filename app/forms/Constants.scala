@@ -25,6 +25,5 @@ object Constants {
   lazy val loadingPlaceMaxLength: Int     = 35
   lazy val maxLengthAgreedLocationOfGoods = 35
   lazy val tirCarnetReferenceMaxLength    = 12
-  lazy val tirCarnetReferenceMinLength    = 2
   lazy val tirGuaranteeReferenceMaxLength = 35
 }

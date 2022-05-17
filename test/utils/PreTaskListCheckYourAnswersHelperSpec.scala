@@ -44,7 +44,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
             val result = helper.localReferenceNumber
 
             result mustBe SummaryListRow(
-              key = Key("Local reference number".toText, classes = "govuk-!-width-one-half"),
+              key = Key("Local reference number (LRN)".toText, classes = "govuk-!-width-one-half"),
               value = Value(s"$lrn".toText),
               actions = Some(
                 Actions(
@@ -52,7 +52,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                     ActionItem(
                       content = "Change".toText,
                       href = routes.LocalReferenceNumberController.onPageLoad().url,
-                      visuallyHiddenText = Some("the local reference number"),
+                      visuallyHiddenText = Some("local reference number"),
                       attributes = Map()
                     )
                   )
@@ -94,7 +94,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                         ActionItem(
                           content = "Change".toText,
                           href = routes.OfficeOfDepartureController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("the office of departure"),
+                          visuallyHiddenText = Some("office of departure"),
                           attributes = Map()
                         )
                       )
@@ -138,7 +138,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                         ActionItem(
                           content = "Change".toText,
                           href = routes.ProcedureTypeController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("the type of procedure"),
+                          visuallyHiddenText = Some("type of procedure"),
                           attributes = Map()
                         )
                       )
@@ -174,7 +174,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Declaration type".toText, classes = "govuk-!-width-one-half"),
+                  key = Key("Type of declaration".toText, classes = "govuk-!-width-one-half"),
                   value = Value(messages(s"declarationType.$declarationType").toText),
                   actions = Some(
                     Actions(
@@ -182,7 +182,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                         ActionItem(
                           content = "Change".toText,
                           href = routes.DeclarationTypeController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("the declaration type"),
+                          visuallyHiddenText = Some("type of declaration"),
                           attributes = Map()
                         )
                       )
@@ -218,7 +218,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("TIR Carnet reference".toText, classes = "govuk-!-width-one-half"),
+                  key = Key("TIR carnet reference".toText, classes = "govuk-!-width-one-half"),
                   value = Value(tirCarnetReference.toText),
                   actions = Some(
                     Actions(
@@ -226,7 +226,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                         ActionItem(
                           content = "Change".toText,
                           href = routes.TIRCarnetReferenceController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("the TIR Carnet reference"),
+                          visuallyHiddenText = Some("TIR carnet reference"),
                           attributes = Map()
                         )
                       )
@@ -262,7 +262,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Type of security details".toText, classes = "govuk-!-width-one-half"),
+                  key = Key("Safety and security details added".toText, classes = "govuk-!-width-one-half"),
                   value = Value(messages(s"securityDetailsType.$securityDetailsType").toText),
                   actions = Some(
                     Actions(
@@ -270,7 +270,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                         ActionItem(
                           content = "Change".toText,
                           href = routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("the type of security details"),
+                          visuallyHiddenText = Some("safety and security details added"),
                           attributes = Map()
                         )
                       )
