@@ -21,7 +21,12 @@ import java.time.LocalDateTime
 import base.{AppWithDefaultMockFixtures, GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.UserAnswersGenerator
-import models.SecurityDetailsType.{EntryAndExitSummaryDeclarationSecurityDetails, EntrySummaryDeclarationSecurityDetails, ExitSummaryDeclarationSecurityDetails, NoSecurityDetails}
+import models.SecurityDetailsType.{
+  EntryAndExitSummaryDeclarationSecurityDetails,
+  EntrySummaryDeclarationSecurityDetails,
+  ExitSummaryDeclarationSecurityDetails,
+  NoSecurityDetails
+}
 import models.journeyDomain.GoodsSummary.GoodSummarySimplifiedDetails
 import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
 import models.journeyDomain.TransportDetails.InlandMode.Rail
@@ -95,18 +100,18 @@ class DeclarationRequestServiceSpec
 
         "Pass value for the secHEA358When based on Safety and Security answer for NoSecurityDetails" in {
 
-            val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
+          val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
 
-            when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-            when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+          when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+          when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
-            val updatedUserAnswer = Scenario1.userAnswers
-              .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
+          val updatedUserAnswer = Scenario1.userAnswers
+            .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
 
-            val result = service.convert(updatedUserAnswer).futureValue
+          val result = service.convert(updatedUserAnswer).futureValue
 
-            result.isRight mustBe true
-            result.value.header.secHEA358 mustBe Some(0)
+          result.isRight mustBe true
+          result.value.header.secHEA358 mustBe Some(0)
         }
 
         "Pass value for the secHEA358When based on Safety and Security answer for EntrySummaryDeclarationSecurityDetails" in {
