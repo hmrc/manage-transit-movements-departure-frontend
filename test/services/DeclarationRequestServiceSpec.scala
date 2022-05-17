@@ -21,12 +21,7 @@ import java.time.LocalDateTime
 import base.{AppWithDefaultMockFixtures, GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.UserAnswersGenerator
-import models.SecurityDetailsType.{
-  EntryAndExitSummaryDeclarationSecurityDetails,
-  EntrySummaryDeclarationSecurityDetails,
-  ExitSummaryDeclarationSecurityDetails,
-  NoSecurityDetails
-}
+import models.SecurityDetailsType.{EntryAndExitSummaryDeclarationSecurityDetails, EntrySummaryDeclarationSecurityDetails, ExitSummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models.journeyDomain.GoodsSummary.GoodSummarySimplifiedDetails
 import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
 import models.journeyDomain.TransportDetails.InlandMode.Rail
@@ -42,6 +37,7 @@ import org.scalacheck.Gen
 import org.scalatest.BeforeAndAfterEach
 import pages._
 import pages.generalInformation.{ContainersUsedPage, PreLodgeDeclarationPage}
+import pages.preTaskList.SecurityDetailsTypePage
 import pages.traderDetails.{IsPrincipalEoriKnownPage, PrincipalAddressPage, PrincipalNamePage, WhatIsPrincipalEoriPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -97,31 +93,68 @@ class DeclarationRequestServiceSpec
 
       "secHEA358" - {
 
-        "Pass value for the secHEA358When based on Safety and Security answer being NoSecurityDetails" in {
+        "Pass value for the secHEA358When based on Safety and Security answer for NoSecurityDetails" in {
 
-          forAll(genUserAnswerScenario) {
-            userAnswerScenario =>
-              val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
+            val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
 
-              when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+            when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+            when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
-              val result = service.convert(userAnswerScenario.userAnswers).futureValue
+            val updatedUserAnswer = Scenario1.userAnswers
+              .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
 
-              result.isRight mustBe true
+            val result = service.convert(updatedUserAnswer).futureValue
 
-              userAnswerScenario.toModel.preTaskList.securityDetailsType match {
-                case NoSecurityDetails                             => result.value.header.secHEA358 mustBe Some(0)
-                case EntrySummaryDeclarationSecurityDetails        => result.value.header.secHEA358 mustBe Some(1)
-                case ExitSummaryDeclarationSecurityDetails         => result.value.header.secHEA358 mustBe Some(2)
-                case EntryAndExitSummaryDeclarationSecurityDetails => result.value.header.secHEA358 mustBe Some(3)
-                case _                                             => result.value.header.secHEA358 mustBe None
-              }
+            result.isRight mustBe true
+            result.value.header.secHEA358 mustBe Some(0)
+        }
 
-              if (userAnswerScenario.toModel.preTaskList.securityDetailsType.requiresSecurityDetails) {
-                result.value.header.secHEA358 mustBe Some(1)
-              } else {}
-          }
+        "Pass value for the secHEA358When based on Safety and Security answer for EntrySummaryDeclarationSecurityDetails" in {
+
+          val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
+
+          when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+          when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+          val updatedUserAnswer = Scenario1.userAnswers
+            .unsafeSetVal(SecurityDetailsTypePage)(EntrySummaryDeclarationSecurityDetails)
+
+          val result = service.convert(updatedUserAnswer).futureValue
+
+          result.isRight mustBe true
+          result.value.header.secHEA358 mustBe Some(1)
+        }
+
+        "Pass value for the secHEA358When based on Safety and Security answer for ExitSummaryDeclarationSecurityDetails" in {
+
+          val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
+
+          when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+          when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+          val updatedUserAnswer = Scenario1.userAnswers
+            .unsafeSetVal(SecurityDetailsTypePage)(ExitSummaryDeclarationSecurityDetails)
+
+          val result = service.convert(updatedUserAnswer).futureValue
+
+          result.isRight mustBe true
+          result.value.header.secHEA358 mustBe Some(2)
+        }
+
+        "Pass value for the secHEA358When based on Safety and Security answer for EntyAndExitSummaryDeclarationSecurityDetails" in {
+
+          val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
+
+          when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+          when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+          val updatedUserAnswer = Scenario1.userAnswers
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
+
+          val result = service.convert(updatedUserAnswer).futureValue
+
+          result.isRight mustBe true
+          result.value.header.secHEA358 mustBe Some(3)
         }
       }
 
