@@ -21,6 +21,12 @@ import java.time.LocalDateTime
 import base.{AppWithDefaultMockFixtures, GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.UserAnswersGenerator
+import models.SecurityDetailsType.{
+  EntryAndExitSummaryDeclarationSecurityDetails,
+  EntrySummaryDeclarationSecurityDetails,
+  ExitSummaryDeclarationSecurityDetails,
+  NoSecurityDetails
+}
 import models.journeyDomain.GoodsSummary.GoodSummarySimplifiedDetails
 import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
 import models.journeyDomain.TransportDetails.InlandMode.Rail
@@ -91,7 +97,7 @@ class DeclarationRequestServiceSpec
 
       "secHEA358" - {
 
-        "Pass value for the secHEA358When based on Safety and Security answer" in {
+        "Pass value for the secHEA358When based on Safety and Security answer being NoSecurityDetails" in {
 
           forAll(genUserAnswerScenario) {
             userAnswerScenario =>
@@ -104,11 +110,17 @@ class DeclarationRequestServiceSpec
 
               result.isRight mustBe true
 
+              userAnswerScenario.toModel.preTaskList.securityDetailsType match {
+                case NoSecurityDetails                             => result.value.header.secHEA358 mustBe Some(0)
+                case EntrySummaryDeclarationSecurityDetails        => result.value.header.secHEA358 mustBe Some(1)
+                case ExitSummaryDeclarationSecurityDetails         => result.value.header.secHEA358 mustBe Some(2)
+                case EntryAndExitSummaryDeclarationSecurityDetails => result.value.header.secHEA358 mustBe Some(3)
+                case _                                             => result.value.header.secHEA358 mustBe None
+              }
+
               if (userAnswerScenario.toModel.preTaskList.securityDetailsType.requiresSecurityDetails) {
                 result.value.header.secHEA358 mustBe Some(1)
-              } else {
-                result.value.header.secHEA358 mustBe None
-              }
+              } else {}
           }
         }
       }

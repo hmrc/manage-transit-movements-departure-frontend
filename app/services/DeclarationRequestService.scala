@@ -41,12 +41,18 @@ import models.messages.guarantee.{Guarantee, GuaranteeReferenceWithGrn, Guarante
 import models.messages.header.{Header, Transport}
 import models.messages.safetyAndSecurity._
 import models.messages.trader._
-import models.{CommonAddress, EoriNumber, UserAnswers}
+import models.{CommonAddress, EoriNumber, SecurityDetailsType, UserAnswers}
 import play.api.Logging
 import repositories.InterchangeControlReferenceIdRepository
 import java.time.LocalDateTime
 
 import javax.inject.Inject
+import models.SecurityDetailsType.{
+  EntryAndExitSummaryDeclarationSecurityDetails,
+  EntrySummaryDeclarationSecurityDetails,
+  ExitSummaryDeclarationSecurityDetails,
+  NoSecurityDetails
+}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -349,6 +355,14 @@ class DeclarationRequestService @Inject() (
         countryCode => models.messages.Itinerary(countryCode.countryCode.code)
       )
 
+    def safetyAndSecurityHeaderCode(securityDetailsType: SecurityDetailsType): Option[Int] =
+      securityDetailsType match {
+        case NoSecurityDetails                             => Some(0)
+        case EntrySummaryDeclarationSecurityDetails        => Some(1)
+        case ExitSummaryDeclarationSecurityDetails         => Some(2)
+        case EntryAndExitSummaryDeclarationSecurityDetails => Some(3)
+        case _                                             => None
+      }
     DeclarationRequest(
       Meta(
         interchangeControlReference = icr,
@@ -383,7 +397,7 @@ class DeclarationRequestService @Inject() (
         speCirIndHEA1 = safetyAndSecurity.flatMap(_.circumstanceIndicator),
         traChaMetOfPayHEA1 = safetyAndSecurity.flatMap(_.paymentMethod.map(_.code)) orElse headerPaymentMethodFromItemDetails(journeyDomain.itemDetails),
         comRefNumHEA = safetyAndSecurity.flatMap(_.commercialReferenceNumber) orElse headerCommercialReferenceNumberFromItemDetails(journeyDomain.itemDetails),
-        secHEA358 = if (preTaskList.securityDetailsType.requiresSecurityDetails) Some(1) else None,
+        secHEA358 = safetyAndSecurityHeaderCode(preTaskList.securityDetailsType),
         conRefNumHEA = safetyAndSecurity.flatMap(_.conveyanceReferenceNumber),
         codPlUnHEA357 = safetyAndSecurity.flatMap(_.placeOfUnloading)
       ),
