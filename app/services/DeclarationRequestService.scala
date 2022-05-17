@@ -383,7 +383,7 @@ class DeclarationRequestService @Inject() (
         speCirIndHEA1 = safetyAndSecurity.flatMap(_.circumstanceIndicator),
         traChaMetOfPayHEA1 = safetyAndSecurity.flatMap(_.paymentMethod.map(_.code)) orElse headerPaymentMethodFromItemDetails(journeyDomain.itemDetails),
         comRefNumHEA = safetyAndSecurity.flatMap(_.commercialReferenceNumber) orElse headerCommercialReferenceNumberFromItemDetails(journeyDomain.itemDetails),
-        secHEA358 = if (preTaskList.securityDetailsType.requiresSecurityDetails) Some(1) else None,
+        secHEA358 = Some(preTaskList.securityDetailsType.securityContentType),
         conRefNumHEA = safetyAndSecurity.flatMap(_.conveyanceReferenceNumber),
         codPlUnHEA357 = safetyAndSecurity.flatMap(_.placeOfUnloading)
       ),
