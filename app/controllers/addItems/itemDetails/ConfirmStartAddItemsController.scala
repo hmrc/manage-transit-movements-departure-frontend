@@ -18,11 +18,13 @@ package controllers.addItems.itemDetails
 
 import controllers.actions._
 import forms.ConfirmStartAddItemsFormProvider
+
+import javax.inject.Inject
 import models.{DependentSection, LocalReferenceNumber, NormalMode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsItemDetails
-import pages.AddSecurityDetailsPage
 import pages.addItems.ConfirmStartAddItemsPage
+import pages.preTaskList.SecurityDetailsTypePage
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -32,7 +34,6 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmStartAddItemsController @Inject() (
@@ -61,20 +62,20 @@ class ConfirmStartAddItemsController @Inject() (
     andThen checkDependentSection(DependentSection.ItemDetails)).async {
     implicit request =>
       request.userAnswers
-        .get(AddSecurityDetailsPage)
+        .get(SecurityDetailsTypePage)
         .map {
           safetyAndSecurity =>
             val json = Json.obj(
               "form"   -> form,
               "lrn"    -> lrn,
-              "safety" -> safetyAndSecurity,
+              "safety" -> safetyAndSecurity.requiresSecurityDetails,
               "radios" -> Radios.yesNo(form("value"))
             )
 
             renderer.render(template, json).map(Ok(_))
         }
         .getOrElse {
-          logger.warn("[onPageLoad] redirecting to session expired controller because AddSecurityDetailsPage not answered")
+          logger.warn("[onPageLoad] redirecting to session expired controller because SecurityDetailsTypePage not answered")
           Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
         }
   }
@@ -85,7 +86,7 @@ class ConfirmStartAddItemsController @Inject() (
     andThen checkDependentSection(DependentSection.ItemDetails)).async {
     implicit request =>
       request.userAnswers
-        .get(AddSecurityDetailsPage)
+        .get(SecurityDetailsTypePage)
         .map {
           safetyAndSecurity =>
             form
@@ -96,7 +97,7 @@ class ConfirmStartAddItemsController @Inject() (
                   val json = Json.obj(
                     "form"   -> formWithErrors,
                     "lrn"    -> lrn,
-                    "safety" -> safetyAndSecurity,
+                    "safety" -> safetyAndSecurity.requiresSecurityDetails,
                     "radios" -> Radios.yesNo(formWithErrors("value"))
                   )
 
@@ -110,7 +111,7 @@ class ConfirmStartAddItemsController @Inject() (
               )
         }
         .getOrElse {
-          logger.warn("[onSubmit] redirecting to session expired controller because AddSecurityDetailsPage not answered")
+          logger.warn("[onSubmit] redirecting to session expired controller because SecurityDetailsTypePage not answered")
           Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
         }
   }

@@ -27,6 +27,8 @@ import pages._
 import pages.generalInformation.PreLodgeDeclarationPage
 
 import java.time.LocalDate
+import models.SecurityDetailsType.{EntryAndExitSummaryDeclarationSecurityDetails, NoSecurityDetails}
+import pages.preTaskList.{ProcedureTypePage, SecurityDetailsTypePage}
 
 class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
@@ -46,7 +48,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(ProcedureTypePage)(Simplified)
-          .unsafeSetVal(AddSecurityDetailsPage)(false)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(AuthorisedLocationCodePage)("authLocation")
           .unsafeSetVal(ControlResultDateLimitPage)(dateNow)
           .unsafeSetVal(AddSealsPage)(false)
@@ -68,7 +70,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(PreLodgeDeclarationPage)(false)
-            .unsafeSetVal(AddSecurityDetailsPage)(true)
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
             .unsafeSetVal(LoadingPlacePage)("loadingPlace")
             .unsafeSetVal(AddCustomsApprovedLocationPage)(true)
             .unsafeSetVal(CustomsApprovedLocationPage)("approvedLocation")
@@ -90,7 +92,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(PreLodgeDeclarationPage)(false)
-            .unsafeSetVal(AddSecurityDetailsPage)(false)
+            .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
             .unsafeSetVal(AddCustomsApprovedLocationPage)(false)
             .unsafeSetVal(AddAgreedLocationOfGoodsPage)(true)
             .unsafeSetVal(AgreedLocationOfGoodsPage)("agreedLocationOfGoods")
@@ -113,7 +115,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(PreLodgeDeclarationPage)(false)
-            .unsafeSetVal(AddSecurityDetailsPage)(false)
+            .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
             .unsafeSetVal(AddCustomsApprovedLocationPage)(false)
             .unsafeSetVal(AddAgreedLocationOfGoodsPage)(false)
             .unsafeSetVal(CustomsApprovedLocationPage)("approvedLocation")
@@ -135,7 +137,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(PreLodgeDeclarationPage)(true)
-            .unsafeSetVal(AddSecurityDetailsPage)(false)
+            .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
             .unsafeSetVal(AddAgreedLocationOfGoodsPage)(true)
             .unsafeSetVal(AgreedLocationOfGoodsPage)("agreedLocationOfGoods")
             .unsafeSetVal(AddSealsPage)(false)
@@ -156,7 +158,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(PreLodgeDeclarationPage)(true)
-            .unsafeSetVal(AddSecurityDetailsPage)(false)
+            .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
             .unsafeSetVal(AddAgreedLocationOfGoodsPage)(false)
             .unsafeSetVal(AddSealsPage)(true)
             .unsafeSetVal(SealIdDetailsPage(index))(SealDomain("numberOrMark1"))
@@ -175,16 +177,16 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(ProcedureTypePage)(Normal)
           .unsafeSetVal(PreLodgeDeclarationPage)(false)
-          .unsafeSetVal(AddSecurityDetailsPage)(true)
+          .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
           .unsafeSetVal(LoadingPlacePage)("loadingPlace")
           .unsafeSetVal(AddCustomsApprovedLocationPage)(true)
           .unsafeSetVal(CustomsApprovedLocationPage)("approvedLocation")
           .unsafeSetVal(AddSealsPage)(false)
-          .unsafeRemove(AddSecurityDetailsPage)
+          .unsafeRemove(SecurityDetailsTypePage)
 
         val result = UserAnswersReader[GoodsSummary].run(userAnswers)
 
-        result.left.value.page mustBe AddSecurityDetailsPage
+        result.left.value.page mustBe SecurityDetailsTypePage
       }
 
       "when Normal" - {
@@ -194,7 +196,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(PreLodgeDeclarationPage)(false)
-            .unsafeSetVal(AddSecurityDetailsPage)(true)
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
             .unsafeSetVal(LoadingPlacePage)("loadingPlace")
             .unsafeSetVal(CustomsApprovedLocationPage)("approvedLocation")
             .unsafeSetVal(AddSealsPage)(false)
@@ -209,7 +211,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(PreLodgeDeclarationPage)(false)
-            .unsafeSetVal(AddSecurityDetailsPage)(true)
+            .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
             .unsafeSetVal(LoadingPlacePage)("loadingPlace")
             .unsafeSetVal(AddCustomsApprovedLocationPage)(true)
             .unsafeSetVal(AddSealsPage)(false)
@@ -224,7 +226,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(PreLodgeDeclarationPage)(true)
-            .unsafeSetVal(AddSecurityDetailsPage)(false)
+            .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
             .unsafeSetVal(AgreedLocationOfGoodsPage)("agreedLocationOfGoods")
             .unsafeSetVal(AddSealsPage)(false)
 
@@ -238,7 +240,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(PreLodgeDeclarationPage)(true)
-            .unsafeSetVal(AddSecurityDetailsPage)(false)
+            .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
             .unsafeSetVal(AddAgreedLocationOfGoodsPage)(true)
             .unsafeSetVal(AddSealsPage)(false)
 
@@ -263,7 +265,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
               val userAnswers = emptyUserAnswers
                 .unsafeSetVal(ProcedureTypePage)(Simplified)
-                .unsafeSetVal(AddSecurityDetailsPage)(false)
+                .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
                 .unsafeSetVal(AuthorisedLocationCodePage)("authLocation")
                 .unsafeSetVal(ControlResultDateLimitPage)(dateNow)
                 .unsafeSetVal(AddSealsPage)(false)

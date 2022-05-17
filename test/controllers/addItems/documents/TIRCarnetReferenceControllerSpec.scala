@@ -18,41 +18,31 @@ package controllers.addItems.documents
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import forms.addItems.TIRCarnetReferenceFormProvider
-import matchers.JsonMatchers
+import forms.preTaskList.TIRCarnetReferenceFormProvider
 import models.DeclarationType.{Option1, Option4}
 import models.NormalMode
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsDocument
-import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{times, verify, when}
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.DeclarationTypePage
 import pages.addItems.TIRCarnetReferencePage
+import pages.preTaskList.DeclarationTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.twirl.api.Html
-import uk.gov.hmrc.viewmodels.NunjucksSupport
+import views.html.TirCarnetReferenceView
 
 import scala.concurrent.Future
 
-class TIRCarnetReferenceControllerSpec
-    extends SpecBase
-    with AppWithDefaultMockFixtures
-    with MockitoSugar
-    with NunjucksSupport
-    with JsonMatchers
-    with UserAnswersSpecHelper {
+class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with UserAnswersSpecHelper {
 
   private val formProvider = new TIRCarnetReferenceFormProvider()
   private val form         = formProvider()
-  private val template     = "tirCarnetReference.njk"
+  private val mode         = NormalMode
 
-  lazy val tirCarnetReferenceRoute = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, index, NormalMode).url
+  private lazy val tirCarnetReferenceRoute = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -63,68 +53,38 @@ class TIRCarnetReferenceControllerSpec
 
     "must return OK and the correct view for a GET" in {
 
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
-
       setUserAnswers(Some(emptyUserAnswers))
 
-      val request                                = FakeRequest(GET, tirCarnetReferenceRoute)
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+      val request = FakeRequest(GET, tirCarnetReferenceRoute)
 
       val result = route(app, request).value
 
+      val view = injector.instanceOf[TirCarnetReferenceView]
+
       status(result) mustEqual OK
 
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
-      val expectedJson = Json.obj(
-        "form"          -> form,
-        "mode"          -> NormalMode,
-        "lrn"           -> lrn,
-        "itemIndex"     -> itemIndex.display,
-        "documentIndex" -> documentIndex.display
-      )
-
-      val jsonWithoutConfig = jsonCaptor.getValue - configKey
-
-      templateCaptor.getValue mustEqual template
-      jsonWithoutConfig mustBe expectedJson
+      contentAsString(result) mustEqual
+        view(form, lrn, mode, itemIndex, documentIndex)(request, messages).toString
 
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
-
       val userAnswers = emptyUserAnswers.set(TIRCarnetReferencePage(index, index), "1234567890").success.value
       setUserAnswers(Some(userAnswers))
 
-      val request                                = FakeRequest(GET, tirCarnetReferenceRoute)
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+      val request = FakeRequest(GET, tirCarnetReferenceRoute)
 
       val result = route(app, request).value
 
       status(result) mustEqual OK
 
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
       val filledForm = form.bind(Map("value" -> "1234567890"))
 
-      val expectedJson = Json.obj(
-        "form"          -> filledForm,
-        "lrn"           -> lrn,
-        "mode"          -> NormalMode,
-        "itemIndex"     -> itemIndex.display,
-        "documentIndex" -> documentIndex.display
-      )
+      val view = injector.instanceOf[TirCarnetReferenceView]
 
-      val jsonWithoutConfig = jsonCaptor.getValue - configKey
-
-      templateCaptor.getValue mustEqual template
-      jsonWithoutConfig mustBe expectedJson
+      contentAsString(result) mustEqual
+        view(filledForm, lrn, mode, itemIndex, documentIndex)(request, messages).toString
 
     }
 
@@ -188,32 +148,19 @@ class TIRCarnetReferenceControllerSpec
       val userAnswers = emptyUserAnswers
         .unsafeSetVal(DeclarationTypePage)(Option4)
 
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
-
       setUserAnswers(Some(userAnswers))
 
-      val request                                = FakeRequest(POST, tirCarnetReferenceRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm                              = form.bind(Map("value" -> ""))
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+      val request   = FakeRequest(POST, tirCarnetReferenceRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      val view = injector.instanceOf[TirCarnetReferenceView]
 
-      val expectedJson = Json.obj(
-        "form"          -> boundForm,
-        "lrn"           -> lrn,
-        "mode"          -> NormalMode,
-        "itemIndex"     -> itemIndex.display,
-        "documentIndex" -> documentIndex.display
-      )
-
-      templateCaptor.getValue mustEqual template
-      jsonCaptor.getValue must containJson(expectedJson)
+      contentAsString(result) mustEqual
+        view(boundForm, lrn, mode, itemIndex, documentIndex)(request, messages).toString
 
     }
 

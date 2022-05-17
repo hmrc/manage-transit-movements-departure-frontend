@@ -21,7 +21,8 @@ import derivable.{DeriveNumberOfDocuments, DeriveNumberOfPreviousAdministrativeR
 import models.{CheckMode, DeclarationType, Index, Mode, NormalMode, UserAnswers}
 import navigation.Navigator
 import pages.addItems._
-import pages.{DeclarationTypePage, Page}
+import pages.Page
+import pages.preTaskList.DeclarationTypePage
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}

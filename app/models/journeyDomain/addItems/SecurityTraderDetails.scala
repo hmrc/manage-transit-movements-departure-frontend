@@ -22,7 +22,7 @@ import models.reference.{CountryCode, CustomsOffice}
 import models.{CommonAddress, EoriNumber, Index}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
-import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage}
+import pages.preTaskList.{OfficeOfDeparturePage, SecurityDetailsTypePage}
 
 sealed trait SecurityTraderDetails
 
@@ -50,8 +50,8 @@ object SecurityTraderDetails {
           case (name, address) => SecurityTraderDetails(name, address)
         }
 
-    AddSecurityDetailsPage
-      .filterOptionalDependent[Option[SecurityTraderDetails]](_ == true) {
+    SecurityDetailsTypePage
+      .filterOptionalDependent[Option[SecurityTraderDetails]](_.requiresSecurityDetails) {
         AddSafetyAndSecurityConsignorPage.filterOptionalDependent(_ == false) {
           (AddCircumstanceIndicatorPage.reader, CircumstanceIndicatorPage.optionalReader, OfficeOfDeparturePage.reader).tupled.flatMap {
             case (true, Some("E"), CustomsOffice(_, _, CountryCode("XI"), _)) => readEori
@@ -83,8 +83,8 @@ object SecurityTraderDetails {
             SecurityTraderDetails(name, address)
         }
 
-    AddSecurityDetailsPage
-      .filterOptionalDependent[Option[SecurityTraderDetails]](_ == true) {
+    SecurityDetailsTypePage
+      .filterOptionalDependent[Option[SecurityTraderDetails]](_.requiresSecurityDetails) {
         AddSafetyAndSecurityConsigneePage
           .filterOptionalDependent(_ == false) {
             (AddCircumstanceIndicatorPage.reader, CircumstanceIndicatorPage.optionalReader).tupled.flatMap {

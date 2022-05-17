@@ -49,7 +49,7 @@ class SubmissionConfirmationController @Inject() (
           val json = Json.obj(
             "lrn"                       -> lrn,
             "manageTransitMovementsUrl" -> appConfig.manageTransitMovementsViewDeparturesUrl,
-            "makeAnotherDeparture"      -> controllers.routes.LocalReferenceNumberController.onPageLoad().url
+            "makeAnotherDeparture"      -> controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad().url
           )
           renderer.render("submissionConfirmation.njk", json).map(Ok(_))
       }

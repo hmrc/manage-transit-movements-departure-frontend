@@ -22,6 +22,7 @@ import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Gen
 import pages._
 import pages.addItems.specialMentions.{SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
+import pages.preTaskList.OfficeOfDeparturePage
 
 class SpecialMentionDomainSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 

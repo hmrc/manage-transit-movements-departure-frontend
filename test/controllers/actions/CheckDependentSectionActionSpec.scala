@@ -22,12 +22,13 @@ import generators.Generators
 import models.DeclarationType.Option1
 import models.ProcedureType.Normal
 import models.RepresentativeCapacity.Direct
+import models.SecurityDetailsType.NoSecurityDetails
 import models.reference.{CountryCode, CustomsOffice}
 import models.requests.DataRequest
 import models.{DependentSection, EoriNumber, UserAnswers}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import pages._
 import pages.generalInformation._
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 import play.api.mvc.{AnyContent, Request, Result, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -58,7 +59,7 @@ class CheckDependentSectionActionSpec extends SpecBase with GuiceOneAppPerSuite 
         // PreTaskList
         .unsafeSetVal(ProcedureTypePage)(Normal)
         .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
-        .unsafeSetVal(AddSecurityDetailsPage)(false)
+        .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
         .unsafeSetVal(DeclarationTypePage)(Option1)
         // MovementDetails
         .unsafeSetVal(ProcedureTypePage)(Normal)

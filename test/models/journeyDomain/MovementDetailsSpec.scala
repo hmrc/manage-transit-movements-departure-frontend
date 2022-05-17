@@ -25,6 +25,7 @@ import models.journeyDomain.MovementDetails.{DeclarationForSelf, DeclarationForS
 import org.scalacheck.Gen
 import pages._
 import pages.generalInformation._
+import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage}
 
 class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 

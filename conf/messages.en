@@ -18,6 +18,8 @@ site.rejected = Rejected
 site.taskList.add = Add
 site.taskList.edit = Edit
 site.continue = Save and continue
+site.submit = Continue
+site.confirm = Confirm and continue
 site.notStarted = Not started
 site.inProgress = In Progress
 site.completed = Completed
@@ -57,30 +59,6 @@ pageNotFound.contactLink=contact the New Computerised Transit System(NCTS) helpd
 checkYourAnswers.title = Check your answers
 checkYourAnswers.heading = Check your answers
 
-index.title = Manage your transit movements - GOV.UK
-index.heading =  Manage your transit movements
-index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
-
-movementDetails.preHeading = General information
-traderDetails.preHeading = Trader’s details
-routeDetails.preHeading = Route details
-transportDetails.preHeading = Transport details
-goodsSummary.preHeading = Goods summary
-guaranteeDetails.preHeading = Guarantee details
-items.preHeading = Items
-safetyAndSecurity.preHeading = Safety and security
-
-package.preHeading = Packages
-specialMention.preHeading = Special mentions
-document.preHeading = Produced documents and work certificates
-reference.preHeading = Previous administrative references
-
-routeDetailsCheckYourAnswers.heading = Check your answers
-routeDetailsCheckYourAnswers.title = Check your answers
-
-traderDetailsCheckYourAnswers.heading = Check your answers
-traderDetailsCheckYourAnswers.title = Check your answers
-
 postcode = Postcode
 postcodeExample = Like, AB1 1AB.
 
@@ -103,23 +81,97 @@ technicalDifficulties.savedAnswers = We saved your answers. They will be availab
 technicalDifficulties.contact = You can
 technicalDifficulties.contact.link = contact the New Computerised Transit System helpdesk if you need to speak to someone about your transit movement(opens in a new tab).
 
+# Pre- task list
+
+localReferenceNumber.title = What is the local reference number (LRN)?
+localReferenceNumber.heading = What is the local reference number (LRN)?
+localReferenceNumber.error.required = Enter the local reference number
+localReferenceNumber.error.length = The local reference number must be 22 characters or less
+localReferenceNumber.error.invalidCharacters = The local reference number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
+localReferenceNumber.checkYourAnswersLabel = Local reference number (LRN)
+localReferenceNumber.change.hidden = local reference number
+
+officeOfDeparture.title = Where is the office of departure?
+officeOfDeparture.heading = Where is the office of departure?
+officeOfDeparture.checkYourAnswersLabel = Office of departure
+officeOfDeparture.error.required = Select the office of departure
+officeOfDeparture.hintText = Give the office location or code. Like, Dover or GB000060.
+officeOfDeparture.label = This is the Customs office where the transit movement starts.
+officeOfDeparture.change.hidden = office of departure
+
+procedureType.title = What type of procedure are you using?
+procedureType.heading = What type of procedure are you using?
+procedureType.checkYourAnswersLabel = Type of procedure
+procedureType.normal = Normal (customs-approved location)
+procedureType.simplified = Simplified (authorised consignor’s location)
+procedureType.error.required = Select which type of procedure you are using
+procedureType.change.hidden = type of procedure
+
+declarationType.title = What declaration do you want to create?
+declarationType.heading = What declaration do you want to create?
+declarationType.T1 = T1 (goods originating outside the European Union, such as Great Britain)
+declarationType.T2 = T2 (goods originating inside the European Union, such as Northern Ireland)
+declarationType.T2F = T2F (goods moving to, from or between the European Union special territories)
+declarationType.TIR = TIR (goods moving under the cover of TIR Carnet)
+declarationType.T = T (mixed consignments, for goods originating inside and outside the European Union)
+declarationType.paragraph = For mixed consignments, you will need to create separate T1 and T2 declarations.
+declarationType.checkYourAnswersLabel = Type of declaration
+declarationType.error.required = Select the declaration you want to create
+declarationType.change.hidden = type of declaration
+
+tirCarnetReference.title = What is the TIR carnet reference?
+tirCarnetReference.heading = What is the TIR carnet reference?
+tirCarnetReference.checkYourAnswersLabel = TIR carnet reference
+tirCarnetReference.error.required = Enter the TIR carnet reference
+tirCarnetReference.error.maxLength = The TIR carnet reference must be 12 characters or less
+tirCarnetReference.error.invalidCharacters = The TIR carnet reference must only include letters a to z and numbers 0 to 9
+tirCarnetReference.change.hidden = TIR carnet reference
+
+securityDetailsType.title = Select which type of safety and security details you need to add
+securityDetailsType.heading = Select which type of safety and security details you need to add
+securityDetailsType.noSecurity = No security
+securityDetailsType.entrySummaryDeclaration = Entry summary declaration (ENS)
+securityDetailsType.exitSummaryDeclaration = Exit summary declaration (EXS)
+securityDetailsType.entryAndExitSummaryDeclaration = Both entry and exit summary declarations (ENS and EXS)
+securityDetailsType.checkYourAnswersLabel = Safety and security details added
+securityDetailsType.error.required = Select the type of safety and security details you need to add
+securityDetailsType.checkYourAnswersLabel = Safety and security details added
+securityDetailsType.change.hidden = safety and security details added
+
+preTaskList.checkYourAnswers.heading = Check your answers
+preTaskList.checkYourAnswers.title = Check your answers
+preTaskList.checkYourAnswers.h2 = Before you continue
+preTaskList.checkYourAnswers.p = Once you have confirmed these details you will not be able to change them.
+
+###################################################################################################################
+# Phase 4
+
+movementDetails.preHeading = General information
+traderDetails.preHeading = Trader’s details
+routeDetails.preHeading = Route details
+transportDetails.preHeading = Transport details
+goodsSummary.preHeading = Goods summary
+guaranteeDetails.preHeading = Guarantee details
+items.preHeading = Items
+safetyAndSecurity.preHeading = Safety and security
+
+package.preHeading = Packages
+specialMention.preHeading = Special mentions
+document.preHeading = Produced documents and work certificates
+reference.preHeading = Previous administrative references
+
+routeDetailsCheckYourAnswers.heading = Check your answers
+routeDetailsCheckYourAnswers.title = Check your answers
+
+traderDetailsCheckYourAnswers.heading = Check your answers
+traderDetailsCheckYourAnswers.title = Check your answers
+
 concurrent.officeOfTransit = office of transit
 concurrent.remove.error.title = Sorry, there is a problem with this {0}
 concurrent.remove.error.heading = Sorry, there is a problem with this {0}
 concurrent.remove.error.paragraph = You will need to answer some questions again.
 concurrent.remove.error.noOfficeOfTransit.link.text = Go back to did any events happen on the journey?
 concurrent.remove.error.multipleOfficeOfTransit.link.text = Go back to you have added office of transit
-
-localReferenceNumber.title = What is the local reference number (LRN)?
-localReferenceNumber.heading = What is the local reference number (LRN)?
-localReferenceNumber.error.required = Enter the local reference number
-localReferenceNumber.error.length = Local reference number must be 22 characters or less
-localReferenceNumber.error.invalidCharacters = Local reference number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
-
-addSecurityDetails.title = Do you need to add safety and security details?
-addSecurityDetails.heading = Do you need to add safety and security details?
-addSecurityDetails.paragraph = These details are usually sent as an entry summary declaration. Some countries will allow you to send these details as part of a departures declaration. You must check the countries the goods will be travelling through.
-addSecurityDetails.error.required = Select yes if you need to add safety and security details
 
 declarationSummary.title = Declaration summary
 declarationSummary.heading = Declaration summary
@@ -144,26 +196,10 @@ declarationSummary.submissionSubheader = Now send your departure declaration
 declarationSummary.submissionHonestyPledge = By sending this you are confirming that the details you are providing are correct, to the best of your knowledge.
 declarationSummary.confirmAndSend = Confirm and send
 
-declarationType.title = What declaration do you want to create?
-declarationType.heading = What declaration do you want to create?
-declarationType.option1 = T1 (goods originating outside the EU, such as GB)
-declarationType.option2 = T2 (goods originating inside the EU, such as NI)
-declarationType.option3 = T2F (goods moving to, from or between the EU special territories)
-declarationType.option4 = TIR (goods moving under the cover of TIR Carnet)
-declarationType.paragraph = For mixed consignments, you will need to create separate T1 and T2 declarations.
-declarationType.checkYourAnswersLabel = Declaration type
-declarationType.error.required = Select the declaration you want to create
-
 containersUsed.title = Have you used any containers?
 containersUsed.heading = Have you used any containers?
 containersUsed.checkYourAnswersLabel = Containers used
 containersUsed.error.required = Select yes if you have used any containers
-
-procedureType.title = What type of procedure are you using?
-procedureType.heading = What type of procedure are you using?
-procedureType.normal = Normal (customs-approved location)
-procedureType.simplified = Simplified (authorised consignor’s location)
-procedureType.error.required = Select which type of procedure you are using
 
 declarationPlace.title = What is the postcode for the place of declaration?
 declarationPlace.heading = What is the postcode for the place of declaration?
@@ -304,12 +340,6 @@ countryOfDispatch.heading = What is the country of dispatch?
 countryOfDispatch.checkYourAnswersLabel = Country of dispatch
 countryOfDispatch.label = This is the country where the goods originated. This may not be where the transit movement started.
 countryOfDispatch.error.required = Enter the country of dispatch
-
-officeOfDeparture.title = Where is the office of departure?
-officeOfDeparture.heading = Where is the office of departure?
-officeOfDeparture.error.required = Select the office of departure
-officeOfDeparture.hintText = Give the office location or code. Like, Dover or GB000060.
-officeOfDeparture.label = This is the Customs office where the transit movement starts.
 
 destinationCountry.title = What country are the goods ending in?
 destinationCountry.heading = What country are the goods ending in?
@@ -1310,14 +1340,6 @@ principalTirHolderId.error.required = Enter  Enter the principal’s TIR holder 
 principalTirHolderId.error.length = Principal’s TIR holder identification must be 35 characters or less
 principalTirHolderId.error.format = Enter the principal’s TIR holder identification in the right format
 principalTirHolderId.error.characters = The principal’s TIR holder identification must only include letters a to z, numbers 0 to 9 and forward slashes
-
-tirCarnetReference.title = What is the TIR Carnet reference?
-tirCarnetReference.heading = What is the TIR Carnet reference?
-tirCarnetReference.checkYourAnswersLabel = TIR Carnet reference
-tirCarnetReference.error.required = Enter the reference for the TIR carnet
-tirCarnetReference.error.maxLength = The reference for the TIR Carnet must be 11 characters or less
-tirCarnetReference.error.minLength = The reference for the TIR Carnet must be 10 characters or more
-tirCarnetReference.error.invalidCharacters = The reference for the TIR Carnet must only include letters a to z and numbers 0 to 9
 
 addOfficeOfTransit.title = Do you need to add an office of transit?
 addOfficeOfTransit.heading = Do you need to add an office of transit?

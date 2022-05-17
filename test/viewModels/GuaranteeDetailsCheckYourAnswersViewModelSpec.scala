@@ -25,6 +25,7 @@ import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
+import pages.preTaskList.OfficeOfDeparturePage
 import pages.routeDetails.DestinationOfficePage
 import uk.gov.hmrc.viewmodels.Text.{Literal, Message}
 

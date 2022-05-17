@@ -20,7 +20,7 @@ import controllers.routeDetails.{alwaysExcludedTransitCountries, gbExcludedCount
 import models.DeclarationType.{Option1, Option4}
 import models.UserAnswers
 import models.reference.CountryCode
-import pages.{DeclarationTypePage, OfficeOfDeparturePage}
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage}
 
 object ExcludedCountriesService {
 

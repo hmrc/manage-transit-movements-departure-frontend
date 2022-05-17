@@ -18,10 +18,11 @@ package controllers.actions
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
+import models.SecurityDetailsType.NoSecurityDetails
 import models.reference.CountryCode
 import models.requests.DataRequest
 import models.{Index, NormalMode}
-import pages.AddSecurityDetailsPage
+import pages.preTaskList.SecurityDetailsTypePage
 import pages.routeDetails.{AddAnotherTransitOfficePage, OfficeOfTransitCountryPage}
 import play.api.mvc.Result
 import play.api.mvc.Results._
@@ -41,7 +42,7 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
 
       "and there is an incomplete loop, must redirect to the first page of that loop" in {
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(AddSecurityDetailsPage)(false)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("Test")
           .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("AR"))
@@ -59,7 +60,7 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
       "and all previous loop are complete, must redirect to Add Transit Office page" in {
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(AddSecurityDetailsPage)(false)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("Test")
           .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("GB"))
@@ -117,7 +118,7 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
 
       "and the index is the next valid value, and the previous loops are all complete, must return OK" in {
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(AddSecurityDetailsPage)(false)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("AS"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TestData")
 
@@ -146,7 +147,7 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
 
       "and the index is not the next valid index, and the previous loops are all complete, must go to Add Transit Office page" in {
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(AddSecurityDetailsPage)(false)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("AS"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TestData")
 
@@ -161,7 +162,7 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
 
       "and the previous loop is not complete, must redirect to the OfficeOfTransitCountryController for the incomplete loop" in {
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(AddSecurityDetailsPage)(false)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("Test")
           .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("AR"))
@@ -178,7 +179,7 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
 
       "and the index is for the current incomplete loop, must return OK" in {
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(AddSecurityDetailsPage)(false)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("AS"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TestData")
           .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("AB"))

@@ -20,7 +20,7 @@ import controllers.traderDetails.routes
 import models.DeclarationType.Option4
 import models.ProcedureType.{Normal, Simplified}
 import models.{CheckMode, _}
-import pages._
+import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage}
 import pages.traderDetails._
 import play.api.mvc.Call
 

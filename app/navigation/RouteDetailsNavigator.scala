@@ -23,6 +23,7 @@ import models.DeclarationType.Option4
 import models._
 import models.reference.CountryCode
 import pages._
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails._
 import play.api.mvc.Call
 
@@ -76,9 +77,9 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
     }
 
   private def redirectToAddTransitOfficeNextPage(ua: UserAnswers, index: Index, mode: Mode): Call =
-    ua.get(AddSecurityDetailsPage) match {
-      case Some(isSelected) if isSelected => routes.ArrivalDatesAtOfficeController.onPageLoad(ua.lrn, index, mode)
-      case _                              => routes.AddTransitOfficeController.onPageLoad(ua.lrn, mode)
+    ua.get(SecurityDetailsTypePage) match {
+      case Some(_: SecurityDetailsNeededType) => routes.ArrivalDatesAtOfficeController.onPageLoad(ua.lrn, index, mode)
+      case _                                  => routes.AddTransitOfficeController.onPageLoad(ua.lrn, mode)
     }
 
   private def isRouteDetailsSectionPage(page: Page): Boolean =

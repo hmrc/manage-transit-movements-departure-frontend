@@ -27,7 +27,9 @@ import models.reference.CountryCode
 import pages.guaranteeDetails._
 import pages.routeDetails.DestinationOfficePage
 import pages._
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage}
 import play.api.mvc.Call
+
 import javax.inject.{Inject, Singleton}
 
 @Singleton

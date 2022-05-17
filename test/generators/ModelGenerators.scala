@@ -147,6 +147,11 @@ trait ModelGenerators {
       Gen.oneOf(DeclarationType.values)
     }
 
+  implicit lazy val arbitrarySecurityDetailsType: Arbitrary[SecurityDetailsType] =
+    Arbitrary {
+      Gen.oneOf(SecurityDetailsType.values)
+    }
+
   implicit lazy val arbitraryLocalReferenceNumber: Arbitrary[LocalReferenceNumber] =
     Arbitrary {
       for {
@@ -191,6 +196,10 @@ trait ModelGenerators {
         description <- stringsWithMaxLength(stringMaxLength)
       } yield MethodOfPayment(code.toUpperCase, description)
     }
+
+  implicit lazy val arbitraryMode: Arbitrary[Mode] = Arbitrary {
+    Gen.oneOf(NormalMode, CheckMode)
+  }
 
 }
 

@@ -22,7 +22,7 @@ import derivable.DeriveNumberOfOfficeOfTransits
 import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
 import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import models.{DeclarationType, Index, UserAnswers}
-import pages._
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails._
 
 import java.time.LocalDateTime
@@ -63,10 +63,10 @@ object RouteDetailsWithTransitInformation {
     arrivalDate: Option[LocalDateTime]
   )
 
-  private def addOfficeOfTransit = AddSecurityDetailsPage.reader
+  private def addOfficeOfTransit = SecurityDetailsTypePage.reader
     .flatMap {
-      addSecurityDetailsFlag =>
-        if (addSecurityDetailsFlag) {
+      securityDetailsType =>
+        if (securityDetailsType.requiresSecurityDetails) {
           DeriveNumberOfOfficeOfTransits.mandatoryNonEmptyListReader.flatMap {
             _.zipWithIndex.traverse({
               case (_, index) =>

@@ -55,6 +55,8 @@ import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index,
 import play.api.libs.json.Json
 
 import java.time.LocalDateTime
+import models.SecurityDetailsType.EntryAndExitSummaryDeclarationSecurityDetails
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 
 case object Scenario5 extends UserAnswerScenario {
 
@@ -65,10 +67,10 @@ case object Scenario5 extends UserAnswerScenario {
   private val lrn: LocalReferenceNumber = LocalReferenceNumber("ABCD1234567890123").get
 
   val userAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj())
-    .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
-    .unsafeSetVal(pages.AddSecurityDetailsPage)(true)
-    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None))
-    .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
+    .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+    .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
+    .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None))
+    .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option2)
     /*
      * General Information Section
      * */
@@ -392,7 +394,12 @@ case object Scenario5 extends UserAnswerScenario {
   )
 
   private val preTaskList =
-    PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None), Option2, true)
+    PreTaskListDetails(lrn,
+                       Normal,
+                       CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None),
+                       Option2,
+                       EntryAndExitSummaryDeclarationSecurityDetails
+    )
 
   val toModel: JourneyDomain = JourneyDomain(
     preTaskList,

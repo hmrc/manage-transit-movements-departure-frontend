@@ -20,7 +20,7 @@ import cats.implicits._
 import models.ProcedureType.{Normal, Simplified}
 import models.journeyDomain.{UserAnswersReader, _}
 import models.{CommonAddress, EoriNumber}
-import pages._
+import pages.preTaskList.ProcedureTypePage
 import pages.traderDetails._
 
 sealed trait PrincipalTraderDetails

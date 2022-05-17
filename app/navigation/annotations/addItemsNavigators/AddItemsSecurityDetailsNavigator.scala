@@ -28,7 +28,8 @@ import pages.safetyAndSecurity.{
   AddSafetyAndSecurityConsignorPage,
   CircumstanceIndicatorPage
 }
-import pages.{OfficeOfDeparturePage, Page}
+import pages.Page
+import pages.preTaskList.OfficeOfDeparturePage
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}

@@ -24,8 +24,9 @@ import models.reference.{Country, CountryCode, CustomsOffice, MethodOfPayment}
 import models.{CommonAddress, EoriNumber, Index}
 import org.scalacheck.Gen
 import org.scalatest.TryValues
+import pages.preTaskList.OfficeOfDeparturePage
 import pages.safetyAndSecurity._
-import pages.{ModeAtBorderPage, OfficeOfDeparturePage, QuestionPage}
+import pages.{ModeAtBorderPage, QuestionPage}
 
 class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 

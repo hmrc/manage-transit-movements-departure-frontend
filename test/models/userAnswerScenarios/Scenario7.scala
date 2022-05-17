@@ -36,6 +36,7 @@ import cats.data.NonEmptyList
 import models.DeclarationType.Option4
 import models.ProcedureType.Normal
 import models.RepresentativeCapacity.Direct
+import models.SecurityDetailsType.EntryAndExitSummaryDeclarationSecurityDetails
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.GoodSummaryNormalDetailsWithoutPreLodge
 import models.journeyDomain.GuaranteeDetails.GuaranteeTIR
@@ -64,6 +65,7 @@ import models.journeyDomain.{
 }
 import models.reference._
 import models.{CommonAddress, DeclarationType, EoriNumber, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 import play.api.libs.json.Json
 
 case object Scenario7 extends UserAnswerScenario {
@@ -74,10 +76,10 @@ case object Scenario7 extends UserAnswerScenario {
   private val lrn: LocalReferenceNumber = LocalReferenceNumber("ABCD1234567890123").get
 
   val userAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj())
-    .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
-    .unsafeSetVal(pages.AddSecurityDetailsPage)(true)
-    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None))
-    .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option4)
+    .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+    .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
+    .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None))
+    .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
     /*
      * General Information Section
      * */
@@ -282,7 +284,12 @@ case object Scenario7 extends UserAnswerScenario {
     .unsafeSetVal(pages.guaranteeDetails.TIRGuaranteeReferencePage(Index(1)))("GUA2Ref")
 
   private val preTaskListDetails =
-    PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None), Option4, true)
+    PreTaskListDetails(lrn,
+                       Normal,
+                       CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None),
+                       Option4,
+                       EntryAndExitSummaryDeclarationSecurityDetails
+    )
 
   private val movementDetails = NormalMovementDetails(false, true, "XX1 1XX", DeclarationForSomeoneElse("John Doe", Direct))
 

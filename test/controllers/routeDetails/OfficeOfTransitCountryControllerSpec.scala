@@ -29,7 +29,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.OfficeOfDeparturePage
+import pages.preTaskList.OfficeOfDeparturePage
 import pages.routeDetails.OfficeOfTransitCountryPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder

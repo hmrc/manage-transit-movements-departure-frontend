@@ -71,6 +71,8 @@ import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index,
 import play.api.libs.json.Json
 
 import java.time.LocalDateTime
+import models.SecurityDetailsType.EntryAndExitSummaryDeclarationSecurityDetails
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 
 case object Scenario1 extends UserAnswerScenario {
 
@@ -80,13 +82,13 @@ case object Scenario1 extends UserAnswerScenario {
   private val lrn: LocalReferenceNumber = LocalReferenceNumber("ABCD1234567890123").get
 
   val userAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj())
-    .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
-    .unsafeSetVal(pages.AddSecurityDetailsPage)(true)
-    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None))
+    .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+    .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
+    .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None))
     /*
      * General Information Section
      * */
-    .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
+    .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option2)
     .unsafeSetVal(pages.generalInformation.PreLodgeDeclarationPage)(false)
     .unsafeSetVal(pages.generalInformation.ContainersUsedPage)(true)
     .unsafeSetVal(pages.generalInformation.DeclarationPlacePage)("XX1 1XX")
@@ -300,7 +302,12 @@ case object Scenario1 extends UserAnswerScenario {
     .unsafeSetVal(pages.AccessCodePage(Index(1)))("4321")
 
   private val preTaskListDetails =
-    PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None), Option2, true)
+    PreTaskListDetails(lrn,
+                       Normal,
+                       CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None),
+                       Option2,
+                       EntryAndExitSummaryDeclarationSecurityDetails
+    )
 
   private val movementDetails = NormalMovementDetails(false, true, "XX1 1XX", DeclarationForSomeoneElse("John Doe", Direct))
 

@@ -23,7 +23,7 @@ import models.DeclarationType._
 import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Gen
 import org.scalatest.matchers.must.Matchers
-import pages.{DeclarationTypePage, OfficeOfDeparturePage}
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage}
 
 class ExcludedCountriesServiceSpec extends SpecBase with Matchers with UserAnswersSpecHelper {
 

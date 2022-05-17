@@ -23,6 +23,7 @@ import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.GoodSummaryDetails
 import pages._
 import pages.generalInformation.PreLodgeDeclarationPage
+import pages.preTaskList.{ProcedureTypePage, SecurityDetailsTypePage}
 
 import java.time.LocalDate
 
@@ -36,7 +37,7 @@ object GoodsSummary {
 
   implicit val parser: UserAnswersReader[GoodsSummary] =
     (
-      AddSecurityDetailsPage.filterOptionalDependent(identity)(LoadingPlacePage.optionalReader).map(_.flatten),
+      SecurityDetailsTypePage.filterOptionalDependent(_.requiresSecurityDetails)(LoadingPlacePage.optionalReader).map(_.flatten),
       UserAnswersReader[GoodSummaryDetails],
       DeriveNumberOfSeals.reader orElse List.empty[SealDomain].pure[UserAnswersReader]
     ).tupled.map((GoodsSummary.apply _).tupled)

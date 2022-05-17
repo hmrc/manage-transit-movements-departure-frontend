@@ -31,6 +31,7 @@ import pages.routeDetails._
 import pages.safetyAndSecurity._
 import pages.traderDetails._
 import pages._
+import pages.preTaskList.{DeclarationTypePage, LocalReferenceNumberPage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators {
@@ -1081,11 +1082,11 @@ trait UserAnswersEntryGenerators {
       } yield (DeclarationTypePage, value)
     }
 
-  implicit lazy val arbitraryAddSecurityDetailsUserAnswersEntry: Arbitrary[(AddSecurityDetailsPage.type, JsValue)] =
+  implicit lazy val arbitraryAddSecurityDetailsUserAnswersEntry: Arbitrary[(SecurityDetailsTypePage.type, JsValue)] =
     Arbitrary {
       for {
         value <- arbitrary[Boolean].map(Json.toJson(_))
-      } yield (AddSecurityDetailsPage, value)
+      } yield (SecurityDetailsTypePage, value)
     }
 
   implicit lazy val arbitraryLocalReferenceNumberUserAnswersEntry: Arbitrary[(LocalReferenceNumberPage.type, JsValue)] =

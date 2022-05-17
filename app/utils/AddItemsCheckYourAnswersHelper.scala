@@ -33,6 +33,7 @@ import pages.addItems.containers._
 import pages.addItems.securityDetails._
 import pages.addItems.traderDetails._
 import pages.addItems.traderSecurityDetails._
+import pages.preTaskList.DeclarationTypePage
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 import viewModels.AddAnotherViewModel

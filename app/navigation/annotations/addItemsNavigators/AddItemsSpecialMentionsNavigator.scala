@@ -20,11 +20,12 @@ import controllers.addItems.specialMentions.routes
 import derivable.{DeriveNumberOfDocuments, DeriveNumberOfSpecialMentions}
 import models.DeclarationType.Option4
 import models.reference.CircumstanceIndicator
-import models.{CheckMode, Index, Mode, NormalMode, UserAnswers}
+import models.{CheckMode, Index, Mode, NormalMode, SecurityDetailsNeededType, UserAnswers}
 import navigation.Navigator
 import pages.addItems.specialMentions._
+import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
-import pages.{AddSecurityDetailsPage, DeclarationTypePage, Page}
+import pages.Page
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -106,13 +107,13 @@ class AddItemsSpecialMentionsNavigator @Inject() () extends Navigator {
   }
 
   private def showDocumentTypePage(userAnswers: UserAnswers, itemIndex: Index): Option[Boolean] =
-    (userAnswers.get(AddSecurityDetailsPage),
+    (userAnswers.get(SecurityDetailsTypePage),
      userAnswers.get(AddCircumstanceIndicatorPage),
      userAnswers.get(AddCommercialReferenceNumberPage),
      itemIndex.position == 0
     ) match {
-      case (Some(true), Some(false), Some(false), true) => Some(true)
-      case (Some(true), Some(true), Some(false), true) =>
+      case (Some(_: SecurityDetailsNeededType), Some(false), Some(false), true) => Some(true)
+      case (Some(_: SecurityDetailsNeededType), Some(true), Some(false), true) =>
         userAnswers.get(CircumstanceIndicatorPage) map (CircumstanceIndicator.conditionalIndicators.contains(_))
       case (Some(_), _, _, _) => Some(false)
       case _                  => None

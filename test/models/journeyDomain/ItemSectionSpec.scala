@@ -21,6 +21,7 @@ import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
 import models.DeclarationType.Option1
 import models.Index
+import models.SecurityDetailsType.EntryAndExitSummaryDeclarationSecurityDetails
 import models.journeyDomain.Packages.UnpackedPackages
 import models.journeyDomain.addItems.ItemsSecurityTraderDetails
 import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice, PackageType}
@@ -31,6 +32,7 @@ import pages.addItems.containers.ContainerNumberPage
 import pages.addItems.securityDetails.AddDangerousGoodsCodePage
 import pages.addItems.specialMentions.{AddSpecialMentionPage, SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
 import pages.generalInformation.ContainersUsedPage
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails.CountryOfDispatchPage
 import pages.safetyAndSecurity._
 import pages.traderDetails.{AddConsigneePage, AddConsignorPage}
@@ -59,7 +61,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
     //SpecialMention
     .unsafeSetVal(AddSpecialMentionPage(itemIndex))(false)
     //ProducedDocuments
-    .unsafeSetVal(AddSecurityDetailsPage)(true)
+    .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
     .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
     .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
     .unsafeSetVal(AddDocumentsPage(index))(false)
@@ -210,7 +212,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
           //SpecialMention
           .unsafeSetVal(AddSpecialMentionPage(Index(1)))(false)
           //ProducedDocuments
-          .unsafeSetVal(AddSecurityDetailsPage)(true)
+          .unsafeSetVal(SecurityDetailsTypePage)(EntryAndExitSummaryDeclarationSecurityDetails)
           .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
           .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
           .unsafeSetVal(AddDocumentsPage(Index(1)))(false)
