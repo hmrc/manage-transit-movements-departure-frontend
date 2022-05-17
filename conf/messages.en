@@ -30,10 +30,11 @@ unauthorisedWithGroupAccess.title = You cannot use this service authorisation
 unauthorisedWithGroupAccess.heading = You cannot use this service
 unauthorisedWithGroupAccess.p = If you already have access, you must contact your group administrator to update your access rights.
 
-unauthorised.title = You can’t access this service with this account
-unauthorised.heading = You can’t access this service with this account
+unauthorised.title = You cannot use this service
+unauthorised.heading = You cannot use this service
+unauthorised.paragraph1 = You must have an account with an activated EORI number.
 
-unauthorisedWithGroupAccess.title = You cannot use this service authorisation
+unauthorisedWithGroupAccess.title = You cannot use this service
 unauthorisedWithGroupAccess.heading = You cannot use this service
 unauthorisedWithGroupAccess.paragraph = If you already have access, you must contact your group administrator to update your access rights.
 

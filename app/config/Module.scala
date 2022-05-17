@@ -33,6 +33,8 @@ class Module extends AbstractModule {
     bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl])
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
 
+    bind(classOf[RenderConfig]).to(classOf[RenderConfigImpl]).asEagerSingleton()
+
     bind(classOf[Clock]).toInstance(Clock.systemUTC)
   }
 }

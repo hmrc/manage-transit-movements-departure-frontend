@@ -31,6 +31,6 @@ class UnauthorisedWithGroupAccessController @Inject() (
 
   def onPageLoad(): Action[AnyContent] = Action {
     implicit request =>
-      Unauthorized(view())
+      Ok(view())
   }
 }
