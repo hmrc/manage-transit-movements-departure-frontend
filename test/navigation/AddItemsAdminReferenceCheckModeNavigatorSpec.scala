@@ -29,7 +29,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems._
-import pages.{DeclarationTypePage, SecurityDetailsTypePage}
+import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 import queries.PreviousReferencesQuery
 
 class AddItemsAdminReferenceCheckModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {

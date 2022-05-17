@@ -20,8 +20,8 @@ import cats.implicits._
 import models.ProcedureType.{Normal, Simplified}
 import models.RepresentativeCapacity
 import models.journeyDomain.MovementDetails.DeclarationForSomeoneElseAnswer
-import pages._
 import pages.generalInformation._
+import pages.preTaskList.ProcedureTypePage
 
 sealed trait MovementDetails {
   val containersUsed: Boolean

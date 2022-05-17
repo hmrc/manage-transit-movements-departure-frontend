@@ -24,7 +24,8 @@ import models.Index
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
 import models.reference.PackageType
 import models.userAnswerScenarios.Scenario1
-import pages.{ItemTotalGrossMassPage, SecurityDetailsTypePage}
+import pages.ItemTotalGrossMassPage
+import pages.preTaskList.SecurityDetailsTypePage
 
 class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGenerator with UserAnswersSpecHelper {
 

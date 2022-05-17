@@ -18,7 +18,7 @@ package controllers.addItems.documents
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import forms.addItems.TIRCarnetReferenceFormProvider
+import forms.preTaskList.TIRCarnetReferenceFormProvider
 import models.DeclarationType.{Option1, Option4}
 import models.NormalMode
 import navigation.Navigator
@@ -26,8 +26,8 @@ import navigation.annotations.addItems.AddItemsDocument
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.DeclarationTypePage
 import pages.addItems.TIRCarnetReferencePage
+import pages.preTaskList.DeclarationTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest

@@ -22,6 +22,7 @@ import models.GuaranteeType.guaranteeReferenceRoute
 import models._
 import pages._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage}
 import pages.routeDetails.DestinationOfficePage
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._

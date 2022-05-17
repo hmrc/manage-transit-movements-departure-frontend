@@ -22,8 +22,8 @@ import generators.Generators
 import models.{DeclarationType, NormalMode}
 import navigation.annotations.addItemsNavigators.AddItemsDocumentNavigator
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.DeclarationTypePage
 import pages.addItems._
+import pages.preTaskList.DeclarationTypePage
 
 class AddItemsDocumentNormalModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
   // format: off

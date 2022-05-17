@@ -19,8 +19,8 @@ package pages.traderDetails
 import models.ProcedureType.{Normal, Simplified}
 import models.{CommonAddress, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.ProcedureTypePage
 import pages.behaviours.PageBehaviours
+import pages.preTaskList.ProcedureTypePage
 
 class IsPrincipalEoriKnownPageSpec extends PageBehaviours {
 

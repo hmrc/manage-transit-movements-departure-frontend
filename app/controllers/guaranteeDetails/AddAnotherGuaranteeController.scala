@@ -25,7 +25,8 @@ import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.GuaranteeDetails
-import pages.{AddAnotherGuaranteePage, DeclarationTypePage}
+import pages.AddAnotherGuaranteePage
+import pages.preTaskList.DeclarationTypePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -35,8 +36,8 @@ import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import utils.GuaranteeDetailsCheckYourAnswersHelper
-import javax.inject.Inject
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherGuaranteeController @Inject() (

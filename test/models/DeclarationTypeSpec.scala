@@ -26,7 +26,7 @@ import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.{OfficeOfDeparturePage, ProcedureTypePage}
+import pages.preTaskList.{OfficeOfDeparturePage, ProcedureTypePage}
 import play.api.libs.json.{JsError, JsString, Json}
 
 class DeclarationTypeSpec

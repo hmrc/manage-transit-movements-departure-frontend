@@ -34,7 +34,7 @@ trait Navigator {
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode =>
       normalRoutes.lift(page) match {
-        case None       => routes.LocalReferenceNumberController.onPageLoad()
+        case None       => controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad()
         case Some(call) => handleCall(userAnswers, call)
       }
     case CheckMode =>

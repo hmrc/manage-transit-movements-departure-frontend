@@ -20,7 +20,7 @@ import cats.data.ReaderT
 import cats.implicits._
 import models.reference.CustomsOffice
 import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType, UserAnswers}
-import pages.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 
 case class PreTaskListDetails(
   lrn: LocalReferenceNumber,

@@ -71,7 +71,7 @@ class GuaranteeNotValidControllerSpec extends SpecBase with AppWithDefaultMockFi
     val expectedJson = Json.obj(
       "guaranteeNotValidMessage" -> Json.toJson(message),
       "contactUrl"               -> "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/new-computerised-transit-system-enquiries",
-      "departureUrl"             -> routes.LocalReferenceNumberController.onPageLoad().url
+      "departureUrl"             -> controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad().url
     )
 
     templateCaptor.getValue mustEqual "guaranteeNotValid.njk"

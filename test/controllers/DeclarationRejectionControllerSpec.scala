@@ -83,7 +83,7 @@ class DeclarationRejectionControllerSpec extends SpecBase with AppWithDefaultMoc
       val expectedJson =
         Json.obj(
           "contactUrl"   -> "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/new-computerised-transit-system-enquiries",
-          "departureUrl" -> routes.LocalReferenceNumberController.onPageLoad().url
+          "departureUrl" -> controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad().url
         )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey - "detailsSection" - "errorsSection"

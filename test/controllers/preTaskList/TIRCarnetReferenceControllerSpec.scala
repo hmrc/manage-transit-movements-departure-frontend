@@ -18,16 +18,15 @@ package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import forms.addItems.TIRCarnetReferenceFormProvider
+import forms.preTaskList.TIRCarnetReferenceFormProvider
 import models.DeclarationType.{Option1, Option4}
 import models.NormalMode
 import navigation.Navigator
-import navigation.annotations.addItems.AddItemsDocument
+import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.DeclarationTypePage
-import pages.preTaskList.TIRCarnetReferencePage
+import pages.preTaskList.{DeclarationTypePage, TIRCarnetReferencePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -47,7 +46,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
 
   "TIRCarnetReference Controller" - {
 

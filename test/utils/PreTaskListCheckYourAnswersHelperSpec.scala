@@ -18,12 +18,14 @@ package utils
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
+import controllers.preTaskList.routes
 import generators.Generators
 import models.reference.CustomsOffice
 import models.{DeclarationType, LocalReferenceNumber, Mode, ProcedureType, SecurityDetailsType}
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
+import pages.preTaskList._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
@@ -49,7 +51,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                   items = List(
                     ActionItem(
                       content = "Change".toText,
-                      href = controllers.routes.LocalReferenceNumberController.onPageLoad().url,
+                      href = routes.LocalReferenceNumberController.onPageLoad().url,
                       visuallyHiddenText = Some("the local reference number"),
                       attributes = Map()
                     )
@@ -91,7 +93,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = controllers.routes.OfficeOfDepartureController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.OfficeOfDepartureController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the office of departure"),
                           attributes = Map()
                         )
@@ -135,7 +137,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = controllers.routes.ProcedureTypeController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.ProcedureTypeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the type of procedure"),
                           attributes = Map()
                         )
@@ -179,7 +181,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = controllers.routes.DeclarationTypeController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.DeclarationTypeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the declaration type"),
                           attributes = Map()
                         )
@@ -193,7 +195,49 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
       }
     }
 
-    "tirCarnet" - {}
+    "tirCarnet" - {
+      "must return None" - {
+        "when TIRCarnetReferencePage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new PreTaskListCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.tirCarnet
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when TIRCarnetReferencePage defined" in {
+          forAll(Gen.alphaNumStr, arbitrary[Mode]) {
+            (tirCarnetReference, mode) =>
+              val answers = emptyUserAnswers.unsafeSetVal(TIRCarnetReferencePage)(tirCarnetReference)
+
+              val helper = new PreTaskListCheckYourAnswersHelper(answers, mode)
+              val result = helper.tirCarnet
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("TIR Carnet reference".toText, classes = "govuk-!-width-one-half"),
+                  value = Value(tirCarnetReference.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = routes.TIRCarnetReferenceController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("the TIR Carnet reference"),
+                          attributes = Map()
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
 
     "securityType" - {
       "must return None" - {
@@ -225,7 +269,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = controllers.routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the type of security details"),
                           attributes = Map()
                         )

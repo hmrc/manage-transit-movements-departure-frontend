@@ -29,6 +29,7 @@ import models.{DependentSection, Index, NormalMode, ProcedureType, SecurityDetai
 import pages._
 import pages.generalInformation.{ContainersUsedPage, PreLodgeDeclarationPage}
 import pages.guaranteeDetails.{GuaranteeTypePage, TIRGuaranteeReferencePage}
+import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage, SecurityDetailsTypePage}
 import pages.routeDetails.CountryOfDispatchPage
 import pages.safetyAndSecurity.AddCircumstanceIndicatorPage
 import pages.traderDetails.{IsPrincipalEoriKnownPage, WhatIsPrincipalEoriPage}

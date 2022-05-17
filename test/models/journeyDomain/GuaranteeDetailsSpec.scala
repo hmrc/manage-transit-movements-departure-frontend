@@ -27,6 +27,7 @@ import models.{Index, UserAnswers}
 import org.scalacheck.Gen
 import pages._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
+import pages.preTaskList.DeclarationTypePage
 
 class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 

@@ -16,9 +16,10 @@
 
 package utils
 
+import controllers.preTaskList.routes._
 import models.reference.CustomsOffice
 import models.{DeclarationType, Mode, ProcedureType, SecurityDetailsType, UserAnswers}
-import pages._
+import pages.preTaskList._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 
@@ -28,7 +29,7 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
     prefix = "localReferenceNumber",
     answer = formatAsLiteral(lrn),
     id = None,
-    call = controllers.routes.LocalReferenceNumberController.onPageLoad()
+    call = LocalReferenceNumberController.onPageLoad()
   )
 
   def officeOfDeparture: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
@@ -36,7 +37,7 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
     formatAnswer = formatAsLiteral,
     prefix = "officeOfDeparture",
     id = None,
-    call = controllers.routes.OfficeOfDepartureController.onPageLoad(lrn, mode)
+    call = OfficeOfDepartureController.onPageLoad(lrn, mode)
   )
 
   def procedureType: Option[SummaryListRow] = getAnswerAndBuildRow[ProcedureType](
@@ -44,7 +45,7 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
     formatAnswer = formatAsEnum(ProcedureType.messageKeyPrefix),
     prefix = "procedureType",
     id = None,
-    call = controllers.routes.ProcedureTypeController.onPageLoad(lrn, mode)
+    call = ProcedureTypeController.onPageLoad(lrn, mode)
   )
 
   def declarationType: Option[SummaryListRow] = getAnswerAndBuildRow[DeclarationType](
@@ -52,16 +53,22 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
     formatAnswer = formatAsEnum(DeclarationType.messageKeyPrefix),
     prefix = "declarationType",
     id = None,
-    call = controllers.routes.DeclarationTypeController.onPageLoad(lrn, mode)
+    call = DeclarationTypeController.onPageLoad(lrn, mode)
   )
 
-  def tirCarnet: Option[SummaryListRow] = None // TODO
+  def tirCarnet: Option[SummaryListRow] = getAnswerAndBuildRow[String](
+    page = TIRCarnetReferencePage,
+    formatAnswer = formatAsLiteral,
+    prefix = "tirCarnetReference",
+    id = None,
+    call = TIRCarnetReferenceController.onPageLoad(lrn, mode)
+  )
 
   def securityType: Option[SummaryListRow] = getAnswerAndBuildRow[SecurityDetailsType](
     page = SecurityDetailsTypePage,
     formatAnswer = formatAsEnum(SecurityDetailsType.messageKeyPrefix),
     prefix = "securityDetailsType",
     id = None,
-    call = controllers.routes.SecurityDetailsTypeController.onPageLoad(lrn, mode)
+    call = SecurityDetailsTypeController.onPageLoad(lrn, mode)
   )
 }

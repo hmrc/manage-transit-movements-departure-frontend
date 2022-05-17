@@ -24,7 +24,7 @@ import models.reference.CircumstanceIndicator
 import models.{Index, UserAnswers}
 import pages.addItems._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
-import pages.{DeclarationTypePage, SecurityDetailsTypePage}
+import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 
 sealed trait ProducedDocument
 

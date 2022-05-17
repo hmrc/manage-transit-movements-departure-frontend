@@ -20,7 +20,7 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import models.reference.{CountryCode, CustomsOffice}
 import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}
-import pages.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
+import pages.preTaskList._
 
 class PreTaskListViewModelSpec extends SpecBase with UserAnswersSpecHelper {
 
@@ -40,23 +40,24 @@ class PreTaskListViewModelSpec extends SpecBase with UserAnswersSpecHelper {
 
     "when user answers populated" - {
       "must return row for each answer" in {
-        // TODO - add TIR carnet
         val answers = emptyUserAnswers
           .copy(lrn = LocalReferenceNumber("1234567890").get)
           .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
           .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-          .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option1)
+          .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
+          .unsafeSetVal(TIRCarnetReferencePage)("tir carnet reference")
           .unsafeSetVal(SecurityDetailsTypePage)(SecurityDetailsType.EntrySummaryDeclarationSecurityDetails)
 
         val section = new PreTaskListViewModel().apply(answers)
 
         section.sectionTitle mustNot be(defined)
-        section.rows.length mustBe 5
+        section.rows.length mustBe 6
         section.rows.head.value.content.asHtml.toString() mustBe "1234567890"
         section.rows(1).value.content.asHtml.toString() mustBe "name (id)"
         section.rows(2).value.content.asHtml.toString() mustBe "Normal (customs-approved location)"
-        section.rows(3).value.content.asHtml.toString() mustBe "T1 (goods originating outside the European Union, such as Great Britain)"
-        section.rows(4).value.content.asHtml.toString() mustBe "Entry summary declaration (ENS)"
+        section.rows(3).value.content.asHtml.toString() mustBe "TIR (goods moving under the cover of TIR Carnet)"
+        section.rows(4).value.content.asHtml.toString() mustBe "tir carnet reference"
+        section.rows(5).value.content.asHtml.toString() mustBe "Entry summary declaration (ENS)"
       }
     }
   }

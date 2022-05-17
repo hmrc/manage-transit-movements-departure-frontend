@@ -32,7 +32,7 @@ import org.mockito.Mockito.{times, verify, when}
 import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
 import pages.routeDetails.MovementDestinationCountryPage
-import pages.{DeclarationTypePage, OfficeOfDeparturePage}
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}

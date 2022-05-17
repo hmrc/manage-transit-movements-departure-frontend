@@ -29,6 +29,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.guaranteeDetails._
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage}
 import pages.routeDetails.DestinationOfficePage
 import play.api.libs.json.{JsObject, JsPath}
 

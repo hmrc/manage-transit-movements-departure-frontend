@@ -19,8 +19,8 @@ package models.journeyDomain
 import cats.implicits._
 import models.Index
 import models.reference.CustomsOffice
-import pages.OfficeOfDeparturePage
 import pages.addItems.specialMentions.{SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
+import pages.preTaskList.OfficeOfDeparturePage
 
 final case class SpecialMentionDomain(specialMentionType: String, additionalInfo: String, officeOfDeparture: CustomsOffice)
 

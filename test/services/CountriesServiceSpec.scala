@@ -25,7 +25,7 @@ import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalacheck.Gen
 import org.scalatest.BeforeAndAfterEach
-import pages.DeclarationTypePage
+import pages.preTaskList.DeclarationTypePage
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

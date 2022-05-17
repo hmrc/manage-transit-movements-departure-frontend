@@ -17,14 +17,13 @@
 package controllers.preTaskList
 
 import controllers.actions._
-import forms.addItems.TIRCarnetReferenceFormProvider
+import forms.preTaskList.TIRCarnetReferenceFormProvider
 import models.DeclarationType.Option4
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItems.AddItemsDocument
-import pages.DeclarationTypePage
+import navigation.annotations.PreTaskListDetails
 import pages.addItems.DocumentTypePage
-import pages.preTaskList.TIRCarnetReferencePage
+import pages.preTaskList.{DeclarationTypePage, TIRCarnetReferencePage}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -38,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class TIRCarnetReferenceController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItemsDocument navigator: Navigator,
+  @PreTaskListDetails navigator: Navigator,
   actions: Actions,
   formProvider: TIRCarnetReferenceFormProvider,
   val controllerComponents: MessagesControllerComponents,

@@ -20,7 +20,8 @@ import controllers.safetyAndSecurity.routes
 import models._
 import models.reference.{CountryCode, CustomsOffice}
 import pages.safetyAndSecurity._
-import pages.{OfficeOfDeparturePage, Page}
+import pages.Page
+import pages.preTaskList.OfficeOfDeparturePage
 import play.api.Logging
 import play.api.mvc.Call
 

@@ -21,8 +21,8 @@ import models.Index
 import models.journeyDomain.addItems.SecurityTraderDetails._
 import models.journeyDomain.{UserAnswersReader, _}
 import models.reference.MethodOfPayment
-import pages.SecurityDetailsTypePage
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
+import pages.preTaskList.SecurityDetailsTypePage
 import pages.safetyAndSecurity._
 
 final case class ItemsSecurityTraderDetails(

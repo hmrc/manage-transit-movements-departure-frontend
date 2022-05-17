@@ -22,7 +22,7 @@ import models.reference.{CountryCode, CustomsOffice}
 import models.{CommonAddress, EoriNumber, Index}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
-import pages.{OfficeOfDeparturePage, SecurityDetailsTypePage}
+import pages.preTaskList.{OfficeOfDeparturePage, SecurityDetailsTypePage}
 
 sealed trait SecurityTraderDetails
 

@@ -1,8 +1,30 @@
-GET        /:lrn/pre-task-list/check-answers                           controllers.preTaskList.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
-POST       /:lrn/pre-task-list/check-answers                           controllers.preTaskList.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)
+GET        /pre-task-list/local-reference-number                    controllers.preTaskList.LocalReferenceNumberController.onPageLoad()
+POST       /pre-task-list/local-reference-number                    controllers.preTaskList.LocalReferenceNumberController.onSubmit()
 
+GET        /:lrn/pre-task-list/office-of-departure                  controllers.preTaskList.OfficeOfDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/pre-task-list/office-of-departure                  controllers.preTaskList.OfficeOfDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/pre-task-list/change-office-of-departure           controllers.preTaskList.OfficeOfDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/pre-task-list/change-office-of-departure           controllers.preTaskList.OfficeOfDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/pre-task-list/tir-carnet-reference                         controllers.preTaskList.TIRCarnetReferenceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/pre-task-list/tir-carnet-reference                         controllers.preTaskList.TIRCarnetReferenceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/pre-task-list/change-tir-carnet-reference                  controllers.preTaskList.TIRCarnetReferenceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/pre-task-list/change-tir-carnet-reference                  controllers.preTaskList.TIRCarnetReferenceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/pre-task-list/procedure-type                       controllers.preTaskList.ProcedureTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/pre-task-list/procedure-type                       controllers.preTaskList.ProcedureTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/pre-task-list/change-procedure-type                controllers.preTaskList.ProcedureTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/pre-task-list/change-procedure-type                controllers.preTaskList.ProcedureTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/pre-task-list/declaration-type                     controllers.preTaskList.DeclarationTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/pre-task-list/declaration-type                     controllers.preTaskList.DeclarationTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/pre-task-list/change-declaration-type              controllers.preTaskList.DeclarationTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/pre-task-list/change-declaration-type              controllers.preTaskList.DeclarationTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/pre-task-list/tir-carnet-reference                 controllers.preTaskList.TIRCarnetReferenceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/pre-task-list/tir-carnet-reference                 controllers.preTaskList.TIRCarnetReferenceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/pre-task-list/change-tir-carnet-reference          controllers.preTaskList.TIRCarnetReferenceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/pre-task-list/change-tir-carnet-reference          controllers.preTaskList.TIRCarnetReferenceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/pre-task-list/security-details                     controllers.preTaskList.SecurityDetailsTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/pre-task-list/security-details                     controllers.preTaskList.SecurityDetailsTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/pre-task-list/change-security-details              controllers.preTaskList.SecurityDetailsTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/pre-task-list/change-security-details              controllers.preTaskList.SecurityDetailsTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/pre-task-list/pre-task-list/check-answers          controllers.preTaskList.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/pre-task-list/pre-task-list/check-answers          controllers.preTaskList.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)

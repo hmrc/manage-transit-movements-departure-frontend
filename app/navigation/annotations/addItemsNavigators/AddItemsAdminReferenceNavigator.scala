@@ -19,12 +19,14 @@ package navigation.annotations.addItemsNavigators
 import controllers.addItems.previousReferences.{routes => previousReferencesRoutes}
 import controllers.addItems.{routes => addItemsRoutes}
 import derivable._
+
 import javax.inject.{Inject, Singleton}
 import models.DeclarationType.t2Options
 import models._
 import navigation.Navigator
 import pages._
 import pages.addItems._
+import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddTransportChargesPaymentMethodPage}
 import play.api.mvc.Call
 

@@ -23,7 +23,8 @@ import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails
 import models.reference.{CountryCode, CustomsOffice, MethodOfPayment}
 import models.{CommonAddress, EoriNumber, UserAnswers}
 import pages.safetyAndSecurity._
-import pages.{ModeAtBorderPage, OfficeOfDeparturePage}
+import pages.ModeAtBorderPage
+import pages.preTaskList.OfficeOfDeparturePage
 
 case class SafetyAndSecurity(
   circumstanceIndicator: Option[String],
