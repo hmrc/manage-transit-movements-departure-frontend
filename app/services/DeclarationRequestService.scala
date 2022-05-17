@@ -355,14 +355,14 @@ class DeclarationRequestService @Inject() (
         countryCode => models.messages.Itinerary(countryCode.countryCode.code)
       )
 
-    def safetyAndSecurityHeaderCode(securityDetailsType: SecurityDetailsType): Option[Int] =
+    def securityContentType(securityDetailsType: SecurityDetailsType): Option[Int] =
       securityDetailsType match {
         case NoSecurityDetails                             => Some(0)
         case EntrySummaryDeclarationSecurityDetails        => Some(1)
         case ExitSummaryDeclarationSecurityDetails         => Some(2)
         case EntryAndExitSummaryDeclarationSecurityDetails => Some(3)
       }
-      
+
     DeclarationRequest(
       Meta(
         interchangeControlReference = icr,
@@ -397,7 +397,7 @@ class DeclarationRequestService @Inject() (
         speCirIndHEA1 = safetyAndSecurity.flatMap(_.circumstanceIndicator),
         traChaMetOfPayHEA1 = safetyAndSecurity.flatMap(_.paymentMethod.map(_.code)) orElse headerPaymentMethodFromItemDetails(journeyDomain.itemDetails),
         comRefNumHEA = safetyAndSecurity.flatMap(_.commercialReferenceNumber) orElse headerCommercialReferenceNumberFromItemDetails(journeyDomain.itemDetails),
-        secHEA358 = safetyAndSecurityHeaderCode(preTaskList.securityDetailsType),
+        secHEA358 = securityContentType(preTaskList.securityDetailsType),
         conRefNumHEA = safetyAndSecurity.flatMap(_.conveyanceReferenceNumber),
         codPlUnHEA357 = safetyAndSecurity.flatMap(_.placeOfUnloading)
       ),
