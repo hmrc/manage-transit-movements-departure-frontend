@@ -361,7 +361,6 @@ class DeclarationRequestService @Inject() (
         case EntrySummaryDeclarationSecurityDetails        => Some(1)
         case ExitSummaryDeclarationSecurityDetails         => Some(2)
         case EntryAndExitSummaryDeclarationSecurityDetails => Some(3)
-        case _                                             => None
       }
     DeclarationRequest(
       Meta(

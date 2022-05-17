@@ -100,7 +100,7 @@ class UserAnswersToXmlConversionSpec
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
           <SpeCirIndHEA1>A</SpeCirIndHEA1>
-          <SecHEA358>1</SecHEA358>
+          <SecHEA358>3</SecHEA358>
           <ConRefNumHEA>SomeConv</ConRefNumHEA>
           <CodPlUnHEA357>PlaceOfUnloadingPage</CodPlUnHEA357>
         </HEAHEA>
@@ -354,6 +354,7 @@ class UserAnswersToXmlConversionSpec
           <TotGroMasHEA307>25000.000</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
+          <SecHEA358>0</SecHEA358>
         </HEAHEA>
         <TRAPRIPC1>
           <TINPC159>PRINCEORI</TINPC159>
@@ -632,7 +633,7 @@ class UserAnswersToXmlConversionSpec
           <SpeCirIndHEA1>E</SpeCirIndHEA1>
           <TraChaMetOfPayHEA1>W</TraChaMetOfPayHEA1>
           <ComRefNumHEA>COMREFALL</ComRefNumHEA>
-          <SecHEA358>1</SecHEA358>
+          <SecHEA358>2</SecHEA358>
         </HEAHEA>
         <TRAPRIPC1>
           <NamPC17>PrincipalName</NamPC17>
@@ -814,7 +815,7 @@ class UserAnswersToXmlConversionSpec
         <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
         <SpeCirIndHEA1>E</SpeCirIndHEA1>
         <ComRefNumHEA>COMREFALL</ComRefNumHEA>
-        <SecHEA358>1</SecHEA358>
+        <SecHEA358>3</SecHEA358>
       </HEAHEA>
       <TRAPRIPC1>
         <NamPC17>PrincipalName</NamPC17>
@@ -1067,7 +1068,7 @@ class UserAnswersToXmlConversionSpec
         <DecDatHEA383>20201212</DecDatHEA383>
         <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
         <SpeCirIndHEA1>A</SpeCirIndHEA1>
-        <SecHEA358>1</SecHEA358>
+        <SecHEA358>3</SecHEA358>
         <ConRefNumHEA>SomeConv</ConRefNumHEA>
         <CodPlUnHEA357>PlaceOfUnloadingPage</CodPlUnHEA357>
       </HEAHEA>
@@ -1322,7 +1323,7 @@ class UserAnswersToXmlConversionSpec
         <DecDatHEA383>20201212</DecDatHEA383>
         <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
         <SpeCirIndHEA1>A</SpeCirIndHEA1>
-        <SecHEA358>1</SecHEA358>
+        <SecHEA358>3</SecHEA358>
         <ConRefNumHEA>SomeConv</ConRefNumHEA>
         <CodPlUnHEA357>PlaceOfUnloadingPage</CodPlUnHEA357>
       </HEAHEA>
