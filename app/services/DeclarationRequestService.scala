@@ -47,12 +47,7 @@ import repositories.InterchangeControlReferenceIdRepository
 import java.time.LocalDateTime
 
 import javax.inject.Inject
-import models.SecurityDetailsType.{
-  EntryAndExitSummaryDeclarationSecurityDetails,
-  EntrySummaryDeclarationSecurityDetails,
-  ExitSummaryDeclarationSecurityDetails,
-  NoSecurityDetails
-}
+import models.SecurityDetailsType._
 
 import scala.concurrent.{ExecutionContext, Future}
 

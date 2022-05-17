@@ -70,7 +70,7 @@ import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index,
 import play.api.libs.json.Json
 import java.time.LocalDateTime
 
-import models.SecurityDetailsType.{EntryAndExitSummaryDeclarationSecurityDetails, EntrySummaryDeclarationSecurityDetails}
+import models.SecurityDetailsType.EntrySummaryDeclarationSecurityDetails
 import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 
 case object Scenario3 extends UserAnswerScenario {
@@ -326,7 +326,7 @@ case object Scenario3 extends UserAnswerScenario {
                        Normal,
                        CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None),
                        Option2,
-                       EntryAndExitSummaryDeclarationSecurityDetails
+                       EntrySummaryDeclarationSecurityDetails
     )
 
   val toModel = JourneyDomain(

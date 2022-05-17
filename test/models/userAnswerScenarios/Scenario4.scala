@@ -298,12 +298,7 @@ case object Scenario4 extends UserAnswerScenario {
   )
 
   private val preTaskList =
-    PreTaskListDetails(lrn,
-                       Normal,
-                       CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None),
-                       Option2,
-                       EntryAndExitSummaryDeclarationSecurityDetails
-    )
+    PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None), Option2, ExitSummaryDeclarationSecurityDetails)
 
   val toModel: JourneyDomain = JourneyDomain(
     preTaskList,
