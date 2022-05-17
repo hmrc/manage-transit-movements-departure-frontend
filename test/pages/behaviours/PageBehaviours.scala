@@ -16,6 +16,7 @@
 
 package pages.behaviours
 
+import commonTestUtils.UserAnswersSpecHelper
 import generators.{Generators, UserAnswersGenerator}
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
@@ -35,7 +36,8 @@ trait PageBehaviours
     with Generators
     with OptionValues
     with TryValues
-    with UserAnswersGenerator {
+    with UserAnswersGenerator
+    with UserAnswersSpecHelper {
 
   class BeRetrievable[A] {
 

@@ -31,116 +31,109 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
   private val navigator = new PreTaskListNavigator
 
   "Navigator" - {
-    "in Normal mode" - {
+    "must go from a page that doesn't exist in the route map" - {
 
-      val mode = NormalMode
+      case object UnknownPage extends Page
 
-      "must go from a page that doesn't exist in the route map to Index" in {
-
-        case object UnknownPage extends Page
-
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            navigator
-              .nextPage(UnknownPage, mode, answers)
-              .mustBe(routes.LocalReferenceNumberController.onPageLoad())
-        }
-      }
-
-      "must go from Local Reference Number page to Office of Departure page" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            navigator
-              .nextPage(LocalReferenceNumberPage, mode, answers)
-              .mustBe(routes.OfficeOfDepartureController.onPageLoad(answers.lrn, mode))
-        }
-      }
-
-      "must go from Office of Departure page to Procedure Type page" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            navigator
-              .nextPage(OfficeOfDeparturePage, mode, answers)
-              .mustBe(routes.ProcedureTypeController.onPageLoad(answers.lrn, mode))
-        }
-      }
-
-      "must go from Procedure Type page to Declaration Type page" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            navigator
-              .nextPage(ProcedureTypePage, mode, answers)
-              .mustBe(routes.DeclarationTypeController.onPageLoad(answers.lrn, mode))
-        }
-      }
-
-      "must go from Declaration Type page" - {
-        "to Security Details Type page" - {
-          "when not Normal procedure type and TIR declaration type" in {
-            forAll(arbitrary[(UserAnswers, DeclarationType, ProcedureType)].suchThat {
-              case (_, declarationType, procedureType) => !(declarationType == DeclarationType.Option4 && procedureType == ProcedureType.Normal)
-            }) {
-              case (answers, declarationType, procedureType) =>
-                val updatedAnswers = answers
-                  .unsafeSetVal(ProcedureTypePage)(procedureType)
-                  .unsafeSetVal(DeclarationTypePage)(declarationType)
-
-                navigator
-                  .nextPage(DeclarationTypePage, mode, updatedAnswers)
-                  .mustBe(routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, mode))
-            }
-          }
-        }
-
-        "to TIR Carnet Reference page" - {
-          "when Normal procedure type and TIR declaration type" in {
-            forAll(arbitrary[UserAnswers]) {
-              answers =>
-                val updatedAnswers = answers
-                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                  .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
-
-                navigator
-                  .nextPage(DeclarationTypePage, mode, updatedAnswers)
-                  .mustBe(routes.TIRCarnetReferenceController.onPageLoad(answers.lrn, mode))
-            }
+      "when in normal mode" - {
+        "to start of the departure journey" in {
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              navigator
+                .nextPage(UnknownPage, NormalMode, answers)
+                .mustBe(routes.LocalReferenceNumberController.onPageLoad())
           }
         }
       }
 
-      "must go from TIR Carnet Reference page to Security Details Type page" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            navigator
-              .nextPage(TIRCarnetReferencePage, mode, answers)
-              .mustBe(routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, mode))
-        }
-      }
-
-      "must go from Security Details Type page to Check Your Answers page" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            navigator
-              .nextPage(SecurityDetailsTypePage, mode, answers)
-              .mustBe(routes.CheckYourAnswersController.onPageLoad(answers.lrn))
+      "when in check mode" - {
+        "to session expired" in {
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              navigator
+                .nextPage(UnknownPage, CheckMode, answers)
+                .mustBe(controllers.routes.SessionExpiredController.onPageLoad())
+          }
         }
       }
     }
 
-    "in Check mode" - {
+    "must go from Local Reference Number page to Office of Departure page" in {
+      forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+        (answers, mode) =>
+          navigator
+            .nextPage(LocalReferenceNumberPage, mode, answers)
+            .mustBe(routes.OfficeOfDepartureController.onPageLoad(answers.lrn, mode))
+      }
+    }
 
-      val mode = CheckMode
+    "must go from Office of Departure page to Procedure Type page" in {
+      forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+        (answers, mode) =>
+          navigator
+            .nextPage(OfficeOfDeparturePage, mode, answers)
+            .mustBe(routes.ProcedureTypeController.onPageLoad(answers.lrn, mode))
+      }
+    }
 
-      "must go to Check Your Answers page" in {
+    "must go from Procedure Type page to Declaration Type page" in {
+      forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+        (answers, mode) =>
+          navigator
+            .nextPage(ProcedureTypePage, mode, answers)
+            .mustBe(routes.DeclarationTypeController.onPageLoad(answers.lrn, mode))
+      }
+    }
 
-        case object UnknownPage extends Page
+    "must go from Declaration Type page" - {
+      "to Security Details Type page" - {
+        "when not Normal procedure type and TIR declaration type" in {
+          forAll(arbitrary[(UserAnswers, Mode, DeclarationType, ProcedureType)].suchThat {
+            case (_, _, declarationType, procedureType) => !(declarationType == DeclarationType.Option4 && procedureType == ProcedureType.Normal)
+          }) {
+            case (answers, mode, declarationType, procedureType) =>
+              val updatedAnswers = answers
+                .unsafeSetVal(ProcedureTypePage)(procedureType)
+                .unsafeSetVal(DeclarationTypePage)(declarationType)
 
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            navigator
-              .nextPage(UnknownPage, mode, answers)
-              .mustBe(routes.CheckYourAnswersController.onPageLoad(answers.lrn))
+              navigator
+                .nextPage(DeclarationTypePage, mode, updatedAnswers)
+                .mustBe(routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, mode))
+          }
         }
+      }
+
+      "to TIR Carnet Reference page" - {
+        "when Normal procedure type and TIR declaration type" in {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val updatedAnswers = answers
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
+
+              navigator
+                .nextPage(DeclarationTypePage, mode, updatedAnswers)
+                .mustBe(routes.TIRCarnetReferenceController.onPageLoad(answers.lrn, mode))
+          }
+        }
+      }
+    }
+
+    "must go from TIR Carnet Reference page to Security Details Type page" in {
+      forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+        (answers, mode) =>
+          navigator
+            .nextPage(TIRCarnetReferencePage, mode, answers)
+            .mustBe(routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, mode))
+      }
+    }
+
+    "must go from Security Details Type page to Check Your Answers page" in {
+      forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+        (answers, mode) =>
+          navigator
+            .nextPage(SecurityDetailsTypePage, mode, answers)
+            .mustBe(routes.CheckYourAnswersController.onPageLoad(answers.lrn))
       }
     }
   }

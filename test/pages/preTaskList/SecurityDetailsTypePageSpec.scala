@@ -16,12 +16,10 @@
 
 package pages.preTaskList
 
-import base.SpecBase
-import commonTestUtils.UserAnswersSpecHelper
 import models.SecurityDetailsType
 import pages.behaviours.PageBehaviours
 
-class SecurityDetailsTypePageSpec extends PageBehaviours with SpecBase with UserAnswersSpecHelper {
+class SecurityDetailsTypePageSpec extends PageBehaviours {
 
   "SecurityDetailsTypePage" - {
 
