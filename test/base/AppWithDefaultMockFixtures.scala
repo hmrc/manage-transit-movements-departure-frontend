@@ -32,19 +32,16 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Call
 import play.api.test.Helpers
 import repositories.SessionRepository
-import uk.gov.hmrc.nunjucks.NunjucksRenderer
 
 trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerSuite with GuiceFakeApplicationFactory with MockitoSugar {
   self: TestSuite =>
 
   override def beforeEach(): Unit =
     Mockito.reset(
-      mockRenderer,
       mockSessionRepository,
       mockDataRetrievalActionProvider
     )
 
-  final val mockRenderer: NunjucksRenderer           = mock[NunjucksRenderer]
   final val mockSessionRepository: SessionRepository = mock[SessionRepository]
   final val mockDataRetrievalActionProvider          = mock[DataRetrievalActionProvider]
 
@@ -52,10 +49,12 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
     guiceApplicationBuilder()
       .build()
 
-  protected def setUserAnswers(answers: Option[UserAnswers]): Unit =
-    when(mockDataRetrievalActionProvider.apply(any())) thenReturn new FakeDataRetrievalAction(answers)
+  protected def setExistingUserAnswers(userAnswers: UserAnswers): Unit = setUserAnswers(Some(userAnswers))
 
   protected def setNoExistingUserAnswers(): Unit = setUserAnswers(None)
+
+  private def setUserAnswers(userAnswers: Option[UserAnswers]): Unit =
+    when(mockDataRetrievalActionProvider.apply(any())) thenReturn new FakeDataRetrievalAction(userAnswers)
 
   protected val onwardRoute: Call = Call("GET", "/foo")
 
@@ -65,10 +64,7 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
     new GuiceApplicationBuilder()
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
-        bind[CheckDependentSectionAction].to[FakeDependencyCheckActionFilter],
-        bind[NameRequiredAction].to[FakeNameRequiredAction],
         bind[IdentifierAction].to[FakeIdentifierAction],
-        bind[NunjucksRenderer].toInstance(mockRenderer),
         bind[SessionRepository].toInstance(mockSessionRepository),
         bind[DataRetrievalActionProvider].toInstance(mockDataRetrievalActionProvider),
         bind[MessagesApi].toInstance(Helpers.stubMessagesApi())

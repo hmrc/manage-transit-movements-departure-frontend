@@ -16,21 +16,17 @@
 
 package base
 
-import models.domain.SealDomain
-import models.journeyDomain.EitherType
-import models.reference.CountryCode
-import models.{DepartureId, EoriNumber, Index, LocalReferenceNumber, PrincipalAddress, UserAnswers}
-import org.scalactic.source
+import models.{EoriNumber, Index, LocalReferenceNumber, UserAnswers}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.exceptions.{StackDepthException, TestFailedException}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.{EitherValues, OptionValues, TryValues}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import pages.QuestionPage
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.Injector
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, Reads, Writes}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
@@ -46,21 +42,12 @@ trait SpecBase
     with IntegrationPatience
     with MockitoSugar {
 
-  val nonEUCountries =
-    Seq(CountryCode("AD"), CountryCode("IS"), CountryCode("LI"), CountryCode("NO"), CountryCode("SM"), CountryCode("SJ"), CountryCode("CH"))
-
-  val userAnswersId             = "id"
   val eoriNumber: EoriNumber    = EoriNumber("EoriNumber")
   val lrn: LocalReferenceNumber = LocalReferenceNumber("ABCD1234567890123").get
-  val sealIndex: Index          = Index(0)
-  val sealDomain: SealDomain    = SealDomain("sealNumber")
-  val sealDomain2: SealDomain   = SealDomain("sealNumber2")
-  val sealDomain3: SealDomain   = SealDomain("sealNumber3")
 
   val index: Index          = Index(0)
   val referenceIndex: Index = Index(0)
   val documentIndex: Index  = Index(0)
-
   val itemIndex: Index      = Index(0)
   val packageIndex: Index   = Index(0)
   val containerIndex: Index = Index(0)
@@ -69,16 +56,6 @@ trait SpecBase
 
   val emptyUserAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj())
 
-  val principalName: String = "principalName"
-
-  val carrierName: String = "carrierName"
-
-  val principalAddress: PrincipalAddress = PrincipalAddress("numberAndStreet", "town", "SW1A 1AA")
-
-  val configKey = "config"
-
-  val departureId: DepartureId = DepartureId(1)
-
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
   def injector: Injector = app.injector
@@ -86,15 +63,15 @@ trait SpecBase
   def messagesApi: MessagesApi    = injector.instanceOf[MessagesApi]
   implicit def messages: Messages = messagesApi.preferred(fakeRequest)
 
-  implicit class UserAnswerReaderResultOps[R](userAnswersReaderResult: EitherType[R]) {
+  implicit class RichUserAnswers(userAnswers: UserAnswers) {
 
-    def isSuccessful(implicit pos: source.Position): R =
-      userAnswersReaderResult match {
-        case Right(value) => value
-        case Left(value) =>
-          throw new TestFailedException((_: StackDepthException) => Some(s"Expected reader to be successful, reader failed on $value"), None, pos)
+    def getValue[T](page: QuestionPage[T])(implicit rds: Reads[T]): T =
+      userAnswers.get(page).value
 
-      }
+    def setValue[T](page: QuestionPage[T], value: T)(implicit wts: Writes[T]): UserAnswers =
+      userAnswers.set(page, value).success.value
 
+    def removeValue(page: QuestionPage[_]): UserAnswers =
+      userAnswers.remove(page).success.value
   }
 }

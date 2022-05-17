@@ -18,15 +18,14 @@ package controllers.preTaskList
 
 import controllers.actions._
 import forms.preTaskList.OfficeOfDepartureFormProvider
-import models.{CountryList, LocalReferenceNumber, Mode}
+import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import pages.addItems.IsNonEuOfficePage
 import pages.preTaskList.OfficeOfDeparturePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.{CountriesService, CustomsOfficesService}
+import services.CustomsOfficesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.OfficeOfDepartureView
 
@@ -41,7 +40,6 @@ class OfficeOfDepartureController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   formProvider: OfficeOfDepartureFormProvider,
-  countriesService: CountriesService,
   customsOfficesService: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
   view: OfficeOfDepartureView
@@ -77,12 +75,9 @@ class OfficeOfDepartureController @Inject() (
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
               value =>
                 for {
-                  getNonEuCountries: CountryList <- countriesService.getNonEuTransitCountries()
-                  isNotEu: Boolean = getNonEuCountries.getCountry(value.countryId).isDefined
-                  ua1 <- Future.fromTry(request.userAnswers.set(OfficeOfDeparturePage, value))
-                  ua2 <- Future.fromTry(ua1.set(IsNonEuOfficePage, isNotEu))
-                  _   <- sessionRepository.set(ua2)
-                } yield Redirect(navigator.nextPage(OfficeOfDeparturePage, mode, ua2))
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(OfficeOfDeparturePage, value))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(OfficeOfDeparturePage, mode, updatedAnswers))
             )
       }
   }

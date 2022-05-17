@@ -42,7 +42,7 @@ class CheckYourAnswersController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     _ =>
-      Redirect(controllers.routes.DeclarationSummaryController.onPageLoad(lrn))
+      Redirect(???) // TODO
   }
 
 }

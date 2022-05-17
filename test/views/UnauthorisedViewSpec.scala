@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-package models
+package views
 
-case class Field(name: String, errorKeys: Map[ErrorFieldType, String])
+import play.twirl.api.HtmlFormat
+import views.behaviours.ViewBehaviours
+import views.html.UnauthorisedView
 
-object Field {
+class UnauthorisedViewSpec extends ViewBehaviours {
 
-  def apply(name: String, errors: (ErrorFieldType, String)*): Field =
-    Field(name, errors.toMap)
+  override def view: HtmlFormat.Appendable =
+    app.injector.instanceOf[UnauthorisedView].apply()(fakeRequest, messages)
+
+  override val prefix: String = "unauthorised"
+
+  behave like pageWithoutBackLink()
+
+  behave like pageWithHeading()
+
+  behave like pageWithContent("p", "You must have an account with an activated EORI number.")
 }
-
-sealed trait ErrorFieldType
-case object Required extends ErrorFieldType
-case object Invalid extends ErrorFieldType

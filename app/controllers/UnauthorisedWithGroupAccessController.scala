@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-package models
+package controllers
 
-case class Field(name: String, errorKeys: Map[ErrorFieldType, String])
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.UnauthorisedWithGroupAccessView
 
-object Field {
+import javax.inject.Inject
 
-  def apply(name: String, errors: (ErrorFieldType, String)*): Field =
-    Field(name, errors.toMap)
+class UnauthorisedWithGroupAccessController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  view: UnauthorisedWithGroupAccessView
+) extends FrontendBaseController
+    with I18nSupport {
+
+  def onPageLoad(): Action[AnyContent] = Action {
+    implicit request =>
+      Unauthorized(view())
+  }
 }
-
-sealed trait ErrorFieldType
-case object Required extends ErrorFieldType
-case object Invalid extends ErrorFieldType

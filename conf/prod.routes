@@ -1,14 +1,7 @@
 # Add all the application routes to the app.routes file
 ->         /manage-transit-movements/departure                   app.Routes
 ->         /manage-transit-movements/departure                   app.preTaskList.Routes
-->         /manage-transit-movements/departure                   app.addItems.Routes
-->         /manage-transit-movements/departure                   app.goodsSummary.Routes
-->         /manage-transit-movements/departure                   app.guaranteeDetails.Routes
-->         /manage-transit-movements/departure                   app.movementDetails.Routes
-->         /manage-transit-movements/departure                   app.routeDetails.Routes
-->         /manage-transit-movements/departure                   app.safetyAndSecurity.Routes
-->         /manage-transit-movements/departure                   app.traderDetails.Routes
-->         /manage-transit-movements/departure                   app.transportDetails.Routes
+
 ->         /                                                     health.Routes
 
 GET        /admin/metrics             @com.kenshoo.play.metrics.MetricsController.metrics

@@ -34,7 +34,7 @@ import scala.concurrent.Future
 
 class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler with ScalaCheckPropertyChecks {
 
-  private val startUrl = "transit-movements-trader-reference-data"
+  private val baseUrl = "transit-movements-trader-reference-data"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder = super
     .guiceApplicationBuilder()
@@ -77,24 +77,6 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       |]
       |""".stripMargin
 
-  private val transportModeListResponseJson: String =
-    """
-      |[
-      |  {
-      |    "state": "valid",
-      |    "activeFrom": "2020-05-30",
-      |    "code": "1",
-      |    "description": "Sea transport"
-      |  },
-      |  {
-      |    "state": "valid",
-      |    "activeFrom": "2015-07-01",
-      |    "code": "10",
-      |    "description": "Sea transport"
-      |  }
-      |]
-      |""".stripMargin
-
   private val customsOfficeJson: String =
     """
       |  {
@@ -106,121 +88,12 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       |  }
       |""".stripMargin
 
-  private val packageTypeJson: String =
-    """
-      |[
-      |  {
-      |    "state": "valid",
-      |    "activeFrom": "2015-10-01",
-      |    "code": "AB",
-      |    "description": "description 1"
-      |  },
-      |  {
-      |    "state": "valid",
-      |    "activeFrom": "2015-07-01",
-      |    "code": "CD",
-      |    "description": "description 2"
-      |  }
-      |]
-      |""".stripMargin
-
-  private val previousDocumentJson: String =
-    """
-      |[
-      |  {
-      |    "code": "T1",
-      |    "description": "Description T1"
-      |  },
-      |  {
-      |    "code": "T2F"
-      |  }
-      |]
-      |""".stripMargin
-
-  private val documentJson: String =
-    """
-      |[
-      | {
-      |    "code": "18",
-      |    "transportDocument": false,
-      |    "description": "Movement certificate A.TR.1"
-      |  },
-      |  {
-      |    "code": "2",
-      |    "transportDocument": false,
-      |    "description": "Certificate of conformity"
-      |  }
-      |]
-      |""".stripMargin
-
-  private val specialMentionJson: String =
-    """
-      |[
-      | {
-      |    "code": "10600",
-      |    "description": "Negotiable Bill of lading 'to order blank endorsed'"
-      |  },
-      |  {
-      |    "code": "30400",
-      |    "description": "RET-EXP – Copy 3 to be returned"
-      |  }
-      |]
-      |""".stripMargin
-
-  private val dangerousGoodsCodeResponseJson: String =
-    """
-      |[
-      |  {
-      |    "code": "0004",
-      |    "description": "AMMONIUM PICRATE dry or wetted with less than 10% water, by mass"
-      |  },
-      |  {
-      |    "code": "0005",
-      |    "description": "CARTRIDGES FOR WEAPONS with bursting charge"
-      |  }
-      |]
-      |""".stripMargin
-
-  private val methodOfPaymentJson: String =
-    """
-      |[
-      | {
-      |    "code": "A",
-      |    "description": "Payment in cash"
-      |  },
-      |  {
-      |    "code": "B",
-      |    "description": "Payment by credit card"
-      |  }
-      |]
-      |""".stripMargin
-
-  private val circumstanceIndicatorJson: String =
-    """
-      |[
-      |  {
-      |    "code": "A",
-      |    "description": "Data1"
-      |  },
-      |  {
-      |    "code": "B",
-      |    "description": "Data2"
-      |  }
-      |]
-      |""".stripMargin
-
-  val errorResponses: Gen[Int] = Gen
-    .chooseNum(400, 599)
-    .map(
-      x => if (x == 404) x + 1 else x
-    )
-
   "Reference Data" - {
 
     "getCustomsOffices" - {
       "must return a successful future response with a sequence of CustomsOffices" in {
         server.stubFor(
-          get(urlEqualTo(s"/$startUrl/customs-offices"))
+          get(urlEqualTo(s"/$baseUrl/customs-offices"))
             .willReturn(okJson(customsOfficeResponseJson))
         )
 
@@ -234,7 +107,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
       "must return a successful future response with roles with a sequence of CustomsOffices" in {
         server.stubFor(
-          get(urlEqualTo(s"/$startUrl/customs-offices?role=NPM"))
+          get(urlEqualTo(s"/$baseUrl/customs-offices?role=NPM"))
             .willReturn(okJson(customsOfficeResponseJson))
         )
 
@@ -247,14 +120,14 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$startUrl/customs-offices", connector.getCustomsOffices())
+        checkErrorResponse(s"/$baseUrl/customs-offices", connector.getCustomsOffices())
       }
     }
 
     "getCustomsOfficesOfTheCountry" - {
       "must return a successful future response with a sequence of CustomsOffices" in {
         server.stubFor(
-          get(urlEqualTo(s"/$startUrl/customs-offices/GB"))
+          get(urlEqualTo(s"/$baseUrl/customs-offices/GB"))
             .willReturn(okJson(customsOfficeResponseJson))
         )
 
@@ -271,7 +144,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
       "must return a successful future response when roles are defined with a sequence of CustomsOffices" in {
         server.stubFor(
-          get(urlEqualTo(s"/$startUrl/customs-offices/GB?role=TRA"))
+          get(urlEqualTo(s"/$baseUrl/customs-offices/GB?role=TRA"))
             .willReturn(okJson(customsOfficeResponseJson))
         )
 
@@ -288,7 +161,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
       "must return a successful future response when CustomsOffice is not found" in {
         server.stubFor(
-          get(urlEqualTo(s"/$startUrl/customs-offices/AR?role=TRA")).willReturn(
+          get(urlEqualTo(s"/$baseUrl/customs-offices/AR?role=TRA")).willReturn(
             aResponse()
               .withStatus(NOT_FOUND)
               .withHeader(CONTENT_TYPE, JSON)
@@ -302,14 +175,14 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$startUrl/customs-offices/GB", connector.getCustomsOfficesForCountry(CountryCode("GB")))
+        checkErrorResponse(s"/$baseUrl/customs-offices/GB", connector.getCustomsOfficesForCountry(CountryCode("GB")))
       }
     }
 
     "getCountries" - {
       "must return Seq of Country when successful" in {
         server.stubFor(
-          get(urlEqualTo(s"/$startUrl/countries?customsOfficeRole=ANY&exclude=IT&exclude=DE&membership=ctc"))
+          get(urlEqualTo(s"/$baseUrl/countries?customsOfficeRole=ANY&exclude=IT&exclude=DE&membership=ctc"))
             .willReturn(okJson(countriesResponseJson))
         )
 
@@ -329,29 +202,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$startUrl/countries?customsOfficeRole=ANY", connector.getCountries(Nil))
-      }
-    }
-
-    "getTransportModes" - {
-
-      "must return Seq of Transport modes when successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$startUrl/transport-modes"))
-            .willReturn(okJson(transportModeListResponseJson))
-        )
-
-        val expectedResult: Seq[TransportMode] = Seq(
-          TransportMode("1", "Sea transport"),
-          TransportMode("10", "Sea transport")
-        )
-
-        connector.getTransportModes().futureValue mustEqual expectedResult
-      }
-
-      "must return an exception when an error response is returned" in {
-
-        checkErrorResponse(s"/$startUrl/transport-modes", connector.getTransportModes())
+        checkErrorResponse(s"/$baseUrl/countries?customsOfficeRole=ANY", connector.getCountries(Nil))
       }
     }
 
@@ -359,7 +210,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
       "must return a Customs Office when successful" in {
         server.stubFor(
-          get(urlEqualTo(s"/$startUrl/customs-office/1"))
+          get(urlEqualTo(s"/$baseUrl/customs-office/1"))
             .willReturn(okJson(customsOfficeJson))
         )
 
@@ -370,167 +221,16 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
       "must return an exception when an error response is returned" in {
 
-        checkErrorResponse(s"/$startUrl/customs-office/1", connector.getCustomsOffice("1"))
+        checkErrorResponse(s"/$baseUrl/customs-office/1", connector.getCustomsOffice("1"))
       }
     }
-
-    "getPackageTypes" - {
-
-      "must return list of package types when successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$startUrl/kinds-of-package"))
-            .willReturn(okJson(packageTypeJson))
-        )
-
-        val expectResult = Seq(
-          PackageType("AB", "description 1"),
-          PackageType("CD", "description 2")
-        )
-
-        connector.getPackageTypes().futureValue mustEqual expectResult
-
-      }
-
-      "must return an exception when an error response is returned" in {
-
-        checkErrorResponse(s"/$startUrl/kinds-of-package", connector.getPackageTypes())
-      }
-
-    }
-
-    "getPreviousDocumentType" - {
-
-      "must return list of previous document types when successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$startUrl/previous-document-types"))
-            .willReturn(okJson(previousDocumentJson))
-        )
-
-        val expectResult = Seq(
-          PreviousReferencesDocumentType("T1", Some("Description T1")),
-          PreviousReferencesDocumentType("T2F", None)
-        )
-
-        connector.getPreviousReferencesDocumentTypes().futureValue mustEqual expectResult
-      }
-
-      "must return an exception when an error response is returned" in {
-
-        checkErrorResponse(s"/$startUrl/previous-document-types", connector.getPreviousReferencesDocumentTypes())
-      }
-
-    }
-
-    "getDocumentType" - {
-
-      "must return list of document types when successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$startUrl/document-types"))
-            .willReturn(okJson(documentJson))
-        )
-
-        val expectResult = Seq(
-          DocumentType("18", "Movement certificate A.TR.1", false),
-          DocumentType("2", "Certificate of conformity", false)
-        )
-
-        connector.getDocumentTypes().futureValue mustEqual expectResult
-      }
-
-      "must return an exception when an error response is returned" in {
-
-        checkErrorResponse(s"/$startUrl/document-type", connector.getDocumentTypes())
-      }
-
-    }
-
-    "getSpecialMentionTypes" - {
-
-      "must return list of document types when successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$startUrl/additional-information"))
-            .willReturn(okJson(specialMentionJson))
-        )
-
-        val expectResult = Seq(
-          SpecialMention("10600", "Negotiable Bill of lading 'to order blank endorsed'"),
-          SpecialMention("30400", "RET-EXP – Copy 3 to be returned")
-        )
-
-        connector.getSpecialMentionTypes().futureValue mustEqual expectResult
-      }
-
-      "must return an exception when an error response is returned" in {
-
-        checkErrorResponse(s"/$startUrl/additional-information", connector.getSpecialMentionTypes())
-      }
-
-    }
-
-    "getDangerousGoodsCodes" - {
-
-      "must return Seq of Dangerous goods codes when successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$startUrl/dangerous-goods-codes"))
-            .willReturn(okJson(dangerousGoodsCodeResponseJson))
-        )
-
-        val expectedResult: Seq[DangerousGoodsCode] = Seq(
-          DangerousGoodsCode("0004", "AMMONIUM PICRATE dry or wetted with less than 10% water, by mass"),
-          DangerousGoodsCode("0005", "CARTRIDGES FOR WEAPONS with bursting charge")
-        )
-
-        connector.getDangerousGoodsCodes().futureValue mustEqual expectedResult
-      }
-
-      "must return an exception when an error response is returned" in {
-
-        checkErrorResponse(s"/$startUrl/dangerous-goods-code", connector.getDangerousGoodsCodes())
-      }
-    }
-
-    "getMethodsOfPayment" - {
-      "must return list of methods of payment when successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$startUrl/method-of-payment"))
-            .willReturn(okJson(methodOfPaymentJson))
-        )
-        val expectResult = Seq(
-          MethodOfPayment("A", "Payment in cash"),
-          MethodOfPayment("B", "Payment by credit card")
-        )
-        connector.getMethodsOfPayment().futureValue mustEqual expectResult
-      }
-      "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$startUrl/method-of-payment", connector.getMethodsOfPayment())
-      }
-    }
-
-    "getCircumstanceIndicators" - {
-
-      "must return Seq of circumstance indicators when successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$startUrl/circumstance-indicators"))
-            .willReturn(okJson(circumstanceIndicatorJson))
-        )
-
-        val expectedResult: Seq[CircumstanceIndicator] = Seq(
-          CircumstanceIndicator("A", "Data1"),
-          CircumstanceIndicator("B", "Data2")
-        )
-
-        connector.getCircumstanceIndicators().futureValue mustEqual expectedResult
-      }
-
-      "must return an exception when an error response is returned" in {
-
-        checkErrorResponse(s"/$startUrl/circumstance-indicators", connector.getCircumstanceIndicators())
-      }
-    }
-
   }
 
-  private def checkErrorResponse(url: String, result: => Future[_]): Assertion =
+  private def checkErrorResponse(url: String, result: => Future[_]): Assertion = {
+    val errorResponses: Gen[Int] = Gen
+      .chooseNum(400: Int, 599: Int)
+      .suchThat(_ != 404)
+
     forAll(errorResponses) {
       errorResponse =>
         server.stubFor(
@@ -545,5 +245,6 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
           _ mustBe an[Exception]
         }
     }
+  }
 
 }

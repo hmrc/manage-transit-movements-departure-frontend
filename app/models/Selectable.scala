@@ -16,14 +16,18 @@
 
 package models
 
-case class Field(name: String, errorKeys: Map[ErrorFieldType, String])
+import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 
-object Field {
-
-  def apply(name: String, errors: (ErrorFieldType, String)*): Field =
-    Field(name, errors.toMap)
+trait Selectable {
+  def toSelectItem(selected: Boolean = false): SelectItem
 }
 
-sealed trait ErrorFieldType
-case object Required extends ErrorFieldType
-case object Invalid extends ErrorFieldType
+object Selectable {
+
+  implicit class Selectables(selectables: Seq[Selectable]) {
+
+    def toSelectItems(selectedValue: Option[Selectable]): Seq[SelectItem] = selectables.map(
+      x => x.toSelectItem(selectedValue.contains(x))
+    )
+  }
+}

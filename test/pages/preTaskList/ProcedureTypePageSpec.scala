@@ -37,7 +37,7 @@ class ProcedureTypePageSpec extends PageBehaviours {
         "when Simplified selected" in {
           forAll(arbitrary[String]) {
             carnetReference =>
-              val preChange  = emptyUserAnswers.unsafeSetVal(TIRCarnetReferencePage)(carnetReference)
+              val preChange  = emptyUserAnswers.setValue(TIRCarnetReferencePage, carnetReference)
               val postChange = preChange.set(ProcedureTypePage, Simplified).success.value
 
               postChange.get(TIRCarnetReferencePage) mustNot be(defined)
@@ -49,7 +49,7 @@ class ProcedureTypePageSpec extends PageBehaviours {
         "when Normal selected" in {
           forAll(arbitrary[String]) {
             carnetReference =>
-              val preChange  = emptyUserAnswers.unsafeSetVal(TIRCarnetReferencePage)(carnetReference)
+              val preChange  = emptyUserAnswers.setValue(TIRCarnetReferencePage, carnetReference)
               val postChange = preChange.set(ProcedureTypePage, Normal).success.value
 
               postChange.get(TIRCarnetReferencePage) must be(defined)

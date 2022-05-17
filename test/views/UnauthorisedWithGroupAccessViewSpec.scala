@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-package models
+package views
 
-case class Field(name: String, errorKeys: Map[ErrorFieldType, String])
+import play.twirl.api.HtmlFormat
+import views.behaviours.ViewBehaviours
+import views.html.UnauthorisedWithGroupAccessView
 
-object Field {
+class UnauthorisedWithGroupAccessViewSpec extends ViewBehaviours {
 
-  def apply(name: String, errors: (ErrorFieldType, String)*): Field =
-    Field(name, errors.toMap)
+  override def view: HtmlFormat.Appendable =
+    injector.instanceOf[UnauthorisedWithGroupAccessView].apply()(fakeRequest, messages)
+
+  override val prefix: String = "unauthorisedWithGroupAccess"
+
+  behave like pageWithBackLink
+
+  behave like pageWithHeading()
+
+  behave like pageWithContent("p", "If you already have access, you must contact your group administrator to update your access rights.")
+
 }
-
-sealed trait ErrorFieldType
-case object Required extends ErrorFieldType
-case object Invalid extends ErrorFieldType
