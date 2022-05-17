@@ -41,13 +41,12 @@ import models.messages.guarantee.{Guarantee, GuaranteeReferenceWithGrn, Guarante
 import models.messages.header.{Header, Transport}
 import models.messages.safetyAndSecurity._
 import models.messages.trader._
-import models.{CommonAddress, EoriNumber, SecurityDetailsType, UserAnswers}
+import models.{CommonAddress, EoriNumber, UserAnswers}
 import play.api.Logging
 import repositories.InterchangeControlReferenceIdRepository
 import java.time.LocalDateTime
 
 import javax.inject.Inject
-import models.SecurityDetailsType._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -350,14 +349,6 @@ class DeclarationRequestService @Inject() (
         countryCode => models.messages.Itinerary(countryCode.countryCode.code)
       )
 
-    def securityContentType(securityDetailsType: SecurityDetailsType): Option[Int] =
-      securityDetailsType match {
-        case NoSecurityDetails                             => Some(0)
-        case EntrySummaryDeclarationSecurityDetails        => Some(1)
-        case ExitSummaryDeclarationSecurityDetails         => Some(2)
-        case EntryAndExitSummaryDeclarationSecurityDetails => Some(3)
-      }
-
     DeclarationRequest(
       Meta(
         interchangeControlReference = icr,
@@ -392,7 +383,7 @@ class DeclarationRequestService @Inject() (
         speCirIndHEA1 = safetyAndSecurity.flatMap(_.circumstanceIndicator),
         traChaMetOfPayHEA1 = safetyAndSecurity.flatMap(_.paymentMethod.map(_.code)) orElse headerPaymentMethodFromItemDetails(journeyDomain.itemDetails),
         comRefNumHEA = safetyAndSecurity.flatMap(_.commercialReferenceNumber) orElse headerCommercialReferenceNumberFromItemDetails(journeyDomain.itemDetails),
-        secHEA358 = securityContentType(preTaskList.securityDetailsType),
+        secHEA358 = Some(preTaskList.securityDetailsType.securityContentType),
         conRefNumHEA = safetyAndSecurity.flatMap(_.conveyanceReferenceNumber),
         codPlUnHEA357 = safetyAndSecurity.flatMap(_.placeOfUnloading)
       ),

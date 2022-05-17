@@ -55,7 +55,7 @@ import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index,
 import play.api.libs.json.Json
 import java.time.LocalDateTime
 
-import models.SecurityDetailsType.{EntryAndExitSummaryDeclarationSecurityDetails, ExitSummaryDeclarationSecurityDetails}
+import models.SecurityDetailsType.ExitSummaryDeclarationSecurityDetails
 import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
 
 case object Scenario4 extends UserAnswerScenario {

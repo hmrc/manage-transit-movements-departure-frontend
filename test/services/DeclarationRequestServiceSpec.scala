@@ -111,7 +111,7 @@ class DeclarationRequestServiceSpec
           val result = service.convert(updatedUserAnswer).futureValue
 
           result.isRight mustBe true
-          result.value.header.secHEA358 mustBe Some(0)
+          result.value.header.secHEA358 mustBe Some(NoSecurityDetails.securityContentType)
         }
 
         "Pass value for the secHEA358When based on Safety and Security answer for EntrySummaryDeclarationSecurityDetails" in {
@@ -127,7 +127,7 @@ class DeclarationRequestServiceSpec
           val result = service.convert(updatedUserAnswer).futureValue
 
           result.isRight mustBe true
-          result.value.header.secHEA358 mustBe Some(1)
+          result.value.header.secHEA358 mustBe Some(EntrySummaryDeclarationSecurityDetails.securityContentType)
         }
 
         "Pass value for the secHEA358When based on Safety and Security answer for ExitSummaryDeclarationSecurityDetails" in {
@@ -143,7 +143,7 @@ class DeclarationRequestServiceSpec
           val result = service.convert(updatedUserAnswer).futureValue
 
           result.isRight mustBe true
-          result.value.header.secHEA358 mustBe Some(2)
+          result.value.header.secHEA358 mustBe Some(ExitSummaryDeclarationSecurityDetails.securityContentType)
         }
 
         "Pass value for the secHEA358When based on Safety and Security answer for EntyAndExitSummaryDeclarationSecurityDetails" in {
@@ -159,7 +159,7 @@ class DeclarationRequestServiceSpec
           val result = service.convert(updatedUserAnswer).futureValue
 
           result.isRight mustBe true
-          result.value.header.secHEA358 mustBe Some(3)
+          result.value.header.secHEA358 mustBe Some(EntryAndExitSummaryDeclarationSecurityDetails.securityContentType)
         }
       }
 
