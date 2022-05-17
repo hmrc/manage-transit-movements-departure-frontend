@@ -362,6 +362,7 @@ class DeclarationRequestService @Inject() (
         case ExitSummaryDeclarationSecurityDetails         => Some(2)
         case EntryAndExitSummaryDeclarationSecurityDetails => Some(3)
       }
+      
     DeclarationRequest(
       Meta(
         interchangeControlReference = icr,
