@@ -26,5 +26,5 @@ POST       /:lrn/pre-task-list/security-details                     controllers.
 GET        /:lrn/pre-task-list/change-security-details              controllers.preTaskList.SecurityDetailsTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/pre-task-list/change-security-details              controllers.preTaskList.SecurityDetailsTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/pre-task-list/pre-task-list/check-answers          controllers.preTaskList.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
-POST       /:lrn/pre-task-list/pre-task-list/check-answers          controllers.preTaskList.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)
+GET        /:lrn/pre-task-list/check-answers                        controllers.preTaskList.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/pre-task-list/check-answers                        controllers.preTaskList.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)
