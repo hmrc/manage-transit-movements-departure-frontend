@@ -29,9 +29,10 @@ class Module extends AbstractModule {
 
     bind(classOf[Navigator]).annotatedWith(classOf[PreTaskListDetails]).to(classOf[PreTaskListNavigator])
 
+    bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])
     bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl])
-    bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
+    bind(classOf[SpecificDataRequiredActionProvider]).to(classOf[SpecificDataRequiredActionImpl]).asEagerSingleton()
 
     bind(classOf[RenderConfig]).to(classOf[RenderConfigImpl]).asEagerSingleton()
 

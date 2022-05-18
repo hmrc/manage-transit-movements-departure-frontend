@@ -36,9 +36,7 @@ class OfficeOfDepartureController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @PreTaskListDetails navigator: Navigator,
-  identify: IdentifierAction,
-  getData: DataRetrievalActionProvider,
-  requireData: DataRequiredAction,
+  actions: Actions,
   formProvider: OfficeOfDepartureFormProvider,
   customsOfficesService: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
@@ -47,9 +45,9 @@ class OfficeOfDepartureController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      customsOfficesService.getCustomsOfficesOfDeparture.flatMap {
+      customsOfficesService.getCustomsOfficesOfDeparture.map {
         customsOfficeList =>
           val form = formProvider(customsOfficeList)
           val preparedForm = request.userAnswers
@@ -60,11 +58,11 @@ class OfficeOfDepartureController @Inject() (
             .map(form.fill)
             .getOrElse(form)
 
-          Future.successful(Ok(view(preparedForm, lrn, customsOfficeList.customsOffices, mode)))
+          Ok(view(preparedForm, lrn, customsOfficeList.customsOffices, mode))
       }
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       customsOfficesService.getCustomsOfficesOfDeparture.flatMap {
         customsOfficeList =>
