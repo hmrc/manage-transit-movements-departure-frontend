@@ -19,9 +19,7 @@ class $className;format="cap"$Controller @Inject()(
     override val messagesApi: MessagesApi,
     sessionRepository: SessionRepository,
     @$navRoute$ navigator: Navigator,
-    identify: IdentifierAction,
-    getData: DataRetrievalActionProvider,
-    requireData: DataRequiredAction,
+    actions: Actions,
     formProvider: $className$FormProvider,
     val controllerComponents: MessagesControllerComponents,
     view: $className$View
@@ -29,7 +27,7 @@ class $className;format="cap"$Controller @Inject()(
 
   private val form = formProvider()
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get($className$Page) match {
@@ -40,7 +38,7 @@ class $className;format="cap"$Controller @Inject()(
       Ok(view(preparedForm, lrn, mode))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
 
       form.bindFromRequest().fold(
