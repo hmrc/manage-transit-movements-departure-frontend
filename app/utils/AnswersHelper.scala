@@ -27,9 +27,9 @@ import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 
 class AnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) extends SummaryListRowHelper {
 
-  def lrn: LocalReferenceNumber = userAnswers.lrn
+  protected def lrn: LocalReferenceNumber = userAnswers.lrn
 
-  def getAnswerAndBuildRow[T](
+  protected def getAnswerAndBuildRow[T](
     page: QuestionPage[T],
     formatAnswer: T => Content,
     prefix: String,
@@ -48,7 +48,7 @@ class AnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) exten
         )
     }
 
-  def getAnswerAndBuildNamedRow[T](
+  protected def getAnswerAndBuildNamedRow[T](
     namePage: QuestionPage[String],
     answerPage: QuestionPage[T],
     formatAnswer: T => Content,
@@ -68,7 +68,7 @@ class AnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) exten
         )
     }
 
-  def getAnswerAndBuildSectionRow[T](
+  protected def getAnswerAndBuildSectionRow[T](
     page: QuestionPage[T],
     formatAnswer: T => String,
     prefix: String,
@@ -88,7 +88,7 @@ class AnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) exten
         )
     }
 
-  def getAnswerAndBuildListItem[T](
+  protected def getAnswerAndBuildListItem[T](
     page: QuestionPage[T],
     formatAnswer: T => String,
     changeCall: Call,

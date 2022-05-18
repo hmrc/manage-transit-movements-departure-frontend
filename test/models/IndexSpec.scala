@@ -14,19 +14,30 @@
  * limitations under the License.
  */
 
-package object services {
+package models
 
-  /**
-    * Utility Function to collect when the condition is true
-    * @param condition
-    * @param func
-    * @tparam T
-    * @return Option[T]
-    */
-  def collectWhen[T](condition: Boolean)(func: => Option[T]): Option[T] = {
-    val result = Option(condition) collect {
-      case true => func
+import base.SpecBase
+
+class IndexSpec extends SpecBase {
+
+  "Index display must return correct Int" in {
+    Index(0).display mustEqual 1
+  }
+
+  "indexPathBindable" - {
+    val binder = Index.indexPathBindable
+    val key    = "index"
+
+    "bind a valid index" in {
+      binder.bind(key, "1") mustBe Right(Index(0))
     }
-    result.flatten
+
+    "fail to bind an index with negative value" in {
+      binder.bind(key, "-1") mustBe Left("Index binding failed")
+    }
+
+    "unbind an index" in {
+      binder.unbind(key, Index(0)) mustEqual "1"
+    }
   }
 }

@@ -18,9 +18,9 @@ package viewModels.sections
 
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 
-case class TwirlSection(sectionTitle: Option[String], rows: Seq[SummaryListRow])
+case class Section(sectionTitle: Option[String], rows: Seq[SummaryListRow])
 
-object TwirlSection {
-  def apply(sectionTitle: String, rows: Seq[SummaryListRow]): TwirlSection = new TwirlSection(Some(sectionTitle), rows)
-  def apply(rows: Seq[SummaryListRow]): TwirlSection                       = new TwirlSection(None, rows)
+object Section {
+  def apply(sectionTitle: String, rows: Seq[SummaryListRow]): Section = new Section(Some(sectionTitle), rows)
+  def apply(rows: Seq[SummaryListRow]): Section                       = new Section(None, rows)
 }

@@ -18,7 +18,7 @@ package views.preTaskList
 
 import controllers.preTaskList.routes
 import play.twirl.api.HtmlFormat
-import viewModels.sections.TwirlSection
+import viewModels.sections.Section
 import views.behaviours.CheckYourAnswersViewBehaviours
 import views.html.preTaskList.CheckYourAnswersView
 
@@ -28,7 +28,7 @@ class CheckYourAnswersViewSpec extends CheckYourAnswersViewBehaviours {
 
   override def view: HtmlFormat.Appendable = viewWithSections(sections)
 
-  override def viewWithSections(sections: Seq[TwirlSection]): HtmlFormat.Appendable =
+  override def viewWithSections(sections: Seq[Section]): HtmlFormat.Appendable =
     injector.instanceOf[CheckYourAnswersView].apply(lrn, sections)(fakeRequest, messages)
 
   behave like pageWithTitle()

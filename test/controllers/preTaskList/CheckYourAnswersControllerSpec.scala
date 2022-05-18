@@ -26,7 +26,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewModels.PreTaskListViewModel
-import viewModels.sections.TwirlSection
+import viewModels.sections.Section
 import views.html.preTaskList.CheckYourAnswersView
 
 class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
@@ -41,7 +41,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
   "Check Your Answers Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val sampleSection = arbitrary[TwirlSection].sample.value
+      val sampleSection = arbitrary[Section].sample.value
 
       when(mockViewModel.apply(any())(any())).thenReturn(sampleSection)
 
