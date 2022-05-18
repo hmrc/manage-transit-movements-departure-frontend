@@ -16,14 +16,10 @@
 
 package pages
 
-import models.Index
 import pages.addItems.PreviousReferencePage
 import pages.behaviours.PageBehaviours
 
 class PreviousReferencePageSpec extends PageBehaviours {
-
-  private val index          = Index(0)
-  private val referenceIndex = Index(0)
 
   "PreviousReferencePage" - {
 

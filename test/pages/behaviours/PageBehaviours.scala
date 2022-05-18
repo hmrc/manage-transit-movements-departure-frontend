@@ -16,26 +16,18 @@
 
 package pages.behaviours
 
-import generators.{Generators, UserAnswersGenerator}
+import base.SpecBase
+import commonTestUtils.UserAnswersSpecHelper
+import generators.Generators
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
-import org.scalatest.{OptionValues, TryValues}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.QuestionPage
 import play.api.libs.json._
 import queries.AllItemsQuery
 
-trait PageBehaviours
-    extends AnyFreeSpec
-    with Matchers
-    with ScalaCheckPropertyChecks
-    with Generators
-    with OptionValues
-    with TryValues
-    with UserAnswersGenerator {
+trait PageBehaviours extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
 
   class BeRetrievable[A] {
 

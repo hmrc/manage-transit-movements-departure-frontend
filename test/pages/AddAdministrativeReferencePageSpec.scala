@@ -16,16 +16,12 @@
 
 package pages
 
-import models.{Index, UserAnswers}
+import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems.{AddAdministrativeReferencePage, AddExtraInformationPage, PreviousReferencePage, ReferenceTypePage}
 import pages.behaviours.PageBehaviours
 
-class AddAdministrativeReferencePageSpec extends PageBehaviours with ScalaCheckPropertyChecks {
-
-  private val index          = Index(0)
-  private val referenceIndex = Index(0)
+class AddAdministrativeReferencePageSpec extends PageBehaviours {
 
   "AddAdministrativeReferencePage" - {
 

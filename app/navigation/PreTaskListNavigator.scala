@@ -27,25 +27,25 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class PreTaskListNavigator @Inject() () extends Navigator {
 
-  override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case LocalReferenceNumberPage => ua => Some(OfficeOfDepartureController.onPageLoad(ua.lrn, NormalMode))
-    case OfficeOfDeparturePage    => ua => Some(ProcedureTypeController.onPageLoad(ua.lrn, NormalMode))
-    case ProcedureTypePage        => ua => Some(DeclarationTypeController.onPageLoad(ua.lrn, NormalMode))
-    case DeclarationTypePage      => ua => declarationTypeRoute(ua)
-    case TIRCarnetReferencePage   => ua => Some(SecurityDetailsTypeController.onPageLoad(ua.lrn, NormalMode))
+  override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(NormalMode)
+
+  override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(CheckMode)
+
+  private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
+    case LocalReferenceNumberPage => ua => Some(OfficeOfDepartureController.onPageLoad(ua.lrn, mode))
+    case OfficeOfDeparturePage    => ua => Some(ProcedureTypeController.onPageLoad(ua.lrn, mode))
+    case ProcedureTypePage        => ua => Some(DeclarationTypeController.onPageLoad(ua.lrn, mode))
+    case DeclarationTypePage      => ua => declarationTypeRoute(ua, mode)
+    case TIRCarnetReferencePage   => ua => Some(SecurityDetailsTypeController.onPageLoad(ua.lrn, mode))
     case SecurityDetailsTypePage  => ua => Some(CheckYourAnswersController.onPageLoad(ua.lrn))
   }
 
-  override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case _ => ua => Some(CheckYourAnswersController.onPageLoad(ua.lrn))
-  }
-
-  private def declarationTypeRoute(ua: UserAnswers): Option[Call] =
+  private def declarationTypeRoute(ua: UserAnswers, mode: Mode): Option[Call] =
     (ua.get(ProcedureTypePage), ua.get(DeclarationTypePage)) match {
       case (Some(ProcedureType.Normal), Some(DeclarationType.Option4)) =>
-        Some(TIRCarnetReferenceController.onPageLoad(ua.lrn, NormalMode))
+        Some(TIRCarnetReferenceController.onPageLoad(ua.lrn, mode))
       case _ =>
-        Some(SecurityDetailsTypeController.onPageLoad(ua.lrn, NormalMode))
+        Some(SecurityDetailsTypeController.onPageLoad(ua.lrn, mode))
     }
 
 }

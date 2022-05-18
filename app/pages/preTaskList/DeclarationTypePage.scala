@@ -16,14 +16,12 @@
 
 package pages.preTaskList
 
-import derivable.DeriveNumberOfGuarantees
-import models.{DeclarationType, GuaranteeType, Index, UserAnswers}
+import models.DeclarationType.Option4
+import models.{DeclarationType, UserAnswers}
 import pages.QuestionPage
-import pages.guaranteeDetails.GuaranteeTypePage
 import play.api.libs.json.JsPath
-import queries.GuaranteesQuery
 
-import scala.util.{Success, Try}
+import scala.util.Try
 
 case object DeclarationTypePage extends QuestionPage[DeclarationType] {
 
@@ -31,34 +29,9 @@ case object DeclarationTypePage extends QuestionPage[DeclarationType] {
 
   override def toString: String = "declarationType"
 
-  override def cleanup(value: Option[DeclarationType], userAnswers: UserAnswers): Try[UserAnswers] = {
-    import DeclarationType.{Option1, Option2, Option3, Option4}
-
-    val amountOfGuarantees = userAnswers.get(DeriveNumberOfGuarantees).getOrElse(0)
-
-    lazy val removeAllGuarantees: Try[UserAnswers] = (0 until userAnswers.get(DeriveNumberOfGuarantees).getOrElse(0)).foldLeft(Try(userAnswers))(
-      (ua, _) => ua.flatMap(_.remove(GuaranteesQuery(Index(0))))
-    )
-
-    lazy val findTirGuaranteeType: Option[Int] = (0 until amountOfGuarantees).find {
-      index =>
-        userAnswers.get(GuaranteeTypePage(Index(index))).contains(GuaranteeType.TIR)
-    }
-
+  override def cleanup(value: Option[DeclarationType], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(Option1 | Option2 | Option3) =>
-        findTirGuaranteeType match {
-          case Some(_) => removeAllGuarantees
-          case None    => Success(userAnswers)
-        }
-
-      case Some(Option4) =>
-        findTirGuaranteeType match {
-          case Some(_) => Success(userAnswers)
-          case None    => removeAllGuarantees
-        }
-
-      case _ => Success(userAnswers)
+      case Some(option) if option != Option4 => userAnswers.remove(TIRCarnetReferencePage)
+      case _                                 => super.cleanup(value, userAnswers)
     }
-  }
 }

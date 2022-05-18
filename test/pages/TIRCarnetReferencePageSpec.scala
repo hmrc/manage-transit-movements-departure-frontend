@@ -16,14 +16,10 @@
 
 package pages
 
-import models.Index
 import pages.addItems.TIRCarnetReferencePage
 import pages.behaviours.PageBehaviours
 
 class TIRCarnetReferencePageSpec extends PageBehaviours {
-
-  private val itemIndex     = Index(0)
-  private val documentIndex = Index(0)
 
   "TIRCarnetReferencePage" - {
 
