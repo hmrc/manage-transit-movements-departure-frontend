@@ -33,7 +33,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
     "must return OK and the correct view for a GET" in {
 
-      setUserAnswers(Some(emptyUserAnswers))
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, $className;format="decap"$Route)
       val result = route(app, request).value
@@ -49,9 +49,8 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-
       val userAnswers = UserAnswers(lrn, eoriNumber).set($className$Page, true).success.value
-      setUserAnswers(Some(userAnswers))
+      setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, $className;format="decap"$Route)
 
@@ -72,7 +71,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      setUserAnswers(Some(emptyUserAnswers))
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request =
         FakeRequest(POST, $className;format="decap"$Route)
@@ -88,7 +87,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      setUserAnswers(Some(emptyUserAnswers))
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(POST, $className;format="decap"$Route).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
@@ -106,7 +105,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      setUserAnswers(None)
+      setNoExistingUserAnswers()
 
       val request = FakeRequest(GET, $className;format="decap"$Route)
 
@@ -120,7 +119,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      setUserAnswers(None)
+      setNoExistingUserAnswers()
 
       val request =
         FakeRequest(POST, $className;format="decap"$Route)
