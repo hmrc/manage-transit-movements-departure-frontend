@@ -25,24 +25,24 @@ import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 
 private[utils] class SummaryListRowHelper(implicit messages: Messages) {
 
-  def formatAsYesOrNo(answer: Boolean): Content =
+  protected def formatAsYesOrNo(answer: Boolean): Content =
     if (answer) {
       messages("site.yes").toText
     } else {
       messages("site.no").toText
     }
 
-  def formatAsAddress(address: Address): Content =
+  protected def formatAsAddress(address: Address): Content =
     HtmlContent(Seq(address.buildingAndStreet, address.city, address.postcode).mkString("<br>"))
 
-  def formatAsLiteral[T](answer: T): Content = s"$answer".toText
+  protected def formatAsLiteral[T](answer: T): Content = s"$answer".toText
 
-  def formatAsEnum[T](messageKeyPrefix: String)(answer: T): Content = messages(s"$messageKeyPrefix.$answer").toText
+  protected def formatAsEnum[T](messageKeyPrefix: String)(answer: T): Content = messages(s"$messageKeyPrefix.$answer").toText
 
-  def formatAsCountry(countryList: CountryList)(answer: CountryCode): Content =
+  protected def formatAsCountry(countryList: CountryList)(answer: CountryCode): Content =
     s"${countryList.getCountry(answer).map(_.description).getOrElse(answer.code)}".toText
 
-  def buildRow(
+  protected def buildRow(
     prefix: String,
     answer: Content,
     id: Option[String],
@@ -58,7 +58,7 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
       args = args: _*
     )
 
-  def buildSimpleRow(
+  protected def buildSimpleRow(
     prefix: String,
     label: Content,
     answer: Content,

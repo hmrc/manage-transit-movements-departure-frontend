@@ -17,7 +17,6 @@
 package services
 
 import base.SpecBase
-import commonTestUtils.UserAnswersSpecHelper
 import connectors.ReferenceDataConnector
 import models.reference.{Country, CountryCode}
 import models.{CountryList, DeclarationType}
@@ -30,7 +29,7 @@ import pages.preTaskList.DeclarationTypePage
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with UserAnswersSpecHelper {
+class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach {
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   private val service                                      = new CountriesService(mockRefDataConnector)
@@ -54,7 +53,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with UserAns
 
       "must call EU membership list if TIR is selection" in {
 
-        val userAnswers = emptyUserAnswers.unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
+        val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, DeclarationType.Option4)
 
         when(mockRefDataConnector.getCountries(any())(any(), any()))
           .thenReturn(Future.successful(countries))
@@ -75,7 +74,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with UserAns
       "must call CTC membership list if TIR is not selection" in {
 
         val generatedOption = Gen.oneOf(DeclarationType.Option1, DeclarationType.Option2, DeclarationType.Option3).sample.value
-        val userAnswers     = emptyUserAnswers.unsafeSetVal(DeclarationTypePage)(generatedOption)
+        val userAnswers     = emptyUserAnswers.setValue(DeclarationTypePage, generatedOption)
 
         when(mockRefDataConnector.getCountries(any())(any(), any()))
           .thenReturn(Future.successful(countries))

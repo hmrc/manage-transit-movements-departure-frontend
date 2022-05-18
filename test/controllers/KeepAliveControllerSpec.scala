@@ -17,6 +17,7 @@
 package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import models.LocalReferenceNumber
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, times, verify, when}
 import play.api.test.FakeRequest
@@ -25,26 +26,40 @@ import play.api.test.Helpers.{GET, route, status, _}
 import scala.concurrent.Future
 
 class KeepAliveControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+
+  private def keepAliveRoute(lrn: Option[LocalReferenceNumber]): String = routes.KeepAliveController.keepAlive(lrn).url
+
   "Keep alive controller" - {
     "touch mongo cache when lrn is available" in {
       when(mockSessionRepository.get(any(), any())).thenReturn(Future.successful(Some(emptyUserAnswers)))
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-      lazy val keepAliveRoute: String = routes.KeepAliveController.keepAlive(Some(lrn)).url
-      val result                      = route(app, FakeRequest(GET, keepAliveRoute)).value
+      val result = route(app, FakeRequest(GET, keepAliveRoute(Some(lrn)))).value
 
       status(result) mustBe NO_CONTENT
-      verify(mockSessionRepository, times(1)).set(any())
+
       verify(mockSessionRepository, times(1)).get(any(), any())
+      verify(mockSessionRepository, times(1)).set(any())
     }
 
     "not touch mongo cache when lrn is not available" in {
-      lazy val keepAliveRoute: String = routes.KeepAliveController.keepAlive(None).url
-      val result                      = route(app, FakeRequest(GET, keepAliveRoute)).value
+      val result = route(app, FakeRequest(GET, keepAliveRoute(None))).value
 
       status(result) mustBe NO_CONTENT
-      verify(mockSessionRepository, never()).set(any())
+
       verify(mockSessionRepository, never()).get(any(), any())
+      verify(mockSessionRepository, never()).set(any())
+    }
+
+    "return NO_CONTENT when get from mongo cache returns None" in {
+      when(mockSessionRepository.get(any(), any())).thenReturn(Future.successful(None))
+
+      val result = route(app, FakeRequest(GET, keepAliveRoute(Some(lrn)))).value
+
+      status(result) mustBe NO_CONTENT
+
+      verify(mockSessionRepository, times(1)).get(any(), any())
+      verify(mockSessionRepository, never()).set(any())
     }
 
   }

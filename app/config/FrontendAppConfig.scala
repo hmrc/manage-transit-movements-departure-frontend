@@ -24,23 +24,23 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   private val contactHost = configuration.get[String]("contact-frontend.host")
 
-  val betaFeedbackUrl          = s"$contactHost/contact/beta-feedback"
-  val nctsEnquiriesUrl: String = configuration.get[String]("urls.nctsEnquiries")
-  val nctsGuidanceUrl: String  = configuration.get[String]("urls.nctsGuidance")
+  lazy val betaFeedbackUrl          = s"$contactHost/contact/beta-feedback"
+  lazy val nctsEnquiriesUrl: String = configuration.get[String]("urls.nctsEnquiries")
+  lazy val nctsGuidanceUrl: String  = configuration.get[String]("urls.nctsGuidance")
 
-  val trackingConsentUrl: String = configuration.get[String]("microservice.services.tracking-consent-frontend.url")
-  val gtmContainer: String       = configuration.get[String]("microservice.services.tracking-consent-frontend.gtm.container")
+  lazy val trackingConsentUrl: String = configuration.get[String]("microservice.services.tracking-consent-frontend.url")
+  lazy val gtmContainer: String       = configuration.get[String]("microservice.services.tracking-consent-frontend.gtm.container")
 
-  val showPhaseBanner: Boolean        = configuration.get[Boolean]("banners.showPhase")
-  val userResearchUrl: String         = configuration.get[String]("urls.userResearch")
-  val showUserResearchBanner: Boolean = configuration.get[Boolean]("banners.showUserResearch")
+  lazy val showPhaseBanner: Boolean        = configuration.get[Boolean]("banners.showPhase")
+  lazy val userResearchUrl: String         = configuration.get[String]("urls.userResearch")
+  lazy val showUserResearchBanner: Boolean = configuration.get[Boolean]("banners.showUserResearch")
 
   //TODO: Move out into it's own config object like `ManageTransitMovementsService`
   lazy val referenceDataUrl: String = configuration.get[Service]("microservice.services.referenceData").fullServiceUrl
 
   //TODO: Move out into it's own config object like `ManageTransitMovementsService`
-  val departureHost    = configuration.get[Service]("microservice.services.departures").fullServiceUrl
-  val departureBaseUrl = configuration.get[Service]("microservice.services.departures").baseUrl
+  lazy val departureHost    = configuration.get[Service]("microservice.services.departures").fullServiceUrl
+  lazy val departureBaseUrl = configuration.get[Service]("microservice.services.departures").baseUrl
 
   // TODO: Move config values for IdentifierAction to it's own config class
   // TODO: Make these values eagerly evaluated. I.e. non lazy
@@ -54,25 +54,11 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val newEnrolmentIdentifierKey: String    = configuration.get[String]("keys.enrolmentIdentifierKey")
   lazy val eccEnrolmentSplashPage: String       = configuration.get[String]("urls.eccEnrolmentSplashPage")
 
-  lazy val languageTranslationEnabled: Boolean =
-    configuration.get[Boolean]("microservice.services.features.welsh-translation")
-
   lazy val manageTransitMovementsUrl: String               = configuration.get[String]("urls.manageTransitMovementsFrontend")
   lazy val serviceUrl: String                              = s"$manageTransitMovementsUrl/what-do-you-want-to-do"
   lazy val manageTransitMovementsViewDeparturesUrl: String = s"$manageTransitMovementsUrl/view-departures"
 
   lazy val enrolmentProxyUrl: String = configuration.get[Service]("microservice.services.enrolment-store-proxy").fullServiceUrl
-
-  lazy val maxTransitOffices: Int     = configuration.get[Int]("limits.maxTransitOffices")
-  lazy val maxItems: Int              = configuration.get[Int]("limits.maxItems")
-  lazy val maxGuarantees: Int         = configuration.get[Int]("limits.maxGuarantees")
-  lazy val maxSeals: Int              = configuration.get[Int]("limits.maxSeals")
-  lazy val maxCountriesOfRouting: Int = configuration.get[Int]("limits.maxCountriesOfRouting")
-  lazy val maxSpecialMentions: Int    = configuration.get[Int]("limits.maxSpecialMentions")
-  lazy val maxPackages: Int           = configuration.get[Int]("limits.maxPackages")
-  lazy val maxContainers: Int         = configuration.get[Int]("limits.maxContainers")
-  lazy val maxDocuments: Int          = configuration.get[Int]("limits.maxDocuments")
-  lazy val maxPreviousReferences: Int = configuration.get[Int]("limits.maxPreviousReferences")
 
   lazy val mongoTtl: Int = configuration.get[Int]("mongodb.timeToLiveInSeconds")
 }

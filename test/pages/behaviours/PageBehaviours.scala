@@ -17,7 +17,6 @@
 package pages.behaviours
 
 import base.SpecBase
-import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
@@ -25,9 +24,8 @@ import org.scalacheck.{Arbitrary, Gen}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.QuestionPage
 import play.api.libs.json._
-import queries.AllItemsQuery
 
-trait PageBehaviours extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
+trait PageBehaviours extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   class BeRetrievable[A] {
 
@@ -116,33 +114,9 @@ trait PageBehaviours extends SpecBase with ScalaCheckPropertyChecks with Generat
       }
   }
 
-  class ClearDownItems[A] {
-
-    def apply[P <: QuestionPage[A]](genP: Gen[P])(implicit ev1: Arbitrary[A], ev2: Format[A]): Unit =
-      "must be able to remove items section from UserAnswers" in {
-
-        val gen = for {
-          page        <- genP
-          userAnswers <- genUserAnswerScenario
-          newValue <- arbitrary[A].retryUntil(
-            a => !userAnswers.userAnswers.get(page).contains(a)
-          )
-        } yield (page, userAnswers.userAnswers, newValue)
-
-        forAll(gen) {
-          case (page, userAnswers, newValue) =>
-            val updatedAnswers = userAnswers.set(page, newValue).success.value
-            updatedAnswers.get(page).value mustEqual newValue
-            updatedAnswers.get(AllItemsQuery) must not be defined
-        }
-      }
-  }
-
   def beRetrievable[A]: BeRetrievable[A] = new BeRetrievable[A]
 
   def beSettable[A]: BeSettable[A] = new BeSettable[A]
 
   def beRemovable[A]: BeRemovable[A] = new BeRemovable[A]
-
-  def clearDownItems[A]: ClearDownItems[A] = new ClearDownItems[A]
 }

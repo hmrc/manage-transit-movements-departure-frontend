@@ -17,16 +17,16 @@
 package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import commonTestUtils.UserAnswersSpecHelper
 import forms.preTaskList.TIRCarnetReferenceFormProvider
-import models.DeclarationType.{Option1, Option4}
-import models.NormalMode
+import generators.Generators
+import models.{DeclarationType, NormalMode, ProcedureType}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
-import pages.preTaskList.{DeclarationTypePage, TIRCarnetReferencePage}
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage, TIRCarnetReferencePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -35,7 +35,7 @@ import views.html.preTaskList.TirCarnetReferenceView
 
 import scala.concurrent.Future
 
-class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with UserAnswersSpecHelper {
+class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   private val formProvider = new TIRCarnetReferenceFormProvider()
   private val form         = formProvider()
@@ -48,11 +48,14 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
 
+  private val baseAnswers = emptyUserAnswers
+    .setValue(ProcedureTypePage, ProcedureType.Normal)
+    .setValue(DeclarationTypePage, DeclarationType.Option4)
+
   "TIRCarnetReference Controller" - {
 
     "must return OK and the correct view for a GET" in {
-
-      setUserAnswers(Some(emptyUserAnswers))
+      setExistingUserAnswers(baseAnswers)
 
       val request = FakeRequest(GET, tirCarnetReferenceRoute)
 
@@ -64,13 +67,11 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
 
       contentAsString(result) mustEqual
         view(form, lrn, mode)(request, messages).toString
-
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-
-      val userAnswers = emptyUserAnswers.set(TIRCarnetReferencePage, "1234567890").success.value
-      setUserAnswers(Some(userAnswers))
+      val userAnswers = baseAnswers.set(TIRCarnetReferencePage, "1234567890").success.value
+      setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, tirCarnetReferenceRoute)
 
@@ -84,70 +85,68 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
 
       contentAsString(result) mustEqual
         view(filledForm, lrn, mode)(request, messages).toString
-
     }
 
-    "must redirect to the next page when valid data is submitted when DeclarationType is TIR" in {
+    "must redirect to local reference number page" - {
+      "when non-Normal or non-Option4 procedure and declaration types" in {
+        forAll(arbitrary[(ProcedureType, DeclarationType)].retryUntil {
+          case (procedureType, declarationType) =>
+            procedureType != ProcedureType.Normal || declarationType != DeclarationType.Option4
+        }) {
+          case (procedureType, declarationType) =>
+            val userAnswers = emptyUserAnswers
+              .setValue(ProcedureTypePage, procedureType)
+              .setValue(DeclarationTypePage, declarationType)
+            setExistingUserAnswers(userAnswers)
 
-      val userAnswers = emptyUserAnswers
-        .unsafeSetVal(DeclarationTypePage)(Option4)
+            val request = FakeRequest(GET, tirCarnetReferenceRoute)
+
+            val result = route(app, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual routes.LocalReferenceNumberController.onPageLoad().url
+        }
+      }
+    }
+
+    "must redirect to session expired" - {
+      "when procedure type and/or declaration type undefined" in {
+        forAll(arbitrary[(Option[ProcedureType], Option[DeclarationType])].retryUntil {
+          case (None, _) | (_, None) => true
+          case _                     => false
+        }) {
+          case (procedureType, declarationType) =>
+            val userAnswers = emptyUserAnswers
+              .setValue(ProcedureTypePage, procedureType)
+              .setValue(DeclarationTypePage, declarationType)
+            setExistingUserAnswers(userAnswers)
+
+            val request = FakeRequest(GET, tirCarnetReferenceRoute)
+
+            val result = route(app, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+        }
+      }
+    }
+
+    "must redirect to the next page when valid data is submitted" in {
+      setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      setUserAnswers(Some(userAnswers))
-
-      val request =
-        FakeRequest(POST, tirCarnetReferenceRoute)
-          .withFormUrlEncodedBody(("value", "1234567890"))
+      val request = FakeRequest(POST, tirCarnetReferenceRoute)
+        .withFormUrlEncodedBody(("value", "1234567890"))
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustEqual onwardRoute.url
-
-    }
-
-    "must redirect Session Expired when DeclarationType is not TIR" in {
-
-      val userAnswers = emptyUserAnswers
-        .unsafeSetVal(DeclarationTypePage)(Option1)
-
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-
-      setUserAnswers(Some(userAnswers))
-
-      val request =
-        FakeRequest(POST, tirCarnetReferenceRoute)
-          .withFormUrlEncodedBody(("value", "1234567890"))
-
-      val result = route(app, request).value
-
-      status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-    }
-
-    "must redirect Session Expired when DeclarationType is not defined" in {
-
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-
-      setUserAnswers(Some(emptyUserAnswers))
-
-      val request =
-        FakeRequest(POST, tirCarnetReferenceRoute)
-          .withFormUrlEncodedBody(("value", "1234567890"))
-
-      val result = route(app, request).value
-
-      status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-
-      val userAnswers = emptyUserAnswers
-        .unsafeSetVal(DeclarationTypePage)(Option4)
-
-      setUserAnswers(Some(userAnswers))
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request   = FakeRequest(POST, tirCarnetReferenceRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
@@ -160,12 +159,10 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
 
       contentAsString(result) mustEqual
         view(boundForm, lrn, mode)(request, messages).toString
-
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
-
-      setUserAnswers(None)
+      setNoExistingUserAnswers()
 
       val request = FakeRequest(GET, tirCarnetReferenceRoute)
 
@@ -174,23 +171,19 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
+      setNoExistingUserAnswers()
 
-      setUserAnswers(None)
-
-      val request =
-        FakeRequest(POST, tirCarnetReferenceRoute)
-          .withFormUrlEncodedBody(("value", "1234567890"))
+      val request = FakeRequest(POST, tirCarnetReferenceRoute)
+        .withFormUrlEncodedBody(("value", "1234567890"))
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
     }
   }
 }

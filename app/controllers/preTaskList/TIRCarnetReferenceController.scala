@@ -19,10 +19,11 @@ package controllers.preTaskList
 import controllers.actions._
 import forms.preTaskList.TIRCarnetReferenceFormProvider
 import models.DeclarationType.Option4
+import models.ProcedureType.Normal
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import pages.preTaskList.{DeclarationTypePage, TIRCarnetReferencePage}
+import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage, TIRCarnetReferencePage}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -38,6 +39,7 @@ class TIRCarnetReferenceController @Inject() (
   sessionRepository: SessionRepository,
   @PreTaskListDetails navigator: Navigator,
   actions: Actions,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: TIRCarnetReferenceFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: TirCarnetReferenceView
@@ -49,37 +51,36 @@ class TIRCarnetReferenceController @Inject() (
   private val form = formProvider()
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
-    actions.requireData(lrn) {
-      implicit request =>
-        val preparedForm = request.userAnswers.get(TIRCarnetReferencePage) match {
-          case None        => form
-          case Some(value) => form.fill(value)
-        }
+    actions
+      .requireData(lrn)
+      .andThen(getMandatoryPage.getFirst(ProcedureTypePage))
+      .andThen(getMandatoryPage.getSecond(DeclarationTypePage)) {
+        implicit request =>
+          request.arg match {
+            case (Normal, Option4) =>
+              val preparedForm = request.userAnswers.get(TIRCarnetReferencePage) match {
+                case None        => form
+                case Some(value) => form.fill(value)
+              }
 
-        Ok(view(preparedForm, lrn, mode))
-    }
+              Ok(view(preparedForm, lrn, mode))
+            case _ =>
+              logger.warn(s"[TIRCarnetReferenceController][onPageLoad] Cannot create TIR carnet reference")
+              Redirect(routes.LocalReferenceNumberController.onPageLoad())
+          }
+      }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
-    actions.requireData(lrn).async {
-      implicit request =>
-        request.userAnswers.get(DeclarationTypePage) match {
-          case Some(Option4) =>
-            form
-              .bindFromRequest()
-              .fold(
-                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-                value =>
-                  for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.set(TIRCarnetReferencePage, value))
-                    _              <- sessionRepository.set(updatedAnswers)
-                  } yield Redirect(navigator.nextPage(TIRCarnetReferencePage, mode, updatedAnswers))
-              )
-          case Some(otherOption) =>
-            logger.warn(s"[TIRCarnetReferenceController][onSubmit] Cannot create TIR carnet reference for $otherOption")
-            Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
-          case None =>
-            logger.warn(s"[TIRCarnetReferenceController][onSubmit] DeclarationTypePage is missing")
-            Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
-        }
-    }
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
+    implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(TIRCarnetReferencePage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(TIRCarnetReferencePage, mode, updatedAnswers))
+        )
+  }
 }

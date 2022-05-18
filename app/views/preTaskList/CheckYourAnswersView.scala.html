@@ -16,7 +16,7 @@
 
 @import controllers.preTaskList.routes
 @import models.LocalReferenceNumber
-@import viewModels.sections.TwirlSection
+@import viewModels.sections.Section
 @import views.html.components.{AnswerSections, Button, Heading}
 
 @this(
@@ -27,7 +27,7 @@
     formHelper: FormWithCSRF
 )
 
-@(lrn: LocalReferenceNumber, sections: Seq[TwirlSection])(implicit request: Request[_], messages: Messages)
+@(lrn: LocalReferenceNumber, sections: Seq[Section])(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("preTaskList.checkYourAnswers.title"),

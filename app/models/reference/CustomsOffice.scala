@@ -16,6 +16,7 @@
 
 package models.reference
 
+import models.Selectable
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 

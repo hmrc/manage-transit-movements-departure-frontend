@@ -16,6 +16,7 @@
 
 package services
 
+import config.Constants._
 import connectors.ReferenceDataConnector
 import models.CustomsOfficeList
 import models.reference.{CountryCode, CustomsOffice}
@@ -41,8 +42,8 @@ class CustomsOfficesService @Inject() (
     }
 
     for {
-      gbOffices <- getCustomsOffices("GB")
-      niOffices <- getCustomsOffices("XI")
+      gbOffices <- getCustomsOffices(GB)
+      niOffices <- getCustomsOffices(XI)
       offices = sort(gbOffices.getAll ++ niOffices.getAll)
     } yield offices
   }

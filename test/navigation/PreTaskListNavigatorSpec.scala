@@ -17,7 +17,6 @@
 package navigation
 
 import base.SpecBase
-import commonTestUtils.UserAnswersSpecHelper
 import controllers.preTaskList.routes
 import generators.Generators
 import models._
@@ -26,7 +25,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.preTaskList._
 
-class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
+class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   private val navigator = new PreTaskListNavigator
 
@@ -93,8 +92,8 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           }) {
             case (answers, mode, declarationType, procedureType) =>
               val updatedAnswers = answers
-                .unsafeSetVal(ProcedureTypePage)(procedureType)
-                .unsafeSetVal(DeclarationTypePage)(declarationType)
+                .setValue(ProcedureTypePage, procedureType)
+                .setValue(DeclarationTypePage, declarationType)
 
               navigator
                 .nextPage(DeclarationTypePage, mode, updatedAnswers)
@@ -108,8 +107,8 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
             (answers, mode) =>
               val updatedAnswers = answers
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
+                .setValue(ProcedureTypePage, ProcedureType.Normal)
+                .setValue(DeclarationTypePage, DeclarationType.Option4)
 
               navigator
                 .nextPage(DeclarationTypePage, mode, updatedAnswers)

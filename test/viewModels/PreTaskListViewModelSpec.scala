@@ -17,12 +17,11 @@
 package viewModels
 
 import base.SpecBase
-import commonTestUtils.UserAnswersSpecHelper
 import models.reference.{CountryCode, CustomsOffice}
 import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}
 import pages.preTaskList._
 
-class PreTaskListViewModelSpec extends SpecBase with UserAnswersSpecHelper {
+class PreTaskListViewModelSpec extends SpecBase {
 
   "apply" - {
     "when user answers empty" - {
@@ -42,11 +41,11 @@ class PreTaskListViewModelSpec extends SpecBase with UserAnswersSpecHelper {
       "must return row for each answer" in {
         val answers = emptyUserAnswers
           .copy(lrn = LocalReferenceNumber("1234567890").get)
-          .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
-          .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-          .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
-          .unsafeSetVal(TIRCarnetReferencePage)("tir carnet reference")
-          .unsafeSetVal(SecurityDetailsTypePage)(SecurityDetailsType.EntrySummaryDeclarationSecurityDetails)
+          .setValue(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("code"), None))
+          .setValue(ProcedureTypePage, ProcedureType.Normal)
+          .setValue(DeclarationTypePage, DeclarationType.Option4)
+          .setValue(TIRCarnetReferencePage, "tir carnet reference")
+          .setValue(SecurityDetailsTypePage, SecurityDetailsType.EntrySummaryDeclarationSecurityDetails)
 
         val section = new PreTaskListViewModel().apply(answers)
 

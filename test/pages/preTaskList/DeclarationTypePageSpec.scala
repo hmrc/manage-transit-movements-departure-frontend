@@ -35,7 +35,7 @@ class DeclarationTypePageSpec extends PageBehaviours {
         "when anything other than Option4 (TIR) selected" in {
           forAll(arbitrary[String], arbitrary[DeclarationType].suchThat(_ != DeclarationType.Option4)) {
             (carnetReference, declarationType) =>
-              val preChange  = emptyUserAnswers.unsafeSetVal(TIRCarnetReferencePage)(carnetReference)
+              val preChange  = emptyUserAnswers.setValue(TIRCarnetReferencePage, carnetReference)
               val postChange = preChange.set(DeclarationTypePage, declarationType).success.value
 
               postChange.get(TIRCarnetReferencePage) mustNot be(defined)
@@ -47,7 +47,7 @@ class DeclarationTypePageSpec extends PageBehaviours {
         "when Option4 (TIR) selected" in {
           forAll(arbitrary[String]) {
             carnetReference =>
-              val preChange  = emptyUserAnswers.unsafeSetVal(TIRCarnetReferencePage)(carnetReference)
+              val preChange  = emptyUserAnswers.setValue(TIRCarnetReferencePage, carnetReference)
               val postChange = preChange.set(DeclarationTypePage, DeclarationType.Option4).success.value
 
               postChange.get(TIRCarnetReferencePage) must be(defined)

@@ -18,30 +18,27 @@ package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.preTaskList.SecurityDetailsFormProvider
-import matchers.JsonMatchers
 import models.SecurityDetailsType.NoSecurityDetails
-import models.{NormalMode, SecurityDetailsType, UserAnswers}
+import models.{NormalMode, SecurityDetailsType}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
 import pages.preTaskList.SecurityDetailsTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.viewmodels.NunjucksSupport
 import views.html.preTaskList.SecurityDetailsTypeView
 
 import scala.concurrent.Future
 
-class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
+class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider          = new SecurityDetailsFormProvider()
-  private val form                  = formProvider()
-  private val mode                  = NormalMode
-  lazy val securityDetailsTypeRoute = routes.SecurityDetailsTypeController.onPageLoad(lrn, mode).url
+  private val formProvider                  = new SecurityDetailsFormProvider()
+  private val form                          = formProvider()
+  private val mode                          = NormalMode
+  private lazy val securityDetailsTypeRoute = routes.SecurityDetailsTypeController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -51,7 +48,7 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
   "SecurityDetailsType Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      setUserAnswers(Some(emptyUserAnswers))
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, securityDetailsTypeRoute)
 
@@ -65,8 +62,8 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(SecurityDetailsTypePage, NoSecurityDetails).success.value
-      setUserAnswers(Some(userAnswers))
+      val userAnswers = emptyUserAnswers.setValue(SecurityDetailsTypePage, NoSecurityDetails)
+      setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, securityDetailsTypeRoute)
 
@@ -82,13 +79,11 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
     }
 
     "must redirect to the next page when valid data is submitted" in {
-      setUserAnswers(Some(emptyUserAnswers))
+      setExistingUserAnswers(emptyUserAnswers)
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-      val selectedValue = SecurityDetailsType.values.head
-      val request =
-        FakeRequest(POST, securityDetailsTypeRoute)
-          .withFormUrlEncodedBody(("value", selectedValue.toString))
+      val request = FakeRequest(POST, securityDetailsTypeRoute)
+        .withFormUrlEncodedBody(("value", SecurityDetailsType.values.head.toString))
 
       val result = route(app, request).value
 
@@ -97,7 +92,7 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      setUserAnswers(Some(emptyUserAnswers))
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request   = FakeRequest(POST, securityDetailsTypeRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
@@ -113,7 +108,7 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
-      setUserAnswers(None)
+      setNoExistingUserAnswers()
 
       val request = FakeRequest(GET, securityDetailsTypeRoute)
 
@@ -125,18 +120,16 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
-      setUserAnswers(None)
+      setNoExistingUserAnswers()
 
-      val request =
-        FakeRequest(POST, securityDetailsTypeRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+      val request = FakeRequest(POST, securityDetailsTypeRoute)
+        .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
     }
   }
 }

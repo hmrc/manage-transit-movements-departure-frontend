@@ -26,7 +26,6 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.NunjucksSupport
 import views.html.preTaskList.SecurityDetailsTypeView
 
 import javax.inject.Inject
@@ -44,8 +43,7 @@ class SecurityDetailsTypeController @Inject() (
   view: SecurityDetailsTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
-    with I18nSupport
-    with NunjucksSupport {
+    with I18nSupport {
 
   private val form = formProvider()
 
@@ -55,6 +53,7 @@ class SecurityDetailsTypeController @Inject() (
         case None        => form
         case Some(value) => form.fill(value)
       }
+
       Ok(view(preparedForm, SecurityDetailsType.radioItems, lrn, mode))
   }
 

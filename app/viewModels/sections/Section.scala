@@ -16,35 +16,11 @@
 
 package viewModels.sections
 
-import play.api.i18n.Messages
-import play.api.libs.functional.syntax.{unlift, _}
-import play.api.libs.json.{__, OWrites}
-import uk.gov.hmrc.viewmodels.SummaryList.Row
-import uk.gov.hmrc.viewmodels.Text
-import viewModels.AddAnotherViewModel
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 
-case class Section(sectionTitle: Option[Text], sectionSubTitle: Option[Text], rows: Seq[Row], addAnother: Option[AddAnotherViewModel])
+case class Section(sectionTitle: Option[String], rows: Seq[SummaryListRow])
 
 object Section {
-  def apply(sectionTitle: Text, rows: Seq[Row]): Section = new Section(Some(sectionTitle), None, rows, None)
-
-  def apply(rows: Seq[Row], sectionSubTitle: Text): Section = new Section(None, Some(sectionSubTitle), rows, None)
-
-  def apply(sectionTitle: Text, sectionSubTitle: Text, rows: Seq[Row]): Section = new Section(Some(sectionTitle), Some(sectionSubTitle), rows, None)
-
-  def apply(rows: Seq[Row]): Section = new Section(None, None, rows, None)
-
-  def apply(sectionTitle: Text, rows: Seq[Row], addAnother: AddAnotherViewModel): Section = new Section(Some(sectionTitle), None, rows, Some(addAnother))
-
-  def apply(sectionTitle: Option[Text], sectionSubTitle: Text, rows: Seq[Row], addAnother: Option[AddAnotherViewModel]): Section =
-    new Section(sectionTitle, Some(sectionSubTitle), rows, addAnother)
-
-  implicit def sectionWrites(implicit messages: Messages): OWrites[Section] =
-    (
-      (__ \ "sectionTitle").write[Option[Text]] and
-        (__ \ "sectionSubTitle").write[Option[Text]] and
-        (__ \ "rows").write[Seq[Row]] and
-        (__ \ "addAnother").write[Option[AddAnotherViewModel]]
-    )(unlift(Section.unapply))
-
+  def apply(sectionTitle: String, rows: Seq[SummaryListRow]): Section = new Section(Some(sectionTitle), rows)
+  def apply(rows: Seq[SummaryListRow]): Section                       = new Section(None, rows)
 }
