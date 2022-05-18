@@ -9,7 +9,7 @@ site.yes = Yes
 site.continue = Save and continue
 site.submit = Continue
 site.confirm = Confirm and continue
-site.service_name =  Manage your transit movements
+site.service_name = Manage your transit movements
 
 error.title.prefix = Error:
 error.summary.title = There is a problem
@@ -19,7 +19,7 @@ pageNotFound.heading = Page not found
 pageNotFound.paragraph1 = If you typed the web address, check it is correct.
 pageNotFound.paragraph2 = If you pasted the web address, check you copied the entire address.
 pageNotFound.paragraph3Start = If the web address is correct or you selected a link or button,
-pageNotFound.contactLink=contact the New Computerised Transit System(NCTS) helpdesk if you need to speak to someone about your transit movement (opens in a new tab)
+pageNotFound.contactLink = contact the New Computerised Transit System(NCTS) helpdesk if you need to speak to someone about your transit movement (opens in a new tab)
 
 session_expired.title = For your security, we signed you out
 session_expired.heading = For your security, we signed you out
