@@ -53,10 +53,21 @@ trait RadioViewBehaviours[T] extends QuestionViewBehaviours[T] {
           }
         }
 
-        radioItems(fieldId) foreach {
-          radioItem =>
+        radioItems(fieldId).zipWithIndex.foreach {
+          case (radioItem, index) =>
             s"must contain an input for the value ${radioItem.value.get}" in {
               assertRenderedById(doc, radioItem.id.get)
+            }
+
+            radioItem.hint.foreach {
+              hint =>
+                s"must contain a hint for the value ${radioItem.value.get}" in {
+                  val element = {
+                    val id = if (index == 0) s"$fieldId-item-hint" else s"${fieldId}_$index-item-hint"
+                    getElementById(doc, id)
+                  }
+                  assertElementContainsText(element, hint.content.asHtml.toString())
+                }
             }
 
             s"must not have ${radioItem.value.get} checked when rendered with no form" in {

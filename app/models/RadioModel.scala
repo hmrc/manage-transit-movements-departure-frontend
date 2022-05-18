@@ -17,8 +17,8 @@
 package models
 
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
-import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
+import uk.gov.hmrc.govukfrontend.views.Aliases._
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 
 trait RadioModel[T] extends Enumerable.Implicits {
 
@@ -36,7 +36,11 @@ trait RadioModel[T] extends Enumerable.Implicits {
           content = Text(messages(s"$messageKeyPrefix.$value")),
           id = Some(if (index == 0) formKey else s"${formKey}_$index"),
           value = Some(value.toString),
-          checked = checkedValue.contains(value)
+          checked = checkedValue.contains(value),
+          hint = {
+            val hintKey = s"$messageKeyPrefix.$value.hint"
+            if (messages.isDefinedAt(hintKey)) Some(Hint(content = messages(hintKey).toText)) else None
+          }
         )
     }
 
