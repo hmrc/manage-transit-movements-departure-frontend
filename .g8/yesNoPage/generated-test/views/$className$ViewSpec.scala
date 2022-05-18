@@ -25,8 +25,6 @@ import views.html.$className$View
 
 class $className$ViewSpec extends YesNoViewBehaviours {
 
-  override val urlContainsLrn: Boolean = true
-
   override def form: Form[Boolean] = new $className$FormProvider()()
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
