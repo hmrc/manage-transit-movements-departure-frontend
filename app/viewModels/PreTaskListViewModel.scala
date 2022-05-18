@@ -19,11 +19,11 @@ package viewModels
 import models.{CheckMode, UserAnswers}
 import play.api.i18n.Messages
 import utils.PreTaskListCheckYourAnswersHelper
-import viewModels.sections.TwirlSection
+import viewModels.sections.Section
 
 class PreTaskListViewModel {
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): TwirlSection = {
+  def apply(userAnswers: UserAnswers)(implicit messages: Messages): Section = {
     val helper = new PreTaskListCheckYourAnswersHelper(userAnswers, CheckMode)
 
     val rows = Seq(
@@ -35,6 +35,6 @@ class PreTaskListViewModel {
       helper.securityType
     ).flatten
 
-    TwirlSection(rows)
+    Section(rows)
   }
 }

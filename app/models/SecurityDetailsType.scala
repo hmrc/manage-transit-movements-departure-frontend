@@ -21,11 +21,11 @@ sealed trait SecurityDetailsType {
   val securityContentType: Int
 }
 
-sealed trait SecurityDetailsNeededType extends SecurityDetailsType {
-  override val requiresSecurityDetails: Boolean = true
-}
-
 object SecurityDetailsType extends RadioModel[SecurityDetailsType] {
+
+  sealed trait SecurityDetailsNeededType extends SecurityDetailsType {
+    override val requiresSecurityDetails: Boolean = true
+  }
 
   case object NoSecurityDetails extends WithName("noSecurity") with SecurityDetailsType {
     override val requiresSecurityDetails: Boolean = false

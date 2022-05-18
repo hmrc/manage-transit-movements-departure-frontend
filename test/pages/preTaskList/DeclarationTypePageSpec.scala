@@ -16,16 +16,11 @@
 
 package pages.preTaskList
 
-import base.SpecBase
-import commonTestUtils.UserAnswersSpecHelper
-import derivable.DeriveNumberOfGuarantees
-import models.{DeclarationType, GuaranteeType, Index}
-import org.scalacheck.Gen
+import models.DeclarationType
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
-import pages.{AccessCodePage, LiabilityAmountPage}
 
-class DeclarationTypeSpec extends PageBehaviours with SpecBase with UserAnswersSpecHelper {
+class DeclarationTypePageSpec extends PageBehaviours {
 
   "DeclarationTypePage" - {
 
@@ -35,76 +30,30 @@ class DeclarationTypeSpec extends PageBehaviours with SpecBase with UserAnswersS
 
     beRemovable[DeclarationType](DeclarationTypePage)
 
-    "Clear down all guarantees if choosing T1,T2 or T2F and Guarantee type B exists" in {
-      val preChangeUserAnswers = emptyUserAnswers
-        .unsafeSetVal(GuaranteeTypePage(Index(0)))(GuaranteeType.TIR)
-        .unsafeSetVal(GuaranteeReferencePage(Index(0)))("REF1")
-        .unsafeSetVal(GuaranteeTypePage(Index(1)))(GuaranteeType.GuaranteeWaiver)
-        .unsafeSetVal(GuaranteeReferencePage(Index(1)))("REF3")
-        .unsafeSetVal(LiabilityAmountPage(Index(1)))("1000")
-        .unsafeSetVal(AccessCodePage(Index(1)))("Star")
-        .unsafeSetVal(GuaranteeTypePage(Index(2)))(GuaranteeType.GuaranteeWaiverByAgreement)
-        .unsafeSetVal(GuaranteeReferencePage(Index(2)))("REF2")
+    "cleanup" - {
+      "must remove TIRCarnetReferencePage" - {
+        "when anything other than Option4 (TIR) selected" in {
+          forAll(arbitrary[String], arbitrary[DeclarationType].suchThat(_ != DeclarationType.Option4)) {
+            (carnetReference, declarationType) =>
+              val preChange  = emptyUserAnswers.setValue(TIRCarnetReferencePage, carnetReference)
+              val postChange = preChange.set(DeclarationTypePage, declarationType).success.value
 
-      preChangeUserAnswers.get(DeriveNumberOfGuarantees).value mustBe 3
+              postChange.get(TIRCarnetReferencePage) mustNot be(defined)
+          }
+        }
+      }
 
-      val declarationType = Gen.oneOf(DeclarationType.Option1, DeclarationType.Option2, DeclarationType.Option3).sample.value
+      "must not remove TIRCarnetReferencePage" - {
+        "when Option4 (TIR) selected" in {
+          forAll(arbitrary[String]) {
+            carnetReference =>
+              val preChange  = emptyUserAnswers.setValue(TIRCarnetReferencePage, carnetReference)
+              val postChange = preChange.set(DeclarationTypePage, DeclarationType.Option4).success.value
 
-      val userAnswers = preChangeUserAnswers.set(DeclarationTypePage, declarationType).success.value
-
-      userAnswers.get(DeriveNumberOfGuarantees).value mustBe 0
-    }
-
-    "Keep guarantees if choosing T1,T2 or T2F and Guarantee type B exists" in {
-      val preChangeUserAnswers = emptyUserAnswers
-        .unsafeSetVal(GuaranteeTypePage(Index(0)))(GuaranteeType.GuaranteeWaiver)
-        .unsafeSetVal(GuaranteeReferencePage(Index(0)))("REF3")
-        .unsafeSetVal(LiabilityAmountPage(Index(0)))("1000")
-        .unsafeSetVal(AccessCodePage(Index(0)))("Star")
-        .unsafeSetVal(GuaranteeTypePage(Index(1)))(GuaranteeType.GuaranteeWaiverByAgreement)
-        .unsafeSetVal(GuaranteeReferencePage(Index(1)))("REF2")
-
-      preChangeUserAnswers.get(DeriveNumberOfGuarantees).value mustBe 2
-
-      val declarationType = Gen.oneOf(DeclarationType.Option1, DeclarationType.Option2, DeclarationType.Option3).sample.value
-
-      val userAnswers = preChangeUserAnswers.set(DeclarationTypePage, declarationType).success.value
-
-      userAnswers.get(DeriveNumberOfGuarantees).value mustBe 2
-    }
-
-    "Keep guarantees if choosing TIR and Guarantee type B exists" in {
-      val preChangeUserAnswers = emptyUserAnswers
-        .unsafeSetVal(GuaranteeTypePage(Index(0)))(GuaranteeType.TIR)
-        .unsafeSetVal(GuaranteeReferencePage(Index(0)))("REF1")
-        .unsafeSetVal(GuaranteeTypePage(Index(1)))(GuaranteeType.GuaranteeWaiver)
-        .unsafeSetVal(GuaranteeReferencePage(Index(1)))("REF3")
-        .unsafeSetVal(LiabilityAmountPage(Index(1)))("1000")
-        .unsafeSetVal(AccessCodePage(Index(1)))("Star")
-        .unsafeSetVal(GuaranteeTypePage(Index(2)))(GuaranteeType.GuaranteeWaiverByAgreement)
-        .unsafeSetVal(GuaranteeReferencePage(Index(2)))("REF2")
-
-      preChangeUserAnswers.get(DeriveNumberOfGuarantees).value mustBe 3
-
-      val userAnswers = preChangeUserAnswers.set(DeclarationTypePage, DeclarationType.Option4).success.value
-
-      userAnswers.get(DeriveNumberOfGuarantees).value mustBe 3
-    }
-
-    "Remove guarantees if choosing TIR and Guarantee type B doesn't exist" in {
-      val preChangeUserAnswers = emptyUserAnswers
-        .unsafeSetVal(GuaranteeTypePage(Index(0)))(GuaranteeType.GuaranteeWaiver)
-        .unsafeSetVal(GuaranteeReferencePage(Index(0)))("REF3")
-        .unsafeSetVal(LiabilityAmountPage(Index(0)))("1000")
-        .unsafeSetVal(AccessCodePage(Index(0)))("Star")
-        .unsafeSetVal(GuaranteeTypePage(Index(1)))(GuaranteeType.GuaranteeWaiverByAgreement)
-        .unsafeSetVal(GuaranteeReferencePage(Index(1)))("REF2")
-
-      preChangeUserAnswers.get(DeriveNumberOfGuarantees).value mustBe 2
-
-      val userAnswers = preChangeUserAnswers.set(DeclarationTypePage, DeclarationType.Option4).success.value
-
-      userAnswers.get(DeriveNumberOfGuarantees).value mustBe 0
+              postChange.get(TIRCarnetReferencePage) must be(defined)
+          }
+        }
+      }
     }
   }
 }

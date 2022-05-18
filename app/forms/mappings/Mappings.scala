@@ -21,8 +21,6 @@ import play.api.data.FieldMapping
 import play.api.data.Forms.of
 import play.api.data.format.Formats.ignoredFormat
 
-import java.time.{LocalDate, LocalDateTime}
-
 trait Mappings extends Formatters with Constraints {
 
   protected def text(errorKey: String = "error.required", args: Seq[Any] = Seq.empty): FieldMapping[String] =
@@ -50,43 +48,6 @@ trait Mappings extends Formatters with Constraints {
 
   protected def enumerable[A](requiredKey: String = "error.required", invalidKey: String = "error.invalid")(implicit ev: Enumerable[A]): FieldMapping[A] =
     of(enumerableFormatter[A](requiredKey, invalidKey))
-
-  protected def localDate(
-    invalidKey: String,
-    allRequiredKey: String,
-    twoRequiredKey: String,
-    requiredKey: String,
-    args: Seq[String] = Seq.empty
-  ): FieldMapping[LocalDate] =
-    of(new LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey, args))
-
-  //noinspection ScalaStyle
-  protected def localDateTime(
-    invalidDateKey: String,
-    invalidTimeKey: String,
-    invalidHourKey: String,
-    allRequiredKey: String,
-    timeRequiredKey: String,
-    dateRequiredKey: String,
-    amOrPmRequired: String,
-    pastDateErrorKey: String,
-    futureDateErrorKey: String,
-    args: Seq[String] = Seq.empty
-  ): FieldMapping[LocalDateTime] =
-    of(
-      new LocalDateTimeFormatter(
-        invalidDateKey,
-        invalidTimeKey,
-        invalidHourKey,
-        allRequiredKey,
-        timeRequiredKey,
-        dateRequiredKey,
-        amOrPmRequired,
-        pastDateErrorKey,
-        futureDateErrorKey,
-        args
-      )
-    )
 
   protected def lrn(requiredKey: String, lengthKey: String, invalidKey: String): FieldMapping[LocalReferenceNumber] =
     of(lrnFormatter(requiredKey, lengthKey, invalidKey))

@@ -51,8 +51,7 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
   "ProcedureType Controller" - {
 
     "must return OK and the correct view for a GET" in {
-
-      setUserAnswers(Some(emptyUserAnswers))
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, procedureTypeRoute)
 
@@ -67,13 +66,8 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(ProcedureTypePage, validAnswer)
-        .success
-        .value
-
-      setUserAnswers(Some(userAnswers))
+      val userAnswers = emptyUserAnswers.setValue(ProcedureTypePage, validAnswer)
+      setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, procedureTypeRoute)
 
@@ -83,22 +77,19 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
 
       status(result) mustEqual OK
 
-      val filledForm =
-        form.bind(Map("value" -> ProcedureType.values.head.toString))
+      val filledForm = form.bind(Map("value" -> ProcedureType.values.head.toString))
 
       contentAsString(result) mustEqual
         view(filledForm, ProcedureType.radioItems, lrn, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
-
-      setUserAnswers(Some(emptyUserAnswers))
+      setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      val request =
-        FakeRequest(POST, procedureTypeRoute)
-          .withFormUrlEncodedBody(("value", ProcedureType.values.head.toString))
+      val request = FakeRequest(POST, procedureTypeRoute)
+        .withFormUrlEncodedBody(("value", ProcedureType.values.head.toString))
 
       val result = route(app, request).value
 
@@ -108,8 +99,7 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-
-      setUserAnswers(Some(emptyUserAnswers))
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(POST, procedureTypeRoute)
         .withFormUrlEncodedBody(("value", "invalid value"))
@@ -127,8 +117,7 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
-
-      setUserAnswers(None)
+      setNoExistingUserAnswers()
 
       val request = FakeRequest(GET, procedureTypeRoute)
 
@@ -139,12 +128,10 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
+      setNoExistingUserAnswers()
 
-      setUserAnswers(None)
-
-      val request =
-        FakeRequest(POST, procedureTypeRoute)
-          .withFormUrlEncodedBody(("value", ProcedureType.values.head.toString))
+      val request = FakeRequest(POST, procedureTypeRoute)
+        .withFormUrlEncodedBody(("value", ProcedureType.values.head.toString))
 
       val result = route(app, request).value
 

@@ -33,6 +33,8 @@ object EoriNumber {
   def prefixGBIfMissing(eoriNumber: String): String =
     if (!eoriNumber.matches(eoriRegex)) {
       s"$eoriPrefix$eoriNumber"
-    } else eoriNumber
+    } else {
+      eoriNumber
+    }
 
 }

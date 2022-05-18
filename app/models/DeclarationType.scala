@@ -16,6 +16,7 @@
 
 package models
 
+import config.Constants.XI
 import models.ProcedureType.Normal
 import models.reference.CountryCode
 import pages.preTaskList.{OfficeOfDeparturePage, ProcedureTypePage}
@@ -47,7 +48,7 @@ object DeclarationType extends RadioModelU[DeclarationType] {
       userAnswers.get(OfficeOfDeparturePage).map(_.countryId),
       userAnswers.get(ProcedureTypePage)
     ) match {
-      case (Some(CountryCode("XI")), Some(Normal)) => values
-      case _                                       => values.filterNot(_ == Option4)
+      case (Some(CountryCode(XI)), Some(Normal)) => values
+      case _                                     => values.filterNot(_ == Option4)
     }
 }

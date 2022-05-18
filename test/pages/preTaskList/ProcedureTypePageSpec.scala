@@ -16,14 +16,13 @@
 
 package pages.preTaskList
 
+import models.ProcedureType
 import models.ProcedureType._
-import models.{ProcedureType, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.generalInformation.PreLodgeDeclarationPage
 
-class ProcedureTypeSpec extends PageBehaviours {
-  // format: off
+class ProcedureTypePageSpec extends PageBehaviours {
+
   "ProcedureTypePage" - {
 
     beRetrievable[ProcedureType](ProcedureTypePage)
@@ -33,18 +32,30 @@ class ProcedureTypeSpec extends PageBehaviours {
     beRemovable[ProcedureType](ProcedureTypePage)
 
     "cleanup" - {
-      "must clean down PreLodgedDeclarationPage when changing to Simplified" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result = userAnswers
-              .set(ProcedureTypePage, Normal).success.value
-              .set(PreLodgeDeclarationPage, true).success.value
-              .set(ProcedureTypePage, Simplified).success.value
 
-            result.get(PreLodgeDeclarationPage) must not be defined
+      "must remove TIRCarnetReferencePage" - {
+        "when Simplified selected" in {
+          forAll(arbitrary[String]) {
+            carnetReference =>
+              val preChange  = emptyUserAnswers.setValue(TIRCarnetReferencePage, carnetReference)
+              val postChange = preChange.set(ProcedureTypePage, Simplified).success.value
+
+              postChange.get(TIRCarnetReferencePage) mustNot be(defined)
+          }
+        }
+      }
+
+      "must not remove TIRCarnetReferencePage" - {
+        "when Normal selected" in {
+          forAll(arbitrary[String]) {
+            carnetReference =>
+              val preChange  = emptyUserAnswers.setValue(TIRCarnetReferencePage, carnetReference)
+              val postChange = preChange.set(ProcedureTypePage, Normal).success.value
+
+              postChange.get(TIRCarnetReferencePage) must be(defined)
+          }
         }
       }
     }
   }
-  // format: on
 }

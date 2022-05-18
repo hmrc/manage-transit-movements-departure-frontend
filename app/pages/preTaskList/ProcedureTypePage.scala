@@ -19,7 +19,6 @@ package pages.preTaskList
 import models.ProcedureType.Simplified
 import models.{ProcedureType, UserAnswers}
 import pages.QuestionPage
-import pages.generalInformation.PreLodgeDeclarationPage
 import play.api.libs.json.JsPath
 
 import scala.util.Try
@@ -32,7 +31,7 @@ case object ProcedureTypePage extends QuestionPage[ProcedureType] {
 
   override def cleanup(value: Option[ProcedureType], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(Simplified) => userAnswers.remove(PreLodgeDeclarationPage)
+      case Some(Simplified) => userAnswers.remove(TIRCarnetReferencePage)
       case _                => super.cleanup(value, userAnswers)
     }
 

@@ -17,7 +17,6 @@
 package utils
 
 import base.SpecBase
-import commonTestUtils.UserAnswersSpecHelper
 import controllers.preTaskList.routes
 import generators.Generators
 import models.reference.CustomsOffice
@@ -30,7 +29,7 @@ import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
 
-class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHelper with ScalaCheckPropertyChecks with Generators {
+class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "PreTaskListCheckYourAnswersHelper" - {
 
@@ -79,7 +78,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
         "when OfficeOfDeparturePage defined" in {
           forAll(arbitrary[CustomsOffice], arbitrary[Mode]) {
             (customsOffice, mode) =>
-              val answers = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(customsOffice)
+              val answers = emptyUserAnswers.setValue(OfficeOfDeparturePage, customsOffice)
 
               val helper = new PreTaskListCheckYourAnswersHelper(answers, mode)
               val result = helper.officeOfDeparture
@@ -123,7 +122,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
         "when ProcedureTypePage defined" in {
           forAll(arbitrary[ProcedureType], arbitrary[Mode]) {
             (procedureType, mode) =>
-              val answers = emptyUserAnswers.unsafeSetVal(ProcedureTypePage)(procedureType)
+              val answers = emptyUserAnswers.setValue(ProcedureTypePage, procedureType)
 
               val helper = new PreTaskListCheckYourAnswersHelper(answers, mode)
               val result = helper.procedureType
@@ -167,7 +166,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
         "when DeclarationTypePage defined" in {
           forAll(arbitrary[DeclarationType], arbitrary[Mode]) {
             (declarationType, mode) =>
-              val answers = emptyUserAnswers.unsafeSetVal(DeclarationTypePage)(declarationType)
+              val answers = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
 
               val helper = new PreTaskListCheckYourAnswersHelper(answers, mode)
               val result = helper.declarationType
@@ -211,7 +210,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
         "when TIRCarnetReferencePage defined" in {
           forAll(Gen.alphaNumStr, arbitrary[Mode]) {
             (tirCarnetReference, mode) =>
-              val answers = emptyUserAnswers.unsafeSetVal(TIRCarnetReferencePage)(tirCarnetReference)
+              val answers = emptyUserAnswers.setValue(TIRCarnetReferencePage, tirCarnetReference)
 
               val helper = new PreTaskListCheckYourAnswersHelper(answers, mode)
               val result = helper.tirCarnet
@@ -255,7 +254,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpe
         "when SecurityDetailsTypePage defined" in {
           forAll(arbitrary[SecurityDetailsType], arbitrary[Mode]) {
             (securityDetailsType, mode) =>
-              val answers = emptyUserAnswers.unsafeSetVal(SecurityDetailsTypePage)(securityDetailsType)
+              val answers = emptyUserAnswers.setValue(SecurityDetailsTypePage, securityDetailsType)
 
               val helper = new PreTaskListCheckYourAnswersHelper(answers, mode)
               val result = helper.securityType

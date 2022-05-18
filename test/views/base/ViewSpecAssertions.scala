@@ -63,16 +63,6 @@ trait ViewSpecAssertions extends ViewSpecGetters {
   def assertElementDoesNotExist(doc: Document, className: String): Assertion =
     assert(doc.getElementsByClass(className).isEmpty)
 
-  //Copied over from Nunjucks to keep old tests working
-  def getByElementTestIdSelector(doc: Document, id: String): Seq[Element] =
-    (doc.select(s"[data-testid=$id]")).asScala
-
-  def assertContainsClass(doc: Document, expectedClass: String) =
-    assert(doc.getElementsByClass(expectedClass).isEmpty == false, s"\n\nPage should have class $expectedClass")
-
-  def assertContainsNoClass(doc: Document, expectedClass: String) =
-    assert(doc.getElementsByClass(expectedClass).isEmpty, s"\n\nPage should not have class $expectedClass")
-
   def assertPageHasSignOutLink(doc: Document, expectedText: String, expectedHref: String): Assertion = {
     val link = doc.getElementsByClass("hmrc-sign-out-nav__link").first()
     link.text() mustBe expectedText

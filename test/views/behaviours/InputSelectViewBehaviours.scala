@@ -16,7 +16,7 @@
 
 package views.behaviours
 
-import models.reference.Selectable
+import models.Selectable
 
 trait InputSelectViewBehaviours[T <: Selectable] extends QuestionViewBehaviours[T] {
 

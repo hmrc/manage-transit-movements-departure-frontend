@@ -22,15 +22,12 @@ import config.FrontendAppConfig
 import connectors.EnrolmentStoreConnector
 import controllers.actions.AuthActionSpec._
 import controllers.routes
-import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
-import org.mockito.Mockito.{reset, times, verify, when}
+import org.mockito.Mockito.{reset, when}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.mvc._
+import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
 import play.api.test.Helpers._
-import play.twirl.api.Html
-import renderer.Renderer
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{~, Retrieval}
@@ -52,14 +49,12 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   val mockAuthConnector: AuthConnector                     = mock[AuthConnector]
   val mockEnrolmentStoreConnector: EnrolmentStoreConnector = mock[EnrolmentStoreConnector]
-  val mockUIRender: Renderer                               = mock[Renderer]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind[AuthConnector].toInstance(mockAuthConnector))
       .overrides(bind[EnrolmentStoreConnector].toInstance(mockEnrolmentStoreConnector))
-      .overrides(bind[Renderer].toInstance(mockUIRender))
 
   val LEGACY_ENROLMENT_KEY    = "HMCE-NCTS-ORG"
   val LEGACY_ENROLMENT_ID_KEY = "VATRegNoTURN"
@@ -82,7 +77,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       "must redirect the user to log in " in {
 
-        setUserAnswers(None)
+        setNoExistingUserAnswers()
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
@@ -91,8 +86,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           new FakeFailingAuthConnector(new MissingBearerToken),
           frontendAppConfig,
           bodyParsers,
-          mockEnrolmentStoreConnector,
-          mockUIRender
+          mockEnrolmentStoreConnector
         )
 
         val controller = new Harness(authAction)
@@ -108,7 +102,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       "must redirect the user to log in " in {
 
-        setUserAnswers(None)
+        setNoExistingUserAnswers()
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
@@ -117,11 +111,10 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           new FakeFailingAuthConnector(new BearerTokenExpired),
           frontendAppConfig,
           bodyParsers,
-          mockEnrolmentStoreConnector,
-          mockUIRender
+          mockEnrolmentStoreConnector
         )
-        val controller             = new Harness(authAction)
-        val result: Future[Result] = controller.onPageLoad()(fakeRequest)
+        val controller = new Harness(authAction)
+        val result     = controller.onPageLoad()(fakeRequest)
 
         status(result) mustBe SEE_OTHER
 
@@ -133,7 +126,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       "must redirect the user to the unauthorised page" in {
 
-        setUserAnswers(None)
+        setNoExistingUserAnswers()
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
@@ -142,8 +135,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           new FakeFailingAuthConnector(new InsufficientEnrolments),
           frontendAppConfig,
           bodyParsers,
-          mockEnrolmentStoreConnector,
-          mockUIRender
+          mockEnrolmentStoreConnector
         )
 
         val controller = new Harness(authAction)
@@ -159,7 +151,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       "must redirect the user to the unauthorised page" in {
 
-        setUserAnswers(None)
+        setNoExistingUserAnswers()
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
@@ -168,8 +160,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           new FakeFailingAuthConnector(new InsufficientConfidenceLevel),
           frontendAppConfig,
           bodyParsers,
-          mockEnrolmentStoreConnector,
-          mockUIRender
+          mockEnrolmentStoreConnector
         )
 
         val controller = new Harness(authAction)
@@ -185,7 +176,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       "must redirect the user to the unauthorised page" in {
 
-        setUserAnswers(None)
+        setNoExistingUserAnswers()
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
@@ -194,8 +185,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           new FakeFailingAuthConnector(new UnsupportedAuthProvider),
           frontendAppConfig,
           bodyParsers,
-          mockEnrolmentStoreConnector,
-          mockUIRender
+          mockEnrolmentStoreConnector
         )
 
         val controller = new Harness(authAction)
@@ -211,7 +201,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       "must redirect the user to the unauthorised page" in {
 
-        setUserAnswers(None)
+        setNoExistingUserAnswers()
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
@@ -220,8 +210,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           new FakeFailingAuthConnector(new UnsupportedAffinityGroup),
           frontendAppConfig,
           bodyParsers,
-          mockEnrolmentStoreConnector,
-          mockUIRender
+          mockEnrolmentStoreConnector
         )
 
         val controller = new Harness(authAction)
@@ -237,7 +226,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       "must redirect the user to the unauthorised page" in {
 
-        setUserAnswers(None)
+        setNoExistingUserAnswers()
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
@@ -246,8 +235,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           new FakeFailingAuthConnector(new UnsupportedCredentialRole),
           frontendAppConfig,
           bodyParsers,
-          mockEnrolmentStoreConnector,
-          mockUIRender
+          mockEnrolmentStoreConnector
         )
 
         val controller = new Harness(authAction)
@@ -275,7 +263,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector, mockUIRender)
+        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector)
         val controller = new Harness(authAction)
         val result     = controller.onPageLoad()(fakeRequest)
 
@@ -299,7 +287,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector, mockUIRender)
+        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector)
         val controller = new Harness(authAction)
         val result     = controller.onPageLoad()(fakeRequest)
 
@@ -320,21 +308,18 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           .thenReturn(Future.successful(legacyEnrolmentsWithEoriButNoActivated ~ Some("testName")))
         when(mockEnrolmentStoreConnector.checkGroupEnrolments(any(), eqTo(NEW_ENROLMENT_KEY))(any())).thenReturn(Future.successful(true))
         when(mockEnrolmentStoreConnector.checkGroupEnrolments(any(), eqTo(LEGACY_ENROLMENT_KEY))(any())).thenReturn(Future.successful(false))
-        when(mockUIRender.render(any())(any())).thenReturn(Future.successful(Html("")))
-
-        val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector, mockUIRender)
+        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector)
         val controller = new Harness(authAction)
         val result     = controller.onPageLoad()(fakeRequest)
 
-        status(result) mustBe UNAUTHORIZED
+        status(result) mustBe SEE_OTHER
 
-        verify(mockUIRender, times(1)).render(templateCaptor.capture())(any())
-        templateCaptor.getValue mustBe "unauthorisedWithGroupAccess.njk"
+        redirectLocation(result).value mustBe controllers.routes.UnauthorisedWithGroupAccessController.onPageLoad().url
+
       }
 
       "must redirect to unauthorised page with group access when given user has no active legacy enrolments but legacy group has" in {
@@ -349,50 +334,35 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           .thenReturn(Future.successful(legacyEnrolmentsWithEoriButNoActivated ~ Some("testName")))
         when(mockEnrolmentStoreConnector.checkGroupEnrolments(any(), eqTo(NEW_ENROLMENT_KEY))(any())).thenReturn(Future.successful(false))
         when(mockEnrolmentStoreConnector.checkGroupEnrolments(any(), eqTo(LEGACY_ENROLMENT_KEY))(any())).thenReturn(Future.successful(true))
-        when(mockUIRender.render(any())(any())).thenReturn(Future.successful(Html("")))
-
-        val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector, mockUIRender)
+        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector)
         val controller = new Harness(authAction)
         val result     = controller.onPageLoad()(fakeRequest)
 
-        status(result) mustBe UNAUTHORIZED
+        status(result) mustBe SEE_OTHER
 
-        verify(mockUIRender, times(1)).render(templateCaptor.capture())(any())
-        templateCaptor.getValue mustBe "unauthorisedWithGroupAccess.njk"
+        redirectLocation(result).value mustBe controllers.routes.UnauthorisedWithGroupAccessController.onPageLoad().url
       }
 
       "must redirect to unauthorised page with group access when given user has no active new enrolments but new group has" in {
-        val newEnrolmentsWithEoriButNoActivated: Enrolments = Enrolments(
-          Set(
-            createEnrolment("IR-SA", Some("UTR"), "123", "Activated"),
-            createEnrolment(NEW_ENROLMENT_KEY, Some(NEW_ENROLMENT_ID_KEY), "123", "NotYetActivated")
-          )
-        )
-
         when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any(), any())(any(), any()))
-          .thenReturn(Future.successful(newEnrolmentsWithEoriButNoActivated ~ Some("testName")))
+          .thenReturn(Future.successful(Enrolments(Set.empty) ~ Some("testName")))
         when(mockEnrolmentStoreConnector.checkGroupEnrolments(any(), eqTo(NEW_ENROLMENT_KEY))(any())).thenReturn(Future.successful(true))
         when(mockEnrolmentStoreConnector.checkGroupEnrolments(any(), eqTo(LEGACY_ENROLMENT_KEY))(any())).thenReturn(Future.successful(false))
-        when(mockUIRender.render(any())(any())).thenReturn(Future.successful(Html("")))
-
-        val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector, mockUIRender)
+        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector)
         val controller = new Harness(authAction)
         val result     = controller.onPageLoad()(fakeRequest)
 
-        status(result) mustBe UNAUTHORIZED
+        status(result) mustBe SEE_OTHER
 
-        verify(mockUIRender, times(1)).render(templateCaptor.capture())(any())
-        templateCaptor.getValue mustBe "unauthorisedWithGroupAccess.njk"
+        redirectLocation(result).value mustBe controllers.routes.UnauthorisedWithGroupAccessController.onPageLoad().url
       }
 
       "must redirect to unauthorised page with group access when given user has no active new enrolments but legacy group has" in {
@@ -407,43 +377,35 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           .thenReturn(Future.successful(newEnrolmentsWithEoriButNoActivated ~ Some("testName")))
         when(mockEnrolmentStoreConnector.checkGroupEnrolments(any(), eqTo(NEW_ENROLMENT_KEY))(any())).thenReturn(Future.successful(false))
         when(mockEnrolmentStoreConnector.checkGroupEnrolments(any(), eqTo(LEGACY_ENROLMENT_KEY))(any())).thenReturn(Future.successful(true))
-        when(mockUIRender.render(any())(any())).thenReturn(Future.successful(Html("")))
-
-        val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector, mockUIRender)
+        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector)
         val controller = new Harness(authAction)
         val result     = controller.onPageLoad()(fakeRequest)
 
-        status(result) mustBe UNAUTHORIZED
+        status(result) mustBe SEE_OTHER
 
-        verify(mockUIRender, times(1)).render(templateCaptor.capture())(any())
-        templateCaptor.getValue mustBe "unauthorisedWithGroupAccess.njk"
+        redirectLocation(result).value mustBe controllers.routes.UnauthorisedWithGroupAccessController.onPageLoad().url
       }
+
       "must redirect to unauthorised page with group access when given user has no enrolments but group has" in {
         when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any(), any())(any(), any()))
           .thenReturn(Future.successful(Enrolments(Set.empty) ~ Some("testName")))
         when(mockEnrolmentStoreConnector.checkGroupEnrolments(any(), eqTo(NEW_ENROLMENT_KEY))(any())).thenReturn(Future.successful(true))
         when(mockEnrolmentStoreConnector.checkGroupEnrolments(any(), eqTo(LEGACY_ENROLMENT_KEY))(any())).thenReturn(Future.successful(false))
-        when(mockUIRender.render(any())(any())).thenReturn(Future.successful(Html("")))
-
-        val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector, mockUIRender)
+        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector)
         val controller = new Harness(authAction)
         val result     = controller.onPageLoad()(fakeRequest)
 
-        status(result) mustBe UNAUTHORIZED
+        status(result) mustBe SEE_OTHER
 
-        verify(mockUIRender, times(1)).render(templateCaptor.capture())(any())
-
-        templateCaptor.getValue mustBe "unauthorisedWithGroupAccess.njk"
+        redirectLocation(result).value mustBe controllers.routes.UnauthorisedWithGroupAccessController.onPageLoad().url
       }
 
       "must redirect to unauthorised page without group access when given both user and group has no enrolments" in {
@@ -451,12 +413,11 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           .thenReturn(Future.successful(Enrolments(Set.empty) ~ Some("testName")))
         when(mockEnrolmentStoreConnector.checkGroupEnrolments(any(), eqTo(NEW_ENROLMENT_KEY))(any())).thenReturn(Future.successful(false))
         when(mockEnrolmentStoreConnector.checkGroupEnrolments(any(), eqTo(LEGACY_ENROLMENT_KEY))(any())).thenReturn(Future.successful(false))
-        when(mockUIRender.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector, mockUIRender)
+        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector)
         val controller = new Harness(authAction)
         val result     = controller.onPageLoad()(fakeRequest)
 
@@ -468,14 +429,13 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
         when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any(), any())(any(), any()))
           .thenReturn(Future.successful(Enrolments(Set.empty) ~ None))
 
-        when(mockUIRender.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
         when(mockEnrolmentStoreConnector.checkGroupEnrolments(any(), eqTo(NEW_ENROLMENT_KEY))(any())).thenReturn(Future.successful(false))
         when(mockEnrolmentStoreConnector.checkGroupEnrolments(any(), eqTo(LEGACY_ENROLMENT_KEY))(any())).thenReturn(Future.successful(false))
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector, mockUIRender)
+        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector)
         val controller = new Harness(authAction)
         val result     = controller.onPageLoad()(fakeRequest)
 
@@ -499,7 +459,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector, mockUIRender)
+        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector)
         val controller = new Harness(authAction)
         val result     = controller.onPageLoad()(fakeRequest)
 
@@ -520,7 +480,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector, mockUIRender)
+        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector)
         val controller = new Harness(authAction)
         val result     = controller.onPageLoad()(fakeRequest)
 
@@ -541,7 +501,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector, mockUIRender)
+        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector)
         val controller = new Harness(authAction)
         val result     = controller.onPageLoad()(fakeRequest)
 
@@ -562,7 +522,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector, mockUIRender)
+        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector)
         val controller = new Harness(authAction)
         val result     = controller.onPageLoad()(fakeRequest)
 
@@ -584,7 +544,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector, mockUIRender)
+        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers, mockEnrolmentStoreConnector)
         val controller = new Harness(authAction)
         val result     = controller.onPageLoad()(fakeRequest)
 
@@ -597,7 +557,6 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
     super.beforeEach()
     reset(mockAuthConnector)
     reset(mockEnrolmentStoreConnector)
-    reset(mockUIRender)
   }
 }
 

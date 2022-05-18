@@ -16,14 +16,14 @@
 
 package models
 
-case class Field(name: String, errorKeys: Map[ErrorType, String])
+case class Field(name: String, errorKeys: Map[ErrorFieldType, String])
 
 object Field {
 
-  def apply(name: String, errors: (ErrorType, String)*): Field =
+  def apply(name: String, errors: (ErrorFieldType, String)*): Field =
     Field(name, errors.toMap)
 }
 
-sealed trait ErrorType
-case object Required extends ErrorType
-case object Invalid extends ErrorType
+sealed trait ErrorFieldType
+case object Required extends ErrorFieldType
+case object Invalid extends ErrorFieldType

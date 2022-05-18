@@ -17,41 +17,29 @@
 package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import commonTestUtils.UserAnswersSpecHelper
 import controllers.{routes => mainRoutes}
 import forms.preTaskList.DeclarationTypeFormProvider
-import matchers.JsonMatchers
-import models.reference.{CountryCode, CustomsOffice}
 import models.{DeclarationType, NormalMode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
 import pages.preTaskList.DeclarationTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.viewmodels.NunjucksSupport
 import views.html.preTaskList.DeclarationTypeView
 
 import scala.concurrent.Future
 
-class DeclarationTypeControllerSpec
-    extends SpecBase
-    with AppWithDefaultMockFixtures
-    with MockitoSugar
-    with NunjucksSupport
-    with JsonMatchers
-    with UserAnswersSpecHelper {
+class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  lazy val declarationTypeRoute = routes.DeclarationTypeController.onPageLoad(lrn, NormalMode).url
+  private lazy val declarationTypeRoute = routes.DeclarationTypeController.onPageLoad(lrn, NormalMode).url
 
-  val formProvider    = new DeclarationTypeFormProvider()
-  val form            = formProvider()
-  val gbCustomsOffice = CustomsOffice("Id", "Name", CountryCode("GB"), None)
-  private val mode    = NormalMode
+  private val formProvider = new DeclarationTypeFormProvider()
+  private val form         = formProvider()
+  private val mode         = NormalMode
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -61,7 +49,7 @@ class DeclarationTypeControllerSpec
   "DeclarationType Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      setUserAnswers(Some(emptyUserAnswers))
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, declarationTypeRoute)
       val view    = injector.instanceOf[DeclarationTypeView]
@@ -71,13 +59,11 @@ class DeclarationTypeControllerSpec
 
       contentAsString(result) mustEqual
         view(form, DeclarationType.radioItemsU(emptyUserAnswers), lrn, mode)(request, messages).toString
-
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-
       val userAnswers = emptyUserAnswers.set(DeclarationTypePage, DeclarationType.values.head).success.value
-      setUserAnswers(Some(userAnswers))
+      setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, declarationTypeRoute)
 
@@ -94,8 +80,7 @@ class DeclarationTypeControllerSpec
     }
 
     "must redirect to the next page when valid data is submitted" in {
-
-      setUserAnswers(Some(emptyUserAnswers))
+      setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
@@ -109,11 +94,10 @@ class DeclarationTypeControllerSpec
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual onwardRoute.url
-
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      setUserAnswers(Some(emptyUserAnswers))
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request   = FakeRequest(POST, declarationTypeRoute).withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))
@@ -125,12 +109,10 @@ class DeclarationTypeControllerSpec
 
       contentAsString(result) mustEqual
         view(boundForm, DeclarationType.radioItemsU(emptyUserAnswers), lrn, mode)(request, messages).toString
-
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
-
-      setUserAnswers(None)
+      setNoExistingUserAnswers()
 
       val request = FakeRequest(GET, declarationTypeRoute)
 
@@ -138,12 +120,10 @@ class DeclarationTypeControllerSpec
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
-
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
-
-      setUserAnswers(None)
+      setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, declarationTypeRoute)
         .withFormUrlEncodedBody(("value", DeclarationType.values.head.toString))
@@ -153,7 +133,6 @@ class DeclarationTypeControllerSpec
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
-
     }
   }
 }

@@ -33,13 +33,12 @@ import scala.concurrent.Future
 
 class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  val formProvider = new LocalReferenceNumberFormProvider()
-  val form         = formProvider()
+  private val formProvider = new LocalReferenceNumberFormProvider()
+  private val form         = formProvider()
 
   private lazy val mockUserAnswersService = mock[UserAnswersService]
 
-  lazy val localReferenceNumberRoute: String =
-    routes.LocalReferenceNumberController.onPageLoad.url
+  private lazy val localReferenceNumberRoute: String = routes.LocalReferenceNumberController.onPageLoad().url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -55,7 +54,6 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
   "LocalReferenceNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
-
       setNoExistingUserAnswers()
 
       val request = FakeRequest(GET, localReferenceNumberRoute)
@@ -71,15 +69,13 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
     }
 
     "must redirect to the next page when valid data is submitted" in {
-
       setNoExistingUserAnswers()
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       when(mockUserAnswersService.getOrCreateUserAnswers(any(), any())) thenReturn Future.successful(emptyUserAnswers)
 
-      val request =
-        FakeRequest(POST, localReferenceNumberRoute)
-          .withFormUrlEncodedBody(("value", lrn.toString))
+      val request = FakeRequest(POST, localReferenceNumberRoute)
+        .withFormUrlEncodedBody(("value", lrn.toString))
 
       val result = route(app, request).value
 
@@ -88,8 +84,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-
-      setUserAnswers(Some(emptyUserAnswers))
+      setExistingUserAnswers(emptyUserAnswers)
 
       val invalidAnswer = ""
 

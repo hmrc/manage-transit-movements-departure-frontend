@@ -35,9 +35,7 @@ class DeclarationTypeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @PreTaskListDetails navigator: Navigator,
-  identify: IdentifierAction,
-  getData: DataRetrievalActionProvider,
-  requireData: DataRequiredAction,
+  actions: Actions,
   formProvider: DeclarationTypeFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: DeclarationTypeView
@@ -47,7 +45,7 @@ class DeclarationTypeController @Inject() (
 
   private val form = formProvider()
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
       val preparedForm = request.userAnswers.get(DeclarationTypePage) match {
         case None        => form
@@ -57,7 +55,7 @@ class DeclarationTypeController @Inject() (
       Ok(view(preparedForm, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       form
         .bindFromRequest()
