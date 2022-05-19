@@ -44,12 +44,11 @@
 
         @select(
             field = form("value"),
-            label = messages("officeOfDeparture.heading"),
+            heading = messages("officeOfDeparture.heading"),
+            label = Some(messages("officeOfDeparture.label")),
             hint = Some(messages("officeOfDeparture.hintText")),
             selectItems = customsOffices.toSelectItems(form.value)
-        ) {
-            <p id="value-paragraph" class="govuk-body">@messages("officeOfDeparture.label")</p>
-        }
+        )
 
       @button(attributes = Map("id" -> "submit"))
     }
