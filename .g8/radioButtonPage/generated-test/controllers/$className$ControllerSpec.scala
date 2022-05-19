@@ -1,23 +1,17 @@
 package controllers
 
-import base.{AppWithDefaultMockFixtures, SpecBase}
+
 import forms.$className$FormProvider
 import views.html.$className$View
-import pages.$className$Page
-import matchers.JsonMatchers
-import models.{NormalMode, $className$, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
-import org.mockito.ArgumentCaptor
+import models.{MyNewPage, NormalMode, UserAnswers}
+import navigation.Navigator
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{times, verify, when}
+import org.mockito.Mockito.when
 import pages.$className$Page
 import play.api.inject.bind
-import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.twirl.api.Html
-import repositories.SessionRepository
 
 import scala.concurrent.Future
 
@@ -26,8 +20,13 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
   private val formProvider = new $className$FormProvider()
   private val form = formProvider()
   private val mode         = NormalMode
-  private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(mrn, mode).url
+  private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, mode).url
 
+  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
+    super
+      .guiceApplicationBuilder()
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[$navRoute$]).toInstance(fakeNavigator))
+      
   "$className$ Controller" - {
 
     "must return OK and the correct view for a GET" in {
@@ -48,7 +47,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(mrn, eoriNumber).set($className$Page, $className$.values.head).success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set($className$Page, $className$.values.head).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, $className;format="decap"$Route)

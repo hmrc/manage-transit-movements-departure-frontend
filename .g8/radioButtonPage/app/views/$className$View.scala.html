@@ -39,7 +39,7 @@
 
     @inputRadio(
         field = form("value"),
-        legend = messages("$className$.heading"),
+        legend = messages("$className;format="decap"$.heading"),
         radioItems = fieldId => radios(fieldId, form.value)
     )
 

@@ -22,7 +22,7 @@ class $className$Controller @Inject()(
    actions: Actions,
    formProvider: $className$FormProvider,
    val controllerComponents: MessagesControllerComponents,
-   view: views.html.$className$View
+   view: $className$View
 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form = formProvider()
