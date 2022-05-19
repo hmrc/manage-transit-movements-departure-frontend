@@ -1,14 +1,15 @@
-package controllers
+package controllers.$package$
 
 import base.{SpecBase, AppWithDefaultMockFixtures}
-import forms.$className$FormProvider
-import views.html.$className$View
-import models.{MyNewPage, NormalMode, UserAnswers}
+import forms.$package$.$className$FormProvider
+import views.html.$package$.$className$View
+import models.{NormalMode, UserAnswers}
+import models.$package$.$className$
 import navigation.Navigator
 import navigation.annotations.$navRoute$
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.$className$Page
+import pages.$package$.$className$Page
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest

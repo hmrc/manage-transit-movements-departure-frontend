@@ -1,4 +1,6 @@
-package models
+package models.$package$
+
+import models.RadioModel
 
 sealed trait $className$
 

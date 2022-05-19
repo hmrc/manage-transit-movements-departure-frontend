@@ -1,7 +1,8 @@
-package pages
+package pages.$package$
 
-import models.$className$
+import models.$package$.$className$
 import play.api.libs.json.JsPath
+import pages.QuestionPage
 
 case object $className$Page extends QuestionPage[$className$] {
   
