@@ -1,19 +1,11 @@
 package controllers
 
-import base.{SpecBase, AppWithDefaultMockFixtures}
-import models.{NormalMode, UserAnswers}
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
-import play.api.inject.bind
-import play.api.inject.guice.GuiceApplicationBuilder
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.$className$View
 
-import scala.concurrent.Future
-
-class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
+class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn).url
 
@@ -23,9 +15,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, $className;
-      format = "decap" $Route
-      )
+      val request = FakeRequest(GET, $className;format="decap"$Route)
       val result = route(app, request).value
 
       val view = injector.instanceOf[$className$View]

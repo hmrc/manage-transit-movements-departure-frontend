@@ -16,14 +16,15 @@
 
 package views
 
-import forms.$className$FormProvider
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
-import views.html.$className$View
+import views.behaviours.ViewBehaviours
+import views.html.{$className$View, MyNewPageView}
 
 class $className$ViewSpec extends ViewBehaviours {
 
-  override def applyView(): HtmlFormat.Appendable =
+  override val urlContainsLrn: Boolean = true
+
+  override def view: HtmlFormat.Appendable =
     injector.instanceOf[$className$View].apply(lrn)(fakeRequest, messages)
 
   override val prefix: String = "$className;format="decap"$"
