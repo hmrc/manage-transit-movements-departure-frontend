@@ -33,7 +33,7 @@ bin
 /*.ipr
 /.classpath
 *.iws
-migrations
+/migrations
 .bloop/
 .bsp
 .metals/
