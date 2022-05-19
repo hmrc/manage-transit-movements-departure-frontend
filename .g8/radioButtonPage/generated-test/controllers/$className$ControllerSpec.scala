@@ -1,10 +1,11 @@
 package controllers
 
-
+import base.{SpecBase, AppWithDefaultMockFixtures}
 import forms.$className$FormProvider
 import views.html.$className$View
 import models.{MyNewPage, NormalMode, UserAnswers}
 import navigation.Navigator
+import navigation.annotations.$navRoute$
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.$className$Page
@@ -18,7 +19,7 @@ import scala.concurrent.Future
 class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private val formProvider = new $className$FormProvider()
-  private val form = formProvider()
+  private val form         = formProvider()
   private val mode         = NormalMode
   private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, mode).url
 
@@ -26,7 +27,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[$navRoute$]).toInstance(fakeNavigator))
-      
+
   "$className$ Controller" - {
 
     "must return OK and the correct view for a GET" in {

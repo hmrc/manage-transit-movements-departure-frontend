@@ -25,11 +25,11 @@ echo "Adding to UserAnswersEntryGenerators"
 awk '/self: Generators =>/ {\
     print;\
     print "";\
-    print "  implicit lazy val arbitrary$className$UserAnswersEntry: Arbitrary[($className$Page.type, JsValue)] =";\
+    print "  implicit lazy val arbitrary$className$UserAnswersEntry: Arbitrary[(pages.$className$Page.type, JsValue)] =";\
     print "    Arbitrary {";\
     print "      for {";\
     print "        value <- arbitrary[$className$Page.type#Data].map(Json.toJson(_))";\
-    print "      } yield ($className$Page, value)";\
+    print "      } yield (pages.$className$Page, value)";\
     print "    }";\
     next }1' ../test/generators/UserAnswersEntryGenerators.scala > tmp && mv tmp ../test/generators/UserAnswersEntryGenerators.scala
 
