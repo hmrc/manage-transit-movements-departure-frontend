@@ -18,7 +18,7 @@ package views
 
 import play.twirl.api.HtmlFormat
 import views.behaviours.ViewBehaviours
-import views.html.{$className$View, MyNewPageView}
+import views.html.$className$View
 
 class $className$ViewSpec extends ViewBehaviours {
 
