@@ -46,7 +46,7 @@ awk '/self: Generators =>/ {\
 echo "Adding to UserAnswersGenerator"
 awk '/val generators/ {\
     print;\
-    print "    arbitrary[($className$Page.type, JsValue)] ::";\
+    print "    arbitrary$className$UserAnswersEntry.arbitrary ::";\
     next }1' ../test/generators/UserAnswersGenerator.scala > tmp && mv tmp ../test/generators/UserAnswersGenerator.scala
 
 echo "Migration $className;format="snake"$ completed"
