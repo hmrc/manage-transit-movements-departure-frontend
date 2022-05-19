@@ -9,6 +9,7 @@ site.yes = Yes
 site.continue = Save and continue
 site.submit = Continue
 site.confirm = Confirm and continue
+site.send = Confirm and send
 site.service_name = Manage your transit movements
 
 error.title.prefix = Error:
@@ -106,3 +107,20 @@ preTaskList.checkYourAnswers.heading = Check your answers
 preTaskList.checkYourAnswers.title = Check your answers
 preTaskList.checkYourAnswers.h2 = Before you continue
 preTaskList.checkYourAnswers.p = Once you have confirmed these details you will not be able to change them.
+
+taskList.title = Declaration summary
+taskList.heading = Declaration summary
+taskList.departureDetails = Departure details
+taskList.sendDeclaration = Now send your departure declaration
+taskList.detailsCorrect = By sending this you are confirming that the details you are providing are correct, to the best of your knowledge.
+taskList.backToTransitMovements = Back to transit movements
+
+taskStatus.completed = Completed
+taskStatus.inProgress = In progress
+taskStatus.notStarted = Not started
+taskStatus.cannotStartYet = Cannot start yet
+
+task.generalInformation = General information
+task.generalInformation.add = Add general information
+task.generalInformation.edit = Edit general information
+

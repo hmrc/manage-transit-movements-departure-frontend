@@ -14,55 +14,54 @@
  * limitations under the License.
  */
 
-package controllers.preTaskList
+package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalacheck.Arbitrary.arbitrary
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewModels.PreTaskListViewModel
-import viewModels.sections.Section
-import views.html.preTaskList.CheckYourAnswersView
+import viewModels.TaskListViewModel
+import viewModels.taskList.Task
+import views.html.TaskListView
 
-class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private lazy val mockViewModel = mock[PreTaskListViewModel]
+  private lazy val mockViewModel = mock[TaskListViewModel]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind[PreTaskListViewModel].toInstance(mockViewModel))
+      .overrides(bind[TaskListViewModel].toInstance(mockViewModel))
 
-  "Check Your Answers Controller" - {
+  "Task List Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val sampleSection = arbitrary[Section].sample.value
+      val sampleTasks = listWithMaxLength[Task]()(arbitraryTask).sample.value
 
-      when(mockViewModel.apply(any())(any())).thenReturn(sampleSection)
+      when(mockViewModel.apply(any())(any())).thenReturn(sampleTasks)
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(lrn).url)
+      val request = FakeRequest(GET, routes.TaskListController.onPageLoad(lrn).url)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[CheckYourAnswersView]
+      val view = injector.instanceOf[TaskListView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(lrn, Seq(sampleSection))(request, messages).toString
+        view(lrn, sampleTasks)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(lrn).url)
+      val request = FakeRequest(GET, routes.TaskListController.onPageLoad(lrn).url)
 
       val result = route(app, request).value
 
@@ -71,16 +70,16 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
-    "must redirect to task list / declaration summary" in {
+    "must redirect to ???" ignore {
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn).url)
+      val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
+      redirectLocation(result).value mustEqual ???
     }
   }
 }

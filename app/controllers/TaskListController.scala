@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.preTaskList
+package controllers
 
 import com.google.inject.Inject
 import controllers.actions.Actions
@@ -22,27 +22,27 @@ import models.LocalReferenceNumber
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.PreTaskListViewModel
-import views.html.preTaskList.CheckYourAnswersView
+import viewModels.TaskListViewModel
+import views.html.TaskListView
 
-class CheckYourAnswersController @Inject() (
+class TaskListController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
-  view: CheckYourAnswersView,
-  viewModel: PreTaskListViewModel
+  view: TaskListView,
+  viewModel: TaskListViewModel
 ) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val section = viewModel(request.userAnswers)
-      Ok(view(lrn, Seq(section)))
+      val tasks = viewModel(request.userAnswers)
+      Ok(view(lrn, tasks))
   }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
-    _ =>
-      Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
+    implicit request =>
+      ???
   }
 
 }

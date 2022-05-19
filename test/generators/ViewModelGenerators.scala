@@ -22,6 +22,7 @@ import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
 import viewModels.sections.Section
+import viewModels.taskList.{Task, TaskStatus}
 
 trait ViewModelGenerators {
   self: Generators =>
@@ -84,5 +85,36 @@ trait ViewModelGenerators {
       length       <- Gen.choose(1, maxSeqLength)
       rows         <- Gen.containerOfN[Seq, SummaryListRow](length, arbitrary[SummaryListRow])
     } yield Section(sectionTitle, rows)
+  }
+
+  implicit lazy val arbitraryTaskStatus: Arbitrary[TaskStatus] = Arbitrary {
+    Gen.oneOf(TaskStatus.Completed, TaskStatus.InProgress, TaskStatus.NotStarted, TaskStatus.CannotStartYet)
+  }
+
+  implicit lazy val arbitraryTask: Arbitrary[Task] = Arbitrary {
+    for {
+      arbitraryStatus <- arbitrary[TaskStatus]
+      arbitraryName   <- Gen.alphaNumStr
+      arbitraryId     <- Gen.alphaNumStr
+      arbitraryHref   <- Gen.option(Gen.alphaNumStr)
+    } yield new Task {
+      override val status: TaskStatus   = arbitraryStatus
+      override val name: String         = arbitraryName
+      override val id: String           = arbitraryId
+      override val href: Option[String] = arbitraryHref
+    }
+  }
+
+  implicit lazy val arbitraryCompletedTask: Arbitrary[Task] = Arbitrary {
+    for {
+      arbitraryName <- Gen.alphaNumStr
+      arbitraryId   <- Gen.alphaNumStr
+      arbitraryHref <- Gen.option(Gen.alphaNumStr)
+    } yield new Task {
+      override val status: TaskStatus   = TaskStatus.Completed
+      override val name: String         = arbitraryName
+      override val id: String           = arbitraryId
+      override val href: Option[String] = arbitraryHref
+    }
   }
 }
