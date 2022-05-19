@@ -15,28 +15,23 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import views.html.components.Heading
 
-@this(govukSelect: GovukSelect, govukLabel: GovukLabel)
+@this(
+    govukSelect: GovukSelect,
+    headingComponent: Heading
+)
 
 @(
     field: Field,
-    label: String,
+    heading: String,
+    label: Option[String] = None,
     hint: Option[String] = None,
     placeholder: Option[String] = None,
     selectItems: Seq[SelectItem]
-)(html: Html = Html(""))(implicit messages: Messages)
+)(implicit messages: Messages)
 
-@govukLabel(
-    Label(
-        content = Text(label),
-        isPageHeading = true,
-        classes = "govuk-label--xl govuk-!-padding-bottom-5"
-    )
-)
-
-@html
-
-@govukSelect(
+@select = @{
     Select(
         hint = hint.map(x => Hint(content = Text(x))),
         items = SelectItem(value = None, text = placeholder.getOrElse("")) +: selectItems,
@@ -48,4 +43,14 @@
         classes = "govuk-!-width-two-thirds"
     )
     .withFormField(field)
-)
+}
+
+@label match {
+    case Some(x) => {
+        @headingComponent(heading)
+        @govukSelect(select.copy(label = Label(content = Text(x))))
+    }
+    case None => {
+        @govukSelect(select.withHeading(heading = Text(heading)))
+    }
+}

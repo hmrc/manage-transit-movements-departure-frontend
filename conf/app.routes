@@ -16,3 +16,6 @@ GET        /:lrn/keep-alive                               controllers.KeepAliveC
 
 GET        /error/cannot-use-service-no-eori              controllers.UnauthorisedController.onPageLoad()
 GET        /unauthorised-group-access                     controllers.UnauthorisedWithGroupAccessController.onPageLoad()
+
+GET        /:lrn/task-list                                controllers.TaskListController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/task-list                                controllers.TaskListController.onSubmit(lrn: LocalReferenceNumber)
