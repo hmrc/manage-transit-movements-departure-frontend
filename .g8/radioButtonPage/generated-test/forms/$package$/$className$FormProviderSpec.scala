@@ -1,7 +1,7 @@
-package forms
+package forms.$package$
 
 import forms.behaviours.OptionFieldBehaviours
-import models.$className$
+import models.$package$.$className$
 import play.api.data.FormError
 
 class $className$FormProviderSpec extends OptionFieldBehaviours {

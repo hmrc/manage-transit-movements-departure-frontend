@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package views
+package views.$package$
 
-import forms.$className$FormProvider
-import models.{$className$, NormalMode}
+import forms.$package$.$className$FormProvider
+import models.NormalMode
+import models.$package$.$className$
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import views.behaviours.RadioViewBehaviours
-import views.html.$className$View
+import views.html.$package$.$className$View
 
 class $className$ViewSpec extends RadioViewBehaviours[$className$] {
 

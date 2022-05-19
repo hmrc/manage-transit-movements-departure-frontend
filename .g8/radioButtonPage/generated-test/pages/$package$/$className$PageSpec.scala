@@ -1,6 +1,6 @@
-package pages
+package pages.$package$
 
-import models.$className$
+import models.$package$.$className$
 import pages.behaviours.PageBehaviours
 
 class $className$Spec extends PageBehaviours {

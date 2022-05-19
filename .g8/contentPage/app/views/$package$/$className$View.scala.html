@@ -15,32 +15,19 @@
  *@
 
 @import models.LocalReferenceNumber
-@import views.html.components.{Button, ErrorSummary, InputYesNo}
+@import views.html.components.Heading
 
 @this(
   mainTemplate: MainTemplate,
-  formHelper: FormWithCSRF,
-  inputYesNo: InputYesNo,
-  errorSummary: ErrorSummary,
-  button: Button
+  heading: Heading
 )
 
-@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(lrn: LocalReferenceNumber)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
   title = messages("$className;format="decap"$.title"),
   showBackLink = true,
   lrn = Some(lrn)
 ) {
-  @formHelper(action = controllers.routes.$className$Controller.onSubmit(lrn, mode), 'autoComplete -> "off") {
-
-    @errorSummary(form.errors)
-
-    @inputYesNo(
-      field = form("value"),
-      messageKeyPrefix = "$className;format="decap"$"
-    )
-
-    @button(attributes = Map("id" -> "submit"))
-  }
+    @heading("$className;format="decap"$.header")
 }

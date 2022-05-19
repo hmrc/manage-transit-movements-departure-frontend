@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package views
+package views.$package$
 
-import forms.$className$FormProvider
+import forms.$package$.$className$FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.$className$View
+import views.html.$package$.$className$View
 
 class $className$ViewSpec extends YesNoViewBehaviours {
 

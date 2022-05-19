@@ -15,6 +15,7 @@
  *@
 
 @import models.LocalReferenceNumber
+@import models.$package$.$className$
 @import views.html.components.{Button, ErrorSummary, InputRadio}
 
 @this(
@@ -33,7 +34,7 @@
   lrn = Some(lrn)
 ) {
 
-  @formHelper(action = controllers.routes.$className;format="cap"$Controller.onSubmit(lrn, mode), 'autoComplete -> "off") {
+  @formHelper(action = controllers.$package$.routes.$className;format="cap"$Controller.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
     @errorSummary(form.errors)
 
