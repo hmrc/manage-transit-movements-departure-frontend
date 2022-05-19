@@ -6,7 +6,7 @@ import javax.inject.Inject
 import models.{Mode, LocalReferenceNumber}
 import navigation.Navigator
 import navigation.annotations.$navRoute$
-import pages.$className$Page
+import pages.$package$.$className$Page
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

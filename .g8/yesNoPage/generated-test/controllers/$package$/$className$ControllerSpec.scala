@@ -12,7 +12,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import forms.$package$.$className$FormProvider
-import views.$package$.html.$className$View
+import views.html.$package$.$className$View
 import pages.$package$.$className$Page
 
 import scala.concurrent.Future
@@ -113,7 +113,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
     }
 
@@ -129,7 +129,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
     }
   }

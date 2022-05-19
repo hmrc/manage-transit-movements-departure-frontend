@@ -32,7 +32,7 @@
   showBackLink = true,
   lrn = Some(lrn)
 ) {
-  @formHelper(action = controllers.routes.$className$Controller.onSubmit(lrn, mode), 'autoComplete -> "off") {
+  @formHelper(action = controllers.$package$.routes.$className$Controller.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
     @errorSummary(form.errors)
 
