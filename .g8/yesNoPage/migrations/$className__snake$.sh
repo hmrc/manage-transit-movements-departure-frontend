@@ -26,7 +26,7 @@ awk '/self: Generators =>/ {\
     print "  implicit lazy val arbitrary$className$UserAnswersEntry: Arbitrary[(pages.$className$Page.type, JsValue)] =";\
     print "    Arbitrary {";\
     print "      for {";\
-    print "        value <- arbitrary[$className$Page.type#Data].map(Json.toJson(_))";\
+    print "        value <- arbitrary[pages.$className$Page.type#Data].map(Json.toJson(_))";\
     print "      } yield (pages.$className$Page, value)";\
     print "    }";\
     next }1' ../test/generators/UserAnswersEntryGenerators.scala > tmp && mv tmp ../test/generators/UserAnswersEntryGenerators.scala
