@@ -20,9 +20,7 @@ import models.UserAnswers
 import play.api.i18n.Messages
 import viewModels.taskList.TaskStatus._
 
-case class GeneralInformationTask(
-  status: TaskStatus
-) extends Task {
+case class GeneralInformationTask(status: TaskStatus) extends Task {
 
   override def name(implicit messages: Messages): String = messages {
     status match {

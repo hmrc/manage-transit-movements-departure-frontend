@@ -41,8 +41,7 @@ class TaskListController @Inject() (
   }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      ???
+    _ => ???
   }
 
 }
