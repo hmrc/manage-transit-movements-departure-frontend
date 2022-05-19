@@ -1,7 +1,7 @@
-package controllers
+package controllers.$package$
 
 import controllers.actions._
-import forms.$className$FormProvider
+import forms.$package$.$className$FormProvider
 import javax.inject.Inject
 import models.{Mode, LocalReferenceNumber}
 import navigation.Navigator
@@ -11,7 +11,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.$className$View
+import views.html.$package$.$className$View
 
 import scala.concurrent.{ExecutionContext, Future}
 

@@ -1,4 +1,4 @@
-package controllers
+package controllers.$package$
 
 import base.{SpecBase, AppWithDefaultMockFixtures}
 import models.{NormalMode, UserAnswers}
@@ -11,16 +11,16 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.$className$FormProvider
-import views.html.$className$View
-import pages.$className$Page
+import forms.$package$.$className$FormProvider
+import views.$package$.html.$className$View
+import pages.$package$.$className$Page
 
 import scala.concurrent.Future
 
 class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
   private val formProvider = new $className$FormProvider()
-  private val form = formProvider()
+  private val form         = formProvider()
   private val mode         = NormalMode
   private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, mode).url
 
