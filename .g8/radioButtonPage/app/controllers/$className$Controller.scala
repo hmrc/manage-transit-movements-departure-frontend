@@ -3,13 +3,12 @@ package controllers
 import controllers.actions._
 import forms.$className$FormProvider
 import javax.inject.Inject
-import models.{Mode, MovementReferenceNumber, $className$}
+import models.{Mode, LocalReferenceNumber, $className$}
 import navigation.Navigator
+import navigation.annotations.$navRoute$
 import pages.$className$Page
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.$className$View
@@ -23,12 +22,12 @@ class $className$Controller @Inject()(
    actions: Actions,
    formProvider: $className$FormProvider,
    val controllerComponents: MessagesControllerComponents,
-   view views.html.$className$View
+   view: views.html.$className$View
 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form = formProvider()
 
-  def onPageLoad(mrn: MovementReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get($className$Page) match {
@@ -39,7 +38,7 @@ class $className$Controller @Inject()(
       Ok(view(preparedForm, lrn, $className$.radioItems, mode))
   }
 
-  def onSubmit(mrn: MovementReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
 
       form.bindFromRequest().fold(
