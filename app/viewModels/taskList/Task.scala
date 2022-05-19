@@ -16,11 +16,12 @@
 
 package viewModels.taskList
 
+import play.api.i18n.Messages
 import viewModels.taskList.TaskStatus.Completed
 
 abstract class Task {
   val status: TaskStatus
-  val name: String
+  def name(implicit messages: Messages): String
   val id: String
   val href: Option[String]
 

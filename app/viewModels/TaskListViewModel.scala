@@ -18,12 +18,11 @@ package viewModels
 
 import models.UserAnswers
 import viewModels.taskList.{GeneralInformationTask, Task}
-import play.api.i18n.Messages
 
 class TaskListViewModel {
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): Seq[Task] =
+  def apply(userAnswers: UserAnswers): Seq[Task] =
     Seq(
-      new GeneralInformationTask(userAnswers)
+      GeneralInformationTask(userAnswers)
     )
 }

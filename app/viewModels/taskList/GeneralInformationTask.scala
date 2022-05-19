@@ -20,11 +20,11 @@ import models.UserAnswers
 import play.api.i18n.Messages
 import viewModels.taskList.TaskStatus._
 
-class GeneralInformationTask(userAnswers: UserAnswers)(implicit messages: Messages) extends Task {
+case class GeneralInformationTask(
+  status: TaskStatus
+) extends Task {
 
-  override val status: TaskStatus = CannotStartYet // TODO - use userAnswers to determine status
-
-  override val name: String = messages {
+  override def name(implicit messages: Messages): String = messages {
     status match {
       case Completed | InProgress => "task.generalInformation.edit"
       case NotStarted             => "task.generalInformation.add"
@@ -34,5 +34,16 @@ class GeneralInformationTask(userAnswers: UserAnswers)(implicit messages: Messag
 
   override val id: String = "general-information"
 
-  override val href: Option[String] = None
+  override val href: Option[String] = status match {
+    case TaskStatus.CannotStartYet => None
+    case _                         => Some("#")
+  }
+}
+
+object GeneralInformationTask {
+
+  def apply(userAnswers: UserAnswers): GeneralInformationTask = {
+    val status: TaskStatus = CannotStartYet // TODO - use userAnswers to determine status
+    new GeneralInformationTask(status)
+  }
 }
