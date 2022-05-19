@@ -63,6 +63,7 @@ officeOfDeparture.error.required = Select the office of departure
 officeOfDeparture.hintText = Give the office location or code. Like, Dover or GB000060.
 officeOfDeparture.label = This is the Customs office where the transit movement starts.
 officeOfDeparture.change.hidden = office of departure
+officeOfDeparture.placeholder = Select a customs office
 
 procedureType.title = What type of procedure are you using?
 procedureType.heading = What type of procedure are you using?

@@ -22,8 +22,6 @@ trait InputSelectViewBehaviours[T <: Selectable] extends QuestionViewBehaviours[
 
   def values: Seq[T]
 
-  val hasPlaceholder: Boolean = true
-
   def pageWithSelect(): Unit =
     "behave like a page with a select element" - {
 
@@ -32,11 +30,9 @@ trait InputSelectViewBehaviours[T <: Selectable] extends QuestionViewBehaviours[
           assertRenderedById(doc, "value")
         }
 
-        if (hasPlaceholder) {
-          "must contain a placeholder" in {
-            val placeholder = getElementsByTag(doc, "option").first()
-            placeholder.text() mustBe messages(s"$prefix.placeholder")
-          }
+        "must contain a placeholder" in {
+          val placeholder = getElementsByTag(doc, "option").first()
+          placeholder.text() mustBe messages(s"$prefix.placeholder")
         }
 
         val options = getElementsByTag(doc, "option")
