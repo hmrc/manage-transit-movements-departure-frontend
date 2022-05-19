@@ -33,21 +33,13 @@ awk '/self: Generators =>/ {\
     print "    }";\
     next }1' ../test/generators/UserAnswersEntryGenerators.scala > tmp && mv tmp ../test/generators/UserAnswersEntryGenerators.scala
 
-echo "Adding to PageGenerators"
-awk '/trait PageGenerators/ {\
-    print;\
-    print "";\
-    print "  implicit lazy val arbitrary$className$Page: Arbitrary[$className$Page.type] =";\
-    print "    Arbitrary($className$Page)";\
-    next }1' ../test/generators/PageGenerators.scala > tmp && mv tmp ../test/generators/PageGenerators.scala
-
 echo "Adding to ModelGenerators"
 awk '/self: Generators =>/ {\
     print;\
     print "";\
-    print "  implicit lazy val arbitrary$className$: Arbitrary[$className$] =";\
+    print "  implicit lazy val arbitrary$className$: Arbitrary[models.$package$.$className$] =";\
     print "    Arbitrary {";\
-    print "      Gen.oneOf($className$.values.toSeq)";\
+    print "      Gen.oneOf(models.$package$.$className$.values.toSeq)";\
     print "    }";\
     next }1' ../test/generators/ModelGenerators.scala > tmp && mv tmp ../test/generators/ModelGenerators.scala
 

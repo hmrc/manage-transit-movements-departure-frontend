@@ -1,6 +1,6 @@
 package models.$package$
 
-import models.RadioModel
+import models.{RadioModel, WithName}
 
 sealed trait $className$
 
