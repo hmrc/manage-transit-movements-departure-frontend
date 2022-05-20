@@ -13,8 +13,8 @@ import forms.$package$.$className$FormProvider
 import views.html.$package$.$className$View
 import services.UserAnswersService
 import pages.$package$.$className$Page
-import base.{AppWithDefaultMockFixtures, SpecBase}
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
@@ -24,6 +24,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
   private val mode         = NormalMode
   private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, mode).url
   private lazy val mockUserAnswersService = mock[UserAnswersService]
+  private val date                        = LocalDate.now
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -57,14 +58,18 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set($className$Page, "test string").success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set($className$Page, date).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, $className;format="decap"$Route)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> "test string"))
+      val filledForm = form.bind(Map(
+        "value.day"   -> date.getDayOfMonth.toString,
+        "value.month" -> date.getMonthValue.toString,
+        "value.year"  -> date.getYear.toString
+      ))
 
       val view = injector.instanceOf[$className$View]
 
@@ -84,7 +89,11 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       val request =
         FakeRequest(POST, $className;format="decap"$Route)
-          .withFormUrlEncodedBody(("value", "test string"))
+          .withFormUrlEncodedBody(
+            "value.day"   -> date.getDayOfMonth.toString,
+            "value.month" -> date.getMonthValue.toString,
+            "value.year"  -> date.getYear.toString
+          )
 
       val result = route(app, request).value
 
@@ -133,7 +142,11 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       val request =
         FakeRequest(POST, $className;format="decap"$Route)
-          .withFormUrlEncodedBody(("value", "test string"))
+          .withFormUrlEncodedBody(
+            "value.day"   -> date.getDayOfMonth.toString,
+            "value.month" -> date.getMonthValue.toString,
+            "value.year"  -> date.getYear.toString
+          )
 
       val result = route(app, request).value
 

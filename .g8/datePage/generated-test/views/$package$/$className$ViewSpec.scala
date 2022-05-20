@@ -20,10 +20,8 @@ import forms.$package$.$className$FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import viewModels.InputSize
 import views.behaviours.DateInputViewBehaviours
 import views.html.$package$.$className$View
-import org.scalacheck.{Arbitrary, Gen}
 
 import java.time.LocalDate
 

@@ -1,5 +1,6 @@
 package pages.$package$
 
+import org.scalacheck.Arbitrary
 import pages.behaviours.PageBehaviours
 
 import java.time.LocalDate
