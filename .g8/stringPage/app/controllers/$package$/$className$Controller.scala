@@ -9,7 +9,6 @@ import pages.$package$.$className$Page
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.UserAnswersService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.$package$.$className$View
 
@@ -20,7 +19,6 @@ class $className;format="cap"$Controller @Inject()(
     override val messagesApi: MessagesApi,
     sessionRepository: SessionRepository,
     @$navRoute$ navigator: Navigator,
-    userAnswersService: UserAnswersService,
     formProvider: $className$FormProvider,
     actions: Actions,
     val controllerComponents: MessagesControllerComponents,
