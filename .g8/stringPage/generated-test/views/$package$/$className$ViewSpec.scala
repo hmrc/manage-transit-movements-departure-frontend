@@ -23,6 +23,7 @@ import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
 import views.html.$package$.$className$View
+import org.scalacheck.{Arbitrary, Gen}
 
 class $className$ViewSpec extends InputTextViewBehaviours[String] {
 
