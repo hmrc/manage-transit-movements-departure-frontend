@@ -38,7 +38,7 @@ class $className;format="cap"$Controller @Inject()(
 
           Ok(view(preparedForm, lrn, mode, name))
 
-        case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+        case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
     }
   }
 

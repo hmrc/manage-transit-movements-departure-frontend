@@ -22,6 +22,7 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.AddressViewBehaviours
 import views.html.$package$.$className$View
+import org.scalacheck.Gen
 
 class $className$ViewSpec extends AddressViewBehaviours {
 

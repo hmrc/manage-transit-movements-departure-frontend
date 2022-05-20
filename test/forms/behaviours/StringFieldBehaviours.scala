@@ -32,6 +32,22 @@ trait StringFieldBehaviours extends FieldBehaviours {
       }
     }
 
+  def fieldWithMaxLength(
+    form: Form[_],
+    fieldName: String,
+    maxLength: Int,
+    lengthError: FormError,
+    gen: Gen[String]
+  ): Unit =
+    s"must not bind strings longer than $maxLength characters" in {
+
+      forAll(gen -> "longString") {
+        string =>
+          val result = form.bind(Map(fieldName -> string)).apply(fieldName)
+          result.errors mustEqual Seq(lengthError)
+      }
+    }
+
   def fieldWithMinLength(form: Form[_], fieldName: String, minLength: Int, lengthError: FormError): Unit =
     s"must not bind strings shorter than $minLength characters" in {
 

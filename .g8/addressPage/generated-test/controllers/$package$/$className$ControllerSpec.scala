@@ -1,5 +1,7 @@
 package controllers.$package$
 
+import base.{AppWithDefaultMockFixtures, SpecBase}
+import org.scalacheck.Gen
 import models.{NormalMode, UserAnswers, Address}
 import navigation.Navigator
 import navigation.annotations.$navRoute$
@@ -14,7 +16,6 @@ import forms.$package$.$className$FormProvider
 import views.html.$package$.$className$View
 import pages.$package$.$className$Page
 import pages.$package$.$addressHolderNamePage$
-import pages.{ConsigneeAddressPage, ConsigneeNamePage}
 
 import scala.concurrent.Future
 
@@ -47,14 +48,14 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode)(request, messages).toString
+        view(form, lrn, mode, addressHolderName)(request, messages).toString
 
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = UserAnswers(lrn, eoriNumber)
-        .setValue(addressHolderNamePage$, addressHolderName)
+        .setValue($addressHolderNamePage$, addressHolderName)
         .setValue($className$Page, testAddress)
 
       setExistingUserAnswers(userAnswers)
@@ -70,7 +71,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
+        view(filledForm, lrn, mode, addressHolderName)(request, messages).toString
 
     }
 
@@ -107,7 +108,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       val view = injector.instanceOf[$className$View]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, mode)(request, messages).toString
+        view(boundForm, lrn, mode, addressHolderName)(request, messages).toString
 
     }
 

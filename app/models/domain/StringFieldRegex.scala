@@ -20,6 +20,7 @@ import scala.util.matching.Regex
 
 object StringFieldRegex {
 
+  val stringFieldRegex: Regex  = "[\\sa-zA-Z0-9&'@/.\\-? ]*".r
   val alphaNumericRegex: Regex = "^[a-zA-Z0-9]*$".r
 
 }

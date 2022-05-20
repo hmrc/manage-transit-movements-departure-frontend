@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms
+package forms.$package$
 
 import base.SpecBase
 import forms.behaviours.StringFieldBehaviours
@@ -73,7 +73,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
         val fieldName = "buildingAndStreet"
         val args      = Seq(Address.Constants.Fields.buildingAndStreetName, addressHolderName)
 
-        val generator: Gen[String] = RegexpGen.from(s"[!£^(){}_+=:;|`~,±<>éèâñüç]{${Address.Constants.buildingAndStreetLength}}")
+        val generator: Gen[String] = RegexpGen.from("[!£^(){}_+=:;|`~,±<>éèâñüç]{" + Address.Constants.buildingAndStreetLength + "}")
         val expectedError          = FormError(fieldName, addressInvalidKey, args)
 
         forAll(generator) {
@@ -119,7 +119,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
         val fieldName = "city"
         val args      = Seq(Address.Constants.Fields.city, addressHolderName)
 
-        val generator: Gen[String] = RegexpGen.from(s"[!£^(){}_+=:;|`~,±<>]{${Address.Constants.cityLength}}")
+        val generator: Gen[String] = RegexpGen.from("[!£^(){}_+=:;|`~,±<>]{" + Address.Constants.cityLength + "}")
         val expectedError          = FormError(fieldName, addressInvalidKey, args)
 
         forAll(generator) {
@@ -162,7 +162,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
       "must not bind strings that do not match regex" in {
         val fieldName = "postcode"
 
-        val generator: Gen[String] = RegexpGen.from(s"[!£^(){}_+=:;|`~,±<>]{${Address.Constants.postcodeLength}}")
+        val generator: Gen[String] = RegexpGen.from("[!£^(){}_+=:;|`~,±<>]{" + Address.Constants.postcodeLength + "}")
         val expectedError          = FormError(fieldName, postcodeInvalidKey, Seq(addressHolderName))
 
         forAll(generator) {
