@@ -1,11 +1,10 @@
 package forms.$package$
 
 import forms.StopOnFirstFail
-import javax.inject.Inject
-import models.Address.Constants.{buildingAndStreetLength, cityLength, postcodeLength}
 import models.domain.StringFieldRegex.stringFieldRegex
 import play.api.data.Form
 import play.api.data.Forms.mapping
+import forms.mappings.Mappings
 import javax.inject.Inject
 import models.Address
 

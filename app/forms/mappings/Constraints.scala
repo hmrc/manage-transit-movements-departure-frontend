@@ -94,7 +94,7 @@ trait Constraints {
         Invalid(errorKey, maximum)
     }
 
-  protected def maxLength(maximum: Int, errorKey: String, args: Any*): Constraint[String] =
+  protected def maxLength(maximum: Int, errorKey: String, args: Seq[Any]): Constraint[String] =
     Constraint {
       case str if str.length <= maximum =>
         Valid

@@ -42,7 +42,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
 
       val fieldName = "buildingAndStreet"
 
-      val validAdressOverLength: Gen[String] = for {
+      val validAddressOverLength: Gen[String] = for {
         num  <- Gen.chooseNum[Int](Address.Constants.buildingAndStreetLength + 1, Address.Constants.buildingAndStreetLength + 5)
         list <- Gen.listOfN(num, Gen.alphaNumChar)
       } yield list.mkString("")
@@ -60,7 +60,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
         fieldName,
         maxLength = Address.Constants.buildingAndStreetLength,
         lengthError = FormError(fieldName, addressLengthKey, args),
-        validAdressOverLength
+        validAddressOverLength
       )
 
       behave like mandatoryField(
@@ -134,7 +134,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
 
       val fieldName = "postcode"
 
-      val validAdressOverLength: Gen[String] = for {
+      val validAddressOverLength: Gen[String] = for {
         num  <- Gen.chooseNum[Int](Address.Constants.postcodeLength + 1, Address.Constants.postcodeLength + 5)
         list <- Gen.listOfN(num, Gen.alphaNumChar)
       } yield list.mkString("")
@@ -150,7 +150,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
         fieldName,
         maxLength = Address.Constants.postcodeLength,
         lengthError = FormError(fieldName, postcodeLengthKey, Seq(addressHolderName)),
-        validAdressOverLength
+        validAddressOverLength
       )
 
       behave like mandatoryField(
@@ -176,7 +176,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
         val fieldName = "postcode"
 
         val genInvalidString: Gen[String] = {
-          stringsWithMaxLength(Address.Constants.postcodeLength) suchThat (!_.matches(Address.Constants.postCodeFormatRegex.toString()))
+          alphaStringsWithMaxLength(Address.Constants.postcodeLength) suchThat (!_.matches(Address.Constants.postCodeFormatRegex.toString()))
         }
         val expectedError = FormError(fieldName, postcodeInvalidFormatKey, Seq(addressHolderName))
 

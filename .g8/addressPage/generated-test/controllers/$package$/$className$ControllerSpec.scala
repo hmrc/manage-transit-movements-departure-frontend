@@ -1,8 +1,7 @@
 package controllers.$package$
 
-import base.{AppWithDefaultMockFixtures, SpecBase}
 import org.scalacheck.Gen
-import models.{NormalMode, UserAnswers, Address}
+import models.{Address, NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.$navRoute$
 import org.mockito.ArgumentMatchers.any
@@ -16,6 +15,7 @@ import forms.$package$.$className$FormProvider
 import views.html.$package$.$className$View
 import pages.$package$.$className$Page
 import pages.$package$.$addressHolderNamePage$
+import pages.address.OwnerNamePage
 
 import scala.concurrent.Future
 
@@ -64,7 +64,13 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> "true"))
+      val filledForm = form.bind(
+        Map(
+          "buildingAndStreet" -> testAddress.buildingAndStreet,
+          "city"              -> testAddress.city,
+          "postcode"          -> testAddress.postcode
+        )
+      )
 
       val view = injector.instanceOf[$className$View]
 
@@ -79,11 +85,16 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.setValue($addressHolderNamePage$, addressHolderName)
+      setExistingUserAnswers(userAnswers)
 
       val request =
         FakeRequest(POST, $className;format="decap"$Route)
-          .withFormUrlEncodedBody(("value", "true"))
+          .withFormUrlEncodedBody(
+            ("buildingAndStreet", testAddress.buildingAndStreet),
+            ("city", testAddress.city),
+            ("postcode", testAddress.postcode)
+      )
 
       val result = route(app, request).value
 

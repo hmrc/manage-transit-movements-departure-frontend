@@ -16,6 +16,9 @@ echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
 echo "$className;format="decap"$.title = $className;format="decap"$" >> ../conf/messages.en
 echo "$className;format="decap"$.heading = $className;format="decap"$" >> ../conf/messages.en
+echo "$className;format="decap"$.buildingAndStreet = buildingAndStreet" >> ../conf/messages.en
+echo "$className;format="decap"$.city = city" >> ../conf/messages.en
+echo "$className;format="decap"$.postcode = postcode" >> ../conf/messages.en
 echo "$className;format="decap"$.checkYourAnswersLabel = $className;format="decap"$" >> ../conf/messages.en
 
 echo "$className;format="decap"$.error.postcode.required = Enter the postcode of {0}’s address" >> ../conf/messages.en
