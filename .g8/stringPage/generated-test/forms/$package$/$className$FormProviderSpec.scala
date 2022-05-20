@@ -1,9 +1,9 @@
 package forms.$package$
 
-import forms.behaviours.BooleanFieldBehaviours
+import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
 
-class $className$FormProviderSpec extends BooleanFieldBehaviours {
+class $className$FormProviderSpec extends StringFieldBehaviours {
 
   val requiredKey = "$className;format="decap"$.error.required"
   val lengthKey = "$className;format="decap"$.error.length"

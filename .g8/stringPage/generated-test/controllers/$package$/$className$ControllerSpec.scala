@@ -13,6 +13,7 @@ import forms.$package$.$className$FormProvider
 import views.html.$package$.$className$View
 import services.UserAnswersService
 import pages.$package$.$className$Page
+import base.{AppWithDefaultMockFixtures, SpecBase}
 
 import scala.concurrent.Future
 
@@ -39,7 +40,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
     "must return OK and the correct view for a GET" in {
 
-      setNoExistingUserAnswers()
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, $className;format="decap"$Route)
 
@@ -56,14 +57,14 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set($className$Page, true).success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set($className$Page, "test string").success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, $className;format="decap"$Route)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> "true"))
+      val filledForm = form.bind(Map("value" -> "test string"))
 
       val view = injector.instanceOf[$className$View]
 
@@ -76,7 +77,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
     "must redirect to the next page when valid data is submitted" in {
 
-      setNoExistingUserAnswers()
+      setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       when(mockUserAnswersService.getOrCreateUserAnswers(any(), any())) thenReturn Future.successful(emptyUserAnswers)

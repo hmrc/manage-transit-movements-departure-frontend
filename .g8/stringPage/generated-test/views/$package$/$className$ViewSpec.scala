@@ -21,15 +21,17 @@ import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
-import views.behaviours.YesNoViewBehaviours
+import views.behaviours.InputTextViewBehaviours
 import views.html.$package$.$className$View
 
-class $className$ViewSpec extends YesNoViewBehaviours {
+class $className$ViewSpec extends InputTextViewBehaviours[String] {
 
   override def form: Form[Boolean] = new $className$FormProvider()()
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector.instanceOf[$className$View].apply(form, lrn, NormalMode)(fakeRequest, messages)
+
+  implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 
   override val prefix: String = "$className;format="decap"$"
 
