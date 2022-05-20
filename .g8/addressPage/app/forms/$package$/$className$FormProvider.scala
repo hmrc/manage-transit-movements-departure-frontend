@@ -1,0 +1,42 @@
+package forms.$package$
+
+import forms.StopOnFirstFail
+import models.domain.StringFieldRegex.stringFieldRegex
+import play.api.data.Form
+import play.api.data.Forms.mapping
+import forms.mappings.Mappings
+import javax.inject.Inject
+import models.Address
+
+class $className$FormProvider @Inject() extends Mappings {
+
+  def apply(name: String): Form[Address] = Form(
+    mapping(
+      "buildingAndStreet" -> text("$className;format="decap"$.error.required", Seq(Address.Constants.Fields.buildingAndStreetName, name))
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(Address.Constants.buildingAndStreetLength,
+              "$className;format="decap"$.error.length",
+              Seq(Address.Constants.Fields.buildingAndStreetName, name)
+            ),
+            regexp(stringFieldRegex, "$className;format="decap"$.error.invalid", Seq(Address.Constants.Fields.buildingAndStreetName, name))
+          )
+        ),
+      "city" -> text("$className;format="decap"$.error.required", args = Seq(Address.Constants.Fields.city, name))
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(Address.Constants.cityLength, "$className;format="decap"$.error.length", args = Seq(Address.Constants.Fields.city, name)),
+            regexp(stringFieldRegex, "$className;format="decap"$.error.invalid", Seq(Address.Constants.Fields.city, name))
+          )
+        ),
+      "postcode" -> text("$className;format="decap"$.error.postcode.required", args = Seq(name))
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(Address.Constants.postcodeLength, "$className;format="decap"$.error.postcode.length", args = Seq(name)),
+            regexp(Address.Constants.postCodeRegex, "$className;format="decap"$.error.postcode.invalid", args = Seq(name)),
+            regexp(Address.Constants.postCodeFormatRegex, "$className;format="decap"$.error.postcode.invalidFormat", args = Seq(name))
+          )
+        )
+    )(Address.apply)(Address.unapply)
+  )
+}
