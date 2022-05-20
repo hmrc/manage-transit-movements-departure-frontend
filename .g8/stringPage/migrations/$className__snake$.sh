@@ -17,7 +17,7 @@ echo "" >> ../conf/messages.en
 echo "$className;format="decap"$.title = $className;format="decap"$" >> ../conf/messages.en
 echo "$className;format="decap"$.heading = $className;format="decap"$" >> ../conf/messages.en
 echo "$className;format="decap"$.checkYourAnswersLabel = $className;format="decap"$" >> ../conf/messages.en
-echo "$className;format="decap"$.error.required = Select yes if $className;format="decap"$" >> ../conf/messages.en
+echo "$className;format="decap"$.error.required = Enter $className;format="decap"$" >> ../conf/messages.en
 echo "$className;format="decap"$.error.length = $className$ must be $maxLength$ characters or less" >> ../conf/messages.en
 
 echo "Adding to UserAnswersEntryGenerators"
