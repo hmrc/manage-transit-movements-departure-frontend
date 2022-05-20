@@ -1,0 +1,4 @@
+GET        /:lrn/trader-details/is-holder-eori-known                        controllers.traderDetails.TransitHolderEoriYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/is-holder-eori-known                        controllers.traderDetails.TransitHolderEoriYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/is-holder-eori-known                        controllers.traderDetails.TransitHolderEoriYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/is-holder-eori-known                        controllers.traderDetails.TransitHolderEoriYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-package viewModels
+package navigation
 
-import models.UserAnswers
-import viewModels.taskList.{Task, TraderDetailsTask}
+import models._
+import pages._
+import pages.traderDetails._
+import play.api.mvc.Call
 
-class TaskListViewModel {
+import javax.inject.{Inject, Singleton}
 
-  def apply(userAnswers: UserAnswers): Seq[Task] =
-    Seq(
-      TraderDetailsTask(userAnswers)
-    )
+@Singleton
+class TraderDetailsNavigator @Inject() () extends Navigator {
+
+  override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(NormalMode)
+
+  override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(CheckMode)
+
+  private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
+    case TransitHolderEoriYesNoPage => ua => ???
+  }
+
 }

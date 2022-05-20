@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package viewModels
+package navigation.annotations;
 
-import models.UserAnswers
-import viewModels.taskList.{Task, TraderDetailsTask}
+import com.google.inject.BindingAnnotation;
 
-class TaskListViewModel {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  def apply(userAnswers: UserAnswers): Seq[Task] =
-    Seq(
-      TraderDetailsTask(userAnswers)
-    )
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface TraderDetails {
 }
