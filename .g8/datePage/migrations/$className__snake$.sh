@@ -17,8 +17,12 @@ echo "" >> ../conf/messages.en
 echo "$className;format="decap"$.title = $className;format="decap"$" >> ../conf/messages.en
 echo "$className;format="decap"$.heading = $className;format="decap"$" >> ../conf/messages.en
 echo "$className;format="decap"$.checkYourAnswersLabel = $className;format="decap"$" >> ../conf/messages.en
-echo "$className;format="decap"$.error.required = Enter $className;format="decap"$" >> ../conf/messages.en
-echo "$className;format="decap"$.error.length = $className$ must be $maxLength$ characters or less" >> ../conf/messages.en
+echo "$className;format="decap"$.hint = For example, 14 1 2020" >> ../conf/messages.en
+echo "$className;format="decap"$.error.required.all = Enter the date for $className;format="decap"$" >> ../conf/messages.en
+echo "$className;format="decap"$.error.required.two = The date for $className;format="decap"$" must include {0} and {1} >> ../conf/messages.en
+echo "$className;format="decap"$.error.required = The date for $className;format="decap"$ must include {0}" >> ../conf/messages.en
+echo "$className;format="decap"$.error.invalid = Enter a real date for $className$" >> ../conf/messages.en
+
 
 echo "Adding to UserAnswersEntryGenerators"
 awk '/self: Generators =>/ {\

@@ -1,6 +1,7 @@
 package controllers.$package$
 
 import models.{NormalMode, UserAnswers}
+import base.{SpecBase, AppWithDefaultMockFixtures}
 import navigation.Navigator
 import navigation.annotations.$navRoute$
 import org.mockito.ArgumentMatchers.any
