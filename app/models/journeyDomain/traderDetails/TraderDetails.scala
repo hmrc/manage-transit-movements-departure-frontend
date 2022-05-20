@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package models.journeyDomain.traderDetails
 
-import play.api.i18n.Messages
-import viewModels.taskList.TaskStatus.{CannotStartYet, Completed, InProgress, NotStarted}
+import models.domain.UserAnswersReader
 
-abstract class Task {
-  val status: TaskStatus
-  val id: String
-  val href: Option[String]
-  val messageKey: String
+case class TraderDetails(
+  holderOfTransit: HolderOfTransit
+)
 
-  def name(implicit messages: Messages): String = messages {
-    status match {
-      case Completed | InProgress => s"task.$messageKey.edit"
-      case NotStarted             => s"task.$messageKey.add"
-      case CannotStartYet         => s"task.$messageKey"
-    }
-  }
+object TraderDetails {
 
-  def isCompleted: Boolean = status == Completed
+  implicit val userAnswersParser: UserAnswersReader[TraderDetails] =
+    UserAnswersReader[HolderOfTransit].map(
+      x => TraderDetails(x)
+    )
 }

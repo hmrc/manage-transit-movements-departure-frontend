@@ -26,6 +26,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.DeclarationTypePage
+import pages.traderDetails._
 import viewModels.taskList.TaskStatus._
 
 class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -78,67 +79,56 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
   }
 
   "apply" - {
-    "status" - {
-      "must be NotStarted" in {
+    "when NotStarted" - {
+      "and declaration type undefined" in {
         val task = TraderDetailsTask(emptyUserAnswers)
         task.status mustBe NotStarted
+        task.href.get mustBe SessionExpiredController.onPageLoad().url
       }
-    }
-  }
 
-  "href" - {
-    "must be None" - {
-      "when status is CannotStartYet" in {
-        val href = TraderDetailsTask.href(emptyUserAnswers, CannotStartYet)
-        href mustNot be(defined)
+      "and TIR declaration type" ignore {
+        val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
+        val task        = TraderDetailsTask(userAnswers)
+        task.status mustBe NotStarted
+        task.href.get mustBe ???
       }
-    }
 
-    "must point to Transit Holder EORI Yes No" - {
-      "when status is NotStarted or InProgress" - {
-        "and declaration type is not TIR" in {
-          forAll(
-            arbitrary[DeclarationType].suchThat(_ != Option4),
-            Gen.oneOf(NotStarted, InProgress)
-          ) {
-            (declarationType, status) =>
-              val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
-              val href        = TraderDetailsTask.href(userAnswers, status)
-              href.get mustBe TransitHolderEoriYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
-          }
+      "and non-TIR declaration type" in {
+        forAll(arbitrary[DeclarationType].suchThat(_ != Option4)) {
+          declarationType =>
+            val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
+            val task        = TraderDetailsTask(userAnswers)
+            task.status mustBe NotStarted
+            task.href.get mustBe TransitHolderEoriYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
         }
       }
     }
 
-    "must point to Transit Procedure TIR identification number" - {
-      "when status is NotStarted or InProgress" - {
-        "and declaration type is TIR" ignore {
-          forAll(Gen.oneOf(NotStarted, InProgress)) {
-            status =>
-              val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
-              val href        = TraderDetailsTask.href(userAnswers, status)
-              href.get mustBe ???
-          }
-        }
-      }
-    }
+    "when InProgress" - {
 
-    "must point to session expired" - {
-      "when status is NotStarted or InProgress" - {
-        "and declaration type is undefined" ignore {
-          forAll(Gen.oneOf(NotStarted, InProgress)) {
-            status =>
-              val href = TraderDetailsTask.href(emptyUserAnswers, status)
-              href.get mustBe SessionExpiredController.onPageLoad()
-          }
-        }
-      }
-    }
+      val baseAnswers = emptyUserAnswers.setValue(TransitHolderEoriYesNoPage, true)
 
-    "must point to trader details check your answers" - {
-      "when status is Completed" ignore {
-        val href = TraderDetailsTask.href(emptyUserAnswers, Completed)
-        href.get mustBe ???
+      "and declaration type undefined" ignore {
+        val task = TraderDetailsTask(baseAnswers)
+        task.status mustBe InProgress
+        task.href.get mustBe SessionExpiredController.onPageLoad().url
+      }
+
+      "and TIR declaration type" ignore {
+        val userAnswers = baseAnswers.setValue(DeclarationTypePage, Option4)
+        val task        = TraderDetailsTask(userAnswers)
+        task.status mustBe InProgress
+        task.href.get mustBe ???
+      }
+
+      "and non-TIR declaration type" ignore {
+        forAll(arbitrary[DeclarationType].suchThat(_ != Option4)) {
+          declarationType =>
+            val userAnswers = baseAnswers.setValue(DeclarationTypePage, declarationType)
+            val task        = TraderDetailsTask(userAnswers)
+            task.status mustBe InProgress
+            task.href.get mustBe TransitHolderEoriYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
+        }
       }
     }
   }

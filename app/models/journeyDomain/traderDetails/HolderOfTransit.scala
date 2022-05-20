@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package models.journeyDomain.traderDetails
 
-import play.api.i18n.Messages
-import viewModels.taskList.TaskStatus.{CannotStartYet, Completed, InProgress, NotStarted}
+import models.EoriNumber
+import models.domain.{GettableAsReaderOps, UserAnswersReader}
+import pages.traderDetails.TransitHolderEoriYesNoPage
 
-abstract class Task {
-  val status: TaskStatus
-  val id: String
-  val href: Option[String]
-  val messageKey: String
+case class HolderOfTransit(eori: Option[EoriNumber])
 
-  def name(implicit messages: Messages): String = messages {
-    status match {
-      case Completed | InProgress => s"task.$messageKey.edit"
-      case NotStarted             => s"task.$messageKey.add"
-      case CannotStartYet         => s"task.$messageKey"
-    }
-  }
+object HolderOfTransit {
 
-  def isCompleted: Boolean = status == Completed
+  implicit val userAnswersReader: UserAnswersReader[HolderOfTransit] =
+    TransitHolderEoriYesNoPage.reader.map {
+      _ => HolderOfTransit(None)
+    } // TODO - update this with each page in the journey
 }

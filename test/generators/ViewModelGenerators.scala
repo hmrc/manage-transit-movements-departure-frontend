@@ -18,7 +18,6 @@ package generators
 
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
-import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
@@ -94,28 +93,28 @@ trait ViewModelGenerators {
 
   implicit lazy val arbitraryTask: Arbitrary[Task] = Arbitrary {
     for {
-      arbitraryStatus <- arbitrary[TaskStatus]
-      arbitraryName   <- Gen.alphaNumStr
-      arbitraryId     <- Gen.alphaNumStr
-      arbitraryHref   <- Gen.option(Gen.alphaNumStr)
+      arbitraryStatus     <- arbitrary[TaskStatus]
+      arbitraryMessageKey <- Gen.alphaNumStr
+      arbitraryId         <- Gen.alphaNumStr
+      arbitraryHref       <- Gen.option(Gen.alphaNumStr)
     } yield new Task {
-      override val status: TaskStatus                        = arbitraryStatus
-      override def name(implicit messages: Messages): String = arbitraryName
-      override val id: String                                = arbitraryId
-      override val href: Option[String]                      = arbitraryHref
+      override val status: TaskStatus   = arbitraryStatus
+      override val messageKey: String   = arbitraryMessageKey
+      override val id: String           = arbitraryId
+      override val href: Option[String] = arbitraryHref
     }
   }
 
   implicit lazy val arbitraryCompletedTask: Arbitrary[Task] = Arbitrary {
     for {
-      arbitraryName <- Gen.alphaNumStr
-      arbitraryId   <- Gen.alphaNumStr
-      arbitraryHref <- Gen.option(Gen.alphaNumStr)
+      arbitraryMessageKey <- Gen.alphaNumStr
+      arbitraryId         <- Gen.alphaNumStr
+      arbitraryHref       <- Gen.option(Gen.alphaNumStr)
     } yield new Task {
-      override val status: TaskStatus                        = TaskStatus.Completed
-      override def name(implicit messages: Messages): String = arbitraryName
-      override val id: String                                = arbitraryId
-      override val href: Option[String]                      = arbitraryHref
+      override val status: TaskStatus   = TaskStatus.Completed
+      override val messageKey: String   = arbitraryMessageKey
+      override val id: String           = arbitraryId
+      override val href: Option[String] = arbitraryHref
     }
   }
 }
