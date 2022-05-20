@@ -123,9 +123,9 @@ taskStatus.inProgress = In progress
 taskStatus.notStarted = Not started
 taskStatus.cannotStartYet = Cannot start yet
 
-task.generalInformation = General information
-task.generalInformation.add = Add general information
-task.generalInformation.edit = Edit general information
+task.traderDetails = Trader details
+task.traderDetails.add = Add trader details
+task.traderDetails.edit = Edit trader details
 
 # Trader details
 

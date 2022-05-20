@@ -17,12 +17,12 @@
 package viewModels
 
 import models.UserAnswers
-import viewModels.taskList.{GeneralInformationTask, Task}
+import viewModels.taskList.{Task, TraderDetailsTask}
 
 class TaskListViewModel {
 
   def apply(userAnswers: UserAnswers): Seq[Task] =
     Seq(
-      GeneralInformationTask(userAnswers)
+      TraderDetailsTask(userAnswers)
     )
 }
