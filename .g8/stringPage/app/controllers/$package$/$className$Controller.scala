@@ -22,6 +22,7 @@ class $className;format="cap"$Controller @Inject()(
     @$navRoute$ navigator: Navigator,
     userAnswersService: UserAnswersService,
     formProvider: $className$FormProvider,
+    actions: Actions,
     val controllerComponents: MessagesControllerComponents,
     view: $className$View
 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
