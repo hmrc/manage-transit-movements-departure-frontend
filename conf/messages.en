@@ -109,6 +109,8 @@ preTaskList.checkYourAnswers.title = Check your answers
 preTaskList.checkYourAnswers.h2 = Before you continue
 preTaskList.checkYourAnswers.p = Once you have confirmed these details you will not be able to change them.
 
+# Task list
+
 taskList.title = Declaration summary
 taskList.heading = Declaration summary
 taskList.departureDetails = Departure details
@@ -121,7 +123,14 @@ taskStatus.inProgress = In progress
 taskStatus.notStarted = Not started
 taskStatus.cannotStartYet = Cannot start yet
 
-task.generalInformation = General information
-task.generalInformation.add = Add general information
-task.generalInformation.edit = Edit general information
+task.traderDetails = Trader details
+task.traderDetails.add = Add trader details
+task.traderDetails.edit = Edit trader details
 
+# Trader details
+
+transitHolderEoriYesNo.title = Do you know the transit holder’s EORI number?
+transitHolderEoriYesNo.heading = Do you know the transit holder’s EORI number?
+transitHolderEoriYesNo.checkYourAnswersLabel = Do you know the transit holder’s EORI number?
+transitHolderEoriYesNo.error.required = Select yes if you know the transit holder’s EORI number
+transitHolderEoriYesNo.change.hidden = if you know the transit holder’s EORI number
