@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package viewModels
+package forms.traderDetails
 
-import models.UserAnswers
-import viewModels.taskList.{Task, TraderDetailsTask}
+import javax.inject.Inject
 
-class TaskListViewModel {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  def apply(userAnswers: UserAnswers): Seq[Task] =
-    Seq(
-      TraderDetailsTask(userAnswers)
+class TransitHolderEoriYesNoFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("transitHolderEoriYesNo.error.required")
     )
 }

@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package viewModels
+package pages.traderDetails
 
-import models.UserAnswers
-import viewModels.taskList.{Task, TraderDetailsTask}
+import play.api.libs.json.JsPath
+import pages.QuestionPage
 
-class TaskListViewModel {
+case object TransitHolderEoriYesNoPage extends QuestionPage[Boolean] {
 
-  def apply(userAnswers: UserAnswers): Seq[Task] =
-    Seq(
-      TraderDetailsTask(userAnswers)
-    )
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "transitHolderEoriYesNo"
 }

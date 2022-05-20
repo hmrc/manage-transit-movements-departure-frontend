@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package viewModels
+package pages.traderDetails
 
-import models.UserAnswers
-import viewModels.taskList.{Task, TraderDetailsTask}
+import pages.behaviours.PageBehaviours
 
-class TaskListViewModel {
+class TransitHolderEoriYesNoPageSpec extends PageBehaviours {
 
-  def apply(userAnswers: UserAnswers): Seq[Task] =
-    Seq(
-      TraderDetailsTask(userAnswers)
-    )
+  "TransitHolderEoriYesNoPage" - {
+
+    beRetrievable[Boolean](TransitHolderEoriYesNoPage)
+
+    beSettable[Boolean](TransitHolderEoriYesNoPage)
+
+    beRemovable[Boolean](TransitHolderEoriYesNoPage)
+  }
 }
