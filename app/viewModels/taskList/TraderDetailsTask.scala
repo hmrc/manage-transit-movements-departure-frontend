@@ -16,14 +16,15 @@
 
 package viewModels.taskList
 
+import cats.implicits._
 import controllers.routes._
 import controllers.traderDetails.routes._
 import models.DeclarationType.Option4
-import models.domain.{GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.traderDetails.TraderDetails
+import models.domain._
+import models.journeyDomain.traderDetails._
 import models.{NormalMode, UserAnswers}
 import pages.preTaskList.DeclarationTypePage
-import pages.traderDetails.TransitHolderEoriYesNoPage
+import pages.traderDetails._
 
 case class TraderDetailsTask(status: TaskStatus, href: Option[String]) extends Task {
   override val id: String         = "trader-details"
@@ -40,17 +41,17 @@ object TraderDetailsTask {
       case None          => SessionExpiredController.onPageLoad().url
     }
 
-    new TaskProvider(userAnswers).ifNoDependencyOnOtherTask
+    new TaskProvider(userAnswers).noDependencyOnOtherTask
       .ifCompleted(
         readerIfCompleted = UserAnswersReader[TraderDetails],
         urlIfCompleted = "#" // TODO - trader details check your answers
       )
       .ifInProgressOrNotStarted(
-        readerIfInProgress = TransitHolderEoriYesNoPage.reader, // TODO - also check TransitProcedureTIRIdentificationNumberPage
+        readerIfInProgress = TransitHolderEoriYesNoPage.reader, // TODO - .orElse(???), also check TransitProcedureTIRIdentificationNumberPage
         urlIfInProgressOrNotStarted = firstPageInJourney
       )
       .apply {
-        (status, href) => new TraderDetailsTask(status, href)
+        new TraderDetailsTask(_, _)
       }
   }
 }

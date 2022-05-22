@@ -17,26 +17,26 @@
 package controllers.traderDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import forms.YesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import pages.traderDetails.TransitHolderEoriYesNoPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.traderDetails.TransitHolderEoriYesNoFormProvider
 import views.html.traderDetails.TransitHolderEoriYesNoView
-import pages.traderDetails.TransitHolderEoriYesNoPage
 
 import scala.concurrent.Future
 
 class TransitHolderEoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
-  private val formProvider                     = new TransitHolderEoriYesNoFormProvider()
-  private val form                             = formProvider()
+  private val formProvider                     = new YesNoFormProvider()
+  private val form                             = formProvider("transitHolderEoriYesNo")
   private val mode                             = NormalMode
   private lazy val transitHolderEoriYesNoRoute = routes.TransitHolderEoriYesNoController.onPageLoad(lrn, mode).url
 

@@ -17,8 +17,7 @@
 package controllers.traderDetails
 
 import controllers.actions._
-import forms.traderDetails.TransitHolderEoriYesNoFormProvider
-import javax.inject.Inject
+import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
@@ -29,6 +28,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.traderDetails.TransitHolderEoriYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TransitHolderEoriYesNoController @Inject() (
@@ -36,14 +36,14 @@ class TransitHolderEoriYesNoController @Inject() (
   sessionRepository: SessionRepository,
   @TraderDetails navigator: Navigator,
   actions: Actions,
-  formProvider: TransitHolderEoriYesNoFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: TransitHolderEoriYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider("transitHolderEoriYesNo")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

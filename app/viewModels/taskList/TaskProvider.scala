@@ -23,7 +23,7 @@ import viewModels.taskList.TaskStatus._
 
 private[viewModels] class TaskProvider(userAnswers: UserAnswers) {
 
-  def ifNoDependencyOnOtherTask[A, B]: DependentTaskStage[A] =
+  def noDependencyOnOtherTask[A, B]: DependentTaskStage[A] =
     new DependentTaskStage[A](userAnswers)(None)
 
   def ifDependentTaskCompleted[A, B](readerIfDependentTaskCompleted: UserAnswersReader[A]): DependentTaskStage[A] =
@@ -35,7 +35,7 @@ private[viewModels] class TaskProvider(userAnswers: UserAnswers) {
     if (isDependent) {
       ifDependentTaskCompleted(readerIfDependentTaskCompleted)
     } else {
-      ifNoDependencyOnOtherTask
+      noDependencyOnOtherTask
     }
 
   class DependentTaskStage[A](userAnswers: UserAnswers)(

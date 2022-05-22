@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package forms.traderDetails
-
-import javax.inject.Inject
+package forms
 
 import forms.mappings.Mappings
 import play.api.data.Form
 
-class TransitHolderEoriYesNoFormProvider @Inject() extends Mappings {
+import javax.inject.Inject
 
-  def apply(): Form[Boolean] =
+class YesNoFormProvider @Inject() extends Mappings {
+
+  def apply(prefix: String): Form[Boolean] =
     Form(
-      "value" -> boolean("transitHolderEoriYesNo.error.required")
+      "value" -> boolean(s"$prefix.error.required")
     )
 }

@@ -16,7 +16,6 @@
 
 package views.traderDetails
 
-import forms.traderDetails.TransitHolderEoriYesNoFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -24,8 +23,6 @@ import views.behaviours.YesNoViewBehaviours
 import views.html.traderDetails.TransitHolderEoriYesNoView
 
 class TransitHolderEoriYesNoViewSpec extends YesNoViewBehaviours {
-
-  override def form: Form[Boolean] = new TransitHolderEoriYesNoFormProvider()()
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector.instanceOf[TransitHolderEoriYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
