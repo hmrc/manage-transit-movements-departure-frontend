@@ -10,7 +10,7 @@ import play.api.libs.json.{JsError, JsString, Json}
 
 class $className$Spec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
 
-  "$className$" - {
+  "$package$.$className$" - {
 
     "must deserialise valid values" in {
 

@@ -25,9 +25,9 @@
 @(lrn: LocalReferenceNumber)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-  title = messages("$className;format="decap"$.title"),
+  title = messages("$package$.$className;format="decap"$.title"),
   showBackLink = true,
   lrn = Some(lrn)
 ) {
-    @heading("$className;format="decap"$.header")
+    @heading("$package$.$className;format="decap"$.heading")
 }

@@ -28,7 +28,7 @@
 @(form: Form[Address], lrn: LocalReferenceNumber, mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-  title = messages("$className;format="decap"$.title"),
+  title = messages("$package$.$className;format="decap"$.title"),
   showBackLink = true,
   lrn = Some(lrn)
 ) {
@@ -38,7 +38,7 @@
 
     @inputAddress(
         form = form,
-        messageKeyPrefix = "$className;format="decap"$",
+        messageKeyPrefix = "$package$.$className;format="decap"$",
         headingArgs = name
     )
 

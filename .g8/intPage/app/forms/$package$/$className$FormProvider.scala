@@ -9,9 +9,9 @@ class $className$FormProvider @Inject() extends Mappings {
 
   def apply(): Form[Int] =
     Form(
-      "value" -> int("$className;format="decap"$.error.required",
-        "$className;format="decap"$.error.wholeNumber",
-        "$className;format="decap"$.error.nonNumeric")
-        .verifying(maximumValue($maximum$, "$className;format="decap"$.error.maximum"))
+      "value" -> int("$package$.$className;format="decap"$.error.required",
+        "$package$.$className;format="decap"$.error.wholeNumber",
+        "$package$.$className;format="decap"$.error.nonNumeric")
+        .verifying(maximumValue($maximum$, "$package$.$className;format="decap"$.error.maximum"))
     )
 }

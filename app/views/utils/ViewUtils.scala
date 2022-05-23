@@ -16,16 +16,30 @@
 
 package views.utils
 
+import play.api.data.{Form, FormError}
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.implicits._
+import uk.gov.hmrc.hmrcfrontend.views.implicits.RichErrorSummarySupport
+
+import java.time.LocalDate
 
 object ViewUtils {
 
   def breadCrumbTitle(title: String, mainContent: Html)(implicit messages: Messages): String =
     (if (mainContent.body.contains("govuk-error-summary")) s"${messages("error.title.prefix")} " else "") +
       s"$title - ${messages("site.service_name")} - GOV.UK"
+
+  def errorClass(error: Option[FormError], dateArg: String): String =
+    error.fold("") {
+      e =>
+        if (e.args.contains(dateArg) || e.args.isEmpty) {
+          "govuk-input--error"
+        } else {
+          ""
+        }
+    }
 
   // TODO refactor this maybe? Going to need this for every ViewModel type going forward
   implicit class RadiosImplicits(radios: Radios)(implicit messages: Messages) extends RichRadiosSupport {
@@ -69,6 +83,18 @@ object ViewUtils {
         case Some(value) => input.withHeadingAndSectionCaption(Text(heading), Text(value))
         case None        => input.withHeading(Text(heading))
       }
+  }
+
+  implicit class ErrorSummaryImplicits(errorSummary: ErrorSummary)(implicit messages: Messages) extends RichErrorSummarySupport {
+
+    def withDateErrorMapping(form: Form[LocalDate], fieldName: String): ErrorSummary = {
+      val args = Seq("day", "month", "year")
+      val arg = form.errors.flatMap(_.args).filter(args.contains) match {
+        case Nil       => args.head
+        case head :: _ => head.toString
+      }
+      errorSummary.withFormErrorsAsText(form, mapping = Map(fieldName -> s"${fieldName}_$arg"))
+    }
   }
 
 }

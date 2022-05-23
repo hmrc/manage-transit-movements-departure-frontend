@@ -11,7 +11,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.$package$.$className$FormProvider
+import forms.YesNoFormProvider
 import views.html.$package$.$className$View
 import pages.$package$.$className$Page
 
@@ -20,7 +20,7 @@ import scala.concurrent.Future
 class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
   private val formProvider = new $className$FormProvider()
-  private val form         = formProvider()
+  private val form         = formProvider("$package$.$className;format="decap"$")
   private val mode         = NormalMode
   private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, mode).url
 
@@ -29,7 +29,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[$navRoute$]).toInstance(fakeNavigator))
 
-  "$className$ Controller" - {
+  "$package$.$className$ Controller" - {
 
     "must return OK and the correct view for a GET" in {
 

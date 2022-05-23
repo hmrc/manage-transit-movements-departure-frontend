@@ -28,13 +28,13 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
   val addressHolderName = "addressHolder"
   val form = new $className$FormProvider()(addressHolderName)
 
-  lazy val addressRequiredKey          = "$className;format="decap"$.error.required"
-  lazy val addressLengthKey            = "$className;format="decap"$.error.length"
-  lazy val addressInvalidKey           = "$className;format="decap"$.error.invalid"
-  lazy val postcodeRequiredKey         = "$className;format="decap"$.error.postcode.required"
-  lazy val postcodeLengthKey           = "$className;format="decap"$.error.postcode.length"
-  lazy val postcodeInvalidKey          = "$className;format="decap"$.error.postcode.invalid"
-  lazy val postcodeInvalidFormatKey    = "$className;format="decap"$.error.postcode.invalidFormat"
+  lazy val addressRequiredKey          = "$package$.$className;format="decap"$.error.required"
+  lazy val addressLengthKey            = "$package$.$className;format="decap"$.error.length"
+  lazy val addressInvalidKey           = "$package$.$className;format="decap"$.error.invalid"
+  lazy val postcodeRequiredKey         = "$package$.$className;format="decap"$.error.postcode.required"
+  lazy val postcodeLengthKey           = "$package$.$className;format="decap"$.error.postcode.length"
+  lazy val postcodeInvalidKey          = "$package$.$className;format="decap"$.error.postcode.invalid"
+  lazy val postcodeInvalidFormatKey    = "$package$.$className;format="decap"$.error.postcode.invalidFormat"
 
   ".value" - {
 

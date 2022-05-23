@@ -1,5 +1,6 @@
 package controllers.$package$
 
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import org.scalacheck.Gen
 import models.{Address, NormalMode, UserAnswers}
 import navigation.Navigator
@@ -15,7 +16,6 @@ import forms.$package$.$className$FormProvider
 import views.html.$package$.$className$View
 import pages.$package$.$className$Page
 import pages.$package$.$addressHolderNamePage$
-import pages.address.OwnerNamePage
 
 import scala.concurrent.Future
 
@@ -33,7 +33,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[$navRoute$]).toInstance(fakeNavigator))
 
-  "$className$ Controller" - {
+  "$package$.$className$ Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
