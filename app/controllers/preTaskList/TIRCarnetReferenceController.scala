@@ -20,6 +20,7 @@ import controllers.actions._
 import forms.preTaskList.TIRCarnetReferenceFormProvider
 import models.DeclarationType.Option4
 import models.ProcedureType.Normal
+import models.journeyDomain.PreTaskListDomain
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
@@ -39,6 +40,7 @@ class TIRCarnetReferenceController @Inject() (
   sessionRepository: SessionRepository,
   @PreTaskListDetails navigator: Navigator,
   actions: Actions,
+  checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: TIRCarnetReferenceFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -53,6 +55,7 @@ class TIRCarnetReferenceController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
     actions
       .requireData(lrn)
+      .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
       .andThen(getMandatoryPage.getFirst(ProcedureTypePage))
       .andThen(getMandatoryPage.getSecond(DeclarationTypePage)) {
         implicit request =>
@@ -70,17 +73,20 @@ class TIRCarnetReferenceController @Inject() (
           }
       }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(TIRCarnetReferencePage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(TIRCarnetReferencePage, mode, updatedAnswers))
-        )
-  }
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+    .async {
+      implicit request =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(TIRCarnetReferencePage, value))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(TIRCarnetReferencePage, mode, updatedAnswers))
+          )
+    }
 }

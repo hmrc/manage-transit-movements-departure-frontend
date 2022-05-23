@@ -17,8 +17,9 @@
 package controllers.preTaskList
 
 import com.google.inject.Inject
-import controllers.actions.Actions
+import controllers.actions.{Actions, CheckTaskAlreadyCompletedActionProvider}
 import models.LocalReferenceNumber
+import models.journeyDomain.PreTaskListDomain
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -28,21 +29,26 @@ import views.html.preTaskList.CheckYourAnswersView
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
+  checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
   viewModel: PreTaskListViewModel
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      val section = viewModel(request.userAnswers)
-      Ok(view(lrn, Seq(section)))
-  }
+  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain]) {
+      implicit request =>
+        val section = viewModel(request.userAnswers)
+        Ok(view(lrn, Seq(section)))
+    }
 
-  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
-    _ =>
-      Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
-  }
+  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain]) {
+      _ =>
+        Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
+    }
 
 }

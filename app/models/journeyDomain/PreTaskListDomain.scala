@@ -32,7 +32,7 @@ case class PreTaskListDomain(
   declarationType: DeclarationType,
   tirCarnetReference: Option[String],
   securityDetailsType: SecurityDetailsType
-)
+) extends TaskDomain
 
 object PreTaskListDomain {
 
