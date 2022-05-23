@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package pages.preTaskList
+package pages.sections
 
 import pages.QuestionPage
-import pages.sections.PreTaskList
 import play.api.libs.json.JsPath
 
-case object TIRCarnetReferencePage extends QuestionPage[String] {
+case object HolderOfTransit extends QuestionPage[Nothing] {
 
-  override def path: JsPath = PreTaskList.path \ toString
+  override def path: JsPath = TraderDetails.path \ toString
 
-  override def toString: String = "tirCarnetReference"
+  override def toString: String = "holderOfTransit"
 }

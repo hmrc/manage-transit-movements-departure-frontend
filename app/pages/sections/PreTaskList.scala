@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package forms.traderDetails
+package pages.sections
 
-import javax.inject.Inject
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-import forms.mappings.Mappings
-import play.api.data.Form
+case object PreTaskList extends QuestionPage[Nothing] {
 
-class TransitHolderEoriYesNoFormProvider @Inject() extends Mappings {
+  override def path: JsPath = JsPath \ toString
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("transitHolderEoriYesNo.error.required")
-    )
+  override def toString: String = "preTaskList"
 }

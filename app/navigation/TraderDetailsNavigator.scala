@@ -18,7 +18,7 @@ package navigation
 
 import models._
 import pages._
-import pages.traderDetails._
+import pages.traderDetails.holderOfTransit.EoriYesNoPage
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -31,7 +31,7 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
   override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(CheckMode)
 
   private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case TransitHolderEoriYesNoPage => ua => ???
+    case EoriYesNoPage => ua => ???
   }
 
 }

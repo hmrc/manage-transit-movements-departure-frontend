@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import controllers.traderDetails.holderOfTransit.routes
 @import models.LocalReferenceNumber
 @import views.html.components.{Button, ErrorSummary, InputYesNo}
 
@@ -28,17 +29,17 @@
 @(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("transitHolderEoriYesNo.title"),
+    title = messages("traderDetails.holderOfTransit.eoriYesNo.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
-    @formHelper(action = controllers.traderDetails.routes.TransitHolderEoriYesNoController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.EoriYesNoController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputYesNo(
             field = form("value"),
-            messageKeyPrefix = "transitHolderEoriYesNo"
+            messageKeyPrefix = "traderDetails.holderOfTransit.eoriYesNo"
         )
 
         @button(attributes = Map("id" -> "submit"))

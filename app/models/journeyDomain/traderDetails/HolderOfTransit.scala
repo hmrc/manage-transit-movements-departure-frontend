@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package pages.traderDetails
+package models.journeyDomain.traderDetails
 
-import play.api.libs.json.JsPath
-import pages.QuestionPage
+import models.EoriNumber
+import models.domain.{GettableAsReaderOps, UserAnswersReader}
+import pages.traderDetails.holderOfTransit.EoriYesNoPage
 
-case object TransitHolderEoriYesNoPage extends QuestionPage[Boolean] {
+case class HolderOfTransit(eori: Option[EoriNumber])
 
-  override def path: JsPath = JsPath \ toString
+object HolderOfTransit {
 
-  override def toString: String = "transitHolderEoriYesNo"
+  implicit val userAnswersReader: UserAnswersReader[HolderOfTransit] =
+    EoriYesNoPage.reader.map {
+      _ => HolderOfTransit(None)
+    } // TODO - update this with each page in the journey
 }

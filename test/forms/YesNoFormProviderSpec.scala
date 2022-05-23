@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package forms.traderDetails
+package forms
 
 import forms.behaviours.BooleanFieldBehaviours
+import org.scalacheck.Gen
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.data.FormError
 
-class TransitHolderEoriYesNoFormProviderSpec extends BooleanFieldBehaviours {
+class YesNoFormProviderSpec extends BooleanFieldBehaviours with ScalaCheckPropertyChecks {
 
-  val requiredKey = "transitHolderEoriYesNo.error.required"
-  val invalidKey  = "error.boolean"
+  private val prefix      = Gen.alphaNumStr.sample.value
+  private val requiredKey = s"$prefix.error.required"
+  private val invalidKey  = "error.boolean"
 
-  val form = new TransitHolderEoriYesNoFormProvider()()
+  private val form = new YesNoFormProvider()(prefix)
 
   ".value" - {
 

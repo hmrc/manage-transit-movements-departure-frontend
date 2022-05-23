@@ -18,11 +18,12 @@ package pages.preTaskList
 
 import models.reference.CustomsOffice
 import pages.QuestionPage
+import pages.sections.PreTaskList
 import play.api.libs.json.JsPath
 
 case object OfficeOfDeparturePage extends QuestionPage[CustomsOffice] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = PreTaskList.path \ toString
 
   override def toString: String = "officeOfDeparture"
 }

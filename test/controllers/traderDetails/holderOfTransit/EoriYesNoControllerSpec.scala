@@ -14,31 +14,31 @@
  * limitations under the License.
  */
 
-package controllers.traderDetails
+package controllers.traderDetails.holderOfTransit
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import forms.YesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import pages.traderDetails.holderOfTransit.EoriYesNoPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.traderDetails.TransitHolderEoriYesNoFormProvider
-import views.html.traderDetails.TransitHolderEoriYesNoView
-import pages.traderDetails.TransitHolderEoriYesNoPage
+import views.html.traderDetails.holderOfTransit.EoriYesNoView
 
 import scala.concurrent.Future
 
-class TransitHolderEoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
+class EoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
-  private val formProvider                     = new TransitHolderEoriYesNoFormProvider()
-  private val form                             = formProvider()
+  private val formProvider                     = new YesNoFormProvider()
+  private val form                             = formProvider("traderDetails.holderOfTransit.eoriYesNo")
   private val mode                             = NormalMode
-  private lazy val transitHolderEoriYesNoRoute = routes.TransitHolderEoriYesNoController.onPageLoad(lrn, mode).url
+  private lazy val transitHolderEoriYesNoRoute = routes.EoriYesNoController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -54,7 +54,7 @@ class TransitHolderEoriYesNoControllerSpec extends SpecBase with AppWithDefaultM
       val request = FakeRequest(GET, transitHolderEoriYesNoRoute)
       val result  = route(app, request).value
 
-      val view = injector.instanceOf[TransitHolderEoriYesNoView]
+      val view = injector.instanceOf[EoriYesNoView]
 
       status(result) mustEqual OK
 
@@ -65,7 +65,7 @@ class TransitHolderEoriYesNoControllerSpec extends SpecBase with AppWithDefaultM
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(TransitHolderEoriYesNoPage, true).success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(EoriYesNoPage, true).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, transitHolderEoriYesNoRoute)
@@ -74,7 +74,7 @@ class TransitHolderEoriYesNoControllerSpec extends SpecBase with AppWithDefaultM
 
       val filledForm = form.bind(Map("value" -> "true"))
 
-      val view = injector.instanceOf[TransitHolderEoriYesNoView]
+      val view = injector.instanceOf[EoriYesNoView]
 
       status(result) mustEqual OK
 
@@ -112,7 +112,7 @@ class TransitHolderEoriYesNoControllerSpec extends SpecBase with AppWithDefaultM
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[TransitHolderEoriYesNoView]
+      val view = injector.instanceOf[EoriYesNoView]
 
       contentAsString(result) mustEqual
         view(boundForm, lrn, mode)(request, messages).toString
