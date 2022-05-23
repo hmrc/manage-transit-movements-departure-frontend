@@ -33,7 +33,7 @@ class EoriYesNoViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithBackLink
 
-  behave like pageWithCaption("Trader details")
+  behave like pageWithSectionCaption("Trader details")
 
   behave like pageWithHeading()
 

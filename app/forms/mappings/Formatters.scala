@@ -16,7 +16,7 @@
 
 package forms.mappings
 
-import models.{Enumerable, LocalReferenceNumber}
+import models.{Enumerable, LocalReferenceNumber, RichString}
 import play.api.data.FormError
 import play.api.data.format.Formatter
 
@@ -46,6 +46,21 @@ trait Formatters {
         case Some(s) if s.trim().isEmpty => error(key)
         case Some(s)                     => Right(s.trim())
       }
+
+    override def unbind(key: String, value: String): Map[String, String] =
+      Map(key -> value)
+  }
+
+  private[mappings] def spacelessStringFormatter(errorKey: String): Formatter[String] = new Formatter[String] {
+
+    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] = {
+      lazy val error = Left(Seq(FormError(key, errorKey)))
+      data.get(key) match {
+        case None                                => error
+        case Some(s) if s.removeSpaces().isEmpty => error
+        case Some(s)                             => Right(s.removeSpaces())
+      }
+    }
 
     override def unbind(key: String, value: String): Map[String, String] =
       Map(key -> value)

@@ -18,6 +18,7 @@ package forms.preTaskList
 
 import forms.Constants.tirCarnetReferenceMaxLength
 import forms.behaviours.StringFieldBehaviours
+import models.domain.StringFieldRegex.alphaNumericRegex
 import play.api.data.FormError
 
 class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
@@ -51,7 +52,11 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(
+      form,
+      fieldName,
+      error = FormError(fieldName, invalidKey, Seq(alphaNumericRegex.regex))
+    )
 
   }
 }
