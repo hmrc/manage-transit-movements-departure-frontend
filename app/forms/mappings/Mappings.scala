@@ -21,6 +21,8 @@ import play.api.data.FieldMapping
 import play.api.data.Forms.of
 import play.api.data.format.Formats.ignoredFormat
 
+import java.time.LocalDate
+
 trait Mappings extends Formatters with Constraints {
 
   protected def text(errorKey: String = "error.required", args: Seq[Any] = Seq.empty): FieldMapping[String] =
@@ -51,4 +53,12 @@ trait Mappings extends Formatters with Constraints {
 
   protected def lrn(requiredKey: String, lengthKey: String, invalidKey: String): FieldMapping[LocalReferenceNumber] =
     of(lrnFormatter(requiredKey, lengthKey, invalidKey))
+
+  protected def localDate(invalidKey: String,
+                          allRequiredKey: String,
+                          twoRequiredKey: String,
+                          requiredKey: String,
+                          args: Seq[String] = Seq.empty
+  ): FieldMapping[LocalDate] =
+    of(new LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey, args))
 }
