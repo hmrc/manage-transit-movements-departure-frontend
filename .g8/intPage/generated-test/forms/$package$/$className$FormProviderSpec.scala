@@ -6,7 +6,7 @@ import play.api.data.FormError
 
 class $className$FormProviderSpec extends IntFieldBehaviours {
 
-  val requiredKey = "$className;format="decap"$.error.required"
+  val requiredKey = "$package$.$className;format="decap"$.error.required"
   val maximum = $maximum$
 
   val generatedInt = Gen.oneOf(1 to maximum)
@@ -26,8 +26,8 @@ class $className$FormProviderSpec extends IntFieldBehaviours {
     behave like intField(
       form,
       fieldName,
-      nonNumericError  = FormError(fieldName, "$className;format="decap"$.error.nonNumeric"),
-      wholeNumberError = FormError(fieldName, "$className;format="decap"$.error.wholeNumber")
+      nonNumericError  = FormError(fieldName, "$package$.$className;format="decap"$.error.nonNumeric"),
+      wholeNumberError = FormError(fieldName, "$package$.$className;format="decap"$.error.wholeNumber")
     )
 
     behave like mandatoryField(

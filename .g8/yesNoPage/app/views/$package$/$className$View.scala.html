@@ -28,7 +28,7 @@
 @(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-  title = messages("$package;format="decap"$.$className;format="decap"$.title"),
+  title = messages("$package$.$className;format="decap"$.title"),
   showBackLink = true,
   lrn = Some(lrn)
 ) {
@@ -38,7 +38,7 @@
 
     @inputYesNo(
       field = form("value"),
-      messageKeyPrefix = "$package;format="decap"$.$className;format="decap"$"
+      messageKeyPrefix = "$package$.$className;format="decap"$"
     )
 
     @button(attributes = Map("id" -> "submit"))

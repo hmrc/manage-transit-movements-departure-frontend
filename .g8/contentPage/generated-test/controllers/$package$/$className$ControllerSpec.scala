@@ -9,7 +9,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
   private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn).url
 
-  "$className$ Controller" - {
+  "$package$.$className$ Controller" - {
 
     "must return OK and the correct view for a GET" in {
 

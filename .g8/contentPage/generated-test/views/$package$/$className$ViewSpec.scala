@@ -27,7 +27,7 @@ class $className$ViewSpec extends ViewBehaviours {
   override def view: HtmlFormat.Appendable =
     injector.instanceOf[$className$View].apply(lrn)(fakeRequest, messages)
 
-  override val prefix: String = "$className;format="decap"$"
+  override val prefix: String = "$package$.$className;format="decap"$"
 
   behave like pageWithTitle()
 

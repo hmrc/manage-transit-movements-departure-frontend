@@ -5,7 +5,7 @@ import models.Address
 
 class $className$PageSpec extends PageBehaviours {
 
-  "$className$Page" - {
+  "$package$.$className$Page" - {
 
     beRetrievable[Address]($className$Page)
 

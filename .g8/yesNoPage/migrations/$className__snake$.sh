@@ -14,10 +14,10 @@ echo "POST       /:lrn/$package;format="packaged"$/change$className$            
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
-echo $package;format="decap"$."$className;format="decap"$.title = $className;format="decap"$" >> ../conf/messages.en
-echo $package;format="decap"$."$className;format="decap"$.heading = $className;format="decap"$" >> ../conf/messages.en
-echo $package;format="decap"$."$className;format="decap"$.checkYourAnswersLabel = $className;format="decap"$" >> ../conf/messages.en
-echo $package;format="decap"$."$className;format="decap"$.error.required = Select yes if $className;format="decap"$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.title = $className;format="decap"$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.heading = $className;format="decap"$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.checkYourAnswersLabel = $className;format="decap"$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.required = Select yes if $className;format="decap"$" >> ../conf/messages.en
 
 echo "Adding to UserAnswersEntryGenerators"
 awk '/self: Generators =>/ {\
