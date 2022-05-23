@@ -86,7 +86,7 @@ declarationType.TIR = TIR (goods moving under the cover of TIR Carnet)
 declarationType.T = T (mixed consignments, for goods originating inside and outside the European Union)
 declarationType.paragraph = For mixed consignments, you will need to create separate T1 and T2 declarations.
 declarationType.checkYourAnswersLabel = Type of declaration
-declarationType.error.required = Select the declaration you want to create
+declarationType.error.required = Select the type of declaration you want to create
 declarationType.change.hidden = type of declaration
 
 tirCarnetReference.title = What is the TIR carnet reference?
