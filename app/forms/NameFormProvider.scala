@@ -16,9 +16,23 @@
 
 package forms
 
-object Constants {
-  lazy val tirCarnetReferenceMaxLength = 12
-  lazy val maxEoriNumberLength: Int    = 17
-  lazy val minEoriNumberLength: Int    = 14
-  lazy val maxNameLength: Int          = 70
+import forms.Constants.maxNameLength
+import forms.mappings.Mappings
+import models.domain.StringFieldRegex.stringFieldRegex
+import play.api.data.Form
+
+import javax.inject.Inject
+
+class NameFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[String] =
+    Form(
+      "value" -> text("traderDetails.holderOfTransit.name.error.required")
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(maxNameLength, "traderDetails.holderOfTransit.name.error.length"),
+            regexp(stringFieldRegex, "traderDetails.holderOfTransit.name.error.invalid")
+          )
+        )
+    )
 }
