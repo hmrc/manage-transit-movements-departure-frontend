@@ -61,12 +61,9 @@ That object must also extend Selectable.
 For the test an arbitrary constructor of the Selectable object will be required, or you can manually create these objects
 <pre>g8Scaffold inputSelectPage
 -> package: foo.bar
--> className: ConsigneeOffice
--> serviceName = CustomsOfficesService
--> lookupReferenceListMethod = getCustomsOfficesOfDeparture
+-> className: OfficeOfDeparture
 -> referenceClass = CustomsOffice
--> referenceListClass = CustomsOfficeList
--> referenceClassValue = customsOffices
+...
 </pre>
 ### License
 
