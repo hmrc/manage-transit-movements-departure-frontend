@@ -1,4 +1,4 @@
-package forms.$package$
+package forms
 
 import forms.behaviours.StringFieldBehaviours
 import models.$referenceListClass$

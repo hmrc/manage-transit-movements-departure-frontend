@@ -1,7 +1,7 @@
 package controllers.$package$
 
 import controllers.actions._
-import forms.$package$.$formProvider$
+import forms.$formProvider$
 import javax.inject.Inject
 import models.{Mode, LocalReferenceNumber}
 import navigation.Navigator

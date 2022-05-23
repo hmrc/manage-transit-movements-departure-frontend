@@ -16,7 +16,7 @@
 
 package views.$package$
 
-import forms.$package$.$formProvider$
+import forms.$formProvider$
 import generators.Generators
 import views.behaviours.InputSelectViewBehaviours
 import models.NormalMode

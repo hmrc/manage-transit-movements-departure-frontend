@@ -1,7 +1,7 @@
 package controllers.$package$
 
 import base.{SpecBase, AppWithDefaultMockFixtures}
-import forms.$package$.$formProvider$
+import forms.$formProvider$
 import views.html.$package$.$className$View
 import models.{$referenceListClass$, NormalMode, UserAnswers}
 import generators.Generators
