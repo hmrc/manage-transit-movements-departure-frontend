@@ -18,7 +18,6 @@ package models
 
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases._
-import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 
 trait RadioModel[T] extends Enumerable.Implicits {
 
@@ -39,7 +38,7 @@ trait RadioModel[T] extends Enumerable.Implicits {
           checked = checkedValue.contains(value),
           hint = {
             val hintKey = s"$messageKeyPrefix.$value.hint"
-            if (messages.isDefinedAt(hintKey)) Some(Hint(content = messages(hintKey).toText)) else None
+            if (messages.isDefinedAt(hintKey)) Some(Hint(content = Text(messages(hintKey)))) else None
           }
         )
     }
