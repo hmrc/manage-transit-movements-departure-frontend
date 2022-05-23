@@ -8,7 +8,7 @@ class YesNoFormProviderSpec extends BooleanFieldBehaviours {
 
   private val prefix      = Gen.alphaNumStr.sample.value
   private val requiredKey = s"\$prefix.error.required"
-  private val invalidKey  = "error.boolean"
+  private val invalidKey  = s"\$prefix.error.boolean"
 
   private val form = new YesNoFormProvider()(prefix)
 

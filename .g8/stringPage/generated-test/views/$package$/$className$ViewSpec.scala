@@ -16,7 +16,7 @@
 
 package views.$package$
 
-import forms.$package$.$className$FormProvider
+import forms.StringFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -27,14 +27,14 @@ import org.scalacheck.{Arbitrary, Gen}
 
 class $className$ViewSpec extends InputTextViewBehaviours[String] {
 
-  override def form: Form[String] = new $className$FormProvider()()
+  override val prefix: String = "$package$.$className;format="decap"$"
+
+  override def form: Form[String] = new StringFormProvider()(prefix,  $maxLength$)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
     injector.instanceOf[$className$View].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
-
-  override val prefix: String = "$package$.$className;format="decap"$"
 
   behave like pageWithTitle()
 
