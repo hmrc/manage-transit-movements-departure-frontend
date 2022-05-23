@@ -11,10 +11,10 @@ class $className$FormProvider @Inject() extends Mappings {
   def apply(): Form[LocalDate] =
     Form(
       "value" -> localDate(
-          invalidKey     = "$className;format="decap"$.error.invalid",
-          allRequiredKey = "$className;format="decap"$.error.required.all",
-          twoRequiredKey = "$className;format="decap"$.error.required.two",
-          requiredKey    = "$className;format="decap"$.error.required"
+          invalidKey     = "$package$.$className;format="decap"$.error.invalid",
+          allRequiredKey = "$package$.$className;format="decap"$.error.required.all",
+          twoRequiredKey = "$package$.$className;format="decap"$.error.required.two",
+          requiredKey    = "$package$.$className;format="decap"$.error.required"
         )
     )
 }

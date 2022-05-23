@@ -33,7 +33,7 @@ class $className$ViewSpec extends DateInputViewBehaviours {
   override def applyView(form: Form[LocalDate]): HtmlFormat.Appendable =
     injector.instanceOf[$className$View].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "$className;format="decap"$"
+  override val prefix: String = "$package$.$className;format="decap"$"
 
   behave like pageWithTitle()
 
