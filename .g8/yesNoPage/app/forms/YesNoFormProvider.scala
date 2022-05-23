@@ -5,7 +5,7 @@ import javax.inject.Inject
 import forms.mappings.Mappings
 import play.api.data.Form
 
-class $className$FormProvider @Inject() extends Mappings {
+class YesNoFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String): Form[Boolean] =
     Form(
