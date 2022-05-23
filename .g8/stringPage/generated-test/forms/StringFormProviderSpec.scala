@@ -7,11 +7,11 @@ import play.api.data.FormError
 class StringFormProviderSpec extends StringFieldBehaviours {
 
   private val prefix      = Gen.alphaNumStr.sample.value
-  val requiredKey = s"\$prefix..error.required"
-  val lengthKey = s"\$prefix..error.length"
+  val requiredKey = s"\$prefix.error.required"
+  val lengthKey = s"\$prefix.error.length"
   val maxLength = 10
 
-  val form = new StringFormProvider()()
+  val form = new StringFormProvider()(prefix, maxLength)
 
   ".value" - {
 

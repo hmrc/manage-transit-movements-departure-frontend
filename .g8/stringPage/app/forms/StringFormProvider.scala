@@ -8,7 +8,7 @@ class StringFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String, maximum: Int): Form[String] =
     Form(
-      "value" -> text(s"$prefix.error.required")
-        .verifying(maxLength(maximum, s"$prefix.error.length"))
+      "value" -> text(s"\$prefix.error.required")
+        .verifying(maxLength(maximum, s"\$prefix.error.length"))
     )
 }
