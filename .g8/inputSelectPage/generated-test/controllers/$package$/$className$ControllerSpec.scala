@@ -52,7 +52,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, $referenceListClass;format="decap"$.$referenceClassValue$, mode)(request, messages).toString
+        view(form, lrn, $referenceListClass;format="decap"$.$$referenceClassPlural;format="decap"$, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
@@ -71,7 +71,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, $referenceListClass;format="decap"$.$referenceClassValue$, mode)(request, messages).toString
+        view(filledForm, lrn, $referenceListClass;format="decap"$.$$referenceClassPlural;format="decap"$, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -105,7 +105,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, $referenceListClass;format="decap"$.$referenceClassValue$, mode)(request, messages).toString
+        view(boundForm, lrn, $referenceListClass;format="decap"$.$$referenceClassPlural;format="decap"$, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
