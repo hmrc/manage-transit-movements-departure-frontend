@@ -97,14 +97,14 @@ tirCarnetReference.error.maxLength = The TIR carnet reference must be 12 charact
 tirCarnetReference.error.invalidCharacters = The TIR carnet reference must only include letters a to z and numbers 0 to 9
 tirCarnetReference.change.hidden = TIR carnet reference
 
-securityDetailsType.title = Select which type of safety and security details you need to add
-securityDetailsType.heading = Select which type of safety and security details you need to add
+securityDetailsType.title = What type of safety and security details do you need to add?
+securityDetailsType.heading = What type of safety and security details do you need to add?
 securityDetailsType.noSecurity = No security
 securityDetailsType.entrySummaryDeclaration = Entry summary declaration (ENS)
 securityDetailsType.exitSummaryDeclaration = Exit summary declaration (EXS)
 securityDetailsType.entryAndExitSummaryDeclaration = Both entry and exit summary declarations (ENS and EXS)
 securityDetailsType.checkYourAnswersLabel = Safety and security details added
-securityDetailsType.error.required = Select the type of safety and security details you need to add
+securityDetailsType.error.required = Select which type of safety and security details you need to add
 securityDetailsType.checkYourAnswersLabel = Safety and security details added
 securityDetailsType.change.hidden = safety and security details added
 
