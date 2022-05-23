@@ -1,9 +1,7 @@
 package forms.$package$
 
 import forms.behaviours.StringFieldBehaviours
-import forms.$package$.$className$FormProvider
 import models.$referenceListClass$
-import models.reference.$referenceClass$
 import play.api.data.FormError
 import generators.Generators
 import org.scalacheck.Gen
@@ -18,7 +16,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with Generators{
   private val $referenceClass;format="decap"$2 = arbitrary$referenceClass$.arbitrary.sample.get
   private val $referenceListClass;format="decap"$ = $referenceListClass$(Seq($referenceClass;format="decap"$1, $referenceClass;format="decap"$2))
 
-  private val form = new $className$FormProvider()($referenceListClass;format="decap"$)
+  private val form = new $className$FormProvider()(prefix, $referenceListClass;format="decap"$)
 
   ".value" - {
 
