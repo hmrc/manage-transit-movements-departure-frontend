@@ -1,9 +1,9 @@
 package controllers.$package$
 
+import base.{SpecBase, AppWithDefaultMockFixtures}
 import forms.$package$.$className$FormProvider
 import views.html.$package$.$className$View
 import models.{$referenceListClass$, NormalMode, UserAnswers}
-import models.reference.$referenceClas$
 import generators.Generators
 import navigation.Navigator
 import navigation.annotations.$navRoute$
@@ -14,7 +14,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{$serviceName$, CustomsOfficesService}
+import services.$serviceName$
 
 import scala.concurrent.Future
 
@@ -25,7 +25,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
   private val $referenceListClass;format="decap"$ = $referenceListClass$(Seq($referenceClass;format="decap"$1, $referenceClass;format="decap"$2))
 
   private val formProvider = new $className$FormProvider()
-  private val form         = formProvider()
+  private val form         = formProvider("$package$.$className;format="decap"$", $referenceListClass;format="decap"$)
   private val mode         = NormalMode
 
   private val mock$serviceName$: $serviceName$ = mock[$serviceName$]
@@ -57,7 +57,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
       when(mock$serviceName$.$lookupReferenceListMethod$(any())).thenReturn(Future.successful($referenceListClass;format="decap"$))
-      val userAnswers = UserAnswers(lrn, eoriNumber).set($className$Page, $className$.values.head).success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set($className$Page, $referenceClass;format="decap"$1).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, $className;format="decap"$Route)

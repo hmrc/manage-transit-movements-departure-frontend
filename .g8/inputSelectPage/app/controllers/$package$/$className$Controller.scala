@@ -30,7 +30,7 @@ class $className$Controller @Inject()(
     implicit request =>
       service.$lookupReferenceListMethod$.map {
         $referenceListClass;format="decap"$ =>
-          val form = formProvider($referenceListClass;format="decap"$)
+          val form = formProvider("$package$.$className;format="decap"$", $referenceListClass;format="decap"$)
           val preparedForm = request.userAnswers.get($className$Page) match {
             case None => form
             case Some(value) => form.fill(value)
@@ -44,7 +44,7 @@ class $className$Controller @Inject()(
     implicit request =>
       service.$lookupReferenceListMethod$.flatMap {
         $referenceListClass;format="decap"$ =>
-          val form = formProvider($referenceListClass;format="decap"$)
+          val form = formProvider("$package$.$className;format="decap"$", $referenceListClass;format="decap"$)
           form.bindFromRequest().fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, $referenceListClass;format="decap"$.$referenceClassValue$, mode))),
             value =>

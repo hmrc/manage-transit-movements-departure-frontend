@@ -6,10 +6,12 @@ import models.$referenceListClass$
 import models.reference.$referenceClass$
 import play.api.data.FormError
 import generators.Generators
+import org.scalacheck.Gen
 
 class $className$FormProviderSpec extends StringFieldBehaviours with Generators{
 
-  private val requiredKey = $package$.$className;format="decap"$.error.required"
+  private val prefix      = Gen.alphaNumStr.sample.value
+  private val requiredKey = s"\$prefix.error.required"
   private val maxLength   = 8
 
   private val $referenceClass;format="decap"$1 = arbitrary$referenceClass$.arbitrary.sample.get

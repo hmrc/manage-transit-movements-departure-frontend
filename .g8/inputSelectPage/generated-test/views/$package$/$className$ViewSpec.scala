@@ -17,30 +17,34 @@
 package views.$package$
 
 import forms.$package$.$className$FormProvider
+import generators.Generators
+import views.behaviours.InputSelectViewBehaviours
 import models.NormalMode
 import models.reference.$referenceClass$
 import models.$referenceListClass$
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
-import views.behaviours.RadioViewBehaviours
 import views.html.$package$.$className$View
 
 class $className$ViewSpec extends InputSelectViewBehaviours[$referenceClass$] with Generators {
 
-  override def form: Form[$className$] = new $className$FormProvider()($referenceListClass$(Nil))
+  private lazy val $referenceClass;format="decap"$1 = arbitrary$referenceClass$.arbitrary.sample.get
+  private lazy val $referenceClass;format="decap"$2 = arbitrary$referenceClass$.arbitrary.sample.get
+  private lazy val $referenceClass;format="decap"$3 = arbitrary$referenceClass$.arbitrary.sample.get
+
+  override def values: Seq[$referenceClass$] =
+    Seq(
+      $referenceClass;format="decap"$1,
+      $referenceClass;format="decap"$2,
+      $referenceClass;format="decap"$3
+    )
+
+  override def form: Form[$referenceClass$] = new $className$FormProvider()($referenceListClass$(values))
 
   override def applyView(form: Form[$referenceClass$]): HtmlFormat.Appendable =
     injector.instanceOf[$className$View].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
 
   override val prefix: String = "$package$.$className;format="decap"$"
-
-  override def values: Seq[$referenceClass$] =
-    Seq(
-      arbitrary$referenceClass$.arbitrary.sample.get,
-      arbitrary$referenceClass$.arbitrary.sample.get,
-      arbitrary$referenceClass$.arbitrary.sample.get
-    )
 
   behave like pageWithTitle()
 
