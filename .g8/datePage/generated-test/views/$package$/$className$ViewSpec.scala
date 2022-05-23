@@ -16,7 +16,7 @@
 
 package views.$package$
 
-import forms.$package$.$className$FormProvider
+import forms.DateFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -28,7 +28,7 @@ import java.time.LocalDate
 
 class $className$ViewSpec extends DateInputViewBehaviours {
 
-  override def form: Form[LocalDate] = new $className$FormProvider()()
+  override def form: Form[LocalDate] = new DateFormProvider()(prefix)
 
   override def applyView(form: Form[LocalDate]): HtmlFormat.Appendable =
     injector.instanceOf[$className$View].apply(form, lrn, NormalMode)(fakeRequest, messages)

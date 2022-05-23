@@ -10,7 +10,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.$package$.$className$FormProvider
+import forms.DateFormProvider
 import views.html.$package$.$className$View
 import services.UserAnswersService
 import pages.$package$.$className$Page
@@ -20,8 +20,8 @@ import scala.concurrent.Future
 
 class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider = new $className$FormProvider()
-  private val form         = formProvider()
+  private val formProvider = new DateFormProvider()
+  private val form         = formProvider("$package$.$className;format="decap"$")
   private val mode         = NormalMode
   private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, mode).url
   private lazy val mockUserAnswersService = mock[UserAnswersService]
