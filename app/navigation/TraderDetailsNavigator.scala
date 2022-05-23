@@ -38,7 +38,7 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
   private def eoriYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
     userAnswers.get(EoriYesNoPage) match {
       case Some(true)  => hotRoutes.EoriController.onPageLoad(userAnswers.lrn, mode)
-      case Some(false) => ???
+      case Some(false) => ??? // TODO - redirect to HoT name once built
       case None        => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
