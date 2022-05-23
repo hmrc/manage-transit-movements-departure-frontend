@@ -31,9 +31,10 @@ class $className;format="cap"$Controller @Inject()(
 
       request.userAnswers.get($addressHolderNamePage$) match {
         case Some (name) =>
+          val form = formProvider("$package$.$className;format="decap"$", name)
           val preparedForm = request.userAnswers.get($className$Page) match {
-            case None => formProvider("$package$.$className;format="decap"$", name)
-            case Some (value) => formProvider(name).fill (value)
+            case None => form
+            case Some (value) => form.fill(value)
           }
 
           Ok(view(preparedForm, lrn, mode, name))

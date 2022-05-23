@@ -27,7 +27,7 @@ class $formProvider$Spec extends StringFieldBehaviours with SpecBase {
 
   private val prefix      = Gen.alphaNumStr.sample.value
   val addressHolderName = "addressHolder"
-  val form = new $formProvider$()(addressHolderName)
+  val form = new $formProvider$()(prefix, addressHolderName)
 
   lazy val addressRequiredKey          = s"\$prefix.error.required"
   lazy val addressLengthKey            = s"\$prefix.error.length"
