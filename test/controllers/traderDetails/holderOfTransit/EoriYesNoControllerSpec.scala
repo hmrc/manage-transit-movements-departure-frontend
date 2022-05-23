@@ -45,7 +45,7 @@ class EoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures w
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
 
-  "TransitHolderEoriYesNo Controller" - {
+  "EoriYesNo Controller" - {
 
     "must return OK and the correct view for a GET" in {
 

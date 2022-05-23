@@ -16,22 +16,16 @@
 
 package pages.traderDetails.holderOfTransit
 
-import models.UserAnswers
-import pages.QuestionPage
-import pages.sections.HolderOfTransit
-import play.api.libs.json.JsPath
+import pages.behaviours.PageBehaviours
 
-import scala.util.Try
+class EoriPageSpec extends PageBehaviours {
 
-case object EoriYesNoPage extends QuestionPage[Boolean] {
+  "EoriPage" - {
 
-  override def path: JsPath = HolderOfTransit.path \ toString
+    beRetrievable[String](EoriPage)
 
-  override def toString: String = "eoriYesNo"
+    beSettable[String](EoriPage)
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(false) => userAnswers.remove(EoriPage)
-      case _           => super.cleanup(value, userAnswers)
-    }
+    beRemovable[String](EoriPage)
+  }
 }

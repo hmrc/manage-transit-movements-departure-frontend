@@ -39,7 +39,8 @@
 
         @inputYesNo(
             field = form("value"),
-            messageKeyPrefix = "traderDetails.holderOfTransit.eoriYesNo"
+            messageKeyPrefix = "traderDetails.holderOfTransit.eoriYesNo",
+            caption = Some(messages("traderDetails.caption"))
         )
 
         @button(attributes = Map("id" -> "submit"))

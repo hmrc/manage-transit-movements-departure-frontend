@@ -16,16 +16,43 @@
 
 package pages.traderDetails.holderOfTransit
 
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class EoriYesNoPageSpec extends PageBehaviours {
 
-  "TransitHolderEoriYesNoPage" - {
+  "EoriYesNoPage" - {
 
     beRetrievable[Boolean](EoriYesNoPage)
 
     beSettable[Boolean](EoriYesNoPage)
 
     beRemovable[Boolean](EoriYesNoPage)
+
+    "cleanup" - {
+      "when NO selected" - {
+        "must clean up EoriPage" in {
+          forAll(arbitrary[String]) {
+            eori =>
+              val preChange  = emptyUserAnswers.setValue(EoriPage, eori)
+              val postChange = preChange.set(EoriYesNoPage, false).success.value
+
+              postChange.get(EoriPage) mustNot be(defined)
+          }
+        }
+      }
+
+      "when YES selected" - {
+        "must do nothing" in {
+          forAll(arbitrary[String]) {
+            eori =>
+              val preChange  = emptyUserAnswers.setValue(EoriPage, eori)
+              val postChange = preChange.set(EoriYesNoPage, true).success.value
+
+              postChange.get(EoriPage) must be(defined)
+          }
+        }
+      }
+    }
   }
 }

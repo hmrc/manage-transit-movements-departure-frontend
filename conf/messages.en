@@ -129,6 +129,8 @@ task.traderDetails.edit = Edit trader details
 
 # Trader details
 
+traderDetails.caption = "Trader details"
+
 # Holder of transit
 
 traderDetails.holderOfTransit.eoriYesNo.title = Do you know the transit holder’s EORI number?
