@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.traderDetails
+package pages.sections
 
-import play.api.libs.json.JsPath
 import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-case object TransitHolderEoriYesNoPage extends QuestionPage[Boolean] {
+case object PreTaskList extends QuestionPage[Nothing] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "transitHolderEoriYesNo"
+  override def toString: String = "preTaskList"
 }

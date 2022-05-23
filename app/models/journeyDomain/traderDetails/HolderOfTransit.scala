@@ -18,14 +18,14 @@ package models.journeyDomain.traderDetails
 
 import models.EoriNumber
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
-import pages.traderDetails.TransitHolderEoriYesNoPage
+import pages.traderDetails.holderOfTransit.EoriYesNoPage
 
 case class HolderOfTransit(eori: Option[EoriNumber])
 
 object HolderOfTransit {
 
   implicit val userAnswersReader: UserAnswersReader[HolderOfTransit] =
-    TransitHolderEoriYesNoPage.reader.map {
+    EoriYesNoPage.reader.map {
       _ => HolderOfTransit(None)
     } // TODO - update this with each page in the journey
 }

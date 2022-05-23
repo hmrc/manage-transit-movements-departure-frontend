@@ -23,7 +23,7 @@ import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
-import pages.traderDetails._
+import pages.traderDetails.holderOfTransit.EoriYesNoPage
 
 class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -61,7 +61,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
         (answers, mode) =>
           navigator
-            .nextPage(TransitHolderEoriYesNoPage, mode, answers)
+            .nextPage(EoriYesNoPage, mode, answers)
             .mustBe(???)
       }
     }

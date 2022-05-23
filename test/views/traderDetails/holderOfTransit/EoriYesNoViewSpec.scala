@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package views.traderDetails
+package views.traderDetails.holderOfTransit
 
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.traderDetails.TransitHolderEoriYesNoView
+import views.html.traderDetails.holderOfTransit.EoriYesNoView
 
-class TransitHolderEoriYesNoViewSpec extends YesNoViewBehaviours {
+class EoriYesNoViewSpec extends YesNoViewBehaviours {
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[TransitHolderEoriYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[EoriYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "transitHolderEoriYesNo"
+  override val prefix: String = "traderDetails.holderOfTransit.eoriYesNo"
 
   behave like pageWithTitle()
 

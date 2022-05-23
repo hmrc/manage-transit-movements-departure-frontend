@@ -14,40 +14,40 @@
  * limitations under the License.
  */
 
-package controllers.traderDetails
+package controllers.traderDetails.holderOfTransit
 
 import controllers.actions._
 import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
-import pages.traderDetails.TransitHolderEoriYesNoPage
+import pages.traderDetails.holderOfTransit.EoriYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.traderDetails.TransitHolderEoriYesNoView
+import views.html.traderDetails.holderOfTransit.EoriYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class TransitHolderEoriYesNoController @Inject() (
+class EoriYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @TraderDetails navigator: Navigator,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: TransitHolderEoriYesNoView
+  view: EoriYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("transitHolderEoriYesNo")
+  private val form = formProvider("traderDetails.holderOfTransit.eoriYesNo")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(TransitHolderEoriYesNoPage) match {
+      val preparedForm = request.userAnswers.get(EoriYesNoPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -63,9 +63,9 @@ class TransitHolderEoriYesNoController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(TransitHolderEoriYesNoPage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(EoriYesNoPage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(TransitHolderEoriYesNoPage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(EoriYesNoPage, mode, updatedAnswers))
         )
   }
 }

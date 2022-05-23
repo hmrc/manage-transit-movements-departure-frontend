@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package pages.preTaskList
+package pages.traderDetails.holderOfTransit
 
-import pages.QuestionPage
-import pages.sections.PreTaskList
-import play.api.libs.json.JsPath
+import pages.behaviours.PageBehaviours
 
-case object TIRCarnetReferencePage extends QuestionPage[String] {
+class EoriYesNoPageSpec extends PageBehaviours {
 
-  override def path: JsPath = PreTaskList.path \ toString
+  "TransitHolderEoriYesNoPage" - {
 
-  override def toString: String = "tirCarnetReference"
+    beRetrievable[Boolean](EoriYesNoPage)
+
+    beSettable[Boolean](EoriYesNoPage)
+
+    beRemovable[Boolean](EoriYesNoPage)
+  }
 }

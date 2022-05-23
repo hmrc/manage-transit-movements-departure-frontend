@@ -129,8 +129,10 @@ task.traderDetails.edit = Edit trader details
 
 # Trader details
 
-transitHolderEoriYesNo.title = Do you know the transit holder’s EORI number?
-transitHolderEoriYesNo.heading = Do you know the transit holder’s EORI number?
-transitHolderEoriYesNo.checkYourAnswersLabel = Do you know the transit holder’s EORI number?
-transitHolderEoriYesNo.error.required = Select yes if you know the transit holder’s EORI number
-transitHolderEoriYesNo.change.hidden = if you know the transit holder’s EORI number
+# Holder of transit
+
+traderDetails.holderOfTransit.eoriYesNo.title = Do you know the transit holder’s EORI number?
+traderDetails.holderOfTransit.eoriYesNo.heading = Do you know the transit holder’s EORI number?
+traderDetails.holderOfTransit.eoriYesNo.checkYourAnswersLabel = Do you know the transit holder’s EORI number?
+traderDetails.holderOfTransit.eoriYesNo.error.required = Select yes if you know the transit holder’s EORI number
+traderDetails.holderOfTransit.eoriYesNo.change.hidden = if you know the transit holder’s EORI number

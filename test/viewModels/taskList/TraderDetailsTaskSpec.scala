@@ -17,8 +17,8 @@
 package viewModels.taskList
 
 import base.SpecBase
-import controllers.routes._
-import controllers.traderDetails.routes._
+import controllers.routes
+import controllers.traderDetails.holderOfTransit.{routes => holderOfTransitRoutes}
 import generators.Generators
 import models.DeclarationType.Option4
 import models.{DeclarationType, NormalMode}
@@ -26,7 +26,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.DeclarationTypePage
-import pages.traderDetails._
+import pages.traderDetails.holderOfTransit.EoriYesNoPage
 import viewModels.taskList.TaskStatus._
 
 class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -83,7 +83,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
       "and declaration type undefined" in {
         val task = TraderDetailsTask(emptyUserAnswers)
         task.status mustBe NotStarted
-        task.href.get mustBe SessionExpiredController.onPageLoad().url
+        task.href.get mustBe routes.SessionExpiredController.onPageLoad().url
       }
 
       "and TIR declaration type" ignore {
@@ -99,19 +99,19 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
             val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
             val task        = TraderDetailsTask(userAnswers)
             task.status mustBe NotStarted
-            task.href.get mustBe TransitHolderEoriYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
+            task.href.get mustBe holderOfTransitRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
         }
       }
     }
 
     "when InProgress" - {
 
-      val baseAnswers = emptyUserAnswers.setValue(TransitHolderEoriYesNoPage, true)
+      val baseAnswers = emptyUserAnswers.setValue(EoriYesNoPage, true)
 
       "and declaration type undefined" ignore {
         val task = TraderDetailsTask(baseAnswers)
         task.status mustBe InProgress
-        task.href.get mustBe SessionExpiredController.onPageLoad().url
+        task.href.get mustBe routes.SessionExpiredController.onPageLoad().url
       }
 
       "and TIR declaration type" ignore {
@@ -127,7 +127,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
             val userAnswers = baseAnswers.setValue(DeclarationTypePage, declarationType)
             val task        = TraderDetailsTask(userAnswers)
             task.status mustBe InProgress
-            task.href.get mustBe TransitHolderEoriYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
+            task.href.get mustBe holderOfTransitRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
         }
       }
     }
