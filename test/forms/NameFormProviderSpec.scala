@@ -19,15 +19,17 @@ package forms
 import forms.Constants.maxNameLength
 import forms.behaviours.StringFieldBehaviours
 import models.domain.StringFieldRegex.stringFieldRegex
+import org.scalacheck.Gen
 import play.api.data.FormError
 
 class NameFormProviderSpec extends StringFieldBehaviours {
 
-  private val requiredKey = "traderDetails.holderOfTransit.name.error.required"
-  private val lengthKey   = "traderDetails.holderOfTransit.name.error.length"
-  private val invalidKey  = "traderDetails.holderOfTransit.name.error.invalid"
+  private val prefix      = Gen.alphaNumStr.sample.value
+  private val requiredKey = s"$prefix.error.required"
+  private val lengthKey   = s"$prefix.error.length"
+  private val invalidKey  = s"$prefix.error.invalid"
 
-  val form = new NameFormProvider()()
+  val form = new NameFormProvider()(prefix)
 
   ".value" - {
 
@@ -52,7 +54,7 @@ class NameFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
 
-    behave like nameFieldWithInvalidCharacters(
+    behave like fieldWithInvalidCharacters(
       form,
       fieldName,
       error = FormError(fieldName, invalidKey, Seq(stringFieldRegex.regex))

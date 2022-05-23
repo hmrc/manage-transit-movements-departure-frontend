@@ -36,7 +36,7 @@ import scala.concurrent.Future
 class NameControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private val formProvider                = new NameFormProvider()
-  private val form                        = formProvider()
+  private val form                        = formProvider("traderDetails.holderOfTransit.name")
   private val mode                        = NormalMode
   private lazy val nameRoute              = routes.NameController.onPageLoad(lrn, mode).url
   private lazy val mockUserAnswersService = mock[UserAnswersService]
