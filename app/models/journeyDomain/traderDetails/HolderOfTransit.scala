@@ -17,8 +17,8 @@
 package models.journeyDomain.traderDetails
 
 import models.EoriNumber
-import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
-import pages.traderDetails.holderOfTransit.{EoriPage, EoriYesNoPage}
+import models.domain._
+import pages.traderDetails.holderOfTransit._
 
 case class HolderOfTransit(eori: Option[EoriNumber])
 
