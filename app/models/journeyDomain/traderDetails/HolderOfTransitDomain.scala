@@ -16,16 +16,20 @@
 
 package models.journeyDomain.traderDetails
 
-import models.domain.UserAnswersReader
+import models.EoriNumber
+import models.domain._
+import pages.traderDetails.holderOfTransit._
 
-case class TraderDetails(
-  holderOfTransit: HolderOfTransit
+case class HolderOfTransitDomain(
+  eori: Option[EoriNumber]
 )
 
-object TraderDetails {
+object HolderOfTransitDomain {
 
-  implicit val userAnswersParser: UserAnswersReader[TraderDetails] =
-    UserAnswersReader[HolderOfTransit].map(
-      x => TraderDetails(x)
-    )
+  private val eori: UserAnswersReader[Option[EoriNumber]] =
+    EoriYesNoPage
+      .filterOptionalDependent(identity)(EoriPage.reader.map(EoriNumber(_)))
+
+  implicit val userAnswersReader: UserAnswersReader[HolderOfTransitDomain] =
+    eori.map(HolderOfTransitDomain.apply)
 }

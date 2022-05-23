@@ -24,7 +24,7 @@ import models.domain.{EitherType, UserAnswersReader}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.traderDetails.holderOfTransit._
 
-class HolderOfTransitSpec extends SpecBase with UserAnswersSpecHelper with Generators {
+class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
   "HolderOfTransit" - {
 
@@ -35,11 +35,11 @@ class HolderOfTransitSpec extends SpecBase with UserAnswersSpecHelper with Gener
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriYesNoPage)(false)
 
-        val expectedResult = HolderOfTransit(
+        val expectedResult = HolderOfTransitDomain(
           eori = None
         )
 
-        val result: EitherType[HolderOfTransit] = UserAnswersReader[HolderOfTransit].run(userAnswers)
+        val result: EitherType[HolderOfTransitDomain] = UserAnswersReader[HolderOfTransitDomain].run(userAnswers)
 
         result.value mustBe expectedResult
       }
@@ -52,11 +52,11 @@ class HolderOfTransitSpec extends SpecBase with UserAnswersSpecHelper with Gener
           .unsafeSetVal(EoriYesNoPage)(true)
           .unsafeSetVal(EoriPage)(eori.value)
 
-        val expectedResult = HolderOfTransit(
+        val expectedResult = HolderOfTransitDomain(
           eori = Some(eori)
         )
 
-        val result: EitherType[HolderOfTransit] = UserAnswersReader[HolderOfTransit].run(userAnswers)
+        val result: EitherType[HolderOfTransitDomain] = UserAnswersReader[HolderOfTransitDomain].run(userAnswers)
 
         result.value mustBe expectedResult
 
@@ -70,7 +70,7 @@ class HolderOfTransitSpec extends SpecBase with UserAnswersSpecHelper with Gener
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriYesNoPage)(true)
 
-        val result: EitherType[HolderOfTransit] = UserAnswersReader[HolderOfTransit].run(userAnswers)
+        val result: EitherType[HolderOfTransitDomain] = UserAnswersReader[HolderOfTransitDomain].run(userAnswers)
 
         result.left.value.page mustBe EoriPage
       }
