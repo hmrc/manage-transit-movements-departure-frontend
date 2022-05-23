@@ -36,7 +36,7 @@ class $className$Controller @Inject()(
             case Some(value) => form.fill(value)
           }
 
-          Ok(view(preparedForm, lrn, $referenceListClass;format="decap"$.$$referenceClassPlural;format="decap"$, mode))
+          Ok(view(preparedForm, lrn, $referenceListClass;format="decap"$.$referenceClassPlural;format="decap"$, mode))
       }
   }
 
@@ -46,7 +46,7 @@ class $className$Controller @Inject()(
         $referenceListClass;format="decap"$ =>
           val form = formProvider("$package$.$className;format="decap"$", $referenceListClass;format="decap"$)
           form.bindFromRequest().fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, $referenceListClass;format="decap"$.$$referenceClassPlural;format="decap"$, mode))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, $referenceListClass;format="decap"$.$referenceClassPlural;format="decap"$, mode))),
             value =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set($className$Page, value))

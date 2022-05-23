@@ -29,7 +29,7 @@
   button: Button
 )
 
-@(form: Form[$referenceClass$], lrn: LocalReferenceNumber, $$referenceClassPlural;format="decap"$: Seq[$referenceClass$], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[$referenceClass$], lrn: LocalReferenceNumber, $referenceClassPlural;format="decap"$: Seq[$referenceClass$], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
   title = messages("$package$.$className;format="decap"$.title"),
@@ -46,7 +46,7 @@
         heading = messages("$package$.$className;format="decap"$.heading"),
         label = Some(messages("$package$.$className;format="decap"$.label")),
         hint = Some(messages("$package$.$className;format="decap"$.hintText")),
-        selectItems = $$referenceClassPlural;format="decap"$.toSelectItems(form.value),
+        selectItems = $referenceClassPlural;format="decap"$.toSelectItems(form.value),
         placeholder = Some(messages("$package$.$className;format="decap"$.placeholder"))
     )
 
