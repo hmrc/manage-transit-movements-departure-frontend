@@ -98,5 +98,10 @@ package object domain {
             case None        => Left(ReaderError(a, Some(message)))
           }
       )
+
+    def optionalReader(implicit reads: Reads[A]): UserAnswersReader[Option[A]] =
+      ReaderT[EitherType, UserAnswers, Option[A]](
+        x => Right(x.get(a))
+      )
   }
 }

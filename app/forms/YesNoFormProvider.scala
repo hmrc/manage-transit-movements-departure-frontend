@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package pages.preTaskList
+package forms
 
-import pages.QuestionPage
-import pages.sections.PreTaskList
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import play.api.data.Form
 
-case object TIRCarnetReferencePage extends QuestionPage[String] {
+import javax.inject.Inject
 
-  override def path: JsPath = PreTaskList.path \ toString
+class YesNoFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "tirCarnetReference"
+  def apply(prefix: String): Form[Boolean] =
+    Form(
+      "value" -> boolean(s"$prefix.error.required")
+    )
 }

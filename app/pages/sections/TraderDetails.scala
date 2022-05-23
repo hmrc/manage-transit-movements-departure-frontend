@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package pages.traderDetails
+package pages.sections
 
-import pages.behaviours.PageBehaviours
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class TransitHolderEoriYesNoPageSpec extends PageBehaviours {
+case object TraderDetails extends QuestionPage[Nothing] {
 
-  "TransitHolderEoriYesNoPage" - {
+  override def path: JsPath = JsPath \ toString
 
-    beRetrievable[Boolean](TransitHolderEoriYesNoPage)
-
-    beSettable[Boolean](TransitHolderEoriYesNoPage)
-
-    beRemovable[Boolean](TransitHolderEoriYesNoPage)
-  }
+  override def toString: String = "traderDetails"
 }

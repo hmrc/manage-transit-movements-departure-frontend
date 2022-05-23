@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package pages.preTaskList
+package models.journeyDomain.traderDetails
 
-import pages.QuestionPage
-import pages.sections.PreTaskList
-import play.api.libs.json.JsPath
+import models.domain.UserAnswersReader
 
-case object TIRCarnetReferencePage extends QuestionPage[String] {
+case class TraderDetails(
+  holderOfTransit: HolderOfTransit
+)
 
-  override def path: JsPath = PreTaskList.path \ toString
+object TraderDetails {
 
-  override def toString: String = "tirCarnetReference"
+  implicit val userAnswersParser: UserAnswersReader[TraderDetails] =
+    UserAnswersReader[HolderOfTransit].map(
+      x => TraderDetails(x)
+    )
 }

@@ -20,16 +20,18 @@ import models._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 import pages.preTaskList._
+import pages.traderDetails.holderOfTransit
+import pages.traderDetails.holderOfTransit.EoriYesNoPage
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators {
   self: Generators =>
 
-  implicit lazy val arbitraryTransitHolderEoriYesNoUserAnswersEntry: Arbitrary[(pages.traderDetails.TransitHolderEoriYesNoPage.type, JsValue)] =
+  implicit lazy val arbitraryTransitHolderEoriYesNoUserAnswersEntry: Arbitrary[(EoriYesNoPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[pages.traderDetails.TransitHolderEoriYesNoPage.type#Data].map(Json.toJson(_))
-      } yield (pages.traderDetails.TransitHolderEoriYesNoPage, value)
+        value <- arbitrary[EoriYesNoPage.type#Data].map(Json.toJson(_))
+      } yield (holderOfTransit.EoriYesNoPage, value)
     }
 
   implicit lazy val arbitraryProcedureTypeUserAnswersEntry: Arbitrary[(ProcedureTypePage.type, JsValue)] =

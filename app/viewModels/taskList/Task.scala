@@ -17,13 +17,21 @@
 package viewModels.taskList
 
 import play.api.i18n.Messages
-import viewModels.taskList.TaskStatus.Completed
+import viewModels.taskList.TaskStatus.{CannotStartYet, Completed, InProgress, NotStarted}
 
 abstract class Task {
   val status: TaskStatus
-  def name(implicit messages: Messages): String
   val id: String
   val href: Option[String]
+  val messageKey: String
+
+  def name(implicit messages: Messages): String = messages {
+    status match {
+      case Completed | InProgress => s"task.$messageKey.edit"
+      case NotStarted             => s"task.$messageKey.add"
+      case CannotStartYet         => s"task.$messageKey"
+    }
+  }
 
   def isCompleted: Boolean = status == Completed
 }

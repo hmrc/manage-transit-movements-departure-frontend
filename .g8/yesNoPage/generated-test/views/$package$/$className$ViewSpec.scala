@@ -16,7 +16,6 @@
 
 package views.$package$
 
-import forms.$package$.$className$FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -24,8 +23,6 @@ import views.behaviours.YesNoViewBehaviours
 import views.html.$package$.$className$View
 
 class $className$ViewSpec extends YesNoViewBehaviours {
-
-  override def form: Form[Boolean] = new $className$FormProvider()()
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector.instanceOf[$className$View].apply(form, lrn, NormalMode)(fakeRequest, messages)
