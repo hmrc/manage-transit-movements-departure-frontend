@@ -25,13 +25,13 @@ import javax.inject.Inject
 
 class NameFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[String] =
+  def apply(prefix: String): Form[String] =
     Form(
-      "value" -> text("traderDetails.holderOfTransit.name.error.required")
+      "value" -> text(s"$prefix.error.required")
         .verifying(
           StopOnFirstFail[String](
-            maxLength(maxNameLength, "traderDetails.holderOfTransit.name.error.length"),
-            regexp(stringFieldRegex, "traderDetails.holderOfTransit.name.error.invalid")
+            maxLength(maxNameLength, s"$prefix.error.length"),
+            regexp(stringFieldRegex, s"$prefix.error.invalid")
           )
         )
     )

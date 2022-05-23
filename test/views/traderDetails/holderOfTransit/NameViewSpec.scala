@@ -27,7 +27,7 @@ import org.scalacheck.{Arbitrary, Gen}
 
 class NameViewSpec extends InputTextViewBehaviours[String] {
 
-  override def form: Form[String] = new NameFormProvider()()
+  override def form: Form[String] = new NameFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
     injector.instanceOf[NameView].apply(form, lrn, NormalMode)(fakeRequest, messages)
