@@ -21,8 +21,8 @@ import cats.implicits._
 import models.DeclarationType.Option4
 import models.ProcedureType.Normal
 import models.domain._
-import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType, UserAnswers}
 import models.reference.CustomsOffice
+import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType, UserAnswers}
 import pages.preTaskList._
 
 case class PreTaskListDomain(
@@ -31,7 +31,8 @@ case class PreTaskListDomain(
   procedureType: ProcedureType,
   declarationType: DeclarationType,
   tirCarnetReference: Option[String],
-  securityDetailsType: SecurityDetailsType
+  securityDetailsType: SecurityDetailsType,
+  detailsConfirmed: Boolean
 ) extends TaskDomain
 
 object PreTaskListDomain {
@@ -57,7 +58,8 @@ object PreTaskListDomain {
       ProcedureTypePage.reader,
       DeclarationTypePage.reader,
       tirCarnetReference,
-      SecurityDetailsTypePage.reader
+      SecurityDetailsTypePage.reader,
+      DetailsConfirmedPage.mandatoryReader(identity)
     ).tupled.map((PreTaskListDomain.apply _).tupled)
 
 }

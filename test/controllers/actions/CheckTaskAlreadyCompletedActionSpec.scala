@@ -27,7 +27,7 @@ import models.reference.{CountryCode, CustomsOffice}
 import models.requests.DataRequest
 import models.{EoriNumber, UserAnswers}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage}
+import pages.preTaskList._
 import play.api.mvc.{AnyContent, Request, Result, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -67,6 +67,7 @@ class CheckTaskAlreadyCompletedActionSpec extends SpecBase with GuiceOneAppPerSu
         .setValue(ProcedureTypePage, Normal)
         .setValue(DeclarationTypePage, Option1)
         .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+        .setValue(DetailsConfirmedPage, true)
 
       val result = harness[PreTaskListDomain](userAnswers)
       status(result) mustBe SEE_OTHER

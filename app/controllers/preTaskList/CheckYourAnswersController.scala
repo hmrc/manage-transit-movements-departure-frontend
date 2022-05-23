@@ -20,20 +20,26 @@ import com.google.inject.Inject
 import controllers.actions.{Actions, CheckTaskAlreadyCompletedActionProvider}
 import models.LocalReferenceNumber
 import models.journeyDomain.PreTaskListDomain
+import pages.preTaskList.DetailsConfirmedPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.PreTaskListViewModel
 import views.html.preTaskList.CheckYourAnswersView
 
+import scala.concurrent.{ExecutionContext, Future}
+
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
   actions: Actions,
   checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
   viewModel: PreTaskListViewModel
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions
@@ -46,9 +52,13 @@ class CheckYourAnswersController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain]) {
-      _ =>
-        Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
+    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+    .async {
+      implicit request =>
+        for {
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(DetailsConfirmedPage, true))
+          _              <- sessionRepository.set(updatedAnswers)
+        } yield Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
     }
 
 }
