@@ -138,3 +138,14 @@ traderDetails.holderOfTransit.eoriYesNo.heading = Do you know the transit holder
 traderDetails.holderOfTransit.eoriYesNo.checkYourAnswersLabel = Do you know the transit holder’s EORI number?
 traderDetails.holderOfTransit.eoriYesNo.error.required = Select yes if you know the transit holder’s EORI number
 traderDetails.holderOfTransit.eoriYesNo.change.hidden = if you know the transit holder’s EORI number
+
+traderDetails.holderOfTransit.eori.title = What is your EORI number?
+traderDetails.holderOfTransit.eori.heading = What is your EORI number?
+traderDetails.holderOfTransit.eori.checkYourAnswersLabel = EORI number
+traderDetails.holderOfTransit.eori.hint = This will start ''GB'' or ''XI'' followed by 12 or 15 numbers, for example GB123456789000.
+traderDetails.holderOfTransit.eori.error.required = Enter your EORI number
+traderDetails.holderOfTransit.eori.error.maxLength = Your EORI number must be 17 characters or less
+traderDetails.holderOfTransit.eori.error.minLength = Your EORI number must be 14 characters or more
+traderDetails.holderOfTransit.eori.error.invalidCharacters = Your EORI number must only include letters a to z without accents and numbers 0 to 9
+traderDetails.holderOfTransit.eori.error.invalidFormat = Your EORI number must start ''GB'' or ''XI'' followed by 12 or 15 numbers, for example GB123456789000
+traderDetails.holderOfTransit.eori.error.prefix = Your EORI number must start with ''GB'' or ''XI'', like GB123456789000
