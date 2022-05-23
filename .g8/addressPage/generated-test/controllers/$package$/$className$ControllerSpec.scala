@@ -12,7 +12,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.$package$.$formProvider$
+import forms.$formProvider$
 import views.html.$package$.$className$View
 import pages.$package$.$className$Page
 import pages.$package$.$addressHolderNamePage$

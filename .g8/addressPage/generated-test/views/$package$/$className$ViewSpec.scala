@@ -16,7 +16,7 @@
 
 package views.$package$
 
-import forms.$package$.$formProvider$
+import forms.$formProvider$
 import models.{Address, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
