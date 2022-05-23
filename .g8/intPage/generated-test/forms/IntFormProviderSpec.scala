@@ -12,7 +12,7 @@ class IntFormProviderSpec extends IntFieldBehaviours {
 
   val generatedInt = Gen.oneOf(1 to maximum)
 
-  val form = new $className$FormProvider()()
+  val form = new IntFormProvider()(prefix, maximum)
 
   ".value" - {
 

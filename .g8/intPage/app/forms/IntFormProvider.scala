@@ -9,9 +9,9 @@ class IntFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String, maximum: Int): Form[Int] =
     Form(
-      "value" -> int("\$prefix.error.required",
-        "\$prefix.error.wholeNumber",
-        "\$prefix.error.nonNumeric")
-        .verifying(maximumValue(maximum, "\$prefix.error.maximum"))
+      "value" -> int(s"\$prefix.error.required",
+        s"\$prefix.error.wholeNumber",
+        s"\$prefix.error.nonNumeric")
+        .verifying(maximumValue(maximum, s"\$prefix.error.maximum"))
     )
 }
