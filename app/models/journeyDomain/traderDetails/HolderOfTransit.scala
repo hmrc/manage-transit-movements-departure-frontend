@@ -17,15 +17,17 @@
 package models.journeyDomain.traderDetails
 
 import models.EoriNumber
-import models.domain.{GettableAsReaderOps, UserAnswersReader}
-import pages.traderDetails.holderOfTransit.EoriYesNoPage
+import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
+import pages.traderDetails.holderOfTransit.{EoriPage, EoriYesNoPage}
 
 case class HolderOfTransit(eori: Option[EoriNumber])
 
 object HolderOfTransit {
 
+  private val eori: UserAnswersReader[Option[EoriNumber]] =
+    EoriYesNoPage
+      .filterOptionalDependent(identity)(EoriPage.reader.map(EoriNumber(_)))
+
   implicit val userAnswersReader: UserAnswersReader[HolderOfTransit] =
-    EoriYesNoPage.reader.map {
-      _ => HolderOfTransit(None)
-    } // TODO - update this with each page in the journey
+    eori.map(HolderOfTransit.apply)
 }

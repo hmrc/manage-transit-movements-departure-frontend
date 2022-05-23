@@ -40,7 +40,7 @@ class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with M
   private val mode                        = NormalMode
   private lazy val transitHolderEoriRoute = routes.EoriController.onPageLoad(lrn, mode).url
 
-  private lazy val validAnswer = "GB1234567891234"
+  private lazy val validAnswer = eoriNumber.value
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
