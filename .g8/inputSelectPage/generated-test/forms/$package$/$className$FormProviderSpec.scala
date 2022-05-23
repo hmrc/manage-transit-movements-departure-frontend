@@ -1,23 +1,31 @@
 package forms.$package$
 
-import forms.behaviours.OptionFieldBehaviours
-import models.$package$.$className$
+import forms.behaviours.StringFieldBehaviours
+import forms.$package$.$className$FormProvider
+import models.$referenceListClass$
+import models.reference.$referenceClass$
 import play.api.data.FormError
+import generators.Generators
 
-class $className$FormProviderSpec extends OptionFieldBehaviours {
+class $className$FormProviderSpec extends StringFieldBehaviours with Generators{
 
-  val form = new $className$FormProvider()()
+  private val requiredKey = $package$.$className;format="decap"$.error.required"
+  private val maxLength   = 8
+
+  private val $referenceClass;format="decap"$1 = arbitrary$referenceClass$.arbitrary.sample.get
+  private val $referenceClass;format="decap"$2 = arbitrary$referenceClass$.arbitrary.sample.get
+  private val $referenceListClass;format="decap"$ = $referenceListClass$(Seq($referenceClass;format="decap"$1, $referenceClass;format="decap"$2))
+
+  private val form = new $className$FormProvider()($referenceListClass;format="decap"$)
 
   ".value" - {
 
     val fieldName = "value"
-    val requiredKey = "$package$.$className;format="decap"$.error.required"
 
-    behave like optionsField[$className$](
+    behave like fieldThatBindsValidData(
       form,
       fieldName,
-      validValues  = $className$.values,
-      invalidError = FormError(fieldName, "error.invalid")
+      stringsWithMaxLength(maxLength)
     )
 
     behave like mandatoryField(
@@ -25,5 +33,17 @@ class $className$FormProviderSpec extends OptionFieldBehaviours {
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
+    "not bind if customs office id does not exist in the $referenceListClass;format="decap"$" in {
+      val boundForm = form.bind(Map("value" -> "foobar"))
+      val field     = boundForm("value")
+      field.errors mustNot be(empty)
+    }
+
+    "bind a $referenceClass;format="decap"$ id which is in the list" in {
+      val boundForm = form.bind(Map("value" -> $referenceClass;format="decap"$1.id))
+      val field     = boundForm("value")
+      field.errors must be(empty)
+    }
   }
 }
