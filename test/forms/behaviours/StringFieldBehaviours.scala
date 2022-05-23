@@ -70,6 +70,18 @@ trait StringFieldBehaviours extends FieldBehaviours {
       }
     }
 
+  def nameFieldWithInvalidCharacters(form: Form[_], fieldName: String, error: FormError): Unit =
+    "must not bind strings with invalid characters" in {
+
+      val generator: Gen[String] = RegexpGen.from(s"[!£^*(){}_+=:;|`~<>,±üçñèé]{$length}")
+
+      forAll(generator) {
+        invalidString =>
+          val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
+          result.errors must contain(error)
+      }
+    }
+
   def postcodeWithInvalidFormat(form: Form[_], fieldName: String, invalidKey: String, length: Int, args: Any*): Unit =
     "must not bind postcode with invalid format" in {
 
