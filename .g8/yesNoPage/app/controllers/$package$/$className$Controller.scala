@@ -25,7 +25,7 @@ class $className;format="cap"$Controller @Inject()(
     view: $className$View
 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider("$className;format="decap"$")
+  private val form = formProvider("$package$.$className;format="decap"$")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

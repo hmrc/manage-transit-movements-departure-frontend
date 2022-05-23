@@ -33,7 +33,7 @@ class $className$ViewSpec extends AddressViewBehaviours {
   override def applyView(form: Form[Address]): HtmlFormat.Appendable =
     injector.instanceOf[$className$View].apply(form, lrn, NormalMode, addressHolderName)(fakeRequest, messages)
 
-  override val prefix: String = "$className;format="decap"$"
+  override val prefix: String = "$package$.$className;format="decap"$"
 
   behave like pageWithTitle()
 

@@ -36,7 +36,7 @@ class $className$ViewSpec extends InputTextViewBehaviours[Int] {
 
   implicit override val arbitraryT: Arbitrary[Int] = Arbitrary(maxInt)
 
-  override val prefix: String = "$className;format="decap"$"
+  override val prefix: String = "$package$.$className;format="decap"$"
 
   behave like pageWithTitle()
 

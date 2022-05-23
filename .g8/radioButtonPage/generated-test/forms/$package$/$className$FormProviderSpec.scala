@@ -11,7 +11,7 @@ class $className$FormProviderSpec extends OptionFieldBehaviours {
   ".value" - {
 
     val fieldName = "value"
-    val requiredKey = "$className;format="decap"$.error.required"
+    val requiredKey = "$package$.$className;format="decap"$.error.required"
 
     behave like optionsField[$className$](
       form,
