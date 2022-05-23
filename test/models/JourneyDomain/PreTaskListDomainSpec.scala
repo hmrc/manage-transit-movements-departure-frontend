@@ -25,7 +25,7 @@ import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.PreTaskListDomain
 import models.reference.{CountryCode, CustomsOffice}
-import models.{DeclarationType, ProcedureType, SecurityDetailsType}
+import models.{ProcedureType, SecurityDetailsType}
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 import pages.QuestionPage

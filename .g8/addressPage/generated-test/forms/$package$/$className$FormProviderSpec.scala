@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms
+package forms.$package$
 
 import base.SpecBase
 import forms.behaviours.StringFieldBehaviours
@@ -42,7 +42,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
 
       val fieldName = "buildingAndStreet"
 
-      val validAdressOverLength: Gen[String] = for {
+      val validAddressOverLength: Gen[String] = for {
         num  <- Gen.chooseNum[Int](Address.Constants.buildingAndStreetLength + 1, Address.Constants.buildingAndStreetLength + 5)
         list <- Gen.listOfN(num, Gen.alphaNumChar)
       } yield list.mkString("")
@@ -60,7 +60,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
         fieldName,
         maxLength = Address.Constants.buildingAndStreetLength,
         lengthError = FormError(fieldName, addressLengthKey, args),
-        validAdressOverLength
+        validAddressOverLength
       )
 
       behave like mandatoryField(
@@ -73,7 +73,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
         val fieldName = "buildingAndStreet"
         val args      = Seq(Address.Constants.Fields.buildingAndStreetName, addressHolderName)
 
-        val generator: Gen[String] = RegexpGen.from(s"[!£^(){}_+=:;|`~,±<>éèâñüç]{${Address.Constants.buildingAndStreetLength}}")
+        val generator: Gen[String] = RegexpGen.from("[!£^(){}_+=:;|`~,±<>éèâñüç]{" + Address.Constants.buildingAndStreetLength + "}")
         val expectedError          = FormError(fieldName, addressInvalidKey, args)
 
         forAll(generator) {
@@ -119,7 +119,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
         val fieldName = "city"
         val args      = Seq(Address.Constants.Fields.city, addressHolderName)
 
-        val generator: Gen[String] = RegexpGen.from(s"[!£^(){}_+=:;|`~,±<>]{${Address.Constants.cityLength}}")
+        val generator: Gen[String] = RegexpGen.from("[!£^(){}_+=:;|`~,±<>]{" + Address.Constants.cityLength + "}")
         val expectedError          = FormError(fieldName, addressInvalidKey, args)
 
         forAll(generator) {
@@ -134,7 +134,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
 
       val fieldName = "postcode"
 
-      val validAdressOverLength: Gen[String] = for {
+      val validAddressOverLength: Gen[String] = for {
         num  <- Gen.chooseNum[Int](Address.Constants.postcodeLength + 1, Address.Constants.postcodeLength + 5)
         list <- Gen.listOfN(num, Gen.alphaNumChar)
       } yield list.mkString("")
@@ -150,7 +150,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
         fieldName,
         maxLength = Address.Constants.postcodeLength,
         lengthError = FormError(fieldName, postcodeLengthKey, Seq(addressHolderName)),
-        validAdressOverLength
+        validAddressOverLength
       )
 
       behave like mandatoryField(
@@ -162,7 +162,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
       "must not bind strings that do not match regex" in {
         val fieldName = "postcode"
 
-        val generator: Gen[String] = RegexpGen.from(s"[!£^(){}_+=:;|`~,±<>]{${Address.Constants.postcodeLength}}")
+        val generator: Gen[String] = RegexpGen.from("[!£^(){}_+=:;|`~,±<>]{" + Address.Constants.postcodeLength + "}")
         val expectedError          = FormError(fieldName, postcodeInvalidKey, Seq(addressHolderName))
 
         forAll(generator) {
@@ -176,7 +176,7 @@ class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
         val fieldName = "postcode"
 
         val genInvalidString: Gen[String] = {
-          stringsWithMaxLength(Address.Constants.postcodeLength) suchThat (!_.matches(Address.Constants.postCodeFormatRegex.toString()))
+          alphaStringsWithMaxLength(Address.Constants.postcodeLength) suchThat (!_.matches(Address.Constants.postCodeFormatRegex.toString()))
         }
         val expectedError = FormError(fieldName, postcodeInvalidFormatKey, Seq(addressHolderName))
 

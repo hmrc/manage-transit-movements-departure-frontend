@@ -1,6 +1,7 @@
 package controllers.$package$
 
-import models.{NormalMode, UserAnswers, Address}
+import org.scalacheck.Gen
+import models.{Address, NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.$navRoute$
 import org.mockito.ArgumentMatchers.any
@@ -14,7 +15,7 @@ import forms.$package$.$className$FormProvider
 import views.html.$package$.$className$View
 import pages.$package$.$className$Page
 import pages.$package$.$addressHolderNamePage$
-import pages.{ConsigneeAddressPage, ConsigneeNamePage}
+import pages.address.OwnerNamePage
 
 import scala.concurrent.Future
 
@@ -47,14 +48,14 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode)(request, messages).toString
+        view(form, lrn, mode, addressHolderName)(request, messages).toString
 
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = UserAnswers(lrn, eoriNumber)
-        .setValue(addressHolderNamePage$, addressHolderName)
+        .setValue($addressHolderNamePage$, addressHolderName)
         .setValue($className$Page, testAddress)
 
       setExistingUserAnswers(userAnswers)
@@ -63,14 +64,20 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> "true"))
+      val filledForm = form.bind(
+        Map(
+          "buildingAndStreet" -> testAddress.buildingAndStreet,
+          "city"              -> testAddress.city,
+          "postcode"          -> testAddress.postcode
+        )
+      )
 
       val view = injector.instanceOf[$className$View]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
+        view(filledForm, lrn, mode, addressHolderName)(request, messages).toString
 
     }
 
@@ -78,11 +85,16 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.setValue($addressHolderNamePage$, addressHolderName)
+      setExistingUserAnswers(userAnswers)
 
       val request =
         FakeRequest(POST, $className;format="decap"$Route)
-          .withFormUrlEncodedBody(("value", "true"))
+          .withFormUrlEncodedBody(
+            ("buildingAndStreet", testAddress.buildingAndStreet),
+            ("city", testAddress.city),
+            ("postcode", testAddress.postcode)
+      )
 
       val result = route(app, request).value
 
@@ -107,7 +119,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       val view = injector.instanceOf[$className$View]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, mode)(request, messages).toString
+        view(boundForm, lrn, mode, addressHolderName)(request, messages).toString
 
     }
 
