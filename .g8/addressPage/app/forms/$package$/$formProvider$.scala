@@ -8,7 +8,7 @@ import forms.mappings.Mappings
 import javax.inject.Inject
 import models.Address
 
-class $className$FormProvider @Inject() extends Mappings {
+class $formProvider$ @Inject() extends Mappings {
 
   def apply(name: String): Form[Address] = Form(
     mapping(

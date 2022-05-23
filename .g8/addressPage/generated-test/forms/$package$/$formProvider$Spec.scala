@@ -23,7 +23,7 @@ import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
 
-class $className$FormProviderSpec extends StringFieldBehaviours with SpecBase {
+class $formProvider$Spec extends StringFieldBehaviours with SpecBase {
 
   val addressHolderName = "addressHolder"
   val form = new $className$FormProvider()(addressHolderName)

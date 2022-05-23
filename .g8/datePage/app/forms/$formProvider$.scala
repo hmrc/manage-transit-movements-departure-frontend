@@ -6,7 +6,7 @@ import play.api.data.Form
 
 import java.time.LocalDate
 
-class DateFormProvider @Inject() extends Mappings {
+class $formProvider$ @Inject() extends Mappings {
 
   def apply(prefix: String): Form[LocalDate] =
     Form(
