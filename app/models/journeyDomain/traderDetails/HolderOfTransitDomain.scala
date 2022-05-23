@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-package pages.sections
+package models.journeyDomain.traderDetails
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import models.EoriNumber
+import models.domain._
+import pages.traderDetails.holderOfTransit._
 
-case object PreTaskList extends QuestionPage[Nothing] {
+case class HolderOfTransitDomain(
+  eori: Option[EoriNumber]
+)
 
-  override def path: JsPath = JsPath \ toString
+object HolderOfTransitDomain {
 
-  override def toString: String = "preTaskList"
+  private val eori: UserAnswersReader[Option[EoriNumber]] =
+    EoriYesNoPage
+      .filterOptionalDependent(identity)(EoriPage.reader.map(EoriNumber(_)))
+
+  implicit val userAnswersReader: UserAnswersReader[HolderOfTransitDomain] =
+    eori.map(HolderOfTransitDomain.apply)
 }

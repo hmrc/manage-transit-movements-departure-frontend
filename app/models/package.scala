@@ -147,4 +147,8 @@ package object models {
             }
       }
   }
+
+  implicit class RichString(string: String) {
+    def removeSpaces(): String = string.replaceAll(" ", "")
+  }
 }

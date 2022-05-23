@@ -59,7 +59,7 @@ trait ModelGenerators {
   implicit lazy val arbitraryLocalReferenceNumber: Arbitrary[LocalReferenceNumber] =
     Arbitrary {
       for {
-        lrn <- alphaNumericWithMaxLength(22: Int)
+        lrn <- stringsWithMaxLength(22: Int, Gen.alphaNumChar)
       } yield new LocalReferenceNumber(lrn)
     }
 
@@ -87,9 +87,9 @@ trait ModelGenerators {
   implicit lazy val arbitraryTraderAddress: Arbitrary[Address] =
     Arbitrary {
       for {
-        buildingAndStreet <- alphaStringsWithMaxLength(Address.Constants.buildingAndStreetLength)
-        city              <- alphaStringsWithMaxLength(Address.Constants.cityLength)
-        postcode          <- alphaStringsWithMaxLength(Address.Constants.postcodeLength)
+        buildingAndStreet <- stringsWithMaxLength(Address.Constants.buildingAndStreetLength, Gen.alphaChar)
+        city              <- stringsWithMaxLength(Address.Constants.cityLength, Gen.alphaChar)
+        postcode          <- stringsWithMaxLength(Address.Constants.postcodeLength, Gen.alphaChar)
       } yield Address(buildingAndStreet, city, postcode)
     }
 

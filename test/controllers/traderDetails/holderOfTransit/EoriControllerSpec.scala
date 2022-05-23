@@ -17,44 +17,46 @@
 package controllers.traderDetails.holderOfTransit
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.YesNoFormProvider
+import forms.EoriNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.traderDetails.holderOfTransit.EoriYesNoPage
+import pages.traderDetails.holderOfTransit.EoriPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.traderDetails.holderOfTransit.EoriYesNoView
+import views.html.traderDetails.holderOfTransit.EoriView
 
 import scala.concurrent.Future
 
-class EoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
+class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
-  private val formProvider                     = new YesNoFormProvider()
-  private val form                             = formProvider("traderDetails.holderOfTransit.eoriYesNo")
-  private val mode                             = NormalMode
-  private lazy val transitHolderEoriYesNoRoute = routes.EoriYesNoController.onPageLoad(lrn, mode).url
+  private val formProvider                = new EoriNumberFormProvider()
+  private val form                        = formProvider("traderDetails.holderOfTransit.eori")
+  private val mode                        = NormalMode
+  private lazy val transitHolderEoriRoute = routes.EoriController.onPageLoad(lrn, mode).url
+
+  private lazy val validAnswer = eoriNumber.value
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
 
-  "EoriYesNo Controller" - {
+  "EoriY Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, transitHolderEoriYesNoRoute)
+      val request = FakeRequest(GET, transitHolderEoriRoute)
       val result  = route(app, request).value
 
-      val view = injector.instanceOf[EoriYesNoView]
+      val view = injector.instanceOf[EoriView]
 
       status(result) mustEqual OK
 
@@ -65,16 +67,16 @@ class EoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures w
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(EoriYesNoPage, true).success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(EoriPage, validAnswer).success.value
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, transitHolderEoriYesNoRoute)
+      val request = FakeRequest(GET, transitHolderEoriRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> "true"))
+      val filledForm = form.bind(Map("value" -> validAnswer))
 
-      val view = injector.instanceOf[EoriYesNoView]
+      val view = injector.instanceOf[EoriView]
 
       status(result) mustEqual OK
 
@@ -89,9 +91,8 @@ class EoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures w
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request =
-        FakeRequest(POST, transitHolderEoriYesNoRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+      val request = FakeRequest(POST, transitHolderEoriRoute)
+        .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
 
@@ -105,14 +106,14 @@ class EoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures w
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, transitHolderEoriYesNoRoute).withFormUrlEncodedBody(("value", ""))
+      val request   = FakeRequest(POST, transitHolderEoriRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[EoriYesNoView]
+      val view = injector.instanceOf[EoriView]
 
       contentAsString(result) mustEqual
         view(boundForm, lrn, mode)(request, messages).toString
@@ -123,7 +124,7 @@ class EoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures w
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, transitHolderEoriYesNoRoute)
+      val request = FakeRequest(GET, transitHolderEoriRoute)
 
       val result = route(app, request).value
 
@@ -137,9 +138,8 @@ class EoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures w
 
       setNoExistingUserAnswers()
 
-      val request =
-        FakeRequest(POST, transitHolderEoriYesNoRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+      val request = FakeRequest(POST, transitHolderEoriRoute)
+        .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
 

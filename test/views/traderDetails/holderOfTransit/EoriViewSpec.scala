@@ -16,18 +16,25 @@
 
 package views.traderDetails.holderOfTransit
 
+import forms.EoriNumberFormProvider
 import models.NormalMode
+import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
-import views.html.traderDetails.holderOfTransit.EoriYesNoView
+import viewModels.InputSize
+import views.behaviours.InputTextViewBehaviours
+import views.html.traderDetails.holderOfTransit.EoriView
 
-class EoriYesNoViewSpec extends YesNoViewBehaviours {
+class EoriViewSpec extends InputTextViewBehaviours[String] {
 
-  override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[EoriYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+  override def form: Form[String] = new EoriNumberFormProvider()(prefix)
 
-  override val prefix: String = "traderDetails.holderOfTransit.eoriYesNo"
+  override def applyView(form: Form[String]): HtmlFormat.Appendable =
+    injector.instanceOf[EoriView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+
+  override val prefix: String = "traderDetails.holderOfTransit.eori"
+
+  implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaNumStr)
 
   behave like pageWithTitle()
 
@@ -37,7 +44,9 @@ class EoriYesNoViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithHeading()
 
-  behave like pageWithRadioItems()
+  behave like pageWithHint("This will start 'GB' or 'XI' followed by 12 or 15 numbers, for example GB123456789000.")
+
+  behave like pageWithInputText(Some(InputSize.Width20))
 
   behave like pageWithSubmitButton("Continue")
 }

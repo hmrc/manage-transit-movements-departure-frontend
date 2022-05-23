@@ -19,13 +19,8 @@ package views.utils
 import play.api.data.{Form, FormError}
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import uk.gov.hmrc.govukfrontend.views.implicits.{RichCharacterCountSupport, RichRadiosSupport, RichTextareaSupport}
-import uk.gov.hmrc.govukfrontend.views.viewmodels.charactercount.CharacterCount
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
-import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorSummary
-import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
-import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.Radios
-import uk.gov.hmrc.govukfrontend.views.viewmodels.textarea.Textarea
+import uk.gov.hmrc.govukfrontend.views.Aliases._
+import uk.gov.hmrc.govukfrontend.views.implicits._
 import uk.gov.hmrc.hmrcfrontend.views.implicits.RichErrorSummarySupport
 
 import java.time.LocalDate
@@ -81,11 +76,21 @@ object ViewUtils {
       }
   }
 
+  implicit class InputImplicits(input: Input)(implicit messages: Messages) extends RichInputSupport {
+
+    def withHeadingAndCaption(heading: String, caption: Option[String]): Input =
+      caption match {
+        case Some(value) => input.withHeadingAndSectionCaption(Text(heading), Text(value))
+        case None        => input.withHeading(Text(heading))
+      }
+  }
+
   implicit class ErrorSummaryImplicits(errorSummary: ErrorSummary)(implicit messages: Messages) extends RichErrorSummarySupport {
 
     def withDateErrorMapping(form: Form[LocalDate], fieldName: String): ErrorSummary = {
-      val arg = form.errors.flatMap(_.args) match {
-        case Nil       => "day"
+      val args = Seq("day", "month", "year")
+      val arg = form.errors.flatMap(_.args).filter(args.contains) match {
+        case Nil       => args.head
         case head :: _ => head.toString
       }
       errorSummary.withFormErrorsAsText(form, mapping = Map(fieldName -> s"${fieldName}_$arg"))

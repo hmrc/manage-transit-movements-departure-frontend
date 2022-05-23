@@ -17,7 +17,6 @@
 package forms.mappings
 
 import generators.Generators
-import models.reference.CountryCode
 import org.scalacheck.Gen
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -97,11 +96,6 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
     "must return Invalid for an input that does not match the expression" in {
       val result = regexp("""^\d+$""", "error.invalid")("foo")
       result mustEqual Invalid("error.invalid", """^\d+$""")
-    }
-
-    "must return Invalid for an input that does not match the expression with the given args" in {
-      val result = regexp("""^\d+$""", "error.invalid", "frank")("foo")
-      result mustEqual Invalid("error.invalid", "frank")
     }
   }
 
@@ -187,22 +181,6 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
           val result = minDate(min, "error.past", "foo")(date)
           result mustEqual Invalid("error.past", "foo")
       }
-    }
-  }
-  "prefix" - {
-    "must return valid if not a Simplified journey" in {
-      val result = isSimplified(false, CountryCode("GB"), "test")("GB")
-      result mustEqual Valid
-    }
-
-    "must return Invalid For a Simplified journey" in {
-      val result = isSimplified(true, CountryCode("GB"), "test")("XI")
-      result mustEqual Invalid("test", "GB")
-    }
-
-    "must return Valid For a Simplified journey" in {
-      val result = isSimplified(true, CountryCode("GB"), "test")("GB")
-      result mustEqual Valid
     }
   }
 

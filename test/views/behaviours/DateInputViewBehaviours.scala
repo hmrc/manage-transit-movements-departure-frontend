@@ -16,11 +16,13 @@
 
 package views.behaviours
 
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.data.FormError
 
 import java.time.LocalDate
 
-trait DateInputViewBehaviours extends QuestionViewBehaviours[LocalDate] {
+trait DateInputViewBehaviours extends QuestionViewBehaviours[LocalDate] with ScalaCheckPropertyChecks {
 
   // scalastyle:off method.length
   def pageWithDateInput(): Unit =
@@ -110,6 +112,15 @@ trait DateInputViewBehaviours extends QuestionViewBehaviours[LocalDate] {
             val docWithError = parseView(applyView(form.withError(FormError("value", errorMessage, Seq("day", "month", "year")))))
             val link         = docWithError.select(".govuk-error-summary__list > li > a").first()
             assertElementContainsHref(link, "#value_day")
+          }
+
+          "when error has other args" in {
+            forAll(arbitrary[String]) {
+              arg =>
+                val docWithError = parseView(applyView(form.withError(FormError("value", errorMessage, Seq(arg)))))
+                val link         = docWithError.select(".govuk-error-summary__list > li > a").first()
+                assertElementContainsHref(link, "#value_day")
+            }
           }
         }
       }

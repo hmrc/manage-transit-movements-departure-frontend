@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package pages.preTaskList
+package pages.traderDetails.holderOfTransit
 
-import models.reference.CustomsOffice
-import pages.QuestionPage
-import pages.sections.PreTaskListSection
-import play.api.libs.json.JsPath
+import pages.behaviours.PageBehaviours
 
-case object OfficeOfDeparturePage extends QuestionPage[CustomsOffice] {
+class EoriPageSpec extends PageBehaviours {
 
-  override def path: JsPath = PreTaskListSection.path \ toString
+  "EoriPage" - {
 
-  override def toString: String = "officeOfDeparture"
+    beRetrievable[String](EoriPage)
+
+    beSettable[String](EoriPage)
+
+    beRemovable[String](EoriPage)
+  }
 }

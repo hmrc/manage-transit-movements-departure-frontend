@@ -15,6 +15,7 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import views.utils.ViewUtils._
 
 @this(govukInput: GovukInput)
 
@@ -27,7 +28,8 @@
     prefix: Option[String] = None,
     suffix: Option[String] = None,
     autocomplete: Option[String] = None,
-    inputMode: Option[String] = None
+    inputMode: Option[String] = None,
+    caption: Option[String] = None
 )(implicit messages: Messages)
 
 @input = @{
@@ -48,7 +50,7 @@
 
 @govukInput(
     if (labelIsHeading) {
-        input.withHeading(heading = Text(label))
+        input.withHeadingAndCaption(heading = label, caption)
     } else {
         input.copy(label = Label(isPageHeading = false, content = Text(label)))
     }
