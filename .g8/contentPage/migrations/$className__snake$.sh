@@ -10,7 +10,7 @@ echo "GET        /:lrn/$package;format="packaged"$/$className;format="decap"$   
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.title = $className;format="decap"$" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.heading = $className;format="decap"$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.title = $className;format="decap"$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.heading = $className;format="decap"$" >> ../conf/messages.en
 
 echo "Migration $className;format="snake"$ completed"

@@ -14,13 +14,13 @@ echo "POST       /:lrn/$package;format="packaged"$/change$className$            
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.title = $className;format="decap"$" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.heading = $className;format="decap"$" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.checkYourAnswersLabel = $className;format="decap"$" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.error.nonNumeric = Enter your $className;format="decap"$ using numbers" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.error.required = Enter your $className;format="decap"$" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.error.wholeNumber = Enter your $className;format="decap"$ using whole numbers" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.error.maximum = $className$ must be {0} or less" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.title = $className;format="decap"$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.heading = $className;format="decap"$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.checkYourAnswersLabel = $className;format="decap"$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.nonNumeric = Enter your $className;format="decap"$ using numbers" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.required = Enter your $className;format="decap"$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.wholeNumber = Enter your $className;format="decap"$ using whole numbers" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.maximum = $className$ must be {0} or less" >> ../conf/messages.en
 
 echo "Adding to UserAnswersEntryGenerators"
 awk '/self: Generators =>/ {\

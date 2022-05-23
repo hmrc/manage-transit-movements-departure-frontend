@@ -14,11 +14,11 @@ echo "POST       /:lrn/$package;format="packaged"$/change$className$            
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.title = $className;format="decap"$" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.heading = $className;format="decap"$" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.checkYourAnswersLabel = $className;format="decap"$" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.error.required = Enter $className;format="decap"$" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.error.length = $className$ must be $maxLength$ characters or less" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.title = $className;format="decap"$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.heading = $className;format="decap"$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.checkYourAnswersLabel = $className;format="decap"$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.required = Enter $className;format="decap"$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.length = $className$ must be $maxLength$ characters or less" >> ../conf/messages.en
 
 echo "Adding to UserAnswersEntryGenerators"
 awk '/self: Generators =>/ {\

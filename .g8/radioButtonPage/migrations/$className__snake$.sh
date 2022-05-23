@@ -14,12 +14,12 @@ echo "POST       /:lrn/$package;format="packaged"$/change$className$            
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.title = $title$" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.heading = $title$" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.$option1key;format="decap"$ = $option1msg$" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.$option2key;format="decap"$ = $option2msg$" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.checkYourAnswersLabel = $title$" >> ../conf/messages.en
-echo $package$."$package$.$className;format="decap"$.error.required = Select $className;format="decap"$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.title = $title$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.heading = $title$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.$option1key;format="decap"$ = $option1msg$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.$option2key;format="decap"$ = $option2msg$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.checkYourAnswersLabel = $title$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.required = Select $className;format="decap"$" >> ../conf/messages.en
 
 echo "Adding to UserAnswersEntryGenerators"
 awk '/self: Generators =>/ {\
