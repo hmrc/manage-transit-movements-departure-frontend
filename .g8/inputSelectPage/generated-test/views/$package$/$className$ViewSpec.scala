@@ -16,7 +16,7 @@
 
 package views.$package$
 
-import forms.$package$.$className$FormProvider
+import forms.$package$.$formProvider$
 import generators.Generators
 import views.behaviours.InputSelectViewBehaviours
 import models.NormalMode
@@ -39,7 +39,7 @@ class $className$ViewSpec extends InputSelectViewBehaviours[$referenceClass$] wi
       $referenceClass;format="decap"$3
     )
 
-  override def form: Form[$referenceClass$] = new $className$FormProvider()(prefix, $referenceListClass$(values))
+  override def form: Form[$referenceClass$] = new $formProvider$()(prefix, $referenceListClass$(values))
 
   override def applyView(form: Form[$referenceClass$]): HtmlFormat.Appendable =
     injector.instanceOf[$className$View].apply(form, lrn, values, NormalMode)(fakeRequest, messages)

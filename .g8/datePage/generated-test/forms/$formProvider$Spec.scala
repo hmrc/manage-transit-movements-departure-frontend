@@ -5,10 +5,10 @@ import org.scalacheck.Gen
 
 import java.time.{LocalDate, ZoneOffset}
 
-class DateFormProviderSpec extends DateBehaviours {
+class $formProvider$Spec extends DateBehaviours {
 
   private val prefix      = Gen.alphaNumStr.sample.value
-  val form = new DateFormProvider()(prefix)
+  val form = new $formProvider$()(prefix)
 
   ".value" - {
 

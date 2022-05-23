@@ -9,7 +9,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.StringFormProvider
+import forms.$formProvider$
 import views.html.$package$.$className$View
 import services.UserAnswersService
 import pages.$package$.$className$Page
@@ -19,7 +19,7 @@ import scala.concurrent.Future
 
 class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider = new StringFormProvider()
+  private val formProvider = new $formProvider$()
   private val form         = formProvider("$package$.$className;format="decap"$", $maxLength$)
   private val mode         = NormalMode
   private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, mode).url

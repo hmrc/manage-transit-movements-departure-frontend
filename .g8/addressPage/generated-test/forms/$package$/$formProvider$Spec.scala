@@ -25,16 +25,17 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 class $formProvider$Spec extends StringFieldBehaviours with SpecBase {
 
+  private val prefix      = Gen.alphaNumStr.sample.value
   val addressHolderName = "addressHolder"
-  val form = new $className$FormProvider()(addressHolderName)
+  val form = new $formProvider$()(addressHolderName)
 
-  lazy val addressRequiredKey          = "$package$.$className;format="decap"$.error.required"
-  lazy val addressLengthKey            = "$package$.$className;format="decap"$.error.length"
-  lazy val addressInvalidKey           = "$package$.$className;format="decap"$.error.invalid"
-  lazy val postcodeRequiredKey         = "$package$.$className;format="decap"$.error.postcode.required"
-  lazy val postcodeLengthKey           = "$package$.$className;format="decap"$.error.postcode.length"
-  lazy val postcodeInvalidKey          = "$package$.$className;format="decap"$.error.postcode.invalid"
-  lazy val postcodeInvalidFormatKey    = "$package$.$className;format="decap"$.error.postcode.invalidFormat"
+  lazy val addressRequiredKey          = s"\$prefix.error.required"
+  lazy val addressLengthKey            = s"\$prefix.error.length"
+  lazy val addressInvalidKey           = s"\$prefix.error.invalid"
+  lazy val postcodeRequiredKey         = s"\$prefix.error.postcode.required"
+  lazy val postcodeLengthKey           = s"\$prefix.error.postcode.length"
+  lazy val postcodeInvalidKey          = s"\$prefix.error.postcode.invalid"
+  lazy val postcodeInvalidFormatKey    = s"\$prefix.error.postcode.invalidFormat"
 
   ".value" - {
 

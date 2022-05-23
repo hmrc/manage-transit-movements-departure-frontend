@@ -1,7 +1,7 @@
 package controllers.$package$
 
 import controllers.actions._
-import forms.$package$.$className$FormProvider
+import forms.$package$.$formProvider$
 import javax.inject.Inject
 import models.{Mode, LocalReferenceNumber}
 import navigation.Navigator
@@ -21,7 +21,7 @@ class $className;format="cap"$Controller @Inject()(
     sessionRepository: SessionRepository,
     @$navRoute$ navigator: Navigator,
     actions: Actions,
-    formProvider: $className$FormProvider,
+    formProvider: $formProvider$,
     val controllerComponents: MessagesControllerComponents,
     view: $className$View
 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
@@ -32,7 +32,7 @@ class $className;format="cap"$Controller @Inject()(
       request.userAnswers.get($addressHolderNamePage$) match {
         case Some (name) =>
           val preparedForm = request.userAnswers.get($className$Page) match {
-            case None => formProvider(name)
+            case None => formProvider("$package$.$className;format="decap"$", name)
             case Some (value) => formProvider(name).fill (value)
           }
 
@@ -46,7 +46,7 @@ class $className;format="cap"$Controller @Inject()(
     implicit request =>
       request.userAnswers.get($addressHolderNamePage$) match {
         case Some(name) =>
-          formProvider(name).bindFromRequest().fold(
+          formProvider("$package$.$className;format="decap"$", name).bindFromRequest().fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, name))),
             value =>
               for {

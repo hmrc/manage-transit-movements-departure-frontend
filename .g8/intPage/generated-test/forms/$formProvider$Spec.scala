@@ -4,7 +4,7 @@ import forms.behaviours.IntFieldBehaviours
 import org.scalacheck.Gen
 import play.api.data.FormError
 
-class IntFormProviderSpec extends IntFieldBehaviours {
+class $formProvider$Spec extends IntFieldBehaviours {
 
   private val prefix      = Gen.alphaNumStr.sample.value
   val requiredKey = s"\$prefix.error.required"
@@ -12,7 +12,7 @@ class IntFormProviderSpec extends IntFieldBehaviours {
 
   val generatedInt = Gen.oneOf(1 to maximum)
 
-  val form = new IntFormProvider()(prefix, maximum)
+  val form = new $formProvider$()(prefix, maximum)
 
   ".value" - {
 

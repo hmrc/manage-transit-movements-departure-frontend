@@ -1,7 +1,7 @@
 package controllers.$package$
 
 import controllers.actions._
-import forms.$package$.$className$FormProvider
+import forms.$package$.$formProvider$
 import javax.inject.Inject
 import models.{Mode, LocalReferenceNumber}
 import navigation.Navigator
@@ -20,7 +20,7 @@ class $className$Controller @Inject()(
    sessionRepository: SessionRepository,
    @$navRoute$ navigator: Navigator,
    actions: Actions,
-   formProvider: $className$FormProvider,
+   formProvider: $formProvider$,
    service: $serviceName$,
    val controllerComponents: MessagesControllerComponents,
    view: $className$View

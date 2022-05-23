@@ -16,7 +16,7 @@
 
 package views.$package$
 
-import forms.StringFormProvider
+import forms.$formProvider$
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -29,7 +29,7 @@ class $className$ViewSpec extends InputTextViewBehaviours[String] {
 
   override val prefix: String = "$package$.$className;format="decap"$"
 
-  override def form: Form[String] = new StringFormProvider()(prefix,  $maxLength$)
+  override def form: Form[String] = new $formProvider$()(prefix,  $maxLength$)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
     injector.instanceOf[$className$View].apply(form, lrn, NormalMode)(fakeRequest, messages)

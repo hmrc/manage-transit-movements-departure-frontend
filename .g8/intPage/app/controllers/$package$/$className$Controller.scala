@@ -1,7 +1,7 @@
 package controllers.$package$
 
 import controllers.actions._
-import forms.IntFormProvider
+import forms.$formProvider$
 import models.{Mode, LocalReferenceNumber}
 import navigation.Navigator
 import navigation.annotations.$navRoute$
@@ -19,7 +19,7 @@ class $className;format="cap"$Controller @Inject()(
     override val messagesApi: MessagesApi,
     sessionRepository: SessionRepository,
     @$navRoute$ navigator: Navigator,
-    formProvider: IntFormProvider,
+    formProvider: $formProvider$,
     actions: Actions,
     val controllerComponents: MessagesControllerComponents,
     view: $className$View

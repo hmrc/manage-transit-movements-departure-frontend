@@ -16,7 +16,7 @@
 
 package views.$package$
 
-import forms.$package$.$className$FormProvider
+import forms.$package$.$formProvider$
 import models.{Address, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -28,7 +28,7 @@ class $className$ViewSpec extends AddressViewBehaviours {
 
   private val addressHolderName = Gen.alphaNumStr.sample.value
 
-  override def form: Form[Address] = new $className$FormProvider()(addressHolderName)
+  override def form: Form[Address] = new $formProvider$()(prefix, addressHolderName)
 
   override def applyView(form: Form[Address]): HtmlFormat.Appendable =
     injector.instanceOf[$className$View].apply(form, lrn, NormalMode, addressHolderName)(fakeRequest, messages)

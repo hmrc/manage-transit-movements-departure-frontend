@@ -10,31 +10,31 @@ import models.Address
 
 class $formProvider$ @Inject() extends Mappings {
 
-  def apply(name: String): Form[Address] = Form(
+  def apply(prefix: String, name: String): Form[Address] = Form(
     mapping(
-      "buildingAndStreet" -> text("$package$.$className;format="decap"$.error.required", Seq(Address.Constants.Fields.buildingAndStreetName, name))
+      "buildingAndStreet" -> text(s"\$prefix.error.required", Seq(Address.Constants.Fields.buildingAndStreetName, name))
         .verifying(
           StopOnFirstFail[String](
             maxLength(Address.Constants.buildingAndStreetLength,
-              "$package$.$className;format="decap"$.error.length",
+              s"\$prefix.error.length",
               Seq(Address.Constants.Fields.buildingAndStreetName, name)
             ),
-            regexp(stringFieldRegex, "$package$.$className;format="decap"$.error.invalid", Seq(Address.Constants.Fields.buildingAndStreetName, name))
+            regexp(stringFieldRegex, s"\$prefix.error.invalid", Seq(Address.Constants.Fields.buildingAndStreetName, name))
           )
         ),
-      "city" -> text("$package$.$className;format="decap"$.error.required", args = Seq(Address.Constants.Fields.city, name))
+      "city" -> text(s"\$prefix.error.required", args = Seq(Address.Constants.Fields.city, name))
         .verifying(
           StopOnFirstFail[String](
-            maxLength(Address.Constants.cityLength, "$package$.$className;format="decap"$.error.length", args = Seq(Address.Constants.Fields.city, name)),
-            regexp(stringFieldRegex, "$package$.$className;format="decap"$.error.invalid", Seq(Address.Constants.Fields.city, name))
+            maxLength(Address.Constants.cityLength, s"\$prefix.error.length", args = Seq(Address.Constants.Fields.city, name)),
+            regexp(stringFieldRegex, s"\$prefix.error.invalid", Seq(Address.Constants.Fields.city, name))
           )
         ),
-      "postcode" -> text("$package$.$className;format="decap"$.error.postcode.required", args = Seq(name))
+      "postcode" -> text(s"\$prefix.error.postcode.required", args = Seq(name))
         .verifying(
           StopOnFirstFail[String](
-            maxLength(Address.Constants.postcodeLength, "$package$.$className;format="decap"$.error.postcode.length", args = Seq(name)),
-            regexp(Address.Constants.postCodeRegex, "$package$.$className;format="decap"$.error.postcode.invalid", args = Seq(name)),
-            regexp(Address.Constants.postCodeFormatRegex, "$package$.$className;format="decap"$.error.postcode.invalidFormat", args = Seq(name))
+            maxLength(Address.Constants.postcodeLength, s"\$prefix.error.postcode.length", args = Seq(name)),
+            regexp(Address.Constants.postCodeRegex, s"\$prefix.error.postcode.invalid", args = Seq(name)),
+            regexp(Address.Constants.postCodeFormatRegex, s"\$prefix.error.postcode.invalidFormat", args = Seq(name))
           )
         )
     )(Address.apply)(Address.unapply)

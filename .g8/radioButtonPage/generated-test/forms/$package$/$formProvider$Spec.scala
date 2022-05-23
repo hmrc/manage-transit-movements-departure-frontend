@@ -4,9 +4,9 @@ import forms.behaviours.OptionFieldBehaviours
 import models.$package$.$className$
 import play.api.data.FormError
 
-class $className$FormProviderSpec extends OptionFieldBehaviours {
+class $formProvider$Spec extends OptionFieldBehaviours {
 
-  val form = new $className$FormProvider()()
+  val form = new $formProvider$()()
 
   ".value" - {
 

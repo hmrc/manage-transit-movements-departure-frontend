@@ -4,14 +4,14 @@ import forms.behaviours.StringFieldBehaviours
 import org.scalacheck.Gen
 import play.api.data.FormError
 
-class StringFormProviderSpec extends StringFieldBehaviours {
+class $formProvider$Spec extends StringFieldBehaviours {
 
   private val prefix      = Gen.alphaNumStr.sample.value
   val requiredKey = s"\$prefix.error.required"
   val lengthKey = s"\$prefix.error.length"
   val maxLength = 10
 
-  val form = new StringFormProvider()(prefix, maxLength)
+  val form = new $formProvider$()(prefix, maxLength)
 
   ".value" - {
 

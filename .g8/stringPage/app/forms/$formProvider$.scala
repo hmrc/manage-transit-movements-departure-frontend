@@ -4,7 +4,7 @@ import forms.mappings.Mappings
 import javax.inject.Inject
 import play.api.data.Form
 
-class StringFormProvider @Inject() extends Mappings {
+class $formProvider$ @Inject() extends Mappings {
 
   def apply(prefix: String, maximum: Int): Form[String] =
     Form(

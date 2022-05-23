@@ -6,7 +6,7 @@ import play.api.data.Form
 import models.reference.$referenceClass$
 import models.$referenceListClass$
 
-class $className$FormProvider @Inject() extends Mappings {
+class $formProvider$ @Inject() extends Mappings {
 
   def apply(prefix: String, $referenceClassPlural;format="decap"$: $referenceListClass$): Form[$referenceClass$] =
 
