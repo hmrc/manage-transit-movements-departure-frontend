@@ -19,14 +19,14 @@ package pages.preTaskList
 import models.DeclarationType.Option4
 import models.{DeclarationType, UserAnswers}
 import pages.QuestionPage
-import pages.sections.PreTaskList
+import pages.sections.PreTaskListSection
 import play.api.libs.json.JsPath
 
 import scala.util.Try
 
 case object DeclarationTypePage extends QuestionPage[DeclarationType] {
 
-  override def path: JsPath = PreTaskList.path \ toString
+  override def path: JsPath = PreTaskListSection.path \ toString
 
   override def toString: String = "declarationType"
 

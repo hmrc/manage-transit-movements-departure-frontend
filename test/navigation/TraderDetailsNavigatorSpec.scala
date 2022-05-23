@@ -17,7 +17,9 @@
 package navigation
 
 import base.SpecBase
-import controllers.preTaskList.routes
+import controllers.preTaskList.{routes => ptlRoutes}
+import controllers.routes
+import controllers.traderDetails.holderOfTransit.{routes => hotRoutes}
 import generators.Generators
 import models._
 import org.scalacheck.Arbitrary.arbitrary
@@ -27,7 +29,7 @@ import pages.traderDetails.holderOfTransit.EoriYesNoPage
 
 class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
-  private val navigator = new PreTaskListNavigator
+  private val navigator = new TraderDetailsNavigator
 
   "Navigator" - {
     "must go from a page that doesn't exist in the route map" - {
@@ -40,7 +42,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             answers =>
               navigator
                 .nextPage(UnknownPage, NormalMode, answers)
-                .mustBe(routes.LocalReferenceNumberController.onPageLoad())
+                .mustBe(ptlRoutes.LocalReferenceNumberController.onPageLoad())
           }
         }
       }
@@ -51,18 +53,47 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             answers =>
               navigator
                 .nextPage(UnknownPage, CheckMode, answers)
-                .mustBe(controllers.routes.SessionExpiredController.onPageLoad())
+                .mustBe(routes.SessionExpiredController.onPageLoad())
           }
         }
       }
     }
 
-    "must go from Transit Holder EORI Yes No page to Transit Holder EORI page" ignore {
-      forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
-        (answers, mode) =>
-          navigator
-            .nextPage(EoriYesNoPage, mode, answers)
-            .mustBe(???)
+    "must go from Transit Holder EORI Yes No page" - {
+      "when Yes selected" - {
+        "to Eori page" in {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.setValue(EoriYesNoPage, true)
+              navigator
+                .nextPage(EoriYesNoPage, mode, userAnswers)
+                .mustBe(hotRoutes.EoriController.onPageLoad(userAnswers.lrn, mode))
+          }
+        }
+      }
+
+      "when No selected" - {
+        "to ???" ignore {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.setValue(EoriYesNoPage, false)
+              navigator
+                .nextPage(EoriYesNoPage, mode, userAnswers)
+                .mustBe(hotRoutes.EoriController.onPageLoad(userAnswers.lrn, mode))
+          }
+        }
+      }
+
+      "when nothing selected" - {
+        "to session expired" in {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.removeValue(EoriYesNoPage)
+              navigator
+                .nextPage(EoriYesNoPage, mode, userAnswers)
+                .mustBe(routes.SessionExpiredController.onPageLoad())
+          }
+        }
       }
     }
   }

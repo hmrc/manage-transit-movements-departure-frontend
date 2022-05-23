@@ -42,7 +42,7 @@ object TraderDetailsTask {
 
     new TaskProvider(userAnswers).noDependencyOnOtherTask
       .ifCompleted(
-        readerIfCompleted = UserAnswersReader[TraderDetails],
+        readerIfCompleted = UserAnswersReader[TraderDetailsDomain],
         urlIfCompleted = "#" // TODO - trader details check your answers
       )
       .ifInProgressOrNotStarted(

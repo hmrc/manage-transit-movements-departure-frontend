@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.JourneyDomain
+package models.journeyDomain
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
@@ -23,7 +23,6 @@ import models.DeclarationType._
 import models.ProcedureType.Normal
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{EitherType, UserAnswersReader}
-import models.journeyDomain.PreTaskListDomain
 import models.reference.{CountryCode, CustomsOffice}
 import models.{ProcedureType, SecurityDetailsType}
 import org.scalacheck.Gen

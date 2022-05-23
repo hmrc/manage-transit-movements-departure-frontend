@@ -14,26 +14,14 @@
  * limitations under the License.
  */
 
-package pages.preTaskList
+package pages.sections
 
-import models.ProcedureType.Simplified
-import models.{ProcedureType, UserAnswers}
 import pages.QuestionPage
-import pages.sections.PreTaskListSection
 import play.api.libs.json.JsPath
 
-import scala.util.Try
+case object HolderOfTransitSection extends QuestionPage[Nothing] {
 
-case object ProcedureTypePage extends QuestionPage[ProcedureType] {
+  override def path: JsPath = TraderDetailsSection.path \ toString
 
-  override def path: JsPath = PreTaskListSection.path \ toString
-
-  override def toString: String = "procedureType"
-
-  override def cleanup(value: Option[ProcedureType], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(Simplified) => userAnswers.remove(TIRCarnetReferencePage)
-      case _                => super.cleanup(value, userAnswers)
-    }
-
+  override def toString: String = "holderOfTransit"
 }

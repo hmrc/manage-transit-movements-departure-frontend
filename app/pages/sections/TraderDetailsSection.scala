@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.traderDetails
+package pages.sections
 
-import models.domain.UserAnswersReader
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-case class TraderDetails(
-  holderOfTransit: HolderOfTransit
-)
+case object TraderDetailsSection extends QuestionPage[Nothing] {
 
-object TraderDetails {
+  override def path: JsPath = JsPath \ toString
 
-  implicit val userAnswersParser: UserAnswersReader[TraderDetails] =
-    UserAnswersReader[HolderOfTransit].map(
-      x => TraderDetails(x)
-    )
+  override def toString: String = "traderDetails"
 }

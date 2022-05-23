@@ -18,4 +18,6 @@ package forms
 
 object Constants {
   lazy val tirCarnetReferenceMaxLength = 12
+  lazy val maxEoriNumberLength: Int    = 17
+  lazy val minEoriNumberLength: Int    = 14
 }

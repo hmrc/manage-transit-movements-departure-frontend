@@ -16,9 +16,10 @@
 
 package navigation
 
+import controllers.traderDetails.holderOfTransit.{routes => hotRoutes}
 import models._
 import pages._
-import pages.traderDetails.holderOfTransit.EoriYesNoPage
+import pages.traderDetails.holderOfTransit._
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -31,7 +32,15 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
   override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(CheckMode)
 
   private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case EoriYesNoPage => ua => ???
+    case EoriYesNoPage => ua => eoriYesNoRoute(ua, mode)
+  }
+
+  private def eoriYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
+    userAnswers.get(EoriYesNoPage) match {
+      case Some(true)  => hotRoutes.EoriController.onPageLoad(userAnswers.lrn, mode)
+      case Some(false) => ??? // TODO - redirect to HoT name once built
+      case None        => controllers.routes.SessionExpiredController.onPageLoad()
+    }
   }
 
 }
