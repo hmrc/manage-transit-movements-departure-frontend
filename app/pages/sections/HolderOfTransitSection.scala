@@ -16,13 +16,12 @@
 
 package pages.sections
 
-import models.journeyDomain.traderDetails.HolderOfTransitDomain
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object HolderOfTransit extends QuestionPage[HolderOfTransitDomain] {
+case object HolderOfTransitSection extends QuestionPage[Nothing] {
 
-  override def path: JsPath = TraderDetails.path \ toString
+  override def path: JsPath = TraderDetailsSection.path \ toString
 
   override def toString: String = "holderOfTransit"
 }

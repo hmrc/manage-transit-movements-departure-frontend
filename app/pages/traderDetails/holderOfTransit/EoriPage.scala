@@ -17,12 +17,12 @@
 package pages.traderDetails.holderOfTransit
 
 import pages.QuestionPage
-import pages.sections.HolderOfTransit
+import pages.sections.HolderOfTransitSection
 import play.api.libs.json.JsPath
 
 case object EoriPage extends QuestionPage[String] {
 
-  override def path: JsPath = HolderOfTransit.path \ toString
+  override def path: JsPath = HolderOfTransitSection.path \ toString
 
   override def toString: String = "eori"
 }
