@@ -24,10 +24,12 @@ import play.api.data.FormError
 
 class LocalReferenceNumberFormProviderSpec extends StringFieldBehaviours {
 
-  private val requiredKey = "localReferenceNumber.error.required"
-  private val lengthKey   = "localReferenceNumber.error.length"
-  private val invalidKey  = "localReferenceNumber.error.invalidCharacters"
-  private val form        = new LocalReferenceNumberFormProvider()()
+  private val requiredKey          = "localReferenceNumber.error.required"
+  private val lengthKey            = "localReferenceNumber.error.length"
+  private val invalidCharactersKey = "localReferenceNumber.error.invalidCharacters"
+  private val invalidFormatKey     = "localReferenceNumber.error.invalidFormat"
+
+  private val form = new LocalReferenceNumberFormProvider()()
 
   ".value" - {
 
@@ -45,17 +47,35 @@ class LocalReferenceNumberFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
 
+    "must not start with a hyphen" in {
+      forAll(stringsWithMaxLength(maxLength - 1)) {
+        value =>
+          val valueStartingWithHyphen = s"-$value"
+          val result                  = form.bind(Map(fieldName -> valueStartingWithHyphen))
+          result.errors must contain(FormError(fieldName, invalidFormatKey))
+      }
+    }
+
+    "must not start with an underscore" in {
+      forAll(stringsWithMaxLength(maxLength - 1)) {
+        value =>
+          val valueStartingWithHyphen = s"_$value"
+          val result                  = form.bind(Map(fieldName -> valueStartingWithHyphen))
+          result.errors must contain(FormError(fieldName, invalidFormatKey))
+      }
+    }
+
     "must not bind invalid LRNs" in {
 
       forAll(arbitrary[String]) {
         value =>
           whenever(value != "" && LocalReferenceNumber(value).isEmpty) {
 
-            val result = form.bind(Map("value" -> value))
+            val result = form.bind(Map(fieldName -> value))
             if (value.length > maxLength) {
-              result.errors must contain(FormError("value", lengthKey))
+              result.errors must contain(FormError(fieldName, lengthKey))
             } else {
-              result.errors must contain(FormError("value", invalidKey))
+              result.errors must contain(FormError(fieldName, invalidCharactersKey))
             }
           }
       }
