@@ -54,9 +54,9 @@ class $className$ViewSpec extends InputSelectViewBehaviours[$referenceClass$] wi
 
   behave like pageWithSelect
 
-  behave like pageWithHint("$className;format="decap"$ hint")
+  behave like pageWithHint("$title$ hint")
 
-  behave like pageWithContent("label", "$className;format="decap"$ label")
+  behave like pageWithContent("label", "$title$ label")
 
   behave like pageWithSubmitButton("Continue")
 }

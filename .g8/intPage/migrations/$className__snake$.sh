@@ -6,21 +6,21 @@ echo "Applying migration $className;format="snake"$"
 echo "Adding routes to conf/app.routes"
 
 echo "" >> ../conf/app.routes
-echo "GET        /:lrn/$package;format="word-space,normalize"$/$className;format="decap"$                        controllers.$package$.$className$Controller.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)" >> ../conf/app.routes
-echo "POST       /:lrn/$package;format="word-space,normalize"$/$className;format="decap"$                        controllers.$package$.$className$Controller.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "GET        /:lrn/$package;format="space,normalize"$/$title;format="normalize"$                        controllers.$package$.$className$Controller.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /:lrn/$package;format="space,normalize"$/$title;format="normalize"$                        controllers.$package$.$className$Controller.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)" >> ../conf/app.routes
 
-echo "GET        /:lrn/$package;format="word-space,normalize"$/change-$className;format="decap"$                controllers.$package$.$className$Controller.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)" >> ../conf/app.routes
-echo "POST       /:lrn/$package;format="word-space,normalize"$/change-$className;format="decap"$                controllers.$package$.$className$Controller.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "GET        /:lrn/$package;format="space,normalize"$/change-$title;format="normalize"$                 controllers.$package$.$className$Controller.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /:lrn/$package;format="space,normalize"$/change-$title;format="normalize"$                 controllers.$package$.$className$Controller.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.title = $className;format="decap"$" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.heading = $className;format="decap"$" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.checkYourAnswersLabel = $className;format="decap"$" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.error.nonNumeric = Enter your $className;format="decap"$ using numbers" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.error.required = Enter your $className;format="decap"$" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.error.wholeNumber = Enter your $className;format="decap"$ using whole numbers" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.error.maximum = $className$ must be {0} or less" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.title = $title$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.heading = $title$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.checkYourAnswersLabel = $title$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.nonNumeric = Enter your $title$ using numbers" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.required = Enter your $title$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.wholeNumber = Enter your $title$ using whole numbers" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.maximum = $title$ must be {0} or less" >> ../conf/messages.en
 
 echo "Adding to UserAnswersEntryGenerators"
 awk '/self: Generators =>/ {\

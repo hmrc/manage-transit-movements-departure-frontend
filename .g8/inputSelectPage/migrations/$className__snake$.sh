@@ -6,28 +6,28 @@ echo "Applying migration $className;format="snake"$"
 echo "Adding routes to conf/app.routes"
 
 echo "" >> ../conf/app.routes
-echo "GET        /:lrn/$package;format="word-space,normalize"$/$className;format="decap"$                        controllers.$package$.$className$Controller.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)" >> ../conf/app.routes
-echo "POST       /:lrn/$package;format="word-space,normalize"$/$className;format="decap"$                        controllers.$package$.$className$Controller.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "GET        /:lrn/$package;format="space,normalize"$/$title;format="normalize"$                        controllers.$package$.$className$Controller.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /:lrn/$package;format="space,normalize"$/$title;format="normalize"$                        controllers.$package$.$className$Controller.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)" >> ../conf/app.routes
 
-echo "GET        /:lrn/$package;format="word-space,normalize"$/change-$className;format="decap"$                controllers.$package$.$className$Controller.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)" >> ../conf/app.routes
-echo "POST       /:lrn/$package;format="word-space,normalize"$/change-$className;format="decap"$                controllers.$package$.$className$Controller.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "GET        /:lrn/$package;format="space,normalize"$/change-$title;format="normalize"$                 controllers.$package$.$className$Controller.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /:lrn/$package;format="space,normalize"$/change-$title;format="normalize"$                 controllers.$package$.$className$Controller.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.title = $className;format="decap"$" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.heading = $className;format="decap"$" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.hintText = $className;format="decap"$ hint" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.label = $className;format="decap"$ label" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.title = $title$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.heading = $title$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.hintText = $title$ hint" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.label = $title$ label" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.placeholder = Select a $referenceClass;format="decap"$" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.change.hidden = $className;format="decap"$" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.checkYourAnswersLabel = $className;format="decap"$" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.error.required = Select the $className;format="decap"$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.change.hidden = $title$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.checkYourAnswersLabel = $title$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.required = Select the $referenceClass;format="decap"$" >> ../conf/messages.en
 
 echo "Adding to UserAnswersEntryGenerators"
 awk '/self: Generators =>/ {\
     print;\
     print "";\
-    print "  implicit lazy val arbitrary$package;format="word-space,upper-camel"$$className$UserAnswersEntry: Arbitrary[(pages.$package$.$className$Page.type, JsValue)] =";\
+    print "  implicit lazy val arbitrary$package;format="space,upper-camel"$$className$UserAnswersEntry: Arbitrary[(pages.$package$.$className$Page.type, JsValue)] =";\
     print "    Arbitrary {";\
     print "      for {";\
     print "        value <- arbitrary[pages.$package$.$className$Page.type#Data].map(Json.toJson(_))";\
@@ -38,7 +38,7 @@ awk '/self: Generators =>/ {\
 echo "Adding to UserAnswersGenerator"
 awk '/val generators/ {\
     print;\
-    print "    arbitrary$package;format="word-space,upper-camel"$$className$UserAnswersEntry.arbitrary ::";\
+    print "    arbitrary$package;format="space,upper-camel"$$className$UserAnswersEntry.arbitrary ::";\
     next }1' ../test/generators/UserAnswersGenerator.scala > tmp && mv tmp ../test/generators/UserAnswersGenerator.scala
 
 echo "Migration $className;format="snake"$ completed"
