@@ -153,3 +153,9 @@ traderDetails.holderOfTransit.eori.error.minLength = Your EORI number must be 14
 traderDetails.holderOfTransit.eori.error.invalidCharacters = Your EORI number must only include letters a to z without accents and numbers 0 to 9
 traderDetails.holderOfTransit.eori.error.invalidFormat = Your EORI number must start ''GB'' or ''XI'' followed by 12 or 15 numbers, for example GB123456789000
 traderDetails.holderOfTransit.eori.error.prefix = Your EORI number must start with ''GB'' or ''XI'', like GB123456789000
+
+traderDetails.holderOfTransit.addContact.title = Do you want to add a contact?
+traderDetails.holderOfTransit.addContact.heading = Do you want to add a contact?
+traderDetails.holderOfTransit.addContact.checkYourAnswersLabel = Do you want to add a contact?
+traderDetails.holderOfTransit.addContact.error.required = Select yes if you want to add a contact
+traderDetails.holderOfTransit.addContact.error.hidden = if you want to add a contact

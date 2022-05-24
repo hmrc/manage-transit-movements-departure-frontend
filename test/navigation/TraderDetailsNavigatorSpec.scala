@@ -25,7 +25,7 @@ import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
-import pages.traderDetails.holderOfTransit.EoriYesNoPage
+import pages.traderDetails.holderOfTransit.{AddContactPage, EoriYesNoPage}
 
 class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -91,6 +91,45 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
               val userAnswers = answers.removeValue(EoriYesNoPage)
               navigator
                 .nextPage(EoriYesNoPage, mode, userAnswers)
+                .mustBe(routes.SessionExpiredController.onPageLoad())
+          }
+        }
+      }
+    }
+
+    "must go from Transit Holder Add Contact page" - {
+      //TODO - add nav test for true and false outcomes
+      "when Yes selected" - {
+        "???" ignore {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.setValue(AddContactPage, true)
+              navigator
+                .nextPage(AddContactPage, mode, userAnswers)
+                .mustBe(hotRoutes.AddContactController.onPageLoad(userAnswers.lrn, mode))
+          }
+        }
+      }
+
+      "when No selected" - {
+        "to ???" ignore {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.setValue(AddContactPage, false)
+              navigator
+                .nextPage(AddContactPage, mode, userAnswers)
+                .mustBe(hotRoutes.AddContactController.onPageLoad(userAnswers.lrn, mode))
+          }
+        }
+      }
+
+      "when nothing selected" - {
+        "to session expired" in {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.removeValue(AddContactPage)
+              navigator
+                .nextPage(AddContactPage, mode, userAnswers)
                 .mustBe(routes.SessionExpiredController.onPageLoad())
           }
         }
