@@ -14,27 +14,15 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.traderDetails
+package pages.preTaskList
 
-import cats.implicits._
-import models.EoriNumber
-import models.domain._
-import pages.traderDetails.holderOfTransit._
+import pages.QuestionPage
+import pages.sections.PreTaskListSection
+import play.api.libs.json.JsPath
 
-case class HolderOfTransitDomain(
-  eori: Option[EoriNumber],
-  name: String
-)
+case object DetailsConfirmedPage extends QuestionPage[Boolean] {
 
-object HolderOfTransitDomain {
+  override def path: JsPath = PreTaskListSection.path \ toString
 
-  private val eori: UserAnswersReader[Option[EoriNumber]] =
-    EoriYesNoPage
-      .filterOptionalDependent(identity)(EoriPage.reader.map(EoriNumber(_)))
-
-  implicit val userAnswersReader: UserAnswersReader[HolderOfTransitDomain] =
-    (
-      eori,
-      NamePage.reader
-    ).tupled.map((HolderOfTransitDomain.apply _).tupled)
+  override def toString: String = "detailsConfirmed"
 }

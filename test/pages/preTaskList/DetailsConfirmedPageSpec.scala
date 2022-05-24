@@ -14,27 +14,18 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.traderDetails
+package pages.preTaskList
 
-import cats.implicits._
-import models.EoriNumber
-import models.domain._
-import pages.traderDetails.holderOfTransit._
+import pages.behaviours.PageBehaviours
 
-case class HolderOfTransitDomain(
-  eori: Option[EoriNumber],
-  name: String
-)
+class DetailsConfirmedPageSpec extends PageBehaviours {
 
-object HolderOfTransitDomain {
+  "DetailsConfirmedPage" - {
 
-  private val eori: UserAnswersReader[Option[EoriNumber]] =
-    EoriYesNoPage
-      .filterOptionalDependent(identity)(EoriPage.reader.map(EoriNumber(_)))
+    beRetrievable[Boolean](DetailsConfirmedPage)
 
-  implicit val userAnswersReader: UserAnswersReader[HolderOfTransitDomain] =
-    (
-      eori,
-      NamePage.reader
-    ).tupled.map((HolderOfTransitDomain.apply _).tupled)
+    beSettable[Boolean](DetailsConfirmedPage)
+
+    beRemovable[Boolean](DetailsConfirmedPage)
+  }
 }

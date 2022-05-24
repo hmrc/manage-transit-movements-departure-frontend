@@ -67,7 +67,7 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
     args: Any*
   ): SummaryListRow =
     SummaryListRow(
-      key = Key(label, classes = "govuk-!-width-one-half"),
+      key = Key(label),
       value = Value(answer),
       actions = Some(
         Actions(

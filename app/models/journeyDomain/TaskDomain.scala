@@ -14,27 +14,6 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.traderDetails
+package models.journeyDomain
 
-import cats.implicits._
-import models.EoriNumber
-import models.domain._
-import pages.traderDetails.holderOfTransit._
-
-case class HolderOfTransitDomain(
-  eori: Option[EoriNumber],
-  name: String
-)
-
-object HolderOfTransitDomain {
-
-  private val eori: UserAnswersReader[Option[EoriNumber]] =
-    EoriYesNoPage
-      .filterOptionalDependent(identity)(EoriPage.reader.map(EoriNumber(_)))
-
-  implicit val userAnswersReader: UserAnswersReader[HolderOfTransitDomain] =
-    (
-      eori,
-      NamePage.reader
-    ).tupled.map((HolderOfTransitDomain.apply _).tupled)
-}
+trait TaskDomain
