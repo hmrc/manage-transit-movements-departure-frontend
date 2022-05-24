@@ -34,14 +34,14 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
       "when holder has no eori with contact" in {
         val name        = Gen.alphaNumStr.sample.value
         val contactName = Gen.alphaNumStr.sample.value
-        val address = arbitrary[Address].sample.value
+        val address     = arbitrary[Address].sample.value
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriYesNoPage)(false)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(AddressPage)(address)
           .unsafeSetVal(AddContactPage)(true)
           .unsafeSetVal(ContactNamePage)(contactName)
-          .unsafeSetVal(AddressPage)(address)
 
         val expectedResult = HolderOfTransitDomain(
           eori = None,
@@ -65,8 +65,8 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
           .unsafeSetVal(EoriYesNoPage)(true)
           .unsafeSetVal(EoriPage)(eori.value)
           .unsafeSetVal(NamePage)(name)
-          .unsafeSetVal(AddContactPage)(false)
           .unsafeSetVal(AddressPage)(address)
+          .unsafeSetVal(AddContactPage)(false)
 
         val expectedResult = HolderOfTransitDomain(
           eori = Some(eori),
@@ -96,11 +96,13 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
 
       "when answered yes to AddContact but no contact name provided" in {
 
-        val name = Gen.alphaNumStr.sample.value
+        val name    = Gen.alphaNumStr.sample.value
+        val address = arbitrary[Address].sample.value
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriYesNoPage)(false)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(AddressPage)(address)
           .unsafeSetVal(AddContactPage)(true)
 
         val result: EitherType[HolderOfTransitDomain] = UserAnswersReader[HolderOfTransitDomain].run(userAnswers)
