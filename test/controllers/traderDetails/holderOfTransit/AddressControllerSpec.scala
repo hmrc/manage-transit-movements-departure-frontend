@@ -17,71 +17,82 @@
 package controllers.traderDetails.holderOfTransit
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.EoriNumberFormProvider
-import models.{NormalMode, UserAnswers}
+import forms.AddressFormProvider
+import models.{Address, NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
-import pages.traderDetails.holderOfTransit.EoriPage
+import pages.traderDetails.holderOfTransit.{AddressPage, NamePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.traderDetails.holderOfTransit.EoriView
+import views.html.traderDetails.holderOfTransit.AddressView
 
 import scala.concurrent.Future
 
-class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
+class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
-  private val formProvider                = new EoriNumberFormProvider()
-  private val form                        = formProvider("traderDetails.holderOfTransit.eori")
-  private val mode                        = NormalMode
-  private lazy val transitHolderEoriRoute = routes.EoriController.onPageLoad(lrn, mode).url
-
-  private lazy val validAnswer = eoriNumber.value
+  private val addressHolderName = Gen.alphaNumStr.sample.value
+  private val testAddress       = Address("buildingAndStreet", "city", "NE99 1XN")
+  private val formProvider      = new AddressFormProvider()
+  private val form              = formProvider("traderDetails.holderOfTransit.address", addressHolderName)
+  private val mode              = NormalMode
+  private lazy val addressRoute = routes.AddressController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
 
-  "Eori Controller" - {
+  "Address Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.setValue(NamePage, addressHolderName)
+      setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, transitHolderEoriRoute)
+      val request = FakeRequest(GET, addressRoute)
       val result  = route(app, request).value
 
-      val view = injector.instanceOf[EoriView]
+      val view = injector.instanceOf[AddressView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode)(request, messages).toString
+        view(form, lrn, mode, addressHolderName)(request, messages).toString
 
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(EoriPage, validAnswer).success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber)
+        .setValue(NamePage, addressHolderName)
+        .setValue(AddressPage, testAddress)
+
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, transitHolderEoriRoute)
+      val request = FakeRequest(GET, addressRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> validAnswer))
+      val filledForm = form.bind(
+        Map(
+          "numberAndStreet" -> testAddress.line1,
+          "town"            -> testAddress.line2,
+          "postcode"        -> testAddress.postcode
+        )
+      )
 
-      val view = injector.instanceOf[EoriView]
+      val view = injector.instanceOf[AddressView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
+        view(filledForm, lrn, mode, addressHolderName)(request, messages).toString
 
     }
 
@@ -89,10 +100,15 @@ class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with M
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.setValue(NamePage, addressHolderName)
+      setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(POST, transitHolderEoriRoute)
-        .withFormUrlEncodedBody(("value", validAnswer))
+      val request = FakeRequest(POST, addressRoute)
+        .withFormUrlEncodedBody(
+          ("numberAndStreet", testAddress.line1),
+          ("town", testAddress.line2),
+          ("postcode", testAddress.postcode)
+        )
 
       val result = route(app, request).value
 
@@ -104,19 +120,20 @@ class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with M
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.setValue(NamePage, addressHolderName)
+      setExistingUserAnswers(userAnswers)
 
-      val request   = FakeRequest(POST, transitHolderEoriRoute).withFormUrlEncodedBody(("value", ""))
+      val request   = FakeRequest(POST, addressRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[EoriView]
+      val view = injector.instanceOf[AddressView]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, mode)(request, messages).toString
+        view(boundForm, lrn, mode, addressHolderName)(request, messages).toString
 
     }
 
@@ -124,7 +141,7 @@ class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with M
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, transitHolderEoriRoute)
+      val request = FakeRequest(GET, addressRoute)
 
       val result = route(app, request).value
 
@@ -138,8 +155,7 @@ class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with M
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, transitHolderEoriRoute)
-        .withFormUrlEncodedBody(("value", "true"))
+      val request = FakeRequest(POST, addressRoute)
 
       val result = route(app, request).value
 

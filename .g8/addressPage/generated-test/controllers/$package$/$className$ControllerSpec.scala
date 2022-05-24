@@ -66,8 +66,8 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       val filledForm = form.bind(
         Map(
-          "buildingAndStreet" -> testAddress.buildingAndStreet,
-          "city"              -> testAddress.city,
+          "buildingAndStreet" -> testAddress.line1,
+          "city"              -> testAddress.line2,
           "postcode"          -> testAddress.postcode
         )
       )
@@ -91,8 +91,8 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       val request =
         FakeRequest(POST, $className;format="decap"$Route)
           .withFormUrlEncodedBody(
-            ("buildingAndStreet", testAddress.buildingAndStreet),
-            ("city", testAddress.city),
+            ("buildingAndStreet", testAddress.line1),
+            ("city", testAddress.line2),
             ("postcode", testAddress.postcode)
       )
 

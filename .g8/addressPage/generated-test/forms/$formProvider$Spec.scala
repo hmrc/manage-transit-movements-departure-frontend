@@ -46,7 +46,7 @@ class $formProvider$Spec extends StringFieldBehaviours with SpecBase {
         list <- Gen.listOfN(num, Gen.alphaNumChar)
       } yield list.mkString("")
 
-      val args = Seq(Address.Constants.Fields.buildingAndStreetName, addressHolderName)
+      val args = Seq(Address.Constants.Fields.buildingAndStreet, addressHolderName)
 
       behave like fieldThatBindsValidData(
         form,
@@ -70,7 +70,7 @@ class $formProvider$Spec extends StringFieldBehaviours with SpecBase {
 
       "must not bind strings that do not match regex" in {
         val fieldName = "buildingAndStreet"
-        val args      = Seq(Address.Constants.Fields.buildingAndStreetName, addressHolderName)
+        val args      = Seq(Address.Constants.Fields.buildingAndStreet, addressHolderName)
 
         val generator: Gen[String] = RegexpGen.from("[!£^(){}_+=:;|`~,±<>éèâñüç]{" + Address.Constants.buildingAndStreetLength + "}")
         val expectedError          = FormError(fieldName, addressInvalidKey, args)

@@ -58,7 +58,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
       }
     }
 
-  def fieldWithInvalidCharacters(form: Form[_], fieldName: String, error: FormError): Unit =
+  def fieldWithInvalidCharacters(form: Form[_], fieldName: String, error: FormError, length: Int = 100): Unit =
     "must not bind strings with invalid characters" in {
 
       val generator: Gen[String] = RegexpGen.from(s"[!£^*(){}_+=:;|`~<>,±üçñèé]{$length}")

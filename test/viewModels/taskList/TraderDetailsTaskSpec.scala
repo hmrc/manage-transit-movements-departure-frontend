@@ -21,7 +21,7 @@ import controllers.routes
 import controllers.traderDetails.holderOfTransit.{routes => holderOfTransitRoutes}
 import generators.Generators
 import models.DeclarationType.Option4
-import models.{DeclarationType, NormalMode}
+import models.{Address, DeclarationType, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -138,6 +138,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
           .setValue(EoriYesNoPage, true)
           .setValue(EoriPage, eoriNumber.value)
           .setValue(NamePage, Gen.alphaNumStr.sample.value)
+          .setValue(AddressPage, arbitrary[Address].sample.value)
 
         val task = TraderDetailsTask(userAnswers)
         task.status mustBe Completed
@@ -148,6 +149,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
         val userAnswers = emptyUserAnswers
           .setValue(EoriYesNoPage, false)
           .setValue(NamePage, Gen.alphaNumStr.sample.value)
+          .setValue(AddressPage, arbitrary[Address].sample.value)
 
         val task = TraderDetailsTask(userAnswers)
         task.status mustBe Completed

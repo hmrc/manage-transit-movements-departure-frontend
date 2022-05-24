@@ -19,8 +19,8 @@ package models.journeyDomain.traderDetails
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
-import models.EoriNumber
 import models.domain.{EitherType, UserAnswersReader}
+import models.{Address, EoriNumber}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.traderDetails.holderOfTransit._
@@ -32,15 +32,18 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
     "can be parsed from UserAnswers" - {
 
       "when holder has no eori" in {
-        val name = Gen.alphaNumStr.sample.value
+        val name    = Gen.alphaNumStr.sample.value
+        val address = arbitrary[Address].sample.value
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriYesNoPage)(false)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(AddressPage)(address)
 
         val expectedResult = HolderOfTransitDomain(
           eori = None,
-          name = name
+          name = name,
+          address = address
         )
 
         val result: EitherType[HolderOfTransitDomain] = UserAnswersReader[HolderOfTransitDomain].run(userAnswers)
@@ -50,17 +53,20 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
 
       "when holder has an eori" in {
 
-        val eori = arbitrary[EoriNumber].sample.value
-        val name = Gen.alphaNumStr.sample.value
+        val eori    = arbitrary[EoriNumber].sample.value
+        val name    = Gen.alphaNumStr.sample.value
+        val address = arbitrary[Address].sample.value
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriYesNoPage)(true)
           .unsafeSetVal(EoriPage)(eori.value)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(AddressPage)(address)
 
         val expectedResult = HolderOfTransitDomain(
           eori = Some(eori),
-          name = name
+          name = name,
+          address = address
         )
 
         val result: EitherType[HolderOfTransitDomain] = UserAnswersReader[HolderOfTransitDomain].run(userAnswers)

@@ -20,12 +20,17 @@ import models._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 import pages.preTaskList._
-import pages.traderDetails.holderOfTransit
-import pages.traderDetails.holderOfTransit.EoriYesNoPage
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators {
   self: Generators =>
+
+  implicit lazy val arbitraryAddressUserAnswersEntry: Arbitrary[(pages.traderDetails.holderOfTransit.AddressPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[pages.traderDetails.holderOfTransit.AddressPage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.holderOfTransit.AddressPage, value)
+    }
 
   implicit lazy val arbitraryNameUserAnswersEntry: Arbitrary[(pages.traderDetails.holderOfTransit.NamePage.type, JsValue)] =
     Arbitrary {
@@ -41,11 +46,18 @@ trait UserAnswersEntryGenerators {
       } yield (pages.traderDetails.holderOfTransit.AddContactPage, value)
     }
 
-  implicit lazy val arbitraryTransitHolderEoriYesNoUserAnswersEntry: Arbitrary[(EoriYesNoPage.type, JsValue)] =
+  implicit lazy val arbitraryTransitHolderEoriUserAnswersEntry: Arbitrary[(pages.traderDetails.holderOfTransit.EoriPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[EoriYesNoPage.type#Data].map(Json.toJson(_))
-      } yield (holderOfTransit.EoriYesNoPage, value)
+        value <- arbitrary[pages.traderDetails.holderOfTransit.EoriPage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.holderOfTransit.EoriPage, value)
+    }
+
+  implicit lazy val arbitraryTransitHolderEoriYesNoUserAnswersEntry: Arbitrary[(pages.traderDetails.holderOfTransit.EoriYesNoPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[pages.traderDetails.holderOfTransit.EoriYesNoPage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.holderOfTransit.EoriYesNoPage, value)
     }
 
   implicit lazy val arbitraryProcedureTypeUserAnswersEntry: Arbitrary[(ProcedureTypePage.type, JsValue)] =

@@ -16,26 +16,30 @@
 
 package models
 
+import play.api.i18n.Messages
 import play.api.libs.json._
 
 import scala.util.matching.Regex
 
-case class Address(buildingAndStreet: String, city: String, postcode: String)
+case class Address(line1: String, line2: String, postcode: String)
 
 object Address {
 
   object Constants {
     val buildingAndStreetLength = 35
+    val numberAndStreetLength   = 35
     val cityLength              = 35
-    val postcodeLength          = 9
+    val townLength              = 35
 
     lazy val postCodeRegex: Regex       = "^[a-zA-Z\\s*0-9]*$".r
     lazy val postCodeFormatRegex: Regex = "^[a-zA-Z]{1,2}([0-9]{1,2}|[0-9][a-zA-Z])\\s*[0-9][a-zA-Z]{2}$".r
 
     object Fields {
-      val buildingAndStreetName = "building and street name"
-      val city                  = "city"
-      val postcode              = "postcode"
+      def buildingAndStreet(implicit messages: Messages): String = messages("address.buildingAndStreet")
+      def numberAndStreet(implicit messages: Messages): String   = messages("address.numberAndStreet")
+      def city(implicit messages: Messages): String              = messages("address.city")
+      def town(implicit messages: Messages): String              = messages("address.town")
+      def postcode(implicit messages: Messages): String          = messages("address.postcode")
     }
   }
 
