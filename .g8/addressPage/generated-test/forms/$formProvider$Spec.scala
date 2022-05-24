@@ -16,28 +16,26 @@
 
 package forms
 
-import base.SpecBase
 import forms.behaviours.StringFieldBehaviours
 import models.Address.Constants.Fields._
 import models.Address.Constants._
 import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
 
 class $formProvider$Spec extends StringFieldBehaviours with SpecBase {
 
   private val prefix            = Gen.alphaNumStr.sample.value
-  private val addressHolderName = "addressHolder"
+  private val addressHolderName = Gen.alphaNumStr.sample.value
   
   private val form = new $formProvider$()(prefix, addressHolderName)
 
-  private val requiredKey                 = s"\$prefix.error.required"
-  private val addressLengthKey            = s"\$prefix.error.length"
-  private val addressInvalidKey           = s"\$prefix.error.invalid"
-  private val requiredKey         = s"\$prefix.error.postcode.required"
-  private val postcodeLengthKey           = s"\$prefix.error.postcode.length"
-  private val postcodeInvalidKey          = s"\$prefix.error.postcode.invalid"
-  private val postcodeInvalidFormatKey    = s"\$prefix.error.postcode.invalidFormat"
+  private val requiredKey              = s"\$prefix.error.required"
+  private val addressLengthKey         = s"\$prefix.error.length"
+  private val addressInvalidKey        = s"\$prefix.error.invalid"
+  private val requiredKey              = s"\$prefix.error.postcode.required"
+  private val postcodeLengthKey        = s"\$prefix.error.postcode.length"
+  private val postcodeInvalidKey       = s"\$prefix.error.postcode.invalid"
+  private val postcodeInvalidFormatKey = s"\$prefix.error.postcode.invalidFormat"
 
   ".value" - {
 

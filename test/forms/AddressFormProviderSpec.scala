@@ -26,8 +26,8 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
-  private val addressHolderName = "addressHolder"
   private val prefix            = Gen.alphaNumStr.sample.value
+  private val addressHolderName = Gen.alphaNumStr.sample.value
 
   private val form = new AddressFormProvider()(prefix, addressHolderName)
 
