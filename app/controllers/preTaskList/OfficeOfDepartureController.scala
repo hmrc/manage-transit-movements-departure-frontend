@@ -18,6 +18,7 @@ package controllers.preTaskList
 
 import controllers.actions._
 import forms.preTaskList.OfficeOfDepartureFormProvider
+import models.journeyDomain.PreTaskListDomain
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
@@ -37,6 +38,7 @@ class OfficeOfDepartureController @Inject() (
   sessionRepository: SessionRepository,
   @PreTaskListDetails navigator: Navigator,
   actions: Actions,
+  checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   formProvider: OfficeOfDepartureFormProvider,
   customsOfficesService: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
@@ -45,39 +47,45 @@ class OfficeOfDepartureController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      customsOfficesService.getCustomsOfficesOfDeparture.map {
-        customsOfficeList =>
-          val form = formProvider(customsOfficeList)
-          val preparedForm = request.userAnswers
-            .get(OfficeOfDeparturePage)
-            .flatMap(
-              x => customsOfficeList.getCustomsOffice(x.id)
-            )
-            .map(form.fill)
-            .getOrElse(form)
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+    .async {
+      implicit request =>
+        customsOfficesService.getCustomsOfficesOfDeparture.map {
+          customsOfficeList =>
+            val form = formProvider(customsOfficeList)
+            val preparedForm = request.userAnswers
+              .get(OfficeOfDeparturePage)
+              .flatMap(
+                x => customsOfficeList.getCustomsOffice(x.id)
+              )
+              .map(form.fill)
+              .getOrElse(form)
 
-          Ok(view(preparedForm, lrn, customsOfficeList.customsOffices, mode))
-      }
-  }
+            Ok(view(preparedForm, lrn, customsOfficeList.customsOffices, mode))
+        }
+    }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      customsOfficesService.getCustomsOfficesOfDeparture.flatMap {
-        customsOfficeList =>
-          val form = formProvider(customsOfficeList)
-          form
-            .bindFromRequest()
-            .fold(
-              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
-              value =>
-                for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(OfficeOfDeparturePage, value))
-                  _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(OfficeOfDeparturePage, mode, updatedAnswers))
-            )
-      }
-  }
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+    .async {
+      implicit request =>
+        customsOfficesService.getCustomsOfficesOfDeparture.flatMap {
+          customsOfficeList =>
+            val form = formProvider(customsOfficeList)
+            form
+              .bindFromRequest()
+              .fold(
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
+                value =>
+                  for {
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(OfficeOfDeparturePage, value))
+                    _              <- sessionRepository.set(updatedAnswers)
+                  } yield Redirect(navigator.nextPage(OfficeOfDeparturePage, mode, updatedAnswers))
+              )
+        }
+    }
 
 }

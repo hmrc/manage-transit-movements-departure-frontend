@@ -99,6 +99,15 @@ package object domain {
           }
       )
 
+    def mandatoryReader(predicate: A => Boolean)(implicit reads: Reads[A]): UserAnswersReader[A] =
+      ReaderT[EitherType, UserAnswers, A](
+        x =>
+          x.get(a) match {
+            case Some(value) if predicate(value) => Right(value)
+            case _                               => Left(ReaderError(a))
+          }
+      )
+
     def optionalReader(implicit reads: Reads[A]): UserAnswersReader[Option[A]] =
       ReaderT[EitherType, UserAnswers, Option[A]](
         x => Right(x.get(a))

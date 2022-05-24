@@ -86,7 +86,7 @@ declarationType.TIR = TIR (goods moving under the cover of TIR Carnet)
 declarationType.T = T (mixed consignments, for goods originating inside and outside the European Union)
 declarationType.paragraph = For mixed consignments, you will need to create separate T1 and T2 declarations.
 declarationType.checkYourAnswersLabel = Type of declaration
-declarationType.error.required = Select the declaration you want to create
+declarationType.error.required = Select the type of declaration you want to create
 declarationType.change.hidden = type of declaration
 
 tirCarnetReference.title = What is the TIR carnet reference?
@@ -97,14 +97,14 @@ tirCarnetReference.error.maxLength = The TIR carnet reference must be 12 charact
 tirCarnetReference.error.invalidCharacters = The TIR carnet reference must only include letters a to z and numbers 0 to 9
 tirCarnetReference.change.hidden = TIR carnet reference
 
-securityDetailsType.title = Select which type of safety and security details you need to add
-securityDetailsType.heading = Select which type of safety and security details you need to add
+securityDetailsType.title = What type of safety and security details do you need to add?
+securityDetailsType.heading = What type of safety and security details do you need to add?
 securityDetailsType.noSecurity = No security
 securityDetailsType.entrySummaryDeclaration = Entry summary declaration (ENS)
 securityDetailsType.exitSummaryDeclaration = Exit summary declaration (EXS)
 securityDetailsType.entryAndExitSummaryDeclaration = Both entry and exit summary declarations (ENS and EXS)
 securityDetailsType.checkYourAnswersLabel = Safety and security details added
-securityDetailsType.error.required = Select the type of safety and security details you need to add
+securityDetailsType.error.required = Select which type of safety and security details you need to add
 securityDetailsType.checkYourAnswersLabel = Safety and security details added
 securityDetailsType.change.hidden = safety and security details added
 

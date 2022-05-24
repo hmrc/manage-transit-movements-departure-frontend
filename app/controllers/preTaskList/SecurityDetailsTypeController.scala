@@ -18,6 +18,7 @@ package controllers.preTaskList
 
 import controllers.actions._
 import forms.preTaskList.SecurityDetailsFormProvider
+import models.journeyDomain.PreTaskListDomain
 import models.{LocalReferenceNumber, Mode, SecurityDetailsType}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
@@ -35,9 +36,8 @@ class SecurityDetailsTypeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @PreTaskListDetails navigator: Navigator,
-  identify: IdentifierAction,
-  getData: DataRetrievalActionProvider,
-  requireData: DataRequiredAction,
+  actions: Actions,
+  checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   formProvider: SecurityDetailsFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: SecurityDetailsTypeView
@@ -47,27 +47,32 @@ class SecurityDetailsTypeController @Inject() (
 
   private val form = formProvider()
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(SecurityDetailsTypePage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain]) {
+      implicit request =>
+        val preparedForm = request.userAnswers.get(SecurityDetailsTypePage) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
 
-      Ok(view(preparedForm, SecurityDetailsType.radioItems, lrn, mode))
-  }
+        Ok(view(preparedForm, SecurityDetailsType.radioItems, lrn, mode))
+    }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, SecurityDetailsType.radioItems, lrn, mode))),
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(SecurityDetailsTypePage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(SecurityDetailsTypePage, mode, updatedAnswers))
-        )
-  }
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+    .async {
+      implicit request =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, SecurityDetailsType.radioItems, lrn, mode))),
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(SecurityDetailsTypePage, value))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(SecurityDetailsTypePage, mode, updatedAnswers))
+          )
+    }
 }

@@ -38,7 +38,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
       "when a TIR declaration" in {
 
-        val securityDetails = Gen.oneOf(SecurityDetailsType.values).sample.value
+        val securityDetails  = Gen.oneOf(SecurityDetailsType.values).sample.value
+        val detailsConfirmed = true
 
         val tirUserAnswers = emptyUserAnswers
           .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
@@ -46,6 +47,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
           .unsafeSetVal(DeclarationTypePage)(Option4)
           .unsafeSetVal(TIRCarnetReferencePage)("tirCarnetReference")
+          .unsafeSetVal(DetailsConfirmedPage)(detailsConfirmed)
 
         val expectedResult = PreTaskListDomain(
           emptyUserAnswers.lrn,
@@ -53,7 +55,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           Normal,
           Option4,
           Some("tirCarnetReference"),
-          securityDetails
+          securityDetails,
+          detailsConfirmed
         )
 
         val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
@@ -61,17 +64,19 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
         result.value mustBe expectedResult
       }
 
-      "when a none TIR declaration" in {
+      "when a non-TIR declaration" in {
 
-        val procedureType   = Gen.oneOf(ProcedureType.values).sample.value
-        val declarationType = Gen.oneOf(Option1, Option2, Option3, Option5).sample.value
-        val securityDetails = Gen.oneOf(SecurityDetailsType.values).sample.value
+        val procedureType    = Gen.oneOf(ProcedureType.values).sample.value
+        val declarationType  = Gen.oneOf(Option1, Option2, Option3, Option5).sample.value
+        val securityDetails  = Gen.oneOf(SecurityDetailsType.values).sample.value
+        val detailsConfirmed = true
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
           .unsafeSetVal(ProcedureTypePage)(procedureType)
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
           .unsafeSetVal(DeclarationTypePage)(declarationType)
+          .unsafeSetVal(DetailsConfirmedPage)(detailsConfirmed)
 
         val expectedResult = PreTaskListDomain(
           emptyUserAnswers.lrn,
@@ -79,7 +84,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           procedureType,
           declarationType,
           None,
-          securityDetails
+          securityDetails,
+          detailsConfirmed
         )
 
         val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(userAnswers)
@@ -106,13 +112,50 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
         result.left.value.page mustBe TIRCarnetReferencePage
       }
 
+      "when details not confirmed" - {
+
+        "when false" in {
+          val procedureType   = Gen.oneOf(ProcedureType.values).sample.value
+          val declarationType = Gen.oneOf(Option1, Option2, Option3, Option5).sample.value
+          val securityDetails = Gen.oneOf(SecurityDetailsType.values).sample.value
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
+            .unsafeSetVal(ProcedureTypePage)(procedureType)
+            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
+            .unsafeSetVal(DeclarationTypePage)(declarationType)
+            .unsafeSetVal(DetailsConfirmedPage)(false)
+
+          val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(userAnswers)
+
+          result.left.value.page mustBe DetailsConfirmedPage
+        }
+
+        "when undefined" in {
+          val procedureType   = Gen.oneOf(ProcedureType.values).sample.value
+          val declarationType = Gen.oneOf(Option1, Option2, Option3, Option5).sample.value
+          val securityDetails = Gen.oneOf(SecurityDetailsType.values).sample.value
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
+            .unsafeSetVal(ProcedureTypePage)(procedureType)
+            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
+            .unsafeSetVal(DeclarationTypePage)(declarationType)
+
+          val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(userAnswers)
+
+          result.left.value.page mustBe DetailsConfirmedPage
+        }
+      }
+
       "when any other mandatory page is missing" in {
 
         val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
           OfficeOfDeparturePage,
           ProcedureTypePage,
           SecurityDetailsTypePage,
-          DeclarationTypePage
+          DeclarationTypePage,
+          DetailsConfirmedPage
         )
 
         val userAnswers = emptyUserAnswers
@@ -120,6 +163,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(ProcedureTypePage)(Normal)
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(DeclarationTypePage)(Option1)
+          .unsafeSetVal(DetailsConfirmedPage)(true)
 
         forAll(mandatoryPages) {
           mandatoryPage =>

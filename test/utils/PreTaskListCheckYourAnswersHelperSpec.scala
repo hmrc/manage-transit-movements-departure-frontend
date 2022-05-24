@@ -43,7 +43,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
             val result = helper.localReferenceNumber
 
             result mustBe SummaryListRow(
-              key = Key("Local reference number (LRN)".toText, classes = "govuk-!-width-one-half"),
+              key = Key("Local reference number (LRN)".toText),
               value = Value(s"$lrn".toText),
               actions = Some(
                 Actions(
@@ -85,7 +85,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Office of departure".toText, classes = "govuk-!-width-one-half"),
+                  key = Key("Office of departure".toText),
                   value = Value(s"$customsOffice".toText),
                   actions = Some(
                     Actions(
@@ -129,7 +129,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Type of procedure".toText, classes = "govuk-!-width-one-half"),
+                  key = Key("Type of procedure".toText),
                   value = Value(messages(s"procedureType.$procedureType").toText),
                   actions = Some(
                     Actions(
@@ -173,7 +173,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Type of declaration".toText, classes = "govuk-!-width-one-half"),
+                  key = Key("Type of declaration".toText),
                   value = Value(messages(s"declarationType.$declarationType").toText),
                   actions = Some(
                     Actions(
@@ -217,7 +217,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("TIR carnet reference".toText, classes = "govuk-!-width-one-half"),
+                  key = Key("TIR carnet reference".toText),
                   value = Value(tirCarnetReference.toText),
                   actions = Some(
                     Actions(
@@ -261,7 +261,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Safety and security details added".toText, classes = "govuk-!-width-one-half"),
+                  key = Key("Safety and security details added".toText),
                   value = Value(messages(s"securityDetailsType.$securityDetailsType").toText),
                   actions = Some(
                     Actions(

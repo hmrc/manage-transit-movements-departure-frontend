@@ -18,9 +18,12 @@ package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
+import models.UserAnswers
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, when}
 import org.scalacheck.Arbitrary.arbitrary
+import pages.preTaskList.DetailsConfirmedPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -28,6 +31,8 @@ import play.api.test.Helpers._
 import viewModels.PreTaskListViewModel
 import viewModels.sections.Section
 import views.html.preTaskList.CheckYourAnswersView
+
+import scala.concurrent.Future
 
 class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
@@ -74,6 +79,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
     "must redirect to task list / declaration summary" in {
       setExistingUserAnswers(emptyUserAnswers)
 
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
       val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn).url)
 
       val result = route(app, request).value
@@ -81,6 +88,10 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
+
+      val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+      verify(mockSessionRepository).set(userAnswersCaptor.capture())
+      userAnswersCaptor.getValue.get(DetailsConfirmedPage).get mustBe true
     }
   }
 }

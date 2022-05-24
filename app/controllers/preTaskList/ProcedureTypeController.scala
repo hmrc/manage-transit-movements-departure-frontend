@@ -18,6 +18,7 @@ package controllers.preTaskList
 
 import controllers.actions._
 import forms.preTaskList.ProcedureTypeFormProvider
+import models.journeyDomain.PreTaskListDomain
 import models.{LocalReferenceNumber, Mode, ProcedureType}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
@@ -36,6 +37,7 @@ class ProcedureTypeController @Inject() (
   sessionRepository: SessionRepository,
   @PreTaskListDetails navigator: Navigator,
   actions: Actions,
+  checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   formProvider: ProcedureTypeFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ProcedureTypeView
@@ -45,27 +47,32 @@ class ProcedureTypeController @Inject() (
 
   private val form = formProvider()
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(ProcedureTypePage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain]) {
+      implicit request =>
+        val preparedForm = request.userAnswers.get(ProcedureTypePage) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
 
-      Ok(view(preparedForm, ProcedureType.radioItems, lrn, mode))
-  }
+        Ok(view(preparedForm, ProcedureType.radioItems, lrn, mode))
+    }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, ProcedureType.radioItems, lrn, mode))),
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(ProcedureTypePage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(ProcedureTypePage, mode, updatedAnswers))
-        )
-  }
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+    .async {
+      implicit request =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, ProcedureType.radioItems, lrn, mode))),
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(ProcedureTypePage, value))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(ProcedureTypePage, mode, updatedAnswers))
+          )
+    }
 }
