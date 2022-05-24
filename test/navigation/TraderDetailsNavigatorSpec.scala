@@ -106,6 +106,44 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
     }
 
+    "must go from TIR identification number Yes No page" - {
+      "when Yes selected" - {
+        "to TIR identification number page" ignore {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.setValue(TirIdentificationYesNoPage, true)
+              navigator
+                .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
+                .mustBe(???)
+          }
+        }
+      }
+
+      "when No selected" - {
+        "to NamePage" in {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.setValue(TirIdentificationYesNoPage, false)
+              navigator
+                .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
+                .mustBe(hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
+          }
+        }
+      }
+
+      "when nothing selected" - {
+        "to session expired" in {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.removeValue(TirIdentificationYesNoPage)
+              navigator
+                .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
+                .mustBe(routes.SessionExpiredController.onPageLoad())
+          }
+        }
+      }
+    }
+
     "must go from Name page to Address page" in {
       forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
         (answers, mode) =>
