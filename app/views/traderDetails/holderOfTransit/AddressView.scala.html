@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import controllers.traderDetails.holderOfTransit.routes
 @import models.LocalReferenceNumber
 @import views.html.components.{Button, ErrorSummary, InputAddress}
 
@@ -33,7 +34,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = controllers.traderDetails.holderOfTransit.routes.AddressController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.AddressController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 

@@ -18,16 +18,17 @@
 @import views.html.components.Heading
 
 @this(
-  mainTemplate: MainTemplate,
-  heading: Heading
+    mainTemplate: MainTemplate,
+    heading: Heading
 )
 
 @(lrn: LocalReferenceNumber)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-  title = messages("$package$.$className;format="decap"$.title"),
-  showBackLink = true,
-  lrn = Some(lrn)
+    title = messages("$package$.$className;format="decap"$.title"),
+    showBackLink = true,
+    lrn = Some(lrn)
 ) {
+
     @heading("$package$.$className;format="decap"$.heading")
 }
