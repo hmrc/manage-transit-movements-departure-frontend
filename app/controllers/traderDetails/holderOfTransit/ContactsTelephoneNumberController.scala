@@ -21,7 +21,7 @@ import forms.TelephoneNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
-import pages.traderDetails.holderOfTransit.{ContactsTelephoneNumberPage, NamePage}
+import pages.traderDetails.holderOfTransit.{ContactNamePage, ContactsTelephoneNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -45,7 +45,7 @@ class ContactsTelephoneNumberController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      request.userAnswers.get(NamePage) match {
+      request.userAnswers.get(ContactNamePage) match {
         case Some(name) =>
           val form = formProvider("traderDetails.holderOfTransit.contactsTelephoneNumber", name)
           val preparedForm = request.userAnswers.get(ContactsTelephoneNumberPage) match {
@@ -60,7 +60,7 @@ class ContactsTelephoneNumberController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      request.userAnswers.get(NamePage) match {
+      request.userAnswers.get(ContactNamePage) match {
         case Some(name) =>
           val form = formProvider("traderDetails.holderOfTransit.contactsTelephoneNumber", name)
           form

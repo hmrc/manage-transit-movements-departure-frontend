@@ -89,7 +89,7 @@ trait ModelGenerators {
       for {
         buildingAndStreet <- stringsWithMaxLength(Address.Constants.buildingAndStreetLength, Gen.alphaChar)
         city              <- stringsWithMaxLength(Address.Constants.cityLength, Gen.alphaChar)
-        postcode          <- stringsWithMaxLength(Address.Constants.postcodeLength, Gen.alphaChar)
+        postcode          <- stringsThatMatchRegex(Address.Constants.postCodeFormatRegex)
       } yield Address(buildingAndStreet, city, postcode)
     }
 

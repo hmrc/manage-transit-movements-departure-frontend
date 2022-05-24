@@ -16,11 +16,13 @@
 
 package views.utils
 
-import play.api.data.{Form, FormError}
+import play.api.data.{Field, Form, FormError}
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.implicits._
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Content
+import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 import uk.gov.hmrc.hmrcfrontend.views.implicits.RichErrorSummarySupport
 
 import java.time.LocalDate
@@ -95,6 +97,16 @@ object ViewUtils {
       }
       errorSummary.withFormErrorsAsText(form, mapping = Map(fieldName -> s"${fieldName}_$arg"))
     }
+  }
+
+  implicit class FieldsetImplicits(fieldset: Fieldset)(implicit val messages: Messages) extends ImplicitsSupport[Fieldset] {
+    override def withFormField(field: Field): Fieldset                = fieldset
+    override def withFormFieldWithErrorAsHtml(field: Field): Fieldset = fieldset
+
+    def withHeadingAndCaption(heading: Content, caption: Content): Fieldset =
+      withHeadingLegend(fieldset, heading, Some(caption))(
+        (ip, ul) => ip.copy(legend = Some(ul))
+      )
   }
 
 }

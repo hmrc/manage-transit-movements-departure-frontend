@@ -37,7 +37,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
     reset(mockUserAnswersService)
   }
 
-  "$package$.$className$ Controller" - {
+  "$className$ Controller" - {
 
     "must return OK and the correct view for a GET" in {
 

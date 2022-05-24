@@ -32,8 +32,13 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
   override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(CheckMode)
 
   private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case EoriYesNoPage => ua => eoriYesNoRoute(ua, mode)
-    case EoriPage      => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, mode))
+    case EoriYesNoPage              => ua => eoriYesNoRoute(ua, mode)
+    case EoriPage                   => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, mode))
+    case TirIdentificationYesNoPage => ua => tirIdentificationYesNoRoute(ua, mode)
+    case NamePage                   => ua => Some(hotRoutes.AddressController.onPageLoad(ua.lrn, mode))
+    case AddressPage                => ua => Some(hotRoutes.AddContactController.onPageLoad(ua.lrn, mode))
+    case AddContactPage             => ua => addContactRoute(ua, mode)
+    case ContactNamePage            => ua => ??? // TODO to route to contact telephone number page when built
   }
 
   private def eoriYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
@@ -43,4 +48,21 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
       case None        => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
+
+  private def tirIdentificationYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
+    userAnswers.get(TirIdentificationYesNoPage) match {
+      case Some(true)  => ??? // TODO - redirect to TIR identification number page
+      case Some(false) => hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
+      case None        => controllers.routes.SessionExpiredController.onPageLoad()
+    }
+  }
+
+  private def addContactRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
+    userAnswers.get(AddContactPage) match {
+      case Some(true)  => ??? //TODO - redirect to HoT contact person name page once built
+      case Some(false) => ??? //TODO - redirect to relevant page once built
+      case None        => controllers.routes.SessionExpiredController.onPageLoad()
+    }
+  }
+
 }

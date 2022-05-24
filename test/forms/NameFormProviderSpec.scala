@@ -57,7 +57,8 @@ class NameFormProviderSpec extends StringFieldBehaviours {
     behave like fieldWithInvalidCharacters(
       form,
       fieldName,
-      error = FormError(fieldName, invalidKey, Seq(stringFieldRegex.regex))
+      error = FormError(fieldName, invalidKey, Seq(stringFieldRegex.regex)),
+      maxNameLength
     )
   }
 }

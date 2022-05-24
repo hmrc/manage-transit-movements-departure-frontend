@@ -47,7 +47,7 @@ class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with M
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
 
-  "EoriY Controller" - {
+  "Eori Controller" - {
 
     "must return OK and the correct view for a GET" in {
 

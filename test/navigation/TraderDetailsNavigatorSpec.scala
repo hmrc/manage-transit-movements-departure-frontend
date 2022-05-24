@@ -105,5 +105,100 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             .mustBe(hotRoutes.NameController.onPageLoad(answers.lrn, mode))
       }
     }
+
+    "must go from TIR identification number Yes No page" - {
+      "when Yes selected" - {
+        "to TIR identification number page" ignore {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.setValue(TirIdentificationYesNoPage, true)
+              navigator
+                .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
+                .mustBe(???)
+          }
+        }
+      }
+
+      "when No selected" - {
+        "to NamePage" in {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.setValue(TirIdentificationYesNoPage, false)
+              navigator
+                .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
+                .mustBe(hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
+          }
+        }
+      }
+
+      "when nothing selected" - {
+        "to session expired" in {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.removeValue(TirIdentificationYesNoPage)
+              navigator
+                .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
+                .mustBe(routes.SessionExpiredController.onPageLoad())
+          }
+        }
+      }
+    }
+
+    "must go from Name page to Address page" in {
+      forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+        (answers, mode) =>
+          navigator
+            .nextPage(NamePage, mode, answers)
+            .mustBe(hotRoutes.AddressController.onPageLoad(answers.lrn, mode))
+      }
+    }
+
+    "must go from Address page to Add Contact page" in {
+      forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+        (answers, mode) =>
+          navigator
+            .nextPage(AddressPage, mode, answers)
+            .mustBe(hotRoutes.AddContactController.onPageLoad(answers.lrn, mode))
+      }
+    }
+
+    "must go from Transit Holder Add Contact page" - {
+      //TODO - add nav test for true and false outcomes
+      "when Yes selected" - {
+        "???" ignore {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.setValue(AddContactPage, true)
+              navigator
+                .nextPage(AddContactPage, mode, userAnswers)
+                .mustBe(hotRoutes.AddContactController.onPageLoad(userAnswers.lrn, mode))
+          }
+        }
+      }
+
+      "when No selected" - {
+        "to ???" ignore {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.setValue(AddContactPage, false)
+              navigator
+                .nextPage(AddContactPage, mode, userAnswers)
+                .mustBe(hotRoutes.AddContactController.onPageLoad(userAnswers.lrn, mode))
+          }
+        }
+      }
+
+      "when nothing selected" - {
+        "to session expired" in {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.removeValue(AddContactPage)
+              navigator
+                .nextPage(AddContactPage, mode, userAnswers)
+                .mustBe(routes.SessionExpiredController.onPageLoad())
+          }
+        }
+      }
+    }
   }
 }

@@ -28,7 +28,7 @@ import play.api.test.Helpers._
 import forms.TelephoneNumberFormProvider
 import views.html.traderDetails.holderOfTransit.ContactsTelephoneNumberView
 import services.UserAnswersService
-import pages.traderDetails.holderOfTransit.{ContactsTelephoneNumberPage, NamePage}
+import pages.traderDetails.holderOfTransit.{ContactNamePage, ContactsTelephoneNumberPage}
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
 
@@ -59,7 +59,7 @@ class ContactsTelephoneNumberControllerSpec extends SpecBase with AppWithDefault
   "traderDetails.holderOfTransit.ContactsTelephoneNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val userAnswers = emptyUserAnswers.setValue(NamePage, holderName)
+      val userAnswers = emptyUserAnswers.setValue(ContactNamePage, holderName)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, contactsTelephoneNumberRoute)
@@ -77,7 +77,7 @@ class ContactsTelephoneNumberControllerSpec extends SpecBase with AppWithDefault
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
       val userAnswers = UserAnswers(lrn, eoriNumber)
-        .setValue(NamePage, holderName)
+        .setValue(ContactNamePage, holderName)
         .set(ContactsTelephoneNumberPage, validAnswer)
         .success
         .value
@@ -100,7 +100,7 @@ class ContactsTelephoneNumberControllerSpec extends SpecBase with AppWithDefault
     }
 
     "must redirect to the next page when valid data is submitted" in {
-      val userAnswers = emptyUserAnswers.setValue(NamePage, holderName)
+      val userAnswers = emptyUserAnswers.setValue(ContactNamePage, holderName)
       setExistingUserAnswers(userAnswers)
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
@@ -117,7 +117,7 @@ class ContactsTelephoneNumberControllerSpec extends SpecBase with AppWithDefault
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      val userAnswers = emptyUserAnswers.setValue(NamePage, holderName)
+      val userAnswers = emptyUserAnswers.setValue(ContactNamePage, holderName)
       setExistingUserAnswers(userAnswers)
 
       val invalidAnswer = ""

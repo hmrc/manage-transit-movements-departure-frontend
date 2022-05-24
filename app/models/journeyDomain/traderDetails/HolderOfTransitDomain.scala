@@ -17,13 +17,15 @@
 package models.journeyDomain.traderDetails
 
 import cats.implicits._
-import models.EoriNumber
 import models.domain._
+import models.{Address, EoriNumber}
 import pages.traderDetails.holderOfTransit._
 
 case class HolderOfTransitDomain(
   eori: Option[EoriNumber],
-  name: String
+  name: String,
+  address: Address,
+  contactName: Option[String]
 )
 
 object HolderOfTransitDomain {
@@ -32,9 +34,15 @@ object HolderOfTransitDomain {
     EoriYesNoPage
       .filterOptionalDependent(identity)(EoriPage.reader.map(EoriNumber(_)))
 
+  private val contactName: UserAnswersReader[Option[String]] =
+    AddContactPage
+      .filterOptionalDependent(identity)(ContactNamePage.reader)
+
   implicit val userAnswersReader: UserAnswersReader[HolderOfTransitDomain] =
     (
       eori,
-      NamePage.reader
+      NamePage.reader,
+      AddressPage.reader,
+      contactName
     ).tupled.map((HolderOfTransitDomain.apply _).tupled)
 }

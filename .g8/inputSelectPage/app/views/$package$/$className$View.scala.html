@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import controllers.$package$.routes
 @import models.LocalReferenceNumber
 @import views.html.components.{Button, ErrorSummary, InputSelect}
 @import models.reference.$referenceClass$
@@ -22,34 +23,34 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 
 @this(
-  mainTemplate: MainTemplate,
-  formHelper: FormWithCSRF,
-  select: InputSelect,
-  errorSummary: ErrorSummary,
-  button: Button
+    mainTemplate: MainTemplate,
+    formHelper: FormWithCSRF,
+    select: InputSelect,
+    errorSummary: ErrorSummary,
+    button: Button
 )
 
 @(form: Form[$referenceClass$], lrn: LocalReferenceNumber, $referenceClassPlural;format="decap"$: Seq[$referenceClass$], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-  title = messages("$package$.$className;format="decap"$.title"),
-  showBackLink = true,
-  lrn = Some(lrn)
+    title = messages("$package$.$className;format="decap"$.title"),
+    showBackLink = true,
+    lrn = Some(lrn)
 ) {
 
-  @formHelper(action = controllers.$package$.routes.$className;format="cap"$Controller.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.$className;format="cap"$Controller.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
-    @errorSummary(form.errors)
+        @errorSummary(form.errors)
 
-    @select(
-        field = form("value"),
-        heading = messages("$package$.$className;format="decap"$.heading"),
-        label = Some(messages("$package$.$className;format="decap"$.label")),
-        hint = Some(messages("$package$.$className;format="decap"$.hintText")),
-        selectItems = $referenceClassPlural;format="decap"$.toSelectItems(form.value),
-        placeholder = Some(messages("$package$.$className;format="decap"$.placeholder"))
-    )
+        @select(
+            field = form("value"),
+            heading = messages("$package$.$className;format="decap"$.heading"),
+            label = Some(messages("$package$.$className;format="decap"$.label")),
+            hint = Some(messages("$package$.$className;format="decap"$.hintText")),
+            selectItems = $referenceClassPlural;format="decap"$.toSelectItems(form.value),
+            placeholder = Some(messages("$package$.$className;format="decap"$.placeholder"))
+        )
 
-    @button(attributes = Map("id" -> "submit"))
-  }
+        @button(attributes = Map("id" -> "submit"))
+    }
 }

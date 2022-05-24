@@ -55,7 +55,8 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
     behave like fieldWithInvalidCharacters(
       form,
       fieldName,
-      error = FormError(fieldName, invalidKey, Seq(alphaNumericRegex.regex))
+      error = FormError(fieldName, invalidKey, Seq(alphaNumericRegex.regex)),
+      maxLength
     )
 
   }
