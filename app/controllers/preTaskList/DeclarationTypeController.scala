@@ -18,6 +18,7 @@ package controllers.preTaskList
 
 import controllers.actions._
 import forms.preTaskList.DeclarationTypeFormProvider
+import models.journeyDomain.PreTaskListDomain
 import models.{DeclarationType, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
@@ -36,6 +37,7 @@ class DeclarationTypeController @Inject() (
   sessionRepository: SessionRepository,
   @PreTaskListDetails navigator: Navigator,
   actions: Actions,
+  checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   formProvider: DeclarationTypeFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: DeclarationTypeView
@@ -45,27 +47,32 @@ class DeclarationTypeController @Inject() (
 
   private val form = formProvider()
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(DeclarationTypePage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain]) {
+      implicit request =>
+        val preparedForm = request.userAnswers.get(DeclarationTypePage) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
 
-      Ok(view(preparedForm, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))
-  }
+        Ok(view(preparedForm, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))
+    }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))),
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(DeclarationTypePage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(DeclarationTypePage, mode, updatedAnswers))
-        )
-  }
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+    .async {
+      implicit request =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))),
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(DeclarationTypePage, value))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(DeclarationTypePage, mode, updatedAnswers))
+          )
+    }
 }
