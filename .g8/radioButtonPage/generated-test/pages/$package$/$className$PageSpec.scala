@@ -5,7 +5,7 @@ import pages.behaviours.PageBehaviours
 
 class $className$Spec extends PageBehaviours {
 
-  "$package$.$className$Page" - {
+  "$className$Page" - {
 
     beRetrievable[$className$]($className$Page)
 

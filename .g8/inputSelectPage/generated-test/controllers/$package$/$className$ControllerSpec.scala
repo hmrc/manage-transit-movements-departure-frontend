@@ -37,7 +37,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[$navRoute$]).toInstance(fakeNavigator))
       .overrides(bind(classOf[$serviceName$]).toInstance(mock$serviceName$))
 
-  "$package$.$className$ Controller" - {
+  "$className$ Controller" - {
 
     "must return OK and the correct view for a GET" in {
       when(mock$serviceName$.$lookupReferenceListMethod$(any())).thenReturn(Future.successful($referenceListClass;format="decap"$))

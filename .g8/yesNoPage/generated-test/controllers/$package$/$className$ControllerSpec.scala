@@ -29,7 +29,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[$navRoute$]).toInstance(fakeNavigator))
 
-  "$package$.$className$ Controller" - {
+  "$className$ Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
