@@ -160,3 +160,11 @@ traderDetails.holderOfTransit.name.checkYourAnswersLabel = Transit holder’s na
 traderDetails.holderOfTransit.name.error.required = Enter the transit holder’s name
 traderDetails.holderOfTransit.name.error.length = The transit holder’s name must be 70 characters or less
 traderDetails.holderOfTransit.name.error.invalid = The transit holder’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, asterisks(*), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+
+traderDetails.holderOfTransit.contactsTelephoneNumber.title = What is the {0}’s telephone number?
+traderDetails.holderOfTransit.contactsTelephoneNumber.heading = What is the {0}’s telephone number?
+traderDetails.holderOfTransit.contactsTelephoneNumber.checkYourAnswersLabel = {0}’s telephone number?
+traderDetails.holderOfTransit.contactsTelephoneNumber.hint = For international numbers include the country code
+traderDetails.holderOfTransit.contactsTelephoneNumber.error.required = Enter {0}’s telephone number?
+traderDetails.holderOfTransit.contactsTelephoneNumber.error.length = {0}’s telephone number must be {1} characters or less
+traderDetails.holderOfTransit.contactsTelephoneNumber.error.invalidFormat = {0}’s telephone number must be a valid phone number

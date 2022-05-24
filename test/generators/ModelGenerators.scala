@@ -97,4 +97,11 @@ trait ModelGenerators {
     Gen.oneOf(NormalMode, CheckMode)
   }
 
+  implicit lazy val arbitraryTelephoneNumber: Arbitrary[TelephoneNumber] =
+    Arbitrary {
+      for {
+        value <- stringsWithMaxLength(TelephoneNumber.Constants.maxTelephoneNumberLength, Gen.numChar)
+      } yield TelephoneNumber(value)
+    }
+
 }

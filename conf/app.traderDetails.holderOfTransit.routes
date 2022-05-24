@@ -8,7 +8,12 @@ POST       /:lrn/trader-details/holder-of-transit/eori                          
 GET        /:lrn/trader-details/holder-of-transit/change-eori                                 controllers.traderDetails.holderOfTransit.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/trader-details/holder-of-transit/change-eori                                 controllers.traderDetails.holderOfTransit.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/trader-details/holder-of-transit/holder-name                                        controllers.traderDetails.holderOfTransit.NameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/trader-details/holder-of-transit/holder-name                                        controllers.traderDetails.holderOfTransit.NameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/trader-details/holder-of-transit/change-holder-name                                 controllers.traderDetails.holderOfTransit.NameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/trader-details/holder-of-transit/change-holder-name                                 controllers.traderDetails.holderOfTransit.NameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/trader-details/holder-of-transit/holder-name                                 controllers.traderDetails.holderOfTransit.NameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/holder-of-transit/holder-name                                 controllers.traderDetails.holderOfTransit.NameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/holder-of-transit/change-holder-name                          controllers.traderDetails.holderOfTransit.NameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/holder-of-transit/change-holder-name                          controllers.traderDetails.holderOfTransit.NameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/holder-of-transit/contacts-telephone-number                   controllers.traderDetails.holderOfTransit.ContactsTelephoneNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/holder-of-transit/contacts-telephone-number                   controllers.traderDetails.holderOfTransit.ContactsTelephoneNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/holder-of-transit/change-contacts-telephone-number            controllers.traderDetails.holderOfTransit.ContactsTelephoneNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/holder-of-transit/change-contacts-telephone-number            controllers.traderDetails.holderOfTransit.ContactsTelephoneNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
