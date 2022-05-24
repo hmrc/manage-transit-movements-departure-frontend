@@ -43,15 +43,27 @@ This updates the test classes app.routes and messages files
 ### Creating an Address Page in Scaffold
 First you need to ensure you have a related AddressNamePage
 <pre>g8Scaffold stringPage
--> package: consignee
+-> package: foo.bar
 -> className: ConsigneeName
 </pre>
 
 Then you create the address page referencing the Name Page
 <pre>g8Scaffold addressPage
--> package: consignee
+-> package: foo.bar
 -> className: ConsigneeAddress
 -> addressHolderNamePage: ConsigneeNamePage
+</pre>
+
+### Creating an InputSelect Page in Scaffold
+This requires that you already have a Service class with a method that will return a list of the reference object that you reqire
+That object must also extend Selectable.
+
+For the test an arbitrary constructor of the Selectable object will be required, or you can manually create these objects
+<pre>g8Scaffold inputSelectPage
+-> package: foo.bar
+-> className: OfficeOfDeparture
+-> referenceClass = CustomsOffice
+...
 </pre>
 ### License
 
