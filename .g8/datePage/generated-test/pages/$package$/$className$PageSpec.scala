@@ -7,7 +7,7 @@ import java.time.LocalDate
 
 class $className$PageSpec extends PageBehaviours {
 
-  "$package$.$className$Page" - {
+  "$className$Page" - {
 
     implicit lazy val arbitraryLocalDate: Arbitrary[LocalDate] = Arbitrary {
       datesBetween(LocalDate.of(1900, 1, 1), LocalDate.of(2100, 1, 1))

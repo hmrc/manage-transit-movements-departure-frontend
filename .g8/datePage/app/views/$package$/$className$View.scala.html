@@ -20,31 +20,32 @@
 @import models.LocalReferenceNumber
 
 @this(
-  mainTemplate: MainTemplate,
-  formHelper: FormWithCSRF,
-  inputDate: InputDate,
-  errorSummary: DateErrorSummary,
-  button: Button
+    mainTemplate: MainTemplate,
+    formHelper: FormWithCSRF,
+    inputDate: InputDate,
+    errorSummary: DateErrorSummary,
+    button: Button
 )
 
 @(form: Form[LocalDate], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-  title = messages("$package$.$className;format="decap"$.title"),
-  showBackLink = true,
-  lrn = Some(lrn)
+    title = messages("$package$.$className;format="decap"$.title"),
+    showBackLink = true,
+    lrn = Some(lrn)
 ) {
-  @formHelper(action = controllers.$package$.routes.$className$Controller.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
-    @errorSummary(form)
+    @formHelper(action = routes.$className$Controller.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
-    @inputDate(
-        field = form("value"),
-        legend = messages("$package$.$className;format="decap"$.heading"),
-        hint = Some(messages("$package$.$className;format="decap"$.hint")),
-        legendAsHeading = true
-    )
+        @errorSummary(form)
 
-    @button(attributes = Map("id" -> "submit"))
-  }
+        @inputDate(
+            field = form("value"),
+            legend = messages("$package$.$className;format="decap"$.heading"),
+            hint = Some(messages("$package$.$className;format="decap"$.hint")),
+            legendAsHeading = true
+        )
+
+        @button(attributes = Map("id" -> "submit"))
+    }
 }

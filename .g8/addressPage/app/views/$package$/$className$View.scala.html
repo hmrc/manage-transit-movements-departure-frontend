@@ -14,34 +14,36 @@
  * limitations under the License.
  *@
 
+@import controllers.$package$.routes
 @import models.LocalReferenceNumber
 @import views.html.components.{Button, ErrorSummary, InputAddress}
 
 @this(
-  mainTemplate: MainTemplate,
-  formHelper: FormWithCSRF,
-  inputAddress: InputAddress,
-  errorSummary: ErrorSummary,
-  button: Button
+    mainTemplate: MainTemplate,
+    formHelper: FormWithCSRF,
+    inputAddress: InputAddress,
+    errorSummary: ErrorSummary,
+    button: Button
 )
 
 @(form: Form[Address], lrn: LocalReferenceNumber, mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-  title = messages("$package$.$className;format="decap"$.title"),
-  showBackLink = true,
-  lrn = Some(lrn)
+    title = messages("$package$.$className;format="decap"$.title"),
+    showBackLink = true,
+    lrn = Some(lrn)
 ) {
-  @formHelper(action = controllers.$package$.routes.$className$Controller.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
-    @errorSummary(form.errors)
+    @formHelper(action = routes.$className$Controller.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
-    @inputAddress(
-        form = form,
-        messageKeyPrefix = "$package$.$className;format="decap"$",
-        headingArgs = name
-    )
+        @errorSummary(form.errors)
 
-    @button(attributes = Map("id" -> "submit"))
-  }
+        @inputAddress(
+            form = form,
+            messageKeyPrefix = "$package$.$className;format="decap"$",
+            headingArgs = name
+        )
+
+        @button(attributes = Map("id" -> "submit"))
+    }
 }

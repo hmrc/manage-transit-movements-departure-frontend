@@ -19,11 +19,11 @@
 @import models.LocalReferenceNumber
 
 @this(
-  mainTemplate: MainTemplate,
-  formHelper: FormWithCSRF,
-  inputText: InputText,
-  errorSummary: ErrorSummary,
-  button: Button
+    mainTemplate: MainTemplate,
+    formHelper: FormWithCSRF,
+    inputText: InputText,
+    errorSummary: ErrorSummary,
+    button: Button
 )
 
 @(form: Form[String], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -33,16 +33,17 @@
   showBackLink = true,
   lrn = Some(lrn)
 ) {
-  @formHelper(action = controllers.$package$.routes.$className$Controller.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
-    @errorSummary(form.errors)
+    @formHelper(action = routes.$className$Controller.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
-    @inputText(
-      field = form("value"),
-      label = messages("$package$.$className;format="decap"$.heading"),
-      inputClass = InputSize.Width20
-    )
+        @errorSummary(form.errors)
 
-    @button(attributes = Map("id" -> "submit"))
-  }
+        @inputText(
+            field = form("value"),
+            label = messages("$package$.$className;format="decap"$.heading"),
+            inputClass = InputSize.Width20
+        )
+
+        @button(attributes = Map("id" -> "submit"))
+    }
 }

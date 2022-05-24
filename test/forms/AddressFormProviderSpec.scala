@@ -26,8 +26,8 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
-  private val addressHolderName = "addressHolder"
   private val prefix            = Gen.alphaNumStr.sample.value
+  private val addressHolderName = Gen.alphaNumStr.sample.value
 
   private val form = new AddressFormProvider()(prefix, addressHolderName)
 
@@ -71,8 +71,7 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
       )
 
       "must not bind strings that do not match regex" in {
-        val fieldName = "numberAndStreet"
-        val args      = Seq(numberAndStreet, addressHolderName)
+        val args = Seq(numberAndStreet, addressHolderName)
 
         val generator: Gen[String] = RegexpGen.from(s"[!£^(){}_+=:;|`~,±<>éèâñüç]{$numberAndStreetLength}")
         val expectedError          = FormError(fieldName, addressInvalidKey, args)
@@ -117,8 +116,7 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
       )
 
       "must not bind strings that do not match regex" in {
-        val fieldName = "town"
-        val args      = Seq(town, addressHolderName)
+        val args = Seq(town, addressHolderName)
 
         val generator: Gen[String] = RegexpGen.from(s"[!£^(){}_+=:;|`~,±<>]{$townLength}")
         val expectedError          = FormError(fieldName, addressInvalidKey, args)
@@ -154,8 +152,6 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
       )
 
       "must not bind strings that do not match postcode format" in {
-        val fieldName = "postcode"
-
         val genInvalidString: Gen[String] = {
           stringsThatMatchRegex(postCodeRegex) suchThat (!_.matches(postCodeFormatRegex.regex))
         }
