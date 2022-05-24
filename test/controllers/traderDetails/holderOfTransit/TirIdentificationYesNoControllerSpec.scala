@@ -89,9 +89,8 @@ class TirIdentificationYesNoControllerSpec extends SpecBase with AppWithDefaultM
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request =
-        FakeRequest(POST, tirIdentificationYesNoRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+      val request = FakeRequest(POST, tirIdentificationYesNoRoute)
+        .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
 
@@ -137,9 +136,8 @@ class TirIdentificationYesNoControllerSpec extends SpecBase with AppWithDefaultM
 
       setNoExistingUserAnswers()
 
-      val request =
-        FakeRequest(POST, tirIdentificationYesNoRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+      val request = FakeRequest(POST, tirIdentificationYesNoRoute)
+        .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
 
