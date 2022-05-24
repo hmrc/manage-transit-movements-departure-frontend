@@ -30,7 +30,6 @@ object Address {
     val numberAndStreetLength   = 35
     val cityLength              = 35
     val townLength              = 35
-    val postcodeLength          = 9
 
     lazy val postCodeRegex: Regex       = "^[a-zA-Z\\s*0-9]*$".r
     lazy val postCodeFormatRegex: Regex = "^[a-zA-Z]{1,2}([0-9]{1,2}|[0-9][a-zA-Z])\\s*[0-9][a-zA-Z]{2}$".r

@@ -34,7 +34,6 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
   private val requiredKey              = s"$prefix.error.required"
   private val addressLengthKey         = s"$prefix.error.length"
   private val addressInvalidKey        = s"$prefix.error.invalid"
-  private val postcodeLengthKey        = s"$prefix.error.postcode.length"
   private val postcodeInvalidKey       = s"$prefix.error.postcode.invalid"
   private val postcodeInvalidFormatKey = s"$prefix.error.postcode.invalidFormat"
 
@@ -136,23 +135,10 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
       val fieldName = "postcode"
 
-      val validAddressOverLength: Gen[String] = for {
-        num  <- Gen.chooseNum[Int](postcodeLength + 1, postcodeLength + 5)
-        list <- Gen.listOfN(num, Gen.alphaNumChar)
-      } yield list.mkString("")
-
       behave like fieldThatBindsValidData(
         form,
         fieldName,
-        stringsWithMaxLength(postcodeLength)
-      )
-
-      behave like fieldWithMaxLength(
-        form,
-        fieldName,
-        maxLength = postcodeLength,
-        lengthError = FormError(fieldName, postcodeLengthKey, Seq(addressHolderName)),
-        validAddressOverLength
+        stringsThatMatchRegex(postCodeFormatRegex)
       )
 
       behave like mandatoryField(
@@ -161,25 +147,19 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
         requiredError = FormError(fieldName, requiredKey, Seq(postcode, addressHolderName))
       )
 
-      "must not bind strings that do not match regex" in {
-        val fieldName = "postcode"
-
-        val generator: Gen[String] = RegexpGen.from(s"[!£^(){}_+=:;|`~,±<>]{$postcodeLength}")
-        val expectedError          = FormError(fieldName, postcodeInvalidKey, Seq(addressHolderName))
-
-        forAll(generator) {
-          invalidString =>
-            val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
-            result.errors must contain(expectedError)
-        }
-      }
+      behave like fieldWithInvalidCharacters(
+        form,
+        fieldName,
+        FormError(fieldName, postcodeInvalidKey, Seq(addressHolderName))
+      )
 
       "must not bind strings that do not match postcode format" in {
         val fieldName = "postcode"
 
         val genInvalidString: Gen[String] = {
-          stringsWithMaxLength(postcodeLength, Gen.alphaChar) suchThat (!_.matches(postCodeFormatRegex.toString()))
+          stringsThatMatchRegex(postCodeRegex) suchThat (!_.matches(postCodeFormatRegex.regex))
         }
+
         val expectedError = FormError(fieldName, postcodeInvalidFormatKey, Seq(addressHolderName))
 
         forAll(genInvalidString) {
