@@ -18,13 +18,13 @@ package views.$package$
 
 import forms.$formProvider$
 import models.{Address, NormalMode}
+import org.scalacheck.Gen
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.AddressViewBehaviours
+import views.behaviours.IndividualAddressViewBehaviours
 import views.html.$package$.$className$View
-import org.scalacheck.Gen
 
-class $className$ViewSpec extends AddressViewBehaviours {
+class $className$ViewSpec extends IndividualAddressViewBehaviours {
 
   private val addressHolderName = Gen.alphaNumStr.sample.value
 
