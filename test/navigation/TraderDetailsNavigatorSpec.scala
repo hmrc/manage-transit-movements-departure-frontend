@@ -105,5 +105,44 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             .mustBe(hotRoutes.NameController.onPageLoad(answers.lrn, mode))
       }
     }
+
+    "must go from Transit Holder Add Contact page" - {
+      //TODO - add nav test for true and false outcomes
+      "when Yes selected" - {
+        "???" ignore {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.setValue(AddContactPage, true)
+              navigator
+                .nextPage(AddContactPage, mode, userAnswers)
+                .mustBe(hotRoutes.AddContactController.onPageLoad(userAnswers.lrn, mode))
+          }
+        }
+      }
+
+      "when No selected" - {
+        "to ???" ignore {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.setValue(AddContactPage, false)
+              navigator
+                .nextPage(AddContactPage, mode, userAnswers)
+                .mustBe(hotRoutes.AddContactController.onPageLoad(userAnswers.lrn, mode))
+          }
+        }
+      }
+
+      "when nothing selected" - {
+        "to session expired" in {
+          forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+            (answers, mode) =>
+              val userAnswers = answers.removeValue(AddContactPage)
+              navigator
+                .nextPage(AddContactPage, mode, userAnswers)
+                .mustBe(routes.SessionExpiredController.onPageLoad())
+          }
+        }
+      }
+    }
   }
 }
