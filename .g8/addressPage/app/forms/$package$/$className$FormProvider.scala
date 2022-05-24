@@ -12,14 +12,14 @@ class $className$FormProvider @Inject() extends Mappings {
 
   def apply(name: String): Form[Address] = Form(
     mapping(
-      "buildingAndStreet" -> text("$package$.$className;format="decap"$.error.required", Seq(Address.Constants.Fields.buildingAndStreetName, name))
+      "buildingAndStreet" -> text("$package$.$className;format="decap"$.error.required", Seq(Address.Constants.Fields.buildingAndStreet, name))
         .verifying(
           StopOnFirstFail[String](
             maxLength(Address.Constants.buildingAndStreetLength,
               "$package$.$className;format="decap"$.error.length",
-              Seq(Address.Constants.Fields.buildingAndStreetName, name)
+              Seq(Address.Constants.Fields.buildingAndStreet, name)
             ),
-            regexp(stringFieldRegex, "$package$.$className;format="decap"$.error.invalid", Seq(Address.Constants.Fields.buildingAndStreetName, name))
+            regexp(stringFieldRegex, "$package$.$className;format="decap"$.error.invalid", Seq(Address.Constants.Fields.buildingAndStreet, name))
           )
         ),
       "city" -> text("$package$.$className;format="decap"$.error.required", args = Seq(Address.Constants.Fields.city, name))

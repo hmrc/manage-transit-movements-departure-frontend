@@ -15,6 +15,7 @@
  *@
 
 @import views.html.components.InputText
+@import views.utils.ViewUtils._
 
 @this(
     inputText: InputText,
@@ -24,21 +25,22 @@
 @(
     form: Form[_],
     messageKeyPrefix: String,
+    caption: Option[String],
     headingArgs: Any*
 )(implicit messages: Messages)
 
 @html = {
     @inputText(
-        field = form("buildingAndStreet"),
-        label = messages(s"$messageKeyPrefix.buildingAndStreet"),
+        field = form("numberAndStreet"),
+        label = messages(s"$messageKeyPrefix.numberAndStreet"),
         labelIsHeading = false,
         autocomplete = Some("address-line1"),
         inputClass = Some("govuk-!-width-two-thirds")
     )
 
     @inputText(
-        field = form("city"),
-        label = messages(s"$messageKeyPrefix.city"),
+        field = form("town"),
+        label = messages(s"$messageKeyPrefix.town"),
         labelIsHeading = false,
         autocomplete = Some("address-line2"),
         inputClass = Some("govuk-!-width-two-thirds")
@@ -53,11 +55,28 @@
     )
 }
 
-@govukFieldset(Fieldset(
-    legend = Some(Legend(
-        content = Text(messages(s"$messageKeyPrefix.heading", headingArgs: _*)),
-        classes = LegendSize.XL,
-        isPageHeading = true
-    )),
-    html = html
-))
+@fieldset = @{
+    Fieldset(
+        html = html
+    )
+}
+
+@govukFieldset(
+    caption match {
+        case Some(x) => {
+            fieldset.withHeadingAndCaption(
+                heading = Text(messages(s"$messageKeyPrefix.heading", headingArgs: _*)),
+                caption = Text(x)
+            )
+        }
+        case None => {
+            fieldset.copy(
+                legend = Some(Legend(
+                    content = Text(messages(s"$messageKeyPrefix.heading", headingArgs: _*)),
+                    classes = LegendSize.XL,
+                    isPageHeading = true
+                ))
+            )
+        }
+    }
+)

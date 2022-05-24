@@ -76,8 +76,24 @@ trait Constraints {
         Invalid(errorKey, regex)
     }
 
+  protected def regexp(regex: Regex, errorKey: String, args: Seq[Any]): Constraint[String] =
+    Constraint {
+      case str if str.matches(regex.pattern.pattern()) =>
+        Valid
+      case _ =>
+        Invalid(errorKey, args: _*)
+    }
+
   protected def maxLength(maximum: Int, errorKey: String): Constraint[String] =
     lengthConstraint(maximum, errorKey, _.length <= maximum)
+
+  protected def maxLength(maximum: Int, errorKey: String, args: Seq[Any]): Constraint[String] =
+    Constraint {
+      case str if str.length <= maximum =>
+        Valid
+      case _ =>
+        Invalid(errorKey, args: _*)
+    }
 
   protected def minLength(minimum: Int, errorKey: String): Constraint[String] =
     lengthConstraint(minimum, errorKey, _.length >= minimum)

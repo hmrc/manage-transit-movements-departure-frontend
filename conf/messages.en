@@ -15,6 +15,12 @@ site.service_name = Manage your transit movements
 error.title.prefix = Error:
 error.summary.title = There is a problem
 
+address.buildingAndStreet = building and street
+address.numberAndStreet = number and street
+address.town = town
+address.city = city
+address.postcode = postcode
+
 date.day.capitalized = Day
 date.month.capitalized = Month
 date.year.capitalized = Year
@@ -160,3 +166,21 @@ traderDetails.holderOfTransit.name.checkYourAnswersLabel = Transit holder’s na
 traderDetails.holderOfTransit.name.error.required = Enter the transit holder’s name
 traderDetails.holderOfTransit.name.error.length = The transit holder’s name must be 70 characters or less
 traderDetails.holderOfTransit.name.error.invalid = The transit holder’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, asterisks(*), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+
+traderDetails.holderOfTransit.address.title = What is the transit holder’s address?
+traderDetails.holderOfTransit.address.heading = What is {0}’s address?
+traderDetails.holderOfTransit.address.numberAndStreet = Number and street
+traderDetails.holderOfTransit.address.town = Town
+traderDetails.holderOfTransit.address.postcode = Postcode
+traderDetails.holderOfTransit.address.checkYourAnswersLabel = Transit holder’s address
+traderDetails.holderOfTransit.address.error.postcode.length = Postcode must be 9 characters or less
+traderDetails.holderOfTransit.address.error.postcode.invalid = Enter a real postcode
+traderDetails.holderOfTransit.address.error.postcode.invalidFormat = Enter the postcode of {0}’s address in the right format, like AB1 1AB
+traderDetails.holderOfTransit.address.error.invalid = The {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, asterisks(*), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+traderDetails.holderOfTransit.address.error.required = Enter the {0} of {1}’s address
+traderDetails.holderOfTransit.address.error.length = The {0} of {1}’s address must be 35 characters or less
+
+myNewPage.title = myNewPage
+myNewPage.heading = myNewPage
+myNewPage.checkYourAnswersLabel = myNewPage
+myNewPage.error.required = Select yes if myNewPage
