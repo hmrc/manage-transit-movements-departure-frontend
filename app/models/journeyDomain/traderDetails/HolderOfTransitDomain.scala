@@ -17,13 +17,14 @@
 package models.journeyDomain.traderDetails
 
 import cats.implicits._
-import models.EoriNumber
 import models.domain._
+import models.{Address, EoriNumber}
 import pages.traderDetails.holderOfTransit._
 
 case class HolderOfTransitDomain(
   eori: Option[EoriNumber],
-  name: String
+  name: String,
+  address: Address
 )
 
 object HolderOfTransitDomain {
@@ -35,6 +36,7 @@ object HolderOfTransitDomain {
   implicit val userAnswersReader: UserAnswersReader[HolderOfTransitDomain] =
     (
       eori,
-      NamePage.reader
+      NamePage.reader,
+      AddressPage.reader
     ).tupled.map((HolderOfTransitDomain.apply _).tupled)
 }

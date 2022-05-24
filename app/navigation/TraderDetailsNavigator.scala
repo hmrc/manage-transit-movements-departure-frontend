@@ -34,6 +34,7 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
   private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
     case EoriYesNoPage => ua => eoriYesNoRoute(ua, mode)
     case EoriPage      => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, mode))
+    case NamePage      => ua => Some(hotRoutes.AddressController.onPageLoad(ua.lrn, mode))
   }
 
   private def eoriYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {

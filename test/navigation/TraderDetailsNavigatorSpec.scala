@@ -105,5 +105,14 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             .mustBe(hotRoutes.NameController.onPageLoad(answers.lrn, mode))
       }
     }
+
+    "must go from Name page to Address page" in {
+      forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+        (answers, mode) =>
+          navigator
+            .nextPage(NamePage, mode, answers)
+            .mustBe(hotRoutes.AddressController.onPageLoad(answers.lrn, mode))
+      }
+    }
   }
 }
