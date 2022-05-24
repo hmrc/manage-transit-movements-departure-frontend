@@ -15,14 +15,13 @@
  *@
 
 @import models.LocalReferenceNumber
-@import views.html.components.{Button, ErrorSummary, HeadingCaption, InputAddress}
+@import views.html.components.{Button, ErrorSummary, InputAddress}
 
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
     inputAddress: InputAddress,
     errorSummary: ErrorSummary,
-    headingCaption: HeadingCaption,
     button: Button
 )
 
@@ -37,8 +36,6 @@
     @formHelper(action = controllers.traderDetails.holderOfTransit.routes.AddressController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
-
-<!--        @headingCaption(messages("traderDetails.caption"))-->
 
         @inputAddress(
             form = form,
