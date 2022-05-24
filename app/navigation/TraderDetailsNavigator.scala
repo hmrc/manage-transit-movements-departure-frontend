@@ -33,13 +33,14 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
 
   private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
     case EoriYesNoPage  => ua => eoriYesNoRoute(ua, mode)
+    case EoriPage       => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, mode))
     case AddContactPage => ua => addContactRoute(ua, mode)
   }
 
   private def eoriYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
     userAnswers.get(EoriYesNoPage) match {
       case Some(true)  => hotRoutes.EoriController.onPageLoad(userAnswers.lrn, mode)
-      case Some(false) => ??? // TODO - redirect to HoT name once built
+      case Some(false) => hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
       case None        => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }

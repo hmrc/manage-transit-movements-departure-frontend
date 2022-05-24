@@ -154,6 +154,13 @@ traderDetails.holderOfTransit.eori.error.invalidCharacters = Your EORI number mu
 traderDetails.holderOfTransit.eori.error.invalidFormat = Your EORI number must start ''GB'' or ''XI'' followed by 12 or 15 numbers, for example GB123456789000
 traderDetails.holderOfTransit.eori.error.prefix = Your EORI number must start with ''GB'' or ''XI'', like GB123456789000
 
+traderDetails.holderOfTransit.name.title = What is the transit holder’s name?
+traderDetails.holderOfTransit.name.heading = What is the transit holder’s name?
+traderDetails.holderOfTransit.name.checkYourAnswersLabel = Transit holder’s name
+traderDetails.holderOfTransit.name.error.required = Enter the transit holder’s name
+traderDetails.holderOfTransit.name.error.length = The transit holder’s name must be 70 characters or less
+traderDetails.holderOfTransit.name.error.invalid = The transit holder’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, asterisks(*), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+
 traderDetails.holderOfTransit.addContact.title = Do you want to add a contact?
 traderDetails.holderOfTransit.addContact.heading = Do you want to add a contact?
 traderDetails.holderOfTransit.addContact.checkYourAnswersLabel = Do you want to add a contact?
