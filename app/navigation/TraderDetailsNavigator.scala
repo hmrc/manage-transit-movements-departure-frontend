@@ -32,11 +32,12 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
   override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(CheckMode)
 
   private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case EoriYesNoPage  => ua => eoriYesNoRoute(ua, mode)
-    case EoriPage       => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, mode))
-    case NamePage       => ua => Some(hotRoutes.AddressController.onPageLoad(ua.lrn, mode))
-    case AddressPage    => ua => Some(hotRoutes.AddContactController.onPageLoad(ua.lrn, mode))
-    case AddContactPage => ua => addContactRoute(ua, mode)
+    case EoriYesNoPage   => ua => eoriYesNoRoute(ua, mode)
+    case EoriPage        => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, mode))
+    case NamePage        => ua => Some(hotRoutes.AddressController.onPageLoad(ua.lrn, mode))
+    case AddressPage     => ua => Some(hotRoutes.AddContactController.onPageLoad(ua.lrn, mode))
+    case AddContactPage  => ua => addContactRoute(ua, mode)
+    case ContactNamePage => ua => ??? // TODO to route to contact telephone number page when built
   }
 
   private def eoriYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
