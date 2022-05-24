@@ -59,8 +59,8 @@ class LocalReferenceNumberFormProviderSpec extends StringFieldBehaviours {
     "must not start with an underscore" in {
       forAll(stringsWithMaxLength(maxLength - 1)) {
         value =>
-          val valueStartingWithHyphen = s"_$value"
-          val result                  = form.bind(Map(fieldName -> valueStartingWithHyphen))
+          val valueStartingWithUnderscore = s"_$value"
+          val result                      = form.bind(Map(fieldName -> valueStartingWithUnderscore))
           result.errors must contain(FormError(fieldName, invalidFormatKey))
       }
     }
