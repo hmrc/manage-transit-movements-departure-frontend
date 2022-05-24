@@ -1,6 +1,5 @@
 package forms
 
-import forms.StopOnFirstFail
 import models.domain.StringFieldRegex.stringFieldRegex
 import play.api.data.Form
 import play.api.data.Forms.mapping
