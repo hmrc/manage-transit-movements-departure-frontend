@@ -193,3 +193,9 @@ traderDetails.holderOfTransit.addContact.heading = Do you want to add a contact?
 traderDetails.holderOfTransit.addContact.checkYourAnswersLabel = Do you want to add a contact?
 traderDetails.holderOfTransit.addContact.error.required = Select yes if you want to add a contact
 traderDetails.holderOfTransit.addContact.change.hidden = if you want to add a contact
+
+traderDetails.holderOfTransit.tirIdentificationYesNo.title = Do you know the Transit procedure TIR identification number?
+traderDetails.holderOfTransit.tirIdentificationYesNo.heading = Do you know the Transit procedure TIR identification number?
+traderDetails.holderOfTransit.tirIdentificationYesNo.checkYourAnswersLabel = Do you know the Transit procedure TIR identification number?
+traderDetails.holderOfTransit.tirIdentificationYesNo.error.required = Select yes if you know the Transit procedure TIR identification number
+traderDetails.holderOfTransit.tirIdentificationYesNo.change.hidden = if you know the Transit procedure TIR identification number
