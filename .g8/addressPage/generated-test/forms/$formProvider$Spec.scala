@@ -73,7 +73,7 @@ class $formProvider$Spec extends StringFieldBehaviours with SpecBase {
       "must not bind strings that do not match regex" in {
         val args      = Seq(numberAndStreet, addressHolderName)
 
-        val generator: Gen[String] = RegexpGen.from(s"[!£^(){}_+=:;|`~,±<>éèâñüç]{$numberAndStreetLength}")
+        val generator: Gen[String] = RegexpGen.from(s"[!£^(){}_+=:;|`~,±<>éèâñüç]{\$numberAndStreetLength}")
         val expectedError          = FormError(fieldName, addressInvalidKey, args)
 
         forAll(generator) {
@@ -118,7 +118,7 @@ class $formProvider$Spec extends StringFieldBehaviours with SpecBase {
       "must not bind strings that do not match regex" in {
         val args = Seq(town, addressHolderName)
 
-        val generator: Gen[String] = RegexpGen.from(s"[!£^(){}_+=:;|`~,±<>]{$townLength}")
+        val generator: Gen[String] = RegexpGen.from(s"[!£^(){}_+=:;|`~,±<>]{\$townLength}")
         val expectedError          = FormError(fieldName, addressInvalidKey, args)
 
         forAll(generator) {

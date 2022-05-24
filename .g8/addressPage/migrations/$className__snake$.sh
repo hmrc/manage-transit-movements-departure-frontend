@@ -16,17 +16,15 @@ echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.title = $title$" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.heading = $title$" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.buildingAndStreet = buildingAndStreet" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.city = city" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.numberAndStreet = numberAndStreet" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.town = town" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.postcode = postcode" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.checkYourAnswersLabel = $title$" >> ../conf/messages.en
 
-echo "$package$.$className;format="decap"$.error.postcode.required = Enter the postcode of {0}’s address" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.error.postcode.length = Postcode must be 9 characters or less" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.error.postcode.invalid = Enter a real postcode" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.postcode.invalid = The postcode of {0}’s address must only include letters a to z, numbers 0 to 9 and spaces" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.error.postcode.invalidFormat = Enter the postcode of {0}’s address in the right format, like AB1 1AB" >> ../conf/messages.en
 
-echo "$package$.$className;format="decap"$.error.invalid = The {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, asterisks(*), forward slashes, full stops, hyphens, percent signs, question marks and spaces" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.invalid = The {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.error.required = Enter the {0} of {1}’s address" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.error.length = The {0} of {1}’s address must be 35 characters or less" >> ../conf/messages.en
 
