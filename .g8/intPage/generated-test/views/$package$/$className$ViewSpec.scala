@@ -16,7 +16,7 @@
 
 package views.$package$
 
-import forms.$package$.$className$FormProvider
+import forms.$formProvider$
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -27,7 +27,7 @@ import org.scalacheck.{Arbitrary, Gen}
 
 class $className$ViewSpec extends InputTextViewBehaviours[Int] {
 
-  override def form: Form[Int] = new $className$FormProvider()()
+  override def form: Form[Int] = new $formProvider$()(prefix, 10)
 
   override def applyView(form: Form[Int]): HtmlFormat.Appendable =
     injector.instanceOf[$className$View].apply(form, lrn, NormalMode)(fakeRequest, messages)

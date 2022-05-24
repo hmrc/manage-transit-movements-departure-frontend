@@ -16,7 +16,7 @@
 
 package views.$package$
 
-import forms.$package$.$className$FormProvider
+import forms.$package$.$formProvider$
 import models.NormalMode
 import models.$package$.$className$
 import play.api.data.Form
@@ -27,7 +27,7 @@ import views.html.$package$.$className$View
 
 class $className$ViewSpec extends RadioViewBehaviours[$className$] {
 
-  override def form: Form[$className$] = new $className$FormProvider()()
+  override def form: Form[$className$] = new $formProvider$()()
 
   override def applyView(form: Form[$className$]): HtmlFormat.Appendable =
     injector.instanceOf[$className$View].apply(form, lrn, $className$.radioItems, NormalMode)(fakeRequest, messages)

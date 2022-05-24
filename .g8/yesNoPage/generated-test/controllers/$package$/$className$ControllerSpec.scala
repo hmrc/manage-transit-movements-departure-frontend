@@ -19,7 +19,7 @@ import scala.concurrent.Future
 
 class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
-  private val formProvider = new $className$FormProvider()
+  private val formProvider = new YesNoFormProvider()
   private val form         = formProvider("$package$.$className;format="decap"$")
   private val mode         = NormalMode
   private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, mode).url

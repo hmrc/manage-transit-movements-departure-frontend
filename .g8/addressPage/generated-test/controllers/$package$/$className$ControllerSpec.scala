@@ -12,7 +12,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.$package$.$className$FormProvider
+import forms.$formProvider$
 import views.html.$package$.$className$View
 import pages.$package$.$className$Page
 import pages.$package$.$addressHolderNamePage$
@@ -23,8 +23,8 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
   private val addressHolderName = Gen.alphaNumStr.sample.value
   private val testAddress       = Address("buildingAndStreet", "city", "NE99 1XN")
-  private val formProvider      = new $className$FormProvider()
-  private val form              = formProvider(addressHolderName)
+  private val formProvider      = new $formProvider$()
+  private val form              = formProvider("$package$.$className;format="decap"$", addressHolderName)
   private val mode              = NormalMode
   private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, mode).url
 

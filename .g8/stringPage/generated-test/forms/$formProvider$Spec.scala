@@ -1,15 +1,17 @@
-package forms.$package$
+package forms
 
 import forms.behaviours.StringFieldBehaviours
+import org.scalacheck.Gen
 import play.api.data.FormError
 
-class $className$FormProviderSpec extends StringFieldBehaviours {
+class $formProvider$Spec extends StringFieldBehaviours {
 
-  val requiredKey = "$package$.$className;format="decap"$.error.required"
-  val lengthKey = "$package$.$className;format="decap"$.error.length"
-  val maxLength = $maxLength$
+  private val prefix      = Gen.alphaNumStr.sample.value
+  val requiredKey = s"\$prefix.error.required"
+  val lengthKey = s"\$prefix.error.length"
+  val maxLength = 10
 
-  val form = new $className$FormProvider()()
+  val form = new $formProvider$()(prefix, maxLength)
 
   ".value" - {
 

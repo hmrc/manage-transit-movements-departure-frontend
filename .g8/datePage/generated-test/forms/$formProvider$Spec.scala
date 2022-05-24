@@ -1,12 +1,14 @@
-package forms.$package$
+package forms
 
 import forms.behaviours.DateBehaviours
+import org.scalacheck.Gen
 
 import java.time.{LocalDate, ZoneOffset}
 
-class $className$FormProviderSpec extends DateBehaviours {
+class $formProvider$Spec extends DateBehaviours {
 
-  val form = new $className$FormProvider()()
+  private val prefix      = Gen.alphaNumStr.sample.value
+  val form = new $formProvider$()(prefix)
 
   ".value" - {
 
@@ -17,6 +19,6 @@ class $className$FormProviderSpec extends DateBehaviours {
 
     behave like dateField(form, "value", validData)
 
-    behave like mandatoryDateField(form, "value", "$package$.$className;format="decap"$.error.required.all")
+    behave like mandatoryDateField(form, "value", s"\$prefix.error.required.all")
   }
 }

@@ -1,17 +1,18 @@
-package forms.$package$
+package forms
 
 import forms.behaviours.IntFieldBehaviours
 import org.scalacheck.Gen
 import play.api.data.FormError
 
-class $className$FormProviderSpec extends IntFieldBehaviours {
+class $formProvider$Spec extends IntFieldBehaviours {
 
-  val requiredKey = "$package$.$className;format="decap"$.error.required"
-  val maximum = $maximum$
+  private val prefix      = Gen.alphaNumStr.sample.value
+  val requiredKey = s"\$prefix.error.required"
+  val maximum = 10
 
   val generatedInt = Gen.oneOf(1 to maximum)
 
-  val form = new $className$FormProvider()()
+  val form = new $formProvider$()(prefix, maximum)
 
   ".value" - {
 
@@ -26,8 +27,8 @@ class $className$FormProviderSpec extends IntFieldBehaviours {
     behave like intField(
       form,
       fieldName,
-      nonNumericError  = FormError(fieldName, "$package$.$className;format="decap"$.error.nonNumeric"),
-      wholeNumberError = FormError(fieldName, "$package$.$className;format="decap"$.error.wholeNumber")
+      nonNumericError  = FormError(fieldName, s"\$prefix.error.nonNumeric"),
+      wholeNumberError = FormError(fieldName, s"\$prefix.error.wholeNumber")
     )
 
     behave like mandatoryField(

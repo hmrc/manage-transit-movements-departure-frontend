@@ -6,7 +6,7 @@ import forms.mappings.Mappings
 import play.api.data.Form
 import models.$package$.$className$
 
-class $className$FormProvider @Inject() extends Mappings {
+class $formProvider$ @Inject() extends Mappings {
 
   def apply(): Form[$className$] =
     Form(
