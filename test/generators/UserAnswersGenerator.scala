@@ -42,6 +42,9 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
   final val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
     arbitraryAddContactUserAnswersEntry.arbitrary ::
       arbitraryAddressUserAnswersEntry.arbitrary ::
+    arbitraryContactNameUserAnswersEntry.arbitrary ::
+      arbitraryNameUserAnswersEntry.arbitrary ::
+      arbitraryAddContactUserAnswersEntry.arbitrary ::
       arbitraryNameUserAnswersEntry.arbitrary ::
       arbitraryTransitHolderEoriUserAnswersEntry.arbitrary ::
       arbitraryTransitHolderEoriYesNoUserAnswersEntry.arbitrary ::

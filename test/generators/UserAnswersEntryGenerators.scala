@@ -32,6 +32,13 @@ trait UserAnswersEntryGenerators {
       } yield (pages.traderDetails.holderOfTransit.AddressPage, value)
     }
 
+  implicit lazy val arbitraryContactNameUserAnswersEntry: Arbitrary[(pages.traderDetails.holderOfTransit.ContactNamePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[pages.traderDetails.holderOfTransit.ContactNamePage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.holderOfTransit.ContactNamePage, value)
+    }
+
   implicit lazy val arbitraryNameUserAnswersEntry: Arbitrary[(pages.traderDetails.holderOfTransit.NamePage.type, JsValue)] =
     Arbitrary {
       for {

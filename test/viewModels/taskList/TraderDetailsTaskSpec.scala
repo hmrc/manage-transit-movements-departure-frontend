@@ -139,6 +139,8 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
           .setValue(EoriPage, eoriNumber.value)
           .setValue(NamePage, Gen.alphaNumStr.sample.value)
           .setValue(AddressPage, arbitrary[Address].sample.value)
+          .setValue(AddContactPage, true)
+          .setValue(ContactNamePage, Gen.alphaNumStr.sample.value)
 
         val task = TraderDetailsTask(userAnswers)
         task.status mustBe Completed
@@ -150,6 +152,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
           .setValue(EoriYesNoPage, false)
           .setValue(NamePage, Gen.alphaNumStr.sample.value)
           .setValue(AddressPage, arbitrary[Address].sample.value)
+          .setValue(AddContactPage, false)
 
         val task = TraderDetailsTask(userAnswers)
         task.status mustBe Completed

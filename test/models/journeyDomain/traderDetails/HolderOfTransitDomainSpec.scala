@@ -31,18 +31,22 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
 
     "can be parsed from UserAnswers" - {
 
-      "when holder has no eori" in {
-        val name    = Gen.alphaNumStr.sample.value
+      "when holder has no eori with contact" in {
+        val name        = Gen.alphaNumStr.sample.value
+        val contactName = Gen.alphaNumStr.sample.value
         val address = arbitrary[Address].sample.value
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriYesNoPage)(false)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(AddContactPage)(true)
+          .unsafeSetVal(ContactNamePage)(contactName)
           .unsafeSetVal(AddressPage)(address)
 
         val expectedResult = HolderOfTransitDomain(
           eori = None,
           name = name,
+          contactName = Some(contactName),
           address = address
         )
 
@@ -51,7 +55,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         result.value mustBe expectedResult
       }
 
-      "when holder has an eori" in {
+      "when holder has an eori and no contact" in {
 
         val eori    = arbitrary[EoriNumber].sample.value
         val name    = Gen.alphaNumStr.sample.value
@@ -61,11 +65,13 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
           .unsafeSetVal(EoriYesNoPage)(true)
           .unsafeSetVal(EoriPage)(eori.value)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(AddContactPage)(false)
           .unsafeSetVal(AddressPage)(address)
 
         val expectedResult = HolderOfTransitDomain(
           eori = Some(eori),
           name = name,
+          contactName = None,
           address = address
         )
 
@@ -86,6 +92,20 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val result: EitherType[HolderOfTransitDomain] = UserAnswersReader[HolderOfTransitDomain].run(userAnswers)
 
         result.left.value.page mustBe EoriPage
+      }
+
+      "when answered yes to AddContact but no contact name provided" in {
+
+        val name = Gen.alphaNumStr.sample.value
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(EoriYesNoPage)(false)
+          .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(AddContactPage)(true)
+
+        val result: EitherType[HolderOfTransitDomain] = UserAnswersReader[HolderOfTransitDomain].run(userAnswers)
+
+        result.left.value.page mustBe ContactNamePage
       }
     }
   }

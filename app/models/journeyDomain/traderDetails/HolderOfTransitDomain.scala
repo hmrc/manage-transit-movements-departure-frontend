@@ -24,6 +24,7 @@ import pages.traderDetails.holderOfTransit._
 case class HolderOfTransitDomain(
   eori: Option[EoriNumber],
   name: String,
+  contactName: Option[String],
   address: Address
 )
 
@@ -33,10 +34,15 @@ object HolderOfTransitDomain {
     EoriYesNoPage
       .filterOptionalDependent(identity)(EoriPage.reader.map(EoriNumber(_)))
 
+  private val contactName: UserAnswersReader[Option[String]] =
+    AddContactPage
+      .filterOptionalDependent(identity)(ContactNamePage.reader)
+
   implicit val userAnswersReader: UserAnswersReader[HolderOfTransitDomain] =
     (
       eori,
       NamePage.reader,
+      contactName,
       AddressPage.reader
     ).tupled.map((HolderOfTransitDomain.apply _).tupled)
 }

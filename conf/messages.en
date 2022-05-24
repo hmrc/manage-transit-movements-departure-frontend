@@ -167,6 +167,13 @@ traderDetails.holderOfTransit.name.error.required = Enter the transit holder’s
 traderDetails.holderOfTransit.name.error.length = The transit holder’s name must be 70 characters or less
 traderDetails.holderOfTransit.name.error.invalid = The transit holder’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, asterisks(*), forward slashes, full stops, hyphens, percent signs, question marks and spaces
 
+traderDetails.holderOfTransit.contactName.title = What is the contact’s name?
+traderDetails.holderOfTransit.contactName.heading = What is the contact’s name?
+traderDetails.holderOfTransit.contactName.checkYourAnswersLabel = Contact’s name
+traderDetails.holderOfTransit.contactName.error.required = Enter the contact’s name
+traderDetails.holderOfTransit.contactName.error.length = The contact’s name must be 70 characters or less
+traderDetails.holderOfTransit.contactName.error.invalid = The contact’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, asterisks(*), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+
 traderDetails.holderOfTransit.address.title = What is the transit holder’s address?
 traderDetails.holderOfTransit.address.heading = What is {0}’s address?
 traderDetails.holderOfTransit.address.numberAndStreet = Number and street
