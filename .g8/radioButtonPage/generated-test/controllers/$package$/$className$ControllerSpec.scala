@@ -1,7 +1,7 @@
 package controllers.$package$
 
 import base.{SpecBase, AppWithDefaultMockFixtures}
-import forms.$package$.$className$FormProvider
+import forms.$package$.$formProvider$
 import views.html.$package$.$className$View
 import models.{NormalMode, UserAnswers}
 import models.$package$.$className$
@@ -19,7 +19,7 @@ import scala.concurrent.Future
 
 class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider = new $className$FormProvider()
+  private val formProvider = new $formProvider$()
   private val form         = formProvider()
   private val mode         = NormalMode
   private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, mode).url

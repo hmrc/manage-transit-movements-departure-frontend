@@ -18,10 +18,9 @@ package forms
 
 import forms.behaviours.BooleanFieldBehaviours
 import org.scalacheck.Gen
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.data.FormError
 
-class YesNoFormProviderSpec extends BooleanFieldBehaviours with ScalaCheckPropertyChecks {
+class YesNoFormProviderSpec extends BooleanFieldBehaviours {
 
   private val prefix      = Gen.alphaNumStr.sample.value
   private val requiredKey = s"$prefix.error.required"

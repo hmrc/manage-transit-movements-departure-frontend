@@ -1,7 +1,7 @@
 package controllers.$package$
 
 import base.{SpecBase, AppWithDefaultMockFixtures}
-import forms.$package$.$className$FormProvider
+import forms.$formProvider$
 import views.html.$package$.$className$View
 import models.{$referenceListClass$, NormalMode, UserAnswers}
 import generators.Generators
@@ -24,7 +24,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
   private val $referenceClass;format="decap"$2 = arbitrary$referenceClass$.arbitrary.sample.get
   private val $referenceListClass;format="decap"$ = $referenceListClass$(Seq($referenceClass;format="decap"$1, $referenceClass;format="decap"$2))
 
-  private val formProvider = new $className$FormProvider()
+  private val formProvider = new $formProvider$()
   private val form         = formProvider("$package$.$className;format="decap"$", $referenceListClass;format="decap"$)
   private val mode         = NormalMode
 

@@ -179,3 +179,9 @@ traderDetails.holderOfTransit.address.error.postcode.invalidFormat = Enter the p
 traderDetails.holderOfTransit.address.error.invalid = The {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 traderDetails.holderOfTransit.address.error.required = Enter the {0} of {1}’s address
 traderDetails.holderOfTransit.address.error.length = The {0} of {1}’s address must be 35 characters or less
+
+traderDetails.holderOfTransit.addContact.title = Do you want to add a contact?
+traderDetails.holderOfTransit.addContact.heading = Do you want to add a contact?
+traderDetails.holderOfTransit.addContact.checkYourAnswersLabel = Do you want to add a contact?
+traderDetails.holderOfTransit.addContact.error.required = Select yes if you want to add a contact
+traderDetails.holderOfTransit.addContact.change.hidden = if you want to add a contact

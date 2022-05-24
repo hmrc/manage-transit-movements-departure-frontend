@@ -1,7 +1,7 @@
 package controllers.$package$
 
 import controllers.actions._
-import forms.$package$.$className$FormProvider
+import forms.$formProvider$
 import models.{Mode, LocalReferenceNumber}
 import navigation.Navigator
 import navigation.annotations.$navRoute$
@@ -19,13 +19,13 @@ class $className;format="cap"$Controller @Inject()(
     override val messagesApi: MessagesApi,
     sessionRepository: SessionRepository,
     @$navRoute$ navigator: Navigator,
-    formProvider: $className$FormProvider,
+    formProvider: $formProvider$,
     actions: Actions,
     val controllerComponents: MessagesControllerComponents,
     view: $className$View
 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider("$package$.$className;format="decap"$", $maximum$)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
