@@ -16,12 +16,10 @@
 
 package forms
 
-import base.SpecBase
 import forms.behaviours.StringFieldBehaviours
 import models.Address
 import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
 
 class $formProvider$Spec extends StringFieldBehaviours with SpecBase {
 
@@ -177,7 +175,7 @@ class $formProvider$Spec extends StringFieldBehaviours with SpecBase {
         val fieldName = "postcode"
 
         val genInvalidString: Gen[String] = {
-          alphaStringsWithMaxLength(Address.Constants.postcodeLength) suchThat (!_.matches(Address.Constants.postCodeFormatRegex.toString()))
+          stringsWithMaxLength(Address.Constants.postcodeLength, Gen.alphaNumChar) suchThat (!_.matches(Address.Constants.postCodeFormatRegex.toString()))
         }
         val expectedError = FormError(fieldName, postcodeInvalidFormatKey, Seq(addressHolderName))
 
