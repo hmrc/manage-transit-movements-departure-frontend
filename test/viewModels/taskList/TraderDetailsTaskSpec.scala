@@ -86,11 +86,11 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
         task.href.get mustBe routes.SessionExpiredController.onPageLoad().url
       }
 
-      "and TIR declaration type" ignore {
+      "and TIR declaration type" in {
         val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
         val task        = TraderDetailsTask(userAnswers)
         task.status mustBe NotStarted
-        task.href.get mustBe ???
+        task.href.get mustBe holderOfTransitRoutes.TirIdentificationYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
       }
 
       "and non-TIR declaration type" in {
@@ -106,26 +106,30 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
     "when InProgress" - {
 
-      val baseAnswers = emptyUserAnswers.setValue(EoriYesNoPage, true)
-
       "and declaration type undefined" ignore {
-        val task = TraderDetailsTask(baseAnswers)
+        val task = TraderDetailsTask(emptyUserAnswers)
         task.status mustBe InProgress
         task.href.get mustBe routes.SessionExpiredController.onPageLoad().url
       }
 
-      "and TIR declaration type" ignore {
-        val userAnswers = baseAnswers.setValue(DeclarationTypePage, Option4)
-        val task        = TraderDetailsTask(userAnswers)
+      "and TIR declaration type" in {
+        val userAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, Option4)
+          .setValue(TirIdentificationYesNoPage, true)
+
+        val task = TraderDetailsTask(userAnswers)
         task.status mustBe InProgress
-        task.href.get mustBe ???
+        task.href.get mustBe holderOfTransitRoutes.TirIdentificationYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
       }
 
-      "and non-TIR declaration type" ignore {
+      "and non-TIR declaration type" in {
         forAll(arbitrary[DeclarationType].suchThat(_ != Option4)) {
           declarationType =>
-            val userAnswers = baseAnswers.setValue(DeclarationTypePage, declarationType)
-            val task        = TraderDetailsTask(userAnswers)
+            val userAnswers = emptyUserAnswers
+              .setValue(DeclarationTypePage, declarationType)
+              .setValue(EoriYesNoPage, true)
+
+            val task = TraderDetailsTask(userAnswers)
             task.status mustBe InProgress
             task.href.get mustBe holderOfTransitRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
         }
