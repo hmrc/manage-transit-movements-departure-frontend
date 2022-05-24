@@ -26,7 +26,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.DeclarationTypePage
-import pages.traderDetails.holderOfTransit.{EoriPage, EoriYesNoPage}
+import pages.traderDetails.holderOfTransit._
 import viewModels.taskList.TaskStatus._
 
 class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -137,6 +137,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
         val userAnswers = emptyUserAnswers
           .setValue(EoriYesNoPage, true)
           .setValue(EoriPage, eoriNumber.value)
+          .setValue(NamePage, Gen.alphaNumStr.sample.value)
 
         val task = TraderDetailsTask(userAnswers)
         task.status mustBe Completed
@@ -146,6 +147,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
       "when holder of transit eori unknown" in {
         val userAnswers = emptyUserAnswers
           .setValue(EoriYesNoPage, false)
+          .setValue(NamePage, Gen.alphaNumStr.sample.value)
 
         val task = TraderDetailsTask(userAnswers)
         task.status mustBe Completed
