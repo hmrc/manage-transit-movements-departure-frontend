@@ -35,6 +35,7 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
     case EoriYesNoPage  => ua => eoriYesNoRoute(ua, mode)
     case EoriPage       => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, mode))
     case NamePage       => ua => Some(hotRoutes.AddressController.onPageLoad(ua.lrn, mode))
+    case AddressPage    => ua => Some(hotRoutes.AddContactController.onPageLoad(ua.lrn, mode))
     case AddContactPage => ua => addContactRoute(ua, mode)
   }
 

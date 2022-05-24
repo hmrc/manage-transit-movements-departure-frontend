@@ -115,6 +115,15 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
     }
 
+    "must go from Address page to Add Contact page" in {
+      forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+        (answers, mode) =>
+          navigator
+            .nextPage(AddressPage, mode, answers)
+            .mustBe(hotRoutes.AddContactController.onPageLoad(answers.lrn, mode))
+      }
+    }
+
     "must go from Transit Holder Add Contact page" - {
       //TODO - add nav test for true and false outcomes
       "when Yes selected" - {
