@@ -160,6 +160,7 @@ traderDetails.holderOfTransit.eori.error.minLength = The transit holder's EORI n
 traderDetails.holderOfTransit.eori.error.invalidCharacters = The transit holder’s EORI number must only include letters a to z and numbers 0 to 9
 traderDetails.holderOfTransit.eori.error.invalidFormat = The transit holder’s EORI number must start with 2 letters, such as GB or XI
 traderDetails.holderOfTransit.eori.error.prefix = The transit holder’s EORI number must start with GB or XI, like GB123456789000
+traderDetails.holderOfTransit.eori.change.hidden = transit holder’s EORI number
 
 traderDetails.holderOfTransit.name.title = What is the transit holder’s name?
 traderDetails.holderOfTransit.name.heading = What is the transit holder’s name?
@@ -167,6 +168,7 @@ traderDetails.holderOfTransit.name.checkYourAnswersLabel = Transit holder’s na
 traderDetails.holderOfTransit.name.error.required = Enter the transit holder’s name
 traderDetails.holderOfTransit.name.error.length = The transit holder’s name must be 70 characters or less
 traderDetails.holderOfTransit.name.error.invalid = The transit holder’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, asterisks(*), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+traderDetails.holderOfTransit.name.change.hidden = transit holder’s name
 
 traderDetails.holderOfTransit.contactName.title = What is the contact’s name?
 traderDetails.holderOfTransit.contactName.heading = What is the contact’s name?
