@@ -9,6 +9,6 @@ class YesNoFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String): Form[Boolean] =
     Form(
-      "value" -> boolean(s"$prefix.error.required")
+      "value" -> boolean(s"\$prefix.error.required")
   )
 }
