@@ -16,22 +16,26 @@
 
 package views.traderDetails.holderOfTransit
 
-import forms.IndividualAddressFormProvider
-import models.{Address, NormalMode}
+import forms.AddressFormProvider
+import generators.Generators
+import models.{Address, CountryList, NormalMode}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.IndividualAddressViewBehaviours
+import views.behaviours.AddressViewBehaviours
 import views.html.traderDetails.holderOfTransit.AddressView
 
-class AddressViewSpec extends IndividualAddressViewBehaviours {
+class AddressViewSpec extends AddressViewBehaviours with Generators {
 
   private val addressHolderName = Gen.alphaNumStr.sample.value
 
-  override def form: Form[Address] = new IndividualAddressFormProvider()(prefix, addressHolderName)
+  private val countryList = arbitrary[CountryList].sample.value
+
+  override def form: Form[Address] = new AddressFormProvider()(prefix, addressHolderName)(countryList)
 
   override def applyView(form: Form[Address]): HtmlFormat.Appendable =
-    injector.instanceOf[AddressView].apply(form, lrn, NormalMode, addressHolderName)(fakeRequest, messages)
+    injector.instanceOf[AddressView].apply(form, lrn, NormalMode, countryList.countries, addressHolderName)(fakeRequest, messages)
 
   override val prefix: String = "traderDetails.holderOfTransit.address"
 

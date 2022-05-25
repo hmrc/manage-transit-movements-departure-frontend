@@ -44,7 +44,7 @@
 
         @select(
             field = form("value"),
-            heading = messages("officeOfDeparture.heading"),
+            heading = Some(messages("officeOfDeparture.heading")),
             label = Some(messages("officeOfDeparture.label")),
             hint = Some(messages("officeOfDeparture.hintText")),
             selectItems = customsOffices.toSelectItems(form.value),

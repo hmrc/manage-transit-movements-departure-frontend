@@ -16,7 +16,8 @@
 
 package forms.mappings
 
-import models.{Enumerable, LocalReferenceNumber, RichString}
+import models.reference.{Country, CustomsOffice}
+import models.{CountryList, CustomsOfficeList, Enumerable, LocalReferenceNumber, RichString}
 import play.api.data.FormError
 import play.api.data.format.Formatter
 
@@ -172,4 +173,44 @@ trait Formatters {
       override def unbind(key: String, value: LocalReferenceNumber): Map[String, String] =
         Map(key -> value.toString)
     }
+
+  private[mappings] def countryFormatter(
+    countryList: CountryList,
+    errorKey: String,
+    args: Seq[Any] = Seq.empty
+  ): Formatter[Country] = new Formatter[Country] {
+
+    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Country] =
+      data.get(key) match {
+        case None => Left(Seq(FormError(key, errorKey, args)))
+        case Some(code) =>
+          countryList.countries.find(_.code.code == code) match {
+            case Some(country) => Right(country)
+            case None          => Left(Seq(FormError(key, errorKey, args)))
+          }
+      }
+
+    override def unbind(key: String, country: Country): Map[String, String] =
+      Map(key -> country.code.code)
+  }
+
+  private[mappings] def customsOfficeFormatter(
+    customsOfficeList: CustomsOfficeList,
+    errorKey: String,
+    args: Seq[Any] = Seq.empty
+  ): Formatter[CustomsOffice] = new Formatter[CustomsOffice] {
+
+    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], CustomsOffice] =
+      data.get(key) match {
+        case None => Left(Seq(FormError(key, errorKey, args)))
+        case Some(id) =>
+          customsOfficeList.customsOffices.find(_.id == id) match {
+            case Some(customsOffice) => Right(customsOffice)
+            case None                => Left(Seq(FormError(key, errorKey, args)))
+          }
+      }
+
+    override def unbind(key: String, customsOffice: CustomsOffice): Map[String, String] =
+      Map(key -> customsOffice.id)
+  }
 }

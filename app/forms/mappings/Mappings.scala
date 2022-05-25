@@ -16,7 +16,8 @@
 
 package forms.mappings
 
-import models.{Enumerable, LocalReferenceNumber}
+import models.reference.{Country, CustomsOffice}
+import models.{CountryList, CustomsOfficeList, Enumerable, LocalReferenceNumber}
 import play.api.data.FieldMapping
 import play.api.data.Forms.of
 import play.api.data.format.Formats.ignoredFormat
@@ -70,4 +71,18 @@ trait Mappings extends Formatters with Constraints {
     args: Seq[String] = Seq.empty
   ): FieldMapping[LocalDate] =
     of(new LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey, args))
+
+  protected def country(
+    countryList: CountryList,
+    errorKey: String = "error.required",
+    args: Seq[Any] = Seq.empty
+  ): FieldMapping[Country] =
+    of(countryFormatter(countryList, errorKey, args))
+
+  protected def customsOffice(
+    customsOfficeList: CustomsOfficeList,
+    errorKey: String = "error.required",
+    args: Seq[Any] = Seq.empty
+  ): FieldMapping[CustomsOffice] =
+    of(customsOfficeFormatter(customsOfficeList, errorKey, args))
 }

@@ -14,44 +14,55 @@
  * limitations under the License.
  *@
 
-@import views.html.components.InputText
+@import models.Address
+@import models.reference.Country
+@import views.html.components.{InputSelect, InputText}
 @import views.utils.ViewUtils._
 
 @this(
     inputText: InputText,
+    inputSelect: InputSelect,
     govukFieldset: GovukFieldset
 )
 
 @(
-    form: Form[_],
+    form: Form[Address],
     messageKeyPrefix: String,
     caption: Option[String],
+    countries: Seq[Country],
     headingArgs: Any*
 )(implicit messages: Messages)
 
 @html = {
     @inputText(
-        field = form("numberAndStreet"),
-        label = messages(s"$messageKeyPrefix.numberAndStreet"),
+        field = form("addressLine1"),
+        label = messages(s"$messageKeyPrefix.addressLine1"),
         labelIsHeading = false,
         autocomplete = Some("address-line1"),
         inputClass = Some("govuk-!-width-two-thirds")
     )
 
     @inputText(
-        field = form("town"),
-        label = messages(s"$messageKeyPrefix.town"),
+        field = form("addressLine2"),
+        label = messages(s"$messageKeyPrefix.addressLine2"),
         labelIsHeading = false,
         autocomplete = Some("address-line2"),
         inputClass = Some("govuk-!-width-two-thirds")
     )
 
     @inputText(
-        field = form("postcode"),
-        label = messages(s"$messageKeyPrefix.postcode"),
+        field = form("postalCode"),
+        label = messages(s"$messageKeyPrefix.postalCode"),
         labelIsHeading = false,
         autocomplete = Some("postal-code"),
         inputClass = InputSize.Width10
+    )
+
+    @inputSelect(
+        field = form("country"),
+        label = Some(messages(s"$messageKeyPrefix.country")),
+        selectItems = countries.toSelectItems(form.value.map(_.country)),
+        placeholder = Some(messages("traderDetails.holderOfTransit.address.placeholder"))
     )
 }
 
