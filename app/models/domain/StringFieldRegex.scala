@@ -27,4 +27,6 @@ object StringFieldRegex {
   val eoriNumberPrefixRegex: Regex = "^(?i)(gb|xi).*$".r
   val eoriNumberRegex: Regex       = "^(?i)(gb|xi)[0-9]*$".r
 
+  val maxTelephoneNumberLength    = 30
+  val telephoneNumberRegex: Regex = "^[\\d*#-+() .x]+$".r
 }

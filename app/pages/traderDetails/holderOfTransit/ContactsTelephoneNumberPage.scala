@@ -16,12 +16,11 @@
 
 package pages.traderDetails.holderOfTransit
 
-import models.TelephoneNumber
 import play.api.libs.json.JsPath
 import pages.QuestionPage
 import pages.sections.HolderOfTransitSection
 
-case object ContactsTelephoneNumberPage extends QuestionPage[TelephoneNumber] {
+case object ContactsTelephoneNumberPage extends QuestionPage[String] {
 
   override def path: JsPath = HolderOfTransitSection.path \ toString
 

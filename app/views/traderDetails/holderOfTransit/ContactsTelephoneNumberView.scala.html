@@ -16,7 +16,7 @@
 
 @import controllers.traderDetails.holderOfTransit.routes
 @import views.html.components.{Button, ErrorSummary, InputText}
-@import models.{LocalReferenceNumber, TelephoneNumber}
+@import models.LocalReferenceNumber
 
 @this(
   mainTemplate: MainTemplate,
@@ -26,7 +26,7 @@
   button: Button
 )
 
-@(form: Form[TelephoneNumber], lrn: LocalReferenceNumber, mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
   title = messages("traderDetails.holderOfTransit.contactsTelephoneNumber.title", name),

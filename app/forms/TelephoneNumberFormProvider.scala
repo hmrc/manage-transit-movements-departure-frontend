@@ -18,25 +18,19 @@ package forms
 
 import forms.mappings.Mappings
 import javax.inject.Inject
-import models.TelephoneNumber
+import models.domain.StringFieldRegex.{maxTelephoneNumberLength, telephoneNumberRegex}
 import play.api.data.Form
-import play.api.data.Forms.mapping
 
 class TelephoneNumberFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String, name: String): Form[TelephoneNumber] =
+  def apply(prefix: String, name: String): Form[String] =
     Form(
-      mapping(
-        "value" -> text(s"$prefix.error.required")
-          .verifying(
-            StopOnFirstFail[String](
-              maxLength(TelephoneNumber.Constants.maxTelephoneNumberLength,
-                        s"$prefix.error.length",
-                        args = Seq(name, TelephoneNumber.Constants.maxTelephoneNumberLength)
-              ),
-              regexp(TelephoneNumber.Constants.telephoneNumberRegex, s"$prefix.error.invalidFormat", args = Seq(name))
-            )
+      "value" -> text(s"$prefix.error.required")
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(maxTelephoneNumberLength, s"$prefix.error.length", args = Seq(name, maxTelephoneNumberLength)),
+            regexp(telephoneNumberRegex, s"$prefix.error.invalidFormat", args = Seq(name))
           )
-      )(TelephoneNumber.apply)(TelephoneNumber.unapply)
+        )
     )
 }

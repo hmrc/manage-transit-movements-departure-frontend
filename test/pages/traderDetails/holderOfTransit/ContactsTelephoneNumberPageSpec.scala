@@ -16,17 +16,16 @@
 
 package pages.traderDetails.holderOfTransit
 
-import models.TelephoneNumber
 import pages.behaviours.PageBehaviours
 
 class ContactsTelephoneNumberPageSpec extends PageBehaviours {
 
   "traderDetails.holderOfTransit.ContactsTelephoneNumberPage" - {
 
-    beRetrievable[TelephoneNumber](ContactsTelephoneNumberPage)
+    beRetrievable[String](ContactsTelephoneNumberPage)
 
-    beSettable[TelephoneNumber](ContactsTelephoneNumberPage)
+    beSettable[String](ContactsTelephoneNumberPage)
 
-    beRemovable[TelephoneNumber](ContactsTelephoneNumberPage)
+    beRemovable[String](ContactsTelephoneNumberPage)
   }
 }

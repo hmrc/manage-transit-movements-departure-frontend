@@ -17,7 +17,8 @@
 package views.traderDetails.holderOfTransit
 
 import forms.TelephoneNumberFormProvider
-import models.{NormalMode, TelephoneNumber}
+import models.NormalMode
+import models.domain.StringFieldRegex.maxTelephoneNumberLength
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
@@ -25,17 +26,17 @@ import views.behaviours.InputTextViewBehaviours
 import views.html.traderDetails.holderOfTransit.ContactsTelephoneNumberView
 import org.scalacheck.{Arbitrary, Gen}
 
-class ContactsTelephoneNumberViewSpec extends InputTextViewBehaviours[TelephoneNumber] {
+class ContactsTelephoneNumberViewSpec extends InputTextViewBehaviours[String] {
 
   private val name: String    = "Contact Name"
   override val prefix: String = "traderDetails.holderOfTransit.contactsTelephoneNumber"
 
-  override def form: Form[TelephoneNumber] = new TelephoneNumberFormProvider()(prefix, name)
+  override def form: Form[String] = new TelephoneNumberFormProvider()(prefix, name)
 
-  override def applyView(form: Form[TelephoneNumber]): HtmlFormat.Appendable =
+  override def applyView(form: Form[String]): HtmlFormat.Appendable =
     injector.instanceOf[ContactsTelephoneNumberView].apply(form, lrn, NormalMode, name)(fakeRequest, messages)
 
-  implicit override val arbitraryT: Arbitrary[TelephoneNumber] = arbitraryTelephoneNumber
+  implicit override val arbitraryT: Arbitrary[String] = Arbitrary(stringsWithMaxLength(maxTelephoneNumberLength, Gen.numChar))
 
   behave like pageWithTitle(name)
 

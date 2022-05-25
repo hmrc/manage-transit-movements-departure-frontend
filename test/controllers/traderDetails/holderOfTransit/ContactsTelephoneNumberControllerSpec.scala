@@ -16,7 +16,7 @@
 
 package controllers.traderDetails.holderOfTransit
 
-import models.{NormalMode, TelephoneNumber, UserAnswers}
+import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
 import org.mockito.ArgumentMatchers.any
@@ -43,7 +43,7 @@ class ContactsTelephoneNumberControllerSpec extends SpecBase with AppWithDefault
   private lazy val contactsTelephoneNumberRoute = routes.ContactsTelephoneNumberController.onPageLoad(lrn, mode).url
   private lazy val mockUserAnswersService       = mock[UserAnswersService]
 
-  private val validAnswer: TelephoneNumber = arbitraryTelephoneNumber.arbitrary.sample.get
+  private val validAnswer: String = "123123"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -88,7 +88,7 @@ class ContactsTelephoneNumberControllerSpec extends SpecBase with AppWithDefault
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> validAnswer.value))
+      val filledForm = form.bind(Map("value" -> validAnswer))
 
       val view = injector.instanceOf[ContactsTelephoneNumberView]
 
@@ -107,7 +107,7 @@ class ContactsTelephoneNumberControllerSpec extends SpecBase with AppWithDefault
 
       val request =
         FakeRequest(POST, contactsTelephoneNumberRoute)
-          .withFormUrlEncodedBody(("value", validAnswer.value))
+          .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
 
