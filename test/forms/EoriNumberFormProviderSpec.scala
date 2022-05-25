@@ -93,7 +93,7 @@ class EoriNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavio
     }
 
     "must not bind strings with correct prefix but invalid suffix" in {
-      val expectedError = FormError(fieldName, invalidFormatKey, Seq(eoriNumberRegex))
+      val expectedError = FormError(fieldName, invalidFormatKey, Seq(eoriNumberRegex.regex))
 
       val gen = for {
         prefix <- prefixGen
@@ -108,7 +108,7 @@ class EoriNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavio
     }
 
     "must not bind strings with wrong prefix" in {
-      val expectedError = FormError(fieldName, invalidPrefixFormatKey, Seq(eoriNumberPrefixRegex))
+      val expectedError = FormError(fieldName, invalidPrefixFormatKey, Seq(eoriNumberPrefixRegex.regex))
 
       val gen = for {
         prefix <- stringsWithLength(2, Gen.alphaChar).retryUntil(!validPrefixes.contains(_))

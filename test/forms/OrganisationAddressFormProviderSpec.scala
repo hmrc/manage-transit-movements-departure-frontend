@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-package models.domain
+package forms
 
-import scala.util.matching.Regex
+class OrganisationAddressFormProviderSpec extends AddressFormProviderSpec {
 
-object StringFieldRegex {
+  override val formProvider: AddressFormProvider = new OrganisationAddressFormProvider()
 
-  val stringFieldRegex: Regex         = "[\\sa-zA-Z0-9&'@/.\\-? ]*".r
-  val stringFieldRegexAsterisk: Regex = "[\\sa-zA-Z0-9&'*/.\\-? ]*".r
-  val alphaNumericRegex: Regex        = "^[a-zA-Z0-9]*$".r
-
-  val eoriNumberPrefixRegex: Regex = "^(?i)(gb|xi).*$".r
-  val eoriNumberRegex: Regex       = "^(?i)(gb|xi)[0-9]*$".r
-
+  behave like addressFormProvider()
 }
