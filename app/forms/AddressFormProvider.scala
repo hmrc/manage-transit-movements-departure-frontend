@@ -18,46 +18,47 @@ package forms
 
 import forms.mappings.Mappings
 import models.Address
-import models.Address.Constants.Fields._
-import models.Address.Constants._
-import models.domain.StringFieldRegex.stringFieldRegex
+import models.Address._
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import play.api.i18n.Messages
 
 import javax.inject.Inject
 
-class AddressFormProvider @Inject() extends Mappings {
+abstract class AddressFormProvider @Inject() extends Mappings {
+
+  val addressLine1: AddressLine1
+  val addressLine2: AddressLine2
 
   def apply(prefix: String, name: String)(implicit messages: Messages): Form[Address] = Form(
     mapping(
-      "numberAndStreet" -> {
-        lazy val args = Seq(numberAndStreet, name)
+      addressLine1.field -> {
+        lazy val args = Seq(addressLine1.arg, name)
         text(s"$prefix.error.required", args)
           .verifying(
             StopOnFirstFail[String](
-              maxLength(buildingAndStreetLength, s"$prefix.error.length", args),
-              regexp(stringFieldRegex, s"$prefix.error.invalid", args)
+              maxLength(addressLine1.length, s"$prefix.error.length", args),
+              regexp(addressLine1.regex, s"$prefix.error.invalid", args)
             )
           )
       },
-      "town" -> {
-        lazy val args = Seq(town, name)
+      addressLine2.field -> {
+        lazy val args = Seq(addressLine2.arg, name)
         text(s"$prefix.error.required", args)
           .verifying(
             StopOnFirstFail[String](
-              maxLength(townLength, s"$prefix.error.length", args),
-              regexp(stringFieldRegex, s"$prefix.error.invalid", args)
+              maxLength(addressLine2.length, s"$prefix.error.length", args),
+              regexp(addressLine2.regex, s"$prefix.error.invalid", args)
             )
           )
       },
-      "postcode" -> {
+      Postcode.field -> {
         lazy val args = Seq(name)
-        text(s"$prefix.error.required", postcode +: args)
+        text(s"$prefix.error.required", Postcode.arg +: args)
           .verifying(
             StopOnFirstFail[String](
-              regexp(postCodeRegex, s"$prefix.error.postcode.invalid", args),
-              regexp(postCodeFormatRegex, s"$prefix.error.postcode.invalidFormat", args)
+              regexp(Postcode.regex, s"$prefix.error.postcode.invalid", args),
+              regexp(Postcode.formatRegex, s"$prefix.error.postcode.invalidFormat", args)
             )
           )
       }
