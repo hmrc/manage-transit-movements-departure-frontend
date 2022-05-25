@@ -33,7 +33,7 @@
                 <li class="app-task-list__item">
                     <span class="app-task-list__task-name">
                         @task.href match {
-                            case Some(href) => { <a href=@href aria-describedby="@task.id-status">@task.name</a> }
+                            case Some(href) => { <a href="@href" aria-describedby="@task.id-status">@task.name</a> }
                             case None       => { @task.name }
                         }
                     </span>
