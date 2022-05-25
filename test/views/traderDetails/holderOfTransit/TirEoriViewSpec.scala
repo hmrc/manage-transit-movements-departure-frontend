@@ -22,27 +22,29 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.traderDetails.holderOfTransit.TirIdentificationNoControllerView
+import views.html.traderDetails.holderOfTransit.TirEoriView
 import org.scalacheck.{Arbitrary, Gen}
 
-class TirIdentificationNoControllerViewSpec extends InputTextViewBehaviours[String] {
+class TirEoriViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "traderDetails.holderOfTransit.tirIdentificationNoController"
-
-  override def form: Form[String] = new EoriNumberFormProvider()(prefix,  100)
+  override def form: Form[String] = new EoriNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[TirIdentificationNoControllerView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[TirEoriView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
-  implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
+  override val prefix: String = "traderDetails.holderOfTransit.tirEori"
+
+  implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaNumStr)
 
   behave like pageWithTitle()
 
   behave like pageWithBackLink
 
+  behave like pageWithSectionCaption("Trader details")
+
   behave like pageWithHeading()
 
-  behave like pageWithoutHint
+  behave like pageWithHint("This will start GB or XI followed by 12 or 15 numbers, for example GB123456789000.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 

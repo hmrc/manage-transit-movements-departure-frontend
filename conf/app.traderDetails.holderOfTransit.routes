@@ -33,3 +33,8 @@ GET        /:lrn/trader-details/holder-of-transit/is-tir-identification-known   
 POST       /:lrn/trader-details/holder-of-transit/is-tir-identification-known                 controllers.traderDetails.holderOfTransit.TirIdentificationYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/trader-details/holder-of-transit/change-is-tir-identification-known          controllers.traderDetails.holderOfTransit.TirIdentificationYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/trader-details/holder-of-transit/change-is-tir-identification-known          controllers.traderDetails.holderOfTransit.TirIdentificationYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/holder-of-transit/tir-eori                                    controllers.traderDetails.holderOfTransit.TirEoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/holder-of-transit/tir-eori                                    controllers.traderDetails.holderOfTransit.TirEoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/holder-of-transit/change-tir-eori                             controllers.traderDetails.holderOfTransit.TirEoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/holder-of-transit/change-tir-eori                             controllers.traderDetails.holderOfTransit.TirEoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

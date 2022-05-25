@@ -1,3 +1,19 @@
+/*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package controllers.traderDetails.holderOfTransit
 
 import models.{NormalMode, UserAnswers}
@@ -10,20 +26,22 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import forms.EoriNumberFormProvider
-import views.html.traderDetails.holderOfTransit.TirIdentificationNoControllerView
+import views.html.traderDetails.holderOfTransit.TirEoriView
 import services.UserAnswersService
-import pages.traderDetails.holderOfTransit.TirIdentificationNoControllerPage
+import pages.traderDetails.holderOfTransit.TirEoriPage
 import base.{AppWithDefaultMockFixtures, SpecBase}
 
 import scala.concurrent.Future
 
-class TirIdentificationNoControllerControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class TirEoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider = new EoriNumberFormProvider()
-  private val form         = formProvider("traderDetails.holderOfTransit.tirIdentificationNoController")
-  private val mode         = NormalMode
-  private lazy val tirIdentificationNoControllerRoute = routes.TirIdentificationNoControllerController.onPageLoad(lrn, mode).url
-  private lazy val mockUserAnswersService = mock[UserAnswersService]
+  private val formProvider                            = new EoriNumberFormProvider()
+  private val form                                    = formProvider("traderDetails.holderOfTransit.tirEori")
+  private val mode                                    = NormalMode
+  private lazy val tirIdentificationNoControllerRoute = routes.TirEoriController.onPageLoad(lrn, mode).url
+  private lazy val mockUserAnswersService             = mock[UserAnswersService]
+
+  private lazy val validAnswer = eoriNumber.value
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -36,7 +54,7 @@ class TirIdentificationNoControllerControllerSpec extends SpecBase with AppWithD
     reset(mockUserAnswersService)
   }
 
-  "TirIdentificationNoController Controller" - {
+  "TirEoriController" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -46,7 +64,7 @@ class TirIdentificationNoControllerControllerSpec extends SpecBase with AppWithD
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[TirIdentificationNoControllerView]
+      val view = injector.instanceOf[TirEoriView]
 
       status(result) mustEqual OK
 
@@ -57,16 +75,16 @@ class TirIdentificationNoControllerControllerSpec extends SpecBase with AppWithD
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(TirIdentificationNoControllerPage, "test string").success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(TirEoriPage, validAnswer).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, tirIdentificationNoControllerRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> "test string"))
+      val filledForm = form.bind(Map("value" -> validAnswer))
 
-      val view = injector.instanceOf[TirIdentificationNoControllerView]
+      val view = injector.instanceOf[TirEoriView]
 
       status(result) mustEqual OK
 
@@ -84,7 +102,7 @@ class TirIdentificationNoControllerControllerSpec extends SpecBase with AppWithD
 
       val request =
         FakeRequest(POST, tirIdentificationNoControllerRoute)
-          .withFormUrlEncodedBody(("value", "test string"))
+          .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
 
@@ -99,14 +117,14 @@ class TirIdentificationNoControllerControllerSpec extends SpecBase with AppWithD
 
       val invalidAnswer = ""
 
-      val request = FakeRequest(POST, tirIdentificationNoControllerRoute).withFormUrlEncodedBody(("value", ""))
+      val request    = FakeRequest(POST, tirIdentificationNoControllerRoute).withFormUrlEncodedBody(("value", ""))
       val filledForm = form.bind(Map("value" -> invalidAnswer))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[TirIdentificationNoControllerView]
+      val view = injector.instanceOf[TirEoriView]
 
       contentAsString(result) mustEqual
         view(filledForm, lrn, mode)(request, messages).toString
