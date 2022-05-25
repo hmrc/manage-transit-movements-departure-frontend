@@ -1,6 +1,8 @@
 package controllers.$package$
 
-import models.{$objectClassName$, NormalMode, UserAnswers}
+import base.{SpecBase, AppWithDefaultMockFixtures}
+import generators.Generators
+import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.$navRoute$
 import org.mockito.ArgumentMatchers.any
@@ -64,7 +66,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> "test string"))
+      val filledForm = form.bind(Map("value" -> validValue.value))
 
       val view = injector.instanceOf[$className$View]
 

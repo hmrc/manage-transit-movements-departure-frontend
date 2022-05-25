@@ -3,6 +3,7 @@ package forms
 import forms.mappings.Mappings
 import javax.inject.Inject
 import play.api.data.Form
+import play.api.data.Forms.mapping
 import models.$objectClassName$
 
 class $formProvider$ @Inject() extends Mappings {
@@ -19,6 +20,6 @@ class $formProvider$ @Inject() extends Mappings {
               )
             )
           )
-      )($className$.apply)($className$.unapply)
+      )($objectClassName$.apply)($objectClassName$.unapply)
     )
 }
