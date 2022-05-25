@@ -16,7 +16,7 @@
 
 package views.traderDetails.holderOfTransit
 
-import forms.AddressFormProvider
+import forms.IndividualAddressFormProvider
 import models.{Address, NormalMode}
 import org.scalacheck.Gen
 import play.api.data.Form
@@ -28,7 +28,7 @@ class AddressViewSpec extends IndividualAddressViewBehaviours {
 
   private val addressHolderName = Gen.alphaNumStr.sample.value
 
-  override def form: Form[Address] = new AddressFormProvider()(prefix, addressHolderName)
+  override def form: Form[Address] = new IndividualAddressFormProvider()(prefix, addressHolderName)
 
   override def applyView(form: Form[Address]): HtmlFormat.Appendable =
     injector.instanceOf[AddressView].apply(form, lrn, NormalMode, addressHolderName)(fakeRequest, messages)

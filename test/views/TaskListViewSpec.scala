@@ -32,7 +32,7 @@ class TaskListViewSpec extends TaskListViewBehaviours {
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithoutBackLink()
 
   behave like pageWithCaption(lrn.toString)
 

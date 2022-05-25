@@ -68,13 +68,8 @@ trait Constraints {
         }
     }
 
-  protected def regexp(regex: String, errorKey: String): Constraint[String] =
-    Constraint {
-      case str if str.matches(regex) =>
-        Valid
-      case _ =>
-        Invalid(errorKey, regex)
-    }
+  protected def regexp(regex: Regex, errorKey: String): Constraint[String] =
+    regexp(regex, errorKey, Seq(regex.regex))
 
   protected def regexp(regex: Regex, errorKey: String, args: Seq[Any]): Constraint[String] =
     Constraint {
@@ -85,28 +80,23 @@ trait Constraints {
     }
 
   protected def maxLength(maximum: Int, errorKey: String): Constraint[String] =
-    lengthConstraint(maximum, errorKey, _.length <= maximum)
+    maxLength(maximum, errorKey, Seq(maximum))
 
   protected def maxLength(maximum: Int, errorKey: String, args: Seq[Any]): Constraint[String] =
-    Constraint {
-      case str if str.length <= maximum =>
-        Valid
-      case _ =>
-        Invalid(errorKey, args: _*)
-    }
+    lengthConstraint(errorKey, _.length <= maximum, args)
 
   protected def minLength(minimum: Int, errorKey: String): Constraint[String] =
-    lengthConstraint(minimum, errorKey, _.length >= minimum)
+    lengthConstraint(errorKey, _.length >= minimum, Seq(minimum))
 
   protected def exactLength(exact: Int, errorKey: String): Constraint[String] =
-    lengthConstraint(exact, errorKey, _.length == exact)
+    lengthConstraint(errorKey, _.length == exact, Seq(exact))
 
-  private def lengthConstraint(length: Int, errorKey: String, predicate: String => Boolean): Constraint[String] =
+  private def lengthConstraint(errorKey: String, predicate: String => Boolean, args: Seq[Any]): Constraint[String] =
     Constraint {
       case str if predicate(str) =>
         Valid
       case _ =>
-        Invalid(errorKey, length)
+        Invalid(errorKey, args: _*)
     }
 
   protected def maxDate(maximum: LocalDate, errorKey: String, args: Any*): Constraint[LocalDate] =
@@ -133,6 +123,4 @@ trait Constraints {
         Invalid(errorKey)
     }
 
-  protected def regexp(regex: Regex, errorKey: String): Constraint[String] =
-    regexp(regex.regex, errorKey)
 }

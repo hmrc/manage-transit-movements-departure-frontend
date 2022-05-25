@@ -17,7 +17,7 @@
 package controllers.traderDetails.holderOfTransit
 
 import controllers.actions._
-import forms.AddressFormProvider
+import forms.IndividualAddressFormProvider
 import models.requests.SpecificDataRequestProvider1
 import models.{Address, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -39,7 +39,7 @@ class AddressController @Inject() (
   @TraderDetails navigator: Navigator,
   actions: Actions,
   getMandatoryPage: SpecificDataRequiredActionProvider,
-  formProvider: AddressFormProvider,
+  formProvider: IndividualAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: AddressView
 )(implicit ec: ExecutionContext)
