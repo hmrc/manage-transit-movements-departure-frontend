@@ -27,8 +27,8 @@ import javax.inject.Inject
 
 abstract class AddressFormProvider @Inject() extends Mappings {
 
-  val addressLine1: AddressLine1
-  val addressLine2: AddressLine2
+  val addressLine1: AddressLine
+  val addressLine2: AddressLine
 
   def apply(prefix: String, name: String)(implicit messages: Messages): Form[Address] = Form(
     mapping(

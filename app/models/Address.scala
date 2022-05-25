@@ -33,27 +33,23 @@ object Address {
     def arg(implicit messages: Messages): String = messages(s"address.$field")
   }
 
-  sealed trait AddressLine1 extends AddressLine
-  sealed trait AddressLine2 extends AddressLine
-  sealed trait AddressLine3 extends AddressLine
-
-  case object NumberAndStreet extends AddressLine1 {
+  case object NumberAndStreet extends AddressLine {
     override val field: String = "numberAndStreet"
   }
 
-  case object BuildingAndStreet extends AddressLine1 {
+  case object BuildingAndStreet extends AddressLine {
     override val field: String = "buildingAndStreet"
   }
 
-  case object Town extends AddressLine2 {
+  case object Town extends AddressLine {
     override val field: String = "town"
   }
 
-  case object City extends AddressLine2 {
+  case object City extends AddressLine {
     override val field: String = "city"
   }
 
-  case object Postcode extends AddressLine3 {
+  case object Postcode extends AddressLine {
     override val field: String = "postcode"
     override val regex: Regex  = "^[a-zA-Z\\s*0-9]*$".r
     val formatRegex: Regex     = "^[a-zA-Z]{1,2}([0-9]{1,2}|[0-9][a-zA-Z])\\s*[0-9][a-zA-Z]{2}$".r

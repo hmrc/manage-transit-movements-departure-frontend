@@ -22,6 +22,6 @@ import javax.inject.Inject
 
 class OrganisationAddressFormProvider @Inject() extends AddressFormProvider {
 
-  override val addressLine1: AddressLine1 = BuildingAndStreet
-  override val addressLine2: AddressLine2 = City
+  override val addressLine1: AddressLine = BuildingAndStreet
+  override val addressLine2: AddressLine = City
 }

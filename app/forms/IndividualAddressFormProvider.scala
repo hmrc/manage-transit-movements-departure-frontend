@@ -22,6 +22,6 @@ import javax.inject.Inject
 
 class IndividualAddressFormProvider @Inject() extends AddressFormProvider {
 
-  override val addressLine1: AddressLine1 = NumberAndStreet
-  override val addressLine2: AddressLine2 = Town
+  override val addressLine1: AddressLine = NumberAndStreet
+  override val addressLine2: AddressLine = Town
 }

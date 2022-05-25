@@ -27,8 +27,8 @@ abstract class AddressFormProviderSpec extends StringFieldBehaviours with SpecBa
 
   val formProvider: AddressFormProvider
 
-  lazy val addressLine1: AddressLine1 = formProvider.addressLine1
-  lazy val addressLine2: AddressLine2 = formProvider.addressLine2
+  lazy val addressLine1: AddressLine = formProvider.addressLine1
+  lazy val addressLine2: AddressLine = formProvider.addressLine2
 
   private val prefix            = Gen.alphaNumStr.sample.value
   private val addressHolderName = Gen.alphaNumStr.sample.value

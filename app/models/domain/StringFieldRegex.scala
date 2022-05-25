@@ -20,11 +20,11 @@ import scala.util.matching.Regex
 
 object StringFieldRegex {
 
-  val stringFieldRegex: Regex  = "[\\sa-zA-Z0-9&'@/.\\-? ]*".r
-  val stringFieldRegexAsterisk = "[\\sa-zA-Z0-9&'*/.\\-? ]*".r
-  val alphaNumericRegex: Regex = "^[a-zA-Z0-9]*$".r
+  val stringFieldRegex: Regex         = "[\\sa-zA-Z0-9&'@/.\\-? ]*".r
+  val stringFieldRegexAsterisk: Regex = "[\\sa-zA-Z0-9&'*/.\\-? ]*".r
+  val alphaNumericRegex: Regex        = "^[a-zA-Z0-9]*$".r
 
-  val eoriNumberPrefixRegex: String = "^(?i)(gb|xi).*$"
-  val eoriNumberRegex: String       = "^(?i)(gb|xi)[0-9]*$"
+  val eoriNumberPrefixRegex: Regex = "^(?i)(gb|xi).*$".r
+  val eoriNumberRegex: Regex       = "^(?i)(gb|xi)[0-9]*$".r
 
 }
