@@ -26,6 +26,7 @@ If you hit an entry point before running the journey tests, it gets the compile 
 e.g.: http://localhost:10120/manage-transit-movements/departure/local-reference-number
 
 ### Running Scaffold
+The first time you create a scaffold page for a new package you will need to add that app.$package$.routes into prod.routes
 
 Create New Page in sbt:
 <pre>sbt --supershell=false
@@ -44,12 +45,14 @@ This updates the test classes app.routes and messages files
 First you need to ensure you have a related AddressNamePage
 <pre>g8Scaffold stringPage
 -> package: foo.bar
+-> title: Consignee Name
 -> className: ConsigneeName
 </pre>
 
 Then you create the address page referencing the Name Page
 <pre>g8Scaffold addressPage
 -> package: foo.bar
+-> title: Condignee Address
 -> className: ConsigneeAddress
 -> addressHolderNamePage: ConsigneeNamePage
 </pre>
@@ -61,8 +64,20 @@ That object must also extend Selectable.
 For the test an arbitrary constructor of the Selectable object will be required, or you can manually create these objects
 <pre>g8Scaffold inputSelectPage
 -> package: foo.bar
+-> title: Office Of Departure
 -> className: OfficeOfDeparture
 -> referenceClass = CustomsOffice
+...
+</pre>
+
+### Creating an Objetc Page in Scaffold
+When creating a new View to store a new Object you'll have to go into ModelGenerations and create a method to create a new arbitrary copy of this object
+<pre>g8Scaffold objectPage
+-> package: foo.bar
+-> title: My New Widget
+-> className: MyNewWidget
+-> objectClassName: Widget
+-> formProvider: WidgetFormProvider
 ...
 </pre>
 ### License
