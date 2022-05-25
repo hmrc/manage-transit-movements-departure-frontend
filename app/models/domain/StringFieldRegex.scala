@@ -27,4 +27,5 @@ object StringFieldRegex {
   val eoriNumberPrefixRegex: Regex = "^(?i)(gb|xi).*$".r
   val eoriNumberRegex: Regex       = "^(?i)(gb|xi)[0-9]*$".r
 
+  val tirIdNumberRegex: Regex = "^[a-zA-Z]{3}\\/[0-9]{3}\\/[0-9]*$".r
 }

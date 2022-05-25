@@ -14,12 +14,24 @@
  * limitations under the License.
  */
 
-package forms
+package forms.traderDetails
 
-object Constants {
-  lazy val tirCarnetReferenceMaxLength = 12
-  lazy val maxEoriNumberLength: Int    = 17
-  lazy val minEoriNumberLength: Int    = 14
-  lazy val maxNameLength: Int          = 70
-  lazy val maxTirIdNumberLength: Int   = 17
+import forms.Constants._
+import forms.mappings.Mappings
+import javax.inject.Inject
+import models.domain.StringFieldRegex._
+import play.api.data.Form
+
+class TirIdNumberFormProvider @Inject() extends Mappings {
+
+  def apply(prefix: String): Form[String] =
+    Form(
+      "value" -> textWithSpacesRemoved(s"$prefix.error.required")
+        .verifying(
+          forms.StopOnFirstFail[String](
+            regexp(tirIdNumberRegex, s"$prefix.error.invalidFormat"),
+            maxLength(maxTirIdNumberLength, s"$prefix.error.maxLength")
+          )
+        )
+    )
 }

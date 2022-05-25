@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages.traderDetails.holderOfTransit
 
-object Constants {
-  lazy val tirCarnetReferenceMaxLength = 12
-  lazy val maxEoriNumberLength: Int    = 17
-  lazy val minEoriNumberLength: Int    = 14
-  lazy val maxNameLength: Int          = 70
-  lazy val maxTirIdNumberLength: Int   = 17
+import pages.behaviours.PageBehaviours
+
+class TirIdentificationPageSpec extends PageBehaviours {
+
+  "TirIdentificationPage" - {
+
+    beRetrievable[String](TirIdentificationPage)
+
+    beSettable[String](TirIdentificationPage)
+
+    beRemovable[String](TirIdentificationPage)
+  }
 }

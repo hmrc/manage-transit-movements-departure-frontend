@@ -199,3 +199,12 @@ traderDetails.holderOfTransit.tirIdentificationYesNo.heading = Do you know the T
 traderDetails.holderOfTransit.tirIdentificationYesNo.checkYourAnswersLabel = Do you know the Transit procedure TIR identification number?
 traderDetails.holderOfTransit.tirIdentificationYesNo.error.required = Select yes if you know the Transit procedure TIR identification number
 traderDetails.holderOfTransit.tirIdentificationYesNo.change.hidden = if you know the Transit procedure TIR identification number
+
+traderDetails.holderOfTransit.tirIdentification.title = What is the TIR holder’s identification number?
+traderDetails.holderOfTransit.tirIdentification.heading = What is the TIR holder’s identification number?
+traderDetails.holderOfTransit.tirIdentification.checkYourAnswersLabel = TIR holder’s identification number?
+traderDetails.holderOfTransit.tirIdentification.hint = AAA/999/99999.
+traderDetails.holderOfTransit.tirIdentification.error.required = Enter the TIR holder’s identification number
+traderDetails.holderOfTransit.tirIdentification.error.maxLength = The TIR holder’s identification number must be 17 characters or less
+traderDetails.holderOfTransit.tirIdentification.error.invalidFormat = The TIR holder’s identification number must start with 3 letters, a forward slash, 3 numbers and another forward slash
+
