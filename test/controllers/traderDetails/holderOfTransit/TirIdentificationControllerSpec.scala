@@ -25,23 +25,23 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.EoriNumberFormProvider
 import views.html.traderDetails.holderOfTransit.TirIdentificationView
 import services.UserAnswersService
 import pages.traderDetails.holderOfTransit.TirIdentificationPage
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import forms.traderDetails.TirIdNumberFormProvider
 
 import scala.concurrent.Future
 
 class TirIdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                = new EoriNumberFormProvider()
+  private val formProvider                = new TirIdNumberFormProvider()
   private val form                        = formProvider("traderDetails.holderOfTransit.tirIdentification")
   private val mode                        = NormalMode
   private lazy val tirIdentificationRoute = routes.TirIdentificationController.onPageLoad(lrn, mode).url
   private lazy val mockUserAnswersService = mock[UserAnswersService]
 
-  private lazy val validAnswer = eoriNumber.value
+  private lazy val validAnswer = "AAA/999/99999"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

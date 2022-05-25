@@ -16,7 +16,7 @@
 
 package views.traderDetails.holderOfTransit
 
-import forms.EoriNumberFormProvider
+import forms.traderDetails.TirIdNumberFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -27,7 +27,7 @@ import org.scalacheck.{Arbitrary, Gen}
 
 class TirIdentificationViewSpec extends InputTextViewBehaviours[String] {
 
-  override def form: Form[String] = new EoriNumberFormProvider()(prefix)
+  override def form: Form[String] = new TirIdNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
     injector.instanceOf[TirIdentificationView].apply(form, lrn, NormalMode)(fakeRequest, messages)
@@ -44,7 +44,7 @@ class TirIdentificationViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithHeading()
 
-  behave like pageWithHint("This will start GB or XI followed by 12 or 15 numbers, for example GB123456789000.")
+  behave like pageWithHint("AAA/999/99999.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 
