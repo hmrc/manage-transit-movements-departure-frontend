@@ -199,3 +199,9 @@ traderDetails.holderOfTransit.tirIdentificationYesNo.heading = Do you know the T
 traderDetails.holderOfTransit.tirIdentificationYesNo.checkYourAnswersLabel = Do you know the Transit procedure TIR identification number?
 traderDetails.holderOfTransit.tirIdentificationYesNo.error.required = Select yes if you know the Transit procedure TIR identification number
 traderDetails.holderOfTransit.tirIdentificationYesNo.change.hidden = if you know the Transit procedure TIR identification number
+
+traderDetails.holderOfTransit.tirIdentificationNoController.title = My New String
+traderDetails.holderOfTransit.tirIdentificationNoController.heading = My New String
+traderDetails.holderOfTransit.tirIdentificationNoController.checkYourAnswersLabel = My New String
+traderDetails.holderOfTransit.tirIdentificationNoController.error.required = Enter My New String
+traderDetails.holderOfTransit.tirIdentificationNoController.error.length = My New String must be 100 characters or less

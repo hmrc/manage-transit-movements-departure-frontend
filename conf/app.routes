@@ -19,3 +19,8 @@ GET        /unauthorised-group-access                     controllers.Unauthoris
 
 GET        /:lrn/task-list                                controllers.TaskListController.onPageLoad(lrn: LocalReferenceNumber)
 POST       /:lrn/task-list                                controllers.TaskListController.onSubmit(lrn: LocalReferenceNumber)
+
+GET        /:lrn/traderDetails/holderOfTransit/my-new-string                        controllers.traderDetails.holderOfTransit.TirIdentificationNoControllerController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/traderDetails/holderOfTransit/my-new-string                        controllers.traderDetails.holderOfTransit.TirIdentificationNoControllerController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/traderDetails/holderOfTransit/change-my-new-string                 controllers.traderDetails.holderOfTransit.TirIdentificationNoControllerController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/traderDetails/holderOfTransit/change-my-new-string                 controllers.traderDetails.holderOfTransit.TirIdentificationNoControllerController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
