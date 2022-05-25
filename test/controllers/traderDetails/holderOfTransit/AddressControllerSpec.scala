@@ -17,7 +17,7 @@
 package controllers.traderDetails.holderOfTransit
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.AddressFormProvider
+import forms.IndividualAddressFormProvider
 import models.{Address, NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
@@ -38,7 +38,7 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
 
   private val addressHolderName = Gen.alphaNumStr.sample.value
   private val testAddress       = Address("buildingAndStreet", "city", "NE99 1XN")
-  private val formProvider      = new AddressFormProvider()
+  private val formProvider      = new IndividualAddressFormProvider()
   private val form              = formProvider("traderDetails.holderOfTransit.address", addressHolderName)
   private val mode              = NormalMode
   private lazy val addressRoute = routes.AddressController.onPageLoad(lrn, mode).url

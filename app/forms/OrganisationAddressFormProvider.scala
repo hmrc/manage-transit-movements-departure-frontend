@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package models.domain
+package forms
 
-import scala.util.matching.Regex
+import models.Address._
 
-object StringFieldRegex {
+import javax.inject.Inject
 
-  val stringFieldRegex: Regex         = "[\\sa-zA-Z0-9&'@/.\\-? ]*".r
-  val stringFieldRegexAsterisk: Regex = "[\\sa-zA-Z0-9&'*/.\\-? ]*".r
-  val alphaNumericRegex: Regex        = "^[a-zA-Z0-9]*$".r
+class OrganisationAddressFormProvider @Inject() extends AddressFormProvider {
 
-  val eoriNumberPrefixRegex: Regex = "^(?i)(gb|xi).*$".r
-  val eoriNumberRegex: Regex       = "^(?i)(gb|xi)[0-9]*$".r
-
+  override val addressLine1: AddressLine = BuildingAndStreet
+  override val addressLine2: AddressLine = City
 }

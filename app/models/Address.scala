@@ -16,6 +16,7 @@
 
 package models
 
+import models.domain.StringFieldRegex.stringFieldRegex
 import play.api.i18n.Messages
 import play.api.libs.json._
 
@@ -25,22 +26,33 @@ case class Address(line1: String, line2: String, postcode: String)
 
 object Address {
 
-  object Constants {
-    val buildingAndStreetLength = 35
-    val numberAndStreetLength   = 35
-    val cityLength              = 35
-    val townLength              = 35
+  sealed trait AddressLine {
+    val field: String
+    val length: Int                              = 35
+    val regex: Regex                             = stringFieldRegex
+    def arg(implicit messages: Messages): String = messages(s"address.$field")
+  }
 
-    lazy val postCodeRegex: Regex       = "^[a-zA-Z\\s*0-9]*$".r
-    lazy val postCodeFormatRegex: Regex = "^[a-zA-Z]{1,2}([0-9]{1,2}|[0-9][a-zA-Z])\\s*[0-9][a-zA-Z]{2}$".r
+  case object NumberAndStreet extends AddressLine {
+    override val field: String = "numberAndStreet"
+  }
 
-    object Fields {
-      def buildingAndStreet(implicit messages: Messages): String = messages("address.buildingAndStreet")
-      def numberAndStreet(implicit messages: Messages): String   = messages("address.numberAndStreet")
-      def city(implicit messages: Messages): String              = messages("address.city")
-      def town(implicit messages: Messages): String              = messages("address.town")
-      def postcode(implicit messages: Messages): String          = messages("address.postcode")
-    }
+  case object BuildingAndStreet extends AddressLine {
+    override val field: String = "buildingAndStreet"
+  }
+
+  case object Town extends AddressLine {
+    override val field: String = "town"
+  }
+
+  case object City extends AddressLine {
+    override val field: String = "city"
+  }
+
+  case object Postcode extends AddressLine {
+    override val field: String = "postcode"
+    override val regex: Regex  = "^[a-zA-Z\\s*0-9]*$".r
+    val formatRegex: Regex     = "^[a-zA-Z]{1,2}([0-9]{1,2}|[0-9][a-zA-Z])\\s*[0-9][a-zA-Z]{2}$".r
   }
 
   implicit val format: OFormat[Address] = Json.format[Address]
