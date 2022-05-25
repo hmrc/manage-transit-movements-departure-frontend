@@ -20,7 +20,7 @@ import scala.concurrent.Future
 class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private val formProvider = new $formProvider$()
-  private val form         = formProvider("$package$.$className;format="decap"$", $maxLength$)
+  private val form         = formProvider("$package$.$className;format="decap"$")
   private val mode         = NormalMode
   private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, mode).url
   private lazy val mockUserAnswersService = mock[UserAnswersService]
