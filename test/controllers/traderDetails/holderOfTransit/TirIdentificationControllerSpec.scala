@@ -26,20 +26,20 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import forms.EoriNumberFormProvider
-import views.html.traderDetails.holderOfTransit.TirEoriView
+import views.html.traderDetails.holderOfTransit.TirIdentificationView
 import services.UserAnswersService
-import pages.traderDetails.holderOfTransit.TirEoriPage
+import pages.traderDetails.holderOfTransit.TirIdentificationPage
 import base.{AppWithDefaultMockFixtures, SpecBase}
 
 import scala.concurrent.Future
 
-class TirEoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class TirIdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                            = new EoriNumberFormProvider()
-  private val form                                    = formProvider("traderDetails.holderOfTransit.tirEori")
-  private val mode                                    = NormalMode
-  private lazy val tirIdentificationNoControllerRoute = routes.TirEoriController.onPageLoad(lrn, mode).url
-  private lazy val mockUserAnswersService             = mock[UserAnswersService]
+  private val formProvider                = new EoriNumberFormProvider()
+  private val form                        = formProvider("traderDetails.holderOfTransit.tirIdentification")
+  private val mode                        = NormalMode
+  private lazy val tirIdentificationRoute = routes.TirIdentificationController.onPageLoad(lrn, mode).url
+  private lazy val mockUserAnswersService = mock[UserAnswersService]
 
   private lazy val validAnswer = eoriNumber.value
 
@@ -54,17 +54,17 @@ class TirEoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
     reset(mockUserAnswersService)
   }
 
-  "TirEoriController" - {
+  "TirIdentificationController" - {
 
     "must return OK and the correct view for a GET" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, tirIdentificationNoControllerRoute)
+      val request = FakeRequest(GET, tirIdentificationRoute)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[TirEoriView]
+      val view = injector.instanceOf[TirIdentificationView]
 
       status(result) mustEqual OK
 
@@ -75,16 +75,16 @@ class TirEoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(TirEoriPage, validAnswer).success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(TirIdentificationPage, validAnswer).success.value
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, tirIdentificationNoControllerRoute)
+      val request = FakeRequest(GET, tirIdentificationRoute)
 
       val result = route(app, request).value
 
       val filledForm = form.bind(Map("value" -> validAnswer))
 
-      val view = injector.instanceOf[TirEoriView]
+      val view = injector.instanceOf[TirIdentificationView]
 
       status(result) mustEqual OK
 
@@ -101,7 +101,7 @@ class TirEoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
       when(mockUserAnswersService.getOrCreateUserAnswers(any(), any())) thenReturn Future.successful(emptyUserAnswers)
 
       val request =
-        FakeRequest(POST, tirIdentificationNoControllerRoute)
+        FakeRequest(POST, tirIdentificationRoute)
           .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
@@ -117,14 +117,14 @@ class TirEoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       val invalidAnswer = ""
 
-      val request    = FakeRequest(POST, tirIdentificationNoControllerRoute).withFormUrlEncodedBody(("value", ""))
+      val request    = FakeRequest(POST, tirIdentificationRoute).withFormUrlEncodedBody(("value", ""))
       val filledForm = form.bind(Map("value" -> invalidAnswer))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[TirEoriView]
+      val view = injector.instanceOf[TirIdentificationView]
 
       contentAsString(result) mustEqual
         view(filledForm, lrn, mode)(request, messages).toString
@@ -135,7 +135,7 @@ class TirEoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, tirIdentificationNoControllerRoute)
+      val request = FakeRequest(GET, tirIdentificationRoute)
 
       val result = route(app, request).value
 
@@ -150,7 +150,7 @@ class TirEoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
       setNoExistingUserAnswers()
 
       val request =
-        FakeRequest(POST, tirIdentificationNoControllerRoute)
+        FakeRequest(POST, tirIdentificationRoute)
           .withFormUrlEncodedBody(("value", "test string"))
 
       val result = route(app, request).value

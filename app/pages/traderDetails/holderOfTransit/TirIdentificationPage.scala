@@ -20,9 +20,9 @@ import play.api.libs.json.JsPath
 import pages.QuestionPage
 import pages.sections.HolderOfTransitSection
 
-case object TirEoriPage extends QuestionPage[String] {
+case object TirIdentificationPage extends QuestionPage[String] {
 
   override def path: JsPath = HolderOfTransitSection.path \ toString
 
-  override def toString: String = "tirIdentificationNoController"
+  override def toString: String = "tirIdentification"
 }

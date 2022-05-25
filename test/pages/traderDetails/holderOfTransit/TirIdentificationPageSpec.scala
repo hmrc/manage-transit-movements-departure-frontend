@@ -18,14 +18,14 @@ package pages.traderDetails.holderOfTransit
 
 import pages.behaviours.PageBehaviours
 
-class TirEoriPageSpec extends PageBehaviours {
+class TirIdentificationPageSpec extends PageBehaviours {
 
-  "TirIdentificationNoControllerPage" - {
+  "TirIdentificationPage" - {
 
-    beRetrievable[String](TirEoriPage)
+    beRetrievable[String](TirIdentificationPage)
 
-    beSettable[String](TirEoriPage)
+    beSettable[String](TirIdentificationPage)
 
-    beRemovable[String](TirEoriPage)
+    beRemovable[String](TirIdentificationPage)
   }
 }

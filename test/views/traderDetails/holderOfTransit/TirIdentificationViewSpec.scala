@@ -22,17 +22,17 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.traderDetails.holderOfTransit.TirEoriView
+import views.html.traderDetails.holderOfTransit.TirIdentificationView
 import org.scalacheck.{Arbitrary, Gen}
 
-class TirEoriViewSpec extends InputTextViewBehaviours[String] {
+class TirIdentificationViewSpec extends InputTextViewBehaviours[String] {
 
   override def form: Form[String] = new EoriNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[TirEoriView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[TirIdentificationView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "traderDetails.holderOfTransit.tirEori"
+  override val prefix: String = "traderDetails.holderOfTransit.tirIdentification"
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaNumStr)
 

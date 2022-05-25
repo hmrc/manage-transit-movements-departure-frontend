@@ -21,33 +21,33 @@ import forms.EoriNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
-import pages.traderDetails.holderOfTransit.TirEoriPage
+import pages.traderDetails.holderOfTransit.TirIdentificationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.traderDetails.holderOfTransit.TirEoriView
+import views.html.traderDetails.holderOfTransit.TirIdentificationView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class TirEoriController @Inject() (
+class TirIdentificationController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @TraderDetails navigator: Navigator,
   formProvider: EoriNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
-  view: TirEoriView
+  view: TirIdentificationView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("traderDetails.holderOfTransit.tirEori")
+  private val form = formProvider("traderDetails.holderOfTransit.tirIdentification")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(TirEoriPage) match {
+      val preparedForm = request.userAnswers.get(TirIdentificationPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -62,9 +62,9 @@ class TirEoriController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(TirEoriPage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(TirIdentificationPage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(TirEoriPage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(TirIdentificationPage, mode, updatedAnswers))
         )
   }
 }

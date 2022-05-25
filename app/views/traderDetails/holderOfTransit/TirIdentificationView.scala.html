@@ -29,20 +29,20 @@
 @(form: Form[String], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-  title = messages("traderDetails.holderOfTransit.tirEori.title"),
+  title = messages("traderDetails.holderOfTransit.tirIdentification.title"),
   showBackLink = true,
   lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.TirEoriController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.TirIdentificationController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputText(
             field = form("value"),
-            label = messages("traderDetails.holderOfTransit.tirEori.heading"),
+            label = messages("traderDetails.holderOfTransit.tirIdentification.heading"),
             inputClass = InputSize.Width20,
-            hint = Some(messages("traderDetails.holderOfTransit.tirEori.hint")),
+            hint = Some(messages("traderDetails.holderOfTransit.tirIdentification.hint")),
             caption = Some(messages("traderDetails.caption"))
         )
 

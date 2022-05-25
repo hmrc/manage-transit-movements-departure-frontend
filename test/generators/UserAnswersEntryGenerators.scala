@@ -26,11 +26,11 @@ trait UserAnswersEntryGenerators {
   self: Generators =>
 
   implicit lazy val arbitraryTraderdetailsHolderoftransitTirIdentificationNoControllerUserAnswersEntry
-    : Arbitrary[(pages.traderDetails.holderOfTransit.TirEoriPage.type, JsValue)] =
+    : Arbitrary[(pages.traderDetails.holderOfTransit.TirIdentificationPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[pages.traderDetails.holderOfTransit.TirEoriPage.type#Data].map(Json.toJson(_))
-      } yield (pages.traderDetails.holderOfTransit.TirEoriPage, value)
+        value <- arbitrary[pages.traderDetails.holderOfTransit.TirIdentificationPage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.holderOfTransit.TirIdentificationPage, value)
     }
 
   implicit lazy val arbitraryTraderdetailsHolderoftransitTirIdentificationYesNoUserAnswersEntry
