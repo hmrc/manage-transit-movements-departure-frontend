@@ -9,9 +9,9 @@ class $formProvider$Spec extends StringFieldBehaviours {
   private val prefix      = Gen.alphaNumStr.sample.value
   val requiredKey = s"\$prefix.error.required"
   val lengthKey = s"\$prefix.error.length"
-  val maxLength = 10
+  val maxLength = $maxLength$
 
-  val form = new $formProvider$()(prefix, maxLength)
+  val form = new $formProvider$()(prefix)
 
   ".value" - {
 

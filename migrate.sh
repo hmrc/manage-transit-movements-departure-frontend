@@ -16,7 +16,7 @@ echo ""
 echo "Moving test files from generated-test/ to test/"
 echo ""
 
-rsync -avm --include='*.scala' -f 'hide,! */' ../generated-test/ ../test/
+rsync --ignore-existing -avm --include='*.scala' -f 'hide,! */' ../generated-test/ ../test/
 rm -rf ../generated-test/
 
 echo ""

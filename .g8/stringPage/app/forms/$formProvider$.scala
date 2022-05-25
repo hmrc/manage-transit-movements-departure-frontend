@@ -6,9 +6,9 @@ import play.api.data.Form
 
 class $formProvider$ @Inject() extends Mappings {
 
-  def apply(prefix: String, maximum: Int): Form[String] =
+  def apply(prefix: String): Form[String] =
     Form(
       "value" -> text(s"\$prefix.error.required")
-        .verifying(maxLength(maximum, s"\$prefix.error.length"))
+        .verifying(maxLength($maxLength$, s"\$prefix.error.length"))
     )
 }
