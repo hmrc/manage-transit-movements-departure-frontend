@@ -16,6 +16,7 @@
 
 package pages.traderDetails.holderOfTransit
 
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class AddContactPageSpec extends PageBehaviours {
@@ -27,5 +28,33 @@ class AddContactPageSpec extends PageBehaviours {
     beSettable[Boolean](AddContactPage)
 
     beRemovable[Boolean](AddContactPage)
+
+    "cleanup" - {
+      "when NO selected" - {
+        "must clean up ContactPages" in {
+          forAll(arbitrary[String]) {
+            eori =>
+              val preChange = emptyUserAnswers
+                .setValue(ContactNamePage, "name")
+                .setValue(ContactTelephoneNumberPage, "0191")
+              val postChange = preChange.set(AddContactPage, false).success.value
+
+              postChange.get(EoriPage) mustNot be(defined)
+          }
+        }
+      }
+
+      "when YES selected" - {
+        "must do nothing" in {
+          forAll(arbitrary[String]) {
+            eori =>
+              val preChange  = emptyUserAnswers.setValue(EoriPage, eori)
+              val postChange = preChange.set(EoriYesNoPage, true).success.value
+
+              postChange.get(EoriPage) must be(defined)
+          }
+        }
+      }
+    }
   }
 }

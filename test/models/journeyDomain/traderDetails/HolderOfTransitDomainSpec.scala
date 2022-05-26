@@ -34,7 +34,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
     "can be parsed from UserAnswers" - {
 
       "when holder has no eori" in {
-        val declarationType = arbitrary[DeclarationType].suchThat(_ != Option4).sample.value
+        val declarationType = Gen.oneOf(DeclarationType.values.filterNot(_ == Option4)).sample.value
         val name            = Gen.alphaNumStr.sample.value
         val address         = arbitrary[Address].sample.value
 
@@ -59,7 +59,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
       }
 
       "when holder has an eori" in {
-        val declarationType = arbitrary[DeclarationType].suchThat(_ != Option4).sample.value
+        val declarationType = Gen.oneOf(DeclarationType.values.filterNot(_ == Option4)).sample.value
         val name            = Gen.alphaNumStr.sample.value
         val eori            = arbitrary[EoriNumber].sample.value
         val address         = arbitrary[Address].sample.value
@@ -166,7 +166,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
     "cannot be parsed from UserAnswers" - {
 
       "when answered yes to EoriYesNo but no eori provided" in {
-        val declarationType = arbitrary[DeclarationType].suchThat(_ != Option4).sample.value
+        val declarationType = Gen.oneOf(DeclarationType.values.filterNot(_ == Option4)).sample.value
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(DeclarationTypePage)(declarationType)
@@ -213,7 +213,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
       }
 
       "when non-Option4 declaration type and EoriYesNo not answered" in {
-        val declarationType = arbitrary[DeclarationType].suchThat(_ != Option4).sample.value
+        val declarationType = Gen.oneOf(DeclarationType.values.filterNot(_ == Option4)).sample.value
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(DeclarationTypePage)(declarationType)

@@ -173,7 +173,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
     "must go from Transit Holder Add Contact page" - {
       "when Yes selected" - {
-        "to ContactName page" in {
+        "to ContactName Page" in {
           forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
             (answers, mode) =>
               val userAnswers = answers.setValue(AddContactPage, true)
@@ -193,6 +193,24 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
                 .nextPage(AddContactPage, mode, userAnswers)
                 .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
           }
+        }
+      }
+
+      "must go from ContactNamePage to ContactTelephoneNumberPage" in {
+        forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+          (userAnswers, mode) =>
+            navigator
+              .nextPage(ContactNamePage, mode, userAnswers)
+              .mustBe(hotRoutes.ContactTelephoneNumberController.onPageLoad(userAnswers.lrn, mode))
+        }
+      }
+
+      "must go from ContactTelephoneNumberPage to CheckYourAnswersPage" ignore {
+        forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+          (userAnswers, mode) =>
+            navigator
+              .nextPage(ContactTelephoneNumberPage, mode, userAnswers)
+              .mustBe(???)
         }
       }
 

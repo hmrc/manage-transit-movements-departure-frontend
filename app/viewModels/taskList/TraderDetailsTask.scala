@@ -44,7 +44,7 @@ object TraderDetailsTask {
     new TaskProvider(userAnswers).noDependencyOnOtherTask
       .ifCompleted(
         readerIfCompleted = UserAnswersReader[TraderDetailsDomain],
-        urlIfCompleted = "#" // TODO - trader details check your answers
+        urlIfCompleted = holderOfTransitRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url
       )
       .ifInProgressOrNotStarted(
         readerIfInProgress = EoriYesNoPage.reader.orElse(TirIdentificationYesNoPage.reader),
