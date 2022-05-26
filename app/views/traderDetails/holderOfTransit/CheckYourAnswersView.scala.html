@@ -17,10 +17,11 @@
 @import controllers.traderDetails.holderOfTransit.routes
 @import models.LocalReferenceNumber
 @import viewModels.sections.Section
-@import views.html.components.{AnswerSections, Button, Heading}
+@import views.html.components.{AnswerSections, Button, Heading, HeadingCaption}
 
 @this(
     mainTemplate: MainTemplate,
+    headingCaption: HeadingCaption,
     heading: Heading,
     answerSections: AnswerSections,
     button: Button,
@@ -35,16 +36,15 @@
     lrn = Some(lrn)
 ) {
 
+    @headingCaption(messages("traderDetails.caption"))
     @heading("traderDetails.holderOfTransit.checkYourAnswers.heading")
+    <h2 class="govuk-heading-m">@messages("traderDetails.holderOfTransit.checkYourAnswers.h2")</h2>
 
     @answerSections(sections)
 
-    <h2 class="govuk-heading-m">@messages("traderDetails.holderOfTransit.checkYourAnswers.h2")</h2>
-    <p class="govuk-body">@messages("traderDetails.holderOfTransit.checkYourAnswers.p")</p>
-
     @formHelper(action = routes.CheckYourAnswersController.onSubmit(lrn), 'autoComplete -> "off") {
         @button(
-            messageKey = "site.confirm",
+            messageKey = "site.continue",
             attributes = Map("id" -> "submit")
         )
     }

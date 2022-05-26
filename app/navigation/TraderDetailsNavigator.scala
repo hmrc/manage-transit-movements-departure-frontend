@@ -60,8 +60,8 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
 
   private def addContactRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
     userAnswers.get(AddContactPage) match {
-      case Some(true)  => ??? //TODO - redirect to HoT contact person name page once built
-      case Some(false) => ??? //TODO - redirect to relevant page once built
+      case Some(true)  => hotRoutes.ContactNameController.onPageLoad(userAnswers.lrn, mode)
+      case Some(false) => hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
       case None        => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }

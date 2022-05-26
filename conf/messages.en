@@ -121,8 +121,7 @@ preTaskList.checkYourAnswers.p = Once you have confirmed these details you will 
 
 traderDetails.holderOfTransit.checkYourAnswers.heading = Check your answers
 traderDetails.holderOfTransit.checkYourAnswers.title = Check your answers
-traderDetails.holderOfTransit.checkYourAnswers.h2 = Before you continue
-traderDetails.holderOfTransit.checkYourAnswers.p = Once you have confirmed these details you will not be able to change them.
+traderDetails.holderOfTransit.checkYourAnswers.h2 = Transit holder
 
 # Task list
 
