@@ -172,28 +172,45 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
     }
 
     "must go from Transit Holder Add Contact page" - {
-      //TODO - add nav test for true and false outcomes
       "when Yes selected" - {
-        "???" ignore {
+        "to ContactName Page" in {
           forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
             (answers, mode) =>
               val userAnswers = answers.setValue(AddContactPage, true)
               navigator
                 .nextPage(AddContactPage, mode, userAnswers)
-                .mustBe(hotRoutes.AddContactController.onPageLoad(userAnswers.lrn, mode))
+                .mustBe(hotRoutes.ContactNameController.onPageLoad(userAnswers.lrn, mode))
           }
         }
       }
 
       "when No selected" - {
-        "to ???" ignore {
+        "to CheckYourAnswersPage" ignore {
           forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
             (answers, mode) =>
               val userAnswers = answers.setValue(AddContactPage, false)
               navigator
                 .nextPage(AddContactPage, mode, userAnswers)
-                .mustBe(hotRoutes.AddContactController.onPageLoad(userAnswers.lrn, mode))
+                .mustBe(???)
           }
+        }
+      }
+
+      "must go from ContactNamePage to ContactTelephoneNumberPage" in {
+        forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+          (userAnswers, mode) =>
+            navigator
+              .nextPage(ContactNamePage, mode, userAnswers)
+              .mustBe(hotRoutes.ContactTelephoneNumberController.onPageLoad(userAnswers.lrn, mode))
+        }
+      }
+
+      "must go from ContactTelephoneNumberPage to CheckYourAnswersPage" ignore {
+        forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+          (userAnswers, mode) =>
+            navigator
+              .nextPage(ContactTelephoneNumberPage, mode, userAnswers)
+              .mustBe(???)
         }
       }
 
