@@ -16,7 +16,6 @@
 
 package forms.traderDetails
 
-import forms.Constants._
 import forms.mappings.Mappings
 import javax.inject.Inject
 import models.domain.StringFieldRegex._
@@ -29,8 +28,7 @@ class TirIdNumberFormProvider @Inject() extends Mappings {
       "value" -> textWithSpacesRemoved(s"$prefix.error.required")
         .verifying(
           forms.StopOnFirstFail[String](
-            regexp(tirIdNumberRegex, s"$prefix.error.invalidFormat"),
-            maxLength(maxTirIdNumberLength, s"$prefix.error.maxLength")
+            regexp(tirIdNumberRegex, s"$prefix.error.invalidFormat")
           )
         )
     )

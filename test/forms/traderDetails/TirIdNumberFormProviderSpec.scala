@@ -16,7 +16,6 @@
 
 package forms.traderDetails
 
-import forms.Constants._
 import forms.behaviours.{FieldBehaviours, StringFieldBehaviours}
 import models.domain.StringFieldRegex.tirIdNumberRegex
 import org.scalacheck.{Arbitrary, Gen}
@@ -26,11 +25,10 @@ class TirIdNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavi
 
   private val prefix = Gen.alphaNumStr.sample.value
 
-  private val requiredKey      = s"$prefix.error.required"
-  private val maxLengthKey     = s"$prefix.error.maxLength"
-  private val invalidFormatKey = s"$prefix.error.invalidFormat"
-
-  private val form = new TirIdNumberFormProvider()(prefix)
+  private val requiredKey          = s"$prefix.error.required"
+  private val invalidFormatKey     = s"$prefix.error.invalidFormat"
+  private val maxTirIdNumberLength = 17
+  private val form                 = new TirIdNumberFormProvider()(prefix)
 
   implicit lazy val prefixGen: Arbitrary[String] =
     Arbitrary {
@@ -57,7 +55,7 @@ class TirIdNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavi
     )
 
     "must not bind strings with correct prefix and suffix but over max length" in {
-      val expectedError = FormError(fieldName, maxLengthKey, Seq(maxTirIdNumberLength))
+      val expectedError = FormError(fieldName, invalidFormatKey, Seq(tirIdNumberRegex.regex))
 
       val gen = for {
         prefix <- prefixGen.arbitrary
