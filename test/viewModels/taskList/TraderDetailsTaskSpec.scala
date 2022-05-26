@@ -106,12 +106,6 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
     "when InProgress" - {
 
-      "and declaration type undefined" ignore {
-        val task = TraderDetailsTask(emptyUserAnswers)
-        task.status mustBe InProgress
-        task.href.get mustBe routes.SessionExpiredController.onPageLoad().url
-      }
-
       "and TIR declaration type" in {
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, Option4)
@@ -137,30 +131,20 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
     }
 
     "when Completed" - {
-      "when holder of transit eori known" in {
+      "when valid journey is completed" in {
         val userAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, Gen.oneOf(DeclarationType.values.filterNot(_ == Option4)).sample.value)
           .setValue(EoriYesNoPage, true)
           .setValue(EoriPage, eoriNumber.value)
           .setValue(NamePage, Gen.alphaNumStr.sample.value)
           .setValue(AddressPage, arbitrary[Address].sample.value)
           .setValue(AddContactPage, true)
           .setValue(ContactNamePage, Gen.alphaNumStr.sample.value)
+          .setValue(ContactTelephoneNumberPage, Gen.alphaNumStr.sample.value)
 
         val task = TraderDetailsTask(userAnswers)
         task.status mustBe Completed
-        task.href.get mustBe "#"
-      }
-
-      "when holder of transit eori unknown" in {
-        val userAnswers = emptyUserAnswers
-          .setValue(EoriYesNoPage, false)
-          .setValue(NamePage, Gen.alphaNumStr.sample.value)
-          .setValue(AddressPage, arbitrary[Address].sample.value)
-          .setValue(AddContactPage, false)
-
-        val task = TraderDetailsTask(userAnswers)
-        task.status mustBe Completed
-        task.href.get mustBe "#"
+        task.href.get mustBe holderOfTransitRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url
       }
     }
   }

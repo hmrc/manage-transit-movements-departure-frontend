@@ -17,32 +17,48 @@
 package models.journeyDomain.traderDetails
 
 import cats.implicits._
+import models.DeclarationType.Option4
 import models.domain._
 import models.{Address, EoriNumber}
+import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.holderOfTransit._
 
 case class HolderOfTransitDomain(
+  tir: Option[String],
   eori: Option[EoriNumber],
   name: String,
   address: Address,
-  contactName: Option[String]
+  additionalContact: Option[AdditionalContactDomain]
 )
 
 object HolderOfTransitDomain {
 
-  private val eori: UserAnswersReader[Option[EoriNumber]] =
-    EoriYesNoPage
-      .filterOptionalDependent(identity)(EoriPage.reader.map(EoriNumber(_)))
+  private val tir: UserAnswersReader[Option[String]] =
+    DeclarationTypePage
+      .filterOptionalDependent(_ == Option4) {
+        TirIdentificationYesNoPage
+          .filterOptionalDependent(identity)(TirIdentificationPage.reader)
+      }
+      .map(_.flatten)
 
-  private val contactName: UserAnswersReader[Option[String]] =
+  private val eori: UserAnswersReader[Option[EoriNumber]] =
+    DeclarationTypePage
+      .filterOptionalDependent(_ != Option4) {
+        EoriYesNoPage
+          .filterOptionalDependent(identity)(EoriPage.reader.map(EoriNumber(_)))
+      }
+      .map(_.flatten)
+
+  private val additionalContact: UserAnswersReader[Option[AdditionalContactDomain]] =
     AddContactPage
-      .filterOptionalDependent(identity)(ContactNamePage.reader)
+      .filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
 
   implicit val userAnswersReader: UserAnswersReader[HolderOfTransitDomain] =
     (
+      tir,
       eori,
       NamePage.reader,
       AddressPage.reader,
-      contactName
+      additionalContact
     ).tupled.map((HolderOfTransitDomain.apply _).tupled)
 }

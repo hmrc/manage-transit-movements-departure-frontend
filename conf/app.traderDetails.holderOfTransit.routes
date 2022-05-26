@@ -43,3 +43,5 @@ POST       /:lrn/trader-details/holder-of-transit/contact-telephone-number      
 GET        /:lrn/trader-details/holder-of-transit/change-contact-telephone-number             controllers.traderDetails.holderOfTransit.ContactTelephoneNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/trader-details/holder-of-transit/change-contact-telephone-number             controllers.traderDetails.holderOfTransit.ContactTelephoneNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
+GET        /:lrn/trader-details/holder-of-transit/check-answers                               controllers.traderDetails.holderOfTransit.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/trader-details/holder-of-transit/check-answers                               controllers.traderDetails.holderOfTransit.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)
