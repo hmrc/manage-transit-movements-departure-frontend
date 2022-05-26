@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 class AddressFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String, name: String)(countryList: CountryList)(implicit messages: Messages): Form[Address] =
+  def apply(prefix: String, name: String, countryList: CountryList)(implicit messages: Messages): Form[Address] =
     Form(
       mapping(
         AddressLine1.field -> {

@@ -32,7 +32,7 @@ class AddressViewSpec extends AddressViewBehaviours with Generators {
 
   private val countryList = arbitrary[CountryList].sample.value
 
-  override def form: Form[Address] = new AddressFormProvider()(prefix, addressHolderName)(countryList)
+  override def form: Form[Address] = new AddressFormProvider()(prefix, addressHolderName, countryList)
 
   override def applyView(form: Form[Address]): HtmlFormat.Appendable =
     injector.instanceOf[AddressView].apply(form, lrn, NormalMode, countryList.countries, addressHolderName)(fakeRequest, messages)

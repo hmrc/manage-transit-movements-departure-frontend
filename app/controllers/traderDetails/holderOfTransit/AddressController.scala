@@ -53,7 +53,7 @@ class AddressController @Inject() (
   private def name(implicit request: Request): String = request.arg
 
   private def form(countryList: CountryList)(implicit request: Request): Form[Address] =
-    formProvider("traderDetails.holderOfTransit.address", name)(countryList)
+    formProvider("traderDetails.holderOfTransit.address", name, countryList)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)

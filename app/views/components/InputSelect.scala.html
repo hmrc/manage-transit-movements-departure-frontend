@@ -46,15 +46,12 @@
 }
 
 @(heading, label) match {
-    case (Some(heading), Some(label)) => {
-        @headingComponent(heading)
+    case (_, Some(label)) => {
+        @heading.map(headingComponent(_))
         @govukSelect(select.copy(label = Label(content = Text(label))))
     }
     case (Some(heading), None) => {
         @govukSelect(select.withHeading(heading = Text(heading)))
-    }
-    case (None, Some(label)) => {
-        @govukSelect(select.copy(label = Label(content = Text(label))))
     }
     case _ => {
         @govukSelect(select)

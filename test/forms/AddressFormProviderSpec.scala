@@ -36,7 +36,7 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
   private val lengthKey   = s"$prefix.error.length"
   private val invalidKey  = s"$prefix.error.invalid"
 
-  private val form = new AddressFormProvider()(prefix, name)(countries)
+  private val form = new AddressFormProvider()(prefix, name, countries)
 
   ".addressLine1" - {
 
