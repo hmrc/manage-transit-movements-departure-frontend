@@ -212,7 +212,7 @@ traderDetails.holderOfTransit.tirIdentification.error.invalidFormat = The TIR ho
 
 traderDetails.holderOfTransit.contactTelephoneNumber.title = What is {0}’s telephone number?
 traderDetails.holderOfTransit.contactTelephoneNumber.heading = What is {0}’s telephone number?
-traderDetails.holderOfTransit.contactTelephoneNumber.checkYourAnswersLabel = {0}’s telephone number?
+traderDetails.holderOfTransit.contactTelephoneNumber.checkYourAnswersLabel = Contact’s telephone number?
 traderDetails.holderOfTransit.contactTelephoneNumber.hint = For international numbers include the country code
 traderDetails.holderOfTransit.contactTelephoneNumber.error.required = Enter {0}’s telephone number?
 traderDetails.holderOfTransit.contactTelephoneNumber.error.length = {0}’s telephone number must be {1} characters or less
