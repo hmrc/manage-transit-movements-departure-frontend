@@ -22,6 +22,7 @@ import models.{Address, EoriNumber}
 import pages.traderDetails.holderOfTransit._
 
 case class HolderOfTransitDomain(
+  tir: Option[String],
   eori: Option[EoriNumber],
   name: String,
   address: Address,
@@ -29,6 +30,10 @@ case class HolderOfTransitDomain(
 )
 
 object HolderOfTransitDomain {
+
+  private val tir: UserAnswersReader[Option[String]] =
+    TirIdentificationYesNoPage
+      .filterOptionalDependent(identity)(TirIdentificationPage.reader)
 
   private val eori: UserAnswersReader[Option[EoriNumber]] =
     EoriYesNoPage
@@ -40,6 +45,7 @@ object HolderOfTransitDomain {
 
   implicit val userAnswersReader: UserAnswersReader[HolderOfTransitDomain] =
     (
+      tir,
       eori,
       NamePage.reader,
       AddressPage.reader,

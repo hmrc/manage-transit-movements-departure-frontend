@@ -24,6 +24,14 @@ import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 
 class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers) {
 
+  def tirIdentificationYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+    page = TirIdentificationYesNoPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "traderDetails.holderOfTransit.tirIdentificationYesNo",
+    id = None,
+    call = TirIdentificationYesNoController.onPageLoad(lrn, mode)
+  )
+
   def eoriYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = EoriYesNoPage,
     formatAnswer = formatAsYesOrNo,

@@ -139,6 +139,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
     "when Completed" - {
       "when holder of transit eori known" in {
         val userAnswers = emptyUserAnswers
+          .setValue(TirIdentificationYesNoPage, false)
           .setValue(EoriYesNoPage, true)
           .setValue(EoriPage, eoriNumber.value)
           .setValue(NamePage, Gen.alphaNumStr.sample.value)
@@ -153,6 +154,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
       "when holder of transit eori unknown" in {
         val userAnswers = emptyUserAnswers
+          .setValue(TirIdentificationYesNoPage, false)
           .setValue(EoriYesNoPage, false)
           .setValue(NamePage, Gen.alphaNumStr.sample.value)
           .setValue(AddressPage, arbitrary[Address].sample.value)

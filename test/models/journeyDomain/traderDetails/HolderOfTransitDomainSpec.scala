@@ -37,6 +37,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val address     = arbitrary[Address].sample.value
 
         val userAnswers = emptyUserAnswers
+          .unsafeSetVal(TirIdentificationYesNoPage)(false)
           .unsafeSetVal(EoriYesNoPage)(false)
           .unsafeSetVal(NamePage)(name)
           .unsafeSetVal(AddressPage)(address)
@@ -44,6 +45,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
           .unsafeSetVal(ContactNamePage)(contactName)
 
         val expectedResult = HolderOfTransitDomain(
+          tir = None,
           eori = None,
           name = name,
           contactName = Some(contactName),
@@ -62,6 +64,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val address = arbitrary[Address].sample.value
 
         val userAnswers = emptyUserAnswers
+          .unsafeSetVal(TirIdentificationYesNoPage)(false)
           .unsafeSetVal(EoriYesNoPage)(true)
           .unsafeSetVal(EoriPage)(eori.value)
           .unsafeSetVal(NamePage)(name)
@@ -69,6 +72,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
           .unsafeSetVal(AddContactPage)(false)
 
         val expectedResult = HolderOfTransitDomain(
+          tir = None,
           eori = Some(eori),
           name = name,
           contactName = None,
@@ -87,6 +91,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
       "when answered yes to EoriYesNo but no eori provided" in {
 
         val userAnswers = emptyUserAnswers
+          .unsafeSetVal(TirIdentificationYesNoPage)(false)
           .unsafeSetVal(EoriYesNoPage)(true)
 
         val result: EitherType[HolderOfTransitDomain] = UserAnswersReader[HolderOfTransitDomain].run(userAnswers)
@@ -100,6 +105,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val address = arbitrary[Address].sample.value
 
         val userAnswers = emptyUserAnswers
+          .unsafeSetVal(TirIdentificationYesNoPage)(false)
           .unsafeSetVal(EoriYesNoPage)(false)
           .unsafeSetVal(NamePage)(name)
           .unsafeSetVal(AddressPage)(address)
