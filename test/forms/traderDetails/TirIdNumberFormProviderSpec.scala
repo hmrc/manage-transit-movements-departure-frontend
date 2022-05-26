@@ -18,25 +18,16 @@ package forms.traderDetails
 
 import forms.behaviours.{FieldBehaviours, StringFieldBehaviours}
 import models.domain.StringFieldRegex.tirIdNumberRegex
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
 
 class TirIdNumberFormProviderSpec extends StringFieldBehaviours with FieldBehaviours {
 
   private val prefix = Gen.alphaNumStr.sample.value
 
-  private val requiredKey          = s"$prefix.error.required"
-  private val invalidFormatKey     = s"$prefix.error.invalidFormat"
-  private val maxTirIdNumberLength = 17
-  private val form                 = new TirIdNumberFormProvider()(prefix)
-
-  implicit lazy val prefixGen: Arbitrary[String] =
-    Arbitrary {
-      for {
-        startString <- stringsWithLength(3, Gen.alphaChar)
-        middleNos   <- stringsWithLength(3, Gen.numChar)
-      } yield s"$startString/$middleNos/"
-    }
+  private val requiredKey      = s"$prefix.error.required"
+  private val invalidFormatKey = s"$prefix.error.invalidFormat"
+  private val form             = new TirIdNumberFormProvider()(prefix)
 
   ".value" - {
 
@@ -45,7 +36,7 @@ class TirIdNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavi
     behave like fieldThatBindsValidData(
       form = form,
       fieldName = fieldName,
-      validDataGenerator = stringsWithMaxLength(maxTirIdNumberLength)
+      validDataGenerator = stringsThatMatchRegex(tirIdNumberRegex)
     )
 
     behave like mandatoryField(
@@ -54,43 +45,10 @@ class TirIdNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavi
       requiredError = FormError(fieldName, requiredKey)
     )
 
-    "must not bind strings with correct prefix and suffix but over max length" in {
+    "must not bind if string doesn't match regex" in {
       val expectedError = FormError(fieldName, invalidFormatKey, Seq(tirIdNumberRegex.regex))
 
-      val gen = for {
-        prefix <- prefixGen.arbitrary
-        suffix <- stringsLongerThan(maxTirIdNumberLength - prefix.length, Gen.numChar)
-      } yield prefix + suffix
-
-      forAll(gen) {
-        invalidString =>
-          val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
-          result.errors must contain(expectedError)
-      }
-    }
-
-    "must not bind strings with correct prefix but invalid suffix" in {
-      val expectedError = FormError(fieldName, invalidFormatKey, Seq(tirIdNumberRegex.regex))
-
-      val gen = for {
-        prefix <- prefixGen.arbitrary
-        suffix <- stringsLongerThan(maxTirIdNumberLength - prefix.length, Gen.alphaChar)
-      } yield prefix + suffix
-
-      forAll(gen) {
-        invalidString =>
-          val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
-          result.errors must contain(expectedError)
-      }
-    }
-
-    "must not bind strings with wrong prefix" in {
-      val expectedError = FormError(fieldName, invalidFormatKey, Seq(tirIdNumberRegex.regex))
-
-      val gen = for {
-        prefix <- stringsWithLength(7, Gen.alphaChar)
-        suffix <- stringsWithLength(maxTirIdNumberLength - prefix.length, Gen.numChar)
-      } yield prefix + suffix
+      val gen = nonEmptyString.retryUntil(!_.matches(tirIdNumberRegex.regex))
 
       forAll(gen) {
         invalidString =>
