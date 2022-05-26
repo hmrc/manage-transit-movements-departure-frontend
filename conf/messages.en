@@ -205,18 +205,20 @@ traderDetails.holderOfTransit.tirIdentificationYesNo.change.hidden = if you know
 
 traderDetails.holderOfTransit.tirIdentification.title = What is the TIR holder’s identification number?
 traderDetails.holderOfTransit.tirIdentification.heading = What is the TIR holder’s identification number?
-traderDetails.holderOfTransit.tirIdentification.checkYourAnswersLabel = TIR holder’s identification number?
+traderDetails.holderOfTransit.tirIdentification.checkYourAnswersLabel = TIR holder’s identification number
 traderDetails.holderOfTransit.tirIdentification.hint = AAA/999/99999.
 traderDetails.holderOfTransit.tirIdentification.error.required = Enter the TIR holder’s identification number
 traderDetails.holderOfTransit.tirIdentification.error.invalidFormat = The TIR holder’s identification number must start with 3 letters, a forward slash, 3 numbers and another forward slash followed by up to 9 numbers
+traderDetails.holderOfTransit.tirIdentification.change.hidden = TIR holder’s identification number
 
 traderDetails.holderOfTransit.contactTelephoneNumber.title = What is {0}’s telephone number?
 traderDetails.holderOfTransit.contactTelephoneNumber.heading = What is {0}’s telephone number?
-traderDetails.holderOfTransit.contactTelephoneNumber.checkYourAnswersLabel = Contact’s telephone number?
+traderDetails.holderOfTransit.contactTelephoneNumber.checkYourAnswersLabel = Contact’s telephone number
 traderDetails.holderOfTransit.contactTelephoneNumber.hint = For international numbers include the country code
 traderDetails.holderOfTransit.contactTelephoneNumber.error.required = Enter {0}’s telephone number?
 traderDetails.holderOfTransit.contactTelephoneNumber.error.length = {0}’s telephone number must be {1} characters or less
 traderDetails.holderOfTransit.contactTelephoneNumber.error.invalidFormat = {0}’s telephone number must be a valid phone number
+traderDetails.holderOfTransit.contactTelephoneNumber.change.hidden = contact’s telephone number
 
 traderDetails.holderOfTransit.checkYourAnswers.heading = Check your answers
 traderDetails.holderOfTransit.checkYourAnswers.title = Check your answers

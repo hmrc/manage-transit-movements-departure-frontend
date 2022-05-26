@@ -32,6 +32,14 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     call = TirIdentificationYesNoController.onPageLoad(lrn, mode)
   )
 
+  def tirIdentification: Option[SummaryListRow] = getAnswerAndBuildRow[String](
+    page = TirIdentificationPage,
+    formatAnswer = formatAsLiteral,
+    prefix = "traderDetails.holderOfTransit.tirIdentification",
+    id = None,
+    call = TirIdentificationController.onPageLoad(lrn, mode)
+  )
+
   def eoriYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = EoriYesNoPage,
     formatAnswer = formatAsYesOrNo,
@@ -78,5 +86,13 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     prefix = "traderDetails.holderOfTransit.contactName",
     id = None,
     call = ContactNameController.onPageLoad(lrn, mode)
+  )
+
+  def contactTelephoneNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
+    page = ContactTelephoneNumberPage,
+    formatAnswer = formatAsLiteral,
+    prefix = "traderDetails.holderOfTransit.contactTelephoneNumber",
+    id = None,
+    call = ContactTelephoneNumberController.onPageLoad(lrn, mode)
   )
 }

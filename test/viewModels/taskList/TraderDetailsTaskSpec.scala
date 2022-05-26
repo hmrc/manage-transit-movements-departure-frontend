@@ -133,7 +133,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
     "when Completed" - {
       "when valid journey is completed" in {
         val userAnswers = emptyUserAnswers
-          .setValue(DeclarationTypePage, arbitrary[DeclarationType].suchThat(_ != Option4).sample.value)
+          .setValue(DeclarationTypePage, Gen.oneOf(DeclarationType.values.filterNot(_ == Option4)).sample.value)
           .setValue(EoriYesNoPage, true)
           .setValue(EoriPage, eoriNumber.value)
           .setValue(NamePage, Gen.alphaNumStr.sample.value)

@@ -31,6 +31,8 @@ class HolderOfTransitViewModel {
       rows = Seq(
         helper.eoriYesNo,
         helper.eori,
+        helper.tirIdentificationYesNo,
+        helper.tirIdentification,
         helper.name,
         helper.address
       ).flatten
@@ -40,7 +42,8 @@ class HolderOfTransitViewModel {
       sectionTitle = messages("traderDetails.holderOfTransit.checkYourAnswers.additionalContact"),
       rows = Seq(
         helper.addContact,
-        helper.contactName
+        helper.contactName,
+        helper.contactTelephoneNumber
       ).flatten
     )
 

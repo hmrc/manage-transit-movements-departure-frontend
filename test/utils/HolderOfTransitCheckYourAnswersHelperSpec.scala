@@ -77,6 +77,50 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
     }
 
+    "tirIdentification" - {
+      "must return None" - {
+        "when TirIdentificationPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new HolderOfTransitCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.tirIdentification
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when TirIdentificationPage is defined" in {
+          forAll(Gen.alphaNumStr, arbitrary[Mode]) {
+            (eori, mode) =>
+              val answers = emptyUserAnswers.setValue(TirIdentificationPage, eori)
+
+              val helper = new HolderOfTransitCheckYourAnswersHelper(answers, mode)
+              val result = helper.tirIdentification
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("TIR holder’s identification number".toText),
+                  value = Value(eori.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = routes.TirIdentificationController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("TIR holder’s identification number"),
+                          attributes = Map()
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
     "eoriYesNo" - {
       "must return None" - {
         "when EoriYesNoPage is undefined" in {
@@ -329,6 +373,50 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.ContactNameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("contact’s name"),
+                          attributes = Map()
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "contactTelephoneNumber" - {
+      "must return None" - {
+        "when ContactTelephoneNumberPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new HolderOfTransitCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.contactTelephoneNumber
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when ContactTelephoneNumberPage is defined" in {
+          forAll(Gen.alphaNumStr, arbitrary[Mode]) {
+            (contactTelephoneNumber, mode) =>
+              val answers = emptyUserAnswers.setValue(ContactTelephoneNumberPage, contactTelephoneNumber)
+
+              val helper = new HolderOfTransitCheckYourAnswersHelper(answers, mode)
+              val result = helper.contactTelephoneNumber
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Contact’s telephone number".toText),
+                  value = Value(contactTelephoneNumber.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = routes.ContactTelephoneNumberController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("contact’s telephone number"),
                           attributes = Map()
                         )
                       )
