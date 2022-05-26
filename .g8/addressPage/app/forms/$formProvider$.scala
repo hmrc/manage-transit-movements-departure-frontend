@@ -9,7 +9,7 @@ import play.api.i18n.Messages
 
 import javax.inject.Inject
 
-class AddressFormProvider @Inject() extends Mappings {
+class $formProvider$ @Inject() extends Mappings {
 
   def apply(prefix: String, name: String, countryList: CountryList)(implicit messages: Messages): Form[Address] =
     Form(

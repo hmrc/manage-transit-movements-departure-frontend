@@ -8,7 +8,7 @@ import models.{AddressLine, CountryList}
 import org.scalacheck.Gen
 import play.api.data.FormError
 
-class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
+class $formProvider$Spec extends StringFieldBehaviours with SpecBase {
 
   private val prefix = Gen.alphaNumStr.sample.value
   private val name   = Gen.alphaNumStr.sample.value
