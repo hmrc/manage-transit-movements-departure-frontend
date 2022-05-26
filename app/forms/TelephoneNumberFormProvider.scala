@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-package forms.traderDetails
+package forms
 
 import forms.mappings.Mappings
 import javax.inject.Inject
-import models.domain.StringFieldRegex._
+import models.domain.StringFieldRegex.telephoneNumberRegex
+import forms.Constants.maxTelephoneNumberLength
 import play.api.data.Form
 
-class TirIdNumberFormProvider @Inject() extends Mappings {
+class TelephoneNumberFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String): Form[String] =
+  def apply(prefix: String, name: String): Form[String] =
     Form(
-      "value" -> textWithSpacesRemoved(s"$prefix.error.required")
+      "value" -> text(s"$prefix.error.required", Seq(name))
         .verifying(
-          forms.StopOnFirstFail[String](
-            regexp(tirIdNumberRegex, s"$prefix.error.invalidFormat")
+          StopOnFirstFail[String](
+            maxLength(maxTelephoneNumberLength, s"$prefix.error.length", args = Seq(name, maxTelephoneNumberLength)),
+            regexp(telephoneNumberRegex, s"$prefix.error.invalidFormat", args = Seq(name))
           )
         )
     )

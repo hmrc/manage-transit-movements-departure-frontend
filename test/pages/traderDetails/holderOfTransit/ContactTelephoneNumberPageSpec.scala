@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package models.domain
+package pages.traderDetails.holderOfTransit
 
-import scala.util.matching.Regex
+import pages.behaviours.PageBehaviours
 
-object StringFieldRegex {
+class ContactTelephoneNumberPageSpec extends PageBehaviours {
 
-  val stringFieldRegex: Regex         = "[\\sa-zA-Z0-9&'@/.\\-? ]*".r
-  val stringFieldRegexAsterisk: Regex = "[\\sa-zA-Z0-9&'*/.\\-? ]*".r
-  val alphaNumericRegex: Regex        = "^[a-zA-Z0-9]*$".r
+  "traderDetails.holderOfTransit.contactTelephoneNumberPage" - {
 
-  val eoriNumberPrefixRegex: Regex = "^(?i)(gb|xi).*$".r
-  val eoriNumberRegex: Regex       = "^(?i)(gb|xi)[0-9]*$".r
+    beRetrievable[String](ContactTelephoneNumberPage)
 
-  val telephoneNumberRegex: Regex = "^[0-9./+\\-()x ]+$".r
-  val tirIdNumberRegex: Regex     = "^[a-zA-Z]{3}\\/[0-9]{3}\\/[0-9]{0,9}$".r
-  val postalCodeRegex: Regex      = "^[a-zA-Z\\s*0-9]*$".r
+    beSettable[String](ContactTelephoneNumberPage)
 
+    beRemovable[String](ContactTelephoneNumberPage)
+  }
 }
