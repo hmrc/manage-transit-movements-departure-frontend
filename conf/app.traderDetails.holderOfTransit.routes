@@ -38,8 +38,8 @@ POST       /:lrn/trader-details/holder-of-transit/tir-identification            
 GET        /:lrn/trader-details/holder-of-transit/change-tir-identification                   controllers.traderDetails.holderOfTransit.TirIdentificationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/trader-details/holder-of-transit/change-tir-identification                   controllers.traderDetails.holderOfTransit.TirIdentificationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/trader-details/holder-of-transit/contacts-telephone-number                   controllers.traderDetails.holderOfTransit.ContactTelephoneNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/trader-details/holder-of-transit/contacts-telephone-number                   controllers.traderDetails.holderOfTransit.ContactTelephoneNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/trader-details/holder-of-transit/change-contacts-telephone-number            controllers.traderDetails.holderOfTransit.ContactTelephoneNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/trader-details/holder-of-transit/change-contacts-telephone-number            controllers.traderDetails.holderOfTransit.ContactTelephoneNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/trader-details/holder-of-transit/contact-telephone-number                    controllers.traderDetails.holderOfTransit.ContactTelephoneNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/holder-of-transit/contact-telephone-number                    controllers.traderDetails.holderOfTransit.ContactTelephoneNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/holder-of-transit/change-contact-telephone-number             controllers.traderDetails.holderOfTransit.ContactTelephoneNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/holder-of-transit/change-contact-telephone-number             controllers.traderDetails.holderOfTransit.ContactTelephoneNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
