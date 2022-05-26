@@ -33,3 +33,6 @@ GET        /:lrn/trader-details/holder-of-transit/is-tir-identification-known   
 POST       /:lrn/trader-details/holder-of-transit/is-tir-identification-known                 controllers.traderDetails.holderOfTransit.TirIdentificationYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/trader-details/holder-of-transit/change-is-tir-identification-known          controllers.traderDetails.holderOfTransit.TirIdentificationYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/trader-details/holder-of-transit/change-is-tir-identification-known          controllers.traderDetails.holderOfTransit.TirIdentificationYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/holder-of-transit/check-answers                               controllers.traderDetails.holderOfTransit.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/trader-details/holder-of-transit/check-answers                               controllers.traderDetails.holderOfTransit.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)
