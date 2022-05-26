@@ -23,18 +23,27 @@ import viewModels.sections.Section
 
 class HolderOfTransitViewModel {
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): Section = {
+  def apply(userAnswers: UserAnswers)(implicit messages: Messages): Seq[Section] = {
     val helper = new HolderOfTransitCheckYourAnswersHelper(userAnswers, CheckMode)
 
-    val rows = Seq(
-      helper.eoriYesNo,
-      helper.eori,
-      helper.name,
-      helper.address,
-      helper.addContact,
-      helper.contactName
-    ).flatten
+    val holderOfTransitSection = Section(
+      sectionTitle = messages("traderDetails.holderOfTransit.checkYourAnswers.transitHolder"),
+      rows = Seq(
+        helper.eoriYesNo,
+        helper.eori,
+        helper.name,
+        helper.address
+      ).flatten
+    )
 
-    Section(rows)
+    val additionalContactSection = Section(
+      sectionTitle = messages("traderDetails.holderOfTransit.checkYourAnswers.additionalContact"),
+      rows = Seq(
+        helper.addContact,
+        helper.contactName
+      ).flatten
+    )
+
+    Seq(holderOfTransitSection, additionalContactSection)
   }
 }

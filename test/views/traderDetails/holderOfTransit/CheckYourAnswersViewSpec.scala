@@ -37,8 +37,6 @@ class CheckYourAnswersViewSpec extends CheckYourAnswersViewBehaviours {
 
   behave like pageWithHeading()
 
-  behave like pageWithContent("h2", "Transit holder")
-
   behave like pageWithCheckYourAnswers()
 
   behave like pageWithFormAction(routes.CheckYourAnswersController.onSubmit(lrn).url)

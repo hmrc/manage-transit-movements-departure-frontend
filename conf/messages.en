@@ -119,10 +119,6 @@ preTaskList.checkYourAnswers.title = Check your answers
 preTaskList.checkYourAnswers.h2 = Before you continue
 preTaskList.checkYourAnswers.p = Once you have confirmed these details you will not be able to change them.
 
-traderDetails.holderOfTransit.checkYourAnswers.heading = Check your answers
-traderDetails.holderOfTransit.checkYourAnswers.title = Check your answers
-traderDetails.holderOfTransit.checkYourAnswers.h2 = Transit holder
-
 # Task list
 
 taskList.title = Declaration summary
@@ -213,3 +209,8 @@ traderDetails.holderOfTransit.tirIdentification.checkYourAnswersLabel = TIR hold
 traderDetails.holderOfTransit.tirIdentification.hint = AAA/999/99999.
 traderDetails.holderOfTransit.tirIdentification.error.required = Enter the TIR holder’s identification number
 traderDetails.holderOfTransit.tirIdentification.error.invalidFormat = The TIR holder’s identification number must start with 3 letters, a forward slash, 3 numbers and another forward slash followed by up to 9 numbers
+
+traderDetails.holderOfTransit.checkYourAnswers.heading = Check your answers
+traderDetails.holderOfTransit.checkYourAnswers.title = Check your answers
+traderDetails.holderOfTransit.checkYourAnswers.transitHolder = Transit holder
+traderDetails.holderOfTransit.checkYourAnswers.additionalContact = Additional contact
