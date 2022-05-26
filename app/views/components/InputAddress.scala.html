@@ -62,7 +62,7 @@
         field = form("country"),
         label = Some(messages(s"$messageKeyPrefix.country")),
         selectItems = countries.toSelectItems(form.value.map(_.country)),
-        placeholder = Some(messages("traderDetails.holderOfTransit.address.placeholder"))
+        placeholder = Some(messages(s"$messageKeyPrefix.placeholder"))
     )
 }
 

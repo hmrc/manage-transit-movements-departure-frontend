@@ -16,15 +16,13 @@
 
 package models
 
-import models.domain.StringFieldRegex.stringFieldRegex
+import models.domain.StringFieldRegex.{postalCodeRegex, stringFieldRegex}
 import play.api.i18n.Messages
 
 import scala.util.matching.Regex
 
 sealed trait AddressLine {
   val field: String
-  val length: Int                              = 35
-  val regex: Regex                             = stringFieldRegex
   def arg(implicit messages: Messages): String = messages(s"address.$field")
 }
 
@@ -32,16 +30,20 @@ object AddressLine {
 
   case object AddressLine1 extends AddressLine {
     override val field: String = "addressLine1"
+    val length: Int            = 35
+    val regex: Regex           = stringFieldRegex
   }
 
   case object AddressLine2 extends AddressLine {
     override val field: String = "addressLine2"
+    val length: Int            = 35
+    val regex: Regex           = stringFieldRegex
   }
 
   case object PostalCode extends AddressLine {
     override val field: String = "postalCode"
-    override val length: Int   = 9
-    override val regex: Regex  = "^[a-zA-Z\\s*0-9]*$".r
+    val length: Int            = 9
+    val regex: Regex           = postalCodeRegex
   }
 
   case object Country extends AddressLine {
