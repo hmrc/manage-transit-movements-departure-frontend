@@ -18,7 +18,7 @@ package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.preTaskList.OfficeOfDepartureFormProvider
+import forms.CustomsOfficeFormProvider
 import models.reference.{CountryCode, CustomsOffice}
 import models.{CustomsOfficeList, NormalMode}
 import navigation.Navigator
@@ -42,7 +42,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
   private val customsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("GB"), None)
   private val customsOffices: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
 
-  private val gbForm = new OfficeOfDepartureFormProvider()(customsOffices)
+  private val gbForm = new CustomsOfficeFormProvider()("officeOfDeparture", customsOffices)
   private val mode   = NormalMode
 
   private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]

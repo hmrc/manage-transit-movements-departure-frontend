@@ -14,22 +14,24 @@
  * limitations under the License.
  */
 
-package forms.preTaskList
+package forms
 
 import forms.behaviours.StringFieldBehaviours
 import models.CustomsOfficeList
 import models.reference.{CountryCode, CustomsOffice}
+import org.scalacheck.Gen
 import play.api.data.FormError
 
-class OfficeOfDepartureFormProviderSpec extends StringFieldBehaviours {
+class CustomsOfficeFormProviderSpec extends StringFieldBehaviours {
 
-  private val requiredKey = "officeOfDeparture.error.required"
+  private val prefix      = Gen.alphaNumStr.sample.value
+  private val requiredKey = s"$prefix.error.required"
   private val maxLength   = 8
 
   private val customsOffices = CustomsOfficeList(
     Seq(CustomsOffice("id", "name", CountryCode("GB"), None), CustomsOffice("officeId", "someName", CountryCode("GB"), None))
   )
-  private val form = new OfficeOfDepartureFormProvider()(customsOffices)
+  private val form = new CustomsOfficeFormProvider()(prefix, customsOffices)
 
   ".value" - {
 

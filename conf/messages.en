@@ -71,7 +71,7 @@ officeOfDeparture.heading = Where is the office of departure?
 officeOfDeparture.checkYourAnswersLabel = Office of departure
 officeOfDeparture.error.required = Select the office of departure
 officeOfDeparture.hintText = Give the office location or code. Like, Dover or GB000060.
-officeOfDeparture.label = This is the Customs office where the transit movement starts.
+officeOfDeparture.label = This is the customs office where the transit movement starts.
 officeOfDeparture.change.hidden = office of departure
 officeOfDeparture.placeholder = Select a customs office
 
@@ -80,7 +80,7 @@ procedureType.heading = What type of procedure are you using?
 procedureType.checkYourAnswersLabel = Type of procedure
 procedureType.normal = Normal (customs-approved location)
 procedureType.simplified = Simplified (authorised consignor’s location)
-procedureType.error.required = Select which type of procedure you are using
+procedureType.error.required = Select the procedure type that you are using
 procedureType.change.hidden = type of procedure
 
 declarationType.title = What declaration do you want to create?

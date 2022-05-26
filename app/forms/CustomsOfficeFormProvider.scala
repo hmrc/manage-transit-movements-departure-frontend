@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms.preTaskList
+package forms
 
 import forms.mappings.Mappings
 import models.CustomsOfficeList
@@ -23,10 +23,10 @@ import play.api.data.Form
 
 import javax.inject.Inject
 
-class OfficeOfDepartureFormProvider @Inject() extends Mappings {
+class CustomsOfficeFormProvider @Inject() extends Mappings {
 
-  def apply(customsOfficeList: CustomsOfficeList): Form[CustomsOffice] =
+  def apply(prefix: String, customsOfficeList: CustomsOfficeList): Form[CustomsOffice] =
     Form(
-      "value" -> customsOffice(customsOfficeList, "officeOfDeparture.error.required")
+      "value" -> customsOffice(customsOfficeList, s"$prefix.error.required")
     )
 }
