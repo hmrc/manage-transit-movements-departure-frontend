@@ -154,7 +154,7 @@ trait Formatters {
     new Formatter[LocalReferenceNumber] {
 
       override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalReferenceNumber] =
-        stringFormatter(requiredKey)
+        spacelessStringFormatter(requiredKey)
           .bind(key, data)
           .right
           .flatMap {

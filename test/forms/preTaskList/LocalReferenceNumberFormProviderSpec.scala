@@ -66,7 +66,6 @@ class LocalReferenceNumberFormProviderSpec extends StringFieldBehaviours {
     }
 
     "must not bind invalid LRNs" in {
-
       forAll(arbitrary[String]) {
         value =>
           whenever(value != "" && LocalReferenceNumber(value).isEmpty) {
@@ -81,5 +80,17 @@ class LocalReferenceNumberFormProviderSpec extends StringFieldBehaviours {
       }
     }
 
+    "must allow spaces but remove them" in {
+      forAll(arbitrary[LocalReferenceNumber].map(_.toString)) {
+        value =>
+          val valueWithSpaces = value
+            .map(
+              char => s" $char "
+            )
+            .mkString
+          val result = form.bind(Map(fieldName -> valueWithSpaces))
+          result.value.value mustBe LocalReferenceNumber(value).get
+      }
+    }
   }
 }
