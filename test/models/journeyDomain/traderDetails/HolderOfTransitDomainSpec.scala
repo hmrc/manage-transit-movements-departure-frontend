@@ -49,7 +49,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
           tir = None,
           eori = None,
           name = name,
-          contactName = None,
+          additionalContact = None,
           address = address
         )
 
@@ -76,7 +76,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
           tir = None,
           eori = Some(eori),
           name = name,
-          contactName = None,
+          additionalContact = None,
           address = address
         )
 
@@ -100,7 +100,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
           tir = None,
           eori = None,
           name = name,
-          contactName = None,
+          additionalContact = None,
           address = address
         )
 
@@ -126,7 +126,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
           tir = Some(tirId),
           eori = None,
           name = name,
-          contactName = None,
+          additionalContact = None,
           address = address
         )
 
@@ -136,9 +136,10 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
       }
 
       "when holder has a contact" in {
-        val name        = Gen.alphaNumStr.sample.value
-        val address     = arbitrary[Address].sample.value
-        val contactName = Gen.alphaNumStr.sample.value
+        val name                   = Gen.alphaNumStr.sample.value
+        val address                = arbitrary[Address].sample.value
+        val contactName            = Gen.alphaNumStr.sample.value
+        val contactTelephoneNumber = Gen.alphaNumStr.sample.value
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(DeclarationTypePage)(Option4)
@@ -147,12 +148,13 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
           .unsafeSetVal(AddressPage)(address)
           .unsafeSetVal(AddContactPage)(true)
           .unsafeSetVal(ContactNamePage)(contactName)
+          .unsafeSetVal(ContactTelephoneNumberPage)(contactTelephoneNumber)
 
         val expectedResult = HolderOfTransitDomain(
           tir = None,
           eori = None,
           name = name,
-          contactName = Some(contactName),
+          additionalContact = Some(AdditionalContactDomain(contactName, contactTelephoneNumber)),
           address = address
         )
 

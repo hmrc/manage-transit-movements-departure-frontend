@@ -73,7 +73,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
-    "must redirect to task list / declaration summary" ignore {
+    "must redirect to representative section" ignore {
       setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))

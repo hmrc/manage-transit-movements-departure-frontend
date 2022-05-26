@@ -140,6 +140,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
           .setValue(AddressPage, arbitrary[Address].sample.value)
           .setValue(AddContactPage, true)
           .setValue(ContactNamePage, Gen.alphaNumStr.sample.value)
+          .setValue(ContactTelephoneNumberPage, Gen.alphaNumStr.sample.value)
 
         val task = TraderDetailsTask(userAnswers)
         task.status mustBe Completed

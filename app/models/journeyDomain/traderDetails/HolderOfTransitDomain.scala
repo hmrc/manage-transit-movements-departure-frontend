@@ -28,7 +28,7 @@ case class HolderOfTransitDomain(
   eori: Option[EoriNumber],
   name: String,
   address: Address,
-  contactName: Option[String]
+  additionalContact: Option[AdditionalContactDomain]
 )
 
 object HolderOfTransitDomain {
@@ -49,9 +49,9 @@ object HolderOfTransitDomain {
       }
       .map(_.flatten)
 
-  private val contactName: UserAnswersReader[Option[String]] =
+  private val additionalContact: UserAnswersReader[Option[AdditionalContactDomain]] =
     AddContactPage
-      .filterOptionalDependent(identity)(ContactNamePage.reader)
+      .filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
 
   implicit val userAnswersReader: UserAnswersReader[HolderOfTransitDomain] =
     (
@@ -59,6 +59,6 @@ object HolderOfTransitDomain {
       eori,
       NamePage.reader,
       AddressPage.reader,
-      contactName
+      additionalContact
     ).tupled.map((HolderOfTransitDomain.apply _).tupled)
 }
