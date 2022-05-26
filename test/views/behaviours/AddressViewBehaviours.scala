@@ -20,7 +20,7 @@ import models.Address
 
 trait AddressViewBehaviours extends QuestionViewBehaviours[Address] {
 
-  val fields = Seq("buildingAndStreet", "city", "postcode")
+  val fields = Seq("addressLine1", "addressLine2", "postalCode", "country")
 
   def pageWithAddressInput(): Unit =
     "page with an address input" - {

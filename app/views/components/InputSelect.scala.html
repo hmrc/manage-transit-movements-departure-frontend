@@ -24,7 +24,7 @@
 
 @(
     field: Field,
-    heading: String,
+    heading: Option[String] = None,
     label: Option[String] = None,
     hint: Option[String] = None,
     placeholder: Option[String] = None,
@@ -45,12 +45,15 @@
     .withFormField(field)
 }
 
-@label match {
-    case Some(x) => {
-        @headingComponent(heading)
-        @govukSelect(select.copy(label = Label(content = Text(x))))
+@(heading, label) match {
+    case (_, Some(label)) => {
+        @heading.map(headingComponent(_))
+        @govukSelect(select.copy(label = Label(content = Text(label))))
     }
-    case None => {
+    case (Some(heading), None) => {
         @govukSelect(select.withHeading(heading = Text(heading)))
+    }
+    case _ => {
+        @govukSelect(select)
     }
 }

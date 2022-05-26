@@ -16,6 +16,7 @@
 
 @import controllers.$package$.routes
 @import models.LocalReferenceNumber
+@import models.reference.Country
 @import views.html.components.{Button, ErrorSummary, InputAddress}
 
 @this(
@@ -26,7 +27,13 @@
     button: Button
 )
 
-@(form: Form[Address], lrn: LocalReferenceNumber, mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
+@(
+    form: Form[Address],
+    lrn: LocalReferenceNumber,
+    mode: Mode,
+    countries: Seq[Country],
+    name: String
+)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("$package$.$className;format="decap"$.title"),
@@ -42,6 +49,7 @@
             form = form,
             messageKeyPrefix = "$package$.$className;format="decap"$",
             caption = None,
+            countries = countries,
             headingArgs = name
         )
 
