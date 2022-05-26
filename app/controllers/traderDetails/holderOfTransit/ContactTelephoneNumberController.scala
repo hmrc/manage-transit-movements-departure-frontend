@@ -21,13 +21,14 @@ import forms.TelephoneNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
-import pages.traderDetails.holderOfTransit.{ContactNamePage, ContactTelephoneNumberPage}
+import pages.traderDetails.holderOfTransit.{ContactNamePage, ContactTelephoneNumberPage, NamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.traderDetails.holderOfTransit.ContactTelephoneNumberView
 import javax.inject.Inject
+import models.requests.SpecificDataRequestProvider1
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,6 +36,7 @@ class ContactTelephoneNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @TraderDetails navigator: Navigator,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: TelephoneNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
@@ -43,37 +45,36 @@ class ContactTelephoneNumberController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      request.userAnswers.get(ContactNamePage) match {
-        case Some(contactName) =>
-          val form = formProvider("traderDetails.holderOfTransit.contactTelephoneNumber", contactName)
-          val preparedForm = request.userAnswers.get(ContactTelephoneNumberPage) match {
-            case None        => form
-            case Some(value) => form.fill(value)
-          }
-          Ok(view(preparedForm, lrn, mode, contactName))
+  private type Request = SpecificDataRequestProvider1[String]#SpecificDataRequest[_]
 
-        case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
-      }
-  }
+  private def contactName(implicit request: Request): String = request.arg
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      request.userAnswers.get(ContactNamePage) match {
-        case Some(contactName) =>
-          formProvider("traderDetails.holderOfTransit.contactTelephoneNumber", contactName)
-            .bindFromRequest()
-            .fold(
-              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, contactName))),
-              value =>
-                for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactTelephoneNumberPage, value))
-                  _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(ContactTelephoneNumberPage, mode, updatedAnswers))
-            )
-        case _ =>
-          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
-      }
-  }
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(ContactNamePage)) {
+      implicit request =>
+        val form = formProvider("traderDetails.holderOfTransit.contactTelephoneNumber", contactName)
+        val preparedForm = request.userAnswers.get(ContactTelephoneNumberPage) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
+        Ok(view(preparedForm, lrn, mode, contactName))
+    }
+
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(ContactNamePage))
+    .async {
+      implicit request =>
+        formProvider("traderDetails.holderOfTransit.contactTelephoneNumber", contactName)
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, contactName))),
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactTelephoneNumberPage, value))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(ContactTelephoneNumberPage, mode, updatedAnswers))
+          )
+    }
 }
