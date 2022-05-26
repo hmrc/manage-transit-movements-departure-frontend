@@ -21,24 +21,24 @@ import forms.TelephoneNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
-import pages.traderDetails.holderOfTransit.{ContactNamePage, ContactsTelephoneNumberPage}
+import pages.traderDetails.holderOfTransit.{ContactNamePage, ContactTelephoneNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.traderDetails.holderOfTransit.ContactsTelephoneNumberView
+import views.html.traderDetails.holderOfTransit.ContactTelephoneNumberView
 import javax.inject.Inject
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ContactsTelephoneNumberController @Inject() (
+class ContactTelephoneNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @TraderDetails navigator: Navigator,
   formProvider: TelephoneNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
-  view: ContactsTelephoneNumberView
+  view: ContactTelephoneNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -47,8 +47,8 @@ class ContactsTelephoneNumberController @Inject() (
     implicit request =>
       request.userAnswers.get(ContactNamePage) match {
         case Some(name) =>
-          val form = formProvider("traderDetails.holderOfTransit.contactsTelephoneNumber", name)
-          val preparedForm = request.userAnswers.get(ContactsTelephoneNumberPage) match {
+          val form = formProvider("traderDetails.holderOfTransit.contactTelephoneNumber", name)
+          val preparedForm = request.userAnswers.get(ContactTelephoneNumberPage) match {
             case None        => form
             case Some(value) => form.fill(value)
           }
@@ -62,16 +62,16 @@ class ContactsTelephoneNumberController @Inject() (
     implicit request =>
       request.userAnswers.get(ContactNamePage) match {
         case Some(name) =>
-          val form = formProvider("traderDetails.holderOfTransit.contactsTelephoneNumber", name)
+          val form = formProvider("traderDetails.holderOfTransit.contactTelephoneNumber", name)
           form
             .bindFromRequest()
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, name))),
               value =>
                 for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactsTelephoneNumberPage, value))
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactTelephoneNumberPage, value))
                   _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(ContactsTelephoneNumberPage, mode, updatedAnswers))
+                } yield Redirect(navigator.nextPage(ContactTelephoneNumberPage, mode, updatedAnswers))
             )
         case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }

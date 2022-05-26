@@ -25,25 +25,23 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.TelephoneNumberFormProvider
-import views.html.traderDetails.holderOfTransit.ContactsTelephoneNumberView
+import views.html.traderDetails.holderOfTransit.TirIdentificationView
 import services.UserAnswersService
-import pages.traderDetails.holderOfTransit.{ContactNamePage, ContactsTelephoneNumberPage}
+import pages.traderDetails.holderOfTransit.TirIdentificationPage
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import generators.Generators
+import forms.traderDetails.TirIdNumberFormProvider
 
 import scala.concurrent.Future
 
-class ContactsTelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+class TirIdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                      = new TelephoneNumberFormProvider()
-  private val holderName                        = "Test Holder Name"
-  private val form                              = formProvider("traderDetails.holderOfTransit.contactsTelephoneNumber", holderName)
-  private val mode                              = NormalMode
-  private lazy val contactsTelephoneNumberRoute = routes.ContactsTelephoneNumberController.onPageLoad(lrn, mode).url
-  private lazy val mockUserAnswersService       = mock[UserAnswersService]
+  private val formProvider                = new TirIdNumberFormProvider()
+  private val form                        = formProvider("traderDetails.holderOfTransit.tirIdentification")
+  private val mode                        = NormalMode
+  private lazy val tirIdentificationRoute = routes.TirIdentificationController.onPageLoad(lrn, mode).url
+  private lazy val mockUserAnswersService = mock[UserAnswersService]
 
-  private val validAnswer: String = "123123"
+  private lazy val validAnswer = "AAA/999/99999"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -56,57 +54,54 @@ class ContactsTelephoneNumberControllerSpec extends SpecBase with AppWithDefault
     reset(mockUserAnswersService)
   }
 
-  "traderDetails.holderOfTransit.ContactsTelephoneNumber Controller" - {
+  "TirIdentificationController" - {
 
     "must return OK and the correct view for a GET" in {
-      val userAnswers = emptyUserAnswers.setValue(ContactNamePage, holderName)
-      setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, contactsTelephoneNumberRoute)
+      setExistingUserAnswers(emptyUserAnswers)
+
+      val request = FakeRequest(GET, tirIdentificationRoute)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[ContactsTelephoneNumberView]
+      val view = injector.instanceOf[TirIdentificationView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode, holderName)(request, messages).toString
+        view(form, lrn, mode)(request, messages).toString
 
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-      val userAnswers = UserAnswers(lrn, eoriNumber)
-        .setValue(ContactNamePage, holderName)
-        .set(ContactsTelephoneNumberPage, validAnswer)
-        .success
-        .value
 
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(TirIdentificationPage, validAnswer).success.value
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, contactsTelephoneNumberRoute)
+      val request = FakeRequest(GET, tirIdentificationRoute)
 
       val result = route(app, request).value
 
       val filledForm = form.bind(Map("value" -> validAnswer))
 
-      val view = injector.instanceOf[ContactsTelephoneNumberView]
+      val view = injector.instanceOf[TirIdentificationView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, holderName)(request, messages).toString
+        view(filledForm, lrn, mode)(request, messages).toString
 
     }
 
     "must redirect to the next page when valid data is submitted" in {
-      val userAnswers = emptyUserAnswers.setValue(ContactNamePage, holderName)
-      setExistingUserAnswers(userAnswers)
+
+      setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockUserAnswersService.getOrCreateUserAnswers(any(), any())) thenReturn Future.successful(emptyUserAnswers)
 
       val request =
-        FakeRequest(POST, contactsTelephoneNumberRoute)
+        FakeRequest(POST, tirIdentificationRoute)
           .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
@@ -117,29 +112,30 @@ class ContactsTelephoneNumberControllerSpec extends SpecBase with AppWithDefault
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      val userAnswers = emptyUserAnswers.setValue(ContactNamePage, holderName)
-      setExistingUserAnswers(userAnswers)
+
+      setExistingUserAnswers(emptyUserAnswers)
 
       val invalidAnswer = ""
 
-      val request    = FakeRequest(POST, contactsTelephoneNumberRoute).withFormUrlEncodedBody(("value", ""))
+      val request    = FakeRequest(POST, tirIdentificationRoute).withFormUrlEncodedBody(("value", ""))
       val filledForm = form.bind(Map("value" -> invalidAnswer))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[ContactsTelephoneNumberView]
+      val view = injector.instanceOf[TirIdentificationView]
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, holderName)(request, messages).toString
+        view(filledForm, lrn, mode)(request, messages).toString
 
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
+
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, contactsTelephoneNumberRoute)
+      val request = FakeRequest(GET, tirIdentificationRoute)
 
       val result = route(app, request).value
 
@@ -150,10 +146,11 @@ class ContactsTelephoneNumberControllerSpec extends SpecBase with AppWithDefault
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
+
       setNoExistingUserAnswers()
 
       val request =
-        FakeRequest(POST, contactsTelephoneNumberRoute)
+        FakeRequest(POST, tirIdentificationRoute)
           .withFormUrlEncodedBody(("value", "test string"))
 
       val result = route(app, request).value

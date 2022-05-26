@@ -16,22 +16,16 @@
 
 package pages.traderDetails.holderOfTransit
 
-import models.UserAnswers
-import pages.QuestionPage
-import pages.sections.HolderOfTransitSection
-import play.api.libs.json.JsPath
+import pages.behaviours.PageBehaviours
 
-import scala.util.Try
+class TirIdentificationPageSpec extends PageBehaviours {
 
-case object TirIdentificationYesNoPage extends QuestionPage[Boolean] {
+  "TirIdentificationPage" - {
 
-  override def path: JsPath = HolderOfTransitSection.path \ toString
+    beRetrievable[String](TirIdentificationPage)
 
-  override def toString: String = "tirIdentificationYesNo"
+    beSettable[String](TirIdentificationPage)
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(false) => userAnswers.remove(TirIdentificationPage)
-      case _           => super.cleanup(value, userAnswers)
-    }
+    beRemovable[String](TirIdentificationPage)
+  }
 }

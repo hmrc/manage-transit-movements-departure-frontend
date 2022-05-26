@@ -200,10 +200,19 @@ traderDetails.holderOfTransit.tirIdentificationYesNo.checkYourAnswersLabel = Do 
 traderDetails.holderOfTransit.tirIdentificationYesNo.error.required = Select yes if you know the Transit procedure TIR identification number
 traderDetails.holderOfTransit.tirIdentificationYesNo.change.hidden = if you know the Transit procedure TIR identification number
 
-traderDetails.holderOfTransit.contactsTelephoneNumber.title = What is {0}’s telephone number?
-traderDetails.holderOfTransit.contactsTelephoneNumber.heading = What is {0}’s telephone number?
-traderDetails.holderOfTransit.contactsTelephoneNumber.checkYourAnswersLabel = {0}’s telephone number?
-traderDetails.holderOfTransit.contactsTelephoneNumber.hint = For international numbers include the country code
-traderDetails.holderOfTransit.contactsTelephoneNumber.error.required = Enter {0}’s telephone number?
-traderDetails.holderOfTransit.contactsTelephoneNumber.error.length = {0}’s telephone number must be {1} characters or less
-traderDetails.holderOfTransit.contactsTelephoneNumber.error.invalidFormat = {0}’s telephone number must be a valid phone number
+traderDetails.holderOfTransit.tirIdentification.title = What is the TIR holder’s identification number?
+traderDetails.holderOfTransit.tirIdentification.heading = What is the TIR holder’s identification number?
+traderDetails.holderOfTransit.tirIdentification.checkYourAnswersLabel = TIR holder’s identification number?
+traderDetails.holderOfTransit.tirIdentification.hint = AAA/999/99999.
+traderDetails.holderOfTransit.tirIdentification.error.required = Enter the TIR holder’s identification number
+traderDetails.holderOfTransit.tirIdentification.error.maxLength = The TIR holder’s identification number must be 17 characters or less
+traderDetails.holderOfTransit.tirIdentification.error.invalidFormat = The TIR holder’s identification number must start with 3 letters, a forward slash, 3 numbers and another forward slash
+
+traderDetails.holderOfTransit.contactTelephoneNumber.title = What is {0}’s telephone number?
+traderDetails.holderOfTransit.contactTelephoneNumber.heading = What is {0}’s telephone number?
+traderDetails.holderOfTransit.contactTelephoneNumber.checkYourAnswersLabel = {0}’s telephone number?
+traderDetails.holderOfTransit.contactTelephoneNumber.hint = For international numbers include the country code
+traderDetails.holderOfTransit.contactTelephoneNumber.error.required = Enter {0}’s telephone number?
+traderDetails.holderOfTransit.contactTelephoneNumber.error.length = {0}’s telephone number must be {1} characters or less
+traderDetails.holderOfTransit.contactTelephoneNumber.error.invalidFormat = {0}’s telephone number must be a valid phone number
+

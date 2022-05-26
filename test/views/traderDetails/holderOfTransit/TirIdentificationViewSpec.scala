@@ -16,35 +16,35 @@
 
 package views.traderDetails.holderOfTransit
 
-import forms.TelephoneNumberFormProvider
+import forms.traderDetails.TirIdNumberFormProvider
 import models.NormalMode
-import models.domain.StringFieldRegex.maxTelephoneNumberLength
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.traderDetails.holderOfTransit.ContactsTelephoneNumberView
+import views.html.traderDetails.holderOfTransit.TirIdentificationView
 import org.scalacheck.{Arbitrary, Gen}
 
-class ContactsTelephoneNumberViewSpec extends InputTextViewBehaviours[String] {
+class TirIdentificationViewSpec extends InputTextViewBehaviours[String] {
 
-  private val name: String    = "Contact Name"
-  override val prefix: String = "traderDetails.holderOfTransit.contactsTelephoneNumber"
-
-  override def form: Form[String] = new TelephoneNumberFormProvider()(prefix, name)
+  override def form: Form[String] = new TirIdNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[ContactsTelephoneNumberView].apply(form, lrn, NormalMode, name)(fakeRequest, messages)
+    injector.instanceOf[TirIdentificationView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
-  implicit override val arbitraryT: Arbitrary[String] = Arbitrary(stringsWithMaxLength(maxTelephoneNumberLength, Gen.numChar))
+  override val prefix: String = "traderDetails.holderOfTransit.tirIdentification"
 
-  behave like pageWithTitle(name)
+  implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaNumStr)
+
+  behave like pageWithTitle()
 
   behave like pageWithBackLink
 
-  behave like pageWithHeading(name)
+  behave like pageWithSectionCaption("Trader details")
 
-  behave like pageWithHint("For international numbers include the country code")
+  behave like pageWithHeading()
+
+  behave like pageWithHint("AAA/999/99999.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 

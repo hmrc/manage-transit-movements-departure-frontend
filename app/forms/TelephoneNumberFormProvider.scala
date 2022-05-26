@@ -18,7 +18,8 @@ package forms
 
 import forms.mappings.Mappings
 import javax.inject.Inject
-import models.domain.StringFieldRegex.{maxTelephoneNumberLength, telephoneNumberRegex}
+import models.domain.StringFieldRegex.telephoneNumberRegex
+import forms.Constants.maxTelephoneNumberLength
 import play.api.data.Form
 
 class TelephoneNumberFormProvider @Inject() extends Mappings {

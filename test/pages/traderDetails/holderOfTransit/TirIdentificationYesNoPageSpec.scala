@@ -16,6 +16,7 @@
 
 package pages.traderDetails.holderOfTransit
 
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class TirIdentificationYesNoPageSpec extends PageBehaviours {
@@ -27,5 +28,31 @@ class TirIdentificationYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](TirIdentificationYesNoPage)
 
     beRemovable[Boolean](TirIdentificationYesNoPage)
+
+    "cleanup" - {
+      "when NO selected" - {
+        "must clean up TirIdentification" in {
+          forAll(arbitrary[String]) {
+            tirId =>
+              val preChange  = emptyUserAnswers.setValue(TirIdentificationPage, tirId)
+              val postChange = preChange.set(TirIdentificationYesNoPage, false).success.value
+
+              postChange.get(TirIdentificationPage) mustNot be(defined)
+          }
+        }
+      }
+
+      "when YES selected" - {
+        "must do nothing" in {
+          forAll(arbitrary[String]) {
+            tirId =>
+              val preChange  = emptyUserAnswers.setValue(TirIdentificationPage, tirId)
+              val postChange = preChange.set(TirIdentificationYesNoPage, true).success.value
+
+              postChange.get(TirIdentificationPage) must be(defined)
+          }
+        }
+      }
+    }
   }
 }

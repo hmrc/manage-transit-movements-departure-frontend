@@ -29,18 +29,18 @@
 @(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-  title = messages("traderDetails.holderOfTransit.contactsTelephoneNumber.title", name),
+  title = messages("traderDetails.holderOfTransit.contactTelephoneNumber.title", name),
   showBackLink = true,
   lrn = Some(lrn)
 ) {
-  @formHelper(action = controllers.traderDetails.holderOfTransit.routes.ContactsTelephoneNumberController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+  @formHelper(action = controllers.traderDetails.holderOfTransit.routes.ContactTelephoneNumberController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
     @errorSummary(form.errors)
 
     @inputText(
       field = form("value"),
-      label = messages("traderDetails.holderOfTransit.contactsTelephoneNumber.heading", name),
-      hint = Some(messages("traderDetails.holderOfTransit.contactsTelephoneNumber.hint")),
+      label = messages("traderDetails.holderOfTransit.contactTelephoneNumber.heading", name),
+      hint = Some(messages("traderDetails.holderOfTransit.contactTelephoneNumber.hint")),
       inputClass = InputSize.Width20
     )
 

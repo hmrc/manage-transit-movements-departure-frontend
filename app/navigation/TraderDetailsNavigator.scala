@@ -35,6 +35,7 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
     case EoriYesNoPage              => ua => eoriYesNoRoute(ua, mode)
     case EoriPage                   => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, mode))
     case TirIdentificationYesNoPage => ua => tirIdentificationYesNoRoute(ua, mode)
+    case TirIdentificationPage      => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, mode))
     case NamePage                   => ua => Some(hotRoutes.AddressController.onPageLoad(ua.lrn, mode))
     case AddressPage                => ua => Some(hotRoutes.AddContactController.onPageLoad(ua.lrn, mode))
     case AddContactPage             => ua => addContactRoute(ua, mode)
@@ -51,7 +52,7 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
 
   private def tirIdentificationYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
     userAnswers.get(TirIdentificationYesNoPage) match {
-      case Some(true)  => ??? // TODO - redirect to TIR identification number page
+      case Some(true)  => hotRoutes.TirIdentificationController.onPageLoad(userAnswers.lrn, mode)
       case Some(false) => hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
       case None        => controllers.routes.SessionExpiredController.onPageLoad()
     }

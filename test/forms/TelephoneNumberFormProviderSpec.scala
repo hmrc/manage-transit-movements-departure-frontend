@@ -17,7 +17,7 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import models.domain.StringFieldRegex.maxTelephoneNumberLength
+import forms.Constants.maxTelephoneNumberLength
 import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen

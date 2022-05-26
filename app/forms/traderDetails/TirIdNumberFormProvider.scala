@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package pages.traderDetails.holderOfTransit
+package forms.traderDetails
 
-import pages.behaviours.PageBehaviours
+import forms.Constants._
+import forms.mappings.Mappings
+import javax.inject.Inject
+import models.domain.StringFieldRegex._
+import play.api.data.Form
 
-class ContactsTelephoneNumberPageSpec extends PageBehaviours {
+class TirIdNumberFormProvider @Inject() extends Mappings {
 
-  "traderDetails.holderOfTransit.ContactsTelephoneNumberPage" - {
-
-    beRetrievable[String](ContactsTelephoneNumberPage)
-
-    beSettable[String](ContactsTelephoneNumberPage)
-
-    beRemovable[String](ContactsTelephoneNumberPage)
-  }
+  def apply(prefix: String): Form[String] =
+    Form(
+      "value" -> textWithSpacesRemoved(s"$prefix.error.required")
+        .verifying(
+          forms.StopOnFirstFail[String](
+            regexp(tirIdNumberRegex, s"$prefix.error.invalidFormat"),
+            maxLength(maxTirIdNumberLength, s"$prefix.error.maxLength")
+          )
+        )
+    )
 }

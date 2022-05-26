@@ -16,22 +16,13 @@
 
 package pages.traderDetails.holderOfTransit
 
-import models.UserAnswers
+import play.api.libs.json.JsPath
 import pages.QuestionPage
 import pages.sections.HolderOfTransitSection
-import play.api.libs.json.JsPath
 
-import scala.util.Try
-
-case object TirIdentificationYesNoPage extends QuestionPage[Boolean] {
+case object ContactTelephoneNumberPage extends QuestionPage[String] {
 
   override def path: JsPath = HolderOfTransitSection.path \ toString
 
-  override def toString: String = "tirIdentificationYesNo"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(false) => userAnswers.remove(TirIdentificationPage)
-      case _           => super.cleanup(value, userAnswers)
-    }
+  override def toString: String = "contactTelephoneNumber"
 }
