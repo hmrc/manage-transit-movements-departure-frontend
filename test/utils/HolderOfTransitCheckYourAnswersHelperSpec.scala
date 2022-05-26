@@ -252,5 +252,49 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         }
       }
     }
+
+    "contactName" - {
+      "must return None" - {
+        "when ContactNamePage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new HolderOfTransitCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.contactName
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when ContactNamePage is defined" in {
+          forAll(Gen.alphaNumStr, arbitrary[Mode]) {
+            (contactName, mode) =>
+              val answers = emptyUserAnswers.setValue(ContactNamePage, contactName)
+
+              val helper = new HolderOfTransitCheckYourAnswersHelper(answers, mode)
+              val result = helper.contactName
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Contact’s name".toText),
+                  value = Value(contactName.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = routes.ContactNameController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("contact’s name"),
+                          attributes = Map()
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
   }
 }

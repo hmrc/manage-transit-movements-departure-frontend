@@ -63,4 +63,12 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     id = None,
     call = AddContactController.onPageLoad(lrn, mode)
   )
+
+  def contactName: Option[SummaryListRow] = getAnswerAndBuildRow[String](
+    page = ContactNamePage,
+    formatAnswer = formatAsLiteral,
+    prefix = "traderDetails.holderOfTransit.contactName",
+    id = None,
+    call = ContactNameController.onPageLoad(lrn, mode)
+  )
 }
