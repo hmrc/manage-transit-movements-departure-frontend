@@ -39,7 +39,8 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
     case NamePage                   => ua => Some(hotRoutes.AddressController.onPageLoad(ua.lrn, mode))
     case AddressPage                => ua => Some(hotRoutes.AddContactController.onPageLoad(ua.lrn, mode))
     case AddContactPage             => ua => addContactRoute(ua, mode)
-    case ContactNamePage            => ua => ??? // TODO to route to contact telephone number page when built
+    case ContactNamePage            => ua => Some(hotRoutes.ContactTelephoneNumberController.onPageLoad(ua.lrn, mode))
+    case ContactTelephoneNumberPage => ua => ??? //TODO - Redirect to CheckYourAnswersController
   }
 
   private def eoriYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
@@ -60,8 +61,8 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
 
   private def addContactRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
     userAnswers.get(AddContactPage) match {
-      case Some(true)  => ??? //TODO - redirect to HoT contact person name page once built
-      case Some(false) => ??? //TODO - redirect to relevant page once built
+      case Some(true)  => hotRoutes.ContactNameController.onPageLoad(userAnswers.lrn, mode)
+      case Some(false) => ??? //TODO - Redirect to CheckYourAnswersController
       case None        => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
