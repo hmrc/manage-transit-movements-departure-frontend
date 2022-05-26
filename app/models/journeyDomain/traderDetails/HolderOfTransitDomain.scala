@@ -17,8 +17,10 @@
 package models.journeyDomain.traderDetails
 
 import cats.implicits._
+import models.DeclarationType.Option4
 import models.domain._
 import models.{Address, EoriNumber}
+import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.holderOfTransit._
 
 case class HolderOfTransitDomain(
@@ -32,12 +34,20 @@ case class HolderOfTransitDomain(
 object HolderOfTransitDomain {
 
   private val tir: UserAnswersReader[Option[String]] =
-    TirIdentificationYesNoPage
-      .filterOptionalDependent(identity)(TirIdentificationPage.reader)
+    DeclarationTypePage
+      .filterOptionalDependent(_ == Option4) {
+        TirIdentificationYesNoPage
+          .filterOptionalDependent(identity)(TirIdentificationPage.reader)
+      }
+      .map(_.flatten)
 
   private val eori: UserAnswersReader[Option[EoriNumber]] =
-    EoriYesNoPage
-      .filterOptionalDependent(identity)(EoriPage.reader.map(EoriNumber(_)))
+    DeclarationTypePage
+      .filterOptionalDependent(_ != Option4) {
+        EoriYesNoPage
+          .filterOptionalDependent(identity)(EoriPage.reader.map(EoriNumber(_)))
+      }
+      .map(_.flatten)
 
   private val contactName: UserAnswersReader[Option[String]] =
     AddContactPage
