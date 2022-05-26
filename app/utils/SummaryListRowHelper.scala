@@ -33,7 +33,7 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
     }
 
   protected def formatAsAddress(address: Address): Content =
-    HtmlContent(Seq(address.line1, address.line2, address.postcode).mkString("<br>"))
+    HtmlContent(Seq(address.line1, address.line2, address.postalCode, address.country.description).mkString("<br>"))
 
   protected def formatAsLiteral[T](answer: T): Content = s"$answer".toText
 

@@ -15,11 +15,10 @@ site.service_name = Manage your transit movements
 error.title.prefix = Error:
 error.summary.title = There is a problem
 
-address.buildingAndStreet = building and street
-address.numberAndStreet = number and street
-address.town = town
-address.city = city
-address.postcode = postcode
+address.addressLine1 = address line 1
+address.addressLine2 = address line 2
+address.postalCode = postal code
+address.country = country
 
 date.day.capitalized = Day
 date.month.capitalized = Month
@@ -177,16 +176,17 @@ traderDetails.holderOfTransit.contactName.error.invalid = The contact’s name m
 
 traderDetails.holderOfTransit.address.title = What is the transit holder’s address?
 traderDetails.holderOfTransit.address.heading = What is {0}’s address?
-traderDetails.holderOfTransit.address.numberAndStreet = Number and street
-traderDetails.holderOfTransit.address.town = Town
-traderDetails.holderOfTransit.address.postcode = Postcode
+traderDetails.holderOfTransit.address.addressLine1 = Address line 1
+traderDetails.holderOfTransit.address.addressLine2 = Address line 2
+traderDetails.holderOfTransit.address.postalCode = Postal code
+traderDetails.holderOfTransit.address.country = Country
 traderDetails.holderOfTransit.address.checkYourAnswersLabel = Transit holder’s address
 traderDetails.holderOfTransit.address.change.hidden = transit holder’s address
-traderDetails.holderOfTransit.address.error.postcode.invalid = The postcode of {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
-traderDetails.holderOfTransit.address.error.postcode.invalidFormat = Enter the postcode of {0}’s address in the right format, like AB1 1AB
-traderDetails.holderOfTransit.address.error.invalid = The {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-traderDetails.holderOfTransit.address.error.required = Enter the {0} of {1}’s address
-traderDetails.holderOfTransit.address.error.length = The {0} of {1}’s address must be 35 characters or less
+traderDetails.holderOfTransit.address.error.postcode.invalid = The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
+traderDetails.holderOfTransit.address.error.invalid = The {0} for {1}’s address address must only include letters a to z, numbers 0 to 9 and spaces
+traderDetails.holderOfTransit.address.error.required = Enter the {0} for {1}’s address
+traderDetails.holderOfTransit.address.error.length = The {0} for {1}’s address must be {2} characters or less
+traderDetails.holderOfTransit.address.placeholder = Select a country
 
 traderDetails.holderOfTransit.addContact.title = Do you want to add a contact?
 traderDetails.holderOfTransit.addContact.heading = Do you want to add a contact?

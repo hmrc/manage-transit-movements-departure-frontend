@@ -16,7 +16,7 @@
 
 package generators
 
-import models.Address.{NumberAndStreet, Postcode, Town}
+import models.AddressLine.{AddressLine1, AddressLine2, PostalCode}
 import models._
 import models.reference._
 import org.scalacheck.Arbitrary.arbitrary
@@ -88,14 +88,21 @@ trait ModelGenerators {
   implicit lazy val arbitraryTraderAddress: Arbitrary[Address] =
     Arbitrary {
       for {
-        numberAndStreet <- stringsWithMaxLength(NumberAndStreet.length, Gen.alphaChar)
-        town            <- stringsWithMaxLength(Town.length, Gen.alphaChar)
-        postcode        <- stringsThatMatchRegex(Postcode.formatRegex)
-      } yield Address(numberAndStreet, town, postcode)
+        addressLine1 <- stringsWithMaxLength(AddressLine1.length, Gen.alphaChar)
+        addressLine2 <- stringsWithMaxLength(AddressLine2.length, Gen.alphaChar)
+        postalCode   <- stringsWithMaxLength(PostalCode.length, Gen.alphaChar)
+        country      <- arbitrary[Country]
+      } yield Address(addressLine1, addressLine2, postalCode, country)
     }
 
   implicit lazy val arbitraryMode: Arbitrary[Mode] = Arbitrary {
     Gen.oneOf(NormalMode, CheckMode)
+  }
+
+  implicit lazy val arbitraryCountryList: Arbitrary[CountryList] = Arbitrary {
+    for {
+      countries <- listWithMaxLength[Country]()
+    } yield CountryList(countries)
   }
 
 }

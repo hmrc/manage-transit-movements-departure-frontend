@@ -25,7 +25,7 @@
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
-    select: InputSelect,
+    inputSelect: InputSelect,
     errorSummary: ErrorSummary,
     button: Button
 )
@@ -42,9 +42,9 @@
 
         @errorSummary(form.errors)
 
-        @select(
+        @inputSelect(
             field = form("value"),
-            heading = messages("$package$.$className;format="decap"$.heading"),
+            heading = Some(messages("$package$.$className;format="decap"$.heading")),
             label = Some(messages("$package$.$className;format="decap"$.label")),
             hint = Some(messages("$package$.$className;format="decap"$.hintText")),
             selectItems = $referenceClassPlural;format="decap"$.toSelectItems(form.value),
