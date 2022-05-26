@@ -16,7 +16,7 @@
 
 package views.preTaskList
 
-import forms.preTaskList.OfficeOfDepartureFormProvider
+import forms.CustomsOfficeFormProvider
 import generators.Generators
 import models.reference.{CountryCode, CustomsOffice}
 import models.{CustomsOfficeList, NormalMode}
@@ -27,7 +27,7 @@ import views.html.preTaskList.OfficeOfDepartureView
 
 class OfficeOfDepartureViewSpec extends InputSelectViewBehaviours[CustomsOffice] with Generators {
 
-  override def form: Form[CustomsOffice] = new OfficeOfDepartureFormProvider()(CustomsOfficeList(Nil))
+  override def form: Form[CustomsOffice] = new CustomsOfficeFormProvider()(prefix, CustomsOfficeList(Nil))
 
   override def applyView(form: Form[CustomsOffice]): HtmlFormat.Appendable =
     injector.instanceOf[OfficeOfDepartureView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
@@ -50,7 +50,7 @@ class OfficeOfDepartureViewSpec extends InputSelectViewBehaviours[CustomsOffice]
 
   behave like pageWithHint("Give the office location or code. Like, Dover or GB000060.")
 
-  behave like pageWithContent("label", "This is the Customs office where the transit movement starts.")
+  behave like pageWithContent("label", "This is the customs office where the transit movement starts.")
 
   behave like pageWithSubmitButton("Continue")
 }

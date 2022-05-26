@@ -17,12 +17,14 @@
 package controllers.preTaskList
 
 import controllers.actions._
-import forms.preTaskList.OfficeOfDepartureFormProvider
+import forms.CustomsOfficeFormProvider
 import models.journeyDomain.PreTaskListDomain
-import models.{LocalReferenceNumber, Mode}
+import models.reference.CustomsOffice
+import models.{CustomsOfficeList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import pages.preTaskList.OfficeOfDeparturePage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -39,13 +41,15 @@ class OfficeOfDepartureController @Inject() (
   @PreTaskListDetails navigator: Navigator,
   actions: Actions,
   checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
-  formProvider: OfficeOfDepartureFormProvider,
+  formProvider: CustomsOfficeFormProvider,
   customsOfficesService: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
   view: OfficeOfDepartureView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
+
+  private def form(customsOfficeList: CustomsOfficeList): Form[CustomsOffice] = formProvider("officeOfDeparture", customsOfficeList)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
@@ -54,14 +58,13 @@ class OfficeOfDepartureController @Inject() (
       implicit request =>
         customsOfficesService.getCustomsOfficesOfDeparture.map {
           customsOfficeList =>
-            val form = formProvider(customsOfficeList)
             val preparedForm = request.userAnswers
               .get(OfficeOfDeparturePage)
               .flatMap(
                 x => customsOfficeList.getCustomsOffice(x.id)
               )
-              .map(form.fill)
-              .getOrElse(form)
+              .map(form(customsOfficeList).fill)
+              .getOrElse(form(customsOfficeList))
 
             Ok(view(preparedForm, lrn, customsOfficeList.customsOffices, mode))
         }
@@ -74,8 +77,7 @@ class OfficeOfDepartureController @Inject() (
       implicit request =>
         customsOfficesService.getCustomsOfficesOfDeparture.flatMap {
           customsOfficeList =>
-            val form = formProvider(customsOfficeList)
-            form
+            form(customsOfficeList)
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
