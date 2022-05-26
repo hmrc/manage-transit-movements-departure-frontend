@@ -46,13 +46,13 @@ class ContactTelephoneNumberController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
       request.userAnswers.get(ContactNamePage) match {
-        case Some(name) =>
-          val form = formProvider("traderDetails.holderOfTransit.contactTelephoneNumber", name)
+        case Some(contactName) =>
+          val form = formProvider("traderDetails.holderOfTransit.contactTelephoneNumber", contactName)
           val preparedForm = request.userAnswers.get(ContactTelephoneNumberPage) match {
             case None        => form
             case Some(value) => form.fill(value)
           }
-          Ok(view(preparedForm, lrn, mode, name))
+          Ok(view(preparedForm, lrn, mode, contactName))
 
         case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
       }
@@ -61,19 +61,19 @@ class ContactTelephoneNumberController @Inject() (
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       request.userAnswers.get(ContactNamePage) match {
-        case Some(name) =>
-          val form = formProvider("traderDetails.holderOfTransit.contactTelephoneNumber", name)
-          form
+        case Some(contactName) =>
+          formProvider("traderDetails.holderOfTransit.contactTelephoneNumber", contactName)
             .bindFromRequest()
             .fold(
-              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, name))),
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, contactName))),
               value =>
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactTelephoneNumberPage, value))
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(navigator.nextPage(ContactTelephoneNumberPage, mode, updatedAnswers))
             )
-        case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+        case _ =>
+          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
   }
 }

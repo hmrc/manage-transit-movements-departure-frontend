@@ -26,7 +26,7 @@ class TelephoneNumberFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String, name: String): Form[String] =
     Form(
-      "value" -> text(s"$prefix.error.required")
+      "value" -> text(s"$prefix.error.required", Seq(name))
         .verifying(
           StopOnFirstFail[String](
             maxLength(maxTelephoneNumberLength, s"$prefix.error.length", args = Seq(name, maxTelephoneNumberLength)),

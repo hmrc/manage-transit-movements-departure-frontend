@@ -44,6 +44,8 @@ class ContactTelephoneNumberViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithHeading(name)
 
+  behave like pageWithSectionCaption("Trader details")
+
   behave like pageWithHint("For international numbers include the country code")
 
   behave like pageWithInputText(Some(InputSize.Width20))

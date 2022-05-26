@@ -18,6 +18,7 @@ package forms
 
 import forms.behaviours.StringFieldBehaviours
 import forms.Constants.maxTelephoneNumberLength
+import models.domain.StringFieldRegex.telephoneNumberRegex
 import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
@@ -39,7 +40,7 @@ class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxTelephoneNumberLength)
+      stringsWithMaxLength(maxTelephoneNumberLength, Gen.numChar)
     )
 
     behave like fieldWithMaxLength(
@@ -52,15 +53,12 @@ class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, Seq(name))
     )
 
     "must not bind strings that do not match regex" in {
-      val fieldName = "value"
-      val args      = Seq(name)
-
-      val generator: Gen[String] = RegexpGen.from(s"[!£^(){}_+=:;|`~,±<>éèâñüç]{$maxTelephoneNumberLength}")
-      val expectedError          = FormError(fieldName, invalidFormatKey, args)
+      val generator     = stringsWithMaxLength(maxTelephoneNumberLength).retryUntil(!_.matches(telephoneNumberRegex.regex))
+      val expectedError = FormError("value", invalidFormatKey, Seq(name))
 
       forAll(generator) {
         invalidString =>
