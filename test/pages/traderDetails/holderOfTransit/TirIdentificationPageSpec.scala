@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages.traderDetails.holderOfTransit
 
-import models.Address._
+import pages.behaviours.PageBehaviours
 
-import javax.inject.Inject
+class TirIdentificationPageSpec extends PageBehaviours {
 
-class OrganisationAddressFormProvider @Inject() extends AddressFormProvider {
+  "TirIdentificationPage" - {
 
-  override val addressLine1: AddressLine = BuildingAndStreet
-  override val addressLine2: AddressLine = City
+    beRetrievable[String](TirIdentificationPage)
+
+    beSettable[String](TirIdentificationPage)
+
+    beRemovable[String](TirIdentificationPage)
+  }
 }

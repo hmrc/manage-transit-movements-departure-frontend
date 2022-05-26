@@ -189,7 +189,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
               result mustBe Some(
                 SummaryListRow(
                   key = Key("Transit holder’s address".toText),
-                  value = Value(HtmlContent(Seq(address.line1, address.line2, address.postcode).mkString("<br>"))),
+                  value = Value(HtmlContent(Seq(address.line1, address.line2, address.postalCode, address.country).mkString("<br>"))),
                   actions = Some(
                     Actions(
                       items = List(

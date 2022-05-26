@@ -17,40 +17,56 @@
 package controllers.traderDetails.holderOfTransit
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.IndividualAddressFormProvider
-import models.{Address, NormalMode, UserAnswers}
+import forms.AddressFormProvider
+import generators.Generators
+import models.{Address, CountryList, NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{reset, when}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import org.scalatestplus.mockito.MockitoSugar
 import pages.traderDetails.holderOfTransit.{AddressPage, NamePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.CountriesService
 import views.html.traderDetails.holderOfTransit.AddressView
 
 import scala.concurrent.Future
 
-class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
+class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val addressHolderName = Gen.alphaNumStr.sample.value
-  private val testAddress       = Address("buildingAndStreet", "city", "NE99 1XN")
-  private val formProvider      = new IndividualAddressFormProvider()
-  private val form              = formProvider("traderDetails.holderOfTransit.address", addressHolderName)
+
+  private val testAddress = arbitrary[Address].sample.value
+  private val countryList = CountryList(Seq(testAddress.country))
+
+  private val formProvider = new AddressFormProvider()
+  private val form         = formProvider("traderDetails.holderOfTransit.address", addressHolderName, countryList)
+
   private val mode              = NormalMode
   private lazy val addressRoute = routes.AddressController.onPageLoad(lrn, mode).url
+
+  private lazy val mockCountriesService: CountriesService = mock[CountriesService]
+
+  override def beforeEach(): Unit = {
+    reset(mockCountriesService)
+    super.beforeEach()
+  }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "Address Controller" - {
 
     "must return OK and the correct view for a GET" in {
+
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
 
       val userAnswers = emptyUserAnswers.setValue(NamePage, addressHolderName)
       setExistingUserAnswers(userAnswers)
@@ -63,11 +79,13 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode, addressHolderName)(request, messages).toString
+        view(form, lrn, mode, countryList.countries, addressHolderName)(request, messages).toString
 
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
+
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
 
       val userAnswers = UserAnswers(lrn, eoriNumber)
         .setValue(NamePage, addressHolderName)
@@ -81,9 +99,10 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
 
       val filledForm = form.bind(
         Map(
-          "numberAndStreet" -> testAddress.line1,
-          "town"            -> testAddress.line2,
-          "postcode"        -> testAddress.postcode
+          "addressLine1" -> testAddress.line1,
+          "addressLine2" -> testAddress.line2,
+          "postalCode"   -> testAddress.postalCode,
+          "country"      -> testAddress.country.code.code
         )
       )
 
@@ -92,12 +111,13 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, addressHolderName)(request, messages).toString
+        view(filledForm, lrn, mode, countryList.countries, addressHolderName)(request, messages).toString
 
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val userAnswers = emptyUserAnswers.setValue(NamePage, addressHolderName)
@@ -105,9 +125,10 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
 
       val request = FakeRequest(POST, addressRoute)
         .withFormUrlEncodedBody(
-          ("numberAndStreet", testAddress.line1),
-          ("town", testAddress.line2),
-          ("postcode", testAddress.postcode)
+          ("addressLine1", testAddress.line1),
+          ("addressLine2", testAddress.line2),
+          ("postalCode", testAddress.postalCode),
+          ("country", testAddress.country.code.code)
         )
 
       val result = route(app, request).value
@@ -119,6 +140,8 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
+
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
 
       val userAnswers = emptyUserAnswers.setValue(NamePage, addressHolderName)
       setExistingUserAnswers(userAnswers)
@@ -133,7 +156,7 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
       val view = injector.instanceOf[AddressView]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, mode, addressHolderName)(request, messages).toString
+        view(boundForm, lrn, mode, countryList.countries, addressHolderName)(request, messages).toString
 
     }
 

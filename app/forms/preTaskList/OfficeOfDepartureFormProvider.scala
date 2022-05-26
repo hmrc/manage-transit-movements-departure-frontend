@@ -25,10 +25,8 @@ import javax.inject.Inject
 
 class OfficeOfDepartureFormProvider @Inject() extends Mappings {
 
-  def apply(customsOffices: CustomsOfficeList): Form[CustomsOffice] =
+  def apply(customsOfficeList: CustomsOfficeList): Form[CustomsOffice] =
     Form(
-      "value" -> text("officeOfDeparture.error.required")
-        .verifying("officeOfDeparture.error.required", value => customsOffices.getAll.exists(_.id == value))
-        .transform[CustomsOffice](value => customsOffices.getCustomsOffice(value).get, _.id)
+      "value" -> customsOffice(customsOfficeList, "officeOfDeparture.error.required")
     )
 }

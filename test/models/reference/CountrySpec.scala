@@ -17,9 +17,11 @@
 package models.reference
 
 import base.SpecBase
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.Json
+import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 
 class CountrySpec extends SpecBase with ScalaCheckPropertyChecks {
 
@@ -50,6 +52,14 @@ class CountrySpec extends SpecBase with ScalaCheckPropertyChecks {
               |}
               |""".stripMargin)
             .as[Country] mustBe country
+      }
+    }
+
+    "must convert to select item" in {
+      forAll(Gen.alphaNumStr, Gen.alphaNumStr, arbitrary[Boolean]) {
+        (code, description, selected) =>
+          val country = Country(CountryCode(code), description)
+          country.toSelectItem(selected) mustBe SelectItem(Some(code), description, selected)
       }
     }
 

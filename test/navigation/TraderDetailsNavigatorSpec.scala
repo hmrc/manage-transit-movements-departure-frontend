@@ -108,13 +108,13 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
     "must go from TIR identification number Yes No page" - {
       "when Yes selected" - {
-        "to TIR identification number page" ignore {
+        "to TIR identification number page" in {
           forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
             (answers, mode) =>
               val userAnswers = answers.setValue(TirIdentificationYesNoPage, true)
               navigator
                 .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
-                .mustBe(???)
+                .mustBe(hotRoutes.TirIdentificationController.onPageLoad(answers.lrn, mode))
           }
         }
       }
@@ -128,6 +128,15 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
                 .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
                 .mustBe(hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
           }
+        }
+      }
+
+      "must go from TirIdentificationPage to NamePage" in {
+        forAll(arbitrary[UserAnswers], arbitrary[Mode]) {
+          (userAnswers, mode) =>
+            navigator
+              .nextPage(TirIdentificationPage, mode, userAnswers)
+              .mustBe(hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
         }
       }
 

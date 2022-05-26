@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package forms
+package pages.traderDetails.holderOfTransit
 
-class IndividualAddressFormProviderSpec extends AddressFormProviderSpec {
+import play.api.libs.json.JsPath
+import pages.QuestionPage
+import pages.sections.HolderOfTransitSection
 
-  override val formProvider: AddressFormProvider = new IndividualAddressFormProvider()
+case object TirIdentificationPage extends QuestionPage[String] {
 
-  behave like addressFormProvider()
+  override def path: JsPath = HolderOfTransitSection.path \ toString
+
+  override def toString: String = "tirIdentification"
 }

@@ -1,41 +1,56 @@
 package controllers.$package$
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import org.scalacheck.Gen
-import models.{Address, NormalMode, UserAnswers}
+import forms.$formProvider$
+import generators.Generators
+import models.{Address, CountryList, NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.$navRoute$
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.Mockito.{reset, when}
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
+import pages.$package$.{$className$Page, $addressHolderNamePage$}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.$formProvider$
+import services.CountriesService
 import views.html.$package$.$className$View
-import pages.$package$.$className$Page
-import pages.$package$.$addressHolderNamePage$
 
 import scala.concurrent.Future
 
-class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
+class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val addressHolderName = Gen.alphaNumStr.sample.value
-  private val testAddress       = Address("buildingAndStreet", "city", "NE99 1XN")
+
+  private val testAddress = arbitrary[Address].sample.value
+  private val countryList = CountryList(Seq(testAddress.country))
+
   private val formProvider      = new $formProvider$()
-  private val form              = formProvider("$package$.$className;format="decap"$", addressHolderName)
-  private val mode              = NormalMode
+  private val form              = formProvider("$package$.$className;format="decap"$", addressHolderName, countryList)
+
+  private val mode                                 = NormalMode
   private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, mode).url
+
+  private lazy val mockCountriesService: CountriesService = mock[CountriesService]
+
+  override def beforeEach(): Unit = {
+    reset(mockCountriesService)
+    super.beforeEach()
+  }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[$navRoute$]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "$className$ Controller" - {
 
     "must return OK and the correct view for a GET" in {
+
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
 
       val userAnswers = emptyUserAnswers.setValue($addressHolderNamePage$, addressHolderName)
       setExistingUserAnswers(userAnswers)
@@ -48,11 +63,13 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode, addressHolderName)(request, messages).toString
+        view(form, lrn, mode, countryList.countries, addressHolderName)(request, messages).toString
 
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
+
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
 
       val userAnswers = UserAnswers(lrn, eoriNumber)
         .setValue($addressHolderNamePage$, addressHolderName)
@@ -66,9 +83,10 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       val filledForm = form.bind(
         Map(
-          "numberAndStreet" -> testAddress.line1,
-          "town"              -> testAddress.line2,
-          "postcode"          -> testAddress.postcode
+          "addressLine1" -> testAddress.line1,
+          "addressLine2" -> testAddress.line2,
+          "postalCode"   -> testAddress.postalCode,
+          "country"      -> testAddress.country.code.code
         )
       )
 
@@ -77,12 +95,13 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, addressHolderName)(request, messages).toString
+        view(filledForm, lrn, mode, countryList.countries, addressHolderName)(request, messages).toString
 
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val userAnswers = emptyUserAnswers.setValue($addressHolderNamePage$, addressHolderName)
@@ -90,9 +109,10 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       val request = FakeRequest(POST, $className;format="decap"$Route)
         .withFormUrlEncodedBody(
-          ("numberAndStreet", testAddress.line1),
-          ("town", testAddress.line2),
-          ("postcode", testAddress.postcode)
+          ("addressLine1", testAddress.line1),
+          ("addressLine2", testAddress.line2),
+          ("postalCode", testAddress.postalCode),
+          ("country", testAddress.country.code.code)
         )
 
       val result = route(app, request).value
@@ -104,6 +124,8 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
+
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
 
       val userAnswers = emptyUserAnswers.setValue($addressHolderNamePage$, addressHolderName)
       setExistingUserAnswers(userAnswers)
@@ -118,7 +140,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       val view = injector.instanceOf[$className$View]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, mode, addressHolderName)(request, messages).toString
+        view(boundForm, lrn, mode, countryList.countries, addressHolderName)(request, messages).toString
 
     }
 

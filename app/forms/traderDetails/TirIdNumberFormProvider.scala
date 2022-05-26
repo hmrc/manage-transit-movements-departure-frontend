@@ -14,9 +14,22 @@
  * limitations under the License.
  */
 
-package views.behaviours
+package forms.traderDetails
 
-trait IndividualAddressViewBehaviours extends AddressViewBehaviours {
+import forms.mappings.Mappings
+import javax.inject.Inject
+import models.domain.StringFieldRegex._
+import play.api.data.Form
 
-  override val fields = Seq("numberAndStreet", "town", "postcode")
+class TirIdNumberFormProvider @Inject() extends Mappings {
+
+  def apply(prefix: String): Form[String] =
+    Form(
+      "value" -> textWithSpacesRemoved(s"$prefix.error.required")
+        .verifying(
+          forms.StopOnFirstFail[String](
+            regexp(tirIdNumberRegex, s"$prefix.error.invalidFormat")
+          )
+        )
+    )
 }

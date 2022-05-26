@@ -14,43 +14,36 @@
  * limitations under the License.
  *@
 
-@import controllers.$package$.routes
+@import controllers.traderDetails.holderOfTransit.routes
+@import views.html.components.{Button, ErrorSummary, InputText}
 @import models.LocalReferenceNumber
-@import models.reference.Country
-@import views.html.components.{Button, ErrorSummary, InputAddress}
 
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
-    inputAddress: InputAddress,
+    inputText: InputText,
     errorSummary: ErrorSummary,
     button: Button
 )
 
-@(
-    form: Form[Address],
-    lrn: LocalReferenceNumber,
-    mode: Mode,
-    countries: Seq[Country],
-    name: String
-)(implicit request: Request[_], messages: Messages)
+@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("$package$.$className;format="decap"$.title"),
-    showBackLink = true,
-    lrn = Some(lrn)
+  title = messages("traderDetails.holderOfTransit.tirIdentification.title"),
+  showBackLink = true,
+  lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.$className$Controller.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.TirIdentificationController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
-        @inputAddress(
-            form = form,
-            messageKeyPrefix = "$package$.$className;format="decap"$",
-            caption = None,
-            countries = countries,
-            headingArgs = name
+        @inputText(
+            field = form("value"),
+            label = messages("traderDetails.holderOfTransit.tirIdentification.heading"),
+            inputClass = InputSize.Width20,
+            hint = Some(messages("traderDetails.holderOfTransit.tirIdentification.hint")),
+            caption = Some(messages("traderDetails.caption"))
         )
 
         @button(attributes = Map("id" -> "submit"))
