@@ -17,11 +17,10 @@
 package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import config.FrontendAppConfig
 import controllers.{routes => mainRoutes}
 import forms.preTaskList.OfficeOfDepartureFormProvider
-import models.reference.{Country, CountryCode, CustomsOffice}
-import models.{CountryList, CustomsOfficeList, NormalMode}
+import models.reference.{CountryCode, CustomsOffice}
+import models.{CustomsOfficeList, NormalMode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentMatchers.any
@@ -32,28 +31,25 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{CountriesService, CustomsOfficesService}
+import services.CustomsOfficesService
 import views.html.preTaskList.OfficeOfDepartureView
 
 import scala.concurrent.Future
 
 class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val customsOffice1: CustomsOffice          = CustomsOffice("officeId", "someName", CountryCode("GB"), None)
-  private val customsOffice2: CustomsOffice          = CustomsOffice("id", "name", CountryCode("GB"), None)
-  private val customsOffices: CustomsOfficeList      = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
-  private val nonEuTransitCountries: Seq[Country]    = Seq(Country(CountryCode("GB"), "description"))
-  private val nonEuTransitCountriesList: CountryList = CountryList(nonEuTransitCountries)
-  private val gbForm                                 = new OfficeOfDepartureFormProvider()(customsOffices)
-  private val mode                                   = NormalMode
+  private val customsOffice1: CustomsOffice     = CustomsOffice("officeId", "someName", CountryCode("GB"), None)
+  private val customsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("GB"), None)
+  private val customsOffices: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
 
-  private val mockFrontendAppConfig: FrontendAppConfig         = mock[FrontendAppConfig]
-  private val mockCountriesService: CountriesService           = mock[CountriesService]
+  private val gbForm = new OfficeOfDepartureFormProvider()(customsOffices)
+  private val mode   = NormalMode
+
   private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
   private lazy val officeOfDepartureRoute: String              = routes.OfficeOfDepartureController.onPageLoad(lrn, mode).url
 
   override def beforeEach(): Unit = {
-    reset(mockFrontendAppConfig, mockCountriesService, mockCustomsOfficesService)
+    reset(mockCustomsOfficesService)
     super.beforeEach()
   }
 
@@ -61,7 +57,6 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
-      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
       .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
   "OfficeOfDeparture Controller" - {
@@ -106,7 +101,6 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
       setExistingUserAnswers(emptyUserAnswers)
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
-      when(mockCountriesService.getNonEuTransitCountries()(any())).thenReturn(Future.successful(nonEuTransitCountriesList))
 
       val request = FakeRequest(POST, officeOfDepartureRoute)
         .withFormUrlEncodedBody(("value", "id"))

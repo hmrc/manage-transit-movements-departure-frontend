@@ -17,51 +17,52 @@
 package forms
 
 import forms.mappings.Mappings
-import models.Address
-import models.Address._
+import models.AddressLine._
+import models.{Address, CountryList}
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import play.api.i18n.Messages
 
 import javax.inject.Inject
 
-abstract class AddressFormProvider @Inject() extends Mappings {
+class AddressFormProvider @Inject() extends Mappings {
 
-  val addressLine1: AddressLine
-  val addressLine2: AddressLine
-
-  def apply(prefix: String, name: String)(implicit messages: Messages): Form[Address] = Form(
-    mapping(
-      addressLine1.field -> {
-        lazy val args = Seq(addressLine1.arg, name)
-        text(s"$prefix.error.required", args)
-          .verifying(
-            StopOnFirstFail[String](
-              maxLength(addressLine1.length, s"$prefix.error.length", args),
-              regexp(addressLine1.regex, s"$prefix.error.invalid", args)
+  def apply(prefix: String, name: String, countryList: CountryList)(implicit messages: Messages): Form[Address] =
+    Form(
+      mapping(
+        AddressLine1.field -> {
+          lazy val args = Seq(AddressLine1.arg, name)
+          trimmedText(s"$prefix.error.required", args)
+            .verifying(
+              StopOnFirstFail[String](
+                maxLength(AddressLine1.length, s"$prefix.error.length", args :+ AddressLine1.length),
+                regexp(AddressLine1.regex, s"$prefix.error.invalid", args)
+              )
             )
-          )
-      },
-      addressLine2.field -> {
-        lazy val args = Seq(addressLine2.arg, name)
-        text(s"$prefix.error.required", args)
-          .verifying(
-            StopOnFirstFail[String](
-              maxLength(addressLine2.length, s"$prefix.error.length", args),
-              regexp(addressLine2.regex, s"$prefix.error.invalid", args)
+        },
+        AddressLine2.field -> {
+          lazy val args = Seq(AddressLine2.arg, name)
+          trimmedText(s"$prefix.error.required", args)
+            .verifying(
+              StopOnFirstFail[String](
+                maxLength(AddressLine2.length, s"$prefix.error.length", args :+ AddressLine2.length),
+                regexp(AddressLine2.regex, s"$prefix.error.invalid", args)
+              )
             )
-          )
-      },
-      Postcode.field -> {
-        lazy val args = Seq(name)
-        text(s"$prefix.error.required", Postcode.arg +: args)
-          .verifying(
-            StopOnFirstFail[String](
-              regexp(Postcode.regex, s"$prefix.error.postcode.invalid", args),
-              regexp(Postcode.formatRegex, s"$prefix.error.postcode.invalidFormat", args)
+        },
+        PostalCode.field -> {
+          lazy val args = Seq(PostalCode.arg, name)
+          trimmedText(s"$prefix.error.required", args)
+            .verifying(
+              StopOnFirstFail[String](
+                maxLength(PostalCode.length, s"$prefix.error.length", args :+ PostalCode.length),
+                regexp(PostalCode.regex, s"$prefix.error.postalCode.invalid", Seq(name))
+              )
             )
-          )
-      }
-    )(Address.apply)(Address.unapply)
-  )
+        },
+        Country.field -> {
+          country(countryList, s"$prefix.error.required", Seq(Country.arg, name))
+        }
+      )(Address.apply)(Address.unapply)
+    )
 }

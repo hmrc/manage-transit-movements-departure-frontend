@@ -17,9 +17,9 @@
 package controllers.traderDetails.holderOfTransit
 
 import controllers.actions._
-import forms.IndividualAddressFormProvider
+import forms.AddressFormProvider
 import models.requests.SpecificDataRequestProvider1
-import models.{Address, LocalReferenceNumber, Mode}
+import models.{Address, CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
 import pages.traderDetails.holderOfTransit.{AddressPage, NamePage}
@@ -27,6 +27,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.traderDetails.holderOfTransit.AddressView
 
@@ -39,7 +40,8 @@ class AddressController @Inject() (
   @TraderDetails navigator: Navigator,
   actions: Actions,
   getMandatoryPage: SpecificDataRequiredActionProvider,
-  formProvider: IndividualAddressFormProvider,
+  formProvider: AddressFormProvider,
+  countriesService: CountriesService,
   val controllerComponents: MessagesControllerComponents,
   view: AddressView
 )(implicit ec: ExecutionContext)
@@ -50,19 +52,23 @@ class AddressController @Inject() (
 
   private def name(implicit request: Request): String = request.arg
 
-  private def form(implicit request: Request): Form[Address] =
-    formProvider("traderDetails.holderOfTransit.address", name)
+  private def form(countryList: CountryList)(implicit request: Request): Form[Address] =
+    formProvider("traderDetails.holderOfTransit.address", name, countryList)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(NamePage)) {
+    .andThen(getMandatoryPage(NamePage))
+    .async {
       implicit request =>
-        val preparedForm = request.userAnswers.get(AddressPage) match {
-          case None        => form
-          case Some(value) => form.fill(value)
-        }
+        countriesService.getCountries().map {
+          countryList =>
+            val preparedForm = request.userAnswers.get(AddressPage) match {
+              case None        => form(countryList)
+              case Some(value) => form(countryList).fill(value)
+            }
 
-        Ok(view(preparedForm, lrn, mode, name))
+            Ok(view(preparedForm, lrn, mode, countryList.countries, name))
+        }
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
@@ -70,15 +76,18 @@ class AddressController @Inject() (
     .andThen(getMandatoryPage(NamePage))
     .async {
       implicit request =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, name))),
-            value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressPage, value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(AddressPage, mode, updatedAnswers))
-          )
+        countriesService.getCountries().flatMap {
+          countryList =>
+            form(countryList)
+              .bindFromRequest()
+              .fold(
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countryList.countries, name))),
+                value =>
+                  for {
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressPage, value))
+                    _              <- sessionRepository.set(updatedAnswers)
+                  } yield Redirect(navigator.nextPage(AddressPage, mode, updatedAnswers))
+              )
+        }
     }
 }

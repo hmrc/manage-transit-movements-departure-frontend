@@ -26,11 +26,9 @@ import org.scalatest.{BeforeAndAfterEach, TestSuite}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.{GuiceFakeApplicationFactory, GuiceOneAppPerSuite}
 import play.api.Application
-import play.api.i18n.MessagesApi
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Call
-import play.api.test.Helpers
 import repositories.SessionRepository
 
 trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerSuite with GuiceFakeApplicationFactory with MockitoSugar {
@@ -66,7 +64,6 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[IdentifierAction].to[FakeIdentifierAction],
         bind[SessionRepository].toInstance(mockSessionRepository),
-        bind[DataRetrievalActionProvider].toInstance(mockDataRetrievalActionProvider),
-        bind[MessagesApi].toInstance(Helpers.stubMessagesApi())
+        bind[DataRetrievalActionProvider].toInstance(mockDataRetrievalActionProvider)
       )
 }

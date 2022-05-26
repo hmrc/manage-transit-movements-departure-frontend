@@ -18,157 +18,148 @@ package forms
 
 import base.SpecBase
 import forms.behaviours.StringFieldBehaviours
-import models.Address._
+import models.AddressLine._
+import models.reference.{Country, CountryCode}
+import models.{AddressLine, CountryList}
 import org.scalacheck.Gen
-import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
+import play.api.data.FormError
 
-abstract class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
+class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
-  val formProvider: AddressFormProvider
+  private val prefix = Gen.alphaNumStr.sample.value
+  private val name   = Gen.alphaNumStr.sample.value
 
-  lazy val addressLine1: AddressLine = formProvider.addressLine1
-  lazy val addressLine2: AddressLine = formProvider.addressLine2
+  private val country   = Country(CountryCode("GB"), "United Kingdom")
+  private val countries = CountryList(Seq(country))
 
-  private val prefix            = Gen.alphaNumStr.sample.value
-  private val addressHolderName = Gen.alphaNumStr.sample.value
+  private val requiredKey = s"$prefix.error.required"
+  private val lengthKey   = s"$prefix.error.length"
+  private val invalidKey  = s"$prefix.error.invalid"
 
-  private lazy val form = formProvider(prefix, addressHolderName)
+  private val form = new AddressFormProvider()(prefix, name, countries)
 
-  private val requiredKey              = s"$prefix.error.required"
-  private val addressLengthKey         = s"$prefix.error.length"
-  private val addressInvalidKey        = s"$prefix.error.invalid"
-  private val postcodeInvalidKey       = s"$prefix.error.postcode.invalid"
-  private val postcodeInvalidFormatKey = s"$prefix.error.postcode.invalidFormat"
+  ".addressLine1" - {
 
-  // scalastyle:off method.length
-  def addressFormProvider(): Unit = {
+    val fieldName = AddressLine1.field
 
-    ".value" - {
+    behave like fieldThatBindsValidData(
+      form = form,
+      fieldName = fieldName,
+      validDataGenerator = stringsWithMaxLength(AddressLine1.length)
+    )
 
-      s".${addressLine1.field}" - {
+    behave like fieldWithMaxLength(
+      form = form,
+      fieldName = fieldName,
+      maxLength = AddressLine1.length,
+      lengthError = FormError(fieldName, lengthKey, Seq(AddressLine1.arg, name, AddressLine1.length))
+    )
 
-        val fieldName = addressLine1.field
+    behave like mandatoryTrimmedField(
+      form = form,
+      fieldName = fieldName,
+      requiredError = FormError(fieldName, requiredKey, Seq(AddressLine1.arg, name))
+    )
 
-        val validAddressOverLength: Gen[String] = for {
-          num  <- Gen.chooseNum[Int](addressLine1.length + 1, addressLine1.length + 5)
-          list <- Gen.listOfN(num, Gen.alphaNumChar)
-        } yield list.mkString("")
+    behave like fieldWithInvalidCharacters(
+      form = form,
+      fieldName = fieldName,
+      error = FormError(fieldName, invalidKey, Seq(AddressLine1.arg, name)),
+      length = AddressLine1.length
+    )
+  }
 
-        val args = Seq(addressLine1.arg, addressHolderName)
+  ".addressLine2" - {
 
-        behave like fieldThatBindsValidData(
-          form,
-          fieldName,
-          stringsWithMaxLength(addressLine1.length)
-        )
+    val fieldName = AddressLine2.field
 
-        behave like fieldWithMaxLength(
-          form,
-          fieldName,
-          maxLength = addressLine1.length,
-          lengthError = FormError(fieldName, addressLengthKey, args),
-          validAddressOverLength
-        )
+    behave like fieldThatBindsValidData(
+      form = form,
+      fieldName = fieldName,
+      validDataGenerator = stringsWithMaxLength(AddressLine2.length)
+    )
 
-        behave like mandatoryField(
-          form,
-          fieldName,
-          requiredError = FormError(fieldName, requiredKey, args)
-        )
+    behave like fieldWithMaxLength(
+      form = form,
+      fieldName = fieldName,
+      maxLength = AddressLine2.length,
+      lengthError = FormError(fieldName, lengthKey, Seq(AddressLine2.arg, name, AddressLine2.length))
+    )
 
-        "must not bind strings that do not match regex" in {
-          val generator: Gen[String] = RegexpGen.from(s"[!£^(){}_+=:;|`~,±<>éèâñüç]{${addressLine1.length}}")
-          val expectedError          = FormError(fieldName, addressInvalidKey, args)
+    behave like mandatoryTrimmedField(
+      form = form,
+      fieldName = fieldName,
+      requiredError = FormError(fieldName, requiredKey, Seq(AddressLine2.arg, name))
+    )
 
-          forAll(generator) {
-            invalidString =>
-              val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
-              result.errors must contain(expectedError)
-          }
-        }
-      }
+    behave like fieldWithInvalidCharacters(
+      form = form,
+      fieldName = fieldName,
+      error = FormError(fieldName, invalidKey, Seq(AddressLine2.arg, name)),
+      length = AddressLine2.length
+    )
+  }
 
-      s".${addressLine2.field}" - {
+  ".postalCode" - {
 
-        val fieldName = addressLine2.field
+    val postcodeInvalidKey = s"$prefix.error.postalCode.invalid"
 
-        val validAddressOverLength: Gen[String] = for {
-          num  <- Gen.chooseNum[Int](addressLine2.length + 1, addressLine2.length + 5)
-          list <- Gen.listOfN(num, Gen.alphaNumChar)
-        } yield list.mkString("")
+    val fieldName = PostalCode.field
 
-        val args = Seq(addressLine2.arg, addressHolderName)
+    behave like fieldThatBindsValidData(
+      form = form,
+      fieldName = fieldName,
+      validDataGenerator = stringsWithMaxLength(PostalCode.length)
+    )
 
-        behave like fieldThatBindsValidData(
-          form,
-          fieldName,
-          stringsWithMaxLength(addressLine2.length)
-        )
+    behave like fieldWithMaxLength(
+      form = form,
+      fieldName = fieldName,
+      maxLength = PostalCode.length,
+      lengthError = FormError(fieldName, lengthKey, Seq(PostalCode.arg, name, PostalCode.length))
+    )
 
-        behave like fieldWithMaxLength(
-          form,
-          fieldName,
-          maxLength = addressLine2.length,
-          lengthError = FormError(fieldName, addressLengthKey, args),
-          validAddressOverLength
-        )
+    behave like mandatoryField(
+      form = form,
+      fieldName = fieldName,
+      requiredError = FormError(fieldName, requiredKey, Seq(PostalCode.arg, name))
+    )
 
-        behave like mandatoryField(
-          form,
-          fieldName,
-          requiredError = FormError(fieldName, requiredKey, args)
-        )
+    behave like fieldWithInvalidCharacters(
+      form = form,
+      fieldName = fieldName,
+      error = FormError(fieldName, postcodeInvalidKey, Seq(name)),
+      length = PostalCode.length
+    )
+  }
 
-        "must not bind strings that do not match regex" in {
-          val generator: Gen[String] = RegexpGen.from(s"[!£^(){}_+=:;|`~,±<>]{${addressLine2.length}}")
-          val expectedError          = FormError(fieldName, addressInvalidKey, args)
+  ".country" - {
 
-          forAll(generator) {
-            invalidString =>
-              val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
-              result.errors must contain(expectedError)
-          }
-        }
-      }
+    import AddressLine.Country
 
-      ".postcode" - {
+    val fieldName = Country.field
 
-        val fieldName = "postcode"
+    behave like fieldThatBindsValidData(
+      form = form,
+      fieldName = fieldName,
+      validDataGenerator = nonEmptyString
+    )
 
-        behave like fieldThatBindsValidData(
-          form,
-          fieldName,
-          stringsThatMatchRegex(Postcode.formatRegex)
-        )
+    behave like mandatoryField(
+      form = form,
+      fieldName = fieldName,
+      requiredError = FormError(fieldName, requiredKey, Seq(Country.arg, name))
+    )
 
-        behave like mandatoryField(
-          form,
-          fieldName,
-          requiredError = FormError(fieldName, requiredKey, Seq(Postcode.arg, addressHolderName))
-        )
+    "not bind if country code does not exist in the country list" in {
+      val result        = form.bind(Map(fieldName -> "foobar")).apply(fieldName)
+      val expectedError = FormError(fieldName, requiredKey, Seq(Country.arg, name))
+      result.errors must contain(expectedError)
+    }
 
-        behave like fieldWithInvalidCharacters(
-          form,
-          fieldName,
-          FormError(fieldName, postcodeInvalidKey, Seq(addressHolderName))
-        )
-
-        "must not bind strings that do not match postcode format" in {
-          val genInvalidString: Gen[String] = {
-            stringsThatMatchRegex(Postcode.regex) suchThat (!_.matches(Postcode.formatRegex.regex))
-          }
-
-          val expectedError = FormError(fieldName, postcodeInvalidFormatKey, Seq(addressHolderName))
-
-          forAll(genInvalidString) {
-            invalidString =>
-              val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
-              result.errors must contain(expectedError)
-          }
-        }
-      }
+    "bind a country code which is in the list" in {
+      val result = form.bind(Map(fieldName -> country.code.code)).apply(fieldName)
+      result.value.value mustBe country.code.code
     }
   }
-  // scalastyle:on method.length
 }

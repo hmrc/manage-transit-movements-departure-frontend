@@ -16,44 +16,16 @@
 
 package models
 
-import models.domain.StringFieldRegex.stringFieldRegex
-import play.api.i18n.Messages
-import play.api.libs.json._
+import models.reference.Country
+import play.api.libs.json.{Json, OFormat}
 
-import scala.util.matching.Regex
-
-case class Address(line1: String, line2: String, postcode: String)
+case class Address(
+  line1: String,
+  line2: String,
+  postalCode: String,
+  country: Country
+)
 
 object Address {
-
-  sealed trait AddressLine {
-    val field: String
-    val length: Int                              = 35
-    val regex: Regex                             = stringFieldRegex
-    def arg(implicit messages: Messages): String = messages(s"address.$field")
-  }
-
-  case object NumberAndStreet extends AddressLine {
-    override val field: String = "numberAndStreet"
-  }
-
-  case object BuildingAndStreet extends AddressLine {
-    override val field: String = "buildingAndStreet"
-  }
-
-  case object Town extends AddressLine {
-    override val field: String = "town"
-  }
-
-  case object City extends AddressLine {
-    override val field: String = "city"
-  }
-
-  case object Postcode extends AddressLine {
-    override val field: String = "postcode"
-    override val regex: Regex  = "^[a-zA-Z\\s*0-9]*$".r
-    val formatRegex: Regex     = "^[a-zA-Z]{1,2}([0-9]{1,2}|[0-9][a-zA-Z])\\s*[0-9][a-zA-Z]{2}$".r
-  }
-
   implicit val format: OFormat[Address] = Json.format[Address]
 }
