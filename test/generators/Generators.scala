@@ -26,7 +26,7 @@ import java.time._
 import scala.util.matching.Regex
 
 // TODO: Move away from mixing style to using objects
-trait Generators extends UserAnswersGenerator with ModelGenerators with ViewModelGenerators {
+trait Generators extends ModelGenerators with ViewModelGenerators {
 
   lazy val stringMaxLength = 36
 

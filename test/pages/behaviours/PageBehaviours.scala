@@ -17,7 +17,7 @@
 package pages.behaviours
 
 import base.SpecBase
-import generators.Generators
+import generators.{Generators, UserAnswersGenerator}
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
@@ -25,7 +25,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.QuestionPage
 import play.api.libs.json._
 
-trait PageBehaviours extends SpecBase with ScalaCheckPropertyChecks with Generators {
+trait PageBehaviours extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersGenerator {
 
   class BeRetrievable[A] {
 

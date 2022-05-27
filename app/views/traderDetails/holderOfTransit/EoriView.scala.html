@@ -33,6 +33,7 @@
     showBackLink = true,
     lrn = Some(lrn)
 ) {
+
     @formHelper(action = routes.EoriController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)

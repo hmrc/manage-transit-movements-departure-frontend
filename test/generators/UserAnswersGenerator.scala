@@ -40,26 +40,23 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
   val maxNumberOfGeneratedPageAnswers: Int = 1
 
   final val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
-    arbitraryTransitHolderContactTelephoneNumberUserAnswersEntry.arbitrary ::
-      arbitraryTraderDetailsTirIdentificationNoUserAnswersEntry.arbitrary ::
-      arbitraryTraderDetailsTirIdentificationYesNoUserAnswersEntry.arbitrary ::
-      arbitraryAddContactUserAnswersEntry.arbitrary ::
-      arbitraryAddressUserAnswersEntry.arbitrary ::
-      arbitraryContactNameUserAnswersEntry.arbitrary ::
-      arbitraryNameUserAnswersEntry.arbitrary ::
-      arbitraryAddContactUserAnswersEntry.arbitrary ::
-      arbitraryNameUserAnswersEntry.arbitrary ::
+    arbitraryTransitHolderAdditionalContactTelephoneNumberUserAnswersEntry.arbitrary ::
+      arbitraryTransitHolderTirIdentificationUserAnswersEntry.arbitrary ::
+      arbitraryTransitHolderTirIdentificationYesNoUserAnswersEntry.arbitrary ::
+      arbitraryTransitHolderAddContactUserAnswersEntry.arbitrary ::
+      arbitraryTransitHolderAddressUserAnswersEntry.arbitrary ::
+      arbitraryTransitHolderAdditionalContactNameUserAnswersEntry.arbitrary ::
+      arbitraryTransitHolderNameUserAnswersEntry.arbitrary ::
       arbitraryTransitHolderEoriUserAnswersEntry.arbitrary ::
       arbitraryTransitHolderEoriYesNoUserAnswersEntry.arbitrary ::
-      arbitraryTIRCarnetReferenceUserAnswersEntry.arbitrary ::
-      arbitraryDeclarationTypeUserAnswersEntry.arbitrary ::
+      arbitraryOfficeOfDepartureUserAnswersEntry.arbitrary ::
       arbitraryProcedureTypeUserAnswersEntry.arbitrary ::
       arbitraryDeclarationTypeUserAnswersEntry.arbitrary ::
+      arbitraryTIRCarnetReferenceUserAnswersEntry.arbitrary ::
       arbitraryAddSecurityDetailsUserAnswersEntry.arbitrary ::
       Nil
 
   implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] = {
-
     import models._
 
     Arbitrary {
@@ -79,5 +76,24 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
         }
       )
     }
+  }
+
+  protected def arbitraryUserAnswers(generators: Seq[Gen[(QuestionPage[_], JsValue)]]): Gen[UserAnswers] = {
+    import models._
+
+    import scala.collection.convert.ImplicitConversions._
+
+    for {
+      id         <- arbitrary[LocalReferenceNumber]
+      eoriNumber <- arbitrary[EoriNumber]
+      data       <- Gen.sequence(generators).map(_.toList)
+    } yield UserAnswers(
+      lrn = id,
+      eoriNumber = eoriNumber,
+      data = data.foldLeft(Json.obj()) {
+        case (obj, (path, value)) =>
+          obj.setObject(path.path, value).get
+      }
+    )
   }
 }
