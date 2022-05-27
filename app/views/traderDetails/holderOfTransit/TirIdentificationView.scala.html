@@ -29,9 +29,9 @@
 @(form: Form[String], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-  title = messages("traderDetails.holderOfTransit.tirIdentification.title"),
-  showBackLink = true,
-  lrn = Some(lrn)
+    title = messages("traderDetails.holderOfTransit.tirIdentification.title"),
+    showBackLink = true,
+    lrn = Some(lrn)
 ) {
 
     @formHelper(action = routes.TirIdentificationController.onSubmit(lrn, mode), 'autoComplete -> "off") {
