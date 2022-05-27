@@ -16,6 +16,7 @@
 
 package generators
 
+import config.Constants._
 import models.DeclarationType.Option4
 import models._
 import org.scalacheck.Arbitrary.arbitrary
@@ -117,7 +118,7 @@ trait UserAnswersEntryGenerators {
   implicit lazy val arbitraryAddSecurityDetailsUserAnswersEntry: Arbitrary[(SecurityDetailsTypePage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[Boolean].map(Json.toJson(_))
+        value <- arbitrary[SecurityDetailsType].map(Json.toJson(_))
       } yield (SecurityDetailsTypePage, value)
     }
 
@@ -132,6 +133,24 @@ trait UserAnswersEntryGenerators {
     Arbitrary {
       for {
         value <- arbitrary[OfficeOfDeparturePage.type#Data].map(Json.toJson(_))
+      } yield (OfficeOfDeparturePage, value)
+    }
+
+  implicit lazy val arbitraryGbOfficeOfDepartureUserAnswersEntry: Arbitrary[(OfficeOfDeparturePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[OfficeOfDeparturePage.type#Data].map(
+          x => Json.toJson(x.copy(countryId = x.countryId.copy(code = GB)))
+        )
+      } yield (OfficeOfDeparturePage, value)
+    }
+
+  implicit lazy val arbitraryXiOfficeOfDepartureUserAnswersEntry: Arbitrary[(OfficeOfDeparturePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[OfficeOfDeparturePage.type#Data].map(
+          x => Json.toJson(x.copy(countryId = x.countryId.copy(code = XI)))
+        )
       } yield (OfficeOfDeparturePage, value)
     }
 }

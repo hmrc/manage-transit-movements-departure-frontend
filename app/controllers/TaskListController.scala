@@ -17,8 +17,9 @@
 package controllers
 
 import com.google.inject.Inject
-import controllers.actions.Actions
+import controllers.actions.{Actions, CheckDependentTaskCompletedActionProvider}
 import models.LocalReferenceNumber
+import models.journeyDomain.PreTaskListDomain
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -28,20 +29,25 @@ import views.html.TaskListView
 class TaskListController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
+  checkDependentTaskCompleted: CheckDependentTaskCompletedActionProvider,
   val controllerComponents: MessagesControllerComponents,
   view: TaskListView,
   viewModel: TaskListViewModel
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      val tasks = viewModel(request.userAnswers)
-      Ok(view(lrn, tasks))
-  }
+  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(checkDependentTaskCompleted[PreTaskListDomain]) {
+      implicit request =>
+        val tasks = viewModel(request.userAnswers)
+        Ok(view(lrn, tasks))
+    }
 
-  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
-    _ => ???
-  }
+  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(checkDependentTaskCompleted[PreTaskListDomain]) {
+      _ => ???
+    }
 
 }

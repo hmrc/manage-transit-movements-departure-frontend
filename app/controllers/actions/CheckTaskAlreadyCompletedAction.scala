@@ -18,7 +18,6 @@ package controllers.actions
 
 import controllers.routes
 import models.domain.UserAnswersReader
-import models.journeyDomain.TaskDomain
 import models.requests.DataRequest
 import play.api.Logging
 import play.api.mvc.Results.Redirect
@@ -27,7 +26,7 @@ import play.api.mvc.{ActionFilter, Result}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckTaskAlreadyCompletedAction[T <: TaskDomain](implicit val executionContext: ExecutionContext, userAnswersReader: UserAnswersReader[T])
+class CheckTaskAlreadyCompletedAction[T](implicit val executionContext: ExecutionContext, userAnswersReader: UserAnswersReader[T])
     extends ActionFilter[DataRequest]
     with Logging {
 
@@ -42,9 +41,9 @@ class CheckTaskAlreadyCompletedAction[T <: TaskDomain](implicit val executionCon
 }
 
 trait CheckTaskAlreadyCompletedActionProvider {
-  def apply[T <: TaskDomain](implicit userAnswersReader: UserAnswersReader[T]): ActionFilter[DataRequest]
+  def apply[T](implicit userAnswersReader: UserAnswersReader[T]): ActionFilter[DataRequest]
 }
 
 class CheckTaskAlreadyCompletedActionProviderImpl @Inject() (implicit val ec: ExecutionContext) extends CheckTaskAlreadyCompletedActionProvider {
-  override def apply[T <: TaskDomain](implicit userAnswersReader: UserAnswersReader[T]): ActionFilter[DataRequest] = new CheckTaskAlreadyCompletedAction()
+  override def apply[T](implicit userAnswersReader: UserAnswersReader[T]): ActionFilter[DataRequest] = new CheckTaskAlreadyCompletedAction()
 }
