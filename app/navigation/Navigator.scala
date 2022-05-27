@@ -18,7 +18,7 @@ package navigation
 
 import controllers.routes
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
-import pages.Page
+import pages.{Page, QuestionPage}
 import play.api.mvc.Call
 
 trait Navigator {
@@ -43,6 +43,15 @@ trait Navigator {
         case Some(call) => handleCall(userAnswers, call)
       }
   }
+
+  protected def yesNoRoute(userAnswers: UserAnswers, page: QuestionPage[Boolean])(yesCall: Call)(noCall: Call): Option[Call] =
+    Some {
+      userAnswers.get(page) match {
+        case Some(true)  => yesCall
+        case Some(false) => noCall
+        case None        => controllers.routes.SessionExpiredController.onPageLoad()
+      }
+    }
 
   private def handleCall(userAnswers: UserAnswers, call: UserAnswers => Option[Call]) =
     call(userAnswers) match {

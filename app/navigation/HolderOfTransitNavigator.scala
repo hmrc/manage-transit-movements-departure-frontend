@@ -52,28 +52,25 @@ class HolderOfTransitNavigator @Inject() () extends Navigator {
     case ContactTelephoneNumberPage => ua => Some(hotRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
   }
 
-  private def eoriYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
-    userAnswers.get(EoriYesNoPage) match {
-      case Some(true)  => hotRoutes.EoriController.onPageLoad(userAnswers.lrn, mode)
-      case Some(false) => hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
-      case None        => controllers.routes.SessionExpiredController.onPageLoad()
-    }
-  }
+  private def eoriYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    yesNoRoute(userAnswers, EoriYesNoPage)(
+      yesCall = hotRoutes.EoriController.onPageLoad(userAnswers.lrn, mode)
+    )(
+      noCall = hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
+    )
 
-  private def tirIdentificationYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
-    userAnswers.get(TirIdentificationYesNoPage) match {
-      case Some(true)  => hotRoutes.TirIdentificationController.onPageLoad(userAnswers.lrn, mode)
-      case Some(false) => hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
-      case None        => controllers.routes.SessionExpiredController.onPageLoad()
-    }
-  }
+  private def tirIdentificationYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    yesNoRoute(userAnswers, TirIdentificationYesNoPage)(
+      yesCall = hotRoutes.TirIdentificationController.onPageLoad(userAnswers.lrn, mode)
+    )(
+      noCall = hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
+    )
 
-  private def addContactRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
-    userAnswers.get(AddContactPage) match {
-      case Some(true)  => hotRoutes.ContactNameController.onPageLoad(userAnswers.lrn, mode)
-      case Some(false) => hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
-      case None        => controllers.routes.SessionExpiredController.onPageLoad()
-    }
-  }
+  private def addContactRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    yesNoRoute(userAnswers, AddContactPage)(
+      yesCall = hotRoutes.ContactNameController.onPageLoad(userAnswers.lrn, mode)
+    )(
+      noCall = hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+    )
 
 }
