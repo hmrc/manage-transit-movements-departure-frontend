@@ -18,10 +18,11 @@ package controllers.traderDetails.holderOfTransit
 
 import controllers.actions._
 import forms.YesNoFormProvider
+
 import javax.inject.Inject
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.TraderDetails
+import navigation.annotations.HolderOfTransit
 import pages.traderDetails.holderOfTransit.AddContactPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -34,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddContactController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @TraderDetails navigator: Navigator,
+  @HolderOfTransit navigator: Navigator,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,

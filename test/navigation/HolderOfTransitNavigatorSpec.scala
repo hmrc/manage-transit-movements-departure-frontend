@@ -21,15 +21,17 @@ import controllers.preTaskList.{routes => ptlRoutes}
 import controllers.routes
 import controllers.traderDetails.holderOfTransit.{routes => hotRoutes}
 import generators.Generators
+import models.DeclarationType.{Option1, Option4}
 import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
+import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.holderOfTransit._
 
-class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
-  private val navigator = new TraderDetailsNavigator
+  private val navigator = new HolderOfTransitNavigator
 
   "Navigator" - {
     "must go from a page that doesn't exist in the route map" - {
@@ -49,15 +51,13 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
       "when in check mode" - {
         "to session expired" in {
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              navigator
-                .nextPage(UnknownPage, CheckMode, answers)
-                .mustBe(routes.SessionExpiredController.onPageLoad())
-          }
+          navigator
+            .nextPage(UnknownPage, CheckMode, emptyUserAnswers)
+            .mustBe(routes.SessionExpiredController.onPageLoad())
         }
       }
     }
+
     "In NormalMode" - {
       "must go from Transit Holder EORI Yes No page" - {
         "when Yes selected" - {
@@ -231,9 +231,15 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
     "In CheckMode" - {
       "must go from change EoriYesNoPage" - {
         "to Check Your Answers when answer is no" in {
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val userAnswers = answers.setValue(EoriYesNoPage, false)
+          forAll(arbitrary[Address]) {
+            address =>
+              val userAnswers = emptyUserAnswers
+                .setValue(DeclarationTypePage, Option1)
+                .setValue(EoriYesNoPage, false)
+                .setValue(NamePage, "Name")
+                .setValue(AddressPage, address)
+                .setValue(AddContactPage, false)
+
               navigator
                 .nextPage(EoriYesNoPage, CheckMode, userAnswers)
                 .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
@@ -241,9 +247,14 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
         }
 
         "to Change Eori when answer is Yes" in {
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val userAnswers = answers.setValue(EoriYesNoPage, true)
+          forAll(arbitrary[Address]) {
+            address =>
+              val userAnswers = emptyUserAnswers
+                .setValue(DeclarationTypePage, Option1)
+                .setValue(EoriYesNoPage, true)
+                .setValue(NamePage, "Name")
+                .setValue(AddressPage, address)
+                .setValue(AddContactPage, false)
               navigator
                 .nextPage(EoriYesNoPage, CheckMode, userAnswers)
                 .mustBe(hotRoutes.EoriController.onPageLoad(userAnswers.lrn, CheckMode))
@@ -252,9 +263,15 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
 
       "must go from change Eori to Check your answers page" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val userAnswers = answers.setValue(EoriPage, "GB123456789012")
+        forAll(arbitrary[Address]) {
+          address =>
+            val userAnswers = emptyUserAnswers
+              .setValue(DeclarationTypePage, Option1)
+              .setValue(EoriYesNoPage, true)
+              .setValue(EoriPage, "GB123456789012")
+              .setValue(NamePage, "Name")
+              .setValue(AddressPage, address)
+              .setValue(AddContactPage, false)
             navigator
               .nextPage(EoriPage, CheckMode, userAnswers)
               .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
@@ -263,9 +280,14 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
       "must go from change TirIdentificationYesNoPage" - {
         "to Check Your Answers when answer is no" in {
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val userAnswers = answers.setValue(TirIdentificationYesNoPage, false)
+          forAll(arbitrary[Address]) {
+            address =>
+              val userAnswers = emptyUserAnswers
+                .setValue(DeclarationTypePage, Option4)
+                .setValue(TirIdentificationYesNoPage, false)
+                .setValue(NamePage, "Name")
+                .setValue(AddressPage, address)
+                .setValue(AddContactPage, false)
               navigator
                 .nextPage(TirIdentificationYesNoPage, CheckMode, userAnswers)
                 .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
@@ -273,9 +295,14 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
         }
 
         "to Change TirIdentificationPage when answer is Yes" in {
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val userAnswers = answers.setValue(TirIdentificationYesNoPage, true)
+          forAll(arbitrary[Address]) {
+            address =>
+              val userAnswers = emptyUserAnswers
+                .setValue(DeclarationTypePage, Option4)
+                .setValue(TirIdentificationYesNoPage, true)
+                .setValue(NamePage, "Name")
+                .setValue(AddressPage, address)
+                .setValue(AddContactPage, false)
               navigator
                 .nextPage(TirIdentificationYesNoPage, CheckMode, userAnswers)
                 .mustBe(hotRoutes.TirIdentificationController.onPageLoad(userAnswers.lrn, CheckMode))
@@ -284,9 +311,15 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
 
       "must go from change TirIdentificationPage to Check your answers page" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val userAnswers = answers.setValue(TirIdentificationPage, "TestString")
+        forAll(arbitrary[Address]) {
+          address =>
+            val userAnswers = emptyUserAnswers
+              .setValue(DeclarationTypePage, Option4)
+              .setValue(TirIdentificationYesNoPage, true)
+              .setValue(TirIdentificationPage, "tir")
+              .setValue(NamePage, "Name")
+              .setValue(AddressPage, address)
+              .setValue(AddContactPage, false)
             navigator
               .nextPage(TirIdentificationPage, CheckMode, userAnswers)
               .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
@@ -294,9 +327,14 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
 
       "must go from change NamePage to Check your answers page" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val userAnswers = answers.setValue(NamePage, "TestString")
+        forAll(arbitrary[Address]) {
+          address =>
+            val userAnswers = emptyUserAnswers
+              .setValue(DeclarationTypePage, Option4)
+              .setValue(TirIdentificationYesNoPage, false)
+              .setValue(NamePage, "Name")
+              .setValue(AddressPage, address)
+              .setValue(AddContactPage, false)
             navigator
               .nextPage(NamePage, CheckMode, userAnswers)
               .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
@@ -304,9 +342,14 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
 
       "must go from change AddressPage to Check your answers page" in {
-        forAll(arbitrary[UserAnswers], arbitrary[Address]) {
-          (answers, address) =>
-            val userAnswers = answers.setValue(AddressPage, address)
+        forAll(arbitrary[Address]) {
+          address =>
+            val userAnswers = emptyUserAnswers
+              .setValue(DeclarationTypePage, Option4)
+              .setValue(TirIdentificationYesNoPage, false)
+              .setValue(NamePage, "Name")
+              .setValue(AddressPage, address)
+              .setValue(AddContactPage, false)
             navigator
               .nextPage(AddressPage, CheckMode, userAnswers)
               .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
@@ -315,9 +358,14 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
       "must go from change AddContactPage" - {
         "to Check Your Answers when answer is no" in {
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val userAnswers = answers.setValue(AddContactPage, false)
+          forAll(arbitrary[Address]) {
+            address =>
+              val userAnswers = emptyUserAnswers
+                .setValue(DeclarationTypePage, Option4)
+                .setValue(TirIdentificationYesNoPage, false)
+                .setValue(NamePage, "Name")
+                .setValue(AddressPage, address)
+                .setValue(AddContactPage, false)
               navigator
                 .nextPage(AddContactPage, CheckMode, userAnswers)
                 .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
@@ -325,9 +373,14 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
         }
 
         "to Change ContactNamePage when answer is Yes" in {
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val userAnswers = answers.setValue(AddContactPage, true)
+          forAll(arbitrary[Address]) {
+            address =>
+              val userAnswers = emptyUserAnswers
+                .setValue(DeclarationTypePage, Option4)
+                .setValue(TirIdentificationYesNoPage, false)
+                .setValue(NamePage, "Name")
+                .setValue(AddressPage, address)
+                .setValue(AddContactPage, true)
               navigator
                 .nextPage(AddContactPage, CheckMode, userAnswers)
                 .mustBe(hotRoutes.ContactNameController.onPageLoad(userAnswers.lrn, CheckMode))
@@ -336,24 +389,33 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
 
       "must go from change ContactNamePage" - {
-        "to Check Your Answers when address already exists" in {
-          forAll(arbitrary[UserAnswers], arbitrary[Address]) {
-            (answers, address) =>
-              val userAnswers = answers
-                .setValue(ContactNamePage, "ContactName")
-                .setValue(ContactTelephoneNumberPage, "12345")
+        "to Check Your Answers when telephone number exists" in {
+          forAll(arbitrary[Address]) {
+            address =>
+              val userAnswers = emptyUserAnswers
+                .setValue(DeclarationTypePage, Option4)
+                .setValue(TirIdentificationYesNoPage, false)
+                .setValue(NamePage, "Name")
+                .setValue(AddressPage, address)
+                .setValue(AddContactPage, true)
+                .setValue(ContactNamePage, "name")
+                .setValue(ContactTelephoneNumberPage, "12234")
               navigator
                 .nextPage(ContactNamePage, CheckMode, userAnswers)
                 .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
           }
         }
 
-        "to Change ContactTelephone when no address exists" in {
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val userAnswers = answers
-                .setValue(ContactNamePage, "Name")
-                .removeValue(ContactTelephoneNumberPage)
+        "to Change ContactTelephone when no telephone number exists" in {
+          forAll(arbitrary[Address]) {
+            address =>
+              val userAnswers = emptyUserAnswers
+                .setValue(DeclarationTypePage, Option4)
+                .setValue(TirIdentificationYesNoPage, false)
+                .setValue(NamePage, "Name")
+                .setValue(AddressPage, address)
+                .setValue(AddContactPage, true)
+                .setValue(ContactNamePage, "name")
               navigator
                 .nextPage(ContactNamePage, CheckMode, userAnswers)
                 .mustBe(hotRoutes.ContactTelephoneNumberController.onPageLoad(userAnswers.lrn, CheckMode))

@@ -21,7 +21,7 @@ import forms.AddressFormProvider
 import models.requests.SpecificDataRequestProvider1
 import models.{Address, CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.TraderDetails
+import navigation.annotations.HolderOfTransit
 import pages.traderDetails.holderOfTransit.{AddressPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -37,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddressController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @TraderDetails navigator: Navigator,
+  @HolderOfTransit navigator: Navigator,
   actions: Actions,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: AddressFormProvider,

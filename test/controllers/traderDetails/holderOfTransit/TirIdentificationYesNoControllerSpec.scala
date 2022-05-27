@@ -19,7 +19,6 @@ package controllers.traderDetails.holderOfTransit
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
-import navigation.annotations.TraderDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -28,6 +27,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import forms.YesNoFormProvider
+import navigation.annotations.HolderOfTransit
 import views.html.traderDetails.holderOfTransit.TirIdentificationYesNoView
 import pages.traderDetails.holderOfTransit.TirIdentificationYesNoPage
 
@@ -43,7 +43,7 @@ class TirIdentificationYesNoControllerSpec extends SpecBase with AppWithDefaultM
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[HolderOfTransit]).toInstance(fakeNavigator))
 
   "traderDetails.holderOfTransit.TirIdentificationYesNo Controller" - {
 
