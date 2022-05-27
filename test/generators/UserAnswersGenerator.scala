@@ -49,9 +49,10 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
       arbitraryTransitHolderNameUserAnswersEntry.arbitrary ::
       arbitraryTransitHolderEoriUserAnswersEntry.arbitrary ::
       arbitraryTransitHolderEoriYesNoUserAnswersEntry.arbitrary ::
-      arbitraryTIRCarnetReferenceUserAnswersEntry.arbitrary ::
+      arbitraryOfficeOfDepartureUserAnswersEntry.arbitrary ::
       arbitraryProcedureTypeUserAnswersEntry.arbitrary ::
       arbitraryDeclarationTypeUserAnswersEntry.arbitrary ::
+      arbitraryTIRCarnetReferenceUserAnswersEntry.arbitrary ::
       arbitraryAddSecurityDetailsUserAnswersEntry.arbitrary ::
       Nil
 
