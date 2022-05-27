@@ -27,35 +27,45 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class TraderDetailsNavigator @Inject() () extends Navigator {
 
-  override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(NormalMode)
+  override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
+    case EoriYesNoPage              => ua => eoriYesNoRoute(ua, NormalMode)
+    case EoriPage                   => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, NormalMode))
+    case TirIdentificationYesNoPage => ua => tirIdentificationYesNoRoute(ua, NormalMode)
+    case TirIdentificationPage      => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, NormalMode))
+    case NamePage                   => ua => Some(hotRoutes.AddressController.onPageLoad(ua.lrn, NormalMode))
+    case AddressPage                => ua => Some(hotRoutes.AddContactController.onPageLoad(ua.lrn, NormalMode))
+    case AddContactPage             => ua => addContactRoute(ua, NormalMode)
+    case ContactNamePage            => ua => Some(hotRoutes.ContactTelephoneNumberController.onPageLoad(ua.lrn, NormalMode))
+    case ContactTelephoneNumberPage => ua => Some(hotRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
+  }
 
-  override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(CheckMode)
-
-  private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case EoriYesNoPage              => ua => eoriYesNoRoute(ua, mode)
-    case EoriPage                   => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, mode))
-    case TirIdentificationYesNoPage => ua => tirIdentificationYesNoRoute(ua, mode)
-    case TirIdentificationPage      => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, mode))
-    case NamePage                   => ua => Some(hotRoutes.AddressController.onPageLoad(ua.lrn, mode))
-    case AddressPage                => ua => Some(hotRoutes.AddContactController.onPageLoad(ua.lrn, mode))
-    case AddContactPage             => ua => addContactRoute(ua, mode)
-    case ContactNamePage            => ua => Some(hotRoutes.ContactTelephoneNumberController.onPageLoad(ua.lrn, mode))
+  override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
+    case EoriYesNoPage              => ua => eoriYesNoRoute(ua, CheckMode)
+    case EoriPage                   => ua => Some(hotRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
+    case TirIdentificationYesNoPage => ua => tirIdentificationYesNoRoute(ua, CheckMode)
+    case TirIdentificationPage      => ua => Some(hotRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
+    case NamePage                   => ua => Some(hotRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
+    case AddressPage                => ua => Some(hotRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
+    case AddContactPage             => ua => addContactRoute(ua, CheckMode)
+    case ContactNamePage            => ua => contactNameRoute(ua, CheckMode)
     case ContactTelephoneNumberPage => ua => Some(hotRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
   }
 
   private def eoriYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
-    userAnswers.get(EoriYesNoPage) match {
-      case Some(true)  => hotRoutes.EoriController.onPageLoad(userAnswers.lrn, mode)
-      case Some(false) => hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
-      case None        => controllers.routes.SessionExpiredController.onPageLoad()
+    (userAnswers.get(EoriYesNoPage), mode) match {
+      case (Some(true), mode)        => hotRoutes.EoriController.onPageLoad(userAnswers.lrn, mode)
+      case (Some(false), NormalMode) => hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
+      case (Some(false), CheckMode)  => hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+      case (None, _)                 => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
 
   private def tirIdentificationYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
-    userAnswers.get(TirIdentificationYesNoPage) match {
-      case Some(true)  => hotRoutes.TirIdentificationController.onPageLoad(userAnswers.lrn, mode)
-      case Some(false) => hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
-      case None        => controllers.routes.SessionExpiredController.onPageLoad()
+    (userAnswers.get(TirIdentificationYesNoPage), mode) match {
+      case (Some(true), _)           => hotRoutes.TirIdentificationController.onPageLoad(userAnswers.lrn, mode)
+      case (Some(false), NormalMode) => hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
+      case (Some(false), CheckMode)  => hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+      case (None, _)                 => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
 
@@ -64,6 +74,13 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
       case Some(true)  => hotRoutes.ContactNameController.onPageLoad(userAnswers.lrn, mode)
       case Some(false) => hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
       case None        => controllers.routes.SessionExpiredController.onPageLoad()
+    }
+  }
+
+  private def contactNameRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] = Some {
+    userAnswers.get(ContactTelephoneNumberPage) match {
+      case Some(_) => hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+      case None    => hotRoutes.ContactTelephoneNumberController.onPageLoad(userAnswers.lrn, CheckMode)
     }
   }
 
