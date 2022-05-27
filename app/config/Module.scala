@@ -28,7 +28,7 @@ class Module extends AbstractModule {
   override def configure(): Unit = {
 
     bind(classOf[Navigator]).annotatedWith(classOf[PreTaskListDetails]).to(classOf[PreTaskListNavigator])
-    bind(classOf[Navigator]).annotatedWith(classOf[TraderDetails]).to(classOf[TraderDetailsNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[HolderOfTransit]).to(classOf[HolderOfTransitNavigator])
 
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])

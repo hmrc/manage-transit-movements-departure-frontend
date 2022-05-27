@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.NameFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
-import navigation.annotations.TraderDetails
+import navigation.annotations.HolderOfTransit
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import pages.traderDetails.holderOfTransit.ContactNamePage
@@ -44,7 +44,7 @@ class ContactNameControllerSpec extends SpecBase with AppWithDefaultMockFixtures
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[HolderOfTransit]).toInstance(fakeNavigator))
       .overrides(bind[UserAnswersService].toInstance(mockUserAnswersService))
 
   override def beforeEach(): Unit = {

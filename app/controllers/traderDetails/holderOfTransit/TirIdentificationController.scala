@@ -20,21 +20,21 @@ import controllers.actions._
 import forms.traderDetails.TirIdNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.TraderDetails
+import navigation.annotations.HolderOfTransit
 import pages.traderDetails.holderOfTransit.TirIdentificationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.traderDetails.holderOfTransit.TirIdentificationView
-import javax.inject.Inject
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TirIdentificationController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @TraderDetails navigator: Navigator,
+  @HolderOfTransit navigator: Navigator,
   formProvider: TirIdNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,

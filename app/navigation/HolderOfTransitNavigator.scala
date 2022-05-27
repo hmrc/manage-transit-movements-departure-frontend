@@ -18,6 +18,8 @@ package navigation
 
 import controllers.traderDetails.holderOfTransit.{routes => hotRoutes}
 import models._
+import models.domain.UserAnswersReader
+import models.journeyDomain.traderDetails.HolderOfTransitDomain
 import pages._
 import pages.traderDetails.holderOfTransit._
 import play.api.mvc.Call
@@ -25,11 +27,18 @@ import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class TraderDetailsNavigator @Inject() () extends Navigator {
+class HolderOfTransitNavigator @Inject() () extends Navigator {
 
   override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(NormalMode)
 
-  override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(CheckMode)
+  override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
+    case page =>
+      ua =>
+        UserAnswersReader[HolderOfTransitDomain].run(ua) match {
+          case Left(_)  => routes(CheckMode).applyOrElse[Page, UserAnswers => Option[Call]](page, _ => _ => None)(ua)
+          case Right(_) => Some(hotRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
+        }
+  }
 
   private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
     case EoriYesNoPage              => ua => eoriYesNoRoute(ua, mode)

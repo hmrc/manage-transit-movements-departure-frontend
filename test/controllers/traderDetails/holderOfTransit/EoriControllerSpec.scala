@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.EoriNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
-import navigation.annotations.TraderDetails
+import navigation.annotations.HolderOfTransit
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -45,7 +45,7 @@ class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with M
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[HolderOfTransit]).toInstance(fakeNavigator))
 
   "Eori Controller" - {
 

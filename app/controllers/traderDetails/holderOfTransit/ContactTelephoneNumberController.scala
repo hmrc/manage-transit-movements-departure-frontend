@@ -20,22 +20,23 @@ import controllers.actions._
 import forms.TelephoneNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.TraderDetails
 import pages.traderDetails.holderOfTransit.{ContactNamePage, ContactTelephoneNumberPage, NamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.traderDetails.holderOfTransit.ContactTelephoneNumberView
+
 import javax.inject.Inject
 import models.requests.SpecificDataRequestProvider1
+import navigation.annotations.HolderOfTransit
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ContactTelephoneNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @TraderDetails navigator: Navigator,
+  @HolderOfTransit navigator: Navigator,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: TelephoneNumberFormProvider,
   actions: Actions,
