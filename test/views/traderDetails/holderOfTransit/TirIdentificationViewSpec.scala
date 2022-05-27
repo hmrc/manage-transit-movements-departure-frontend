@@ -44,7 +44,7 @@ class TirIdentificationViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithHeading()
 
-  behave like pageWithHint("AAA/999/99999.")
+  behave like pageWithHint("For example, AAA/9999/99999.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 
