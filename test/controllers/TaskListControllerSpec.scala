@@ -17,7 +17,7 @@
 package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import generators.Generators
+import generators.{Generators, PreTaskListUserAnswersGenerator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.inject.bind
@@ -28,7 +28,7 @@ import viewModels.TaskListViewModel
 import viewModels.taskList.Task
 import views.html.TaskListView
 
-class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators with PreTaskListUserAnswersGenerator {
 
   private lazy val mockViewModel = mock[TaskListViewModel]
 
@@ -44,7 +44,8 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       when(mockViewModel.apply(any())).thenReturn(sampleTasks)
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = arbitraryCompletedAnswersWithoutTir.sample.value
+      setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, routes.TaskListController.onPageLoad(lrn).url)
 
@@ -56,6 +57,18 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       contentAsString(result) mustEqual
         view(lrn, sampleTasks)(request, messages).toString
+    }
+
+    "must redirect to LRN page if pre- task list section is incomplete" in {
+      setExistingUserAnswers(emptyUserAnswers)
+
+      val request = FakeRequest(GET, routes.TaskListController.onPageLoad(lrn).url)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad().url
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

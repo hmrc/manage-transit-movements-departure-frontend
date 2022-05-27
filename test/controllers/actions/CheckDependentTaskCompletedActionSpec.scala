@@ -22,7 +22,9 @@ import generators.Generators
 import models.DeclarationType.Option1
 import models.ProcedureType.Normal
 import models.SecurityDetailsType.NoSecurityDetails
+import models.domain.UserAnswersReader
 import models.journeyDomain.PreTaskListDomain
+import models.journeyDomain.traderDetails.TraderDetailsDomain
 import models.reference.{CountryCode, CustomsOffice}
 import models.requests.DataRequest
 import models.{EoriNumber, UserAnswers}
@@ -33,15 +35,16 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
 import scala.concurrent.Future
+import scala.reflect.runtime.universe.TypeTag
 
-class CheckTaskAlreadyCompletedActionSpec extends SpecBase with GuiceOneAppPerSuite with Generators with UserAnswersSpecHelper {
+class CheckDependentTaskCompletedActionSpec extends SpecBase with GuiceOneAppPerSuite with Generators with UserAnswersSpecHelper {
 
-  def harness[T](userAnswers: UserAnswers): Future[Result] = {
+  def harness[T: TypeTag](userAnswers: UserAnswers)(implicit userAnswersReader: UserAnswersReader[T]): Future[Result] = {
 
-    lazy val actionProvider = app.injector.instanceOf[CheckTaskAlreadyCompletedActionProviderImpl]
+    lazy val actionProvider = app.injector.instanceOf[CheckDependentTaskCompletedActionProviderImpl]
 
     actionProvider
-      .apply[PreTaskListDomain]
+      .apply[T]
       .invokeBlock(
         DataRequest(FakeRequest(GET, "/").asInstanceOf[Request[AnyContent]], EoriNumber(""), userAnswers),
         {
@@ -51,16 +54,9 @@ class CheckTaskAlreadyCompletedActionSpec extends SpecBase with GuiceOneAppPerSu
       )
   }
 
-  "CheckTaskAlreadyCompletedAction" - {
+  "CheckDependentTaskCompletedAction" - {
 
-    "return None if dependent section is incomplete" in {
-
-      val result: Future[Result] = harness(emptyUserAnswers)
-      status(result) mustBe OK
-      redirectLocation(result) mustBe None
-    }
-
-    "return to task list page if section has already been completed" in {
+    "return None if dependent section is completed" in {
 
       val userAnswers = emptyUserAnswers
         .setValue(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("code"), None))
@@ -69,7 +65,21 @@ class CheckTaskAlreadyCompletedActionSpec extends SpecBase with GuiceOneAppPerSu
         .setValue(SecurityDetailsTypePage, NoSecurityDetails)
         .setValue(DetailsConfirmedPage, true)
 
-      val result = harness[PreTaskListDomain](userAnswers)
+      val result: Future[Result] = harness[PreTaskListDomain](userAnswers)
+      status(result) mustBe OK
+      redirectLocation(result) mustBe None
+    }
+
+    "return to LRN page if pre- task list is incomplete" in {
+
+      val result = harness[PreTaskListDomain](emptyUserAnswers)
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad().url)
+    }
+
+    "return to task list if any other dependent section is incomplete" in {
+
+      val result = harness[TraderDetailsDomain](emptyUserAnswers)
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(controllers.routes.TaskListController.onPageLoad(emptyUserAnswers.lrn).url)
     }
