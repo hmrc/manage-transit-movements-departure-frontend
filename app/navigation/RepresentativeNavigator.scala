@@ -29,8 +29,17 @@ class RepresentativeNavigator @Inject() () extends Navigator {
   override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(NormalMode)
 
   private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case ActingRepresentativePage => ua => ???
+    case ActingRepresentativePage => ua => actingRepresentativeRoute(ua, mode)
   }
 
   override protected def checkRoutes: RouteMapping = ???
+
+  private def actingRepresentativeRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    yesNoRoute(userAnswers, ActingRepresentativePage)(
+      yesCall = controllers.traderDetails.representative.routes.RepresentativeEoriController.onPageLoad(userAnswers.lrn, mode)
+    )(
+      noCall = //TODO REDIRECT TO CORRECT PAGE WHEN BUILT
+        controllers.routes.SessionExpiredController.onPageLoad()
+    )
+
 }
