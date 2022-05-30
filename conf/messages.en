@@ -230,14 +230,15 @@ traderDetails.representative.actingRepresentative.heading = Are you acting as a 
 traderDetails.representative.actingRepresentative.checkYourAnswersLabel = Are you acting as a representative?
 traderDetails.representative.actingRepresentative.error.required = Select yes if you are acting as a representative
 traderDetails.representative.actingRepresentative.hint = You are a representative if you are moving the goods for someone else or you are completing the declaration on behalf of a trader.
+traderDetails.representative.actingRepresentative.change.hidden = if you are acting as a representative
 
-traderDetails.representative.representativeEori.title = What is the representative’s EORI number?
-traderDetails.representative.representativeEori.heading = What is the representative’s EORI number?
-traderDetails.representative.representativeEori.checkYourAnswersLabel = What is the representative’s EORI number?
-traderDetails.representative.representativeEori.error.required = Enter the representative’s EORI number
+traderDetails.representative.representativeEori.title = What is your EORI number?
+traderDetails.representative.representativeEori.heading = What is your EORI number?
+traderDetails.representative.representativeEori.checkYourAnswersLabel = Representative’s EORI number
+traderDetails.representative.representativeEori.error.required = Enter your EORI number
 traderDetails.representative.eori.hint = This will start with ’GB’ or ’XI’ followed by 12 or 15 numbers. for example GB123456789000.
-traderDetails.representative.representativeEori.error.invalidFormat = The representative’s EORI number must start with 2 letters, such as GB or XI
-traderDetails.representative.representativeEori.error.maxLength = The representative’s EORI number must be 17 characters or less
-traderDetails.representative.representativeEori.error.minLength = The representative’s EORI number must be 14 characters or more
-traderDetails.representative.representativeEori.error.prefix =  The representative’s EORI number must start with 2 letters, such as GB or XI
+traderDetails.representative.representativeEori.error.invalidFormat = Your EORI number must start with GB or XI
+traderDetails.representative.representativeEori.error.maxLength = Your EORI number must be 17 characters or less
+traderDetails.representative.representativeEori.error.minLength = Your EORI number must be 14 characters or more
+traderDetails.representative.representativeEori.error.prefix = Your EORI number must start with 2 letters, such as GB or XI
 
