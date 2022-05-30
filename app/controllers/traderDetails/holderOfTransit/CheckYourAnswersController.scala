@@ -18,7 +18,7 @@ package controllers.traderDetails.holderOfTransit
 
 import com.google.inject.Inject
 import controllers.actions.Actions
-import models.LocalReferenceNumber
+import models.{LocalReferenceNumber, NormalMode}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -45,8 +45,7 @@ class CheckYourAnswersController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      //TODO - to redirect to Representitive section once built
-      ???
+      Redirect(controllers.traderDetails.representative.routes.ActingRepresentativeController.onPageLoad(lrn, NormalMode))
   }
 
 }
