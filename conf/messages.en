@@ -224,3 +224,9 @@ traderDetails.holderOfTransit.checkYourAnswers.heading = Check your answers
 traderDetails.holderOfTransit.checkYourAnswers.title = Check your answers
 traderDetails.holderOfTransit.checkYourAnswers.transitHolder = Transit holder
 traderDetails.holderOfTransit.checkYourAnswers.additionalContact = Additional contact
+
+traderDetails.representative.actingRepresentative.title = Are you acting as a representative?
+traderDetails.representative.actingRepresentative.heading = Are you acting as a representative?
+traderDetails.representative.actingRepresentative.checkYourAnswersLabel = Are you acting as a representative?
+traderDetails.representative.actingRepresentative.error.required = Select yes if you are acting as a representative
+traderDetails.representative.actingRepresentative.hint = You are a representative if you are moving the goods for someone else or you are completing the declaration on behalf of a trader.
