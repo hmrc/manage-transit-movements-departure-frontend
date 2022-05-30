@@ -106,6 +106,11 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
     val fieldName = PostalCode.field
 
+    val validPostalOverLength: Gen[String] = for {
+      num  <- Gen.chooseNum[Int](PostalCode.length + 1, PostalCode.length + 5)
+      list <- Gen.listOfN(num, Gen.alphaNumChar)
+    } yield list.mkString("")
+
     behave like fieldThatBindsValidData(
       form = form,
       fieldName = fieldName,
@@ -116,7 +121,8 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
       form = form,
       fieldName = fieldName,
       maxLength = PostalCode.length,
-      lengthError = FormError(fieldName, lengthKey, Seq(PostalCode.arg, name, PostalCode.length))
+      lengthError = FormError(fieldName, lengthKey, Seq(PostalCode.arg, name, PostalCode.length)),
+      gen = validPostalOverLength
     )
 
     behave like mandatoryField(
