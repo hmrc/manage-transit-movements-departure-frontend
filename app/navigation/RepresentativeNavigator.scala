@@ -18,8 +18,9 @@ package navigation
 
 import models._
 import pages._
-import pages.traderDetails.representative.ActingRepresentativePage
+import pages.traderDetails.representative.{ActingRepresentativePage, RepresentativeEoriPage}
 import play.api.mvc.Call
+import controllers.traderDetails.representative.{routes => repRoutes}
 
 import javax.inject.{Inject, Singleton}
 
@@ -30,6 +31,7 @@ class RepresentativeNavigator @Inject() () extends Navigator {
 
   private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
     case ActingRepresentativePage => ua => actingRepresentativeRoute(ua, mode)
+    case RepresentativeEoriPage   => ua => Some(repRoutes.RepresentativeNameController.onPageLoad(ua.lrn, mode))
   }
 
   override protected def checkRoutes: RouteMapping = ???

@@ -24,7 +24,7 @@ import models.{CheckMode, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.Page
-import pages.traderDetails.representative.ActingRepresentativePage
+import pages.traderDetails.representative.{ActingRepresentativePage, RepresentativeEoriPage}
 
 class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RepresentativeUserAnswersGenerator {
 
@@ -59,17 +59,26 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
             }
           }
         }
+
+        "when No selected" - {
+          "to ??? page" ignore {
+            forAll(arbitrary[UserAnswers]) {
+              answers =>
+                val userAnswers = answers.setValue(ActingRepresentativePage, false)
+                navigator
+                  .nextPage(ActingRepresentativePage, mode, userAnswers)
+                  .mustBe(repRoutes.RepresentativeEoriController.onPageLoad(userAnswers.lrn, mode))
+            }
+          }
+        }
       }
 
-      "when No selected" - {
-        "to ??? page" ignore {
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val userAnswers = answers.setValue(ActingRepresentativePage, false)
-              navigator
-                .nextPage(ActingRepresentativePage, mode, userAnswers)
-                .mustBe(repRoutes.RepresentativeEoriController.onPageLoad(userAnswers.lrn, mode))
-          }
+      "must go from RepresentativeEoriPage to RepresentativeName page" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            navigator
+              .nextPage(RepresentativeEoriPage, mode, answers)
+              .mustBe(repRoutes.RepresentativeNameController.onPageLoad(answers.lrn, mode))
         }
       }
     }

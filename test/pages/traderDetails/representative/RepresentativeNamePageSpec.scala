@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package generators
+package pages.traderDetails.representative
 
-import org.scalacheck.Gen
-import pages.QuestionPage
-import play.api.libs.json.JsValue
+import pages.behaviours.PageBehaviours
 
-trait RepresentativeUserAnswersGenerator extends UserAnswersGenerator {
-  self: Generators =>
+class RepresentativeNamePageSpec extends PageBehaviours {
 
-  lazy val arbitraryUserAnswersWithActingRepresentative: Seq[Gen[(QuestionPage[_], JsValue)]] =
-    arbitraryRepresentativeNameUserAnswersEntry.arbitrary ::
-      arbitraryRepresentativeEoriUserAnswersEntry.arbitrary ::
-      arbitraryRepresentativeActingRepresentativeUserAnswersEntry.arbitrary ::
-      Nil
+  "RepresentativeNamePage" - {
+
+    beRetrievable[String](RepresentativeNamePage)
+
+    beSettable[String](RepresentativeNamePage)
+
+    beRemovable[String](RepresentativeNamePage)
+  }
 }
