@@ -158,7 +158,7 @@ traderDetails.holderOfTransit.eori.error.maxLength = The transit holder’s EORI
 traderDetails.holderOfTransit.eori.error.minLength = The transit holder’s EORI number must be 14 characters or more
 traderDetails.holderOfTransit.eori.error.invalidCharacters = The transit holder’s EORI number must only include letters a to z and numbers 0 to 9
 traderDetails.holderOfTransit.eori.error.invalidFormat = The transit holder’s EORI number must start with 2 letters, such as GB or XI
-traderDetails.holderOfTransit.eori.error.prefix = The transit holder’s EORI number must start with GB or XI, like GB123456789000
+traderDetails.holderOfTransit.eori.error.prefix = The transit holder’s EORI number must start with 2 letters, such as GB or XI
 traderDetails.holderOfTransit.eori.change.hidden = transit holder’s EORI number
 
 traderDetails.holderOfTransit.tirIdentificationYesNo.title = Do you know the Transit procedure TIR identification number?
@@ -180,7 +180,7 @@ traderDetails.holderOfTransit.name.heading = What is the transit holder’s name
 traderDetails.holderOfTransit.name.checkYourAnswersLabel = Transit holder’s name
 traderDetails.holderOfTransit.name.error.required = Enter the transit holder’s name
 traderDetails.holderOfTransit.name.error.length = The transit holder’s name must be 70 characters or less
-traderDetails.holderOfTransit.name.error.invalid = The transit holder’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, asterisks(*), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+traderDetails.holderOfTransit.name.error.invalid = The transit holder’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 traderDetails.holderOfTransit.name.change.hidden = transit holder’s name
 
 traderDetails.holderOfTransit.address.title = What is the transit holder’s address?
@@ -191,9 +191,9 @@ traderDetails.holderOfTransit.address.postalCode = Postal code
 traderDetails.holderOfTransit.address.country = Country
 traderDetails.holderOfTransit.address.checkYourAnswersLabel = Transit holder’s address
 traderDetails.holderOfTransit.address.change.hidden = transit holder’s address
-traderDetails.holderOfTransit.address.error.postcode.invalid = The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
-traderDetails.holderOfTransit.address.error.invalid = The {0} for {1}’s address address must only include letters a to z, numbers 0 to 9 and spaces
-traderDetails.holderOfTransit.address.error.required = Enter the {0} for {1}’s address
+traderDetails.holderOfTransit.address.error.postalCode.invalid = The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
+traderDetails.holderOfTransit.address.error.invalid = The {0} for {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+traderDetails.holderOfTransit.address.error.required = Enter {0} for {1}’s address
 traderDetails.holderOfTransit.address.error.length = The {0} for {1}’s address must be {2} characters or less
 traderDetails.holderOfTransit.address.placeholder = Select a country
 
