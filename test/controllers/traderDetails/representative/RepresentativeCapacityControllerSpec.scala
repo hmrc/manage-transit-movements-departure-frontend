@@ -56,7 +56,7 @@ class RepresentativeCapacityControllerSpec extends SpecBase with AppWithDefaultM
       val view    = injector.instanceOf[RepresentativeCapacityView]
       val result  = route(app, request).value
 
-      //  status(result) mustEqual OK
+      status(result) mustEqual OK
 
       contentAsString(result) mustEqual
         view(form, lrn, RepresentativeCapacity.radioItems, mode)(request, messages).toString

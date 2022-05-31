@@ -22,8 +22,8 @@ sealed trait RepresentativeCapacity
 
 object RepresentativeCapacity extends RadioModel[RepresentativeCapacity] {
 
-  case object Option1 extends WithName("option1") with RepresentativeCapacity
-  case object Option2 extends WithName("option2") with RepresentativeCapacity
+  case object Option1 extends WithName("direct") with RepresentativeCapacity
+  case object Option2 extends WithName("indirect") with RepresentativeCapacity
 
   override val messageKeyPrefix: String = "traderDetails.representative.representativeCapacity"
 
