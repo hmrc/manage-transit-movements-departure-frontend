@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package generators
+package pages.traderDetails.representative
 
-import org.scalacheck.Gen
+import play.api.libs.json.JsPath
 import pages.QuestionPage
-import play.api.libs.json.JsValue
+import pages.sections.RepresentativeSection
 
-trait RepresentativeUserAnswersGenerator extends UserAnswersGenerator {
-  self: Generators =>
+case object RepresentativePhonePage extends QuestionPage[String] {
 
-  lazy val arbitraryUserAnswersWithActingRepresentative: Seq[Gen[(QuestionPage[_], JsValue)]] =
-    arbitraryRepresentativePhoneUserAnswersEntry.arbitrary ::
-      arbitraryRepresentativeCapacityUserAnswersEntry.arbitrary ::
-      arbitraryRepresentativeNameUserAnswersEntry.arbitrary ::
-      arbitraryRepresentativeEoriUserAnswersEntry.arbitrary ::
-      arbitraryRepresentativeActingRepresentativeUserAnswersEntry.arbitrary ::
-      Nil
+  override def path: JsPath = RepresentativeSection.path \ toString
+
+  override def toString: String = "representativePhone"
 }

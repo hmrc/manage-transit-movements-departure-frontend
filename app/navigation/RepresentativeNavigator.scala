@@ -33,7 +33,7 @@ class RepresentativeNavigator @Inject() () extends Navigator {
     case ActingRepresentativePage   => ua => actingRepresentativeRoute(ua, mode)
     case RepresentativeEoriPage     => ua => Some(repRoutes.RepresentativeNameController.onPageLoad(ua.lrn, mode))
     case RepresentativeNamePage     => ua => Some(repRoutes.RepresentativeCapacityController.onPageLoad(ua.lrn, mode))
-    case RepresentativeCapacityPage => ua => ???
+    case RepresentativeCapacityPage => ua => Some(repRoutes.RepresentativePhoneController.onPageLoad(ua.lrn, mode))
   }
 
   override protected def checkRoutes: RouteMapping = ???
