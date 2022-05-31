@@ -17,43 +17,44 @@
 package controllers.traderDetails.representative
 
 import controllers.actions._
-import forms.YesNoFormProvider
+import forms.traderDetails.representative.RepresentativeCapacityFormProvider
 
 import javax.inject.Inject
 import models.{LocalReferenceNumber, Mode}
+import models.traderDetails.representative.RepresentativeCapacity
 import navigation.Navigator
 import navigation.annotations.Representative
-import pages.traderDetails.representative.ActingRepresentativePage
+import pages.traderDetails.representative.RepresentativeCapacityPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.traderDetails.representative.ActingRepresentativeView
+import views.html.traderDetails.representative.RepresentativeCapacityView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ActingRepresentativeController @Inject() (
+class RepresentativeCapacityController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @Representative navigator: Navigator,
   actions: Actions,
-  formProvider: YesNoFormProvider,
+  formProvider: RepresentativeCapacityFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ActingRepresentativeView
+  view: RepresentativeCapacityView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("traderDetails.representative.actingRepresentative")
+  private val form = formProvider()
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(ActingRepresentativePage) match {
+      val preparedForm = request.userAnswers.get(RepresentativeCapacityPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, lrn, mode))
+      Ok(view(preparedForm, lrn, RepresentativeCapacity.radioItems, mode))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
@@ -61,12 +62,12 @@ class ActingRepresentativeController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, RepresentativeCapacity.radioItems, mode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(ActingRepresentativePage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(RepresentativeCapacityPage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(ActingRepresentativePage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(RepresentativeCapacityPage, mode, updatedAnswers))
         )
   }
 }

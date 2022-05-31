@@ -18,13 +18,13 @@ package navigation
 
 import base.SpecBase
 import controllers.routes
-import controllers.traderDetails.representative.{routes => repRoutes}
 import generators.{Generators, RepresentativeUserAnswersGenerator}
 import models.{CheckMode, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.Page
 import pages.traderDetails.representative.{ActingRepresentativePage, RepresentativeEoriPage}
+import controllers.traderDetails.representative.{routes => repRoutes}
 
 class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RepresentativeUserAnswersGenerator {
 
