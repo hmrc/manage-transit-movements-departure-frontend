@@ -22,13 +22,13 @@ sealed trait RepresentativeCapacity
 
 object RepresentativeCapacity extends RadioModel[RepresentativeCapacity] {
 
-  case object Option1 extends WithName("direct") with RepresentativeCapacity
-  case object Option2 extends WithName("indirect") with RepresentativeCapacity
+  case object Direct extends WithName("direct") with RepresentativeCapacity
+  case object Indirect extends WithName("indirect") with RepresentativeCapacity
 
   override val messageKeyPrefix: String = "traderDetails.representative.representativeCapacity"
 
   val values: Seq[RepresentativeCapacity] = Seq(
-    Option1,
-    Option2
+    Direct,
+    Indirect
   )
 }
