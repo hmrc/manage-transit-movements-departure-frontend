@@ -18,13 +18,13 @@ package navigation
 
 import base.SpecBase
 import controllers.routes
-import controllers.traderDetails.representative.{routes => repRoutes}
 import generators.{Generators, RepresentativeUserAnswersGenerator}
 import models.{CheckMode, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.Page
-import pages.traderDetails.representative.{ActingRepresentativePage, RepresentativeEoriPage}
+import pages.traderDetails.representative.{ActingRepresentativePage, RepresentativeEoriPage, RepresentativeNamePage}
+import controllers.traderDetails.representative.{routes => repRoutes}
 
 class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RepresentativeUserAnswersGenerator {
 
@@ -79,6 +79,15 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
             navigator
               .nextPage(RepresentativeEoriPage, mode, answers)
               .mustBe(repRoutes.RepresentativeNameController.onPageLoad(answers.lrn, mode))
+        }
+      }
+
+      "must go from RepresentativeNamePage to Representative Capacity page" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            navigator
+              .nextPage(RepresentativeNamePage, mode, answers)
+              .mustBe(repRoutes.RepresentativeCapacityController.onPageLoad(answers.lrn, mode))
         }
       }
     }
