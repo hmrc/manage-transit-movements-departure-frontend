@@ -18,7 +18,10 @@ POST       /:lrn/trader-details/representative/representative-capacity          
 GET        /:lrn/trader-details/representative/change-representative-capacity                                 controllers.traderDetails.representative.RepresentativeCapacityController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/trader-details/representative/change-representative-capacity                                 controllers.traderDetails.representative.RepresentativeCapacityController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/traderDetails/representative/representative-phone                                            controllers.traderDetails.representative.RepresentativePhoneController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/traderDetails/representative/representative-phone                                            controllers.traderDetails.representative.RepresentativePhoneController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/traderDetails/representative/change-representative-phone                                     controllers.traderDetails.representative.RepresentativePhoneController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/traderDetails/representative/change-representative-phone                                     controllers.traderDetails.representative.RepresentativePhoneController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/trader-details/representative/representative-phone                                            controllers.traderDetails.representative.RepresentativePhoneController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/representative/representative-phone                                            controllers.traderDetails.representative.RepresentativePhoneController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/representative/change-representative-phone                                     controllers.traderDetails.representative.RepresentativePhoneController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/representative/change-representative-phone                                     controllers.traderDetails.representative.RepresentativePhoneController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/representative/check-answers                                                   controllers.traderDetails.representative.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/trader-details/representative/check-answers                                                   controllers.traderDetails.representative.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)

@@ -16,18 +16,18 @@
 
 package generators
 
+import models.UserAnswers
 import org.scalacheck.Gen
-import pages.QuestionPage
-import play.api.libs.json.JsValue
 
 trait RepresentativeUserAnswersGenerator extends UserAnswersGenerator {
   self: Generators =>
 
-  lazy val arbitraryUserAnswersWithActingRepresentative: Seq[Gen[(QuestionPage[_], JsValue)]] =
+  lazy val arbitraryUserAnswersWithActingRepresentative: Gen[UserAnswers] = arbitraryUserAnswers(
     arbitraryRepresentativePhoneUserAnswersEntry.arbitrary ::
       arbitraryRepresentativeCapacityUserAnswersEntry.arbitrary ::
       arbitraryRepresentativeNameUserAnswersEntry.arbitrary ::
       arbitraryRepresentativeEoriUserAnswersEntry.arbitrary ::
       arbitraryRepresentativeActingRepresentativeUserAnswersEntry.arbitrary ::
       Nil
+  )
 }
