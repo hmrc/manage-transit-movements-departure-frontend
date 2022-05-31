@@ -17,12 +17,13 @@
 package models.journeyDomain.traderDetails
 
 import cats.implicits._
+import models.EoriNumber
 import models.domain._
 import models.traderDetails.representative.RepresentativeCapacity
 import pages.traderDetails.representative._
 
 case class RepresentativeDomain(
-  eori: String,
+  eori: EoriNumber,
   name: String,
   capacity: RepresentativeCapacity,
   phone: String
@@ -32,7 +33,7 @@ object RepresentativeDomain {
 
   implicit val userAnswersReader: UserAnswersReader[RepresentativeDomain] =
     (
-      RepresentativeEoriPage.reader,
+      RepresentativeEoriPage.reader.map(EoriNumber(_)),
       RepresentativeNamePage.reader,
       RepresentativeCapacityPage.reader,
       RepresentativePhonePage.reader

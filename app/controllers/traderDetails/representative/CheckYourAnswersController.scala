@@ -41,7 +41,8 @@ class CheckYourAnswersController @Inject() (
   }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
-    Redirect(controllers.traderDetails.representative.routes.ActingRepresentativeController.onPageLoad(lrn, NormalMode))
+    //TODO - Redirect to next section when built
+    Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
   }
 
 }

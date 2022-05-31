@@ -19,7 +19,6 @@ package controllers.traderDetails.representative
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.traderDetails.representative.routes._
 import generators.Generators
-import models.NormalMode
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.inject.bind
@@ -74,7 +73,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
-    "must redirect to representative section" ignore {
+    "must redirect to ??? section" ignore {
       setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))

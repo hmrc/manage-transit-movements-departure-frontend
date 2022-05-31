@@ -17,11 +17,7 @@
 package viewModels
 
 import base.SpecBase
-import models.Address
-import models.reference.{Country, CountryCode}
-import models.traderDetails.representative.RepresentativeCapacity
 import models.traderDetails.representative.RepresentativeCapacity.Direct
-import org.scalacheck.Gen
 import pages.traderDetails.representative._
 
 class RepresentativeViewModelSpec extends SpecBase {

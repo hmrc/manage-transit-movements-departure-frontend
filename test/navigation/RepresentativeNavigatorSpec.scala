@@ -116,13 +116,13 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
 
       "must go from change ActingRepresentative" - {
         "when No selected" - {
-          "to Session Expired page" in {
+          "to Task List page" in {
             forAll(arbitraryUserAnswersWithActingRepresentative) {
               answers =>
                 val userAnswers = answers.setValue(ActingRepresentativePage, false)
                 navigator
                   .nextPage(ActingRepresentativePage, mode, userAnswers)
-                  .mustBe(controllers.routes.SessionExpiredController.onPageLoad()) //TODO change to next section when built
+                  .mustBe(controllers.routes.TaskListController.onPageLoad(userAnswers.lrn)) //TODO change to next section when built
             }
           }
         }

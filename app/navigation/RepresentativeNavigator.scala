@@ -53,7 +53,7 @@ class RepresentativeNavigator @Inject() () extends Navigator {
       yesCall = controllers.traderDetails.representative.routes.RepresentativeEoriController.onPageLoad(userAnswers.lrn, mode)
     )(
       noCall = //TODO REDIRECT TO CORRECT PAGE WHEN BUILT
-        controllers.routes.SessionExpiredController.onPageLoad()
+        controllers.routes.TaskListController.onPageLoad(userAnswers.lrn)
     )
 
 }
