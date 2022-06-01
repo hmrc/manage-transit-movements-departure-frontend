@@ -5,7 +5,7 @@ echo "Applying migration $className;format="snake"$"
 
 echo "Adding routes to conf/app.$package$.routes"
 
-echo "" >> ../conf/app.$package.routes
+echo "" >> ../conf/app.$package$.routes
 echo "GET        /:lrn/$package;format="packaged"$/$title;format="normalize"$                        controllers.$package$.$className$Controller.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)" >> ../conf/app.$package$.routes
 echo "POST       /:lrn/$package;format="packaged"$/$title;format="normalize"$                        controllers.$package$.$className$Controller.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)" >> ../conf/app.$package$.routes
 
