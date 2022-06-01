@@ -102,7 +102,8 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
   ".postalCode" - {
 
-    val postcodeInvalidKey = s"$prefix.error.postalCode.invalid"
+    val postcodeInvalidKey    = s"$prefix.error.postalCode.invalid"
+    val postalCodeRequiredKey = s"$prefix.error.postalCode.required"
 
     val fieldName = PostalCode.field
 
@@ -122,7 +123,7 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
     behave like mandatoryField(
       form = form,
       fieldName = fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(PostalCode.arg, name))
+      requiredError = FormError(fieldName, postalCodeRequiredKey, name)
     )
 
     behave like fieldWithInvalidCharacters(
