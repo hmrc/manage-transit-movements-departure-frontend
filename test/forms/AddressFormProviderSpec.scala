@@ -123,7 +123,7 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
     behave like mandatoryField(
       form = form,
       fieldName = fieldName,
-      requiredError = FormError(fieldName, postalCodeRequiredKey, name)
+      requiredError = FormError(fieldName, postalCodeRequiredKey, Seq(name))
     )
 
     behave like fieldWithInvalidCharacters(
