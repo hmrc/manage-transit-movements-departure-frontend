@@ -16,7 +16,7 @@
 
 package models.journeyDomain.traderDetails
 
-import models.domain.{GettableAsReaderOps, UserAnswersReader}
+import models.domain._
 import cats.implicits._
 import pages.traderDetails.representative.ActingRepresentativePage
 
