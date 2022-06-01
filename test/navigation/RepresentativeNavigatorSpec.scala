@@ -35,7 +35,7 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
       case object UnknownPage extends Page
 
       "when in check mode" - {
-        "to session expired" ignore {
+        "to session expired" in {
           navigator
             .nextPage(UnknownPage, CheckMode, emptyUserAnswers)
             .mustBe(routes.SessionExpiredController.onPageLoad())
@@ -67,7 +67,7 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
                 val userAnswers = answers.setValue(ActingRepresentativePage, false)
                 navigator
                   .nextPage(ActingRepresentativePage, mode, userAnswers)
-                  .mustBe(repRoutes.RepresentativeEoriController.onPageLoad(userAnswers.lrn, mode))
+                  .mustBe(repRoutes.RepresentativeEoriController.onPageLoad(userAnswers.lrn, mode)) //TODO redirect to next section when built
             }
           }
         }
@@ -97,6 +97,82 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
             navigator
               .nextPage(RepresentativeCapacityPage, mode, answers)
               .mustBe(repRoutes.RepresentativePhoneController.onPageLoad(answers.lrn, mode))
+        }
+      }
+
+      "must go from RepresentativePhonePage to CheckYourAnswers page" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            navigator
+              .nextPage(RepresentativePhonePage, mode, answers)
+              .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+        }
+      }
+    }
+
+    "when in CheckMode" - {
+
+      val mode = CheckMode
+
+      "must go from change ActingRepresentative" - {
+        "when No selected" - {
+          "to Task List page" in {
+            forAll(arbitraryUserAnswersWithActingRepresentative) {
+              answers =>
+                val userAnswers = answers.setValue(ActingRepresentativePage, false)
+                navigator
+                  .nextPage(ActingRepresentativePage, mode, userAnswers)
+                  .mustBe(controllers.routes.TaskListController.onPageLoad(userAnswers.lrn)) //TODO change to next section when built
+            }
+          }
+        }
+
+        "when Yes selected" - {
+          "to RepresentativeEoriPage" in {
+            forAll(arbitraryUserAnswersWithActingRepresentative) {
+              answers =>
+                val userAnswers = answers.setValue(ActingRepresentativePage, true)
+                navigator
+                  .nextPage(ActingRepresentativePage, mode, userAnswers)
+                  .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+            }
+          }
+        }
+      }
+
+      "must go from RepresentativeEoriPage to Check your answers page" in {
+        forAll(arbitraryUserAnswersWithActingRepresentative) {
+          answers =>
+            navigator
+              .nextPage(RepresentativeEoriPage, mode, answers)
+              .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+        }
+      }
+
+      "must go from RepresentativeNamePage to Check your answers page" in {
+        forAll(arbitraryUserAnswersWithActingRepresentative) {
+          answers =>
+            navigator
+              .nextPage(RepresentativeNamePage, mode, answers)
+              .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+        }
+      }
+
+      "must go from RepresentativeCapacityPage to Check your answers page" in {
+        forAll(arbitraryUserAnswersWithActingRepresentative) {
+          answers =>
+            navigator
+              .nextPage(RepresentativeCapacityPage, mode, answers)
+              .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+        }
+      }
+
+      "must go from RepresentativePhonePage to Check your answers page" in {
+        forAll(arbitraryUserAnswersWithActingRepresentative) {
+          answers =>
+            navigator
+              .nextPage(RepresentativePhonePage, mode, answers)
+              .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
     }

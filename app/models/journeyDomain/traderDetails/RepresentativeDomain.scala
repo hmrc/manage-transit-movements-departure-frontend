@@ -16,25 +16,26 @@
 
 package models.journeyDomain.traderDetails
 
-import models.domain._
 import cats.implicits._
-import pages.traderDetails.representative.ActingRepresentativePage
+import models.EoriNumber
+import models.domain._
+import models.traderDetails.representative.RepresentativeCapacity
+import pages.traderDetails.representative._
 
-case class TraderDetailsDomain(
-  holderOfTransit: HolderOfTransitDomain,
-  representative: Option[RepresentativeDomain]
+case class RepresentativeDomain(
+  eori: EoriNumber,
+  name: String,
+  capacity: RepresentativeCapacity,
+  phone: String
 )
 
-object TraderDetailsDomain {
+object RepresentativeDomain {
 
-  implicit val userAnswersParser: UserAnswersReader[TraderDetailsDomain] = {
-
-    for {
-      holderOfTransitDomain <- UserAnswersReader[HolderOfTransitDomain]
-      representativeDomain  <- ActingRepresentativePage.filterOptionalDependent(identity)(UserAnswersReader[RepresentativeDomain])
-    } yield TraderDetailsDomain(
-      holderOfTransitDomain,
-      representativeDomain
-    )
-  }
+  implicit val userAnswersReader: UserAnswersReader[RepresentativeDomain] =
+    (
+      RepresentativeEoriPage.reader.map(EoriNumber(_)),
+      RepresentativeNamePage.reader,
+      RepresentativeCapacityPage.reader,
+      RepresentativePhonePage.reader
+    ).tupled.map((RepresentativeDomain.apply _).tupled)
 }

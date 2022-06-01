@@ -19,14 +19,23 @@ package viewModels.taskList
 import base.SpecBase
 import controllers.routes
 import controllers.traderDetails.holderOfTransit.{routes => holderOfTransitRoutes}
+import controllers.traderDetails.representative.{routes => representativeRoutes}
 import generators.Generators
 import models.DeclarationType.Option4
+import models.traderDetails.representative.RepresentativeCapacity
 import models.{Address, DeclarationType, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.holderOfTransit._
+import pages.traderDetails.representative.{
+  ActingRepresentativePage,
+  RepresentativeCapacityPage,
+  RepresentativeEoriPage,
+  RepresentativeNamePage,
+  RepresentativePhonePage
+}
 import viewModels.taskList.TaskStatus._
 
 class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -141,10 +150,15 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
           .setValue(AddContactPage, true)
           .setValue(ContactNamePage, Gen.alphaNumStr.sample.value)
           .setValue(ContactTelephoneNumberPage, Gen.alphaNumStr.sample.value)
+          .setValue(ActingRepresentativePage, true)
+          .setValue(RepresentativeEoriPage, Gen.alphaNumStr.sample.value)
+          .setValue(RepresentativeNamePage, Gen.alphaNumStr.sample.value)
+          .setValue(RepresentativeCapacityPage, Gen.oneOf(RepresentativeCapacity.values).sample.value)
+          .setValue(RepresentativePhonePage, Gen.alphaNumStr.sample.value)
 
         val task = TraderDetailsTask(userAnswers)
         task.status mustBe Completed
-        task.href.get mustBe holderOfTransitRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url
+        task.href.get mustBe representativeRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url
       }
     }
   }
