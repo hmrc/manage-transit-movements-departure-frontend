@@ -18,7 +18,7 @@ package controllers.traderDetails.representative
 
 import com.google.inject.Inject
 import controllers.actions.Actions
-import models.{LocalReferenceNumber, NormalMode}
+import models.LocalReferenceNumber
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
