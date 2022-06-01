@@ -192,6 +192,7 @@ traderDetails.holderOfTransit.address.country = Country
 traderDetails.holderOfTransit.address.checkYourAnswersLabel = Transit holder’s address
 traderDetails.holderOfTransit.address.change.hidden = transit holder’s address
 traderDetails.holderOfTransit.address.error.postalCode.invalid = The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
+traderDetails.holderOfTransit.address.postalCode.error.required = Enter the postal code for {0}’s address
 traderDetails.holderOfTransit.address.error.invalid = The {0} for {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 traderDetails.holderOfTransit.address.error.required = Enter {0} for {1}’s address
 traderDetails.holderOfTransit.address.error.length = The {0} for {1}’s address must be {2} characters or less

@@ -52,7 +52,7 @@ class AddressFormProvider @Inject() extends Mappings {
         },
         PostalCode.field -> {
           lazy val args = Seq(PostalCode.arg, name)
-          trimmedText(s"$prefix.error.required", args)
+          trimmedText(s"$prefix.postalCode.error.required", name)
             .verifying(
               StopOnFirstFail[String](
                 maxLength(PostalCode.length, s"$prefix.error.length", args :+ PostalCode.length),
