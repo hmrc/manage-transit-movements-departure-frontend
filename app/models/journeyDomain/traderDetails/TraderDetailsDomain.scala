@@ -29,14 +29,9 @@ object TraderDetailsDomain {
 
   implicit val userAnswersParser: UserAnswersReader[TraderDetailsDomain] = {
 
-    val representativeReader: UserAnswersReader[Option[RepresentativeDomain]] = ActingRepresentativePage.reader.flatMap {
-      case true  => UserAnswersReader[RepresentativeDomain].map(_.some)
-      case false => none[RepresentativeDomain].pure[UserAnswersReader]
-    }
-
     for {
       holderOfTransitDomain <- UserAnswersReader[HolderOfTransitDomain]
-      representativeDomain  <- representativeReader
+      representativeDomain  <- ActingRepresentativePage.filterOptionalDependent(identity)(UserAnswersReader[RepresentativeDomain])
     } yield TraderDetailsDomain(
       holderOfTransitDomain,
       representativeDomain
