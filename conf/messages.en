@@ -225,6 +225,8 @@ traderDetails.holderOfTransit.checkYourAnswers.title = Check your answers
 traderDetails.holderOfTransit.checkYourAnswers.transitHolder = Transit holder
 traderDetails.holderOfTransit.checkYourAnswers.additionalContact = Additional contact
 
+# Representative
+
 traderDetails.representative.actingRepresentative.title = Are you acting as a representative?
 traderDetails.representative.actingRepresentative.heading = Are you acting as a representative?
 traderDetails.representative.actingRepresentative.checkYourAnswersLabel = Are you acting as a representative?
@@ -234,13 +236,14 @@ traderDetails.representative.actingRepresentative.change.hidden = if you are act
 
 traderDetails.representative.representativeEori.title = What is your EORI number?
 traderDetails.representative.representativeEori.heading = What is your EORI number?
-traderDetails.representative.representativeEori.checkYourAnswersLabel = Representative’s EORI number
+traderDetails.representative.representativeEori.checkYourAnswersLabel = Representative EORI number
 traderDetails.representative.representativeEori.error.required = Enter your EORI number
 traderDetails.representative.eori.hint = This will start with ’GB’ or ’XI’ followed by 12 or 15 numbers. for example GB123456789000.
 traderDetails.representative.representativeEori.error.invalidFormat = Your EORI number must start with GB or XI
 traderDetails.representative.representativeEori.error.maxLength = Your EORI number must be 17 characters or less
 traderDetails.representative.representativeEori.error.minLength = Your EORI number must be 14 characters or more
 traderDetails.representative.representativeEori.error.prefix = Your EORI number must start with 2 letters, such as GB or XI
+traderDetails.representative.representativeEori.change.hidden = representative’s EORI number
 
 traderDetails.representative.representativeName.title = What is your name?
 traderDetails.representative.representativeName.heading = What is your name?
@@ -249,3 +252,25 @@ traderDetails.representative.representativeName.error.required = Enter your name
 traderDetails.representative.representativeName.error.length = Your name must be 70 characters or less
 traderDetails.representative.representativeName.error.invalid = Your name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, asterisks(*), forward slashes, full stops, hyphens, percent signs, question marks and spaces
 traderDetails.representative.representativeName.change.hidden = representative’s name
+
+traderDetails.representative.representativeCapacity.title = What is your capacity?
+traderDetails.representative.representativeCapacity.heading = What is your capacity?
+traderDetails.representative.representativeCapacity.direct = Direct (principal solely liable)
+traderDetails.representative.representativeCapacity.indirect = Indirect (principal and agent jointly liable)
+traderDetails.representative.representativeCapacity.checkYourAnswersLabel = Representative capacity
+traderDetails.representative.representativeCapacity.error.required = Select which capacity you are acting in
+traderDetails.representative.representativeCapacity.change.hidden = representative capacity
+
+traderDetails.representative.representativePhone.title = What is your phone number?
+traderDetails.representative.representativePhone.heading = What is your phone number?
+traderDetails.representative.representativePhone.checkYourAnswersLabel = Representative’s phone number
+traderDetails.representative.representativePhone.error.required = Enter your phone number
+traderDetails.representative.representativePhone.hint = Must include the country code, like +44 808 157 0192.
+traderDetails.representative.representativePhone.error.invalid = Enter your phone number in the right format
+traderDetails.representative.representativePhone.error.maxLength = Your phone number must be 35 characters or less
+traderDetails.representative.representativePhone.error.minLength = Your phone number must be 7 characters or more
+traderDetails.representative.representativePhone.change.hidden = representative’s phone number
+
+traderDetails.representative.checkYourAnswers.heading = Check your answers
+traderDetails.representative.checkYourAnswers.title = Check your answers
+traderDetails.representative.checkYourAnswers.representative = Representative

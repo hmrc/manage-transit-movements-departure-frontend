@@ -16,91 +16,80 @@
 
 package controllers.traderDetails.representative
 
+import base.{AppWithDefaultMockFixtures, SpecBase}
+import forms.traderDetails.representative.RepresentativeCapacityFormProvider
+import views.html.traderDetails.representative.RepresentativeCapacityView
 import models.{NormalMode, UserAnswers}
+import models.traderDetails.representative.RepresentativeCapacity
 import navigation.Navigator
 import navigation.annotations.Representative
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.when
+import pages.traderDetails.representative.RepresentativeCapacityPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.NameFormProvider
-import views.html.traderDetails.representative.RepresentativeNameView
-import services.UserAnswersService
-import base.{AppWithDefaultMockFixtures, SpecBase}
-import pages.traderDetails.representative.RepresentativeNamePage
 
 import scala.concurrent.Future
 
-class RepresentativeNameControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class RepresentativeCapacityControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                 = new NameFormProvider()
-  private val form                         = formProvider("traderDetails.representative.representativeName")
-  private val mode                         = NormalMode
-  private lazy val representativeNameRoute = routes.RepresentativeNameController.onPageLoad(lrn, mode).url
-  private lazy val mockUserAnswersService  = mock[UserAnswersService]
+  private lazy val representativeCapacityRoute = routes.RepresentativeCapacityController.onPageLoad(lrn, mode).url
+
+  private val formProvider = new RepresentativeCapacityFormProvider()
+  private val form         = formProvider()
+  private val mode         = NormalMode
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Representative]).toInstance(fakeNavigator))
-      .overrides(bind[UserAnswersService].toInstance(mockUserAnswersService))
 
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    reset(mockUserAnswersService)
-  }
-
-  "RepresentativeName Controller" - {
+  "RepresentativeCapacity Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, representativeNameRoute)
-
-      val result = route(app, request).value
-
-      val view = injector.instanceOf[RepresentativeNameView]
+      val request = FakeRequest(GET, representativeCapacityRoute)
+      val view    = injector.instanceOf[RepresentativeCapacityView]
+      val result  = route(app, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode)(request, messages).toString
-
+        view(form, lrn, RepresentativeCapacity.radioItems, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(RepresentativeNamePage, "test string").success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(RepresentativeCapacityPage, RepresentativeCapacity.values.head).success.value
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, representativeNameRoute)
+      val request = FakeRequest(GET, representativeCapacityRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> "test string"))
+      val filledForm = form.bind(Map("value" -> RepresentativeCapacity.values.head.toString))
 
-      val view = injector.instanceOf[RepresentativeNameView]
+      val view = injector.instanceOf[RepresentativeCapacityView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
-
+        view(filledForm, lrn, RepresentativeCapacity.radioItems, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
       setExistingUserAnswers(emptyUserAnswers)
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockUserAnswersService.getOrCreateUserAnswers(any(), any())) thenReturn Future.successful(emptyUserAnswers)
-
       val request =
-        FakeRequest(POST, representativeNameRoute)
-          .withFormUrlEncodedBody(("value", "test string"))
+        FakeRequest(POST, representativeCapacityRoute)
+          .withFormUrlEncodedBody(("value", RepresentativeCapacity.values.head.toString))
 
       val result = route(app, request).value
 
@@ -113,34 +102,29 @@ class RepresentativeNameControllerSpec extends SpecBase with AppWithDefaultMockF
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val invalidAnswer = ""
-
-      val request    = FakeRequest(POST, representativeNameRoute).withFormUrlEncodedBody(("value", ""))
-      val filledForm = form.bind(Map("value" -> invalidAnswer))
+      val request   = FakeRequest(POST, representativeCapacityRoute).withFormUrlEncodedBody(("value", "invalid value"))
+      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(app, request).value
 
+      val view = injector.instanceOf[RepresentativeCapacityView]
+
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[RepresentativeNameView]
-
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
-
+        view(boundForm, lrn, RepresentativeCapacity.radioItems, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, representativeNameRoute)
+      val request = FakeRequest(GET, representativeCapacityRoute)
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
@@ -148,15 +132,14 @@ class RepresentativeNameControllerSpec extends SpecBase with AppWithDefaultMockF
       setNoExistingUserAnswers()
 
       val request =
-        FakeRequest(POST, representativeNameRoute)
-          .withFormUrlEncodedBody(("value", "test string"))
+        FakeRequest(POST, representativeCapacityRoute)
+          .withFormUrlEncodedBody(("value", RepresentativeCapacity.values.head.toString))
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
     }
   }
 }

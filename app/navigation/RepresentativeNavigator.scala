@@ -16,11 +16,13 @@
 
 package navigation
 
-import models._
-import pages._
-import pages.traderDetails.representative.{ActingRepresentativePage, RepresentativeEoriPage}
-import play.api.mvc.Call
 import controllers.traderDetails.representative.{routes => repRoutes}
+import models._
+import models.domain.UserAnswersReader
+import models.journeyDomain.traderDetails.RepresentativeDomain
+import pages._
+import pages.traderDetails.representative._
+import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
 
@@ -29,19 +31,29 @@ class RepresentativeNavigator @Inject() () extends Navigator {
 
   override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(NormalMode)
 
-  private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case ActingRepresentativePage => ua => actingRepresentativeRoute(ua, mode)
-    case RepresentativeEoriPage   => ua => Some(repRoutes.RepresentativeNameController.onPageLoad(ua.lrn, mode))
+  override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
+    case page =>
+      ua =>
+        UserAnswersReader[RepresentativeDomain].run(ua) match {
+          case Left(_)  => routes(CheckMode).applyOrElse[Page, UserAnswers => Option[Call]](page, _ => _ => None)(ua)
+          case Right(_) => Some(repRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
+        }
   }
 
-  override protected def checkRoutes: RouteMapping = ???
+  private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
+    case ActingRepresentativePage   => ua => actingRepresentativeRoute(ua, mode)
+    case RepresentativeEoriPage     => ua => Some(repRoutes.RepresentativeNameController.onPageLoad(ua.lrn, mode))
+    case RepresentativeNamePage     => ua => Some(repRoutes.RepresentativeCapacityController.onPageLoad(ua.lrn, mode))
+    case RepresentativeCapacityPage => ua => Some(repRoutes.RepresentativePhoneController.onPageLoad(ua.lrn, mode))
+    case RepresentativePhonePage    => ua => Some(repRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
+  }
 
   private def actingRepresentativeRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     yesNoRoute(userAnswers, ActingRepresentativePage)(
       yesCall = controllers.traderDetails.representative.routes.RepresentativeEoriController.onPageLoad(userAnswers.lrn, mode)
     )(
       noCall = //TODO REDIRECT TO CORRECT PAGE WHEN BUILT
-        controllers.routes.SessionExpiredController.onPageLoad()
+        controllers.routes.TaskListController.onPageLoad(userAnswers.lrn)
     )
 
 }

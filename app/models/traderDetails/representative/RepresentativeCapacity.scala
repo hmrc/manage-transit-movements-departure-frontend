@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package generators
+package models.traderDetails.representative
 
-import models.UserAnswers
-import org.scalacheck.Gen
+import models.{RadioModel, WithName}
 
-trait RepresentativeUserAnswersGenerator extends UserAnswersGenerator {
-  self: Generators =>
+sealed trait RepresentativeCapacity
 
-  lazy val arbitraryUserAnswersWithActingRepresentative: Gen[UserAnswers] = arbitraryUserAnswers(
-    arbitraryRepresentativePhoneUserAnswersEntry.arbitrary ::
-      arbitraryRepresentativeCapacityUserAnswersEntry.arbitrary ::
-      arbitraryRepresentativeNameUserAnswersEntry.arbitrary ::
-      arbitraryRepresentativeEoriUserAnswersEntry.arbitrary ::
-      arbitraryRepresentativeActingRepresentativeUserAnswersEntry.arbitrary ::
-      Nil
+object RepresentativeCapacity extends RadioModel[RepresentativeCapacity] {
+
+  case object Direct extends WithName("direct") with RepresentativeCapacity
+  case object Indirect extends WithName("indirect") with RepresentativeCapacity
+
+  override val messageKeyPrefix: String = "traderDetails.representative.representativeCapacity"
+
+  val values: Seq[RepresentativeCapacity] = Seq(
+    Direct,
+    Indirect
   )
 }

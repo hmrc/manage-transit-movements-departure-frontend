@@ -25,21 +25,23 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.NameFormProvider
-import views.html.traderDetails.representative.RepresentativeNameView
+import forms.RepresentativePhoneFormProvider
+import views.html.traderDetails.representative.RepresentativePhoneView
 import services.UserAnswersService
+import pages.traderDetails.representative.RepresentativePhonePage
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import pages.traderDetails.representative.RepresentativeNamePage
 
 import scala.concurrent.Future
 
-class RepresentativeNameControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class RepresentativePhoneControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                 = new NameFormProvider()
-  private val form                         = formProvider("traderDetails.representative.representativeName")
-  private val mode                         = NormalMode
-  private lazy val representativeNameRoute = routes.RepresentativeNameController.onPageLoad(lrn, mode).url
-  private lazy val mockUserAnswersService  = mock[UserAnswersService]
+  private val formProvider                  = new RepresentativePhoneFormProvider()
+  private val form                          = formProvider("traderDetails.representative.representativePhone")
+  private val mode                          = NormalMode
+  private lazy val representativePhoneRoute = routes.RepresentativePhoneController.onPageLoad(lrn, mode).url
+  private lazy val mockUserAnswersService   = mock[UserAnswersService]
+
+  private val validAnswer: String = "123123123"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -52,17 +54,17 @@ class RepresentativeNameControllerSpec extends SpecBase with AppWithDefaultMockF
     reset(mockUserAnswersService)
   }
 
-  "RepresentativeName Controller" - {
+  "RepresentativePhone Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, representativeNameRoute)
+      val request = FakeRequest(GET, representativePhoneRoute)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[RepresentativeNameView]
+      val view = injector.instanceOf[RepresentativePhoneView]
 
       status(result) mustEqual OK
 
@@ -73,16 +75,16 @@ class RepresentativeNameControllerSpec extends SpecBase with AppWithDefaultMockF
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(RepresentativeNamePage, "test string").success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(RepresentativePhonePage, validAnswer).success.value
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, representativeNameRoute)
+      val request = FakeRequest(GET, representativePhoneRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> "test string"))
+      val filledForm = form.bind(Map("value" -> validAnswer))
 
-      val view = injector.instanceOf[RepresentativeNameView]
+      val view = injector.instanceOf[RepresentativePhoneView]
 
       status(result) mustEqual OK
 
@@ -99,8 +101,8 @@ class RepresentativeNameControllerSpec extends SpecBase with AppWithDefaultMockF
       when(mockUserAnswersService.getOrCreateUserAnswers(any(), any())) thenReturn Future.successful(emptyUserAnswers)
 
       val request =
-        FakeRequest(POST, representativeNameRoute)
-          .withFormUrlEncodedBody(("value", "test string"))
+        FakeRequest(POST, representativePhoneRoute)
+          .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
 
@@ -115,14 +117,14 @@ class RepresentativeNameControllerSpec extends SpecBase with AppWithDefaultMockF
 
       val invalidAnswer = ""
 
-      val request    = FakeRequest(POST, representativeNameRoute).withFormUrlEncodedBody(("value", ""))
+      val request    = FakeRequest(POST, representativePhoneRoute).withFormUrlEncodedBody(("value", ""))
       val filledForm = form.bind(Map("value" -> invalidAnswer))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[RepresentativeNameView]
+      val view = injector.instanceOf[RepresentativePhoneView]
 
       contentAsString(result) mustEqual
         view(filledForm, lrn, mode)(request, messages).toString
@@ -133,7 +135,7 @@ class RepresentativeNameControllerSpec extends SpecBase with AppWithDefaultMockF
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, representativeNameRoute)
+      val request = FakeRequest(GET, representativePhoneRoute)
 
       val result = route(app, request).value
 
@@ -148,7 +150,7 @@ class RepresentativeNameControllerSpec extends SpecBase with AppWithDefaultMockF
       setNoExistingUserAnswers()
 
       val request =
-        FakeRequest(POST, representativeNameRoute)
+        FakeRequest(POST, representativePhoneRoute)
           .withFormUrlEncodedBody(("value", "test string"))
 
       val result = route(app, request).value

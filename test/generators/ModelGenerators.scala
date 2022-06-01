@@ -25,6 +25,11 @@ import org.scalacheck.{Arbitrary, Gen}
 trait ModelGenerators {
   self: Generators =>
 
+  implicit lazy val arbitraryRepresentativeCapacity: Arbitrary[models.traderDetails.representative.RepresentativeCapacity] =
+    Arbitrary {
+      Gen.oneOf(models.traderDetails.representative.RepresentativeCapacity.values.toSeq)
+    }
+
   implicit lazy val arbitraryCountryCode: Arbitrary[CountryCode] =
     Arbitrary {
       Gen

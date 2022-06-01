@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package controllers.traderDetails.holderOfTransit
+package controllers.traderDetails.representative
 
 import com.google.inject.Inject
 import controllers.actions.Actions
-import models.{LocalReferenceNumber, NormalMode}
+import models.LocalReferenceNumber
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.HolderOfTransitViewModel
-import views.html.traderDetails.holderOfTransit.CheckYourAnswersView
+import viewModels.RepresentativeViewModel
+import views.html.traderDetails.representative.CheckYourAnswersView
 
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
-  viewModel: HolderOfTransitViewModel
+  viewModel: RepresentativeViewModel
 )() extends FrontendBaseController
     with I18nSupport {
 
@@ -41,7 +41,8 @@ class CheckYourAnswersController @Inject() (
   }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
-    Redirect(controllers.traderDetails.representative.routes.ActingRepresentativeController.onPageLoad(lrn, NormalMode))
+    //TODO - Redirect to next section when built
+    Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
   }
 
 }

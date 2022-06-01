@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package forms.traderDetails.representative
 
-object Constants {
-  lazy val tirCarnetReferenceMaxLength = 12
-  lazy val maxEoriNumberLength: Int    = 17
-  lazy val minEoriNumberLength: Int    = 14
-  lazy val maxNameLength: Int          = 70
-  lazy val minTelephoneNumberLength    = 7
-  lazy val maxTelephoneNumberLength    = 35
+import javax.inject.Inject
+
+import forms.mappings.Mappings
+import play.api.data.Form
+import models.traderDetails.representative.RepresentativeCapacity
+
+class RepresentativeCapacityFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[RepresentativeCapacity] =
+    Form(
+      "value" -> enumerable[RepresentativeCapacity]("traderDetails.representative.representativeCapacity.error.required")
+    )
 }

@@ -16,27 +16,13 @@
 
 package pages.traderDetails.representative
 
-import models.UserAnswers
 import play.api.libs.json.JsPath
 import pages.QuestionPage
 import pages.sections.RepresentativeSection
 
-import scala.util.Try
-
-case object ActingRepresentativePage extends QuestionPage[Boolean] {
+case object RepresentativePhonePage extends QuestionPage[String] {
 
   override def path: JsPath = RepresentativeSection.path \ toString
 
-  override def toString: String = "actingRepresentative"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(false) =>
-        userAnswers
-          .remove(RepresentativeEoriPage)
-          .flatMap(_.remove(RepresentativeNamePage))
-          .flatMap(_.remove(RepresentativeCapacityPage))
-          .flatMap(_.remove(RepresentativePhonePage))
-      case _ => super.cleanup(value, userAnswers)
-    }
+  override def toString: String = "representativePhone"
 }
