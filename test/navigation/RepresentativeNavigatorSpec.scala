@@ -117,31 +117,29 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
       "must go from change ActingRepresentative" - {
         "when No selected" - {
           "to Task List page" in {
-            forAll(arbitraryUserAnswersWithActingRepresentative) {
+            forAll(arbitraryRepresentativeAnswersNotActingAsRepresentative) {
               answers =>
-                val userAnswers = answers.setValue(ActingRepresentativePage, false)
                 navigator
-                  .nextPage(ActingRepresentativePage, mode, userAnswers)
-                  .mustBe(controllers.routes.TaskListController.onPageLoad(userAnswers.lrn)) //TODO change to next section when built
+                  .nextPage(ActingRepresentativePage, mode, answers)
+                  .mustBe(controllers.routes.TaskListController.onPageLoad(answers.lrn)) //TODO change to next section when built
             }
           }
         }
 
         "when Yes selected" - {
           "to RepresentativeEoriPage" in {
-            forAll(arbitraryUserAnswersWithActingRepresentative) {
+            forAll(arbitraryRepresentativeAnswersActingAsRepresentative) {
               answers =>
-                val userAnswers = answers.setValue(ActingRepresentativePage, true)
                 navigator
-                  .nextPage(ActingRepresentativePage, mode, userAnswers)
-                  .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+                  .nextPage(ActingRepresentativePage, mode, answers)
+                  .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
             }
           }
         }
       }
 
       "must go from RepresentativeEoriPage to Check your answers page" in {
-        forAll(arbitraryUserAnswersWithActingRepresentative) {
+        forAll(arbitraryRepresentativeAnswersActingAsRepresentative) {
           answers =>
             navigator
               .nextPage(RepresentativeEoriPage, mode, answers)
@@ -150,7 +148,7 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
       }
 
       "must go from RepresentativeNamePage to Check your answers page" in {
-        forAll(arbitraryUserAnswersWithActingRepresentative) {
+        forAll(arbitraryRepresentativeAnswersActingAsRepresentative) {
           answers =>
             navigator
               .nextPage(RepresentativeNamePage, mode, answers)
@@ -159,7 +157,7 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
       }
 
       "must go from RepresentativeCapacityPage to Check your answers page" in {
-        forAll(arbitraryUserAnswersWithActingRepresentative) {
+        forAll(arbitraryRepresentativeAnswersActingAsRepresentative) {
           answers =>
             navigator
               .nextPage(RepresentativeCapacityPage, mode, answers)
@@ -168,7 +166,7 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
       }
 
       "must go from RepresentativePhonePage to Check your answers page" in {
-        forAll(arbitraryUserAnswersWithActingRepresentative) {
+        forAll(arbitraryRepresentativeAnswersActingAsRepresentative) {
           answers =>
             navigator
               .nextPage(RepresentativePhonePage, mode, answers)

@@ -236,7 +236,7 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       "must go from change EoriYesNoPage" - {
         "when No selected" - {
           "to Check Your Answers page" in {
-            forAll(arbitraryCompletedAnswersWithEori) {
+            forAll(arbitraryHolderOfTransitAnswersWithEori) {
               answers =>
                 val userAnswers = answers.setValue(EoriYesNoPage, false)
                 navigator
@@ -248,7 +248,7 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
         "when Yes selected" - {
           "to EoriPage" in {
-            forAll(arbitraryCompletedAnswersWithoutEori) {
+            forAll(arbitraryHolderOfTransitAnswersWithoutEori) {
               answers =>
                 val userAnswers = answers.setValue(EoriYesNoPage, true)
                 navigator
@@ -260,7 +260,7 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       }
 
       "must go from EoriPage to Check your answers page" in {
-        forAll(arbitraryCompletedAnswersWithEori) {
+        forAll(arbitraryHolderOfTransitAnswersWithEori) {
           answers =>
             navigator
               .nextPage(EoriPage, mode, answers)
@@ -271,7 +271,7 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       "must go from change TirIdentificationYesNoPage" - {
         "when No selected" - {
           "to Check your answers page" in {
-            forAll(arbitraryCompletedAnswersWithTirId) {
+            forAll(arbitraryHolderOfTransitAnswersWithTirId) {
               answers =>
                 val userAnswers = answers.setValue(TirIdentificationYesNoPage, false)
                 navigator
@@ -283,7 +283,7 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
         "when Yes selected" - {
           "to TirIdentificationPage" in {
-            forAll(arbitraryCompletedAnswersWithoutTirId) {
+            forAll(arbitraryHolderOfTransitAnswersWithoutTirId) {
               answers =>
                 val userAnswers = answers.setValue(TirIdentificationYesNoPage, true)
                 navigator
@@ -295,7 +295,7 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       }
 
       "must go from TirIdentificationPage to Check your answers page" in {
-        forAll(arbitraryCompletedAnswersWithTirId) {
+        forAll(arbitraryHolderOfTransitAnswersWithTirId) {
           answers =>
             navigator
               .nextPage(TirIdentificationPage, mode, answers)
@@ -304,7 +304,7 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       }
 
       "must go from NamePage to Check your answers page" in {
-        forAll(arbitraryCompletedAnswersWithoutEori) {
+        forAll(arbitraryHolderOfTransitAnswers) {
           answers =>
             navigator
               .nextPage(NamePage, mode, answers)
@@ -313,7 +313,7 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       }
 
       "must go from AddressPage to Check your answers page" in {
-        forAll(arbitraryCompletedAnswersWithoutEori) {
+        forAll(arbitraryHolderOfTransitAnswers) {
           answers =>
             navigator
               .nextPage(AddressPage, mode, answers)
@@ -324,7 +324,7 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       "must go from AddContactPage" - {
         "when No selected" - {
           "to Check Your Answers" in {
-            forAll(arbitraryCompletedAnswersWithAdditionalContact) {
+            forAll(arbitraryHolderOfTransitAnswersWithAdditionalContact) {
               answers =>
                 val userAnswers = answers.setValue(AddContactPage, false)
                 navigator
@@ -336,7 +336,7 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
         "when Yes selected" - {
           "to ContactNamePage" in {
-            forAll(arbitraryCompletedAnswersWithoutEori) {
+            forAll(arbitraryHolderOfTransitAnswersWithoutAdditionalContact) {
               answers =>
                 val userAnswers = answers.setValue(AddContactPage, true)
                 navigator
@@ -350,7 +350,7 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       "must go from ContactNamePage" - {
         "when telephone number exists" - {
           "to Check Your Answers" in {
-            forAll(arbitraryCompletedAnswersWithAdditionalContact) {
+            forAll(arbitraryHolderOfTransitAnswersWithAdditionalContact) {
               answers =>
                 navigator
                   .nextPage(ContactNamePage, mode, answers)
@@ -361,7 +361,7 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
         "when no telephone number exists" - {
           "to ContactTelephoneNumberPage" in {
-            forAll(arbitraryCompletedAnswersWithAdditionalContact) {
+            forAll(arbitraryHolderOfTransitAnswersWithAdditionalContact) {
               answers =>
                 val userAnswers = answers.removeValue(ContactTelephoneNumberPage)
                 navigator
@@ -373,7 +373,7 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       }
 
       "must go from ContactTelephoneNumberPage to Check your answers" in {
-        forAll(arbitraryCompletedAnswersWithAdditionalContact) {
+        forAll(arbitraryHolderOfTransitAnswersWithAdditionalContact) {
           answers =>
             navigator
               .nextPage(ContactTelephoneNumberPage, mode, answers)
