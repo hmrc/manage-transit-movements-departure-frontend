@@ -61,7 +61,7 @@ class AddressFormProvider @Inject() extends Mappings {
             )
         },
         Country.field -> {
-          country(countryList, s"$prefix.error.required", Seq(Country.arg, name))
+          country(countryList, s"$prefix.error.country.required", Seq(name))
         }
       )(Address.apply)(Address.unapply)
     )

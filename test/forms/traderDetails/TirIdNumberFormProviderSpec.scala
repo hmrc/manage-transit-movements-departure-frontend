@@ -27,6 +27,7 @@ class TirIdNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavi
 
   private val requiredKey      = s"$prefix.error.required"
   private val invalidFormatKey = s"$prefix.error.invalidFormat"
+  private val lengthKey        = s"$prefix.error.length"
   private val form             = new TirIdNumberFormProvider()(prefix)
 
   ".value" - {
@@ -43,6 +44,13 @@ class TirIdNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavi
       form = form,
       fieldName = fieldName,
       requiredError = FormError(fieldName, requiredKey)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      17,
+      FormError(fieldName, lengthKey)
     )
 
     "must not bind if string doesn't match regex" in {
