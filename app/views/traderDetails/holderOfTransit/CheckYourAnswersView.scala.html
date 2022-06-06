@@ -17,12 +17,11 @@
 @import controllers.traderDetails.holderOfTransit.routes
 @import models.LocalReferenceNumber
 @import viewModels.sections.Section
-@import views.html.components.{AnswerSections, Button, Heading, HeadingCaption}
+@import views.html.components.{AnswerSections, Button, HeadingWithSectionCaption}
 
 @this(
     mainTemplate: MainTemplate,
-    headingCaption: HeadingCaption,
-    heading: Heading,
+    heading: HeadingWithSectionCaption,
     answerSections: AnswerSections,
     button: Button,
     formHelper: FormWithCSRF
@@ -36,8 +35,10 @@
     lrn = Some(lrn)
 ) {
 
-    @headingCaption(messages("traderDetails.caption"))
-    @heading("traderDetails.holderOfTransit.checkYourAnswers.heading")
+    @heading(
+        headingKey = "traderDetails.holderOfTransit.checkYourAnswers.heading",
+        captionKey = "traderDetails.caption"
+    )
 
     @answerSections(sections)
 
