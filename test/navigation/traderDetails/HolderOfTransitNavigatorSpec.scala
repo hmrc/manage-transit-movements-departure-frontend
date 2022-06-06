@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.traderDetails
 
 import base.SpecBase
 import controllers.routes
@@ -22,7 +22,6 @@ import controllers.traderDetails.holderOfTransit.{routes => hotRoutes}
 import controllers.traderDetails.{routes => tdRoutes}
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models._
-import navigation.traderDetails.HolderOfTransitNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._

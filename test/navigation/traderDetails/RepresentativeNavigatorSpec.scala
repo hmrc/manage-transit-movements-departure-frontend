@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.traderDetails
 
 import base.SpecBase
 import controllers.routes
@@ -22,7 +22,6 @@ import controllers.traderDetails.representative.{routes => repRoutes}
 import controllers.traderDetails.{routes => tdRoutes}
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models.{CheckMode, Mode, NormalMode}
-import navigation.traderDetails.RepresentativeNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.Page
@@ -112,7 +111,7 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
           }
 
           "when Yes selected" - {
-            "to RepresentativeEoriPage" in {
+            "to Check your answers page" in {
               forAll(arbitraryRepresentativeAnswersActingAsRepresentative) {
                 answers =>
                   navigator
@@ -178,7 +177,7 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
         }
 
         "when Yes selected" - {
-          "to RepresentativeEoriPage" in {
+          "to Check your answers page" in {
             forAll(arbitraryTraderDetailsAnswersWithRepresentative) {
               answers =>
                 navigator
