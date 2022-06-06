@@ -7,5 +7,5 @@ case object $pageSection$ extends QuestionPage[Nothing] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "ClassName;format="decap"$"
+  override def toString: String = "$className;format="decap"$"
 }

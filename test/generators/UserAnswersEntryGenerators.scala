@@ -27,6 +27,13 @@ import play.api.libs.json.{JsValue, Json}
 trait UserAnswersEntryGenerators {
   self: Generators =>
 
+  implicit lazy val arbitraryRootMyNewYesNoUserAnswersEntry: Arbitrary[(pages.root.MyNewYesNoPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[pages.root.MyNewYesNoPage.type#Data].map(Json.toJson(_))
+      } yield (pages.root.MyNewYesNoPage, value)
+    }
+
   implicit lazy val arbitraryRepresentativePhoneUserAnswersEntry: Arbitrary[(pages.traderDetails.representative.RepresentativePhonePage.type, JsValue)] =
     Arbitrary {
       for {

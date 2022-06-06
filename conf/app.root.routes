@@ -1,0 +1,5 @@
+
+GET        /:lrn/root/my-new-yes-no                        controllers.root.MyNewYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/root/my-new-yes-no                        controllers.root.MyNewYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/root/change-my-new-yes-no                 controllers.root.MyNewYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/root/change-my-new-yes-no                 controllers.root.MyNewYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
