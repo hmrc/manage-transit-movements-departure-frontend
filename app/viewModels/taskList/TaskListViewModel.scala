@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package viewModels
+package viewModels.taskList
 
-import base.SpecBase
+import models.UserAnswers
 
-class TaskListViewModelSpec extends SpecBase {
+class TaskListViewModel {
 
-  "apply" - {
-    "must create tasks" in {
-      val answers = emptyUserAnswers
-
-      val tasks = new TaskListViewModel().apply(answers)
-
-      tasks.size mustBe 1
-    }
-  }
+  def apply(userAnswers: UserAnswers): Seq[Task] =
+    Seq(
+      TraderDetailsTask(userAnswers)
+    )
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewModels
+package viewModels.traderDetails
 
 import base.SpecBase
 import generators.Generators

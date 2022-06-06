@@ -14,29 +14,39 @@
  * limitations under the License.
  */
 
-package viewModels
+package viewModels.traderDetails
 
 import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
-import utils.RepresentativeCheckYourAnswersHelper
+import utils.HolderOfTransitCheckYourAnswersHelper
 import viewModels.sections.Section
 
-class RepresentativeViewModel {
+class HolderOfTransitViewModel {
 
   def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): Seq[Section] = {
-    val helper = new RepresentativeCheckYourAnswersHelper(userAnswers, mode)
+    val helper = new HolderOfTransitCheckYourAnswersHelper(userAnswers, mode)
 
-    val representativeSection = Section(
-      sectionTitle = messages("traderDetails.representative.checkYourAnswers.representative"),
+    val holderOfTransitSection = Section(
+      sectionTitle = messages("traderDetails.holderOfTransit.checkYourAnswers.transitHolder"),
       rows = Seq(
-        helper.actingRepresentative,
-        helper.representativeEori,
-        helper.representativeName,
-        helper.representativeCapacity,
-        helper.representativePhone
+        helper.eoriYesNo,
+        helper.eori,
+        helper.tirIdentificationYesNo,
+        helper.tirIdentification,
+        helper.name,
+        helper.address
       ).flatten
     )
 
-    Seq(representativeSection)
+    val additionalContactSection = Section(
+      sectionTitle = messages("traderDetails.holderOfTransit.checkYourAnswers.additionalContact"),
+      rows = Seq(
+        helper.addContact,
+        helper.contactName,
+        helper.contactTelephoneNumber
+      ).flatten
+    )
+
+    Seq(holderOfTransitSection, additionalContactSection)
   }
 }

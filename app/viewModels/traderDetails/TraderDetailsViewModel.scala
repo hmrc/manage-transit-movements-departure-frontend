@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewModels
+package viewModels.traderDetails
 
 import models.{CheckMode, UserAnswers}
 import play.api.i18n.Messages

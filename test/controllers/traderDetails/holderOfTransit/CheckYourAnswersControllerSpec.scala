@@ -26,8 +26,8 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewModels.HolderOfTransitViewModel
 import viewModels.sections.Section
+import viewModels.traderDetails.HolderOfTransitViewModel
 import views.html.traderDetails.holderOfTransit.CheckYourAnswersView
 
 import scala.concurrent.Future

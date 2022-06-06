@@ -22,7 +22,7 @@ import models.{LocalReferenceNumber, NormalMode}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.RepresentativeViewModel
+import viewModels.traderDetails.RepresentativeViewModel
 import views.html.traderDetails.representative.CheckYourAnswersView
 
 class CheckYourAnswersController @Inject() (
