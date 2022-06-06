@@ -88,10 +88,10 @@ class StringFieldRegexSpec extends SpecBase with Generators with ScalaCheckPrope
     val validExamples = Seq(
       "+44 (0) 123 222 333 x 234",
       "+44(0)123-222-333",
-      "0785 999 1234",
-      "0785.999.1234",
-      "1-541-754-3010",
-      "(090) 636-48018"
+      "+0785 999 1234",
+      "+0785.999.1234",
+      "+1-541-754-3010",
+      "+(090) 636-48018"
     )
 
     "must match valid examples" in {
