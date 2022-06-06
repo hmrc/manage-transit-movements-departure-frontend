@@ -30,6 +30,8 @@ class TirIdNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavi
   private val lengthKey        = s"$prefix.error.length"
   private val form             = new TirIdNumberFormProvider()(prefix)
 
+  private val tirMaxLength = 17
+
   ".value" - {
 
     val fieldName = "value"
@@ -49,14 +51,16 @@ class TirIdNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavi
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      17,
-      FormError(fieldName, lengthKey)
+      tirMaxLength,
+      FormError(fieldName, lengthKey, Seq(tirMaxLength))
     )
 
     "must not bind if string doesn't match regex" in {
       val expectedError = FormError(fieldName, invalidFormatKey, Seq(tirIdNumberRegex.regex))
 
-      val gen = nonEmptyString.retryUntil(!_.matches(tirIdNumberRegex.regex))
+      val gen = nonEmptyString.retryUntil(
+        x => !x.matches(tirIdNumberRegex.regex) && x.length < tirMaxLength
+      )
 
       forAll(gen) {
         invalidString =>

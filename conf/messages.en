@@ -164,7 +164,7 @@ traderDetails.holderOfTransit.eori.change.hidden = transit holder’s EORI numbe
 traderDetails.holderOfTransit.tirIdentificationYesNo.title = Is the TIR holder’s identification number known?
 traderDetails.holderOfTransit.tirIdentificationYesNo.heading = Is the TIR holder’s identification number known?
 traderDetails.holderOfTransit.tirIdentificationYesNo.checkYourAnswersLabel = Is the TIR holder’s identification number known?
-traderDetails.holderOfTransit.tirIdentificationYesNo.error.required = Select yes if you know the Transit procedure TIR identification number
+traderDetails.holderOfTransit.tirIdentificationYesNo.error.required = Select yes if the TIR holder’s identification number is known
 traderDetails.holderOfTransit.tirIdentificationYesNo.change.hidden = if you know the Transit procedure TIR identification number
 
 traderDetails.holderOfTransit.tirIdentification.title = What is the TIR holder’s identification number?
@@ -172,7 +172,7 @@ traderDetails.holderOfTransit.tirIdentification.heading = What is the TIR holder
 traderDetails.holderOfTransit.tirIdentification.checkYourAnswersLabel = TIR holder’s identification number
 traderDetails.holderOfTransit.tirIdentification.hint = For example, AAA/999/99999.
 traderDetails.holderOfTransit.tirIdentification.error.required = Enter the TIR holder’s identification number
-traderDetails.holderOfTransit.tirIdentification.error.invalidFormat = The TIR holder’s identification number must only include letters a to z, numbers 0 to 9 and forward slashes
+traderDetails.holderOfTransit.tirIdentification.error.invalidFormat = The TIR holder’s identification number must start with 3 letters, a forward slash, 3 numbers and another forward slash followed by up to 9 numbers
 traderDetails.holderOfTransit.tirIdentification.error.length = The TIR holder’s identification number must be {0} characters or less
 traderDetails.holderOfTransit.tirIdentification.change.hidden = TIR holder’s identification number
 
@@ -211,7 +211,7 @@ traderDetails.holderOfTransit.contactName.heading = What is the contact’s name
 traderDetails.holderOfTransit.contactName.checkYourAnswersLabel = Contact’s name
 traderDetails.holderOfTransit.contactName.error.required = Enter the contact’s name
 traderDetails.holderOfTransit.contactName.error.length = The contact’s name must be 70 characters or less
-traderDetails.holderOfTransit.contactName.error.invalid = The contact’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, asterisks(*), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+traderDetails.holderOfTransit.contactName.error.invalid = The contact’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 traderDetails.holderOfTransit.contactName.change.hidden = Contact’s name
 
 traderDetails.holderOfTransit.contactTelephoneNumber.title = What is {0}’s phone number?

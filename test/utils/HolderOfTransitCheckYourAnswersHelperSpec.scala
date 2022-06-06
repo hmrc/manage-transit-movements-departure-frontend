@@ -56,7 +56,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Do you know the Transit procedure TIR identification number?".toText),
+                  key = Key("Is the TIR holder’s identification number known?".toText),
                   value = Value("Yes".toText),
                   actions = Some(
                     Actions(
@@ -240,7 +240,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = routes.NameController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("transit holder’s name"),
+                          visuallyHiddenText = Some("Transit holder’s name"),
                           attributes = Map()
                         )
                       )
@@ -372,7 +372,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = routes.ContactNameController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("contact’s name"),
+                          visuallyHiddenText = Some("Contact’s name"),
                           attributes = Map()
                         )
                       )
@@ -408,7 +408,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Contact’s telephone number".toText),
+                  key = Key("Contact’s phone number".toText),
                   value = Value(contactTelephoneNumber.toText),
                   actions = Some(
                     Actions(
@@ -416,7 +416,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = routes.ContactTelephoneNumberController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("contact’s telephone number"),
+                          visuallyHiddenText = Some("Contact’s phone number"),
                           attributes = Map()
                         )
                       )
