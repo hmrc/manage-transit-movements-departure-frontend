@@ -17,41 +17,31 @@
 package navigation
 
 import base.SpecBase
-import controllers.preTaskList.{routes => ptlRoutes}
 import controllers.routes
 import controllers.traderDetails.holderOfTransit.{routes => hotRoutes}
-import generators.{Generators, HolderOfTransitUserAnswersGenerator}
+import controllers.traderDetails.{routes => tdRoutes}
+import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models._
+import navigation.traderDetails.HolderOfTransitNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.traderDetails.holderOfTransit._
 
-class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with HolderOfTransitUserAnswersGenerator {
+class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
 
   private val navigator = new HolderOfTransitNavigator
 
   "Navigator" - {
     "must go from a page that doesn't exist in the route map" - {
-
       case object UnknownPage extends Page
 
-      "when in normal mode" - {
-        "to start of the departure journey" in {
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              navigator
-                .nextPage(UnknownPage, NormalMode, answers)
-                .mustBe(ptlRoutes.LocalReferenceNumberController.onPageLoad())
-          }
-        }
-      }
-
-      "when in check mode" - {
-        "to session expired" in {
-          navigator
-            .nextPage(UnknownPage, CheckMode, emptyUserAnswers)
-            .mustBe(routes.SessionExpiredController.onPageLoad())
+      "to session expired" in {
+        forAll(arbitrary[Mode]) {
+          mode =>
+            navigator
+              .nextPage(UnknownPage, mode, emptyUserAnswers)
+              .mustBe(routes.SessionExpiredController.onPageLoad())
         }
       }
     }
@@ -60,170 +50,276 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
       val mode = NormalMode
 
-      "must go from Transit Holder EORI Yes No page" - {
-        "when Yes selected" - {
-          "to Eori page" in {
-            forAll(arbitrary[UserAnswers]) {
-              answers =>
-                val userAnswers = answers.setValue(EoriYesNoPage, true)
-                navigator
-                  .nextPage(EoriYesNoPage, mode, userAnswers)
-                  .mustBe(hotRoutes.EoriController.onPageLoad(userAnswers.lrn, mode))
+      "when answers incomplete" - {
+
+        "must go from Transit Holder EORI Yes No page" - {
+          "when Yes selected" - {
+            "to Eori page" in {
+              val userAnswers = emptyUserAnswers.setValue(EoriYesNoPage, true)
+              navigator
+                .nextPage(EoriYesNoPage, mode, userAnswers)
+                .mustBe(hotRoutes.EoriController.onPageLoad(userAnswers.lrn, mode))
+            }
+          }
+
+          "when No selected" - {
+            "to NamePage" in {
+              val userAnswers = emptyUserAnswers.setValue(EoriYesNoPage, false)
+              navigator
+                .nextPage(EoriYesNoPage, mode, userAnswers)
+                .mustBe(hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
+            }
+          }
+
+          "when nothing selected" - {
+            "to session expired" in {
+              navigator
+                .nextPage(EoriYesNoPage, mode, emptyUserAnswers)
+                .mustBe(routes.SessionExpiredController.onPageLoad())
             }
           }
         }
 
-        "when No selected" - {
-          "to NamePage" in {
-            forAll(arbitrary[UserAnswers]) {
-              answers =>
-                val userAnswers = answers.setValue(EoriYesNoPage, false)
-                navigator
-                  .nextPage(EoriYesNoPage, mode, userAnswers)
-                  .mustBe(hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
-            }
-          }
+        "must go from EoriPage to NamePage" in {
+          navigator
+            .nextPage(EoriPage, mode, emptyUserAnswers)
+            .mustBe(hotRoutes.NameController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
 
-        "when nothing selected" - {
-          "to session expired" in {
-            forAll(arbitrary[UserAnswers]) {
-              answers =>
-                val userAnswers = answers.removeValue(EoriYesNoPage)
-                navigator
-                  .nextPage(EoriYesNoPage, mode, userAnswers)
-                  .mustBe(routes.SessionExpiredController.onPageLoad())
+        "must go from TIR identification number Yes No page" - {
+          "when Yes selected" - {
+            "to TIR identification number page" in {
+              val userAnswers = emptyUserAnswers.setValue(TirIdentificationYesNoPage, true)
+              navigator
+                .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
+                .mustBe(hotRoutes.TirIdentificationController.onPageLoad(userAnswers.lrn, mode))
             }
           }
-        }
-      }
 
-      "must go from EoriPage to NamePage" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
+          "when No selected" - {
+            "to NamePage" in {
+              val userAnswers = emptyUserAnswers.setValue(TirIdentificationYesNoPage, false)
+              navigator
+                .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
+                .mustBe(hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
+            }
+          }
+
+          "must go from TirIdentificationPage to NamePage" in {
             navigator
-              .nextPage(EoriPage, mode, answers)
-              .mustBe(hotRoutes.NameController.onPageLoad(answers.lrn, mode))
+              .nextPage(TirIdentificationPage, mode, emptyUserAnswers)
+              .mustBe(hotRoutes.NameController.onPageLoad(emptyUserAnswers.lrn, mode))
+          }
+
+          "when nothing selected" - {
+            "to session expired" in {
+              navigator
+                .nextPage(TirIdentificationYesNoPage, mode, emptyUserAnswers)
+                .mustBe(routes.SessionExpiredController.onPageLoad())
+            }
+          }
+        }
+
+        "must go from Name page to Address page" in {
+          navigator
+            .nextPage(NamePage, mode, emptyUserAnswers)
+            .mustBe(hotRoutes.AddressController.onPageLoad(emptyUserAnswers.lrn, mode))
+        }
+
+        "must go from Address page to Add Contact page" in {
+          navigator
+            .nextPage(AddressPage, mode, emptyUserAnswers)
+            .mustBe(hotRoutes.AddContactController.onPageLoad(emptyUserAnswers.lrn, mode))
+        }
+
+        "must go from Add Contact page" - {
+          "when Yes selected" - {
+            "to ContactName Page" in {
+              val userAnswers = emptyUserAnswers.setValue(AddContactPage, true)
+              navigator
+                .nextPage(AddContactPage, mode, userAnswers)
+                .mustBe(hotRoutes.ContactNameController.onPageLoad(userAnswers.lrn, mode))
+            }
+          }
+
+          "when No selected" - {
+            "to CheckYourAnswers page" in {
+              val userAnswers = emptyUserAnswers.setValue(AddContactPage, false)
+              navigator
+                .nextPage(AddContactPage, mode, userAnswers)
+                .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+            }
+          }
+
+          "must go from ContactNamePage to ContactTelephoneNumberPage" in {
+            navigator
+              .nextPage(ContactNamePage, mode, emptyUserAnswers)
+              .mustBe(hotRoutes.ContactTelephoneNumberController.onPageLoad(emptyUserAnswers.lrn, mode))
+          }
+
+          "must go from ContactTelephoneNumberPage to CheckYourAnswersPage" in {
+            navigator
+              .nextPage(ContactTelephoneNumberPage, mode, emptyUserAnswers)
+              .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn))
+          }
+
+          "when nothing selected" - {
+            "to session expired" in {
+              navigator
+                .nextPage(AddContactPage, mode, emptyUserAnswers)
+                .mustBe(routes.SessionExpiredController.onPageLoad())
+            }
+          }
         }
       }
 
-      "must go from TIR identification number Yes No page" - {
-        "when Yes selected" - {
-          "to TIR identification number page" in {
-            forAll(arbitrary[UserAnswers]) {
-              answers =>
-                val userAnswers = answers.setValue(TirIdentificationYesNoPage, true)
-                navigator
-                  .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
-                  .mustBe(hotRoutes.TirIdentificationController.onPageLoad(answers.lrn, mode))
+      "when answers complete" - {
+
+        "must go from change EoriYesNoPage" - {
+          "when No selected" - {
+            "to Check Your Answers page" in {
+              forAll(arbitraryHolderOfTransitAnswersWithEori) {
+                answers =>
+                  val userAnswers = answers.setValue(EoriYesNoPage, false)
+                  navigator
+                    .nextPage(EoriYesNoPage, mode, userAnswers)
+                    .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+              }
+            }
+          }
+
+          "when Yes selected" - {
+            "to EoriPage" in {
+              forAll(arbitraryHolderOfTransitAnswersWithoutEori) {
+                answers =>
+                  val userAnswers = answers.setValue(EoriYesNoPage, true)
+                  navigator
+                    .nextPage(EoriYesNoPage, mode, userAnswers)
+                    .mustBe(hotRoutes.EoriController.onPageLoad(userAnswers.lrn, mode))
+              }
             }
           }
         }
 
-        "when No selected" - {
-          "to NamePage" in {
-            forAll(arbitrary[UserAnswers]) {
-              answers =>
-                val userAnswers = answers.setValue(TirIdentificationYesNoPage, false)
-                navigator
-                  .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
-                  .mustBe(hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
-            }
-          }
-        }
-
-        "must go from TirIdentificationPage to NamePage" in {
-          forAll(arbitrary[UserAnswers]) {
+        "must go from EoriPage to Check your answers page" in {
+          forAll(arbitraryHolderOfTransitAnswersWithEori) {
             answers =>
               navigator
-                .nextPage(TirIdentificationPage, mode, answers)
-                .mustBe(hotRoutes.NameController.onPageLoad(answers.lrn, mode))
-          }
-        }
-
-        "when nothing selected" - {
-          "to session expired" in {
-            forAll(arbitrary[UserAnswers]) {
-              answers =>
-                val userAnswers = answers.removeValue(TirIdentificationYesNoPage)
-                navigator
-                  .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
-                  .mustBe(routes.SessionExpiredController.onPageLoad())
-            }
-          }
-        }
-      }
-
-      "must go from Name page to Address page" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            navigator
-              .nextPage(NamePage, mode, answers)
-              .mustBe(hotRoutes.AddressController.onPageLoad(answers.lrn, mode))
-        }
-      }
-
-      "must go from Address page to Add Contact page" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            navigator
-              .nextPage(AddressPage, mode, answers)
-              .mustBe(hotRoutes.AddContactController.onPageLoad(answers.lrn, mode))
-        }
-      }
-
-      "must go from Add Contact page" - {
-        "when Yes selected" - {
-          "to ContactName Page" in {
-            forAll(arbitrary[UserAnswers]) {
-              answers =>
-                val userAnswers = answers.setValue(AddContactPage, true)
-                navigator
-                  .nextPage(AddContactPage, mode, userAnswers)
-                  .mustBe(hotRoutes.ContactNameController.onPageLoad(userAnswers.lrn, mode))
-            }
-          }
-        }
-
-        "when No selected" - {
-          "to CheckYourAnswers page" in {
-            forAll(arbitrary[UserAnswers]) {
-              answers =>
-                val userAnswers = answers.setValue(AddContactPage, false)
-                navigator
-                  .nextPage(AddContactPage, mode, userAnswers)
-                  .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
-            }
-          }
-        }
-
-        "must go from ContactNamePage to ContactTelephoneNumberPage" in {
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              navigator
-                .nextPage(ContactNamePage, mode, answers)
-                .mustBe(hotRoutes.ContactTelephoneNumberController.onPageLoad(answers.lrn, mode))
-          }
-        }
-
-        "must go from ContactTelephoneNumberPage to CheckYourAnswersPage" in {
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              navigator
-                .nextPage(ContactTelephoneNumberPage, mode, answers)
+                .nextPage(EoriPage, mode, answers)
                 .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
 
-        "when nothing selected" - {
-          "to session expired" in {
-            forAll(arbitrary[UserAnswers]) {
-              answers =>
-                val userAnswers = answers.removeValue(AddContactPage)
-                navigator
-                  .nextPage(AddContactPage, mode, userAnswers)
-                  .mustBe(routes.SessionExpiredController.onPageLoad())
+        "must go from change TirIdentificationYesNoPage" - {
+          "when No selected" - {
+            "to Check your answers page" in {
+              forAll(arbitraryHolderOfTransitAnswersWithTirId) {
+                answers =>
+                  val userAnswers = answers.setValue(TirIdentificationYesNoPage, false)
+                  navigator
+                    .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
+                    .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+              }
             }
+          }
+
+          "when Yes selected" - {
+            "to TirIdentificationPage" in {
+              forAll(arbitraryHolderOfTransitAnswersWithoutTirId) {
+                answers =>
+                  val userAnswers = answers.setValue(TirIdentificationYesNoPage, true)
+                  navigator
+                    .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
+                    .mustBe(hotRoutes.TirIdentificationController.onPageLoad(userAnswers.lrn, mode))
+              }
+            }
+          }
+        }
+
+        "must go from TirIdentificationPage to Check your answers page" in {
+          forAll(arbitraryHolderOfTransitAnswersWithTirId) {
+            answers =>
+              navigator
+                .nextPage(TirIdentificationPage, mode, answers)
+                .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+          }
+        }
+
+        "must go from NamePage to Check your answers page" in {
+          forAll(arbitraryHolderOfTransitAnswers) {
+            answers =>
+              navigator
+                .nextPage(NamePage, mode, answers)
+                .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+          }
+        }
+
+        "must go from AddressPage to Check your answers page" in {
+          forAll(arbitraryHolderOfTransitAnswers) {
+            answers =>
+              navigator
+                .nextPage(AddressPage, mode, answers)
+                .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+          }
+        }
+
+        "must go from AddContactPage" - {
+          "when No selected" - {
+            "to Check Your Answers" in {
+              forAll(arbitraryHolderOfTransitAnswersWithAdditionalContact) {
+                answers =>
+                  val userAnswers = answers.setValue(AddContactPage, false)
+                  navigator
+                    .nextPage(AddContactPage, mode, userAnswers)
+                    .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+              }
+            }
+          }
+
+          "when Yes selected" - {
+            "to ContactNamePage" in {
+              forAll(arbitraryHolderOfTransitAnswersWithoutAdditionalContact) {
+                answers =>
+                  val userAnswers = answers.setValue(AddContactPage, true)
+                  navigator
+                    .nextPage(AddContactPage, mode, userAnswers)
+                    .mustBe(hotRoutes.ContactNameController.onPageLoad(userAnswers.lrn, mode))
+              }
+            }
+          }
+        }
+
+        "must go from ContactNamePage" - {
+          "when telephone number exists" - {
+            "to Check Your Answers" in {
+              forAll(arbitraryHolderOfTransitAnswersWithAdditionalContact) {
+                answers =>
+                  navigator
+                    .nextPage(ContactNamePage, mode, answers)
+                    .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+              }
+            }
+          }
+
+          "when no telephone number exists" - {
+            "to ContactTelephoneNumberPage" in {
+              forAll(arbitraryHolderOfTransitAnswersWithAdditionalContact) {
+                answers =>
+                  val userAnswers = answers.removeValue(ContactTelephoneNumberPage)
+                  navigator
+                    .nextPage(ContactNamePage, mode, userAnswers)
+                    .mustBe(hotRoutes.ContactTelephoneNumberController.onPageLoad(userAnswers.lrn, mode))
+              }
+            }
+          }
+        }
+
+        "must go from ContactTelephoneNumberPage to Check your answers" in {
+          forAll(arbitraryHolderOfTransitAnswersWithAdditionalContact) {
+            answers =>
+              navigator
+                .nextPage(ContactTelephoneNumberPage, mode, answers)
+                .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
       }
@@ -236,19 +332,19 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       "must go from change EoriYesNoPage" - {
         "when No selected" - {
           "to Check Your Answers page" in {
-            forAll(arbitraryHolderOfTransitAnswersWithEori) {
+            forAll(arbitraryTraderDetailsAnswersWithHolderOfTransitWithEori) {
               answers =>
                 val userAnswers = answers.setValue(EoriYesNoPage, false)
                 navigator
                   .nextPage(EoriYesNoPage, mode, userAnswers)
-                  .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+                  .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
             }
           }
         }
 
         "when Yes selected" - {
           "to EoriPage" in {
-            forAll(arbitraryHolderOfTransitAnswersWithoutEori) {
+            forAll(arbitraryTraderDetailsAnswersWithHolderOfTransitWithoutEori) {
               answers =>
                 val userAnswers = answers.setValue(EoriYesNoPage, true)
                 navigator
@@ -260,30 +356,30 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       }
 
       "must go from EoriPage to Check your answers page" in {
-        forAll(arbitraryHolderOfTransitAnswersWithEori) {
+        forAll(arbitraryTraderDetailsAnswersWithHolderOfTransitWithEori) {
           answers =>
             navigator
               .nextPage(EoriPage, mode, answers)
-              .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+              .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
       "must go from change TirIdentificationYesNoPage" - {
         "when No selected" - {
           "to Check your answers page" in {
-            forAll(arbitraryHolderOfTransitAnswersWithTirId) {
+            forAll(arbitraryTraderDetailsAnswersWithHolderOfTransitWithTirId) {
               answers =>
                 val userAnswers = answers.setValue(TirIdentificationYesNoPage, false)
                 navigator
                   .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
-                  .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+                  .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
             }
           }
         }
 
         "when Yes selected" - {
           "to TirIdentificationPage" in {
-            forAll(arbitraryHolderOfTransitAnswersWithoutTirId) {
+            forAll(arbitraryTraderDetailsAnswersWithHolderOfTransitWithoutTirId) {
               answers =>
                 val userAnswers = answers.setValue(TirIdentificationYesNoPage, true)
                 navigator
@@ -295,48 +391,48 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       }
 
       "must go from TirIdentificationPage to Check your answers page" in {
-        forAll(arbitraryHolderOfTransitAnswersWithTirId) {
+        forAll(arbitraryTraderDetailsAnswersWithHolderOfTransitWithTirId) {
           answers =>
             navigator
               .nextPage(TirIdentificationPage, mode, answers)
-              .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+              .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
       "must go from NamePage to Check your answers page" in {
-        forAll(arbitraryHolderOfTransitAnswers) {
+        forAll(arbitraryTraderDetailsAnswers) {
           answers =>
             navigator
               .nextPage(NamePage, mode, answers)
-              .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+              .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
       "must go from AddressPage to Check your answers page" in {
-        forAll(arbitraryHolderOfTransitAnswers) {
+        forAll(arbitraryTraderDetailsAnswers) {
           answers =>
             navigator
               .nextPage(AddressPage, mode, answers)
-              .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+              .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
       "must go from AddContactPage" - {
         "when No selected" - {
           "to Check Your Answers" in {
-            forAll(arbitraryHolderOfTransitAnswersWithAdditionalContact) {
+            forAll(arbitraryTraderDetailsAnswersWithHolderOfTransitWithAdditionalContact) {
               answers =>
                 val userAnswers = answers.setValue(AddContactPage, false)
                 navigator
                   .nextPage(AddContactPage, mode, userAnswers)
-                  .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+                  .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
             }
           }
         }
 
         "when Yes selected" - {
           "to ContactNamePage" in {
-            forAll(arbitraryHolderOfTransitAnswersWithoutAdditionalContact) {
+            forAll(arbitraryTraderDetailsAnswersWithHolderOfTransitWithoutAdditionalContact) {
               answers =>
                 val userAnswers = answers.setValue(AddContactPage, true)
                 navigator
@@ -350,18 +446,18 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       "must go from ContactNamePage" - {
         "when telephone number exists" - {
           "to Check Your Answers" in {
-            forAll(arbitraryHolderOfTransitAnswersWithAdditionalContact) {
+            forAll(arbitraryTraderDetailsAnswersWithHolderOfTransitWithAdditionalContact) {
               answers =>
                 navigator
                   .nextPage(ContactNamePage, mode, answers)
-                  .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+                  .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
             }
           }
         }
 
         "when no telephone number exists" - {
           "to ContactTelephoneNumberPage" in {
-            forAll(arbitraryHolderOfTransitAnswersWithAdditionalContact) {
+            forAll(arbitraryTraderDetailsAnswersWithHolderOfTransitWithAdditionalContact) {
               answers =>
                 val userAnswers = answers.removeValue(ContactTelephoneNumberPage)
                 navigator
@@ -373,11 +469,11 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       }
 
       "must go from ContactTelephoneNumberPage to Check your answers" in {
-        forAll(arbitraryHolderOfTransitAnswersWithAdditionalContact) {
+        forAll(arbitraryTraderDetailsAnswersWithHolderOfTransitWithAdditionalContact) {
           answers =>
             navigator
               .nextPage(ContactTelephoneNumberPage, mode, answers)
-              .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+              .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
     }

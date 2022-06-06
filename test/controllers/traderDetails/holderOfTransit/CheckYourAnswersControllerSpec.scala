@@ -20,8 +20,8 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.traderDetails.holderOfTransit.routes._
 import generators.Generators
 import models.NormalMode
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.Mockito.{verify, when}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -46,7 +46,9 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
     "must return OK and the correct view for a GET" in {
       val sampleSections = listWithMaxLength[Section]().sample.value
 
-      when(mockViewModel.apply(any())(any())).thenReturn(sampleSections)
+      val userAnswers = emptyUserAnswers
+
+      when(mockViewModel.apply(any(), any())(any())).thenReturn(sampleSections)
 
       setExistingUserAnswers(emptyUserAnswers)
 
@@ -60,6 +62,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       contentAsString(result) mustEqual
         view(lrn, sampleSections)(request, messages).toString
+
+      verify(mockViewModel).apply(eqTo(userAnswers), eqTo(NormalMode))(any())
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

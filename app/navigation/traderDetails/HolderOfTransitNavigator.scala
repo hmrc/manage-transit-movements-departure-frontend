@@ -14,33 +14,31 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.traderDetails
 
 import controllers.traderDetails.holderOfTransit.{routes => hotRoutes}
 import models._
 import models.domain.UserAnswersReader
 import models.journeyDomain.traderDetails.HolderOfTransitDomain
-import pages._
+import pages.Page
 import pages.traderDetails.holderOfTransit._
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class HolderOfTransitNavigator @Inject() () extends Navigator {
+class HolderOfTransitNavigator @Inject() () extends TraderDetailsNavigator {
 
-  override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(NormalMode)
-
-  override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
+  override val normalRoutes: RouteMapping = {
     case page =>
       ua =>
         UserAnswersReader[HolderOfTransitDomain].run(ua) match {
-          case Left(_)  => routes(CheckMode).applyOrElse[Page, UserAnswers => Option[Call]](page, _ => _ => None)(ua)
+          case Left(_)  => routes(NormalMode).applyOrElse[Page, UserAnswers => Option[Call]](page, _ => _ => None)(ua)
           case Right(_) => Some(hotRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
         }
   }
 
-  private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
+  override def routes(mode: Mode): RouteMapping = {
     case EoriYesNoPage              => ua => eoriYesNoRoute(ua, mode)
     case EoriPage                   => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, mode))
     case TirIdentificationYesNoPage => ua => tirIdentificationYesNoRoute(ua, mode)

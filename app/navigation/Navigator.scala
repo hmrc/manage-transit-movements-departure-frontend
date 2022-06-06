@@ -28,9 +28,6 @@ trait Navigator {
 
   protected def checkRoutes: RouteMapping
 
-  protected def checkModeDefaultPage(userAnswers: UserAnswers): Call =
-    routes.SessionExpiredController.onPageLoad()
-
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode =>
       normalRoutes.lift(page) match {
@@ -39,7 +36,7 @@ trait Navigator {
       }
     case CheckMode =>
       checkRoutes.lift(page) match {
-        case None       => checkModeDefaultPage(userAnswers)
+        case None       => routes.SessionExpiredController.onPageLoad()
         case Some(call) => handleCall(userAnswers, call)
       }
   }

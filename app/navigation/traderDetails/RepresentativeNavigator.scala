@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.traderDetails
 
 import controllers.traderDetails.representative.{routes => repRoutes}
+import controllers.traderDetails.{routes => tdRoutes}
 import models._
 import models.domain.UserAnswersReader
 import models.journeyDomain.traderDetails.RepresentativeDomain
@@ -27,20 +28,18 @@ import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RepresentativeNavigator @Inject() () extends Navigator {
+class RepresentativeNavigator @Inject() () extends TraderDetailsNavigator {
 
-  override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(NormalMode)
-
-  override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
+  override val normalRoutes: RouteMapping = {
     case page =>
       ua =>
         UserAnswersReader[RepresentativeDomain].run(ua) match {
-          case Left(_)  => routes(CheckMode).applyOrElse[Page, UserAnswers => Option[Call]](page, _ => _ => None)(ua)
+          case Left(_)  => routes(NormalMode).applyOrElse[Page, UserAnswers => Option[Call]](page, _ => _ => None)(ua)
           case Right(_) => Some(repRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
         }
   }
 
-  private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
+  override def routes(mode: Mode): RouteMapping = {
     case ActingRepresentativePage   => ua => actingRepresentativeRoute(ua, mode)
     case RepresentativeEoriPage     => ua => Some(repRoutes.RepresentativeNameController.onPageLoad(ua.lrn, mode))
     case RepresentativeNamePage     => ua => Some(repRoutes.RepresentativeCapacityController.onPageLoad(ua.lrn, mode))
@@ -50,10 +49,9 @@ class RepresentativeNavigator @Inject() () extends Navigator {
 
   private def actingRepresentativeRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     yesNoRoute(userAnswers, ActingRepresentativePage)(
-      yesCall = controllers.traderDetails.representative.routes.RepresentativeEoriController.onPageLoad(userAnswers.lrn, mode)
+      yesCall = repRoutes.RepresentativeEoriController.onPageLoad(userAnswers.lrn, mode)
     )(
-      noCall = //TODO REDIRECT TO CORRECT PAGE WHEN BUILT
-        controllers.routes.TaskListController.onPageLoad(userAnswers.lrn)
+      noCall = tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn) //TODO REDIRECT TO CORRECT PAGE WHEN BUILT
     )
 
 }

@@ -36,7 +36,7 @@ class CheckYourAnswersController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val sections = viewModel(request.userAnswers)
+      val sections = viewModel(request.userAnswers, NormalMode)
       Ok(view(lrn, sections))
   }
 

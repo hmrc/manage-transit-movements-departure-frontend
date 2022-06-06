@@ -18,7 +18,6 @@ package navigation
 
 import controllers.preTaskList.routes._
 import models._
-import pages._
 import pages.preTaskList._
 import play.api.mvc.Call
 
@@ -27,11 +26,11 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class PreTaskListNavigator @Inject() () extends Navigator {
 
-  override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(NormalMode)
+  override val normalRoutes: RouteMapping = routes(NormalMode)
 
-  override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = routes(CheckMode)
+  override val checkRoutes: RouteMapping = routes(CheckMode)
 
-  private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Option[Call]] = {
+  private def routes(mode: Mode): RouteMapping = {
     case LocalReferenceNumberPage => ua => Some(OfficeOfDepartureController.onPageLoad(ua.lrn, mode))
     case OfficeOfDeparturePage    => ua => Some(ProcedureTypeController.onPageLoad(ua.lrn, mode))
     case ProcedureTypePage        => ua => Some(DeclarationTypeController.onPageLoad(ua.lrn, mode))

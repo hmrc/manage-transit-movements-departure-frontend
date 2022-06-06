@@ -16,7 +16,7 @@
 
 package viewModels
 
-import models.UserAnswers
+import models.{CheckMode, UserAnswers}
 import play.api.i18n.Messages
 import viewModels.sections.Section
 
@@ -28,6 +28,6 @@ class TraderDetailsViewModel @Inject() (
 ) {
 
   def apply(userAnswers: UserAnswers)(implicit messages: Messages): Seq[Section] =
-    holderOfTransitViewModel(userAnswers) ++
-      representativeViewModel(userAnswers)
+    holderOfTransitViewModel(userAnswers, CheckMode) ++
+      representativeViewModel(userAnswers, CheckMode)
 }
