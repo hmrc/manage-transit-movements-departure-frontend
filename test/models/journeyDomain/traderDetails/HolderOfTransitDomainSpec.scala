@@ -19,10 +19,10 @@ package models.journeyDomain.traderDetails
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
-import models.{Address, DeclarationType, EoriNumber}
-import models.DeclarationType.{Option1, Option4}
+import models.DeclarationType.Option4
 import models.domain.{EitherType, UserAnswersReader}
 import models.reference.{Country, CountryCode}
+import models.{Address, DeclarationType, EoriNumber}
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 import pages.QuestionPage

@@ -14,28 +14,16 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.traderDetails
+package pages.traderDetails.representative
 
-import cats.implicits._
-import models.EoriNumber
-import models.domain._
 import models.traderDetails.representative.RepresentativeCapacity
-import pages.traderDetails.representative._
+import play.api.libs.json.JsPath
+import pages.QuestionPage
+import pages.sections.RepresentativeSection
 
-case class RepresentativeDomain(
-  eori: EoriNumber,
-  name: String,
-  capacity: RepresentativeCapacity,
-  phone: String
-)
+case object CapacityPage extends QuestionPage[RepresentativeCapacity] {
 
-object RepresentativeDomain {
+  override def path: JsPath = RepresentativeSection.path \ toString
 
-  implicit val userAnswersReader: UserAnswersReader[RepresentativeDomain] =
-    (
-      EoriPage.reader.map(EoriNumber(_)),
-      NamePage.reader,
-      CapacityPage.reader,
-      TelephoneNumberPage.reader
-    ).tupled.map((RepresentativeDomain.apply _).tupled)
+  override def toString: String = "capacity"
 }

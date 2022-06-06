@@ -27,40 +27,40 @@ import play.api.libs.json.{JsValue, Json}
 trait UserAnswersEntryGenerators {
   self: Generators =>
 
-  implicit lazy val arbitraryRepresentativePhoneUserAnswersEntry: Arbitrary[(pages.traderDetails.representative.RepresentativePhonePage.type, JsValue)] =
+  implicit lazy val arbitraryRepresentativePhoneUserAnswersEntry: Arbitrary[(pages.traderDetails.representative.TelephoneNumberPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[pages.traderDetails.representative.RepresentativePhonePage.type#Data].map(Json.toJson(_))
-      } yield (pages.traderDetails.representative.RepresentativePhonePage, value)
+        value <- arbitrary[pages.traderDetails.representative.TelephoneNumberPage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.representative.TelephoneNumberPage, value)
     }
 
-  implicit lazy val arbitraryRepresentativeCapacityUserAnswersEntry: Arbitrary[(pages.traderDetails.representative.RepresentativeCapacityPage.type, JsValue)] =
+  implicit lazy val arbitraryRepresentativeCapacityUserAnswersEntry: Arbitrary[(pages.traderDetails.representative.CapacityPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[pages.traderDetails.representative.RepresentativeCapacityPage.type#Data].map(Json.toJson(_))
-      } yield (pages.traderDetails.representative.RepresentativeCapacityPage, value)
+        value <- arbitrary[pages.traderDetails.representative.CapacityPage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.representative.CapacityPage, value)
     }
 
-  implicit lazy val arbitraryRepresentativeNameUserAnswersEntry: Arbitrary[(pages.traderDetails.representative.RepresentativeNamePage.type, JsValue)] =
+  implicit lazy val arbitraryRepresentativeNameUserAnswersEntry: Arbitrary[(pages.traderDetails.representative.NamePage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[pages.traderDetails.representative.RepresentativeNamePage.type#Data].map(Json.toJson(_))
-      } yield (pages.traderDetails.representative.RepresentativeNamePage, value)
+        value <- arbitrary[pages.traderDetails.representative.NamePage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.representative.NamePage, value)
     }
 
-  implicit lazy val arbitraryRepresentativeEoriUserAnswersEntry: Arbitrary[(pages.traderDetails.representative.RepresentativeEoriPage.type, JsValue)] =
+  implicit lazy val arbitraryRepresentativeEoriUserAnswersEntry: Arbitrary[(pages.traderDetails.representative.EoriPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[pages.traderDetails.representative.RepresentativeEoriPage.type#Data].map(Json.toJson(_))
-      } yield (pages.traderDetails.representative.RepresentativeEoriPage, value)
+        value <- arbitrary[pages.traderDetails.representative.EoriPage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.representative.EoriPage, value)
     }
 
   implicit lazy val arbitraryRepresentativeActingRepresentativeUserAnswersEntry
-    : Arbitrary[(pages.traderDetails.representative.ActingRepresentativePage.type, JsValue)] =
+    : Arbitrary[(pages.traderDetails.representative.ActingAsRepresentativePage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[pages.traderDetails.representative.ActingRepresentativePage.type#Data].map(Json.toJson(_))
-      } yield (pages.traderDetails.representative.ActingRepresentativePage, value)
+        value <- arbitrary[pages.traderDetails.representative.ActingAsRepresentativePage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.representative.ActingAsRepresentativePage, value)
     }
 
   implicit lazy val arbitraryTransitHolderAdditionalContactTelephoneNumberUserAnswersEntry

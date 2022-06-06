@@ -18,7 +18,7 @@ package viewModels
 
 import models.{CheckMode, UserAnswers}
 import play.api.i18n.Messages
-import utils.HolderOfTransitCheckYourAnswersHelper
+import utils.cyaHelpers.traderDetails.HolderOfTransitCheckYourAnswersHelper
 import viewModels.sections.Section
 
 class HolderOfTransitViewModel {

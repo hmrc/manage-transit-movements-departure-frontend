@@ -37,11 +37,11 @@ class RepresentativeViewModelSpec extends SpecBase {
     "when user answers populated" - {
       "must return row for each answer" in {
         val answers = emptyUserAnswers
-          .setValue(ActingRepresentativePage, true)
-          .setValue(RepresentativeEoriPage, "eori")
-          .setValue(RepresentativeNamePage, "name")
-          .setValue(RepresentativeCapacityPage, Direct)
-          .setValue(RepresentativePhonePage, "phone")
+          .setValue(ActingAsRepresentativePage, true)
+          .setValue(EoriPage, "eori")
+          .setValue(NamePage, "name")
+          .setValue(CapacityPage, Direct)
+          .setValue(TelephoneNumberPage, "phone")
 
         val sections = new RepresentativeViewModel().apply(answers)
 

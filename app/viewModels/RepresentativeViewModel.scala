@@ -18,7 +18,7 @@ package viewModels
 
 import models.{CheckMode, UserAnswers}
 import play.api.i18n.Messages
-import utils.RepresentativeCheckYourAnswersHelper
+import utils.cyaHelpers.traderDetails.RepresentativeCheckYourAnswersHelper
 import viewModels.sections.Section
 
 class RepresentativeViewModel {
