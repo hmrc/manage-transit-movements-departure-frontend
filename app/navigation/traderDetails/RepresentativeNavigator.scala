@@ -19,33 +19,25 @@ package navigation.traderDetails
 import controllers.traderDetails.representative.{routes => repRoutes}
 import controllers.traderDetails.{routes => tdRoutes}
 import models._
-import models.domain.UserAnswersReader
 import models.journeyDomain.traderDetails.RepresentativeDomain
-import pages._
 import pages.traderDetails.representative._
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RepresentativeNavigator @Inject() () extends TraderDetailsNavigator {
-
-  override val normalRoutes: RouteMapping = {
-    case page =>
-      ua =>
-        UserAnswersReader[RepresentativeDomain].run(ua) match {
-          case Left(_)  => routes(NormalMode).applyOrElse[Page, UserAnswers => Option[Call]](page, _ => _ => None)(ua)
-          case Right(_) => Some(repRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
-        }
-  }
+class RepresentativeNavigator @Inject() () extends TraderDetailsNavigator[RepresentativeDomain] {
 
   override def routes(mode: Mode): RouteMapping = {
     case ActingRepresentativePage   => ua => actingRepresentativeRoute(ua, mode)
     case RepresentativeEoriPage     => ua => Some(repRoutes.RepresentativeNameController.onPageLoad(ua.lrn, mode))
     case RepresentativeNamePage     => ua => Some(repRoutes.RepresentativeCapacityController.onPageLoad(ua.lrn, mode))
     case RepresentativeCapacityPage => ua => Some(repRoutes.RepresentativePhoneController.onPageLoad(ua.lrn, mode))
-    case RepresentativePhonePage    => ua => Some(repRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
+    case RepresentativePhonePage    => ua => Some(checkYourAnswersRoute(ua))
   }
+
+  override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
+    repRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
 
   private def actingRepresentativeRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     yesNoRoute(userAnswers, ActingRepresentativePage)(

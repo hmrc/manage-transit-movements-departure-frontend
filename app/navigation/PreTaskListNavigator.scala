@@ -30,7 +30,7 @@ class PreTaskListNavigator @Inject() () extends Navigator {
 
   override val checkRoutes: RouteMapping = routes(CheckMode)
 
-  private def routes(mode: Mode): RouteMapping = {
+  override def routes(mode: Mode): RouteMapping = {
     case LocalReferenceNumberPage => ua => Some(OfficeOfDepartureController.onPageLoad(ua.lrn, mode))
     case OfficeOfDeparturePage    => ua => Some(ProcedureTypeController.onPageLoad(ua.lrn, mode))
     case ProcedureTypePage        => ua => Some(DeclarationTypeController.onPageLoad(ua.lrn, mode))

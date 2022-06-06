@@ -18,25 +18,14 @@ package navigation.traderDetails
 
 import controllers.traderDetails.holderOfTransit.{routes => hotRoutes}
 import models._
-import models.domain.UserAnswersReader
 import models.journeyDomain.traderDetails.HolderOfTransitDomain
-import pages.Page
 import pages.traderDetails.holderOfTransit._
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class HolderOfTransitNavigator @Inject() () extends TraderDetailsNavigator {
-
-  override val normalRoutes: RouteMapping = {
-    case page =>
-      ua =>
-        UserAnswersReader[HolderOfTransitDomain].run(ua) match {
-          case Left(_)  => routes(NormalMode).applyOrElse[Page, UserAnswers => Option[Call]](page, _ => _ => None)(ua)
-          case Right(_) => Some(hotRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
-        }
-  }
+class HolderOfTransitNavigator @Inject() () extends TraderDetailsNavigator[HolderOfTransitDomain] {
 
   override def routes(mode: Mode): RouteMapping = {
     case EoriYesNoPage              => ua => eoriYesNoRoute(ua, mode)
@@ -47,8 +36,11 @@ class HolderOfTransitNavigator @Inject() () extends TraderDetailsNavigator {
     case AddressPage                => ua => Some(hotRoutes.AddContactController.onPageLoad(ua.lrn, mode))
     case AddContactPage             => ua => addContactRoute(ua, mode)
     case ContactNamePage            => ua => Some(hotRoutes.ContactTelephoneNumberController.onPageLoad(ua.lrn, mode))
-    case ContactTelephoneNumberPage => ua => Some(hotRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
+    case ContactTelephoneNumberPage => ua => Some(checkYourAnswersRoute(ua))
   }
+
+  override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
+    hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
 
   private def eoriYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     yesNoRoute(userAnswers, EoriYesNoPage)(
@@ -68,7 +60,7 @@ class HolderOfTransitNavigator @Inject() () extends TraderDetailsNavigator {
     yesNoRoute(userAnswers, AddContactPage)(
       yesCall = hotRoutes.ContactNameController.onPageLoad(userAnswers.lrn, mode)
     )(
-      noCall = hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+      noCall = checkYourAnswersRoute(userAnswers)
     )
 
 }

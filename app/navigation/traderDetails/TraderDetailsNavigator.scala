@@ -21,20 +21,18 @@ import models._
 import models.domain.UserAnswersReader
 import models.journeyDomain.traderDetails.TraderDetailsDomain
 import navigation.Navigator
-import pages._
 import play.api.mvc.Call
 
-trait TraderDetailsNavigator extends Navigator {
+abstract class TraderDetailsNavigator[T](implicit userAnswersReader: UserAnswersReader[T]) extends Navigator {
 
-  override val checkRoutes: RouteMapping = {
-    case page =>
-      ua =>
-        UserAnswersReader[TraderDetailsDomain].run(ua) match {
-          case Left(_)  => routes(CheckMode).applyOrElse[Page, UserAnswers => Option[Call]](page, _ => _ => None)(ua)
-          case Right(_) => Some(tdRoutes.CheckYourAnswersController.onPageLoad(ua.lrn))
-        }
-  }
+  override val normalRoutes: RouteMapping =
+    readUserAnswers[T](NormalMode)(checkYourAnswersRoute)
 
-  def routes(mode: Mode): RouteMapping
+  override val checkRoutes: RouteMapping =
+    readUserAnswers[TraderDetailsDomain](CheckMode)(
+      ua => tdRoutes.CheckYourAnswersController.onPageLoad(ua.lrn)
+    )
+
+  def checkYourAnswersRoute(userAnswers: UserAnswers): Call
 
 }
