@@ -274,7 +274,3 @@ traderDetails.representative.representativePhone.change.hidden = representativeâ
 traderDetails.representative.checkYourAnswers.heading = Check your answers
 traderDetails.representative.checkYourAnswers.title = Check your answers
 traderDetails.representative.checkYourAnswers.representative = Representative
-root.myNewYesNo.title = My New Yes No
-root.myNewYesNo.heading = My New Yes No
-root.myNewYesNo.checkYourAnswersLabel = My New Yes No
-root.myNewYesNo.error.required = Select yes if My New Yes No
