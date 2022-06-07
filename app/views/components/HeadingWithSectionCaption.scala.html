@@ -18,15 +18,14 @@
 
 @(
     headingKey: String,
-    args: Seq[Any] = Nil,
-    headingSize: String = "govuk-heading-xl",
-    captionKey: String
+    captionKey: String,
+    headingArgs: Seq[Any] = Nil
 )(implicit messages: Messages)
 
-<h1 class="@headingSize">
+<h1 class="govuk-heading-xl">
     <span class="hmrc-caption govuk-caption-xl">
         <span class="govuk-visually-hidden">@messages("site.section") </span>
         @messages(captionKey)
     </span>
-    @messages(headingKey, args: _*)
+    @messages(headingKey, headingArgs: _*)
 </h1>
