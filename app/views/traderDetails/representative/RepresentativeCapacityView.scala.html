@@ -42,6 +42,7 @@
         @inputRadio(
             field = form("value"),
             legend = messages("traderDetails.representative.representativeCapacity.heading"),
+            caption = Some(messages("traderDetails.caption")),
             radioItems = fieldId => radios(fieldId, form.value)
         )
 

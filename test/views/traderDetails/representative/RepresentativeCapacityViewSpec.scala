@@ -43,6 +43,8 @@ class RepresentativeCapacityViewSpec extends RadioViewBehaviours[RepresentativeC
 
   behave like pageWithBackLink
 
+  behave like pageWithSectionCaption("Trader details")
+
   behave like pageWithHeading()
 
   behave like pageWithRadioItems()
