@@ -11,6 +11,7 @@ site.submit = Continue
 site.confirm = Confirm and continue
 site.send = Confirm and send
 site.service_name = Manage your transit movements
+site.section = This section is
 
 error.title.prefix = Error:
 error.summary.title = There is a problem

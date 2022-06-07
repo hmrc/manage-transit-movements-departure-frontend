@@ -40,6 +40,8 @@ class TelephoneNumberViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink
 
+  behave like pageWithSectionCaption("Trader details")
+
   behave like pageWithHeading()
 
   behave like pageWithHint("Must include the country code, like +44 808 157 0192.")

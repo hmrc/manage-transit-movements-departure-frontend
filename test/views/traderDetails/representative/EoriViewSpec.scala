@@ -40,6 +40,8 @@ class EoriViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink
 
+  behave like pageWithSectionCaption("Trader details")
+
   behave like pageWithHeading()
 
   behave like pageWithHint("This will start with ’GB’ or ’XI’ followed by 12 or 15 numbers. for example GB123456789000.")

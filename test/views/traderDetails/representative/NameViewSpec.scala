@@ -40,6 +40,8 @@ class NameViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink
 
+  behave like pageWithSectionCaption("Trader details")
+
   behave like pageWithHeading()
 
   behave like pageWithoutHint
