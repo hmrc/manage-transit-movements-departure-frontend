@@ -221,7 +221,7 @@ traderDetails.holderOfTransit.contactName.change.hidden = Contact’s name
 
 traderDetails.holderOfTransit.contactTelephoneNumber.title = What is the transit holder’s contact phone number?
 traderDetails.holderOfTransit.contactTelephoneNumber.heading = What is the transit holder’s contact phone number?
-traderDetails.holderOfTransit.contactTelephoneNumber.checkYourAnswersLabel = Transit holder’s phone number
+traderDetails.holderOfTransit.contactTelephoneNumber.checkYourAnswersLabel = Transit holder’s contact phone number
 traderDetails.holderOfTransit.contactTelephoneNumber.hint = Must include the country code, like +44 808 157 0192.
 traderDetails.holderOfTransit.contactTelephoneNumber.error.required = Enter {0}’s phone number
 traderDetails.holderOfTransit.contactTelephoneNumber.error.length = {0}’s phone number must be {1} characters or less

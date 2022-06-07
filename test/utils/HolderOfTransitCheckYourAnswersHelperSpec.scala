@@ -408,7 +408,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Contact’s phone number".toText),
+                  key = Key("Transit holder’s contact phone number".toText),
                   value = Value(contactTelephoneNumber.toText),
                   actions = Some(
                     Actions(
