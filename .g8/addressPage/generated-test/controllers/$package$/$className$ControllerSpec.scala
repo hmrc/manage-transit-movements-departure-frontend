@@ -10,13 +10,15 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.$package$.{$className$Page, $addressHolderNamePage$}
+import pages.$package$.$className$Page
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CountriesService
 import views.html.$package$.$className$View
+import $addressHolderNameImport$
+import pages.$package$.$className$Page
 
 import scala.concurrent.Future
 

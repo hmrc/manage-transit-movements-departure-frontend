@@ -6,7 +6,8 @@ import models.requests.SpecificDataRequestProvider1
 import models.{Address, CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.$navRoute$
-import pages.$package$.{$addressHolderNamePage$, $className$Page}
+import $addressHolderNameImport$
+import pages.$package$.$className$Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -57,7 +58,7 @@ class $className;format="cap"$Controller @Inject()(
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage($addressHolderNamePage$))
+    .andThen(getMandatoryPage(NamePage))
     .async {
       implicit request =>
         countriesService.getCountries().flatMap {
