@@ -16,19 +16,19 @@
 
 package forms
 
-import forms.behaviours.StringFieldBehaviours
 import forms.Constants.maxTelephoneNumberLength
-import models.domain.StringFieldRegex.telephoneNumberRegex
+import forms.behaviours.StringFieldBehaviours
 import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
 
 class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
 
-  private val prefix   = Gen.alphaNumStr.sample.value
-  private val name     = Gen.alphaNumStr.sample.value
-  val requiredKey      = s"$prefix.error.required"
-  val lengthKey        = s"$prefix.error.length"
-  val invalidFormatKey = s"$prefix.error.invalidFormat"
+  private val prefix              = Gen.alphaNumStr.sample.value
+  private val name                = Gen.alphaNumStr.sample.value
+  private val requiredKey         = s"$prefix.error.required"
+  private val lengthKey           = s"$prefix.error.length"
+  private val invalidFormatKey    = s"$prefix.error.invalidFormat"
+  private val invalidCharacterKey = s"$prefix.error.invalidCharacter"
 
   val form = new TelephoneNumberFormProvider()(prefix, name)
 
@@ -55,13 +55,28 @@ class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey, Seq(name))
     )
 
-    "must not bind strings that do not match regex" in {
-      val generator     = stringsWithMaxLength(maxTelephoneNumberLength).retryUntil(!_.matches(telephoneNumberRegex.regex))
+    "must not bind strings that do not match character regex" in {
+
+      val invalidCharacters = Gen.oneOf(Seq("%", "£", "!", "$", "^", "&"))
+
+      val expectedError = FormError("value", invalidCharacterKey, Seq(name))
+
+      forAll(invalidCharacters) {
+        invalidCharacter =>
+          val result: Field = form.bind(Map(fieldName -> invalidCharacter)).apply(fieldName)
+          result.errors must contain(expectedError)
+      }
+    }
+
+    "must not bind strings that do not match format regex" in {
+
+      val invalidFormat: Gen[String] = genNumberString.retryUntil(_.length < maxTelephoneNumberLength)
+
       val expectedError = FormError("value", invalidFormatKey, Seq(name))
 
-      forAll(generator) {
-        invalidString =>
-          val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
+      forAll(invalidFormat) {
+        invalidNumber =>
+          val result: Field = form.bind(Map(fieldName -> invalidNumber)).apply(fieldName)
           result.errors must contain(expectedError)
       }
     }

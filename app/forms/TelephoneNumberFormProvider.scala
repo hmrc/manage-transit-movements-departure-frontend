@@ -16,11 +16,12 @@
 
 package forms
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import models.domain.StringFieldRegex.telephoneNumberRegex
 import forms.Constants.maxTelephoneNumberLength
+import forms.mappings.Mappings
+import models.domain.StringFieldRegex.{telephoneNumberCharacterRegex, telephoneNumberFormatRegex}
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class TelephoneNumberFormProvider @Inject() extends Mappings {
 
@@ -30,7 +31,8 @@ class TelephoneNumberFormProvider @Inject() extends Mappings {
         .verifying(
           StopOnFirstFail[String](
             maxLength(maxTelephoneNumberLength, s"$prefix.error.length", args = Seq(name, maxTelephoneNumberLength)),
-            regexp(telephoneNumberRegex, s"$prefix.error.invalidFormat", args = Seq(name))
+            regexp(telephoneNumberCharacterRegex, s"$prefix.error.invalidCharacter", args = Seq(name)),
+            regexp(telephoneNumberFormatRegex, s"$prefix.error.invalidFormat", args = Seq(name))
           )
         )
     )

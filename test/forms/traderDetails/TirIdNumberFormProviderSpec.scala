@@ -17,7 +17,7 @@
 package forms.traderDetails
 
 import forms.behaviours.{FieldBehaviours, StringFieldBehaviours}
-import models.domain.StringFieldRegex.tirIdNumberRegex
+import models.domain.StringFieldRegex.{tirIdNumberCharacterRegex, tirIdNumberFormatRegex}
 import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
 
@@ -25,10 +25,11 @@ class TirIdNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavi
 
   private val prefix = Gen.alphaNumStr.sample.value
 
-  private val requiredKey      = s"$prefix.error.required"
-  private val invalidFormatKey = s"$prefix.error.invalidFormat"
-  private val lengthKey        = s"$prefix.error.length"
-  private val form             = new TirIdNumberFormProvider()(prefix)
+  private val requiredKey         = s"$prefix.error.required"
+  private val invalidFormatKey    = s"$prefix.error.invalidFormat"
+  private val invalidCharacterKey = s"$prefix.error.invalidCharacter"
+  private val lengthKey           = s"$prefix.error.length"
+  private val form                = new TirIdNumberFormProvider()(prefix)
 
   private val tirMaxLength = 17
 
@@ -39,7 +40,7 @@ class TirIdNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavi
     behave like fieldThatBindsValidData(
       form = form,
       fieldName = fieldName,
-      validDataGenerator = stringsThatMatchRegex(tirIdNumberRegex)
+      validDataGenerator = stringsThatMatchRegex(tirIdNumberFormatRegex)
     )
 
     behave like mandatoryField(
@@ -55,14 +56,33 @@ class TirIdNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavi
       FormError(fieldName, lengthKey, Seq(tirMaxLength))
     )
 
-    "must not bind if string doesn't match regex" in {
-      val expectedError = FormError(fieldName, invalidFormatKey, Seq(tirIdNumberRegex.regex))
+    "must not bind strings that do not match character regex" in {
 
-      val gen = nonEmptyString.retryUntil(
-        x => !x.matches(tirIdNumberRegex.regex) && x.length < tirMaxLength
+      val invalidCharacters = Gen.oneOf(Seq("%", "(", ")", "£", "!", "$", "^", "&"))
+
+      val expectedError = FormError(fieldName, invalidCharacterKey, Seq(tirIdNumberCharacterRegex.regex))
+
+      forAll(invalidCharacters) {
+        invalidCharacter =>
+          val result: Field = form.bind(Map(fieldName -> invalidCharacter)).apply(fieldName)
+          result.errors must contain(expectedError)
+      }
+    }
+
+    "must not bind if string doesn't match format regex" in {
+
+      val invalidFormats = Gen.oneOf(
+        Seq(
+          "AAA999/99999",
+          "AAA99999999",
+          "AAA/99999999",
+          "/AAA/999/9999"
+        )
       )
 
-      forAll(gen) {
+      val expectedError = FormError(fieldName, invalidFormatKey, Seq(tirIdNumberFormatRegex.regex))
+
+      forAll(invalidFormats) {
         invalidString =>
           val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
           result.errors must contain(expectedError)

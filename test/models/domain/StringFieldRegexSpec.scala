@@ -18,7 +18,7 @@ package models.domain
 
 import base.SpecBase
 import generators.Generators
-import models.domain.StringFieldRegex.{telephoneNumberRegex, tirIdNumberRegex}
+import models.domain.StringFieldRegex.{telephoneNumberFormatRegex, tirIdNumberFormatRegex}
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
@@ -43,7 +43,7 @@ class StringFieldRegexSpec extends SpecBase with Generators with ScalaCheckPrope
 
       forAll(gen) {
         validStrings =>
-          tirIdNumberRegex.pattern.matcher(validStrings).matches mustEqual true
+          tirIdNumberFormatRegex.pattern.matcher(validStrings).matches mustEqual true
       }
     }
 
@@ -55,7 +55,7 @@ class StringFieldRegexSpec extends SpecBase with Generators with ScalaCheckPrope
 
       forAll(gen) {
         invalidString =>
-          tirIdNumberRegex.pattern.matcher(invalidString).matches mustEqual false
+          tirIdNumberFormatRegex.pattern.matcher(invalidString).matches mustEqual false
       }
     }
 
@@ -67,7 +67,7 @@ class StringFieldRegexSpec extends SpecBase with Generators with ScalaCheckPrope
 
       forAll(gen) {
         invalidString =>
-          tirIdNumberRegex.pattern.matcher(invalidString).matches mustEqual false
+          tirIdNumberFormatRegex.pattern.matcher(invalidString).matches mustEqual false
       }
     }
 
@@ -79,7 +79,7 @@ class StringFieldRegexSpec extends SpecBase with Generators with ScalaCheckPrope
 
       forAll(gen) {
         invalidString =>
-          tirIdNumberRegex.pattern.matcher(invalidString).matches mustEqual false
+          tirIdNumberFormatRegex.pattern.matcher(invalidString).matches mustEqual false
       }
     }
   }
@@ -97,7 +97,7 @@ class StringFieldRegexSpec extends SpecBase with Generators with ScalaCheckPrope
     "must match valid examples" in {
       forAll(Gen.oneOf(validExamples)) {
         validString =>
-          telephoneNumberRegex.pattern.matcher(validString).matches mustEqual true
+          telephoneNumberFormatRegex.pattern.matcher(validString).matches mustEqual true
       }
     }
 
@@ -107,7 +107,7 @@ class StringFieldRegexSpec extends SpecBase with Generators with ScalaCheckPrope
 
       forAll(generator) {
         invalidString =>
-          telephoneNumberRegex.pattern.matcher(invalidString).matches mustEqual false
+          telephoneNumberFormatRegex.pattern.matcher(invalidString).matches mustEqual false
       }
     }
   }

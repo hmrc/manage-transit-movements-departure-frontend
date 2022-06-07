@@ -32,7 +32,8 @@ class TirIdNumberFormProvider @Inject() extends Mappings {
         .verifying(
           forms.StopOnFirstFail[String](
             maxLength(tirNumberMaxLength, s"$prefix.error.length", Seq(tirNumberMaxLength)),
-            regexp(tirIdNumberRegex, s"$prefix.error.invalidFormat")
+            regexp(tirIdNumberCharacterRegex, s"$prefix.error.invalidCharacter"),
+            regexp(tirIdNumberFormatRegex, s"$prefix.error.invalidFormat")
           )
         )
     )
