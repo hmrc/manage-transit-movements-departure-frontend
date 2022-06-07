@@ -18,7 +18,7 @@ package models.domain
 
 import base.SpecBase
 import generators.Generators
-import models.domain.StringFieldRegex.{telephoneNumberRegex, tirIdNumberRegex}
+import models.domain.StringFieldRegex.{telephoneNumberFormatRegex, tirIdNumberFormatRegex}
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
@@ -43,7 +43,7 @@ class StringFieldRegexSpec extends SpecBase with Generators with ScalaCheckPrope
 
       forAll(gen) {
         validStrings =>
-          tirIdNumberRegex.pattern.matcher(validStrings).matches mustEqual true
+          tirIdNumberFormatRegex.pattern.matcher(validStrings).matches mustEqual true
       }
     }
 
@@ -55,7 +55,7 @@ class StringFieldRegexSpec extends SpecBase with Generators with ScalaCheckPrope
 
       forAll(gen) {
         invalidString =>
-          tirIdNumberRegex.pattern.matcher(invalidString).matches mustEqual false
+          tirIdNumberFormatRegex.pattern.matcher(invalidString).matches mustEqual false
       }
     }
 
@@ -67,7 +67,7 @@ class StringFieldRegexSpec extends SpecBase with Generators with ScalaCheckPrope
 
       forAll(gen) {
         invalidString =>
-          tirIdNumberRegex.pattern.matcher(invalidString).matches mustEqual false
+          tirIdNumberFormatRegex.pattern.matcher(invalidString).matches mustEqual false
       }
     }
 
@@ -79,35 +79,27 @@ class StringFieldRegexSpec extends SpecBase with Generators with ScalaCheckPrope
 
       forAll(gen) {
         invalidString =>
-          tirIdNumberRegex.pattern.matcher(invalidString).matches mustEqual false
+          tirIdNumberFormatRegex.pattern.matcher(invalidString).matches mustEqual false
       }
     }
   }
 
   ".telephoneNumberRegex" - {
-    val validExamples = Seq(
-      "+44 (0) 123 222 333 x 234",
-      "+44(0)123-222-333",
-      "0785 999 1234",
-      "0785.999.1234",
-      "1-541-754-3010",
-      "(090) 636-48018"
-    )
 
     "must match valid examples" in {
-      forAll(Gen.oneOf(validExamples)) {
-        validString =>
-          telephoneNumberRegex.pattern.matcher(validString).matches mustEqual true
-      }
+
+      val validTelephoneNumber = "+123456789"
+
+      telephoneNumberFormatRegex.pattern.matcher(validTelephoneNumber).matches mustEqual true
     }
 
-    "must not match if the telephone number contains a character other that 0-9,+,-,.,(,), ." in {
-      val validCharacters: Seq[String] = "0123456789()+-. x".toSeq.map(_.toString)
+    "must not match if the telephone number contains a character other that 0-9 or +" in {
+      val validCharacters: Seq[String] = "0123456789+".toSeq.map(_.toString)
       val generator: Gen[String]       = stringsExceptSpecificValues(validCharacters)
 
       forAll(generator) {
         invalidString =>
-          telephoneNumberRegex.pattern.matcher(invalidString).matches mustEqual false
+          telephoneNumberFormatRegex.pattern.matcher(invalidString).matches mustEqual false
       }
     }
   }

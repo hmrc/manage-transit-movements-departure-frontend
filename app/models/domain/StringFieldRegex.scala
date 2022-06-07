@@ -24,11 +24,14 @@ object StringFieldRegex {
   val stringFieldRegexAsterisk: Regex = "[\\sa-zA-Z0-9&'*/.\\-? ]*".r
   val alphaNumericRegex: Regex        = "^[a-zA-Z0-9]*$".r
 
-  val eoriNumberPrefixRegex: Regex = "^(?i)(gb|xi).*$".r
-  val eoriNumberRegex: Regex       = "^(?i)(gb|xi)[0-9]*$".r
+  val eoriNumberRegex: Regex = "^(?i)(gb|xi)[0-9]*$".r
 
-  val telephoneNumberRegex: Regex = "^[0-9./+\\-()x ]+$".r
-  val tirIdNumberRegex: Regex     = "^[a-zA-Z]{3}\\/[0-9]{3}\\/[0-9]{0,9}$".r
-  val postalCodeRegex: Regex      = "^[a-zA-Z\\s*0-9]*$".r
+  val telephoneNumberCharacterRegex: Regex = "^[0-9+ ]+$".r
+  val telephoneNumberFormatRegex: Regex    = "^\\+[0-9 ]+$".r
+
+  val tirIdNumberCharacterRegex: Regex = "^[a-zA-Z0-9/]+$".r
+  val tirIdNumberFormatRegex: Regex    = "^[a-zA-Z]{3}\\/[0-9]{3}\\/[0-9]{0,9}$".r
+
+  val postalCodeRegex: Regex = "^[a-zA-Z\\s*0-9]*$".r
 
 }

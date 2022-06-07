@@ -82,11 +82,14 @@ trait Constraints {
   protected def maxLength(maximum: Int, errorKey: String): Constraint[String] =
     maxLength(maximum, errorKey, Seq(maximum))
 
-  protected def maxLength(maximum: Int, errorKey: String, args: Seq[Any]): Constraint[String] =
-    lengthConstraint(errorKey, _.length <= maximum, args)
+  protected def maxLength(maximum: Int, errorKey: String, args: Seq[Any], trim: Boolean = false): Constraint[String] =
+    lengthConstraint(errorKey, x => (if (trim) x.replaceAll("\\s", "").length else x.length) <= maximum, args)
 
   protected def minLength(minimum: Int, errorKey: String): Constraint[String] =
     lengthConstraint(errorKey, _.length >= minimum, Seq(minimum))
+
+  protected def minLength(minimum: Int, errorKey: String, args: Seq[Any], trim: Boolean = false): Constraint[String] =
+    lengthConstraint(errorKey, x => (if (trim) x.replaceAll("\\s", "").length else x.length) >= minimum, args)
 
   protected def exactLength(exact: Int, errorKey: String): Constraint[String] =
     lengthConstraint(errorKey, _.length == exact, Seq(exact))

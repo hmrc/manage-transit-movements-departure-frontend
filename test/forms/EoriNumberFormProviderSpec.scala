@@ -26,12 +26,11 @@ class EoriNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavio
 
   private val prefix = Gen.alphaNumStr.sample.value
 
-  private val requiredKey            = s"$prefix.error.required"
-  private val maxLengthKey           = s"$prefix.error.maxLength"
-  private val minLengthKey           = s"$prefix.error.minLength"
-  private val invalidCharactersKey   = s"$prefix.error.invalidCharacters"
-  private val invalidFormatKey       = s"$prefix.error.invalidFormat"
-  private val invalidPrefixFormatKey = s"$prefix.error.prefix"
+  private val requiredKey          = s"$prefix.error.required"
+  private val maxLengthKey         = s"$prefix.error.maxLength"
+  private val minLengthKey         = s"$prefix.error.minLength"
+  private val invalidCharactersKey = s"$prefix.error.invalidCharacters"
+  private val invalidFormatKey     = s"$prefix.error.invalidFormat"
 
   private val form = new EoriNumberFormProvider()(prefix)
 
@@ -98,21 +97,6 @@ class EoriNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavio
       val gen = for {
         prefix <- prefixGen
         suffix <- stringsLongerThan(maxEoriNumberLength - prefix.length, Gen.alphaNumChar)
-      } yield prefix + suffix
-
-      forAll(gen) {
-        invalidString =>
-          val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
-          result.errors must contain(expectedError)
-      }
-    }
-
-    "must not bind strings with wrong prefix" in {
-      val expectedError = FormError(fieldName, invalidPrefixFormatKey, Seq(eoriNumberPrefixRegex.regex))
-
-      val gen = for {
-        prefix <- stringsWithLength(2, Gen.alphaChar).retryUntil(!validPrefixes.contains(_))
-        suffix <- stringsWithLengthInRange(minEoriNumberLength - prefix.length, maxEoriNumberLength - prefix.length, Gen.numChar)
       } yield prefix + suffix
 
       forAll(gen) {

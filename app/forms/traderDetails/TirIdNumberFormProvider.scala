@@ -17,18 +17,23 @@
 package forms.traderDetails
 
 import forms.mappings.Mappings
-import javax.inject.Inject
 import models.domain.StringFieldRegex._
 import play.api.data.Form
 
+import javax.inject.Inject
+
 class TirIdNumberFormProvider @Inject() extends Mappings {
+
+  private val tirNumberMaxLength = 17
 
   def apply(prefix: String): Form[String] =
     Form(
       "value" -> textWithSpacesRemoved(s"$prefix.error.required")
         .verifying(
           forms.StopOnFirstFail[String](
-            regexp(tirIdNumberRegex, s"$prefix.error.invalidFormat")
+            maxLength(tirNumberMaxLength, s"$prefix.error.length", Seq(tirNumberMaxLength)),
+            regexp(tirIdNumberCharacterRegex, s"$prefix.error.invalidCharacter"),
+            regexp(tirIdNumberFormatRegex, s"$prefix.error.invalidFormat")
           )
         )
     )
