@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package views.traderDetails.holderOfTransit
+package views.traderDetails.holderOfTransit.contact
 
+import forms.Constants.maxTelephoneNumberLength
 import forms.TelephoneNumberFormProvider
 import models.NormalMode
-import forms.Constants.maxTelephoneNumberLength
+import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.traderDetails.holderOfTransit.ContactTelephoneNumberView
-import org.scalacheck.{Arbitrary, Gen}
+import views.html.traderDetails.holderOfTransit.contact.TelephoneNumberView
 
-class ContactTelephoneNumberViewSpec extends InputTextViewBehaviours[String] {
+class TelephoneNumberViewSpec extends InputTextViewBehaviours[String] {
 
-  private val name: String    = "Contact Name"
-  override val prefix: String = "traderDetails.holderOfTransit.contactTelephoneNumber"
+  private val name: String    = Gen.alphaNumStr.sample.value
+  override val prefix: String = "traderDetails.holderOfTransit.contact.telephoneNumber"
 
   override def form: Form[String] = new TelephoneNumberFormProvider()(prefix, name)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[ContactTelephoneNumberView].apply(form, lrn, NormalMode, name)(fakeRequest, messages)
+    injector.instanceOf[TelephoneNumberView].apply(form, lrn, NormalMode, name)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(stringsWithMaxLength(maxTelephoneNumberLength, Gen.numChar))
 

@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package pages.traderDetails.holderOfTransit
+package pages.traderDetails.holderOfTransit.contact
 
-import play.api.libs.json.JsPath
 import pages.QuestionPage
-import pages.sections.HolderOfTransitSection
+import pages.sections.HolderOfTransitContactSection
+import play.api.libs.json.JsPath
 
-case object ContactNamePage extends QuestionPage[String] {
+case object NamePage extends QuestionPage[String] {
 
-  override def path: JsPath = HolderOfTransitSection.path \ toString
+  override def path: JsPath = HolderOfTransitContactSection.path \ toString
 
-  override def toString: String = "contactName"
+  override def toString: String = "name"
 }

@@ -18,7 +18,7 @@ package models.journeyDomain.traderDetails
 
 import cats.implicits._
 import models.domain._
-import pages.traderDetails.holderOfTransit._
+import pages.traderDetails.holderOfTransit.contact.{NamePage, TelephoneNumberPage}
 
 case class AdditionalContactDomain(
   name: String,
@@ -29,7 +29,7 @@ object AdditionalContactDomain {
 
   implicit val userAnswersReader: UserAnswersReader[AdditionalContactDomain] =
     (
-      ContactNamePage.reader,
-      ContactTelephoneNumberPage.reader
+      NamePage.reader,
+      TelephoneNumberPage.reader
     ).tupled.map((AdditionalContactDomain.apply _).tupled)
 }

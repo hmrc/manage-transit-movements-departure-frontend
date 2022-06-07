@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.traderDetails.holderOfTransit
+package controllers.traderDetails.holderOfTransit.contact
 
 import controllers.actions._
 import forms.TelephoneNumberFormProvider
@@ -22,18 +22,18 @@ import models.requests.SpecificDataRequestProvider1
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.HolderOfTransit
-import pages.traderDetails.holderOfTransit.{ContactNamePage, ContactTelephoneNumberPage}
+import pages.traderDetails.holderOfTransit.contact.{NamePage, TelephoneNumberPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.traderDetails.holderOfTransit.ContactTelephoneNumberView
+import views.html.traderDetails.holderOfTransit.contact.TelephoneNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ContactTelephoneNumberController @Inject() (
+class TelephoneNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @HolderOfTransit navigator: Navigator,
@@ -41,13 +41,13 @@ class ContactTelephoneNumberController @Inject() (
   formProvider: TelephoneNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
-  view: ContactTelephoneNumberView
+  view: TelephoneNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   private def form(implicit request: Request): Form[String] =
-    formProvider("traderDetails.holderOfTransit.contactTelephoneNumber", contactName)
+    formProvider("traderDetails.holderOfTransit.contact.telephoneNumber", contactName)
 
   private type Request = SpecificDataRequestProvider1[String]#SpecificDataRequest[_]
 
@@ -55,9 +55,9 @@ class ContactTelephoneNumberController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(ContactNamePage)) {
+    .andThen(getMandatoryPage(NamePage)) {
       implicit request =>
-        val preparedForm = request.userAnswers.get(ContactTelephoneNumberPage) match {
+        val preparedForm = request.userAnswers.get(TelephoneNumberPage) match {
           case None        => form
           case Some(value) => form.fill(value)
         }
@@ -66,7 +66,7 @@ class ContactTelephoneNumberController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(ContactNamePage))
+    .andThen(getMandatoryPage(NamePage))
     .async {
       implicit request =>
         form
@@ -75,9 +75,9 @@ class ContactTelephoneNumberController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, contactName))),
             value =>
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactTelephoneNumberPage, value))
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(TelephoneNumberPage, value))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(ContactTelephoneNumberPage, mode, updatedAnswers))
+              } yield Redirect(navigator.nextPage(TelephoneNumberPage, mode, updatedAnswers))
           )
     }
 }

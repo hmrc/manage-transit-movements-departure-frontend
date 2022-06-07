@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.traderDetails.holderOfTransit
+package views.traderDetails.holderOfTransit.contact
 
 import forms.NameFormProvider
 import models.NormalMode
@@ -23,18 +23,18 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.traderDetails.holderOfTransit.ContactNameView
+import views.html.traderDetails.holderOfTransit.contact.NameView
 
-class ContactNameViewSpec extends InputTextViewBehaviours[String] {
+class NameViewSpec extends InputTextViewBehaviours[String] {
 
   override def form: Form[String] = new NameFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[ContactNameView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[NameView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 
-  override val prefix: String = "traderDetails.holderOfTransit.contactName"
+  override val prefix: String = "traderDetails.holderOfTransit.contact.name"
 
   behave like pageWithTitle()
 

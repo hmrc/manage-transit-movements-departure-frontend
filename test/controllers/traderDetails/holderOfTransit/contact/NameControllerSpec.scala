@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.traderDetails.holderOfTransit
+package controllers.traderDetails.holderOfTransit.contact
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.NameFormProvider
@@ -22,37 +22,29 @@ import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.HolderOfTransit
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
-import pages.traderDetails.holderOfTransit.ContactNamePage
+import org.mockito.Mockito.when
+import pages.traderDetails.holderOfTransit.contact.NamePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.UserAnswersService
-import views.html.traderDetails.holderOfTransit.ContactNameView
+import views.html.traderDetails.holderOfTransit.contact.NameView
 
 import scala.concurrent.Future
 
-class ContactNameControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class NameControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                = new NameFormProvider()
-  private val form                        = formProvider("traderDetails.holderOfTransit.contactName")
-  private val mode                        = NormalMode
-  private lazy val contactNameRoute       = routes.ContactNameController.onPageLoad(lrn, mode).url
-  private lazy val mockUserAnswersService = mock[UserAnswersService]
+  private val formProvider          = new NameFormProvider()
+  private val form                  = formProvider("traderDetails.holderOfTransit.contact.name")
+  private val mode                  = NormalMode
+  private lazy val contactNameRoute = routes.NameController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[HolderOfTransit]).toInstance(fakeNavigator))
-      .overrides(bind[UserAnswersService].toInstance(mockUserAnswersService))
 
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    reset(mockUserAnswersService)
-  }
-
-  "traderDetails.holderOfTransit.ContactName Controller" - {
+  "Name Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -62,7 +54,7 @@ class ContactNameControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[ContactNameView]
+      val view = injector.instanceOf[NameView]
 
       status(result) mustEqual OK
 
@@ -73,7 +65,7 @@ class ContactNameControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(ContactNamePage, "test string").success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(NamePage, "test string").success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, contactNameRoute)
@@ -82,7 +74,7 @@ class ContactNameControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       val filledForm = form.bind(Map("value" -> "test string"))
 
-      val view = injector.instanceOf[ContactNameView]
+      val view = injector.instanceOf[NameView]
 
       status(result) mustEqual OK
 
@@ -96,7 +88,6 @@ class ContactNameControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockUserAnswersService.getOrCreateUserAnswers(any(), any())) thenReturn Future.successful(emptyUserAnswers)
 
       val request =
         FakeRequest(POST, contactNameRoute)
@@ -122,7 +113,7 @@ class ContactNameControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[ContactNameView]
+      val view = injector.instanceOf[NameView]
 
       contentAsString(result) mustEqual
         view(filledForm, lrn, mode)(request, messages).toString

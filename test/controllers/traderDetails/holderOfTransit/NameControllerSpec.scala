@@ -16,41 +16,33 @@
 
 package controllers.traderDetails.holderOfTransit
 
+import base.{AppWithDefaultMockFixtures, SpecBase}
+import forms.NameFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
+import navigation.annotations.HolderOfTransit
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.when
+import pages.traderDetails.holderOfTransit.NamePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.traderDetails.holderOfTransit.NameView
-import services.UserAnswersService
-import pages.traderDetails.holderOfTransit.NamePage
-import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.NameFormProvider
-import navigation.annotations.HolderOfTransit
 
 import scala.concurrent.Future
 
 class NameControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                = new NameFormProvider()
-  private val form                        = formProvider("traderDetails.holderOfTransit.name")
-  private val mode                        = NormalMode
-  private lazy val nameRoute              = routes.NameController.onPageLoad(lrn, mode).url
-  private lazy val mockUserAnswersService = mock[UserAnswersService]
+  private val formProvider   = new NameFormProvider()
+  private val form           = formProvider("traderDetails.holderOfTransit.name")
+  private val mode           = NormalMode
+  private lazy val nameRoute = routes.NameController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[HolderOfTransit]).toInstance(fakeNavigator))
-      .overrides(bind[UserAnswersService].toInstance(mockUserAnswersService))
-
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    reset(mockUserAnswersService)
-  }
 
   "traderDetails.holderOfTransit.Name Controller" - {
 
@@ -96,7 +88,6 @@ class NameControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
       setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockUserAnswersService.getOrCreateUserAnswers(any(), any())) thenReturn Future.successful(emptyUserAnswers)
 
       val request =
         FakeRequest(POST, nameRoute)

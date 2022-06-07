@@ -50,8 +50,8 @@ class HolderOfTransitViewModelSpec extends SpecBase with Generators {
           .setValue(NamePage, "name")
           .setValue(AddressPage, Address("line1", "line2", "postal code", Country(CountryCode("code"), "description")))
           .setValue(AddContactPage, true)
-          .setValue(ContactNamePage, "contact name")
-          .setValue(ContactTelephoneNumberPage, "phone number")
+          .setValue(contact.NamePage, "contact name")
+          .setValue(contact.TelephoneNumberPage, "phone number")
 
         val sections = new HolderOfTransitSectionViewModel().apply(answers)
 

@@ -61,7 +61,7 @@ class RepresentativeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)
   def phoneNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = TelephoneNumberPage,
     formatAnswer = formatAsLiteral,
-    prefix = "traderDetails.representative.phone",
+    prefix = "traderDetails.representative.telephoneNumber",
     id = None,
     call = TelephoneNumberController.onPageLoad(lrn, mode)
   )

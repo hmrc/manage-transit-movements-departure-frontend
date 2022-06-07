@@ -16,6 +16,7 @@
 
 package utils.cyaHelpers.traderDetails
 
+import controllers.traderDetails.holderOfTransit.contact.{routes => contactRoutes}
 import controllers.traderDetails.holderOfTransit.routes._
 import models.{Address, Mode, UserAnswers}
 import pages.traderDetails.holderOfTransit._
@@ -82,18 +83,18 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
   )
 
   def contactName: Option[SummaryListRow] = getAnswerAndBuildRow[String](
-    page = ContactNamePage,
+    page = contact.NamePage,
     formatAnswer = formatAsLiteral,
-    prefix = "traderDetails.holderOfTransit.contactName",
+    prefix = "traderDetails.holderOfTransit.contact.name",
     id = None,
-    call = ContactNameController.onPageLoad(lrn, mode)
+    call = contactRoutes.NameController.onPageLoad(lrn, mode)
   )
 
   def contactTelephoneNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
-    page = ContactTelephoneNumberPage,
+    page = contact.TelephoneNumberPage,
     formatAnswer = formatAsLiteral,
-    prefix = "traderDetails.holderOfTransit.contactTelephoneNumber",
+    prefix = "traderDetails.holderOfTransit.contact.telephoneNumber",
     id = None,
-    call = ContactTelephoneNumberController.onPageLoad(lrn, mode)
+    call = contactRoutes.TelephoneNumberController.onPageLoad(lrn, mode)
   )
 }

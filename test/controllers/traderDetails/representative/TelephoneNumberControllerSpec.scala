@@ -16,30 +16,28 @@
 
 package controllers.traderDetails.representative
 
+import base.{AppWithDefaultMockFixtures, SpecBase}
+import forms.RepresentativePhoneFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.Representative
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.when
+import pages.traderDetails.representative.TelephoneNumberPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.RepresentativePhoneFormProvider
 import views.html.traderDetails.representative.TelephoneNumberView
-import services.UserAnswersService
-import pages.traderDetails.representative.TelephoneNumberPage
-import base.{AppWithDefaultMockFixtures, SpecBase}
 
 import scala.concurrent.Future
 
 class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private val formProvider                  = new RepresentativePhoneFormProvider()
-  private val form                          = formProvider("traderDetails.representative.phone")
+  private val form                          = formProvider("traderDetails.representative.telephoneNumber")
   private val mode                          = NormalMode
   private lazy val representativePhoneRoute = routes.TelephoneNumberController.onPageLoad(lrn, mode).url
-  private lazy val mockUserAnswersService   = mock[UserAnswersService]
 
   private val validAnswer: String = "123123123"
 
@@ -47,12 +45,6 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Representative]).toInstance(fakeNavigator))
-      .overrides(bind[UserAnswersService].toInstance(mockUserAnswersService))
-
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    reset(mockUserAnswersService)
-  }
 
   "RepresentativePhone Controller" - {
 
@@ -98,7 +90,6 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
       setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockUserAnswersService.getOrCreateUserAnswers(any(), any())) thenReturn Future.successful(emptyUserAnswers)
 
       val request =
         FakeRequest(POST, representativePhoneRoute)

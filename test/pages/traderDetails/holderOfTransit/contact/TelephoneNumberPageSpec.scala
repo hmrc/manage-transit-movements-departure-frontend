@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package pages.traderDetails.holderOfTransit
+package pages.traderDetails.holderOfTransit.contact
 
 import pages.behaviours.PageBehaviours
 
-class ContactNamePageSpec extends PageBehaviours {
+class TelephoneNumberPageSpec extends PageBehaviours {
 
-  "traderDetails.holderOfTransit.ContactNamePage" - {
+  "TelephoneNumberPage" - {
 
-    beRetrievable[String](ContactNamePage)
+    beRetrievable[String](TelephoneNumberPage)
 
-    beSettable[String](ContactNamePage)
+    beSettable[String](TelephoneNumberPage)
 
-    beRemovable[String](ContactNamePage)
+    beRemovable[String](TelephoneNumberPage)
   }
 }

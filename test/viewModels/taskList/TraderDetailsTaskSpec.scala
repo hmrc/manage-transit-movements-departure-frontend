@@ -28,8 +28,8 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.DeclarationTypePage
-import pages.traderDetails.{holderOfTransit => hot}
-import pages.traderDetails.{representative => rep}
+import pages.traderDetails.holderOfTransit.contact
+import pages.traderDetails.{holderOfTransit => hot, representative => rep}
 import viewModels.taskList.TaskStatus._
 
 class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -142,8 +142,8 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
           .setValue(hot.NamePage, Gen.alphaNumStr.sample.value)
           .setValue(hot.AddressPage, arbitrary[Address].sample.value)
           .setValue(hot.AddContactPage, true)
-          .setValue(hot.ContactNamePage, Gen.alphaNumStr.sample.value)
-          .setValue(hot.ContactTelephoneNumberPage, Gen.alphaNumStr.sample.value)
+          .setValue(contact.NamePage, Gen.alphaNumStr.sample.value)
+          .setValue(contact.TelephoneNumberPage, Gen.alphaNumStr.sample.value)
           .setValue(rep.ActingAsRepresentativePage, true)
           .setValue(rep.EoriPage, Gen.alphaNumStr.sample.value)
           .setValue(rep.NamePage, Gen.alphaNumStr.sample.value)

@@ -22,6 +22,8 @@ import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import pages.preTaskList._
+import pages.traderDetails.holderOfTransit.contact
+import pages.traderDetails.holderOfTransit.contact.{NamePage, TelephoneNumberPage}
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators {
@@ -63,12 +65,11 @@ trait UserAnswersEntryGenerators {
       } yield (pages.traderDetails.representative.ActingAsRepresentativePage, value)
     }
 
-  implicit lazy val arbitraryTransitHolderAdditionalContactTelephoneNumberUserAnswersEntry
-    : Arbitrary[(pages.traderDetails.holderOfTransit.ContactTelephoneNumberPage.type, JsValue)] =
+  implicit lazy val arbitraryTransitHolderAdditionalContactTelephoneNumberUserAnswersEntry: Arbitrary[(TelephoneNumberPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[pages.traderDetails.holderOfTransit.ContactTelephoneNumberPage.type#Data].map(Json.toJson(_))
-      } yield (pages.traderDetails.holderOfTransit.ContactTelephoneNumberPage, value)
+        value <- arbitrary[TelephoneNumberPage.type#Data].map(Json.toJson(_))
+      } yield (contact.TelephoneNumberPage, value)
     }
 
   implicit lazy val arbitraryTransitHolderTirIdentificationUserAnswersEntry
@@ -94,12 +95,11 @@ trait UserAnswersEntryGenerators {
       } yield (pages.traderDetails.holderOfTransit.AddressPage, value)
     }
 
-  implicit lazy val arbitraryTransitHolderAdditionalContactNameUserAnswersEntry
-    : Arbitrary[(pages.traderDetails.holderOfTransit.ContactNamePage.type, JsValue)] =
+  implicit lazy val arbitraryTransitHolderAdditionalContactNameUserAnswersEntry: Arbitrary[(NamePage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[pages.traderDetails.holderOfTransit.ContactNamePage.type#Data].map(Json.toJson(_))
-      } yield (pages.traderDetails.holderOfTransit.ContactNamePage, value)
+        value <- arbitrary[NamePage.type#Data].map(Json.toJson(_))
+      } yield (contact.NamePage, value)
     }
 
   implicit lazy val arbitraryTransitHolderNameUserAnswersEntry: Arbitrary[(pages.traderDetails.holderOfTransit.NamePage.type, JsValue)] =

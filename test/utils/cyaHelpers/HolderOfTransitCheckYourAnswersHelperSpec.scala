@@ -17,7 +17,8 @@
 package utils.cyaHelpers
 
 import base.SpecBase
-import controllers.traderDetails.holderOfTransit.routes
+import controllers.traderDetails.holderOfTransit.contact.{routes => contactRoutes}
+import controllers.traderDetails.holderOfTransit.{routes => hotRoutes}
 import generators.Generators
 import models.{Address, Mode}
 import org.scalacheck.Arbitrary.arbitrary
@@ -64,7 +65,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.TirIdentificationYesNoController.onPageLoad(answers.lrn, mode).url,
+                          href = hotRoutes.TirIdentificationYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you know the Transit procedure TIR identification number"),
                           attributes = Map()
                         )
@@ -108,7 +109,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.TirIdentificationController.onPageLoad(answers.lrn, mode).url,
+                          href = hotRoutes.TirIdentificationController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("TIR holder’s identification number"),
                           attributes = Map()
                         )
@@ -152,7 +153,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.EoriYesNoController.onPageLoad(answers.lrn, mode).url,
+                          href = hotRoutes.EoriYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you know the transit holder’s EORI number"),
                           attributes = Map()
                         )
@@ -196,7 +197,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.EoriController.onPageLoad(answers.lrn, mode).url,
+                          href = hotRoutes.EoriController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("transit holder’s EORI number"),
                           attributes = Map()
                         )
@@ -240,7 +241,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.NameController.onPageLoad(answers.lrn, mode).url,
+                          href = hotRoutes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("transit holder’s name"),
                           attributes = Map()
                         )
@@ -284,7 +285,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.AddressController.onPageLoad(answers.lrn, mode).url,
+                          href = hotRoutes.AddressController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("transit holder’s address"),
                           attributes = Map()
                         )
@@ -328,7 +329,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.AddContactController.onPageLoad(answers.lrn, mode).url,
+                          href = hotRoutes.AddContactController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add a contact"),
                           attributes = Map()
                         )
@@ -344,7 +345,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
     "contactName" - {
       "must return None" - {
-        s"when $ContactNamePage is undefined" in {
+        s"when ${contact.NamePage} is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new HolderOfTransitCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -355,10 +356,10 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
 
       "must return Some(Row)" - {
-        s"when $ContactNamePage is defined" in {
+        s"when ${contact.NamePage} is defined" in {
           forAll(Gen.alphaNumStr, arbitrary[Mode]) {
             (contactName, mode) =>
-              val answers = emptyUserAnswers.setValue(ContactNamePage, contactName)
+              val answers = emptyUserAnswers.setValue(contact.NamePage, contactName)
 
               val helper = new HolderOfTransitCheckYourAnswersHelper(answers, mode)
               val result = helper.contactName
@@ -372,7 +373,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.ContactNameController.onPageLoad(answers.lrn, mode).url,
+                          href = contactRoutes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("contact’s name"),
                           attributes = Map()
                         )
@@ -388,7 +389,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
     "contactTelephoneNumber" - {
       "must return None" - {
-        s"when $ContactTelephoneNumberPage is undefined" in {
+        s"when ${contact.TelephoneNumberPage} is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new HolderOfTransitCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -399,10 +400,10 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
 
       "must return Some(Row)" - {
-        s"when $ContactTelephoneNumberPage is defined" in {
+        s"when ${contact.TelephoneNumberPage} is defined" in {
           forAll(Gen.alphaNumStr, arbitrary[Mode]) {
             (contactTelephoneNumber, mode) =>
-              val answers = emptyUserAnswers.setValue(ContactTelephoneNumberPage, contactTelephoneNumber)
+              val answers = emptyUserAnswers.setValue(contact.TelephoneNumberPage, contactTelephoneNumber)
 
               val helper = new HolderOfTransitCheckYourAnswersHelper(answers, mode)
               val result = helper.contactTelephoneNumber
@@ -416,7 +417,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.ContactTelephoneNumberController.onPageLoad(answers.lrn, mode).url,
+                          href = contactRoutes.TelephoneNumberController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("contact’s telephone number"),
                           attributes = Map()
                         )

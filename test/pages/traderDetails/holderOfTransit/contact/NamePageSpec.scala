@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package pages.traderDetails.holderOfTransit
+package pages.traderDetails.holderOfTransit.contact
 
-import play.api.libs.json.JsPath
-import pages.QuestionPage
-import pages.sections.HolderOfTransitSection
+import pages.behaviours.PageBehaviours
 
-case object ContactTelephoneNumberPage extends QuestionPage[String] {
+class NamePageSpec extends PageBehaviours {
 
-  override def path: JsPath = HolderOfTransitSection.path \ toString
+  "NamePage" - {
 
-  override def toString: String = "contactTelephoneNumber"
+    beRetrievable[String](NamePage)
+
+    beSettable[String](NamePage)
+
+    beRemovable[String](NamePage)
+  }
 }

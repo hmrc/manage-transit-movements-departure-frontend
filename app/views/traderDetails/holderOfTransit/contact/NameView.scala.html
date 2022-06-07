@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.traderDetails.holderOfTransit.routes
+@import controllers.traderDetails.holderOfTransit.contact.routes
 @import views.html.components.{Button, ErrorSummary, InputText}
 @import models.LocalReferenceNumber
 
@@ -26,22 +26,21 @@
     button: Button
 )
 
-@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("traderDetails.holderOfTransit.contactTelephoneNumber.title", name),
+    title = messages("traderDetails.holderOfTransit.contact.name.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = controllers.traderDetails.holderOfTransit.routes.ContactTelephoneNumberController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.NameController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputText(
             field = form("value"),
-            label = messages("traderDetails.holderOfTransit.contactTelephoneNumber.heading", name),
-            hint = Some(messages("traderDetails.holderOfTransit.contactTelephoneNumber.hint")),
+            label = messages("traderDetails.holderOfTransit.contact.name.heading"),
             inputClass = InputSize.Width20,
             caption = Some(messages("traderDetails.caption"))
         )

@@ -14,24 +14,14 @@
  * limitations under the License.
  */
 
-package pages.traderDetails.holderOfTransit
+package pages.sections
 
-import models.UserAnswers
 import pages.QuestionPage
-import pages.sections.{HolderOfTransitContactSection, HolderOfTransitSection}
 import play.api.libs.json.JsPath
 
-import scala.util.Try
-
-case object AddContactPage extends QuestionPage[Boolean] {
+case object HolderOfTransitContactSection extends QuestionPage[Nothing] {
 
   override def path: JsPath = HolderOfTransitSection.path \ toString
 
-  override def toString: String = "addContact"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(false) => userAnswers.remove(HolderOfTransitContactSection)
-      case _           => super.cleanup(value, userAnswers)
-    }
+  override def toString: String = "contact"
 }

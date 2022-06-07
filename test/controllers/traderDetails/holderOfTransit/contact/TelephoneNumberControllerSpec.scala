@@ -14,34 +14,32 @@
  * limitations under the License.
  */
 
-package controllers.traderDetails.holderOfTransit
+package controllers.traderDetails.holderOfTransit.contact
 
+import base.{AppWithDefaultMockFixtures, SpecBase}
+import forms.TelephoneNumberFormProvider
+import generators.Generators
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
+import navigation.annotations.HolderOfTransit
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.when
+import pages.traderDetails.holderOfTransit.contact.{NamePage, TelephoneNumberPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.TelephoneNumberFormProvider
-import views.html.traderDetails.holderOfTransit.ContactTelephoneNumberView
-import services.UserAnswersService
-import pages.traderDetails.holderOfTransit.{ContactNamePage, ContactTelephoneNumberPage}
-import base.{AppWithDefaultMockFixtures, SpecBase}
-import generators.Generators
-import navigation.annotations.HolderOfTransit
+import views.html.traderDetails.holderOfTransit.contact.TelephoneNumberView
 
 import scala.concurrent.Future
 
-class ContactTelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val formProvider                     = new TelephoneNumberFormProvider()
   private val holderName                       = "Test Holder Name"
-  private val form                             = formProvider("traderDetails.holderOfTransit.contactTelephoneNumber", holderName)
+  private val form                             = formProvider("traderDetails.holderOfTransit.contact.telephoneNumber", holderName)
   private val mode                             = NormalMode
-  private lazy val contactTelephoneNumberRoute = routes.ContactTelephoneNumberController.onPageLoad(lrn, mode).url
-  private lazy val mockUserAnswersService      = mock[UserAnswersService]
+  private lazy val contactTelephoneNumberRoute = routes.TelephoneNumberController.onPageLoad(lrn, mode).url
 
   private val validAnswer: String = "123123"
 
@@ -49,24 +47,18 @@ class ContactTelephoneNumberControllerSpec extends SpecBase with AppWithDefaultM
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[HolderOfTransit]).toInstance(fakeNavigator))
-      .overrides(bind[UserAnswersService].toInstance(mockUserAnswersService))
-
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    reset(mockUserAnswersService)
-  }
 
   "traderDetails.holderOfTransit.contactTelephoneNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val userAnswers = emptyUserAnswers.setValue(ContactNamePage, holderName)
+      val userAnswers = emptyUserAnswers.setValue(NamePage, holderName)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, contactTelephoneNumberRoute)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[ContactTelephoneNumberView]
+      val view = injector.instanceOf[TelephoneNumberView]
 
       status(result) mustEqual OK
 
@@ -77,8 +69,8 @@ class ContactTelephoneNumberControllerSpec extends SpecBase with AppWithDefaultM
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
       val userAnswers = UserAnswers(lrn, eoriNumber)
-        .setValue(ContactNamePage, holderName)
-        .set(ContactTelephoneNumberPage, validAnswer)
+        .setValue(NamePage, holderName)
+        .set(TelephoneNumberPage, validAnswer)
         .success
         .value
 
@@ -90,7 +82,7 @@ class ContactTelephoneNumberControllerSpec extends SpecBase with AppWithDefaultM
 
       val filledForm = form.bind(Map("value" -> validAnswer))
 
-      val view = injector.instanceOf[ContactTelephoneNumberView]
+      val view = injector.instanceOf[TelephoneNumberView]
 
       status(result) mustEqual OK
 
@@ -100,7 +92,7 @@ class ContactTelephoneNumberControllerSpec extends SpecBase with AppWithDefaultM
     }
 
     "must redirect to the next page when valid data is submitted" in {
-      val userAnswers = emptyUserAnswers.setValue(ContactNamePage, holderName)
+      val userAnswers = emptyUserAnswers.setValue(NamePage, holderName)
       setExistingUserAnswers(userAnswers)
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
@@ -117,7 +109,7 @@ class ContactTelephoneNumberControllerSpec extends SpecBase with AppWithDefaultM
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      val userAnswers = emptyUserAnswers.setValue(ContactNamePage, holderName)
+      val userAnswers = emptyUserAnswers.setValue(NamePage, holderName)
       setExistingUserAnswers(userAnswers)
 
       val invalidAnswer = ""
@@ -129,7 +121,7 @@ class ContactTelephoneNumberControllerSpec extends SpecBase with AppWithDefaultM
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[ContactTelephoneNumberView]
+      val view = injector.instanceOf[TelephoneNumberView]
 
       contentAsString(result) mustEqual
         view(filledForm, lrn, mode, holderName)(request, messages).toString
