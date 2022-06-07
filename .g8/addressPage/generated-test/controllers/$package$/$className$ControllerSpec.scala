@@ -18,7 +18,7 @@ import play.api.test.Helpers._
 import services.CountriesService
 import views.html.$package$.$className$View
 import $addressHolderNameImport$
-import pages.$packages$.$className$Page
+import pages.$package$.$className$Page
 
 import scala.concurrent.Future
 

@@ -7,7 +7,7 @@ import models.{Address, CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.$navRoute$
 import $addressHolderNameImport$
-import pages.$packages$.$className$Page
+import pages.$package$.$className$Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
