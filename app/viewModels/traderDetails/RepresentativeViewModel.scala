@@ -16,27 +16,34 @@
 
 package viewModels.traderDetails
 
-import models.{Mode, UserAnswers}
+import models.UserAnswers
 import play.api.i18n.Messages
 import utils.cyaHelpers.traderDetails.RepresentativeCheckYourAnswersHelper
 import viewModels.sections.Section
+import viewModels.{SectionViewModel, SubSectionViewModel}
 
-class RepresentativeViewModel {
+sealed trait RepresentativeViewModel {
+  self: SectionViewModel =>
 
-  def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): Seq[Section] = {
+  def apply(userAnswers: UserAnswers)(implicit messages: Messages): Seq[Section] = {
     val helper = new RepresentativeCheckYourAnswersHelper(userAnswers, mode)
 
-    val representativeSection = Section(
-      sectionTitle = messages("traderDetails.representative.checkYourAnswers.representative"),
-      rows = Seq(
-        helper.actingAsRepresentative,
-        helper.eori,
-        helper.name,
-        helper.capacity,
-        helper.phoneNumber
-      ).flatten
+    Seq(
+      Section(
+        sectionTitle = messages("traderDetails.representative.checkYourAnswers.representative"),
+        rows = Seq(
+          helper.actingAsRepresentative,
+          helper.eori,
+          helper.name,
+          helper.capacity,
+          helper.phoneNumber
+        ).flatten
+      )
     )
-
-    Seq(representativeSection)
   }
+}
+
+object RepresentativeViewModel {
+  class RepresentativeSectionViewModel extends SectionViewModel with RepresentativeViewModel
+  class RepresentativeSubSectionViewModel extends SubSectionViewModel with RepresentativeViewModel
 }

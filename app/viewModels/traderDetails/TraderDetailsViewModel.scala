@@ -16,18 +16,20 @@
 
 package viewModels.traderDetails
 
-import models.{CheckMode, UserAnswers}
+import models.UserAnswers
 import play.api.i18n.Messages
 import viewModels.sections.Section
+import viewModels.traderDetails.HolderOfTransitViewModel.HolderOfTransitSectionViewModel
+import viewModels.traderDetails.RepresentativeViewModel.RepresentativeSectionViewModel
 
 import javax.inject.Inject
 
 class TraderDetailsViewModel @Inject() (
-  holderOfTransitViewModel: HolderOfTransitViewModel,
-  representativeViewModel: RepresentativeViewModel
+  holderOfTransitViewModel: HolderOfTransitSectionViewModel,
+  representativeViewModel: RepresentativeSectionViewModel
 ) {
 
   def apply(userAnswers: UserAnswers)(implicit messages: Messages): Seq[Section] =
-    holderOfTransitViewModel(userAnswers, CheckMode) ++
-      representativeViewModel(userAnswers, CheckMode)
+    holderOfTransitViewModel(userAnswers) ++
+      representativeViewModel(userAnswers)
 }

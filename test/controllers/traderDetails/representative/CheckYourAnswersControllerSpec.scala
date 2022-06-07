@@ -19,38 +19,35 @@ package controllers.traderDetails.representative
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.traderDetails.representative.routes._
 import generators.Generators
-import models.NormalMode
-import org.mockito.ArgumentMatchers.{any, eq => eqTo}
-import org.mockito.Mockito.{verify, when}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewModels.sections.Section
-import viewModels.traderDetails.RepresentativeViewModel
+import viewModels.traderDetails.RepresentativeViewModel.RepresentativeSubSectionViewModel
 import views.html.traderDetails.representative.CheckYourAnswersView
 
 import scala.concurrent.Future
 
 class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private lazy val mockViewModel = mock[RepresentativeViewModel]
+  private lazy val mockViewModel = mock[RepresentativeSubSectionViewModel]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind[RepresentativeViewModel].toInstance(mockViewModel))
+      .overrides(bind[RepresentativeSubSectionViewModel].toInstance(mockViewModel))
 
   "Check Your Answers Controller" - {
 
     "must return OK and the correct view for a GET" in {
       val sampleSections = listWithMaxLength[Section]().sample.value
 
-      val userAnswers = emptyUserAnswers
+      when(mockViewModel.apply(any())(any())).thenReturn(sampleSections)
 
-      when(mockViewModel.apply(any(), any())(any())).thenReturn(sampleSections)
-
-      setExistingUserAnswers(userAnswers)
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad(lrn).url)
 
@@ -62,8 +59,6 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       contentAsString(result) mustEqual
         view(lrn, sampleSections)(request, messages).toString
-
-      verify(mockViewModel).apply(eqTo(userAnswers), eqTo(NormalMode))(any())
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

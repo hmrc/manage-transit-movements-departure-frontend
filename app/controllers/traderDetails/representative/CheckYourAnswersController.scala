@@ -18,11 +18,11 @@ package controllers.traderDetails.representative
 
 import com.google.inject.Inject
 import controllers.actions.Actions
-import models.{LocalReferenceNumber, NormalMode}
+import models.LocalReferenceNumber
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.traderDetails.RepresentativeViewModel
+import viewModels.traderDetails.RepresentativeViewModel.RepresentativeSubSectionViewModel
 import views.html.traderDetails.representative.CheckYourAnswersView
 
 class CheckYourAnswersController @Inject() (
@@ -30,13 +30,13 @@ class CheckYourAnswersController @Inject() (
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
-  viewModel: RepresentativeViewModel
+  viewModel: RepresentativeSubSectionViewModel
 )() extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val sections = viewModel(request.userAnswers, NormalMode)
+      val sections = viewModel(request.userAnswers)
       Ok(view(lrn, sections))
   }
 
