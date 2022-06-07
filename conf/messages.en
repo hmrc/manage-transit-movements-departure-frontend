@@ -157,7 +157,7 @@ traderDetails.holderOfTransit.eori.error.required = Enter the transit holder’s
 traderDetails.holderOfTransit.eori.error.maxLength = The transit holder’s EORI number must be 17 characters or less
 traderDetails.holderOfTransit.eori.error.minLength = The transit holder’s EORI number must be 14 characters or more
 traderDetails.holderOfTransit.eori.error.invalidCharacters = The transit holder’s EORI number must only include letters a to z and numbers 0 to 9
-traderDetails.holderOfTransit.eori.error.invalidFormat = The transit holder’s EORI number must start with 2 letters, such as GB or XI
+traderDetails.holderOfTransit.eori.error.invalidFormat = The transit holder’s EORI number must start with 2 letters, such as GB or XI, followed by up to 15 numbers
 traderDetails.holderOfTransit.eori.error.prefix = The transit holder’s EORI number must start with 2 letters, such as GB or XI
 traderDetails.holderOfTransit.eori.change.hidden = transit holder’s EORI number
 
@@ -221,6 +221,7 @@ traderDetails.holderOfTransit.contactTelephoneNumber.checkYourAnswersLabel = Con
 traderDetails.holderOfTransit.contactTelephoneNumber.hint = Must include the country code, like +44 808 157 0192.
 traderDetails.holderOfTransit.contactTelephoneNumber.error.required = Enter {0}’s phone number
 traderDetails.holderOfTransit.contactTelephoneNumber.error.length = {0}’s phone number must be {1} characters or less
+traderDetails.holderOfTransit.contactTelephoneNumber.error.minLength = {0}’s phone number must be {1} characters or more
 traderDetails.holderOfTransit.contactTelephoneNumber.error.invalidCharacter = {0}’s phone number must only include numbers 0 to 9 and a plus sign
 traderDetails.holderOfTransit.contactTelephoneNumber.error.invalidFormat = Enter {0}’s phone number in the right format
 traderDetails.holderOfTransit.contactTelephoneNumber.change.hidden = Contact’s phone number

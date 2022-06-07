@@ -16,7 +16,7 @@
 
 package forms
 
-import forms.Constants.maxTelephoneNumberLength
+import forms.Constants.{maxTelephoneNumberLength, minTelephoneNumberLength}
 import forms.behaviours.StringFieldBehaviours
 import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
@@ -26,7 +26,8 @@ class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
   private val prefix              = Gen.alphaNumStr.sample.value
   private val name                = Gen.alphaNumStr.sample.value
   private val requiredKey         = s"$prefix.error.required"
-  private val lengthKey           = s"$prefix.error.length"
+  private val maxLengthKey        = s"$prefix.error.length"
+  private val minLengthKey        = s"$prefix.error.minLength"
   private val invalidFormatKey    = s"$prefix.error.invalidFormat"
   private val invalidCharacterKey = s"$prefix.error.invalidCharacter"
 
@@ -42,18 +43,33 @@ class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
       stringsWithMaxLength(maxTelephoneNumberLength, Gen.numChar)
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxTelephoneNumberLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(name, maxTelephoneNumberLength))
-    )
-
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey, Seq(name))
     )
+
+    s"must not bind strings longer than $maxTelephoneNumberLength characters" in {
+
+      val stringInt = "9" * maxTelephoneNumberLength
+
+      val expectedError = FormError(fieldName, maxLengthKey, Seq(name, maxTelephoneNumberLength))
+
+      val result = form.bind(Map(fieldName -> ("+" + stringInt))).apply(fieldName)
+      result.errors mustEqual Seq(expectedError)
+
+    }
+
+    s"must not bind strings less than $minTelephoneNumberLength characters" in {
+
+      val genInt = intsInsideRange(0, 9999).sample.value
+
+      val expectedError = FormError(fieldName, minLengthKey, Seq(name, minTelephoneNumberLength))
+
+      val result = form.bind(Map(fieldName -> ("+" + genInt))).apply(fieldName)
+      result.errors mustEqual Seq(expectedError)
+
+    }
 
     "must not bind strings that do not match character regex" in {
 

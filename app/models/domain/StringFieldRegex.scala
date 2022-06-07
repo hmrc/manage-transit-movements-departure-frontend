@@ -27,8 +27,8 @@ object StringFieldRegex {
   val eoriNumberPrefixRegex: Regex = "^(?i)(gb|xi).*$".r
   val eoriNumberRegex: Regex       = "^(?i)(gb|xi)[0-9]*$".r
 
-  val telephoneNumberCharacterRegex: Regex = "^[0-9+]+$".r
-  val telephoneNumberFormatRegex: Regex    = "^\\+[0-9]+$".r
+  val telephoneNumberCharacterRegex: Regex = "^[0-9+ ]+$".r
+  val telephoneNumberFormatRegex: Regex    = "^\\+[0-9 ]+$".r
 
   val tirIdNumberCharacterRegex: Regex = "^[a-zA-Z0-9/]+$".r
   val tirIdNumberFormatRegex: Regex    = "^[a-zA-Z]{3}\\/[0-9]{3}\\/[0-9]{0,9}$".r

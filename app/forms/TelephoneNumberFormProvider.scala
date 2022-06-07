@@ -16,7 +16,7 @@
 
 package forms
 
-import forms.Constants.maxTelephoneNumberLength
+import forms.Constants.{maxTelephoneNumberLength, minTelephoneNumberLength}
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.{telephoneNumberCharacterRegex, telephoneNumberFormatRegex}
 import play.api.data.Form
@@ -30,9 +30,10 @@ class TelephoneNumberFormProvider @Inject() extends Mappings {
       "value" -> text(s"$prefix.error.required", Seq(name))
         .verifying(
           StopOnFirstFail[String](
-            maxLength(maxTelephoneNumberLength, s"$prefix.error.length", args = Seq(name, maxTelephoneNumberLength)),
             regexp(telephoneNumberCharacterRegex, s"$prefix.error.invalidCharacter", args = Seq(name)),
-            regexp(telephoneNumberFormatRegex, s"$prefix.error.invalidFormat", args = Seq(name))
+            regexp(telephoneNumberFormatRegex, s"$prefix.error.invalidFormat", args = Seq(name)),
+            minLength(minTelephoneNumberLength, s"$prefix.error.minLength", args = Seq(name, minTelephoneNumberLength), trim = true),
+            maxLength(maxTelephoneNumberLength, s"$prefix.error.length", args = Seq(name, maxTelephoneNumberLength), trim = true)
           )
         )
     )
