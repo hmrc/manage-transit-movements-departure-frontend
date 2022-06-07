@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package viewModels
+package viewModels.traderDetails
 
-import models.{CheckMode, UserAnswers}
+import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
 import utils.cyaHelpers.traderDetails.RepresentativeCheckYourAnswersHelper
 import viewModels.sections.Section
 
 class RepresentativeViewModel {
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): Seq[Section] = {
-    val helper = new RepresentativeCheckYourAnswersHelper(userAnswers, CheckMode)
+  def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): Seq[Section] = {
+    val helper = new RepresentativeCheckYourAnswersHelper(userAnswers, mode)
 
     val representativeSection = Section(
       sectionTitle = messages("traderDetails.representative.checkYourAnswers.representative"),

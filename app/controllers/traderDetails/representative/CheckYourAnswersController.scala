@@ -18,11 +18,11 @@ package controllers.traderDetails.representative
 
 import com.google.inject.Inject
 import controllers.actions.Actions
-import models.LocalReferenceNumber
+import models.{LocalReferenceNumber, NormalMode}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.RepresentativeViewModel
+import viewModels.traderDetails.RepresentativeViewModel
 import views.html.traderDetails.representative.CheckYourAnswersView
 
 class CheckYourAnswersController @Inject() (
@@ -36,13 +36,13 @@ class CheckYourAnswersController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val sections = viewModel(request.userAnswers)
+      val sections = viewModel(request.userAnswers, NormalMode)
       Ok(view(lrn, sections))
   }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     //TODO - Redirect to next section when built
-    Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
+    Redirect(controllers.traderDetails.routes.CheckYourAnswersController.onPageLoad(lrn))
   }
 
 }

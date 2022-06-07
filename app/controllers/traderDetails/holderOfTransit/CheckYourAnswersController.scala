@@ -22,7 +22,7 @@ import models.{LocalReferenceNumber, NormalMode}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.HolderOfTransitViewModel
+import viewModels.traderDetails.HolderOfTransitViewModel
 import views.html.traderDetails.holderOfTransit.CheckYourAnswersView
 
 class CheckYourAnswersController @Inject() (
@@ -36,7 +36,7 @@ class CheckYourAnswersController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val sections = viewModel(request.userAnswers)
+      val sections = viewModel(request.userAnswers, NormalMode)
       Ok(view(lrn, sections))
   }
 

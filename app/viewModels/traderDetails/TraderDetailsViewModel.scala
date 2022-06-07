@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-package navigation
+package viewModels.traderDetails
 
-import models.{Mode, NormalMode}
-import play.api.mvc.Call
+import models.{CheckMode, UserAnswers}
+import play.api.i18n.Messages
+import viewModels.sections.Section
 
-class FakeNavigator(desiredRoute: Call, mode: Mode = NormalMode) extends Navigator {
+import javax.inject.Inject
 
-  override protected def normalRoutes: RouteMapping = {
-    case _ =>
-      _ => Some(desiredRoute)
-  }
+class TraderDetailsViewModel @Inject() (
+  holderOfTransitViewModel: HolderOfTransitViewModel,
+  representativeViewModel: RepresentativeViewModel
+) {
 
-  override protected def checkRoutes: RouteMapping = {
-    case _ =>
-      _ => Some(desiredRoute)
-  }
-
-  override def routes(mode: Mode): RouteMapping = {
-    case _ =>
-      _ => Some(desiredRoute)
-  }
+  def apply(userAnswers: UserAnswers)(implicit messages: Messages): Seq[Section] =
+    holderOfTransitViewModel(userAnswers, CheckMode) ++
+      representativeViewModel(userAnswers, CheckMode)
 }

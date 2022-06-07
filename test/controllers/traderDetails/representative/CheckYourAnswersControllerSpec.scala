@@ -19,14 +19,15 @@ package controllers.traderDetails.representative
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.traderDetails.representative.routes._
 import generators.Generators
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import models.NormalMode
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.Mockito.{verify, when}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewModels.RepresentativeViewModel
 import viewModels.sections.Section
+import viewModels.traderDetails.RepresentativeViewModel
 import views.html.traderDetails.representative.CheckYourAnswersView
 
 import scala.concurrent.Future
@@ -45,9 +46,11 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
     "must return OK and the correct view for a GET" in {
       val sampleSections = listWithMaxLength[Section]().sample.value
 
-      when(mockViewModel.apply(any())(any())).thenReturn(sampleSections)
+      val userAnswers = emptyUserAnswers
 
-      setExistingUserAnswers(emptyUserAnswers)
+      when(mockViewModel.apply(any(), any())(any())).thenReturn(sampleSections)
+
+      setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad(lrn).url)
 
@@ -59,6 +62,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       contentAsString(result) mustEqual
         view(lrn, sampleSections)(request, messages).toString
+
+      verify(mockViewModel).apply(eqTo(userAnswers), eqTo(NormalMode))(any())
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
@@ -73,7 +78,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
-    "must redirect to ??? section" ignore {
+    "must redirect to consignor/consignee section" ignore {
       setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
@@ -84,9 +89,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       status(result) mustEqual SEE_OTHER
 
-      //TODO - redirect to next section when built
-      ???
-
+      redirectLocation(result).value mustEqual ???
     }
   }
 }

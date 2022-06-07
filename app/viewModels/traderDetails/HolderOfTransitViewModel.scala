@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package viewModels
+package viewModels.traderDetails
 
-import models.{CheckMode, UserAnswers}
+import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
 import utils.cyaHelpers.traderDetails.HolderOfTransitCheckYourAnswersHelper
 import viewModels.sections.Section
 
 class HolderOfTransitViewModel {
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): Seq[Section] = {
-    val helper = new HolderOfTransitCheckYourAnswersHelper(userAnswers, CheckMode)
+  def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): Seq[Section] = {
+    val helper = new HolderOfTransitCheckYourAnswersHelper(userAnswers, mode)
 
     val holderOfTransitSection = Section(
       sectionTitle = messages("traderDetails.holderOfTransit.checkYourAnswers.transitHolder"),

@@ -14,66 +14,57 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.traderDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import generators.{Generators, PreTaskListUserAnswersGenerator}
+import controllers.traderDetails.routes._
+import generators.Generators
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewModels.taskList.{Task, TaskListViewModel}
-import views.html.TaskListView
+import viewModels.sections.Section
+import viewModels.traderDetails.TraderDetailsViewModel
+import views.html.traderDetails.CheckYourAnswersView
 
-class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators with PreTaskListUserAnswersGenerator {
+import scala.concurrent.Future
 
-  private lazy val mockViewModel = mock[TaskListViewModel]
+class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+
+  private lazy val mockViewModel = mock[TraderDetailsViewModel]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind[TaskListViewModel].toInstance(mockViewModel))
+      .overrides(bind[TraderDetailsViewModel].toInstance(mockViewModel))
 
-  "Task List Controller" - {
+  "Check Your Answers Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val sampleTasks = listWithMaxLength[Task]()(arbitraryTask).sample.value
+      val sampleSections = listWithMaxLength[Section]().sample.value
 
-      when(mockViewModel.apply(any())).thenReturn(sampleTasks)
+      when(mockViewModel.apply(any())(any())).thenReturn(sampleSections)
 
-      val userAnswers = arbitraryPreTaskListAnswersWithoutTir.sample.value
-      setExistingUserAnswers(userAnswers)
+      setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, routes.TaskListController.onPageLoad(lrn).url)
+      val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad(lrn).url)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[TaskListView]
+      val view = injector.instanceOf[CheckYourAnswersView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(lrn, sampleTasks)(request, messages).toString
-    }
-
-    "must redirect to LRN page if pre- task list section is incomplete" in {
-      setExistingUserAnswers(emptyUserAnswers)
-
-      val request = FakeRequest(GET, routes.TaskListController.onPageLoad(lrn).url)
-
-      val result = route(app, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad().url
+        view(lrn, sampleSections)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, routes.TaskListController.onPageLoad(lrn).url)
+      val request = FakeRequest(GET, controllers.traderDetails.holderOfTransit.routes.CheckYourAnswersController.onPageLoad(lrn).url)
 
       val result = route(app, request).value
 
@@ -82,16 +73,19 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
-    "must redirect to ???" ignore {
+    "must redirect to task list" in {
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+      val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn).url)
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual ???
+      redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
+
     }
   }
 }

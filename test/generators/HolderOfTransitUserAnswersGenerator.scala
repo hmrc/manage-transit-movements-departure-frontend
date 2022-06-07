@@ -26,7 +26,22 @@ import play.api.libs.json.{JsBoolean, Json}
 trait HolderOfTransitUserAnswersGenerator extends UserAnswersGenerator {
   self: Generators =>
 
-  lazy val arbitraryCompletedAnswersWithEori: Gen[UserAnswers] = arbitraryUserAnswers(
+  lazy val arbitraryHolderOfTransitAnswers: Gen[UserAnswers] = Gen.oneOf(
+    arbitraryHolderOfTransitAnswersWithEori,
+    arbitraryHolderOfTransitAnswersWithoutEori,
+    arbitraryHolderOfTransitAnswersWithTirId,
+    arbitraryHolderOfTransitAnswersWithoutTirId,
+    arbitraryHolderOfTransitAnswersWithAdditionalContact
+  )
+
+  lazy val arbitraryHolderOfTransitAnswersWithoutAdditionalContact: Gen[UserAnswers] = Gen.oneOf(
+    arbitraryHolderOfTransitAnswersWithEori,
+    arbitraryHolderOfTransitAnswersWithoutEori,
+    arbitraryHolderOfTransitAnswersWithTirId,
+    arbitraryHolderOfTransitAnswersWithoutTirId
+  )
+
+  lazy val arbitraryHolderOfTransitAnswersWithEori: Gen[UserAnswers] = arbitraryUserAnswers(
     arbitraryNonOption4DeclarationTypeUserAnswersEntry.arbitrary ::
       Arbitrary((EoriYesNoPage, JsBoolean(true))).arbitrary ::
       arbitraryTransitHolderEoriUserAnswersEntry.arbitrary ::
@@ -36,7 +51,7 @@ trait HolderOfTransitUserAnswersGenerator extends UserAnswersGenerator {
       Nil
   )
 
-  lazy val arbitraryCompletedAnswersWithoutEori: Gen[UserAnswers] = arbitraryUserAnswers(
+  lazy val arbitraryHolderOfTransitAnswersWithoutEori: Gen[UserAnswers] = arbitraryUserAnswers(
     arbitraryNonOption4DeclarationTypeUserAnswersEntry.arbitrary ::
       Arbitrary((EoriYesNoPage, JsBoolean(false))).arbitrary ::
       arbitraryTransitHolderNameUserAnswersEntry.arbitrary ::
@@ -45,7 +60,7 @@ trait HolderOfTransitUserAnswersGenerator extends UserAnswersGenerator {
       Nil
   )
 
-  lazy val arbitraryCompletedAnswersWithTirId: Gen[UserAnswers] = arbitraryUserAnswers(
+  lazy val arbitraryHolderOfTransitAnswersWithTirId: Gen[UserAnswers] = arbitraryUserAnswers(
     Arbitrary((DeclarationTypePage, Json.toJson[DeclarationType](Option4))).arbitrary ::
       Arbitrary((TirIdentificationYesNoPage, JsBoolean(true))).arbitrary ::
       arbitraryTransitHolderTirIdentificationUserAnswersEntry.arbitrary ::
@@ -55,7 +70,7 @@ trait HolderOfTransitUserAnswersGenerator extends UserAnswersGenerator {
       Nil
   )
 
-  lazy val arbitraryCompletedAnswersWithoutTirId: Gen[UserAnswers] = arbitraryUserAnswers(
+  lazy val arbitraryHolderOfTransitAnswersWithoutTirId: Gen[UserAnswers] = arbitraryUserAnswers(
     Arbitrary((DeclarationTypePage, Json.toJson[DeclarationType](Option4))).arbitrary ::
       Arbitrary((TirIdentificationYesNoPage, JsBoolean(false))).arbitrary ::
       arbitraryTransitHolderNameUserAnswersEntry.arbitrary ::
@@ -64,7 +79,7 @@ trait HolderOfTransitUserAnswersGenerator extends UserAnswersGenerator {
       Nil
   )
 
-  lazy val arbitraryCompletedAnswersWithAdditionalContact: Gen[UserAnswers] = arbitraryUserAnswers(
+  lazy val arbitraryHolderOfTransitAnswersWithAdditionalContact: Gen[UserAnswers] = arbitraryUserAnswers(
     arbitraryNonOption4DeclarationTypeUserAnswersEntry.arbitrary ::
       Arbitrary((EoriYesNoPage, JsBoolean(false))).arbitrary ::
       arbitraryTransitHolderNameUserAnswersEntry.arbitrary ::

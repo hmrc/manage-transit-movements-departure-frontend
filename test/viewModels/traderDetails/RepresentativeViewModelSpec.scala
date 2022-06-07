@@ -14,18 +14,23 @@
  * limitations under the License.
  */
 
-package viewModels
+package viewModels.traderDetails
 
 import base.SpecBase
+import generators.Generators
+import models.Mode
 import models.traderDetails.representative.RepresentativeCapacity.Direct
+import org.scalacheck.Arbitrary.arbitrary
 import pages.traderDetails.representative._
 
-class RepresentativeViewModelSpec extends SpecBase {
+class RepresentativeViewModelSpec extends SpecBase with Generators {
+
+  private val mode = arbitrary[Mode].sample.value
 
   "apply" - {
     "when user answers empty" - {
       "must return empty rows" in {
-        val sections = new RepresentativeViewModel().apply(emptyUserAnswers)
+        val sections = new RepresentativeViewModel().apply(emptyUserAnswers, mode)
 
         sections.size mustBe 1
 
@@ -43,7 +48,7 @@ class RepresentativeViewModelSpec extends SpecBase {
           .setValue(CapacityPage, Direct)
           .setValue(TelephoneNumberPage, "phone")
 
-        val sections = new RepresentativeViewModel().apply(answers)
+        val sections = new RepresentativeViewModel().apply(answers, mode)
 
         sections.size mustBe 1
 
