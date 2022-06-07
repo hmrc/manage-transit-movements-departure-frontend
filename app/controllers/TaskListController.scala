@@ -23,7 +23,7 @@ import models.journeyDomain.PreTaskListDomain
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.TaskListViewModel
+import viewModels.taskList.TaskListViewModel
 import views.html.TaskListView
 
 class TaskListController @Inject() (

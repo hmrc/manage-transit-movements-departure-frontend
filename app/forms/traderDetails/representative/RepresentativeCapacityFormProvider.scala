@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package viewModels
+package forms.traderDetails.representative
 
-import base.SpecBase
+import javax.inject.Inject
 
-class TaskListViewModelSpec extends SpecBase {
+import forms.mappings.Mappings
+import play.api.data.Form
+import models.traderDetails.representative.RepresentativeCapacity
 
-  "apply" - {
-    "must create tasks" in {
-      val answers = emptyUserAnswers
+class RepresentativeCapacityFormProvider @Inject() extends Mappings {
 
-      val tasks = new TaskListViewModel().apply(answers)
-
-      tasks.size mustBe 1
-    }
-  }
+  def apply(): Form[RepresentativeCapacity] =
+    Form(
+      "value" -> enumerable[RepresentativeCapacity]("traderDetails.representative.representativeCapacity.error.required")
+    )
 }

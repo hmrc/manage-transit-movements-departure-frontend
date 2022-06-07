@@ -24,8 +24,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewModels.TaskListViewModel
-import viewModels.taskList.Task
+import viewModels.taskList.{Task, TaskListViewModel}
 import views.html.TaskListView
 
 class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators with PreTaskListUserAnswersGenerator {
@@ -44,7 +43,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       when(mockViewModel.apply(any())).thenReturn(sampleTasks)
 
-      val userAnswers = arbitraryCompletedAnswersWithoutTir.sample.value
+      val userAnswers = arbitraryPreTaskListAnswersWithoutTir.sample.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, routes.TaskListController.onPageLoad(lrn).url)

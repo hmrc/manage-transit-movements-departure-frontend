@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package viewModels
+package pages.traderDetails.representative
 
-import models.UserAnswers
-import viewModels.taskList.{Task, TraderDetailsTask}
+import models.traderDetails.representative.RepresentativeCapacity
+import play.api.libs.json.JsPath
+import pages.QuestionPage
+import pages.sections.RepresentativeSection
 
-class TaskListViewModel {
+case object RepresentativeCapacityPage extends QuestionPage[RepresentativeCapacity] {
 
-  def apply(userAnswers: UserAnswers): Seq[Task] =
-    Seq(
-      TraderDetailsTask(userAnswers)
-    )
+  override def path: JsPath = RepresentativeSection.path \ toString
+
+  override def toString: String = "representativeCapacity"
 }

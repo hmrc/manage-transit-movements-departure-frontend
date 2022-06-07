@@ -22,19 +22,16 @@ import models.{LocalReferenceNumber, NormalMode}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.HolderOfTransitViewModel
+import viewModels.traderDetails.HolderOfTransitViewModel.HolderOfTransitSubSectionViewModel
 import views.html.traderDetails.holderOfTransit.CheckYourAnswersView
-
-import scala.concurrent.ExecutionContext
 
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
-  viewModel: HolderOfTransitViewModel
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+  viewModel: HolderOfTransitSubSectionViewModel
+)() extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {

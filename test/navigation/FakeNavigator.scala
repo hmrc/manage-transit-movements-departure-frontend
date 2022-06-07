@@ -16,18 +16,22 @@
 
 package navigation
 
-import models.{Mode, NormalMode, UserAnswers}
-import pages._
+import models.{Mode, NormalMode}
 import play.api.mvc.Call
 
 class FakeNavigator(desiredRoute: Call, mode: Mode = NormalMode) extends Navigator {
 
-  override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
+  override protected def normalRoutes: RouteMapping = {
     case _ =>
       _ => Some(desiredRoute)
   }
 
-  override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
+  override protected def checkRoutes: RouteMapping = {
+    case _ =>
+      _ => Some(desiredRoute)
+  }
+
+  override def routes(mode: Mode): RouteMapping = {
     case _ =>
       _ => Some(desiredRoute)
   }

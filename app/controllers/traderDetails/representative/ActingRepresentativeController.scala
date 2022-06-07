@@ -18,6 +18,7 @@ package controllers.traderDetails.representative
 
 import controllers.actions._
 import forms.YesNoFormProvider
+
 import javax.inject.Inject
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator

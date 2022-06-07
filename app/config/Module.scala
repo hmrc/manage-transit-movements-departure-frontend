@@ -20,6 +20,7 @@ import com.google.inject.AbstractModule
 import controllers.actions._
 import navigation._
 import navigation.annotations._
+import navigation.traderDetails.{HolderOfTransitNavigator, RepresentativeNavigator}
 
 import java.time.Clock
 

@@ -26,20 +26,20 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewModels.HolderOfTransitViewModel
 import viewModels.sections.Section
+import viewModels.traderDetails.HolderOfTransitViewModel.HolderOfTransitSubSectionViewModel
 import views.html.traderDetails.holderOfTransit.CheckYourAnswersView
 
 import scala.concurrent.Future
 
 class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private lazy val mockViewModel = mock[HolderOfTransitViewModel]
+  private lazy val mockViewModel = mock[HolderOfTransitSubSectionViewModel]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind[HolderOfTransitViewModel].toInstance(mockViewModel))
+      .overrides(bind[HolderOfTransitSubSectionViewModel].toInstance(mockViewModel))
 
   "Check Your Answers Controller" - {
 

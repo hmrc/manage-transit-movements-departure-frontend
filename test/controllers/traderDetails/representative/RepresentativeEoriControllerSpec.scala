@@ -27,9 +27,9 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.traderDetails.representative.RepresentativeEoriView
 import services.UserAnswersService
-import pages.traderDetails.representative.RepresentativeEoriPage
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.EoriNumberFormProvider
+import pages.traderDetails.representative.RepresentativeEoriPage
 
 import scala.concurrent.Future
 

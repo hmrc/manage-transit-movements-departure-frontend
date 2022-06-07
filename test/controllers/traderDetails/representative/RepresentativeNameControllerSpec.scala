@@ -28,8 +28,8 @@ import play.api.test.Helpers._
 import forms.NameFormProvider
 import views.html.traderDetails.representative.RepresentativeNameView
 import services.UserAnswersService
-import pages.traderDetails.representative.RepresentativeNamePage
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import pages.traderDetails.representative.RepresentativeNamePage
 
 import scala.concurrent.Future
 
