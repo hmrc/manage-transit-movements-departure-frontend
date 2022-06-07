@@ -48,7 +48,7 @@ Then you create the address page referencing the Name Page
 -> className[MyNewAddress]: ConsigneeAddress
 -> formProvider [AddressFormProvider]
 -> addressHolderNamePage: ConsigneeNamePage
-->addressHolderNameImport[pages.foo.bar.NamePage]
+-> addressHolderNameImport[pages.foo.bar.NamePage]
 -> navRoute [PreTaskListDetails]:         # use same package as created for Address name page above
 -> pageSection [PreTaskListSection]:      # use same package as created for Address name page above
 </pre>
