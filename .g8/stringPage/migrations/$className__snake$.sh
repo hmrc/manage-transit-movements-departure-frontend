@@ -5,8 +5,15 @@ echo "Applying migration $className;format="snake"$"
 
 echo "Adding routes to conf/app.$package$.routes"
 
+
 if [ ! -f ../conf/app.$package$.routes ]; then
-  echo "->         /manage-transit-movements/departure                   app.$package$.Routes" >> ../conf/prod.routes
+  echo "Write into file"
+  awk '
+  /"health.Routes"/ {
+   print "->         /manage-transit-movements/departure                   app.$package$.Routes"
+  }
+  { print }
+  ' ../conf/prod.routes
 fi
 
 echo "" >> ../conf/app.$package$.routes
