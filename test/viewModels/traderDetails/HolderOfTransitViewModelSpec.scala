@@ -18,19 +18,17 @@ package viewModels.traderDetails
 
 import base.SpecBase
 import generators.Generators
+import models.Address
 import models.reference.{Country, CountryCode}
-import models.{Address, Mode}
-import org.scalacheck.Arbitrary.arbitrary
 import pages.traderDetails.holderOfTransit._
+import viewModels.traderDetails.HolderOfTransitViewModel.HolderOfTransitSectionViewModel
 
 class HolderOfTransitViewModelSpec extends SpecBase with Generators {
-
-  private val mode = arbitrary[Mode].sample.value
 
   "apply" - {
     "when user answers empty" - {
       "must return empty rows" in {
-        val sections = new HolderOfTransitViewModel().apply(emptyUserAnswers, mode)
+        val sections = new HolderOfTransitSectionViewModel().apply(emptyUserAnswers)
 
         sections.size mustBe 2
 
@@ -55,7 +53,7 @@ class HolderOfTransitViewModelSpec extends SpecBase with Generators {
           .setValue(ContactNamePage, "contact name")
           .setValue(ContactTelephoneNumberPage, "phone number")
 
-        val sections = new HolderOfTransitViewModel().apply(answers, mode)
+        val sections = new HolderOfTransitSectionViewModel().apply(answers)
 
         sections.size mustBe 2
 

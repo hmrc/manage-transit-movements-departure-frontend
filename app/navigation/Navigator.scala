@@ -22,7 +22,8 @@ import pages.{Page, QuestionPage}
 import play.api.mvc.Call
 
 trait Navigator {
-  type RouteMapping = PartialFunction[Page, UserAnswers => Option[Call]]
+  private type Route          = UserAnswers => Option[Call]
+  protected type RouteMapping = PartialFunction[Page, Route]
 
   protected def normalRoutes: RouteMapping
 
@@ -56,12 +57,12 @@ trait Navigator {
     case page =>
       ua =>
         UserAnswersReader[T].run(ua) match {
-          case Left(_)  => routes(mode).applyOrElse[Page, UserAnswers => Option[Call]](page, _ => _ => None)(ua)
+          case Left(_)  => routes(mode).applyOrElse[Page, Route](page, _ => _ => None)(ua)
           case Right(_) => Some(checkYourAnswersRoute(ua))
         }
   }
 
-  private def handleCall(userAnswers: UserAnswers, call: UserAnswers => Option[Call]): Call =
+  private def handleCall(userAnswers: UserAnswers, call: Route): Call =
     call(userAnswers) match {
       case Some(onwardRoute) => onwardRoute
       case None              => controllers.routes.SessionExpiredController.onPageLoad()

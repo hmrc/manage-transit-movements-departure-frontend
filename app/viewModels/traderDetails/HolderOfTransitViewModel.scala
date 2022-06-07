@@ -16,14 +16,16 @@
 
 package viewModels.traderDetails
 
-import models.{Mode, UserAnswers}
+import models.UserAnswers
 import play.api.i18n.Messages
 import utils.HolderOfTransitCheckYourAnswersHelper
 import viewModels.sections.Section
+import viewModels.{SectionViewModel, SubSectionViewModel}
 
-class HolderOfTransitViewModel {
+sealed trait HolderOfTransitViewModel {
+  self: SectionViewModel =>
 
-  def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): Seq[Section] = {
+  def apply(userAnswers: UserAnswers)(implicit messages: Messages): Seq[Section] = {
     val helper = new HolderOfTransitCheckYourAnswersHelper(userAnswers, mode)
 
     val holderOfTransitSection = Section(
@@ -49,4 +51,9 @@ class HolderOfTransitViewModel {
 
     Seq(holderOfTransitSection, additionalContactSection)
   }
+}
+
+object HolderOfTransitViewModel {
+  class HolderOfTransitSectionViewModel extends SectionViewModel with HolderOfTransitViewModel
+  class HolderOfTransitSubSectionViewModel extends SubSectionViewModel with HolderOfTransitViewModel
 }
