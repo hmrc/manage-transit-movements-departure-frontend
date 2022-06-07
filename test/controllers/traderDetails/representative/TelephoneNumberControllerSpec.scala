@@ -36,7 +36,7 @@ import scala.concurrent.Future
 class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private val formProvider                  = new RepresentativePhoneFormProvider()
-  private val form                          = formProvider("traderDetails.representative.representativePhone")
+  private val form                          = formProvider("traderDetails.representative.phone")
   private val mode                          = NormalMode
   private lazy val representativePhoneRoute = routes.TelephoneNumberController.onPageLoad(lrn, mode).url
   private lazy val mockUserAnswersService   = mock[UserAnswersService]

@@ -43,7 +43,7 @@ class TelephoneNumberController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("traderDetails.representative.representativePhone")
+  private val form = formProvider("traderDetails.representative.phone")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

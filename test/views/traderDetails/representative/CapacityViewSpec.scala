@@ -32,7 +32,7 @@ class CapacityViewSpec extends RadioViewBehaviours[RepresentativeCapacity] {
   override def applyView(form: Form[RepresentativeCapacity]): HtmlFormat.Appendable =
     injector.instanceOf[CapacityView].apply(form, lrn, RepresentativeCapacity.radioItems, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "traderDetails.representative.representativeCapacity"
+  override val prefix: String = "traderDetails.representative.capacity"
 
   override def radioItems(fieldId: String, checkedValue: Option[RepresentativeCapacity] = None): Seq[RadioItem] =
     RepresentativeCapacity.radioItems(fieldId, checkedValue)

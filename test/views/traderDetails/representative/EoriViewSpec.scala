@@ -27,7 +27,7 @@ import views.html.traderDetails.representative.EoriView
 
 class EoriViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "traderDetails.representative.representativeEori"
+  override val prefix: String = "traderDetails.representative.eori"
 
   override def form: Form[String] = new EoriNumberFormProvider()(prefix)
 
@@ -44,7 +44,7 @@ class EoriViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithHeading()
 
-  behave like pageWithHint("This will start with ’GB’ or ’XI’ followed by 12 or 15 numbers. for example GB123456789000.")
+  behave like pageWithHint("This will start GB or XI followed by 12 or 15 numbers, for example GB123456789000.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 

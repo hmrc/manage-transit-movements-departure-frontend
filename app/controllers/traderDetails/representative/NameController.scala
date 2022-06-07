@@ -43,7 +43,7 @@ class NameController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("traderDetails.representative.representativeName")
+  private val form = formProvider("traderDetails.representative.name")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

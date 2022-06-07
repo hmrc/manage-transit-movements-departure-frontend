@@ -34,26 +34,26 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
 
   "RepresentativeCheckYourAnswersHelper" - {
 
-    "actingRepresentative" - {
+    "actingAsRepresentative" - {
       "must return None" - {
-        "when ActingRepresentativePage is undefined" in {
+        s"when $ActingAsRepresentativePage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new RepresentativeCheckYourAnswersHelper(emptyUserAnswers, mode)
-              val result = helper.actingRepresentative
+              val result = helper.actingAsRepresentative
               result mustBe None
           }
         }
       }
 
       "must return Some(Row)" - {
-        "when ActingRepresentativePage is defined" in {
+        s"when $ActingAsRepresentativePage is defined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val answers = emptyUserAnswers.setValue(ActingAsRepresentativePage, true)
 
               val helper = new RepresentativeCheckYourAnswersHelper(answers, mode)
-              val result = helper.actingRepresentative
+              val result = helper.actingAsRepresentative
 
               result mustBe Some(
                 SummaryListRow(
@@ -78,26 +78,26 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
       }
     }
 
-    "representativeEori" - {
+    "eori" - {
       "must return None" - {
-        "when RepresentativeEoriPage is undefined" in {
+        s"when $EoriPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new RepresentativeCheckYourAnswersHelper(emptyUserAnswers, mode)
-              val result = helper.representativeEori
+              val result = helper.eori
               result mustBe None
           }
         }
       }
 
       "must return Some(Row)" - {
-        "when RepresentativeEoriPage is defined" in {
+        s"when $EoriPage is defined" in {
           forAll(Gen.alphaNumStr, arbitrary[Mode]) {
             (eori, mode) =>
               val answers = emptyUserAnswers.setValue(EoriPage, eori)
 
               val helper = new RepresentativeCheckYourAnswersHelper(answers, mode)
-              val result = helper.representativeEori
+              val result = helper.eori
 
               result mustBe Some(
                 SummaryListRow(
@@ -122,26 +122,26 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
       }
     }
 
-    "representativeName" - {
+    "name" - {
       "must return None" - {
-        "when RepresentativeNamePage is undefined" in {
+        s"when $NamePage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new RepresentativeCheckYourAnswersHelper(emptyUserAnswers, mode)
-              val result = helper.representativeName
+              val result = helper.name
               result mustBe None
           }
         }
       }
 
       "must return Some(Row)" - {
-        "when RepresentativeNamePage is defined" in {
+        s"when $NamePage is defined" in {
           forAll(Gen.alphaNumStr, arbitrary[Mode]) {
             (representativeName, mode) =>
               val answers = emptyUserAnswers.setValue(NamePage, representativeName)
 
               val helper = new RepresentativeCheckYourAnswersHelper(answers, mode)
-              val result = helper.representativeName
+              val result = helper.name
 
               result mustBe Some(
                 SummaryListRow(
@@ -166,31 +166,31 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
       }
     }
 
-    "representativeCapacity" - {
+    "capacity" - {
       "must return None" - {
-        "when RepresentativeCapacityPage is undefined" in {
+        s"when $CapacityPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new RepresentativeCheckYourAnswersHelper(emptyUserAnswers, mode)
-              val result = helper.representativeCapacity
+              val result = helper.capacity
               result mustBe None
           }
         }
       }
 
       "must return Some(Row)" - {
-        "when RepresentativeCapacityPage is defined" in {
+        s"when $CapacityPage is defined" in {
           forAll(Gen.oneOf(RepresentativeCapacity.values), arbitrary[Mode]) {
             (capacity, mode) =>
               val answers = emptyUserAnswers.setValue(CapacityPage, capacity)
 
               val helper = new RepresentativeCheckYourAnswersHelper(answers, mode)
-              val result = helper.representativeCapacity
+              val result = helper.capacity
 
               result mustBe Some(
                 SummaryListRow(
                   key = Key("Representative capacity".toText),
-                  value = Value(messages(s"traderDetails.representative.representativeCapacity.$capacity").toText),
+                  value = Value(messages(s"traderDetails.representative.capacity.$capacity").toText),
                   actions = Some(
                     Actions(
                       items = List(
@@ -210,26 +210,26 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
       }
     }
 
-    "RepresentativePhoneNumber" - {
+    "phoneNumber" - {
       "must return None" - {
-        "when RepresentativePhoneNumberPage is undefined" in {
+        s"when $TelephoneNumberPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new RepresentativeCheckYourAnswersHelper(emptyUserAnswers, mode)
-              val result = helper.representativePhone
+              val result = helper.phoneNumber
               result mustBe None
           }
         }
       }
 
       "must return Some(Row)" - {
-        "when RepresentativePhoneNumberPage is defined" in {
+        s"when $TelephoneNumberPage is defined" in {
           forAll(Gen.alphaNumStr, arbitrary[Mode]) {
             (representativePhoneNumber, mode) =>
               val answers = emptyUserAnswers.setValue(TelephoneNumberPage, representativePhoneNumber)
 
               val helper = new RepresentativeCheckYourAnswersHelper(answers, mode)
-              val result = helper.representativePhone
+              val result = helper.phoneNumber
 
               result mustBe Some(
                 SummaryListRow(

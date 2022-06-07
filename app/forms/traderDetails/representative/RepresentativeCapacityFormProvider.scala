@@ -26,6 +26,6 @@ class RepresentativeCapacityFormProvider @Inject() extends Mappings {
 
   def apply(): Form[RepresentativeCapacity] =
     Form(
-      "value" -> enumerable[RepresentativeCapacity]("traderDetails.representative.representativeCapacity.error.required")
+      "value" -> enumerable[RepresentativeCapacity]("traderDetails.representative.capacity.error.required")
     )
 }

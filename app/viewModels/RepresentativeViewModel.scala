@@ -29,11 +29,11 @@ class RepresentativeViewModel {
     val representativeSection = Section(
       sectionTitle = messages("traderDetails.representative.checkYourAnswers.representative"),
       rows = Seq(
-        helper.actingRepresentative,
-        helper.representativeEori,
-        helper.representativeName,
-        helper.representativeCapacity,
-        helper.representativePhone
+        helper.actingAsRepresentative,
+        helper.eori,
+        helper.name,
+        helper.capacity,
+        helper.phoneNumber
       ).flatten
     )
 

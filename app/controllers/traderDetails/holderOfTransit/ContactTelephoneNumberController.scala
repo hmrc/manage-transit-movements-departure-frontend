@@ -23,6 +23,7 @@ import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.HolderOfTransit
 import pages.traderDetails.holderOfTransit.{ContactNamePage, ContactTelephoneNumberPage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -45,6 +46,9 @@ class ContactTelephoneNumberController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  private def form(implicit request: Request): Form[String] =
+    formProvider("traderDetails.holderOfTransit.contactTelephoneNumber", contactName)
+
   private type Request = SpecificDataRequestProvider1[String]#SpecificDataRequest[_]
 
   private def contactName(implicit request: Request): String = request.arg
@@ -53,7 +57,6 @@ class ContactTelephoneNumberController @Inject() (
     .requireData(lrn)
     .andThen(getMandatoryPage(ContactNamePage)) {
       implicit request =>
-        val form = formProvider("traderDetails.holderOfTransit.contactTelephoneNumber", contactName)
         val preparedForm = request.userAnswers.get(ContactTelephoneNumberPage) match {
           case None        => form
           case Some(value) => form.fill(value)
@@ -66,7 +69,7 @@ class ContactTelephoneNumberController @Inject() (
     .andThen(getMandatoryPage(ContactNamePage))
     .async {
       implicit request =>
-        formProvider("traderDetails.holderOfTransit.contactTelephoneNumber", contactName)
+        form
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, contactName))),

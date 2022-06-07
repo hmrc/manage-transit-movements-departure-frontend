@@ -27,7 +27,7 @@ import org.scalacheck.{Arbitrary, Gen}
 
 class TelephoneNumberViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "traderDetails.representative.representativePhone"
+  override val prefix: String = "traderDetails.representative.phone"
 
   override def form: Form[String] = new RepresentativePhoneFormProvider()(prefix)
 

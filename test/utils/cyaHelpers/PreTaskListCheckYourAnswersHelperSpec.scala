@@ -64,7 +64,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
 
     "officeOfDeparture" - {
       "must return None" - {
-        "when OfficeOfDeparturePage undefined" in {
+        s"when $OfficeOfDeparturePage undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new PreTaskListCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -75,7 +75,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
       }
 
       "must return Some(Row)" - {
-        "when OfficeOfDeparturePage defined" in {
+        s"when $OfficeOfDeparturePage defined" in {
           forAll(arbitrary[CustomsOffice], arbitrary[Mode]) {
             (customsOffice, mode) =>
               val answers = emptyUserAnswers.setValue(OfficeOfDeparturePage, customsOffice)
@@ -108,7 +108,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
 
     "procedureType" - {
       "must return None" - {
-        "when ProcedureTypePage undefined" in {
+        s"when $ProcedureTypePage undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new PreTaskListCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -119,7 +119,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
       }
 
       "must return Some(Row)" - {
-        "when ProcedureTypePage defined" in {
+        s"when $ProcedureTypePage defined" in {
           forAll(arbitrary[ProcedureType], arbitrary[Mode]) {
             (procedureType, mode) =>
               val answers = emptyUserAnswers.setValue(ProcedureTypePage, procedureType)
@@ -152,7 +152,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
 
     "declarationType" - {
       "must return None" - {
-        "when DeclarationTypePage undefined" in {
+        s"when $DeclarationTypePage undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new PreTaskListCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -163,7 +163,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
       }
 
       "must return Some(Row)" - {
-        "when DeclarationTypePage defined" in {
+        s"when $DeclarationTypePage defined" in {
           forAll(arbitrary[DeclarationType], arbitrary[Mode]) {
             (declarationType, mode) =>
               val answers = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
@@ -196,7 +196,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
 
     "tirCarnet" - {
       "must return None" - {
-        "when TIRCarnetReferencePage undefined" in {
+        s"when $TIRCarnetReferencePage undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new PreTaskListCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -207,7 +207,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
       }
 
       "must return Some(Row)" - {
-        "when TIRCarnetReferencePage defined" in {
+        s"when $TIRCarnetReferencePage defined" in {
           forAll(Gen.alphaNumStr, arbitrary[Mode]) {
             (tirCarnetReference, mode) =>
               val answers = emptyUserAnswers.setValue(TIRCarnetReferencePage, tirCarnetReference)
@@ -240,7 +240,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
 
     "securityType" - {
       "must return None" - {
-        "when SecurityDetailsTypePage undefined" in {
+        s"when $SecurityDetailsTypePage undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new PreTaskListCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -251,7 +251,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
       }
 
       "must return Some(Row)" - {
-        "when SecurityDetailsTypePage defined" in {
+        s"when $SecurityDetailsTypePage defined" in {
           forAll(arbitrary[SecurityDetailsType], arbitrary[Mode]) {
             (securityDetailsType, mode) =>
               val answers = emptyUserAnswers.setValue(SecurityDetailsTypePage, securityDetailsType)

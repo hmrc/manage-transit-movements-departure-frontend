@@ -36,7 +36,7 @@ import scala.concurrent.Future
 class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private val formProvider                 = new EoriNumberFormProvider()
-  private val form                         = formProvider("traderDetails.representative.representativeEori")
+  private val form                         = formProvider("traderDetails.representative.eori")
   private val mode                         = NormalMode
   private lazy val representativeEoriRoute = routes.EoriController.onPageLoad(lrn, mode).url
   private lazy val mockUserAnswersService  = mock[UserAnswersService]

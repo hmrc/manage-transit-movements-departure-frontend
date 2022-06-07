@@ -36,7 +36,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
     "tirIdentificationYesNo" - {
       "must return None" - {
-        "when TirIdentificationYesNoPage is undefined" in {
+        s"when $TirIdentificationYesNoPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new HolderOfTransitCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -47,7 +47,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
 
       "must return Some(Row)" - {
-        "when TirIdentificationYesNoPage is defined" in {
+        s"when $TirIdentificationYesNoPage is defined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val answers = emptyUserAnswers.setValue(TirIdentificationYesNoPage, true)
@@ -80,7 +80,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
     "tirIdentification" - {
       "must return None" - {
-        "when TirIdentificationPage is undefined" in {
+        s"when $TirIdentificationPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new HolderOfTransitCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -91,7 +91,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
 
       "must return Some(Row)" - {
-        "when TirIdentificationPage is defined" in {
+        s"when $TirIdentificationPage is defined" in {
           forAll(Gen.alphaNumStr, arbitrary[Mode]) {
             (eori, mode) =>
               val answers = emptyUserAnswers.setValue(TirIdentificationPage, eori)
@@ -124,7 +124,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
     "eoriYesNo" - {
       "must return None" - {
-        "when EoriYesNoPage is undefined" in {
+        s"when $EoriYesNoPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new HolderOfTransitCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -135,7 +135,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
 
       "must return Some(Row)" - {
-        "when EoriYesNoPage is defined" in {
+        s"when $EoriYesNoPage is defined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val answers = emptyUserAnswers.setValue(EoriYesNoPage, true)
@@ -168,7 +168,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
     "eori" - {
       "must return None" - {
-        "when EoriPage is undefined" in {
+        s"when $EoriPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new HolderOfTransitCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -179,7 +179,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
 
       "must return Some(Row)" - {
-        "when EoriPage is defined" in {
+        s"when $EoriPage is defined" in {
           forAll(Gen.alphaNumStr, arbitrary[Mode]) {
             (eori, mode) =>
               val answers = emptyUserAnswers.setValue(EoriPage, eori)
@@ -212,7 +212,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
     "name" - {
       "must return None" - {
-        "when NamePage is undefined" in {
+        s"when $NamePage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new HolderOfTransitCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -223,7 +223,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
 
       "must return Some(Row)" - {
-        "when NamePage is defined" in {
+        s"when $NamePage is defined" in {
           forAll(Gen.alphaNumStr, arbitrary[Mode]) {
             (name, mode) =>
               val answers = emptyUserAnswers.setValue(NamePage, name)
@@ -256,7 +256,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
     "address" - {
       "must return None" - {
-        "when AddressPage is undefined" in {
+        s"when $AddressPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new HolderOfTransitCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -267,7 +267,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
 
       "must return Some(Row)" - {
-        "when AddressPage is defined" in {
+        s"when $AddressPage is defined" in {
           forAll(arbitrary[Address], arbitrary[Mode]) {
             (address, mode) =>
               val answers = emptyUserAnswers.setValue(AddressPage, address)
@@ -300,7 +300,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
     "addContact" - {
       "must return None" - {
-        "when AddContactPage is undefined" in {
+        s"when $AddContactPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new HolderOfTransitCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -311,7 +311,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
 
       "must return Some(Row)" - {
-        "when AddContactPage is defined" in {
+        s"when $AddContactPage is defined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val answers = emptyUserAnswers.setValue(AddContactPage, true)
@@ -344,7 +344,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
     "contactName" - {
       "must return None" - {
-        "when ContactNamePage is undefined" in {
+        s"when $ContactNamePage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new HolderOfTransitCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -355,7 +355,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
 
       "must return Some(Row)" - {
-        "when ContactNamePage is defined" in {
+        s"when $ContactNamePage is defined" in {
           forAll(Gen.alphaNumStr, arbitrary[Mode]) {
             (contactName, mode) =>
               val answers = emptyUserAnswers.setValue(ContactNamePage, contactName)
@@ -388,7 +388,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
     "contactTelephoneNumber" - {
       "must return None" - {
-        "when ContactTelephoneNumberPage is undefined" in {
+        s"when $ContactTelephoneNumberPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new HolderOfTransitCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -399,7 +399,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
 
       "must return Some(Row)" - {
-        "when ContactTelephoneNumberPage is defined" in {
+        s"when $ContactTelephoneNumberPage is defined" in {
           forAll(Gen.alphaNumStr, arbitrary[Mode]) {
             (contactTelephoneNumber, mode) =>
               val answers = emptyUserAnswers.setValue(ContactTelephoneNumberPage, contactTelephoneNumber)

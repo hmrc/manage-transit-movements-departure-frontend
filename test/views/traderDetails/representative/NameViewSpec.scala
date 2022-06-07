@@ -27,7 +27,7 @@ import views.html.traderDetails.representative.NameView
 
 class NameViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "traderDetails.representative.representativeName"
+  override val prefix: String = "traderDetails.representative.name"
 
   override def form: Form[String] = new NameFormProvider()(prefix)
 
