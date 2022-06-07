@@ -10,13 +10,14 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.$package$.{$className$Page, $addressHolderNamePage$}
+import pages.$package$.$className$Page
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CountriesService
 import views.html.$package$.$className$View
+import pages.traderDetails.holderOfTransit.NamePage //todo change this to the relevant namePage
 
 import scala.concurrent.Future
 
@@ -52,7 +53,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
 
-      val userAnswers = emptyUserAnswers.setValue($addressHolderNamePage$, addressHolderName)
+      val userAnswers = emptyUserAnswers.setValue(NamePage, addressHolderName) //todo change this to the relevant namepage
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, $className;format="decap"$Route)
@@ -72,7 +73,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
 
       val userAnswers = UserAnswers(lrn, eoriNumber)
-        .setValue($addressHolderNamePage$, addressHolderName)
+        .setValue(NamePage, addressHolderName) //todo change this to the relevant namepage
         .setValue($className$Page, testAddress)
 
       setExistingUserAnswers(userAnswers)
@@ -104,7 +105,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      val userAnswers = emptyUserAnswers.setValue($addressHolderNamePage$, addressHolderName)
+      val userAnswers = emptyUserAnswers.setValue(NamePage, addressHolderName) //todo change this to the relevant namepage
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(POST, $className;format="decap"$Route)
@@ -127,7 +128,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
 
-      val userAnswers = emptyUserAnswers.setValue($addressHolderNamePage$, addressHolderName)
+      val userAnswers = emptyUserAnswers.setValue(NamePage, addressHolderName) //todo change this to the relevant namepage
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(POST, $className;format="decap"$Route).withFormUrlEncodedBody(("value", ""))
