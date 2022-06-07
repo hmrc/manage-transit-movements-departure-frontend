@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package viewModels
+package viewModels.traderDetails
 
 import base.SpecBase
+import generators.Generators
 import models.traderDetails.representative.RepresentativeCapacity.Direct
 import pages.traderDetails.representative._
+import viewModels.traderDetails.RepresentativeViewModel.RepresentativeSectionViewModel
 
-class RepresentativeViewModelSpec extends SpecBase {
+class RepresentativeViewModelSpec extends SpecBase with Generators {
 
   "apply" - {
     "when user answers empty" - {
       "must return empty rows" in {
-        val sections = new RepresentativeViewModel().apply(emptyUserAnswers)
+        val sections = new RepresentativeSectionViewModel().apply(emptyUserAnswers)
 
         sections.size mustBe 1
 
@@ -43,7 +45,7 @@ class RepresentativeViewModelSpec extends SpecBase {
           .setValue(RepresentativeCapacityPage, Direct)
           .setValue(RepresentativePhonePage, "phone")
 
-        val sections = new RepresentativeViewModel().apply(answers)
+        val sections = new RepresentativeSectionViewModel().apply(answers)
 
         sections.size mustBe 1
 

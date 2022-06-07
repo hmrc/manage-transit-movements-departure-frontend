@@ -16,17 +16,12 @@
 
 package viewModels
 
-import base.SpecBase
+import models.{CheckMode, Mode, NormalMode}
 
-class TaskListViewModelSpec extends SpecBase {
+trait SectionViewModel {
+  val mode: Mode = CheckMode
+}
 
-  "apply" - {
-    "must create tasks" in {
-      val answers = emptyUserAnswers
-
-      val tasks = new TaskListViewModel().apply(answers)
-
-      tasks.size mustBe 1
-    }
-  }
+trait SubSectionViewModel extends SectionViewModel {
+  override val mode: Mode = NormalMode
 }

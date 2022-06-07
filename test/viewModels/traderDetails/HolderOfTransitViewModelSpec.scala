@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package viewModels
+package viewModels.traderDetails
 
 import base.SpecBase
+import generators.Generators
 import models.Address
 import models.reference.{Country, CountryCode}
 import pages.traderDetails.holderOfTransit._
+import viewModels.traderDetails.HolderOfTransitViewModel.HolderOfTransitSectionViewModel
 
-class HolderOfTransitViewModelSpec extends SpecBase {
+class HolderOfTransitViewModelSpec extends SpecBase with Generators {
 
   "apply" - {
     "when user answers empty" - {
       "must return empty rows" in {
-        val sections = new HolderOfTransitViewModel().apply(emptyUserAnswers)
+        val sections = new HolderOfTransitSectionViewModel().apply(emptyUserAnswers)
 
         sections.size mustBe 2
 
@@ -51,7 +53,7 @@ class HolderOfTransitViewModelSpec extends SpecBase {
           .setValue(ContactNamePage, "contact name")
           .setValue(ContactTelephoneNumberPage, "phone number")
 
-        val sections = new HolderOfTransitViewModel().apply(answers)
+        val sections = new HolderOfTransitSectionViewModel().apply(answers)
 
         sections.size mustBe 2
 

@@ -16,20 +16,20 @@
 
 package navigation
 
-import controllers.routes
+import models.domain.UserAnswersReader
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.{Page, QuestionPage}
 import play.api.mvc.Call
 
 trait Navigator {
-  type RouteMapping = PartialFunction[Page, UserAnswers => Option[Call]]
+  private type Route          = UserAnswers => Option[Call]
+  protected type RouteMapping = PartialFunction[Page, Route]
 
   protected def normalRoutes: RouteMapping
 
   protected def checkRoutes: RouteMapping
 
-  protected def checkModeDefaultPage(userAnswers: UserAnswers): Call =
-    routes.SessionExpiredController.onPageLoad()
+  def routes(mode: Mode): RouteMapping
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode =>
@@ -39,7 +39,7 @@ trait Navigator {
       }
     case CheckMode =>
       checkRoutes.lift(page) match {
-        case None       => checkModeDefaultPage(userAnswers)
+        case None       => controllers.routes.SessionExpiredController.onPageLoad()
         case Some(call) => handleCall(userAnswers, call)
       }
   }
@@ -53,9 +53,18 @@ trait Navigator {
       }
     }
 
-  private def handleCall(userAnswers: UserAnswers, call: UserAnswers => Option[Call]) =
+  protected def readUserAnswers[T](mode: Mode)(checkYourAnswersRoute: UserAnswers => Call)(implicit userAnswersReader: UserAnswersReader[T]): RouteMapping = {
+    case page =>
+      ua =>
+        UserAnswersReader[T].run(ua) match {
+          case Left(_)  => routes(mode).applyOrElse[Page, Route](page, _ => _ => None)(ua)
+          case Right(_) => Some(checkYourAnswersRoute(ua))
+        }
+  }
+
+  private def handleCall(userAnswers: UserAnswers, call: Route): Call =
     call(userAnswers) match {
       case Some(onwardRoute) => onwardRoute
-      case None              => routes.SessionExpiredController.onPageLoad()
+      case None              => controllers.routes.SessionExpiredController.onPageLoad()
     }
 }

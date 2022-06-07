@@ -16,7 +16,7 @@
 
 package generators
 
-import models.UserAnswers
+import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
@@ -95,5 +95,19 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
           obj.setObject(path.path, value).get
       }
     )
+  }
+
+  protected def combineUserAnswers(gens: Gen[UserAnswers]*): Gen[UserAnswers] = {
+    import scala.collection.convert.ImplicitConversions._
+
+    for {
+      id         <- arbitrary[LocalReferenceNumber]
+      eoriNumber <- arbitrary[EoriNumber]
+      data       <- Gen.sequence(gens).map(_.toList)
+    } yield data.foldLeft(UserAnswers(id, eoriNumber)) {
+      (acc, ua) =>
+        acc.copy(data = acc.data.deepMerge(ua.data))
+    }
+
   }
 }

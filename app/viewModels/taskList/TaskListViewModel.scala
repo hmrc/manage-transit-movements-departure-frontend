@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package viewModels
+package viewModels.taskList
 
 import models.UserAnswers
-import viewModels.taskList.{Task, TraderDetailsTask}
 
 class TaskListViewModel {
 

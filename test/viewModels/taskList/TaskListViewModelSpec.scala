@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-package navigation
+package viewModels.taskList
 
-import models.{Mode, NormalMode}
-import play.api.mvc.Call
+import base.SpecBase
 
-class FakeNavigator(desiredRoute: Call, mode: Mode = NormalMode) extends Navigator {
+class TaskListViewModelSpec extends SpecBase {
 
-  override protected def normalRoutes: RouteMapping = {
-    case _ =>
-      _ => Some(desiredRoute)
-  }
+  "apply" - {
+    "must create tasks" in {
+      val answers = emptyUserAnswers
 
-  override protected def checkRoutes: RouteMapping = {
-    case _ =>
-      _ => Some(desiredRoute)
-  }
+      val tasks = new TaskListViewModel().apply(answers)
 
-  override def routes(mode: Mode): RouteMapping = {
-    case _ =>
-      _ => Some(desiredRoute)
+      tasks.size mustBe 1
+    }
   }
 }

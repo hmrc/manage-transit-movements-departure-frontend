@@ -25,20 +25,20 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewModels.RepresentativeViewModel
 import viewModels.sections.Section
+import viewModels.traderDetails.RepresentativeViewModel.RepresentativeSubSectionViewModel
 import views.html.traderDetails.representative.CheckYourAnswersView
 
 import scala.concurrent.Future
 
 class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private lazy val mockViewModel = mock[RepresentativeViewModel]
+  private lazy val mockViewModel = mock[RepresentativeSubSectionViewModel]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind[RepresentativeViewModel].toInstance(mockViewModel))
+      .overrides(bind[RepresentativeSubSectionViewModel].toInstance(mockViewModel))
 
   "Check Your Answers Controller" - {
 
@@ -73,7 +73,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
-    "must redirect to ??? section" ignore {
+    "must redirect to consignor/consignee section" ignore {
       setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
@@ -84,9 +84,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       status(result) mustEqual SEE_OTHER
 
-      //TODO - redirect to next section when built
-      ???
-
+      redirectLocation(result).value mustEqual ???
     }
   }
 }

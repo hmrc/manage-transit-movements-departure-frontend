@@ -22,7 +22,7 @@ import models.{LocalReferenceNumber, NormalMode}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.HolderOfTransitViewModel
+import viewModels.traderDetails.HolderOfTransitViewModel.HolderOfTransitSubSectionViewModel
 import views.html.traderDetails.holderOfTransit.CheckYourAnswersView
 
 class CheckYourAnswersController @Inject() (
@@ -30,7 +30,7 @@ class CheckYourAnswersController @Inject() (
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
-  viewModel: HolderOfTransitViewModel
+  viewModel: HolderOfTransitSubSectionViewModel
 )() extends FrontendBaseController
     with I18nSupport {
 

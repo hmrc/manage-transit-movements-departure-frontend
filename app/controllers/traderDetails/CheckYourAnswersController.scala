@@ -14,40 +14,34 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.traderDetails
 
 import com.google.inject.Inject
-import controllers.actions.{Actions, CheckDependentTaskCompletedActionProvider}
+import controllers.actions.Actions
 import models.LocalReferenceNumber
-import models.journeyDomain.PreTaskListDomain
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.taskList.TaskListViewModel
-import views.html.TaskListView
+import viewModels.traderDetails.TraderDetailsViewModel
+import views.html.traderDetails.CheckYourAnswersView
 
-class TaskListController @Inject() (
+class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
-  checkDependentTaskCompleted: CheckDependentTaskCompletedActionProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: TaskListView,
-  viewModel: TaskListViewModel
-) extends FrontendBaseController
+  view: CheckYourAnswersView,
+  viewModel: TraderDetailsViewModel
+)() extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions
-    .requireData(lrn)
-    .andThen(checkDependentTaskCompleted[PreTaskListDomain]) {
-      implicit request =>
-        val tasks = viewModel(request.userAnswers)
-        Ok(view(lrn, tasks))
-    }
+  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
+    implicit request =>
+      val sections = viewModel(request.userAnswers)
+      Ok(view(lrn, sections))
+  }
 
-  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions
-    .requireData(lrn)
-    .andThen(checkDependentTaskCompleted[PreTaskListDomain]) {
-      _ => ???
-    }
+  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
+    Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
+  }
 
 }
