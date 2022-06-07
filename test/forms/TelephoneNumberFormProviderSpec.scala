@@ -57,7 +57,7 @@ class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
 
     "must not bind strings that do not match character regex" in {
 
-      val invalidCharacters = Gen.oneOf(Seq("%", "£", "!", "$", "^", "&"))
+      val invalidCharacters = Gen.oneOf(Seq("%", "£", "!", "$", "^", "&", "(", ")"))
 
       val expectedError = FormError("value", invalidCharacterKey, Seq(name))
 
@@ -70,15 +70,10 @@ class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
 
     "must not bind strings that do not match format regex" in {
 
-      val invalidFormat: Gen[String] = genNumberString.retryUntil(_.length < maxTelephoneNumberLength)
-
       val expectedError = FormError("value", invalidFormatKey, Seq(name))
 
-      forAll(invalidFormat) {
-        invalidNumber =>
-          val result: Field = form.bind(Map(fieldName -> invalidNumber)).apply(fieldName)
-          result.errors must contain(expectedError)
-      }
+      val result: Field = form.bind(Map(fieldName -> "123456")).apply(fieldName)
+      result.errors must contain(expectedError)
     }
   }
 }
