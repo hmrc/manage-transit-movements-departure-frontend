@@ -16,7 +16,7 @@
 
 package views.traderDetails.representative
 
-import forms.RepresentativePhoneFormProvider
+import forms.TelephoneNumberFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -29,7 +29,7 @@ class RepresentativePhoneViewSpec extends InputTextViewBehaviours[String] {
 
   override val prefix: String = "traderDetails.representative.representativePhone"
 
-  override def form: Form[String] = new RepresentativePhoneFormProvider()(prefix)
+  override def form: Form[String] = new TelephoneNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
     injector.instanceOf[RepresentativePhoneView].apply(form, lrn, NormalMode)(fakeRequest, messages)
