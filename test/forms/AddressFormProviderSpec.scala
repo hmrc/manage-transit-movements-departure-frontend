@@ -102,7 +102,8 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
   ".postalCode" - {
 
-    val postcodeInvalidKey = s"$prefix.error.postalCode.invalid"
+    val postcodeInvalidKey    = s"$prefix.error.postalCode.invalid"
+    val postalCodeRequiredKey = s"$prefix.error.postalCode.required"
 
     val fieldName = PostalCode.field
 
@@ -128,7 +129,7 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
     behave like mandatoryField(
       form = form,
       fieldName = fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(PostalCode.arg, name))
+      requiredError = FormError(fieldName, postalCodeRequiredKey, Seq(name))
     )
 
     behave like fieldWithInvalidCharacters(
@@ -145,6 +146,8 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
     val fieldName = Country.field
 
+    val countryRequiredKey = s"$prefix.error.country.required"
+
     behave like fieldThatBindsValidData(
       form = form,
       fieldName = fieldName,
@@ -154,12 +157,12 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
     behave like mandatoryField(
       form = form,
       fieldName = fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(Country.arg, name))
+      requiredError = FormError(fieldName, countryRequiredKey, Seq(name))
     )
 
     "not bind if country code does not exist in the country list" in {
       val result        = form.bind(Map(fieldName -> "foobar")).apply(fieldName)
-      val expectedError = FormError(fieldName, requiredKey, Seq(Country.arg, name))
+      val expectedError = FormError(fieldName, countryRequiredKey, Seq(name))
       result.errors must contain(expectedError)
     }
 

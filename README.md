@@ -41,17 +41,16 @@ Return to command line:
 This updates the test classes app.routes and messages files
 
 ### Creating an Address Page in Scaffold
-First you need to ensure you have a related AddressNamePage
-<pre>g8Scaffold stringPage
--> package: foo.bar
--> className: ConsigneeName
-</pre>
-
 Then you create the address page referencing the Name Page
 <pre>g8Scaffold addressPage
--> package: foo.bar
--> className: ConsigneeAddress
+-> package: foo.bar                       # use same package as created for Address name page above
+-> title[My New Address]: Consignee Address                    
+-> className[MyNewAddress]: ConsigneeAddress
+-> formProvider [AddressFormProvider]
 -> addressHolderNamePage: ConsigneeNamePage
+-> addressHolderNameImport[pages.foo.bar.NamePage]
+-> navRoute [PreTaskListDetails]:         # use same package as created for Address name page above
+-> pageSection [PreTaskListSection]:      # use same package as created for Address name page above
 </pre>
 
 ### Creating an InputSelect Page in Scaffold

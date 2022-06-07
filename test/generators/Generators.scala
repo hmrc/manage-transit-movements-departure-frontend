@@ -99,6 +99,11 @@ trait Generators extends ModelGenerators with ViewModelGenerators {
       x => x < min || x > max
     )
 
+  def intsInsideRange(min: Int, max: Int): Gen[Int] =
+    arbitrary[Int] retryUntil (
+      x => x > min && x < max
+    )
+
   def nonBooleans: Gen[String] =
     nonEmptyString
       .retryUntil(_ != "true")

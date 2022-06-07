@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package forms
+package navigation.annotations;
 
-object Constants {
-  lazy val tirCarnetReferenceMaxLength = 12
-  lazy val maxEoriNumberLength: Int    = 17
-  lazy val minEoriNumberLength: Int    = 14
-  lazy val maxNameLength: Int          = 70
-  lazy val maxTelephoneNumberLength    = 35
-  lazy val minTelephoneNumberLength    = 6
+import com.google.inject.BindingAnnotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface $navRoute$ {
 }

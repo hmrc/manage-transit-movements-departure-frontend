@@ -41,7 +41,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
   private val mode                             = NormalMode
   private lazy val contactTelephoneNumberRoute = routes.TelephoneNumberController.onPageLoad(lrn, mode).url
 
-  private val validAnswer: String = "123123"
+  private val validAnswer: String = "+123123"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

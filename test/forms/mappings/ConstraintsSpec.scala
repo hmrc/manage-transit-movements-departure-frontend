@@ -121,6 +121,29 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
       val result = maxLength(10, "error.length")("a" * 11)
       result mustEqual Invalid("error.length", 10)
     }
+
+    "must trim values when boolean is true" in {
+      val result = maxLength(10, "error.length", Seq.empty, trim = true)("a " * 10)
+      result mustEqual Valid
+    }
+  }
+
+  "minLength" - {
+
+    "must return InValid for a string shorter than the allowed length" in {
+      val result = minLength(10, "error.length")("a" * 9)
+      result mustBe Invalid("error.length", 10)
+    }
+
+    "must return Valid for a string equal to the allowed length" in {
+      val result = minLength(10, "error.length")("a" * 10)
+      result mustEqual Valid
+    }
+
+    "must trim values when boolean is true" in {
+      val result = minLength(10, "error.length", Seq.empty, trim = true)("a " * 10)
+      result mustEqual Valid
+    }
   }
 
   "maxDate" - {

@@ -46,7 +46,7 @@ class TelephoneNumberViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithSectionCaption("Trader details")
 
-  behave like pageWithHint("For international numbers include the country code")
+  behave like pageWithHint("Must include the country code, like +44 808 157 0192.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 
