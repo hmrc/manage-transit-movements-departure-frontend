@@ -44,6 +44,9 @@
             radioItems = fieldId => radios(fieldId, form.value)
         )
 
-        @button(attributes = Map("id" -> "submit"))
+        @button(
+                messageKey = "site.continue",
+                attributes = Map("id" -> "submit")
+        )
     }
 }

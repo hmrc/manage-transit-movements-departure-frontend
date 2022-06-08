@@ -51,6 +51,9 @@
             placeholder = Some(messages("officeOfDeparture.placeholder"))
         )
 
-      @button(attributes = Map("id" -> "submit"))
+        @button(
+            messageKey = "site.continue",
+            attributes = Map("id" -> "submit")
+        )
     }
 }
