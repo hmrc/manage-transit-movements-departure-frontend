@@ -16,20 +16,19 @@
 
 package controllers.traderDetails.holderOfTransit
 
+import base.{AppWithDefaultMockFixtures, SpecBase}
+import forms.traderDetails.TirIdNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
+import navigation.annotations.HolderOfTransit
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.when
+import pages.traderDetails.holderOfTransit.TirIdentificationPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.traderDetails.holderOfTransit.TirIdentificationView
-import services.UserAnswersService
-import pages.traderDetails.holderOfTransit.TirIdentificationPage
-import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.traderDetails.TirIdNumberFormProvider
-import navigation.annotations.HolderOfTransit
 
 import scala.concurrent.Future
 
@@ -39,7 +38,6 @@ class TirIdentificationControllerSpec extends SpecBase with AppWithDefaultMockFi
   private val form                        = formProvider("traderDetails.holderOfTransit.tirIdentification")
   private val mode                        = NormalMode
   private lazy val tirIdentificationRoute = routes.TirIdentificationController.onPageLoad(lrn, mode).url
-  private lazy val mockUserAnswersService = mock[UserAnswersService]
 
   private lazy val validAnswer = "AAA/999/99999"
 
@@ -47,12 +45,6 @@ class TirIdentificationControllerSpec extends SpecBase with AppWithDefaultMockFi
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[HolderOfTransit]).toInstance(fakeNavigator))
-      .overrides(bind[UserAnswersService].toInstance(mockUserAnswersService))
-
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    reset(mockUserAnswersService)
-  }
 
   "TirIdentificationController" - {
 
@@ -98,7 +90,6 @@ class TirIdentificationControllerSpec extends SpecBase with AppWithDefaultMockFi
       setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockUserAnswersService.getOrCreateUserAnswers(any(), any())) thenReturn Future.successful(emptyUserAnswers)
 
       val request =
         FakeRequest(POST, tirIdentificationRoute)

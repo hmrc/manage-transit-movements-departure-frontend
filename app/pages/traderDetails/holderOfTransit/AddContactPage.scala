@@ -18,7 +18,7 @@ package pages.traderDetails.holderOfTransit
 
 import models.UserAnswers
 import pages.QuestionPage
-import pages.sections.HolderOfTransitSection
+import pages.sections.{HolderOfTransitContactSection, HolderOfTransitSection}
 import play.api.libs.json.JsPath
 
 import scala.util.Try
@@ -31,7 +31,7 @@ case object AddContactPage extends QuestionPage[Boolean] {
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) => userAnswers.remove(ContactNamePage).flatMap(_.remove(ContactTelephoneNumberPage))
+      case Some(false) => userAnswers.remove(HolderOfTransitContactSection)
       case _           => super.cleanup(value, userAnswers)
     }
 }

@@ -25,7 +25,7 @@ object RepresentativeCapacity extends RadioModel[RepresentativeCapacity] {
   case object Direct extends WithName("direct") with RepresentativeCapacity
   case object Indirect extends WithName("indirect") with RepresentativeCapacity
 
-  override val messageKeyPrefix: String = "traderDetails.representative.representativeCapacity"
+  override val messageKeyPrefix: String = "traderDetails.representative.capacity"
 
   val values: Seq[RepresentativeCapacity] = Seq(
     Direct,

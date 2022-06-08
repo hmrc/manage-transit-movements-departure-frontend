@@ -21,7 +21,7 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import org.scalacheck.Gen
-import pages.traderDetails.holderOfTransit._
+import pages.traderDetails.holderOfTransit.contact._
 
 class AdditionalContactDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
@@ -34,8 +34,8 @@ class AdditionalContactDomainSpec extends SpecBase with UserAnswersSpecHelper wi
         val telephoneNumber = Gen.alphaNumStr.sample.value
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(ContactNamePage)(name)
-          .unsafeSetVal(ContactTelephoneNumberPage)(telephoneNumber)
+          .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(TelephoneNumberPage)(telephoneNumber)
 
         val expectedResult = AdditionalContactDomain(
           name = name,
@@ -54,22 +54,22 @@ class AdditionalContactDomainSpec extends SpecBase with UserAnswersSpecHelper wi
         val telephoneNumber = Gen.alphaNumStr.sample.value
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(ContactTelephoneNumberPage)(telephoneNumber)
+          .unsafeSetVal(TelephoneNumberPage)(telephoneNumber)
 
         val result: EitherType[AdditionalContactDomain] = UserAnswersReader[AdditionalContactDomain].run(userAnswers)
 
-        result.left.value.page mustBe ContactNamePage
+        result.left.value.page mustBe NamePage
       }
 
       "when additional contact has no telephone number" in {
         val name = Gen.alphaNumStr.sample.value
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(ContactNamePage)(name)
+          .unsafeSetVal(NamePage)(name)
 
         val result: EitherType[AdditionalContactDomain] = UserAnswersReader[AdditionalContactDomain].run(userAnswers)
 
-        result.left.value.page mustBe ContactTelephoneNumberPage
+        result.left.value.page mustBe TelephoneNumberPage
       }
     }
   }
