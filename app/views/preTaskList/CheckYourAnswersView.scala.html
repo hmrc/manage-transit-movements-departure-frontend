@@ -44,9 +44,8 @@
 
     @formHelper(action = routes.CheckYourAnswersController.onSubmit(lrn), 'autoComplete -> "off") {
         @button(
-                messageKey = "site.confirm",
-                attributes = Map("id" -> "submit")
-               )
+            messageKey = "site.confirm",
+            attributes = Map("id" -> "submit")
+        )
     }
-
 }
