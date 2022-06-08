@@ -25,7 +25,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.RepresentativePhoneFormProvider
+import forms.TelephoneNumberFormProvider
 import views.html.traderDetails.representative.RepresentativePhoneView
 import services.UserAnswersService
 import pages.traderDetails.representative.RepresentativePhonePage
@@ -35,13 +35,13 @@ import scala.concurrent.Future
 
 class RepresentativePhoneControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                  = new RepresentativePhoneFormProvider()
+  private val formProvider                  = new TelephoneNumberFormProvider()
   private val form                          = formProvider("traderDetails.representative.representativePhone")
   private val mode                          = NormalMode
   private lazy val representativePhoneRoute = routes.RepresentativePhoneController.onPageLoad(lrn, mode).url
   private lazy val mockUserAnswersService   = mock[UserAnswersService]
 
-  private val validAnswer: String = "123123123"
+  private val validAnswer: String = "+123123123"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

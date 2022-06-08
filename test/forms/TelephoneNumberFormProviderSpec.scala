@@ -26,70 +26,131 @@ class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
   private val prefix              = Gen.alphaNumStr.sample.value
   private val name                = Gen.alphaNumStr.sample.value
   private val requiredKey         = s"$prefix.error.required"
-  private val maxLengthKey        = s"$prefix.error.length"
+  private val maxLengthKey        = s"$prefix.error.maxLength"
   private val minLengthKey        = s"$prefix.error.minLength"
   private val invalidFormatKey    = s"$prefix.error.invalidFormat"
   private val invalidCharacterKey = s"$prefix.error.invalidCharacter"
-
-  val form = new TelephoneNumberFormProvider()(prefix, name)
 
   ".value" - {
 
     val fieldName = "value"
 
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      stringsWithMaxLength(maxTelephoneNumberLength, Gen.numChar)
-    )
+    "with form name" - {
+      val form = new TelephoneNumberFormProvider()(prefix, name)
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(name))
-    )
+      behave like fieldThatBindsValidData(
+        form,
+        fieldName,
+        stringsWithMaxLength(maxTelephoneNumberLength, Gen.numChar)
+      )
 
-    s"must not bind strings longer than $maxTelephoneNumberLength characters" in {
+      behave like mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey, Seq(name))
+      )
 
-      val stringInt = "9" * maxTelephoneNumberLength
+      s"must not bind strings longer than $maxTelephoneNumberLength characters" in {
 
-      val expectedError = FormError(fieldName, maxLengthKey, Seq(name, maxTelephoneNumberLength))
+        val stringInt = "9" * maxTelephoneNumberLength
 
-      val result = form.bind(Map(fieldName -> ("+" + stringInt))).apply(fieldName)
-      result.errors mustEqual Seq(expectedError)
+        val expectedError = FormError(fieldName, maxLengthKey, Seq(name, maxTelephoneNumberLength))
 
-    }
+        val result = form.bind(Map(fieldName -> ("+" + stringInt))).apply(fieldName)
+        result.errors mustEqual Seq(expectedError)
 
-    s"must not bind strings less than $minTelephoneNumberLength characters" in {
+      }
 
-      val genInt = intsInsideRange(0, 9999).sample.value
+      s"must not bind strings less than $minTelephoneNumberLength characters" in {
 
-      val expectedError = FormError(fieldName, minLengthKey, Seq(name, minTelephoneNumberLength))
+        val genInt = intsInsideRange(0, 9999).sample.value
 
-      val result = form.bind(Map(fieldName -> ("+" + genInt))).apply(fieldName)
-      result.errors mustEqual Seq(expectedError)
+        val expectedError = FormError(fieldName, minLengthKey, Seq(name, minTelephoneNumberLength))
 
-    }
+        val result = form.bind(Map(fieldName -> ("+" + genInt))).apply(fieldName)
+        result.errors mustEqual Seq(expectedError)
 
-    "must not bind strings that do not match character regex" in {
+      }
 
-      val invalidCharacters = Gen.oneOf(Seq("%", "£", "!", "$", "^", "&", "(", ")"))
+      "must not bind strings that do not match character regex" in {
 
-      val expectedError = FormError("value", invalidCharacterKey, Seq(name))
+        val invalidCharacters = Gen.oneOf(Seq("%", "£", "!", "$", "^", "&", "(", ")"))
 
-      forAll(invalidCharacters) {
-        invalidCharacter =>
-          val result: Field = form.bind(Map(fieldName -> invalidCharacter)).apply(fieldName)
-          result.errors must contain(expectedError)
+        val expectedError = FormError("value", invalidCharacterKey, Seq(name))
+
+        forAll(invalidCharacters) {
+          invalidCharacter =>
+            val result: Field = form.bind(Map(fieldName -> invalidCharacter)).apply(fieldName)
+            result.errors must contain(expectedError)
+        }
+      }
+
+      "must not bind strings that do not match format regex" in {
+
+        val expectedError = FormError("value", invalidFormatKey, Seq(name))
+
+        val result: Field = form.bind(Map(fieldName -> "123456")).apply(fieldName)
+        result.errors must contain(expectedError)
       }
     }
 
-    "must not bind strings that do not match format regex" in {
+    "without form name" - {
+      val form = new TelephoneNumberFormProvider()(prefix)
 
-      val expectedError = FormError("value", invalidFormatKey, Seq(name))
+      behave like fieldThatBindsValidData(
+        form,
+        fieldName,
+        stringsWithMaxLength(maxTelephoneNumberLength, Gen.numChar)
+      )
 
-      val result: Field = form.bind(Map(fieldName -> "123456")).apply(fieldName)
-      result.errors must contain(expectedError)
+      behave like mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
+
+      s"must not bind strings longer than $maxTelephoneNumberLength characters" in {
+
+        val stringInt = "9" * maxTelephoneNumberLength
+
+        val expectedError = FormError(fieldName, maxLengthKey, Seq(maxTelephoneNumberLength))
+
+        val result = form.bind(Map(fieldName -> ("+" + stringInt))).apply(fieldName)
+        result.errors mustEqual Seq(expectedError)
+
+      }
+
+      s"must not bind strings less than $minTelephoneNumberLength characters" in {
+
+        val genInt = intsInsideRange(0, 9999).sample.value
+
+        val expectedError = FormError(fieldName, minLengthKey, Seq(minTelephoneNumberLength))
+
+        val result = form.bind(Map(fieldName -> ("+" + genInt))).apply(fieldName)
+        result.errors mustEqual Seq(expectedError)
+
+      }
+
+      "must not bind strings that do not match character regex" in {
+
+        val invalidCharacters = Gen.oneOf(Seq("%", "£", "!", "$", "^", "&", "(", ")"))
+
+        val expectedError = FormError("value", invalidCharacterKey)
+
+        forAll(invalidCharacters) {
+          invalidCharacter =>
+            val result: Field = form.bind(Map(fieldName -> invalidCharacter)).apply(fieldName)
+            result.errors must contain(expectedError)
+        }
+      }
+
+      "must not bind strings that do not match format regex" in {
+
+        val expectedError = FormError("value", invalidFormatKey)
+
+        val result: Field = form.bind(Map(fieldName -> "123456")).apply(fieldName)
+        result.errors must contain(expectedError)
+      }
     }
   }
 }

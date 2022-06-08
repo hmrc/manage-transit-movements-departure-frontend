@@ -25,15 +25,15 @@ import javax.inject.Inject
 
 class TelephoneNumberFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String, name: String): Form[String] =
+  def apply(prefix: String, args: String*): Form[String] =
     Form(
-      "value" -> text(s"$prefix.error.required", Seq(name))
+      "value" -> text(s"$prefix.error.required", args)
         .verifying(
           StopOnFirstFail[String](
-            regexp(telephoneNumberCharacterRegex, s"$prefix.error.invalidCharacter", args = Seq(name)),
-            regexp(telephoneNumberFormatRegex, s"$prefix.error.invalidFormat", args = Seq(name)),
-            minLength(minTelephoneNumberLength, s"$prefix.error.minLength", args = Seq(name, minTelephoneNumberLength), trim = true),
-            maxLength(maxTelephoneNumberLength, s"$prefix.error.length", args = Seq(name, maxTelephoneNumberLength), trim = true)
+            regexp(telephoneNumberCharacterRegex, s"$prefix.error.invalidCharacter", args = args),
+            regexp(telephoneNumberFormatRegex, s"$prefix.error.invalidFormat", args = args),
+            minLength(minTelephoneNumberLength, s"$prefix.error.minLength", args = args :+ minTelephoneNumberLength, trim = true),
+            maxLength(maxTelephoneNumberLength, s"$prefix.error.maxLength", args = args :+ maxTelephoneNumberLength, trim = true)
           )
         )
     )
