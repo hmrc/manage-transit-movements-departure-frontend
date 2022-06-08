@@ -40,6 +40,8 @@
 
     @formHelper(action = routes.OfficeOfDepartureController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
+        <span class="govuk-visually-hidden">4253009172660</span>
+
         @errorSummary(form.errors)
 
         @select(
