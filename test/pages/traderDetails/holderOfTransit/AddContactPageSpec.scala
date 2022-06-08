@@ -18,6 +18,7 @@ package pages.traderDetails.holderOfTransit
 
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.traderDetails.holderOfTransit.contact.{NamePage, TelephoneNumberPage}
 
 class AddContactPageSpec extends PageBehaviours {
 
@@ -35,8 +36,8 @@ class AddContactPageSpec extends PageBehaviours {
           forAll(arbitrary[String]) {
             eori =>
               val preChange = emptyUserAnswers
-                .setValue(ContactNamePage, "name")
-                .setValue(ContactTelephoneNumberPage, "0191")
+                .setValue(NamePage, "name")
+                .setValue(TelephoneNumberPage, "0191")
               val postChange = preChange.set(AddContactPage, false).success.value
 
               postChange.get(EoriPage) mustNot be(defined)

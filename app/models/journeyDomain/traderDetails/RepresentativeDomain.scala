@@ -33,9 +33,9 @@ object RepresentativeDomain {
 
   implicit val userAnswersReader: UserAnswersReader[RepresentativeDomain] =
     (
-      RepresentativeEoriPage.reader.map(EoriNumber(_)),
-      RepresentativeNamePage.reader,
-      RepresentativeCapacityPage.reader,
-      RepresentativePhonePage.reader
+      EoriPage.reader.map(EoriNumber(_)),
+      NamePage.reader,
+      CapacityPage.reader,
+      TelephoneNumberPage.reader
     ).tupled.map((RepresentativeDomain.apply _).tupled)
 }

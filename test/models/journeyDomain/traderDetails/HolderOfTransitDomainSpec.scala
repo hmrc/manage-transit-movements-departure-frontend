@@ -109,8 +109,8 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
           .unsafeSetVal(NamePage)("name")
           .unsafeSetVal(AddressPage)(Address("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
           .unsafeSetVal(AddContactPage)(true)
-          .unsafeSetVal(ContactNamePage)("contactName")
-          .unsafeSetVal(ContactTelephoneNumberPage)("123123")
+          .unsafeSetVal(contact.NamePage)("contactName")
+          .unsafeSetVal(contact.TelephoneNumberPage)("123123")
 
         val result: EitherType[HolderOfTransitEori] = UserAnswersReader[HolderOfTransitEori].run(userAnswers)
 
@@ -175,7 +175,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
 
         val result: EitherType[HolderOfTransitEori] = UserAnswersReader[HolderOfTransitEori].run(userAnswers)
 
-        result.left.value.page mustBe ContactNamePage
+        result.left.value.page mustBe contact.NamePage
       }
     }
   }
@@ -208,8 +208,8 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
           .unsafeSetVal(NamePage)("name")
           .unsafeSetVal(AddressPage)(Address("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
           .unsafeSetVal(AddContactPage)(true)
-          .unsafeSetVal(ContactNamePage)("contactName")
-          .unsafeSetVal(ContactTelephoneNumberPage)("123123")
+          .unsafeSetVal(contact.NamePage)("contactName")
+          .unsafeSetVal(contact.TelephoneNumberPage)("123123")
 
         val result: EitherType[HolderOfTransitTIR] = UserAnswersReader[HolderOfTransitTIR].run(userAnswers)
 
@@ -275,7 +275,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
 
         val result: EitherType[HolderOfTransitTIR] = UserAnswersReader[HolderOfTransitTIR].run(userAnswers)
 
-        result.left.value.page mustBe ContactNamePage
+        result.left.value.page mustBe contact.NamePage
       }
 
     }

@@ -12,7 +12,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import forms.$formProvider$
 import views.html.$package$.$className$View
-import services.UserAnswersService
 import pages.$package$.$className$Page
 
 import java.time.LocalDate
@@ -24,19 +23,12 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
   private val form         = formProvider("$package$.$className;format="decap"$")
   private val mode         = NormalMode
   private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, mode).url
-  private lazy val mockUserAnswersService = mock[UserAnswersService]
   private val date                        = LocalDate.now
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[$navRoute$]).toInstance(fakeNavigator))
-      .overrides(bind[UserAnswersService].toInstance(mockUserAnswersService))
-
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    reset(mockUserAnswersService)
-  }
 
   "$className$ Controller" - {
 
@@ -86,7 +78,6 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockUserAnswersService.getOrCreateUserAnswers(any(), any())) thenReturn Future.successful(emptyUserAnswers)
 
       val request =
         FakeRequest(POST, $className;format="decap"$Route)

@@ -28,14 +28,8 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.DeclarationTypePage
-import pages.traderDetails.holderOfTransit._
-import pages.traderDetails.representative.{
-  ActingRepresentativePage,
-  RepresentativeCapacityPage,
-  RepresentativeEoriPage,
-  RepresentativeNamePage,
-  RepresentativePhonePage
-}
+import pages.traderDetails.holderOfTransit.contact
+import pages.traderDetails.{holderOfTransit => hot, representative => rep}
 import viewModels.taskList.TaskStatus._
 
 class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -118,7 +112,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
       "and TIR declaration type" in {
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, Option4)
-          .setValue(TirIdentificationYesNoPage, true)
+          .setValue(hot.TirIdentificationYesNoPage, true)
 
         val task = TraderDetailsTask(userAnswers)
         task.status mustBe InProgress
@@ -130,7 +124,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
           declarationType =>
             val userAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
-              .setValue(EoriYesNoPage, true)
+              .setValue(hot.EoriYesNoPage, true)
 
             val task = TraderDetailsTask(userAnswers)
             task.status mustBe InProgress
@@ -143,18 +137,18 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
       "when valid journey is completed" in {
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, Gen.oneOf(DeclarationType.values.filterNot(_ == Option4)).sample.value)
-          .setValue(EoriYesNoPage, true)
-          .setValue(EoriPage, eoriNumber.value)
-          .setValue(NamePage, Gen.alphaNumStr.sample.value)
-          .setValue(AddressPage, arbitrary[Address].sample.value)
-          .setValue(AddContactPage, true)
-          .setValue(ContactNamePage, Gen.alphaNumStr.sample.value)
-          .setValue(ContactTelephoneNumberPage, Gen.alphaNumStr.sample.value)
-          .setValue(ActingRepresentativePage, true)
-          .setValue(RepresentativeEoriPage, Gen.alphaNumStr.sample.value)
-          .setValue(RepresentativeNamePage, Gen.alphaNumStr.sample.value)
-          .setValue(RepresentativeCapacityPage, Gen.oneOf(RepresentativeCapacity.values).sample.value)
-          .setValue(RepresentativePhonePage, Gen.alphaNumStr.sample.value)
+          .setValue(hot.EoriYesNoPage, true)
+          .setValue(hot.EoriPage, eoriNumber.value)
+          .setValue(hot.NamePage, Gen.alphaNumStr.sample.value)
+          .setValue(hot.AddressPage, arbitrary[Address].sample.value)
+          .setValue(hot.AddContactPage, true)
+          .setValue(contact.NamePage, Gen.alphaNumStr.sample.value)
+          .setValue(contact.TelephoneNumberPage, Gen.alphaNumStr.sample.value)
+          .setValue(rep.ActingAsRepresentativePage, true)
+          .setValue(rep.EoriPage, Gen.alphaNumStr.sample.value)
+          .setValue(rep.NamePage, Gen.alphaNumStr.sample.value)
+          .setValue(rep.CapacityPage, Gen.oneOf(RepresentativeCapacity.values).sample.value)
+          .setValue(rep.TelephoneNumberPage, Gen.alphaNumStr.sample.value)
 
         val task = TraderDetailsTask(userAnswers)
         task.status mustBe Completed

@@ -18,7 +18,7 @@ package models.journeyDomain.traderDetails
 
 import models.domain._
 import cats.implicits._
-import pages.traderDetails.representative.ActingRepresentativePage
+import pages.traderDetails.representative.ActingAsRepresentativePage
 
 case class TraderDetailsDomain(
   holderOfTransit: HolderOfTransitDomain,
@@ -31,7 +31,7 @@ object TraderDetailsDomain {
 
     for {
       holderOfTransitDomain <- UserAnswersReader[HolderOfTransitDomain]
-      representativeDomain  <- ActingRepresentativePage.filterOptionalDependent(identity)(UserAnswersReader[RepresentativeDomain])
+      representativeDomain  <- ActingAsRepresentativePage.filterOptionalDependent(identity)(UserAnswersReader[RepresentativeDomain])
     } yield TraderDetailsDomain(
       holderOfTransitDomain,
       representativeDomain

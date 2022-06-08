@@ -18,7 +18,7 @@ package generators
 
 import models.UserAnswers
 import org.scalacheck.{Arbitrary, Gen}
-import pages.traderDetails.representative.ActingRepresentativePage
+import pages.traderDetails.representative.ActingAsRepresentativePage
 import play.api.libs.json.JsBoolean
 
 trait RepresentativeUserAnswersGenerator extends UserAnswersGenerator {
@@ -30,7 +30,7 @@ trait RepresentativeUserAnswersGenerator extends UserAnswersGenerator {
   )
 
   lazy val arbitraryRepresentativeAnswersActingAsRepresentative: Gen[UserAnswers] = arbitraryUserAnswers(
-    Arbitrary((ActingRepresentativePage, JsBoolean(true))).arbitrary ::
+    Arbitrary((ActingAsRepresentativePage, JsBoolean(true))).arbitrary ::
       arbitraryRepresentativeEoriUserAnswersEntry.arbitrary ::
       arbitraryRepresentativeNameUserAnswersEntry.arbitrary ::
       arbitraryRepresentativeCapacityUserAnswersEntry.arbitrary ::
@@ -39,7 +39,7 @@ trait RepresentativeUserAnswersGenerator extends UserAnswersGenerator {
   )
 
   lazy val arbitraryRepresentativeAnswersNotActingAsRepresentative: Gen[UserAnswers] = arbitraryUserAnswers(
-    Arbitrary((ActingRepresentativePage, JsBoolean(false))).arbitrary ::
+    Arbitrary((ActingAsRepresentativePage, JsBoolean(false))).arbitrary ::
       Nil
   )
 }

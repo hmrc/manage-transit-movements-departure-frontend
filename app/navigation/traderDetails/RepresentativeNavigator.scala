@@ -29,19 +29,19 @@ import javax.inject.{Inject, Singleton}
 class RepresentativeNavigator @Inject() () extends TraderDetailsNavigator[RepresentativeDomain] {
 
   override def routes(mode: Mode): RouteMapping = {
-    case ActingRepresentativePage   => ua => actingRepresentativeRoute(ua, mode)
-    case RepresentativeEoriPage     => ua => Some(repRoutes.RepresentativeNameController.onPageLoad(ua.lrn, mode))
-    case RepresentativeNamePage     => ua => Some(repRoutes.RepresentativeCapacityController.onPageLoad(ua.lrn, mode))
-    case RepresentativeCapacityPage => ua => Some(repRoutes.RepresentativePhoneController.onPageLoad(ua.lrn, mode))
-    case RepresentativePhonePage    => ua => Some(checkYourAnswersRoute(ua))
+    case ActingAsRepresentativePage => ua => actingRepresentativeRoute(ua, mode)
+    case EoriPage                   => ua => Some(repRoutes.NameController.onPageLoad(ua.lrn, mode))
+    case NamePage                   => ua => Some(repRoutes.CapacityController.onPageLoad(ua.lrn, mode))
+    case CapacityPage               => ua => Some(repRoutes.TelephoneNumberController.onPageLoad(ua.lrn, mode))
+    case TelephoneNumberPage        => ua => Some(checkYourAnswersRoute(ua))
   }
 
   override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
     repRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
 
   private def actingRepresentativeRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    yesNoRoute(userAnswers, ActingRepresentativePage)(
-      yesCall = repRoutes.RepresentativeEoriController.onPageLoad(userAnswers.lrn, mode)
+    yesNoRoute(userAnswers, ActingAsRepresentativePage)(
+      yesCall = repRoutes.EoriController.onPageLoad(userAnswers.lrn, mode)
     )(
       noCall = tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn) //TODO REDIRECT TO CORRECT PAGE WHEN BUILT
     )

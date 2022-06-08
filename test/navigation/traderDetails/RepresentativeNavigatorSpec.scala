@@ -51,109 +51,109 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
 
       "when answers incomplete" - {
 
-        "must go from ActingRepresentativePage" - {
+        "must go from acting as representative page" - {
           "when Yes selected" - {
-            "to RepresentativeEori page" in {
-              val userAnswers = emptyUserAnswers.setValue(ActingRepresentativePage, true)
+            "to eori page" in {
+              val userAnswers = emptyUserAnswers.setValue(ActingAsRepresentativePage, true)
               navigator
-                .nextPage(ActingRepresentativePage, mode, userAnswers)
-                .mustBe(repRoutes.RepresentativeEoriController.onPageLoad(userAnswers.lrn, mode))
+                .nextPage(ActingAsRepresentativePage, mode, userAnswers)
+                .mustBe(repRoutes.EoriController.onPageLoad(userAnswers.lrn, mode))
             }
           }
 
           "when No selected" - {
             "to ???" ignore {
-              val userAnswers = emptyUserAnswers.setValue(ActingRepresentativePage, false)
+              val userAnswers = emptyUserAnswers.setValue(ActingAsRepresentativePage, false)
               navigator
-                .nextPage(ActingRepresentativePage, mode, userAnswers)
+                .nextPage(ActingAsRepresentativePage, mode, userAnswers)
                 .mustBe(???) //TODO change to next section when built
             }
           }
         }
 
-        "must go from RepresentativeEoriPage to RepresentativeName page" in {
+        "must go from eori page to name page" in {
           navigator
-            .nextPage(RepresentativeEoriPage, mode, emptyUserAnswers)
-            .mustBe(repRoutes.RepresentativeNameController.onPageLoad(emptyUserAnswers.lrn, mode))
+            .nextPage(EoriPage, mode, emptyUserAnswers)
+            .mustBe(repRoutes.NameController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
 
-        "must go from RepresentativeNamePage to Representative Capacity page" in {
+        "must go from name page to capacity page" in {
           navigator
-            .nextPage(RepresentativeNamePage, mode, emptyUserAnswers)
-            .mustBe(repRoutes.RepresentativeCapacityController.onPageLoad(emptyUserAnswers.lrn, mode))
+            .nextPage(NamePage, mode, emptyUserAnswers)
+            .mustBe(repRoutes.CapacityController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
 
-        "must go from RepresentativeCapacityPage to RepresentativePhone page" in {
+        "must go from capacity page to phone number page" in {
           navigator
-            .nextPage(RepresentativeCapacityPage, mode, emptyUserAnswers)
-            .mustBe(repRoutes.RepresentativePhoneController.onPageLoad(emptyUserAnswers.lrn, mode))
+            .nextPage(CapacityPage, mode, emptyUserAnswers)
+            .mustBe(repRoutes.TelephoneNumberController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
 
         "must go from RepresentativePhonePage to CheckYourAnswers page" in {
           navigator
-            .nextPage(RepresentativePhonePage, mode, emptyUserAnswers)
+            .nextPage(TelephoneNumberPage, mode, emptyUserAnswers)
             .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn))
         }
       }
 
       "when answers complete" - {
 
-        "must go from change ActingRepresentative" - {
+        "must go from acting as representative page" - {
           "when No selected" - {
             "to ???" ignore {
               forAll(arbitraryRepresentativeAnswersNotActingAsRepresentative) {
                 answers =>
                   navigator
-                    .nextPage(ActingRepresentativePage, mode, answers)
+                    .nextPage(ActingAsRepresentativePage, mode, answers)
                     .mustBe(???) //TODO change to next section when built
               }
             }
           }
 
           "when Yes selected" - {
-            "to Check your answers page" in {
+            "to check your answers page" in {
               forAll(arbitraryRepresentativeAnswersActingAsRepresentative) {
                 answers =>
                   navigator
-                    .nextPage(ActingRepresentativePage, mode, answers)
+                    .nextPage(ActingAsRepresentativePage, mode, answers)
                     .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
               }
             }
           }
         }
 
-        "must go from RepresentativeEoriPage to Check your answers page" in {
+        "must go from eori page to check your answers page" in {
           forAll(arbitraryRepresentativeAnswersActingAsRepresentative) {
             answers =>
               navigator
-                .nextPage(RepresentativeEoriPage, mode, answers)
+                .nextPage(EoriPage, mode, answers)
                 .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
 
-        "must go from RepresentativeNamePage to Check your answers page" in {
+        "must go from name page to check your answers page" in {
           forAll(arbitraryRepresentativeAnswersActingAsRepresentative) {
             answers =>
               navigator
-                .nextPage(RepresentativeNamePage, mode, answers)
+                .nextPage(NamePage, mode, answers)
                 .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
 
-        "must go from RepresentativeCapacityPage to Check your answers page" in {
+        "must go from capacity page to check your answers page" in {
           forAll(arbitraryRepresentativeAnswersActingAsRepresentative) {
             answers =>
               navigator
-                .nextPage(RepresentativeCapacityPage, mode, answers)
+                .nextPage(CapacityPage, mode, answers)
                 .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
 
-        "must go from RepresentativePhonePage to Check your answers page" in {
+        "must go from phone number page to check your answers page" in {
           forAll(arbitraryRepresentativeAnswersActingAsRepresentative) {
             answers =>
               navigator
-                .nextPage(RepresentativePhonePage, mode, answers)
+                .nextPage(TelephoneNumberPage, mode, answers)
                 .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
@@ -164,62 +164,62 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
 
       val mode = CheckMode
 
-      "must go from change ActingRepresentative" - {
+      "must go from acting as representative page" - {
         "when No selected" - {
           "to ???" ignore {
             forAll(arbitraryTraderDetailsAnswersWithoutRepresentative) {
               answers =>
                 navigator
-                  .nextPage(ActingRepresentativePage, mode, answers)
+                  .nextPage(ActingAsRepresentativePage, mode, answers)
                   .mustBe(???) //TODO change to next section when built
             }
           }
         }
 
         "when Yes selected" - {
-          "to Check your answers page" in {
+          "to check your answers page" in {
             forAll(arbitraryTraderDetailsAnswersWithRepresentative) {
               answers =>
                 navigator
-                  .nextPage(ActingRepresentativePage, mode, answers)
+                  .nextPage(ActingAsRepresentativePage, mode, answers)
                   .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
             }
           }
         }
       }
 
-      "must go from RepresentativeEoriPage to Check your answers page" in {
+      "must go from eori page to check your answers page" in {
         forAll(arbitraryTraderDetailsAnswersWithRepresentative) {
           answers =>
             navigator
-              .nextPage(RepresentativeEoriPage, mode, answers)
+              .nextPage(EoriPage, mode, answers)
               .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
-      "must go from RepresentativeNamePage to Check your answers page" in {
+      "must go from name page to check your answers page" in {
         forAll(arbitraryTraderDetailsAnswersWithRepresentative) {
           answers =>
             navigator
-              .nextPage(RepresentativeNamePage, mode, answers)
+              .nextPage(NamePage, mode, answers)
               .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
-      "must go from RepresentativeCapacityPage to Check your answers page" in {
+      "must go from capacity page to check your answers page" in {
         forAll(arbitraryTraderDetailsAnswersWithRepresentative) {
           answers =>
             navigator
-              .nextPage(RepresentativeCapacityPage, mode, answers)
+              .nextPage(CapacityPage, mode, answers)
               .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
-      "must go from RepresentativePhonePage to Check your answers page" in {
+      "must go from phone number page to check your answers page" in {
         forAll(arbitraryTraderDetailsAnswersWithRepresentative) {
           answers =>
             navigator
-              .nextPage(RepresentativePhonePage, mode, answers)
+              .nextPage(TelephoneNumberPage, mode, answers)
               .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }

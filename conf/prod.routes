@@ -5,6 +5,7 @@
 
 ->         /manage-transit-movements/departure                   app.traderDetails.Routes
 ->         /manage-transit-movements/departure                   app.traderDetails.holderOfTransit.Routes
+->         /manage-transit-movements/departure                   app.traderDetails.holderOfTransit.contact.Routes
 ->         /manage-transit-movements/departure                   app.traderDetails.representative.Routes
 
 ->         /                                                     health.Routes

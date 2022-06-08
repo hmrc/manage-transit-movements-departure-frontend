@@ -18,7 +18,7 @@ package viewModels.traderDetails
 
 import models.UserAnswers
 import play.api.i18n.Messages
-import utils.RepresentativeCheckYourAnswersHelper
+import utils.cyaHelpers.traderDetails.RepresentativeCheckYourAnswersHelper
 import viewModels.sections.Section
 import viewModels.{SectionViewModel, SubSectionViewModel}
 
@@ -32,11 +32,11 @@ sealed trait RepresentativeViewModel {
       Section(
         sectionTitle = messages("traderDetails.representative.checkYourAnswers.representative"),
         rows = Seq(
-          helper.actingRepresentative,
-          helper.representativeEori,
-          helper.representativeName,
-          helper.representativeCapacity,
-          helper.representativePhone
+          helper.actingAsRepresentative,
+          helper.eori,
+          helper.name,
+          helper.capacity,
+          helper.phoneNumber
         ).flatten
       )
     )

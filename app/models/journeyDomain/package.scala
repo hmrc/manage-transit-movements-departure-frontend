@@ -77,7 +77,7 @@ package object domain {
   implicit class GettableAsReaderOps[A](a: Gettable[A]) {
 
     /**
-      * Returns a reader for [[gettable]], which will succeed with an [[A]]  if the value is defined
+      * Returns a reader for [[Gettable]], which will succeed with an [[A]]  if the value is defined
       * and will fail if it is not defined
       */
 
