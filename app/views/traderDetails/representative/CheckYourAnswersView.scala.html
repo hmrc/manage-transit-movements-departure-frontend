@@ -43,10 +43,6 @@
     @answerSections(sections)
 
     @formHelper(action = routes.CheckYourAnswersController.onSubmit(lrn), 'autoComplete -> "off") {
-        @button(
-            messageKey = "site.continue",
-            attributes = Map("id" -> "submit")
-        )
+        @button(attributes = Map("id" -> "submit"))
     }
-
 }
