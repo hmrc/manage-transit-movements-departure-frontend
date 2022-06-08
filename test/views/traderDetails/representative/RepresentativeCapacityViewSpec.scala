@@ -49,5 +49,5 @@ class RepresentativeCapacityViewSpec extends RadioViewBehaviours[RepresentativeC
 
   behave like pageWithRadioItems()
 
-  behave like pageWithSubmitButton("Continue")
+  behave like pageWithSubmitButton("Save and continue")
 }

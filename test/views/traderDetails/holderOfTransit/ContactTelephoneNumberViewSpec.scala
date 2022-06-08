@@ -50,5 +50,5 @@ class ContactTelephoneNumberViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithInputText(Some(InputSize.Width20))
 
-  behave like pageWithSubmitButton("Continue")
+  behave like pageWithSubmitButton("Save and continue")
 }

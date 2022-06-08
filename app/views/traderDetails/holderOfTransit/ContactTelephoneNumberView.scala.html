@@ -46,6 +46,9 @@
             caption = Some(messages("traderDetails.caption"))
         )
 
-        @button(attributes = Map("id" -> "submit"))
+        @button(
+                messageKey = "site.continue",
+                attributes = Map("id" -> "submit")
+        )
     }
 }

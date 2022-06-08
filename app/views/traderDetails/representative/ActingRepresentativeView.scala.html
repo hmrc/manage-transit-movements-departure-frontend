@@ -45,6 +45,9 @@
             hint = Some(HtmlContent(messages("traderDetails.representative.actingRepresentative.hint")))
         )
 
-        @button(attributes = Map("id" -> "submit"))
+        @button(
+                messageKey = "site.continue",
+                attributes = Map("id" -> "submit")
+        )
     }
 }
