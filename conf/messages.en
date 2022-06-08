@@ -220,11 +220,11 @@ traderDetails.holderOfTransit.contact.name.error.invalid = The contact’s name 
 traderDetails.holderOfTransit.contact.name.change.hidden = contact’s name
 
 traderDetails.holderOfTransit.contact.telephoneNumber.title = What is the transit holder’s contact phone number?
-traderDetails.holderOfTransit.contact.telephoneNumber.heading = What is the transit holder’s contact phone number?
+traderDetails.holderOfTransit.contact.telephoneNumber.heading = What is {0}’s phone number?
 traderDetails.holderOfTransit.contact.telephoneNumber.checkYourAnswersLabel = Transit holder’s contact phone number
 traderDetails.holderOfTransit.contact.telephoneNumber.hint = Must include the country code, like +44 808 157 0192.
 traderDetails.holderOfTransit.contact.telephoneNumber.error.required = Enter {0}’s phone number
-traderDetails.holderOfTransit.contact.telephoneNumber.error.length = {0}’s phone number must be {1} characters or less
+traderDetails.holderOfTransit.contact.telephoneNumber.error.maxLength = {0}’s phone number must be {1} characters or less
 traderDetails.holderOfTransit.contact.telephoneNumber.error.minLength = {0}’s phone number must be {1} characters or more
 traderDetails.holderOfTransit.contact.telephoneNumber.error.invalidCharacter = {0}’s phone number must only include numbers 0 to 9 and a plus sign
 traderDetails.holderOfTransit.contact.telephoneNumber.error.invalidFormat = Enter {0}’s phone number in the right format
@@ -276,9 +276,10 @@ traderDetails.representative.telephoneNumber.heading = What is your phone number
 traderDetails.representative.telephoneNumber.checkYourAnswersLabel = Representative’s phone number
 traderDetails.representative.telephoneNumber.error.required = Enter your phone number
 traderDetails.representative.telephoneNumber.hint = Must include the country code, like +44 808 157 0192.
-traderDetails.representative.telephoneNumber.error.invalid = Enter your phone number in the right format
-traderDetails.representative.telephoneNumber.error.maxLength = Your phone number must be 35 characters or less
-traderDetails.representative.telephoneNumber.error.minLength = Your phone number must be 7 characters or more
+traderDetails.representative.telephoneNumber.error.maxLength = Your phone number must be {0} characters or less
+traderDetails.representative.telephoneNumber.error.minLength = Your phone number must be {0} characters or more
+traderDetails.representative.telephoneNumber.error.invalidCharacter = Your phone number must only include numbers 0 to 9 and a plus sign
+traderDetails.representative.telephoneNumber.error.invalidFormat = Enter your phone number in the right format
 traderDetails.representative.telephoneNumber.change.hidden = representative’s phone number
 
 traderDetails.representative.checkYourAnswers.heading = Check your answers

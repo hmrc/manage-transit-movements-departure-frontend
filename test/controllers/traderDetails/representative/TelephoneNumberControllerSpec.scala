@@ -17,7 +17,7 @@
 package controllers.traderDetails.representative
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.RepresentativePhoneFormProvider
+import forms.TelephoneNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.Representative
@@ -34,12 +34,12 @@ import scala.concurrent.Future
 
 class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                  = new RepresentativePhoneFormProvider()
+  private val formProvider                  = new TelephoneNumberFormProvider()
   private val form                          = formProvider("traderDetails.representative.telephoneNumber")
   private val mode                          = NormalMode
   private lazy val representativePhoneRoute = routes.TelephoneNumberController.onPageLoad(lrn, mode).url
 
-  private val validAnswer: String = "123123123"
+  private val validAnswer: String = "+123123123"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

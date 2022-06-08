@@ -17,7 +17,7 @@
 package controllers.traderDetails.representative
 
 import controllers.actions._
-import forms.RepresentativePhoneFormProvider
+import forms.TelephoneNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.Representative
@@ -35,7 +35,7 @@ class TelephoneNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @Representative navigator: Navigator,
-  formProvider: RepresentativePhoneFormProvider,
+  formProvider: TelephoneNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: TelephoneNumberView
