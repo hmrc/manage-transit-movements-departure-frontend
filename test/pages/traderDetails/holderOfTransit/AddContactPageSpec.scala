@@ -18,11 +18,10 @@ package pages.traderDetails.holderOfTransit
 
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.traderDetails.holderOfTransit.contact.{NamePage, TelephoneNumberPage}
 
 class AddContactPageSpec extends PageBehaviours {
 
-  "traderDetails.AddContactPage" - {
+  "AddContactPage" - {
 
     beRetrievable[Boolean](AddContactPage)
 
@@ -32,27 +31,31 @@ class AddContactPageSpec extends PageBehaviours {
 
     "cleanup" - {
       "when NO selected" - {
-        "must clean up ContactPages" in {
-          forAll(arbitrary[String]) {
-            eori =>
+        "must clean up contact pages" in {
+          forAll(arbitrary[String], arbitrary[String]) {
+            (name, phoneNumber) =>
               val preChange = emptyUserAnswers
-                .setValue(NamePage, "name")
-                .setValue(TelephoneNumberPage, "0191")
+                .setValue(contact.NamePage, name)
+                .setValue(contact.TelephoneNumberPage, phoneNumber)
               val postChange = preChange.set(AddContactPage, false).success.value
 
-              postChange.get(EoriPage) mustNot be(defined)
+              postChange.get(contact.NamePage) mustNot be(defined)
+              postChange.get(contact.TelephoneNumberPage) mustNot be(defined)
           }
         }
       }
 
       "when YES selected" - {
         "must do nothing" in {
-          forAll(arbitrary[String]) {
-            eori =>
-              val preChange  = emptyUserAnswers.setValue(EoriPage, eori)
-              val postChange = preChange.set(EoriYesNoPage, true).success.value
+          forAll(arbitrary[String], arbitrary[String]) {
+            (name, phoneNumber) =>
+              val preChange = emptyUserAnswers
+                .setValue(contact.NamePage, name)
+                .setValue(contact.TelephoneNumberPage, phoneNumber)
+              val postChange = preChange.set(AddContactPage, true).success.value
 
-              postChange.get(EoriPage) must be(defined)
+              postChange.get(contact.NamePage) must be(defined)
+              postChange.get(contact.TelephoneNumberPage) must be(defined)
           }
         }
       }
