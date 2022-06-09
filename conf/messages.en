@@ -151,7 +151,7 @@ traderDetails.holderOfTransit.eoriYesNo.title = Do you know the transit holder�
 traderDetails.holderOfTransit.eoriYesNo.heading = Do you know the transit holder’s EORI number?
 traderDetails.holderOfTransit.eoriYesNo.checkYourAnswersLabel = Do you know the transit holder’s EORI number?
 traderDetails.holderOfTransit.eoriYesNo.error.required = Select yes if you know the transit holder’s EORI number
-traderDetails.holderOfTransit.eoriYesNo.change.hidden = Do you know the transit holder’s EORI number?
+traderDetails.holderOfTransit.eoriYesNo.change.hidden = if you know the transit holder’s EORI number
 
 traderDetails.holderOfTransit.eori.title = What is the transit holder’s EORI number?
 traderDetails.holderOfTransit.eori.heading = What is the transit holder’s EORI number?
@@ -209,7 +209,7 @@ traderDetails.holderOfTransit.addContact.title = Do you want to add a contact?
 traderDetails.holderOfTransit.addContact.heading = Do you want to add a contact?
 traderDetails.holderOfTransit.addContact.checkYourAnswersLabel = Do you want to add a contact?
 traderDetails.holderOfTransit.addContact.error.required = Select yes if you want to add a contact
-traderDetails.holderOfTransit.addContact.change.hidden = Do you want to add a contact?
+traderDetails.holderOfTransit.addContact.change.hidden = if you want to add a contact
 
 traderDetails.holderOfTransit.contact.name.title = What is the contact’s name?
 traderDetails.holderOfTransit.contact.name.heading = What is the contact’s name?
@@ -228,7 +228,7 @@ traderDetails.holderOfTransit.contact.telephoneNumber.error.maxLength = {0}’s 
 traderDetails.holderOfTransit.contact.telephoneNumber.error.minLength = {0}’s phone number must be {1} characters or more
 traderDetails.holderOfTransit.contact.telephoneNumber.error.invalidCharacter = {0}’s phone number must only include numbers 0 to 9 and a plus sign
 traderDetails.holderOfTransit.contact.telephoneNumber.error.invalidFormat = Enter {0}’s phone number in the right format
-traderDetails.holderOfTransit.contact.telephoneNumber.change.hidden = Transit holder’s contact phone number
+traderDetails.holderOfTransit.contact.telephoneNumber.change.hidden = contact’s phone number
 
 traderDetails.holderOfTransit.checkYourAnswers.heading = Check your answers
 traderDetails.holderOfTransit.checkYourAnswers.title = Check your answers

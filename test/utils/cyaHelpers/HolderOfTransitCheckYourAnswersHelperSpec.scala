@@ -154,7 +154,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = hotRoutes.EoriYesNoController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("Do you know the transit holder’s EORI number?"),
+                          visuallyHiddenText = Some("if you know the transit holder’s EORI number"),
                           attributes = Map()
                         )
                       )
@@ -330,7 +330,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = hotRoutes.AddContactController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("Do you want to add a contact?"),
+                          visuallyHiddenText = Some("if you want to add a contact"),
                           attributes = Map()
                         )
                       )
@@ -418,7 +418,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = contactRoutes.TelephoneNumberController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("Transit holder’s contact phone number"),
+                          visuallyHiddenText = Some("contact’s phone number"),
                           attributes = Map()
                         )
                       )
