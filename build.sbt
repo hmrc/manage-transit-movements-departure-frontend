@@ -48,7 +48,7 @@ lazy val root = (project in file("."))
       ".*BuildInfo.*;.*javascript.*;.*Routes.*;.*GuiceInjector;" +
       ".*ControllerConfiguration",
     ScoverageKeys.coverageExcludedPackages := ".*views.html.components.*",
-    ScoverageKeys.coverageMinimumStmtTotal := 80, // TODO - increase to at least 90
+    ScoverageKeys.coverageMinimumStmtTotal := 90,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting  := true,
     useSuperShell in ThisBuild          := false,
