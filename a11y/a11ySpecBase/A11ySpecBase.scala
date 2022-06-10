@@ -16,6 +16,7 @@
 
 package a11ySpecBase
 
+import org.scalatest.OptionValues
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -26,7 +27,7 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import uk.gov.hmrc.scalatestaccessibilitylinter.AccessibilityMatchers
 
-trait A11ySpecBase extends AnyWordSpec with Matchers with GuiceOneAppPerSuite with AccessibilityMatchers {
+trait A11ySpecBase extends AnyWordSpec with Matchers with GuiceOneAppPerSuite with AccessibilityMatchers with OptionValues {
 
   override def fakeApplication(): Application =
     new GuiceApplicationBuilder()
