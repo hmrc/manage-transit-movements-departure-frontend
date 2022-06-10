@@ -31,6 +31,7 @@
     hmrcTimeoutDialog: HmrcTimeoutDialog,
     standardBetaBanner: StandardBetaBanner,
     stylesheets: Stylesheets,
+    javascripts: Javascripts,
     govukBackLink: GovukBackLink,
     hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper
 )
@@ -85,5 +86,6 @@
     signOutUrl = if (canSignOut) Some(renderConfig.signOutUrl) else None,
     phaseBanner = Some(standardBetaBanner(url = renderConfig.betaFeedbackUnauthenticatedUrl)),
     beforeContentBlock = Some(beforeContentBlock),
-    nonce = CSPNonce.get
+    nonce = CSPNonce.get,
+    additionalScriptsBlock = Some(javascripts())
 )(mainContentWithGetHelp)
