@@ -44,7 +44,10 @@ class EoriViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithHeading()
 
-  behave like pageWithHint("This will start GB or XI followed by 12 or 15 numbers, for example GB123456789000.")
+  behave like pageWithHintWithVisuallyHiddenText(
+    expectedVisibleText = "This will start GB or XI followed by 12 or 15 numbers, for example GB123456789000.",
+    expectedHiddenText = "This will start GB or X I followed by 12 or 15 numbers, for example GB123456789000."
+  )
 
   behave like pageWithInputText(Some(InputSize.Width20))
 

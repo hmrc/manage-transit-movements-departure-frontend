@@ -144,6 +144,17 @@ trait ViewBehaviours extends SpecBase with ViewSpecAssertions {
       assertElementContainsText(hint, expectedText)
     }
 
+  def pageWithHintWithVisuallyHiddenText(expectedVisibleText: String, expectedHiddenText: String): Unit =
+    "must render hint" in {
+      val hint = getElementByClass(doc, "govuk-hint")
+
+      val visibleText = hint.getElementsByAttributeValue("aria-hidden", "true")
+      visibleText.text() mustBe expectedVisibleText
+
+      val hiddenText = hint.getElementsByClass("govuk-visually-hidden").first()
+      hiddenText.text() mustBe expectedHiddenText
+    }
+
   def pageWithoutHint(): Unit =
     "must not render hint" in {
       assertElementDoesNotExist(doc, "govuk-hint")

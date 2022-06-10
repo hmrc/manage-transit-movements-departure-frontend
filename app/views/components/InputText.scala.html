@@ -24,7 +24,7 @@
     label: String,
     labelIsHeading: Boolean = true,
     inputClass: Option[String] = None,
-    hint: Option[String] = None,
+    hint: Option[Content] = None,
     prefix: Option[String] = None,
     suffix: Option[String] = None,
     autocomplete: Option[String] = None,
@@ -35,7 +35,7 @@
 @input = @{
     Input(
         autocomplete = autocomplete,
-        hint = hint.map(x => Hint(content = Text(x))),
+        hint = hint.map(x => Hint(content = x)),
         errorMessage = field.error.map { e =>
             ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(e.message, e.args: _*)))
         },

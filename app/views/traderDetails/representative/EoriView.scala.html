@@ -28,6 +28,16 @@
 
 @(form: Form[String], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
+@hint = @{
+    HtmlContent(
+        Html(s"""
+            |<span aria-hidden="true">${messages("traderDetails.representative.eori.hint")}</span>
+            |<span class="govuk-visually-hidden">${messages("traderDetails.representative.eori.hint.hidden")}</span>
+            |""".stripMargin
+        )
+    )
+}
+
 @mainTemplate(
     title = messages("traderDetails.representative.eori.title"),
     showBackLink = true,
@@ -43,7 +53,7 @@
             label = messages("traderDetails.representative.eori.heading"),
             inputClass = InputSize.Width20,
             caption = Some(messages("traderDetails.caption")),
-            hint = Some(messages("traderDetails.representative.eori.hint"))
+            hint = Some(hint)
         )
 
         @button(attributes = Map("id" -> "submit"))
