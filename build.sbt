@@ -20,6 +20,8 @@ lazy val root = (project in file("."))
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(itSettings): _*)
   .settings(inConfig(IntegrationTest)(org.scalafmt.sbt.ScalafmtPlugin.scalafmtConfigSettings): _*)
+  .configs(A11yTest)
+  .settings(inConfig(A11yTest)(org.scalafmt.sbt.ScalafmtPlugin.scalafmtConfigSettings): _*)
   .settings(DefaultBuildSettings.scalaSettings: _*)
   .settings(DefaultBuildSettings.defaultSettings(): _*)
   .settings(SbtDistributablesPlugin.publishingSettings: _*)
@@ -28,6 +30,8 @@ lazy val root = (project in file("."))
   .settings(scalaVersion := "2.12.12")
   .settings(headerSettings(IntegrationTest): _*)
   .settings(automateHeaderSettings(IntegrationTest))
+  .settings(headerSettings(A11yTest): _*)
+  .settings(automateHeaderSettings(A11yTest))
   .settings(
     name := appName,
     RoutesKeys.routesImport ++= Seq("models._", "models.OptionBinder._"),
