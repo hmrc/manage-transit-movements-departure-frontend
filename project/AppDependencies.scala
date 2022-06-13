@@ -22,7 +22,7 @@ object AppDependencies {
     "org.scalatestplus.play"     %% "scalatestplus-play"       % "5.1.0",
     "org.scalatestplus"          %% "scalatestplus-scalacheck" % "3.1.0.0-RC2",
     "org.pegdown"                 % "pegdown"                  % "1.6.0",
-    "org.jsoup"                   % "jsoup"                    % "1.14.3",
+    "org.jsoup"                   % "jsoup"                    % "1.15.1",
     "com.typesafe.play"          %% "play-test"                % current,
     "org.mockito"                 % "mockito-core"             % "4.5.1",
     "org.scalacheck"             %% "scalacheck"               % "1.16.0",
