@@ -1,5 +1,4 @@
 site.edit = Change
-site.back = Back
 site.delete = Remove
 site.change = Change
 site.delete.hidden = Remove {0}
