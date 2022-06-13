@@ -16,9 +16,12 @@
 
 package controllers.preTaskList
 
+import controllers.SettableOps
 import controllers.actions._
 import forms.preTaskList.DeclarationTypeFormProvider
+import models.domain.GettableAsReaderOps
 import models.journeyDomain.PreTaskListDomain
+import models.requests.DataRequest
 import models.{DeclarationType, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
@@ -63,16 +66,27 @@ class DeclarationTypeController @Inject() (
     .requireData(lrn)
     .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
     .async {
-      implicit request =>
+      implicit request: DataRequest[AnyContent] =>
         form
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))),
-            value =>
+            value => {
+
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(DeclarationTypePage, value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(DeclarationTypePage, mode, updatedAnswers))
+                x <- DeclarationTypePage.sessionWriter(value, sessionRepository)
+                y <- DeclarationTypePage.reader
+              } yield ???
+
+              DeclarationTypePage.sessionWriter(value, sessionRepository).value.map {
+                userAnswers => Redirect(navigator.nextPage(DeclarationTypePage, mode, userAnswers))
+              }
+            }
           )
     }
+
+
+
+
 }
+
