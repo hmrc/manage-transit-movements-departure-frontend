@@ -6,7 +6,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName: String = "manage-transit-movements-departure-frontend"
 
-val silencerVersion = "1.7.0"
+val silencerVersion = "1.7.9"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
@@ -27,7 +27,7 @@ lazy val root = (project in file("."))
   .settings(SbtDistributablesPlugin.publishingSettings: _*)
   .settings(inConfig(Test)(testSettings): _*)
   .settings(majorVersion := 0)
-  .settings(scalaVersion := "2.12.12")
+  .settings(scalaVersion := "2.12.15")
   .settings(headerSettings(IntegrationTest): _*)
   .settings(automateHeaderSettings(IntegrationTest))
   .settings(headerSettings(A11yTest): _*)
