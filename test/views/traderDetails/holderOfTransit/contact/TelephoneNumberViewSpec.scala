@@ -16,17 +16,15 @@
 
 package views.traderDetails.holderOfTransit.contact
 
-import forms.Constants.maxTelephoneNumberLength
 import forms.TelephoneNumberFormProvider
 import models.NormalMode
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Gen
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import viewModels.InputSize
-import views.behaviours.InputTextViewBehaviours
+import views.behaviours.TelephoneNumberViewBehaviours
 import views.html.traderDetails.holderOfTransit.contact.TelephoneNumberView
 
-class TelephoneNumberViewSpec extends InputTextViewBehaviours[String] {
+class TelephoneNumberViewSpec extends TelephoneNumberViewBehaviours {
 
   private val name: String    = Gen.alphaNumStr.sample.value
   override val prefix: String = "traderDetails.holderOfTransit.contact.telephoneNumber"
@@ -36,8 +34,6 @@ class TelephoneNumberViewSpec extends InputTextViewBehaviours[String] {
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
     injector.instanceOf[TelephoneNumberView].apply(form, lrn, NormalMode, name)(fakeRequest, messages)
 
-  implicit override val arbitraryT: Arbitrary[String] = Arbitrary(stringsWithMaxLength(maxTelephoneNumberLength, Gen.numChar))
-
   behave like pageWithTitle(name)
 
   behave like pageWithBackLink
@@ -46,9 +42,7 @@ class TelephoneNumberViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithSectionCaption("Trader details")
 
-  behave like pageWithHint("Must include the country code, like +44 808 157 0192.")
-
-  behave like pageWithInputText(Some(InputSize.Width20))
+  behave like pageWithTelephoneNumberInput()
 
   behave like pageWithSubmitButton("Save and continue")
 }

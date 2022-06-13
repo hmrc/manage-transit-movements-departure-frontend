@@ -43,7 +43,9 @@
             label = messages("traderDetails.representative.telephoneNumber.heading"),
             hint = Some(messages("traderDetails.representative.telephoneNumber.hint")),
             inputClass = InputSize.Width20,
-            caption = Some(messages("traderDetails.caption"))
+            caption = Some(messages("traderDetails.caption")),
+            inputType = "tel",
+            autocomplete = Some("tel")
         )
 
         @button(attributes = Map("id" -> "submit"))
