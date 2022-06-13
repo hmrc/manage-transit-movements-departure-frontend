@@ -22,12 +22,12 @@ import forms.preTaskList.DeclarationTypeFormProvider
 import models.domain.GettableAsReaderOps
 import models.journeyDomain.PreTaskListDomain
 import models.requests.DataRequest
-import models.{DeclarationType, LocalReferenceNumber, Mode}
+import models.{DeclarationType, LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import pages.preTaskList.DeclarationTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.DeclarationTypeView
@@ -73,12 +73,7 @@ class DeclarationTypeController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))),
             value => {
 
-              for {
-                x <- DeclarationTypePage.sessionWriter(value, sessionRepository)
-                y <- DeclarationTypePage.reader
-              } yield ???
-
-              DeclarationTypePage.sessionWriter(value, sessionRepository).value.map {
+             DeclarationTypePage.sessionWriter(value, sessionRepository).map {
                 userAnswers => Redirect(navigator.nextPage(DeclarationTypePage, mode, userAnswers))
               }
             }

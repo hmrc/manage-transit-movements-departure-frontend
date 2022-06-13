@@ -26,21 +26,23 @@ package object controllers {
 
   implicit class SettableOps[A](a: Settable[A]) {
 
-    def settableWriter(value: A)(implicit writes: Writes[A], ec: ExecutionContext): ReaderT[Future, UserAnswers, UserAnswers] =
+
+    def userAnswerWriter(value: A)(implicit writes: Writes[A], ec: ExecutionContext): ReaderT[Future, UserAnswers, UserAnswers] =
       ReaderT[Future, UserAnswers, UserAnswers](
         userAnswers => Future.fromTry(userAnswers.set[A](a, value))
       )
 
     def sessionWriter(value: A, sessionRepository: SessionRepository)
-                     (implicit writes: Writes[A], ec: ExecutionContext): ReaderT[Future, UserAnswers, UserAnswers] =
+                     (implicit writes: Writes[A], ec: ExecutionContext): ReaderT[Future, UserAnswers, UserAnswers] = {
       ReaderT[Future, UserAnswers, UserAnswers](
         userAnswers =>
           Future.fromTry(userAnswers.set[A](a, value)).flatMap(
             updatedUserAnswers => sessionRepository.set(updatedUserAnswers).map(_ =>
-              userAnswers
+              updatedUserAnswers
             )
           )
       )
+    }
   }
 
 }
