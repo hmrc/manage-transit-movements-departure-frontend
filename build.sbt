@@ -51,7 +51,7 @@ lazy val root = (project in file("."))
     ScoverageKeys.coverageMinimumStmtTotal := 90,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting  := true,
-    useSuperShell in ThisBuild          := false,
+    ThisBuild /useSuperShell            := false,
     scalacOptions ++= Seq(
       "-feature",
       "-language:implicitConversions",
@@ -61,7 +61,7 @@ lazy val root = (project in file("."))
     ),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged                        := true,
-    evictionWarningOptions in update :=
+    update / evictionWarningOptions   :=
       EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     resolvers ++= Seq(
       Resolver.bintrayRepo("hmrc", "releases"),
