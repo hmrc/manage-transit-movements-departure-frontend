@@ -43,7 +43,7 @@ trait ModelGenerators {
     Arbitrary {
       for {
         code <- arbitrary[CountryCode]
-        name <- stringsWithMaxLength(stringMaxLength)
+        name <- Gen.alphaNumStr
       } yield Country(code, name)
     }
 
@@ -76,19 +76,15 @@ trait ModelGenerators {
       } yield EoriNumber(number)
     }
 
-  implicit lazy val arbitraryCustomsOffice: Arbitrary[CustomsOffice] = {
-
-    val genCountryCode = Gen.oneOf(CountryCode("AD"), CountryCode("DE"), CountryCode("GB"))
-
+  implicit lazy val arbitraryCustomsOffice: Arbitrary[CustomsOffice] =
     Arbitrary {
       for {
-        id          <- stringsWithMaxLength(stringMaxLength)
-        name        <- stringsWithMaxLength(stringMaxLength)
-        countryId   <- genCountryCode
-        phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
+        id          <- Gen.alphaNumStr
+        name        <- Gen.alphaNumStr
+        countryId   <- arbitrary[CountryCode]
+        phoneNumber <- Gen.option(Gen.alphaNumStr)
       } yield CustomsOffice(id, name, countryId, phoneNumber)
     }
-  }
 
   implicit lazy val arbitraryCustomsOfficeList: Arbitrary[CustomsOfficeList] =
     Arbitrary {
@@ -100,9 +96,9 @@ trait ModelGenerators {
   implicit lazy val arbitraryTraderAddress: Arbitrary[Address] =
     Arbitrary {
       for {
-        addressLine1 <- stringsWithMaxLength(AddressLine1.length, Gen.alphaChar)
-        addressLine2 <- stringsWithMaxLength(AddressLine2.length, Gen.alphaChar)
-        postalCode   <- stringsWithMaxLength(PostalCode.length, Gen.alphaChar)
+        addressLine1 <- stringsWithMaxLength(AddressLine1.length, Gen.alphaNumChar)
+        addressLine2 <- stringsWithMaxLength(AddressLine2.length, Gen.alphaNumChar)
+        postalCode   <- stringsWithMaxLength(PostalCode.length, Gen.alphaNumChar)
         country      <- arbitrary[Country]
       } yield Address(addressLine1, addressLine2, postalCode, country)
     }

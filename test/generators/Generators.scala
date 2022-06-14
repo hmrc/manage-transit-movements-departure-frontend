@@ -112,7 +112,7 @@ trait Generators extends ModelGenerators with ViewModelGenerators {
   def nonEmptyString: Gen[String] =
     for {
       length <- choose(1, stringMaxLength)
-      chars  <- listOfN(length, arbitrary[Char])
+      chars  <- listOfN(length, Gen.alphaNumChar)
     } yield chars.mkString
 
   def stringsThatMatchRegex(regex: Regex): Gen[String] =
