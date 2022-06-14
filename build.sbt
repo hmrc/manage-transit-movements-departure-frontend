@@ -51,7 +51,7 @@ lazy val root = (project in file("."))
     ScoverageKeys.coverageMinimumStmtTotal := 90,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting  := true,
-    useSuperShell in ThisBuild          := false,
+    ThisBuild / useSuperShell := false,
     scalacOptions ++= Seq(
       "-feature",
       "-language:implicitConversions",
@@ -60,8 +60,8 @@ lazy val root = (project in file("."))
       "-Ypartial-unification"
     ),
     libraryDependencies ++= AppDependencies(),
-    retrieveManaged                        := true,
-    evictionWarningOptions in update :=
+    retrieveManaged := true,
+    update / evictionWarningOptions :=
       EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     resolvers ++= Seq(
       Resolver.bintrayRepo("hmrc", "releases"),
