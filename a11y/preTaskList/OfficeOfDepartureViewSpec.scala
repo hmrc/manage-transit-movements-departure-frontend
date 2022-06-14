@@ -14,24 +14,27 @@
  * limitations under the License.
  */
 
-package traderDetails
+package preTaskList
 
 import a11ySpecBase.A11ySpecBase
+import forms.CustomsOfficeFormProvider
 import generators.Generators
-import models.LocalReferenceNumber
+import models.{CustomsOfficeList, LocalReferenceNumber, Mode}
 import org.scalacheck.Arbitrary.arbitrary
-import viewModels.sections.Section
-import views.html.traderDetails.CheckYourAnswersView
+import views.html.preTaskList.OfficeOfDepartureView
 
-class CheckYourAnswersViewSpec extends A11ySpecBase with Generators {
+class OfficeOfDepartureViewSpec extends A11ySpecBase with Generators {
 
-  "the 'check your answers' view" must {
-    val view = app.injector.instanceOf[CheckYourAnswersView]
+  "the 'office of departure' view" must {
+    val view = app.injector.instanceOf[OfficeOfDepartureView]
 
-    val lrn      = arbitrary[LocalReferenceNumber].sample.value
-    val sections = listWithMaxLength[Section]().sample.value
+    val prefix         = arbitrary[String].sample.value
+    val customsOffices = arbitrary[CustomsOfficeList].sample.value
+    val form           = new CustomsOfficeFormProvider()(prefix, customsOffices)
+    val lrn            = arbitrary[LocalReferenceNumber].sample.value
+    val mode           = arbitrary[Mode].sample.value
 
-    val content = view(lrn, sections)
+    val content = view(form, lrn, customsOffices.customsOffices, mode)
 
     "pass accessibility checks" in {
       content.toString() must passAccessibilityChecks

@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
+package preTaskList
+
 import a11ySpecBase.A11ySpecBase
-import views.html.SessionExpiredView
+import forms.preTaskList.LocalReferenceNumberFormProvider
+import views.html.preTaskList.LocalReferenceNumberView
 
-class SessionExpiredViewSpec extends A11ySpecBase {
+class LocalReferenceNumberViewSpec extends A11ySpecBase {
 
-  "the 'session expired' view" must {
-    val view    = app.injector.instanceOf[SessionExpiredView]
-    val content = view()
+  "the 'local reference number' view" must {
+    val view = app.injector.instanceOf[LocalReferenceNumberView]
+
+    val form = new LocalReferenceNumberFormProvider()()
+
+    val content = view(form)
 
     "pass accessibility checks" in {
       content.toString() must passAccessibilityChecks

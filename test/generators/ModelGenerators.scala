@@ -90,6 +90,13 @@ trait ModelGenerators {
     }
   }
 
+  implicit lazy val arbitraryCustomsOfficeList: Arbitrary[CustomsOfficeList] =
+    Arbitrary {
+      for {
+        customsOffices <- listWithMaxLength[CustomsOffice]()
+      } yield CustomsOfficeList(customsOffices)
+    }
+
   implicit lazy val arbitraryTraderAddress: Arbitrary[Address] =
     Arbitrary {
       for {

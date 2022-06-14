@@ -15,13 +15,19 @@
  */
 
 import a11ySpecBase.A11ySpecBase
-import views.html.SessionExpiredView
+import generators.Generators
+import models.LocalReferenceNumber
+import org.scalacheck.Arbitrary.arbitrary
+import viewModels.taskList.Task
+import views.html.TaskListView
 
-class SessionExpiredViewSpec extends A11ySpecBase {
+class TaskListViewSpec extends A11ySpecBase with Generators {
 
-  "the 'session expired' view" must {
-    val view    = app.injector.instanceOf[SessionExpiredView]
-    val content = view()
+  "the 'task list' view" must {
+    val view    = app.injector.instanceOf[TaskListView]
+    val lrn     = arbitrary[LocalReferenceNumber].sample.value
+    val tasks   = listWithMaxLength[Task]()(arbitraryTask).sample.value
+    val content = view(lrn, tasks)
 
     "pass accessibility checks" in {
       content.toString() must passAccessibilityChecks

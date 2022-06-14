@@ -15,12 +15,12 @@
  */
 
 import a11ySpecBase.A11ySpecBase
-import views.html.SessionExpiredView
+import views.html.TechnicalDifficultiesView
 
-class SessionExpiredViewSpec extends A11ySpecBase {
+class TechnicalDifficultiesViewSpec extends A11ySpecBase {
 
-  "the 'session expired' view" must {
-    val view    = app.injector.instanceOf[SessionExpiredView]
+  "the 'technical difficulties' view" must {
+    val view    = app.injector.instanceOf[TechnicalDifficultiesView]
     val content = view()
 
     "pass accessibility checks" in {

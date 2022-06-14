@@ -14,14 +14,25 @@
  * limitations under the License.
  */
 
+package preTaskList
+
 import a11ySpecBase.A11ySpecBase
-import views.html.SessionExpiredView
+import forms.preTaskList.TIRCarnetReferenceFormProvider
+import generators.Generators
+import models.{LocalReferenceNumber, Mode}
+import org.scalacheck.Arbitrary.arbitrary
+import views.html.preTaskList.TirCarnetReferenceView
 
-class SessionExpiredViewSpec extends A11ySpecBase {
+class TirCarnetReferenceViewSpec extends A11ySpecBase with Generators {
 
-  "the 'session expired' view" must {
-    val view    = app.injector.instanceOf[SessionExpiredView]
-    val content = view()
+  "the 'tir carnet reference' view" must {
+    val view = app.injector.instanceOf[TirCarnetReferenceView]
+
+    val form = new TIRCarnetReferenceFormProvider()()
+    val lrn  = arbitrary[LocalReferenceNumber].sample.value
+    val mode = arbitrary[Mode].sample.value
+
+    val content = view(form, lrn, mode)
 
     "pass accessibility checks" in {
       content.toString() must passAccessibilityChecks

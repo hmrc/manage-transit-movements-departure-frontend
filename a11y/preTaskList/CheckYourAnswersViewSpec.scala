@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
+package preTaskList
+
 import a11ySpecBase.A11ySpecBase
-import views.html.SessionExpiredView
+import generators.Generators
+import models.LocalReferenceNumber
+import org.scalacheck.Arbitrary.arbitrary
+import viewModels.sections.Section
+import views.html.preTaskList.CheckYourAnswersView
 
-class SessionExpiredViewSpec extends A11ySpecBase {
+class CheckYourAnswersViewSpec extends A11ySpecBase with Generators {
 
-  "the 'session expired' view" must {
-    val view    = app.injector.instanceOf[SessionExpiredView]
-    val content = view()
+  "the 'check your answers' view" must {
+    val view = app.injector.instanceOf[CheckYourAnswersView]
+
+    val lrn      = arbitrary[LocalReferenceNumber].sample.value
+    val sections = listWithMaxLength[Section]().sample.value
+
+    val content = view(lrn, sections)
 
     "pass accessibility checks" in {
       content.toString() must passAccessibilityChecks

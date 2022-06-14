@@ -15,12 +15,12 @@
  */
 
 import a11ySpecBase.A11ySpecBase
-import views.html.SessionExpiredView
+import views.html.NotFoundView
 
-class SessionExpiredViewSpec extends A11ySpecBase {
+class NotFoundViewSpec extends A11ySpecBase {
 
-  "the 'session expired' view" must {
-    val view    = app.injector.instanceOf[SessionExpiredView]
+  "the 'not found' view" must {
+    val view    = app.injector.instanceOf[NotFoundView]
     val content = view()
 
     "pass accessibility checks" in {
