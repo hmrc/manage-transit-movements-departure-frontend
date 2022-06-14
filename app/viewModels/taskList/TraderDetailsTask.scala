@@ -19,7 +19,7 @@ package viewModels.taskList
 import cats.implicits._
 import controllers.routes
 import controllers.traderDetails.holderOfTransit.{routes => holderOfTransitRoutes}
-import controllers.traderDetails.representative.{routes => representativeRoutes}
+import controllers.traderDetails.{routes => traderDetailsRoutes}
 import models.DeclarationType.Option4
 import models.domain._
 import models.journeyDomain.traderDetails._
@@ -45,7 +45,7 @@ object TraderDetailsTask {
     new TaskProvider(userAnswers).noDependencyOnOtherTask
       .ifCompleted(
         readerIfCompleted = UserAnswersReader[TraderDetailsDomain],
-        urlIfCompleted = representativeRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url
+        urlIfCompleted = traderDetailsRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url
       )
       .ifInProgressOrNotStarted(
         readerIfInProgress = EoriYesNoPage.reader.orElse(TirIdentificationYesNoPage.reader),
