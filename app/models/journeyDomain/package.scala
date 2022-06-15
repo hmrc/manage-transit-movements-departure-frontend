@@ -18,13 +18,13 @@ package models
 
 import cats.data.ReaderT
 import cats.implicits._
-import models.journeyDomain.ReaderError
+import models.journeyDomain.{OpsError, ReaderError}
 import play.api.libs.json.Reads
 import queries.Gettable
 
 package object domain {
 
-  type EitherType[A]        = Either[ReaderError, A]
+  type EitherType[A]        = Either[OpsError, A]
   type UserAnswersReader[A] = ReaderT[EitherType, UserAnswers, A]
 
   object UserAnswersReader {

@@ -19,21 +19,20 @@ package controllers.preTaskList
 import controllers.SettableOps
 import controllers.actions._
 import forms.preTaskList.DeclarationTypeFormProvider
-import models.domain.GettableAsReaderOps
 import models.journeyDomain.PreTaskListDomain
 import models.requests.DataRequest
-import models.{DeclarationType, LocalReferenceNumber, Mode, UserAnswers}
+import models.{DeclarationType, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import pages.preTaskList.DeclarationTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.DeclarationTypeView
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class DeclarationTypeController @Inject() (
   override val messagesApi: MessagesApi,
@@ -64,24 +63,18 @@ class DeclarationTypeController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
-    .async {
+    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain]) {
       implicit request: DataRequest[AnyContent] =>
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))),
-            value => {
-
-             DeclarationTypePage.sessionWriter(value, sessionRepository).map {
-                userAnswers => Redirect(navigator.nextPage(DeclarationTypePage, mode, userAnswers))
+            formWithErrors => BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode)),
+            value =>
+              // ToDo if this is a common pattern we can extract it
+              DeclarationTypePage.sessionWriterRun(value, sessionRepository) match {
+                case Left(_)      => Redirect(controllers.routes.ErrorController.technicalDifficulties())
+                case Right(value) => Redirect(navigator.nextPage(DeclarationTypePage, mode, value))
               }
-            }
           )
     }
-
-
-
-
 }
-

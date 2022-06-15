@@ -16,33 +16,61 @@
 
 import cats.data.ReaderT
 import models.UserAnswers
+import models.journeyDomain.{OpsError, WriterError}
+import models.requests.DataRequest
 import play.api.libs.json.Writes
 import queries.Settable
 import repositories.SessionRepository
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
+import scala.util.{Failure, Success}
 
 package object controllers {
 
-  implicit class SettableOps[A](a: Settable[A]) {
+  type EitherType[A]        = Either[OpsError, A]
+  type UserAnswersWriter[A] = ReaderT[EitherType, UserAnswers, A]
 
+  object UserAnswersReader {
+    def apply[A: UserAnswersWriter]: UserAnswersWriter[A] = implicitly[UserAnswersWriter[A]]
 
-    def userAnswerWriter(value: A)(implicit writes: Writes[A], ec: ExecutionContext): ReaderT[Future, UserAnswers, UserAnswers] =
-      ReaderT[Future, UserAnswers, UserAnswers](
-        userAnswers => Future.fromTry(userAnswers.set[A](a, value))
-      )
-
-    def sessionWriter(value: A, sessionRepository: SessionRepository)
-                     (implicit writes: Writes[A], ec: ExecutionContext): ReaderT[Future, UserAnswers, UserAnswers] = {
-      ReaderT[Future, UserAnswers, UserAnswers](
-        userAnswers =>
-          Future.fromTry(userAnswers.set[A](a, value)).flatMap(
-            updatedUserAnswers => sessionRepository.set(updatedUserAnswers).map(_ =>
-              updatedUserAnswers
-            )
-          )
-      )
-    }
+    def apply(fn: UserAnswers => EitherType[UserAnswers]): UserAnswersWriter[UserAnswers] =
+      ReaderT[EitherType, UserAnswers, UserAnswers](fn)
   }
 
+  implicit class SettableOps[A](page: Settable[A]) {
+
+    def userAnswerWriter(value: A)(implicit writes: Writes[A]): UserAnswersWriter[UserAnswers] =
+      ReaderT[EitherType, UserAnswers, UserAnswers](
+        userAnswers =>
+          userAnswers.set[A](page, value) match {
+            case Success(value)     => Right(value)
+            case Failure(exception) => Left(WriterError(page, Some(s"Failed to write $value to page $page with exception: ${exception.toString}")))
+          }
+      )
+
+    def userAnswersWriterRun(value: A)(implicit writes: Writes[A], request: DataRequest[_]): EitherType[UserAnswers] =
+      userAnswerWriter(value).run(request.userAnswers)
+
+    def sessionWriter(value: A, sessionRepository: SessionRepository)(implicit writes: Writes[A]): UserAnswersWriter[UserAnswers] =
+      userAnswerWriter(value).flatMap {
+        updatedUserAnswers =>
+          ReaderT[EitherType, UserAnswers, UserAnswers](
+            _ =>
+              sessionRepository.set(updatedUserAnswers).value match {
+                case Some(Success(true))  => Right(updatedUserAnswers)
+                case Some(Success(false)) => Left(WriterError(page, Some(s"Failed to write $value to Mongo for page $page non critical")))
+                case Some(Failure(exception)) =>
+                  Left(WriterError(page, Some(s"Failed to write $value to Mongo for page $page with this exception: ${exception.toString}")))
+                case None => Left(WriterError(page, Some("Future not complete")))
+              }
+          )
+      }
+
+    def sessionWriterRun(value: A, sessionRepository: SessionRepository)(implicit
+      writes: Writes[A],
+      ec: ExecutionContext,
+      request: DataRequest[_]
+    ): EitherType[UserAnswers] =
+      sessionWriter(value, sessionRepository).run(request.userAnswers)
+  }
 }
