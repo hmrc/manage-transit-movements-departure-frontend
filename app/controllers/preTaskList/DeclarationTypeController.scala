@@ -16,8 +16,7 @@
 
 package controllers.preTaskList
 
-import controllers.SettableOps
-import controllers.SettableOpsRunner
+import controllers.{SettableOps, SettableOpsRunner}
 import controllers.actions._
 import forms.preTaskList.DeclarationTypeFormProvider
 import models.journeyDomain.PreTaskListDomain
@@ -33,7 +32,6 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.DeclarationTypeView
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 
 class DeclarationTypeController @Inject() (
   override val messagesApi: MessagesApi,
@@ -69,10 +67,7 @@ class DeclarationTypeController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode)),
-            value =>
-              DeclarationTypePage
-                .sessionWriter(value)
-                .runWithRedirect(mode, DeclarationTypePage) // Can maybe get this from the Kleisli e.g. Kleisli[EitherType, UserAnswers, (Page, UserAnswers)]???
+            value => DeclarationTypePage.sessionWriter(value).runWithRedirect(mode)
           )
     }
 }

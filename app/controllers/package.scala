@@ -19,11 +19,9 @@ import models.journeyDomain.{OpsError, WriterError}
 import models.requests.DataRequest
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.Page
+import pages.QuestionPage
 import play.api.libs.json.Writes
-import play.api.mvc.AnyContent
 import play.api.mvc.Results.Redirect
-import queries.Settable
 import repositories.SessionRepository
 
 import scala.util.{Failure, Success}
@@ -40,23 +38,23 @@ package object controllers {
       ReaderT[EitherType, UserAnswers, UserAnswers](fn)
   }
 
-  implicit class SettableOps[A](page: Settable[A]) {
+  implicit class SettableOps[A](page: QuestionPage[A]) {
 
-    def userAnswerWriter(value: A)(implicit writes: Writes[A]): UserAnswersWriter[UserAnswers] =
-      ReaderT[EitherType, UserAnswers, UserAnswers](
+    def userAnswerWriter(value: A)(implicit writes: Writes[A]): UserAnswersWriter[(QuestionPage[A], UserAnswers)] =
+      ReaderT[EitherType, UserAnswers, (QuestionPage[A], UserAnswers)](
         userAnswers =>
           userAnswers.set[A](page, value) match {
-            case Success(value)     => Right(value)
+            case Success(value)     => Right((page, value))
             case Failure(exception) => Left(WriterError(page, Some(s"Failed to write $value to page $page with exception: ${exception.toString}")))
           }
       )
 
-    def sessionWriter(value: A)(implicit writes: Writes[A], sessionRepository: SessionRepository): UserAnswersWriter[UserAnswers] =
+    def sessionWriter(value: A)(implicit writes: Writes[A], sessionRepository: SessionRepository): UserAnswersWriter[(QuestionPage[A], UserAnswers)] =
       userAnswerWriter(value).flatMap {
         updatedUserAnswers =>
-          ReaderT[EitherType, UserAnswers, UserAnswers](
+          ReaderT[EitherType, UserAnswers, (QuestionPage[A], UserAnswers)](
             _ =>
-              sessionRepository.set(updatedUserAnswers).value match {
+              sessionRepository.set(updatedUserAnswers._2).value match {
                 case Some(Success(true))  => Right(updatedUserAnswers)
                 case Some(Success(false)) => Left(WriterError(page, Some(s"Failed to write $value to Mongo for page $page non critical")))
                 case Some(Failure(exception)) =>
@@ -67,14 +65,14 @@ package object controllers {
       }
   }
 
-  implicit class SettableOpsRunner[A](userAnswersWriter: UserAnswersWriter[UserAnswers]) {
+  implicit class SettableOpsRunner[A](userAnswersWriter: UserAnswersWriter[(QuestionPage[A], UserAnswers)]) {
 
-    def runner(userAnswers: UserAnswers): EitherType[UserAnswers]               = userAnswersWriter.run(userAnswers)
-    def runner()(implicit dataRequest: DataRequest[_]): EitherType[UserAnswers] = userAnswersWriter.run(dataRequest.userAnswers)
+    def runner(userAnswers: UserAnswers): EitherType[(QuestionPage[A], UserAnswers)]               = userAnswersWriter.run(userAnswers)
+    def runner()(implicit dataRequest: DataRequest[_]): EitherType[(QuestionPage[A], UserAnswers)] = userAnswersWriter.run(dataRequest.userAnswers)
 
-    def runWithRedirect(mode: Mode, page: Page)(implicit navigator: Navigator, request: DataRequest[_]) = runner(request.userAnswers) match {
+    def runWithRedirect(mode: Mode)(implicit navigator: Navigator, request: DataRequest[_]) = runner(request.userAnswers) match {
       case Left(_)      => Redirect(controllers.routes.ErrorController.technicalDifficulties())
-      case Right(value) => Redirect(navigator.nextPage(page, mode, value))
+      case Right(value) => Redirect(navigator.nextPage(value._1, mode, value._2))
     }
 
 //    def runWithRedirect()(implicit dataRequest: DataRequest[_]): EitherType[A] = userAnswersWriter.run(dataRequest.userAnswers)
