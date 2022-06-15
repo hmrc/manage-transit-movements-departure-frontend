@@ -19,20 +19,18 @@ package viewModels.taskList
 import base.SpecBase
 import controllers.routes
 import controllers.traderDetails.holderOfTransit.{routes => holderOfTransitRoutes}
-import controllers.traderDetails.representative.{routes => representativeRoutes}
-import generators.Generators
+import controllers.traderDetails.{routes => traderDetailsRoutes}
+import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models.DeclarationType.Option4
-import models.traderDetails.representative.RepresentativeCapacity
-import models.{Address, DeclarationType, NormalMode}
+import models.{DeclarationType, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.DeclarationTypePage
-import pages.traderDetails.holderOfTransit.contact
-import pages.traderDetails.{holderOfTransit => hot, representative => rep}
+import pages.traderDetails.{holderOfTransit => hot}
 import viewModels.taskList.TaskStatus._
 
-class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
 
   "name" - {
     "must be Trader Details" - {
@@ -135,24 +133,12 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
     "when Completed" - {
       "when valid journey is completed" in {
-        val userAnswers = emptyUserAnswers
-          .setValue(DeclarationTypePage, Gen.oneOf(DeclarationType.values.filterNot(_ == Option4)).sample.value)
-          .setValue(hot.EoriYesNoPage, true)
-          .setValue(hot.EoriPage, eoriNumber.value)
-          .setValue(hot.NamePage, Gen.alphaNumStr.sample.value)
-          .setValue(hot.AddressPage, arbitrary[Address].sample.value)
-          .setValue(hot.AddContactPage, true)
-          .setValue(contact.NamePage, Gen.alphaNumStr.sample.value)
-          .setValue(contact.TelephoneNumberPage, Gen.alphaNumStr.sample.value)
-          .setValue(rep.ActingAsRepresentativePage, true)
-          .setValue(rep.EoriPage, Gen.alphaNumStr.sample.value)
-          .setValue(rep.NamePage, Gen.alphaNumStr.sample.value)
-          .setValue(rep.CapacityPage, Gen.oneOf(RepresentativeCapacity.values).sample.value)
-          .setValue(rep.TelephoneNumberPage, Gen.alphaNumStr.sample.value)
-
-        val task = TraderDetailsTask(userAnswers)
-        task.status mustBe Completed
-        task.href.get mustBe representativeRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url
+        forAll(arbitraryTraderDetailsAnswers) {
+          userAnswers =>
+            val task = TraderDetailsTask(userAnswers)
+            task.status mustBe Completed
+            task.href.get mustBe traderDetailsRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url
+        }
       }
     }
   }
