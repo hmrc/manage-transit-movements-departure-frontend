@@ -17,6 +17,7 @@
 package controllers.preTaskList
 
 import controllers.SettableOps
+import controllers.SettableOpsRunner
 import controllers.actions._
 import forms.preTaskList.DeclarationTypeFormProvider
 import models.journeyDomain.PreTaskListDomain
@@ -36,15 +37,14 @@ import scala.concurrent.ExecutionContext
 
 class DeclarationTypeController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  @PreTaskListDetails navigator: Navigator,
+  implicit val sessionRepository: SessionRepository,
+  @PreTaskListDetails implicit val navigator: Navigator,
   actions: Actions,
   checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   formProvider: DeclarationTypeFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: DeclarationTypeView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+) extends FrontendBaseController
     with I18nSupport {
 
   private val form = formProvider()
@@ -70,10 +70,9 @@ class DeclarationTypeController @Inject() (
           .fold(
             formWithErrors => BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode)),
             value =>
-              // ToDo if this is a common pattern we can extract it
-              DeclarationTypePage.sessionWriterRun(value, sessionRepository) match {
-                case Left(_)      => Redirect(controllers.routes.ErrorController.technicalDifficulties())
-                case Right(value) => Redirect(navigator.nextPage(DeclarationTypePage, mode, value))
+              DeclarationTypePage.sessionWriter(value).runner match {
+                case Left(_)   => Redirect(controllers.routes.ErrorController.technicalDifficulties())
+                case Right(ua) => Redirect(navigator.nextPage(DeclarationTypePage, mode, ua))
               }
           )
     }

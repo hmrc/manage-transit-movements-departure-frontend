@@ -15,14 +15,16 @@
  */
 
 import cats.data.ReaderT
-import models.UserAnswers
 import models.journeyDomain.{OpsError, WriterError}
 import models.requests.DataRequest
+import models.{Mode, UserAnswers}
+import navigation.Navigator
 import play.api.libs.json.Writes
+import play.api.mvc.AnyContent
+import play.api.mvc.Results.Redirect
 import queries.Settable
 import repositories.SessionRepository
 
-import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
 package object controllers {
@@ -48,10 +50,7 @@ package object controllers {
           }
       )
 
-    def userAnswersWriterRun(value: A)(implicit writes: Writes[A], request: DataRequest[_]): EitherType[UserAnswers] =
-      userAnswerWriter(value).run(request.userAnswers)
-
-    def sessionWriter(value: A, sessionRepository: SessionRepository)(implicit writes: Writes[A]): UserAnswersWriter[UserAnswers] =
+    def sessionWriter(value: A)(implicit writes: Writes[A], sessionRepository: SessionRepository): UserAnswersWriter[UserAnswers] =
       userAnswerWriter(value).flatMap {
         updatedUserAnswers =>
           ReaderT[EitherType, UserAnswers, UserAnswers](
@@ -65,12 +64,19 @@ package object controllers {
               }
           )
       }
+  }
 
-    def sessionWriterRun(value: A, sessionRepository: SessionRepository)(implicit
-      writes: Writes[A],
-      ec: ExecutionContext,
-      request: DataRequest[_]
-    ): EitherType[UserAnswers] =
-      sessionWriter(value, sessionRepository).run(request.userAnswers)
+  implicit class SettableOpsRunner[A](userAnswersWriter: UserAnswersWriter[A]) {
+
+    def runner(userAnswers: UserAnswers): EitherType[A]                        = userAnswersWriter.run(userAnswers)
+    def runner()(implicit dataRequest: DataRequest[AnyContent]): EitherType[A] = userAnswersWriter.run(dataRequest.userAnswers)
+
+    def runWithRedirect(userAnswers: UserAnswers, mode: Mode)(implicit navigator: Navigator) = runner(userAnswers) match {
+      case Left(_)      => Redirect(controllers.routes.ErrorController.technicalDifficulties())
+      case Right(value) => Redirect(navigator.nextPage(???, mode, userAnswers))
+
+    }
+
+    def runWithRedirect()(implicit dataRequest: DataRequest[_]): EitherType[A] = userAnswersWriter.run(dataRequest.userAnswers)
   }
 }
