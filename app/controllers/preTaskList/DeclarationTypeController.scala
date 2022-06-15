@@ -70,10 +70,9 @@ class DeclarationTypeController @Inject() (
           .fold(
             formWithErrors => BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode)),
             value =>
-              DeclarationTypePage.sessionWriter(value).runner match {
-                case Left(_)   => Redirect(controllers.routes.ErrorController.technicalDifficulties())
-                case Right(ua) => Redirect(navigator.nextPage(DeclarationTypePage, mode, ua))
-              }
+              DeclarationTypePage
+                .sessionWriter(value)
+                .runWithRedirect(mode, DeclarationTypePage) // Can maybe get this from the Kleisli e.g. Kleisli[EitherType, UserAnswers, (Page, UserAnswers)]???
           )
     }
 }

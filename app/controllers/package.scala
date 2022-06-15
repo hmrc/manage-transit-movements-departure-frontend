@@ -19,6 +19,7 @@ import models.journeyDomain.{OpsError, WriterError}
 import models.requests.DataRequest
 import models.{Mode, UserAnswers}
 import navigation.Navigator
+import pages.Page
 import play.api.libs.json.Writes
 import play.api.mvc.AnyContent
 import play.api.mvc.Results.Redirect
@@ -66,17 +67,16 @@ package object controllers {
       }
   }
 
-  implicit class SettableOpsRunner[A](userAnswersWriter: UserAnswersWriter[A]) {
+  implicit class SettableOpsRunner[A](userAnswersWriter: UserAnswersWriter[UserAnswers]) {
 
-    def runner(userAnswers: UserAnswers): EitherType[A]                        = userAnswersWriter.run(userAnswers)
-    def runner()(implicit dataRequest: DataRequest[AnyContent]): EitherType[A] = userAnswersWriter.run(dataRequest.userAnswers)
+    def runner(userAnswers: UserAnswers): EitherType[UserAnswers]               = userAnswersWriter.run(userAnswers)
+    def runner()(implicit dataRequest: DataRequest[_]): EitherType[UserAnswers] = userAnswersWriter.run(dataRequest.userAnswers)
 
-    def runWithRedirect(userAnswers: UserAnswers, mode: Mode)(implicit navigator: Navigator) = runner(userAnswers) match {
+    def runWithRedirect(mode: Mode, page: Page)(implicit navigator: Navigator, request: DataRequest[_]) = runner(request.userAnswers) match {
       case Left(_)      => Redirect(controllers.routes.ErrorController.technicalDifficulties())
-      case Right(value) => Redirect(navigator.nextPage(???, mode, userAnswers))
-
+      case Right(value) => Redirect(navigator.nextPage(page, mode, value))
     }
 
-    def runWithRedirect()(implicit dataRequest: DataRequest[_]): EitherType[A] = userAnswersWriter.run(dataRequest.userAnswers)
+//    def runWithRedirect()(implicit dataRequest: DataRequest[_]): EitherType[A] = userAnswersWriter.run(dataRequest.userAnswers)
   }
 }
