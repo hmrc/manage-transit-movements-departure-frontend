@@ -53,6 +53,6 @@
     if (legendIsHeading) {
         radios.withHeadingAndCaption(messages(s"$messageKeyPrefix.heading", legendParams: _*), caption)
     } else {
-        radios.withLabel(messages(s"$messageKeyPrefix.label", legendParams: _*), legendIsVisible)
+        radios.withLegend(messages(s"$messageKeyPrefix.legend", legendParams: _*), legendIsVisible)
     }
 )
