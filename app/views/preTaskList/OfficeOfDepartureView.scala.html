@@ -15,7 +15,7 @@
  *@
 
 @import controllers.preTaskList.routes
-@import views.html.components.{Button, ErrorSummary, InputSelect}
+@import views.html.components.{Button, ErrorSummary, Heading, InputSelect}
 @import models.LocalReferenceNumber
 @import models.reference.CustomsOffice
 @import models.Selectable
@@ -25,6 +25,7 @@
 @this(
     mainTemplate: MainTemplate,
     errorSummary: ErrorSummary,
+    heading: Heading,
     select: InputSelect,
     button: Button,
     formHelper: FormWithCSRF
@@ -42,13 +43,15 @@
 
         @errorSummary(form.errors)
 
+        @heading("officeOfDeparture.heading")
+
         @select(
             field = form("value"),
-            heading = Some(messages("officeOfDeparture.heading")),
-            label = Some(messages("officeOfDeparture.label")),
+            label = messages("officeOfDeparture.label"),
+            labelIsHeading = false,
             hint = Some(messages("officeOfDeparture.hintText")),
             selectItems = customsOffices.toSelectItems(form.value),
-            placeholder = Some(messages("officeOfDeparture.placeholder"))
+            placeholder = messages("officeOfDeparture.placeholder")
         )
 
         @button(

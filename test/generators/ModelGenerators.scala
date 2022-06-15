@@ -27,7 +27,7 @@ trait ModelGenerators {
 
   implicit lazy val arbitraryRepresentativeCapacity: Arbitrary[models.traderDetails.representative.RepresentativeCapacity] =
     Arbitrary {
-      Gen.oneOf(models.traderDetails.representative.RepresentativeCapacity.values.toSeq)
+      Gen.oneOf(models.traderDetails.representative.RepresentativeCapacity.values)
     }
 
   implicit lazy val arbitraryCountryCode: Arbitrary[CountryCode] =
@@ -43,7 +43,7 @@ trait ModelGenerators {
     Arbitrary {
       for {
         code <- arbitrary[CountryCode]
-        name <- Gen.alphaNumStr
+        name <- nonEmptyString
       } yield Country(code, name)
     }
 
@@ -79,8 +79,8 @@ trait ModelGenerators {
   implicit lazy val arbitraryCustomsOffice: Arbitrary[CustomsOffice] =
     Arbitrary {
       for {
-        id          <- Gen.alphaNumStr
-        name        <- Gen.alphaNumStr
+        id          <- nonEmptyString
+        name        <- nonEmptyString
         countryId   <- arbitrary[CountryCode]
         phoneNumber <- Gen.option(Gen.alphaNumStr)
       } yield CustomsOffice(id, name, countryId, phoneNumber)

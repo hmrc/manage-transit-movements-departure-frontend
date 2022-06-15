@@ -14,14 +14,25 @@
  * limitations under the License.
  */
 
+package components
+
 import a11ySpecBase.A11ySpecBase
-import views.html.TechnicalDifficultiesView
+import viewModels.sections.Section
+import views.html.components.AnswerSections
+import views.html.templates.MainTemplate
 
-class TechnicalDifficultiesViewSpec extends A11ySpecBase {
+class AnswerSectionsSpec extends A11ySpecBase {
 
-  "the 'technical difficulties' view" must {
-    val view    = app.injector.instanceOf[TechnicalDifficultiesView]
-    val content = view()
+  "the 'answer sections' component" must {
+    val template  = app.injector.instanceOf[MainTemplate]
+    val component = app.injector.instanceOf[AnswerSections]
+
+    val title    = nonEmptyString.sample.value
+    val sections = listWithMaxLength[Section]().sample.value
+
+    val content = template.apply(title) {
+      component.apply(sections).withHeading(title)
+    }
 
     "pass accessibility checks" in {
       content.toString() must passAccessibilityChecks

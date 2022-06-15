@@ -45,10 +45,10 @@
         @inputSelect(
             field = form("value"),
             heading = Some(messages("$package$.$className;format="decap"$.heading")),
-            label = Some(messages("$package$.$className;format="decap"$.label")),
+            label = messages("$package$.$className;format="decap"$.label"),
             hint = Some(messages("$package$.$className;format="decap"$.hintText")),
             selectItems = $referenceClassPlural;format="decap"$.toSelectItems(form.value),
-            placeholder = Some(messages("$package$.$className;format="decap"$.placeholder"))
+            placeholder = messages("$package$.$className;format="decap"$.placeholder")
         )
 
         @button(attributes = Map("id" -> "submit"))

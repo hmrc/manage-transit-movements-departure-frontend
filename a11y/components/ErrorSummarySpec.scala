@@ -14,26 +14,25 @@
  * limitations under the License.
  */
 
-package traderDetails.holderOfTransit
+package components
 
 import a11ySpecBase.A11ySpecBase
-import forms.YesNoFormProvider
-import generators.Generators
-import models.{LocalReferenceNumber, Mode}
-import org.scalacheck.Arbitrary.arbitrary
-import views.html.traderDetails.holderOfTransit.TirIdentificationYesNoView
+import play.api.data.FormError
+import views.html.components.ErrorSummary
+import views.html.templates.MainTemplate
 
-class TirIdentificationYesNoViewSpec extends A11ySpecBase with Generators {
+class ErrorSummarySpec extends A11ySpecBase {
 
-  "the 'tir identification yes/no' view" must {
-    val view = app.injector.instanceOf[TirIdentificationYesNoView]
+  "the 'error summary' component" must {
+    val template  = app.injector.instanceOf[MainTemplate]
+    val component = app.injector.instanceOf[ErrorSummary]
 
-    val prefix = arbitrary[String].sample.value
-    val form   = new YesNoFormProvider()(prefix)
-    val lrn    = arbitrary[LocalReferenceNumber].sample.value
-    val mode   = arbitrary[Mode].sample.value
+    val title      = nonEmptyString.sample.value
+    val formErrors = listWithMaxLength[FormError]().sample.value
 
-    val content = view(form, lrn, mode)
+    val content = template.apply(title) {
+      component.apply(formErrors).withHeading(title)
+    }
 
     "pass accessibility checks" in {
       content.toString() must passAccessibilityChecks

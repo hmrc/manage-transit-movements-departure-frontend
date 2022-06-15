@@ -15,26 +15,24 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-@import views.html.components.Heading
 
 @this(
-    govukSelect: GovukSelect,
-    headingComponent: Heading
+    govukSelect: GovukSelect
 )
 
 @(
     field: Field,
-    heading: Option[String] = None,
-    label: Option[String] = None,
+    label: String,
+    placeholder: String,
+    labelIsHeading: Boolean = true,
     hint: Option[String] = None,
-    placeholder: Option[String] = None,
     selectItems: Seq[SelectItem]
 )(implicit messages: Messages)
 
 @select = @{
     Select(
         hint = hint.map(x => Hint(content = Text(x))),
-        items = SelectItem(value = None, text = placeholder.getOrElse("")) +: selectItems,
+        items = SelectItem(value = None, text = placeholder) +: selectItems,
         formGroupClasses = "autocomplete-wrapper",
         attributes = Map("data-autocomplete" -> ""),
         errorMessage = field.error.map { e =>
@@ -45,15 +43,10 @@
     .withFormField(field)
 }
 
-@(heading, label) match {
-    case (_, Some(label)) => {
-        @heading.map(headingComponent(_))
-        @govukSelect(select.copy(label = Label(content = Text(label))))
+@govukSelect(
+    if (labelIsHeading) {
+        select.withHeading(heading = Text(label))
+    } else {
+        select.copy(label = Label(content = Text(label)))
     }
-    case (Some(heading), None) => {
-        @govukSelect(select.withHeading(heading = Text(heading)))
-    }
-    case _ => {
-        @govukSelect(select)
-    }
-}
+)

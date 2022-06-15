@@ -16,6 +16,7 @@
 
 package a11ySpecBase
 
+import generators.Generators
 import org.scalatest.OptionValues
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -25,9 +26,12 @@ import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
+import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.scalatestaccessibilitylinter.AccessibilityMatchers
 
-trait A11ySpecBase extends AnyWordSpec with Matchers with GuiceOneAppPerSuite with AccessibilityMatchers with OptionValues {
+import scala.collection.immutable
+
+trait A11ySpecBase extends AnyWordSpec with Matchers with GuiceOneAppPerSuite with AccessibilityMatchers with OptionValues with Generators {
 
   override def fakeApplication(): Application =
     new GuiceApplicationBuilder()
@@ -39,5 +43,17 @@ trait A11ySpecBase extends AnyWordSpec with Matchers with GuiceOneAppPerSuite wi
   implicit lazy val messages: Messages = {
     val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
     messagesApi.preferred(fakeRequest)
+  }
+
+  def heading(text: String): Html = Html(s"""<h1>$text</h1>""")
+
+  implicit class RichHtmlFormat(html: HtmlFormat.Appendable) {
+
+    def withHeading(text: String): Html = HtmlFormat.fill(
+      immutable.Seq(
+        heading(text),
+        Html(html.toString())
+      )
+    )
   }
 }

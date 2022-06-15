@@ -60,9 +60,10 @@
 
     @inputSelect(
         field = form("country"),
-        label = Some(messages(s"$messageKeyPrefix.country")),
+        label = messages(s"$messageKeyPrefix.country"),
+        labelIsHeading = false,
         selectItems = countries.toSelectItems(form.value.map(_.country)),
-        placeholder = Some(messages(s"$messageKeyPrefix.placeholder"))
+        placeholder = messages(s"$messageKeyPrefix.placeholder")
     )
 }
 

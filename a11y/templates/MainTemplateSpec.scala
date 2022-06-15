@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package traderDetails.holderOfTransit.contact
+package templates
 
 import a11ySpecBase.A11ySpecBase
-import forms.TelephoneNumberFormProvider
-import generators.Generators
-import models.{LocalReferenceNumber, Mode}
+import models.LocalReferenceNumber
 import org.scalacheck.Arbitrary.arbitrary
-import views.html.traderDetails.holderOfTransit.contact.TelephoneNumberView
+import views.html.templates.MainTemplate
 
-class TelephoneNumberViewSpec extends A11ySpecBase with Generators {
+class MainTemplateSpec extends A11ySpecBase {
 
-  "the 'telephone number' view" must {
-    val view = app.injector.instanceOf[TelephoneNumberView]
+  "the 'main' template" must {
+    val template = app.injector.instanceOf[MainTemplate]
 
-    val prefix = arbitrary[String].sample.value
-    val name   = arbitrary[String].sample.value
-    val form   = new TelephoneNumberFormProvider()(prefix, name)
-    val lrn    = arbitrary[LocalReferenceNumber].sample.value
-    val mode   = arbitrary[Mode].sample.value
+    val title          = nonEmptyString.sample.value
+    val timeoutEnabled = arbitrary[Boolean].sample.value
+    val canSignOut     = arbitrary[Boolean].sample.value
+    val showBackLink   = arbitrary[Boolean].sample.value
+    val lrn            = arbitrary[Option[LocalReferenceNumber]].sample.value
 
-    val content = view(form, lrn, mode, name)
+    val content = template.apply(title, timeoutEnabled, canSignOut, showBackLink, lrn) {
+      heading(title)
+    }
 
     "pass accessibility checks" in {
       content.toString() must passAccessibilityChecks

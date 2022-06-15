@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
+package templates
+
 import a11ySpecBase.A11ySpecBase
-import views.html.UnauthorisedView
+import views.html.templates.ErrorTemplate
 
-class UnauthorisedViewSpec extends A11ySpecBase {
+class ErrorTemplateSpec extends A11ySpecBase {
 
-  "the 'unauthorised' view" must {
-    val view    = app.injector.instanceOf[UnauthorisedView]
-    val content = view()
+  "the 'error' template" must {
+    val template = app.injector.instanceOf[ErrorTemplate]
+
+    val title   = nonEmptyString.sample.value
+    val header  = nonEmptyString.sample.value
+    val message = nonEmptyString.sample.value
+
+    val content = template.apply(title, header, message)
 
     "pass accessibility checks" in {
       content.toString() must passAccessibilityChecks

@@ -14,14 +14,27 @@
  * limitations under the License.
  */
 
+package components
+
 import a11ySpecBase.A11ySpecBase
-import views.html.SessionExpiredView
+import org.scalacheck.Gen
+import views.html.components.HeadingCaption
+import views.html.templates.MainTemplate
 
-class SessionExpiredViewSpec extends A11ySpecBase {
+class HeadingCaptionSpec extends A11ySpecBase {
 
-  "the 'session expired' view" must {
-    val view    = app.injector.instanceOf[SessionExpiredView]
-    val content = view()
+  "the 'heading caption' component" must {
+    val template  = app.injector.instanceOf[MainTemplate]
+    val component = app.injector.instanceOf[HeadingCaption]
+
+    val title      = nonEmptyString.sample.value
+    val caption    = nonEmptyString.sample.value
+    val styleClass = nonEmptyString.sample.value
+    val id         = nonEmptyString.sample.value
+
+    val content = template.apply(title) {
+      component.apply(caption, styleClass, id).withHeading(title)
+    }
 
     "pass accessibility checks" in {
       content.toString() must passAccessibilityChecks

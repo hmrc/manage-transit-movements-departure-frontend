@@ -94,6 +94,8 @@ trait Generators extends ModelGenerators with ViewModelGenerators {
   def intsAboveValue(value: Int): Gen[Int] =
     arbitrary[Int] retryUntil (_ > value)
 
+  def positiveInts: Gen[Int] = Gen.choose(0, Int.MaxValue)
+
   def intsOutsideRange(min: Int, max: Int): Gen[Int] =
     arbitrary[Int] retryUntil (
       x => x < min || x > max
@@ -226,4 +228,8 @@ trait Generators extends ModelGenerators with ViewModelGenerators {
     } yield pickRange
 
   val localDateGen: Gen[LocalDate] = datesBetween(LocalDate.of(1900, 1, 1), LocalDate.now)
+
+  implicit lazy val arbitraryAny: Arbitrary[Any] = Arbitrary {
+    Gen.oneOf[Any](Gen.alphaNumStr, arbitrary[Int])
+  }
 }

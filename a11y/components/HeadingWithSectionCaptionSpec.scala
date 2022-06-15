@@ -14,20 +14,26 @@
  * limitations under the License.
  */
 
+package components
+
 import a11ySpecBase.A11ySpecBase
-import generators.Generators
-import models.LocalReferenceNumber
-import org.scalacheck.Arbitrary.arbitrary
-import viewModels.taskList.Task
-import views.html.TaskListView
+import views.html.components.HeadingWithSectionCaption
+import views.html.templates.MainTemplate
 
-class TaskListViewSpec extends A11ySpecBase with Generators {
+class HeadingWithSectionCaptionSpec extends A11ySpecBase {
 
-  "the 'task list' view" must {
-    val view    = app.injector.instanceOf[TaskListView]
-    val lrn     = arbitrary[LocalReferenceNumber].sample.value
-    val tasks   = listWithMaxLength[Task]()(arbitraryTask).sample.value
-    val content = view(lrn, tasks)
+  "the 'heading with section' component" must {
+    val template  = app.injector.instanceOf[MainTemplate]
+    val component = app.injector.instanceOf[HeadingWithSectionCaption]
+
+    val title       = nonEmptyString.sample.value
+    val headingKey  = nonEmptyString.sample.value
+    val captionKey  = nonEmptyString.sample.value
+    val headingArgs = listWithMaxLength[Any]().sample.value
+
+    val content = template.apply(title) {
+      component.apply(headingKey, captionKey, headingArgs)
+    }
 
     "pass accessibility checks" in {
       content.toString() must passAccessibilityChecks

@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-package preTaskList
+package components
 
 import a11ySpecBase.A11ySpecBase
-import forms.preTaskList.LocalReferenceNumberFormProvider
-import views.html.preTaskList.LocalReferenceNumberView
+import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
+import views.html.components.ListWithActions
+import views.html.templates.MainTemplate
 
-class LocalReferenceNumberViewSpec extends A11ySpecBase {
+class TaskListSpec extends A11ySpecBase {
 
-  "the 'local reference number' view" must {
-    val view = app.injector.instanceOf[LocalReferenceNumberView]
+  "the 'task list' component" must {
+    val template  = app.injector.instanceOf[MainTemplate]
+    val component = app.injector.instanceOf[ListWithActions]
 
-    val form = new LocalReferenceNumberFormProvider()()
+    val title     = nonEmptyString.sample.value
+    val listItems = listWithMaxLength[ListItem]().sample.value
 
-    val content = view(form)
+    val content = template.apply(title) {
+      component.apply(listItems).withHeading(title)
+    }
 
     "pass accessibility checks" in {
       content.toString() must passAccessibilityChecks

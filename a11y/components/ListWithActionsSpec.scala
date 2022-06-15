@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package traderDetails.holderOfTransit
+package components
 
 import a11ySpecBase.A11ySpecBase
-import forms.YesNoFormProvider
-import generators.Generators
-import models.{LocalReferenceNumber, Mode}
-import org.scalacheck.Arbitrary.arbitrary
-import views.html.traderDetails.holderOfTransit.EoriYesNoView
+import viewModels.taskList.Task
+import views.html.components.TaskList
+import views.html.templates.MainTemplate
 
-class EoriYesNoViewSpec extends A11ySpecBase with Generators {
+class ListWithActionsSpec extends A11ySpecBase {
 
-  "the 'eori yes/no' view" must {
-    val view = app.injector.instanceOf[EoriYesNoView]
+  "the 'list with actions' component" must {
+    val template  = app.injector.instanceOf[MainTemplate]
+    val component = app.injector.instanceOf[TaskList]
 
-    val prefix = arbitrary[String].sample.value
-    val form   = new YesNoFormProvider()(prefix)
-    val lrn    = arbitrary[LocalReferenceNumber].sample.value
-    val mode   = arbitrary[Mode].sample.value
+    val title      = nonEmptyString.sample.value
+    val sectionKey = nonEmptyString.sample.value
+    val tasks      = listWithMaxLength[Task]()(arbitraryTask).sample.value
 
-    val content = view(form, lrn, mode)
+    val content = template.apply(title) {
+      component.apply(sectionKey, tasks).withHeading(title)
+    }
 
     "pass accessibility checks" in {
       content.toString() must passAccessibilityChecks

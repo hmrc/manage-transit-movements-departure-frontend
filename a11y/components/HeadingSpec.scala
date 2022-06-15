@@ -14,24 +14,27 @@
  * limitations under the License.
  */
 
-package traderDetails.holderOfTransit
+package components
 
 import a11ySpecBase.A11ySpecBase
-import generators.Generators
-import models.LocalReferenceNumber
-import org.scalacheck.Arbitrary.arbitrary
-import viewModels.sections.Section
-import views.html.traderDetails.holderOfTransit.CheckYourAnswersView
+import org.scalacheck.Gen
+import views.html.components.Heading
+import views.html.templates.MainTemplate
 
-class CheckYourAnswersViewSpec extends A11ySpecBase with Generators {
+class HeadingSpec extends A11ySpecBase {
 
-  "the 'check your answers' view" must {
-    val view = app.injector.instanceOf[CheckYourAnswersView]
+  "the 'heading' component" must {
+    val template  = app.injector.instanceOf[MainTemplate]
+    val component = app.injector.instanceOf[Heading]
 
-    val lrn      = arbitrary[LocalReferenceNumber].sample.value
-    val sections = listWithMaxLength[Section]().sample.value
+    val title       = nonEmptyString.sample.value
+    val headingKey  = nonEmptyString.sample.value
+    val args        = listWithMaxLength[Any]().sample.value
+    val headingSize = Gen.alphaNumStr.sample.value
 
-    val content = view(lrn, sections)
+    val content = template.apply(title) {
+      component.apply(headingKey, args, headingSize)
+    }
 
     "pass accessibility checks" in {
       content.toString() must passAccessibilityChecks
