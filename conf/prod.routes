@@ -7,7 +7,9 @@
 ->         /manage-transit-movements/departure                   app.traderDetails.holderOfTransit.Routes
 ->         /manage-transit-movements/departure                   app.traderDetails.holderOfTransit.contact.Routes
 ->         /manage-transit-movements/departure                   app.traderDetails.representative.Routes
+->         /manage-transit-movements/departure                   app.traderDetails.consignment.Routes
 ->         /manage-transit-movements/departure                   app.traderDetails.consignment.consignor.Routes
+->         /manage-transit-movements/departure                   app.traderDetails.consignment.Routes
 
 ->         /                                                     health.Routes
 

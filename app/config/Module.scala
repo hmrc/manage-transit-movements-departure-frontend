@@ -31,6 +31,7 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(classOf[PreTaskListDetails]).to(classOf[PreTaskListNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[HolderOfTransit]).to(classOf[HolderOfTransitNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[Representative]).to(classOf[RepresentativeNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[TraderDetailsConsignment]).to(classOf[RepresentativeNavigator])
 
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])

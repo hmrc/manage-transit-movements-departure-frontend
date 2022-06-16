@@ -286,8 +286,13 @@ traderDetails.representative.checkYourAnswers.heading = Check your answers
 traderDetails.representative.checkYourAnswers.title = Check your answers
 traderDetails.representative.checkYourAnswers.representative = Representative
 
-# Trader Details - Consignor
+traderDetails.consignment.approvedOperator.title = Do you want to use a reduced data set?
+traderDetails.consignment.approvedOperator.heading = Do you want to use a reduced data set?
+traderDetails.consignment.approvedOperator.checkYourAnswersLabel = Do you want to use a reduced data set?
+traderDetails.consignment.approvedOperator.error.required = Select yes if you want to use a reduced data set
+traderDetails.consignment.approvedOperator.hintText = You must be an approved airline, shipping or rail freight operator to use reduced data.
 
+# Trader Details - Consignor
 traderDetails.consignment.consignor.eoriYesNo.title = Do you know the consignor’s EORI number?
 traderDetails.consignment.consignor.eoriYesNo.heading = Do you know the consignor’s EORI number?
 traderDetails.consignment.consignor.eoriYesNo.checkYourAnswersLabel = Do you know the consignor’s EORI number?
