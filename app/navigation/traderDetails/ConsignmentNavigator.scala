@@ -27,10 +27,19 @@ import javax.inject.{Inject, Singleton}
 class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[RepresentativeDomain] {
 
   override def routes(mode: Mode): RouteMapping = {
-    case ApprovedOperatorPage    => ua => Some(consignorRoutes.EoriController.onPageLoad(ua.lrn, mode))
+    case ApprovedOperatorPage    => ua => approvedOperatorYesNoRoute(ua, mode)
     case consignor.EoriYesNoPage => ua => consignorEoriYesNoRoute(ua, mode)
     case consignor.EoriPage      => ua => ??? //TODO replace with consignorRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
   }
+
+  private def approvedOperatorYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    yesNoRoute(userAnswers, ApprovedOperatorPage)(
+      yesCall = consignorRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode)
+    )(
+      noCall = consignorRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn,
+                                                              mode
+      ) //TODO replace with consigneeRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode)
+    )
 
   private def consignorEoriYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     yesNoRoute(userAnswers, consignor.EoriYesNoPage)(
