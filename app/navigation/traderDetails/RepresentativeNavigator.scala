@@ -42,8 +42,6 @@ class RepresentativeNavigator @Inject() () extends TraderDetailsNavigator[Repres
   private def actingRepresentativeRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     yesNoRoute(userAnswers, ActingAsRepresentativePage)(
       yesCall = repRoutes.EoriController.onPageLoad(userAnswers.lrn, mode)
-    )(
-      noCall = tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn) //TODO REDIRECT TO CORRECT PAGE WHEN BUILT
-    )
+    )(noCall = controllers.traderDetails.consignment.routes.ApprovedOperatorController.onPageLoad(userAnswers.lrn, mode))
 
 }
