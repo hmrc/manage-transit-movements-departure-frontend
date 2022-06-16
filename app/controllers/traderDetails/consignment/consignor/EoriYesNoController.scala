@@ -21,7 +21,7 @@ import forms.YesNoFormProvider
 import javax.inject.Inject
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.HolderOfTransit
+import navigation.annotations.TraderDetailsConsignment
 import pages.traderDetails.consignment.consignor.EoriYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class EoriYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @HolderOfTransit navigator: Navigator,
+  @TraderDetailsConsignment navigator: Navigator,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,

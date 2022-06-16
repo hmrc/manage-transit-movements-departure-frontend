@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package pages.traderDetails.consigment.consignor
+package pages.traderDetails.consignment.consignor
 
 import pages.behaviours.PageBehaviours
-import pages.traderDetails.consignment.consignor.EoriPage
 
 class EoriPageSpec extends PageBehaviours {
 

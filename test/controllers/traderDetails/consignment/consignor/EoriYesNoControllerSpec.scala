@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
-import navigation.annotations.HolderOfTransit
+import navigation.annotations.TraderDetailsConsignment
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -43,7 +43,7 @@ class EoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures w
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[HolderOfTransit]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetailsConsignment]).toInstance(fakeNavigator))
 
   "EoriYesNo Controller" - {
 

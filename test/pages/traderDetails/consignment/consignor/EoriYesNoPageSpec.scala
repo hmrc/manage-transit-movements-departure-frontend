@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package pages.traderDetails.consigment.consignor
+package pages.traderDetails.consignment.consignor
 
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.traderDetails.consignment.consignor.{EoriPage, EoriYesNoPage}
 
 class EoriYesNoPageSpec extends PageBehaviours {
 

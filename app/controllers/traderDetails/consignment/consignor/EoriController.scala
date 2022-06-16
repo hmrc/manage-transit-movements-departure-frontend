@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.EoriNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.HolderOfTransit
+import navigation.annotations.TraderDetailsConsignment
 import pages.traderDetails.consignment.consignor.EoriPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -28,14 +28,13 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.traderDetails.consignment.consignor.EoriView
 import javax.inject.Inject
-import pages.traderDetails.consignment.consignor.EoriPage
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class EoriController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @HolderOfTransit navigator: Navigator,
+  @TraderDetailsConsignment navigator: Navigator,
   actions: Actions,
   formProvider: EoriNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
