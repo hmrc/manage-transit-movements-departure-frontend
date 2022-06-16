@@ -25,7 +25,6 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.traderDetails.consignment._
-import pages.traderDetails.holderOfTransit.{AddressPage, NamePage}
 
 class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
 
@@ -115,13 +114,13 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
         "must go from name page to address page" in {
           navigator
-            .nextPage(NamePage, mode, emptyUserAnswers)
+            .nextPage(consignor.NamePage, mode, emptyUserAnswers)
             .mustBe(consignorRoutes.AddressController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
 
         "must go from address page to add contact page" ignore {
           navigator
-            .nextPage(AddressPage, mode, emptyUserAnswers)
+            .nextPage(consignor.AddressPage, mode, emptyUserAnswers)
             .mustBe(???) //TODO consignorRoutes.AddContactController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
       }
@@ -184,7 +183,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           forAll(arbitraryTraderDetailsConsignmentAnswers) {
             answers =>
               navigator
-                .nextPage(NamePage, mode, answers)
+                .nextPage(consignor.NamePage, mode, answers)
                 .mustBe(???) //TODO CheckYourAnswers
           }
         }
@@ -193,7 +192,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           forAll(arbitraryTraderDetailsConsignmentAnswers) {
             answers =>
               navigator
-                .nextPage(AddressPage, mode, answers)
+                .nextPage(consignor.AddressPage, mode, answers)
                 .mustBe(???) //TODO CheckYourAnswers
           }
         }
@@ -269,7 +268,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         forAll(arbitraryTraderDetailsAnswers) {
           answers =>
             navigator
-              .nextPage(NamePage, mode, answers)
+              .nextPage(consignor.NamePage, mode, answers)
               .mustBe(???) //TODO Check Your Answers Page
         }
       }
@@ -278,7 +277,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         forAll(arbitraryTraderDetailsAnswers) {
           answers =>
             navigator
-              .nextPage(AddressPage, mode, answers)
+              .nextPage(consignor.AddressPage, mode, answers)
               .mustBe(???) //TODO Check Your Answers Page
         }
       }
