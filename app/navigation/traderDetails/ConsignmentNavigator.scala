@@ -22,7 +22,6 @@ import pages.traderDetails.consignment._
 import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
 import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
-import pages.traderDetails.holderOfTransit.{AddressPage, NamePage}
 
 @Singleton
 class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[RepresentativeDomain] {
@@ -31,8 +30,8 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Represent
     case ApprovedOperatorPage    => ua => approvedOperatorYesNoRoute(ua, mode)
     case consignor.EoriYesNoPage => ua => consignorEoriYesNoRoute(ua, mode)
     case consignor.EoriPage      => ua => Some(consignorRoutes.NameController.onPageLoad(ua.lrn, mode))
-    case NamePage                => ua => Some(consignorRoutes.AddressController.onPageLoad(ua.lrn, mode))
-    case AddressPage             => ua => ??? //TODO Some(consignorRoutes.AddContactController.onPageLoad(ua.lrn, mode))
+    case consignor.NamePage      => ua => Some(consignorRoutes.AddressController.onPageLoad(ua.lrn, mode))
+    case consignor.AddressPage   => ua => ??? //TODO Some(consignorRoutes.AddContactController.onPageLoad(ua.lrn, mode))
   }
 
   private def approvedOperatorYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
