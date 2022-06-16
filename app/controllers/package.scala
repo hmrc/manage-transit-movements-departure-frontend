@@ -15,15 +15,16 @@
  */
 
 import cats.data.ReaderT
+import models.{Mode, UserAnswers}
 import models.journeyDomain.{OpsError, WriterError}
 import models.requests.DataRequest
-import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.QuestionPage
 import play.api.libs.json.Writes
 import play.api.mvc.Results.Redirect
 import repositories.SessionRepository
 
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 package object controllers {
@@ -48,21 +49,6 @@ package object controllers {
             case Failure(exception) => Left(WriterError(page, Some(s"Failed to write $value to page $page with exception: ${exception.toString}")))
           }
       )
-
-    def sessionWriter(value: A)(implicit writes: Writes[A], sessionRepository: SessionRepository): UserAnswersWriter[(QuestionPage[A], UserAnswers)] =
-      userAnswerWriter(value).flatMap {
-        updatedUserAnswers =>
-          ReaderT[EitherType, UserAnswers, (QuestionPage[A], UserAnswers)](
-            _ =>
-              sessionRepository.set(updatedUserAnswers._2).value match {
-                case Some(Success(true))  => Right(updatedUserAnswers)
-                case Some(Success(false)) => Left(WriterError(page, Some(s"Failed to write $value to Mongo for page $page non critical")))
-                case Some(Failure(exception)) =>
-                  Left(WriterError(page, Some(s"Failed to write $value to Mongo for page $page with this exception: ${exception.toString}")))
-                case None => Left(WriterError(page, Some("Future not complete")))
-              }
-          )
-      }
   }
 
   implicit class SettableOpsRunner[A](userAnswersWriter: UserAnswersWriter[(QuestionPage[A], UserAnswers)]) {
@@ -70,11 +56,44 @@ package object controllers {
     def runner(userAnswers: UserAnswers): EitherType[(QuestionPage[A], UserAnswers)]               = userAnswersWriter.run(userAnswers)
     def runner()(implicit dataRequest: DataRequest[_]): EitherType[(QuestionPage[A], UserAnswers)] = userAnswersWriter.run(dataRequest.userAnswers)
 
-    def runWithRedirect(mode: Mode)(implicit navigator: Navigator, request: DataRequest[_]) = runner(request.userAnswers) match {
-      case Left(_)      => Redirect(controllers.routes.ErrorController.technicalDifficulties())
-      case Right(value) => Redirect(navigator.nextPage(value._1, mode, value._2))
+    def writeToSession(
+      userAnswers: UserAnswers
+    )(implicit sessionRepository: SessionRepository, executionContext: ExecutionContext): Future[(QuestionPage[A], UserAnswers)] = runner(userAnswers) match {
+      case Left(opsError) => Future.failed(new Exception(s"${opsError.toString}"))
+      case Right(value) =>
+        sessionRepository
+          .set(value._2)
+          .map(
+            _ => value
+          )
     }
 
-//    def runWithRedirect()(implicit dataRequest: DataRequest[_]): EitherType[A] = userAnswersWriter.run(dataRequest.userAnswers)
+    def writeToSession()(implicit
+      dataRequest: DataRequest[_],
+      sessionRepository: SessionRepository,
+      ex: ExecutionContext
+    ): Future[(QuestionPage[A], UserAnswers)] = runner() match {
+      case Left(opsError) => Future.failed(new Exception(s"${opsError.toString}"))
+      case Right(value) =>
+        sessionRepository
+          .set(value._2)
+          .map(
+            _ => value
+          )
+    }
+
+    def writeToSessionNavigator(userAnswers: UserAnswers,
+                                mode: Mode
+    )(implicit sessionRepository: SessionRepository, navigator: Navigator, executionContext: ExecutionContext) =
+      writeToSession(userAnswers).map {
+        result => Redirect(navigator.nextPage(result._1, mode, result._2))
+      }
+
+    def writeToSessionNavigator(
+      mode: Mode
+    )(implicit dataRequest: DataRequest[_], sessionRepository: SessionRepository, navigator: Navigator, executionContext: ExecutionContext) =
+      writeToSession(dataRequest.userAnswers).map {
+        result => Redirect(navigator.nextPage(result._1, mode, result._2))
+      }
   }
 }

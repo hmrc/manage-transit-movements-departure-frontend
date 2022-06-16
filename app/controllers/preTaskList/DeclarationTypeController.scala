@@ -16,8 +16,8 @@
 
 package controllers.preTaskList
 
-import controllers.{SettableOps, SettableOpsRunner}
 import controllers.actions._
+import controllers.{SettableOps, SettableOpsRunner}
 import forms.preTaskList.DeclarationTypeFormProvider
 import models.journeyDomain.PreTaskListDomain
 import models.requests.DataRequest
@@ -32,6 +32,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.DeclarationTypeView
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class DeclarationTypeController @Inject() (
   override val messagesApi: MessagesApi,
@@ -42,7 +43,8 @@ class DeclarationTypeController @Inject() (
   formProvider: DeclarationTypeFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: DeclarationTypeView
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   private val form = formProvider()
@@ -61,13 +63,14 @@ class DeclarationTypeController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain]) {
+    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+    .async {
       implicit request: DataRequest[AnyContent] =>
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode)),
-            value => DeclarationTypePage.sessionWriter(value).runWithRedirect(mode)
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))),
+            value          => DeclarationTypePage.userAnswerWriter(value).writeToSessionNavigator(mode)
           )
     }
 }
