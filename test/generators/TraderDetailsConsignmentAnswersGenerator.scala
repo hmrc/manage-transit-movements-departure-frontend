@@ -28,6 +28,8 @@ trait TraderDetailsConsignmentAnswersGenerator extends UserAnswersGenerator {
     arbitraryTraderdetailsConsignmentApprovedOperatorUserAnswersEntry.arbitrary ::
       Arbitrary((consignor.EoriYesNoPage, JsBoolean(true))).arbitrary ::
       arbitraryTransitHolderConsignmentConsignorEoriUserAnswersEntry.arbitrary ::
+      arbitraryTransitHolderConsignmentConsignorNameUserAnswersEntry.arbitrary ::
+      arbitraryTransitHolderConsignmentConsignorAddressUserAnswersEntry.arbitrary ::
       Nil
   )
 
@@ -39,6 +41,14 @@ trait TraderDetailsConsignmentAnswersGenerator extends UserAnswersGenerator {
   lazy val arbitraryTraderDetailsConsignmentAnswersWithoutConsignorEori: Gen[UserAnswers] = arbitraryUserAnswers(
     arbitraryTraderdetailsConsignmentApprovedOperatorUserAnswersEntry.arbitrary ::
       Arbitrary((consignor.EoriYesNoPage, JsBoolean(false))).arbitrary ::
+      arbitraryTransitHolderConsignmentConsignorNameUserAnswersEntry.arbitrary ::
+      arbitraryTransitHolderConsignmentConsignorAddressUserAnswersEntry.arbitrary ::
       Nil
+  )
+
+  lazy val arbitraryTraderDetailsConsignmentAnswers: Gen[UserAnswers] = Gen.oneOf(
+    arbitraryTraderDetailsConsignmentAnswersWithConsignorEori,
+    arbitraryTraderDetailsConsignmentAnswersWithoutConsignor,
+    arbitraryTraderDetailsConsignmentAnswersWithoutConsignorEori
   )
 }

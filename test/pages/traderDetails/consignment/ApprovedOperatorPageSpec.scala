@@ -16,9 +16,10 @@
 
 package pages.traderDetails.consignment
 
+import models.Address
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.traderDetails.consignment.consignor.{EoriPage, EoriYesNoPage}
+import pages.traderDetails.consignment.consignor._
 
 class ApprovedOperatorPageSpec extends PageBehaviours {
 
@@ -31,18 +32,25 @@ class ApprovedOperatorPageSpec extends PageBehaviours {
     beRemovable[Boolean](ApprovedOperatorPage)
 
     "cleanup" - {
+      val testAddress = arbitrary[Address].sample.value
+
       "when NO selected" - {
         "must clean up Consignor pages" in {
+
           forAll(arbitrary[String]) {
             eori =>
               val preChange = emptyUserAnswers
                 .setValue(ApprovedOperatorPage, true)
                 .setValue(EoriYesNoPage, true)
                 .setValue(EoriPage, eori)
+                .setValue(NamePage, "name")
+                .setValue(AddressPage, testAddress)
               val postChange = preChange.set(ApprovedOperatorPage, false).success.value
 
               postChange.get(EoriPage) mustNot be(defined)
               postChange.get(EoriYesNoPage) mustNot be(defined)
+              postChange.get(NamePage) mustNot be(defined)
+              postChange.get(AddressPage) mustNot be(defined)
           }
         }
       }
@@ -51,10 +59,19 @@ class ApprovedOperatorPageSpec extends PageBehaviours {
         "must do nothing" in {
           forAll(arbitrary[String]) {
             eori =>
-              val preChange  = emptyUserAnswers.setValue(EoriPage, eori)
+              val preChange = emptyUserAnswers
+                .setValue(ApprovedOperatorPage, true)
+                .setValue(EoriYesNoPage, true)
+                .setValue(EoriPage, eori)
+                .setValue(NamePage, "name")
+                .setValue(AddressPage, testAddress)
+
               val postChange = preChange.set(EoriYesNoPage, true).success.value
 
               postChange.get(EoriPage) must be(defined)
+              postChange.get(EoriYesNoPage) must be(defined)
+              postChange.get(NamePage) must be(defined)
+              postChange.get(AddressPage) must be(defined)
           }
         }
       }

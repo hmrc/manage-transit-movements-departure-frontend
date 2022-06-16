@@ -29,11 +29,28 @@ import play.api.libs.json.{JsValue, Json}
 trait UserAnswersEntryGenerators {
   self: Generators =>
 
-  implicit lazy val arbitraryTransitHolderConsignmentConsignorEoriUserAnswersEntry: Arbitrary[(pages.traderDetails.holderOfTransit.EoriPage.type, JsValue)] =
+  implicit lazy val arbitraryTransitHolderConsignmentConsignorAddressUserAnswersEntry
+    : Arbitrary[(pages.traderDetails.consignment.consignor.AddressPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[pages.traderDetails.consignment.consignor.AddressPage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.consignment.consignor.AddressPage, value)
+    }
+
+  implicit lazy val arbitraryTransitHolderConsignmentConsignorNameUserAnswersEntry
+    : Arbitrary[(pages.traderDetails.consignment.consignor.NamePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[pages.traderDetails.consignment.consignor.NamePage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.consignment.consignor.NamePage, value)
+    }
+
+  implicit lazy val arbitraryTransitHolderConsignmentConsignorEoriUserAnswersEntry
+    : Arbitrary[(pages.traderDetails.consignment.consignor.EoriPage.type, JsValue)] =
     Arbitrary {
       for {
         value <- arbitrary[pages.traderDetails.consignment.consignor.EoriPage.type#Data].map(Json.toJson(_))
-      } yield (pages.traderDetails.holderOfTransit.EoriPage, value)
+      } yield (pages.traderDetails.consignment.consignor.EoriPage, value)
     }
 
   implicit lazy val arbitraryTraderdetailsConsignmentApprovedOperatorUserAnswersEntry
