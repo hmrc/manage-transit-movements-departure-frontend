@@ -18,19 +18,37 @@ package navigation.traderDetails
 
 import models._
 import models.journeyDomain.traderDetails.RepresentativeDomain
-import pages.traderDetails.holderOfTransit.EoriPage
-import controllers.traderDetails.holderOfTransit.{routes => hotRoutes}
+import pages.traderDetails.consignment._
+import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
 import play.api.mvc.Call
-
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[RepresentativeDomain] {
 
   override def routes(mode: Mode): RouteMapping = {
-    case EoriPage => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, mode)) //todo when new pages built add nav
+    case ApprovedOperatorPage    => ua => approvedOperatorYesNoRoute(ua, mode)
+    case consignor.EoriYesNoPage => ua => consignorEoriYesNoRoute(ua, mode)
+    case consignor.EoriPage      => ua => ??? //TODO replace with consignorRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
   }
 
+  private def approvedOperatorYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    yesNoRoute(userAnswers, ApprovedOperatorPage)(
+      yesCall = consignorRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode)
+    )(
+      noCall = consignorRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn,
+                                                              mode
+      ) //TODO replace with consigneeRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode)
+    )
+
+  private def consignorEoriYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    yesNoRoute(userAnswers, consignor.EoriYesNoPage)(
+      yesCall = consignorRoutes.EoriController.onPageLoad(userAnswers.lrn, mode)
+    )(
+      noCall =
+        consignorRoutes.EoriController.onPageLoad(userAnswers.lrn, mode) //TODO replace with consignorRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
+    )
+
   override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
-    hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn) //todo update when new pages built
+    ??? //todo update when new pages built consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
 }

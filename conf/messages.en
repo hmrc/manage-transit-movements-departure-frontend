@@ -291,3 +291,22 @@ traderDetails.consignment.approvedOperator.heading = Do you want to use a reduce
 traderDetails.consignment.approvedOperator.checkYourAnswersLabel = Do you want to use a reduced data set?
 traderDetails.consignment.approvedOperator.error.required = Select yes if you want to use a reduced data set
 traderDetails.consignment.approvedOperator.hintText = You must be an approved airline, shipping or rail freight operator to use reduced data.
+
+# Trader Details - Consignor
+traderDetails.consignment.consignor.eoriYesNo.title = Do you know the consignor’s EORI number?
+traderDetails.consignment.consignor.eoriYesNo.heading = Do you know the consignor’s EORI number?
+traderDetails.consignment.consignor.eoriYesNo.checkYourAnswersLabel = Do you know the consignor’s EORI number?
+traderDetails.consignment.consignor.eoriYesNo.error.required = Select yes if you know the consignor’s EORI number
+traderDetails.consignment.consignor.eoriYesNo.change.hidden = if you know the consignor’s EORI number
+
+traderDetails.consignment.consignor.eori.title = What is the consignor’s EORI number?
+traderDetails.consignment.consignor.eori.heading = What is the consignor’s EORI number?
+traderDetails.consignment.consignor.eori.checkYourAnswersLabel = Consignor’s EORI number
+traderDetails.consignment.consignor.eori.hint = This will start GB or XI followed by 12 or 15 numbers, for example GB123456789000.
+traderDetails.consignment.consignor.eori.error.required = Enter the consignor’s EORI number
+traderDetails.consignment.consignor.eori.error.maxLength = The consignor’s EORI number must be 17 characters or less
+traderDetails.consignment.consignor.eori.error.minLength = The consignor’s EORI number must be 14 characters or more
+traderDetails.consignment.consignor.eori.error.invalidCharacters = The consignor’s EORI number must only include letters a to z and numbers 0 to 9
+traderDetails.consignment.consignor.eori.error.invalidFormat = The consignor’s EORI number must start with 2 letters, such as GB or XI, followed by up to 15 numbers
+traderDetails.consignment.consignor.eori.error.prefix = The consignor’s EORI number must start with 2 letters, such as GB or XI
+traderDetails.consignment.consignor.eori.change.hidden = consignor’s EORI number

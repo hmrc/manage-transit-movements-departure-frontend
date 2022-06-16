@@ -14,35 +14,30 @@
  * limitations under the License.
  */
 
-package pages.traderDetails.consignment
+package pages.traderDetails.consignment.consignor
 
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.traderDetails.consignment.consignor.{EoriPage, EoriYesNoPage}
 
-class ApprovedOperatorPageSpec extends PageBehaviours {
+class EoriYesNoPageSpec extends PageBehaviours {
 
-  "ApprovedOperatorPage" - {
+  "consignment.consignor.EoriYesNoPage" - {
 
-    beRetrievable[Boolean](ApprovedOperatorPage)
+    beRetrievable[Boolean](EoriYesNoPage)
 
-    beSettable[Boolean](ApprovedOperatorPage)
+    beSettable[Boolean](EoriYesNoPage)
 
-    beRemovable[Boolean](ApprovedOperatorPage)
+    beRemovable[Boolean](EoriYesNoPage)
 
     "cleanup" - {
       "when NO selected" - {
-        "must clean up Consignor pages" in {
+        "must clean up EoriPage" in {
           forAll(arbitrary[String]) {
             eori =>
-              val preChange = emptyUserAnswers
-                .setValue(ApprovedOperatorPage, true)
-                .setValue(EoriYesNoPage, true)
-                .setValue(EoriPage, eori)
-              val postChange = preChange.set(ApprovedOperatorPage, false).success.value
+              val preChange  = emptyUserAnswers.setValue(EoriPage, eori)
+              val postChange = preChange.set(EoriYesNoPage, false).success.value
 
               postChange.get(EoriPage) mustNot be(defined)
-              postChange.get(EoriYesNoPage) mustNot be(defined)
           }
         }
       }

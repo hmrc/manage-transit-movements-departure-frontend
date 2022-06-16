@@ -14,30 +14,24 @@
  * limitations under the License.
  */
 
-package pages.traderDetails.consignment
+package pages.traderDetails.consignment.consignor
 
 import models.UserAnswers
-import play.api.libs.json.JsPath
 import pages.QuestionPage
-import pages.sections.TraderDetailsConsignmentSection
-import pages.traderDetails.consignment.consignor.{EoriPage, EoriYesNoPage}
+import pages.sections.TraderDetailsConsignorSection
+import play.api.libs.json.JsPath
 
 import scala.util.Try
 
-case object ApprovedOperatorPage extends QuestionPage[Boolean] {
+case object EoriYesNoPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = TraderDetailsConsignmentSection.path \ toString
+  override def path: JsPath = TraderDetailsConsignorSection.path \ toString
 
-  override def toString: String = "approvedOperator"
+  override def toString: String = "eoriYesNo"
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) =>
-        for {
-          noEoriYesNo <- userAnswers.remove(EoriYesNoPage)
-          noEori      <- noEoriYesNo.remove(EoriPage)
-        } yield noEori
-
-      case _ => super.cleanup(value, userAnswers)
+      case Some(false) => userAnswers.remove(EoriPage)
+      case _           => super.cleanup(value, userAnswers)
     }
 }

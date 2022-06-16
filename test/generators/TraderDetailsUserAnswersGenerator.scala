@@ -19,7 +19,10 @@ package generators
 import models.UserAnswers
 import org.scalacheck.Gen
 
-trait TraderDetailsUserAnswersGenerator extends HolderOfTransitUserAnswersGenerator with RepresentativeUserAnswersGenerator {
+trait TraderDetailsUserAnswersGenerator
+    extends HolderOfTransitUserAnswersGenerator
+    with RepresentativeUserAnswersGenerator
+    with TraderDetailsConsignmentAnswersGenerator {
   self: Generators =>
 
   lazy val arbitraryTraderDetailsAnswers: Gen[UserAnswers] = combineUserAnswers(

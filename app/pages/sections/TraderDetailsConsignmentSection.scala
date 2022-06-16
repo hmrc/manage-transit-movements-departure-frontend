@@ -16,12 +16,12 @@
 
 package pages.sections
 
-import play.api.libs.json.JsPath
 import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-case object ConsignmentSection extends QuestionPage[Nothing] {
+case object TraderDetailsConsignmentSection extends QuestionPage[Nothing] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = TraderDetailsSection.path \ toString
 
-  override def toString: String = "approvedOperator"
+  override def toString: String = "consignment"
 }
