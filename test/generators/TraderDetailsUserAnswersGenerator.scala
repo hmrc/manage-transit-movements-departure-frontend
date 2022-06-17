@@ -27,7 +27,8 @@ trait TraderDetailsUserAnswersGenerator
 
   lazy val arbitraryTraderDetailsAnswers: Gen[UserAnswers] = combineUserAnswers(
     arbitraryHolderOfTransitAnswers,
-    arbitraryRepresentativeAnswers
+    arbitraryRepresentativeAnswers,
+    arbitraryTraderDetailsConsignmentAnswers
   )
 
   lazy val arbitraryTraderDetailsAnswersWithHolderOfTransitWithEori: Gen[UserAnswers] = combineUserAnswers(

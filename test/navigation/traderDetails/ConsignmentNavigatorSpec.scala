@@ -89,11 +89,11 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           }
 
           "when No selected" - {
-            "to name page" ignore {
+            "to name page" in {
               val userAnswers = emptyUserAnswers.setValue(consignor.EoriYesNoPage, false)
               navigator
                 .nextPage(consignor.EoriYesNoPage, mode, userAnswers)
-                .mustBe(???) //ToDo - Consignor Name Controller
+                .mustBe(consignorRoutes.NameController.onPageLoad(emptyUserAnswers.lrn, mode))
             }
           }
 
@@ -106,10 +106,22 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           }
         }
 
-        "must go from consignor eori page to name page" ignore {
+        "must go from consignor eori page to name page" in {
           navigator
             .nextPage(consignor.EoriPage, mode, emptyUserAnswers)
-            .mustBe(???) //TODO Put Name Page Controller here
+            .mustBe(consignorRoutes.NameController.onPageLoad(emptyUserAnswers.lrn, mode))
+        }
+
+        "must go from name page to address page" in {
+          navigator
+            .nextPage(consignor.NamePage, mode, emptyUserAnswers)
+            .mustBe(consignorRoutes.AddressController.onPageLoad(emptyUserAnswers.lrn, mode))
+        }
+
+        "must go from address page to add contact page" ignore {
+          navigator
+            .nextPage(consignor.AddressPage, mode, emptyUserAnswers)
+            .mustBe(???) //TODO consignorRoutes.AddContactController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
       }
 
@@ -164,6 +176,24 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
                     .mustBe(consignorRoutes.EoriController.onPageLoad(userAnswers.lrn, mode))
               }
             }
+          }
+        }
+
+        "must go from name page to check your answers page" ignore {
+          forAll(arbitraryTraderDetailsConsignmentAnswers) {
+            answers =>
+              navigator
+                .nextPage(consignor.NamePage, mode, answers)
+                .mustBe(???) //TODO CheckYourAnswers
+          }
+        }
+
+        "must go from address page to check your answers page" ignore {
+          forAll(arbitraryTraderDetailsConsignmentAnswers) {
+            answers =>
+              navigator
+                .nextPage(consignor.AddressPage, mode, answers)
+                .mustBe(???) //TODO CheckYourAnswers
           }
         }
       }
@@ -231,6 +261,24 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             navigator
               .nextPage(consignor.EoriPage, mode, answers)
               .mustBe(???) //ToDo CheckYourAnswers Page
+        }
+      }
+
+      "must go from name page to check your answers page" ignore {
+        forAll(arbitraryTraderDetailsAnswers) {
+          answers =>
+            navigator
+              .nextPage(consignor.NamePage, mode, answers)
+              .mustBe(???) //TODO Check Your Answers Page
+        }
+      }
+
+      "must go from address page to check your answers page" ignore {
+        forAll(arbitraryTraderDetailsAnswers) {
+          answers =>
+            navigator
+              .nextPage(consignor.AddressPage, mode, answers)
+              .mustBe(???) //TODO Check Your Answers Page
         }
       }
     }

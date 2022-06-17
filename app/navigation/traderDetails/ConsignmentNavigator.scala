@@ -29,7 +29,9 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Represent
   override def routes(mode: Mode): RouteMapping = {
     case ApprovedOperatorPage    => ua => approvedOperatorYesNoRoute(ua, mode)
     case consignor.EoriYesNoPage => ua => consignorEoriYesNoRoute(ua, mode)
-    case consignor.EoriPage      => ua => ??? //TODO replace with consignorRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
+    case consignor.EoriPage      => ua => Some(consignorRoutes.NameController.onPageLoad(ua.lrn, mode))
+    case consignor.NamePage      => ua => Some(consignorRoutes.AddressController.onPageLoad(ua.lrn, mode))
+    case consignor.AddressPage   => ua => ??? //TODO Some(consignorRoutes.AddContactController.onPageLoad(ua.lrn, mode))
   }
 
   private def approvedOperatorYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
@@ -45,8 +47,7 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Represent
     yesNoRoute(userAnswers, consignor.EoriYesNoPage)(
       yesCall = consignorRoutes.EoriController.onPageLoad(userAnswers.lrn, mode)
     )(
-      noCall =
-        consignorRoutes.EoriController.onPageLoad(userAnswers.lrn, mode) //TODO replace with consignorRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
+      noCall = consignorRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
     )
 
   override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =

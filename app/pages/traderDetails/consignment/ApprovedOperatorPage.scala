@@ -20,7 +20,7 @@ import models.UserAnswers
 import play.api.libs.json.JsPath
 import pages.QuestionPage
 import pages.sections.TraderDetailsConsignmentSection
-import pages.traderDetails.consignment.consignor.{EoriPage, EoriYesNoPage}
+import pages.traderDetails.consignment.consignor._
 
 import scala.util.Try
 
@@ -36,7 +36,9 @@ case object ApprovedOperatorPage extends QuestionPage[Boolean] {
         for {
           noEoriYesNo <- userAnswers.remove(EoriYesNoPage)
           noEori      <- noEoriYesNo.remove(EoriPage)
-        } yield noEori
+          noName      <- noEori.remove(NamePage)
+          noAddress   <- noName.remove(AddressPage)
+        } yield noAddress
 
       case _ => super.cleanup(value, userAnswers)
     }
