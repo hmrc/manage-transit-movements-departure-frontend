@@ -340,3 +340,22 @@ traderDetails.consignment.consignor.addContact.heading = Do you want to add a co
 traderDetails.consignment.consignor.addContact.checkYourAnswersLabel = Do you want to add a contact for the consignor??
 traderDetails.consignment.consignor.addContact.error.required = Select yes if you want to add a contact for the consignor
 traderDetails.consignment.consignor.addContact.change.hidden = if you want to add a contact for the consignor
+
+traderDetails.consignment.consignor.contact.name.title = What is the consignor’s contact name?
+traderDetails.consignment.consignor.contact.name.heading = What is the consignor’s contact name?
+traderDetails.consignment.consignor.contact.name.checkYourAnswersLabel = Consignor’s contact name
+traderDetails.consignment.consignor.contact.name.error.required = Enter the consignor’s contact name
+traderDetails.consignment.consignor.contact.name.error.length = The consignor’s contact name must be 70 characters or less
+traderDetails.consignment.consignor.contact.name.error.invalid = The consignor’s contact name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+traderDetails.consignment.consignor.contact.name.change.hidden = consignor’s contact name
+
+traderDetails.consignment.consignor.contact.telephoneNumber.title = What is the consignor’s contact phone number?
+traderDetails.consignment.consignor.contact.telephoneNumber.heading = What is {0}’s phone number?
+traderDetails.consignment.consignor.contact.telephoneNumber.checkYourAnswersLabel = Consignor’s contact phone number
+traderDetails.consignment.consignor.contact.telephoneNumber.hint = Must include the country code, like +44 808 157 0192.
+traderDetails.consignment.consignor.contact.telephoneNumber.error.required = Enter {0}’s phone number
+traderDetails.consignment.consignor.contact.telephoneNumber.error.maxLength = {0}’s phone number must be {1} characters or less
+traderDetails.consignment.consignor.contact.telephoneNumber.error.minLength = {0}’s phone number must be {1} characters or more
+traderDetails.consignment.consignor.contact.telephoneNumber.error.invalidCharacter = {0}’s phone number must only include numbers 0 to 9 and a plus sign
+traderDetails.consignment.consignor.consignorransit.contact.telephoneNumber.error.invalidFormat = Enter {0}’s phone number in the right format
+traderDetails.consignment.consignor.contact.telephoneNumber.change.hidden = contact’s phone number

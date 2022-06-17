@@ -27,10 +27,12 @@ trait TraderDetailsConsignmentAnswersGenerator extends UserAnswersGenerator {
   lazy val arbitraryTraderDetailsConsignmentAnswersWithConsignor: Gen[UserAnswers] = arbitraryUserAnswers(
     arbitraryTraderdetailsConsignmentApprovedOperatorUserAnswersEntry.arbitrary ::
       Arbitrary((consignor.EoriYesNoPage, JsBoolean(true))).arbitrary ::
-      arbitraryTransitHolderConsignmentConsignorEoriUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderConsignmentConsignorNameUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderConsignmentConsignorAddressUserAnswersEntry.arbitrary ::
+      arbitraryTraderDetailsConsignmentConsignorEoriUserAnswersEntry.arbitrary ::
+      arbitraryTraderDetailsConsignmentConsignorNameUserAnswersEntry.arbitrary ::
+      arbitraryTraderDetailsConsignmentConsignorAddressUserAnswersEntry.arbitrary ::
       Arbitrary((consignor.AddContactPage, JsBoolean(true))).arbitrary ::
+      arbitraryTraderDetailsConsignmentConsignorContactNameUserAnswersEntry.arbitrary ::
+      arbitraryTraderDetailsConsignmentConsignorContactTelephoneNumberUserAnswersEntry.arbitrary ::
       Nil
   )
 
@@ -42,17 +44,17 @@ trait TraderDetailsConsignmentAnswersGenerator extends UserAnswersGenerator {
   lazy val arbitraryTraderDetailsConsignmentAnswersWithoutConsignorEori: Gen[UserAnswers] = arbitraryUserAnswers(
     arbitraryTraderdetailsConsignmentApprovedOperatorUserAnswersEntry.arbitrary ::
       Arbitrary((consignor.EoriYesNoPage, JsBoolean(false))).arbitrary ::
-      arbitraryTransitHolderConsignmentConsignorNameUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderConsignmentConsignorAddressUserAnswersEntry.arbitrary ::
+      arbitraryTraderDetailsConsignmentConsignorNameUserAnswersEntry.arbitrary ::
+      arbitraryTraderDetailsConsignmentConsignorAddressUserAnswersEntry.arbitrary ::
       Nil
   )
 
   lazy val arbitraryTraderDetailsConsignmentAnswersWithConsignorWithoutContact: Gen[UserAnswers] = arbitraryUserAnswers(
     arbitraryTraderdetailsConsignmentApprovedOperatorUserAnswersEntry.arbitrary ::
       Arbitrary((consignor.EoriYesNoPage, JsBoolean(true))).arbitrary ::
-      arbitraryTransitHolderConsignmentConsignorEoriUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderConsignmentConsignorNameUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderConsignmentConsignorAddressUserAnswersEntry.arbitrary ::
+      arbitraryTraderDetailsConsignmentConsignorEoriUserAnswersEntry.arbitrary ::
+      arbitraryTraderDetailsConsignmentConsignorNameUserAnswersEntry.arbitrary ::
+      arbitraryTraderDetailsConsignmentConsignorAddressUserAnswersEntry.arbitrary ::
       Arbitrary((consignor.AddContactPage, JsBoolean(false))).arbitrary ::
       Nil
   )

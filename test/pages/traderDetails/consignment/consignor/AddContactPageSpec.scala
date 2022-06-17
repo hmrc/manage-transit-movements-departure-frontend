@@ -29,36 +29,36 @@ class AddContactPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](AddContactPage)
 
-//    "cleanup" - {
-//      "when NO selected" - {
-//        "must clean up contact pages" in {
-//          forAll(arbitrary[String], arbitrary[String]) {
-//            (name, phoneNumber) =>
-//              val preChange = emptyUserAnswers
-//                .setValue(contact.NamePage, name)
-//                .setValue(contact.TelephoneNumberPage, phoneNumber)
-//              val postChange = preChange.set(AddContactPage, false).success.value
-//
-//              postChange.get(contact.NamePage) mustNot be(defined)
-//              postChange.get(contact.TelephoneNumberPage) mustNot be(defined)
-//          }
-//        }
-//      }
-//
-//      "when YES selected" - {
-//        "must do nothing" in {
-//          forAll(arbitrary[String], arbitrary[String]) {
-//            (name, phoneNumber) =>
-//              val preChange = emptyUserAnswers
-//                .setValue(contact.NamePage, name)
-//                .setValue(contact.TelephoneNumberPage, phoneNumber)
-//              val postChange = preChange.set(AddContactPage, true).success.value
-//
-//              postChange.get(contact.NamePage) must be(defined)
-//              postChange.get(contact.TelephoneNumberPage) must be(defined)
-//          }
-//        }
-//      }
-//    }
+    "cleanup" - {
+      "when NO selected" - {
+        "must clean up contact pages" in {
+          forAll(arbitrary[String], arbitrary[String]) {
+            (name, phoneNumber) =>
+              val preChange = emptyUserAnswers
+                .setValue(contact.NamePage, name)
+                .setValue(contact.TelephoneNumberPage, phoneNumber)
+              val postChange = preChange.set(AddContactPage, false).success.value
+
+              postChange.get(contact.NamePage) mustNot be(defined)
+              postChange.get(contact.TelephoneNumberPage) mustNot be(defined)
+          }
+        }
+      }
+
+      "when YES selected" - {
+        "must do nothing" in {
+          forAll(arbitrary[String], arbitrary[String]) {
+            (name, phoneNumber) =>
+              val preChange = emptyUserAnswers
+                .setValue(contact.NamePage, name)
+                .setValue(contact.TelephoneNumberPage, phoneNumber)
+              val postChange = preChange.set(AddContactPage, true).success.value
+
+              postChange.get(contact.NamePage) must be(defined)
+              postChange.get(contact.TelephoneNumberPage) must be(defined)
+          }
+        }
+      }
+    }
   }
 }
