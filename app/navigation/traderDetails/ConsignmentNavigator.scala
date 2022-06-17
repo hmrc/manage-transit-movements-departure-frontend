@@ -20,6 +20,7 @@ import models._
 import models.journeyDomain.traderDetails.RepresentativeDomain
 import pages.traderDetails.consignment._
 import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
+import controllers.traderDetails.consignment.consignor.contact.{routes => contactRoutes}
 import controllers.traderDetails.consignment.consignee.{routes => consigneeRoutes}
 import models.SecurityDetailsType.NoSecurityDetails
 import pages.preTaskList.SecurityDetailsTypePage
@@ -31,11 +32,14 @@ import javax.inject.{Inject, Singleton}
 class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[RepresentativeDomain] {
 
   override def routes(mode: Mode): RouteMapping = {
-    case ApprovedOperatorPage    => ua => approvedOperatorYesNoRoute(ua, mode)
-    case consignor.EoriYesNoPage => ua => consignorEoriYesNoRoute(ua, mode)
-    case consignor.EoriPage      => ua => Some(consignorRoutes.NameController.onPageLoad(ua.lrn, mode))
-    case consignor.NamePage      => ua => Some(consignorRoutes.AddressController.onPageLoad(ua.lrn, mode))
-    case consignor.AddressPage   => ua => ??? //TODO Some(consignorRoutes.AddContactController.onPageLoad(ua.lrn, mode))
+    case ApprovedOperatorPage                  => ua => approvedOperatorYesNoRoute(ua, mode)
+    case consignor.EoriYesNoPage               => ua => consignorEoriYesNoRoute(ua, mode)
+    case consignor.EoriPage                    => ua => Some(consignorRoutes.NameController.onPageLoad(ua.lrn, mode))
+    case consignor.NamePage                    => ua => Some(consignorRoutes.AddressController.onPageLoad(ua.lrn, mode))
+    case consignor.AddressPage                 => ua => Some(consignorRoutes.AddContactController.onPageLoad(ua.lrn, mode))
+    case consignor.AddContactPage              => ua => addContactRoute(ua, mode)
+    case consignor.contact.NamePage            => ua => Some(contactRoutes.TelephoneNumberController.onPageLoad(ua.lrn, mode))
+    case consignor.contact.TelephoneNumberPage => ua => Some(consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(ua.lrn, mode))
   }
 
   private def approvedOperatorYesNoRoute(ua: UserAnswers, mode: Mode): Option[Call] =
@@ -50,6 +54,13 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Represent
       yesCall = consignorRoutes.EoriController.onPageLoad(userAnswers.lrn, mode)
     )(
       noCall = consignorRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
+    )
+
+  private def addContactRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    yesNoRoute(userAnswers, consignor.AddContactPage)(
+      yesCall = contactRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
+    )(
+      noCall = consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(userAnswers.lrn, mode)
     )
 
   override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
