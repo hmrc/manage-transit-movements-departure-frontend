@@ -50,7 +50,8 @@ sealed trait TraderDetailsConsignmentViewModel {
     val consigneeSection = Section(
       sectionTitle = messages("traderDetails.consignment.checkYourAnswers.consignee"),
       rows = Seq(
-        helper.moreThanOneConsignee
+        helper.moreThanOneConsignee,
+        helper.consigneeEoriYesNo
       ).flatten
     )
 

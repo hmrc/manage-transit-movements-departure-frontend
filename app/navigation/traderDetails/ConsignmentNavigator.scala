@@ -40,6 +40,7 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Consignme
     case consignor.AddContactPage              => ua => addContactRoute(ua, mode)
     case consignor.contact.NamePage            => ua => Some(contactRoutes.TelephoneNumberController.onPageLoad(ua.lrn, mode))
     case consignor.contact.TelephoneNumberPage => ua => Some(consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(ua.lrn, mode))
+    case consignee.MoreThanOneConsigneePage    => ua => consigneeEoriYesNoRoute(ua, mode)
   }
 
   private def approvedOperatorYesNoRoute(ua: UserAnswers, mode: Mode): Option[Call] =
@@ -61,6 +62,13 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Consignme
       yesCall = contactRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
     )(
       noCall = consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(userAnswers.lrn, mode)
+    )
+
+  private def consigneeEoriYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    yesNoRoute(userAnswers, consignee.MoreThanOneConsigneePage)(
+      yesCall = consigneeRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode) //TODO change this to check your answers when built
+    )(
+      noCall = consigneeRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode)
     )
 
   override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =

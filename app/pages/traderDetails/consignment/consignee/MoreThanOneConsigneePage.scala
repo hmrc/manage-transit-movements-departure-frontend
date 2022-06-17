@@ -16,13 +16,22 @@
 
 package pages.traderDetails.consignment.consignee
 
-import play.api.libs.json.JsPath
+import models.UserAnswers
 import pages.QuestionPage
-import pages.sections.TraderDetailsConsigneeSection
+import pages.sections.{TraderDetailsConsigneeSection, TraderDetailsConsignmentSection}
+import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 case object MoreThanOneConsigneePage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = TraderDetailsConsigneeSection.path \ toString
+  override def path: JsPath = TraderDetailsConsignmentSection.path \ toString
 
   override def toString: String = "moreThanOneConsignee"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(false) => userAnswers.remove(TraderDetailsConsigneeSection)
+      case _           => super.cleanup(value, userAnswers)
+    }
 }

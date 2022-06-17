@@ -90,4 +90,12 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     id = None,
     call = consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(lrn, mode)
   )
+
+  def consigneeEoriYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+    page = consignee.EoriYesNoPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "traderDetails.consignment.consignee.eoriYesNo",
+    id = None,
+    call = consigneeRoutes.EoriYesNoController.onPageLoad(lrn, mode)
+  )
 }

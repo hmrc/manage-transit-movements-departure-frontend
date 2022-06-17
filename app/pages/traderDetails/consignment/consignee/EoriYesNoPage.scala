@@ -16,18 +16,13 @@
 
 package pages.traderDetails.consignment.consignee
 
-import pages.behaviours.PageBehaviours
+import play.api.libs.json.JsPath
+import pages.QuestionPage
+import pages.sections.TraderDetailsConsigneeSection
 
-class MoreThanOneConsigneePageSpec extends PageBehaviours {
+case object EoriYesNoPage extends QuestionPage[Boolean] {
 
-  "MoreThanOneConsigneePage" - {
+  override def path: JsPath = TraderDetailsConsigneeSection.path \ toString
 
-    beRetrievable[Boolean](MoreThanOneConsigneePage)
-
-    beSettable[Boolean](MoreThanOneConsigneePage)
-
-    beRemovable[Boolean](MoreThanOneConsigneePage)
-
-    //TODO add clean up tests once pages built
-  }
+  override def toString: String = "eoriYesNo"
 }
