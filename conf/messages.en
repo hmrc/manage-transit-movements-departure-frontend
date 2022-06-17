@@ -337,9 +337,9 @@ traderDetails.consignment.consignor.address.error.required = Enter {0} for {1}â€
 traderDetails.consignment.consignor.address.error.length = The {0} for {1}â€™s address must be {2} characters or less
 traderDetails.consignment.consignor.address.placeholder = Select a country
 
-traderDetails.consignment.consignor.addContact.title = Do you want to add a contact for the consignor??
-traderDetails.consignment.consignor.addContact.heading = Do you want to add a contact for the consignor??
-traderDetails.consignment.consignor.addContact.checkYourAnswersLabel = Do you want to add a contact for the consignor??
+traderDetails.consignment.consignor.addContact.title = Do you want to add a contact for the consignor?
+traderDetails.consignment.consignor.addContact.heading = Do you want to add a contact for the consignor?
+traderDetails.consignment.consignor.addContact.checkYourAnswersLabel = Do you want to add a contact for the consignor?
 traderDetails.consignment.consignor.addContact.error.required = Select yes if you want to add a contact for the consignor
 traderDetails.consignment.consignor.addContact.change.hidden = if you want to add a contact for the consignor
 
