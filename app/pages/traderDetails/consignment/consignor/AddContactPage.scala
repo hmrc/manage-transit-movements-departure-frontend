@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package pages.traderDetails.consignment
+package pages.traderDetails.consignment.consignor
 
 import models.UserAnswers
-import play.api.libs.json.JsPath
 import pages.QuestionPage
-import pages.sections.{TraderDetailsConsignmentSection, TraderDetailsConsignorSection}
+import pages.sections.{TraderDetailsConsignorContactSection, TraderDetailsConsignorSection}
+import play.api.libs.json.JsPath
 
 import scala.util.Try
 
-case object ApprovedOperatorPage extends QuestionPage[Boolean] {
+case object AddContactPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = TraderDetailsConsignmentSection.path \ toString
+  override def path: JsPath = TraderDetailsConsignorSection.path \ toString
 
-  override def toString: String = "approvedOperator"
+  override def toString: String = "addContact"
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) => userAnswers.remove(TraderDetailsConsignorSection)
+      case Some(false) => userAnswers.remove(TraderDetailsConsignorContactSection)
       case _           => super.cleanup(value, userAnswers)
     }
 }

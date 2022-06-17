@@ -17,3 +17,8 @@ GET        /:lrn/trader-details/consignment/consignor-address                   
 POST       /:lrn/trader-details/consignment/consignor-address                       controllers.traderDetails.consignment.consignor.AddressController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/trader-details/consignment/change-consignor-address                controllers.traderDetails.consignment.consignor.AddressController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/trader-details/consignment/change-consignor-address                controllers.traderDetails.consignment.consignor.AddressController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/consignment/add-consignor-contact                   controllers.traderDetails.consignment.consignor.AddContactController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/consignment/add-consignor-contact                   controllers.traderDetails.consignment.consignor.AddContactController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/consignmentchange-add-consignor-contact             controllers.traderDetails.consignment.consignor.AddContactController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/consignment/change-add-consignor-contact            controllers.traderDetails.consignment.consignor.AddContactController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
