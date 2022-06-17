@@ -18,16 +18,14 @@ package pages.traderDetails.consignment.consignee
 
 import pages.behaviours.PageBehaviours
 
-class MoreThanOneConsigneePageSpec extends PageBehaviours {
+class EoriYesNoPageSpec extends PageBehaviours {
 
-  "MoreThanOneConsigneePage" - {
+  "EoriYesNoPage" - {
 
-    beRetrievable[Boolean](MoreThanOneConsigneePage)
+    beRetrievable[Boolean](EoriYesNoPage)
 
-    beSettable[Boolean](MoreThanOneConsigneePage)
+    beSettable[Boolean](EoriYesNoPage)
 
-    beRemovable[Boolean](MoreThanOneConsigneePage)
-
-    //TODO add clean up tests once pages built
+    beRemovable[Boolean](EoriYesNoPage)
   }
 }
