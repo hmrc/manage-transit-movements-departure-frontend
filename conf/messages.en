@@ -290,7 +290,9 @@ traderDetails.consignment.approvedOperator.title = Do you want to use a reduced 
 traderDetails.consignment.approvedOperator.heading = Do you want to use a reduced data set?
 traderDetails.consignment.approvedOperator.checkYourAnswersLabel = Do you want to use a reduced data set?
 traderDetails.consignment.approvedOperator.error.required = Select yes if you want to use a reduced data set
-traderDetails.consignment.approvedOperator.hintText = You must be an approved airline, shipping or rail freight operator to use reduced data.
+traderDetails.consignment.approvedOperator.hintText = This simplifies the declaration process, enabling you to complete submissions with less data.
+traderDetails.consignment.approvedOperator.paragraph = You must be an approved airline, shipping or rail freight operator to use a reduced data set.
+traderDetails.consignment.approvedOperator.label = Do you want to use a reduced data set?
 
 # Trader Details - Consignor
 traderDetails.consignment.consignor.eoriYesNo.title = Do you know the consignor’s EORI number?

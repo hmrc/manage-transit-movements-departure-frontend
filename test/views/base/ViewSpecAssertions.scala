@@ -20,6 +20,7 @@ import base.SpecBase
 import org.jsoup.nodes.{Document, Element}
 import org.jsoup.select.Elements
 import org.scalatest.Assertion
+import play.twirl.api.HtmlFormat
 
 import scala.collection.JavaConverters._
 

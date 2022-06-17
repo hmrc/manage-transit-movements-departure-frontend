@@ -17,6 +17,7 @@
 package views.traderDetails.consignment
 
 import models.NormalMode
+import org.scalatest.Tag
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -33,11 +34,13 @@ class ApprovedOperatorViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Trader details")
+  behave like pageWithCaption("Trader details")
 
   behave like pageWithHeading()
 
-  behave like pageWithHint("You must be an approved airline, shipping or rail freight operator to use reduced data.")
+  behave like pageWithContent("p", "You must be an approved airline, shipping or rail freight operator to use a reduced data set.")
+
+  behave like pageWithHint("This simplifies the declaration process, enabling you to complete submissions with less data.")
 
   behave like pageWithRadioItems()
 
