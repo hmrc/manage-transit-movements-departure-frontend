@@ -17,7 +17,6 @@
 package navigation.traderDetails
 
 import controllers.traderDetails.representative.{routes => repRoutes}
-import controllers.traderDetails.{routes => tdRoutes}
 import models._
 import models.journeyDomain.traderDetails.RepresentativeDomain
 import pages.preTaskList.DeclarationTypePage
