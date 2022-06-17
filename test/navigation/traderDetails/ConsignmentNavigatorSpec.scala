@@ -182,6 +182,26 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             .nextPage(consignor.contact.TelephoneNumberPage, mode, emptyUserAnswers)
             .mustBe(consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
+
+        "must go from more than one consignee page" - {
+          "when yes selected" - {
+            "to check your answers page" ignore {
+              val userAnswers = emptyUserAnswers.setValue(consignee.MoreThanOneConsigneePage, true)
+              navigator
+                .nextPage(consignee.MoreThanOneConsigneePage, mode, userAnswers)
+                .mustBe(???) //TODO change to check your answers when built
+            }
+          }
+
+          "when no selected" - {
+            "to eori yes no page" in {
+              val userAnswers = emptyUserAnswers.setValue(consignee.MoreThanOneConsigneePage, false)
+              navigator
+                .nextPage(consignee.MoreThanOneConsigneePage, mode, userAnswers)
+                .mustBe(consigneeRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode))
+            }
+          }
+        }
       }
 
       "when answers complete" - {
