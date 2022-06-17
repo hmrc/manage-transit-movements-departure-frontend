@@ -17,7 +17,7 @@
 package navigation.traderDetails
 
 import models._
-import models.journeyDomain.traderDetails.RepresentativeDomain
+import models.journeyDomain.traderDetails.ConsignmentDomain
 import pages.traderDetails.consignment._
 import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
 import controllers.traderDetails.consignment.consignor.contact.{routes => contactRoutes}
@@ -29,7 +29,7 @@ import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[RepresentativeDomain] {
+class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[ConsignmentDomain] {
 
   override def routes(mode: Mode): RouteMapping = {
     case ApprovedOperatorPage                  => ua => approvedOperatorYesNoRoute(ua, mode)

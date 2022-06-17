@@ -361,11 +361,20 @@ traderDetails.consignment.consignor.contact.telephoneNumber.error.maxLength = {0
 traderDetails.consignment.consignor.contact.telephoneNumber.error.minLength = {0}’s phone number must be {1} characters or more
 traderDetails.consignment.consignor.contact.telephoneNumber.error.invalidCharacter = {0}’s phone number must only include numbers 0 to 9 and a plus sign
 traderDetails.consignment.consignor.contact.telephoneNumber.error.invalidFormat = Enter {0}’s phone number in the right format
-traderDetails.consignment.consignor.contact.telephoneNumber.change.hidden = contact’s phone number
+traderDetails.consignment.consignor.contact.telephoneNumber.change.hidden = consignor’s contact phone number
 
 # Trader Details - Consignee
 traderDetails.consignment.consignee.moreThanOneConsignee.title = Is there more than one consignee?
 traderDetails.consignment.consignee.moreThanOneConsignee.heading = Is there more than one consignee?
 traderDetails.consignment.consignee.moreThanOneConsignee.checkYourAnswersLabel = Is there more than one consignee?
 traderDetails.consignment.consignee.moreThanOneConsignee.error.required = Select yes if there is more than one consignee
+traderDetails.consignment.consignee.moreThanOneConsignee.checkYourAnswersLabel = Is there more than one consignee?
+traderDetails.consignment.consignee.moreThanOneConsignee.change.hidden = if there is more than one consignee
 
+# Trader Details - Check Your Answers
+
+traderDetails.consignment.checkYourAnswers.heading = Check your answers
+traderDetails.consignment.checkYourAnswers.title = Check your answers
+traderDetails.consignment.checkYourAnswers.consignor = Consignor
+traderDetails.consignment.checkYourAnswers.consignorContact = Consignor contact
+traderDetails.consignment.checkYourAnswers.consignee = Consignee

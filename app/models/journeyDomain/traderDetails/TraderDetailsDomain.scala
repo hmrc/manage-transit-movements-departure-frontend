@@ -22,7 +22,8 @@ import pages.traderDetails.representative.ActingAsRepresentativePage
 
 case class TraderDetailsDomain(
   holderOfTransit: HolderOfTransitDomain,
-  representative: Option[RepresentativeDomain]
+  representative: Option[RepresentativeDomain],
+  consignment: ConsignmentDomain
 )
 
 object TraderDetailsDomain {
@@ -32,9 +33,11 @@ object TraderDetailsDomain {
     for {
       holderOfTransitDomain <- UserAnswersReader[HolderOfTransitDomain]
       representativeDomain  <- ActingAsRepresentativePage.filterOptionalDependent(identity)(UserAnswersReader[RepresentativeDomain])
+      consignment           <- UserAnswersReader[ConsignmentDomain]
     } yield TraderDetailsDomain(
       holderOfTransitDomain,
-      representativeDomain
+      representativeDomain,
+      consignment
     )
   }
 }
