@@ -34,7 +34,13 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.ApprovedOperatorController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+
+@formHelper(action = routes.ApprovedOperatorController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+
+<p class="govuk-caption-xl">@messages("traderDetails.caption")</p>
+
+        <h1 class="govuk-heading-xl">@messages("traderDetails.consignment.approvedOperator.heading")</h1>
+        <p class="govuk-body">@messages("traderDetails.consignment.approvedOperator.paragraph")</p>
 
         @errorSummary(form.errors)
 
@@ -42,7 +48,9 @@
             field = form("value"),
             messageKeyPrefix = "traderDetails.consignment.approvedOperator",
             caption = Some(messages("traderDetails.caption")),
-            hint = Some(HtmlContent(messages("traderDetails.consignment.approvedOperator.hintText")))
+            hint = Some(HtmlContent(messages("traderDetails.consignment.approvedOperator.hintText"))),
+            legendIsHeading = false,
+            legendIsVisible = false,
         )
 
         @button(attributes = Map("id" -> "submit"))
