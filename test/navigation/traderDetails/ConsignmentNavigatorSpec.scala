@@ -20,11 +20,14 @@ import base.SpecBase
 import controllers.routes
 import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
 import controllers.traderDetails.consignment.consignor.contact.{routes => contactRoutes}
+import controllers.traderDetails.consignment.consignee.{routes => consigneeRoutes}
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
+import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
+import pages.preTaskList.SecurityDetailsTypePage
 import pages.traderDetails.consignment._
 
 class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
@@ -52,21 +55,36 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
       "when answers incomplete" - {
 
         "must go from is approved operator page" - {
-          "when Yes selected" - {
+          "when Yes selected and security exists" - {
             "to consignor eori yes no page page" in {
-              val userAnswers = emptyUserAnswers.setValue(ApprovedOperatorPage, true)
+              val userAnswers = emptyUserAnswers
+                .setValue(ApprovedOperatorPage, true)
+                .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
               navigator
                 .nextPage(ApprovedOperatorPage, mode, userAnswers)
                 .mustBe(consignorRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode))
             }
           }
 
-          "when No selected" - {
-            "to how many consignees page" ignore {
-              val userAnswers = emptyUserAnswers.setValue(ApprovedOperatorPage, false)
+          "when Yes selected and no security exists" - {
+            "to consignor eori yes no page page" in {
+              val userAnswers = emptyUserAnswers
+                .setValue(ApprovedOperatorPage, true)
+                .setValue(SecurityDetailsTypePage, NoSecurityDetails)
               navigator
                 .nextPage(ApprovedOperatorPage, mode, userAnswers)
-                .mustBe(???) //ToDo - HowManyConsignees Page
+                .mustBe(consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(userAnswers.lrn, mode))
+            }
+          }
+
+          "when No selected and security exists" - {
+            "to how many consignees page" in {
+              val userAnswers = emptyUserAnswers
+                .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
+                .setValue(ApprovedOperatorPage, false)
+              navigator
+                .nextPage(ApprovedOperatorPage, mode, userAnswers)
+                .mustBe(consignorRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode))
             }
           }
 
@@ -136,11 +154,11 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           }
 
           "when No selected" - {
-            "to check your answers page" ignore {
+            "to cconsignee pages" ignore {
               val userAnswers = emptyUserAnswers.setValue(consignor.AddContactPage, false)
               navigator
                 .nextPage(consignor.AddContactPage, mode, userAnswers)
-                .mustBe(???) //ToDo - Consignee Yes No Controller
+                .mustBe(consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(userAnswers.lrn, mode))
             }
           }
 
@@ -159,10 +177,10 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             .mustBe(contactRoutes.TelephoneNumberController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
 
-        "must go from contact telephone number page to how many consignees page" ignore {
+        "must go from contact telephone number page to how many consignees page" in {
           navigator
             .nextPage(consignor.contact.TelephoneNumberPage, mode, emptyUserAnswers)
-            .mustBe(???) //TODO HowManyConsignee Page
+            .mustBe(consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
       }
 
@@ -185,7 +203,9 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             "to consignor eori page" in {
               forAll(arbitraryTraderDetailsConsignmentAnswersWithoutConsignor) {
                 answers =>
-                  val userAnswers = answers.setValue(ApprovedOperatorPage, true)
+                  val userAnswers = answers
+                    .setValue(ApprovedOperatorPage, true)
+                    .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
                   navigator
                     .nextPage(ApprovedOperatorPage, mode, userAnswers)
                     .mustBe(consignorRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode))
@@ -321,7 +341,9 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           "to consignor eori yes no page" in {
             forAll(arbitraryTraderDetailsConsignmentAnswersWithoutConsignor) {
               answers =>
-                val userAnswers = answers.setValue(ApprovedOperatorPage, true)
+                val userAnswers = answers
+                  .setValue(ApprovedOperatorPage, true)
+                  .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
                 navigator
                   .nextPage(ApprovedOperatorPage, mode, userAnswers)
                   .mustBe(consignorRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode))
