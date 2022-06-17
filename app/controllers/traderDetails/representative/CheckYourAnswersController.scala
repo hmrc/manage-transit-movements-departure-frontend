@@ -18,9 +18,10 @@ package controllers.traderDetails.representative
 
 import com.google.inject.Inject
 import controllers.actions.Actions
-import models.LocalReferenceNumber
+import models.{DeclarationType, LocalReferenceNumber, Mode, NormalMode, UserAnswers}
+import pages.preTaskList.DeclarationTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.traderDetails.RepresentativeViewModel.RepresentativeSubSectionViewModel
 import views.html.traderDetails.representative.CheckYourAnswersView
@@ -41,8 +42,13 @@ class CheckYourAnswersController @Inject() (
   }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
-    //TODO - Redirect to next section when built
-    Redirect(controllers.traderDetails.routes.CheckYourAnswersController.onPageLoad(lrn))
+    implicit request =>
+      declarationTypeRoute(request.userAnswers, NormalMode)
   }
 
+  private def declarationTypeRoute(ua: UserAnswers, mode: Mode): Result =
+    ua.get(DeclarationTypePage) match {
+      case Some(DeclarationType.Option4) => Redirect(controllers.traderDetails.consignment.consignor.routes.EoriYesNoController.onPageLoad(ua.lrn, mode))
+      case _                             => Redirect(controllers.traderDetails.consignment.routes.ApprovedOperatorController.onPageLoad(ua.lrn, mode))
+    }
 }

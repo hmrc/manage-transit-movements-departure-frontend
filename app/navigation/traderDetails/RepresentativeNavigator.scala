@@ -17,9 +17,9 @@
 package navigation.traderDetails
 
 import controllers.traderDetails.representative.{routes => repRoutes}
-import controllers.traderDetails.{routes => tdRoutes}
 import models._
 import models.journeyDomain.traderDetails.RepresentativeDomain
+import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.representative._
 import play.api.mvc.Call
 
@@ -42,6 +42,11 @@ class RepresentativeNavigator @Inject() () extends TraderDetailsNavigator[Repres
   private def actingRepresentativeRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     yesNoRoute(userAnswers, ActingAsRepresentativePage)(
       yesCall = repRoutes.EoriController.onPageLoad(userAnswers.lrn, mode)
-    )(noCall = tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)) //TODO REDIRECT TO CORRECT PAGE WHEN BUILT
+    )(noCall = declarationTypeRoute(userAnswers, mode))
 
+  private def declarationTypeRoute(ua: UserAnswers, mode: Mode): Call =
+    ua.get(DeclarationTypePage) match {
+      case Some(DeclarationType.Option4) => controllers.traderDetails.consignment.consignor.routes.EoriYesNoController.onPageLoad(ua.lrn, mode)
+      case _                             => controllers.traderDetails.consignment.routes.ApprovedOperatorController.onPageLoad(ua.lrn, mode)
+    }
 }
