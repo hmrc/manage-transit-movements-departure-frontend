@@ -24,12 +24,13 @@ import play.api.libs.json.JsBoolean
 trait TraderDetailsConsignmentAnswersGenerator extends UserAnswersGenerator {
   self: Generators =>
 
-  lazy val arbitraryTraderDetailsConsignmentAnswersWithConsignorEori: Gen[UserAnswers] = arbitraryUserAnswers(
+  lazy val arbitraryTraderDetailsConsignmentAnswersWithConsignor: Gen[UserAnswers] = arbitraryUserAnswers(
     arbitraryTraderdetailsConsignmentApprovedOperatorUserAnswersEntry.arbitrary ::
       Arbitrary((consignor.EoriYesNoPage, JsBoolean(true))).arbitrary ::
       arbitraryTransitHolderConsignmentConsignorEoriUserAnswersEntry.arbitrary ::
       arbitraryTransitHolderConsignmentConsignorNameUserAnswersEntry.arbitrary ::
       arbitraryTransitHolderConsignmentConsignorAddressUserAnswersEntry.arbitrary ::
+      Arbitrary((consignor.AddContactPage, JsBoolean(true))).arbitrary ::
       Nil
   )
 
@@ -46,9 +47,20 @@ trait TraderDetailsConsignmentAnswersGenerator extends UserAnswersGenerator {
       Nil
   )
 
+  lazy val arbitraryTraderDetailsConsignmentAnswersWithConsignorWithoutContact: Gen[UserAnswers] = arbitraryUserAnswers(
+    arbitraryTraderdetailsConsignmentApprovedOperatorUserAnswersEntry.arbitrary ::
+      Arbitrary((consignor.EoriYesNoPage, JsBoolean(true))).arbitrary ::
+      arbitraryTransitHolderConsignmentConsignorEoriUserAnswersEntry.arbitrary ::
+      arbitraryTransitHolderConsignmentConsignorNameUserAnswersEntry.arbitrary ::
+      arbitraryTransitHolderConsignmentConsignorAddressUserAnswersEntry.arbitrary ::
+      Arbitrary((consignor.AddContactPage, JsBoolean(false))).arbitrary ::
+      Nil
+  )
+
   lazy val arbitraryTraderDetailsConsignmentAnswers: Gen[UserAnswers] = Gen.oneOf(
-    arbitraryTraderDetailsConsignmentAnswersWithConsignorEori,
+    arbitraryTraderDetailsConsignmentAnswersWithConsignor,
     arbitraryTraderDetailsConsignmentAnswersWithoutConsignor,
-    arbitraryTraderDetailsConsignmentAnswersWithoutConsignorEori
+    arbitraryTraderDetailsConsignmentAnswersWithoutConsignorEori,
+    arbitraryTraderDetailsConsignmentAnswersWithConsignorWithoutContact
   )
 }

@@ -27,11 +27,12 @@ import javax.inject.{Inject, Singleton}
 class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[RepresentativeDomain] {
 
   override def routes(mode: Mode): RouteMapping = {
-    case ApprovedOperatorPage    => ua => approvedOperatorYesNoRoute(ua, mode)
-    case consignor.EoriYesNoPage => ua => consignorEoriYesNoRoute(ua, mode)
-    case consignor.EoriPage      => ua => Some(consignorRoutes.NameController.onPageLoad(ua.lrn, mode))
-    case consignor.NamePage      => ua => Some(consignorRoutes.AddressController.onPageLoad(ua.lrn, mode))
-    case consignor.AddressPage   => ua => ??? //TODO Some(consignorRoutes.AddContactController.onPageLoad(ua.lrn, mode))
+    case ApprovedOperatorPage     => ua => approvedOperatorYesNoRoute(ua, mode)
+    case consignor.EoriYesNoPage  => ua => consignorEoriYesNoRoute(ua, mode)
+    case consignor.EoriPage       => ua => Some(consignorRoutes.NameController.onPageLoad(ua.lrn, mode))
+    case consignor.NamePage       => ua => Some(consignorRoutes.AddressController.onPageLoad(ua.lrn, mode))
+    case consignor.AddressPage    => ua => Some(consignorRoutes.AddContactController.onPageLoad(ua.lrn, mode))
+    case consignor.AddContactPage => ua => addContactRoute(ua, mode)
   }
 
   private def approvedOperatorYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
@@ -49,6 +50,9 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Represent
     )(
       noCall = consignorRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
     )
+
+  private def addContactRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    ??? //todo update when new pages built
 
   override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
     ??? //todo update when new pages built consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
