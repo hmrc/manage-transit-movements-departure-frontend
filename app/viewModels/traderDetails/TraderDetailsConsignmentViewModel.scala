@@ -51,7 +51,8 @@ sealed trait TraderDetailsConsignmentViewModel {
       sectionTitle = messages("traderDetails.consignment.checkYourAnswers.consignee"),
       rows = Seq(
         helper.moreThanOneConsignee,
-        helper.consigneeEoriYesNo
+        helper.consigneeEoriYesNo,
+        helper.consigneeEori
       ).flatten
     )
 

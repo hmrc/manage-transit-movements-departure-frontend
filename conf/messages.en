@@ -376,6 +376,18 @@ traderDetails.consignment.consignee.eoriYesNo.checkYourAnswersLabel = Do you kno
 traderDetails.consignment.consignee.eoriYesNo.error.required = Select yes if you know the consignee’s EORI number
 traderDetails.consignment.consignee.eoriYesNo.change.hidden = if you know the consignee’s EORI number
 
+traderDetails.consignment.consignee.eoriNumber.title = What is the consignee’s EORI number?
+traderDetails.consignment.consignee.eoriNumber.heading = What is the consignee’s EORI number?
+traderDetails.consignment.consignee.eoriNumber.checkYourAnswersLabel = Consignee’s EORI number
+traderDetails.consignment.consignee.eoriNumber.error.required = Enter the consignee’s EORI number
+traderDetails.consignment.consignee.eoriNumber.hint = This will start with 2 letters such as GB or XI followed by 12 or 15 numbers, for example GB123456789000.
+traderDetails.consignment.consignee.eoriNumber.error.maxLength = The consignee’s EORI number must be 17 characters or less
+traderDetails.consignment.consignee.eoriNumber.error.minLength = The consignee’s EORI number must be 14 characters or more
+traderDetails.consignment.consignee.eoriNumber.error.invalidCharacters = The consignee’s EORI number must only include letters a to z and numbers 0 to 9
+traderDetails.consignment.consignee.eoriNumber.error.invalidFormat = The consignee’s EORI number must start with 2 letters, such as GB or XI, followed by up to 15 numbers
+traderDetails.consignment.consignee.eoriNumber.error.prefix = The consignee’s EORI number must start with 2 letters, such as GB or XI
+traderDetails.consignment.consignee.eoriNumber.change.hidden = consignee’s EORI number
+
 # Trader Details - Check Your Answers
 traderDetails.consignment.checkYourAnswers.heading = Check your answers
 traderDetails.consignment.checkYourAnswers.title = Check your answers

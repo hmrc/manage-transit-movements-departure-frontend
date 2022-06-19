@@ -15,4 +15,6 @@
 
 ->         /                                                     health.Routes
 
+->         /manage-transit-movements/departure                   app.traderDetails.consignment.consignee.Routes
+
 GET        /admin/metrics             @com.kenshoo.play.metrics.MetricsController.metrics

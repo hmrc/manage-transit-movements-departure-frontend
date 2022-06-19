@@ -431,5 +431,49 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
         }
       }
     }
+
+    "consigneeEori" - {
+      "must return None" - {
+        s"when ${consignee.EoriNumberPage} is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.consigneeEori
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        s"when ${consignee.EoriNumberPage} is defined" in {
+          forAll(Gen.alphaNumStr, arbitrary[Mode]) {
+            (eori, mode) =>
+              val answers = emptyUserAnswers.setValue(consignee.EoriNumberPage, eori)
+
+              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val result = helper.consigneeEori
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Consignee’s EORI number".toText),
+                  value = Value(eori.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = consigneeRoutes.EoriNumberController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("consignee’s EORI number"),
+                          attributes = Map()
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
   }
 }

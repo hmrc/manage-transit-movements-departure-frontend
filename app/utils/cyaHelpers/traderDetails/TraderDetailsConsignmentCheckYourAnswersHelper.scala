@@ -98,4 +98,12 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     id = None,
     call = consigneeRoutes.EoriYesNoController.onPageLoad(lrn, mode)
   )
+
+  def consigneeEori: Option[SummaryListRow] = getAnswerAndBuildRow[String](
+    page = consignee.EoriNumberPage,
+    formatAnswer = formatAsLiteral,
+    prefix = "traderDetails.consignment.consignee.eoriNumber",
+    id = None,
+    call = consigneeRoutes.EoriNumberController.onPageLoad(lrn, mode)
+  )
 }

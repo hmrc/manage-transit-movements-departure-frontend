@@ -19,8 +19,8 @@ package models.journeyDomain.traderDetails
 import cats.implicits._
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.{Address, EoriNumber}
-import pages.traderDetails.consignment.consignee.{EoriYesNoPage}
-import pages.traderDetails.consignment.consignor.{AddressPage, EoriPage, NamePage}
+import pages.traderDetails.consignment.consignee.{EoriNumberPage, EoriYesNoPage}
+import pages.traderDetails.consignment.consignor.{AddressPage, NamePage}
 
 case class ConsignmentConsigneeDomain(
   eori: Option[EoriNumber],
@@ -32,7 +32,7 @@ object ConsignmentConsigneeDomain {
 
   implicit val userAnswersReader: UserAnswersReader[ConsignmentConsigneeDomain] =
     (
-      EoriYesNoPage.filterOptionalDependent(identity)(EoriPage.reader.map(EoriNumber(_))),
+      EoriYesNoPage.filterOptionalDependent(identity)(EoriNumberPage.reader.map(EoriNumber(_))),
       NamePage.reader,
       AddressPage.reader
     ).tupled.map((ConsignmentConsigneeDomain.apply _).tupled)
