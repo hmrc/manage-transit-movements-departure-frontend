@@ -202,6 +202,26 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             }
           }
         }
+
+        "must go from eori yes no page" - {
+          "when Yes selected" - {
+            "to eori number page" in {
+              val userAnswers = emptyUserAnswers.setValue(consignee.EoriYesNoPage, true)
+              navigator
+                .nextPage(consignee.EoriYesNoPage, mode, userAnswers)
+                .mustBe(consigneeRoutes.EoriNumberController.onPageLoad(emptyUserAnswers.lrn, mode))
+            }
+          }
+
+          "when No selected" - {
+            "to consignee name page" ignore {
+              val userAnswers = emptyUserAnswers.setValue(consignee.EoriYesNoPage, false)
+              navigator
+                .nextPage(consignee.EoriYesNoPage, mode, userAnswers)
+                .mustBe(???) //TODO change to consignee name page when built
+            }
+          }
+        }
       }
 
       "when answers complete" - {
