@@ -73,7 +73,7 @@ class ConsignmentConsigneeDomainSpec extends SpecBase with UserAnswersSpecHelper
 
     "cannot be parsed from UserAnswer" - {
 
-      "when Declaration type is missing" in {
+      "when EoriYesNoPage type is missing" in {
 
         val userAnswers = emptyUserAnswers
 

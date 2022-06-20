@@ -48,7 +48,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
     "cannot be parsed from UserAnswer" - {
 
-      "when Declaration type is missing" in {
+      "when ApprovedOperatorPage type is missing" in {
 
         val userAnswers = emptyUserAnswers
 

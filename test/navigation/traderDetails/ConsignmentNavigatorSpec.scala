@@ -238,9 +238,9 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             .mustBe(consigneeRoutes.AddressController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
 
-        "must go from Consignee address page to Consignment Check Your Answers page page" ignore {
+        "must go from Consignee address page to Consignment Check Your Answers page page" in {
           navigator
-            .nextPage(consignor.AddressPage, mode, emptyUserAnswers)
+            .nextPage(consignee.AddressPage, mode, emptyUserAnswers)
             .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn))
         }
       }
@@ -249,13 +249,13 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
         "must go from approved operator page" - {
           "when No selected" - {
-            "to check Your Answers page" ignore {
+            "to check Your Answers page" in {
               forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
                 answers =>
                   val userAnswers = answers.setValue(ApprovedOperatorPage, false)
                   navigator
                     .nextPage(ApprovedOperatorPage, mode, userAnswers)
-                    .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn))
+                    .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
               }
             }
           }
@@ -277,13 +277,13 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
         "must go from is consignor eori known page" - {
           "when No selected" - {
-            "to check Your Answers page" ignore {
+            "to check Your Answers page" in {
               forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
                 answers =>
                   val userAnswers = answers.setValue(consignor.EoriYesNoPage, false)
                   navigator
                     .nextPage(consignor.EoriYesNoPage, mode, userAnswers)
-                    .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn))
+                    .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
               }
             }
           }
@@ -292,7 +292,11 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             "to consignor eori page" in {
               forAll(arbitraryTraderDetailsConsignmentAnswersWithoutConsignorEori) {
                 answers =>
-                  val userAnswers = answers.setValue(consignor.EoriYesNoPage, true)
+                  val userAnswers = answers
+                    .setValue(consignor.EoriYesNoPage, true)
+                    .remove(consignor.EoriPage)
+                    .success
+                    .value
                   navigator
                     .nextPage(consignor.EoriYesNoPage, mode, userAnswers)
                     .mustBe(consignorRoutes.EoriController.onPageLoad(userAnswers.lrn, mode))
@@ -306,7 +310,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             answers =>
               navigator
                 .nextPage(consignor.NamePage, mode, answers)
-                .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn))
+                .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
 
@@ -315,7 +319,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             answers =>
               navigator
                 .nextPage(consignor.AddressPage, mode, answers)
-                .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn))
+                .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
 
@@ -327,7 +331,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
                   val userAnswers = answers.setValue(consignor.AddContactPage, false)
                   navigator
                     .nextPage(consignor.AddContactPage, mode, userAnswers)
-                    .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn))
+                    .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
               }
             }
           }
@@ -352,7 +356,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
                 answers =>
                   navigator
                     .nextPage(consignor.contact.NamePage, mode, answers)
-                    .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn))
+                    .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
               }
             }
           }
@@ -375,7 +379,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             answers =>
               navigator
                 .nextPage(consignor.contact.TelephoneNumberPage, mode, answers)
-                .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn))
+                .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
       }

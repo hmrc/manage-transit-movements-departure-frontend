@@ -115,13 +115,27 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
 
     "cannot be parsed from UserAnswer" - {
 
-      "when Declaration type is missing" in {
+      "when EoriYesNo type is missing" in {
 
         val userAnswers = emptyUserAnswers
 
         val result: EitherType[ConsignmentConsignorDomain] = UserAnswersReader[ConsignmentConsignorDomain].run(userAnswers)
 
         result.left.value.page mustBe consignor.EoriYesNoPage
+      }
+
+      "when has all consignment fields complete eoriYesNo is true, but we have no eori" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(consignor.EoriYesNoPage)(true)
+          .unsafeSetVal(consignor.NamePage)(consignorName)
+          .unsafeSetVal(consignor.AddressPage)(consignorAddress)
+          .unsafeSetVal(consignor.AddContactPage)(true)
+          .unsafeSetVal(consignor.contact.NamePage)(contactName)
+          .unsafeSetVal(consignor.contact.TelephoneNumberPage)(contactPhone)
+
+        val result: EitherType[ConsignmentConsignorDomain] = UserAnswersReader[ConsignmentConsignorDomain].run(userAnswers)
+        result.left.value.page mustBe consignor.EoriPage
       }
     }
   }

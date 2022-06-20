@@ -52,7 +52,9 @@ sealed trait TraderDetailsConsignmentViewModel {
       rows = Seq(
         helper.moreThanOneConsignee,
         helper.consigneeEoriYesNo,
-        helper.consigneeEori
+        helper.consigneeEori,
+        helper.consigneeName,
+        helper.consigneeAddress
       ).flatten
     )
 

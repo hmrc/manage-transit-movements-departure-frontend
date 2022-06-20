@@ -58,7 +58,8 @@ class TraderDetailsConsignmentViewModelSpec extends SpecBase with ScalaCheckProp
           .setValue(consignee.MoreThanOneConsigneePage, false)
           .setValue(consignee.EoriYesNoPage, true)
           .setValue(consignee.EoriNumberPage, "eori2")
-
+          .setValue(consignee.NamePage, "name2")
+          .setValue(consignee.AddressPage, Address("line12", "line22", "postal code2", Country(CountryCode("code"), "description")))
         val sections = new TraderDetailsConsignmentSectionViewModel().apply(answers)
 
         sections.size mustBe 3
@@ -77,10 +78,12 @@ class TraderDetailsConsignmentViewModelSpec extends SpecBase with ScalaCheckProp
         sections(1).rows(2).value.content.asHtml.toString() mustBe "phone number"
 
         sections(2).sectionTitle.get mustBe "Consignee"
-        sections(2).rows.size mustBe 3
+        sections(2).rows.size mustBe 5
         sections(2).rows.head.value.content.asHtml.toString() mustBe "No"
         sections(2).rows(1).value.content.asHtml.toString() mustBe "Yes"
         sections(2).rows(2).value.content.asHtml.toString() mustBe "eori2"
+        sections(2).rows(3).value.content.asHtml.toString() mustBe "name2"
+        sections(2).rows(4).value.content.asHtml.toString() mustBe "line12<br>line22<br>postal code2<br>description"
       }
     }
   }
