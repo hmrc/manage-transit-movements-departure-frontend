@@ -15,14 +15,14 @@
  */
 
 import cats.data.ReaderT
-import models.{Mode, UserAnswers}
 import models.journeyDomain.{OpsError, WriterError}
-import models.requests.DataRequest
+import models.requests.MandatoryDataRequest
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.QuestionPage
 import play.api.libs.json.Writes
-import play.api.mvc.{Call, Result}
 import play.api.mvc.Results.Redirect
+import play.api.mvc.{Call, Result}
 import repositories.SessionRepository
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -54,8 +54,8 @@ package object controllers {
 
   implicit class SettableOpsRunner[A](userAnswersWriter: UserAnswersWriter[(QuestionPage[A], UserAnswers)]) {
 
-    def runner(userAnswers: UserAnswers): EitherType[(QuestionPage[A], UserAnswers)]               = userAnswersWriter.run(userAnswers)
-    def runner()(implicit dataRequest: DataRequest[_]): EitherType[(QuestionPage[A], UserAnswers)] = userAnswersWriter.run(dataRequest.userAnswers)
+    def runner(userAnswers: UserAnswers): EitherType[(QuestionPage[A], UserAnswers)]                        = userAnswersWriter.run(userAnswers)
+    def runner()(implicit dataRequest: MandatoryDataRequest[_]): EitherType[(QuestionPage[A], UserAnswers)] = userAnswersWriter.run(dataRequest.userAnswers)
 
     def writeToSession(
       userAnswers: UserAnswers
@@ -70,7 +70,7 @@ package object controllers {
     }
 
     def writeToSession()(implicit
-      dataRequest: DataRequest[_],
+      dataRequest: MandatoryDataRequest[_],
       sessionRepository: SessionRepository,
       ex: ExecutionContext
     ): Future[(QuestionPage[A], UserAnswers)] = runner() match {
@@ -92,14 +92,19 @@ package object controllers {
 
     def writeToSessionNavigator(
       mode: Mode
-    )(implicit dataRequest: DataRequest[_], sessionRepository: SessionRepository, navigator: Navigator, executionContext: ExecutionContext): Future[Result] =
+    )(implicit
+      dataRequest: MandatoryDataRequest[_],
+      sessionRepository: SessionRepository,
+      navigator: Navigator,
+      executionContext: ExecutionContext
+    ): Future[Result] =
       writeToSession(dataRequest.userAnswers).map {
         result => Redirect(navigator.nextPage(result._1, mode, result._2))
       }
 
     def writeToSessionNavigator(
       call: Call
-    )(implicit dataRequest: DataRequest[_], sessionRepository: SessionRepository, executionContext: ExecutionContext): Future[Result] =
+    )(implicit dataRequest: MandatoryDataRequest[_], sessionRepository: SessionRepository, executionContext: ExecutionContext): Future[Result] =
       writeToSession(dataRequest.userAnswers).map {
         _ => Redirect(call)
       }

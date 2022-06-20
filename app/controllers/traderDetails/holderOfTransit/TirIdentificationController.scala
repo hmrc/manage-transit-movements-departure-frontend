@@ -27,14 +27,15 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.traderDetails.holderOfTransit.TirIdentificationView
+import controllers.{SettableOps, SettableOpsRunner}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TirIdentificationController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  @HolderOfTransit navigator: Navigator,
+  implicit val sessionRepository: SessionRepository,
+  @HolderOfTransit implicit val navigator: Navigator,
   formProvider: TirIdNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
@@ -60,11 +61,7 @@ class TirIdentificationController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(TirIdentificationPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(TirIdentificationPage, mode, updatedAnswers))
+          value => TirIdentificationPage.userAnswerWriter(value).writeToSessionNavigator(mode)
         )
   }
 }
