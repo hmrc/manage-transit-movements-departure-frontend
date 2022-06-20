@@ -18,6 +18,7 @@ package controllers.preTaskList
 
 import com.google.inject.Inject
 import controllers.actions.{Actions, CheckTaskAlreadyCompletedActionProvider}
+import controllers.{SettableOps, SettableOpsRunner}
 import models.LocalReferenceNumber
 import models.journeyDomain.PreTaskListDomain
 import pages.preTaskList.DetailsConfirmedPage
@@ -28,11 +29,11 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.PreTaskListViewModel
 import views.html.preTaskList.CheckYourAnswersView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
+  implicit val sessionRepository: SessionRepository,
   actions: Actions,
   checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -55,10 +56,9 @@ class CheckYourAnswersController @Inject() (
     .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
     .async {
       implicit request =>
-        for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(DetailsConfirmedPage, true))
-          _              <- sessionRepository.set(updatedAnswers)
-        } yield Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
+        DetailsConfirmedPage
+          .userAnswerWriter(true)
+          .writeToSessionNavigator(controllers.routes.TaskListController.onPageLoad(lrn))
     }
 
 }

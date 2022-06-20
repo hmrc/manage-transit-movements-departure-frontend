@@ -21,6 +21,7 @@ import models.requests.DataRequest
 import navigation.Navigator
 import pages.QuestionPage
 import play.api.libs.json.Writes
+import play.api.mvc.{Call, Result}
 import play.api.mvc.Results.Redirect
 import repositories.SessionRepository
 
@@ -84,16 +85,23 @@ package object controllers {
 
     def writeToSessionNavigator(userAnswers: UserAnswers,
                                 mode: Mode
-    )(implicit sessionRepository: SessionRepository, navigator: Navigator, executionContext: ExecutionContext) =
+    )(implicit sessionRepository: SessionRepository, navigator: Navigator, executionContext: ExecutionContext): Future[Result] =
       writeToSession(userAnswers).map {
         result => Redirect(navigator.nextPage(result._1, mode, result._2))
       }
 
     def writeToSessionNavigator(
       mode: Mode
-    )(implicit dataRequest: DataRequest[_], sessionRepository: SessionRepository, navigator: Navigator, executionContext: ExecutionContext) =
+    )(implicit dataRequest: DataRequest[_], sessionRepository: SessionRepository, navigator: Navigator, executionContext: ExecutionContext): Future[Result] =
       writeToSession(dataRequest.userAnswers).map {
         result => Redirect(navigator.nextPage(result._1, mode, result._2))
+      }
+
+    def writeToSessionNavigator(
+      call: Call
+    )(implicit dataRequest: DataRequest[_], sessionRepository: SessionRepository, executionContext: ExecutionContext): Future[Result] =
+      writeToSession(dataRequest.userAnswers).map {
+        _ => Redirect(call)
       }
   }
 }

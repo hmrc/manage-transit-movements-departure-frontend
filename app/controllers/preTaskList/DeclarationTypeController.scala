@@ -70,7 +70,7 @@ class DeclarationTypeController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))),
-            value          => DeclarationTypePage.userAnswerWriter(value).writeToSessionNavigator(mode)
+            value => DeclarationTypePage.userAnswerWriter(value).writeToSessionNavigator(mode)
           )
     }
 }

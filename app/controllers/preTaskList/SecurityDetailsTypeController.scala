@@ -28,14 +28,15 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.SecurityDetailsTypeView
+import controllers.{SettableOps, SettableOpsRunner}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SecurityDetailsTypeController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  @PreTaskListDetails navigator: Navigator,
+  implicit val sessionRepository: SessionRepository,
+  @PreTaskListDetails implicit val navigator: Navigator,
   actions: Actions,
   checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   formProvider: SecurityDetailsFormProvider,
@@ -68,11 +69,7 @@ class SecurityDetailsTypeController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, SecurityDetailsType.radioItems, lrn, mode))),
-            value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(SecurityDetailsTypePage, value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(SecurityDetailsTypePage, mode, updatedAnswers))
+            value => SecurityDetailsTypePage.userAnswerWriter(value).writeToSessionNavigator(mode)
           )
     }
 }
