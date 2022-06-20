@@ -30,6 +30,6 @@ object ConsignmentDomain {
   implicit val userAnswersReader: UserAnswersReader[ConsignmentDomain] =
     (
       ApprovedOperatorPage.filterOptionalDependent(identity)(UserAnswersReader[ConsignmentConsignorDomain]),
-      consignee.MoreThanOneConsigneePage.filterOptionalDependent(identity)(UserAnswersReader[ConsignmentConsigneeDomain])
+      consignee.MoreThanOneConsigneePage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsigneeDomain])
     ).tupled.map((ConsignmentDomain.apply _).tupled)
 }

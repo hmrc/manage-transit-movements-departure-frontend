@@ -24,7 +24,7 @@ import play.api.libs.json.JsBoolean
 trait TraderDetailsConsignmentAnswersGenerator extends UserAnswersGenerator {
   self: Generators =>
 
-  lazy val arbitraryTraderDetailsConsignmentAnswersWithConsignor: Gen[UserAnswers] = arbitraryUserAnswers(
+  lazy val arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee: Gen[UserAnswers] = arbitraryUserAnswers(
     arbitraryAddSecurityDetailsUserAnswersEntry.arbitrary ::
       arbitraryTraderdetailsConsignmentApprovedOperatorUserAnswersEntry.arbitrary ::
       Arbitrary((consignor.EoriYesNoPage, JsBoolean(true))).arbitrary ::
@@ -34,7 +34,9 @@ trait TraderDetailsConsignmentAnswersGenerator extends UserAnswersGenerator {
       Arbitrary((consignor.AddContactPage, JsBoolean(true))).arbitrary ::
       arbitraryTraderDetailsConsignmentConsignorContactNameUserAnswersEntry.arbitrary ::
       arbitraryTraderDetailsConsignmentConsignorContactTelephoneNumberUserAnswersEntry.arbitrary ::
-      Arbitrary((consignee.MoreThanOneConsigneePage, JsBoolean(true))).arbitrary ::
+      Arbitrary((consignee.MoreThanOneConsigneePage, JsBoolean(false))).arbitrary ::
+      Arbitrary((consignee.EoriYesNoPage, JsBoolean(true))).arbitrary ::
+      arbitraryTraderDetailsConsignmentConsigneeEoriNumberUserAnswersEntry.arbitrary ::
       Nil
   )
 
@@ -68,7 +70,7 @@ trait TraderDetailsConsignmentAnswersGenerator extends UserAnswersGenerator {
   )
 
   lazy val arbitraryTraderDetailsConsignmentAnswers: Gen[UserAnswers] = Gen.oneOf(
-    arbitraryTraderDetailsConsignmentAnswersWithConsignor,
+    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee,
     arbitraryTraderDetailsConsignmentAnswersWithoutConsignorOrConsignee,
     arbitraryTraderDetailsConsignmentAnswersWithoutConsignorEori,
     arbitraryTraderDetailsConsignmentAnswersWithConsignorWithoutContact

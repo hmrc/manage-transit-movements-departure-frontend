@@ -19,13 +19,13 @@ package navigation.traderDetails
 import models._
 import models.journeyDomain.traderDetails.ConsignmentDomain
 import pages.traderDetails.consignment._
+import controllers.traderDetails.consignment.{routes => consignmentRoutes}
 import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
 import controllers.traderDetails.consignment.consignor.contact.{routes => contactRoutes}
 import controllers.traderDetails.consignment.consignee.{routes => consigneeRoutes}
 import models.SecurityDetailsType.NoSecurityDetails
 import pages.preTaskList.SecurityDetailsTypePage
 import play.api.mvc.Call
-
 import javax.inject.{Inject, Singleton}
 
 @Singleton
@@ -67,7 +67,7 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Consignme
 
   private def moreThanOneConsigneeRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     yesNoRoute(userAnswers, consignee.MoreThanOneConsigneePage)(
-      yesCall = consigneeRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode) //TODO change this to check your answers when built
+      yesCall = checkYourAnswersRoute(userAnswers)
     )(
       noCall = consigneeRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode)
     )
@@ -80,5 +80,5 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Consignme
     )
 
   override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
-    ??? //todo update when new pages built consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+    consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
 }
