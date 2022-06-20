@@ -373,6 +373,7 @@ traderDetails.consignment.consignee.eoriYesNo.title = Do you know the consignee�
 traderDetails.consignment.consignee.eoriYesNo.heading = Do you know the consignee’s EORI number?
 traderDetails.consignment.consignee.eoriYesNo.checkYourAnswersLabel = Do you know the consignee’s EORI number?
 traderDetails.consignment.consignee.eoriYesNo.error.required = Select yes if you know the consignee’s EORI number
+traderDetails.consignment.consignee.eoriYesNo.change.hidden = if you know the consignee’s EORI number
 
 traderDetails.consignment.consignee.eoriNumber.title = What is the consignee’s EORI number?
 traderDetails.consignment.consignee.eoriNumber.heading = What is the consignee’s EORI number?
