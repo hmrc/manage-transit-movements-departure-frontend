@@ -30,9 +30,10 @@ case class ConsignmentDomain(
 object ConsignmentDomain {
 
   implicit val userAnswersReader: UserAnswersReader[ConsignmentDomain] = {
+    lazy val consignorDomain = UserAnswersReader[ConsignmentConsignorDomain]
     for {
-      consignorApprovedDomain <- ApprovedOperatorPage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsignorDomain])
-      consignorSecurityDomain <- SecurityDetailsTypePage.filterOptionalDependent(_ != NoSecurityDetails)(UserAnswersReader[ConsignmentConsignorDomain])
+      consignorApprovedDomain <- ApprovedOperatorPage.filterOptionalDependent(!_)(consignorDomain)
+      consignorSecurityDomain <- SecurityDetailsTypePage.filterOptionalDependent(_ != NoSecurityDetails)(consignorDomain)
       consigneeDomain         <- consignee.MoreThanOneConsigneePage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsigneeDomain])
     } yield ConsignmentDomain(consignorApprovedDomain orElse consignorSecurityDomain, consigneeDomain)
 
