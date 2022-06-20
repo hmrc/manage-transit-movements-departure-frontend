@@ -29,6 +29,14 @@ import play.api.libs.json.{JsValue, Json}
 trait UserAnswersEntryGenerators {
   self: Generators =>
 
+  implicit lazy val arbitraryTraderdetailsConsignmentConsigneeAddressUserAnswersEntry
+    : Arbitrary[(pages.traderDetails.consignment.consignee.AddressPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[pages.traderDetails.consignment.consignee.AddressPage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.consignment.consignee.AddressPage, value)
+    }
+
   implicit lazy val arbitraryTraderdetailsConsignmentConsigneeNameUserAnswersEntry
     : Arbitrary[(pages.traderDetails.consignment.consignee.NamePage.type, JsValue)] =
     Arbitrary {

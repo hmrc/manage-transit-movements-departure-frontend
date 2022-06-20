@@ -131,13 +131,13 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             .mustBe(consignorRoutes.NameController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
 
-        "must go from name page to address page" in {
+        "must go from consignor name page to address page" in {
           navigator
             .nextPage(consignor.NamePage, mode, emptyUserAnswers)
             .mustBe(consignorRoutes.AddressController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
 
-        "must go from address page to add contact page" in {
+        "must go from consignor address page to add contact page" in {
           navigator
             .nextPage(consignor.AddressPage, mode, emptyUserAnswers)
             .mustBe(consignorRoutes.AddContactController.onPageLoad(emptyUserAnswers.lrn, mode))
@@ -230,12 +230,19 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             .mustBe(consigneeRoutes.NameController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
 
-        "must go from Consignee name page to Consignee address page" ignore {
+        "must go from Consignee name page to Consignee address page" in {
           val userAnswers = emptyUserAnswers.setValue(consignee.NamePage, "TestName")
           navigator
             .nextPage(consignee.NamePage, mode, userAnswers)
-            .mustBe(consigneeRoutes.NameController.onPageLoad(emptyUserAnswers.lrn, mode)) //todo change to address controller when built
+            .mustBe(consigneeRoutes.AddressController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
+
+        "must go from Consignee address page to Consignment Check Your Answers page page" ignore {
+          navigator
+            .nextPage(consignor.AddressPage, mode, emptyUserAnswers)
+            .mustBe(consignorRoutes.AddContactController.onPageLoad(emptyUserAnswers.lrn, mode)) //todo change to cya page when built
+        }
+
       }
 
       "when answers complete" - {
@@ -294,7 +301,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           }
         }
 
-        "must go from name page to check your answers page" ignore {
+        "must go from consignor name page to check your answers page" ignore {
           forAll(arbitraryTraderDetailsConsignmentAnswers) {
             answers =>
               navigator
@@ -303,7 +310,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           }
         }
 
-        "must go from address page to check your answers page" ignore {
+        "must go from consignor address page to check your answers page" ignore {
           forAll(arbitraryTraderDetailsConsignmentAnswers) {
             answers =>
               navigator
@@ -432,7 +439,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
       }
 
-      "must go from eori page to check your answers page" ignore {
+      "must go from consignor eori page to check your answers page" ignore {
         forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignor) {
           answers =>
             navigator
@@ -441,16 +448,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
       }
 
-      "must go from name page to check your answers page" ignore {
-        forAll(arbitraryTraderDetailsAnswers) {
-          answers =>
-            navigator
-              .nextPage(consignor.NamePage, mode, answers)
-              .mustBe(???) //TODO Check Your Answers Page
-        }
-      }
-
-      "must go from address page to check your answers page" ignore {
+      "must go from consignor address page to check your answers page" ignore {
         forAll(arbitraryTraderDetailsAnswers) {
           answers =>
             navigator
@@ -499,6 +497,24 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           answers =>
             navigator
               .nextPage(consignor.contact.TelephoneNumberPage, mode, answers)
+              .mustBe(???) //TODO Check Your Answers Page
+        }
+      }
+
+      "must go from consignee name page to check your answers page" ignore {
+        forAll(arbitraryTraderDetailsAnswers) {
+          answers =>
+            navigator
+              .nextPage(consignee.NamePage, mode, answers)
+              .mustBe(???) //TODO Check Your Answers Page
+        }
+      }
+
+      "must go from consignee address page to check your answers page" ignore {
+        forAll(arbitraryTraderDetailsAnswers) {
+          answers =>
+            navigator
+              .nextPage(consignee.AddressPage, mode, answers)
               .mustBe(???) //TODO Check Your Answers Page
         }
       }

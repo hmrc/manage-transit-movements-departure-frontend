@@ -43,7 +43,8 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Represent
     case consignee.MoreThanOneConsigneePage    => ua => moreThanOneConsigneeRoute(ua, mode)
     case consignee.EoriYesNoPage               => ua => consigneeEoriYesNoRoute(ua, mode)
     case consignee.EoriNumberPage              => ua => Some(consigneeRoutes.NameController.onPageLoad(ua.lrn, mode))
-    case consignee.NamePage                    => ua => ??? //todo to nav to address controller when built
+    case consignee.NamePage                    => ua => Some(consigneeRoutes.AddressController.onPageLoad(ua.lrn, mode))
+    case consignee.AddressPage                 => ua => ??? //todo -to Consignment Check your answers page once built
   }
 
   private def approvedOperatorYesNoRoute(ua: UserAnswers, mode: Mode): Option[Call] =
