@@ -8,7 +8,17 @@ POST       /:lrn/trader-details/consignment/is-consignee-eori-known             
 GET        /:lrn/trader-details/consignment/change-is-consignee-eori-known                          controllers.traderDetails.consignment.consignee.EoriYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/trader-details/consignment/change-is-consignee-eori-known                          controllers.traderDetails.consignment.consignee.EoriYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/traderDetails/consignment/consignee-eori-number                                              controllers.traderDetails.consignment.consignee.EoriNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/traderDetails/consignment/consignee-eori-number                                              controllers.traderDetails.consignment.consignee.EoriNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/traderDetails/consignment/change-consignee-eori-number                                       controllers.traderDetails.consignment.consignee.EoriNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/traderDetails/consignment/change-consignee-eori-number                                       controllers.traderDetails.consignment.consignee.EoriNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/traderDetails/consignment/consignee-eori-number                                    controllers.traderDetails.consignment.consignee.EoriNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/traderDetails/consignment/consignee-eori-number                                    controllers.traderDetails.consignment.consignee.EoriNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/traderDetails/consignment/change-consignee-eori-number                             controllers.traderDetails.consignment.consignee.EoriNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/traderDetails/consignment/change-consignee-eori-number                             controllers.traderDetails.consignment.consignee.EoriNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/consignment/consignee-name                                          controllers.traderDetails.consignment.consignee.NameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/consignment/consignee-name                                          controllers.traderDetails.consignment.consignee.NameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/consignment/change-consignee-name                                   controllers.traderDetails.consignment.consignee.NameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/consignment/change-consignee-name                                   controllers.traderDetails.consignment.consignee.NameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/trader-details/consignment/consignee-address                                       controllers.traderDetails.consignment.consignee.AddressController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/consignment/consignee-address                                       controllers.traderDetails.consignment.consignee.AddressController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/consignment/change-consignee-address                                controllers.traderDetails.consignment.consignee.AddressController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/consignment/change-consignee-address                                controllers.traderDetails.consignment.consignee.AddressController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
