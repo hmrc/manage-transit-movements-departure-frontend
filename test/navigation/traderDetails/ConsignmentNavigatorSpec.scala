@@ -154,7 +154,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           }
 
           "when No selected" - {
-            "to cconsignee pages" ignore {
+            "to more than one consignee page" in {
               val userAnswers = emptyUserAnswers.setValue(consignor.AddContactPage, false)
               navigator
                 .nextPage(consignor.AddContactPage, mode, userAnswers)
@@ -177,7 +177,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             .mustBe(contactRoutes.TelephoneNumberController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
 
-        "must go from contact telephone number page to how many consignees page" in {
+        "must go from contact telephone number page to more than one consignee page" in {
           navigator
             .nextPage(consignor.contact.TelephoneNumberPage, mode, emptyUserAnswers)
             .mustBe(consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(emptyUserAnswers.lrn, mode))
@@ -214,13 +214,27 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           }
 
           "when No selected" - {
-            "to consignee name page" ignore {
+            "to consignee name page" in {
               val userAnswers = emptyUserAnswers.setValue(consignee.EoriYesNoPage, false)
               navigator
                 .nextPage(consignee.EoriYesNoPage, mode, userAnswers)
-                .mustBe(???) //TODO change to consignee name page when built
+                .mustBe(consigneeRoutes.NameController.onPageLoad(emptyUserAnswers.lrn, mode))
             }
           }
+        }
+
+        "must go from Consignee EORI Page to Consignee name page" in {
+          val userAnswers = emptyUserAnswers.setValue(consignee.EoriNumberPage, "GB1234567")
+          navigator
+            .nextPage(consignee.EoriNumberPage, mode, userAnswers)
+            .mustBe(consigneeRoutes.NameController.onPageLoad(emptyUserAnswers.lrn, mode))
+        }
+
+        "must go from Consignee name page to Consignee address page" ignore {
+          val userAnswers = emptyUserAnswers.setValue(consignee.NamePage, "TestName")
+          navigator
+            .nextPage(consignee.NamePage, mode, userAnswers)
+            .mustBe(consigneeRoutes.NameController.onPageLoad(emptyUserAnswers.lrn, mode)) //todo change to address controller when built
         }
       }
 
