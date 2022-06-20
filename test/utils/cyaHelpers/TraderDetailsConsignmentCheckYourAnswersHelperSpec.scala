@@ -475,5 +475,93 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
         }
       }
     }
+
+    "consigneeName" - {
+      "must return None" - {
+        s"when ${consignee.NamePage} is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.consigneeName
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        s"when ${consignee.NamePage} is defined" in {
+          forAll(Gen.alphaNumStr, arbitrary[Mode]) {
+            (name, mode) =>
+              val answers = emptyUserAnswers.setValue(consignee.NamePage, name)
+
+              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val result = helper.consigneeName
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Consignee’s name".toText),
+                  value = Value(name.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = consigneeRoutes.NameController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("consignee’s name"),
+                          attributes = Map()
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "consigneeAddress" - {
+      "must return None" - {
+        s"when ${consignee.AddressPage} is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.consigneeAddress
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        s"when ${consignee.AddressPage} is defined" in {
+          forAll(arbitrary[Address], arbitrary[Mode]) {
+            (address, mode) =>
+              val answers = emptyUserAnswers.setValue(consignee.AddressPage, address)
+
+              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val result = helper.consigneeAddress
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Consignee’s address".toText),
+                  value = Value(HtmlContent(Seq(address.line1, address.line2, address.postalCode, address.country).mkString("<br>"))),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = consigneeRoutes.AddressController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("consignee’s address"),
+                          attributes = Map()
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
   }
 }

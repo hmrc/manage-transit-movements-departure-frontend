@@ -19,8 +19,7 @@ package models.journeyDomain.traderDetails
 import cats.implicits._
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.{Address, EoriNumber}
-import pages.traderDetails.consignment.consignee.{EoriNumberPage, EoriYesNoPage}
-import pages.traderDetails.consignment.consignor.{AddressPage, NamePage}
+import pages.traderDetails.consignment.consignee.{AddressPage, EoriNumberPage, EoriYesNoPage, NamePage}
 
 case class ConsignmentConsigneeDomain(
   eori: Option[EoriNumber],

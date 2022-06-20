@@ -106,4 +106,20 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     id = None,
     call = consigneeRoutes.EoriNumberController.onPageLoad(lrn, mode)
   )
+
+  def consigneeName: Option[SummaryListRow] = getAnswerAndBuildRow[String](
+    page = consignee.NamePage,
+    formatAnswer = formatAsLiteral,
+    prefix = "traderDetails.consignment.consignee.name",
+    id = None,
+    call = consigneeRoutes.NameController.onPageLoad(lrn, mode)
+  )
+
+  def consigneeAddress: Option[SummaryListRow] = getAnswerAndBuildRow[Address](
+    page = consignee.AddressPage,
+    formatAnswer = formatAsAddress,
+    prefix = "traderDetails.consignment.consignee.address",
+    id = None,
+    call = consigneeRoutes.AddressController.onPageLoad(lrn, mode)
+  )
 }
