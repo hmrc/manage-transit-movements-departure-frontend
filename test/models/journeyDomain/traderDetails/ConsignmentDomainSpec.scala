@@ -19,24 +19,103 @@ package models.JourneyDomain.traderDetails
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
+import models.Address
+import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models.domain.{EitherType, UserAnswersReader}
-import models.journeyDomain.traderDetails.ConsignmentDomain
+import models.journeyDomain.traderDetails.{ConsignmentConsignorDomain, ConsignmentDomain}
+import models.reference.{Country, CountryCode}
+import org.scalacheck.Gen
+import pages.preTaskList.SecurityDetailsTypePage
 import pages.traderDetails.consignment._
 
 class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
   "ConsignmentDomain" - {
+    val consignorName    = Gen.alphaNumStr.sample.value
+    val consignorAddress = Address("line1", "line2", "postalCode", Country(CountryCode("GB"), "description"))
 
     "can be parsed from UserAnswers" - {
 
-      "when has all consignment fields complete" in {
+      "when has the minimum consignment fields complete" in {
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(ApprovedOperatorPage)(false)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
+          .unsafeSetVal(ApprovedOperatorPage)(true)
           .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
 
         val expectedResult = ConsignmentDomain(
           consignor = None,
+          consignee = None
+        )
+
+        val result: EitherType[ConsignmentDomain] = UserAnswersReader[ConsignmentDomain].run(userAnswers)
+
+        result.value mustBe expectedResult
+      }
+
+      "when the consignor fields are complete" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(SecurityDetailsTypePage)(EntrySummaryDeclarationSecurityDetails)
+          .unsafeSetVal(ApprovedOperatorPage)(true)
+          .unsafeSetVal(consignor.EoriYesNoPage)(false)
+          .unsafeSetVal(consignor.NamePage)(consignorName)
+          .unsafeSetVal(consignor.AddressPage)(consignorAddress)
+          .unsafeSetVal(consignor.AddContactPage)(false)
+          .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
+
+        val consignorDomain = ConsignmentConsignorDomain(
+          eori = None,
+          name = consignorName,
+          address = consignorAddress,
+          contact = None
+        )
+        val expectedResult = ConsignmentDomain(
+          consignor = Some(consignorDomain),
+          consignee = None
+        )
+
+        val result: EitherType[ConsignmentDomain] = UserAnswersReader[ConsignmentDomain].run(userAnswers)
+
+        result.value mustBe expectedResult
+      }
+
+      "when the consignor fields are populated but we don't want security details but have the ApprovedOperatorPage as Yes" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
+          .unsafeSetVal(ApprovedOperatorPage)(true)
+          .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
+
+        val expectedResult = ConsignmentDomain(
+          consignor = None,
+          consignee = None
+        )
+
+        val result: EitherType[ConsignmentDomain] = UserAnswersReader[ConsignmentDomain].run(userAnswers)
+
+        result.value mustBe expectedResult
+      }
+
+      "when the consignor fields are populated we do not want security details and have the ApprovedOperatorPage as No" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
+          .unsafeSetVal(ApprovedOperatorPage)(false)
+          .unsafeSetVal(consignor.EoriYesNoPage)(false)
+          .unsafeSetVal(consignor.NamePage)(consignorName)
+          .unsafeSetVal(consignor.AddressPage)(consignorAddress)
+          .unsafeSetVal(consignor.AddContactPage)(false)
+          .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
+
+        val consignorDomain = ConsignmentConsignorDomain(
+          eori = None,
+          name = consignorName,
+          address = consignorAddress,
+          contact = None
+        )
+        val expectedResult = ConsignmentDomain(
+          consignor = Some(consignorDomain),
           consignee = None
         )
 

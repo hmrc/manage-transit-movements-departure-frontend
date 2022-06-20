@@ -17,7 +17,9 @@
 package models.journeyDomain.traderDetails
 
 import cats.implicits._
+import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{GettableAsFilterForNextReaderOps, UserAnswersReader}
+import pages.preTaskList.SecurityDetailsTypePage
 import pages.traderDetails.consignment._
 
 case class ConsignmentDomain(
@@ -27,9 +29,12 @@ case class ConsignmentDomain(
 
 object ConsignmentDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[ConsignmentDomain] =
-    (
-      ApprovedOperatorPage.filterOptionalDependent(identity)(UserAnswersReader[ConsignmentConsignorDomain]),
-      consignee.MoreThanOneConsigneePage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsigneeDomain])
-    ).tupled.map((ConsignmentDomain.apply _).tupled)
+  implicit val userAnswersReader: UserAnswersReader[ConsignmentDomain] = {
+    for {
+      consignorApprovedDomain <- ApprovedOperatorPage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsignorDomain])
+      consignorSecurityDomain <- SecurityDetailsTypePage.filterOptionalDependent(_ != NoSecurityDetails)(UserAnswersReader[ConsignmentConsignorDomain])
+      consigneeDomain         <- consignee.MoreThanOneConsigneePage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsigneeDomain])
+    } yield ConsignmentDomain(consignorApprovedDomain orElse consignorSecurityDomain, consigneeDomain)
+
+  }
 }

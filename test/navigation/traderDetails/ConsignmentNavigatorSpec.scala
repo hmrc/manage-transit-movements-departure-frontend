@@ -249,11 +249,13 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
       "when answers complete" - {
 
         "must go from approved operator page" - {
-          "when No selected" - {
+          "when Yes selected" - {
             "to check Your Answers page" in {
               forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
                 answers =>
-                  val userAnswers = answers.setValue(ApprovedOperatorPage, false)
+                  val userAnswers = answers
+                    .setValue(ApprovedOperatorPage, true)
+                    .setValue(SecurityDetailsTypePage, NoSecurityDetails)
                   navigator
                     .nextPage(ApprovedOperatorPage, mode, userAnswers)
                     .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
@@ -261,13 +263,15 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             }
           }
 
-          "when Yes selected" - {
+          "when No selected" - {
             "to consignor eori page" in {
-              forAll(arbitraryTraderDetailsConsignmentAnswersWithoutConsignorOrConsignee) {
+              forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
                 answers =>
                   val userAnswers = answers
-                    .setValue(ApprovedOperatorPage, true)
-                    .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
+                    .setValue(ApprovedOperatorPage, false)
+                    .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+                    .removeValue(consignor.EoriYesNoPage)
+
                   navigator
                     .nextPage(ApprovedOperatorPage, mode, userAnswers)
                     .mustBe(consignorRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode))
@@ -476,11 +480,13 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
       val mode = CheckMode
 
       "must go from approved operator page" - {
-        "when No selected" - {
+        "when Yes selected" - {
           "to check Your Answers page" in {
             forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
               answers =>
-                val userAnswers = answers.setValue(ApprovedOperatorPage, false)
+                val userAnswers = answers
+                  .setValue(ApprovedOperatorPage, true)
+                  .setValue(SecurityDetailsTypePage, NoSecurityDetails)
                 navigator
                   .nextPage(ApprovedOperatorPage, mode, userAnswers)
                   .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
@@ -488,13 +494,13 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           }
         }
 
-        "when Yes selected" - {
+        "when No selected" - {
           "to consignor eori page" in {
             forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
               answers =>
                 val userAnswers = answers
-                  .setValue(ApprovedOperatorPage, true)
-                  .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
+                  .setValue(ApprovedOperatorPage, false)
+                  .setValue(SecurityDetailsTypePage, NoSecurityDetails)
                   .removeValue(consignor.EoriYesNoPage)
 
                 navigator
