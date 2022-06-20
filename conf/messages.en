@@ -386,3 +386,11 @@ traderDetails.consignment.consignee.eoriNumber.error.invalidCharacters = The con
 traderDetails.consignment.consignee.eoriNumber.error.invalidFormat = The consignee’s EORI number must start with 2 letters, such as GB or XI, followed by up to 15 numbers
 traderDetails.consignment.consignee.eoriNumber.error.prefix = The consignee’s EORI number must start with 2 letters, such as GB or XI
 traderDetails.consignment.consignee.eoriNumber.change.hidden = consignee’s EORI number
+
+traderDetails.consignment.consignee.name.title = What is the consignee’s name?
+traderDetails.consignment.consignee.name.heading = What is the consignee’s name?
+traderDetails.consignment.consignee.name.checkYourAnswersLabel = Consignee’s name
+traderDetails.consignment.consignee.name.error.required = Enter the consignee’s name
+traderDetails.consignment.consignee.name.error.length = The consignee’s name must be 70 characters or less
+traderDetails.consignment.consignee.name.error.invalid = The consignee’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+traderDetails.consignment.consignee.name.change.hidden = consignee’s name
