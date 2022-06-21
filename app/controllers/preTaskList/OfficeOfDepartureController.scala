@@ -82,7 +82,7 @@ class OfficeOfDepartureController @Inject() (
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
-                value => OfficeOfDeparturePage.writeToUserAnswers(value).writeToSession().navigate(mode)
+                value => OfficeOfDeparturePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
               )
         }
     }

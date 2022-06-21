@@ -61,7 +61,7 @@ class NameController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => NamePage.writeToUserAnswers(value).writeToSession().navigate(mode)
+          value => NamePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

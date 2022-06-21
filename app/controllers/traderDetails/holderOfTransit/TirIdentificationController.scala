@@ -61,7 +61,7 @@ class TirIdentificationController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => TirIdentificationPage.writeToUserAnswers(value).writeToSession().navigate(mode)
+          value => TirIdentificationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

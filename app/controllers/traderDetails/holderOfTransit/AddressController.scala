@@ -83,7 +83,7 @@ class AddressController @Inject() (
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countryList.countries, name))),
-                value => AddressPage.writeToUserAnswers(value).writeToSession().navigate(mode)
+                value => AddressPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
               )
         }
     }

@@ -62,7 +62,7 @@ class ActingAsRepresentativeController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => ActingAsRepresentativePage.writeToUserAnswers(value).writeToSession().navigate(mode)
+          value => ActingAsRepresentativePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

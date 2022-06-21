@@ -62,7 +62,7 @@ class EoriYesNoController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => EoriYesNoPage.writeToUserAnswers(value).writeToSession().navigate(mode)
+          value => EoriYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

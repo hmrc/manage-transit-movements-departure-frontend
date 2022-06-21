@@ -61,7 +61,7 @@ class TelephoneNumberController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => TelephoneNumberPage.writeToUserAnswers(value).writeToSession().navigate(mode)
+          value => TelephoneNumberPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

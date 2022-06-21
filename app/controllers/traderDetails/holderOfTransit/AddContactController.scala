@@ -63,7 +63,7 @@ class AddContactController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => AddContactPage.writeToUserAnswers(value).writeToSession().navigate(mode)
+          value => AddContactPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

@@ -61,7 +61,7 @@ class EoriController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => EoriPage.writeToUserAnswers(value).writeToSession().navigate(mode)
+          value => EoriPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

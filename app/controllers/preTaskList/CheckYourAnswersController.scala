@@ -59,7 +59,7 @@ class CheckYourAnswersController @Inject() (
         DetailsConfirmedPage
           .writeToUserAnswers(true)
           .writeToSession()
-          .navigate(controllers.routes.TaskListController.onPageLoad(lrn))
+          .navigateTo(controllers.routes.TaskListController.onPageLoad(lrn))
     }
 
 }

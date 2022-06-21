@@ -69,7 +69,7 @@ class SecurityDetailsTypeController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, SecurityDetailsType.radioItems, lrn, mode))),
-            value => SecurityDetailsTypePage.writeToUserAnswers(value).writeToSession().navigate(mode)
+            value => SecurityDetailsTypePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
           )
     }
 }

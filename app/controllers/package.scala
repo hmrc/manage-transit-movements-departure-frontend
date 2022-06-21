@@ -77,12 +77,12 @@ package object controllers {
 
   implicit class NavigatorOps[A](write: Future[Write[A]]) {
 
-    def navigate(mode: Mode)(implicit navigator: Navigator, executionContext: ExecutionContext): Future[Result] =
+    def navigateWith(mode: Mode)(implicit navigator: Navigator, executionContext: ExecutionContext): Future[Result] =
       navigate {
         result => navigator.nextPage(result._1, mode, result._2)
       }
 
-    def navigate(call: Call)(implicit executionContext: ExecutionContext): Future[Result] =
+    def navigateTo(call: Call)(implicit executionContext: ExecutionContext): Future[Result] =
       navigate {
         _ => call
       }

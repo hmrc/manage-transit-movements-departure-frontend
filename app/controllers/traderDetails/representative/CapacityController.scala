@@ -63,7 +63,7 @@ class CapacityController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, RepresentativeCapacity.radioItems, mode))),
-          value => CapacityPage.writeToUserAnswers(value).writeToSession().navigate(mode)
+          value => CapacityPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

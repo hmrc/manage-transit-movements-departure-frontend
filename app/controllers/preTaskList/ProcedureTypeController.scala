@@ -69,7 +69,7 @@ class ProcedureTypeController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, ProcedureType.radioItems, lrn, mode))),
-            value => ProcedureTypePage.writeToUserAnswers(value).writeToSession().navigate(mode)
+            value => ProcedureTypePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
           )
     }
 }
