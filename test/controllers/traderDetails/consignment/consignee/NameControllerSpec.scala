@@ -16,19 +16,19 @@
 
 package controllers.traderDetails.consignment.consignee
 
+import base.{AppWithDefaultMockFixtures, SpecBase}
+import forms.NameFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.TraderDetailsConsignment
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.when
+import pages.traderDetails.consignment.consignee.NamePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.NameFormProvider
 import views.html.traderDetails.consignment.consignee.NameView
-import pages.traderDetails.consignment.consignee.NamePage
-import base.{AppWithDefaultMockFixtures, SpecBase}
 
 import scala.concurrent.Future
 

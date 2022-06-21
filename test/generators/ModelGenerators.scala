@@ -90,7 +90,7 @@ trait ModelGenerators {
     }
   }
 
-  implicit lazy val arbitraryTraderAddress: Arbitrary[Address] =
+  implicit lazy val arbitraryAddress: Arbitrary[Address] =
     Arbitrary {
       for {
         addressLine1 <- stringsWithMaxLength(AddressLine1.length, Gen.alphaChar)

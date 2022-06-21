@@ -35,10 +35,10 @@ import scala.concurrent.Future
 
 class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
-  private val formProvider                = new EoriNumberFormProvider()
-  private val form                        = formProvider("traderDetails.consignment.consignor.eori")
-  private val mode                        = NormalMode
-  private lazy val transitHolderEoriRoute = routes.EoriController.onPageLoad(lrn, mode).url
+  private val formProvider            = new EoriNumberFormProvider()
+  private val form                    = formProvider("traderDetails.consignment.consignor.eori")
+  private val mode                    = NormalMode
+  private lazy val consignorEoriRoute = routes.EoriController.onPageLoad(lrn, mode).url
 
   private lazy val validAnswer = eoriNumber.value
 
@@ -53,7 +53,7 @@ class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with M
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, transitHolderEoriRoute)
+      val request = FakeRequest(GET, consignorEoriRoute)
       val result  = route(app, request).value
 
       val view = injector.instanceOf[EoriView]
@@ -70,7 +70,7 @@ class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with M
       val userAnswers = UserAnswers(lrn, eoriNumber).set(EoriPage, validAnswer).success.value
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, transitHolderEoriRoute)
+      val request = FakeRequest(GET, consignorEoriRoute)
 
       val result = route(app, request).value
 
@@ -91,7 +91,7 @@ class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with M
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, transitHolderEoriRoute)
+      val request = FakeRequest(POST, consignorEoriRoute)
         .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
@@ -106,7 +106,7 @@ class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with M
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, transitHolderEoriRoute).withFormUrlEncodedBody(("value", ""))
+      val request   = FakeRequest(POST, consignorEoriRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
@@ -124,7 +124,7 @@ class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with M
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, transitHolderEoriRoute)
+      val request = FakeRequest(GET, consignorEoriRoute)
 
       val result = route(app, request).value
 
@@ -138,7 +138,7 @@ class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with M
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, transitHolderEoriRoute)
+      val request = FakeRequest(POST, consignorEoriRoute)
         .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value

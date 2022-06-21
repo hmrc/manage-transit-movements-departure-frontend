@@ -35,10 +35,10 @@ import scala.concurrent.Future
 
 class EoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
-  private val formProvider                     = new YesNoFormProvider()
-  private val form                             = formProvider("traderDetails.consignment.consignor.eoriYesNo")
-  private val mode                             = NormalMode
-  private lazy val transitHolderEoriYesNoRoute = routes.EoriYesNoController.onPageLoad(lrn, mode).url
+  private val formProvider                 = new YesNoFormProvider()
+  private val form                         = formProvider("traderDetails.consignment.consignor.eoriYesNo")
+  private val mode                         = NormalMode
+  private lazy val consignorEoriYesNoRoute = routes.EoriYesNoController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -51,7 +51,7 @@ class EoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures w
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, transitHolderEoriYesNoRoute)
+      val request = FakeRequest(GET, consignorEoriYesNoRoute)
       val result  = route(app, request).value
 
       val view = injector.instanceOf[EoriYesNoView]
@@ -68,7 +68,7 @@ class EoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures w
       val userAnswers = UserAnswers(lrn, eoriNumber).set(EoriYesNoPage, true).success.value
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, transitHolderEoriYesNoRoute)
+      val request = FakeRequest(GET, consignorEoriYesNoRoute)
 
       val result = route(app, request).value
 
@@ -90,7 +90,7 @@ class EoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures w
       setExistingUserAnswers(emptyUserAnswers)
 
       val request =
-        FakeRequest(POST, transitHolderEoriYesNoRoute)
+        FakeRequest(POST, consignorEoriYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
@@ -105,7 +105,7 @@ class EoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures w
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, transitHolderEoriYesNoRoute).withFormUrlEncodedBody(("value", ""))
+      val request   = FakeRequest(POST, consignorEoriYesNoRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
@@ -123,7 +123,7 @@ class EoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures w
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, transitHolderEoriYesNoRoute)
+      val request = FakeRequest(GET, consignorEoriYesNoRoute)
 
       val result = route(app, request).value
 
@@ -138,7 +138,7 @@ class EoriYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures w
       setNoExistingUserAnswers()
 
       val request =
-        FakeRequest(POST, transitHolderEoriYesNoRoute)
+        FakeRequest(POST, consignorEoriYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value

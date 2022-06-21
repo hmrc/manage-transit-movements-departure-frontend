@@ -17,19 +17,19 @@
 package navigation.traderDetails
 
 import models._
-import models.journeyDomain.traderDetails.RepresentativeDomain
+import models.journeyDomain.traderDetails.ConsignmentDomain
 import pages.traderDetails.consignment._
+import controllers.traderDetails.consignment.{routes => consignmentRoutes}
 import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
 import controllers.traderDetails.consignment.consignor.contact.{routes => contactRoutes}
 import controllers.traderDetails.consignment.consignee.{routes => consigneeRoutes}
 import models.SecurityDetailsType.NoSecurityDetails
 import pages.preTaskList.SecurityDetailsTypePage
 import play.api.mvc.Call
-
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[RepresentativeDomain] {
+class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[ConsignmentDomain] {
 
   override def routes(mode: Mode): RouteMapping = {
     case ApprovedOperatorPage                  => ua => approvedOperatorYesNoRoute(ua, mode)
@@ -44,7 +44,7 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Represent
     case consignee.EoriYesNoPage               => ua => consigneeEoriYesNoRoute(ua, mode)
     case consignee.EoriNumberPage              => ua => Some(consigneeRoutes.NameController.onPageLoad(ua.lrn, mode))
     case consignee.NamePage                    => ua => Some(consigneeRoutes.AddressController.onPageLoad(ua.lrn, mode))
-    case consignee.AddressPage                 => ua => ??? //todo -to Consignment Check your answers page once built
+    case consignee.AddressPage                 => ua => Some(checkYourAnswersRoute(ua))
   }
 
   private def approvedOperatorYesNoRoute(ua: UserAnswers, mode: Mode): Option[Call] =
@@ -70,7 +70,7 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Represent
 
   private def moreThanOneConsigneeRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     yesNoRoute(userAnswers, consignee.MoreThanOneConsigneePage)(
-      yesCall = consigneeRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode) //TODO change this to check your answers when built
+      yesCall = checkYourAnswersRoute(userAnswers)
     )(
       noCall = consigneeRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode)
     )
@@ -83,5 +83,5 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Represent
     )
 
   override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
-    ??? //todo update when new pages built consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+    consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
 }

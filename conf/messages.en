@@ -329,12 +329,12 @@ traderDetails.consignment.consignor.address.postalCode = Postal code
 traderDetails.consignment.consignor.address.country = Country
 traderDetails.consignment.consignor.address.checkYourAnswersLabel = Consignor’s address
 traderDetails.consignment.consignor.address.change.hidden = consignor’s address
-traderDetails.consignment.consignor.address.error.postalCode.invalid = The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
-traderDetails.consignment.consignor.address.error.postalCode.required = Enter the postal code for {0}’s address
-traderDetails.consignment.consignor.address.error.country.required = Enter the country for {0}’s address
-traderDetails.consignment.consignor.address.error.invalid = The {0} for {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-traderDetails.consignment.consignor.address.error.required = Enter {0} for {1}’s address
-traderDetails.consignment.consignor.address.error.length = The {0} for {1}’s address must be {2} characters or less
+traderDetails.consignment.consignor.address.error.postalCode.invalid = The postal code of {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
+traderDetails.consignment.consignor.address.error.postalCode.required = Enter the postal code of {0}’s address
+traderDetails.consignment.consignor.address.error.country.required = Enter the country of {0}’s address
+traderDetails.consignment.consignor.address.error.invalid = {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+traderDetails.consignment.consignor.address.error.required = Enter {0} of {1}’s address
+traderDetails.consignment.consignor.address.error.length = {0} of {1}’s address must be {2} characters or less
 traderDetails.consignment.consignor.address.placeholder = Select a country
 
 # Trader Details - Consignor - Contact
@@ -361,13 +361,14 @@ traderDetails.consignment.consignor.contact.telephoneNumber.error.maxLength = {0
 traderDetails.consignment.consignor.contact.telephoneNumber.error.minLength = {0}’s phone number must be {1} characters or more
 traderDetails.consignment.consignor.contact.telephoneNumber.error.invalidCharacter = {0}’s phone number must only include numbers 0 to 9 and a plus sign
 traderDetails.consignment.consignor.contact.telephoneNumber.error.invalidFormat = Enter {0}’s phone number in the right format
-traderDetails.consignment.consignor.contact.telephoneNumber.change.hidden = contact’s phone number
+traderDetails.consignment.consignor.contact.telephoneNumber.change.hidden = consignor’s contact phone number
 
 # Trader Details - Consignee
 traderDetails.consignment.consignee.moreThanOneConsignee.title = Is there more than one consignee?
 traderDetails.consignment.consignee.moreThanOneConsignee.heading = Is there more than one consignee?
 traderDetails.consignment.consignee.moreThanOneConsignee.checkYourAnswersLabel = Is there more than one consignee?
 traderDetails.consignment.consignee.moreThanOneConsignee.error.required = Select yes if there is more than one consignee
+traderDetails.consignment.consignee.moreThanOneConsignee.change.hidden = if there is more than one consignee
 
 traderDetails.consignment.consignee.eoriYesNo.title = Do you know the consignee’s EORI number?
 traderDetails.consignment.consignee.eoriYesNo.heading = Do you know the consignee’s EORI number?
@@ -411,3 +412,11 @@ traderDetails.consignment.consignee.address.error.postalCode.required = Enter th
 traderDetails.consignment.consignee.address.error.country.required = Enter the country for {0}’s address
 traderDetails.consignment.consignee.address.error.length = The {0} of {1}’s address must be 35 characters or less
 traderDetails.consignment.consignee.address.placeholder = Select a country
+
+# Trader Details - Check Your Answers
+traderDetails.consignment.checkYourAnswers.heading = Check your answers
+traderDetails.consignment.checkYourAnswers.title = Check your answers
+traderDetails.consignment.checkYourAnswers.consignor = Consignor
+traderDetails.consignment.checkYourAnswers.consignorContact = Consignor contact
+traderDetails.consignment.checkYourAnswers.consignee = Consignee
+

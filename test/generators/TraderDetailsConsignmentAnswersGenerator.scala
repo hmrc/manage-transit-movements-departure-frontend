@@ -16,16 +16,18 @@
 
 package generators
 
-import models.UserAnswers
+import models.{SecurityDetailsType, UserAnswers}
 import org.scalacheck.{Arbitrary, Gen}
+import pages.preTaskList.SecurityDetailsTypePage
 import pages.traderDetails.consignment._
-import play.api.libs.json.JsBoolean
+import play.api.libs.json.{JsBoolean, Json}
 
 trait TraderDetailsConsignmentAnswersGenerator extends UserAnswersGenerator {
   self: Generators =>
 
-  lazy val arbitraryTraderDetailsConsignmentAnswersWithConsignor: Gen[UserAnswers] = arbitraryUserAnswers(
-    arbitraryTraderdetailsConsignmentApprovedOperatorUserAnswersEntry.arbitrary ::
+  lazy val arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee: Gen[UserAnswers] = arbitraryUserAnswers(
+    Arbitrary((SecurityDetailsTypePage, Json.toJson[SecurityDetailsType](SecurityDetailsType.EntrySummaryDeclarationSecurityDetails))).arbitrary ::
+      Arbitrary((ApprovedOperatorPage, JsBoolean(false))).arbitrary ::
       Arbitrary((consignor.EoriYesNoPage, JsBoolean(true))).arbitrary ::
       arbitraryTraderDetailsConsignmentConsignorEoriUserAnswersEntry.arbitrary ::
       arbitraryTraderDetailsConsignmentConsignorNameUserAnswersEntry.arbitrary ::
@@ -33,36 +35,53 @@ trait TraderDetailsConsignmentAnswersGenerator extends UserAnswersGenerator {
       Arbitrary((consignor.AddContactPage, JsBoolean(true))).arbitrary ::
       arbitraryTraderDetailsConsignmentConsignorContactNameUserAnswersEntry.arbitrary ::
       arbitraryTraderDetailsConsignmentConsignorContactTelephoneNumberUserAnswersEntry.arbitrary ::
+      Arbitrary((consignee.MoreThanOneConsigneePage, JsBoolean(false))).arbitrary ::
+      Arbitrary((consignee.EoriYesNoPage, JsBoolean(true))).arbitrary ::
+      arbitraryTraderDetailsConsignmentConsigneeEoriNumberUserAnswersEntry.arbitrary ::
+      arbitraryTraderdetailsConsignmentConsigneeNameUserAnswersEntry.arbitrary ::
+      arbitraryTraderdetailsConsignmentConsigneeAddressUserAnswersEntry.arbitrary ::
       Nil
   )
 
-  lazy val arbitraryTraderDetailsConsignmentAnswersWithoutConsignor: Gen[UserAnswers] = arbitraryUserAnswers(
-    arbitraryTraderdetailsConsignmentApprovedOperatorUserAnswersEntry.arbitrary ::
+  lazy val arbitraryTraderDetailsConsignmentAnswersWithoutConsignorOrConsignee: Gen[UserAnswers] = arbitraryUserAnswers(
+    Arbitrary((SecurityDetailsTypePage, Json.toJson[SecurityDetailsType](SecurityDetailsType.NoSecurityDetails))).arbitrary ::
+      Arbitrary((ApprovedOperatorPage, JsBoolean(true))).arbitrary ::
+      Arbitrary((consignee.MoreThanOneConsigneePage, JsBoolean(true))).arbitrary ::
       Nil
   )
 
-  lazy val arbitraryTraderDetailsConsignmentAnswersWithoutConsignorEori: Gen[UserAnswers] = arbitraryUserAnswers(
-    arbitraryTraderdetailsConsignmentApprovedOperatorUserAnswersEntry.arbitrary ::
+  lazy val arbitraryTraderDetailsConsignmentAnswersWithoutEoris: Gen[UserAnswers] = arbitraryUserAnswers(
+    Arbitrary((SecurityDetailsTypePage, Json.toJson[SecurityDetailsType](SecurityDetailsType.EntrySummaryDeclarationSecurityDetails))).arbitrary ::
+      Arbitrary((ApprovedOperatorPage, JsBoolean(false))).arbitrary ::
       Arbitrary((consignor.EoriYesNoPage, JsBoolean(false))).arbitrary ::
       arbitraryTraderDetailsConsignmentConsignorNameUserAnswersEntry.arbitrary ::
       arbitraryTraderDetailsConsignmentConsignorAddressUserAnswersEntry.arbitrary ::
+      Arbitrary((consignor.AddContactPage, JsBoolean(true))).arbitrary ::
+      arbitraryTraderDetailsConsignmentConsignorContactNameUserAnswersEntry.arbitrary ::
+      arbitraryTraderDetailsConsignmentConsignorContactTelephoneNumberUserAnswersEntry.arbitrary ::
+      Arbitrary((consignee.MoreThanOneConsigneePage, JsBoolean(false))).arbitrary ::
+      Arbitrary((consignee.EoriYesNoPage, JsBoolean(false))).arbitrary ::
+      arbitraryTraderdetailsConsignmentConsigneeNameUserAnswersEntry.arbitrary ::
+      arbitraryTraderdetailsConsignmentConsigneeAddressUserAnswersEntry.arbitrary ::
       Nil
   )
 
   lazy val arbitraryTraderDetailsConsignmentAnswersWithConsignorWithoutContact: Gen[UserAnswers] = arbitraryUserAnswers(
-    arbitraryTraderdetailsConsignmentApprovedOperatorUserAnswersEntry.arbitrary ::
+    Arbitrary((SecurityDetailsTypePage, Json.toJson[SecurityDetailsType](SecurityDetailsType.EntrySummaryDeclarationSecurityDetails))).arbitrary ::
+      Arbitrary((ApprovedOperatorPage, JsBoolean(false))).arbitrary ::
       Arbitrary((consignor.EoriYesNoPage, JsBoolean(true))).arbitrary ::
       arbitraryTraderDetailsConsignmentConsignorEoriUserAnswersEntry.arbitrary ::
       arbitraryTraderDetailsConsignmentConsignorNameUserAnswersEntry.arbitrary ::
       arbitraryTraderDetailsConsignmentConsignorAddressUserAnswersEntry.arbitrary ::
       Arbitrary((consignor.AddContactPage, JsBoolean(false))).arbitrary ::
+      Arbitrary((consignee.MoreThanOneConsigneePage, JsBoolean(true))).arbitrary ::
       Nil
   )
 
   lazy val arbitraryTraderDetailsConsignmentAnswers: Gen[UserAnswers] = Gen.oneOf(
-    arbitraryTraderDetailsConsignmentAnswersWithConsignor,
-    arbitraryTraderDetailsConsignmentAnswersWithoutConsignor,
-    arbitraryTraderDetailsConsignmentAnswersWithoutConsignorEori,
+    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee,
+    arbitraryTraderDetailsConsignmentAnswersWithoutConsignorOrConsignee,
+    arbitraryTraderDetailsConsignmentAnswersWithoutEoris,
     arbitraryTraderDetailsConsignmentAnswersWithConsignorWithoutContact
   )
 }

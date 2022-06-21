@@ -18,9 +18,11 @@ package navigation.traderDetails
 
 import base.SpecBase
 import controllers.routes
+import controllers.traderDetails.{routes => tdRoutes}
 import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
 import controllers.traderDetails.consignment.consignor.contact.{routes => contactRoutes}
 import controllers.traderDetails.consignment.consignee.{routes => consigneeRoutes}
+import controllers.traderDetails.consignment.{routes => consignmentRoutes}
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models._
@@ -185,11 +187,11 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
         "must go from more than one consignee page" - {
           "when yes selected" - {
-            "to check your answers page" ignore {
+            "to check your answers page" in {
               val userAnswers = emptyUserAnswers.setValue(consignee.MoreThanOneConsigneePage, true)
               navigator
                 .nextPage(consignee.MoreThanOneConsigneePage, mode, userAnswers)
-                .mustBe(???) //TODO change to check your answers when built
+                .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
             }
           }
 
@@ -237,36 +239,39 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             .mustBe(consigneeRoutes.AddressController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
 
-        "must go from Consignee address page to Consignment Check Your Answers page page" ignore {
+        "must go from Consignee address page to Consignment Check Your Answers page page" in {
           navigator
-            .nextPage(consignor.AddressPage, mode, emptyUserAnswers)
-            .mustBe(consignorRoutes.AddContactController.onPageLoad(emptyUserAnswers.lrn, mode)) //todo change to cya page when built
+            .nextPage(consignee.AddressPage, mode, emptyUserAnswers)
+            .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn))
         }
-
       }
 
       "when answers complete" - {
 
         "must go from approved operator page" - {
-          "when No selected" - {
-            "to check Your Answers page" ignore {
-              forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignor) {
+          "when Yes selected" - {
+            "to check Your Answers page" in {
+              forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
                 answers =>
-                  val userAnswers = answers.setValue(ApprovedOperatorPage, false)
+                  val userAnswers = answers
+                    .setValue(ApprovedOperatorPage, true)
+                    .setValue(SecurityDetailsTypePage, NoSecurityDetails)
                   navigator
                     .nextPage(ApprovedOperatorPage, mode, userAnswers)
-                    .mustBe(???) //TODO CheckYourAnswers Here
+                    .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
               }
             }
           }
 
-          "when Yes selected" - {
+          "when No selected" - {
             "to consignor eori page" in {
-              forAll(arbitraryTraderDetailsConsignmentAnswersWithoutConsignor) {
+              forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
                 answers =>
                   val userAnswers = answers
-                    .setValue(ApprovedOperatorPage, true)
-                    .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
+                    .setValue(ApprovedOperatorPage, false)
+                    .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+                    .removeValue(consignor.EoriYesNoPage)
+
                   navigator
                     .nextPage(ApprovedOperatorPage, mode, userAnswers)
                     .mustBe(consignorRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode))
@@ -275,68 +280,79 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           }
         }
 
-        "must go from is consignor eori known page" - {
-          "when No selected" - {
-            "to check Your Answers page" ignore {
-              forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignor) {
-                answers =>
-                  val userAnswers = answers.setValue(consignor.EoriYesNoPage, false)
-                  navigator
-                    .nextPage(consignor.EoriYesNoPage, mode, userAnswers)
-                    .mustBe(???) //TODO CheckYourAnswers Here
-              }
+        "must go from more than one consignor EoriYesNo page " - {
+          "to check your answers page when no is selected" in {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+              answers =>
+                val userAnswers = answers.setValue(consignor.EoriYesNoPage, false)
+                navigator
+                  .nextPage(consignor.EoriYesNoPage, mode, userAnswers)
+                  .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
             }
           }
 
-          "when Yes selected" - {
-            "to consignor eori page" in {
-              forAll(arbitraryTraderDetailsConsignmentAnswersWithoutConsignorEori) {
-                answers =>
-                  val userAnswers = answers.setValue(consignor.EoriYesNoPage, true)
-                  navigator
-                    .nextPage(consignor.EoriYesNoPage, mode, userAnswers)
-                    .mustBe(consignorRoutes.EoriController.onPageLoad(userAnswers.lrn, mode))
-              }
+          "to Consignee Eori page when yes is selected" in {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+              answers =>
+                val userAnswers = answers
+                  .setValue(consignor.EoriYesNoPage, true)
+                  .removeValue(consignor.EoriPage)
+
+                navigator
+                  .nextPage(consignor.EoriYesNoPage, mode, userAnswers)
+                  .mustBe(consignorRoutes.EoriController.onPageLoad(userAnswers.lrn, mode))
             }
           }
         }
 
-        "must go from consignor name page to check your answers page" ignore {
-          forAll(arbitraryTraderDetailsConsignmentAnswers) {
+        "must go from consignor eori page to check your answers page" in {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+            answers =>
+              navigator
+                .nextPage(consignor.EoriPage, mode, answers)
+                .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+          }
+        }
+
+        "must go from consignor name page to check your answers page" in {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
             answers =>
               navigator
                 .nextPage(consignor.NamePage, mode, answers)
-                .mustBe(???) //TODO CheckYourAnswers
+                .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
 
-        "must go from consignor address page to check your answers page" ignore {
-          forAll(arbitraryTraderDetailsConsignmentAnswers) {
+        "must go from consignor address page to check your answers page" in {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
             answers =>
               navigator
                 .nextPage(consignor.AddressPage, mode, answers)
-                .mustBe(???) //TODO CheckYourAnswers
+                .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
 
         "must go from add contact page" - {
           "when No selected" - {
-            "to check your answers page" ignore {
-              forAll(arbitraryTraderDetailsConsignmentAnswers) {
+            "to check your answers page" in {
+              forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
                 answers =>
                   val userAnswers = answers.setValue(consignor.AddContactPage, false)
                   navigator
                     .nextPage(consignor.AddContactPage, mode, userAnswers)
-                    .mustBe(???) //TODO CheckYourAnswers
+                    .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
               }
             }
           }
 
           "when Yes selected" - {
             "to contact name page" in {
-              forAll(arbitraryTraderDetailsConsignmentAnswers) {
+              forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
                 answers =>
-                  val userAnswers = answers.setValue(consignor.AddContactPage, true)
+                  val userAnswers = answers
+                    .setValue(consignor.AddContactPage, true)
+                    .removeValue(consignor.contact.NamePage)
+                    .removeValue(consignor.contact.TelephoneNumberPage)
                   navigator
                     .nextPage(consignor.AddContactPage, mode, userAnswers)
                     .mustBe(contactRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
@@ -347,19 +363,19 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
         "must go from contact name page" - {
           "when telephone number exists" - {
-            "to check your answers page" ignore {
-              forAll(arbitraryHolderOfTransitAnswersWithAdditionalContact) {
+            "to check your answers page" in {
+              forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
                 answers =>
                   navigator
                     .nextPage(consignor.contact.NamePage, mode, answers)
-                    .mustBe(???) //TODO CheckYourAnswers
+                    .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
               }
             }
           }
 
           "when no telephone number exists" - {
             "to contact telephone number page" in {
-              forAll(arbitraryHolderOfTransitAnswersWithAdditionalContact) {
+              forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
                 answers =>
                   val userAnswers = answers.removeValue(consignor.contact.TelephoneNumberPage)
                   navigator
@@ -370,12 +386,90 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           }
         }
 
-        "must go from contact telephone number page to check your answers page" ignore {
-          forAll(arbitraryHolderOfTransitAnswersWithAdditionalContact) {
+        "must go from contact telephone number page to check your answers page" in {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
             answers =>
               navigator
                 .nextPage(consignor.contact.TelephoneNumberPage, mode, answers)
-                .mustBe(???) //TODO CheckYourAnswers
+                .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+          }
+        }
+
+        "must go from more than one consignee page " - {
+          "to check your answers page when yes is selected" in {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+              answers =>
+                val userAnswers = answers.setValue(consignee.MoreThanOneConsigneePage, true)
+                navigator
+                  .nextPage(consignee.MoreThanOneConsigneePage, mode, userAnswers)
+                  .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+            }
+          }
+
+          "to Consignee EoriYesNo page when no is selected and we have no Consignee Data" in {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+              answers =>
+                val userAnswers = answers
+                  .setValue(consignee.MoreThanOneConsigneePage, false)
+                  .removeValue(consignee.EoriYesNoPage)
+                  .removeValue(consignee.EoriNumberPage)
+
+                navigator
+                  .nextPage(consignee.MoreThanOneConsigneePage, mode, userAnswers)
+                  .mustBe(consigneeRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode))
+            }
+          }
+        }
+
+        "must go from more than one consignee EoriYesNo page " - {
+          "to check your answers page when no is selected" in {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+              answers =>
+                val userAnswers = answers.setValue(consignee.EoriYesNoPage, false)
+                navigator
+                  .nextPage(consignee.EoriYesNoPage, mode, userAnswers)
+                  .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+            }
+          }
+
+          "to Consignee Eori page when yes is selected" in {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+              answers =>
+                val userAnswers = answers
+                  .setValue(consignee.EoriYesNoPage, true)
+                  .removeValue(consignee.EoriNumberPage)
+
+                navigator
+                  .nextPage(consignee.EoriYesNoPage, mode, userAnswers)
+                  .mustBe(consigneeRoutes.EoriNumberController.onPageLoad(userAnswers.lrn, mode))
+            }
+          }
+        }
+
+        "must go from consignee eori page to check your answers page" in {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+            answers =>
+              navigator
+                .nextPage(consignee.EoriNumberPage, mode, answers)
+                .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+          }
+        }
+
+        "must go from consignee name page to check your answers page" in {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+            answers =>
+              navigator
+                .nextPage(consignee.NamePage, mode, answers)
+                .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+          }
+        }
+
+        "must go from consignee address page to check your answers page" in {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+            answers =>
+              navigator
+                .nextPage(consignee.AddressPage, mode, answers)
+                .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
       }
@@ -385,26 +479,30 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       val mode = CheckMode
 
-      "must go from change approved operator page" - {
-        "when No selected" - {
-          "to check your answers page" ignore {
-            forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignor) {
+      "must go from approved operator page" - {
+        "when Yes selected" - {
+          "to check Your Answers page" in {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
               answers =>
-                val userAnswers = answers.setValue(ApprovedOperatorPage, false)
+                val userAnswers = answers
+                  .setValue(ApprovedOperatorPage, true)
+                  .setValue(SecurityDetailsTypePage, NoSecurityDetails)
                 navigator
                   .nextPage(ApprovedOperatorPage, mode, userAnswers)
-                  .mustBe(???) //TODO CheckYourAnswers
+                  .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
             }
           }
         }
 
-        "when Yes selected" - {
-          "to consignor eori yes no page" in {
-            forAll(arbitraryTraderDetailsConsignmentAnswersWithoutConsignor) {
+        "when No selected" - {
+          "to consignor eori page" in {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
               answers =>
                 val userAnswers = answers
-                  .setValue(ApprovedOperatorPage, true)
-                  .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
+                  .setValue(ApprovedOperatorPage, false)
+                  .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+                  .removeValue(consignor.EoriYesNoPage)
+
                 navigator
                   .nextPage(ApprovedOperatorPage, mode, userAnswers)
                   .mustBe(consignorRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode))
@@ -413,68 +511,79 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
       }
 
-      "must go from change is consignor eori known page" - {
-        "when No selected" - {
-          "to check your answers page" ignore {
-            forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignor) {
-              answers =>
-                val userAnswers = answers.setValue(consignor.EoriYesNoPage, false)
-                navigator
-                  .nextPage(consignor.EoriYesNoPage, mode, userAnswers)
-                  .mustBe(???) //TODO Check Your Answers Page
-            }
+      "must go from more than one consignor EoriYesNo page " - {
+        "to check your answers page when no is selected" in {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+            answers =>
+              val userAnswers = answers.setValue(consignor.EoriYesNoPage, false)
+              navigator
+                .nextPage(consignor.EoriYesNoPage, mode, userAnswers)
+                .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
           }
         }
 
-        "when Yes selected" - {
-          "to consignor eori page" in {
-            forAll(arbitraryTraderDetailsConsignmentAnswersWithoutConsignorEori) {
-              answers =>
-                val userAnswers = answers.setValue(consignor.EoriYesNoPage, true)
-                navigator
-                  .nextPage(consignor.EoriYesNoPage, mode, userAnswers)
-                  .mustBe(consignorRoutes.EoriController.onPageLoad(userAnswers.lrn, mode))
-            }
+        "to Consignee Eori page when yes is selected" in {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+            answers =>
+              val userAnswers = answers
+                .setValue(consignor.EoriYesNoPage, true)
+                .removeValue(consignor.EoriPage)
+
+              navigator
+                .nextPage(consignor.EoriYesNoPage, mode, userAnswers)
+                .mustBe(consignorRoutes.EoriController.onPageLoad(userAnswers.lrn, mode))
           }
         }
       }
 
-      "must go from consignor eori page to check your answers page" ignore {
-        forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignor) {
+      "must go from consignor eori page to check your answers page" in {
+        forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
           answers =>
             navigator
               .nextPage(consignor.EoriPage, mode, answers)
-              .mustBe(???) //ToDo CheckYourAnswers Page
+              .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
-      "must go from consignor address page to check your answers page" ignore {
-        forAll(arbitraryTraderDetailsAnswers) {
+      "must go from consignor name page to check your answers page" in {
+        forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+          answers =>
+            navigator
+              .nextPage(consignor.NamePage, mode, answers)
+              .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+        }
+      }
+
+      "must go from consignor address page to check your answers page" in {
+        forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
           answers =>
             navigator
               .nextPage(consignor.AddressPage, mode, answers)
-              .mustBe(???) //TODO Check Your Answers Page
+              .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
       "must go from add contact page" - {
         "when No selected" - {
-          "to check your answers page" ignore {
-            forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignor) {
+          "to check your answers page" in {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
               answers =>
                 val userAnswers = answers.setValue(consignor.AddContactPage, false)
                 navigator
                   .nextPage(consignor.AddContactPage, mode, userAnswers)
-                  .mustBe(???) //TODO Check Your Answers Page
+                  .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
             }
           }
         }
 
         "when Yes selected" - {
-          "to contact name page" ignore {
-            forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorWithoutContact) {
+          "to contact name page" in {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
               answers =>
-                val userAnswers = answers.setValue(consignor.AddContactPage, true)
+                val userAnswers = answers
+                  .setValue(consignor.AddContactPage, true)
+                  .removeValue(consignor.contact.NamePage)
+                  .removeValue(consignor.contact.TelephoneNumberPage)
                 navigator
                   .nextPage(consignor.AddContactPage, mode, userAnswers)
                   .mustBe(contactRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
@@ -483,39 +592,115 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
       }
 
-      "must go from contact name page to check your answers page" ignore {
-        forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignor) {
-          answers =>
-            navigator
-              .nextPage(consignor.contact.NamePage, mode, answers)
-              .mustBe(???) //TODO Check Your Answers Page
+      "must go from contact name page" - {
+        "when telephone number exists" - {
+          "to check your answers page" in {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+              answers =>
+                navigator
+                  .nextPage(consignor.contact.NamePage, mode, answers)
+                  .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+            }
+          }
+        }
+
+        "when no telephone number exists" - {
+          "to contact telephone number page" in {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+              answers =>
+                val userAnswers = answers.removeValue(consignor.contact.TelephoneNumberPage)
+                navigator
+                  .nextPage(consignor.contact.NamePage, mode, userAnswers)
+                  .mustBe(contactRoutes.TelephoneNumberController.onPageLoad(userAnswers.lrn, mode))
+            }
+          }
         }
       }
 
-      "must go from contact telephone number page to check your answers page" ignore {
-        forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignor) {
+      "must go from contact telephone number page to check your answers page" in {
+        forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
           answers =>
             navigator
               .nextPage(consignor.contact.TelephoneNumberPage, mode, answers)
-              .mustBe(???) //TODO Check Your Answers Page
+              .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
-      "must go from consignee name page to check your answers page" ignore {
-        forAll(arbitraryTraderDetailsAnswers) {
+      "must go from more than one consignee page " - {
+        "to check your answers page when yes is selected" in {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+            answers =>
+              val userAnswers = answers.setValue(consignee.MoreThanOneConsigneePage, true)
+              navigator
+                .nextPage(consignee.MoreThanOneConsigneePage, mode, userAnswers)
+                .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+          }
+        }
+
+        "to Consignee EoriYesNo page when no is selected and we have no Consignee Data" in {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+            answers =>
+              val userAnswers = answers
+                .setValue(consignee.MoreThanOneConsigneePage, false)
+                .removeValue(consignee.EoriYesNoPage)
+                .removeValue(consignee.EoriNumberPage)
+
+              navigator
+                .nextPage(consignee.MoreThanOneConsigneePage, mode, userAnswers)
+                .mustBe(consigneeRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode))
+          }
+        }
+      }
+
+      "must go from more than one consignee EoriYesNo page " - {
+        "to check your answers page when no is selected" in {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+            answers =>
+              val userAnswers = answers.setValue(consignee.EoriYesNoPage, false)
+              navigator
+                .nextPage(consignee.EoriYesNoPage, mode, userAnswers)
+                .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+          }
+        }
+
+        "to Consignee Eori page when yes is selected" in {
+          forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+            answers =>
+              val userAnswers = answers
+                .setValue(consignee.EoriYesNoPage, true)
+                .removeValue(consignee.EoriNumberPage)
+
+              navigator
+                .nextPage(consignee.EoriYesNoPage, mode, userAnswers)
+                .mustBe(consigneeRoutes.EoriNumberController.onPageLoad(userAnswers.lrn, mode))
+          }
+        }
+      }
+
+      "must go from consignee eori page to check your answers page" in {
+        forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
+          answers =>
+            navigator
+              .nextPage(consignee.EoriNumberPage, mode, answers)
+              .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+        }
+      }
+
+      "must go from consignee name page to check your answers page" in {
+        forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
           answers =>
             navigator
               .nextPage(consignee.NamePage, mode, answers)
-              .mustBe(???) //TODO Check Your Answers Page
+              .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
-      "must go from consignee address page to check your answers page" ignore {
-        forAll(arbitraryTraderDetailsAnswers) {
+      "must go from consignee address page to check your answers page" in {
+        forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
           answers =>
             navigator
               .nextPage(consignee.AddressPage, mode, answers)
-              .mustBe(???) //TODO Check Your Answers Page
+              .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
     }
