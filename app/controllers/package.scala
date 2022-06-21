@@ -32,6 +32,7 @@ package object controllers {
 
   type EitherType[A]        = Either[OpsError, A]
   type UserAnswersWriter[A] = ReaderT[EitherType, UserAnswers, A]
+  type Write[A]             = (QuestionPage[A], UserAnswers)
 
   object UserAnswersReader {
     def apply[A: UserAnswersWriter]: UserAnswersWriter[A] = implicitly[UserAnswersWriter[A]]
@@ -42,8 +43,8 @@ package object controllers {
 
   implicit class SettableOps[A](page: QuestionPage[A]) {
 
-    def userAnswerWriter(value: A)(implicit writes: Writes[A]): UserAnswersWriter[(QuestionPage[A], UserAnswers)] =
-      ReaderT[EitherType, UserAnswers, (QuestionPage[A], UserAnswers)](
+    def writeToUserAnswers(value: A)(implicit writes: Writes[A]): UserAnswersWriter[Write[A]] =
+      ReaderT[EitherType, UserAnswers, Write[A]](
         userAnswers =>
           userAnswers.set[A](page, value) match {
             case Success(value)     => Right((page, value))
@@ -52,61 +53,43 @@ package object controllers {
       )
   }
 
-  implicit class SettableOpsRunner[A](userAnswersWriter: UserAnswersWriter[(QuestionPage[A], UserAnswers)]) {
-
-    def runner(userAnswers: UserAnswers): EitherType[(QuestionPage[A], UserAnswers)]                        = userAnswersWriter.run(userAnswers)
-    def runner()(implicit dataRequest: MandatoryDataRequest[_]): EitherType[(QuestionPage[A], UserAnswers)] = userAnswersWriter.run(dataRequest.userAnswers)
+  implicit class SettableOpsRunner[A](userAnswersWriter: UserAnswersWriter[Write[A]]) {
 
     def writeToSession(
       userAnswers: UserAnswers
-    )(implicit sessionRepository: SessionRepository, executionContext: ExecutionContext): Future[(QuestionPage[A], UserAnswers)] = runner(userAnswers) match {
-      case Left(opsError) => Future.failed(new Exception(s"${opsError.toString}"))
-      case Right(value) =>
-        sessionRepository
-          .set(value._2)
-          .map(
-            _ => value
-          )
-    }
+    )(implicit sessionRepository: SessionRepository, executionContext: ExecutionContext): Future[Write[A]] =
+      userAnswersWriter.run(userAnswers) match {
+        case Left(opsError) => Future.failed(new Exception(s"${opsError.toString}"))
+        case Right(value) =>
+          sessionRepository
+            .set(value._2)
+            .map(
+              _ => value
+            )
+      }
 
     def writeToSession()(implicit
       dataRequest: MandatoryDataRequest[_],
       sessionRepository: SessionRepository,
       ex: ExecutionContext
-    ): Future[(QuestionPage[A], UserAnswers)] = runner() match {
-      case Left(opsError) => Future.failed(new Exception(s"${opsError.toString}"))
-      case Right(value) =>
-        sessionRepository
-          .set(value._2)
-          .map(
-            _ => value
-          )
-    }
+    ): Future[Write[A]] = writeToSession(dataRequest.userAnswers)
+  }
 
-    def writeToSessionNavigator(userAnswers: UserAnswers,
-                                mode: Mode
-    )(implicit sessionRepository: SessionRepository, navigator: Navigator, executionContext: ExecutionContext): Future[Result] =
-      writeToSession(userAnswers).map {
-        result => Redirect(navigator.nextPage(result._1, mode, result._2))
+  implicit class NavigatorOps[A](write: Future[Write[A]]) {
+
+    def navigateWith(mode: Mode)(implicit navigator: Navigator, executionContext: ExecutionContext): Future[Result] =
+      navigate {
+        result => navigator.nextPage(result._1, mode, result._2)
       }
 
-    def writeToSessionNavigator(
-      mode: Mode
-    )(implicit
-      dataRequest: MandatoryDataRequest[_],
-      sessionRepository: SessionRepository,
-      navigator: Navigator,
-      executionContext: ExecutionContext
-    ): Future[Result] =
-      writeToSession(dataRequest.userAnswers).map {
-        result => Redirect(navigator.nextPage(result._1, mode, result._2))
+    def navigateTo(call: Call)(implicit executionContext: ExecutionContext): Future[Result] =
+      navigate {
+        _ => call
       }
 
-    def writeToSessionNavigator(
-      call: Call
-    )(implicit dataRequest: MandatoryDataRequest[_], sessionRepository: SessionRepository, executionContext: ExecutionContext): Future[Result] =
-      writeToSession(dataRequest.userAnswers).map {
-        _ => Redirect(call)
+    private def navigate(result: Write[A] => Call)(implicit executionContext: ExecutionContext): Future[Result] =
+      write.map {
+        w => Redirect(result(w))
       }
   }
 }

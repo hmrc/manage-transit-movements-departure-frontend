@@ -18,7 +18,7 @@ package controllers.preTaskList
 
 import com.google.inject.Inject
 import controllers.actions.{Actions, CheckTaskAlreadyCompletedActionProvider}
-import controllers.{SettableOps, SettableOpsRunner}
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import models.LocalReferenceNumber
 import models.journeyDomain.PreTaskListDomain
 import pages.preTaskList.DetailsConfirmedPage
@@ -57,8 +57,9 @@ class CheckYourAnswersController @Inject() (
     .async {
       implicit request =>
         DetailsConfirmedPage
-          .userAnswerWriter(true)
-          .writeToSessionNavigator(controllers.routes.TaskListController.onPageLoad(lrn))
+          .writeToUserAnswers(true)
+          .writeToSession()
+          .navigateTo(controllers.routes.TaskListController.onPageLoad(lrn))
     }
 
 }

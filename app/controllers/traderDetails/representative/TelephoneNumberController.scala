@@ -27,7 +27,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.traderDetails.representative.TelephoneNumberView
-import controllers.{SettableOps, SettableOpsRunner}
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -61,7 +61,7 @@ class TelephoneNumberController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => TelephoneNumberPage.userAnswerWriter(value).writeToSessionNavigator(mode)
+          value => TelephoneNumberPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

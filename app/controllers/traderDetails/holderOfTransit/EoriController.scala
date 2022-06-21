@@ -27,7 +27,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.traderDetails.holderOfTransit.EoriView
-import controllers.{SettableOps, SettableOpsRunner}
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -62,7 +62,7 @@ class EoriController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => EoriPage.userAnswerWriter(value).writeToSessionNavigator(mode)
+          value => EoriPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

@@ -29,7 +29,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.traderDetails.holderOfTransit.AddContactView
-import controllers.{SettableOps, SettableOpsRunner}
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -63,7 +63,7 @@ class AddContactController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => AddContactPage.userAnswerWriter(value).writeToSessionNavigator(mode)
+          value => AddContactPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

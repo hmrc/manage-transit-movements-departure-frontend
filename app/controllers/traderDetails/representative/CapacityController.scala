@@ -28,7 +28,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.traderDetails.representative.CapacityView
-import controllers.{SettableOps, SettableOpsRunner}
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -63,7 +63,7 @@ class CapacityController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, RepresentativeCapacity.radioItems, mode))),
-          value => CapacityPage.userAnswerWriter(value).writeToSessionNavigator(mode)
+          value => CapacityPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

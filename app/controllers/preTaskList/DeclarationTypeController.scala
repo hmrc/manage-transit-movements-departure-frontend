@@ -17,7 +17,7 @@
 package controllers.preTaskList
 
 import controllers.actions._
-import controllers.{SettableOps, SettableOpsRunner}
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.preTaskList.DeclarationTypeFormProvider
 import models.journeyDomain.PreTaskListDomain
 import models.requests.DataRequest
@@ -70,7 +70,7 @@ class DeclarationTypeController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))),
-            value => DeclarationTypePage.userAnswerWriter(value).writeToSessionNavigator(mode)
+            value => DeclarationTypePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
           )
     }
 }
