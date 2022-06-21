@@ -28,7 +28,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.ProcedureTypeView
-import controllers.{SettableOps, SettableOpsRunner}
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -69,7 +69,7 @@ class ProcedureTypeController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, ProcedureType.radioItems, lrn, mode))),
-            value => ProcedureTypePage.userAnswerWriter(value).writeToSessionNavigator(mode)
+            value => ProcedureTypePage.writeToUserAnswers(value).writeToSession().navigate(mode)
           )
     }
 }

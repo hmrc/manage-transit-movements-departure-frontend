@@ -31,7 +31,7 @@ import repositories.SessionRepository
 import services.CustomsOfficesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.OfficeOfDepartureView
-import controllers.{SettableOps, SettableOpsRunner}
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -82,7 +82,7 @@ class OfficeOfDepartureController @Inject() (
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
-                value => OfficeOfDeparturePage.userAnswerWriter(value).writeToSessionNavigator(mode)
+                value => OfficeOfDeparturePage.writeToUserAnswers(value).writeToSession().navigate(mode)
               )
         }
     }

@@ -28,7 +28,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.SecurityDetailsTypeView
-import controllers.{SettableOps, SettableOpsRunner}
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -69,7 +69,7 @@ class SecurityDetailsTypeController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, SecurityDetailsType.radioItems, lrn, mode))),
-            value => SecurityDetailsTypePage.userAnswerWriter(value).writeToSessionNavigator(mode)
+            value => SecurityDetailsTypePage.writeToUserAnswers(value).writeToSession().navigate(mode)
           )
     }
 }

@@ -30,7 +30,7 @@ import repositories.SessionRepository
 import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.traderDetails.holderOfTransit.AddressView
-import controllers.{SettableOps, SettableOpsRunner}
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -83,7 +83,7 @@ class AddressController @Inject() (
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countryList.countries, name))),
-                value => AddressPage.userAnswerWriter(value).writeToSessionNavigator(mode)
+                value => AddressPage.writeToUserAnswers(value).writeToSession().navigate(mode)
               )
         }
     }
