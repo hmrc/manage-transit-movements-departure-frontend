@@ -21,7 +21,6 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.traderDetails.ConsignmentConsigneeDomain
-import models.reference.{Country, CountryCode}
 import models.{Address, EoriNumber}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -33,7 +32,7 @@ class ConsignmentConsigneeDomainSpec extends SpecBase with UserAnswersSpecHelper
 
     val consigneeEori    = arbitrary[EoriNumber].sample.value
     val consigneeName    = Gen.alphaNumStr.sample.value
-    val consigneeAddress = Address("line1", "line2", "postalCode", Country(CountryCode("GB"), "description"))
+    val consigneeAddress = arbitrary[Address].sample.value
 
     "can be parsed from UserAnswers" - {
 

@@ -23,7 +23,7 @@ import models.{Address, DeclarationType}
 import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.traderDetails.{ConsignmentConsignorDomain, ConsignmentDomain}
-import models.reference.{Country, CountryCode}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 import pages.traderDetails.consignment._
@@ -32,7 +32,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
   "ConsignmentDomain" - {
     val consignorName    = Gen.alphaNumStr.sample.value
-    val consignorAddress = Address("line1", "line2", "postalCode", Country(CountryCode("GB"), "description"))
+    val consignorAddress = arbitrary[Address].sample.value
 
     "can be parsed from UserAnswers" - {
 

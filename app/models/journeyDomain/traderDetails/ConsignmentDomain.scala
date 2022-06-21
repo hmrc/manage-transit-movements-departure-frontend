@@ -40,15 +40,18 @@ object ConsignmentDomain {
         }
     }
 
-  def readConsignorDomain: UserAnswersReader[ConsignmentDomain] =
+  private def readConsignorDomain: UserAnswersReader[ConsignmentDomain] =
     for {
       consignorDomain <- UserAnswersReader[ConsignmentConsignorDomain]
-      consigneeDomain <- consignee.MoreThanOneConsigneePage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsigneeDomain])
+      consigneeDomain <- readConsigneeDomain
     } yield ConsignmentDomain(Some(consignorDomain), consigneeDomain)
 
-  def checkApprovedOperatorConsignor: UserAnswersReader[ConsignmentDomain] =
+  private def checkApprovedOperatorConsignor: UserAnswersReader[ConsignmentDomain] =
     for {
       consignorDomain <- ApprovedOperatorPage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsignorDomain])
-      consigneeDomain <- consignee.MoreThanOneConsigneePage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsigneeDomain])
+      consigneeDomain <- readConsigneeDomain
     } yield ConsignmentDomain(consignorDomain, consigneeDomain)
+
+  private def readConsigneeDomain: UserAnswersReader[Option[ConsignmentConsigneeDomain]] =
+    consignee.MoreThanOneConsigneePage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsigneeDomain])
 }

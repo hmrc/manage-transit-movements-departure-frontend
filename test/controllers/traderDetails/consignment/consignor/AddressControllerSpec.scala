@@ -44,7 +44,7 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
   private val countryList = CountryList(Seq(testAddress.country))
 
   private val formProvider = new AddressFormProvider()
-  private val form         = formProvider("traderDetails.holderOfTransit.address", addressHolderName, countryList)
+  private val form         = formProvider("traderDetails.consignment.consignor.address", addressHolderName, countryList)
 
   private val mode              = NormalMode
   private lazy val addressRoute = routes.AddressController.onPageLoad(lrn, mode).url

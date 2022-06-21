@@ -28,7 +28,7 @@ sealed trait TraderDetailsConsignmentViewModel {
   def apply(userAnswers: UserAnswers)(implicit messages: Messages): Seq[Section] = {
     val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers, mode)
 
-    val holderOfTransitSection = Section(
+    val consignorSection = Section(
       sectionTitle = messages("traderDetails.consignment.checkYourAnswers.consignor"),
       rows = Seq(
         helper.consignorEoriYesNo,
@@ -38,7 +38,7 @@ sealed trait TraderDetailsConsignmentViewModel {
       ).flatten
     )
 
-    val additionalContactSection = Section(
+    val consignorContactSection = Section(
       sectionTitle = messages("traderDetails.consignment.checkYourAnswers.consignorContact"),
       rows = Seq(
         helper.addConsignorContact,
@@ -58,7 +58,7 @@ sealed trait TraderDetailsConsignmentViewModel {
       ).flatten
     )
 
-    Seq(holderOfTransitSection, additionalContactSection, consigneeSection)
+    Seq(consignorSection, consignorContactSection, consigneeSection)
   }
 }
 
