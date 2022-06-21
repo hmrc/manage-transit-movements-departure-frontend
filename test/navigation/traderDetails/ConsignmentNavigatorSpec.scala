@@ -251,7 +251,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         "must go from approved operator page" - {
           "when Yes selected" - {
             "to check Your Answers page" in {
-              forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+              forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
                 answers =>
                   val userAnswers = answers
                     .setValue(ApprovedOperatorPage, true)
@@ -265,7 +265,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
           "when No selected" - {
             "to consignor eori page" in {
-              forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+              forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
                 answers =>
                   val userAnswers = answers
                     .setValue(ApprovedOperatorPage, false)
@@ -282,7 +282,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
         "must go from more than one consignor EoriYesNo page " - {
           "to check your answers page when no is selected" in {
-            forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
               answers =>
                 val userAnswers = answers.setValue(consignor.EoriYesNoPage, false)
                 navigator
@@ -292,7 +292,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           }
 
           "to Consignee Eori page when yes is selected" in {
-            forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
               answers =>
                 val userAnswers = answers
                   .setValue(consignor.EoriYesNoPage, true)
@@ -306,7 +306,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
 
         "must go from consignor eori page to check your answers page" in {
-          forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
             answers =>
               navigator
                 .nextPage(consignor.EoriPage, mode, answers)
@@ -315,7 +315,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
 
         "must go from consignor name page to check your answers page" in {
-          forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
             answers =>
               navigator
                 .nextPage(consignor.NamePage, mode, answers)
@@ -324,7 +324,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
 
         "must go from consignor address page to check your answers page" in {
-          forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
             answers =>
               navigator
                 .nextPage(consignor.AddressPage, mode, answers)
@@ -335,7 +335,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         "must go from add contact page" - {
           "when No selected" - {
             "to check your answers page" in {
-              forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+              forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
                 answers =>
                   val userAnswers = answers.setValue(consignor.AddContactPage, false)
                   navigator
@@ -347,7 +347,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
           "when Yes selected" - {
             "to contact name page" in {
-              forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+              forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
                 answers =>
                   val userAnswers = answers
                     .setValue(consignor.AddContactPage, true)
@@ -364,7 +364,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         "must go from contact name page" - {
           "when telephone number exists" - {
             "to check your answers page" in {
-              forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+              forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
                 answers =>
                   navigator
                     .nextPage(consignor.contact.NamePage, mode, answers)
@@ -375,7 +375,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
           "when no telephone number exists" - {
             "to contact telephone number page" in {
-              forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+              forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
                 answers =>
                   val userAnswers = answers.removeValue(consignor.contact.TelephoneNumberPage)
                   navigator
@@ -387,7 +387,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
 
         "must go from contact telephone number page to check your answers page" in {
-          forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
             answers =>
               navigator
                 .nextPage(consignor.contact.TelephoneNumberPage, mode, answers)
@@ -397,7 +397,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
         "must go from more than one consignee page " - {
           "to check your answers page when yes is selected" in {
-            forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
               answers =>
                 val userAnswers = answers.setValue(consignee.MoreThanOneConsigneePage, true)
                 navigator
@@ -407,7 +407,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           }
 
           "to Consignee EoriYesNo page when no is selected and we have no Consignee Data" in {
-            forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
               answers =>
                 val userAnswers = answers
                   .setValue(consignee.MoreThanOneConsigneePage, false)
@@ -423,7 +423,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
         "must go from more than one consignee EoriYesNo page " - {
           "to check your answers page when no is selected" in {
-            forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
               answers =>
                 val userAnswers = answers.setValue(consignee.EoriYesNoPage, false)
                 navigator
@@ -433,7 +433,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           }
 
           "to Consignee Eori page when yes is selected" in {
-            forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+            forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
               answers =>
                 val userAnswers = answers
                   .setValue(consignee.EoriYesNoPage, true)
@@ -447,7 +447,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
 
         "must go from consignee eori page to check your answers page" in {
-          forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
             answers =>
               navigator
                 .nextPage(consignee.EoriNumberPage, mode, answers)
@@ -456,7 +456,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
 
         "must go from consignee name page to check your answers page" in {
-          forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
             answers =>
               navigator
                 .nextPage(consignee.NamePage, mode, answers)
@@ -465,7 +465,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
 
         "must go from consignee address page to check your answers page" in {
-          forAll(arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee) {
+          forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
             answers =>
               navigator
                 .nextPage(consignee.AddressPage, mode, answers)

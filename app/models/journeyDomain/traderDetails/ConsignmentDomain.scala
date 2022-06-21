@@ -17,9 +17,10 @@
 package models.journeyDomain.traderDetails
 
 import cats.implicits._
+import models.DeclarationType.Option4
 import models.SecurityDetailsType.NoSecurityDetails
-import models.domain.{GettableAsFilterForNextReaderOps, UserAnswersReader}
-import pages.preTaskList.SecurityDetailsTypePage
+import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
+import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 import pages.traderDetails.consignment._
 
 case class ConsignmentDomain(
@@ -29,13 +30,25 @@ case class ConsignmentDomain(
 
 object ConsignmentDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[ConsignmentDomain] = {
-    lazy val consignorDomain = UserAnswersReader[ConsignmentConsignorDomain]
-    for {
-      consignorApprovedDomain <- ApprovedOperatorPage.filterOptionalDependent(!_)(consignorDomain)
-      consignorSecurityDomain <- SecurityDetailsTypePage.filterOptionalDependent(_ != NoSecurityDetails)(consignorDomain)
-      consigneeDomain         <- consignee.MoreThanOneConsigneePage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsigneeDomain])
-    } yield ConsignmentDomain(consignorApprovedDomain orElse consignorSecurityDomain, consigneeDomain)
+  implicit val userAnswersReader: UserAnswersReader[ConsignmentDomain] =
+    DeclarationTypePage.reader.flatMap {
+      case Option4 => readConsignorDomain
+      case _ =>
+        SecurityDetailsTypePage.reader.flatMap {
+          case NoSecurityDetails => checkApprovedOperatorConsignor
+          case _                 => readConsignorDomain
+        }
+    }
 
-  }
+  def readConsignorDomain: UserAnswersReader[ConsignmentDomain] =
+    for {
+      consignorDomain <- UserAnswersReader[ConsignmentConsignorDomain]
+      consigneeDomain <- consignee.MoreThanOneConsigneePage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsigneeDomain])
+    } yield ConsignmentDomain(Some(consignorDomain), consigneeDomain)
+
+  def checkApprovedOperatorConsignor: UserAnswersReader[ConsignmentDomain] =
+    for {
+      consignorDomain <- ApprovedOperatorPage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsignorDomain])
+      consigneeDomain <- consignee.MoreThanOneConsigneePage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsigneeDomain])
+    } yield ConsignmentDomain(consignorDomain, consigneeDomain)
 }

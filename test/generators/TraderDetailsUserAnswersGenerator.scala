@@ -28,55 +28,55 @@ trait TraderDetailsUserAnswersGenerator
   lazy val arbitraryTraderDetailsAnswers: Gen[UserAnswers] = combineUserAnswers(
     arbitraryHolderOfTransitAnswers,
     arbitraryRepresentativeAnswers,
-    arbitraryTraderDetailsConsignmentAnswers
+    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
   )
 
   lazy val arbitraryTraderDetailsAnswersWithHolderOfTransitWithEori: Gen[UserAnswers] = combineUserAnswers(
     arbitraryHolderOfTransitAnswersWithEori,
     arbitraryRepresentativeAnswers,
-    arbitraryTraderDetailsConsignmentAnswers
+    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
   )
 
   lazy val arbitraryTraderDetailsAnswersWithHolderOfTransitWithoutEori: Gen[UserAnswers] = combineUserAnswers(
     arbitraryHolderOfTransitAnswersWithoutEori,
     arbitraryRepresentativeAnswers,
-    arbitraryTraderDetailsConsignmentAnswers
+    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
   )
 
   lazy val arbitraryTraderDetailsAnswersWithHolderOfTransitWithTirId: Gen[UserAnswers] = combineUserAnswers(
     arbitraryHolderOfTransitAnswersWithTirId,
     arbitraryRepresentativeAnswers,
-    arbitraryTraderDetailsConsignmentAnswers
+    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
   )
 
   lazy val arbitraryTraderDetailsAnswersWithHolderOfTransitWithoutTirId: Gen[UserAnswers] = combineUserAnswers(
     arbitraryHolderOfTransitAnswersWithoutTirId,
     arbitraryRepresentativeAnswers,
-    arbitraryTraderDetailsConsignmentAnswers
+    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
   )
 
   lazy val arbitraryTraderDetailsAnswersWithHolderOfTransitWithAdditionalContact: Gen[UserAnswers] = combineUserAnswers(
     arbitraryHolderOfTransitAnswersWithAdditionalContact,
     arbitraryRepresentativeAnswers,
-    arbitraryTraderDetailsConsignmentAnswers
+    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
   )
 
   lazy val arbitraryTraderDetailsAnswersWithHolderOfTransitWithoutAdditionalContact: Gen[UserAnswers] = combineUserAnswers(
     arbitraryHolderOfTransitAnswersWithoutAdditionalContact,
     arbitraryRepresentativeAnswers,
-    arbitraryTraderDetailsConsignmentAnswers
+    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
   )
 
   lazy val arbitraryTraderDetailsAnswersWithRepresentative: Gen[UserAnswers] = combineUserAnswers(
     arbitraryHolderOfTransitAnswers,
     arbitraryRepresentativeAnswersActingAsRepresentative,
-    arbitraryTraderDetailsConsignmentAnswers
+    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
   )
 
   lazy val arbitraryTraderDetailsAnswersWithoutRepresentative: Gen[UserAnswers] = combineUserAnswers(
     arbitraryHolderOfTransitAnswers,
     arbitraryRepresentativeAnswersNotActingAsRepresentative,
-    arbitraryTraderDetailsConsignmentAnswers
+    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
   )
 
   lazy val arbitraryTraderDetailsWithConsignorAndConsigneeAnswers: Gen[UserAnswers] = combineUserAnswers(

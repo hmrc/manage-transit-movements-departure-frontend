@@ -32,4 +32,5 @@ class TraderDetailsViewModel @Inject() (
   def apply(userAnswers: UserAnswers)(implicit messages: Messages): Seq[Section] =
     holderOfTransitViewModel(userAnswers) ++
       representativeViewModel(userAnswers)
+
 }
