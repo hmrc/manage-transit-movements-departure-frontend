@@ -64,7 +64,7 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
     behave like fieldWithInvalidCharacters(
       form = form,
       fieldName = fieldName,
-      error = FormError(fieldName, invalidKey, Seq(AddressLine1.arg, name)),
+      error = FormError(fieldName, invalidKey, Seq(AddressLine1.arg.capitalize, name)),
       length = AddressLine1.length
     )
   }
@@ -95,7 +95,7 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
     behave like fieldWithInvalidCharacters(
       form = form,
       fieldName = fieldName,
-      error = FormError(fieldName, invalidKey, Seq(AddressLine2.arg, name)),
+      error = FormError(fieldName, invalidKey, Seq(AddressLine2.arg.capitalize, name)),
       length = AddressLine2.length
     )
   }

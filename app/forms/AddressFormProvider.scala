@@ -36,7 +36,7 @@ class AddressFormProvider @Inject() extends Mappings {
             .verifying(
               StopOnFirstFail[String](
                 maxLength(AddressLine1.length, s"$prefix.error.length", Seq(AddressLine1.arg.capitalize, name, AddressLine1.length)),
-                regexp(AddressLine1.regex, s"$prefix.error.invalid", args)
+                regexp(AddressLine1.regex, s"$prefix.error.invalid", Seq(AddressLine1.arg.capitalize, name))
               )
             )
         },
@@ -46,7 +46,7 @@ class AddressFormProvider @Inject() extends Mappings {
             .verifying(
               StopOnFirstFail[String](
                 maxLength(AddressLine2.length, s"$prefix.error.length", Seq(AddressLine2.arg.capitalize, name, AddressLine2.length)),
-                regexp(AddressLine2.regex, s"$prefix.error.invalid", args)
+                regexp(AddressLine2.regex, s"$prefix.error.invalid", Seq(AddressLine2.arg.capitalize, name))
               )
             )
         },
