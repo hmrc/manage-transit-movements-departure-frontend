@@ -52,7 +52,7 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
       form = form,
       fieldName = fieldName,
       maxLength = AddressLine1.length,
-      lengthError = FormError(fieldName, lengthKey, Seq(AddressLine1.arg, name, AddressLine1.length))
+      lengthError = FormError(fieldName, lengthKey, Seq(AddressLine1.arg.capitalize, name, AddressLine1.length))
     )
 
     behave like mandatoryTrimmedField(
@@ -83,7 +83,7 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
       form = form,
       fieldName = fieldName,
       maxLength = AddressLine2.length,
-      lengthError = FormError(fieldName, lengthKey, Seq(AddressLine2.arg, name, AddressLine2.length))
+      lengthError = FormError(fieldName, lengthKey, Seq(AddressLine2.arg.capitalize, name, AddressLine2.length))
     )
 
     behave like mandatoryTrimmedField(
@@ -104,6 +104,7 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
     val postcodeInvalidKey    = s"$prefix.error.postalCode.invalid"
     val postalCodeRequiredKey = s"$prefix.error.postalCode.required"
+    val lengthKey             = s"$prefix.error.postalCode.length"
 
     val fieldName = PostalCode.field
 
@@ -122,7 +123,7 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
       form = form,
       fieldName = fieldName,
       maxLength = PostalCode.length,
-      lengthError = FormError(fieldName, lengthKey, Seq(PostalCode.arg, name, PostalCode.length)),
+      lengthError = FormError(fieldName, lengthKey, Seq(name, PostalCode.length)),
       gen = validPostalOverLength
     )
 
