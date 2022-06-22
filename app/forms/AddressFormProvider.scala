@@ -35,7 +35,7 @@ class AddressFormProvider @Inject() extends Mappings {
           trimmedText(s"$prefix.error.required", args)
             .verifying(
               StopOnFirstFail[String](
-                maxLength(AddressLine1.length, s"$prefix.error.length", args :+ AddressLine1.length),
+                maxLength(AddressLine1.length, s"$prefix.error.length", Seq(AddressLine1.arg.capitalize, name, AddressLine1.length)),
                 regexp(AddressLine1.regex, s"$prefix.error.invalid", args)
               )
             )
@@ -45,18 +45,18 @@ class AddressFormProvider @Inject() extends Mappings {
           trimmedText(s"$prefix.error.required", args)
             .verifying(
               StopOnFirstFail[String](
-                maxLength(AddressLine2.length, s"$prefix.error.length", args :+ AddressLine2.length),
+                maxLength(AddressLine2.length, s"$prefix.error.length", Seq(AddressLine2.arg.capitalize, name, AddressLine2.length)),
                 regexp(AddressLine2.regex, s"$prefix.error.invalid", args)
               )
             )
         },
         PostalCode.field -> {
-          lazy val args = Seq(PostalCode.arg, name)
-          trimmedText(s"$prefix.error.postalCode.required", Seq(name))
+          lazy val args = Seq(name)
+          trimmedText(s"$prefix.error.postalCode.required", args)
             .verifying(
               StopOnFirstFail[String](
-                maxLength(PostalCode.length, s"$prefix.error.length", args :+ PostalCode.length),
-                regexp(PostalCode.regex, s"$prefix.error.postalCode.invalid", Seq(name))
+                maxLength(PostalCode.length, s"$prefix.error.postalCode.length", args :+ PostalCode.length),
+                regexp(PostalCode.regex, s"$prefix.error.postalCode.invalid", args)
               )
             )
         },
