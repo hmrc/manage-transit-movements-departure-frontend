@@ -323,7 +323,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Consignor’s contact phone number".toText),
+                  key = Key("Consignor contact’s phone number".toText),
                   value = Value(contactTelephoneNumber.toText),
                   actions = Some(
                     Actions(
@@ -331,7 +331,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                         ActionItem(
                           content = "Change".toText,
                           href = contactRoutes.TelephoneNumberController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("consignor’s contact phone number"),
+                          visuallyHiddenText = Some("consignor contact phone number"),
                           attributes = Map()
                         )
                       )
