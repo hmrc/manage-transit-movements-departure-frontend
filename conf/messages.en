@@ -18,7 +18,7 @@ error.summary.title = There is a problem
 address.addressLine1 = address line 1
 address.addressLine2 = address line 2
 address.postalCode = postal code
-address.country = Country
+address.country = country
 
 date.day.capitalized = Day
 date.month.capitalized = Month
