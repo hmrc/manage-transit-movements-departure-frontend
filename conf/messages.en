@@ -15,9 +15,9 @@ site.section = This section is
 error.title.prefix = Error:
 error.summary.title = There is a problem
 
-address.addressLine1 = Address line 1
-address.addressLine2 = Address line 2
-address.postalCode = Postal code
+address.addressLine1 = address line 1
+address.addressLine2 = address line 2
+address.postalCode = postal code
 address.country = Country
 
 date.day.capitalized = Day
