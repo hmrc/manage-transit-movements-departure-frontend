@@ -31,12 +31,12 @@ object TraderDetailsDomain {
   implicit val userAnswersParser: UserAnswersReader[TraderDetailsDomain] = {
 
     for {
-      holderOfTransitDomain <- UserAnswersReader[HolderOfTransitDomain]
-      representativeDomain  <- ActingAsRepresentativePage.filterOptionalDependent(identity)(UserAnswersReader[RepresentativeDomain])
-      consignment           <- UserAnswersReader[ConsignmentDomain]
+      holderOfTransit <- UserAnswersReader[HolderOfTransitDomain]
+      representative  <- ActingAsRepresentativePage.filterOptionalDependent(identity)(UserAnswersReader[RepresentativeDomain])
+      consignment     <- UserAnswersReader[ConsignmentDomain]
     } yield TraderDetailsDomain(
-      holderOfTransitDomain,
-      representativeDomain,
+      holderOfTransit,
+      representative,
       consignment
     )
   }

@@ -18,51 +18,34 @@ package navigation.traderDetails
 
 import controllers.traderDetails.holderOfTransit.contact.{routes => contactRoutes}
 import controllers.traderDetails.holderOfTransit.{routes => hotRoutes}
+import controllers.traderDetails.{routes => tdRoutes}
 import models._
 import models.journeyDomain.traderDetails.HolderOfTransitDomain
+import navigation.UserAnswersNavigator
 import pages.traderDetails.holderOfTransit._
-import pages.traderDetails.holderOfTransit.contact
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class HolderOfTransitNavigator @Inject() () extends TraderDetailsNavigator[HolderOfTransitDomain] {
+class HolderOfTransitNavigator @Inject() () extends UserAnswersNavigator[HolderOfTransitDomain] {
 
   override def routes(mode: Mode): RouteMapping = {
-    case EoriYesNoPage               => ua => eoriYesNoRoute(ua, mode)
-    case EoriPage                    => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, mode))
-    case TirIdentificationYesNoPage  => ua => tirIdentificationYesNoRoute(ua, mode)
-    case TirIdentificationPage       => ua => Some(hotRoutes.NameController.onPageLoad(ua.lrn, mode))
-    case NamePage                    => ua => Some(hotRoutes.AddressController.onPageLoad(ua.lrn, mode))
-    case AddressPage                 => ua => Some(hotRoutes.AddContactController.onPageLoad(ua.lrn, mode))
-    case AddContactPage              => ua => addContactRoute(ua, mode)
-    case contact.NamePage            => ua => Some(contactRoutes.TelephoneNumberController.onPageLoad(ua.lrn, mode))
-    case contact.TelephoneNumberPage => ua => Some(checkYourAnswersRoute(ua))
+    case EoriYesNoPage               => ua => hotRoutes.EoriYesNoController.onPageLoad(ua.lrn, mode)
+    case EoriPage                    => ua => hotRoutes.EoriController.onPageLoad(ua.lrn, mode)
+    case TirIdentificationYesNoPage  => ua => hotRoutes.TirIdentificationYesNoController.onPageLoad(ua.lrn, mode)
+    case TirIdentificationPage       => ua => hotRoutes.TirIdentificationController.onPageLoad(ua.lrn, mode)
+    case NamePage                    => ua => hotRoutes.NameController.onPageLoad(ua.lrn, mode)
+    case AddressPage                 => ua => hotRoutes.AddressController.onPageLoad(ua.lrn, mode)
+    case AddContactPage              => ua => hotRoutes.AddContactController.onPageLoad(ua.lrn, mode)
+    case contact.NamePage            => ua => contactRoutes.NameController.onPageLoad(ua.lrn, mode)
+    case contact.TelephoneNumberPage => ua => contactRoutes.TelephoneNumberController.onPageLoad(ua.lrn, mode)
   }
 
-  override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
-    hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
-
-  private def eoriYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    yesNoRoute(userAnswers, EoriYesNoPage)(
-      yesCall = hotRoutes.EoriController.onPageLoad(userAnswers.lrn, mode)
-    )(
-      noCall = hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
-    )
-
-  private def tirIdentificationYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    yesNoRoute(userAnswers, TirIdentificationYesNoPage)(
-      yesCall = hotRoutes.TirIdentificationController.onPageLoad(userAnswers.lrn, mode)
-    )(
-      noCall = hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
-    )
-
-  private def addContactRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    yesNoRoute(userAnswers, AddContactPage)(
-      yesCall = contactRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
-    )(
-      noCall = checkYourAnswersRoute(userAnswers)
-    )
+  override def checkYourAnswersRoute(mode: Mode, userAnswers: UserAnswers): Call =
+    mode match {
+      case NormalMode => hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+      case CheckMode  => tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+    }
 
 }

@@ -17,11 +17,12 @@
 package queries
 
 import models.UserAnswers
+import pages.Page
 import play.api.libs.json.JsPath
 
 import scala.util.{Success, Try}
 
-sealed trait Query {
+sealed trait Query extends Page {
   def path: JsPath
 }
 

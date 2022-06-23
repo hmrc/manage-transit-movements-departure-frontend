@@ -16,6 +16,6 @@
 
 package models.journeyDomain
 
-import queries.Query
+import queries.Gettable
 
-case class ReaderError(page: Query, message: Option[String] = None)
+case class ReaderError(page: Gettable[_], message: Option[String] = None)

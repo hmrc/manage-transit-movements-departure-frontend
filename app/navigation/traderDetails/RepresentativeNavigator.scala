@@ -17,36 +17,30 @@
 package navigation.traderDetails
 
 import controllers.traderDetails.representative.{routes => repRoutes}
+import controllers.traderDetails.{routes => tdRoutes}
 import models._
 import models.journeyDomain.traderDetails.RepresentativeDomain
-import pages.preTaskList.DeclarationTypePage
+import navigation.UserAnswersNavigator
 import pages.traderDetails.representative._
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RepresentativeNavigator @Inject() () extends TraderDetailsNavigator[RepresentativeDomain] {
+class RepresentativeNavigator @Inject() () extends UserAnswersNavigator[RepresentativeDomain] {
 
   override def routes(mode: Mode): RouteMapping = {
-    case ActingAsRepresentativePage => ua => actingRepresentativeRoute(ua, mode)
-    case EoriPage                   => ua => Some(repRoutes.NameController.onPageLoad(ua.lrn, mode))
-    case NamePage                   => ua => Some(repRoutes.CapacityController.onPageLoad(ua.lrn, mode))
-    case CapacityPage               => ua => Some(repRoutes.TelephoneNumberController.onPageLoad(ua.lrn, mode))
-    case TelephoneNumberPage        => ua => Some(checkYourAnswersRoute(ua))
+    case ActingAsRepresentativePage => ua => repRoutes.ActingAsRepresentativeController.onPageLoad(ua.lrn, mode)
+    case EoriPage                   => ua => repRoutes.EoriController.onPageLoad(ua.lrn, mode)
+    case NamePage                   => ua => repRoutes.NameController.onPageLoad(ua.lrn, mode)
+    case CapacityPage               => ua => repRoutes.CapacityController.onPageLoad(ua.lrn, mode)
+    case TelephoneNumberPage        => ua => repRoutes.TelephoneNumberController.onPageLoad(ua.lrn, mode)
   }
 
-  override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
-    repRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
-
-  private def actingRepresentativeRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    yesNoRoute(userAnswers, ActingAsRepresentativePage)(
-      yesCall = repRoutes.EoriController.onPageLoad(userAnswers.lrn, mode)
-    )(noCall = declarationTypeRoute(userAnswers, mode))
-
-  private def declarationTypeRoute(ua: UserAnswers, mode: Mode): Call =
-    ua.get(DeclarationTypePage) match {
-      case Some(DeclarationType.Option4) => controllers.traderDetails.consignment.consignor.routes.EoriYesNoController.onPageLoad(ua.lrn, mode)
-      case _                             => controllers.traderDetails.consignment.routes.ApprovedOperatorController.onPageLoad(ua.lrn, mode)
+  override def checkYourAnswersRoute(mode: Mode, userAnswers: UserAnswers): Call =
+    mode match {
+      case NormalMode => repRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+      case CheckMode  => tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
     }
+
 }

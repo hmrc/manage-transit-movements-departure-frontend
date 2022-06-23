@@ -26,25 +26,21 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class PreTaskListNavigator @Inject() () extends Navigator {
 
-  override val normalRoutes: RouteMapping = routes(NormalMode)
-
-  override val checkRoutes: RouteMapping = routes(CheckMode)
-
   override def routes(mode: Mode): RouteMapping = {
-    case LocalReferenceNumberPage => ua => Some(OfficeOfDepartureController.onPageLoad(ua.lrn, mode))
-    case OfficeOfDeparturePage    => ua => Some(ProcedureTypeController.onPageLoad(ua.lrn, mode))
-    case ProcedureTypePage        => ua => Some(DeclarationTypeController.onPageLoad(ua.lrn, mode))
+    case LocalReferenceNumberPage => ua => OfficeOfDepartureController.onPageLoad(ua.lrn, mode)
+    case OfficeOfDeparturePage    => ua => ProcedureTypeController.onPageLoad(ua.lrn, mode)
+    case ProcedureTypePage        => ua => DeclarationTypeController.onPageLoad(ua.lrn, mode)
     case DeclarationTypePage      => ua => declarationTypeRoute(ua, mode)
-    case TIRCarnetReferencePage   => ua => Some(SecurityDetailsTypeController.onPageLoad(ua.lrn, mode))
-    case SecurityDetailsTypePage  => ua => Some(CheckYourAnswersController.onPageLoad(ua.lrn))
+    case TIRCarnetReferencePage   => ua => SecurityDetailsTypeController.onPageLoad(ua.lrn, mode)
+    case SecurityDetailsTypePage  => ua => CheckYourAnswersController.onPageLoad(ua.lrn)
   }
 
-  private def declarationTypeRoute(ua: UserAnswers, mode: Mode): Option[Call] =
+  private def declarationTypeRoute(ua: UserAnswers, mode: Mode): Call =
     (ua.get(ProcedureTypePage), ua.get(DeclarationTypePage)) match {
       case (Some(ProcedureType.Normal), Some(DeclarationType.Option4)) =>
-        Some(TIRCarnetReferenceController.onPageLoad(ua.lrn, mode))
+        TIRCarnetReferenceController.onPageLoad(ua.lrn, mode)
       case _ =>
-        Some(SecurityDetailsTypeController.onPageLoad(ua.lrn, mode))
+        SecurityDetailsTypeController.onPageLoad(ua.lrn, mode)
     }
 
 }
