@@ -1,8 +1,8 @@
 
-GET        /:lrn/trader-details/consignment/approved-operator                        controllers.traderDetails.consignment.ApprovedOperatorController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/trader-details/consignment/approved-operator                        controllers.traderDetails.consignment.ApprovedOperatorController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/trader-details/consignment/change-approved-operator                 controllers.traderDetails.consignment.ApprovedOperatorController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/trader-details/consignment/change-approved-operator                 controllers.traderDetails.consignment.ApprovedOperatorController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/trader-details/consignment/reduced-data-set                         controllers.traderDetails.consignment.ApprovedOperatorController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/consignment/reduced-data-set                         controllers.traderDetails.consignment.ApprovedOperatorController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/consignment/change-reduced-data-set                  controllers.traderDetails.consignment.ApprovedOperatorController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/consignment/change-reduced-data-set                  controllers.traderDetails.consignment.ApprovedOperatorController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/trader-details/consignment/check-answers                            controllers.traderDetails.consignment.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
 POST       /:lrn/trader-details/consignment/check-answers                            controllers.traderDetails.consignment.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)
