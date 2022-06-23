@@ -27,14 +27,15 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.traderDetails.holderOfTransit.NameView
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class NameController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  @HolderOfTransit navigator: Navigator,
+  implicit val sessionRepository: SessionRepository,
+  @HolderOfTransit implicit val navigator: Navigator,
   formProvider: NameFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
@@ -60,11 +61,7 @@ class NameController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(NamePage, mode, updatedAnswers))
+          value => NamePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

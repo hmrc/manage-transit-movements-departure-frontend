@@ -28,14 +28,15 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.traderDetails.representative.CapacityView
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CapacityController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  @Representative navigator: Navigator,
+  implicit val sessionRepository: SessionRepository,
+  @Representative implicit val navigator: Navigator,
   actions: Actions,
   formProvider: RepresentativeCapacityFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -62,11 +63,7 @@ class CapacityController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, RepresentativeCapacity.radioItems, mode))),
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(CapacityPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(CapacityPage, mode, updatedAnswers))
+          value => CapacityPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

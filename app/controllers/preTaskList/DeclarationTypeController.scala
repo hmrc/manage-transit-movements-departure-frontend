@@ -17,8 +17,10 @@
 package controllers.preTaskList
 
 import controllers.actions._
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.preTaskList.DeclarationTypeFormProvider
 import models.journeyDomain.PreTaskListDomain
+import models.requests.DataRequest
 import models.{DeclarationType, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
@@ -34,8 +36,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DeclarationTypeController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  @PreTaskListDetails navigator: Navigator,
+  implicit val sessionRepository: SessionRepository,
+  @PreTaskListDetails implicit val navigator: Navigator,
   actions: Actions,
   checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   formProvider: DeclarationTypeFormProvider,
@@ -63,16 +65,12 @@ class DeclarationTypeController @Inject() (
     .requireData(lrn)
     .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
     .async {
-      implicit request =>
+      implicit request: DataRequest[AnyContent] =>
         form
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))),
-            value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(DeclarationTypePage, value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(DeclarationTypePage, mode, updatedAnswers))
+            value => DeclarationTypePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
           )
     }
 }

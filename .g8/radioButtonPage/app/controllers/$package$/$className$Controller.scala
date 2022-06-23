@@ -13,13 +13,14 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.$package$.$className$View
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class $className$Controller @Inject()(
    override val messagesApi: MessagesApi,
-   sessionRepository: SessionRepository,
-   @$navRoute$ navigator: Navigator,
+   implicit val sessionRepository: SessionRepository,
+   @$navRoute$ implicit val navigator: Navigator,
    actions: Actions,
    formProvider: $formProvider$,
    val controllerComponents: MessagesControllerComponents,
@@ -44,11 +45,7 @@ class $className$Controller @Inject()(
 
       form.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, $className$.radioItems, mode))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set($className$Page, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage($className$Page, mode, updatedAnswers))
+        value => $className$Page.writeToUserAnswers(value).writeToSession().navigateWith(mode)
       )
   }
 }

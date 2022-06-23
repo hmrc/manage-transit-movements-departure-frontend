@@ -15,14 +15,15 @@ import repositories.SessionRepository
 import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.$package$.$className$View
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class $className;format="cap"$Controller @Inject()(
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  @$navRoute$ navigator: Navigator,
+  implicit val sessionRepository: SessionRepository,
+  @$navRoute$ implicit val navigator: Navigator,
   actions: Actions,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: $formProvider$,
@@ -67,11 +68,7 @@ class $className;format="cap"$Controller @Inject()(
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countryList.countries, name))),
-                value =>
-                  for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.set($className$Page, value))
-                    _              <- sessionRepository.set(updatedAnswers)
-                  } yield Redirect(navigator.nextPage($className$Page, mode, updatedAnswers))
+                value => $className$Page.writeToUserAnswers(value).writeToSession().navigateWith(mode)
               )
             }
     }
