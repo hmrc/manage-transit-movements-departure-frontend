@@ -16,6 +16,9 @@
 
 package pages.traderDetails.consignment.consignee
 
+import models.{Address, EoriNumber}
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
 import pages.behaviours.PageBehaviours
 
 class MoreThanOneConsigneePageSpec extends PageBehaviours {
@@ -28,6 +31,42 @@ class MoreThanOneConsigneePageSpec extends PageBehaviours {
 
     beRemovable[Boolean](MoreThanOneConsigneePage)
 
-    //TODO add clean up tests once pages built
+    "cleanup" - {
+      val consigneeEori    = arbitrary[EoriNumber].sample.value
+      val consigneeName    = Gen.alphaNumStr.sample.value
+      val consigneeAddress = arbitrary[Address].sample.value
+
+      "when Yes selected" - {
+        "must clean up Consignee pages" in {
+          val preChange = emptyUserAnswers
+            .setValue(EoriYesNoPage, true)
+            .setValue(EoriNumberPage, consigneeEori.value)
+            .setValue(NamePage, consigneeName)
+            .setValue(AddressPage, consigneeAddress)
+          val postChange = preChange.set(MoreThanOneConsigneePage, true).success.value
+
+          postChange.get(EoriNumberPage) mustNot be(defined)
+          postChange.get(EoriYesNoPage) mustNot be(defined)
+          postChange.get(NamePage) mustNot be(defined)
+          postChange.get(AddressPage) mustNot be(defined)
+        }
+      }
+
+      "when NO selected" - {
+        "must do nothing" in {
+          val preChange = emptyUserAnswers
+            .setValue(EoriYesNoPage, true)
+            .setValue(EoriNumberPage, consigneeEori.value)
+            .setValue(NamePage, consigneeName)
+            .setValue(AddressPage, consigneeAddress)
+          val postChange = preChange.set(MoreThanOneConsigneePage, false).success.value
+
+          postChange.get(EoriNumberPage) must be(defined)
+          postChange.get(EoriYesNoPage) must be(defined)
+          postChange.get(NamePage) must be(defined)
+          postChange.get(AddressPage) must be(defined)
+        }
+      }
+    }
   }
 }
