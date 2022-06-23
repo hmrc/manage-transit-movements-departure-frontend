@@ -15,26 +15,29 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-@import views.html.components.Heading
+@import viewModels.components.InputSelectViewModel
+@import viewModels.components.InputSelectViewModel._
+@import views.html.components.{Heading, HeadingWithSectionCaption}
+@import views.utils.ViewUtils._
 
 @this(
     govukSelect: GovukSelect,
-    headingComponent: Heading
+    headingWithNoCaption: Heading,
+    headingWithSectionCaption: HeadingWithSectionCaption
 )
 
 @(
     field: Field,
-    heading: Option[String] = None,
-    label: Option[String] = None,
-    hint: Option[String] = None,
-    placeholder: Option[String] = None,
-    selectItems: Seq[SelectItem]
+    selectType: InputSelectViewModel,
+    placeholder: String,
+    selectItems: Seq[SelectItem],
+    hint: Option[String] = None
 )(implicit messages: Messages)
 
 @select = @{
     Select(
         hint = hint.map(x => Hint(content = Text(x))),
-        items = SelectItem(value = None, text = placeholder.getOrElse("")) +: selectItems,
+        items = SelectItem(value = None, text = placeholder) +: selectItems,
         formGroupClasses = "autocomplete-wrapper",
         attributes = Map("data-autocomplete" -> ""),
         errorMessage = field.error.map { e =>
@@ -45,15 +48,19 @@
     .withFormField(field)
 }
 
-@(heading, label) match {
-    case (_, Some(label)) => {
-        @heading.map(headingComponent(_))
-        @govukSelect(select.copy(label = Label(content = Text(label))))
+@selectType match {
+    case OrdinarySelect(heading, caption) => {
+        @govukSelect(select.withHeadingAndCaption(heading, caption))
     }
-    case (Some(heading), None) => {
-        @govukSelect(select.withHeading(heading = Text(heading)))
+    case SelectWithAdditionalHtml(heading, caption, additionalHtml) => {
+        @caption match {
+            case Some(value) => { @headingWithSectionCaption(heading, value) }
+            case None        => { @headingWithNoCaption(heading) }
+        }
+        @additionalHtml
+        @govukSelect(select.copy(label = Label(content = Text(heading), isPageHeading = false, classes = "govuk-visually-hidden")))
     }
-    case _ => {
-        @govukSelect(select)
+    case AddressCountrySelect(label) => {
+        @govukSelect(select.copy(label = Label(content = Text(label), isPageHeading = false)))
     }
 }
