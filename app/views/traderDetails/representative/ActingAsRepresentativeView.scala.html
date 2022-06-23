@@ -16,6 +16,7 @@
 
 @import controllers.traderDetails.representative.routes
 @import models.LocalReferenceNumber
+@import viewModels.components.InputYesNoViewModel._
 @import views.html.components.{Button, ErrorSummary, InputYesNo}
 
 @this(
@@ -40,9 +41,11 @@
 
         @inputYesNo(
             field = form("value"),
-            messageKeyPrefix = "traderDetails.representative.actingRepresentative",
-            caption = Some(messages("traderDetails.caption")),
-            hint = Some(HtmlContent(messages("traderDetails.representative.actingRepresentative.hint")))
+            hint = Some(HtmlContent(messages("traderDetails.representative.actingRepresentative.hint"))),
+            yesNoType = OrdinaryYesNo(
+                heading = messages("traderDetails.representative.actingRepresentative.heading"),
+                caption = Some(messages("traderDetails.caption"))
+            )
         )
 
         @button(attributes = Map("id" -> "submit"))

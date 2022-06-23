@@ -17,7 +17,6 @@
 package views.traderDetails.consignment
 
 import models.NormalMode
-import org.scalatest.Tag
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -34,7 +33,7 @@ class ApprovedOperatorViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithBackLink
 
-  behave like pageWithCaption("Trader details")
+  behave like pageWithSectionCaption("Trader details")
 
   behave like pageWithHeading()
 
