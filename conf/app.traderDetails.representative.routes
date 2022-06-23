@@ -1,8 +1,3 @@
-GET        /:lrn/trader-details/representative/acting-representative                           controllers.traderDetails.representative.ActingAsRepresentativeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/trader-details/representative/acting-representative                           controllers.traderDetails.representative.ActingAsRepresentativeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/trader-details/representative/change-acting-representative                    controllers.traderDetails.representative.ActingAsRepresentativeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/trader-details/representative/change-acting-representative                    controllers.traderDetails.representative.ActingAsRepresentativeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-
 GET        /:lrn/trader-details/representative/eori                                            controllers.traderDetails.representative.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/trader-details/representative/eori                                            controllers.traderDetails.representative.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/trader-details/representative/change-eori                                     controllers.traderDetails.representative.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

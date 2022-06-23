@@ -18,7 +18,7 @@ package models.journeyDomain.traderDetails
 
 import models.domain._
 import cats.implicits._
-import pages.traderDetails.representative.ActingAsRepresentativePage
+import pages.traderDetails.ActingAsRepresentativePage
 
 case class TraderDetailsDomain(
   holderOfTransit: HolderOfTransitDomain,

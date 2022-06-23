@@ -14,33 +14,28 @@
  * limitations under the License.
  */
 
-package pages.traderDetails.representative
+package pages.traderDetails
 
 import models.{Mode, UserAnswers}
-import play.api.libs.json.JsPath
 import pages.QuestionPage
-import pages.sections.RepresentativeSection
+import pages.sections.{RepresentativeSection, TraderDetailsSection}
+import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 import scala.util.Try
 
 case object ActingAsRepresentativePage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = RepresentativeSection.path \ toString
+  override def path: JsPath = TraderDetailsSection.path \ toString
 
   override def toString: String = "actingAsRepresentative"
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) =>
-        userAnswers
-          .remove(EoriPage)
-          .flatMap(_.remove(NamePage))
-          .flatMap(_.remove(CapacityPage))
-          .flatMap(_.remove(TelephoneNumberPage))
-      case _ => super.cleanup(value, userAnswers)
+      case Some(false) => userAnswers.remove(RepresentativeSection)
+      case _           => super.cleanup(value, userAnswers)
     }
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(controllers.traderDetails.representative.routes.ActingAsRepresentativeController.onPageLoad(userAnswers.lrn, mode))
+    Some(controllers.traderDetails.routes.ActingAsRepresentativeController.onPageLoad(userAnswers.lrn, mode))
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.traderDetails.representative
+package controllers.traderDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
@@ -24,12 +24,12 @@ import navigation.annotations.Representative
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.traderDetails.representative.ActingAsRepresentativePage
+import pages.traderDetails.ActingAsRepresentativePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.traderDetails.representative.ActingAsRepresentativeView
+import views.html.traderDetails.ActingAsRepresentativeView
 
 import scala.concurrent.Future
 

@@ -26,14 +26,6 @@ import utils.cyaHelpers.AnswersHelper
 
 class RepresentativeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers) {
 
-  def actingAsRepresentative: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
-    page = ActingAsRepresentativePage,
-    formatAnswer = formatAsYesOrNo,
-    prefix = "traderDetails.representative.actingRepresentative",
-    id = None,
-    call = ActingAsRepresentativeController.onPageLoad(lrn, mode)
-  )
-
   def eori: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = EoriPage,
     formatAnswer = formatAsLiteral,

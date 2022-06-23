@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package controllers.traderDetails.representative
+package controllers.traderDetails
 
 import controllers.actions._
 import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.Representative
-import pages.traderDetails.representative.ActingAsRepresentativePage
+import navigation.annotations.TraderDetails
+import pages.traderDetails.ActingAsRepresentativePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.traderDetails.representative.ActingAsRepresentativeView
+import views.html.traderDetails.ActingAsRepresentativeView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ActingAsRepresentativeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @Representative navigator: Navigator,
+  @TraderDetails navigator: Navigator,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,

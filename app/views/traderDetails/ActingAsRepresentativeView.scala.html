@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.traderDetails.representative.routes
+@import controllers.traderDetails.routes
 @import models.LocalReferenceNumber
 @import views.html.components.{Button, ErrorSummary, InputYesNo}
 
@@ -29,7 +29,7 @@
 @(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("traderDetails.representative.actingRepresentative.title"),
+    title = messages("traderDetails.actingRepresentative.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -40,9 +40,9 @@
 
         @inputYesNo(
             field = form("value"),
-            messageKeyPrefix = "traderDetails.representative.actingRepresentative",
+            messageKeyPrefix = "traderDetails.actingRepresentative",
             caption = Some(messages("traderDetails.caption")),
-            hint = Some(HtmlContent(messages("traderDetails.representative.actingRepresentative.hint")))
+            hint = Some(HtmlContent(messages("traderDetails.actingRepresentative.hint")))
         )
 
         @button(attributes = Map("id" -> "submit"))

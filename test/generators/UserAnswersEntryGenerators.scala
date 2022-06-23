@@ -22,6 +22,7 @@ import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import pages.preTaskList._
+import pages.traderDetails.ActingAsRepresentativePage
 import pages.traderDetails.holderOfTransit.{contact => holderOfTransitContact}
 import pages.traderDetails.consignment.{consignor => traderDetailsConsignor}
 import play.api.libs.json.{JsValue, Json}
@@ -141,12 +142,11 @@ trait UserAnswersEntryGenerators {
       } yield (pages.traderDetails.representative.EoriPage, value)
     }
 
-  implicit lazy val arbitraryRepresentativeActingRepresentativeUserAnswersEntry
-    : Arbitrary[(pages.traderDetails.representative.ActingAsRepresentativePage.type, JsValue)] =
+  implicit lazy val arbitraryRepresentativeActingRepresentativeUserAnswersEntry: Arbitrary[(ActingAsRepresentativePage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[pages.traderDetails.representative.ActingAsRepresentativePage.type#Data].map(Json.toJson(_))
-      } yield (pages.traderDetails.representative.ActingAsRepresentativePage, value)
+        value <- arbitrary[ActingAsRepresentativePage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.ActingAsRepresentativePage, value)
     }
 
   implicit lazy val arbitraryTransitHolderAdditionalContactTelephoneNumberUserAnswersEntry

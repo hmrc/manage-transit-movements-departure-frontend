@@ -27,6 +27,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.Page
 import pages.preTaskList.DeclarationTypePage
+import pages.traderDetails.ActingAsRepresentativePage
 import pages.traderDetails.representative._
 
 class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {

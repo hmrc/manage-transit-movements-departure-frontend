@@ -18,7 +18,7 @@ package generators
 
 import models.UserAnswers
 import org.scalacheck.{Arbitrary, Gen}
-import pages.traderDetails.representative.ActingAsRepresentativePage
+import pages.traderDetails.ActingAsRepresentativePage
 import play.api.libs.json.JsBoolean
 
 trait RepresentativeUserAnswersGenerator extends UserAnswersGenerator {

@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package views.traderDetails.representative
+package views.traderDetails
 
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.traderDetails.representative.ActingAsRepresentativeView
+import views.html.traderDetails.ActingAsRepresentativeView
 
 class ActingAsRepresentativeViewSpec extends YesNoViewBehaviours {
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector.instanceOf[ActingAsRepresentativeView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "traderDetails.representative.actingRepresentative"
+  override val prefix: String = "traderDetails.actingRepresentative"
 
   behave like pageWithTitle()
 

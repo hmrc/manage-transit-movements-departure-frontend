@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package pages.traderDetails.representative
+package pages.traderDetails
 
 import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.traderDetails.representative.{CapacityPage, EoriPage, NamePage, TelephoneNumberPage}
 
 class ActingAsRepresentativePageSpec extends PageBehaviours {
 

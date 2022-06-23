@@ -141,6 +141,13 @@ task.traderDetails.edit = Edit trader details
 
 traderDetails.caption = Trader details
 
+traderDetails.actingRepresentative.title = Are you acting as a representative?
+traderDetails.actingRepresentative.heading = Are you acting as a representative?
+traderDetails.actingRepresentative.checkYourAnswersLabel = Are you acting as a representative?
+traderDetails.actingRepresentative.error.required = Select yes if you are acting as a representative
+traderDetails.actingRepresentative.hint = You are a representative if you are moving the goods for someone else or you are completing the declaration on behalf of a trader.
+traderDetails.actingRepresentative.change.hidden = if you are acting as a representative
+
 traderDetails.checkYourAnswers.heading = Check your answers
 traderDetails.checkYourAnswers.title = Check your answers
 
@@ -237,13 +244,6 @@ traderDetails.holderOfTransit.checkYourAnswers.additionalContact = Additional co
 
 # Representative
 
-traderDetails.representative.actingRepresentative.title = Are you acting as a representative?
-traderDetails.representative.actingRepresentative.heading = Are you acting as a representative?
-traderDetails.representative.actingRepresentative.checkYourAnswersLabel = Are you acting as a representative?
-traderDetails.representative.actingRepresentative.error.required = Select yes if you are acting as a representative
-traderDetails.representative.actingRepresentative.hint = You are a representative if you are moving the goods for someone else or you are completing the declaration on behalf of a trader.
-traderDetails.representative.actingRepresentative.change.hidden = if you are acting as a representative
-
 traderDetails.representative.eori.title = What is your EORI number?
 traderDetails.representative.eori.heading = What is your EORI number?
 traderDetails.representative.eori.checkYourAnswersLabel = Representative EORI number
@@ -287,6 +287,8 @@ traderDetails.representative.checkYourAnswers.heading = Check your answers
 traderDetails.representative.checkYourAnswers.title = Check your answers
 traderDetails.representative.checkYourAnswers.representative = Representative
 
+# Consignment
+
 traderDetails.consignment.approvedOperator.title = Do you want to use a reduced data set?
 traderDetails.consignment.approvedOperator.heading = Do you want to use a reduced data set?
 traderDetails.consignment.approvedOperator.checkYourAnswersLabel = Do you want to use a reduced data set?
@@ -295,7 +297,8 @@ traderDetails.consignment.approvedOperator.hintText = This simplifies the declar
 traderDetails.consignment.approvedOperator.paragraph = You must be an approved airline, shipping or rail freight operator to use a reduced data set.
 traderDetails.consignment.approvedOperator.label = Do you want to use a reduced data set?
 
-# Trader Details - Consignor
+# Consignor
+
 traderDetails.consignment.consignor.eoriYesNo.title = Do you know the consignor’s EORI number?
 traderDetails.consignment.consignor.eoriYesNo.heading = Do you know the consignor’s EORI number?
 traderDetails.consignment.consignor.eoriYesNo.checkYourAnswersLabel = Do you know the consignor’s EORI number?
@@ -339,7 +342,6 @@ traderDetails.consignment.consignor.address.error.required = Enter {0} of {1}’
 traderDetails.consignment.consignor.address.error.length = {0} of {1}’s address must be {2} characters or less
 traderDetails.consignment.consignor.address.placeholder = Select a country
 
-# Trader Details - Consignor - Contact
 traderDetails.consignment.consignor.addContact.title = Do you want to add a contact for the consignor?
 traderDetails.consignment.consignor.addContact.heading = Do you want to add a contact for the consignor?
 traderDetails.consignment.consignor.addContact.checkYourAnswersLabel = Do you want to add a contact for the consignor?
@@ -365,7 +367,8 @@ traderDetails.consignment.consignor.contact.telephoneNumber.error.invalidCharact
 traderDetails.consignment.consignor.contact.telephoneNumber.error.invalidFormat = Enter {0}’s phone number in the right format
 traderDetails.consignment.consignor.contact.telephoneNumber.change.hidden = consignor contact phone number
 
-# Trader Details - Consignee
+# Consignee
+
 traderDetails.consignment.consignee.moreThanOneConsignee.title = Is there more than one consignee?
 traderDetails.consignment.consignee.moreThanOneConsignee.heading = Is there more than one consignee?
 traderDetails.consignment.consignee.moreThanOneConsignee.checkYourAnswersLabel = Is there more than one consignee?
@@ -416,10 +419,8 @@ traderDetails.consignment.consignee.address.error.country.required = Enter the c
 traderDetails.consignment.consignee.address.error.length = {0} of {1}’s address must be {2} characters or less
 traderDetails.consignment.consignee.address.placeholder = Select a country
 
-# Trader Details - Check Your Answers
 traderDetails.consignment.checkYourAnswers.heading = Check your answers
 traderDetails.consignment.checkYourAnswers.title = Check your answers
 traderDetails.consignment.checkYourAnswers.consignor = Consignor
 traderDetails.consignment.checkYourAnswers.consignorContact = Consignor contact
 traderDetails.consignment.checkYourAnswers.consignee = Consignee
-

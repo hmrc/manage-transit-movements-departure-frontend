@@ -41,7 +41,7 @@ class CheckYourAnswersController @Inject() (
   }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
-    Redirect(controllers.traderDetails.representative.routes.ActingAsRepresentativeController.onPageLoad(lrn, NormalMode))
+    Redirect(controllers.traderDetails.routes.ActingAsRepresentativeController.onPageLoad(lrn, NormalMode))
   }
 
 }
