@@ -20,6 +20,7 @@ import base.SpecBase
 import controllers.traderDetails.consignment.consignor.contact.{routes => contactRoutes}
 import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
 import controllers.traderDetails.consignment.consignee.{routes => consigneeRoutes}
+import controllers.traderDetails.consignment.{routes => consignmentRoutes}
 import generators.Generators
 import models.{Address, Mode}
 import org.scalacheck.Arbitrary.arbitrary
@@ -35,6 +36,50 @@ import utils.cyaHelpers.traderDetails.TraderDetailsConsignmentCheckYourAnswersHe
 class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "TraderDetailsConsignmentCheckYourAnswersHelper" - {
+
+    "approvedOperator" - {
+      "must return None" - {
+        s"when $ApprovedOperatorPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.approvedOperator
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        s"when $ApprovedOperatorPage is defined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(ApprovedOperatorPage, true)
+
+              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val result = helper.approvedOperator
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Do you want to use a reduced data set?".toText),
+                  value = Value("Yes".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = consignmentRoutes.ApprovedOperatorController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("if you want to use a reduced data set"),
+                          attributes = Map()
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
 
     "consignorEoriYesNo" - {
       "must return None" - {

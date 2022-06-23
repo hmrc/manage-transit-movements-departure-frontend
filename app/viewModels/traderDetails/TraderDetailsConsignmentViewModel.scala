@@ -31,6 +31,7 @@ sealed trait TraderDetailsConsignmentViewModel {
     val consignorSection = Section(
       sectionTitle = messages("traderDetails.consignment.checkYourAnswers.consignor"),
       rows = Seq(
+        helper.approvedOperator,
         helper.consignorEoriYesNo,
         helper.consignorEori,
         helper.consignorName,
