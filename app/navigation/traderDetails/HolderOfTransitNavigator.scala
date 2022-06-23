@@ -16,31 +16,17 @@
 
 package navigation.traderDetails
 
-import controllers.traderDetails.holderOfTransit.contact.{routes => contactRoutes}
 import controllers.traderDetails.holderOfTransit.{routes => hotRoutes}
 import controllers.traderDetails.{routes => tdRoutes}
 import models._
 import models.journeyDomain.traderDetails.HolderOfTransitDomain
 import navigation.UserAnswersNavigator
-import pages.traderDetails.holderOfTransit._
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class HolderOfTransitNavigator @Inject() () extends UserAnswersNavigator[HolderOfTransitDomain] {
-
-  override def routes(mode: Mode): RouteMapping = {
-    case EoriYesNoPage               => ua => hotRoutes.EoriYesNoController.onPageLoad(ua.lrn, mode)
-    case EoriPage                    => ua => hotRoutes.EoriController.onPageLoad(ua.lrn, mode)
-    case TirIdentificationYesNoPage  => ua => hotRoutes.TirIdentificationYesNoController.onPageLoad(ua.lrn, mode)
-    case TirIdentificationPage       => ua => hotRoutes.TirIdentificationController.onPageLoad(ua.lrn, mode)
-    case NamePage                    => ua => hotRoutes.NameController.onPageLoad(ua.lrn, mode)
-    case AddressPage                 => ua => hotRoutes.AddressController.onPageLoad(ua.lrn, mode)
-    case AddContactPage              => ua => hotRoutes.AddContactController.onPageLoad(ua.lrn, mode)
-    case contact.NamePage            => ua => contactRoutes.NameController.onPageLoad(ua.lrn, mode)
-    case contact.TelephoneNumberPage => ua => contactRoutes.TelephoneNumberController.onPageLoad(ua.lrn, mode)
-  }
 
   override def checkYourAnswersRoute(mode: Mode, userAnswers: UserAnswers): Call =
     mode match {

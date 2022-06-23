@@ -16,14 +16,19 @@
 
 package pages.traderDetails.representative
 
+import models.{Mode, UserAnswers}
 import models.traderDetails.representative.RepresentativeCapacity
 import play.api.libs.json.JsPath
 import pages.QuestionPage
 import pages.sections.RepresentativeSection
+import play.api.mvc.Call
 
 case object CapacityPage extends QuestionPage[RepresentativeCapacity] {
 
   override def path: JsPath = RepresentativeSection.path \ toString
 
   override def toString: String = "capacity"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(controllers.traderDetails.representative.routes.CapacityController.onPageLoad(userAnswers.lrn, mode))
 }

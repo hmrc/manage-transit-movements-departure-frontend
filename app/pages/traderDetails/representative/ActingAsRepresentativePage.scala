@@ -16,10 +16,11 @@
 
 package pages.traderDetails.representative
 
-import models.UserAnswers
+import models.{Mode, UserAnswers}
 import play.api.libs.json.JsPath
 import pages.QuestionPage
 import pages.sections.RepresentativeSection
+import play.api.mvc.Call
 
 import scala.util.Try
 
@@ -39,4 +40,7 @@ case object ActingAsRepresentativePage extends QuestionPage[Boolean] {
           .flatMap(_.remove(TelephoneNumberPage))
       case _ => super.cleanup(value, userAnswers)
     }
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(controllers.traderDetails.representative.routes.ActingAsRepresentativeController.onPageLoad(userAnswers.lrn, mode))
 }

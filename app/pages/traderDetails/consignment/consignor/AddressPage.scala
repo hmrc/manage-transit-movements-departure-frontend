@@ -16,14 +16,18 @@
 
 package pages.traderDetails.consignment.consignor
 
-import models.Address
+import models.{Address, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.TraderDetailsConsignorSection
 import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
 case object AddressPage extends QuestionPage[Address] {
 
   override def path: JsPath = TraderDetailsConsignorSection.path \ toString
 
   override def toString: String = "address"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(controllers.traderDetails.consignment.consignor.routes.AddressController.onPageLoad(userAnswers.lrn, mode))
 }

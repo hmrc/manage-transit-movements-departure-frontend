@@ -24,14 +24,15 @@ import play.api.mvc.Call
 
 abstract class UserAnswersNavigator[T](implicit userAnswersReader: UserAnswersReader[T]) extends Navigator {
 
+  override def routes(mode: Mode): RouteMapping = ???
+
   def checkYourAnswersRoute(mode: Mode, userAnswers: UserAnswers): Call
 
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
     UserAnswersReader[T].run(userAnswers) match {
       case Left(ReaderError(page, _)) =>
-        routes(mode)
-          .applyOrElse[Page, Route](page, _ => _ => controllers.routes.SessionExpiredController.onPageLoad())
-          .apply(userAnswers)
-      case Right(_) => checkYourAnswersRoute(mode, userAnswers)
+        page.route(userAnswers, mode).getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
+      case Right(_) =>
+        checkYourAnswersRoute(mode, userAnswers)
     }
 }

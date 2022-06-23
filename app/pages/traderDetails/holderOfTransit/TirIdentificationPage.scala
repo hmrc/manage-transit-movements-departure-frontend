@@ -16,13 +16,18 @@
 
 package pages.traderDetails.holderOfTransit
 
+import models.{Mode, UserAnswers}
 import play.api.libs.json.JsPath
 import pages.QuestionPage
 import pages.sections.HolderOfTransitSection
+import play.api.mvc.Call
 
 case object TirIdentificationPage extends QuestionPage[String] {
 
   override def path: JsPath = HolderOfTransitSection.path \ toString
 
   override def toString: String = "tirIdentification"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(controllers.traderDetails.holderOfTransit.routes.TirIdentificationController.onPageLoad(userAnswers.lrn, mode))
 }

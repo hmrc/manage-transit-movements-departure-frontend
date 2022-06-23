@@ -21,21 +21,12 @@ import controllers.traderDetails.{routes => tdRoutes}
 import models._
 import models.journeyDomain.traderDetails.RepresentativeDomain
 import navigation.UserAnswersNavigator
-import pages.traderDetails.representative._
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class RepresentativeNavigator @Inject() () extends UserAnswersNavigator[RepresentativeDomain] {
-
-  override def routes(mode: Mode): RouteMapping = {
-    case ActingAsRepresentativePage => ua => repRoutes.ActingAsRepresentativeController.onPageLoad(ua.lrn, mode)
-    case EoriPage                   => ua => repRoutes.EoriController.onPageLoad(ua.lrn, mode)
-    case NamePage                   => ua => repRoutes.NameController.onPageLoad(ua.lrn, mode)
-    case CapacityPage               => ua => repRoutes.CapacityController.onPageLoad(ua.lrn, mode)
-    case TelephoneNumberPage        => ua => repRoutes.TelephoneNumberController.onPageLoad(ua.lrn, mode)
-  }
 
   override def checkYourAnswersRoute(mode: Mode, userAnswers: UserAnswers): Call =
     mode match {

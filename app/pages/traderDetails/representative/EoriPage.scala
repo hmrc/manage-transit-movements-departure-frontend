@@ -16,13 +16,18 @@
 
 package pages.traderDetails.representative
 
+import models.{Mode, UserAnswers}
 import play.api.libs.json.JsPath
 import pages.QuestionPage
 import pages.sections.RepresentativeSection
+import play.api.mvc.Call
 
 case object EoriPage extends QuestionPage[String] {
 
   override def path: JsPath = RepresentativeSection.path \ toString
 
   override def toString: String = "eori"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(controllers.traderDetails.representative.routes.EoriController.onPageLoad(userAnswers.lrn, mode))
 }

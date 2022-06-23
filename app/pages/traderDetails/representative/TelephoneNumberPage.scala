@@ -16,13 +16,18 @@
 
 package pages.traderDetails.representative
 
-import play.api.libs.json.JsPath
+import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.RepresentativeSection
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
 case object TelephoneNumberPage extends QuestionPage[String] {
 
   override def path: JsPath = RepresentativeSection.path \ toString
 
   override def toString: String = "telephoneNumber"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(controllers.traderDetails.representative.routes.TelephoneNumberController.onPageLoad(userAnswers.lrn, mode))
 }
