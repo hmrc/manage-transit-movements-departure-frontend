@@ -16,6 +16,12 @@
 
 package models.journeyDomain
 
-import queries.Gettable
+import queries.{Gettable, Query, Settable}
 
-case class ReaderError(page: Gettable[_], message: Option[String] = None)
+trait OpsError {
+  val page: Query
+  val message: Option[String]
+}
+
+case class ReaderError(page: Gettable[_], message: Option[String] = None) extends OpsError
+case class WriterError(page: Settable[_], message: Option[String] = None) extends OpsError

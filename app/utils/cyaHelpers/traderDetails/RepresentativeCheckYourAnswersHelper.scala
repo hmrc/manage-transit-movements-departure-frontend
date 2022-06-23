@@ -19,12 +19,21 @@ package utils.cyaHelpers.traderDetails
 import controllers.traderDetails.representative.routes._
 import models.traderDetails.representative.RepresentativeCapacity
 import models.{Mode, UserAnswers}
+import pages.traderDetails.ActingAsRepresentativePage
 import pages.traderDetails.representative._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
 
 class RepresentativeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers) {
+
+  def actingAsRepresentative: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+    page = ActingAsRepresentativePage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "traderDetails.actingRepresentative",
+    id = None,
+    call = controllers.traderDetails.routes.ActingAsRepresentativeController.onPageLoad(lrn, mode)
+  )
 
   def eori: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = EoriPage,

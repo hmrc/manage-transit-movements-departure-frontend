@@ -32,8 +32,8 @@ case object MoreThanOneConsigneePage extends QuestionPage[Boolean] {
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) => userAnswers.remove(TraderDetailsConsigneeSection)
-      case _           => super.cleanup(value, userAnswers)
+      case Some(true) => userAnswers.remove(TraderDetailsConsigneeSection)
+      case _          => super.cleanup(value, userAnswers)
     }
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =

@@ -32,6 +32,7 @@ sealed trait RepresentativeViewModel {
       Section(
         sectionTitle = messages("traderDetails.representative.checkYourAnswers.representative"),
         rows = Seq(
+          helper.actingAsRepresentative,
           helper.eori,
           helper.name,
           helper.capacity,

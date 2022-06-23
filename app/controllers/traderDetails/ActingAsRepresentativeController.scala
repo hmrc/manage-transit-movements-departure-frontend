@@ -17,6 +17,7 @@
 package controllers.traderDetails
 
 import controllers.actions._
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -33,8 +34,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ActingAsRepresentativeController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  @TraderDetails navigator: Navigator,
+  implicit val sessionRepository: SessionRepository,
+  @TraderDetails implicit val navigator: Navigator,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -61,11 +62,7 @@ class ActingAsRepresentativeController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(ActingAsRepresentativePage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(ActingAsRepresentativePage, mode, updatedAnswers))
+          value => ActingAsRepresentativePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }
