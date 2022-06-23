@@ -47,7 +47,7 @@ class TraderDetailsConsignmentViewModelSpec extends SpecBase with ScalaCheckProp
     "when user answers populated" - {
       "must return row for each answer" in {
         val answers = emptyUserAnswers
-          .setValue(ApprovedOperatorPage, true)
+          .setValue(ApprovedOperatorPage, false)
           .setValue(consignor.EoriYesNoPage, true)
           .setValue(consignor.EoriPage, "eori")
           .setValue(consignor.NamePage, "name")
@@ -65,11 +65,12 @@ class TraderDetailsConsignmentViewModelSpec extends SpecBase with ScalaCheckProp
         sections.size mustBe 3
 
         sections.head.sectionTitle.get mustBe "Consignor"
-        sections.head.rows.size mustBe 4
-        sections.head.rows.head.value.content.asHtml.toString() mustBe "Yes"
-        sections.head.rows(1).value.content.asHtml.toString() mustBe "eori"
-        sections.head.rows(2).value.content.asHtml.toString() mustBe "name"
-        sections.head.rows(3).value.content.asHtml.toString() mustBe "line1<br>line2<br>postal code<br>description"
+        sections.head.rows.size mustBe 5
+        sections.head.rows.head.value.content.asHtml.toString() mustBe "No"
+        sections.head.rows(1).value.content.asHtml.toString() mustBe "Yes"
+        sections.head.rows(2).value.content.asHtml.toString() mustBe "eori"
+        sections.head.rows(3).value.content.asHtml.toString() mustBe "name"
+        sections.head.rows(4).value.content.asHtml.toString() mustBe "line1<br>line2<br>postal code<br>description"
 
         sections(1).sectionTitle.get mustBe "Consignor contact"
         sections(1).rows.size mustBe 3

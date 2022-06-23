@@ -17,8 +17,10 @@
 package pages.traderDetails.consignment
 
 import models.Address
+import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.preTaskList.SecurityDetailsTypePage
 import pages.traderDetails.consignment.consignor._
 
 class ApprovedOperatorPageSpec extends PageBehaviours {
@@ -34,18 +36,19 @@ class ApprovedOperatorPageSpec extends PageBehaviours {
     "cleanup" - {
       val testAddress = arbitrary[Address].sample.value
 
-      "when NO selected" - {
+      "when Yes selected and we have No Security Details" - {
         "must clean up Consignor pages" in {
 
           forAll(arbitrary[String]) {
             eori =>
               val preChange = emptyUserAnswers
-                .setValue(ApprovedOperatorPage, true)
+                .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+                .setValue(ApprovedOperatorPage, false)
                 .setValue(EoriYesNoPage, true)
                 .setValue(EoriPage, eori)
                 .setValue(NamePage, "name")
                 .setValue(AddressPage, testAddress)
-              val postChange = preChange.set(ApprovedOperatorPage, false).success.value
+              val postChange = preChange.set(ApprovedOperatorPage, true).success.value
 
               postChange.get(EoriPage) mustNot be(defined)
               postChange.get(EoriYesNoPage) mustNot be(defined)
@@ -55,23 +58,67 @@ class ApprovedOperatorPageSpec extends PageBehaviours {
         }
       }
 
-      "when YES selected" - {
+      "when No selected and we have No Security Details" - {
         "must do nothing" in {
           forAll(arbitrary[String]) {
             eori =>
               val preChange = emptyUserAnswers
+                .setValue(SecurityDetailsTypePage, NoSecurityDetails)
                 .setValue(ApprovedOperatorPage, true)
                 .setValue(EoriYesNoPage, true)
                 .setValue(EoriPage, eori)
                 .setValue(NamePage, "name")
                 .setValue(AddressPage, testAddress)
 
-              val postChange = preChange.set(EoriYesNoPage, true).success.value
+              val postChange = preChange.set(ApprovedOperatorPage, false).success.value
 
-              postChange.get(EoriPage) must be(defined)
-              postChange.get(EoriYesNoPage) must be(defined)
-              postChange.get(NamePage) must be(defined)
-              postChange.get(AddressPage) must be(defined)
+              postChange.get(EoriPage).isDefined must be(true)
+              postChange.get(EoriYesNoPage).isDefined must be(true)
+              postChange.get(NamePage).isDefined must be(true)
+              postChange.get(AddressPage).isDefined must be(true)
+          }
+        }
+      }
+
+      "when Yes selected and we have Security Details" - {
+        "must do nothing" in {
+          forAll(arbitrary[String]) {
+            eori =>
+              val preChange = emptyUserAnswers
+                .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
+                .setValue(ApprovedOperatorPage, false)
+                .setValue(EoriYesNoPage, true)
+                .setValue(EoriPage, eori)
+                .setValue(NamePage, "name")
+                .setValue(AddressPage, testAddress)
+
+              val postChange = preChange.set(ApprovedOperatorPage, true).success.value
+
+              postChange.get(EoriPage).isDefined must be(true)
+              postChange.get(EoriYesNoPage).isDefined must be(true)
+              postChange.get(NamePage).isDefined must be(true)
+              postChange.get(AddressPage).isDefined must be(true)
+          }
+        }
+      }
+
+      "when Yes selected and haven't populated the security details type" - {
+        "must do nothing" in {
+          forAll(arbitrary[String]) {
+            eori =>
+              val preChange = emptyUserAnswers
+                .setValue(ApprovedOperatorPage, false)
+                .setValue(EoriYesNoPage, true)
+                .setValue(EoriPage, eori)
+                .setValue(NamePage, "name")
+                .setValue(AddressPage, testAddress)
+
+              val postChange = preChange.set(ApprovedOperatorPage, true).success.value
+
+              postChange.get(EoriPage).isDefined must be(true)
+              postChange.get(EoriYesNoPage).isDefined must be(true)
+              postChange.get(NamePage).isDefined must be(true)
+              postChange.get(AddressPage).isDefined must be(true)
           }
         }
       }

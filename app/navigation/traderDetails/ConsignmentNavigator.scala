@@ -16,17 +16,15 @@
 
 package navigation.traderDetails
 
+import controllers.traderDetails.consignment.consignee.{routes => consigneeRoutes}
+import controllers.traderDetails.consignment.consignor.contact.{routes => contactRoutes}
+import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
+import controllers.traderDetails.consignment.{routes => consignmentRoutes}
+import javax.inject.{Inject, Singleton}
 import models._
 import models.journeyDomain.traderDetails.ConsignmentDomain
 import pages.traderDetails.consignment._
-import controllers.traderDetails.consignment.{routes => consignmentRoutes}
-import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
-import controllers.traderDetails.consignment.consignor.contact.{routes => contactRoutes}
-import controllers.traderDetails.consignment.consignee.{routes => consigneeRoutes}
-import models.SecurityDetailsType.NoSecurityDetails
-import pages.preTaskList.SecurityDetailsTypePage
 import play.api.mvc.Call
-import javax.inject.{Inject, Singleton}
 
 @Singleton
 class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[ConsignmentDomain] {
@@ -48,10 +46,10 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Consignme
   }
 
   private def approvedOperatorYesNoRoute(ua: UserAnswers, mode: Mode): Option[Call] =
-    (ua.get(SecurityDetailsTypePage), ua.get(ApprovedOperatorPage)) match {
-      case (Some(NoSecurityDetails), Some(true)) => Some(consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(ua.lrn, mode))
-      case (Some(_), Some(_))                    => Some(consignorRoutes.EoriYesNoController.onPageLoad(ua.lrn, mode))
-      case _                                     => Some(controllers.routes.SessionExpiredController.onPageLoad())
+    ApprovedOperatorPage.skipConsignor(ua) match {
+      case Some(true)  => Some(consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(ua.lrn, mode))
+      case Some(false) => Some(consignorRoutes.EoriYesNoController.onPageLoad(ua.lrn, mode))
+      case None        => Some(controllers.routes.SessionExpiredController.onPageLoad())
     }
 
   private def consignorEoriYesNoRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =

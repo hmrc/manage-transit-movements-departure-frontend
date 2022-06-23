@@ -19,6 +19,7 @@ package utils.cyaHelpers.traderDetails
 import controllers.traderDetails.consignment.consignor.contact.{routes => contactRoutes}
 import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
 import controllers.traderDetails.consignment.consignee.{routes => consigneeRoutes}
+import controllers.traderDetails.consignment.{routes => consignmentRoutes}
 import models.{Address, Mode, UserAnswers}
 import pages.traderDetails.consignment._
 import play.api.i18n.Messages
@@ -26,6 +27,14 @@ import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
 
 class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers) {
+
+  def approvedOperator: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+    page = ApprovedOperatorPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "traderDetails.consignment.approvedOperator",
+    id = None,
+    call = consignmentRoutes.ApprovedOperatorController.onPageLoad(lrn, mode)
+  )
 
   def consignorEoriYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = consignor.EoriYesNoPage,

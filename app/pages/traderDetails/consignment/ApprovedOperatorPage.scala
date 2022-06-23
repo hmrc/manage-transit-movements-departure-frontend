@@ -16,9 +16,11 @@
 
 package pages.traderDetails.consignment
 
+import models.SecurityDetailsType.NoSecurityDetails
 import models.UserAnswers
 import play.api.libs.json.JsPath
 import pages.QuestionPage
+import pages.preTaskList.SecurityDetailsTypePage
 import pages.sections.{TraderDetailsConsignmentSection, TraderDetailsConsignorSection}
 
 import scala.util.Try
@@ -30,8 +32,15 @@ case object ApprovedOperatorPage extends QuestionPage[Boolean] {
   override def toString: String = "approvedOperator"
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(false) => userAnswers.remove(TraderDetailsConsignorSection)
-      case _           => super.cleanup(value, userAnswers)
+    skipConsignor(userAnswers) match {
+      case Some(true) => userAnswers.remove(TraderDetailsConsignorSection)
+      case _          => super.cleanup(value, userAnswers)
+    }
+
+  def skipConsignor(userAnswers: UserAnswers): Option[Boolean] =
+    (userAnswers.get(SecurityDetailsTypePage), userAnswers.get(ApprovedOperatorPage)) match {
+      case (Some(NoSecurityDetails), Some(true)) => Some(true)
+      case (Some(_), Some(_))                    => Some(false)
+      case _                                     => None
     }
 }
