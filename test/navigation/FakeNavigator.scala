@@ -16,12 +16,11 @@
 
 package navigation
 
-import models.{Mode, NormalMode}
+import models.{Mode, UserAnswers}
+import pages.Page
 import play.api.mvc.Call
 
-class FakeNavigator(desiredRoute: Call, mode: Mode = NormalMode) extends Navigator {
+class FakeNavigator(desiredRoute: Call) extends Navigator {
 
-  override def routes(mode: Mode): RouteMapping = {
-    case _ => _ => desiredRoute
-  }
+  override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = desiredRoute
 }

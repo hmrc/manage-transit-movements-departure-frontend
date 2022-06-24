@@ -31,26 +31,28 @@ case class ConsignmentDomain(
 object ConsignmentDomain {
 
   implicit val userAnswersReader: UserAnswersReader[ConsignmentDomain] =
+    for {
+      consignor <- readConsignorDomain
+      consignee <- readConsigneeDomain
+    } yield ConsignmentDomain(consignor, consignee)
+
+  private def readConsignorDomain: UserAnswersReader[Option[ConsignmentConsignorDomain]] = {
+    lazy val consignorReader: UserAnswersReader[Option[ConsignmentConsignorDomain]] =
+      UserAnswersReader[ConsignmentConsignorDomain].map(Some(_))
+
     DeclarationTypePage.reader.flatMap {
-      case Option4 => readConsignorDomain
+      case Option4 => consignorReader
       case _ =>
-        SecurityDetailsTypePage.reader.flatMap {
-          case NoSecurityDetails => checkApprovedOperatorConsignor
-          case _                 => readConsignorDomain
+        ApprovedOperatorPage.reader.flatMap {
+          case true =>
+            SecurityDetailsTypePage.reader.flatMap {
+              case NoSecurityDetails => none[ConsignmentConsignorDomain].pure[UserAnswersReader]
+              case _                 => consignorReader
+            }
+          case false => consignorReader
         }
     }
-
-  private def readConsignorDomain: UserAnswersReader[ConsignmentDomain] =
-    for {
-      consignorDomain <- UserAnswersReader[ConsignmentConsignorDomain]
-      consigneeDomain <- readConsigneeDomain
-    } yield ConsignmentDomain(Some(consignorDomain), consigneeDomain)
-
-  private def checkApprovedOperatorConsignor: UserAnswersReader[ConsignmentDomain] =
-    for {
-      consignorDomain <- ApprovedOperatorPage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsignorDomain])
-      consigneeDomain <- readConsigneeDomain
-    } yield ConsignmentDomain(consignorDomain, consigneeDomain)
+  }
 
   private def readConsigneeDomain: UserAnswersReader[Option[ConsignmentConsigneeDomain]] =
     consignee.MoreThanOneConsigneePage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsigneeDomain])

@@ -16,31 +16,15 @@
 
 package navigation
 
-import controllers.preTaskList.routes._
 import models._
-import pages.preTaskList._
+import models.journeyDomain.PreTaskListDomain
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class PreTaskListNavigator @Inject() () extends Navigator {
+class PreTaskListNavigator @Inject() () extends UserAnswersNavigator[PreTaskListDomain] {
 
-  override def routes(mode: Mode): RouteMapping = {
-    case LocalReferenceNumberPage => ua => OfficeOfDepartureController.onPageLoad(ua.lrn, mode)
-    case OfficeOfDeparturePage    => ua => ProcedureTypeController.onPageLoad(ua.lrn, mode)
-    case ProcedureTypePage        => ua => DeclarationTypeController.onPageLoad(ua.lrn, mode)
-    case DeclarationTypePage      => ua => declarationTypeRoute(ua, mode)
-    case TIRCarnetReferencePage   => ua => SecurityDetailsTypeController.onPageLoad(ua.lrn, mode)
-    case SecurityDetailsTypePage  => ua => CheckYourAnswersController.onPageLoad(ua.lrn)
-  }
-
-  private def declarationTypeRoute(ua: UserAnswers, mode: Mode): Call =
-    (ua.get(ProcedureTypePage), ua.get(DeclarationTypePage)) match {
-      case (Some(ProcedureType.Normal), Some(DeclarationType.Option4)) =>
-        TIRCarnetReferenceController.onPageLoad(ua.lrn, mode)
-      case _ =>
-        SecurityDetailsTypeController.onPageLoad(ua.lrn, mode)
-    }
-
+  override def checkYourAnswersRoute(mode: Mode, userAnswers: UserAnswers): Call =
+    controllers.preTaskList.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
 }

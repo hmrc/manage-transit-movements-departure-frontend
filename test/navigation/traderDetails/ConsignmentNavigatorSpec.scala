@@ -18,17 +18,15 @@ package navigation.traderDetails
 
 import base.SpecBase
 import controllers.routes
-import controllers.traderDetails.{routes => tdRoutes}
-import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
-import controllers.traderDetails.consignment.consignor.contact.{routes => contactRoutes}
 import controllers.traderDetails.consignment.consignee.{routes => consigneeRoutes}
+import controllers.traderDetails.consignment.consignor.contact.{routes => contactRoutes}
+import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
 import controllers.traderDetails.consignment.{routes => consignmentRoutes}
+import controllers.traderDetails.{routes => tdRoutes}
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models._
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages._
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.traderDetails.consignment._
 
@@ -37,18 +35,6 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
   private val navigator = new ConsignmentNavigator
 
   "Navigator" ignore {
-    "must go from a page that doesn't exist in the route map" - {
-      case object UnknownPage extends Page
-
-      "to session expired" in {
-        forAll(arbitrary[Mode]) {
-          mode =>
-            navigator
-              .nextPage(UnknownPage, mode, emptyUserAnswers)
-              .mustBe(routes.SessionExpiredController.onPageLoad())
-        }
-      }
-    }
 
     "when in NormalMode" - {
 

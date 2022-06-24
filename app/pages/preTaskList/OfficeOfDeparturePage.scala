@@ -17,13 +17,18 @@
 package pages.preTaskList
 
 import models.reference.CustomsOffice
+import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.PreTaskListSection
 import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
 case object OfficeOfDeparturePage extends QuestionPage[CustomsOffice] {
 
   override def path: JsPath = PreTaskListSection.path \ toString
 
   override def toString: String = "officeOfDeparture"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(controllers.preTaskList.routes.OfficeOfDepartureController.onPageLoad(userAnswers.lrn, mode))
 }

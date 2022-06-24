@@ -18,6 +18,7 @@ package models.journeyDomain
 
 import cats.data.ReaderT
 import cats.implicits._
+import config.Constants.XI
 import models.DeclarationType.Option4
 import models.ProcedureType.Normal
 import models.domain._
@@ -43,13 +44,20 @@ object PreTaskListDomain {
     )
 
   private val tirCarnetReference: UserAnswersReader[Option[String]] =
-    ProcedureTypePage
-      .filterOptionalDependent(_ == Normal) {
-        DeclarationTypePage.filterOptionalDependent(_ == Option4) {
-          TIRCarnetReferencePage.reader
+    OfficeOfDeparturePage.reader.map(_.countryId.code).flatMap {
+      case XI =>
+        ProcedureTypePage
+          .filterOptionalDependent(_ == Normal) {
+            DeclarationTypePage.filterOptionalDependent(_ == Option4) {
+              TIRCarnetReferencePage.reader
+            }
+          }
+          .map(_.flatten)
+      case _ =>
+        DeclarationTypePage.filterMandatoryDependent(_ != Option4) {
+          none[String].pure[UserAnswersReader]
         }
-      }
-      .map(_.flatten)
+    }
 
   implicit val reader: UserAnswersReader[PreTaskListDomain] =
     (

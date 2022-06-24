@@ -16,14 +16,18 @@
 
 package pages.preTaskList
 
-import models.SecurityDetailsType
+import models.{Mode, SecurityDetailsType, UserAnswers}
 import pages.QuestionPage
 import pages.sections.PreTaskListSection
 import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
 case object SecurityDetailsTypePage extends QuestionPage[SecurityDetailsType] {
 
   override def path: JsPath = PreTaskListSection.path \ toString
 
   override def toString: String = "securityDetailsType"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(controllers.preTaskList.routes.SecurityDetailsTypeController.onPageLoad(userAnswers.lrn, mode))
 }

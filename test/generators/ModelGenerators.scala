@@ -76,19 +76,35 @@ trait ModelGenerators {
       } yield EoriNumber(number)
     }
 
-  implicit lazy val arbitraryCustomsOffice: Arbitrary[CustomsOffice] = {
-
-    val genCountryCode = Gen.oneOf(CountryCode("AD"), CountryCode("DE"), CountryCode("GB"))
-
+  implicit lazy val arbitraryCustomsOffice: Arbitrary[CustomsOffice] =
     Arbitrary {
       for {
         id          <- stringsWithMaxLength(stringMaxLength)
         name        <- stringsWithMaxLength(stringMaxLength)
-        countryId   <- genCountryCode
+        countryId   <- arbitrary[CountryCode]
         phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
       } yield CustomsOffice(id, name, countryId, phoneNumber)
     }
-  }
+
+  lazy val arbitraryXiCustomsOffice: Arbitrary[CustomsOffice] =
+    Arbitrary {
+      for {
+        id          <- stringsWithMaxLength(stringMaxLength)
+        name        <- stringsWithMaxLength(stringMaxLength)
+        countryId   <- Gen.const(CountryCode("XI"))
+        phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
+      } yield CustomsOffice(id, name, countryId, phoneNumber)
+    }
+
+  lazy val arbitraryGbCustomsOffice: Arbitrary[CustomsOffice] =
+    Arbitrary {
+      for {
+        id          <- stringsWithMaxLength(stringMaxLength)
+        name        <- stringsWithMaxLength(stringMaxLength)
+        countryId   <- Gen.const(CountryCode("GB"))
+        phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
+      } yield CustomsOffice(id, name, countryId, phoneNumber)
+    }
 
   implicit lazy val arbitraryAddress: Arbitrary[Address] =
     Arbitrary {

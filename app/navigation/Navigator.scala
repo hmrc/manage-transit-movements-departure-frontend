@@ -16,39 +16,10 @@
 
 package navigation
 
-import models.{CheckMode, Mode, NormalMode, UserAnswers}
-import pages.{Page, QuestionPage}
+import models.{Mode, UserAnswers}
+import pages.Page
 import play.api.mvc.Call
 
 trait Navigator {
-  protected type Route        = UserAnswers => Call
-  protected type RouteMapping = PartialFunction[Page, Route]
-
-  protected def normalRoutes: RouteMapping = routes(NormalMode)
-
-  protected def checkRoutes: RouteMapping = routes(CheckMode)
-
-  def routes(mode: Mode): RouteMapping
-
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
-    case NormalMode =>
-      normalRoutes.lift(page) match {
-        case None    => controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad()
-        case Some(f) => f(userAnswers)
-      }
-    case CheckMode =>
-      checkRoutes.lift(page) match {
-        case None    => controllers.routes.SessionExpiredController.onPageLoad()
-        case Some(f) => f(userAnswers)
-      }
-  }
-
-  protected def yesNoRoute(userAnswers: UserAnswers, page: QuestionPage[Boolean])(yesCall: Call)(noCall: Call): Option[Call] =
-    Some {
-      userAnswers.get(page) match {
-        case Some(true)  => yesCall
-        case Some(false) => noCall
-        case None        => controllers.routes.SessionExpiredController.onPageLoad()
-      }
-    }
+  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call
 }

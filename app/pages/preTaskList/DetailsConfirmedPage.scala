@@ -16,13 +16,18 @@
 
 package pages.preTaskList
 
+import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.PreTaskListSection
 import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
 case object DetailsConfirmedPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = PreTaskListSection.path \ toString
 
   override def toString: String = "detailsConfirmed"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(controllers.preTaskList.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
 }

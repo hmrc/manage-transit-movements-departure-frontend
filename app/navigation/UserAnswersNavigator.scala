@@ -24,8 +24,6 @@ import play.api.mvc.Call
 
 abstract class UserAnswersNavigator[T](implicit userAnswersReader: UserAnswersReader[T]) extends Navigator {
 
-  override def routes(mode: Mode): RouteMapping = ???
-
   def checkYourAnswersRoute(mode: Mode, userAnswers: UserAnswers): Call
 
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =

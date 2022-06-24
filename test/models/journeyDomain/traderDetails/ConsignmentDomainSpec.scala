@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package models.JourneyDomain.traderDetails
+package models.journeyDomain.traderDetails
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
-import models.{Address, DeclarationType}
 import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models.domain.{EitherType, UserAnswersReader}
-import models.journeyDomain.traderDetails.{ConsignmentConsignorDomain, ConsignmentDomain}
+import models.{Address, DeclarationType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}

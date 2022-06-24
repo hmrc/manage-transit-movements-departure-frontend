@@ -17,10 +17,11 @@
 package pages.preTaskList
 
 import models.ProcedureType.Simplified
-import models.{ProcedureType, UserAnswers}
+import models.{Mode, ProcedureType, UserAnswers}
 import pages.QuestionPage
 import pages.sections.PreTaskListSection
 import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
 import scala.util.Try
 
@@ -36,4 +37,6 @@ case object ProcedureTypePage extends QuestionPage[ProcedureType] {
       case _                => super.cleanup(value, userAnswers)
     }
 
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(controllers.preTaskList.routes.ProcedureTypeController.onPageLoad(userAnswers.lrn, mode))
 }

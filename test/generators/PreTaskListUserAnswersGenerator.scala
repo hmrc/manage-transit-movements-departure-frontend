@@ -26,6 +26,11 @@ import play.api.libs.json.{JsBoolean, Json}
 trait PreTaskListUserAnswersGenerator extends UserAnswersGenerator {
   self: Generators =>
 
+  lazy val arbitraryPreTaskListAnswers: Gen[UserAnswers] = Gen.oneOf(
+    arbitraryPreTaskListAnswersWithTir,
+    arbitraryPreTaskListAnswersWithoutTir
+  )
+
   lazy val arbitraryPreTaskListAnswersWithTir: Gen[UserAnswers] = arbitraryUserAnswers(
     arbitraryXiOfficeOfDepartureUserAnswersEntry.arbitrary ::
       Arbitrary((ProcedureTypePage, Json.toJson[ProcedureType](Normal))).arbitrary ::
@@ -37,7 +42,7 @@ trait PreTaskListUserAnswersGenerator extends UserAnswersGenerator {
   )
 
   lazy val arbitraryPreTaskListAnswersWithoutTir: Gen[UserAnswers] = arbitraryUserAnswers(
-    arbitraryGbOfficeOfDepartureUserAnswersEntry.arbitrary ::
+    arbitraryOfficeOfDepartureUserAnswersEntry.arbitrary ::
       arbitraryProcedureTypeUserAnswersEntry.arbitrary ::
       arbitraryNonOption4DeclarationTypeUserAnswersEntry.arbitrary ::
       arbitraryAddSecurityDetailsUserAnswersEntry.arbitrary ::

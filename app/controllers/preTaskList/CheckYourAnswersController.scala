@@ -19,8 +19,9 @@ package controllers.preTaskList
 import com.google.inject.Inject
 import controllers.actions.{Actions, CheckTaskAlreadyCompletedActionProvider}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import models.LocalReferenceNumber
-import models.journeyDomain.PreTaskListDomain
+import models.domain.UserAnswersReader
+import models.journeyDomain.{PreTaskListDomain, ReaderError}
+import models.{LocalReferenceNumber, NormalMode}
 import pages.preTaskList.DetailsConfirmedPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -47,8 +48,13 @@ class CheckYourAnswersController @Inject() (
     .requireData(lrn)
     .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain]) {
       implicit request =>
-        val section = viewModel(request.userAnswers)
-        Ok(view(lrn, Seq(section)))
+        UserAnswersReader[PreTaskListDomain].run(request.userAnswers) match {
+          case Left(ReaderError(page, _)) if page != DetailsConfirmedPage =>
+            Redirect(page.route(request.userAnswers, NormalMode).getOrElse(controllers.routes.SessionExpiredController.onPageLoad()))
+          case _ =>
+            val section = viewModel(request.userAnswers)
+            Ok(view(lrn, Seq(section)))
+        }
     }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions

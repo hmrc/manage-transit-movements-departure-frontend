@@ -25,7 +25,7 @@ case class ConsignmentConsignorDomain(
   eori: Option[EoriNumber],
   name: String,
   address: Address,
-  contact: Option[ConsignorContactDomain]
+  contact: Option[ConsignmentConsignorContactDomain]
 )
 
 object ConsignmentConsignorDomain {
@@ -35,6 +35,6 @@ object ConsignmentConsignorDomain {
       EoriYesNoPage.filterOptionalDependent(identity)(EoriPage.reader.map(EoriNumber(_))),
       NamePage.reader,
       AddressPage.reader,
-      AddContactPage.filterOptionalDependent(identity)(UserAnswersReader[ConsignorContactDomain])
+      AddContactPage.filterOptionalDependent(identity)(UserAnswersReader[ConsignmentConsignorContactDomain])
     ).tupled.map((ConsignmentConsignorDomain.apply _).tupled)
 }

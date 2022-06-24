@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package models.JourneyDomain.traderDetails
+package models.journeyDomain.traderDetails
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
-import models.journeyDomain.traderDetails.{ConsignmentConsignorDomain, ConsignorContactDomain}
 import models.{Address, EoriNumber}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -54,7 +53,7 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
           name = consignorName,
           address = consignorAddress,
           contact = Some(
-            ConsignorContactDomain(
+            ConsignmentConsignorContactDomain(
               name = contactName,
               telephoneNumber = contactPhone
             )
@@ -80,7 +79,7 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
           name = consignorName,
           address = consignorAddress,
           contact = Some(
-            ConsignorContactDomain(
+            ConsignmentConsignorContactDomain(
               name = contactName,
               telephoneNumber = contactPhone
             )

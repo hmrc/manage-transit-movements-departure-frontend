@@ -34,6 +34,9 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
   "PreTaskListDomain" - {
 
+    val gbCustomsOffice = CustomsOffice("id", "name", CountryCode("GB"), None)
+    val xiCustomsOffice = CustomsOffice("id", "name", CountryCode("XI"), None)
+
     "can be parsed from UserAnswers" - {
 
       "when a TIR declaration" in {
@@ -42,16 +45,16 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
         val detailsConfirmed = true
 
         val tirUserAnswers = emptyUserAnswers
-          .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
+          .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
-          .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
           .unsafeSetVal(DeclarationTypePage)(Option4)
           .unsafeSetVal(TIRCarnetReferencePage)("tirCarnetReference")
+          .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
           .unsafeSetVal(DetailsConfirmedPage)(detailsConfirmed)
 
         val expectedResult = PreTaskListDomain(
           emptyUserAnswers.lrn,
-          CustomsOffice("id", "name", CountryCode("code"), None),
+          xiCustomsOffice,
           Normal,
           Option4,
           Some("tirCarnetReference"),
@@ -72,15 +75,15 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
         val detailsConfirmed = true
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
+          .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(procedureType)
-          .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
           .unsafeSetVal(DeclarationTypePage)(declarationType)
+          .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
           .unsafeSetVal(DetailsConfirmedPage)(detailsConfirmed)
 
         val expectedResult = PreTaskListDomain(
           emptyUserAnswers.lrn,
-          CustomsOffice("id", "name", CountryCode("code"), None),
+          gbCustomsOffice,
           procedureType,
           declarationType,
           None,
@@ -102,14 +105,32 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
         val securityDetails = Gen.oneOf(SecurityDetailsType.values).sample.value
 
         val tirUserAnswers = emptyUserAnswers
-          .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
+          .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
-          .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
           .unsafeSetVal(DeclarationTypePage)(Option4)
+          .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
+          .unsafeSetVal(DetailsConfirmedPage)(true)
 
         val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
 
         result.left.value.page mustBe TIRCarnetReferencePage
+      }
+
+      "when a TIR with a GB customs office" in {
+
+        val securityDetails = Gen.oneOf(SecurityDetailsType.values).sample.value
+
+        val tirUserAnswers = emptyUserAnswers
+          .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
+          .unsafeSetVal(ProcedureTypePage)(Normal)
+          .unsafeSetVal(DeclarationTypePage)(Option4)
+          .unsafeSetVal(TIRCarnetReferencePage)("tirCarnetReference")
+          .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
+          .unsafeSetVal(DetailsConfirmedPage)(true)
+
+        val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
+
+        result.left.value.page mustBe DeclarationTypePage
       }
 
       "when details not confirmed" - {
@@ -120,10 +141,10 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           val securityDetails = Gen.oneOf(SecurityDetailsType.values).sample.value
 
           val userAnswers = emptyUserAnswers
-            .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
+            .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
             .unsafeSetVal(ProcedureTypePage)(procedureType)
-            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
             .unsafeSetVal(DeclarationTypePage)(declarationType)
+            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
             .unsafeSetVal(DetailsConfirmedPage)(false)
 
           val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(userAnswers)
@@ -137,10 +158,10 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           val securityDetails = Gen.oneOf(SecurityDetailsType.values).sample.value
 
           val userAnswers = emptyUserAnswers
-            .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
+            .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
             .unsafeSetVal(ProcedureTypePage)(procedureType)
-            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
             .unsafeSetVal(DeclarationTypePage)(declarationType)
+            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
 
           val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(userAnswers)
 
@@ -159,10 +180,10 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
         )
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
+          .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
-          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(DeclarationTypePage)(Option1)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(DetailsConfirmedPage)(true)
 
         forAll(mandatoryPages) {

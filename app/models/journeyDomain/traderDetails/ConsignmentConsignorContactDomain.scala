@@ -20,16 +20,16 @@ import cats.implicits._
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import pages.traderDetails.consignment.consignor.contact._
 
-case class ConsignorContactDomain(
+case class ConsignmentConsignorContactDomain(
   name: String,
   telephoneNumber: String
 )
 
-object ConsignorContactDomain {
+object ConsignmentConsignorContactDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[ConsignorContactDomain] =
+  implicit val userAnswersReader: UserAnswersReader[ConsignmentConsignorContactDomain] =
     (
       NamePage.reader,
       TelephoneNumberPage.reader
-    ).tupled.map((ConsignorContactDomain.apply _).tupled)
+    ).tupled.map((ConsignmentConsignorContactDomain.apply _).tupled)
 }
