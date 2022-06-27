@@ -22,10 +22,13 @@ import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
 import play.api.mvc.Call
 
-abstract class UserAnswersNavigator[SubSection, Section](implicit
-  subSectionReader: UserAnswersReader[SubSection],
-  sectionReader: UserAnswersReader[Section]
+abstract class UserAnswersNavigator[A, B](implicit
+  subSectionReader: UserAnswersReader[A],
+  sectionReader: UserAnswersReader[B]
 ) extends Navigator {
+
+  type SubSection = A
+  type Section    = B
 
   def subSectionCheckYourAnswersRoute(userAnswers: UserAnswers): Call = sectionCheckYourAnswersRoute(userAnswers)
 
@@ -37,12 +40,12 @@ abstract class UserAnswersNavigator[SubSection, Section](implicit
       case CheckMode  => nextPage[Section](userAnswers, mode, sectionCheckYourAnswersRoute)
     }
 
-  private def nextPage[A](
+  private def nextPage[T](
     userAnswers: UserAnswers,
     mode: Mode,
     route: UserAnswers => Call
-  )(implicit userAnswersReader: UserAnswersReader[A]): Call =
-    UserAnswersReader[A].run(userAnswers) match {
+  )(implicit userAnswersReader: UserAnswersReader[T]): Call =
+    UserAnswersReader[T].run(userAnswers) match {
       case Left(ReaderError(page, _)) =>
         page.route(userAnswers, mode).getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
       case Right(_) =>

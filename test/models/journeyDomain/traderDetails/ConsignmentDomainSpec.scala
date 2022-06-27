@@ -33,7 +33,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
     val name                      = Gen.alphaNumStr.sample.value
     val address                   = arbitrary[Address].sample.value
-    val nonOption4DeclarationType = arbitrary[DeclarationType].sample.value
+    val nonOption4DeclarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
     val securityDetailsType       = arbitrary[SecurityDetailsType].sample.value
 
     "can be parsed from UserAnswers" - {

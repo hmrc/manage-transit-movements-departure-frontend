@@ -51,7 +51,7 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
     }
   }
 
-  protected def arbitraryUserAnswers(generators: Seq[Gen[(QuestionPage[_], JsValue)]]): Gen[UserAnswers] = {
+  protected def arbitraryUserAnswers(generators: Gen[(QuestionPage[_], JsValue)]*): Gen[UserAnswers] = {
     import models._
 
     import scala.collection.convert.ImplicitConversions._
@@ -90,7 +90,7 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
         case Left(ReaderError(page, _)) =>
           combineUserAnswers(
             Gen.const(userAnswers),
-            arbitraryUserAnswers(Seq(generateAnswer.apply(page)))
+            arbitraryUserAnswers(generateAnswer.apply(page))
           ).flatMap(rec)
         case Right(_) => Gen.const(userAnswers)
       }
