@@ -243,6 +243,13 @@ trait UserAnswersEntryGenerators {
       } yield (SecurityDetailsTypePage, value)
     }
 
+  lazy val arbitrarySomeSecurityDetailsUserAnswersEntry: Arbitrary[(SecurityDetailsTypePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[SecurityDetailsType](arbitrarySomeSecurityDetailsType).map(Json.toJson(_))
+      } yield (SecurityDetailsTypePage, value)
+    }
+
   implicit lazy val arbitraryTIRCarnetReferenceUserAnswersEntry: Arbitrary[(TIRCarnetReferencePage.type, JsValue)] =
     Arbitrary {
       for {

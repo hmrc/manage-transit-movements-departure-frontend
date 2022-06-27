@@ -24,9 +24,12 @@ import play.api.libs.json.JsBoolean
 trait RepresentativeUserAnswersGenerator extends UserAnswersGenerator {
   self: Generators =>
 
-  lazy val arbitraryRepresentativeAnswers: Gen[UserAnswers] = Gen.oneOf(
-    arbitraryRepresentativeAnswersActingAsRepresentative,
-    arbitraryRepresentativeAnswersNotActingAsRepresentative
+  def arbitraryRepresentativeAnswers(userAnswers: UserAnswers): Gen[UserAnswers] = combineUserAnswers(
+    Gen.const(userAnswers),
+    Gen.oneOf(
+      arbitraryRepresentativeAnswersActingAsRepresentative,
+      arbitraryRepresentativeAnswersNotActingAsRepresentative
+    )
   )
 
   lazy val arbitraryRepresentativeAnswersActingAsRepresentative: Gen[UserAnswers] = arbitraryUserAnswers(

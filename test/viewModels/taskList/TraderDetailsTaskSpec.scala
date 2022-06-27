@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.routes
 import controllers.traderDetails.holderOfTransit.{routes => holderOfTransitRoutes}
 import controllers.traderDetails.{routes => traderDetailsRoutes}
-import generators.{Generators, TraderDetailsUserAnswersGenerator}
+import generators.{Generators, PreTaskListUserAnswersGenerator, TraderDetailsUserAnswersGenerator}
 import models.DeclarationType.Option4
 import models.{DeclarationType, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
@@ -30,7 +30,12 @@ import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.{holderOfTransit => hot}
 import viewModels.taskList.TaskStatus._
 
-class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
+class TraderDetailsTaskSpec
+    extends SpecBase
+    with ScalaCheckPropertyChecks
+    with Generators
+    with TraderDetailsUserAnswersGenerator
+    with PreTaskListUserAnswersGenerator {
 
   "name" - {
     "must be Trader Details" - {
@@ -95,7 +100,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
       }
 
       "and non-TIR declaration type" in {
-        forAll(arbitrary[DeclarationType].suchThat(_ != Option4)) {
+        forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)) {
           declarationType =>
             val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
             val task        = TraderDetailsTask(userAnswers)
@@ -118,7 +123,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
       }
 
       "and non-TIR declaration type" in {
-        forAll(arbitrary[DeclarationType].suchThat(_ != Option4)) {
+        forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)) {
           declarationType =>
             val userAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
@@ -133,11 +138,14 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
     "when Completed" - {
       "when valid journey is completed" in {
-        forAll(arbitraryTraderDetailsAnswers) {
-          userAnswers =>
-            val task = TraderDetailsTask(userAnswers)
-            task.status mustBe Completed
-            task.href.get mustBe traderDetailsRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url
+        forAll(arbitraryPreTaskListAnswers) {
+          preTaskListAnswers =>
+            forAll(arbitraryTraderDetailsAnswers(preTaskListAnswers)) {
+              userAnswers =>
+                val task = TraderDetailsTask(userAnswers)
+                task.status mustBe Completed
+                task.href.get mustBe traderDetailsRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url
+            }
         }
       }
     }

@@ -17,26 +17,34 @@
 package viewModels.traderDetails
 
 import base.SpecBase
-import generators.{Generators, TraderDetailsUserAnswersGenerator}
+import generators.{Generators, PreTaskListUserAnswersGenerator, TraderDetailsUserAnswersGenerator}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class TraderDetailsViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
+class TraderDetailsViewModelSpec
+    extends SpecBase
+    with ScalaCheckPropertyChecks
+    with Generators
+    with TraderDetailsUserAnswersGenerator
+    with PreTaskListUserAnswersGenerator {
 
   private val viewModel = injector.instanceOf[TraderDetailsViewModel]
 
   "apply" - {
     "must return all sections" in {
-      forAll(arbitraryTraderDetailsAnswers) {
-        answers =>
-          val sections = viewModel.apply(answers)
+      forAll(arbitraryPreTaskListAnswers) {
+        preTaskListAnswers =>
+          forAll(arbitraryTraderDetailsAnswers(preTaskListAnswers)) {
+            answers =>
+              val sections = viewModel.apply(answers)
 
-          sections.size mustBe 6
-          sections.head.sectionTitle.get mustBe "Transit holder"
-          sections(1).sectionTitle.get mustBe "Additional contact"
-          sections(2).sectionTitle.get mustBe "Representative"
-          sections(3).sectionTitle.get mustBe "Consignor"
-          sections(4).sectionTitle.get mustBe "Consignor contact"
-          sections(5).sectionTitle.get mustBe "Consignee"
+              sections.size mustBe 6
+              sections.head.sectionTitle.get mustBe "Transit holder"
+              sections(1).sectionTitle.get mustBe "Additional contact"
+              sections(2).sectionTitle.get mustBe "Representative"
+              sections(3).sectionTitle.get mustBe "Consignor"
+              sections(4).sectionTitle.get mustBe "Consignor contact"
+              sections(5).sectionTitle.get mustBe "Consignee"
+          }
       }
     }
   }

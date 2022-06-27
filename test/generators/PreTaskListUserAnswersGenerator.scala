@@ -18,7 +18,8 @@ package generators
 
 import models.DeclarationType.Option4
 import models.ProcedureType.Normal
-import models.{DeclarationType, ProcedureType, UserAnswers}
+import models.SecurityDetailsType.NoSecurityDetails
+import models.{DeclarationType, ProcedureType, SecurityDetailsType, UserAnswers}
 import org.scalacheck.{Arbitrary, Gen}
 import pages.preTaskList._
 import play.api.libs.json.{JsBoolean, Json}
@@ -46,6 +47,24 @@ trait PreTaskListUserAnswersGenerator extends UserAnswersGenerator {
       arbitraryProcedureTypeUserAnswersEntry.arbitrary ::
       arbitraryNonOption4DeclarationTypeUserAnswersEntry.arbitrary ::
       arbitraryAddSecurityDetailsUserAnswersEntry.arbitrary ::
+      Arbitrary((DetailsConfirmedPage, JsBoolean(true))).arbitrary ::
+      Nil
+  )
+
+  lazy val arbitraryPreTaskListAnswersWithoutTirAndWithSecurity: Gen[UserAnswers] = arbitraryUserAnswers(
+    arbitraryOfficeOfDepartureUserAnswersEntry.arbitrary ::
+      arbitraryProcedureTypeUserAnswersEntry.arbitrary ::
+      arbitraryNonOption4DeclarationTypeUserAnswersEntry.arbitrary ::
+      arbitrarySomeSecurityDetailsUserAnswersEntry.arbitrary ::
+      Arbitrary((DetailsConfirmedPage, JsBoolean(true))).arbitrary ::
+      Nil
+  )
+
+  lazy val arbitraryPreTaskListAnswersWithoutTirAndWithoutSecurity: Gen[UserAnswers] = arbitraryUserAnswers(
+    arbitraryOfficeOfDepartureUserAnswersEntry.arbitrary ::
+      arbitraryProcedureTypeUserAnswersEntry.arbitrary ::
+      arbitraryNonOption4DeclarationTypeUserAnswersEntry.arbitrary ::
+      Arbitrary((SecurityDetailsTypePage, Json.toJson[SecurityDetailsType](NoSecurityDetails))).arbitrary ::
       Arbitrary((DetailsConfirmedPage, JsBoolean(true))).arbitrary ::
       Nil
   )

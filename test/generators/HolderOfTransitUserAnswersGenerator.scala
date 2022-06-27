@@ -16,77 +16,80 @@
 
 package generators
 
+import base.SpecBase
 import models.DeclarationType.Option4
-import models.{DeclarationType, UserAnswers}
+import models.UserAnswers
 import org.scalacheck.{Arbitrary, Gen}
 import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.holderOfTransit._
-import play.api.libs.json.{JsBoolean, Json}
+import play.api.libs.json.JsBoolean
 
 trait HolderOfTransitUserAnswersGenerator extends UserAnswersGenerator {
-  self: Generators =>
+  self: Generators with SpecBase =>
 
-  lazy val arbitraryHolderOfTransitAnswers: Gen[UserAnswers] = Gen.oneOf(
-    arbitraryHolderOfTransitAnswersWithEori,
-    arbitraryHolderOfTransitAnswersWithoutEori,
-    arbitraryHolderOfTransitAnswersWithTirId,
-    arbitraryHolderOfTransitAnswersWithoutTirId,
-    arbitraryHolderOfTransitAnswersWithAdditionalContact
+  def arbitraryHolderOfTransitAnswers(userAnswers: UserAnswers): Gen[UserAnswers] = {
+    val declarationType = userAnswers.getValue(DeclarationTypePage)
+
+    combineUserAnswers(
+      Gen.const(userAnswers),
+      declarationType match {
+        case Option4 => arbitraryOption4HolderOfTransitAnswers
+        case _       => arbitraryNonOption4HolderOfTransitAnswers
+      }
+    )
+  }
+
+  private lazy val arbitraryOption4HolderOfTransitAnswers: Gen[UserAnswers] = combineUserAnswers(
+    Gen.oneOf(arbitraryHolderOfTransitWithTirId, arbitraryHolderOfTransitWithoutTirId),
+    arbitraryUserAnswers(
+      arbitraryTransitHolderNameUserAnswersEntry.arbitrary ::
+        arbitraryTransitHolderAddressUserAnswersEntry.arbitrary ::
+        Nil
+    ),
+    Gen.oneOf(arbitraryHolderOfTransitWithContact, arbitraryHolderOfTransitWithoutContact)
   )
 
-  lazy val arbitraryHolderOfTransitAnswersWithoutAdditionalContact: Gen[UserAnswers] = Gen.oneOf(
-    arbitraryHolderOfTransitAnswersWithEori,
-    arbitraryHolderOfTransitAnswersWithoutEori,
-    arbitraryHolderOfTransitAnswersWithTirId,
-    arbitraryHolderOfTransitAnswersWithoutTirId
+  private lazy val arbitraryNonOption4HolderOfTransitAnswers: Gen[UserAnswers] = combineUserAnswers(
+    Gen.oneOf(arbitraryHolderOfTransitWithEori, arbitraryHolderOfTransitWithoutEori),
+    arbitraryUserAnswers(
+      arbitraryTransitHolderNameUserAnswersEntry.arbitrary ::
+        arbitraryTransitHolderAddressUserAnswersEntry.arbitrary ::
+        Nil
+    ),
+    Gen.oneOf(arbitraryHolderOfTransitWithContact, arbitraryHolderOfTransitWithoutContact)
   )
 
-  lazy val arbitraryHolderOfTransitAnswersWithEori: Gen[UserAnswers] = arbitraryUserAnswers(
-    arbitraryNonOption4DeclarationTypeUserAnswersEntry.arbitrary ::
-      Arbitrary((EoriYesNoPage, JsBoolean(true))).arbitrary ::
+  private lazy val arbitraryHolderOfTransitWithEori: Gen[UserAnswers] = arbitraryUserAnswers(
+    Arbitrary((EoriYesNoPage, JsBoolean(true))).arbitrary ::
       arbitraryTransitHolderEoriUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderNameUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderAddressUserAnswersEntry.arbitrary ::
-      Arbitrary((AddContactPage, JsBoolean(false))).arbitrary ::
       Nil
   )
 
-  lazy val arbitraryHolderOfTransitAnswersWithoutEori: Gen[UserAnswers] = arbitraryUserAnswers(
-    arbitraryNonOption4DeclarationTypeUserAnswersEntry.arbitrary ::
-      Arbitrary((EoriYesNoPage, JsBoolean(false))).arbitrary ::
-      arbitraryTransitHolderNameUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderAddressUserAnswersEntry.arbitrary ::
-      Arbitrary((AddContactPage, JsBoolean(false))).arbitrary ::
+  private lazy val arbitraryHolderOfTransitWithoutEori: Gen[UserAnswers] = arbitraryUserAnswers(
+    Arbitrary((EoriYesNoPage, JsBoolean(false))).arbitrary ::
       Nil
   )
 
-  lazy val arbitraryHolderOfTransitAnswersWithTirId: Gen[UserAnswers] = arbitraryUserAnswers(
-    Arbitrary((DeclarationTypePage, Json.toJson[DeclarationType](Option4))).arbitrary ::
-      Arbitrary((TirIdentificationYesNoPage, JsBoolean(true))).arbitrary ::
+  private lazy val arbitraryHolderOfTransitWithTirId: Gen[UserAnswers] = arbitraryUserAnswers(
+    Arbitrary((TirIdentificationYesNoPage, JsBoolean(true))).arbitrary ::
       arbitraryTransitHolderTirIdentificationUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderNameUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderAddressUserAnswersEntry.arbitrary ::
-      Arbitrary((AddContactPage, JsBoolean(false))).arbitrary ::
       Nil
   )
 
-  lazy val arbitraryHolderOfTransitAnswersWithoutTirId: Gen[UserAnswers] = arbitraryUserAnswers(
-    Arbitrary((DeclarationTypePage, Json.toJson[DeclarationType](Option4))).arbitrary ::
-      Arbitrary((TirIdentificationYesNoPage, JsBoolean(false))).arbitrary ::
-      arbitraryTransitHolderNameUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderAddressUserAnswersEntry.arbitrary ::
-      Arbitrary((AddContactPage, JsBoolean(false))).arbitrary ::
+  private lazy val arbitraryHolderOfTransitWithoutTirId: Gen[UserAnswers] = arbitraryUserAnswers(
+    Arbitrary((TirIdentificationYesNoPage, JsBoolean(false))).arbitrary ::
       Nil
   )
 
-  lazy val arbitraryHolderOfTransitAnswersWithAdditionalContact: Gen[UserAnswers] = arbitraryUserAnswers(
-    arbitraryNonOption4DeclarationTypeUserAnswersEntry.arbitrary ::
-      Arbitrary((EoriYesNoPage, JsBoolean(false))).arbitrary ::
-      arbitraryTransitHolderNameUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderAddressUserAnswersEntry.arbitrary ::
-      Arbitrary((AddContactPage, JsBoolean(true))).arbitrary ::
+  private lazy val arbitraryHolderOfTransitWithContact: Gen[UserAnswers] = arbitraryUserAnswers(
+    Arbitrary((AddContactPage, JsBoolean(true))).arbitrary ::
       arbitraryTransitHolderAdditionalContactNameUserAnswersEntry.arbitrary ::
       arbitraryTransitHolderAdditionalContactTelephoneNumberUserAnswersEntry.arbitrary ::
+      Nil
+  )
+
+  private lazy val arbitraryHolderOfTransitWithoutContact: Gen[UserAnswers] = arbitraryUserAnswers(
+    Arbitrary((AddContactPage, JsBoolean(false))).arbitrary ::
       Nil
   )
 }

@@ -114,6 +114,5 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
       (acc, ua) =>
         acc.copy(data = acc.data.deepMerge(ua.data))
     }
-
   }
 }

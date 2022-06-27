@@ -57,9 +57,19 @@ trait ModelGenerators {
       Gen.oneOf(DeclarationType.values)
     }
 
+  lazy val arbitraryNonOption4DeclarationType: Arbitrary[DeclarationType] =
+    Arbitrary {
+      Gen.oneOf(DeclarationType.values.filterNot(_ == DeclarationType.Option4))
+    }
+
   implicit lazy val arbitrarySecurityDetailsType: Arbitrary[SecurityDetailsType] =
     Arbitrary {
       Gen.oneOf(SecurityDetailsType.values)
+    }
+
+  lazy val arbitrarySomeSecurityDetailsType: Arbitrary[SecurityDetailsType] =
+    Arbitrary {
+      Gen.oneOf(SecurityDetailsType.values.filterNot(_ == SecurityDetailsType.NoSecurityDetails))
     }
 
   implicit lazy val arbitraryLocalReferenceNumber: Arbitrary[LocalReferenceNumber] =

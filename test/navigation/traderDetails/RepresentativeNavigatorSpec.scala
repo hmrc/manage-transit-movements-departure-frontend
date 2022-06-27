@@ -133,39 +133,12 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
 
       val mode = CheckMode
 
-      "must go from eori page to check your answers page" in {
-        forAll(arbitraryTraderDetailsAnswersWithRepresentative) {
-          answers =>
-            navigator
-              .nextPage(EoriPage, mode, answers)
-              .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
-        }
-      }
-
-      "must go from name page to check your answers page" in {
-        forAll(arbitraryTraderDetailsAnswersWithRepresentative) {
-          answers =>
-            navigator
-              .nextPage(NamePage, mode, answers)
-              .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
-        }
-      }
-
-      "must go from capacity page to check your answers page" in {
-        forAll(arbitraryTraderDetailsAnswersWithRepresentative) {
-          answers =>
-            navigator
-              .nextPage(CapacityPage, mode, answers)
-              .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
-        }
-      }
-
-      "must go from phone number page to check your answers page" in {
-        forAll(arbitraryTraderDetailsAnswersWithRepresentative) {
-          answers =>
-            navigator
-              .nextPage(TelephoneNumberPage, mode, answers)
-              .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+      "when answers complete" - {
+        "must redirect to check your answers" in {
+          val userAnswers = emptyUserAnswers
+          navigator
+            .checkYourAnswersRoute(mode, emptyUserAnswers)
+            .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
         }
       }
     }

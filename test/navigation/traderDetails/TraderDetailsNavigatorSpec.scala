@@ -20,12 +20,18 @@ import base.SpecBase
 import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
 import controllers.traderDetails.consignment.{routes => consignmentRoutes}
 import controllers.traderDetails.representative.{routes => repRoutes}
-import generators.{Generators, TraderDetailsUserAnswersGenerator}
-import models.NormalMode
+import controllers.traderDetails.{routes => tdRoutes}
+import generators.{Generators, PreTaskListUserAnswersGenerator, TraderDetailsUserAnswersGenerator}
+import models.{CheckMode, NormalMode}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.traderDetails.ActingAsRepresentativePage
 
-class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
+class TraderDetailsNavigatorSpec
+    extends SpecBase
+    with ScalaCheckPropertyChecks
+    with Generators
+    with TraderDetailsUserAnswersGenerator
+    with PreTaskListUserAnswersGenerator {
 
   private val navigator = new TraderDetailsNavigator
 
@@ -38,36 +44,59 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       "must go from acting as representative page" - {
         "when Yes selected" - {
           "to eori page" in {
-            forAll(arbitraryHolderOfTransitAnswersWithEori) {
-              answers =>
-                val userAnswers = answers.setValue(ActingAsRepresentativePage, true)
-                navigator
-                  .nextPage(ActingAsRepresentativePage, mode, userAnswers)
-                  .mustBe(repRoutes.EoriController.onPageLoad(userAnswers.lrn, mode))
+            forAll(arbitraryPreTaskListAnswers) {
+              preTaskListAnswers =>
+                forAll(arbitraryHolderOfTransitAnswers(preTaskListAnswers)) {
+                  answers =>
+                    val userAnswers = answers.setValue(ActingAsRepresentativePage, true)
+                    navigator
+                      .nextPage(ActingAsRepresentativePage, mode, userAnswers)
+                      .mustBe(repRoutes.EoriController.onPageLoad(userAnswers.lrn, mode))
+                }
             }
           }
         }
 
         "when No selected" - {
           "to consignorEoriYesNoPage when declarationType is TIR" in {
-            forAll(arbitraryHolderOfTransitAnswersWithTirId) {
-              answers =>
-                val userAnswers = answers.setValue(ActingAsRepresentativePage, false)
-                navigator
-                  .nextPage(ActingAsRepresentativePage, mode, userAnswers)
-                  .mustBe(consignorRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode))
+            forAll(arbitraryPreTaskListAnswersWithTir) {
+              preTaskListAnswers =>
+                forAll(arbitraryHolderOfTransitAnswers(preTaskListAnswers)) {
+                  answers =>
+                    val userAnswers = answers.setValue(ActingAsRepresentativePage, false)
+                    navigator
+                      .nextPage(ActingAsRepresentativePage, mode, userAnswers)
+                      .mustBe(consignorRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode))
+                }
             }
           }
 
           "to approvedOperatorPage when declarationType is not TIR" in {
-            forAll(arbitraryHolderOfTransitAnswersWithEori) {
-              answers =>
-                val userAnswers = answers.setValue(ActingAsRepresentativePage, false)
-                navigator
-                  .nextPage(ActingAsRepresentativePage, mode, userAnswers)
-                  .mustBe(consignmentRoutes.ApprovedOperatorController.onPageLoad(userAnswers.lrn, mode))
+            forAll(arbitraryPreTaskListAnswersWithoutTir) {
+              preTaskListAnswers =>
+                forAll(arbitraryHolderOfTransitAnswers(preTaskListAnswers)) {
+                  answers =>
+                    val userAnswers = answers.setValue(ActingAsRepresentativePage, false)
+                    navigator
+                      .nextPage(ActingAsRepresentativePage, mode, userAnswers)
+                      .mustBe(consignmentRoutes.ApprovedOperatorController.onPageLoad(userAnswers.lrn, mode))
+                }
             }
           }
+        }
+      }
+    }
+
+    "when in CheckMode" - {
+
+      val mode = CheckMode
+
+      "when answers complete" - {
+        "must redirect to check your answers" in {
+          val userAnswers = emptyUserAnswers
+          navigator
+            .checkYourAnswersRoute(mode, emptyUserAnswers)
+            .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
         }
       }
     }
