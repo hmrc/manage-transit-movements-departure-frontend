@@ -66,7 +66,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                           content = "Change".toText,
                           href = routes.ActingAsRepresentativeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you are acting as a representative"),
-                          attributes = Map()
+                          attributes = Map("id" -> "has-acting-representative")
                         )
                       )
                     )
@@ -110,7 +110,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                           content = "Change".toText,
                           href = routes.EoriController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("representative’s EORI number"),
-                          attributes = Map()
+                          attributes = Map("id" -> "representative-eori-number")
                         )
                       )
                     )
@@ -154,7 +154,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                           content = "Change".toText,
                           href = routes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("representative’s name"),
-                          attributes = Map()
+                          attributes = Map("id" -> "representative-name")
                         )
                       )
                     )
@@ -198,7 +198,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                           content = "Change".toText,
                           href = routes.CapacityController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("representative capacity"),
-                          attributes = Map()
+                          attributes = Map("id" -> "representative-capacity")
                         )
                       )
                     )
@@ -242,7 +242,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                           content = "Change".toText,
                           href = routes.TelephoneNumberController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("representative’s phone number"),
-                          attributes = Map()
+                          attributes = Map("id" -> "representative-phone-number")
                         )
                       )
                     )
