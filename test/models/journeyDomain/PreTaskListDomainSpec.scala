@@ -35,21 +35,17 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
   "PreTaskListDomain" - {
 
-    val gbCustomsOffice = arbitrary[CustomsOffice](arbitraryGbCustomsOffice).sample.value
-    val xiCustomsOffice = arbitrary[CustomsOffice](arbitraryXiCustomsOffice).sample.value
-
-    val carnetRef = Gen.alphaNumStr.sample.value
-
-    val procedureType   = arbitrary[ProcedureType].sample.value
-    val securityDetails = arbitrary[SecurityDetailsType].sample.value
-
+    val gbCustomsOffice           = arbitrary[CustomsOffice](arbitraryGbCustomsOffice).sample.value
+    val xiCustomsOffice           = arbitrary[CustomsOffice](arbitraryXiCustomsOffice).sample.value
+    val carnetRef                 = Gen.alphaNumStr.sample.value
+    val procedureType             = arbitrary[ProcedureType].sample.value
+    val securityDetails           = arbitrary[SecurityDetailsType].sample.value
     val nonOption4DeclarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+    val detailsConfirmed          = true
 
     "can be parsed from UserAnswers" - {
 
       "when a TIR declaration" in {
-
-        val detailsConfirmed = true
 
         val tirUserAnswers = emptyUserAnswers
           .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
@@ -75,8 +71,6 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
       }
 
       "when a non-TIR declaration" in {
-
-        val detailsConfirmed = true
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)

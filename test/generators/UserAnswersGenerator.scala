@@ -28,30 +28,12 @@ import play.api.libs.json.{JsValue, Json}
 trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
   self: Generators =>
 
-  implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] = {
-    import models._
-
+  implicit lazy val arbitraryUserAnswers: Arbitrary[UserAnswers] =
     Arbitrary {
-      for {
-        id         <- arbitrary[LocalReferenceNumber]
-        eoriNumber <- arbitrary[EoriNumber]
-        generators = Nil
-        data <- generators match {
-          case Nil => Gen.const(Map[QuestionPage[_], JsValue]())
-          case _   => Gen.mapOf(oneOf(generators))
-        }
-      } yield UserAnswers(
-        lrn = id,
-        eoriNumber = eoriNumber,
-        data = data.foldLeft(Json.obj()) {
-          case (obj, (path, value)) =>
-            obj.setObject(path.path, value).get
-        }
-      )
+      arbitraryUserAnswers()
     }
-  }
 
-  protected def arbitraryUserAnswers(generators: Gen[(QuestionPage[_], JsValue)]*): Gen[UserAnswers] = {
+  protected def arbitraryUserAnswers(gens: Gen[(QuestionPage[_], JsValue)]*): Gen[UserAnswers] = {
     import models._
 
     import scala.collection.convert.ImplicitConversions._
@@ -59,7 +41,7 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
     for {
       id         <- arbitrary[LocalReferenceNumber]
       eoriNumber <- arbitrary[EoriNumber]
-      data       <- Gen.sequence(generators).map(_.toList)
+      data       <- Gen.sequence(gens).map(_.toList)
     } yield UserAnswers(
       lrn = id,
       eoriNumber = eoriNumber,
