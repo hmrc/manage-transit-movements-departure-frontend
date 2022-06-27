@@ -16,56 +16,13 @@
 
 package generators
 
-import models.DeclarationType.Option4
-import models.ProcedureType.Normal
-import models.SecurityDetailsType.NoSecurityDetails
-import models.{DeclarationType, ProcedureType, SecurityDetailsType, UserAnswers}
-import org.scalacheck.{Arbitrary, Gen}
-import pages.preTaskList._
-import play.api.libs.json.{JsBoolean, Json}
+import models.UserAnswers
+import models.journeyDomain.PreTaskListDomain
+import org.scalacheck.Gen
 
 trait PreTaskListUserAnswersGenerator extends UserAnswersGenerator {
   self: Generators =>
 
-  lazy val arbitraryPreTaskListAnswers: Gen[UserAnswers] = Gen.oneOf(
-    arbitraryPreTaskListAnswersWithTir,
-    arbitraryPreTaskListAnswersWithoutTir
-  )
-
-  lazy val arbitraryPreTaskListAnswersWithTir: Gen[UserAnswers] = arbitraryUserAnswers(
-    arbitraryXiOfficeOfDepartureUserAnswersEntry.arbitrary ::
-      Arbitrary((ProcedureTypePage, Json.toJson[ProcedureType](Normal))).arbitrary ::
-      Arbitrary((DeclarationTypePage, Json.toJson[DeclarationType](Option4))).arbitrary ::
-      arbitraryTIRCarnetReferenceUserAnswersEntry.arbitrary ::
-      arbitraryAddSecurityDetailsUserAnswersEntry.arbitrary ::
-      Arbitrary((DetailsConfirmedPage, JsBoolean(true))).arbitrary ::
-      Nil
-  )
-
-  lazy val arbitraryPreTaskListAnswersWithoutTir: Gen[UserAnswers] = arbitraryUserAnswers(
-    arbitraryOfficeOfDepartureUserAnswersEntry.arbitrary ::
-      arbitraryProcedureTypeUserAnswersEntry.arbitrary ::
-      arbitraryNonOption4DeclarationTypeUserAnswersEntry.arbitrary ::
-      arbitraryAddSecurityDetailsUserAnswersEntry.arbitrary ::
-      Arbitrary((DetailsConfirmedPage, JsBoolean(true))).arbitrary ::
-      Nil
-  )
-
-  lazy val arbitraryPreTaskListAnswersWithoutTirAndWithSecurity: Gen[UserAnswers] = arbitraryUserAnswers(
-    arbitraryOfficeOfDepartureUserAnswersEntry.arbitrary ::
-      arbitraryProcedureTypeUserAnswersEntry.arbitrary ::
-      arbitraryNonOption4DeclarationTypeUserAnswersEntry.arbitrary ::
-      arbitrarySomeSecurityDetailsUserAnswersEntry.arbitrary ::
-      Arbitrary((DetailsConfirmedPage, JsBoolean(true))).arbitrary ::
-      Nil
-  )
-
-  lazy val arbitraryPreTaskListAnswersWithoutTirAndWithoutSecurity: Gen[UserAnswers] = arbitraryUserAnswers(
-    arbitraryOfficeOfDepartureUserAnswersEntry.arbitrary ::
-      arbitraryProcedureTypeUserAnswersEntry.arbitrary ::
-      arbitraryNonOption4DeclarationTypeUserAnswersEntry.arbitrary ::
-      Arbitrary((SecurityDetailsTypePage, Json.toJson[SecurityDetailsType](NoSecurityDetails))).arbitrary ::
-      Arbitrary((DetailsConfirmedPage, JsBoolean(true))).arbitrary ::
-      Nil
-  )
+  def arbitraryPreTaskListAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[PreTaskListDomain](userAnswers)
 }

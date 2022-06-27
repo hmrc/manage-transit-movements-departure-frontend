@@ -69,15 +69,46 @@ class ConsignmentConsigneeDomainSpec extends SpecBase with UserAnswersSpecHelper
       }
     }
 
-    "cannot be parsed from UserAnswer" - {
+    "cannot be parsed from UserAnswers" - {
 
-      "when EoriYesNoPage type is missing" in {
+      "when EoriYesNoPage is missing" in {
 
         val userAnswers = emptyUserAnswers
 
         val result: EitherType[ConsignmentConsigneeDomain] = UserAnswersReader[ConsignmentConsigneeDomain].run(userAnswers)
 
         result.left.value.page mustBe consignee.EoriYesNoPage
+      }
+
+      "when EoriYesNoPage is true and EoriPage is missing" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(consignee.EoriYesNoPage)(true)
+
+        val result: EitherType[ConsignmentConsigneeDomain] = UserAnswersReader[ConsignmentConsigneeDomain].run(userAnswers)
+
+        result.left.value.page mustBe consignee.EoriNumberPage
+      }
+
+      "when NamePage is missing" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(consignee.EoriYesNoPage)(false)
+
+        val result: EitherType[ConsignmentConsigneeDomain] = UserAnswersReader[ConsignmentConsigneeDomain].run(userAnswers)
+
+        result.left.value.page mustBe consignee.NamePage
+      }
+
+      "when AddressPage is missing" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(consignee.EoriYesNoPage)(false)
+          .unsafeSetVal(consignee.NamePage)(consigneeName)
+
+        val result: EitherType[ConsignmentConsigneeDomain] = UserAnswersReader[ConsignmentConsigneeDomain].run(userAnswers)
+
+        result.left.value.page mustBe consignee.AddressPage
       }
     }
   }

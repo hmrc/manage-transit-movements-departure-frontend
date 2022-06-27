@@ -26,7 +26,7 @@ case object EoriNumberPage extends QuestionPage[String] {
 
   override def path: JsPath = TraderDetailsConsigneeSection.path \ toString
 
-  override def toString: String = "eoriNumber"
+  override def toString: String = "eori"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(controllers.traderDetails.consignment.consignee.routes.EoriNumberController.onPageLoad(userAnswers.lrn, mode))

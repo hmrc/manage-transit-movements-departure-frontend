@@ -44,14 +44,14 @@ package object domain {
       */
 
     def filterMandatoryDependent[B](predicate: A => Boolean)(next: UserAnswersReader[B]): UserAnswersReader[B] =
-      a.reader(s"Reader for $a failed before reaching predicate")
+      a.reader(s"Reader for ${a.path} failed before reaching predicate")
         .flatMap {
           x =>
             if (predicate(x)) {
               next
             } else {
               ReaderT[EitherType, UserAnswers, B](
-                _ => Left(ReaderError(a, Some(s"Mandatory predicate failed for $a")))
+                _ => Left(ReaderError(a, Some(s"Mandatory predicate failed for ${a.path}")))
               )
             }
         }
@@ -63,7 +63,7 @@ package object domain {
       * `next` will not be run
       */
     def filterOptionalDependent[B](predicate: A => Boolean)(next: UserAnswersReader[B]): UserAnswersReader[Option[B]] =
-      a.reader(s"Reader for $a failed before reaching predicate")
+      a.reader(s"Reader for ${a.path} failed before reaching predicate")
         .flatMap {
           x =>
             if (predicate(x)) {

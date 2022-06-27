@@ -116,6 +116,11 @@ trait ModelGenerators {
       } yield CustomsOffice(id, name, countryId, phoneNumber)
     }
 
+  lazy val arbitraryOfficeOfDeparture: Arbitrary[CustomsOffice] =
+    Arbitrary {
+      Gen.oneOf(arbitraryGbCustomsOffice.arbitrary, arbitraryXiCustomsOffice.arbitrary)
+    }
+
   implicit lazy val arbitraryAddress: Arbitrary[Address] =
     Arbitrary {
       for {

@@ -20,9 +20,7 @@ import base.SpecBase
 import controllers.traderDetails.representative.{routes => repRoutes}
 import controllers.traderDetails.{routes => tdRoutes}
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
-import models.traderDetails.representative.RepresentativeCapacity
 import models.{CheckMode, NormalMode}
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.traderDetails.representative._
@@ -31,98 +29,25 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
 
   private val navigator = new RepresentativeNavigator
 
-  "Navigator" - {
+  "Representative Navigator" - {
+
+    val pageGen = Gen.oneOf(
+      EoriPage,
+      NamePage,
+      CapacityPage,
+      TelephoneNumberPage
+    )
 
     "when in NormalMode" - {
 
       val mode = NormalMode
 
-      "when answers incomplete" - {
-
-        "must go from eori page to name page" in {
-          forAll(Gen.alphaNumStr) {
-            eori =>
-              val userAnswers = emptyUserAnswers.setValue(EoriPage, eori)
-              navigator
-                .nextPage(EoriPage, mode, userAnswers)
-                .mustBe(repRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
-          }
-        }
-
-        "must go from name page to capacity page" in {
-          forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
-            (eori, name) =>
-              val userAnswers = emptyUserAnswers
-                .setValue(EoriPage, eori)
-                .setValue(NamePage, name)
-              navigator
-                .nextPage(NamePage, mode, userAnswers)
-                .mustBe(repRoutes.CapacityController.onPageLoad(userAnswers.lrn, mode))
-          }
-        }
-
-        "must go from capacity page to phone number page" in {
-          forAll(Gen.alphaNumStr, Gen.alphaNumStr, arbitrary[RepresentativeCapacity]) {
-            (eori, name, capacity) =>
-              val userAnswers = emptyUserAnswers
-                .setValue(EoriPage, eori)
-                .setValue(NamePage, name)
-                .setValue(CapacityPage, capacity)
-              navigator
-                .nextPage(CapacityPage, mode, userAnswers)
-                .mustBe(repRoutes.TelephoneNumberController.onPageLoad(userAnswers.lrn, mode))
-          }
-        }
-
-        "must go from RepresentativePhonePage to CheckYourAnswers page" in {
-          forAll(Gen.alphaNumStr, Gen.alphaNumStr, arbitrary[RepresentativeCapacity], Gen.alphaNumStr) {
-            (eori, name, capacity, telephoneNumber) =>
-              val userAnswers = emptyUserAnswers
-                .setValue(EoriPage, eori)
-                .setValue(NamePage, name)
-                .setValue(CapacityPage, capacity)
-                .setValue(TelephoneNumberPage, telephoneNumber)
-              navigator
-                .nextPage(TelephoneNumberPage, mode, userAnswers)
-                .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
-          }
-        }
-      }
-
       "when answers complete" - {
-
-        "must go from eori page to check your answers page" in {
-          forAll(arbitraryRepresentativeAnswersActingAsRepresentative) {
-            answers =>
+        "must redirect to check your answers" in {
+          forAll(arbitraryRepresentativeAnswers(emptyUserAnswers), pageGen) {
+            (answers, page) =>
               navigator
-                .nextPage(EoriPage, mode, answers)
-                .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
-          }
-        }
-
-        "must go from name page to check your answers page" in {
-          forAll(arbitraryRepresentativeAnswersActingAsRepresentative) {
-            answers =>
-              navigator
-                .nextPage(NamePage, mode, answers)
-                .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
-          }
-        }
-
-        "must go from capacity page to check your answers page" in {
-          forAll(arbitraryRepresentativeAnswersActingAsRepresentative) {
-            answers =>
-              navigator
-                .nextPage(CapacityPage, mode, answers)
-                .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
-          }
-        }
-
-        "must go from phone number page to check your answers page" in {
-          forAll(arbitraryRepresentativeAnswersActingAsRepresentative) {
-            answers =>
-              navigator
-                .nextPage(TelephoneNumberPage, mode, answers)
+                .nextPage(page, mode, answers)
                 .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
@@ -135,10 +60,12 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
 
       "when answers complete" - {
         "must redirect to check your answers" in {
-          val userAnswers = emptyUserAnswers
-          navigator
-            .checkYourAnswersRoute(mode, emptyUserAnswers)
-            .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+          forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers), pageGen) {
+            (answers, page) =>
+              navigator
+                .nextPage(page, mode, answers)
+                .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+          }
         }
       }
     }

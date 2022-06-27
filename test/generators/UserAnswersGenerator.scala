@@ -16,6 +16,8 @@
 
 package generators
 
+import models.domain.UserAnswersReader
+import models.journeyDomain.ReaderError
 import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
@@ -26,42 +28,6 @@ import play.api.libs.json.{JsValue, Json}
 trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
   self: Generators =>
 
-  /**
-    * The max number of QuestionPage and valid answers that are generated
-    *
-    * The larger this number the more QuestionPages and answers are generated
-    * used in the UserAnswers that is returned. Larger values will increase test
-    * runtime and should therefore have a sensible value that still provide
-    * confidence that the tests are robust.
-    *
-    * @note The value must be greater than 0 but less than the number of elements in the
-    *       class member `generators`.
-    */
-  val maxNumberOfGeneratedPageAnswers: Int = 1
-
-  final val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
-    arbitraryTraderdetailsConsignmentConsigneeAddressUserAnswersEntry.arbitrary ::
-      arbitraryTraderdetailsConsignmentConsigneeNameUserAnswersEntry.arbitrary ::
-      arbitraryTraderdetailsConsignmentConsigneeEoriYesNoUserAnswersEntry.arbitrary ::
-      arbitraryTraderDetailsConsignmentConsigneeEoriNumberUserAnswersEntry.arbitrary ::
-      arbitraryTraderdetailsConsignmentConsigneeMoreThanOneConsigneeUserAnswersEntry.arbitrary ::
-      arbitraryTraderdetailsConsignmentApprovedOperatorUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderAdditionalContactTelephoneNumberUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderTirIdentificationUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderTirIdentificationYesNoUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderAddContactUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderAddressUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderAdditionalContactNameUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderNameUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderEoriUserAnswersEntry.arbitrary ::
-      arbitraryTransitHolderEoriYesNoUserAnswersEntry.arbitrary ::
-      arbitraryOfficeOfDepartureUserAnswersEntry.arbitrary ::
-      arbitraryProcedureTypeUserAnswersEntry.arbitrary ::
-      arbitraryDeclarationTypeUserAnswersEntry.arbitrary ::
-      arbitraryTIRCarnetReferenceUserAnswersEntry.arbitrary ::
-      arbitraryAddSecurityDetailsUserAnswersEntry.arbitrary ::
-      Nil
-
   implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] = {
     import models._
 
@@ -69,6 +35,7 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
       for {
         id         <- arbitrary[LocalReferenceNumber]
         eoriNumber <- arbitrary[EoriNumber]
+        generators = Nil
         data <- generators match {
           case Nil => Gen.const(Map[QuestionPage[_], JsValue]())
           case _   => Gen.mapOf(oneOf(generators))
@@ -114,5 +81,20 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
       (acc, ua) =>
         acc.copy(data = acc.data.deepMerge(ua.data))
     }
+  }
+
+  protected def buildUserAnswers[T](initialUserAnswers: UserAnswers)(implicit userAnswersReader: UserAnswersReader[T]): Gen[UserAnswers] = {
+
+    def rec(userAnswers: UserAnswers): Gen[UserAnswers] =
+      UserAnswersReader[T].run(userAnswers) match {
+        case Left(ReaderError(page, _)) =>
+          combineUserAnswers(
+            Gen.const(userAnswers),
+            arbitraryUserAnswers(Seq(generateAnswer.apply(page)))
+          ).flatMap(rec)
+        case Right(_) => Gen.const(userAnswers)
+      }
+
+    rec(initialUserAnswers)
   }
 }

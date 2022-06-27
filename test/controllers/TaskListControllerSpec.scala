@@ -43,7 +43,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       when(mockViewModel.apply(any())).thenReturn(sampleTasks)
 
-      val userAnswers = arbitraryPreTaskListAnswersWithoutTir.sample.value
+      val userAnswers = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, routes.TaskListController.onPageLoad(lrn).url)

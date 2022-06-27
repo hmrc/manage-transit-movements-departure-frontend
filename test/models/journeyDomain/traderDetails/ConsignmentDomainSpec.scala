@@ -21,7 +21,7 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models.domain.{EitherType, UserAnswersReader}
-import models.{Address, DeclarationType}
+import models.{Address, DeclarationType, SecurityDetailsType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
@@ -30,15 +30,18 @@ import pages.traderDetails.consignment._
 class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
   "ConsignmentDomain" - {
-    val consignorName    = Gen.alphaNumStr.sample.value
-    val consignorAddress = arbitrary[Address].sample.value
+
+    val name                      = Gen.alphaNumStr.sample.value
+    val address                   = arbitrary[Address].sample.value
+    val nonOption4DeclarationType = arbitrary[DeclarationType].sample.value
+    val securityDetailsType       = arbitrary[SecurityDetailsType].sample.value
 
     "can be parsed from UserAnswers" - {
 
       "when has the minimum consignment fields complete" in {
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option1)
+          .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(ApprovedOperatorPage)(true)
           .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
@@ -56,19 +59,19 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
       "when the consignor fields are complete" in {
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option1)
+          .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
           .unsafeSetVal(SecurityDetailsTypePage)(EntrySummaryDeclarationSecurityDetails)
           .unsafeSetVal(ApprovedOperatorPage)(true)
           .unsafeSetVal(consignor.EoriYesNoPage)(false)
-          .unsafeSetVal(consignor.NamePage)(consignorName)
-          .unsafeSetVal(consignor.AddressPage)(consignorAddress)
+          .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(false)
           .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
 
         val consignorDomain = ConsignmentConsignorDomain(
           eori = None,
-          name = consignorName,
-          address = consignorAddress,
+          name = name,
+          address = address,
           contact = None
         )
         val expectedResult = ConsignmentDomain(
@@ -84,7 +87,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
       "when the consignor fields are populated but we don't want security details but have the ApprovedOperatorPage as Yes" in {
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option1)
+          .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(ApprovedOperatorPage)(true)
           .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
@@ -102,19 +105,19 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
       "when the consignor fields are populated we do not want security details and have the ApprovedOperatorPage as No" in {
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option1)
+          .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(ApprovedOperatorPage)(false)
           .unsafeSetVal(consignor.EoriYesNoPage)(false)
-          .unsafeSetVal(consignor.NamePage)(consignorName)
-          .unsafeSetVal(consignor.AddressPage)(consignorAddress)
+          .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(false)
           .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
 
         val consignorDomain = ConsignmentConsignorDomain(
           eori = None,
-          name = consignorName,
-          address = consignorAddress,
+          name = name,
+          address = address,
           contact = None
         )
         val expectedResult = ConsignmentDomain(
@@ -133,15 +136,15 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(consignor.EoriYesNoPage)(false)
-          .unsafeSetVal(consignor.NamePage)(consignorName)
-          .unsafeSetVal(consignor.AddressPage)(consignorAddress)
+          .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(false)
           .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
 
         val consignorDomain = ConsignmentConsignorDomain(
           eori = None,
-          name = consignorName,
-          address = consignorAddress,
+          name = name,
+          address = address,
           contact = None
         )
         val expectedResult = ConsignmentDomain(
@@ -155,15 +158,17 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
       }
     }
 
-    "cannot be parsed from UserAnswer" - {
+    "cannot be parsed from UserAnswers" - {
 
-      "when ApprovedOperatorPage type is missing" in {
+      "when Reduced data set page is missing" in {
 
         val userAnswers = emptyUserAnswers
+          .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
+          .unsafeSetVal(SecurityDetailsTypePage)(securityDetailsType)
 
         val result: EitherType[ConsignmentDomain] = UserAnswersReader[ConsignmentDomain].run(userAnswers)
 
-        result.left.value.page mustBe DeclarationTypePage
+        result.left.value.page mustBe ApprovedOperatorPage
       }
     }
   }

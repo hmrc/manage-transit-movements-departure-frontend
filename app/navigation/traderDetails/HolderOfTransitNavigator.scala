@@ -19,19 +19,19 @@ package navigation.traderDetails
 import controllers.traderDetails.holderOfTransit.{routes => hotRoutes}
 import controllers.traderDetails.{routes => tdRoutes}
 import models._
-import models.journeyDomain.traderDetails.HolderOfTransitDomain
+import models.journeyDomain.traderDetails.{HolderOfTransitDomain, TraderDetailsDomain}
 import navigation.UserAnswersNavigator
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class HolderOfTransitNavigator @Inject() () extends UserAnswersNavigator[HolderOfTransitDomain] {
+class HolderOfTransitNavigator @Inject() () extends UserAnswersNavigator[HolderOfTransitDomain, TraderDetailsDomain] {
 
-  override def checkYourAnswersRoute(mode: Mode, userAnswers: UserAnswers): Call =
-    mode match {
-      case NormalMode => hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
-      case CheckMode  => tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
-    }
+  override def subSectionCheckYourAnswersRoute(userAnswers: UserAnswers): Call =
+    hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+
+  override def sectionCheckYourAnswersRoute(userAnswers: UserAnswers): Call =
+    tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
 
 }

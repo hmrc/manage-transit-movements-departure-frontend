@@ -29,11 +29,11 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
 
   "ConsignmentConsignorDomain" - {
 
-    val consignorEori    = arbitrary[EoriNumber].sample.value
-    val consignorName    = Gen.alphaNumStr.sample.value
-    val consignorAddress = arbitrary[Address].sample.value
-    val contactName      = Gen.alphaNumStr.sample.value
-    val contactPhone     = Gen.alphaNumStr.sample.value
+    val eori         = arbitrary[EoriNumber].sample.value
+    val name         = Gen.alphaNumStr.sample.value
+    val address      = arbitrary[Address].sample.value
+    val contactName  = Gen.alphaNumStr.sample.value
+    val contactPhone = Gen.alphaNumStr.sample.value
 
     "can be parsed from UserAnswers" - {
 
@@ -41,17 +41,17 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(consignor.EoriYesNoPage)(true)
-          .unsafeSetVal(consignor.EoriPage)(consignorEori.value)
-          .unsafeSetVal(consignor.NamePage)(consignorName)
-          .unsafeSetVal(consignor.AddressPage)(consignorAddress)
+          .unsafeSetVal(consignor.EoriPage)(eori.value)
+          .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(true)
           .unsafeSetVal(consignor.contact.NamePage)(contactName)
           .unsafeSetVal(consignor.contact.TelephoneNumberPage)(contactPhone)
 
         val expectedResult = ConsignmentConsignorDomain(
-          eori = Some(consignorEori),
-          name = consignorName,
-          address = consignorAddress,
+          eori = Some(eori),
+          name = name,
+          address = address,
           contact = Some(
             ConsignmentConsignorContactDomain(
               name = contactName,
@@ -68,16 +68,16 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(consignor.EoriYesNoPage)(false)
-          .unsafeSetVal(consignor.NamePage)(consignorName)
-          .unsafeSetVal(consignor.AddressPage)(consignorAddress)
+          .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(true)
           .unsafeSetVal(consignor.contact.NamePage)(contactName)
           .unsafeSetVal(consignor.contact.TelephoneNumberPage)(contactPhone)
 
         val expectedResult = ConsignmentConsignorDomain(
           eori = None,
-          name = consignorName,
-          address = consignorAddress,
+          name = name,
+          address = address,
           contact = Some(
             ConsignmentConsignorContactDomain(
               name = contactName,
@@ -94,15 +94,15 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(consignor.EoriYesNoPage)(true)
-          .unsafeSetVal(consignor.EoriPage)(consignorEori.value)
-          .unsafeSetVal(consignor.NamePage)(consignorName)
-          .unsafeSetVal(consignor.AddressPage)(consignorAddress)
+          .unsafeSetVal(consignor.EoriPage)(eori.value)
+          .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(false)
 
         val expectedResult = ConsignmentConsignorDomain(
-          eori = Some(consignorEori),
-          name = consignorName,
-          address = consignorAddress,
+          eori = Some(eori),
+          name = name,
+          address = address,
           contact = None
         )
 
@@ -111,9 +111,9 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
       }
     }
 
-    "cannot be parsed from UserAnswer" - {
+    "cannot be parsed from UserAnswers" - {
 
-      "when EoriYesNo type is missing" in {
+      "when EoriYesNo is missing" in {
 
         val userAnswers = emptyUserAnswers
 
@@ -122,18 +122,68 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
         result.left.value.page mustBe consignor.EoriYesNoPage
       }
 
-      "when has all consignment fields complete eoriYesNo is true, but we have no eori" in {
+      "when EoriYesNoPage is true and EoriPage is missing" in {
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(consignor.EoriYesNoPage)(true)
-          .unsafeSetVal(consignor.NamePage)(consignorName)
-          .unsafeSetVal(consignor.AddressPage)(consignorAddress)
-          .unsafeSetVal(consignor.AddContactPage)(true)
-          .unsafeSetVal(consignor.contact.NamePage)(contactName)
-          .unsafeSetVal(consignor.contact.TelephoneNumberPage)(contactPhone)
 
         val result: EitherType[ConsignmentConsignorDomain] = UserAnswersReader[ConsignmentConsignorDomain].run(userAnswers)
         result.left.value.page mustBe consignor.EoriPage
+      }
+
+      "when NamePage is missing" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(consignor.EoriYesNoPage)(false)
+
+        val result: EitherType[ConsignmentConsignorDomain] = UserAnswersReader[ConsignmentConsignorDomain].run(userAnswers)
+        result.left.value.page mustBe consignor.NamePage
+      }
+
+      "when AddressPage is missing" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(consignor.EoriYesNoPage)(false)
+          .unsafeSetVal(consignor.NamePage)(name)
+
+        val result: EitherType[ConsignmentConsignorDomain] = UserAnswersReader[ConsignmentConsignorDomain].run(userAnswers)
+        result.left.value.page mustBe consignor.AddressPage
+      }
+
+      "when AddContactPage is missing" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(consignor.EoriYesNoPage)(false)
+          .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.AddressPage)(address)
+
+        val result: EitherType[ConsignmentConsignorDomain] = UserAnswersReader[ConsignmentConsignorDomain].run(userAnswers)
+        result.left.value.page mustBe consignor.AddContactPage
+      }
+
+      "when contact name page is missing" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(consignor.EoriYesNoPage)(false)
+          .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.AddressPage)(address)
+          .unsafeSetVal(consignor.AddContactPage)(true)
+
+        val result: EitherType[ConsignmentConsignorDomain] = UserAnswersReader[ConsignmentConsignorDomain].run(userAnswers)
+        result.left.value.page mustBe consignor.contact.NamePage
+      }
+
+      "when contact telephone number page is missing" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(consignor.EoriYesNoPage)(false)
+          .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.AddressPage)(address)
+          .unsafeSetVal(consignor.AddContactPage)(true)
+          .unsafeSetVal(consignor.contact.NamePage)(contactName)
+
+        val result: EitherType[ConsignmentConsignorDomain] = UserAnswersReader[ConsignmentConsignorDomain].run(userAnswers)
+        result.left.value.page mustBe consignor.contact.TelephoneNumberPage
       }
     }
   }

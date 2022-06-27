@@ -18,19 +18,34 @@ package navigation
 
 import models.domain.UserAnswersReader
 import models.journeyDomain.ReaderError
-import models.{Mode, UserAnswers}
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
 import play.api.mvc.Call
 
-abstract class UserAnswersNavigator[T](implicit userAnswersReader: UserAnswersReader[T]) extends Navigator {
+abstract class UserAnswersNavigator[SubSection, Section](implicit
+  subSectionReader: UserAnswersReader[SubSection],
+  sectionReader: UserAnswersReader[Section]
+) extends Navigator {
 
-  def checkYourAnswersRoute(mode: Mode, userAnswers: UserAnswers): Call
+  def subSectionCheckYourAnswersRoute(userAnswers: UserAnswers): Call = sectionCheckYourAnswersRoute(userAnswers)
+
+  def sectionCheckYourAnswersRoute(userAnswers: UserAnswers): Call
 
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
-    UserAnswersReader[T].run(userAnswers) match {
+    mode match {
+      case NormalMode => nextPage[SubSection](userAnswers, mode, subSectionCheckYourAnswersRoute)
+      case CheckMode  => nextPage[Section](userAnswers, mode, sectionCheckYourAnswersRoute)
+    }
+
+  private def nextPage[A](
+    userAnswers: UserAnswers,
+    mode: Mode,
+    route: UserAnswers => Call
+  )(implicit userAnswersReader: UserAnswersReader[A]): Call =
+    UserAnswersReader[A].run(userAnswers) match {
       case Left(ReaderError(page, _)) =>
         page.route(userAnswers, mode).getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
       case Right(_) =>
-        checkYourAnswersRoute(mode, userAnswers)
+        route(userAnswers)
     }
 }

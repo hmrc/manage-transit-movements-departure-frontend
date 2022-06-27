@@ -16,18 +16,29 @@
 
 package generators
 
-import base.SpecBase
 import models.UserAnswers
+import models.journeyDomain.traderDetails._
 import org.scalacheck.Gen
 
-trait TraderDetailsUserAnswersGenerator extends HolderOfTransitUserAnswersGenerator with RepresentativeUserAnswersGenerator with ConsignmentAnswersGenerator {
-  self: Generators with SpecBase =>
+trait TraderDetailsUserAnswersGenerator extends UserAnswersGenerator {
+  self: Generators =>
 
-  def arbitraryTraderDetailsAnswers(userAnswers: UserAnswers): Gen[UserAnswers] = combineUserAnswers(
-    Gen.const(userAnswers),
-    arbitraryHolderOfTransitAnswers(userAnswers)
-      .flatMap(arbitraryRepresentativeAnswers)
-      .flatMap(arbitraryConsignmentAnswers)
-  )
+  def arbitraryTraderDetailsAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[TraderDetailsDomain](userAnswers)
+
+  def arbitraryHolderOfTransitAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[HolderOfTransitDomain](userAnswers)
+
+  def arbitraryRepresentativeAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[RepresentativeDomain](userAnswers)
+
+  def arbitraryConsignmentAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[ConsignmentDomain](userAnswers)
+
+  def arbitraryConsignorAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[ConsignmentConsignorDomain](userAnswers)
+
+  def arbitraryConsigneeAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[ConsignmentConsigneeDomain](userAnswers)
 
 }

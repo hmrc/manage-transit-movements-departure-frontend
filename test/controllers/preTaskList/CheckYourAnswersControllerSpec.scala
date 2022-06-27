@@ -18,14 +18,13 @@ package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.{Generators, PreTaskListUserAnswersGenerator}
-import models.reference.CustomsOffice
 import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.preTaskList.{DetailsConfirmedPage, OfficeOfDeparturePage}
+import pages.preTaskList.DetailsConfirmedPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -53,7 +52,7 @@ class CheckYourAnswersControllerSpec
   "Check Your Answers Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      forAll(arbitraryPreTaskListAnswers, arbitrary[Section]) {
+      forAll(arbitraryPreTaskListAnswers(emptyUserAnswers), arbitrary[Section]) {
         (answers, section) =>
           val userAnswers = answers.removeValue(DetailsConfirmedPage)
           setExistingUserAnswers(userAnswers)
@@ -86,21 +85,16 @@ class CheckYourAnswersControllerSpec
     }
 
     "must redirect back into journey if answers in invalid state" in {
-      forAll(arbitraryPreTaskListAnswersWithTir, arbitrary[CustomsOffice](arbitraryGbCustomsOffice)) {
-        (answers, customsOffice) =>
-          val userAnswers = answers
-            .removeValue(DetailsConfirmedPage)
-            .setValue(OfficeOfDeparturePage, customsOffice)
-          setExistingUserAnswers(userAnswers)
+      val userAnswers = emptyUserAnswers
+      setExistingUserAnswers(emptyUserAnswers)
 
-          val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url)
+      val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url)
 
-          val result = route(app, request).value
+      val result = route(app, request).value
 
-          status(result) mustEqual SEE_OTHER
+      status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual routes.DeclarationTypeController.onPageLoad(userAnswers.lrn, NormalMode).url
-      }
+      redirectLocation(result).value mustEqual routes.OfficeOfDepartureController.onPageLoad(userAnswers.lrn, NormalMode).url
     }
 
     "must redirect to task list / declaration summary" in {

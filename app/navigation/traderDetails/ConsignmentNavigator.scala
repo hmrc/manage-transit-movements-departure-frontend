@@ -19,19 +19,19 @@ package navigation.traderDetails
 import controllers.traderDetails.consignment.{routes => consignmentRoutes}
 import controllers.traderDetails.{routes => tdRoutes}
 import models._
-import models.journeyDomain.traderDetails.ConsignmentDomain
+import models.journeyDomain.traderDetails.{ConsignmentDomain, TraderDetailsDomain}
 import navigation.UserAnswersNavigator
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class ConsignmentNavigator @Inject() () extends UserAnswersNavigator[ConsignmentDomain] {
+class ConsignmentNavigator @Inject() () extends UserAnswersNavigator[ConsignmentDomain, TraderDetailsDomain] {
 
-  override def checkYourAnswersRoute(mode: Mode, userAnswers: UserAnswers): Call =
-    mode match {
-      case NormalMode => consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
-      case CheckMode  => tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
-    }
+  override def subSectionCheckYourAnswersRoute(userAnswers: UserAnswers): Call =
+    consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+
+  override def sectionCheckYourAnswersRoute(userAnswers: UserAnswers): Call =
+    tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
 
 }

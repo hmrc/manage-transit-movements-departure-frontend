@@ -16,7 +16,7 @@
 
 package navigation.traderDetails
 
-import controllers.traderDetails.{routes => tdRoutes}
+import controllers.traderDetails.routes
 import models._
 import models.journeyDomain.traderDetails.TraderDetailsDomain
 import navigation.UserAnswersNavigator
@@ -25,9 +25,9 @@ import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class TraderDetailsNavigator @Inject() () extends UserAnswersNavigator[TraderDetailsDomain] {
+class TraderDetailsNavigator @Inject() () extends UserAnswersNavigator[TraderDetailsDomain, TraderDetailsDomain] {
 
-  override def checkYourAnswersRoute(mode: Mode, userAnswers: UserAnswers): Call =
-    tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+  override def sectionCheckYourAnswersRoute(userAnswers: UserAnswers): Call =
+    routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
 
 }

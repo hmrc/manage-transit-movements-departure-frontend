@@ -138,14 +138,11 @@ class TraderDetailsTaskSpec
 
     "when Completed" - {
       "when valid journey is completed" in {
-        forAll(arbitraryPreTaskListAnswers) {
-          preTaskListAnswers =>
-            forAll(arbitraryTraderDetailsAnswers(preTaskListAnswers)) {
-              userAnswers =>
-                val task = TraderDetailsTask(userAnswers)
-                task.status mustBe Completed
-                task.href.get mustBe traderDetailsRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url
-            }
+        forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers)) {
+          userAnswers =>
+            val task = TraderDetailsTask(userAnswers)
+            task.status mustBe Completed
+            task.href.get mustBe traderDetailsRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url
         }
       }
     }

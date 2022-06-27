@@ -17,406 +17,43 @@
 package navigation.traderDetails
 
 import base.SpecBase
-import controllers.traderDetails.holderOfTransit.contact.{routes => contactRoutes}
-import controllers.traderDetails.holderOfTransit.{routes => hotRoutes}
+import controllers.traderDetails.holderOfTransit.{routes => holderOfTransitRoutes}
 import controllers.traderDetails.{routes => tdRoutes}
-import generators.{Generators, PreTaskListUserAnswersGenerator, TraderDetailsUserAnswersGenerator}
+import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models._
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.sections.HolderOfTransitContactSection
 import pages.traderDetails.holderOfTransit._
 
-class HolderOfTransitNavigatorSpec
-    extends SpecBase
-    with ScalaCheckPropertyChecks
-    with Generators
-    with TraderDetailsUserAnswersGenerator
-    with PreTaskListUserAnswersGenerator {
+class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
 
   private val navigator = new HolderOfTransitNavigator
 
-  "Navigator" - {
+  "Holder Of Transit Navigator" - {
+
+    val pageGen = Gen.oneOf(
+      EoriYesNoPage,
+      EoriPage,
+      TirIdentificationYesNoPage,
+      TirIdentificationPage,
+      NamePage,
+      AddressPage,
+      AddContactPage,
+      contact.NamePage,
+      contact.TelephoneNumberPage
+    )
 
     "when in NormalMode" - {
 
       val mode = NormalMode
 
-      "when answers incomplete" - {
-
-        "must go from is eori known page" - {
-          "when Yes selected" - {
-            "to eori page" in {
-              forAll(arbitraryPreTaskListAnswersWithoutTir) {
-                answers =>
-                  val userAnswers = answers.setValue(EoriYesNoPage, true)
-                  navigator
-                    .nextPage(EoriYesNoPage, mode, userAnswers)
-                    .mustBe(hotRoutes.EoriController.onPageLoad(userAnswers.lrn, mode))
-              }
-            }
-          }
-
-          "when No selected" - {
-            "to name page" in {
-              forAll(arbitraryPreTaskListAnswersWithoutTir) {
-                answers =>
-                  val userAnswers = answers.setValue(EoriYesNoPage, false)
-                  navigator
-                    .nextPage(EoriYesNoPage, mode, userAnswers)
-                    .mustBe(hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
-              }
-            }
-          }
-        }
-
-        "must go from eori page to name page" in {
-          forAll(arbitraryPreTaskListAnswersWithoutTir, Gen.alphaNumStr) {
-            (answers, eori) =>
-              val userAnswers = answers
-                .setValue(EoriYesNoPage, true)
-                .setValue(EoriPage, eori)
-              navigator
-                .nextPage(EoriPage, mode, userAnswers)
-                .mustBe(hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
-          }
-        }
-
-        "must go from is tir id known page" - {
-          "when Yes selected" - {
-            "to tir id page" in {
-              forAll(arbitraryPreTaskListAnswersWithTir) {
-                answers =>
-                  val userAnswers = answers.setValue(TirIdentificationYesNoPage, true)
-                  navigator
-                    .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
-                    .mustBe(hotRoutes.TirIdentificationController.onPageLoad(userAnswers.lrn, mode))
-              }
-            }
-          }
-
-          "when No selected" - {
-            "to name page" in {
-              forAll(arbitraryPreTaskListAnswersWithTir) {
-                answers =>
-                  val userAnswers = answers.setValue(TirIdentificationYesNoPage, false)
-                  navigator
-                    .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
-                    .mustBe(hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
-              }
-            }
-          }
-        }
-
-        "must go from tir id page to name page" in {
-          forAll(arbitraryPreTaskListAnswersWithTir, Gen.alphaNumStr) {
-            (answers, tir) =>
-              val userAnswers = answers
-                .setValue(TirIdentificationYesNoPage, true)
-                .setValue(TirIdentificationPage, tir)
-              navigator
-                .nextPage(TirIdentificationPage, mode, userAnswers)
-                .mustBe(hotRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
-          }
-        }
-
-        "must go from name page to address page" in {
-          forAll(arbitraryPreTaskListAnswersWithoutTir, Gen.alphaNumStr) {
-            (answers, name) =>
-              val userAnswers = answers
-                .setValue(EoriYesNoPage, false)
-                .setValue(NamePage, name)
-              navigator
-                .nextPage(NamePage, mode, userAnswers)
-                .mustBe(hotRoutes.AddressController.onPageLoad(userAnswers.lrn, mode))
-          }
-        }
-
-        "must go from address page to add contact page" in {
-          forAll(arbitraryPreTaskListAnswersWithoutTir, Gen.alphaNumStr, arbitrary[Address]) {
-            (answers, name, address) =>
-              val userAnswers = answers
-                .setValue(EoriYesNoPage, false)
-                .setValue(NamePage, name)
-                .setValue(AddressPage, address)
-              navigator
-                .nextPage(AddressPage, mode, userAnswers)
-                .mustBe(hotRoutes.AddContactController.onPageLoad(userAnswers.lrn, mode))
-          }
-        }
-
-        "must go from add contact page" - {
-          "when Yes selected" - {
-            "to contact name page" in {
-              forAll(arbitraryPreTaskListAnswersWithoutTir, Gen.alphaNumStr, arbitrary[Address]) {
-                (answers, name, address) =>
-                  val userAnswers = answers
-                    .setValue(EoriYesNoPage, false)
-                    .setValue(NamePage, name)
-                    .setValue(AddressPage, address)
-                    .setValue(AddContactPage, true)
-                  navigator
-                    .nextPage(AddContactPage, mode, userAnswers)
-                    .mustBe(contactRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
-              }
-            }
-          }
-
-          "when No selected" - {
-            "to check your answers page" in {
-              forAll(arbitraryPreTaskListAnswersWithoutTir, Gen.alphaNumStr, arbitrary[Address]) {
-                (answers, name, address) =>
-                  val userAnswers = answers
-                    .setValue(EoriYesNoPage, false)
-                    .setValue(NamePage, name)
-                    .setValue(AddressPage, address)
-                    .setValue(AddContactPage, false)
-                  navigator
-                    .nextPage(AddContactPage, mode, userAnswers)
-                    .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
-              }
-            }
-          }
-
-          "must go from contact name page to contact telephone number page" in {
-            forAll(arbitraryPreTaskListAnswersWithoutTir, Gen.alphaNumStr, arbitrary[Address]) {
-              (answers, name, address) =>
-                val userAnswers = answers
-                  .setValue(EoriYesNoPage, false)
-                  .setValue(NamePage, name)
-                  .setValue(AddressPage, address)
-                  .setValue(AddContactPage, true)
-                  .setValue(contact.NamePage, name)
-                navigator
-                  .nextPage(contact.NamePage, mode, userAnswers)
-                  .mustBe(contactRoutes.TelephoneNumberController.onPageLoad(userAnswers.lrn, mode))
-            }
-          }
-
-          "must go from contact telephone number page to check your answers page" in {
-            forAll(arbitraryPreTaskListAnswersWithoutTir, Gen.alphaNumStr, arbitrary[Address]) {
-              (answers, str, address) =>
-                val userAnswers = answers
-                  .setValue(EoriYesNoPage, false)
-                  .setValue(NamePage, str)
-                  .setValue(AddressPage, address)
-                  .setValue(AddContactPage, true)
-                  .setValue(contact.NamePage, str)
-                  .setValue(contact.TelephoneNumberPage, str)
-                navigator
-                  .nextPage(contact.TelephoneNumberPage, mode, userAnswers)
-                  .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
-            }
-          }
-        }
-      }
-
       "when answers complete" - {
-
-        "must go from is eori known page" - {
-          "when No selected" - {
-            "to check Your Answers page" in {
-              forAll(arbitraryPreTaskListAnswersWithoutTir) {
-                preTaskListAnswers =>
-                  forAll(arbitraryHolderOfTransitAnswers(preTaskListAnswers)) {
-                    answers =>
-                      val userAnswers = answers.setValue(EoriYesNoPage, false)
-                      navigator
-                        .nextPage(EoriYesNoPage, mode, userAnswers)
-                        .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
-                  }
-              }
-            }
-          }
-
-          "when Yes selected" - {
-            "to eori page" in {
-              forAll(arbitraryPreTaskListAnswersWithoutTir) {
-                preTaskListAnswers =>
-                  forAll(arbitraryHolderOfTransitAnswers(preTaskListAnswers)) {
-                    answers =>
-                      val userAnswers = answers
-                        .removeValue(EoriPage)
-                        .setValue(EoriYesNoPage, true)
-                      navigator
-                        .nextPage(EoriYesNoPage, mode, userAnswers)
-                        .mustBe(hotRoutes.EoriController.onPageLoad(userAnswers.lrn, mode))
-                  }
-              }
-            }
-          }
-        }
-
-        "must go from eori page to check your answers page" in {
-          forAll(arbitraryPreTaskListAnswersWithoutTir) {
-            preTaskListAnswers =>
-              forAll(arbitraryHolderOfTransitAnswers(preTaskListAnswers)) {
-                answers =>
-                  navigator
-                    .nextPage(EoriPage, mode, answers)
-                    .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
-              }
-          }
-        }
-
-        "must go from change tir id known page" - {
-          "when No selected" - {
-            "to check your answers page" in {
-              forAll(arbitraryPreTaskListAnswersWithTir) {
-                preTaskListAnswers =>
-                  forAll(arbitraryHolderOfTransitAnswers(preTaskListAnswers)) {
-                    answers =>
-                      val userAnswers = answers.setValue(TirIdentificationYesNoPage, false)
-                      navigator
-                        .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
-                        .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
-                  }
-              }
-            }
-          }
-
-          "when Yes selected" - {
-            "to tir id page" in {
-              forAll(arbitraryPreTaskListAnswersWithTir) {
-                preTaskListAnswers =>
-                  forAll(arbitraryHolderOfTransitAnswers(preTaskListAnswers)) {
-                    answers =>
-                      val userAnswers = answers
-                        .removeValue(TirIdentificationPage)
-                        .setValue(TirIdentificationYesNoPage, true)
-                      navigator
-                        .nextPage(TirIdentificationYesNoPage, mode, userAnswers)
-                        .mustBe(hotRoutes.TirIdentificationController.onPageLoad(userAnswers.lrn, mode))
-                  }
-              }
-            }
-          }
-        }
-
-        "must go from tir id page to check your answers page" in {
-          forAll(arbitraryPreTaskListAnswersWithTir) {
-            preTaskListAnswers =>
-              forAll(arbitraryHolderOfTransitAnswers(preTaskListAnswers)) {
-                answers =>
-                  navigator
-                    .nextPage(TirIdentificationPage, mode, answers)
-                    .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
-              }
-          }
-        }
-
-        "must go from name page to check your answers page" in {
-          forAll(arbitraryPreTaskListAnswers) {
-            preTaskListAnswers =>
-              forAll(arbitraryHolderOfTransitAnswers(preTaskListAnswers)) {
-                answers =>
-                  navigator
-                    .nextPage(NamePage, mode, answers)
-                    .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
-              }
-          }
-        }
-
-        "must go from address page to check your answers page" in {
-          forAll(arbitraryPreTaskListAnswers) {
-            preTaskListAnswers =>
-              forAll(arbitraryHolderOfTransitAnswers(preTaskListAnswers)) {
-                answers =>
-                  navigator
-                    .nextPage(AddressPage, mode, answers)
-                    .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
-              }
-          }
-        }
-
-        "must go from add contact name page" - {
-          "when No selected" - {
-            "to check your answers page" in {
-              forAll(arbitraryPreTaskListAnswers) {
-                preTaskListAnswers =>
-                  forAll(arbitraryHolderOfTransitAnswers(preTaskListAnswers)) {
-                    answers =>
-                      val userAnswers = answers.setValue(AddContactPage, false)
-                      navigator
-                        .nextPage(AddContactPage, mode, userAnswers)
-                        .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
-                  }
-              }
-            }
-          }
-
-          "when Yes selected" - {
-            "to contact name page" in {
-              forAll(arbitraryPreTaskListAnswers) {
-                preTaskListAnswers =>
-                  forAll(arbitraryHolderOfTransitAnswers(preTaskListAnswers)) {
-                    answers =>
-                      val userAnswers = answers
-                        .removeValue(HolderOfTransitContactSection)
-                        .setValue(AddContactPage, true)
-                      navigator
-                        .nextPage(AddContactPage, mode, userAnswers)
-                        .mustBe(contactRoutes.NameController.onPageLoad(userAnswers.lrn, mode))
-                  }
-              }
-            }
-          }
-        }
-
-        "must go from contact name page" - {
-          "when telephone number exists" - {
-            "to check your answers page" in {
-              forAll(arbitraryPreTaskListAnswers) {
-                preTaskListAnswers =>
-                  forAll(arbitraryHolderOfTransitAnswers(preTaskListAnswers), Gen.alphaNumStr) {
-                    (answers, str) =>
-                      val userAnswers = answers
-                        .removeValue(HolderOfTransitContactSection)
-                        .setValue(AddContactPage, true)
-                        .setValue(contact.NamePage, str)
-                        .setValue(contact.TelephoneNumberPage, str)
-                      navigator
-                        .nextPage(contact.NamePage, mode, userAnswers)
-                        .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
-                  }
-              }
-            }
-          }
-
-          "when no telephone number exists" - {
-            "to contact telephone number page" in {
-              forAll(arbitraryPreTaskListAnswers) {
-                preTaskListAnswers =>
-                  forAll(arbitraryHolderOfTransitAnswers(preTaskListAnswers), Gen.alphaNumStr) {
-                    (answers, name) =>
-                      val userAnswers = answers
-                        .removeValue(HolderOfTransitContactSection)
-                        .setValue(AddContactPage, true)
-                        .setValue(contact.NamePage, name)
-                      navigator
-                        .nextPage(contact.NamePage, mode, userAnswers)
-                        .mustBe(contactRoutes.TelephoneNumberController.onPageLoad(userAnswers.lrn, mode))
-                  }
-              }
-            }
-          }
-        }
-
-        "must go from contact telephone number page to check your answers page" in {
-          forAll(arbitraryPreTaskListAnswers) {
-            preTaskListAnswers =>
-              forAll(arbitraryHolderOfTransitAnswers(preTaskListAnswers), Gen.alphaNumStr) {
-                (answers, str) =>
-                  val userAnswers = answers
-                    .removeValue(HolderOfTransitContactSection)
-                    .setValue(AddContactPage, true)
-                    .setValue(contact.NamePage, str)
-                    .setValue(contact.TelephoneNumberPage, str)
-                  navigator
-                    .nextPage(contact.TelephoneNumberPage, mode, userAnswers)
-                    .mustBe(hotRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
-              }
+        "must redirect to check your answers" in {
+          forAll(arbitraryHolderOfTransitAnswers(emptyUserAnswers), pageGen) {
+            (answers, page) =>
+              navigator
+                .nextPage(page, mode, answers)
+                .mustBe(holderOfTransitRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
       }
@@ -428,10 +65,12 @@ class HolderOfTransitNavigatorSpec
 
       "when answers complete" - {
         "must redirect to check your answers" in {
-          val userAnswers = emptyUserAnswers
-          navigator
-            .checkYourAnswersRoute(mode, emptyUserAnswers)
-            .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+          forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers), pageGen) {
+            (answers, page) =>
+              navigator
+                .nextPage(page, mode, answers)
+                .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+          }
         }
       }
     }

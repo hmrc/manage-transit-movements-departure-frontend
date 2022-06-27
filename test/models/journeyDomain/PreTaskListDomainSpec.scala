@@ -174,8 +174,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
         val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
           OfficeOfDeparturePage,
           ProcedureTypePage,
-          SecurityDetailsTypePage,
           DeclarationTypePage,
+          SecurityDetailsTypePage,
           DetailsConfirmedPage
         )
 
