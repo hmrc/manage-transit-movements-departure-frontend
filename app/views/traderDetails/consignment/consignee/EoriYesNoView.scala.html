@@ -16,6 +16,7 @@
 
 @import controllers.traderDetails.consignment.consignee.routes
 @import models.LocalReferenceNumber
+@import viewModels.components.InputYesNoViewModel._
 @import views.html.components.{Button, ErrorSummary, InputYesNo}
 
 @this(
@@ -40,8 +41,10 @@
 
         @inputYesNo(
             field = form("value"),
-            messageKeyPrefix = "traderDetails.consignment.consignee.eoriYesNo",
-            caption = Some(messages("traderDetails.caption"))
+            yesNoType = OrdinaryYesNo(
+                heading = messages("traderDetails.consignment.consignee.eoriYesNo.heading"),
+                caption = Some(messages("traderDetails.caption"))
+            )
         )
 
         @button(attributes = Map("id" -> "submit"))
