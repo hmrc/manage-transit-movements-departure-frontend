@@ -16,6 +16,7 @@
 
 @import controllers.traderDetails.consignment.routes
 @import models.LocalReferenceNumber
+@import viewModels.components.InputYesNoViewModel._
 @import views.html.components.{Button, ErrorSummary, InputYesNo}
 
 @this(
@@ -34,23 +35,18 @@
     lrn = Some(lrn)
 ) {
 
-
-@formHelper(action = routes.ApprovedOperatorController.onSubmit(lrn, mode), 'autoComplete -> "off") {
-
-<p class="govuk-caption-xl">@messages("traderDetails.caption")</p>
-
-        <h1 class="govuk-heading-xl">@messages("traderDetails.consignment.approvedOperator.heading")</h1>
-        <p class="govuk-body">@messages("traderDetails.consignment.approvedOperator.paragraph")</p>
+    @formHelper(action = routes.ApprovedOperatorController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputYesNo(
             field = form("value"),
-            messageKeyPrefix = "traderDetails.consignment.approvedOperator",
-            caption = Some(messages("traderDetails.caption")),
-            hint = Some(HtmlContent(messages("traderDetails.consignment.approvedOperator.hintText"))),
-            legendIsHeading = false,
-            legendIsVisible = false,
+            yesNoType = YesNoWithAdditionalHtml(
+                heading = messages("traderDetails.consignment.approvedOperator.heading"),
+                caption = Some(messages("traderDetails.caption")),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("traderDetails.consignment.approvedOperator.paragraph")}</p>""")
+            ),
+            hint = Some(HtmlContent(messages("traderDetails.consignment.approvedOperator.hintText")))
         )
 
         @button(attributes = Map("id" -> "submit"))

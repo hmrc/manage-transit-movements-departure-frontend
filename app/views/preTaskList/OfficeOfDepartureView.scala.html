@@ -21,6 +21,7 @@
 @import models.Selectable
 @import models.Selectable._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import viewModels.components.InputSelectViewModel._
 
 @this(
     mainTemplate: MainTemplate,
@@ -44,11 +45,13 @@
 
         @select(
             field = form("value"),
-            heading = Some(messages("officeOfDeparture.heading")),
-            label = Some(messages("officeOfDeparture.label")),
+            selectType = SelectWithAdditionalHtml(
+                heading = messages("officeOfDeparture.heading"),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("officeOfDeparture.paragraph")}</p>""")
+            ),
             hint = Some(messages("officeOfDeparture.hintText")),
             selectItems = customsOffices.toSelectItems(form.value),
-            placeholder = Some(messages("officeOfDeparture.placeholder"))
+            placeholder = messages("officeOfDeparture.placeholder")
         )
 
         @button(

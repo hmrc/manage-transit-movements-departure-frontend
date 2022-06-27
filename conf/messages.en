@@ -71,7 +71,7 @@ officeOfDeparture.heading = Where is the office of departure?
 officeOfDeparture.checkYourAnswersLabel = Office of departure
 officeOfDeparture.error.required = Enter the office of departure
 officeOfDeparture.hintText = Give the office location or code. Like, Dover or GB000060.
-officeOfDeparture.label = This is the customs office where the transit movement starts.
+officeOfDeparture.paragraph = This is the customs office where the transit movement starts.
 officeOfDeparture.change.hidden = office of departure
 officeOfDeparture.placeholder = Select a customs office
 
