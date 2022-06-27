@@ -43,14 +43,14 @@ object ConsignmentDomain {
     DeclarationTypePage.reader.flatMap {
       case Option4 => consignorReader
       case _ =>
-        ApprovedOperatorPage.reader.flatMap {
-          case true =>
-            SecurityDetailsTypePage.reader.flatMap {
-              case NoSecurityDetails => none[ConsignmentConsignorDomain].pure[UserAnswersReader]
-              case _                 => consignorReader
-            }
-          case false => consignorReader
-        }
+        for {
+          securityDetailsType <- SecurityDetailsTypePage.reader
+          reducedDataSet      <- ApprovedOperatorPage.reader
+          reader <- (securityDetailsType, reducedDataSet) match {
+            case (NoSecurityDetails, true) => none[ConsignmentConsignorDomain].pure[UserAnswersReader]
+            case _                         => consignorReader
+          }
+        } yield reader
     }
   }
 
