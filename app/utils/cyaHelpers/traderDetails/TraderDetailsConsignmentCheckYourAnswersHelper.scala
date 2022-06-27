@@ -32,7 +32,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     page = ApprovedOperatorPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.consignment.approvedOperator",
-    id = None,
+    id = Some("has-reduced-data-set"),
     call = consignmentRoutes.ApprovedOperatorController.onPageLoad(lrn, mode)
   )
 
@@ -40,7 +40,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     page = consignor.EoriYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.consignment.consignor.eoriYesNo",
-    id = None,
+    id = Some("has-consignor-eori"),
     call = consignorRoutes.EoriYesNoController.onPageLoad(lrn, mode)
   )
 
@@ -48,7 +48,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     page = consignor.EoriPage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.consignment.consignor.eori",
-    id = None,
+    id = Some("consignor-eori-number"),
     call = consignorRoutes.EoriController.onPageLoad(lrn, mode)
   )
 
@@ -56,7 +56,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     page = consignor.NamePage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.consignment.consignor.name",
-    id = None,
+    id = Some("consignor-name"),
     call = consignorRoutes.NameController.onPageLoad(lrn, mode)
   )
 
@@ -64,7 +64,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     page = consignor.AddressPage,
     formatAnswer = formatAsAddress,
     prefix = "traderDetails.consignment.consignor.address",
-    id = None,
+    id = Some("consignor-address"),
     call = consignorRoutes.AddressController.onPageLoad(lrn, mode)
   )
 
@@ -72,7 +72,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     page = consignor.AddContactPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.consignment.consignor.addContact",
-    id = None,
+    id = Some("has-consignor-contact"),
     call = consignorRoutes.AddContactController.onPageLoad(lrn, mode)
   )
 
@@ -80,7 +80,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     page = consignor.contact.NamePage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.consignment.consignor.contact.name",
-    id = None,
+    id = Some("consignor-contact-name"),
     call = contactRoutes.NameController.onPageLoad(lrn, mode)
   )
 
@@ -88,7 +88,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     page = consignor.contact.TelephoneNumberPage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.consignment.consignor.contact.telephoneNumber",
-    id = None,
+    id = Some("consignor-contact-phone-number"),
     call = contactRoutes.TelephoneNumberController.onPageLoad(lrn, mode)
   )
 
@@ -96,7 +96,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     page = consignee.MoreThanOneConsigneePage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.consignment.consignee.moreThanOneConsignee",
-    id = None,
+    id = Some("has-more-than-one-consignee"),
     call = consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(lrn, mode)
   )
 
@@ -104,7 +104,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     page = consignee.EoriYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.consignment.consignee.eoriYesNo",
-    id = None,
+    id = Some("has-consignee-eori"),
     call = consigneeRoutes.EoriYesNoController.onPageLoad(lrn, mode)
   )
 
@@ -112,7 +112,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     page = consignee.EoriNumberPage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.consignment.consignee.eoriNumber",
-    id = None,
+    id = Some("consignee-eori-number"),
     call = consigneeRoutes.EoriNumberController.onPageLoad(lrn, mode)
   )
 
@@ -120,7 +120,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     page = consignee.NamePage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.consignment.consignee.name",
-    id = None,
+    id = Some("consignee-name"),
     call = consigneeRoutes.NameController.onPageLoad(lrn, mode)
   )
 
@@ -128,7 +128,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     page = consignee.AddressPage,
     formatAnswer = formatAsAddress,
     prefix = "traderDetails.consignment.consignee.address",
-    id = None,
+    id = Some("consignee-address"),
     call = consigneeRoutes.AddressController.onPageLoad(lrn, mode)
   )
 }

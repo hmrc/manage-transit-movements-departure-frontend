@@ -30,7 +30,7 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     page = TirIdentificationYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.holderOfTransit.tirIdentificationYesNo",
-    id = None,
+    id = Some("has-transit-holder-tir-id"),
     call = TirIdentificationYesNoController.onPageLoad(lrn, mode)
   )
 
@@ -38,7 +38,7 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     page = TirIdentificationPage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.holderOfTransit.tirIdentification",
-    id = None,
+    id = Some("transit-holder-tir-id-number"),
     call = TirIdentificationController.onPageLoad(lrn, mode)
   )
 
@@ -46,7 +46,7 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     page = EoriYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.holderOfTransit.eoriYesNo",
-    id = None,
+    id = Some("has-transit-holder-eori"),
     call = EoriYesNoController.onPageLoad(lrn, mode)
   )
 
@@ -54,7 +54,7 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     page = EoriPage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.holderOfTransit.eori",
-    id = None,
+    id = Some("transit-holder-eori-number"),
     call = EoriController.onPageLoad(lrn, mode)
   )
 
@@ -62,7 +62,7 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     page = NamePage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.holderOfTransit.name",
-    id = None,
+    id = Some("transit-holder-name"),
     call = NameController.onPageLoad(lrn, mode)
   )
 
@@ -70,7 +70,7 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     page = AddressPage,
     formatAnswer = formatAsAddress,
     prefix = "traderDetails.holderOfTransit.address",
-    id = None,
+    id = Some("transit-holder-address"),
     call = AddressController.onPageLoad(lrn, mode)
   )
 
@@ -78,7 +78,7 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     page = AddContactPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.holderOfTransit.addContact",
-    id = None,
+    id = Some("has-transit-holder-contact"),
     call = AddContactController.onPageLoad(lrn, mode)
   )
 
@@ -86,7 +86,7 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     page = contact.NamePage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.holderOfTransit.contact.name",
-    id = None,
+    id = Some("transit-holder-contact-name"),
     call = contactRoutes.NameController.onPageLoad(lrn, mode)
   )
 
@@ -94,7 +94,7 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     page = contact.TelephoneNumberPage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.holderOfTransit.contact.telephoneNumber",
-    id = None,
+    id = Some("transit-holder-contact-phone-number"),
     call = contactRoutes.TelephoneNumberController.onPageLoad(lrn, mode)
   )
 }
