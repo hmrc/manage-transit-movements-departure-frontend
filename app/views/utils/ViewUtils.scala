@@ -109,4 +109,13 @@ object ViewUtils {
       )
   }
 
+  implicit class SelectImplicits(select: Select)(implicit messages: Messages) extends RichSelectSupport {
+
+    def withHeadingAndCaption(heading: String, caption: Option[String]): Select =
+      caption match {
+        case Some(value) => select.withHeadingAndSectionCaption(Text(heading), Text(value))
+        case None        => select.withHeading(Text(heading))
+      }
+  }
+
 }

@@ -15,16 +15,23 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import viewModels.components.InputSelectViewModel
+@import viewModels.components.InputSelectViewModel._
+@import views.html.components.{Heading, HeadingWithSectionCaption}
+@import views.utils.ViewUtils._
 
-@this(govukSelect: GovukSelect)
+@this(
+    govukSelect: GovukSelect,
+    headingWithNoCaption: Heading,
+    headingWithSectionCaption: HeadingWithSectionCaption
+)
 
 @(
     field: Field,
-    label: String,
+    selectType: InputSelectViewModel,
     placeholder: String,
-    labelIsHeading: Boolean = true,
-    hint: Option[String] = None,
-    selectItems: Seq[SelectItem]
+    selectItems: Seq[SelectItem],
+    hint: Option[String] = None
 )(implicit messages: Messages)
 
 @select = @{
@@ -41,10 +48,19 @@
     .withFormField(field)
 }
 
-@govukSelect(
-    if (labelIsHeading) {
-        select.withHeading(heading = Text(label))
-    } else {
-        select.copy(label = Label(content = Text(label)))
+@selectType match {
+    case OrdinarySelect(heading, caption) => {
+        @govukSelect(select.withHeadingAndCaption(heading, caption))
     }
-)
+    case SelectWithAdditionalHtml(heading, caption, additionalHtml) => {
+        @caption match {
+            case Some(value) => { @headingWithSectionCaption(heading, value) }
+            case None        => { @headingWithNoCaption(heading) }
+        }
+        @additionalHtml
+        @govukSelect(select.copy(label = Label(content = Text(heading), isPageHeading = false, classes = "govuk-visually-hidden")))
+    }
+    case AddressCountrySelect(label) => {
+        @govukSelect(select.copy(label = Label(content = Text(label), isPageHeading = false)))
+    }
+}

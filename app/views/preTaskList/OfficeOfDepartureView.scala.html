@@ -15,17 +15,17 @@
  *@
 
 @import controllers.preTaskList.routes
-@import views.html.components.{Button, ErrorSummary, Heading, InputSelect}
+@import views.html.components.{Button, ErrorSummary, InputSelect}
 @import models.LocalReferenceNumber
 @import models.reference.CustomsOffice
 @import models.Selectable
 @import models.Selectable._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import viewModels.components.InputSelectViewModel._
 
 @this(
     mainTemplate: MainTemplate,
     errorSummary: ErrorSummary,
-    heading: Heading,
     select: InputSelect,
     button: Button,
     formHelper: FormWithCSRF
@@ -43,12 +43,12 @@
 
         @errorSummary(form.errors)
 
-        @heading("officeOfDeparture.heading")
-
         @select(
             field = form("value"),
-            label = messages("officeOfDeparture.label"),
-            labelIsHeading = false,
+            selectType = SelectWithAdditionalHtml(
+                heading = messages("officeOfDeparture.heading"),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("officeOfDeparture.paragraph")}</p>""")
+            ),
             hint = Some(messages("officeOfDeparture.hintText")),
             selectItems = customsOffices.toSelectItems(form.value),
             placeholder = messages("officeOfDeparture.placeholder")

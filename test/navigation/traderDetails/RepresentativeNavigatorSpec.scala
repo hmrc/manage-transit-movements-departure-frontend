@@ -21,10 +21,12 @@ import controllers.routes
 import controllers.traderDetails.representative.{routes => repRoutes}
 import controllers.traderDetails.{routes => tdRoutes}
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
+import models.DeclarationType.{Option1, Option4}
 import models.{CheckMode, Mode, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.Page
+import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.representative._
 
 class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
@@ -62,11 +64,24 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
           }
 
           "when No selected" - {
-            "to ???" ignore {
-              val userAnswers = emptyUserAnswers.setValue(ActingAsRepresentativePage, false)
-              navigator
-                .nextPage(ActingAsRepresentativePage, mode, userAnswers)
-                .mustBe(???) //TODO change to next section when built
+            "to consignorEoriPage when declarationType is TIR" in {
+              forAll(arbitraryRepresentativeAnswersNotActingAsRepresentative) {
+                answers =>
+                  val updatedAnswers = answers.setValue(DeclarationTypePage, Option4)
+                  navigator
+                    .nextPage(ActingAsRepresentativePage, mode, updatedAnswers)
+                    .mustBe(controllers.traderDetails.consignment.consignor.routes.EoriYesNoController.onPageLoad(updatedAnswers.lrn, mode))
+              }
+            }
+
+            "to approvedOperatorPage when declarationType is not TIR" in {
+              forAll(arbitraryRepresentativeAnswersNotActingAsRepresentative) {
+                answers =>
+                  val updatedAnswers = answers.setValue(DeclarationTypePage, Option1)
+                  navigator
+                    .nextPage(ActingAsRepresentativePage, mode, updatedAnswers)
+                    .mustBe(controllers.traderDetails.consignment.routes.ApprovedOperatorController.onPageLoad(updatedAnswers.lrn, mode))
+              }
             }
           }
         }
@@ -166,12 +181,25 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
 
       "must go from acting as representative page" - {
         "when No selected" - {
-          "to ???" ignore {
-            forAll(arbitraryTraderDetailsAnswersWithoutRepresentative) {
+          "to consignorEoriPage when declarationType is TIR" in {
+            forAll(arbitraryRepresentativeAnswersNotActingAsRepresentative) {
               answers =>
+                val updatedAnswers = answers
+                  .setValue(DeclarationTypePage, Option4)
                 navigator
-                  .nextPage(ActingAsRepresentativePage, mode, answers)
-                  .mustBe(???) //TODO change to next section when built
+                  .nextPage(ActingAsRepresentativePage, mode, updatedAnswers)
+                  .mustBe(controllers.traderDetails.consignment.consignor.routes.EoriYesNoController.onPageLoad(updatedAnswers.lrn, mode))
+            }
+          }
+
+          "to approvedOperatorPage when declarationType is not TIR" in {
+            forAll(arbitraryRepresentativeAnswersNotActingAsRepresentative) {
+              answers =>
+                val updatedAnswers = answers
+                  .setValue(DeclarationTypePage, Option1)
+                navigator
+                  .nextPage(ActingAsRepresentativePage, mode, updatedAnswers)
+                  .mustBe(controllers.traderDetails.consignment.routes.ApprovedOperatorController.onPageLoad(updatedAnswers.lrn, mode))
             }
           }
         }

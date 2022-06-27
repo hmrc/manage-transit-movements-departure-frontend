@@ -21,6 +21,8 @@ import forms.CustomsOfficeFormProvider
 import models.CustomsOfficeList
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
+import play.twirl.api.Html
+import viewModels.components.InputSelectViewModel.{AddressCountrySelect, OrdinarySelect, SelectWithAdditionalHtml}
 import views.html.components.InputSelect
 import views.html.templates.MainTemplate
 
@@ -32,12 +34,14 @@ class InputSelectSpec extends A11ySpecBase {
 
     val prefix         = Gen.alphaNumStr.sample.value
     val title          = nonEmptyString.sample.value
+    val caption        = Gen.option(nonEmptyString).sample.value
     val customsOffices = arbitrary[CustomsOfficeList].sample.value
     val label          = nonEmptyString.sample.value
     val hint           = Gen.option(nonEmptyString).sample.value
     val placeholder    = nonEmptyString.sample.value
     val selectedValue  = Gen.oneOf(None, Some(customsOffices.customsOffices.head)).sample.value
     val selectItems    = customsOffices.customsOffices.toSelectItems(selectedValue)
+    val additionalHtml = arbitrary[Html].sample.value
     val form           = new CustomsOfficeFormProvider()(prefix, customsOffices)
     val preparedForm = selectedValue match {
       case Some(customsOffice) => form.fill(customsOffice)
@@ -46,16 +50,23 @@ class InputSelectSpec extends A11ySpecBase {
 
     "pass accessibility checks" when {
 
-      "label is heading" in {
+      "ordinary select" in {
         val content = template.apply(title) {
-          component.apply(preparedForm("value"), label, placeholder, labelIsHeading = true, hint, selectItems)
+          component.apply(preparedForm("value"), OrdinarySelect(title, caption), placeholder, selectItems, hint)
         }
         content.toString() must passAccessibilityChecks
       }
 
-      "label isn't heading" in {
+      "select with additional html" in {
         val content = template.apply(title) {
-          component.apply(preparedForm("value"), label, placeholder, labelIsHeading = false, hint, selectItems).withHeading(title)
+          component.apply(preparedForm("value"), SelectWithAdditionalHtml(title, caption, additionalHtml), placeholder, selectItems, hint)
+        }
+        content.toString() must passAccessibilityChecks
+      }
+
+      "address country select" in {
+        val content = template.apply(title) {
+          component.apply(preparedForm("value"), AddressCountrySelect(label), placeholder, selectItems, hint).withHeading(title)
         }
         content.toString() must passAccessibilityChecks
       }

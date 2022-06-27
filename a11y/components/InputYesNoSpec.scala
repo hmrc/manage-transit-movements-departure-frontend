@@ -20,7 +20,9 @@ import a11ySpecBase.A11ySpecBase
 import forms.YesNoFormProvider
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
+import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Content
+import viewModels.components.InputYesNoViewModel.{OrdinaryYesNo, YesNoWithAdditionalHtml}
 import views.html.components.InputYesNo
 import views.html.templates.MainTemplate
 
@@ -30,26 +32,25 @@ class InputYesNoSpec extends A11ySpecBase {
     val template  = app.injector.instanceOf[MainTemplate]
     val component = app.injector.instanceOf[InputYesNo]
 
-    val prefix          = Gen.alphaNumStr.sample.value
-    val title           = nonEmptyString.sample.value
-    val caption         = Gen.option(nonEmptyString).sample.value
-    val hint            = Gen.option(arbitrary[Content]).sample.value
-    val legendIsVisible = arbitrary[Boolean].sample.value
-    val legendParams    = listWithMaxLength[String]().sample.value
-    val form            = new YesNoFormProvider()(prefix)
+    val prefix         = Gen.alphaNumStr.sample.value
+    val title          = nonEmptyString.sample.value
+    val caption        = Gen.option(nonEmptyString).sample.value
+    val hint           = Gen.option(arbitrary[Content]).sample.value
+    val additionalHtml = arbitrary[Html].sample.value
+    val form           = new YesNoFormProvider()(prefix)
 
     "pass accessibility checks" when {
 
-      "label is heading" in {
+      "ordinary yes/no" in {
         val content = template.apply(title) {
-          component.apply(form("value"), prefix, caption, hint, legendIsHeading = true, legendIsVisible, legendParams)
+          component.apply(form("value"), OrdinaryYesNo(title, caption), hint)
         }
         content.toString() must passAccessibilityChecks
       }
 
-      "label isn't heading" in {
+      "yes/no with additional html" in {
         val content = template.apply(title) {
-          component.apply(form("value"), prefix, caption, hint, legendIsHeading = false, legendIsVisible, legendParams).withHeading(title)
+          component.apply(form("value"), YesNoWithAdditionalHtml(title, caption, additionalHtml))
         }
         content.toString() must passAccessibilityChecks
       }

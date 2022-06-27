@@ -26,5 +26,5 @@ class $className$ViewSpec extends DateInputViewBehaviours {
 
   behave like pageWithDateInput
 
-  behave like pageWithSubmitButton("Continue")
+  behave like pageWithSubmitButton("Save and continue")
 }

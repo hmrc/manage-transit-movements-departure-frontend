@@ -56,10 +56,7 @@ trait SpecificDataRequiredActionProvider {
 
   def apply[T1](
     page: Gettable[T1]
-  )(implicit rds: Reads[T1]): ActionRefiner[
-    DataRequest,
-    SpecificDataRequestProvider1[T1]#SpecificDataRequest
-  ] = getFirst(page)
+  )(implicit rds: Reads[T1]): ActionRefiner[DataRequest, SpecificDataRequestProvider1[T1]#SpecificDataRequest] = getFirst(page)
 
   def getFirst[T1](
     page: Gettable[T1]

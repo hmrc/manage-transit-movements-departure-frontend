@@ -25,11 +25,18 @@ case class OptionalDataRequest[A](
   userAnswers: Option[UserAnswers]
 ) extends WrappedRequest[A](request)
 
+trait MandatoryDataRequest[A] {
+  val request: Request[A]
+  val eoriNumber: EoriNumber
+  val userAnswers: UserAnswers
+}
+
 case class DataRequest[A](
   request: Request[A],
   eoriNumber: EoriNumber,
   userAnswers: UserAnswers
 ) extends WrappedRequest[A](request)
+    with MandatoryDataRequest[A]
 
 class SpecificDataRequestProvider1[T1] {
 
@@ -39,6 +46,7 @@ class SpecificDataRequestProvider1[T1] {
     userAnswers: UserAnswers,
     arg: T1
   ) extends WrappedRequest[A](request)
+      with MandatoryDataRequest[A]
 }
 
 class SpecificDataRequestProvider2[T1, T2] {
@@ -49,6 +57,7 @@ class SpecificDataRequestProvider2[T1, T2] {
     userAnswers: UserAnswers,
     arg: (T1, T2)
   ) extends WrappedRequest[A](request)
+      with MandatoryDataRequest[A]
 }
 
 class SpecificDataRequestProvider3[T1, T2, T3] {
@@ -59,4 +68,5 @@ class SpecificDataRequestProvider3[T1, T2, T3] {
     userAnswers: UserAnswers,
     arg: (T1, T2, T3)
   ) extends WrappedRequest[A](request)
+      with MandatoryDataRequest[A]
 }

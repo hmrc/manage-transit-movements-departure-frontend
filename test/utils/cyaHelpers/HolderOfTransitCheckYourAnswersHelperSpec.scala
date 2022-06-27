@@ -67,7 +67,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = hotRoutes.TirIdentificationYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you know the Transit procedure TIR identification number"),
-                          attributes = Map()
+                          attributes = Map("id" -> "has-transit-holder-tir-id")
                         )
                       )
                     )
@@ -111,7 +111,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = hotRoutes.TirIdentificationController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("TIR holder’s identification number"),
-                          attributes = Map()
+                          attributes = Map("id" -> "transit-holder-tir-id-number")
                         )
                       )
                     )
@@ -155,7 +155,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = hotRoutes.EoriYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you know the transit holder’s EORI number"),
-                          attributes = Map()
+                          attributes = Map("id" -> "has-transit-holder-eori")
                         )
                       )
                     )
@@ -199,7 +199,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = hotRoutes.EoriController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("transit holder’s EORI number"),
-                          attributes = Map()
+                          attributes = Map("id" -> "transit-holder-eori-number")
                         )
                       )
                     )
@@ -243,7 +243,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = hotRoutes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("transit holder’s name"),
-                          attributes = Map()
+                          attributes = Map("id" -> "transit-holder-name")
                         )
                       )
                     )
@@ -287,7 +287,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = hotRoutes.AddressController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("transit holder’s address"),
-                          attributes = Map()
+                          attributes = Map("id" -> "transit-holder-address")
                         )
                       )
                     )
@@ -331,7 +331,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = hotRoutes.AddContactController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add a contact"),
-                          attributes = Map()
+                          attributes = Map("id" -> "has-transit-holder-contact")
                         )
                       )
                     )
@@ -375,7 +375,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = contactRoutes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("contact’s name"),
-                          attributes = Map()
+                          attributes = Map("id" -> "transit-holder-contact-name")
                         )
                       )
                     )
@@ -419,7 +419,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = contactRoutes.TelephoneNumberController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("contact’s phone number"),
-                          attributes = Map()
+                          attributes = Map("id" -> "transit-holder-contact-phone-number")
                         )
                       )
                     )

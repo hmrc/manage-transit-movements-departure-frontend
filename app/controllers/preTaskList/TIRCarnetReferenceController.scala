@@ -31,14 +31,15 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.TirCarnetReferenceView
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TIRCarnetReferenceController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  @PreTaskListDetails navigator: Navigator,
+  implicit val sessionRepository: SessionRepository,
+  @PreTaskListDetails implicit val navigator: Navigator,
   actions: Actions,
   checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   getMandatoryPage: SpecificDataRequiredActionProvider,
@@ -82,11 +83,7 @@ class TIRCarnetReferenceController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-            value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(TIRCarnetReferencePage, value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(TIRCarnetReferencePage, mode, updatedAnswers))
+            value => TIRCarnetReferencePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
           )
     }
 }

@@ -18,4 +18,10 @@ package models.journeyDomain
 
 import queries.Query
 
-case class ReaderError(page: Query, message: Option[String] = None)
+trait OpsError {
+  val page: Query
+  val message: Option[String]
+}
+
+case class ReaderError(page: Query, message: Option[String] = None) extends OpsError
+case class WriterError(page: Query, message: Option[String] = None) extends OpsError

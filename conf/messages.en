@@ -71,7 +71,7 @@ officeOfDeparture.heading = Where is the office of departure?
 officeOfDeparture.checkYourAnswersLabel = Office of departure
 officeOfDeparture.error.required = Enter the office of departure
 officeOfDeparture.hintText = Give the office location or code. Like, Dover or GB000060.
-officeOfDeparture.label = This is the customs office where the transit movement starts.
+officeOfDeparture.paragraph = This is the customs office where the transit movement starts.
 officeOfDeparture.change.hidden = office of departure
 officeOfDeparture.placeholder = Select a customs office
 
@@ -198,10 +198,11 @@ traderDetails.holderOfTransit.address.checkYourAnswersLabel = Transit holder’s
 traderDetails.holderOfTransit.address.change.hidden = transit holder’s address
 traderDetails.holderOfTransit.address.error.postalCode.invalid = The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
 traderDetails.holderOfTransit.address.error.postalCode.required = Enter the postal code for {0}’s address
+traderDetails.holderOfTransit.address.error.postalCode.length = The postal code of {0}’s address must be {1} characters or less
 traderDetails.holderOfTransit.address.error.country.required = Enter the country for {0}’s address
-traderDetails.holderOfTransit.address.error.invalid = The {0} for {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+traderDetails.holderOfTransit.address.error.invalid = {0} for {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 traderDetails.holderOfTransit.address.error.required = Enter {0} for {1}’s address
-traderDetails.holderOfTransit.address.error.length = The {0} for {1}’s address must be {2} characters or less
+traderDetails.holderOfTransit.address.error.length = {0} for {1}’s address must be {2} characters or less
 traderDetails.holderOfTransit.address.placeholder = Select a country
 
 traderDetails.holderOfTransit.addContact.title = Do you want to add a contact?
@@ -285,3 +286,141 @@ traderDetails.representative.telephoneNumber.change.hidden = representative’s 
 traderDetails.representative.checkYourAnswers.heading = Check your answers
 traderDetails.representative.checkYourAnswers.title = Check your answers
 traderDetails.representative.checkYourAnswers.representative = Representative
+
+traderDetails.consignment.approvedOperator.title = Do you want to use a reduced data set?
+traderDetails.consignment.approvedOperator.heading = Do you want to use a reduced data set?
+traderDetails.consignment.approvedOperator.checkYourAnswersLabel = Do you want to use a reduced data set?
+traderDetails.consignment.approvedOperator.error.required = Select yes if you want to use a reduced data set
+traderDetails.consignment.approvedOperator.hintText = This simplifies the declaration process, enabling you to complete submissions with less data.
+traderDetails.consignment.approvedOperator.paragraph = You must be an approved airline, shipping or rail freight operator to use a reduced data set.
+traderDetails.consignment.approvedOperator.label = Do you want to use a reduced data set?
+traderDetails.consignment.approvedOperator.change.hidden = if you want to use a reduced data set
+
+# Trader Details - Consignor
+traderDetails.consignment.consignor.eoriYesNo.title = Do you know the consignor’s EORI number?
+traderDetails.consignment.consignor.eoriYesNo.heading = Do you know the consignor’s EORI number?
+traderDetails.consignment.consignor.eoriYesNo.checkYourAnswersLabel = Do you know the consignor’s EORI number?
+traderDetails.consignment.consignor.eoriYesNo.error.required = Select yes if you know the consignor’s EORI number
+traderDetails.consignment.consignor.eoriYesNo.change.hidden = if you know the consignor’s EORI number
+
+traderDetails.consignment.consignor.eori.title = What is the consignor’s EORI number?
+traderDetails.consignment.consignor.eori.heading = What is the consignor’s EORI number?
+traderDetails.consignment.consignor.eori.checkYourAnswersLabel = Consignor’s EORI number
+traderDetails.consignment.consignor.eori.hint = This will start with 2 letters such as GB or XI followed by 12 to 15 numbers, for example GB123456789000.
+traderDetails.consignment.consignor.eori.error.required = Enter the consignor’s EORI number
+traderDetails.consignment.consignor.eori.error.maxLength = The consignor’s EORI number must be 17 characters or less
+traderDetails.consignment.consignor.eori.error.minLength = The consignor’s EORI number must be 14 characters or more
+traderDetails.consignment.consignor.eori.error.invalidCharacters = The consignor’s EORI number must only include letters a to z and numbers 0 to 9
+traderDetails.consignment.consignor.eori.error.invalidFormat = The consignor’s EORI number must start with 2 letters, such as GB or XI, followed by up to 15 numbers
+traderDetails.consignment.consignor.eori.error.prefix = The consignor’s EORI number must start with 2 letters, such as GB or XI
+traderDetails.consignment.consignor.eori.change.hidden = consignor’s EORI number
+
+traderDetails.consignment.consignor.name.title = What is the consignor’s name?
+traderDetails.consignment.consignor.name.heading = What is the consignor’s name?
+traderDetails.consignment.consignor.name.checkYourAnswersLabel = Consignor’s name
+traderDetails.consignment.consignor.name.error.required = Enter the consignor’s name
+traderDetails.consignment.consignor.name.error.length = The consignor’s name must be 70 characters or less
+traderDetails.consignment.consignor.name.error.invalid = The consignor’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+traderDetails.consignment.consignor.name.change.hidden = consignor’s name
+
+traderDetails.consignment.consignor.address.title = What is the consignor’s address?
+traderDetails.consignment.consignor.address.heading = What is {0}’s address?
+traderDetails.consignment.consignor.address.addressLine1 = Address line 1
+traderDetails.consignment.consignor.address.addressLine2 = Address line 2
+traderDetails.consignment.consignor.address.postalCode = Postal code
+traderDetails.consignment.consignor.address.country = Country
+traderDetails.consignment.consignor.address.checkYourAnswersLabel = Consignor’s address
+traderDetails.consignment.consignor.address.change.hidden = consignor’s address
+traderDetails.consignment.consignor.address.error.postalCode.invalid = The postal code of {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
+traderDetails.consignment.consignor.address.error.postalCode.required = Enter the postal code of {0}’s address
+traderDetails.consignment.consignor.address.error.postalCode.length = The postal code of {0}’s address must be {1} characters or less
+traderDetails.consignment.consignor.address.error.country.required = Enter the country of {0}’s address
+traderDetails.consignment.consignor.address.error.invalid = {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+traderDetails.consignment.consignor.address.error.required = Enter {0} of {1}’s address
+traderDetails.consignment.consignor.address.error.length = {0} of {1}’s address must be {2} characters or less
+traderDetails.consignment.consignor.address.placeholder = Select a country
+
+# Trader Details - Consignor - Contact
+traderDetails.consignment.consignor.addContact.title = Do you want to add a contact for the consignor?
+traderDetails.consignment.consignor.addContact.heading = Do you want to add a contact for the consignor?
+traderDetails.consignment.consignor.addContact.checkYourAnswersLabel = Do you want to add a contact for the consignor?
+traderDetails.consignment.consignor.addContact.error.required = Select yes if you want to add a contact for the consignor
+traderDetails.consignment.consignor.addContact.change.hidden = if you want to add a contact for the consignor
+
+traderDetails.consignment.consignor.contact.name.title = Who is the contact for the consignor?
+traderDetails.consignment.consignor.contact.name.heading = Who is the contact for the consignor?
+traderDetails.consignment.consignor.contact.name.checkYourAnswersLabel = Contact for the consignor
+traderDetails.consignment.consignor.contact.name.error.required = Enter the the name of the contact for the consignor
+traderDetails.consignment.consignor.contact.name.error.length = The name of the contact for the consignor must be 70 characters or less
+traderDetails.consignment.consignor.contact.name.error.invalid = The name of the contact for the consignor must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+traderDetails.consignment.consignor.contact.name.change.hidden = contact for the consignor
+
+traderDetails.consignment.consignor.contact.telephoneNumber.title = What is the consignor contact’s phone number?
+traderDetails.consignment.consignor.contact.telephoneNumber.heading = What is {0}’s phone number?
+traderDetails.consignment.consignor.contact.telephoneNumber.checkYourAnswersLabel = Consignor contact’s phone number
+traderDetails.consignment.consignor.contact.telephoneNumber.hint = Must include the country code, like +44 808 157 0192.
+traderDetails.consignment.consignor.contact.telephoneNumber.error.required = Enter {0}’s phone number
+traderDetails.consignment.consignor.contact.telephoneNumber.error.maxLength = {0}’s phone number must be {1} characters or less
+traderDetails.consignment.consignor.contact.telephoneNumber.error.minLength = {0}’s phone number must be {1} characters or more
+traderDetails.consignment.consignor.contact.telephoneNumber.error.invalidCharacter = {0}’s phone number must only include numbers 0 to 9 and a plus sign
+traderDetails.consignment.consignor.contact.telephoneNumber.error.invalidFormat = Enter {0}’s phone number in the right format
+traderDetails.consignment.consignor.contact.telephoneNumber.change.hidden = consignor contact phone number
+
+# Trader Details - Consignee
+traderDetails.consignment.consignee.moreThanOneConsignee.title = Is there more than one consignee?
+traderDetails.consignment.consignee.moreThanOneConsignee.heading = Is there more than one consignee?
+traderDetails.consignment.consignee.moreThanOneConsignee.checkYourAnswersLabel = Is there more than one consignee?
+traderDetails.consignment.consignee.moreThanOneConsignee.error.required = Select yes if there is more than one consignee
+traderDetails.consignment.consignee.moreThanOneConsignee.change.hidden = if there is more than one consignee
+
+traderDetails.consignment.consignee.eoriYesNo.title = Do you know the consignee’s EORI number?
+traderDetails.consignment.consignee.eoriYesNo.heading = Do you know the consignee’s EORI number?
+traderDetails.consignment.consignee.eoriYesNo.checkYourAnswersLabel = Do you know the consignee’s EORI number?
+traderDetails.consignment.consignee.eoriYesNo.error.required = Select yes if you know the consignee’s EORI number
+traderDetails.consignment.consignee.eoriYesNo.change.hidden = if you know the consignee’s EORI number
+
+traderDetails.consignment.consignee.eoriNumber.title = What is the consignee’s EORI number?
+traderDetails.consignment.consignee.eoriNumber.heading = What is the consignee’s EORI number?
+traderDetails.consignment.consignee.eoriNumber.checkYourAnswersLabel = Consignee’s EORI number
+traderDetails.consignment.consignee.eoriNumber.error.required = Enter the consignee’s EORI number
+traderDetails.consignment.consignee.eoriNumber.hint = This will start with 2 letters such as GB or XI followed by 12 or 15 numbers, for example GB123456789000.
+traderDetails.consignment.consignee.eoriNumber.error.maxLength = The consignee’s EORI number must be 17 characters or less
+traderDetails.consignment.consignee.eoriNumber.error.minLength = The consignee’s EORI number must be 14 characters or more
+traderDetails.consignment.consignee.eoriNumber.error.invalidCharacters = The consignee’s EORI number must only include letters a to z and numbers 0 to 9
+traderDetails.consignment.consignee.eoriNumber.error.invalidFormat = The consignee’s EORI number must start with 2 letters, such as GB or XI, followed by up to 15 numbers
+traderDetails.consignment.consignee.eoriNumber.error.prefix = The consignee’s EORI number must start with 2 letters, such as GB or XI
+traderDetails.consignment.consignee.eoriNumber.change.hidden = consignee’s EORI number
+
+traderDetails.consignment.consignee.name.title = What is the consignee’s name?
+traderDetails.consignment.consignee.name.heading = What is the consignee’s name?
+traderDetails.consignment.consignee.name.checkYourAnswersLabel = Consignee’s name
+traderDetails.consignment.consignee.name.error.required = Enter the consignee’s name
+traderDetails.consignment.consignee.name.error.length = The consignee’s name must be 70 characters or less
+traderDetails.consignment.consignee.name.error.invalid = The consignee’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+traderDetails.consignment.consignee.name.change.hidden = consignee’s name
+
+traderDetails.consignment.consignee.address.title = What is the consignee’s address?
+traderDetails.consignment.consignee.address.heading = What is {0}’s address?
+traderDetails.consignment.consignee.address.addressLine1 = Address line 1
+traderDetails.consignment.consignee.address.addressLine2 = Address line 2
+traderDetails.consignment.consignee.address.postalCode = Postal code
+traderDetails.consignment.consignee.address.country = Country
+traderDetails.consignment.consignee.address.checkYourAnswersLabel = Consignee’s address
+traderDetails.consignment.consignee.address.change.hidden = consignee’s address
+traderDetails.consignment.consignee.address.error.postalCode.invalid = The postal code of {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
+traderDetails.consignment.consignee.address.error.postalCode.invalidFormat = Enter the postal code of {0}’s address in the right format, like AB1 1AB
+traderDetails.consignment.consignee.address.error.invalid = {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+traderDetails.consignment.consignee.address.error.required = Enter {0} of {1}’s address
+traderDetails.consignment.consignee.address.error.postalCode.required = Enter the postal code of {0}’s address
+traderDetails.consignment.consignee.address.error.postalCode.length = The postal code of {0}’s address must be {1} characters or less
+traderDetails.consignment.consignee.address.error.country.required = Enter the country for {0}’s address
+traderDetails.consignment.consignee.address.error.length = {0} of {1}’s address must be {2} characters or less
+traderDetails.consignment.consignee.address.placeholder = Select a country
+
+# Trader Details - Check Your Answers
+traderDetails.consignment.checkYourAnswers.heading = Check your answers
+traderDetails.consignment.checkYourAnswers.title = Check your answers
+traderDetails.consignment.checkYourAnswers.consignor = Consignor
+traderDetails.consignment.checkYourAnswers.consignorContact = Consignor contact
+traderDetails.consignment.checkYourAnswers.consignee = Consignee
+

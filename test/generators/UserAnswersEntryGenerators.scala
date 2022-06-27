@@ -22,12 +22,96 @@ import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import pages.preTaskList._
-import pages.traderDetails.holderOfTransit.contact
-import pages.traderDetails.holderOfTransit.contact.{NamePage, TelephoneNumberPage}
+import pages.traderDetails.holderOfTransit.{contact => holderOfTransitContact}
+import pages.traderDetails.consignment.{consignor => traderDetailsConsignor}
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators {
   self: Generators =>
+
+  implicit lazy val arbitraryTraderdetailsConsignmentConsigneeAddressUserAnswersEntry
+    : Arbitrary[(pages.traderDetails.consignment.consignee.AddressPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[pages.traderDetails.consignment.consignee.AddressPage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.consignment.consignee.AddressPage, value)
+    }
+
+  implicit lazy val arbitraryTraderdetailsConsignmentConsigneeNameUserAnswersEntry
+    : Arbitrary[(pages.traderDetails.consignment.consignee.NamePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[pages.traderDetails.consignment.consignee.NamePage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.consignment.consignee.NamePage, value)
+    }
+
+  implicit lazy val arbitraryTraderDetailsConsignmentConsigneeEoriNumberUserAnswersEntry
+    : Arbitrary[(pages.traderDetails.consignment.consignee.EoriNumberPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[pages.traderDetails.consignment.consignee.EoriNumberPage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.consignment.consignee.EoriNumberPage, value)
+    }
+
+  implicit lazy val arbitraryTraderdetailsConsignmentConsigneeEoriYesNoUserAnswersEntry
+    : Arbitrary[(pages.traderDetails.consignment.consignee.EoriYesNoPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[pages.traderDetails.consignment.consignee.EoriYesNoPage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.consignment.consignee.EoriYesNoPage, value)
+    }
+
+  implicit lazy val arbitraryTraderDetailsConsignmentConsignorContactTelephoneNumberUserAnswersEntry
+    : Arbitrary[(traderDetailsConsignor.contact.TelephoneNumberPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[traderDetailsConsignor.contact.TelephoneNumberPage.type#Data].map(Json.toJson(_))
+      } yield (traderDetailsConsignor.contact.TelephoneNumberPage, value)
+    }
+
+  implicit lazy val arbitraryTraderDetailsConsignmentConsignorContactNameUserAnswersEntry: Arbitrary[(traderDetailsConsignor.contact.NamePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[traderDetailsConsignor.contact.NamePage.type#Data].map(Json.toJson(_))
+      } yield (traderDetailsConsignor.contact.NamePage, value)
+    }
+
+  implicit lazy val arbitraryTraderDetailsConsignmentConsignorAddressUserAnswersEntry: Arbitrary[(traderDetailsConsignor.AddressPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[traderDetailsConsignor.AddressPage.type#Data].map(Json.toJson(_))
+      } yield (traderDetailsConsignor.AddressPage, value)
+    }
+
+  implicit lazy val arbitraryTraderDetailsConsignmentConsignorNameUserAnswersEntry: Arbitrary[(traderDetailsConsignor.NamePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[traderDetailsConsignor.NamePage.type#Data].map(Json.toJson(_))
+      } yield (traderDetailsConsignor.NamePage, value)
+    }
+
+  implicit lazy val arbitraryTraderDetailsConsignmentConsignorEoriUserAnswersEntry: Arbitrary[(traderDetailsConsignor.EoriPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[traderDetailsConsignor.EoriPage.type#Data].map(Json.toJson(_))
+      } yield (traderDetailsConsignor.EoriPage, value)
+    }
+
+  implicit lazy val arbitraryTraderdetailsConsignmentConsigneeMoreThanOneConsigneeUserAnswersEntry
+    : Arbitrary[(pages.traderDetails.consignment.consignee.MoreThanOneConsigneePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[pages.traderDetails.consignment.consignee.MoreThanOneConsigneePage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.consignment.consignee.MoreThanOneConsigneePage, value)
+    }
+
+  implicit lazy val arbitraryTraderdetailsConsignmentApprovedOperatorUserAnswersEntry
+    : Arbitrary[(pages.traderDetails.consignment.ApprovedOperatorPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[pages.traderDetails.consignment.ApprovedOperatorPage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.consignment.ApprovedOperatorPage, value)
+    }
 
   implicit lazy val arbitraryRepresentativePhoneUserAnswersEntry: Arbitrary[(pages.traderDetails.representative.TelephoneNumberPage.type, JsValue)] =
     Arbitrary {
@@ -65,11 +149,12 @@ trait UserAnswersEntryGenerators {
       } yield (pages.traderDetails.representative.ActingAsRepresentativePage, value)
     }
 
-  implicit lazy val arbitraryTransitHolderAdditionalContactTelephoneNumberUserAnswersEntry: Arbitrary[(TelephoneNumberPage.type, JsValue)] =
+  implicit lazy val arbitraryTransitHolderAdditionalContactTelephoneNumberUserAnswersEntry
+    : Arbitrary[(holderOfTransitContact.TelephoneNumberPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[TelephoneNumberPage.type#Data].map(Json.toJson(_))
-      } yield (contact.TelephoneNumberPage, value)
+        value <- arbitrary[holderOfTransitContact.TelephoneNumberPage.type#Data].map(Json.toJson(_))
+      } yield (holderOfTransitContact.TelephoneNumberPage, value)
     }
 
   implicit lazy val arbitraryTransitHolderTirIdentificationUserAnswersEntry
@@ -95,11 +180,11 @@ trait UserAnswersEntryGenerators {
       } yield (pages.traderDetails.holderOfTransit.AddressPage, value)
     }
 
-  implicit lazy val arbitraryTransitHolderAdditionalContactNameUserAnswersEntry: Arbitrary[(NamePage.type, JsValue)] =
+  implicit lazy val arbitraryTransitHolderAdditionalContactNameUserAnswersEntry: Arbitrary[(holderOfTransitContact.NamePage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[NamePage.type#Data].map(Json.toJson(_))
-      } yield (contact.NamePage, value)
+        value <- arbitrary[holderOfTransitContact.NamePage.type#Data].map(Json.toJson(_))
+      } yield (holderOfTransitContact.NamePage, value)
     }
 
   implicit lazy val arbitraryTransitHolderNameUserAnswersEntry: Arbitrary[(pages.traderDetails.holderOfTransit.NamePage.type, JsValue)] =

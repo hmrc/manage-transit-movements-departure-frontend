@@ -17,7 +17,6 @@
 package components
 
 import a11ySpecBase.A11ySpecBase
-import org.scalacheck.Gen
 import views.html.components.HeadingCaption
 import views.html.templates.MainTemplate
 

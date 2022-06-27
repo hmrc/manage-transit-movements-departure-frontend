@@ -28,14 +28,15 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.ProcedureTypeView
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ProcedureTypeController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  @PreTaskListDetails navigator: Navigator,
+  implicit val sessionRepository: SessionRepository,
+  @PreTaskListDetails implicit val navigator: Navigator,
   actions: Actions,
   checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   formProvider: ProcedureTypeFormProvider,
@@ -68,11 +69,7 @@ class ProcedureTypeController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, ProcedureType.radioItems, lrn, mode))),
-            value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(ProcedureTypePage, value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(ProcedureTypePage, mode, updatedAnswers))
+            value => ProcedureTypePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
           )
     }
 }

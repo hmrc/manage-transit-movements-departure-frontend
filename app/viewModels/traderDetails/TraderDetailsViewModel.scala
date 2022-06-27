@@ -21,15 +21,18 @@ import play.api.i18n.Messages
 import viewModels.sections.Section
 import viewModels.traderDetails.HolderOfTransitViewModel.HolderOfTransitSectionViewModel
 import viewModels.traderDetails.RepresentativeViewModel.RepresentativeSectionViewModel
-
+import viewModels.traderDetails.TraderDetailsConsignmentViewModel.TraderDetailsConsignmentSectionViewModel
 import javax.inject.Inject
 
 class TraderDetailsViewModel @Inject() (
   holderOfTransitViewModel: HolderOfTransitSectionViewModel,
-  representativeViewModel: RepresentativeSectionViewModel
+  representativeViewModel: RepresentativeSectionViewModel,
+  consignmentViewModel: TraderDetailsConsignmentSectionViewModel
 ) {
 
   def apply(userAnswers: UserAnswers)(implicit messages: Messages): Seq[Section] =
     holderOfTransitViewModel(userAnswers) ++
-      representativeViewModel(userAnswers)
+      representativeViewModel(userAnswers) ++
+      consignmentViewModel(userAnswers)
+
 }

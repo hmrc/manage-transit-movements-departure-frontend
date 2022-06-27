@@ -16,6 +16,7 @@
 
 @import models.Address
 @import models.reference.Country
+@import viewModels.components.InputSelectViewModel._
 @import views.html.components.{InputSelect, InputText}
 @import views.utils.ViewUtils._
 
@@ -60,8 +61,7 @@
 
     @inputSelect(
         field = form("country"),
-        label = messages(s"$messageKeyPrefix.country"),
-        labelIsHeading = false,
+        selectType = AddressCountrySelect(messages(s"$messageKeyPrefix.country")),
         selectItems = countries.toSelectItems(form.value.map(_.country)),
         placeholder = messages(s"$messageKeyPrefix.placeholder")
     )

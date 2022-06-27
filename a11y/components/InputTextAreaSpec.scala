@@ -18,7 +18,6 @@ package components
 
 import a11ySpecBase.A11ySpecBase
 import forms.NameFormProvider
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import views.html.components.InputTextArea
 import views.html.templates.MainTemplate
