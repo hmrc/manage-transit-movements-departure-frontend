@@ -16,11 +16,12 @@
 
 @import controllers.$package$.routes
 @import models.LocalReferenceNumber
-@import views.html.components.{Button, ErrorSummary, InputSelect}
 @import models.reference.$referenceClass$
 @import models.Selectable
 @import models.Selectable._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import viewModels.components.InputSelectViewModel._
+@import views.html.components.{Button, ErrorSummary, InputSelect}
 
 @this(
     mainTemplate: MainTemplate,
@@ -44,8 +45,9 @@
 
         @inputSelect(
             field = form("value"),
-            heading = Some(messages("$package$.$className;format="decap"$.heading")),
-            label = messages("$package$.$className;format="decap"$.label"),
+            selectType = OrdinarySelect(
+                heading = messages("$package$.$className;format="decap"$.heading")
+            ),
             hint = Some(messages("$package$.$className;format="decap"$.hintText")),
             selectItems = $referenceClassPlural;format="decap"$.toSelectItems(form.value),
             placeholder = messages("$package$.$className;format="decap"$.placeholder")
