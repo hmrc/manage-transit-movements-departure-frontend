@@ -69,7 +69,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                           content = "Change".toText,
                           href = consignmentRoutes.ApprovedOperatorController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to use a reduced data set"),
-                          attributes = Map()
+                          attributes = Map("id" -> "has-reduced-data-set")
                         )
                       )
                     )
@@ -113,7 +113,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                           content = "Change".toText,
                           href = consignorRoutes.EoriYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you know the consignor’s EORI number"),
-                          attributes = Map()
+                          attributes = Map("id" -> "has-consignor-eori")
                         )
                       )
                     )
@@ -157,7 +157,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                           content = "Change".toText,
                           href = consignorRoutes.EoriController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignor’s EORI number"),
-                          attributes = Map()
+                          attributes = Map("id" -> "consignor-eori-number")
                         )
                       )
                     )
@@ -201,7 +201,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                           content = "Change".toText,
                           href = consignorRoutes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignor’s name"),
-                          attributes = Map()
+                          attributes = Map("id" -> "consignor-name")
                         )
                       )
                     )
@@ -245,7 +245,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                           content = "Change".toText,
                           href = consignorRoutes.AddressController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignor’s address"),
-                          attributes = Map()
+                          attributes = Map("id" -> "consignor-address")
                         )
                       )
                     )
@@ -289,7 +289,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                           content = "Change".toText,
                           href = consignorRoutes.AddContactController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add a contact for the consignor"),
-                          attributes = Map()
+                          attributes = Map("id" -> "has-consignor-contact")
                         )
                       )
                     )
@@ -333,7 +333,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                           content = "Change".toText,
                           href = contactRoutes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("contact for the consignor"),
-                          attributes = Map()
+                          attributes = Map("id" -> "consignor-contact-name")
                         )
                       )
                     )
@@ -377,7 +377,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                           content = "Change".toText,
                           href = contactRoutes.TelephoneNumberController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignor contact phone number"),
-                          attributes = Map()
+                          attributes = Map("id" -> "consignor-contact-phone-number")
                         )
                       )
                     )
@@ -421,7 +421,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                           content = "Change".toText,
                           href = consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if there is more than one consignee"),
-                          attributes = Map()
+                          attributes = Map("id" -> "has-more-than-one-consignee")
                         )
                       )
                     )
@@ -465,7 +465,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                           content = "Change".toText,
                           href = consigneeRoutes.EoriYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you know the consignee’s EORI number"),
-                          attributes = Map()
+                          attributes = Map("id" -> "has-consignee-eori")
                         )
                       )
                     )
@@ -509,7 +509,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                           content = "Change".toText,
                           href = consigneeRoutes.EoriNumberController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignee’s EORI number"),
-                          attributes = Map()
+                          attributes = Map("id" -> "consignee-eori-number")
                         )
                       )
                     )
@@ -553,7 +553,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                           content = "Change".toText,
                           href = consigneeRoutes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignee’s name"),
-                          attributes = Map()
+                          attributes = Map("id" -> "consignee-name")
                         )
                       )
                     )
@@ -597,7 +597,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                           content = "Change".toText,
                           href = consigneeRoutes.AddressController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignee’s address"),
-                          attributes = Map()
+                          attributes = Map("id" -> "consignee-address")
                         )
                       )
                     )

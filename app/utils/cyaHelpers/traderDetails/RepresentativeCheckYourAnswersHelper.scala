@@ -31,7 +31,7 @@ class RepresentativeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)
     page = ActingAsRepresentativePage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.actingRepresentative",
-    id = None,
+    id = Some("has-acting-representative"),
     call = controllers.traderDetails.routes.ActingAsRepresentativeController.onPageLoad(lrn, mode)
   )
 
@@ -39,7 +39,7 @@ class RepresentativeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)
     page = EoriPage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.representative.eori",
-    id = None,
+    id = Some("representative-eori-number"),
     call = EoriController.onPageLoad(lrn, mode)
   )
 
@@ -47,7 +47,7 @@ class RepresentativeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)
     page = NamePage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.representative.name",
-    id = None,
+    id = Some("representative-name"),
     call = NameController.onPageLoad(lrn, mode)
   )
 
@@ -55,7 +55,7 @@ class RepresentativeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)
     page = CapacityPage,
     formatAnswer = formatAsEnum(RepresentativeCapacity.messageKeyPrefix),
     prefix = "traderDetails.representative.capacity",
-    id = None,
+    id = Some("representative-capacity"),
     call = CapacityController.onPageLoad(lrn, mode)
   )
 
@@ -63,7 +63,7 @@ class RepresentativeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)
     page = TelephoneNumberPage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.representative.telephoneNumber",
-    id = None,
+    id = Some("representative-phone-number"),
     call = TelephoneNumberController.onPageLoad(lrn, mode)
   )
 }
