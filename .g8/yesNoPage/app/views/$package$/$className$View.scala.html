@@ -16,6 +16,7 @@
 
 @import controllers.$package$.routes
 @import models.LocalReferenceNumber
+@import viewModels.components.InputYesNoViewModel._
 @import views.html.components.{Button, ErrorSummary, InputYesNo}
 
 @this(
@@ -40,7 +41,9 @@
 
         @inputYesNo(
             field = form("value"),
-            messageKeyPrefix = "$package$.$className;format="decap"$"
+            yesNoType = OrdinaryYesNo(
+                heading = messages("$package$.$className;format="decap"$.heading")
+            )
         )
 
         @button(attributes = Map("id" -> "submit"))
