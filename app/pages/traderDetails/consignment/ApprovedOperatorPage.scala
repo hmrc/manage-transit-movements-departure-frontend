@@ -33,7 +33,7 @@ case object ApprovedOperatorPage extends QuestionPage[Boolean] {
   override def toString: String = "approvedOperator"
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    (userAnswers.get(SecurityDetailsTypePage), userAnswers.get(ApprovedOperatorPage)) match {
+    (userAnswers.get(SecurityDetailsTypePage), value) match {
       case (Some(NoSecurityDetails), Some(true)) => userAnswers.remove(TraderDetailsConsignorSection)
       case _                                     => super.cleanup(value, userAnswers)
     }
