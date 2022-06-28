@@ -62,6 +62,6 @@
             case None        => { @headingWithNoCaption(heading) }
         }
         @additionalHtml
-        @govukRadios(radios.withLabel(heading, false))
+        @govukRadios(radios.withLegend(heading, false))
     }
 }

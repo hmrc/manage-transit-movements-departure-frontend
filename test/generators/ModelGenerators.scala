@@ -16,6 +16,7 @@
 
 package generators
 
+import config.Constants.{GB, XI}
 import models.AddressLine.{AddressLine1, AddressLine2, PostalCode}
 import models._
 import models.reference._
@@ -27,7 +28,7 @@ trait ModelGenerators {
 
   implicit lazy val arbitraryRepresentativeCapacity: Arbitrary[models.traderDetails.representative.RepresentativeCapacity] =
     Arbitrary {
-      Gen.oneOf(models.traderDetails.representative.RepresentativeCapacity.values.toSeq)
+      Gen.oneOf(models.traderDetails.representative.RepresentativeCapacity.values)
     }
 
   implicit lazy val arbitraryCountryCode: Arbitrary[CountryCode] =
@@ -43,7 +44,7 @@ trait ModelGenerators {
     Arbitrary {
       for {
         code <- arbitrary[CountryCode]
-        name <- stringsWithMaxLength(stringMaxLength)
+        name <- nonEmptyString
       } yield Country(code, name)
     }
 
@@ -89,10 +90,10 @@ trait ModelGenerators {
   implicit lazy val arbitraryCustomsOffice: Arbitrary[CustomsOffice] =
     Arbitrary {
       for {
-        id          <- stringsWithMaxLength(stringMaxLength)
-        name        <- stringsWithMaxLength(stringMaxLength)
+        id          <- nonEmptyString
+        name        <- nonEmptyString
         countryId   <- arbitrary[CountryCode]
-        phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
+        phoneNumber <- Gen.option(Gen.alphaNumStr)
       } yield CustomsOffice(id, name, countryId, phoneNumber)
     }
 
@@ -101,7 +102,7 @@ trait ModelGenerators {
       for {
         id          <- stringsWithMaxLength(stringMaxLength)
         name        <- stringsWithMaxLength(stringMaxLength)
-        countryId   <- Gen.const(CountryCode("XI"))
+        countryId   <- Gen.const(CountryCode(XI))
         phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
       } yield CustomsOffice(id, name, countryId, phoneNumber)
     }
@@ -111,7 +112,7 @@ trait ModelGenerators {
       for {
         id          <- stringsWithMaxLength(stringMaxLength)
         name        <- stringsWithMaxLength(stringMaxLength)
-        countryId   <- Gen.const(CountryCode("GB"))
+        countryId   <- Gen.const(CountryCode(GB))
         phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
       } yield CustomsOffice(id, name, countryId, phoneNumber)
     }
@@ -121,12 +122,19 @@ trait ModelGenerators {
       Gen.oneOf(arbitraryGbCustomsOffice.arbitrary, arbitraryXiCustomsOffice.arbitrary)
     }
 
+  implicit lazy val arbitraryCustomsOfficeList: Arbitrary[CustomsOfficeList] =
+    Arbitrary {
+      for {
+        customsOffices <- listWithMaxLength[CustomsOffice]()
+      } yield CustomsOfficeList(customsOffices)
+    }
+
   implicit lazy val arbitraryAddress: Arbitrary[Address] =
     Arbitrary {
       for {
-        addressLine1 <- stringsWithMaxLength(AddressLine1.length, Gen.alphaChar)
-        addressLine2 <- stringsWithMaxLength(AddressLine2.length, Gen.alphaChar)
-        postalCode   <- stringsWithMaxLength(PostalCode.length, Gen.alphaChar)
+        addressLine1 <- stringsWithMaxLength(AddressLine1.length, Gen.alphaNumChar)
+        addressLine2 <- stringsWithMaxLength(AddressLine2.length, Gen.alphaNumChar)
+        postalCode   <- stringsWithMaxLength(PostalCode.length, Gen.alphaNumChar)
         country      <- arbitrary[Country]
       } yield Address(addressLine1, addressLine2, postalCode, country)
     }
