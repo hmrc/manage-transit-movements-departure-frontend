@@ -376,7 +376,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                         ActionItem(
                           content = "Change".toText,
                           href = contactRoutes.TelephoneNumberController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("consignor contact phone number"),
+                          visuallyHiddenText = Some("consignor contact’s phone number"),
                           attributes = Map("id" -> "consignor-contact-phone-number")
                         )
                       )
