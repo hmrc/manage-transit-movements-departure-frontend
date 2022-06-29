@@ -17,8 +17,8 @@
 package controllers.traderDetails.consignment.consignee
 
 import controllers.actions._
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
-import javax.inject.Inject
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetailsConsignment
@@ -29,12 +29,13 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.traderDetails.consignment.consignee.MoreThanOneConsigneeView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class MoreThanOneConsigneeController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  @TraderDetailsConsignment navigator: Navigator,
+  implicit val sessionRepository: SessionRepository,
+  @TraderDetailsConsignment implicit val navigator: Navigator,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -61,11 +62,7 @@ class MoreThanOneConsigneeController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(MoreThanOneConsigneePage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(MoreThanOneConsigneePage, mode, updatedAnswers))
+          value => MoreThanOneConsigneePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }
