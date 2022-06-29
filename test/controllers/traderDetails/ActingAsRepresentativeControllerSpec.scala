@@ -36,7 +36,7 @@ import scala.concurrent.Future
 class ActingAsRepresentativeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
   private val formProvider                   = new YesNoFormProvider()
-  private val form                           = formProvider("traderDetails.representative.actingRepresentative")
+  private val form                           = formProvider("traderDetails.actingRepresentative")
   private val mode                           = NormalMode
   private lazy val actingRepresentativeRoute = routes.ActingAsRepresentativeController.onPageLoad(lrn, mode).url
 

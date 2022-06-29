@@ -1,8 +1,8 @@
 package controllers.$package$
 
 import controllers.actions._
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.$formProvider$
-import javax.inject.Inject
 import models.{Mode, LocalReferenceNumber}
 import navigation.Navigator
 import navigation.annotations.$navRoute$
@@ -10,11 +10,12 @@ import pages.$package$.$className$Page
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.$serviceName$
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.$package$.$className$View
-import services.$serviceName$
+
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 
 class $className$Controller @Inject()(
    override val messagesApi: MessagesApi,

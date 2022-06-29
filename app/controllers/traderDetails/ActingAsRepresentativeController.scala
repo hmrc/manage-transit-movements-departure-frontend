@@ -44,7 +44,7 @@ class ActingAsRepresentativeController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("traderDetails.representative.actingRepresentative")
+  private val form = formProvider("traderDetails.actingRepresentative")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
