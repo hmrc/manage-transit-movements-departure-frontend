@@ -349,11 +349,11 @@ traderDetails.consignment.consignor.addContact.change.hidden = if you want to ad
 
 traderDetails.consignment.consignor.contact.name.title = Who is the contact for the consignor?
 traderDetails.consignment.consignor.contact.name.heading = Who is the contact for the consignor?
-traderDetails.consignment.consignor.contact.name.checkYourAnswersLabel = Contact for the consignor
+traderDetails.consignment.consignor.contact.name.checkYourAnswersLabel = Consignor contact’s name
 traderDetails.consignment.consignor.contact.name.error.required = Enter the the name of the contact for the consignor
 traderDetails.consignment.consignor.contact.name.error.length = The name of the contact for the consignor must be 70 characters or less
 traderDetails.consignment.consignor.contact.name.error.invalid = The name of the contact for the consignor must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-traderDetails.consignment.consignor.contact.name.change.hidden = contact for the consignor
+traderDetails.consignment.consignor.contact.name.change.hidden = consignor contact’s name
 
 traderDetails.consignment.consignor.contact.telephoneNumber.title = What is the consignor contact’s phone number?
 traderDetails.consignment.consignor.contact.telephoneNumber.heading = What is {0}’s phone number?
