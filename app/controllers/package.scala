@@ -34,13 +34,6 @@ package object controllers {
   type UserAnswersWriter[A] = ReaderT[EitherType, UserAnswers, A]
   type Write[A]             = (QuestionPage[A], UserAnswers)
 
-  object UserAnswersReader {
-    def apply[A: UserAnswersWriter]: UserAnswersWriter[A] = implicitly[UserAnswersWriter[A]]
-
-    def apply(fn: UserAnswers => EitherType[UserAnswers]): UserAnswersWriter[UserAnswers] =
-      ReaderT[EitherType, UserAnswers, UserAnswers](fn)
-  }
-
   implicit class SettableOps[A](page: QuestionPage[A]) {
 
     def writeToUserAnswers(value: A)(implicit writes: Writes[A]): UserAnswersWriter[Write[A]] =
