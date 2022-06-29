@@ -17,6 +17,7 @@
 package controllers.traderDetails.consignment.consignee
 
 import controllers.actions._
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EoriNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -33,8 +34,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class EoriNumberController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  @TraderDetailsConsignment navigator: Navigator,
+  implicit val sessionRepository: SessionRepository,
+  @TraderDetailsConsignment implicit val navigator: Navigator,
   formProvider: EoriNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
@@ -60,11 +61,7 @@ class EoriNumberController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(EoriNumberPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(EoriNumberPage, mode, updatedAnswers))
+          value => EoriNumberPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

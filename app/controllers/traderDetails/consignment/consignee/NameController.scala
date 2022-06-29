@@ -17,6 +17,7 @@
 package controllers.traderDetails.consignment.consignee
 
 import controllers.actions._
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.NameFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -33,8 +34,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class NameController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  @TraderDetailsConsignment navigator: Navigator,
+  implicit val sessionRepository: SessionRepository,
+  @TraderDetailsConsignment implicit val navigator: Navigator,
   formProvider: NameFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
@@ -60,11 +61,7 @@ class NameController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(NamePage, mode, updatedAnswers))
+          value => NamePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

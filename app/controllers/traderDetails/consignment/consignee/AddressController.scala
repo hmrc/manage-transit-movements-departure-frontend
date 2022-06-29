@@ -17,13 +17,13 @@
 package controllers.traderDetails.consignment.consignee
 
 import controllers.actions._
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.AddressFormProvider
 import models.requests.SpecificDataRequestProvider1
 import models.{Address, CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetailsConsignment
-import pages.traderDetails.consignment.consignee.NamePage
-import pages.traderDetails.consignment.consignee.AddressPage
+import pages.traderDetails.consignment.consignee.{AddressPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -37,8 +37,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AddressController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  @TraderDetailsConsignment navigator: Navigator,
+  implicit val sessionRepository: SessionRepository,
+  @TraderDetailsConsignment implicit val navigator: Navigator,
   actions: Actions,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: AddressFormProvider,
@@ -83,11 +83,7 @@ class AddressController @Inject() (
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countryList.countries, name))),
-                value =>
-                  for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressPage, value))
-                    _              <- sessionRepository.set(updatedAnswers)
-                  } yield Redirect(navigator.nextPage(AddressPage, mode, updatedAnswers))
+                value => AddressPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
               )
         }
     }

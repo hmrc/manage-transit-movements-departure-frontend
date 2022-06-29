@@ -17,8 +17,8 @@
 package controllers.traderDetails.consignment.consignor.contact
 
 import controllers.actions._
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.TelephoneNumberFormProvider
-import javax.inject.Inject
 import models.requests.SpecificDataRequestProvider1
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -31,12 +31,13 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.traderDetails.consignment.consignor.contact.TelephoneNumberView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TelephoneNumberController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  @TraderDetailsConsignment navigator: Navigator,
+  implicit val sessionRepository: SessionRepository,
+  @TraderDetailsConsignment implicit val navigator: Navigator,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: TelephoneNumberFormProvider,
   actions: Actions,
@@ -73,11 +74,7 @@ class TelephoneNumberController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, contactName))),
-            value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(TelephoneNumberPage, value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(TelephoneNumberPage, mode, updatedAnswers))
+            value => TelephoneNumberPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
           )
     }
 }
