@@ -27,7 +27,7 @@ import play.api.mvc.{ActionFilter, Result}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.reflect.runtime.universe.{TypeTag, typeOf}
+import scala.reflect.runtime.universe.{typeOf, TypeTag}
 
 class CheckDependentTaskCompletedAction[T: TypeTag](implicit val executionContext: ExecutionContext, userAnswersReader: UserAnswersReader[T])
     extends ActionFilter[DataRequest]
