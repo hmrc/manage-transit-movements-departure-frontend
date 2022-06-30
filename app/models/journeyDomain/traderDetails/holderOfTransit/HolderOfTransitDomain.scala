@@ -14,19 +14,24 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.traderDetails
+package models.journeyDomain.traderDetails.holderOfTransit
 
 import cats.implicits._
 import models.DeclarationType.Option4
 import models.domain._
-import models.{Address, EoriNumber}
+import models.journeyDomain.CheckYourAnswersDomain
+import models.{Address, EoriNumber, UserAnswers}
 import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.holderOfTransit._
+import play.api.mvc.Call
 
-trait HolderOfTransitDomain {
+trait HolderOfTransitDomain extends CheckYourAnswersDomain {
   val name: String
   val address: Address
   val additionalContact: Option[AdditionalContactDomain]
+
+  override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
+    controllers.traderDetails.holderOfTransit.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
 }
 
 object HolderOfTransitDomain {

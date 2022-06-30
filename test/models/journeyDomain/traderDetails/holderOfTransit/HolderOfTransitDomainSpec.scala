@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.traderDetails
+package models.journeyDomain.traderDetails.holderOfTransit
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper

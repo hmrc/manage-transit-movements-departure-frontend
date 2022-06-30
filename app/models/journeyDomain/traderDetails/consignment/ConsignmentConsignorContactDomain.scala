@@ -14,25 +14,22 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.traderDetails
+package models.journeyDomain.traderDetails.consignment
 
 import cats.implicits._
-import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
-import models.{Address, EoriNumber}
-import pages.traderDetails.consignment.consignee.{AddressPage, EoriNumberPage, EoriYesNoPage, NamePage}
+import models.domain.{GettableAsReaderOps, UserAnswersReader}
+import pages.traderDetails.consignment.consignor.contact._
 
-case class ConsignmentConsigneeDomain(
-  eori: Option[EoriNumber],
+case class ConsignmentConsignorContactDomain(
   name: String,
-  address: Address
+  telephoneNumber: String
 )
 
-object ConsignmentConsigneeDomain {
+object ConsignmentConsignorContactDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[ConsignmentConsigneeDomain] =
+  implicit val userAnswersReader: UserAnswersReader[ConsignmentConsignorContactDomain] =
     (
-      EoriYesNoPage.filterOptionalDependent(identity)(EoriNumberPage.reader.map(EoriNumber(_))),
       NamePage.reader,
-      AddressPage.reader
-    ).tupled.map((ConsignmentConsigneeDomain.apply _).tupled)
+      TelephoneNumberPage.reader
+    ).tupled.map((ConsignmentConsignorContactDomain.apply _).tupled)
 }

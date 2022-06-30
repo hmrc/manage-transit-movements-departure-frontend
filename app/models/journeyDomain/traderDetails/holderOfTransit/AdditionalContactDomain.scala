@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
-package navigation.traderDetails
+package models.journeyDomain.traderDetails.holderOfTransit
 
-import models.journeyDomain.traderDetails.TraderDetailsDomain
-import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain
-import navigation.UserAnswersNavigator
+import cats.implicits._
+import models.domain._
+import pages.traderDetails.holderOfTransit.contact.{NamePage, TelephoneNumberPage}
 
-import javax.inject.{Inject, Singleton}
+case class AdditionalContactDomain(
+  name: String,
+  telephoneNumber: String
+)
 
-@Singleton
-class HolderOfTransitNavigator @Inject() () extends UserAnswersNavigator[HolderOfTransitDomain, TraderDetailsDomain]
+object AdditionalContactDomain {
+
+  implicit val userAnswersReader: UserAnswersReader[AdditionalContactDomain] =
+    (
+      NamePage.reader,
+      TelephoneNumberPage.reader
+    ).tupled.map((AdditionalContactDomain.apply _).tupled)
+}

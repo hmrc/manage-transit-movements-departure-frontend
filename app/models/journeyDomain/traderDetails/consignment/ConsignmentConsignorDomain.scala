@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.traderDetails
+package models.journeyDomain.traderDetails.consignment
 
 import cats.implicits._
-import models.{Address, EoriNumber}
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
+import models.{Address, EoriNumber}
 import pages.traderDetails.consignment.consignor._
 
 case class ConsignmentConsignorDomain(

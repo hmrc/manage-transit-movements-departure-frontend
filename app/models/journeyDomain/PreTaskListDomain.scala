@@ -25,6 +25,7 @@ import models.domain._
 import models.reference.CustomsOffice
 import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType, UserAnswers}
 import pages.preTaskList._
+import play.api.mvc.Call
 
 case class PreTaskListDomain(
   localReferenceNumber: LocalReferenceNumber,
@@ -34,7 +35,11 @@ case class PreTaskListDomain(
   tirCarnetReference: Option[String],
   securityDetailsType: SecurityDetailsType,
   detailsConfirmed: Boolean
-)
+) extends CheckYourAnswersDomain {
+
+  override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
+    controllers.preTaskList.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+}
 
 object PreTaskListDomain {
 

@@ -18,6 +18,8 @@ package generators
 
 import models.UserAnswers
 import models.journeyDomain.traderDetails._
+import models.journeyDomain.traderDetails.consignment.{ConsignmentConsigneeDomain, ConsignmentConsignorDomain, ConsignmentDomain}
+import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain
 import org.scalacheck.Gen
 
 trait TraderDetailsUserAnswersGenerator extends UserAnswersGenerator {

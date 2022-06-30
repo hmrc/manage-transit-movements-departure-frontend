@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package navigation.traderDetails
+package pages
 
-import models.journeyDomain.traderDetails.TraderDetailsDomain
-import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain
-import navigation.UserAnswersNavigator
+import models.Index
 
-import javax.inject.{Inject, Singleton}
-
-@Singleton
-class HolderOfTransitNavigator @Inject() () extends UserAnswersNavigator[HolderOfTransitDomain, TraderDetailsDomain]
+trait IndexedPage extends Page {
+  val indexes: Seq[Index]
+}

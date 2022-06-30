@@ -16,15 +16,24 @@
 
 package models.journeyDomain.traderDetails
 
-import models.domain._
 import cats.implicits._
+import models.UserAnswers
+import models.domain._
+import models.journeyDomain.CheckYourAnswersDomain
+import models.journeyDomain.traderDetails.consignment.ConsignmentDomain
+import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain
 import pages.traderDetails.ActingAsRepresentativePage
+import play.api.mvc.Call
 
 case class TraderDetailsDomain(
   holderOfTransit: HolderOfTransitDomain,
   representative: Option[RepresentativeDomain],
   consignment: ConsignmentDomain
-)
+) extends CheckYourAnswersDomain {
+
+  override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
+    controllers.traderDetails.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+}
 
 object TraderDetailsDomain {
 

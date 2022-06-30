@@ -16,17 +16,9 @@
 
 package navigation
 
-import controllers.preTaskList.routes
-import models._
 import models.journeyDomain.PreTaskListDomain
-import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class PreTaskListNavigator @Inject() () extends UserAnswersNavigator[PreTaskListDomain, PreTaskListDomain] {
-
-  override def sectionCheckYourAnswersRoute(userAnswers: UserAnswers): Call =
-    routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
-
-}
+class PreTaskListNavigator @Inject() () extends UserAnswersNavigator[PreTaskListDomain, PreTaskListDomain]

@@ -16,22 +16,11 @@
 
 package navigation.traderDetails
 
-import controllers.traderDetails.consignment.{routes => consignmentRoutes}
-import controllers.traderDetails.{routes => tdRoutes}
-import models._
-import models.journeyDomain.traderDetails.{ConsignmentDomain, TraderDetailsDomain}
+import models.journeyDomain.traderDetails.TraderDetailsDomain
+import models.journeyDomain.traderDetails.consignment.ConsignmentDomain
 import navigation.UserAnswersNavigator
-import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class ConsignmentNavigator @Inject() () extends UserAnswersNavigator[ConsignmentDomain, TraderDetailsDomain] {
-
-  override def subSectionCheckYourAnswersRoute(userAnswers: UserAnswers): Call =
-    consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
-
-  override def sectionCheckYourAnswersRoute(userAnswers: UserAnswers): Call =
-    tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
-
-}
+class ConsignmentNavigator @Inject() () extends UserAnswersNavigator[ConsignmentDomain, TraderDetailsDomain]

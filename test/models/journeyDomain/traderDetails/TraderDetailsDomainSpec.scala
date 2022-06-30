@@ -21,13 +21,15 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{EitherType, UserAnswersReader}
+import models.journeyDomain.traderDetails.consignment.ConsignmentDomain
+import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitEori
 import models.{Address, DeclarationType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 import pages.traderDetails.consignment._
 import pages.traderDetails.consignment.consignee.MoreThanOneConsigneePage
-import pages.traderDetails.{holderOfTransit, ActingAsRepresentativePage}
+import pages.traderDetails.{ActingAsRepresentativePage, holderOfTransit => hot}
 
 class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
@@ -44,10 +46,10 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
-          .unsafeSetVal(holderOfTransit.EoriYesNoPage)(false)
-          .unsafeSetVal(holderOfTransit.NamePage)(holderOfTransitName)
-          .unsafeSetVal(holderOfTransit.AddressPage)(holderOfTransitAddress)
-          .unsafeSetVal(holderOfTransit.AddContactPage)(false)
+          .unsafeSetVal(hot.EoriYesNoPage)(false)
+          .unsafeSetVal(hot.NamePage)(holderOfTransitName)
+          .unsafeSetVal(hot.AddressPage)(holderOfTransitAddress)
+          .unsafeSetVal(hot.AddContactPage)(false)
           .unsafeSetVal(ActingAsRepresentativePage)(false)
           .unsafeSetVal(ApprovedOperatorPage)(true)
           .unsafeSetVal(MoreThanOneConsigneePage)(true)
@@ -79,10 +81,10 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
-          .unsafeSetVal(holderOfTransit.TirIdentificationYesNoPage)(false)
-          .unsafeSetVal(holderOfTransit.NamePage)(holderOfTransitName)
-          .unsafeSetVal(holderOfTransit.AddressPage)(holderOfTransitAddress)
-          .unsafeSetVal(holderOfTransit.AddContactPage)(false)
+          .unsafeSetVal(hot.TirIdentificationYesNoPage)(false)
+          .unsafeSetVal(hot.NamePage)(holderOfTransitName)
+          .unsafeSetVal(hot.AddressPage)(holderOfTransitAddress)
+          .unsafeSetVal(hot.AddContactPage)(false)
 
         val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain].run(userAnswers)
 

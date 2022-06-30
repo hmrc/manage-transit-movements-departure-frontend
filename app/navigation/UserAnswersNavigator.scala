@@ -17,12 +17,12 @@
 package navigation
 
 import models.domain.UserAnswersReader
-import models.journeyDomain.ReaderError
+import models.journeyDomain.{CheckYourAnswersDomain, ReaderError}
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
 import play.api.mvc.Call
 
-abstract class UserAnswersNavigator[A, B](implicit
+abstract class UserAnswersNavigator[A <: CheckYourAnswersDomain, B <: CheckYourAnswersDomain](implicit
   subSectionReader: UserAnswersReader[A],
   sectionReader: UserAnswersReader[B]
 ) extends Navigator {
@@ -30,25 +30,20 @@ abstract class UserAnswersNavigator[A, B](implicit
   type SubSection = A
   type Section    = B
 
-  def subSectionCheckYourAnswersRoute(userAnswers: UserAnswers): Call = sectionCheckYourAnswersRoute(userAnswers)
-
-  def sectionCheckYourAnswersRoute(userAnswers: UserAnswers): Call
-
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
     mode match {
-      case NormalMode => nextPage[SubSection](userAnswers, mode, subSectionCheckYourAnswersRoute)
-      case CheckMode  => nextPage[Section](userAnswers, mode, sectionCheckYourAnswersRoute)
+      case NormalMode => nextPage[SubSection](userAnswers, mode)
+      case CheckMode  => nextPage[Section](userAnswers, mode)
     }
 
-  private def nextPage[T](
+  private def nextPage[T <: CheckYourAnswersDomain](
     userAnswers: UserAnswers,
-    mode: Mode,
-    route: UserAnswers => Call
+    mode: Mode
   )(implicit userAnswersReader: UserAnswersReader[T]): Call =
     UserAnswersReader[T].run(userAnswers) match {
       case Left(ReaderError(page, _)) =>
         page.route(userAnswers, mode).getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
-      case Right(_) =>
-        route(userAnswers)
+      case Right(x) =>
+        x.checkYourAnswersRoute(userAnswers)
     }
 }

@@ -14,22 +14,10 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.traderDetails
+package pages
 
-import cats.implicits._
-import models.domain._
-import pages.traderDetails.holderOfTransit.contact.{NamePage, TelephoneNumberPage}
+import models.Index
 
-case class AdditionalContactDomain(
-  name: String,
-  telephoneNumber: String
-)
-
-object AdditionalContactDomain {
-
-  implicit val userAnswersReader: UserAnswersReader[AdditionalContactDomain] =
-    (
-      NamePage.reader,
-      TelephoneNumberPage.reader
-    ).tupled.map((AdditionalContactDomain.apply _).tupled)
+case class FooBarPage(itemIndex: Index, containerIndex: Index) extends IndexedPage {
+  override val indexes: Seq[Index] = Seq(itemIndex, containerIndex)
 }

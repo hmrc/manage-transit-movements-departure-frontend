@@ -14,22 +14,13 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.traderDetails
+package models.journeyDomain
 
-import cats.implicits._
-import models.domain.{GettableAsReaderOps, UserAnswersReader}
-import pages.traderDetails.consignment.consignor.contact._
+import models.UserAnswers
+import play.api.mvc.Call
 
-case class ConsignmentConsignorContactDomain(
-  name: String,
-  telephoneNumber: String
-)
+trait CheckYourAnswersDomain {
 
-object ConsignmentConsignorContactDomain {
+  def checkYourAnswersRoute(userAnswers: UserAnswers): Call
 
-  implicit val userAnswersReader: UserAnswersReader[ConsignmentConsignorContactDomain] =
-    (
-      NamePage.reader,
-      TelephoneNumberPage.reader
-    ).tupled.map((ConsignmentConsignorContactDomain.apply _).tupled)
 }
