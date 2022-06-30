@@ -34,6 +34,8 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(classOf[TraderDetailsConsignment]).to(classOf[ConsignmentNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[TraderDetails]).to(classOf[TraderDetailsNavigator])
 
+    bind(classOf[TestNavigatorProvider]).to(classOf[TestNavigatorProviderImpl])
+
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])
     bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl])

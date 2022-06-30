@@ -27,8 +27,8 @@ abstract class UserAnswersNavigator[A <: CheckYourAnswersDomain, B <: CheckYourA
   sectionReader: UserAnswersReader[B]
 ) extends Navigator {
 
-  type SubSection = A
-  type Section    = B
+  private type SubSection = A
+  private type Section    = B
 
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
     mode match {
