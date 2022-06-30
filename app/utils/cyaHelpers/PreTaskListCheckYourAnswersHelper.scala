@@ -23,7 +23,7 @@ import pages.preTaskList._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 
-class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers) {
+class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
   def localReferenceNumber: SummaryListRow = buildRow(
     prefix = "localReferenceNumber",
@@ -36,39 +36,34 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
     page = OfficeOfDeparturePage,
     formatAnswer = formatAsLiteral,
     prefix = "officeOfDeparture",
-    id = None,
-    call = OfficeOfDepartureController.onPageLoad(lrn, mode)
+    id = None
   )
 
   def procedureType: Option[SummaryListRow] = getAnswerAndBuildRow[ProcedureType](
     page = ProcedureTypePage,
     formatAnswer = formatAsEnum(ProcedureType.messageKeyPrefix),
     prefix = "procedureType",
-    id = None,
-    call = ProcedureTypeController.onPageLoad(lrn, mode)
+    id = None
   )
 
   def declarationType: Option[SummaryListRow] = getAnswerAndBuildRow[DeclarationType](
     page = DeclarationTypePage,
     formatAnswer = formatAsEnum(DeclarationType.messageKeyPrefix),
     prefix = "declarationType",
-    id = None,
-    call = DeclarationTypeController.onPageLoad(lrn, mode)
+    id = None
   )
 
   def tirCarnet: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = TIRCarnetReferencePage,
     formatAnswer = formatAsLiteral,
     prefix = "tirCarnetReference",
-    id = None,
-    call = TIRCarnetReferenceController.onPageLoad(lrn, mode)
+    id = None
   )
 
   def securityType: Option[SummaryListRow] = getAnswerAndBuildRow[SecurityDetailsType](
     page = SecurityDetailsTypePage,
     formatAnswer = formatAsEnum(SecurityDetailsType.messageKeyPrefix),
     prefix = "securityDetailsType",
-    id = None,
-    call = SecurityDetailsTypeController.onPageLoad(lrn, mode)
+    id = None
   )
 }

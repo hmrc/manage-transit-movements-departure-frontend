@@ -23,6 +23,7 @@ import models.domain.UserAnswersReader
 import models.journeyDomain.{PreTaskListDomain, ReaderError}
 import models.{LocalReferenceNumber, NormalMode}
 import pages.preTaskList.DetailsConfirmedPage
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -42,7 +43,8 @@ class CheckYourAnswersController @Inject() (
   viewModel: PreTaskListViewModel
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
-    with I18nSupport {
+    with I18nSupport
+    with Logging {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions
     .requireData(lrn)
@@ -50,6 +52,7 @@ class CheckYourAnswersController @Inject() (
       implicit request =>
         UserAnswersReader[PreTaskListDomain].run(request.userAnswers) match {
           case Left(ReaderError(page, _)) if page != DetailsConfirmedPage =>
+            logger.warn(s"[preTaskList.CheckYourAnswersController][$lrn] Shouldn't be here yet. Redirecting to ${page.path}")
             Redirect(page.route(request.userAnswers, NormalMode).getOrElse(controllers.routes.SessionExpiredController.onPageLoad()))
           case _ =>
             val section = viewModel(request.userAnswers)
