@@ -35,10 +35,10 @@ case class PreTaskListDomain(
   tirCarnetReference: Option[String],
   securityDetailsType: SecurityDetailsType,
   detailsConfirmed: Boolean
-) extends CheckYourAnswersDomain {
+) extends JourneyDomainModel {
 
-  override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
-    controllers.preTaskList.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+  override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
+    Some(controllers.preTaskList.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
 }
 
 object PreTaskListDomain {

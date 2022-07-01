@@ -19,8 +19,8 @@ package models.journeyDomain
 import models.UserAnswers
 import play.api.mvc.Call
 
-trait CheckYourAnswersDomain {
+trait JourneyDomainModel {
 
-  def checkYourAnswersRoute(userAnswers: UserAnswers): Call
+  def routeIfCompleted(userAnswers: UserAnswers): Option[Call]
 
 }

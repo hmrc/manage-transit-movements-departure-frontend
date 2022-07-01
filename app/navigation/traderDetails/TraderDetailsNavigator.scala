@@ -17,9 +17,9 @@
 package navigation.traderDetails
 
 import models.journeyDomain.traderDetails.TraderDetailsDomain
-import navigation.UserAnswersNavigator
+import navigation.UserAnswersSectionNavigator
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class TraderDetailsNavigator @Inject() () extends UserAnswersNavigator[TraderDetailsDomain, TraderDetailsDomain]
+class TraderDetailsNavigator @Inject() () extends UserAnswersSectionNavigator[TraderDetailsDomain]

@@ -21,4 +21,4 @@ import models.journeyDomain.PreTaskListDomain
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class PreTaskListNavigator @Inject() () extends UserAnswersNavigator[PreTaskListDomain, PreTaskListDomain]
+class PreTaskListNavigator @Inject() () extends UserAnswersSectionNavigator[PreTaskListDomain]
