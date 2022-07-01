@@ -21,6 +21,6 @@ import play.api.mvc.Call
 
 trait JourneyDomainModel {
 
-  def routeIfCompleted(userAnswers: UserAnswers): Option[Call]
+  def routeIfCompleted(userAnswers: UserAnswers): Option[Call] = None
 
 }
