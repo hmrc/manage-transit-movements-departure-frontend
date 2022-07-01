@@ -17,12 +17,12 @@
 package navigation
 
 import models.domain.UserAnswersReader
-import models.journeyDomain.{CheckYourAnswersDomain, ReaderError}
+import models.journeyDomain.{Domain, ReaderError}
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
 import play.api.mvc.Call
 
-abstract class UserAnswersNavigator[A <: CheckYourAnswersDomain, B <: CheckYourAnswersDomain](implicit
+abstract class UserAnswersNavigator[A <: Domain, B <: Domain](implicit
   subSectionReader: UserAnswersReader[A],
   sectionReader: UserAnswersReader[B]
 ) extends Navigator {
@@ -36,14 +36,14 @@ abstract class UserAnswersNavigator[A <: CheckYourAnswersDomain, B <: CheckYourA
       case CheckMode  => nextPage[Section](userAnswers, mode)
     }
 
-  private def nextPage[T <: CheckYourAnswersDomain](
+  private def nextPage[T <: Domain](
     userAnswers: UserAnswers,
     mode: Mode
   )(implicit userAnswersReader: UserAnswersReader[T]): Call =
-    UserAnswersReader[T].run(userAnswers) match {
+    (UserAnswersReader[T].run(userAnswers) match {
       case Left(ReaderError(page, _)) =>
-        page.route(userAnswers, mode).getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
+        page.route(userAnswers, mode)
       case Right(x) =>
-        x.checkYourAnswersRoute(userAnswers)
-    }
+        x.routeIfCompleted(userAnswers)
+    }).getOrElse(controllers.routes.ErrorController.notFound())
 }

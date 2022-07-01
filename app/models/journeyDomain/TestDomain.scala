@@ -26,10 +26,10 @@ case class TestDomain(
   test1: String,
   test2: String
 )(fooIndex: Index, barIndex: Index)
-    extends CheckYourAnswersDomain {
+    extends Domain {
 
-  override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
-    controllers.test.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, fooIndex, barIndex)
+  override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
+    Some(controllers.test.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, fooIndex, barIndex))
 }
 
 object TestDomain {

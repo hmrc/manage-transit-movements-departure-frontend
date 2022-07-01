@@ -19,7 +19,7 @@ package models.journeyDomain.traderDetails
 import cats.implicits._
 import models.{EoriNumber, UserAnswers}
 import models.domain._
-import models.journeyDomain.CheckYourAnswersDomain
+import models.journeyDomain.Domain
 import models.traderDetails.representative.RepresentativeCapacity
 import pages.traderDetails.representative._
 import play.api.mvc.Call
@@ -29,10 +29,10 @@ case class RepresentativeDomain(
   name: String,
   capacity: RepresentativeCapacity,
   phone: String
-) extends CheckYourAnswersDomain {
+) extends Domain {
 
-  override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
-    controllers.traderDetails.representative.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
+  override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
+    Some(controllers.traderDetails.representative.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
 }
 
 object RepresentativeDomain {
