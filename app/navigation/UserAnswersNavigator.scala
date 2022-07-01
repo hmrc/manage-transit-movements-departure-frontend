@@ -47,3 +47,5 @@ abstract class UserAnswersNavigator[A <: Domain, B <: Domain](implicit
         x.routeIfCompleted(userAnswers)
     }).getOrElse(controllers.routes.ErrorController.notFound())
 }
+
+abstract class UserAnswersSectionNavigator[A <: Domain](implicit userAnswersReader: UserAnswersReader[A]) extends UserAnswersNavigator[A, A]

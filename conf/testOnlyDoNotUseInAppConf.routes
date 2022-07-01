@@ -11,3 +11,16 @@
 
 # Add all the application routes to the prod.routes file
 ->         /                          prod.Routes
+
+GET        /manage-transit-movements/departure/test-only/:lrn/test/foo/:fooIndex/bar/:barIndex/test-1                       controllers.test.Test1Controller.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode, fooIndex: Index, barIndex: Index)
+POST       /manage-transit-movements/departure/test-only/:lrn/test/foo/:fooIndex/bar/:barIndex/test-1                       controllers.test.Test1Controller.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode, fooIndex: Index, barIndex: Index)
+GET        /manage-transit-movements/departure/test-only/:lrn/test/foo/:fooIndex/bar/:barIndex/change-test-1                controllers.test.Test1Controller.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, fooIndex: Index, barIndex: Index)
+POST       /manage-transit-movements/departure/test-only/:lrn/test/foo/:fooIndex/bar/:barIndex/change-test-1                controllers.test.Test1Controller.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode, fooIndex: Index, barIndex: Index)
+
+GET        /manage-transit-movements/departure/test-only/:lrn/test/foo/:fooIndex/bar/:barIndex/test-2                       controllers.test.Test2Controller.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode, fooIndex: Index, barIndex: Index)
+POST       /manage-transit-movements/departure/test-only/:lrn/test/foo/:fooIndex/bar/:barIndex/test-2                       controllers.test.Test2Controller.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode, fooIndex: Index, barIndex: Index)
+GET        /manage-transit-movements/departure/test-only/:lrn/test/foo/:fooIndex/bar/:barIndex/change-test-2                controllers.test.Test2Controller.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, fooIndex: Index, barIndex: Index)
+POST       /manage-transit-movements/departure/test-only/:lrn/test/foo/:fooIndex/bar/:barIndex/change-test-2                controllers.test.Test2Controller.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode, fooIndex: Index, barIndex: Index)
+
+GET        /manage-transit-movements/departure/test-only/:lrn/test/foo/:fooIndex/bar/:barIndex/check-answers                controllers.test.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber, fooIndex: Index, barIndex: Index)
+POST       /manage-transit-movements/departure/test-only/:lrn/test/foo/:fooIndex/bar/:barIndex/check-answers                controllers.test.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber, fooIndex: Index, barIndex: Index)

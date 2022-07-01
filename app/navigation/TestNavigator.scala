@@ -36,7 +36,4 @@ trait TestNavigatorProvider {
 class TestNavigator(
   fooIndex: Index,
   barIndex: Index
-) extends UserAnswersNavigator[TestDomain, TestDomain]()(
-      TestDomain.userAnswersReader(fooIndex, barIndex),
-      TestDomain.userAnswersReader(fooIndex, barIndex)
-    )
+) extends UserAnswersSectionNavigator[TestDomain]()(TestDomain.userAnswersReader(fooIndex, barIndex))
