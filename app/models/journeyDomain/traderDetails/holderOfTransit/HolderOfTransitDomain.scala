@@ -19,13 +19,13 @@ package models.journeyDomain.traderDetails.holderOfTransit
 import cats.implicits._
 import models.DeclarationType.Option4
 import models.domain._
-import models.journeyDomain.Domain
+import models.journeyDomain.JourneyDomainModel
 import models.{Address, EoriNumber, UserAnswers}
 import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.holderOfTransit._
 import play.api.mvc.Call
 
-trait HolderOfTransitDomain extends Domain {
+trait HolderOfTransitDomain extends JourneyDomainModel {
   val name: String
   val address: Address
   val additionalContact: Option[AdditionalContactDomain]

@@ -26,7 +26,7 @@ case class TestDomain(
   test1: String,
   test2: String
 )(fooIndex: Index, barIndex: Index)
-    extends Domain {
+    extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
     Some(controllers.test.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, fooIndex, barIndex))

@@ -35,7 +35,7 @@ case class PreTaskListDomain(
   tirCarnetReference: Option[String],
   securityDetailsType: SecurityDetailsType,
   detailsConfirmed: Boolean
-) extends Domain {
+) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
     Some(controllers.preTaskList.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))

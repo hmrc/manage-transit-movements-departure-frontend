@@ -19,7 +19,7 @@ package models.journeyDomain
 import models.UserAnswers
 import play.api.mvc.Call
 
-trait Domain {
+trait JourneyDomainModel {
 
   def routeIfCompleted(userAnswers: UserAnswers): Option[Call] = None
 

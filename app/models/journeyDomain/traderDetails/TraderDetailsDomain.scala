@@ -19,7 +19,7 @@ package models.journeyDomain.traderDetails
 import cats.implicits._
 import models.UserAnswers
 import models.domain._
-import models.journeyDomain.Domain
+import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.traderDetails.consignment.ConsignmentDomain
 import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain
 import pages.traderDetails.ActingAsRepresentativePage
@@ -29,7 +29,7 @@ case class TraderDetailsDomain(
   holderOfTransit: HolderOfTransitDomain,
   representative: Option[RepresentativeDomain],
   consignment: ConsignmentDomain
-) extends Domain {
+) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
     Some(controllers.traderDetails.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))

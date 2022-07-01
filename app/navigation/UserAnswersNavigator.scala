@@ -17,12 +17,12 @@
 package navigation
 
 import models.domain.UserAnswersReader
-import models.journeyDomain.{Domain, ReaderError}
+import models.journeyDomain.{JourneyDomainModel, ReaderError}
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
 import play.api.mvc.Call
 
-abstract class UserAnswersNavigator[A <: Domain, B <: Domain](implicit
+abstract class UserAnswersNavigator[A <: JourneyDomainModel, B <: JourneyDomainModel](implicit
   subSectionReader: UserAnswersReader[A],
   sectionReader: UserAnswersReader[B]
 ) extends Navigator {
@@ -36,7 +36,7 @@ abstract class UserAnswersNavigator[A <: Domain, B <: Domain](implicit
       case CheckMode  => nextPage[Section](userAnswers, mode)
     }
 
-  private def nextPage[T <: Domain](
+  private def nextPage[T <: JourneyDomainModel](
     userAnswers: UserAnswers,
     mode: Mode
   )(implicit userAnswersReader: UserAnswersReader[T]): Call =
@@ -48,4 +48,4 @@ abstract class UserAnswersNavigator[A <: Domain, B <: Domain](implicit
     }).getOrElse(controllers.routes.ErrorController.notFound())
 }
 
-abstract class UserAnswersSectionNavigator[A <: Domain](implicit userAnswersReader: UserAnswersReader[A]) extends UserAnswersNavigator[A, A]
+abstract class UserAnswersSectionNavigator[A <: JourneyDomainModel](implicit userAnswersReader: UserAnswersReader[A]) extends UserAnswersNavigator[A, A]
