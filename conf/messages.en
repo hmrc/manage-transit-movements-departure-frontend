@@ -424,3 +424,14 @@ traderDetails.consignment.checkYourAnswers.consignor = Consignor
 traderDetails.consignment.checkYourAnswers.consignorContact = Consignor contact
 traderDetails.consignment.checkYourAnswers.consignee = Consignee
 
+#GuaranteeDetails
+
+guaranteeDetails.caption = Guarantee details
+
+guaranteeDetails.guaranteeAddedTIR.title = Guarantee added for TIR declaration
+guaranteeDetails.guaranteeAddedTIR.heading = Guarantee added for TIR declaration
+guaranteeDetails.guaranteeAddedTIR.paragraph1 = We’ve added the following guarantee to your declaration:
+guaranteeDetails.guaranteeAddedTIR.paragraph2 = (B) Guarantee for goods dispatched under TIR procedure
+guaranteeDetails.guaranteeAddedTIR.paragraph3 = This guarantee is required for all TIR declarations (goods moving under the cover of TIR carnet).
+guaranteeDetails.guaranteeAddedTIR.paragraph4 = You don’t need to do anything here – this is just for your reference.
+

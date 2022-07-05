@@ -216,4 +216,10 @@ trait ViewBehaviours extends SpecBase with ViewSpecAssertions {
       val formAction = getElementByTag(doc, "form").attr("action")
       formAction mustBe expectedUrl
     }
+
+  def pageWithInsetText(expectedText: String): Unit =
+    "must render inset text" in {
+      val caption = getElementByClass(doc, "govuk-inset-text")
+      assertElementContainsText(caption, expectedText)
+    }
 }

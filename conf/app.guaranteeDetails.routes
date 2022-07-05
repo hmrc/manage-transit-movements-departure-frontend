@@ -1,0 +1,3 @@
+
+GET        /:lrn/guarantee-details/guarantee-added-tir                        controllers.guaranteeDetails.GuaranteeAddedTIRController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/guarantee-details/guarantee-added-tir                        controllers.guaranteeDetails.GuaranteeAddedTIRController.onSubmit(lrn: LocalReferenceNumber)
