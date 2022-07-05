@@ -449,6 +449,7 @@ guaranteeDetails.guaranteeType.5 = (5) Guarantee waiver – secured for 500 euro
 guaranteeDetails.guaranteeType.8 = (8) Guarantee not required – exempt public body
 guaranteeDetails.guaranteeType.9 = (9) Individual guarantee with multiple usage
 guaranteeDetails.guaranteeType.A = (A) Guarantee waiver by agreement
+guaranteeDetails.guaranteeType.B = (B) Guarantee for goods dispatched under TIR procedure
 guaranteeDetails.guaranteeType.R = (R) Guarantee not required – goods carried on the Rhine, the Danube or their waterways
 guaranteeDetails.guaranteeType.checkYourAnswersLabel = Type of guarantee
 guaranteeDetails.guaranteeType.change.hidden = type of guarantee

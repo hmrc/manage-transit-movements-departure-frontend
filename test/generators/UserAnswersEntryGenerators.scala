@@ -17,6 +17,7 @@
 package generators
 
 import models._
+import models.guaranteeDetails.GuaranteeType
 import models.reference.CustomsOffice
 import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
@@ -32,7 +33,8 @@ trait UserAnswersEntryGenerators {
 
   def generateAnswer: PartialFunction[Gettable[_], Gen[(QuestionPage[_], JsValue)]] =
     generatePreTaskListAnswer orElse
-      generateTraderDetailsAnswer
+      generateTraderDetailsAnswer orElse
+      generateGuaranteeDetailsAnswer
 
   private def generatePreTaskListAnswer: PartialFunction[Gettable[_], Gen[(QuestionPage[_], JsValue)]] = {
     case OfficeOfDeparturePage   => arbitrary[CustomsOffice](arbitraryOfficeOfDeparture).map(Json.toJson(_)).map((OfficeOfDeparturePage, _))
@@ -106,6 +108,13 @@ trait UserAnswersEntryGenerators {
       case EoriNumberPage           => Gen.alphaNumStr.map(JsString).map((EoriNumberPage, _))
       case NamePage                 => Gen.alphaNumStr.map(JsString).map((NamePage, _))
       case AddressPage              => arbitrary[Address].map(Json.toJson(_)).map((AddressPage, _))
+    }
+  }
+
+  private def generateGuaranteeDetailsAnswer: PartialFunction[Gettable[_], Gen[(QuestionPage[_], JsValue)]] = {
+    import pages.guaranteeDetails._
+    {
+      case GuaranteeTypePage(index) => arbitrary[GuaranteeType].map(Json.toJson(_)).map((GuaranteeTypePage(index), _))
     }
   }
 

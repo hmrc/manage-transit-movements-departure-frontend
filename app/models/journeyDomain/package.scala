@@ -19,7 +19,7 @@ package models
 import cats.data.ReaderT
 import cats.implicits._
 import models.journeyDomain.ReaderError
-import play.api.libs.json.Reads
+import play.api.libs.json.{JsArray, Reads}
 import queries.Gettable
 
 package object domain {
@@ -111,6 +111,14 @@ package object domain {
     def optionalReader(implicit reads: Reads[A]): UserAnswersReader[Option[A]] =
       ReaderT[EitherType, UserAnswers, Option[A]](
         x => Right(x.get(a))
+      )
+  }
+
+  implicit class JsArrayGettableAsReaderOps(a: Gettable[JsArray]) {
+
+    def reader(implicit reads: Reads[JsArray]): UserAnswersReader[JsArray] =
+      ReaderT[EitherType, UserAnswers, JsArray](
+        x => Right(x.get(a).getOrElse(JsArray()))
       )
   }
 }

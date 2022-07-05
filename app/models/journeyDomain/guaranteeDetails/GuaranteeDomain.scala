@@ -14,31 +14,34 @@
  * limitations under the License.
  */
 
-package models.journeyDomain
+package models.journeyDomain.guaranteeDetails
 
 import cats.implicits._
-import models.domain.{UserAnswersReader, _}
+import models.domain._
+import models.guaranteeDetails.GuaranteeType
+import models.guaranteeDetails.GuaranteeType.TIRGuarantee
+import models.journeyDomain.JourneyDomainModel
 import models.{Index, UserAnswers}
-import pages.test.{Test1Page, Test2Page}
+import pages.guaranteeDetails.GuaranteeTypePage
 import play.api.mvc.Call
 
-case class TestDomain(
-  test1: String,
-  test2: String
-)(fooIndex: Index, barIndex: Index)
+case class GuaranteeDomain(
+  `type`: GuaranteeType
+)(index: Index)
     extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
-    Some(controllers.test.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, fooIndex, barIndex))
+    Some(???)
 }
 
-object TestDomain {
+object GuaranteeDomain {
 
-  implicit def userAnswersReader(fooIndex: Index, barIndex: Index): UserAnswersReader[TestDomain] =
+  implicit def userAnswersReader(index: Index): UserAnswersReader[GuaranteeDomain] =
     (
-      Test1Page(fooIndex, barIndex).reader,
-      Test2Page(fooIndex, barIndex).reader
-    ).mapN(
-      (x, y) => TestDomain.apply(x, y)(fooIndex, barIndex)
-    )
+      GuaranteeTypePage(index)
+        .mandatoryReader(_ != TIRGuarantee)
+      )
+      .map(
+        x => GuaranteeDomain.apply(x)(index)
+      )
 }

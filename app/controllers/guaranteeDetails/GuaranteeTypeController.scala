@@ -19,10 +19,9 @@ package controllers.guaranteeDetails
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.guaranteeDetails.GuaranteeTypeFormProvider
-import models.{LocalReferenceNumber, Mode}
 import models.guaranteeDetails.GuaranteeType
-import navigation.Navigator
-import navigation.annotations.GuaranteeDetails
+import models.{Index, LocalReferenceNumber, Mode}
+import navigation.{GuaranteeNavigator, GuaranteeNavigatorProvider}
 import pages.guaranteeDetails.GuaranteeTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class GuaranteeTypeController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @GuaranteeDetails implicit val navigator: Navigator,
+  navigatorProvider: GuaranteeNavigatorProvider,
   actions: Actions,
   formProvider: GuaranteeTypeFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -47,23 +46,26 @@ class GuaranteeTypeController @Inject() (
 
   private val form = formProvider()
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(GuaranteeTypePage) match {
+      val preparedForm = request.userAnswers.get(GuaranteeTypePage(index)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, lrn, GuaranteeType.radioItemsU(request.userAnswers), mode))
+      Ok(view(preparedForm, lrn, GuaranteeType.radioItemsU(request.userAnswers), mode, index))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, GuaranteeType.radioItems, mode))),
-          value => GuaranteeTypePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, GuaranteeType.radioItems, mode, index))),
+          value => {
+            implicit val navigator: GuaranteeNavigator = navigatorProvider(index)
+            GuaranteeTypePage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+          }
         )
   }
 }

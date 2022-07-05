@@ -19,6 +19,7 @@ package generators
 import config.Constants.{GB, XI}
 import models.AddressLine.{AddressLine1, AddressLine2, PostalCode}
 import models._
+import models.guaranteeDetails.GuaranteeType
 import models.reference._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
@@ -26,9 +27,14 @@ import org.scalacheck.{Arbitrary, Gen}
 trait ModelGenerators {
   self: Generators =>
 
-  implicit lazy val arbitraryGuaranteeType: Arbitrary[models.guaranteeDetails.GuaranteeType] =
+  implicit lazy val arbitraryGuaranteeType: Arbitrary[GuaranteeType] =
     Arbitrary {
-      Gen.oneOf(models.guaranteeDetails.GuaranteeType.values.toSeq)
+      Gen.oneOf(models.guaranteeDetails.GuaranteeType.values)
+    }
+
+  lazy val arbitraryNonTIRGuaranteeType: Arbitrary[GuaranteeType] =
+    Arbitrary {
+      Gen.oneOf(GuaranteeType.values.filterNot(_ == GuaranteeType.TIRGuarantee))
     }
 
   implicit lazy val arbitraryRepresentativeCapacity: Arbitrary[models.traderDetails.representative.RepresentativeCapacity] =

@@ -16,24 +16,23 @@
 
 package navigation
 
-import models.Index
-import models.journeyDomain.TestDomain
+import models._
+import models.journeyDomain.guaranteeDetails.GuaranteeDomain
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class TestNavigatorProviderImpl @Inject() () extends TestNavigatorProvider {
+class GuaranteeNavigatorProviderImpl @Inject() () extends GuaranteeNavigatorProvider {
 
-  def apply(fooIndex: Index, barIndex: Index): TestNavigator =
-    new TestNavigator(fooIndex, barIndex)
+  def apply(index: Index): GuaranteeNavigator =
+    new GuaranteeNavigator(index)
 }
 
-trait TestNavigatorProvider {
+trait GuaranteeNavigatorProvider {
 
-  def apply(fooIndex: Index, barIndex: Index): TestNavigator
+  def apply(index: Index): GuaranteeNavigator
 }
 
-class TestNavigator(
-  fooIndex: Index,
-  barIndex: Index
-) extends UserAnswersSectionNavigator[TestDomain]()(TestDomain.userAnswersReader(fooIndex, barIndex))
+class GuaranteeNavigator(
+  index: Index
+) extends UserAnswersSectionNavigator[GuaranteeDomain]()(GuaranteeDomain.userAnswersReader(index))

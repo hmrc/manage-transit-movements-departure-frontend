@@ -16,14 +16,15 @@
 
 package pages.guaranteeDetails
 
+import models.Index
 import models.guaranteeDetails.GuaranteeType
-import play.api.libs.json.JsPath
 import pages.QuestionPage
 import pages.sections.GuaranteeDetailsSection
+import play.api.libs.json.JsPath
 
-case object GuaranteeTypePage extends QuestionPage[GuaranteeType] {
+case class GuaranteeTypePage(index: Index) extends QuestionPage[GuaranteeType] {
 
-  override def path: JsPath = GuaranteeDetailsSection.path \ toString
+  override def path: JsPath = GuaranteeDetailsSection.path \ index.position \ toString
 
   override def toString: String = "guaranteeType"
 }

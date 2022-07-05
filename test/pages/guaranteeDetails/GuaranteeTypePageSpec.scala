@@ -19,14 +19,14 @@ package pages.guaranteeDetails
 import models.guaranteeDetails.GuaranteeType
 import pages.behaviours.PageBehaviours
 
-class GuaranteeTypeSpec extends PageBehaviours {
+class GuaranteeTypePageSpec extends PageBehaviours {
 
   "GuaranteeTypePage" - {
 
-    beRetrievable[GuaranteeType](GuaranteeTypePage)
+    beRetrievable[GuaranteeType](GuaranteeTypePage(index))
 
-    beSettable[GuaranteeType](GuaranteeTypePage)
+    beSettable[GuaranteeType](GuaranteeTypePage(index))
 
-    beRemovable[GuaranteeType](GuaranteeTypePage)
+    beRemovable[GuaranteeType](GuaranteeTypePage(index))
   }
 }
