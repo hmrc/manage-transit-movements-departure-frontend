@@ -17,7 +17,6 @@
 package models.guaranteeDetails
 
 import config.Constants.XI
-import models.reference.CountryCode
 import models.{RadioModelU, UserAnswers, WithName}
 import pages.preTaskList.OfficeOfDeparturePage
 
@@ -61,8 +60,8 @@ object GuaranteeType extends RadioModelU[GuaranteeType] {
   )
 
   override def valuesU(userAnswers: UserAnswers): Seq[GuaranteeType] =
-    userAnswers.get(OfficeOfDeparturePage).map(_.countryId) match {
-      case Some(CountryCode(XI)) => values.filterNot(_ == IndividualGuaranteeMultiple)
-      case _                     => values
+    userAnswers.get(OfficeOfDeparturePage).map(_.countryId.code) match {
+      case Some(XI) => values.filterNot(_ == IndividualGuaranteeMultiple)
+      case _        => values
     }
 }
