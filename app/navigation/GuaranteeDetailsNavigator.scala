@@ -29,7 +29,7 @@ class GuaranteeDetailsNavigator @Inject() () extends Navigator {
   override val checkRoutes: RouteMapping = routes(CheckMode)
 
   override def routes(mode: Mode): RouteMapping = {
-    case GuaranteeTypePage => ua => Some(controllers.routes.SessionExpiredController.onPageLoad()) //TODO change to next page when built
+    case GuaranteeTypePage(index) => ua => Some(controllers.routes.SessionExpiredController.onPageLoad()) //TODO change to next page when built
   }
 
 }
