@@ -351,11 +351,11 @@ traderDetails.consignment.consignor.addContact.change.hidden = if you want to ad
 
 traderDetails.consignment.consignor.contact.name.title = Who is the contact for the consignor?
 traderDetails.consignment.consignor.contact.name.heading = Who is the contact for the consignor?
-traderDetails.consignment.consignor.contact.name.checkYourAnswersLabel = Contact for the consignor
+traderDetails.consignment.consignor.contact.name.checkYourAnswersLabel = Consignor contact’s name
 traderDetails.consignment.consignor.contact.name.error.required = Enter the the name of the contact for the consignor
 traderDetails.consignment.consignor.contact.name.error.length = The name of the contact for the consignor must be 70 characters or less
 traderDetails.consignment.consignor.contact.name.error.invalid = The name of the contact for the consignor must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-traderDetails.consignment.consignor.contact.name.change.hidden = contact for the consignor
+traderDetails.consignment.consignor.contact.name.change.hidden = consignor contact’s name
 
 traderDetails.consignment.consignor.contact.telephoneNumber.title = What is the consignor contact’s phone number?
 traderDetails.consignment.consignor.contact.telephoneNumber.heading = What is {0}’s phone number?
@@ -425,3 +425,15 @@ traderDetails.consignment.checkYourAnswers.title = Check your answers
 traderDetails.consignment.checkYourAnswers.consignor = Consignor
 traderDetails.consignment.checkYourAnswers.consignorContact = Consignor contact
 traderDetails.consignment.checkYourAnswers.consignee = Consignee
+
+# Guarantee details
+
+guaranteeDetails.caption = Guarantee details
+
+guaranteeDetails.guaranteeAddedTIR.title = Guarantee added for TIR declaration
+guaranteeDetails.guaranteeAddedTIR.heading = Guarantee added for TIR declaration
+guaranteeDetails.guaranteeAddedTIR.paragraph1 = We’ve added the following guarantee to your declaration:
+guaranteeDetails.guaranteeAddedTIR.paragraph2 = (B) Guarantee for goods dispatched under TIR procedure
+guaranteeDetails.guaranteeAddedTIR.paragraph3 = This guarantee is required for all TIR declarations (goods moving under the cover of TIR carnet).
+guaranteeDetails.guaranteeAddedTIR.paragraph4 = You don’t need to do anything here – this is just for your reference.
+
