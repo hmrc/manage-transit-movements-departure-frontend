@@ -7,14 +7,13 @@
 ->         /manage-transit-movements/departure                   app.traderDetails.holderOfTransit.Routes
 ->         /manage-transit-movements/departure                   app.traderDetails.holderOfTransit.contact.Routes
 ->         /manage-transit-movements/departure                   app.traderDetails.representative.Routes
-
 ->         /manage-transit-movements/departure                   app.traderDetails.consignment.Routes
 ->         /manage-transit-movements/departure                   app.traderDetails.consignment.consignor.Routes
 ->         /manage-transit-movements/departure                   app.traderDetails.consignment.consignor.contact.Routes
 ->         /manage-transit-movements/departure                   app.traderDetails.consignment.consignee.Routes
 
-->         /                                                     health.Routes
-
 ->         /manage-transit-movements/departure                   app.guaranteeDetails.Routes
+
+->         /                                                     health.Routes
 
 GET        /admin/metrics             @com.kenshoo.play.metrics.MetricsController.metrics

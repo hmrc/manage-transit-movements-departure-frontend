@@ -435,3 +435,19 @@ guaranteeDetails.guaranteeAddedTIR.paragraph2 = (B) Guarantee for goods dispatch
 guaranteeDetails.guaranteeAddedTIR.paragraph3 = This guarantee is required for all TIR declarations (goods moving under the cover of TIR carnet).
 guaranteeDetails.guaranteeAddedTIR.paragraph4 = You don’t need to do anything here – this is just for your reference.
 
+
+guaranteeDetails.guaranteeType.title = Which type of guarantee is it?
+guaranteeDetails.guaranteeType.heading = Which type of guarantee is it?
+guaranteeDetails.guaranteeType.0 = (0) Guarantee waiver
+guaranteeDetails.guaranteeType.1 = (1) Comprehensive guarantee
+guaranteeDetails.guaranteeType.2 = (2) Individual guarantee as an undertaking by a guarantor
+guaranteeDetails.guaranteeType.3 = (3) Individual guarantee in cash or an equivalent recognised by the customs authorities
+guaranteeDetails.guaranteeType.4 = (4) Individual guarantee in the form of vouchers
+guaranteeDetails.guaranteeType.5 = (5) Guarantee waiver – secured for 500 euros or less
+guaranteeDetails.guaranteeType.8 = (8) Guarantee not required – exempt public body
+guaranteeDetails.guaranteeType.9 = (9) Individual guarantee with multiple usage
+guaranteeDetails.guaranteeType.A = (A) Guarantee waiver by agreement
+guaranteeDetails.guaranteeType.R = (R) Guarantee not required – goods carried on the Rhine, the Danube or their waterways
+guaranteeDetails.guaranteeType.checkYourAnswersLabel = Type of guarantee
+guaranteeDetails.guaranteeType.change.hidden = type of guarantee
+guaranteeDetails.guaranteeType.error.required = Select which type of guarantee you are using
