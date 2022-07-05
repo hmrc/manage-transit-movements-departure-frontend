@@ -1,3 +1,8 @@
 
 GET        /:lrn/guarantee-details/guarantee-added-tir                        controllers.guaranteeDetails.GuaranteeAddedTIRController.onPageLoad(lrn: LocalReferenceNumber)
 POST       /:lrn/guarantee-details/guarantee-added-tir                        controllers.guaranteeDetails.GuaranteeAddedTIRController.onSubmit(lrn: LocalReferenceNumber)
+
+GET        /:lrn/guarantee-details/guarantee-type                             controllers.guaranteeDetails.GuaranteeTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/guarantee-details/guarantee-type                             controllers.guaranteeDetails.GuaranteeTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/guarantee-details/change-guarantee-type                      controllers.guaranteeDetails.GuaranteeTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/guarantee-details/change-guarantee-type                      controllers.guaranteeDetails.GuaranteeTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
