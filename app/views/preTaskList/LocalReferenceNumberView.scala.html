@@ -16,6 +16,7 @@
 
 @import controllers.preTaskList.routes
 @import views.html.components.{Button, ErrorSummary, InputText}
+@import viewModels.components.InputTextViewModel._
 @import models.LocalReferenceNumber
 
 @this(
@@ -39,7 +40,9 @@
 
         @inputText(
             field = form("value"),
-            label = messages("localReferenceNumber.heading"),
+            inputTextType = OrdinaryTextInput(
+                heading = messages("localReferenceNumber.heading")
+            ),
             inputClass = InputSize.Width20
         )
 

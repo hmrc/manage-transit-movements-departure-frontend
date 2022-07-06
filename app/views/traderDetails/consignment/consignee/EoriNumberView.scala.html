@@ -16,6 +16,7 @@
 
 @import controllers.traderDetails.consignment.consignee.routes
 @import views.html.components.{Button, ErrorSummary, InputText}
+@import viewModels.components.InputTextViewModel._
 @import models.LocalReferenceNumber
 
 @this(
@@ -40,10 +41,12 @@
 
         @inputText(
             field = form("value"),
-            label = messages("traderDetails.consignment.consignee.eoriNumber.heading"),
+            inputTextType = OrdinaryTextInput(
+                heading = messages("traderDetails.consignment.consignee.eoriNumber.heading"),
+                caption = Some(messages("traderDetails.caption"))
+            ),
             inputClass = InputSize.Width20,
-            hint = Some(messages("traderDetails.consignment.consignee.eoriNumber.hint")),
-            caption = Some(messages("traderDetails.caption"))
+            hint = Some(messages("traderDetails.consignment.consignee.eoriNumber.hint"))
         )
 
         @button(attributes = Map("id" -> "submit"))

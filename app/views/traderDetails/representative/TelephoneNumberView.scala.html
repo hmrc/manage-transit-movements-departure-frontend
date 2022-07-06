@@ -16,6 +16,7 @@
 
 @import controllers.traderDetails.representative.routes
 @import views.html.components.{Button, ErrorSummary, InputText}
+@import viewModels.components.InputTextViewModel._
 @import models.LocalReferenceNumber
 
 @this(
@@ -40,10 +41,12 @@
 
         @inputText(
             field = form("value"),
-            label = messages("traderDetails.representative.telephoneNumber.heading"),
             hint = Some(messages("traderDetails.representative.telephoneNumber.hint")),
             inputClass = InputSize.Width20,
-            caption = Some(messages("traderDetails.caption")),
+            inputTextType = OrdinaryTextInput(
+                heading = messages("traderDetails.representative.telephoneNumber.heading"),
+                caption = Some(messages("traderDetails.caption"))
+            ),
             inputType = "tel",
             autocomplete = Some("tel")
         )
