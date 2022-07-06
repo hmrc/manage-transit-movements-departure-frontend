@@ -35,7 +35,7 @@ trait TraderDetailsConsignmentAnswersGenerator extends UserAnswersGenerator {
       Arbitrary((consignor.AddContactPage, JsBoolean(true))).arbitrary ::
       arbitraryTraderDetailsConsignmentConsignorContactNameUserAnswersEntry.arbitrary ::
       arbitraryTraderDetailsConsignmentConsignorContactTelephoneNumberUserAnswersEntry.arbitrary ::
-      Arbitrary((consignee.MoreThanOneConsigneePage, JsBoolean(false))).arbitrary ::
+      Arbitrary((MoreThanOneConsigneePage, JsBoolean(false))).arbitrary ::
       Arbitrary((consignee.EoriYesNoPage, JsBoolean(true))).arbitrary ::
       arbitraryTraderDetailsConsignmentConsigneeEoriNumberUserAnswersEntry.arbitrary ::
       arbitraryTraderdetailsConsignmentConsigneeNameUserAnswersEntry.arbitrary ::
@@ -46,7 +46,7 @@ trait TraderDetailsConsignmentAnswersGenerator extends UserAnswersGenerator {
   lazy val arbitraryTraderDetailsConsignmentAnswersWithoutConsignorOrConsignee: Gen[UserAnswers] = arbitraryUserAnswers(
     Arbitrary((SecurityDetailsTypePage, Json.toJson[SecurityDetailsType](SecurityDetailsType.NoSecurityDetails))).arbitrary ::
       Arbitrary((ApprovedOperatorPage, JsBoolean(true))).arbitrary ::
-      Arbitrary((consignee.MoreThanOneConsigneePage, JsBoolean(true))).arbitrary ::
+      Arbitrary((MoreThanOneConsigneePage, JsBoolean(true))).arbitrary ::
       Nil
   )
 
@@ -59,7 +59,7 @@ trait TraderDetailsConsignmentAnswersGenerator extends UserAnswersGenerator {
       Arbitrary((consignor.AddContactPage, JsBoolean(true))).arbitrary ::
       arbitraryTraderDetailsConsignmentConsignorContactNameUserAnswersEntry.arbitrary ::
       arbitraryTraderDetailsConsignmentConsignorContactTelephoneNumberUserAnswersEntry.arbitrary ::
-      Arbitrary((consignee.MoreThanOneConsigneePage, JsBoolean(false))).arbitrary ::
+      Arbitrary((MoreThanOneConsigneePage, JsBoolean(false))).arbitrary ::
       Arbitrary((consignee.EoriYesNoPage, JsBoolean(false))).arbitrary ::
       arbitraryTraderdetailsConsignmentConsigneeNameUserAnswersEntry.arbitrary ::
       arbitraryTraderdetailsConsignmentConsigneeAddressUserAnswersEntry.arbitrary ::
@@ -74,7 +74,7 @@ trait TraderDetailsConsignmentAnswersGenerator extends UserAnswersGenerator {
       arbitraryTraderDetailsConsignmentConsignorNameUserAnswersEntry.arbitrary ::
       arbitraryTraderDetailsConsignmentConsignorAddressUserAnswersEntry.arbitrary ::
       Arbitrary((consignor.AddContactPage, JsBoolean(false))).arbitrary ::
-      Arbitrary((consignee.MoreThanOneConsigneePage, JsBoolean(true))).arbitrary ::
+      Arbitrary((MoreThanOneConsigneePage, JsBoolean(true))).arbitrary ::
       Nil
   )
 

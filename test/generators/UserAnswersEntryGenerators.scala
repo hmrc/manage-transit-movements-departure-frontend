@@ -106,11 +106,11 @@ trait UserAnswersEntryGenerators {
     }
 
   implicit lazy val arbitraryTraderdetailsConsignmentConsigneeMoreThanOneConsigneeUserAnswersEntry
-    : Arbitrary[(pages.traderDetails.consignment.consignee.MoreThanOneConsigneePage.type, JsValue)] =
+    : Arbitrary[(pages.traderDetails.consignment.MoreThanOneConsigneePage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[pages.traderDetails.consignment.consignee.MoreThanOneConsigneePage.type#Data].map(Json.toJson(_))
-      } yield (pages.traderDetails.consignment.consignee.MoreThanOneConsigneePage, value)
+        value <- arbitrary[pages.traderDetails.consignment.MoreThanOneConsigneePage.type#Data].map(Json.toJson(_))
+      } yield (pages.traderDetails.consignment.MoreThanOneConsigneePage, value)
     }
 
   implicit lazy val arbitraryTraderdetailsConsignmentApprovedOperatorUserAnswersEntry

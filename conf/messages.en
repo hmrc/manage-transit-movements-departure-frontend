@@ -367,11 +367,11 @@ traderDetails.consignment.consignor.contact.telephoneNumber.error.invalidFormat 
 traderDetails.consignment.consignor.contact.telephoneNumber.change.hidden = consignor contact’s phone number
 
 # Trader Details - Consignee
-traderDetails.consignment.consignee.moreThanOneConsignee.title = Is there more than one consignee?
-traderDetails.consignment.consignee.moreThanOneConsignee.heading = Is there more than one consignee?
-traderDetails.consignment.consignee.moreThanOneConsignee.checkYourAnswersLabel = Is there more than one consignee?
-traderDetails.consignment.consignee.moreThanOneConsignee.error.required = Select yes if there is more than one consignee
-traderDetails.consignment.consignee.moreThanOneConsignee.change.hidden = if there is more than one consignee
+traderDetails.consignment.moreThanOneConsignee.title = Is there more than one consignee?
+traderDetails.consignment.moreThanOneConsignee.heading = Is there more than one consignee?
+traderDetails.consignment.moreThanOneConsignee.checkYourAnswersLabel = Is there more than one consignee?
+traderDetails.consignment.moreThanOneConsignee.error.required = Select yes if there is more than one consignee
+traderDetails.consignment.moreThanOneConsignee.change.hidden = if there is more than one consignee
 
 traderDetails.consignment.consignee.eoriYesNo.title = Do you know the consignee’s EORI number?
 traderDetails.consignment.consignee.eoriYesNo.heading = Do you know the consignee’s EORI number?

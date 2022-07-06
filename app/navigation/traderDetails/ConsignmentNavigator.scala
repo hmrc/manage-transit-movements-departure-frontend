@@ -37,8 +37,8 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Consignme
     case consignor.AddressPage                 => ua => Some(consignorRoutes.AddContactController.onPageLoad(ua.lrn, mode))
     case consignor.AddContactPage              => ua => addContactRoute(ua, mode)
     case consignor.contact.NamePage            => ua => Some(contactRoutes.TelephoneNumberController.onPageLoad(ua.lrn, mode))
-    case consignor.contact.TelephoneNumberPage => ua => Some(consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(ua.lrn, mode))
-    case consignee.MoreThanOneConsigneePage    => ua => moreThanOneConsigneeRoute(ua, mode)
+    case consignor.contact.TelephoneNumberPage => ua => Some(consignmentRoutes.MoreThanOneConsigneeController.onPageLoad(ua.lrn, mode))
+    case MoreThanOneConsigneePage              => ua => moreThanOneConsigneeRoute(ua, mode)
     case consignee.EoriYesNoPage               => ua => consigneeEoriYesNoRoute(ua, mode)
     case consignee.EoriNumberPage              => ua => Some(consigneeRoutes.NameController.onPageLoad(ua.lrn, mode))
     case consignee.NamePage                    => ua => Some(consigneeRoutes.AddressController.onPageLoad(ua.lrn, mode))
@@ -47,7 +47,7 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Consignme
 
   private def approvedOperatorYesNoRoute(ua: UserAnswers, mode: Mode): Option[Call] =
     ApprovedOperatorPage.skipConsignor(ua) match {
-      case Some(true)  => Some(consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(ua.lrn, mode))
+      case Some(true)  => Some(consignmentRoutes.MoreThanOneConsigneeController.onPageLoad(ua.lrn, mode))
       case Some(false) => Some(consignorRoutes.EoriYesNoController.onPageLoad(ua.lrn, mode))
       case None        => Some(controllers.routes.SessionExpiredController.onPageLoad())
     }
@@ -63,11 +63,11 @@ class ConsignmentNavigator @Inject() () extends TraderDetailsNavigator[Consignme
     yesNoRoute(userAnswers, consignor.AddContactPage)(
       yesCall = contactRoutes.NameController.onPageLoad(userAnswers.lrn, mode)
     )(
-      noCall = consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(userAnswers.lrn, mode)
+      noCall = consignmentRoutes.MoreThanOneConsigneeController.onPageLoad(userAnswers.lrn, mode)
     )
 
   private def moreThanOneConsigneeRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    yesNoRoute(userAnswers, consignee.MoreThanOneConsigneePage)(
+    yesNoRoute(userAnswers, MoreThanOneConsigneePage)(
       yesCall = checkYourAnswersRoute(userAnswers)
     )(
       noCall = consigneeRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode)

@@ -55,7 +55,7 @@ class TraderDetailsConsignmentViewModelSpec extends SpecBase with ScalaCheckProp
           .setValue(consignor.AddContactPage, true)
           .setValue(consignor.contact.NamePage, "contact name")
           .setValue(consignor.contact.TelephoneNumberPage, "phone number")
-          .setValue(consignee.MoreThanOneConsigneePage, false)
+          .setValue(MoreThanOneConsigneePage, false)
           .setValue(consignee.EoriYesNoPage, true)
           .setValue(consignee.EoriNumberPage, "eori2")
           .setValue(consignee.NamePage, "name2")

@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package pages.traderDetails.consignment.consignee
+package pages.traderDetails.consignment
 
 import models.{Address, EoriNumber}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.behaviours.PageBehaviours
+import pages.traderDetails.consignment.consignee._
 
 class MoreThanOneConsigneePageSpec extends PageBehaviours {
 

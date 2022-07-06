@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.traderDetails.consignment.consignee
+package controllers.traderDetails.consignment
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
@@ -22,12 +22,12 @@ import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetailsConsignment
-import pages.traderDetails.consignment.consignee.MoreThanOneConsigneePage
+import pages.traderDetails.consignment.MoreThanOneConsigneePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.traderDetails.consignment.consignee.MoreThanOneConsigneeView
+import views.html.traderDetails.consignment.MoreThanOneConsigneeView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -44,7 +44,7 @@ class MoreThanOneConsigneeController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("traderDetails.consignment.consignee.moreThanOneConsignee")
+  private val form = formProvider("traderDetails.consignment.moreThanOneConsignee")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

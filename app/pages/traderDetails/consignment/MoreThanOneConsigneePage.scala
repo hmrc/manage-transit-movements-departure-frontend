@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.traderDetails.consignment.consignee
+package pages.traderDetails.consignment
 
 import models.UserAnswers
 import pages.QuestionPage

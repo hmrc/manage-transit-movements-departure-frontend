@@ -75,7 +75,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
                 .setValue(SecurityDetailsTypePage, NoSecurityDetails)
               navigator
                 .nextPage(ApprovedOperatorPage, mode, userAnswers)
-                .mustBe(consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(userAnswers.lrn, mode))
+                .mustBe(consignmentRoutes.MoreThanOneConsigneeController.onPageLoad(userAnswers.lrn, mode))
             }
           }
 
@@ -160,7 +160,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
               val userAnswers = emptyUserAnswers.setValue(consignor.AddContactPage, false)
               navigator
                 .nextPage(consignor.AddContactPage, mode, userAnswers)
-                .mustBe(consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(userAnswers.lrn, mode))
+                .mustBe(consignmentRoutes.MoreThanOneConsigneeController.onPageLoad(userAnswers.lrn, mode))
             }
           }
 
@@ -182,24 +182,24 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         "must go from contact telephone number page to more than one consignee page" in {
           navigator
             .nextPage(consignor.contact.TelephoneNumberPage, mode, emptyUserAnswers)
-            .mustBe(consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(emptyUserAnswers.lrn, mode))
+            .mustBe(consignmentRoutes.MoreThanOneConsigneeController.onPageLoad(emptyUserAnswers.lrn, mode))
         }
 
         "must go from more than one consignee page" - {
           "when yes selected" - {
             "to check your answers page" in {
-              val userAnswers = emptyUserAnswers.setValue(consignee.MoreThanOneConsigneePage, true)
+              val userAnswers = emptyUserAnswers.setValue(MoreThanOneConsigneePage, true)
               navigator
-                .nextPage(consignee.MoreThanOneConsigneePage, mode, userAnswers)
+                .nextPage(MoreThanOneConsigneePage, mode, userAnswers)
                 .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
             }
           }
 
           "when no selected" - {
             "to eori yes no page" in {
-              val userAnswers = emptyUserAnswers.setValue(consignee.MoreThanOneConsigneePage, false)
+              val userAnswers = emptyUserAnswers.setValue(MoreThanOneConsigneePage, false)
               navigator
-                .nextPage(consignee.MoreThanOneConsigneePage, mode, userAnswers)
+                .nextPage(MoreThanOneConsigneePage, mode, userAnswers)
                 .mustBe(consigneeRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode))
             }
           }
@@ -399,9 +399,9 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           "to check your answers page when yes is selected" in {
             forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
               answers =>
-                val userAnswers = answers.setValue(consignee.MoreThanOneConsigneePage, true)
+                val userAnswers = answers.setValue(MoreThanOneConsigneePage, true)
                 navigator
-                  .nextPage(consignee.MoreThanOneConsigneePage, mode, userAnswers)
+                  .nextPage(MoreThanOneConsigneePage, mode, userAnswers)
                   .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
             }
           }
@@ -410,12 +410,12 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
               answers =>
                 val userAnswers = answers
-                  .setValue(consignee.MoreThanOneConsigneePage, false)
+                  .setValue(MoreThanOneConsigneePage, false)
                   .removeValue(consignee.EoriYesNoPage)
                   .removeValue(consignee.EoriNumberPage)
 
                 navigator
-                  .nextPage(consignee.MoreThanOneConsigneePage, mode, userAnswers)
+                  .nextPage(MoreThanOneConsigneePage, mode, userAnswers)
                   .mustBe(consigneeRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode))
             }
           }
@@ -630,9 +630,9 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         "to check your answers page when yes is selected" in {
           forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
             answers =>
-              val userAnswers = answers.setValue(consignee.MoreThanOneConsigneePage, true)
+              val userAnswers = answers.setValue(MoreThanOneConsigneePage, true)
               navigator
-                .nextPage(consignee.MoreThanOneConsigneePage, mode, userAnswers)
+                .nextPage(MoreThanOneConsigneePage, mode, userAnswers)
                 .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
           }
         }
@@ -641,12 +641,12 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           forAll(arbitraryTraderDetailsWithConsignorAndConsigneeAnswers) {
             answers =>
               val userAnswers = answers
-                .setValue(consignee.MoreThanOneConsigneePage, false)
+                .setValue(MoreThanOneConsigneePage, false)
                 .removeValue(consignee.EoriYesNoPage)
                 .removeValue(consignee.EoriNumberPage)
 
               navigator
-                .nextPage(consignee.MoreThanOneConsigneePage, mode, userAnswers)
+                .nextPage(MoreThanOneConsigneePage, mode, userAnswers)
                 .mustBe(consigneeRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, mode))
           }
         }

@@ -93,11 +93,11 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
   )
 
   def moreThanOneConsignee: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
-    page = consignee.MoreThanOneConsigneePage,
+    page = MoreThanOneConsigneePage,
     formatAnswer = formatAsYesOrNo,
-    prefix = "traderDetails.consignment.consignee.moreThanOneConsignee",
+    prefix = "traderDetails.consignment.moreThanOneConsignee",
     id = Some("has-more-than-one-consignee"),
-    call = consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(lrn, mode)
+    call = consignmentRoutes.MoreThanOneConsigneeController.onPageLoad(lrn, mode)
   )
 
   def consigneeEoriYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](

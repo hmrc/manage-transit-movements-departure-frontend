@@ -42,7 +42,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option1)
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(ApprovedOperatorPage)(true)
-          .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
+          .unsafeSetVal(MoreThanOneConsigneePage)(true)
 
         val expectedResult = ConsignmentDomain(
           consignor = None,
@@ -64,7 +64,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(consignor.NamePage)(consignorName)
           .unsafeSetVal(consignor.AddressPage)(consignorAddress)
           .unsafeSetVal(consignor.AddContactPage)(false)
-          .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
+          .unsafeSetVal(MoreThanOneConsigneePage)(true)
 
         val consignorDomain = ConsignmentConsignorDomain(
           eori = None,
@@ -88,7 +88,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option1)
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(ApprovedOperatorPage)(true)
-          .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
+          .unsafeSetVal(MoreThanOneConsigneePage)(true)
 
         val expectedResult = ConsignmentDomain(
           consignor = None,
@@ -110,7 +110,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(consignor.NamePage)(consignorName)
           .unsafeSetVal(consignor.AddressPage)(consignorAddress)
           .unsafeSetVal(consignor.AddContactPage)(false)
-          .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
+          .unsafeSetVal(MoreThanOneConsigneePage)(true)
 
         val consignorDomain = ConsignmentConsignorDomain(
           eori = None,
@@ -128,32 +128,33 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
         result.value mustBe expectedResult
       }
 
-      "when the consignor fields are populated but we don't want security details but have the ApprovedOperatorPage as Yes, but we have an option4 declarationType" in {
+      "when the consignor fields are populated but we don't want security details but have the ApprovedOperatorPage " +
+        "as Yes, but we have an option4 declarationType" in {
 
-        val userAnswers = emptyUserAnswers
-          .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
-          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
-          .unsafeSetVal(consignor.EoriYesNoPage)(false)
-          .unsafeSetVal(consignor.NamePage)(consignorName)
-          .unsafeSetVal(consignor.AddressPage)(consignorAddress)
-          .unsafeSetVal(consignor.AddContactPage)(false)
-          .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
+            .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
+            .unsafeSetVal(consignor.EoriYesNoPage)(false)
+            .unsafeSetVal(consignor.NamePage)(consignorName)
+            .unsafeSetVal(consignor.AddressPage)(consignorAddress)
+            .unsafeSetVal(consignor.AddContactPage)(false)
+            .unsafeSetVal(MoreThanOneConsigneePage)(true)
 
-        val consignorDomain = ConsignmentConsignorDomain(
-          eori = None,
-          name = consignorName,
-          address = consignorAddress,
-          contact = None
-        )
-        val expectedResult = ConsignmentDomain(
-          consignor = Some(consignorDomain),
-          consignee = None
-        )
+          val consignorDomain = ConsignmentConsignorDomain(
+            eori = None,
+            name = consignorName,
+            address = consignorAddress,
+            contact = None
+          )
+          val expectedResult = ConsignmentDomain(
+            consignor = Some(consignorDomain),
+            consignee = None
+          )
 
-        val result: EitherType[ConsignmentDomain] = UserAnswersReader[ConsignmentDomain].run(userAnswers)
+          val result: EitherType[ConsignmentDomain] = UserAnswersReader[ConsignmentDomain].run(userAnswers)
 
-        result.value mustBe expectedResult
-      }
+          result.value mustBe expectedResult
+        }
     }
 
     "cannot be parsed from UserAnswer" - {
