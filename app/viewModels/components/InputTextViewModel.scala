@@ -30,7 +30,6 @@ object InputTextViewModel {
   case class TextInputWithHiddenLabel(
     heading: String,
     caption: Option[String] = None,
-    label: String,
     additionalHtml: Html
   ) extends InputTextViewModel
 

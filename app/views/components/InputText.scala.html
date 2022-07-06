@@ -60,13 +60,13 @@
     case OrdinaryTextInput(heading, caption) => {
         @govukInput(input.withHeadingAndCaption(heading, caption))
     }
-    case TextInputWithHiddenLabel(heading, caption, label, additionalHtml) => {
+    case TextInputWithHiddenLabel(heading, caption, additionalHtml) => {
         @caption match {
             case Some(value) => { @headingWithSectionCaption(heading, value) }
             case None        => { @headingWithNoCaption(heading) }
         }
         @additionalHtml
-        @govukInput(input.copy(label = Label(isPageHeading = false, content = Text(label), classes = "govuk-visually-hidden")))
+        @govukInput(input.copy(label = Label(isPageHeading = false, content = Text(heading), classes = "govuk-visually-hidden")))
     }
     case TextInputWithStatementHeading(heading, caption, label, additionalHtml) => {
         @caption match {
