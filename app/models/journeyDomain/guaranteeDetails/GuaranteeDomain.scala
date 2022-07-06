@@ -46,6 +46,7 @@ object GuaranteeDomain {
   private val `3` = Seq(CashDepositGuarantee)
   private val `5` = Seq(GuaranteeWaiverSecured)
   private val `8` = Seq(GuaranteeNotRequiredExemptPublicBody)
+
   private val `A,R` = Seq(
     GuaranteeWaiverByAgreement,
     GuaranteeNotRequired
@@ -56,9 +57,7 @@ object GuaranteeDomain {
   implicit def userAnswersReader(index: Index): UserAnswersReader[GuaranteeDomain] =
     DeclarationTypePage.reader.flatMap {
       case Option4 =>
-        GuaranteeTypePage(index)
-          .mandatoryReader(_ == `B`)
-          .map(GuaranteeOfTypesABR(_)(index))
+        GuaranteeTypePage(index).mandatoryReader(_ == `B`).map(GuaranteeOfTypesABR(_)(index))
       case _ =>
         GuaranteeTypePage(index).reader.flatMap {
           case guaranteeType if `A,R`.contains(guaranteeType) =>

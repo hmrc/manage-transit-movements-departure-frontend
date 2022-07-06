@@ -41,6 +41,7 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
   private val `3` = Gen.const(CashDepositGuarantee)
   private val `5` = Gen.const(GuaranteeWaiverSecured)
   private val `8` = Gen.const(GuaranteeNotRequiredExemptPublicBody)
+
   private val `A,R` = Gen
     .oneOf(
       GuaranteeWaiverByAgreement,
