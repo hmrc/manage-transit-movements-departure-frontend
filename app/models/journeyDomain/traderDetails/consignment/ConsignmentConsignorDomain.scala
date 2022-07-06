@@ -18,6 +18,7 @@ package models.journeyDomain.traderDetails.consignment
 
 import cats.implicits._
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
+import models.journeyDomain.JourneyDomainModel
 import models.{Address, EoriNumber}
 import pages.traderDetails.consignment.consignor._
 
@@ -26,7 +27,7 @@ case class ConsignmentConsignorDomain(
   name: String,
   address: Address,
   contact: Option[ConsignmentConsignorContactDomain]
-)
+) extends JourneyDomainModel
 
 object ConsignmentConsignorDomain {
 

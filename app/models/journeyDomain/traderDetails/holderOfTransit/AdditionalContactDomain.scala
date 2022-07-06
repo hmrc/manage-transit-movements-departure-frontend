@@ -18,12 +18,13 @@ package models.journeyDomain.traderDetails.holderOfTransit
 
 import cats.implicits._
 import models.domain._
+import models.journeyDomain.JourneyDomainModel
 import pages.traderDetails.holderOfTransit.contact.{NamePage, TelephoneNumberPage}
 
 case class AdditionalContactDomain(
   name: String,
   telephoneNumber: String
-)
+) extends JourneyDomainModel
 
 object AdditionalContactDomain {
 

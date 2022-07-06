@@ -17,14 +17,19 @@
 package models.journeyDomain.guaranteeDetails
 
 import cats.implicits._
-import models.Index
 import models.domain.{UserAnswersReader, _}
 import models.journeyDomain.JourneyDomainModel
+import models.{Index, UserAnswers}
 import pages.sections.GuaranteeDetailsSection
+import play.api.mvc.Call
 
 case class GuaranteeDetailsDomain(
   guarantees: Seq[GuaranteeDomain]
-) extends JourneyDomainModel
+) extends JourneyDomainModel {
+
+  override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
+    None // TODO - update to section summary when built
+}
 
 object GuaranteeDetailsDomain {
 

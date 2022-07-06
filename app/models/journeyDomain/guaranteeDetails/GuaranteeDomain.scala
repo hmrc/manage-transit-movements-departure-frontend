@@ -30,7 +30,7 @@ case class GuaranteeDomain(
     extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
-    Some(???)
+    None // TODO - update to check your answers when built
 }
 
 object GuaranteeDomain {

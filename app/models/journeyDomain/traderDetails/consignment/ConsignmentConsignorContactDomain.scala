@@ -18,12 +18,13 @@ package models.journeyDomain.traderDetails.consignment
 
 import cats.implicits._
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
+import models.journeyDomain.JourneyDomainModel
 import pages.traderDetails.consignment.consignor.contact._
 
 case class ConsignmentConsignorContactDomain(
   name: String,
   telephoneNumber: String
-)
+) extends JourneyDomainModel
 
 object ConsignmentConsignorContactDomain {
 

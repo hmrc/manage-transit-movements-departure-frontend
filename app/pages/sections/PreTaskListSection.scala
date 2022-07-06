@@ -16,10 +16,9 @@
 
 package pages.sections
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import play.api.libs.json.{JsObject, JsPath}
 
-case object PreTaskListSection extends QuestionPage[Nothing] {
+case object PreTaskListSection extends Section[JsObject] {
 
   override def path: JsPath = JsPath \ toString
 
