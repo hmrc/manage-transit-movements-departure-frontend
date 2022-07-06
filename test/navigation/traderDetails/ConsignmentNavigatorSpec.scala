@@ -23,7 +23,7 @@ import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models._
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.traderDetails.consignment.{consignee, consignor, ApprovedOperatorPage}
+import pages.traderDetails.consignment._
 
 class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
 
@@ -40,7 +40,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
       consignor.AddContactPage,
       consignor.contact.NamePage,
       consignor.contact.TelephoneNumberPage,
-      consignee.MoreThanOneConsigneePage,
+      MoreThanOneConsigneePage,
       consignee.EoriYesNoPage,
       consignee.EoriNumberPage,
       consignee.NamePage,

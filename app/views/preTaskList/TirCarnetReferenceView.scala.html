@@ -16,6 +16,7 @@
 
 @import controllers.preTaskList.routes
 @import views.html.components.{Button, ErrorSummary, InputText}
+@import viewModels.components.InputTextViewModel._
 @import models.LocalReferenceNumber
 
 @this(
@@ -40,7 +41,9 @@
 
         @inputText(
             field = form("value"),
-            label = messages("tirCarnetReference.heading"),
+            inputTextType = OrdinaryTextInput(
+                heading = messages("tirCarnetReference.heading")
+            ),
             inputClass = InputSize.Width10
         )
 

@@ -374,11 +374,11 @@ traderDetails.consignment.consignor.contact.telephoneNumber.change.hidden = cons
 
 # Consignee
 
-traderDetails.consignment.consignee.moreThanOneConsignee.title = Is there more than one consignee?
-traderDetails.consignment.consignee.moreThanOneConsignee.heading = Is there more than one consignee?
-traderDetails.consignment.consignee.moreThanOneConsignee.checkYourAnswersLabel = Is there more than one consignee?
-traderDetails.consignment.consignee.moreThanOneConsignee.error.required = Select yes if there is more than one consignee
-traderDetails.consignment.consignee.moreThanOneConsignee.change.hidden = if there is more than one consignee
+traderDetails.consignment.moreThanOneConsignee.title = Is there more than one consignee?
+traderDetails.consignment.moreThanOneConsignee.heading = Is there more than one consignee?
+traderDetails.consignment.moreThanOneConsignee.checkYourAnswersLabel = Is there more than one consignee?
+traderDetails.consignment.moreThanOneConsignee.error.required = Select yes if there is more than one consignee
+traderDetails.consignment.moreThanOneConsignee.change.hidden = if there is more than one consignee
 
 traderDetails.consignment.consignee.eoriYesNo.title = Do you know the consignee’s EORI number?
 traderDetails.consignment.consignee.eoriYesNo.heading = Do you know the consignee’s EORI number?
@@ -458,3 +458,13 @@ guaranteeDetails.guaranteeType.R = (R) Guarantee not required – goods carried 
 guaranteeDetails.guaranteeType.checkYourAnswersLabel = Type of guarantee
 guaranteeDetails.guaranteeType.change.hidden = type of guarantee
 guaranteeDetails.guaranteeType.error.required = Select which type of guarantee you are using
+
+guaranteeDetails.referenceNumber.title = What is the Guarantee Reference Number (GRN)?
+guaranteeDetails.referenceNumber.heading = What is the Guarantee Reference Number (GRN)?
+guaranteeDetails.referenceNumber.checkYourAnswersLabel = Guarantee Reference Number
+guaranteeDetails.referenceNumber.error.required = Enter the Guarantee Reference Number
+guaranteeDetails.referenceNumber.change.hidden = guarantee reference number
+guaranteeDetails.referenceNumber.paragraph = You must make sure this reference is up to date.
+guaranteeDetails.referenceNumber.hint = This can be up to 24 characters long and include both letters and numbers. For example, 01GB01234567890123A1B2C3.
+guaranteeDetails.referenceNumber.error.length = The Guarantee Reference Number must be 24 characters or less
+guaranteeDetails.referenceNumber.error.invalid = The Guarantee Reference Number must only include the letters a to z and numbers 0 to 9

@@ -28,7 +28,6 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 import pages.traderDetails.consignment._
-import pages.traderDetails.consignment.consignee.MoreThanOneConsigneePage
 import pages.traderDetails.{ActingAsRepresentativePage, holderOfTransit => hot}
 
 class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {

@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package views.traderDetails.consignment.consignee
+package views.traderDetails.consignment
 
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.traderDetails.consignment.consignee.MoreThanOneConsigneeView
+import views.html.traderDetails.consignment.MoreThanOneConsigneeView
 
 class MoreThanOneConsigneeViewSpec extends YesNoViewBehaviours {
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector.instanceOf[MoreThanOneConsigneeView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "traderDetails.consignment.consignee.moreThanOneConsignee"
+  override val prefix: String = "traderDetails.consignment.moreThanOneConsignee"
 
   behave like pageWithTitle()
 

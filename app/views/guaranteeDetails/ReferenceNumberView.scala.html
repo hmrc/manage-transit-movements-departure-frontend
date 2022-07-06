@@ -14,10 +14,10 @@
  * limitations under the License.
  *@
 
-@import controllers.traderDetails.representative.routes
+@import controllers.guaranteeDetails.routes
 @import views.html.components.{Button, ErrorSummary, InputText}
 @import viewModels.components.InputTextViewModel._
-@import models.LocalReferenceNumber
+@import models.{Index, LocalReferenceNumber}
 
 @this(
     mainTemplate: MainTemplate,
@@ -27,26 +27,28 @@
     button: Button
 )
 
-@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, index: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("traderDetails.representative.eori.title"),
+    title = messages("guaranteeDetails.referenceNumber.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.EoriController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.ReferenceNumberController.onSubmit(lrn, mode, index), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputText(
             field = form("value"),
-            inputTextType = OrdinaryTextInput(
-                heading = messages("traderDetails.representative.eori.heading"),
-                caption = Some(messages("traderDetails.caption"))
+            inputTextType = TextInputWithHiddenLabel(
+                heading = messages("guaranteeDetails.referenceNumber.heading"),
+                caption = Some(messages("guaranteeDetails.caption")),
+                label = messages("guaranteeDetails.referenceNumber.heading"),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("guaranteeDetails.referenceNumber.paragraph")}</p>""")
             ),
-            inputClass = InputSize.Width20,
-            hint = Some(messages("traderDetails.representative.eori.hint"))
+            hint = Some(messages("guaranteeDetails.referenceNumber.hint")),
+            inputClass = InputSize.Width20
         )
 
         @button(attributes = Map("id" -> "submit"))

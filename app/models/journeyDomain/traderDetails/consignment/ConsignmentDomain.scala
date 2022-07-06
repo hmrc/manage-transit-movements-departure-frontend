@@ -62,5 +62,5 @@ object ConsignmentDomain {
   }
 
   private def readConsigneeDomain: UserAnswersReader[Option[ConsignmentConsigneeDomain]] =
-    consignee.MoreThanOneConsigneePage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsigneeDomain])
+    MoreThanOneConsigneePage.filterOptionalDependent(!_)(UserAnswersReader[ConsignmentConsigneeDomain])
 }

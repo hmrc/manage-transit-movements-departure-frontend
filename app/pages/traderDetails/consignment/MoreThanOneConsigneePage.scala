@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.traderDetails.consignment.consignee
+package pages.traderDetails.consignment
 
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
@@ -37,5 +37,5 @@ case object MoreThanOneConsigneePage extends QuestionPage[Boolean] {
     }
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(controllers.traderDetails.consignment.consignee.routes.MoreThanOneConsigneeController.onPageLoad(userAnswers.lrn, mode))
+    Some(controllers.traderDetails.consignment.routes.MoreThanOneConsigneeController.onPageLoad(userAnswers.lrn, mode))
 }

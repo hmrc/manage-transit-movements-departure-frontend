@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.traderDetails.consignment.consignee
+package controllers.traderDetails.consignment
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import models.{NormalMode, UserAnswers}
@@ -28,15 +28,15 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import forms.YesNoFormProvider
-import views.html.traderDetails.consignment.consignee.MoreThanOneConsigneeView
-import pages.traderDetails.consignment.consignee.MoreThanOneConsigneePage
+import views.html.traderDetails.consignment.MoreThanOneConsigneeView
+import pages.traderDetails.consignment.MoreThanOneConsigneePage
 
 import scala.concurrent.Future
 
 class MoreThanOneConsigneeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
   private val formProvider                   = new YesNoFormProvider()
-  private val form                           = formProvider("traderDetails.consignment.consignee.moreThanOneConsignee")
+  private val form                           = formProvider("traderDetails.consignment.moreThanOneConsignee")
   private val mode                           = NormalMode
   private lazy val moreThanOneConsigneeRoute = routes.MoreThanOneConsigneeController.onPageLoad(lrn, mode).url
 

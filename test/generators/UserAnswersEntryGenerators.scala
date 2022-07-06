@@ -82,7 +82,8 @@ trait UserAnswersEntryGenerators {
     {
       generateConsignorAnswer orElse
         generateConsigneeAnswer orElse {
-          case ApprovedOperatorPage => arbitrary[Boolean].map(JsBoolean).map((ApprovedOperatorPage, _))
+          case ApprovedOperatorPage     => arbitrary[Boolean].map(JsBoolean).map((ApprovedOperatorPage, _))
+          case MoreThanOneConsigneePage => arbitrary[Boolean].map(JsBoolean).map((MoreThanOneConsigneePage, _))
         }
     }
   }
@@ -103,18 +104,18 @@ trait UserAnswersEntryGenerators {
   private def generateConsigneeAnswer: PartialFunction[Gettable[_], Gen[(QuestionPage[_], JsValue)]] = {
     import pages.traderDetails.consignment.consignee._
     {
-      case MoreThanOneConsigneePage => arbitrary[Boolean].map(JsBoolean).map((MoreThanOneConsigneePage, _))
-      case EoriYesNoPage            => arbitrary[Boolean].map(JsBoolean).map((EoriYesNoPage, _))
-      case EoriNumberPage           => Gen.alphaNumStr.map(JsString).map((EoriNumberPage, _))
-      case NamePage                 => Gen.alphaNumStr.map(JsString).map((NamePage, _))
-      case AddressPage              => arbitrary[Address].map(Json.toJson(_)).map((AddressPage, _))
+      case EoriYesNoPage  => arbitrary[Boolean].map(JsBoolean).map((EoriYesNoPage, _))
+      case EoriNumberPage => Gen.alphaNumStr.map(JsString).map((EoriNumberPage, _))
+      case NamePage       => Gen.alphaNumStr.map(JsString).map((NamePage, _))
+      case AddressPage    => arbitrary[Address].map(Json.toJson(_)).map((AddressPage, _))
     }
   }
 
   private def generateGuaranteeDetailsAnswer: PartialFunction[Gettable[_], Gen[(QuestionPage[_], JsValue)]] = {
     import pages.guaranteeDetails._
     {
-      case GuaranteeTypePage(index) => arbitrary[GuaranteeType].map(Json.toJson(_)).map((GuaranteeTypePage(index), _))
+      case GuaranteeTypePage(index)   => arbitrary[GuaranteeType].map(Json.toJson(_)).map((GuaranteeTypePage(index), _))
+      case ReferenceNumberPage(index) => arbitrary[GuaranteeType].map(Json.toJson(_)).map((GuaranteeTypePage(index), _))
     }
   }
 

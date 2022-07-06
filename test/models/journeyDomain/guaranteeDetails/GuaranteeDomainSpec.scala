@@ -18,24 +18,123 @@ package models.journeyDomain.guaranteeDetails
 
 import base.SpecBase
 import generators.Generators
+import models.DeclarationType
+import models.DeclarationType.Option4
 import models.domain.{EitherType, UserAnswersReader}
-import models.guaranteeDetails.GuaranteeType
+import models.guaranteeDetails.GuaranteeType._
+import models.journeyDomain.guaranteeDetails.GuaranteeDomain._
 import org.scalacheck.Arbitrary.arbitrary
-import pages.guaranteeDetails.GuaranteeTypePage
+import org.scalacheck.Gen
+import pages.guaranteeDetails._
+import pages.preTaskList.DeclarationTypePage
 
 class GuaranteeDomainSpec extends SpecBase with Generators {
 
   "GuaranteeDomain" - {
 
-    val guaranteeType = arbitrary[GuaranteeType].sample.value
-
     "can be parsed from UserAnswers" - {
-      "when valid data set" in {
+      "when 0, 1, 2, 4, 5, 9 guarantee type" in {
+        val guaranteeType = Gen
+          .oneOf(
+            GuaranteeWaiver,
+            ComprehensiveGuarantee,
+            IndividualGuarantee,
+            FlatRateVoucher,
+            GuaranteeWaiverSecured,
+            IndividualGuaranteeMultiple
+          )
+          .sample
+          .value
+
+        val grn = Gen.alphaNumStr.sample.value
+
+        val userAnswers = emptyUserAnswers
+          .setValue(GuaranteeTypePage(index), guaranteeType)
+          .setValue(ReferenceNumberPage(index), grn)
+
+        val expectedResult = FullGuarantee(
+          `type` = guaranteeType,
+          grn = grn
+        )(index)
+
+        val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
+          GuaranteeDomain.userAnswersReader(index)
+        ).run(userAnswers)
+
+        result.value mustBe expectedResult
+      }
+
+      // TODO - what is J?
+      "when A, J, R guarantee type" in {
+        val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+        val guaranteeType = Gen
+          .oneOf(
+            GuaranteeWaiverByAgreement,
+            GuaranteeNotRequired
+          )
+          .sample
+          .value
+
+        val userAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, declarationType)
+          .setValue(GuaranteeTypePage(index), guaranteeType)
+
+        val expectedResult = GuaranteeTypeOnly(
+          `type` = guaranteeType
+        )(index)
+
+        val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
+          GuaranteeDomain.userAnswersReader(index)
+        ).run(userAnswers)
+
+        result.value mustBe expectedResult
+      }
+
+      "when B guarantee type" in {
+        val guaranteeType = TIRGuarantee
+
+        val userAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, Option4)
+          .setValue(GuaranteeTypePage(index), guaranteeType)
+
+        val expectedResult = GuaranteeTypeOnly(
+          `type` = guaranteeType
+        )(index)
+
+        val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
+          GuaranteeDomain.userAnswersReader(index)
+        ).run(userAnswers)
+
+        result.value mustBe expectedResult
+      }
+
+      "when 8 guarantee type" in {
+        val guaranteeType = GuaranteeNotRequiredExemptPublicBody
+
         val userAnswers = emptyUserAnswers
           .setValue(GuaranteeTypePage(index), guaranteeType)
 
-        val expectedResult = GuaranteeDomain(
-          `type` = guaranteeType
+        val expectedResult = GuaranteeWithOtherReference(
+          `type` = guaranteeType,
+          otherReference = ""
+        )(index)
+
+        val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
+          GuaranteeDomain.userAnswersReader(index)
+        ).run(userAnswers)
+
+        result.value mustBe expectedResult
+      }
+
+      "when 3 guarantee type" in {
+        val guaranteeType = CashDepositGuarantee
+
+        val userAnswers = emptyUserAnswers
+          .setValue(GuaranteeTypePage(index), guaranteeType)
+
+        val expectedResult = GuaranteeWithOptionalOtherReference(
+          `type` = guaranteeType,
+          otherReference = None
         )(index)
 
         val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](

@@ -44,7 +44,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(ApprovedOperatorPage)(true)
-          .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
+          .unsafeSetVal(MoreThanOneConsigneePage)(true)
 
         val expectedResult = ConsignmentDomain(
           consignor = None,
@@ -66,7 +66,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(consignor.NamePage)(name)
           .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(false)
-          .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
+          .unsafeSetVal(MoreThanOneConsigneePage)(true)
 
         val consignorDomain = ConsignmentConsignorDomain(
           eori = None,
@@ -90,7 +90,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(ApprovedOperatorPage)(true)
-          .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
+          .unsafeSetVal(MoreThanOneConsigneePage)(true)
 
         val expectedResult = ConsignmentDomain(
           consignor = None,
@@ -112,7 +112,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(consignor.NamePage)(name)
           .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(false)
-          .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
+          .unsafeSetVal(MoreThanOneConsigneePage)(true)
 
         val consignorDomain = ConsignmentConsignorDomain(
           eori = None,
@@ -139,7 +139,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(consignor.NamePage)(name)
           .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(false)
-          .unsafeSetVal(consignee.MoreThanOneConsigneePage)(true)
+          .unsafeSetVal(MoreThanOneConsigneePage)(true)
 
         val consignorDomain = ConsignmentConsignorDomain(
           eori = None,
