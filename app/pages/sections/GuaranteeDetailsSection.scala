@@ -17,9 +17,8 @@
 package pages.sections
 
 import play.api.libs.json.{JsArray, JsPath}
-import pages.QuestionPage
 
-case object GuaranteeDetailsSection extends QuestionPage[JsArray] {
+case object GuaranteeDetailsSection extends Section[JsArray] {
 
   override def path: JsPath = JsPath \ toString
 

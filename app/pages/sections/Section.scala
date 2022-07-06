@@ -16,11 +16,7 @@
 
 package pages.sections
 
-import play.api.libs.json.{JsObject, JsPath}
+import pages.QuestionPage
+import play.api.libs.json.JsValue
 
-case object TraderDetailsSection extends Section[JsObject] {
-
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "traderDetails"
-}
+trait Section[T <: JsValue] extends QuestionPage[T]

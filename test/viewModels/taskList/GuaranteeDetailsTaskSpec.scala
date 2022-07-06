@@ -17,64 +17,65 @@
 package viewModels.taskList
 
 import base.SpecBase
-import controllers.traderDetails.holderOfTransit.{routes => holderOfTransitRoutes}
-import controllers.traderDetails.{routes => traderDetailsRoutes}
-import generators.{Generators, TraderDetailsUserAnswersGenerator}
+import controllers.guaranteeDetails.{routes => guaranteeDetails}
+import generators.{Generators, GuaranteeDetailsUserAnswersGenerator}
 import models.DeclarationType.Option4
-import models.{DeclarationType, NormalMode}
+import models.guaranteeDetails.GuaranteeType
+import models.guaranteeDetails.GuaranteeType.TIRGuarantee
+import models.{DeclarationType, Index, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.guaranteeDetails._
 import pages.preTaskList.DeclarationTypePage
-import pages.traderDetails.{holderOfTransit => hot}
 import viewModels.taskList.TaskStatus._
 
-class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
+class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with GuaranteeDetailsUserAnswersGenerator {
 
   "name" - {
-    "must be Trader Details" - {
+    "must be Guarantee Details" - {
       "when status is CannotStartYet" in {
         forAll(Gen.option(Gen.alphaNumStr)) {
           href =>
-            val task = TraderDetailsTask(CannotStartYet, href)
-            task.name mustBe "Trader details"
+            val task = GuaranteeDetailsTask(CannotStartYet, href)
+            task.name mustBe "Guarantee details"
         }
       }
     }
 
-    "must be Add trader details" - {
+    "must be Add guarantee details" - {
       "when status is NotStarted" in {
         forAll(Gen.option(Gen.alphaNumStr)) {
           href =>
-            val task = TraderDetailsTask(NotStarted, href)
-            task.name mustBe "Add trader details"
+            val task = GuaranteeDetailsTask(NotStarted, href)
+            task.name mustBe "Add guarantee details"
         }
       }
     }
 
-    "must be Edit trader details" - {
+    "must be Edit guarantee details" - {
       "when status is Completed" in {
         forAll(Gen.option(Gen.alphaNumStr)) {
           href =>
-            val task = TraderDetailsTask(Completed, href)
-            task.name mustBe "Edit trader details"
+            val task = GuaranteeDetailsTask(Completed, href)
+            task.name mustBe "Edit guarantee details"
         }
       }
 
       "when status is InProgress" in {
         forAll(Gen.option(Gen.alphaNumStr)) {
           href =>
-            val task = TraderDetailsTask(InProgress, href)
-            task.name mustBe "Edit trader details"
+            val task = GuaranteeDetailsTask(InProgress, href)
+            task.name mustBe "Edit guarantee details"
         }
       }
     }
   }
 
   "id" - {
-    "must be trader-details" in {
-      val task = TraderDetailsTask(emptyUserAnswers)
-      task.id mustBe "trader-details"
+    "must be guarantee-details" in {
+      val task = GuaranteeDetailsTask(emptyUserAnswers)
+      task.id mustBe "guarantee-details"
     }
   }
 
@@ -82,55 +83,55 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
     "when NotStarted" - {
       "and TIR declaration type" in {
         val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
-        val task        = TraderDetailsTask(userAnswers)
+        val task        = GuaranteeDetailsTask(userAnswers)
         task.status mustBe NotStarted
-        task.href.get mustBe holderOfTransitRoutes.TirIdentificationYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
+        task.href.get mustBe guaranteeDetails.GuaranteeAddedTIRController.onPageLoad(userAnswers.lrn).url
       }
 
       "and non-TIR declaration type" in {
         forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)) {
           declarationType =>
             val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
-            val task        = TraderDetailsTask(userAnswers)
+            val task        = GuaranteeDetailsTask(userAnswers)
             task.status mustBe NotStarted
-            task.href.get mustBe holderOfTransitRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
+            task.href.get mustBe guaranteeDetails.GuaranteeTypeController.onPageLoad(userAnswers.lrn, NormalMode, Index(0)).url
         }
       }
     }
 
     "when InProgress" - {
 
-      "and TIR declaration type" in {
+      "and TIR declaration type" ignore {
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, Option4)
-          .setValue(hot.TirIdentificationYesNoPage, true)
+          .setValue(GuaranteeTypePage(Index(0)), TIRGuarantee)
 
-        val task = TraderDetailsTask(userAnswers)
+        val task = GuaranteeDetailsTask(userAnswers)
         task.status mustBe InProgress
-        task.href.get mustBe holderOfTransitRoutes.TirIdentificationController.onPageLoad(userAnswers.lrn, NormalMode).url
+        task.href.get mustBe ???
       }
 
-      "and non-TIR declaration type" in {
-        forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)) {
-          declarationType =>
+      "and non-TIR declaration type" ignore {
+        forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType), arbitrary[GuaranteeType](arbitraryNonTIRGuaranteeType)) {
+          (declarationType, guaranteeType) =>
             val userAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
-              .setValue(hot.EoriYesNoPage, true)
+              .setValue(GuaranteeTypePage(Index(0)), guaranteeType)
 
-            val task = TraderDetailsTask(userAnswers)
+            val task = GuaranteeDetailsTask(userAnswers)
             task.status mustBe InProgress
-            task.href.get mustBe holderOfTransitRoutes.EoriController.onPageLoad(userAnswers.lrn, NormalMode).url
+            task.href.get mustBe ???
         }
       }
     }
 
     "when Completed" - {
-      "when valid journey is completed" in {
-        forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers)) {
+      "when valid journey is completed" ignore {
+        forAll(arbitraryGuaranteeDetailsAnswers(emptyUserAnswers)) {
           userAnswers =>
-            val task = TraderDetailsTask(userAnswers)
+            val task = GuaranteeDetailsTask(userAnswers)
             task.status mustBe Completed
-            task.href.get mustBe traderDetailsRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url
+            task.href.get mustBe ???
         }
       }
     }

@@ -17,21 +17,21 @@
 package viewModels.taskList
 
 import models.UserAnswers
-import models.journeyDomain.traderDetails._
-import pages.sections.TraderDetailsSection
-import play.api.libs.json.JsObject
+import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
+import pages.sections.GuaranteeDetailsSection
+import play.api.libs.json.JsArray
 
-case class TraderDetailsTask(status: TaskStatus, href: Option[String]) extends Task {
-  override val id: String         = "trader-details"
-  override val messageKey: String = "traderDetails"
+case class GuaranteeDetailsTask(status: TaskStatus, href: Option[String]) extends Task {
+  override val id: String         = "guarantee-details"
+  override val messageKey: String = "guaranteeDetails"
 }
 
-object TraderDetailsTask {
+object GuaranteeDetailsTask {
 
-  def apply(userAnswers: UserAnswers): TraderDetailsTask = {
+  def apply(userAnswers: UserAnswers): GuaranteeDetailsTask = {
     val (status, href) = new TaskProvider(userAnswers).noDependencyOnOtherTask
-      .readUserAnswers[TraderDetailsDomain, JsObject](TraderDetailsSection)
+      .readUserAnswers[GuaranteeDetailsDomain, JsArray](GuaranteeDetailsSection)
 
-    new TraderDetailsTask(status, href)
+    new GuaranteeDetailsTask(status, href)
   }
 }

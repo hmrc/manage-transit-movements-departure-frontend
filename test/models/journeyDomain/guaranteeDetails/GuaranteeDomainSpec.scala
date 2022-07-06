@@ -20,7 +20,6 @@ import base.SpecBase
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import models.guaranteeDetails.GuaranteeType
-import models.guaranteeDetails.GuaranteeType.TIRGuarantee
 import org.scalacheck.Arbitrary.arbitrary
 import pages.guaranteeDetails.GuaranteeTypePage
 
@@ -28,7 +27,7 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
 
   "GuaranteeDomain" - {
 
-    val guaranteeType = arbitrary[GuaranteeType](arbitraryNonTIRGuaranteeType).sample.value
+    val guaranteeType = arbitrary[GuaranteeType].sample.value
 
     "can be parsed from UserAnswers" - {
       "when valid data set" in {
@@ -47,17 +46,6 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
       }
     }
 
-    "cannot be parsed from user answers" - {
-      "when guarantee has TIR guarantee type" in {
-        val userAnswers = emptyUserAnswers
-          .setValue(GuaranteeTypePage(index), TIRGuarantee)
-
-        val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
-          GuaranteeDomain.userAnswersReader(index)
-        ).run(userAnswers)
-
-        result.left.value.page mustBe GuaranteeTypePage(index)
-      }
-    }
+    "cannot be parsed from user answers" - {}
   }
 }

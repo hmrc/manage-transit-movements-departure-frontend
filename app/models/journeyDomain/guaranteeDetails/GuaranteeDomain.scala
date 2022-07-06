@@ -19,7 +19,6 @@ package models.journeyDomain.guaranteeDetails
 import cats.implicits._
 import models.domain._
 import models.guaranteeDetails.GuaranteeType
-import models.guaranteeDetails.GuaranteeType.TIRGuarantee
 import models.journeyDomain.JourneyDomainModel
 import models.{Index, UserAnswers}
 import pages.guaranteeDetails.GuaranteeTypePage
@@ -38,9 +37,8 @@ object GuaranteeDomain {
 
   implicit def userAnswersReader(index: Index): UserAnswersReader[GuaranteeDomain] =
     (
-      GuaranteeTypePage(index)
-        .mandatoryReader(_ != TIRGuarantee)
-      )
+      GuaranteeTypePage(index).reader
+    )
       .map(
         x => GuaranteeDomain.apply(x)(index)
       )

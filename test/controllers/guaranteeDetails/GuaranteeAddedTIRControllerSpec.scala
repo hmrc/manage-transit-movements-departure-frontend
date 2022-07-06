@@ -17,8 +17,12 @@
 package controllers.guaranteeDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import models.guaranteeDetails.GuaranteeType.TIRGuarantee
+import models.{Index, UserAnswers}
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, when}
+import pages.guaranteeDetails.GuaranteeTypePage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.guaranteeDetails.GuaranteeAddedTIRView
@@ -59,6 +63,10 @@ class GuaranteeAddedTIRControllerSpec extends SpecBase with AppWithDefaultMockFi
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
+
+      val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+      verify(mockSessionRepository).set(userAnswersCaptor.capture())
+      userAnswersCaptor.getValue.get(GuaranteeTypePage(Index(0))).get mustBe TIRGuarantee
     }
   }
 }

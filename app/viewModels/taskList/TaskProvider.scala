@@ -16,9 +16,11 @@
 
 package viewModels.taskList
 
-import cats.implicits._
-import models.UserAnswers
 import models.domain.UserAnswersReader
+import models.journeyDomain.{JourneyDomainModel, ReaderError}
+import models.{NormalMode, UserAnswers}
+import pages.sections.Section
+import play.api.libs.json.{JsValue, Reads}
 import viewModels.taskList.TaskStatus._
 
 private[viewModels] class TaskProvider(userAnswers: UserAnswers) {
@@ -42,94 +44,28 @@ private[viewModels] class TaskProvider(userAnswers: UserAnswers) {
     readerIfDependentTaskCompleted: Option[UserAnswersReader[A]]
   ) {
 
-    def ifCompleted[B](readerIfCompleted: UserAnswersReader[B], urlIfCompleted: String): IfCompletedStage[A, B] =
-      new IfCompletedStage(userAnswers)(
-        readerIfDependentTaskCompleted,
-        readerIfCompleted,
-        urlIfCompleted
-      )
-  }
-
-  class IfCompletedStage[A, B](userAnswers: UserAnswers)(
-    readerIfDependentTaskCompleted: Option[UserAnswersReader[A]],
-    readerIfCompleted: UserAnswersReader[B],
-    urlIfCompleted: String
-  ) {
-
-    def ifInProgress[C](readerIfInProgress: UserAnswersReader[C], urlIfInProgress: String): IfInProgressStage[A, B, C] =
-      new IfInProgressStage(userAnswers)(
-        readerIfDependentTaskCompleted,
-        readerIfCompleted,
-        urlIfCompleted,
-        readerIfInProgress,
-        urlIfInProgress
-      )
-
-    def ifInProgressOrNotStarted[C](readerIfInProgress: UserAnswersReader[C], urlIfInProgressOrNotStarted: String): ApplyStage[A, B, C] =
-      new ApplyStage(userAnswers)(
-        readerIfDependentTaskCompleted,
-        readerIfCompleted,
-        urlIfCompleted,
-        readerIfInProgress,
-        urlIfInProgressOrNotStarted,
-        urlIfInProgressOrNotStarted
-      )
-  }
-
-  class IfInProgressStage[A, B, C](userAnswers: UserAnswers)(
-    readerIfDependentTaskCompleted: Option[UserAnswersReader[A]],
-    readerIfCompleted: UserAnswersReader[B],
-    urlIfCompleted: String,
-    readerIfInProgress: UserAnswersReader[C],
-    urlIfInProgress: String
-  ) {
-
-    def ifNotStarted(urlIfNotStarted: String): ApplyStage[A, B, C] =
-      new ApplyStage(userAnswers)(
-        readerIfDependentTaskCompleted,
-        readerIfCompleted,
-        urlIfCompleted,
-        readerIfInProgress,
-        urlIfInProgress,
-        urlIfNotStarted
-      )
-  }
-
-  class ApplyStage[A, B, C](userAnswers: UserAnswers)(
-    readerIfDependentTaskCompleted: Option[UserAnswersReader[A]],
-    readerIfCompleted: UserAnswersReader[B],
-    urlIfCompleted: String,
-    readerIfInProgress: UserAnswersReader[C],
-    urlIfInProgress: String,
-    urlIfNotStarted: String
-  ) {
-
-    def apply[T <: Task](f: (TaskStatus, Option[String]) => T): T = {
-      lazy val completed = readerIfCompleted
-        .map[(String, TaskStatus)](
-          _ => (urlIfCompleted, Completed)
-        )
-
-      lazy val inProgress = readerIfInProgress
-        .map[(String, TaskStatus)](
-          _ => (urlIfInProgress, InProgress)
-        )
-
-      lazy val (onwardRoute, status) = completed
-        .orElse(inProgress)
-        .run(userAnswers)
-        .getOrElse((urlIfNotStarted, NotStarted))
-
-      val (updatedStatus, updatedOnwardRoute) = readerIfDependentTaskCompleted match {
-        case Some(reader) =>
-          reader.run(userAnswers) match {
-            case Right(_) => (status, Some(onwardRoute))
-            case _        => (CannotStartYet, None)
+    def readUserAnswers[T <: JourneyDomainModel, U <: JsValue](section: Section[U])(implicit
+      rds: Reads[U],
+      userAnswersReader: UserAnswersReader[T]
+    ): (TaskStatus, Option[String]) = {
+      lazy val (status, onwardRoute) = UserAnswersReader[T].run(userAnswers) match {
+        case Left(ReaderError(page, _)) =>
+          val route = page.route(userAnswers, NormalMode).map(_.url)
+          userAnswers.get(section) match {
+            case Some(_) => (InProgress, route)
+            case None    => (NotStarted, route)
           }
-        case _ => (status, Some(onwardRoute))
+        case Right(value) => (Completed, value.routeIfCompleted(userAnswers).map(_.url))
       }
 
-      f(updatedStatus, updatedOnwardRoute)
+      readerIfDependentTaskCompleted match {
+        case Some(reader) =>
+          reader.run(userAnswers) match {
+            case Right(_) => (status, onwardRoute)
+            case _        => (CannotStartYet, None)
+          }
+        case _ => (status, onwardRoute)
+      }
     }
   }
 }

@@ -34,6 +34,7 @@ class GuaranteeDetailsDomainSpec extends SpecBase with Generators {
       "when TIR declaration type" in {
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, Option4)
+          .setValue(GuaranteeTypePage(Index(0)), TIRGuarantee)
 
         val expectedResult = GuaranteeDetailsDomain(
           Seq(

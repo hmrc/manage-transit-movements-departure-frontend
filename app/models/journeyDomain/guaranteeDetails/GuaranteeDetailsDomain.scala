@@ -17,12 +17,9 @@
 package models.journeyDomain.guaranteeDetails
 
 import cats.implicits._
-import models.DeclarationType.Option4
 import models.Index
 import models.domain.{UserAnswersReader, _}
-import models.guaranteeDetails.GuaranteeType.TIRGuarantee
 import models.journeyDomain.JourneyDomainModel
-import pages.preTaskList.DeclarationTypePage
 import pages.sections.GuaranteeDetailsSection
 
 case class GuaranteeDetailsDomain(
@@ -32,23 +29,15 @@ case class GuaranteeDetailsDomain(
 object GuaranteeDetailsDomain {
 
   implicit val userAnswersReader: UserAnswersReader[GuaranteeDetailsDomain] =
-    DeclarationTypePage.reader.flatMap {
-      case Option4 =>
-        GuaranteeDomain(TIRGuarantee)(Index(0))
-          .pure[UserAnswersReader]
-          .map(Seq(_))
-          .map(GuaranteeDetailsDomain(_))
-      case _ =>
-        GuaranteeDetailsSection.reader
-          .map(_.value.toList)
-          .flatMap {
-            case Nil =>
-              GuaranteeDomain.userAnswersReader(Index(0)).map(List(_))
-            case x =>
-              x.zipWithIndex.traverse[UserAnswersReader, GuaranteeDomain] {
-                case (_, index) => GuaranteeDomain.userAnswersReader(Index(index))
-              }
+    GuaranteeDetailsSection.reader
+      .map(_.value.toList)
+      .flatMap {
+        case Nil =>
+          GuaranteeDomain.userAnswersReader(Index(0)).map(List(_))
+        case x =>
+          x.zipWithIndex.traverse[UserAnswersReader, GuaranteeDomain] {
+            case (_, index) => GuaranteeDomain.userAnswersReader(Index(index))
           }
-          .map(GuaranteeDetailsDomain.apply)
-    }
+      }
+      .map(GuaranteeDetailsDomain.apply)
 }
