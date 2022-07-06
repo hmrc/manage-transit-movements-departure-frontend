@@ -21,7 +21,7 @@ import generators.Generators
 import models.DeclarationType.Option4
 import models.domain._
 import models.guaranteeDetails.GuaranteeType._
-import models.journeyDomain.guaranteeDetails.GuaranteeDomain.GuaranteeTypeOnly
+import models.journeyDomain.guaranteeDetails.GuaranteeDomain.GuaranteeOfTypesABR
 import models.{DeclarationType, Index}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.guaranteeDetails.GuaranteeTypePage
@@ -39,7 +39,7 @@ class GuaranteeDetailsDomainSpec extends SpecBase with Generators {
 
         val expectedResult = GuaranteeDetailsDomain(
           Seq(
-            GuaranteeTypeOnly(
+            GuaranteeOfTypesABR(
               `type` = TIRGuarantee
             )(Index(0))
           )
@@ -60,10 +60,10 @@ class GuaranteeDetailsDomainSpec extends SpecBase with Generators {
 
         val expectedResult = GuaranteeDetailsDomain(
           Seq(
-            GuaranteeTypeOnly(
+            GuaranteeOfTypesABR(
               `type` = GuaranteeWaiverByAgreement
             )(Index(0)),
-            GuaranteeTypeOnly(
+            GuaranteeOfTypesABR(
               `type` = GuaranteeNotRequired
             )(Index(1))
           )

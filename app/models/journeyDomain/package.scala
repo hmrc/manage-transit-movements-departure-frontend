@@ -32,6 +32,16 @@ package object domain {
 
     def apply[A](fn: UserAnswers => EitherType[A]): UserAnswersReader[A] =
       ReaderT[EitherType, UserAnswers, A](fn)
+
+    def apply[A](a: A): UserAnswersReader[A] = {
+      val f: UserAnswers => EitherType[A] = _ => Right(a)
+      apply(f)
+    }
+
+    def fail[A](page: Gettable[_]): UserAnswersReader[A] = {
+      val f: UserAnswers => EitherType[A] = _ => Left(ReaderError(page))
+      apply(f)
+    }
   }
 
   implicit class GettableAsFilterForNextReaderOps[A: Reads](a: Gettable[A]) {

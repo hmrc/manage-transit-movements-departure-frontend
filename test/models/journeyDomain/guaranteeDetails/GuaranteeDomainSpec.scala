@@ -30,29 +30,62 @@ import pages.preTaskList.DeclarationTypePage
 
 class GuaranteeDomainSpec extends SpecBase with Generators {
 
+  private val `0,1,2,4,9` = Gen
+    .oneOf(
+      GuaranteeWaiver,
+      ComprehensiveGuarantee,
+      IndividualGuarantee,
+      FlatRateVoucher,
+      IndividualGuaranteeMultiple
+    )
+  private val `3` = Gen.const(CashDepositGuarantee)
+  private val `5` = Gen.const(GuaranteeWaiverSecured)
+  private val `8` = Gen.const(GuaranteeNotRequiredExemptPublicBody)
+  private val `A,R` = Gen
+    .oneOf(
+      GuaranteeWaiverByAgreement,
+      GuaranteeNotRequired
+    )
+  private val `B` = Gen.const(TIRGuarantee)
+
   "GuaranteeDomain" - {
 
     "can be parsed from UserAnswers" - {
-      "when 0, 1, 2, 4, 5, 9 guarantee type" in {
-        val guaranteeType = Gen
-          .oneOf(
-            GuaranteeWaiver,
-            ComprehensiveGuarantee,
-            IndividualGuarantee,
-            FlatRateVoucher,
-            GuaranteeWaiverSecured,
-            IndividualGuaranteeMultiple
-          )
-          .sample
-          .value
-
-        val grn = Gen.alphaNumStr.sample.value
+      "when 0,1,2,4,5,9 guarantee type" in {
+        val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+        val guaranteeType   = `0,1,2,4,9`.sample.value
+        val grn             = Gen.alphaNumStr.sample.value
 
         val userAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, declarationType)
           .setValue(GuaranteeTypePage(index), guaranteeType)
           .setValue(ReferenceNumberPage(index), grn)
 
-        val expectedResult = FullGuarantee(
+        val expectedResult = GuaranteeOfTypes01249(
+          `type` = guaranteeType,
+          grn = grn,
+          accessCode = "",
+          liabilityAmount = ""
+        )(index)
+
+        val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
+          GuaranteeDomain.userAnswersReader(index)
+        ).run(userAnswers)
+
+        result.value mustBe expectedResult
+      }
+
+      "when 5 guarantee type" in {
+        val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+        val guaranteeType   = `5`.sample.value
+        val grn             = Gen.alphaNumStr.sample.value
+
+        val userAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, declarationType)
+          .setValue(GuaranteeTypePage(index), guaranteeType)
+          .setValue(ReferenceNumberPage(index), grn)
+
+        val expectedResult = GuaranteeOfType5(
           `type` = guaranteeType,
           grn = grn
         )(index)
@@ -65,21 +98,15 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
       }
 
       // TODO - what is J?
-      "when A, J, R guarantee type" in {
+      "when A,J,R guarantee type" in {
         val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
-        val guaranteeType = Gen
-          .oneOf(
-            GuaranteeWaiverByAgreement,
-            GuaranteeNotRequired
-          )
-          .sample
-          .value
+        val guaranteeType   = `A,R`.sample.value
 
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, declarationType)
           .setValue(GuaranteeTypePage(index), guaranteeType)
 
-        val expectedResult = GuaranteeTypeOnly(
+        val expectedResult = GuaranteeOfTypesABR(
           `type` = guaranteeType
         )(index)
 
@@ -91,13 +118,15 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
       }
 
       "when B guarantee type" in {
-        val guaranteeType = TIRGuarantee
+        val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+        val guaranteeType   = `B`.sample.value
 
         val userAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, declarationType)
           .setValue(DeclarationTypePage, Option4)
           .setValue(GuaranteeTypePage(index), guaranteeType)
 
-        val expectedResult = GuaranteeTypeOnly(
+        val expectedResult = GuaranteeOfTypesABR(
           `type` = guaranteeType
         )(index)
 
@@ -109,12 +138,14 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
       }
 
       "when 8 guarantee type" in {
-        val guaranteeType = GuaranteeNotRequiredExemptPublicBody
+        val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+        val guaranteeType   = `8`.sample.value
 
         val userAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, declarationType)
           .setValue(GuaranteeTypePage(index), guaranteeType)
 
-        val expectedResult = GuaranteeWithOtherReference(
+        val expectedResult = GuaranteeOfType8(
           `type` = guaranteeType,
           otherReference = ""
         )(index)
@@ -127,12 +158,14 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
       }
 
       "when 3 guarantee type" in {
-        val guaranteeType = CashDepositGuarantee
+        val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+        val guaranteeType   = `3`.sample.value
 
         val userAnswers = emptyUserAnswers
           .setValue(GuaranteeTypePage(index), guaranteeType)
+          .setValue(DeclarationTypePage, declarationType)
 
-        val expectedResult = GuaranteeWithOptionalOtherReference(
+        val expectedResult = GuaranteeOfType3(
           `type` = guaranteeType,
           otherReference = None
         )(index)
@@ -145,6 +178,37 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
       }
     }
 
-    "cannot be parsed from user answers" - {}
+    "cannot be parsed from user answers" - {
+
+      "when non-TIR" - {
+        "when 0,1,2,4,5,9 guarantee type" - {
+          "when grn missing" in {
+            val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+            val guaranteeType   = `0,1,2,4,9`.sample.value
+
+            val userAnswers = emptyUserAnswers
+              .setValue(DeclarationTypePage, declarationType)
+              .setValue(GuaranteeTypePage(index), guaranteeType)
+
+            val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
+
+            result.left.value.page mustBe ReferenceNumberPage(index)
+          }
+        }
+
+        "when B guarantee type" in {
+          val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+          val guaranteeType   = `B`.sample.value
+
+          val userAnswers = emptyUserAnswers
+            .setValue(DeclarationTypePage, declarationType)
+            .setValue(GuaranteeTypePage(index), guaranteeType)
+
+          val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
+
+          result.left.value.page mustBe GuaranteeTypePage(index)
+        }
+      }
+    }
   }
 }

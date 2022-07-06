@@ -36,106 +36,119 @@ sealed trait GuaranteeDomain extends JourneyDomainModel {
 
 object GuaranteeDomain {
 
-  implicit def userAnswersReader(index: Index): UserAnswersReader[GuaranteeDomain] =
-    UserAnswersReader[GuaranteeTypeOnly](GuaranteeTypeOnly.userAnswersReader(index)).widen[GuaranteeDomain] orElse
-      UserAnswersReader[FullGuarantee](FullGuarantee.userAnswersReader(index)).widen[GuaranteeDomain] orElse
-      UserAnswersReader[GuaranteeWithOtherReference](GuaranteeWithOtherReference.userAnswersReader(index)).widen[GuaranteeDomain] orElse
-      UserAnswersReader[GuaranteeWithOptionalOtherReference](GuaranteeWithOptionalOtherReference.userAnswersReader(index)).widen[GuaranteeDomain]
+  private val `0,1,2,4,9` = Seq(
+    GuaranteeWaiver,
+    ComprehensiveGuarantee,
+    IndividualGuarantee,
+    FlatRateVoucher,
+    IndividualGuaranteeMultiple
+  )
+  private val `3` = Seq(CashDepositGuarantee)
+  private val `5` = Seq(GuaranteeWaiverSecured)
+  private val `8` = Seq(GuaranteeNotRequiredExemptPublicBody)
+  private val `A,R` = Seq(
+    GuaranteeWaiverByAgreement,
+    GuaranteeNotRequired
+  )
+  private val `B` = TIRGuarantee
 
-  case class GuaranteeTypeOnly(
+  // scalastyle:off cyclomatic.complexity
+  implicit def userAnswersReader(index: Index): UserAnswersReader[GuaranteeDomain] =
+    DeclarationTypePage.reader.flatMap {
+      case Option4 =>
+        GuaranteeTypePage(index)
+          .mandatoryReader(_ == `B`)
+          .map(GuaranteeOfTypesABR(_)(index))
+      case _ =>
+        GuaranteeTypePage(index).reader.flatMap {
+          case guaranteeType if `A,R`.contains(guaranteeType) =>
+            GuaranteeOfTypesABR.userAnswersReader(index, guaranteeType)
+          case guaranteeType if `0,1,2,4,9`.contains(guaranteeType) =>
+            GuaranteeOfTypes01249.userAnswersReader(index, guaranteeType)
+          case guaranteeType if `5`.contains(guaranteeType) =>
+            GuaranteeOfType5.userAnswersReader(index, guaranteeType)
+          case guaranteeType if `8`.contains(guaranteeType) =>
+            GuaranteeOfType8.userAnswersReader(index, guaranteeType)
+          case guaranteeType if `3`.contains(guaranteeType) =>
+            GuaranteeOfType3.userAnswersReader(index, guaranteeType)
+          case `B` =>
+            UserAnswersReader.fail[GuaranteeDomain](GuaranteeTypePage(index))
+        }
+    }
+  // scalastyle:on cyclomatic.complexity
+
+  case class GuaranteeOfTypesABR(
     `type`: GuaranteeType
   )(override val index: Index)
       extends GuaranteeDomain
 
-  object GuaranteeTypeOnly {
+  object GuaranteeOfTypesABR {
 
-    implicit def userAnswersReader(index: Index): UserAnswersReader[GuaranteeTypeOnly] =
-      DeclarationTypePage.reader
-        .map {
-          case Option4 =>
-            Seq(
-              TIRGuarantee // B
-            )
-          case _ =>
-            // TODO - what is J?
-            Seq(
-              GuaranteeWaiverByAgreement, // A
-              GuaranteeNotRequired // R
-            )
-        }
-        .flatMap {
-          `types`: Seq[GuaranteeType] =>
-            GuaranteeTypePage(index).mandatoryReader(`types`.contains(_)).map {
-              `type` => GuaranteeTypeOnly(`type`)(index)
-            }
-        }
+    def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
+      UserAnswersReader(GuaranteeOfTypesABR(guaranteeType)(index))
   }
 
-  // TODO - add access code and liability amount once built
-  case class FullGuarantee(
+  case class GuaranteeOfTypes01249(
+    `type`: GuaranteeType,
+    grn: String,
+    accessCode: String,
+    liabilityAmount: String
+  )(override val index: Index)
+      extends GuaranteeDomain
+
+  object GuaranteeOfTypes01249 {
+
+    def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
+      (
+        UserAnswersReader(guaranteeType),
+        ReferenceNumberPage(index).reader
+      ).mapN {
+        (`type`, grn) => GuaranteeOfTypes01249(`type`, grn, "", "")(index) // TODO - read access code and liability amount once built
+      }
+  }
+
+  case class GuaranteeOfType5(
     `type`: GuaranteeType,
     grn: String
   )(override val index: Index)
       extends GuaranteeDomain
 
-  object FullGuarantee {
+  object GuaranteeOfType5 {
 
-    implicit def userAnswersReader(index: Index): UserAnswersReader[FullGuarantee] = {
-      val `types` = Seq(
-        GuaranteeWaiver, // 0
-        ComprehensiveGuarantee, // 1
-        IndividualGuarantee, // 2
-        FlatRateVoucher, // 4
-        GuaranteeWaiverSecured, // 5
-        IndividualGuaranteeMultiple // 9
-      )
+    def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
       (
-        GuaranteeTypePage(index).mandatoryReader(`types`.contains(_)),
+        UserAnswersReader(guaranteeType),
         ReferenceNumberPage(index).reader
       ).mapN {
-        (`type`, grn) => FullGuarantee(`type`, grn)(index)
+        (`type`, grn) => GuaranteeOfType5(`type`, grn)(index)
       }
-    }
   }
 
-  case class GuaranteeWithOtherReference(
+  case class GuaranteeOfType8(
     `type`: GuaranteeType,
     otherReference: String
   )(override val index: Index)
       extends GuaranteeDomain
 
-  object GuaranteeWithOtherReference {
+  object GuaranteeOfType8 {
 
-    implicit def userAnswersReader(index: Index): UserAnswersReader[GuaranteeWithOtherReference] = {
-      val `types` = Seq(
-        GuaranteeNotRequiredExemptPublicBody // 8
-      )
-      (
-        GuaranteeTypePage(index).mandatoryReader(`types`.contains(_))
-      ).map {
-        `type` => GuaranteeWithOtherReference(`type`, "")(index) // TODO - read other ref. page once built
+    def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
+      UserAnswersReader(guaranteeType).map {
+        `type` => GuaranteeOfType8(`type`, "")(index) // TODO - read other ref. page once built
       }
-    }
   }
 
-  case class GuaranteeWithOptionalOtherReference(
+  case class GuaranteeOfType3(
     `type`: GuaranteeType,
     otherReference: Option[String]
   )(override val index: Index)
       extends GuaranteeDomain
 
-  object GuaranteeWithOptionalOtherReference {
+  object GuaranteeOfType3 {
 
-    implicit def userAnswersReader(index: Index): UserAnswersReader[GuaranteeWithOptionalOtherReference] = {
-      val `types` = Seq(
-        CashDepositGuarantee // 3
-      )
-      (
-        GuaranteeTypePage(index).mandatoryReader(`types`.contains(_)),
-        none[String].pure[UserAnswersReader] // TODO - read other ref. pages once built
-      ).mapN {
-        (`type`, otherReference) => GuaranteeWithOptionalOtherReference(`type`, otherReference)(index)
+    def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
+      UserAnswersReader(guaranteeType).map {
+        `type` => GuaranteeOfType3(`type`, None)(index) // TODO - read other ref. pages once built
       }
-    }
   }
 }
