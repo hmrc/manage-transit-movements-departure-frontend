@@ -30,6 +30,13 @@ import play.api.libs.json.{JsValue, Json}
 trait UserAnswersEntryGenerators {
   self: Generators =>
 
+  implicit lazy val arbitraryGuaranteedetailsReferenceNumberUserAnswersEntry: Arbitrary[(pages.guaranteeDetails.ReferenceNumberPage, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[String].map(Json.toJson(_))
+      } yield (pages.guaranteeDetails.ReferenceNumberPage(Index(0)), value)
+    }
+
   implicit lazy val arbitraryGuaranteeDetailsGuaranteeTypeUserAnswersEntry: Arbitrary[(pages.guaranteeDetails.GuaranteeTypePage, JsValue)] =
     Arbitrary {
       for {

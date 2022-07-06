@@ -451,3 +451,9 @@ guaranteeDetails.guaranteeType.R = (R) Guarantee not required – goods carried 
 guaranteeDetails.guaranteeType.checkYourAnswersLabel = Type of guarantee
 guaranteeDetails.guaranteeType.change.hidden = type of guarantee
 guaranteeDetails.guaranteeType.error.required = Select which type of guarantee you are using
+
+guaranteeDetails.referenceNumber.title = Reference Number
+guaranteeDetails.referenceNumber.heading = Reference Number
+guaranteeDetails.referenceNumber.checkYourAnswersLabel = Reference Number
+guaranteeDetails.referenceNumber.error.required = Enter Reference Number
+guaranteeDetails.referenceNumber.error.length = Reference Number must be 24 characters or less
