@@ -19,28 +19,29 @@ package generators
 import config.Constants._
 import models.DeclarationType.Option4
 import models._
+import models.guaranteeDetails.GuaranteeType
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import pages.preTaskList._
-import pages.traderDetails.holderOfTransit.{contact => holderOfTransitContact}
 import pages.traderDetails.consignment.{consignor => traderDetailsConsignor}
+import pages.traderDetails.holderOfTransit.{contact => holderOfTransitContact}
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators {
   self: Generators =>
 
-  implicit lazy val arbitraryGuaranteedetailsGuaranteeTypeUserAnswersEntry: Arbitrary[(pages.guaranteeDetails.GuaranteeTypePage.type, JsValue)] =
+  implicit lazy val arbitraryGuaranteeDetailsGuaranteeTypeUserAnswersEntry: Arbitrary[(pages.guaranteeDetails.GuaranteeTypePage, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[pages.guaranteeDetails.GuaranteeTypePage.type#Data].map(Json.toJson(_))
-      } yield (pages.guaranteeDetails.GuaranteeTypePage, value)
+        value <- arbitrary[GuaranteeType].map(Json.toJson(_))
+      } yield (pages.guaranteeDetails.GuaranteeTypePage(Index(0)), value)
     }
 
   implicit lazy val arbitraryTraderdetailsConsignmentConsigneeAddressUserAnswersEntry
     : Arbitrary[(pages.traderDetails.consignment.consignee.AddressPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[pages.traderDetails.consignment.consignee.AddressPage.type#Data].map(Json.toJson(_))
+        value <- arbitrary[Address].map(Json.toJson(_))
       } yield (pages.traderDetails.consignment.consignee.AddressPage, value)
     }
 
@@ -48,7 +49,7 @@ trait UserAnswersEntryGenerators {
     : Arbitrary[(pages.traderDetails.consignment.consignee.NamePage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[pages.traderDetails.consignment.consignee.NamePage.type#Data].map(Json.toJson(_))
+        value <- arbitrary[String].map(Json.toJson(_))
       } yield (pages.traderDetails.consignment.consignee.NamePage, value)
     }
 

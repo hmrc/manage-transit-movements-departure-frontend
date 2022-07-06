@@ -46,7 +46,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
           forAll(arbitrary[UserAnswers]) {
             answers =>
               navigator
-                .nextPage(GuaranteeTypePage, NormalMode, answers)
+                .nextPage(GuaranteeTypePage(index), NormalMode, answers)
                 .mustBe(controllers.routes.SessionExpiredController.onPageLoad()) //TODO change when next page built
           }
         }
