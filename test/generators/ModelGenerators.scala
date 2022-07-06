@@ -160,4 +160,10 @@ trait ModelGenerators {
     } yield CountryList(countries)
   }
 
+  implicit lazy val arbitraryIndex: Arbitrary[Index] = Arbitrary {
+    for {
+      position <- Gen.choose(0: Int, 10: Int)
+    } yield Index(position)
+  }
+
 }

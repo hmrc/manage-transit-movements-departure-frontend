@@ -75,8 +75,8 @@ class GuaranteeDetailsDomainSpec extends SpecBase with Generators {
     }
 
     "cannot be parsed from user answers" - {
-      "when non-TIR declaration type and guarantees empty" in {
-        val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+      "when guarantees empty" in {
+        val declarationType = arbitrary[DeclarationType].sample.value
 
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, declarationType)

@@ -16,8 +16,12 @@
 
 package pages.guaranteeDetails
 
+import models.DeclarationType.Option4
 import models.guaranteeDetails.GuaranteeType
+import models.{DeclarationType, Index, Mode}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.preTaskList.DeclarationTypePage
 
 class GuaranteeTypePageSpec extends PageBehaviours {
 
@@ -28,5 +32,29 @@ class GuaranteeTypePageSpec extends PageBehaviours {
     beSettable[GuaranteeType](GuaranteeTypePage(index))
 
     beRemovable[GuaranteeType](GuaranteeTypePage(index))
+
+    "route" - {
+      "when TIR declaration type" - {
+        "must point to GuaranteeAddedTIRController" in {
+          forAll(arbitrary[Index], arbitrary[Mode]) {
+            (index, mode) =>
+              val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
+              GuaranteeTypePage(index).route(userAnswers, mode).get.url mustBe
+                controllers.guaranteeDetails.routes.GuaranteeAddedTIRController.onPageLoad(userAnswers.lrn).url
+          }
+        }
+      }
+
+      "when non-TIR declaration type" - {
+        "must point to GuaranteeTypeController" in {
+          forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType), arbitrary[Index], arbitrary[Mode]) {
+            (declarationType, index, mode) =>
+              val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
+              GuaranteeTypePage(index).route(userAnswers, mode).get.url mustBe
+                controllers.guaranteeDetails.routes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, mode, index).url
+          }
+        }
+      }
+    }
   }
 }

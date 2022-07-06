@@ -26,7 +26,7 @@ class TaskListViewModelSpec extends SpecBase {
 
       val tasks = new TaskListViewModel().apply(answers)
 
-      tasks.size mustBe 1
+      tasks.size mustBe 2
     }
   }
 }
