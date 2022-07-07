@@ -17,13 +17,12 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 @import viewModels.components.InputTextViewModel
 @import viewModels.components.InputTextViewModel._
-@import views.html.components.{Heading, HeadingWithSectionCaption}
+@import views.html.components.Heading
 @import views.utils.ViewUtils._
 
 @this(
     govukInput: GovukInput,
-    headingWithNoCaption: Heading,
-    headingWithSectionCaption: HeadingWithSectionCaption
+    hmrcHeading: Heading
 )
 
 @(
@@ -61,18 +60,12 @@
         @govukInput(input.withHeadingAndCaption(heading, caption))
     }
     case TextInputWithHiddenLabel(heading, caption, additionalHtml) => {
-        @caption match {
-            case Some(value) => { @headingWithSectionCaption(heading, value) }
-            case None        => { @headingWithNoCaption(heading) }
-        }
+        @hmrcHeading(heading, caption)
         @additionalHtml
         @govukInput(input.copy(label = Label(isPageHeading = false, content = Text(heading), classes = "govuk-visually-hidden")))
     }
     case TextInputWithStatementHeading(heading, caption, label, additionalHtml) => {
-        @caption match {
-            case Some(value) => { @headingWithSectionCaption(heading, value) }
-            case None        => { @headingWithNoCaption(heading) }
-        }
+        @hmrcHeading(heading, caption)
         @additionalHtml
         @govukInput(input.copy(label = Label(isPageHeading = false, content = Text(label), classes = "govuk-label--m")))
     }

@@ -15,13 +15,13 @@
  *@
 
 @import models.LocalReferenceNumber
-@import views.html.components.{Button, HeadingWithSectionCaption}
+@import views.html.components.{Button, Heading}
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import controllers.guaranteeDetails.routes
 
 @this(
     mainTemplate: MainTemplate,
-    headingWithSectionCaption: HeadingWithSectionCaption,
+    heading: Heading,
     button: Button,
     govukInsetText : GovukInsetText,
     formHelper: FormWithCSRF
@@ -37,7 +37,10 @@
 
     @formHelper(action = routes.GuaranteeAddedTIRController.onSubmit(lrn), 'autoComplete -> "off") {
 
-        @headingWithSectionCaption("guaranteeDetails.guaranteeAddedTIR.heading", "guaranteeDetails.caption")
+        @heading(
+            heading = messages("guaranteeDetails.guaranteeAddedTIR.heading"),
+            caption = Some(messages("guaranteeDetails.caption"))
+        )
 
         <p class="govuk-body">@messages("guaranteeDetails.guaranteeAddedTIR.paragraph1")</p>
 
