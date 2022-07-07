@@ -42,7 +42,7 @@ class ReferenceNumberViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithHeading()
 
-  behave like pageWithHint("This can be up to 24 characters long and include both letters and numbers. For example, 01GB01234567890123A1B2C3.")
+  behave like pageWithHint("It can be up to 24 characters long and include both letters and numbers. For example, 01GB1234567890120A123456.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 
