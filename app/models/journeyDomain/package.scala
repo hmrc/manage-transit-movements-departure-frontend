@@ -89,32 +89,25 @@ package object domain {
       * and will fail if it is not defined
       */
 
-    def reader(implicit reads: Reads[A]): UserAnswersReader[A] =
-      ReaderT[EitherType, UserAnswers, A](
-        x =>
-          x.get(a) match {
-            case Some(value) => Right(value)
-            case None        => Left(ReaderError(a))
-          }
-      )
+    def reader(implicit reads: Reads[A]): UserAnswersReader[A] = reader(None)
 
-    def reader(message: String)(implicit reads: Reads[A]): UserAnswersReader[A] =
-      ReaderT[EitherType, UserAnswers, A](
-        x =>
-          x.get(a) match {
-            case Some(value) => Right(value)
-            case None        => Left(ReaderError(a, Some(message)))
-          }
-      )
+    def reader(message: String)(implicit reads: Reads[A]): UserAnswersReader[A] = reader(Some(message))
 
-    def mandatoryReader(predicate: A => Boolean)(implicit reads: Reads[A]): UserAnswersReader[A] =
-      ReaderT[EitherType, UserAnswers, A](
-        x =>
-          x.get(a) match {
-            case Some(value) if predicate(value) => Right(value)
-            case _                               => Left(ReaderError(a))
-          }
-      )
+    private def reader(message: Option[String])(implicit reads: Reads[A]): UserAnswersReader[A] = {
+      val fn: UserAnswers => EitherType[A] = _.get(a) match {
+        case Some(value) => Right(value)
+        case None        => Left(ReaderError(a, message))
+      }
+      UserAnswersReader(fn)
+    }
+
+    def mandatoryReader(predicate: A => Boolean)(implicit reads: Reads[A]): UserAnswersReader[A] = {
+      val fn: UserAnswers => EitherType[A] = _.get(a) match {
+        case Some(value) if predicate(value) => Right(value)
+        case _                               => Left(ReaderError(a))
+      }
+      UserAnswersReader(fn)
+    }
 
     def optionalReader(implicit reads: Reads[A]): UserAnswersReader[Option[A]] = {
       val fn: UserAnswers => EitherType[Option[A]] = ua => Right(ua.get(a))
@@ -122,10 +115,10 @@ package object domain {
     }
   }
 
-  implicit class JsArrayGettableAsReaderOps(a: Gettable[JsArray]) {
+  implicit class JsArrayGettableAsReaderOps(jsArray: Gettable[JsArray]) {
 
     def reader(implicit reads: Reads[JsArray]): UserAnswersReader[JsArray] = {
-      val fn: UserAnswers => EitherType[JsArray] = ua => Right(ua.get(a).getOrElse(JsArray()))
+      val fn: UserAnswers => EitherType[JsArray] = ua => Right(ua.get(jsArray).getOrElse(JsArray()))
       UserAnswersReader(fn)
     }
   }
