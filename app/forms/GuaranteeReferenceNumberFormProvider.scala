@@ -27,7 +27,7 @@ class GuaranteeReferenceNumberFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String): Form[String] =
     Form(
-      "value" -> text(s"$prefix.error.required")
+      "value" -> textWithSpacesRemoved(s"$prefix.error.required")
         .verifying(
           StopOnFirstFail[String](
             maxLength(maxRefNumberLength, s"$prefix.error.length"),
