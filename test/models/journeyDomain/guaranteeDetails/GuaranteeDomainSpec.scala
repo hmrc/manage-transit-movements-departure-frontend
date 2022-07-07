@@ -34,7 +34,7 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
   private val `3`         = Gen.const(CashDepositGuarantee)
   private val `5`         = Gen.const(GuaranteeWaiverSecured)
   private val `8`         = Gen.const(GuaranteeNotRequiredExemptPublicBody)
-  private val `A,R`       = arbitraryAJRGuaranteeType.arbitrary
+  private val `A,R`       = arbitraryARGuaranteeType.arbitrary
   private val `B`         = Gen.const(TIRGuarantee)
 
   "GuaranteeDomain" - {
@@ -86,8 +86,7 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
         result.value mustBe expectedResult
       }
 
-      // TODO - what is J?
-      "when A,J,R guarantee type" in {
+      "when A,R guarantee type" in {
         val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
         val guaranteeType   = `A,R`.sample.value
 

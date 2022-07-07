@@ -56,7 +56,7 @@ trait ModelGenerators {
       )
     }
 
-  lazy val arbitraryAJRGuaranteeType: Arbitrary[GuaranteeType] =
+  lazy val arbitraryARGuaranteeType: Arbitrary[GuaranteeType] =
     Arbitrary {
       Gen.oneOf(
         GuaranteeWaiverByAgreement,
