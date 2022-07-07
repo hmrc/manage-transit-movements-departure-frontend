@@ -16,15 +16,24 @@
 
 package forms
 
+import forms.Constants.maxRefNumberLength
 import forms.mappings.Mappings
-import javax.inject.Inject
+import models.domain.StringFieldRegex.{alphaNumericRegex, referenceNumberFormatRegex}
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class GuaranteeReferenceNumberFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String): Form[String] =
     Form(
       "value" -> text(s"$prefix.error.required")
-        .verifying(maxLength(24, s"$prefix.error.length"))
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(maxRefNumberLength, s"$prefix.error.length"),
+            regexp(alphaNumericRegex, s"$prefix.error.invalid"),
+            regexp(referenceNumberFormatRegex, s"$prefix.error.format")
+          )
+        )
     )
 }

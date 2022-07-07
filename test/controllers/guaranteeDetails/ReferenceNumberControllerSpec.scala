@@ -38,6 +38,7 @@ class ReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
   private val form                      = formProvider("guaranteeDetails.referenceNumber")
   private val mode                      = NormalMode
   private lazy val referenceNumberRoute = routes.ReferenceNumberController.onPageLoad(lrn, mode, index).url
+  private val validRefNumber            = "01GB0123456789012A123456"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -65,14 +66,14 @@ class ReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(ReferenceNumberPage(index), "test string").success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(ReferenceNumberPage(index), validRefNumber).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, referenceNumberRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> "test string"))
+      val filledForm = form.bind(Map("value" -> validRefNumber))
 
       val view = injector.instanceOf[ReferenceNumberView]
 
@@ -91,7 +92,7 @@ class ReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       val request =
         FakeRequest(POST, referenceNumberRoute)
-          .withFormUrlEncodedBody(("value", "test string"))
+          .withFormUrlEncodedBody(("value", validRefNumber))
 
       val result = route(app, request).value
 
@@ -140,7 +141,7 @@ class ReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       val request =
         FakeRequest(POST, referenceNumberRoute)
-          .withFormUrlEncodedBody(("value", "test string"))
+          .withFormUrlEncodedBody(("value", validRefNumber))
 
       val result = route(app, request).value
 
