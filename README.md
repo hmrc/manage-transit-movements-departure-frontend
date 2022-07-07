@@ -80,6 +80,19 @@ There is similar logic behind the InputYesNo and InputSelect component view mode
 ### Accessibility testing
 The accessibility of our templates and components can be checked by running `sbt a11y:test`
 
+### User answers reader
+This microservice has been quite experimental in the approach taken towards navigation. This is primarily driven by the UserAnswersReader.
+For any given JourneyDomainModel, a user answers reader is defined as the steps taken in order to have a valid set of user answers for that particular journey, often dependent on a series of other answers from previous sections.
+Depending on the state of the user answers, the reader will either return a `Right` when the answers are in a completed state, or a `Left` when they are not.
+The `Right` contains an instance of the journey domain model, which has a corresponding `routeIfCompleted` (generally a check your answers page) to navigate to.
+The `Left` contains an instance of the page that caused the reader to fail, which has a corresponding `route` to navigate to.
+
+This logic is utilised by the navigators, add-to-list change links, and task list links.
+
+NormalMode and CheckMode are still used. Generally speaking:
+* sub-section check your answers pages use NormalMode
+* section check your answers pages use CheckMode
+
 ### License
 
 This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
