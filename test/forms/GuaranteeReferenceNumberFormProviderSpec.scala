@@ -16,16 +16,21 @@
 
 package forms
 
+import forms.Constants.maxRefNumberLength
 import forms.behaviours.StringFieldBehaviours
+import models.domain.StringFieldRegex.{alphaNumericRegex, referenceNumberFormatRegex}
 import org.scalacheck.Gen
 import play.api.data.FormError
 
 class GuaranteeReferenceNumberFormProviderSpec extends StringFieldBehaviours {
 
-  private val prefix = Gen.alphaNumStr.sample.value
-  val requiredKey    = s"$prefix.error.required"
-  val lengthKey      = s"$prefix.error.length"
-  val maxLength      = 24
+  private val prefix                 = Gen.alphaNumStr.sample.value
+  private val invalidFormatRefNumber = Gen.alphaNumStr.sample.value.take(maxRefNumberLength)
+
+  val requiredKey = s"$prefix.error.required"
+  val lengthKey   = s"$prefix.error.length"
+  val invalidKey  = s"$prefix.error.invalid"
+  val formatKey   = s"$prefix.error.format"
 
   val form = new GuaranteeReferenceNumberFormProvider()(prefix)
 
@@ -36,20 +41,35 @@ class GuaranteeReferenceNumberFormProviderSpec extends StringFieldBehaviours {
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(maxRefNumberLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      maxLength = maxRefNumberLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxRefNumberLength))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
+    )
+
+    behave like fieldWithInvalidCharacters(
+      form,
+      fieldName,
+      error = FormError(fieldName, invalidKey, Seq(alphaNumericRegex.regex)),
+      maxRefNumberLength
+    )
+
+    behave like fieldThatDoesNotBindInvalidData(
+      form = form,
+      fieldName = fieldName,
+      regex = referenceNumberFormatRegex.regex,
+      gen = invalidFormatRefNumber,
+      invalidKey = formatKey
     )
   }
 }
