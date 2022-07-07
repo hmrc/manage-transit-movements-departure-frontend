@@ -16,7 +16,6 @@
 
 package models.journeyDomain
 
-import cats.data.ReaderT
 import cats.implicits._
 import config.Constants.XI
 import models.DeclarationType.Option4
@@ -43,10 +42,10 @@ case class PreTaskListDomain(
 
 object PreTaskListDomain {
 
-  private val localReferenceNumber: UserAnswersReader[LocalReferenceNumber] =
-    ReaderT[EitherType, UserAnswers, LocalReferenceNumber](
-      ua => Right(ua.lrn)
-    )
+  private val localReferenceNumber: UserAnswersReader[LocalReferenceNumber] = {
+    val fn: UserAnswers => EitherType[LocalReferenceNumber] = ua => Right(ua.lrn)
+    UserAnswersReader(fn)
+  }
 
   private val tirCarnetReference: UserAnswersReader[Option[String]] =
     OfficeOfDeparturePage.reader.map(_.countryId.code).flatMap {

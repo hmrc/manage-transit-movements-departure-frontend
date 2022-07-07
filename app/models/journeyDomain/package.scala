@@ -34,13 +34,13 @@ package object domain {
       ReaderT[EitherType, UserAnswers, A](fn)
 
     def apply[A](a: A): UserAnswersReader[A] = {
-      val f: UserAnswers => EitherType[A] = _ => Right(a)
-      apply(f)
+      val fn: UserAnswers => EitherType[A] = _ => Right(a)
+      apply(fn)
     }
 
     def fail[A](page: Gettable[_]): UserAnswersReader[A] = {
-      val f: UserAnswers => EitherType[A] = _ => Left(ReaderError(page))
-      apply(f)
+      val fn: UserAnswers => EitherType[A] = _ => Left(ReaderError(page))
+      apply(fn)
     }
   }
 
