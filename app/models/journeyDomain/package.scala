@@ -38,8 +38,8 @@ package object domain {
       apply(fn)
     }
 
-    def fail[A](page: Gettable[_]): UserAnswersReader[A] = {
-      val fn: UserAnswers => EitherType[A] = _ => Left(ReaderError(page))
+    def fail[A](page: Gettable[_], message: Option[String] = None): UserAnswersReader[A] = {
+      val fn: UserAnswers => EitherType[A] = _ => Left(ReaderError(page, message))
       apply(fn)
     }
   }
@@ -60,9 +60,7 @@ package object domain {
             if (predicate(x)) {
               next
             } else {
-              ReaderT[EitherType, UserAnswers, B](
-                _ => Left(ReaderError(a, Some(s"Mandatory predicate failed for ${a.path}")))
-              )
+              UserAnswersReader.fail[B](a, Some(s"Mandatory predicate failed for ${a.path}"))
             }
         }
 
@@ -118,17 +116,17 @@ package object domain {
           }
       )
 
-    def optionalReader(implicit reads: Reads[A]): UserAnswersReader[Option[A]] =
-      ReaderT[EitherType, UserAnswers, Option[A]](
-        x => Right(x.get(a))
-      )
+    def optionalReader(implicit reads: Reads[A]): UserAnswersReader[Option[A]] = {
+      val fn: UserAnswers => EitherType[Option[A]] = ua => Right(ua.get(a))
+      UserAnswersReader(fn)
+    }
   }
 
   implicit class JsArrayGettableAsReaderOps(a: Gettable[JsArray]) {
 
-    def reader(implicit reads: Reads[JsArray]): UserAnswersReader[JsArray] =
-      ReaderT[EitherType, UserAnswers, JsArray](
-        x => Right(x.get(a).getOrElse(JsArray()))
-      )
+    def reader(implicit reads: Reads[JsArray]): UserAnswersReader[JsArray] = {
+      val fn: UserAnswers => EitherType[JsArray] = ua => Right(ua.get(a).getOrElse(JsArray()))
+      UserAnswersReader(fn)
+    }
   }
 }
