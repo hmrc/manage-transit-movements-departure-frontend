@@ -62,7 +62,7 @@ class ReferenceNumberController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index))),
           value => {
             implicit val navigator: GuaranteeNavigator = navigatorProvider(index)
-            ReferenceNumberPage(index).writeToUserAnswers(value.replaceAll("\\s", "")).writeToSession().navigateWith(mode)
+            ReferenceNumberPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
           }
         )
   }

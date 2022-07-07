@@ -71,5 +71,11 @@ class GuaranteeReferenceNumberFormProviderSpec extends StringFieldBehaviours {
       gen = invalidFormatRefNumber,
       invalidKey = formatKey
     )
+
+    "must remove spaces on bound strings" in {
+      val result = form.bind(Map(fieldName -> "  01  GB1  234  567890120A  123456  "))
+      result.errors mustEqual Nil
+      result.get mustEqual "01GB1234567890120A123456"
+    }
   }
 }
