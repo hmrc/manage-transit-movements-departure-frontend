@@ -15,8 +15,9 @@
  *@
 
 @import controllers.$package$.routes
-@import views.html.components.{Button, ErrorSummary, InputText}
 @import models.LocalReferenceNumber
+@import viewModels.components.InputTextViewModel._
+@import views.html.components.{Button, ErrorSummary, InputText}
 
 @this(
     mainTemplate: MainTemplate,
@@ -40,7 +41,9 @@
 
         @inputText(
             field = form("value"),
-            label = messages("$package$.$className;format="decap"$.heading"),
+            inputTextType = OrdinaryTextInput(
+                heading = messages("$package$.$className;format="decap"$.heading")
+            ),
             inputClass = InputSize.Width20
         )
 
