@@ -32,11 +32,14 @@ abstract class UserAnswersNavigator[A <: JourneyDomainModel, B <: JourneyDomainM
 
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
     mode match {
-      case NormalMode => nextPage[SubSection](userAnswers, mode)
-      case CheckMode  => nextPage[Section](userAnswers, mode)
+      case NormalMode => UserAnswersNavigator.nextPage[SubSection](userAnswers, mode)
+      case CheckMode  => UserAnswersNavigator.nextPage[Section](userAnswers, mode)
     }
+}
 
-  private def nextPage[T <: JourneyDomainModel](
+object UserAnswersNavigator {
+
+  def nextPage[T <: JourneyDomainModel](
     userAnswers: UserAnswers,
     mode: Mode
   )(implicit userAnswersReader: UserAnswersReader[T]): Call =

@@ -16,11 +16,16 @@
 
 package utils.cyaHelpers
 
-import models.{LocalReferenceNumber, Mode, UserAnswers}
+import models.domain.UserAnswersReader
+import models.journeyDomain.JourneyDomainModel
+import models.{LocalReferenceNumber, Mode, NormalMode, UserAnswers}
+import navigation.UserAnswersNavigator
 import pages.QuestionPage
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
+import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.html.components.{Content, SummaryListRow}
+import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 
 class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends SummaryListRowHelper {
 
@@ -44,4 +49,17 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
       args = args: _*
     )
 
+  protected def getAnswerAndBuildListItem[A, B <: JourneyDomainModel](
+    page: QuestionPage[A],
+    formatAnswer: A => String,
+    removeCall: Call
+  )(implicit rds: Reads[A], userAnswersReader: UserAnswersReader[B]): Option[ListItem] =
+    userAnswers.get(page) map {
+      answer =>
+        ListItem(
+          name = formatAnswer(answer),
+          changeUrl = UserAnswersNavigator.nextPage[B](userAnswers, NormalMode).url,
+          removeUrl = removeCall.url
+        )
+    }
 }
