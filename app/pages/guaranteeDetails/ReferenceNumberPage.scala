@@ -16,14 +16,18 @@
 
 package pages.guaranteeDetails
 
-import models.Index
-import play.api.libs.json.JsPath
+import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.GuaranteeDetailsSection
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
 case class ReferenceNumberPage(index: Index) extends QuestionPage[String] {
 
   override def path: JsPath = GuaranteeDetailsSection.path \ index.position \ toString
 
   override def toString: String = "referenceNumber"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(controllers.guaranteeDetails.routes.ReferenceNumberController.onPageLoad(userAnswers.lrn, mode, index))
 }

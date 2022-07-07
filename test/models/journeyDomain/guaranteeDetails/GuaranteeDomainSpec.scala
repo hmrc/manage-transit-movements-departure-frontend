@@ -30,24 +30,12 @@ import pages.preTaskList.DeclarationTypePage
 
 class GuaranteeDomainSpec extends SpecBase with Generators {
 
-  private val `0,1,2,4,9` = Gen
-    .oneOf(
-      GuaranteeWaiver,
-      ComprehensiveGuarantee,
-      IndividualGuarantee,
-      FlatRateVoucher,
-      IndividualGuaranteeMultiple
-    )
-  private val `3` = Gen.const(CashDepositGuarantee)
-  private val `5` = Gen.const(GuaranteeWaiverSecured)
-  private val `8` = Gen.const(GuaranteeNotRequiredExemptPublicBody)
-
-  private val `A,R` = Gen
-    .oneOf(
-      GuaranteeWaiverByAgreement,
-      GuaranteeNotRequired
-    )
-  private val `B` = Gen.const(TIRGuarantee)
+  private val `0,1,2,4,9` = arbitrary01249GuaranteeType.arbitrary
+  private val `3`         = Gen.const(CashDepositGuarantee)
+  private val `5`         = Gen.const(GuaranteeWaiverSecured)
+  private val `8`         = Gen.const(GuaranteeNotRequiredExemptPublicBody)
+  private val `A,R`       = arbitraryAJRGuaranteeType.arbitrary
+  private val `B`         = Gen.const(TIRGuarantee)
 
   "GuaranteeDomain" - {
 

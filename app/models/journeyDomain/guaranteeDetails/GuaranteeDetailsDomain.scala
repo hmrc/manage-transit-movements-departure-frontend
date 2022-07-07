@@ -20,6 +20,7 @@ import cats.implicits._
 import models.domain.{UserAnswersReader, _}
 import models.journeyDomain.JourneyDomainModel
 import models.{Index, UserAnswers}
+import pages.guaranteeDetails.GuaranteeTypePage
 import pages.sections.GuaranteeDetailsSection
 import play.api.mvc.Call
 
@@ -38,11 +39,13 @@ object GuaranteeDetailsDomain {
       .map(_.value.toList)
       .flatMap {
         case Nil =>
-          GuaranteeDomain.userAnswersReader(Index(0)).map(List(_))
+          UserAnswersReader.fail[GuaranteeDetailsDomain](GuaranteeTypePage(Index(0)))
         case x =>
-          x.zipWithIndex.traverse[UserAnswersReader, GuaranteeDomain] {
-            case (_, index) => GuaranteeDomain.userAnswersReader(Index(index))
-          }
+          x.zipWithIndex
+            .traverse[UserAnswersReader, GuaranteeDomain] {
+              case (_, index) => GuaranteeDomain.userAnswersReader(Index(index))
+            }
+            .map(GuaranteeDetailsDomain.apply)
       }
-      .map(GuaranteeDetailsDomain.apply)
+
 }

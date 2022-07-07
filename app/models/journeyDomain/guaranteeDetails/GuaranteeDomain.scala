@@ -102,7 +102,7 @@ object GuaranteeDomain {
         UserAnswersReader(guaranteeType),
         ReferenceNumberPage(index).reader
       ).mapN {
-        (`type`, grn) => GuaranteeOfTypes01249(`type`, grn, "", "")(index) // TODO - read access code and liability amount once built
+        (`type`, grn) => GuaranteeOfTypes01249(`type`, grn, "", "")(index) // TODO - read access code and liability amount pages once built
       }
   }
 

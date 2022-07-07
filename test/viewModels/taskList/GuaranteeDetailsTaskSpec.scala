@@ -21,7 +21,6 @@ import controllers.guaranteeDetails.{routes => guaranteeDetails}
 import generators.{Generators, GuaranteeDetailsUserAnswersGenerator}
 import models.DeclarationType.Option4
 import models.guaranteeDetails.GuaranteeType
-import models.guaranteeDetails.GuaranteeType.TIRGuarantee
 import models.{DeclarationType, Index, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -101,26 +100,16 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
     "when InProgress" - {
 
-      "and TIR declaration type" ignore {
-        val userAnswers = emptyUserAnswers
-          .setValue(DeclarationTypePage, Option4)
-          .setValue(GuaranteeTypePage(Index(0)), TIRGuarantee)
-
-        val task = GuaranteeDetailsTask(userAnswers)
-        task.status mustBe InProgress
-        task.href.get mustBe ???
-      }
-
-      "and non-TIR declaration type" ignore {
-        forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType), arbitrary[GuaranteeType](arbitraryNonTIRGuaranteeType)) {
+      "and 0,1,2,4,5,9 guarantee type" in {
+        forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType), arbitrary[GuaranteeType](arbitrary012459GuaranteeType)) {
           (declarationType, guaranteeType) =>
             val userAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
-              .setValue(GuaranteeTypePage(Index(0)), guaranteeType)
+              .setValue(GuaranteeTypePage(index), guaranteeType)
 
             val task = GuaranteeDetailsTask(userAnswers)
             task.status mustBe InProgress
-            task.href.get mustBe ???
+            task.href.get mustBe guaranteeDetails.ReferenceNumberController.onPageLoad(userAnswers.lrn, NormalMode, index).url
         }
       }
     }

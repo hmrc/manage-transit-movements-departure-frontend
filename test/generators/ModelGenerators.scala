@@ -20,6 +20,7 @@ import config.Constants.{GB, XI}
 import models.AddressLine.{AddressLine1, AddressLine2, PostalCode}
 import models._
 import models.guaranteeDetails.GuaranteeType
+import models.guaranteeDetails.GuaranteeType._
 import models.reference._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
@@ -32,9 +33,35 @@ trait ModelGenerators {
       Gen.oneOf(models.guaranteeDetails.GuaranteeType.values)
     }
 
-  lazy val arbitraryNonTIRGuaranteeType: Arbitrary[GuaranteeType] =
+  lazy val arbitrary012459GuaranteeType: Arbitrary[GuaranteeType] =
     Arbitrary {
-      Gen.oneOf(GuaranteeType.values.filterNot(_ == GuaranteeType.TIRGuarantee))
+      Gen.oneOf(
+        GuaranteeWaiver,
+        ComprehensiveGuarantee,
+        IndividualGuarantee,
+        FlatRateVoucher,
+        GuaranteeWaiverSecured,
+        IndividualGuaranteeMultiple
+      )
+    }
+
+  lazy val arbitrary01249GuaranteeType: Arbitrary[GuaranteeType] =
+    Arbitrary {
+      Gen.oneOf(
+        GuaranteeWaiver,
+        ComprehensiveGuarantee,
+        IndividualGuarantee,
+        FlatRateVoucher,
+        IndividualGuaranteeMultiple
+      )
+    }
+
+  lazy val arbitraryAJRGuaranteeType: Arbitrary[GuaranteeType] =
+    Arbitrary {
+      Gen.oneOf(
+        GuaranteeWaiverByAgreement,
+        GuaranteeNotRequired
+      )
     }
 
   implicit lazy val arbitraryRepresentativeCapacity: Arbitrary[models.traderDetails.representative.RepresentativeCapacity] =
