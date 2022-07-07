@@ -71,9 +71,9 @@ This has been done through the use of our own component view models, to define h
 
 In the example of a text input, we have 4 distinct use cases:
 
-![Ordinary text input where the heading is a label](Images/OrdinaryTextInput.png) | ![Text input with heading and hidden label](Images/TextInputWithHiddenLabel.png)
+![Ordinary text input where the heading is a label](images/OrdinaryTextInput.png) | ![Text input with heading and hidden label](images/TextInputWithHiddenLabel.png)
 :-------------------------:|:-------------------------:
-![Text input with statement heading and visible label that asks the question](Images/TextInputWithStatementHeading.png) | ![Text input used for address fields](Images/AddressTextInput.png)
+![Text input with statement heading and visible label that asks the question](images/TextInputWithStatementHeading.png) | ![Text input used for address fields](images/AddressTextInput.png)
 
 There is similar logic behind the InputYesNo and InputSelect component view models.
 
