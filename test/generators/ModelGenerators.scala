@@ -16,8 +16,11 @@
 
 package generators
 
+import config.Constants.{GB, XI}
 import models.AddressLine.{AddressLine1, AddressLine2, PostalCode}
 import models._
+import models.guaranteeDetails.GuaranteeType
+import models.guaranteeDetails.GuaranteeType._
 import models.reference._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
@@ -25,9 +28,40 @@ import org.scalacheck.{Arbitrary, Gen}
 trait ModelGenerators {
   self: Generators =>
 
-  implicit lazy val arbitraryGuaranteeType: Arbitrary[models.guaranteeDetails.GuaranteeType] =
+  implicit lazy val arbitraryGuaranteeType: Arbitrary[GuaranteeType] =
     Arbitrary {
-      Gen.oneOf(models.guaranteeDetails.GuaranteeType.values.toSeq)
+      Gen.oneOf(models.guaranteeDetails.GuaranteeType.values)
+    }
+
+  lazy val arbitrary012459GuaranteeType: Arbitrary[GuaranteeType] =
+    Arbitrary {
+      Gen.oneOf(
+        GuaranteeWaiver,
+        ComprehensiveGuarantee,
+        IndividualGuarantee,
+        FlatRateVoucher,
+        GuaranteeWaiverSecured,
+        IndividualGuaranteeMultiple
+      )
+    }
+
+  lazy val arbitrary01249GuaranteeType: Arbitrary[GuaranteeType] =
+    Arbitrary {
+      Gen.oneOf(
+        GuaranteeWaiver,
+        ComprehensiveGuarantee,
+        IndividualGuarantee,
+        FlatRateVoucher,
+        IndividualGuaranteeMultiple
+      )
+    }
+
+  lazy val arbitraryARGuaranteeType: Arbitrary[GuaranteeType] =
+    Arbitrary {
+      Gen.oneOf(
+        GuaranteeWaiverByAgreement,
+        GuaranteeNotRequired
+      )
     }
 
   implicit lazy val arbitraryRepresentativeCapacity: Arbitrary[models.traderDetails.representative.RepresentativeCapacity] =
@@ -62,9 +96,19 @@ trait ModelGenerators {
       Gen.oneOf(DeclarationType.values)
     }
 
+  lazy val arbitraryNonOption4DeclarationType: Arbitrary[DeclarationType] =
+    Arbitrary {
+      Gen.oneOf(DeclarationType.values.filterNot(_ == DeclarationType.Option4))
+    }
+
   implicit lazy val arbitrarySecurityDetailsType: Arbitrary[SecurityDetailsType] =
     Arbitrary {
       Gen.oneOf(SecurityDetailsType.values)
+    }
+
+  lazy val arbitrarySomeSecurityDetailsType: Arbitrary[SecurityDetailsType] =
+    Arbitrary {
+      Gen.oneOf(SecurityDetailsType.values.filterNot(_ == SecurityDetailsType.NoSecurityDetails))
     }
 
   implicit lazy val arbitraryLocalReferenceNumber: Arbitrary[LocalReferenceNumber] =
@@ -89,6 +133,31 @@ trait ModelGenerators {
         countryId   <- arbitrary[CountryCode]
         phoneNumber <- Gen.option(Gen.alphaNumStr)
       } yield CustomsOffice(id, name, countryId, phoneNumber)
+    }
+
+  lazy val arbitraryXiCustomsOffice: Arbitrary[CustomsOffice] =
+    Arbitrary {
+      for {
+        id          <- stringsWithMaxLength(stringMaxLength)
+        name        <- stringsWithMaxLength(stringMaxLength)
+        countryId   <- Gen.const(CountryCode(XI))
+        phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
+      } yield CustomsOffice(id, name, countryId, phoneNumber)
+    }
+
+  lazy val arbitraryGbCustomsOffice: Arbitrary[CustomsOffice] =
+    Arbitrary {
+      for {
+        id          <- stringsWithMaxLength(stringMaxLength)
+        name        <- stringsWithMaxLength(stringMaxLength)
+        countryId   <- Gen.const(CountryCode(GB))
+        phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
+      } yield CustomsOffice(id, name, countryId, phoneNumber)
+    }
+
+  lazy val arbitraryOfficeOfDeparture: Arbitrary[CustomsOffice] =
+    Arbitrary {
+      Gen.oneOf(arbitraryGbCustomsOffice.arbitrary, arbitraryXiCustomsOffice.arbitrary)
     }
 
   implicit lazy val arbitraryCustomsOfficeList: Arbitrary[CustomsOfficeList] =
@@ -116,6 +185,12 @@ trait ModelGenerators {
     for {
       countries <- listWithMaxLength[Country]()
     } yield CountryList(countries)
+  }
+
+  implicit lazy val arbitraryIndex: Arbitrary[Index] = Arbitrary {
+    for {
+      position <- Gen.choose(0: Int, 10: Int)
+    } yield Index(position)
   }
 
 }

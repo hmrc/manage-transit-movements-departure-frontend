@@ -19,6 +19,7 @@ package viewModels.traderDetails
 import base.SpecBase
 import generators.Generators
 import models.traderDetails.representative.RepresentativeCapacity.Direct
+import pages.traderDetails.ActingAsRepresentativePage
 import pages.traderDetails.representative._
 import viewModels.traderDetails.RepresentativeViewModel.RepresentativeSectionViewModel
 

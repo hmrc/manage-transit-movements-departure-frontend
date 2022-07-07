@@ -16,119 +16,103 @@
 
 package utils.cyaHelpers.traderDetails
 
-import controllers.traderDetails.consignment.consignor.contact.{routes => contactRoutes}
-import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
-import controllers.traderDetails.consignment.consignee.{routes => consigneeRoutes}
-import controllers.traderDetails.consignment.{routes => consignmentRoutes}
 import models.{Address, Mode, UserAnswers}
 import pages.traderDetails.consignment._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
 
-class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers) {
+class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages)
+    extends AnswersHelper(userAnswers, mode) {
 
   def approvedOperator: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = ApprovedOperatorPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.consignment.approvedOperator",
-    id = Some("has-reduced-data-set"),
-    call = consignmentRoutes.ApprovedOperatorController.onPageLoad(lrn, mode)
+    id = Some("has-reduced-data-set")
   )
 
   def consignorEoriYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = consignor.EoriYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.consignment.consignor.eoriYesNo",
-    id = Some("has-consignor-eori"),
-    call = consignorRoutes.EoriYesNoController.onPageLoad(lrn, mode)
+    id = Some("has-consignor-eori")
   )
 
   def consignorEori: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignor.EoriPage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.consignment.consignor.eori",
-    id = Some("consignor-eori-number"),
-    call = consignorRoutes.EoriController.onPageLoad(lrn, mode)
+    id = Some("consignor-eori-number")
   )
 
   def consignorName: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignor.NamePage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.consignment.consignor.name",
-    id = Some("consignor-name"),
-    call = consignorRoutes.NameController.onPageLoad(lrn, mode)
+    id = Some("consignor-name")
   )
 
   def consignorAddress: Option[SummaryListRow] = getAnswerAndBuildRow[Address](
     page = consignor.AddressPage,
     formatAnswer = formatAsAddress,
     prefix = "traderDetails.consignment.consignor.address",
-    id = Some("consignor-address"),
-    call = consignorRoutes.AddressController.onPageLoad(lrn, mode)
+    id = Some("consignor-address")
   )
 
   def addConsignorContact: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = consignor.AddContactPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.consignment.consignor.addContact",
-    id = Some("has-consignor-contact"),
-    call = consignorRoutes.AddContactController.onPageLoad(lrn, mode)
+    id = Some("has-consignor-contact")
   )
 
   def consignorContactName: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignor.contact.NamePage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.consignment.consignor.contact.name",
-    id = Some("consignor-contact-name"),
-    call = contactRoutes.NameController.onPageLoad(lrn, mode)
+    id = Some("consignor-contact-name")
   )
 
   def consignorContactTelephoneNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignor.contact.TelephoneNumberPage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.consignment.consignor.contact.telephoneNumber",
-    id = Some("consignor-contact-phone-number"),
-    call = contactRoutes.TelephoneNumberController.onPageLoad(lrn, mode)
+    id = Some("consignor-contact-phone-number")
   )
 
   def moreThanOneConsignee: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
-    page = consignee.MoreThanOneConsigneePage,
+    page = MoreThanOneConsigneePage,
     formatAnswer = formatAsYesOrNo,
-    prefix = "traderDetails.consignment.consignee.moreThanOneConsignee",
-    id = Some("has-more-than-one-consignee"),
-    call = consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(lrn, mode)
+    prefix = "traderDetails.consignment.moreThanOneConsignee",
+    id = Some("has-more-than-one-consignee")
   )
 
   def consigneeEoriYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = consignee.EoriYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.consignment.consignee.eoriYesNo",
-    id = Some("has-consignee-eori"),
-    call = consigneeRoutes.EoriYesNoController.onPageLoad(lrn, mode)
+    id = Some("has-consignee-eori")
   )
 
   def consigneeEori: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignee.EoriNumberPage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.consignment.consignee.eoriNumber",
-    id = Some("consignee-eori-number"),
-    call = consigneeRoutes.EoriNumberController.onPageLoad(lrn, mode)
+    id = Some("consignee-eori-number")
   )
 
   def consigneeName: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignee.NamePage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.consignment.consignee.name",
-    id = Some("consignee-name"),
-    call = consigneeRoutes.NameController.onPageLoad(lrn, mode)
+    id = Some("consignee-name")
   )
 
   def consigneeAddress: Option[SummaryListRow] = getAnswerAndBuildRow[Address](
     page = consignee.AddressPage,
     formatAnswer = formatAsAddress,
     prefix = "traderDetails.consignment.consignee.address",
-    id = Some("consignee-address"),
-    call = consigneeRoutes.AddressController.onPageLoad(lrn, mode)
+    id = Some("consignee-address")
   )
 }

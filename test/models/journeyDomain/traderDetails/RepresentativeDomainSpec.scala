@@ -28,10 +28,10 @@ import pages.traderDetails.representative.{CapacityPage, EoriPage, NamePage, Tel
 
 class RepresentativeDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
-  val eori     = arbitrary[EoriNumber].sample.value
-  val name     = Gen.alphaNumStr.sample.value
-  val capacity = Gen.oneOf(RepresentativeCapacity.values).sample.value
-  val phone    = Gen.alphaNumStr.sample.value
+  private val eori     = arbitrary[EoriNumber].sample.value
+  private val name     = Gen.alphaNumStr.sample.value
+  private val capacity = Gen.oneOf(RepresentativeCapacity.values).sample.value
+  private val phone    = Gen.alphaNumStr.sample.value
 
   "Representative" - {
 
@@ -63,9 +63,6 @@ class RepresentativeDomainSpec extends SpecBase with UserAnswersSpecHelper with 
       "when representative has no eori" in {
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(NamePage)(name)
-          .unsafeSetVal(CapacityPage)(capacity)
-          .unsafeSetVal(TelephoneNumberPage)(phone)
 
         val result: EitherType[RepresentativeDomain] = UserAnswersReader[RepresentativeDomain].run(userAnswers)
 
@@ -75,8 +72,6 @@ class RepresentativeDomainSpec extends SpecBase with UserAnswersSpecHelper with 
       "when representative has no name" in {
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriPage)(eori.value)
-          .unsafeSetVal(CapacityPage)(capacity)
-          .unsafeSetVal(TelephoneNumberPage)(phone)
 
         val result: EitherType[RepresentativeDomain] = UserAnswersReader[RepresentativeDomain].run(userAnswers)
 
@@ -87,7 +82,6 @@ class RepresentativeDomainSpec extends SpecBase with UserAnswersSpecHelper with 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriPage)(eori.value)
           .unsafeSetVal(NamePage)(name)
-          .unsafeSetVal(TelephoneNumberPage)(phone)
 
         val result: EitherType[RepresentativeDomain] = UserAnswersReader[RepresentativeDomain].run(userAnswers)
 

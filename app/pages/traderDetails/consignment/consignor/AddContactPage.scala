@@ -16,10 +16,11 @@
 
 package pages.traderDetails.consignment.consignor
 
-import models.UserAnswers
+import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.{TraderDetailsConsignorContactSection, TraderDetailsConsignorSection}
 import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
 import scala.util.Try
 
@@ -34,4 +35,7 @@ case object AddContactPage extends QuestionPage[Boolean] {
       case Some(false) => userAnswers.remove(TraderDetailsConsignorContactSection)
       case _           => super.cleanup(value, userAnswers)
     }
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(controllers.traderDetails.consignment.consignor.routes.AddContactController.onPageLoad(userAnswers.lrn, mode))
 }

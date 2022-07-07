@@ -34,7 +34,8 @@
     showBackLink = true,
     lrn = Some(lrn)
 ) {
-        @formHelper(action = routes.GuaranteeAddedTIRController.onSubmit(lrn), 'autoComplete -> "off") {
+
+    @formHelper(action = routes.GuaranteeAddedTIRController.onSubmit(lrn), 'autoComplete -> "off") {
 
         @headingWithSectionCaption("guaranteeDetails.guaranteeAddedTIR.heading", "guaranteeDetails.caption")
 

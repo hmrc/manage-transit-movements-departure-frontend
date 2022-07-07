@@ -17,19 +17,27 @@
 package controllers.guaranteeDetails
 
 import controllers.actions._
-import javax.inject.Inject
-import models.LocalReferenceNumber
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
+import models.guaranteeDetails.GuaranteeType.TIRGuarantee
+import models.{Index, LocalReferenceNumber}
+import pages.guaranteeDetails.GuaranteeTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.guaranteeDetails.GuaranteeAddedTIRView
 
+import javax.inject.Inject
+import scala.concurrent.ExecutionContext
+
 class GuaranteeAddedTIRController @Inject() (
   override val messagesApi: MessagesApi,
+  implicit val sessionRepository: SessionRepository,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: GuaranteeAddedTIRView
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
@@ -37,7 +45,11 @@ class GuaranteeAddedTIRController @Inject() (
       Ok(view(lrn))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
-    Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
+  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
+    implicit request =>
+      GuaranteeTypePage(Index(0))
+        .writeToUserAnswers(TIRGuarantee)
+        .writeToSession()
+        .navigateTo(controllers.routes.TaskListController.onPageLoad(lrn)) // TODO - change to summary page once built
   }
 }

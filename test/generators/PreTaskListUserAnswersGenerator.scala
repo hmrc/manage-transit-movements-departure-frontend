@@ -16,32 +16,13 @@
 
 package generators
 
-import models.DeclarationType.Option4
-import models.ProcedureType.Normal
-import models.{DeclarationType, ProcedureType, UserAnswers}
-import org.scalacheck.{Arbitrary, Gen}
-import pages.preTaskList._
-import play.api.libs.json.{JsBoolean, Json}
+import models.UserAnswers
+import models.journeyDomain.PreTaskListDomain
+import org.scalacheck.Gen
 
 trait PreTaskListUserAnswersGenerator extends UserAnswersGenerator {
   self: Generators =>
 
-  lazy val arbitraryPreTaskListAnswersWithTir: Gen[UserAnswers] = arbitraryUserAnswers(
-    arbitraryXiOfficeOfDepartureUserAnswersEntry.arbitrary ::
-      Arbitrary((ProcedureTypePage, Json.toJson[ProcedureType](Normal))).arbitrary ::
-      Arbitrary((DeclarationTypePage, Json.toJson[DeclarationType](Option4))).arbitrary ::
-      arbitraryTIRCarnetReferenceUserAnswersEntry.arbitrary ::
-      arbitraryAddSecurityDetailsUserAnswersEntry.arbitrary ::
-      Arbitrary((DetailsConfirmedPage, JsBoolean(true))).arbitrary ::
-      Nil
-  )
-
-  lazy val arbitraryPreTaskListAnswersWithoutTir: Gen[UserAnswers] = arbitraryUserAnswers(
-    arbitraryGbOfficeOfDepartureUserAnswersEntry.arbitrary ::
-      arbitraryProcedureTypeUserAnswersEntry.arbitrary ::
-      arbitraryNonOption4DeclarationTypeUserAnswersEntry.arbitrary ::
-      arbitraryAddSecurityDetailsUserAnswersEntry.arbitrary ::
-      Arbitrary((DetailsConfirmedPage, JsBoolean(true))).arbitrary ::
-      Nil
-  )
+  def arbitraryPreTaskListAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[PreTaskListDomain](userAnswers)
 }

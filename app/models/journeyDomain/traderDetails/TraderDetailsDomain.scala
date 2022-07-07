@@ -16,27 +16,36 @@
 
 package models.journeyDomain.traderDetails
 
-import models.domain._
 import cats.implicits._
-import pages.traderDetails.representative.ActingAsRepresentativePage
+import models.UserAnswers
+import models.domain._
+import models.journeyDomain.JourneyDomainModel
+import models.journeyDomain.traderDetails.consignment.ConsignmentDomain
+import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain
+import pages.traderDetails.ActingAsRepresentativePage
+import play.api.mvc.Call
 
 case class TraderDetailsDomain(
   holderOfTransit: HolderOfTransitDomain,
   representative: Option[RepresentativeDomain],
   consignment: ConsignmentDomain
-)
+) extends JourneyDomainModel {
+
+  override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
+    Some(controllers.traderDetails.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+}
 
 object TraderDetailsDomain {
 
   implicit val userAnswersParser: UserAnswersReader[TraderDetailsDomain] = {
 
     for {
-      holderOfTransitDomain <- UserAnswersReader[HolderOfTransitDomain]
-      representativeDomain  <- ActingAsRepresentativePage.filterOptionalDependent(identity)(UserAnswersReader[RepresentativeDomain])
-      consignment           <- UserAnswersReader[ConsignmentDomain]
+      holderOfTransit <- UserAnswersReader[HolderOfTransitDomain]
+      representative  <- ActingAsRepresentativePage.filterOptionalDependent(identity)(UserAnswersReader[RepresentativeDomain])
+      consignment     <- UserAnswersReader[ConsignmentDomain]
     } yield TraderDetailsDomain(
-      holderOfTransitDomain,
-      representativeDomain,
+      holderOfTransit,
+      representative,
       consignment
     )
   }

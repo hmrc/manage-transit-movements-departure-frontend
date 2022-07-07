@@ -16,23 +16,10 @@
 
 package navigation.traderDetails
 
-import controllers.traderDetails.{routes => tdRoutes}
-import models._
-import models.domain.UserAnswersReader
 import models.journeyDomain.traderDetails.TraderDetailsDomain
-import navigation.Navigator
-import play.api.mvc.Call
+import navigation.UserAnswersSectionNavigator
 
-abstract class TraderDetailsNavigator[T](implicit userAnswersReader: UserAnswersReader[T]) extends Navigator {
+import javax.inject.{Inject, Singleton}
 
-  override val normalRoutes: RouteMapping =
-    readUserAnswers[T](NormalMode)(checkYourAnswersRoute)
-
-  override val checkRoutes: RouteMapping =
-    readUserAnswers[TraderDetailsDomain](CheckMode)(
-      ua => tdRoutes.CheckYourAnswersController.onPageLoad(ua.lrn)
-    )
-
-  def checkYourAnswersRoute(userAnswers: UserAnswers): Call
-
-}
+@Singleton
+class TraderDetailsNavigator @Inject() () extends UserAnswersSectionNavigator[TraderDetailsDomain]

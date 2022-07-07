@@ -16,14 +16,15 @@
 
 package models.journeyDomain
 
-import cats.data.ReaderT
 import cats.implicits._
+import config.Constants.XI
 import models.DeclarationType.Option4
 import models.ProcedureType.Normal
 import models.domain._
 import models.reference.CustomsOffice
 import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType, UserAnswers}
 import pages.preTaskList._
+import play.api.mvc.Call
 
 case class PreTaskListDomain(
   localReferenceNumber: LocalReferenceNumber,
@@ -33,23 +34,34 @@ case class PreTaskListDomain(
   tirCarnetReference: Option[String],
   securityDetailsType: SecurityDetailsType,
   detailsConfirmed: Boolean
-)
+) extends JourneyDomainModel {
+
+  override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
+    Some(controllers.preTaskList.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+}
 
 object PreTaskListDomain {
 
-  private val localReferenceNumber: UserAnswersReader[LocalReferenceNumber] =
-    ReaderT[EitherType, UserAnswers, LocalReferenceNumber](
-      ua => Right(ua.lrn)
-    )
+  private val localReferenceNumber: UserAnswersReader[LocalReferenceNumber] = {
+    val fn: UserAnswers => EitherType[LocalReferenceNumber] = ua => Right(ua.lrn)
+    UserAnswersReader(fn)
+  }
 
   private val tirCarnetReference: UserAnswersReader[Option[String]] =
-    ProcedureTypePage
-      .filterOptionalDependent(_ == Normal) {
-        DeclarationTypePage.filterOptionalDependent(_ == Option4) {
-          TIRCarnetReferencePage.reader
+    OfficeOfDeparturePage.reader.map(_.countryId.code).flatMap {
+      case XI =>
+        ProcedureTypePage
+          .filterOptionalDependent(_ == Normal) {
+            DeclarationTypePage.filterOptionalDependent(_ == Option4) {
+              TIRCarnetReferencePage.reader
+            }
+          }
+          .map(_.flatten)
+      case _ =>
+        DeclarationTypePage.filterMandatoryDependent(_ != Option4) {
+          none[String].pure[UserAnswersReader]
         }
-      }
-      .map(_.flatten)
+    }
 
   implicit val reader: UserAnswersReader[PreTaskListDomain] =
     (

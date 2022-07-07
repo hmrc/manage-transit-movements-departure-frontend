@@ -17,17 +17,23 @@
 package models.journeyDomain.traderDetails
 
 import cats.implicits._
-import models.EoriNumber
+import models.{EoriNumber, UserAnswers}
 import models.domain._
+import models.journeyDomain.JourneyDomainModel
 import models.traderDetails.representative.RepresentativeCapacity
 import pages.traderDetails.representative._
+import play.api.mvc.Call
 
 case class RepresentativeDomain(
   eori: EoriNumber,
   name: String,
   capacity: RepresentativeCapacity,
   phone: String
-)
+) extends JourneyDomainModel {
+
+  override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
+    Some(controllers.traderDetails.representative.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+}
 
 object RepresentativeDomain {
 

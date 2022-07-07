@@ -22,6 +22,7 @@ class TaskListViewModel {
 
   def apply(userAnswers: UserAnswers): Seq[Task] =
     Seq(
-      TraderDetailsTask(userAnswers)
+      TraderDetailsTask(userAnswers),
+      GuaranteeDetailsTask(userAnswers)
     )
 }

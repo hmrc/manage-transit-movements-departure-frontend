@@ -16,14 +16,18 @@
 
 package pages.traderDetails.holderOfTransit
 
-import models.Address
+import models.{Address, Mode, UserAnswers}
 import play.api.libs.json.JsPath
 import pages.QuestionPage
 import pages.sections.HolderOfTransitSection
+import play.api.mvc.Call
 
 case object AddressPage extends QuestionPage[Address] {
 
   override def path: JsPath = HolderOfTransitSection.path \ toString
 
   override def toString: String = "address"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(controllers.traderDetails.holderOfTransit.routes.AddressController.onPageLoad(userAnswers.lrn, mode))
 }

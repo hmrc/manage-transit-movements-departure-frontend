@@ -137,9 +137,20 @@ task.traderDetails = Trader details
 task.traderDetails.add = Add trader details
 task.traderDetails.edit = Edit trader details
 
+task.guaranteeDetails = Guarantee details
+task.guaranteeDetails.add = Add guarantee details
+task.guaranteeDetails.edit = Edit guarantee details
+
 # Trader details
 
 traderDetails.caption = Trader details
+
+traderDetails.actingRepresentative.title = Are you acting as a representative?
+traderDetails.actingRepresentative.heading = Are you acting as a representative?
+traderDetails.actingRepresentative.checkYourAnswersLabel = Are you acting as a representative?
+traderDetails.actingRepresentative.error.required = Select yes if you are acting as a representative
+traderDetails.actingRepresentative.hint = You are a representative if you are moving the goods for someone else or you are completing the declaration on behalf of a trader.
+traderDetails.actingRepresentative.change.hidden = if you are acting as a representative
 
 traderDetails.checkYourAnswers.heading = Check your answers
 traderDetails.checkYourAnswers.title = Check your answers
@@ -237,13 +248,6 @@ traderDetails.holderOfTransit.checkYourAnswers.additionalContact = Additional co
 
 # Representative
 
-traderDetails.representative.actingRepresentative.title = Are you acting as a representative?
-traderDetails.representative.actingRepresentative.heading = Are you acting as a representative?
-traderDetails.representative.actingRepresentative.checkYourAnswersLabel = Are you acting as a representative?
-traderDetails.representative.actingRepresentative.error.required = Select yes if you are acting as a representative
-traderDetails.representative.actingRepresentative.hint = You are a representative if you are moving the goods for someone else or you are completing the declaration on behalf of a trader.
-traderDetails.representative.actingRepresentative.change.hidden = if you are acting as a representative
-
 traderDetails.representative.eori.title = What is your EORI number?
 traderDetails.representative.eori.heading = What is your EORI number?
 traderDetails.representative.eori.checkYourAnswersLabel = Representative EORI number
@@ -287,6 +291,8 @@ traderDetails.representative.checkYourAnswers.heading = Check your answers
 traderDetails.representative.checkYourAnswers.title = Check your answers
 traderDetails.representative.checkYourAnswers.representative = Representative
 
+# Consignment
+
 traderDetails.consignment.approvedOperator.title = Do you want to use a reduced data set?
 traderDetails.consignment.approvedOperator.heading = Do you want to use a reduced data set?
 traderDetails.consignment.approvedOperator.checkYourAnswersLabel = Do you want to use a reduced data set?
@@ -296,7 +302,8 @@ traderDetails.consignment.approvedOperator.paragraph = You must be an approved a
 traderDetails.consignment.approvedOperator.label = Do you want to use a reduced data set?
 traderDetails.consignment.approvedOperator.change.hidden = if you want to use a reduced data set
 
-# Trader Details - Consignor
+# Consignor
+
 traderDetails.consignment.consignor.eoriYesNo.title = Do you know the consignor’s EORI number?
 traderDetails.consignment.consignor.eoriYesNo.heading = Do you know the consignor’s EORI number?
 traderDetails.consignment.consignor.eoriYesNo.checkYourAnswersLabel = Do you know the consignor’s EORI number?
@@ -340,7 +347,6 @@ traderDetails.consignment.consignor.address.error.required = Enter {0} of {1}’
 traderDetails.consignment.consignor.address.error.length = {0} of {1}’s address must be {2} characters or less
 traderDetails.consignment.consignor.address.placeholder = Select a country
 
-# Trader Details - Consignor - Contact
 traderDetails.consignment.consignor.addContact.title = Do you want to add a contact for the consignor?
 traderDetails.consignment.consignor.addContact.heading = Do you want to add a contact for the consignor?
 traderDetails.consignment.consignor.addContact.checkYourAnswersLabel = Do you want to add a contact for the consignor?
@@ -366,12 +372,13 @@ traderDetails.consignment.consignor.contact.telephoneNumber.error.invalidCharact
 traderDetails.consignment.consignor.contact.telephoneNumber.error.invalidFormat = Enter {0}’s phone number in the right format
 traderDetails.consignment.consignor.contact.telephoneNumber.change.hidden = consignor contact’s phone number
 
-# Trader Details - Consignee
-traderDetails.consignment.consignee.moreThanOneConsignee.title = Is there more than one consignee?
-traderDetails.consignment.consignee.moreThanOneConsignee.heading = Is there more than one consignee?
-traderDetails.consignment.consignee.moreThanOneConsignee.checkYourAnswersLabel = Is there more than one consignee?
-traderDetails.consignment.consignee.moreThanOneConsignee.error.required = Select yes if there is more than one consignee
-traderDetails.consignment.consignee.moreThanOneConsignee.change.hidden = if there is more than one consignee
+# Consignee
+
+traderDetails.consignment.moreThanOneConsignee.title = Is there more than one consignee?
+traderDetails.consignment.moreThanOneConsignee.heading = Is there more than one consignee?
+traderDetails.consignment.moreThanOneConsignee.checkYourAnswersLabel = Is there more than one consignee?
+traderDetails.consignment.moreThanOneConsignee.error.required = Select yes if there is more than one consignee
+traderDetails.consignment.moreThanOneConsignee.change.hidden = if there is more than one consignee
 
 traderDetails.consignment.consignee.eoriYesNo.title = Do you know the consignee’s EORI number?
 traderDetails.consignment.consignee.eoriYesNo.heading = Do you know the consignee’s EORI number?
@@ -417,14 +424,13 @@ traderDetails.consignment.consignee.address.error.country.required = Enter the c
 traderDetails.consignment.consignee.address.error.length = {0} of {1}’s address must be {2} characters or less
 traderDetails.consignment.consignee.address.placeholder = Select a country
 
-# Trader Details - Check Your Answers
 traderDetails.consignment.checkYourAnswers.heading = Check your answers
 traderDetails.consignment.checkYourAnswers.title = Check your answers
 traderDetails.consignment.checkYourAnswers.consignor = Consignor
 traderDetails.consignment.checkYourAnswers.consignorContact = Consignor contact
 traderDetails.consignment.checkYourAnswers.consignee = Consignee
 
-#GuaranteeDetails
+# Guarantee details
 
 guaranteeDetails.caption = Guarantee details
 
@@ -447,7 +453,19 @@ guaranteeDetails.guaranteeType.5 = (5) Guarantee waiver – secured for 500 euro
 guaranteeDetails.guaranteeType.8 = (8) Guarantee not required – exempt public body
 guaranteeDetails.guaranteeType.9 = (9) Individual guarantee with multiple usage
 guaranteeDetails.guaranteeType.A = (A) Guarantee waiver by agreement
+guaranteeDetails.guaranteeType.B = (B) Guarantee for goods dispatched under TIR procedure
 guaranteeDetails.guaranteeType.R = (R) Guarantee not required – goods carried on the Rhine, the Danube or their waterways
 guaranteeDetails.guaranteeType.checkYourAnswersLabel = Type of guarantee
 guaranteeDetails.guaranteeType.change.hidden = type of guarantee
 guaranteeDetails.guaranteeType.error.required = Select which type of guarantee you are using
+
+guaranteeDetails.referenceNumber.title = What is the Guarantee Reference Number (GRN)?
+guaranteeDetails.referenceNumber.heading = What is the Guarantee Reference Number (GRN)?
+guaranteeDetails.referenceNumber.checkYourAnswersLabel = Guarantee Reference Number
+guaranteeDetails.referenceNumber.error.required = Enter the Guarantee Reference Number
+guaranteeDetails.referenceNumber.change.hidden = guarantee reference number
+guaranteeDetails.referenceNumber.paragraph = You must make sure this reference is up to date.
+guaranteeDetails.referenceNumber.hint = This can be up to 24 characters long and include both letters and numbers. For example, 01GB01234567890123A1B2C3.
+guaranteeDetails.referenceNumber.error.length = The Guarantee Reference Number must be 24 characters or less
+guaranteeDetails.referenceNumber.error.invalid = The Guarantee Reference Number must only include the letters a to z and numbers 0 to 9
+guaranteeDetails.referenceNumber.error.format = The Guarantee Reference Number must be in the correct format.

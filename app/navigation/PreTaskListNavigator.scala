@@ -16,35 +16,9 @@
 
 package navigation
 
-import controllers.preTaskList.routes._
-import models._
-import pages.preTaskList._
-import play.api.mvc.Call
+import models.journeyDomain.PreTaskListDomain
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class PreTaskListNavigator @Inject() () extends Navigator {
-
-  override val normalRoutes: RouteMapping = routes(NormalMode)
-
-  override val checkRoutes: RouteMapping = routes(CheckMode)
-
-  override def routes(mode: Mode): RouteMapping = {
-    case LocalReferenceNumberPage => ua => Some(OfficeOfDepartureController.onPageLoad(ua.lrn, mode))
-    case OfficeOfDeparturePage    => ua => Some(ProcedureTypeController.onPageLoad(ua.lrn, mode))
-    case ProcedureTypePage        => ua => Some(DeclarationTypeController.onPageLoad(ua.lrn, mode))
-    case DeclarationTypePage      => ua => declarationTypeRoute(ua, mode)
-    case TIRCarnetReferencePage   => ua => Some(SecurityDetailsTypeController.onPageLoad(ua.lrn, mode))
-    case SecurityDetailsTypePage  => ua => Some(CheckYourAnswersController.onPageLoad(ua.lrn))
-  }
-
-  private def declarationTypeRoute(ua: UserAnswers, mode: Mode): Option[Call] =
-    (ua.get(ProcedureTypePage), ua.get(DeclarationTypePage)) match {
-      case (Some(ProcedureType.Normal), Some(DeclarationType.Option4)) =>
-        Some(TIRCarnetReferenceController.onPageLoad(ua.lrn, mode))
-      case _ =>
-        Some(SecurityDetailsTypeController.onPageLoad(ua.lrn, mode))
-    }
-
-}
+class PreTaskListNavigator @Inject() () extends UserAnswersSectionNavigator[PreTaskListDomain]

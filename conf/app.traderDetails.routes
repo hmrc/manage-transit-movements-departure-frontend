@@ -1,2 +1,7 @@
+GET        /:lrn/trader-details/acting-representative                       controllers.traderDetails.ActingAsRepresentativeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/acting-representative                       controllers.traderDetails.ActingAsRepresentativeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-acting-representative                controllers.traderDetails.ActingAsRepresentativeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-acting-representative                controllers.traderDetails.ActingAsRepresentativeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
 GET        /:lrn/trader-details/check-answers                               controllers.traderDetails.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
 POST       /:lrn/trader-details/check-answers                               controllers.traderDetails.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)

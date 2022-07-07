@@ -17,16 +17,21 @@
 package viewModels.traderDetails
 
 import base.SpecBase
-import generators.{Generators, TraderDetailsUserAnswersGenerator}
+import generators.{Generators, PreTaskListUserAnswersGenerator, TraderDetailsUserAnswersGenerator}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class TraderDetailsViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
+class TraderDetailsViewModelSpec
+    extends SpecBase
+    with ScalaCheckPropertyChecks
+    with Generators
+    with TraderDetailsUserAnswersGenerator
+    with PreTaskListUserAnswersGenerator {
 
   private val viewModel = injector.instanceOf[TraderDetailsViewModel]
 
   "apply" - {
     "must return all sections" in {
-      forAll(arbitraryTraderDetailsAnswers) {
+      forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers)) {
         answers =>
           val sections = viewModel.apply(answers)
 

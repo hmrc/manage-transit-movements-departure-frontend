@@ -391,7 +391,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
 
     "moreThanOneConsignee" - {
       "must return None" - {
-        s"when ${consignee.MoreThanOneConsigneePage} is undefined" in {
+        s"when $MoreThanOneConsigneePage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -402,10 +402,10 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
       }
 
       "must return Some(Row)" - {
-        s"when ${consignee.MoreThanOneConsigneePage} is defined" in {
+        s"when $MoreThanOneConsigneePage is defined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val answers = emptyUserAnswers.setValue(consignee.MoreThanOneConsigneePage, true)
+              val answers = emptyUserAnswers.setValue(MoreThanOneConsigneePage, true)
 
               val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
               val result = helper.moreThanOneConsignee
@@ -419,7 +419,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = consigneeRoutes.MoreThanOneConsigneeController.onPageLoad(answers.lrn, mode).url,
+                          href = consignmentRoutes.MoreThanOneConsigneeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if there is more than one consignee"),
                           attributes = Map("id" -> "has-more-than-one-consignee")
                         )

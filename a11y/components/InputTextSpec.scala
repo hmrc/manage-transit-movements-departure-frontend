@@ -18,7 +18,10 @@ package components
 
 import a11ySpecBase.A11ySpecBase
 import forms.NameFormProvider
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
+import play.twirl.api.Html
+import viewModels.components.InputTextViewModel._
 import views.html.components.InputText
 import views.html.templates.MainTemplate
 
@@ -44,21 +47,82 @@ class InputTextSpec extends A11ySpecBase {
       )
       .sample
       .value
-    val form = new NameFormProvider()(messageKeyPrefix)
+    val additionalHtml = arbitrary[Html].sample.value
+    val form           = new NameFormProvider()(messageKeyPrefix)
 
     "pass accessibility checks" when {
 
-      "label is heading" in {
+      "ordinary text input" in {
         val content = template.apply(title) {
-          component.apply(form("value"), label, labelIsHeading = true, inputClass, hint, prefix, suffix, autocomplete, inputMode, caption, inputType)
+          component.apply(
+            form("value"),
+            OrdinaryTextInput(title, caption),
+            inputClass,
+            hint,
+            prefix,
+            suffix,
+            autocomplete,
+            inputMode,
+            caption,
+            inputType
+          )
         }
         content.toString() must passAccessibilityChecks
       }
 
-      "label isn't heading" in {
+      "text input with hidden label" in {
         val content = template.apply(title) {
           component
-            .apply(form("value"), label, labelIsHeading = false, inputClass, hint, prefix, suffix, autocomplete, inputMode, caption, inputType)
+            .apply(
+              form("value"),
+              TextInputWithHiddenLabel(title, caption, additionalHtml),
+              inputClass,
+              hint,
+              prefix,
+              suffix,
+              autocomplete,
+              inputMode,
+              caption,
+              inputType
+            )
+        }
+        content.toString() must passAccessibilityChecks
+      }
+
+      "text input with statement heading" in {
+        val content = template.apply(title) {
+          component
+            .apply(
+              form("value"),
+              TextInputWithStatementHeading(title, caption, label, additionalHtml),
+              inputClass,
+              hint,
+              prefix,
+              suffix,
+              autocomplete,
+              inputMode,
+              caption,
+              inputType
+            )
+        }
+        content.toString() must passAccessibilityChecks
+      }
+
+      "address text input" in {
+        val content = template.apply(title) {
+          component
+            .apply(
+              form("value"),
+              AddressTextInput(label),
+              inputClass,
+              hint,
+              prefix,
+              suffix,
+              autocomplete,
+              inputMode,
+              caption,
+              inputType
+            )
             .withHeading(title)
         }
         content.toString() must passAccessibilityChecks

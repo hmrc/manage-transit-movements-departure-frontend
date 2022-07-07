@@ -15,7 +15,7 @@
  */
 
 import cats.data.ReaderT
-import models.journeyDomain.{OpsError, WriterError}
+import models.journeyDomain.WriterError
 import models.requests.MandatoryDataRequest
 import models.{Mode, UserAnswers}
 import navigation.Navigator
@@ -30,16 +30,9 @@ import scala.util.{Failure, Success}
 
 package object controllers {
 
-  type EitherType[A]        = Either[OpsError, A]
+  type EitherType[A]        = Either[WriterError, A]
   type UserAnswersWriter[A] = ReaderT[EitherType, UserAnswers, A]
   type Write[A]             = (QuestionPage[A], UserAnswers)
-
-  object UserAnswersReader {
-    def apply[A: UserAnswersWriter]: UserAnswersWriter[A] = implicitly[UserAnswersWriter[A]]
-
-    def apply(fn: UserAnswers => EitherType[UserAnswers]): UserAnswersWriter[UserAnswers] =
-      ReaderT[EitherType, UserAnswers, UserAnswers](fn)
-  }
 
   implicit class SettableOps[A](page: QuestionPage[A]) {
 

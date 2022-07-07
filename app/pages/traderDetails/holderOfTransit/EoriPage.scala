@@ -16,13 +16,18 @@
 
 package pages.traderDetails.holderOfTransit
 
+import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.HolderOfTransitSection
 import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
 case object EoriPage extends QuestionPage[String] {
 
   override def path: JsPath = HolderOfTransitSection.path \ toString
 
   override def toString: String = "eori"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(controllers.traderDetails.holderOfTransit.routes.EoriController.onPageLoad(userAnswers.lrn, mode))
 }

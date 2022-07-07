@@ -24,6 +24,7 @@ import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.traderDetails.ActingAsRepresentativePage
 import pages.traderDetails.representative._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
@@ -64,7 +65,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.ActingAsRepresentativeController.onPageLoad(answers.lrn, mode).url,
+                          href = controllers.traderDetails.routes.ActingAsRepresentativeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you are acting as a representative"),
                           attributes = Map("id" -> "has-acting-representative")
                         )

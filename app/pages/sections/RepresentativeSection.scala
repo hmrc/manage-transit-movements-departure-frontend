@@ -16,10 +16,9 @@
 
 package pages.sections
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import play.api.libs.json.{JsObject, JsPath}
 
-case object RepresentativeSection extends QuestionPage[Nothing] {
+case object RepresentativeSection extends Section[JsObject] {
 
   override def path: JsPath = TraderDetailsSection.path \ toString
 

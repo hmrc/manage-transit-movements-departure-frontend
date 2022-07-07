@@ -17,10 +17,11 @@
 package pages.preTaskList
 
 import models.DeclarationType.Option4
-import models.{DeclarationType, UserAnswers}
+import models.{DeclarationType, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.PreTaskListSection
 import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
 import scala.util.Try
 
@@ -35,4 +36,7 @@ case object DeclarationTypePage extends QuestionPage[DeclarationType] {
       case Some(option) if option != Option4 => userAnswers.remove(TIRCarnetReferencePage)
       case _                                 => super.cleanup(value, userAnswers)
     }
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(controllers.preTaskList.routes.DeclarationTypeController.onPageLoad(userAnswers.lrn, mode))
 }

@@ -16,15 +16,24 @@
 
 package pages.guaranteeDetails
 
-import models.Index
+import models.DeclarationType.Option4
 import models.guaranteeDetails.GuaranteeType
+import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
+import pages.preTaskList.DeclarationTypePage
 import pages.sections.GuaranteeDetailsSection
 import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
 case class GuaranteeTypePage(index: Index) extends QuestionPage[GuaranteeType] {
 
   override def path: JsPath = GuaranteeDetailsSection.path \ index.position \ toString
 
   override def toString: String = "guaranteeType"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    userAnswers.get(DeclarationTypePage) map {
+      case Option4 => controllers.guaranteeDetails.routes.GuaranteeAddedTIRController.onPageLoad(userAnswers.lrn)
+      case _       => controllers.guaranteeDetails.routes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, mode, index)
+    }
 }

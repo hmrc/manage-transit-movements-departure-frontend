@@ -20,8 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.guaranteeDetails.GuaranteeTypeFormProvider
 import models.guaranteeDetails.GuaranteeType
 import models.{NormalMode, UserAnswers}
-import navigation.Navigator
-import navigation.annotations.GuaranteeDetails
+import navigation.GuaranteeNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.guaranteeDetails.GuaranteeTypePage
@@ -43,13 +42,14 @@ class GuaranteeTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[GuaranteeDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[GuaranteeNavigatorProvider]).toInstance(fakeGuaranteeNavigatorProvider))
 
   "GuaranteeType Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers
+      setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, guaranteeTypeRoute)
 
@@ -60,7 +60,7 @@ class GuaranteeTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, GuaranteeType.radioItems, mode, index)(request, messages).toString
+        view(form, lrn, GuaranteeType.radioItemsU(userAnswers), mode, index)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
@@ -79,7 +79,7 @@ class GuaranteeTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, GuaranteeType.radioItems, mode, index)(request, messages).toString
+        view(filledForm, lrn, GuaranteeType.radioItemsU(userAnswers), mode, index)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {

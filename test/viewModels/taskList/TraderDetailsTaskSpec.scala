@@ -17,7 +17,6 @@
 package viewModels.taskList
 
 import base.SpecBase
-import controllers.routes
 import controllers.traderDetails.holderOfTransit.{routes => holderOfTransitRoutes}
 import controllers.traderDetails.{routes => traderDetailsRoutes}
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
@@ -73,7 +72,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
   }
 
   "id" - {
-    "must be general-information" in {
+    "must be trader-details" in {
       val task = TraderDetailsTask(emptyUserAnswers)
       task.id mustBe "trader-details"
     }
@@ -81,12 +80,6 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
   "apply" - {
     "when NotStarted" - {
-      "and declaration type undefined" in {
-        val task = TraderDetailsTask(emptyUserAnswers)
-        task.status mustBe NotStarted
-        task.href.get mustBe routes.SessionExpiredController.onPageLoad().url
-      }
-
       "and TIR declaration type" in {
         val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
         val task        = TraderDetailsTask(userAnswers)
@@ -95,7 +88,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
       }
 
       "and non-TIR declaration type" in {
-        forAll(arbitrary[DeclarationType].suchThat(_ != Option4)) {
+        forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)) {
           declarationType =>
             val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
             val task        = TraderDetailsTask(userAnswers)
@@ -114,11 +107,11 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
         val task = TraderDetailsTask(userAnswers)
         task.status mustBe InProgress
-        task.href.get mustBe holderOfTransitRoutes.TirIdentificationYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
+        task.href.get mustBe holderOfTransitRoutes.TirIdentificationController.onPageLoad(userAnswers.lrn, NormalMode).url
       }
 
       "and non-TIR declaration type" in {
-        forAll(arbitrary[DeclarationType].suchThat(_ != Option4)) {
+        forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)) {
           declarationType =>
             val userAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
@@ -126,14 +119,14 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
             val task = TraderDetailsTask(userAnswers)
             task.status mustBe InProgress
-            task.href.get mustBe holderOfTransitRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
+            task.href.get mustBe holderOfTransitRoutes.EoriController.onPageLoad(userAnswers.lrn, NormalMode).url
         }
       }
     }
 
     "when Completed" - {
       "when valid journey is completed" in {
-        forAll(arbitraryTraderDetailsAnswers) {
+        forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers)) {
           userAnswers =>
             val task = TraderDetailsTask(userAnswers)
             task.status mustBe Completed

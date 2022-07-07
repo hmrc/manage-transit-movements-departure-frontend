@@ -16,53 +16,48 @@
 
 package utils.cyaHelpers.traderDetails
 
-import controllers.traderDetails.representative.routes._
 import models.traderDetails.representative.RepresentativeCapacity
 import models.{Mode, UserAnswers}
+import pages.traderDetails.ActingAsRepresentativePage
 import pages.traderDetails.representative._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
 
-class RepresentativeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers) {
+class RepresentativeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
   def actingAsRepresentative: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = ActingAsRepresentativePage,
     formatAnswer = formatAsYesOrNo,
-    prefix = "traderDetails.representative.actingRepresentative",
-    id = Some("has-acting-representative"),
-    call = ActingAsRepresentativeController.onPageLoad(lrn, mode)
+    prefix = "traderDetails.actingRepresentative",
+    id = Some("has-acting-representative")
   )
 
   def eori: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = EoriPage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.representative.eori",
-    id = Some("representative-eori-number"),
-    call = EoriController.onPageLoad(lrn, mode)
+    id = Some("representative-eori-number")
   )
 
   def name: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = NamePage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.representative.name",
-    id = Some("representative-name"),
-    call = NameController.onPageLoad(lrn, mode)
+    id = Some("representative-name")
   )
 
   def capacity: Option[SummaryListRow] = getAnswerAndBuildRow[RepresentativeCapacity](
     page = CapacityPage,
     formatAnswer = formatAsEnum(RepresentativeCapacity.messageKeyPrefix),
     prefix = "traderDetails.representative.capacity",
-    id = Some("representative-capacity"),
-    call = CapacityController.onPageLoad(lrn, mode)
+    id = Some("representative-capacity")
   )
 
   def phoneNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = TelephoneNumberPage,
     formatAnswer = formatAsLiteral,
     prefix = "traderDetails.representative.telephoneNumber",
-    id = Some("representative-phone-number"),
-    call = TelephoneNumberController.onPageLoad(lrn, mode)
+    id = Some("representative-phone-number")
   )
 }

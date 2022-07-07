@@ -85,7 +85,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.traderDetails.representative.routes.ActingAsRepresentativeController.onPageLoad(lrn, NormalMode).url
+      redirectLocation(result).value mustEqual controllers.traderDetails.routes.ActingAsRepresentativeController.onPageLoad(lrn, NormalMode).url
 
     }
   }

@@ -16,37 +16,10 @@
 
 package navigation.traderDetails
 
-import controllers.traderDetails.representative.{routes => repRoutes}
-import models._
-import models.journeyDomain.traderDetails.RepresentativeDomain
-import pages.preTaskList.DeclarationTypePage
-import pages.traderDetails.representative._
-import play.api.mvc.Call
+import models.journeyDomain.traderDetails.{RepresentativeDomain, TraderDetailsDomain}
+import navigation.UserAnswersNavigator
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RepresentativeNavigator @Inject() () extends TraderDetailsNavigator[RepresentativeDomain] {
-
-  override def routes(mode: Mode): RouteMapping = {
-    case ActingAsRepresentativePage => ua => actingRepresentativeRoute(ua, mode)
-    case EoriPage                   => ua => Some(repRoutes.NameController.onPageLoad(ua.lrn, mode))
-    case NamePage                   => ua => Some(repRoutes.CapacityController.onPageLoad(ua.lrn, mode))
-    case CapacityPage               => ua => Some(repRoutes.TelephoneNumberController.onPageLoad(ua.lrn, mode))
-    case TelephoneNumberPage        => ua => Some(checkYourAnswersRoute(ua))
-  }
-
-  override def checkYourAnswersRoute(userAnswers: UserAnswers): Call =
-    repRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn)
-
-  private def actingRepresentativeRoute(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    yesNoRoute(userAnswers, ActingAsRepresentativePage)(
-      yesCall = repRoutes.EoriController.onPageLoad(userAnswers.lrn, mode)
-    )(noCall = declarationTypeRoute(userAnswers, mode))
-
-  private def declarationTypeRoute(ua: UserAnswers, mode: Mode): Call =
-    ua.get(DeclarationTypePage) match {
-      case Some(DeclarationType.Option4) => controllers.traderDetails.consignment.consignor.routes.EoriYesNoController.onPageLoad(ua.lrn, mode)
-      case _                             => controllers.traderDetails.consignment.routes.ApprovedOperatorController.onPageLoad(ua.lrn, mode)
-    }
-}
+class RepresentativeNavigator @Inject() () extends UserAnswersNavigator[RepresentativeDomain, TraderDetailsDomain]

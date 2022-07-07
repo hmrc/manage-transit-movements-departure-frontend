@@ -16,16 +16,10 @@
 
 package viewModels.taskList
 
-import cats.implicits._
-import controllers.routes
-import controllers.traderDetails.holderOfTransit.{routes => holderOfTransitRoutes}
-import controllers.traderDetails.{routes => traderDetailsRoutes}
-import models.DeclarationType.Option4
-import models.domain._
+import models.UserAnswers
 import models.journeyDomain.traderDetails._
-import models.{NormalMode, UserAnswers}
-import pages.preTaskList.DeclarationTypePage
-import pages.traderDetails.holderOfTransit.{EoriYesNoPage, TirIdentificationYesNoPage}
+import pages.sections.TraderDetailsSection
+import play.api.libs.json.JsObject
 
 case class TraderDetailsTask(status: TaskStatus, href: Option[String]) extends Task {
   override val id: String         = "trader-details"
@@ -35,24 +29,9 @@ case class TraderDetailsTask(status: TaskStatus, href: Option[String]) extends T
 object TraderDetailsTask {
 
   def apply(userAnswers: UserAnswers): TraderDetailsTask = {
+    val (status, href) = new TaskProvider(userAnswers).noDependencyOnOtherTask
+      .readUserAnswers[TraderDetailsDomain, JsObject](TraderDetailsSection)
 
-    lazy val firstPageInJourney = userAnswers.get(DeclarationTypePage) match {
-      case Some(Option4) => holderOfTransitRoutes.TirIdentificationYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
-      case Some(_)       => holderOfTransitRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
-      case None          => routes.SessionExpiredController.onPageLoad().url
-    }
-
-    new TaskProvider(userAnswers).noDependencyOnOtherTask
-      .ifCompleted(
-        readerIfCompleted = UserAnswersReader[TraderDetailsDomain],
-        urlIfCompleted = traderDetailsRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url
-      )
-      .ifInProgressOrNotStarted(
-        readerIfInProgress = EoriYesNoPage.reader.orElse(TirIdentificationYesNoPage.reader),
-        urlIfInProgressOrNotStarted = firstPageInJourney
-      )
-      .apply {
-        new TraderDetailsTask(_, _)
-      }
+    new TraderDetailsTask(status, href)
   }
 }

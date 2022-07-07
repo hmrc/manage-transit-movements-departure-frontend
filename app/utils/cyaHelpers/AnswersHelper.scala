@@ -16,16 +16,18 @@
 
 package utils.cyaHelpers
 
-import models.{LocalReferenceNumber, UserAnswers}
+import models.domain.UserAnswersReader
+import models.journeyDomain.JourneyDomainModel
+import models.{LocalReferenceNumber, Mode, NormalMode, UserAnswers}
+import navigation.UserAnswersNavigator
 import pages.QuestionPage
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import play.api.mvc.Call
-import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{Content, SummaryListRow}
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 
-class AnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) extends SummaryListRowHelper {
+class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends SummaryListRowHelper {
 
   protected def lrn: LocalReferenceNumber = userAnswers.lrn
 
@@ -34,73 +36,30 @@ class AnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) exten
     formatAnswer: T => Content,
     prefix: String,
     id: Option[String],
-    call: Call,
     args: Any*
   )(implicit rds: Reads[T]): Option[SummaryListRow] =
-    userAnswers.get(page) map {
-      answer =>
-        buildRow(
-          prefix = prefix,
-          answer = formatAnswer(answer),
-          id = id,
-          call = call,
-          args = args: _*
-        )
-    }
+    for {
+      answer <- userAnswers.get(page)
+      call   <- page.route(userAnswers, mode)
+    } yield buildRow(
+      prefix = prefix,
+      answer = formatAnswer(answer),
+      id = id,
+      call = call,
+      args = args: _*
+    )
 
-  protected def getAnswerAndBuildNamedRow[T](
-    namePage: QuestionPage[String],
-    answerPage: QuestionPage[T],
-    formatAnswer: T => Content,
-    prefix: String,
-    id: Option[String],
-    call: Call
-  )(implicit rds: Reads[T]): Option[SummaryListRow] =
-    userAnswers.get(namePage) flatMap {
-      name =>
-        getAnswerAndBuildRow[T](
-          page = answerPage,
-          formatAnswer = formatAnswer,
-          prefix = prefix,
-          id = id,
-          call = call,
-          args = name
-        )
-    }
-
-  protected def getAnswerAndBuildSectionRow[T](
-    page: QuestionPage[T],
-    formatAnswer: T => String,
-    prefix: String,
-    label: Content,
-    id: Option[String],
-    call: Call
-  )(implicit rds: Reads[T]): Option[SummaryListRow] =
-    userAnswers.get(page) map {
-      answer =>
-        buildSimpleRow(
-          prefix = prefix,
-          label = label,
-          answer = s"${formatAnswer(answer)}".toText,
-          id = id,
-          call = call,
-          args = formatAnswer(answer)
-        )
-    }
-
-  protected def getAnswerAndBuildListItem[T](
-    page: QuestionPage[T],
-    formatAnswer: T => String,
-    changeCall: Call,
+  protected def getAnswerAndBuildListItem[A, B <: JourneyDomainModel](
+    page: QuestionPage[A],
+    formatAnswer: A => String,
     removeCall: Call
-  )(implicit rds: Reads[T]): Option[ListItem] =
+  )(implicit rds: Reads[A], userAnswersReader: UserAnswersReader[B]): Option[ListItem] =
     userAnswers.get(page) map {
       answer =>
         ListItem(
           name = formatAnswer(answer),
-          changeUrl = changeCall.url,
+          changeUrl = UserAnswersNavigator.nextPage[B](userAnswers, NormalMode).url,
           removeUrl = removeCall.url
         )
     }
-
 }

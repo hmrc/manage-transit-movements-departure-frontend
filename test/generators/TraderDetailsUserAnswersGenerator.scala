@@ -17,72 +17,30 @@
 package generators
 
 import models.UserAnswers
+import models.journeyDomain.traderDetails._
+import models.journeyDomain.traderDetails.consignment.{ConsignmentConsigneeDomain, ConsignmentConsignorDomain, ConsignmentDomain}
+import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain
 import org.scalacheck.Gen
 
-trait TraderDetailsUserAnswersGenerator
-    extends HolderOfTransitUserAnswersGenerator
-    with RepresentativeUserAnswersGenerator
-    with TraderDetailsConsignmentAnswersGenerator {
+trait TraderDetailsUserAnswersGenerator extends UserAnswersGenerator {
   self: Generators =>
 
-  lazy val arbitraryTraderDetailsAnswers: Gen[UserAnswers] = combineUserAnswers(
-    arbitraryHolderOfTransitAnswers,
-    arbitraryRepresentativeAnswers,
-    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
-  )
+  def arbitraryTraderDetailsAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[TraderDetailsDomain](userAnswers)
 
-  lazy val arbitraryTraderDetailsAnswersWithHolderOfTransitWithEori: Gen[UserAnswers] = combineUserAnswers(
-    arbitraryHolderOfTransitAnswersWithEori,
-    arbitraryRepresentativeAnswers,
-    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
-  )
+  def arbitraryHolderOfTransitAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[HolderOfTransitDomain](userAnswers)
 
-  lazy val arbitraryTraderDetailsAnswersWithHolderOfTransitWithoutEori: Gen[UserAnswers] = combineUserAnswers(
-    arbitraryHolderOfTransitAnswersWithoutEori,
-    arbitraryRepresentativeAnswers,
-    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
-  )
+  def arbitraryRepresentativeAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[RepresentativeDomain](userAnswers)
 
-  lazy val arbitraryTraderDetailsAnswersWithHolderOfTransitWithTirId: Gen[UserAnswers] = combineUserAnswers(
-    arbitraryHolderOfTransitAnswersWithTirId,
-    arbitraryRepresentativeAnswers,
-    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
-  )
+  def arbitraryConsignmentAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[ConsignmentDomain](userAnswers)
 
-  lazy val arbitraryTraderDetailsAnswersWithHolderOfTransitWithoutTirId: Gen[UserAnswers] = combineUserAnswers(
-    arbitraryHolderOfTransitAnswersWithoutTirId,
-    arbitraryRepresentativeAnswers,
-    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
-  )
+  def arbitraryConsignorAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[ConsignmentConsignorDomain](userAnswers)
 
-  lazy val arbitraryTraderDetailsAnswersWithHolderOfTransitWithAdditionalContact: Gen[UserAnswers] = combineUserAnswers(
-    arbitraryHolderOfTransitAnswersWithAdditionalContact,
-    arbitraryRepresentativeAnswers,
-    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
-  )
-
-  lazy val arbitraryTraderDetailsAnswersWithHolderOfTransitWithoutAdditionalContact: Gen[UserAnswers] = combineUserAnswers(
-    arbitraryHolderOfTransitAnswersWithoutAdditionalContact,
-    arbitraryRepresentativeAnswers,
-    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
-  )
-
-  lazy val arbitraryTraderDetailsAnswersWithRepresentative: Gen[UserAnswers] = combineUserAnswers(
-    arbitraryHolderOfTransitAnswers,
-    arbitraryRepresentativeAnswersActingAsRepresentative,
-    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
-  )
-
-  lazy val arbitraryTraderDetailsAnswersWithoutRepresentative: Gen[UserAnswers] = combineUserAnswers(
-    arbitraryHolderOfTransitAnswers,
-    arbitraryRepresentativeAnswersNotActingAsRepresentative,
-    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
-  )
-
-  lazy val arbitraryTraderDetailsWithConsignorAndConsigneeAnswers: Gen[UserAnswers] = combineUserAnswers(
-    arbitraryHolderOfTransitAnswers,
-    arbitraryRepresentativeAnswers,
-    arbitraryTraderDetailsConsignmentAnswersWithConsignorAndConsignee
-  )
+  def arbitraryConsigneeAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[ConsignmentConsigneeDomain](userAnswers)
 
 }

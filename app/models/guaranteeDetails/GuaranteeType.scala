@@ -44,6 +44,8 @@ object GuaranteeType extends RadioModelU[GuaranteeType] {
 
   case object GuaranteeWaiverByAgreement extends WithName("A") with GuaranteeType
 
+  case object TIRGuarantee extends WithName("B") with GuaranteeType
+
   case object GuaranteeNotRequired extends WithName("R") with GuaranteeType
 
   val values: Seq[GuaranteeType] = Seq(
@@ -56,12 +58,15 @@ object GuaranteeType extends RadioModelU[GuaranteeType] {
     GuaranteeNotRequiredExemptPublicBody,
     IndividualGuaranteeMultiple,
     GuaranteeWaiverByAgreement,
+    TIRGuarantee,
     GuaranteeNotRequired
   )
 
-  override def valuesU(userAnswers: UserAnswers): Seq[GuaranteeType] =
+  override def valuesU(userAnswers: UserAnswers): Seq[GuaranteeType] = {
+    val valuesExcludingTIRGuarantee = values.filterNot(_ == TIRGuarantee)
     userAnswers.get(OfficeOfDeparturePage).map(_.countryId.code) match {
-      case Some(XI) => values.filterNot(_ == IndividualGuaranteeMultiple)
-      case _        => values
+      case Some(XI) => valuesExcludingTIRGuarantee.filterNot(_ == IndividualGuaranteeMultiple)
+      case _        => valuesExcludingTIRGuarantee
     }
+  }
 }
