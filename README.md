@@ -54,7 +54,7 @@ Then you create the address page referencing the Name Page
 </pre>
 
 ### Creating an InputSelect Page in Scaffold
-This requires that you already have a Service class with a method that will return a list of the reference object that you reqire
+This requires that you already have a Service class with a method that will return a list of the reference object that you require
 That object must also extend Selectable.
 
 For the test an arbitrary constructor of the Selectable object will be required, or you can manually create these objects
@@ -64,6 +64,22 @@ For the test an arbitrary constructor of the Selectable object will be required,
 -> referenceClass = CustomsOffice
 ...
 </pre>
+
+### Component view models
+In certain cases, we want to limit the number of ways in which the govuk design components are being used so that we can ensure the pages being built are accessible.
+This has been done through the use of our own component view models, to define how a heading, caption, and label will be rendered relative to an input.
+
+In the example of a text input, we have 4 distinct use cases:
+
+![Ordinary text input where the heading is a label](Images/OrdinaryTextInput.png) | ![Text input with heading and hidden label](Images/TextInputWithHiddenLabel.png)
+:-------------------------:|:-------------------------:
+![Text input with statement heading and visible label that asks the question](Images/TextInputWithStatementHeading.png) | ![Text input used for address fields](Images/AddressTextInput.png)
+
+There is similar logic behind the InputYesNo and InputSelect component view models.
+
+### Accessibility testing
+The accessibility of our templates and components can be checked by running `sbt a11y:test`
+
 ### License
 
 This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
