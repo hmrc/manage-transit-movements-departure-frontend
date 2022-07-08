@@ -128,14 +128,16 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
       "when 8 guarantee type" in {
         val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
         val guaranteeType   = `8`.sample.value
+        val otherReference  = Gen.alphaNumStr.sample.value
 
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, declarationType)
           .setValue(GuaranteeTypePage(index), guaranteeType)
+          .setValue(OtherReferencePage(index), otherReference)
 
         val expectedResult = GuaranteeOfType8(
           `type` = guaranteeType,
-          otherReference = ""
+          otherReference = otherReference
         )(index)
 
         val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
@@ -195,6 +197,19 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
           val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
 
           result.left.value.page mustBe GuaranteeTypePage(index)
+        }
+
+        "when 8 guarantee type" in {
+          val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+          val guaranteeType   = `8`.sample.value
+
+          val userAnswers = emptyUserAnswers
+            .setValue(DeclarationTypePage, declarationType)
+            .setValue(GuaranteeTypePage(index), guaranteeType)
+
+          val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
+
+          result.left.value.page mustBe OtherReferencePage(index)
         }
       }
     }

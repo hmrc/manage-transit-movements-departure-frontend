@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package forms
+package pages.guaranteeDetails
 
-object Constants {
-  lazy val tirCarnetReferenceMaxLength = 12
-  lazy val maxEoriNumberLength: Int    = 17
-  lazy val minEoriNumberLength: Int    = 14
-  lazy val maxNameLength: Int          = 70
-  lazy val maxTelephoneNumberLength    = 35
-  lazy val minTelephoneNumberLength    = 6
-  lazy val maxRefNumberLength          = 24
-  lazy val maxOtherRefLength           = 35
+import models.{Index, Mode, UserAnswers}
+import pages.QuestionPage
+import pages.sections.GuaranteeDetailsSection
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
+
+case class OtherReferencePage(index: Index) extends QuestionPage[String] {
+
+  override def path: JsPath = GuaranteeDetailsSection.path \ index.position \ toString
+
+  override def toString: String = "otherReference"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(controllers.guaranteeDetails.routes.OtherReferenceController.onPageLoad(userAnswers.lrn, mode, index))
 }
