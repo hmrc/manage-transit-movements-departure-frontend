@@ -487,6 +487,9 @@ guaranteeDetails.otherReference.paragraph = You must make sure this reference is
 guaranteeDetails.otherReference.checkYourAnswersLabel = Reference for the guarantee
 guaranteeDetails.otherReference.hidden = reference for the guarantee
 
+guaranteeDetails.removeGuaranteeYesNo.title = Are you sure you want to remove this guarantee?
+guaranteeDetails.removeGuaranteeYesNo.heading = Are you sure you want to remove this guarantee?
+guaranteeDetails.removeGuaranteeYesNo.error.required = Select yes if you want to remove this guarantee
 
 guaranteeDetails.addAnotherGuarantee.singular.title = You have added {0} guarantee
 guaranteeDetails.addAnotherGuarantee.singular.heading = You have added {0} guarantee
