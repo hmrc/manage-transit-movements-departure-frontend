@@ -11,3 +11,8 @@ GET        /:lrn/guarantee-details/:index/guarantee-reference-number            
 POST       /:lrn/guarantee-details/:index/guarantee-reference-number                controllers.guaranteeDetails.ReferenceNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode, index: Index)
 GET        /:lrn/guarantee-details/:index/change-guarantee-reference-number         controllers.guaranteeDetails.ReferenceNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
 POST       /:lrn/guarantee-details/:index/change-guarantee-reference-number         controllers.guaranteeDetails.ReferenceNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
+
+GET        /:lrn/guaranteeDetails/:index/other-reference                            controllers.guaranteeDetails.OtherReferenceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode, index: Index)
+POST       /:lrn/guaranteeDetails/:index/other-reference                            controllers.guaranteeDetails.OtherReferenceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode, index: Index)
+GET        /:lrn/guaranteeDetails/:index/change-other-reference                     controllers.guaranteeDetails.OtherReferenceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
+POST       /:lrn/guaranteeDetails/:index/change-other-reference                     controllers.guaranteeDetails.OtherReferenceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
