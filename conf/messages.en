@@ -485,7 +485,13 @@ guaranteeDetails.otherReference.option8.error.invalid = The reference must only 
 guaranteeDetails.otherReference.hint = This can be up to 35 characters long and include both letters and numbers.
 guaranteeDetails.otherReference.paragraph = You must make sure this reference is up to date.
 guaranteeDetails.otherReference.checkYourAnswersLabel = Reference for the guarantee
-guaranteeDetails.otherReference.hidden = reference for the guarantee
+guaranteeDetails.otherReference.change.hidden = reference for the guarantee
+
+guaranteeDetails.otherReferenceYesNo.title = Do you want to add a reference for the guarantee?
+guaranteeDetails.otherReferenceYesNo.heading = Do you want to add a reference for the guarantee?
+guaranteeDetails.otherReferenceYesNo.checkYourAnswersLabel = Reference for the guarantee
+guaranteeDetails.otherReferenceYesNo.error.required = Select yes if you want to add a reference for the guarantee
+guaranteeDetails.otherReferenceYesNo.change.hidden = reference for the guarantee
 
 guaranteeDetails.removeGuaranteeYesNo.title = Are you sure you want to remove this guarantee?
 guaranteeDetails.removeGuaranteeYesNo.heading = Are you sure you want to remove this guarantee?

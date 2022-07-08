@@ -148,8 +148,11 @@ object GuaranteeDomain {
   object GuaranteeOfType3 {
 
     def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
-      UserAnswersReader(guaranteeType).map {
-        `type` => GuaranteeOfType3(`type`, None)(index) // TODO - read other ref. pages once built
+      (
+        UserAnswersReader(guaranteeType),
+        OtherReferenceYesNoPage(index).filterOptionalDependent(identity)(OtherReferencePage(index).reader)
+      ).mapN {
+        (`type`, otherReferenceYesNo) => GuaranteeOfType3(`type`, otherReferenceYesNo)(index)
       }
   }
 }
