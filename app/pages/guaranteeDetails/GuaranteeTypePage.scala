@@ -21,13 +21,13 @@ import models.guaranteeDetails.GuaranteeType
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.preTaskList.DeclarationTypePage
-import pages.sections.GuaranteeDetailsSection
+import pages.sections.GuaranteeSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case class GuaranteeTypePage(index: Index) extends QuestionPage[GuaranteeType] {
 
-  override def path: JsPath = GuaranteeDetailsSection.path \ index.position \ toString
+  override def path: JsPath = GuaranteeSection(index).path \ toString
 
   override def toString: String = "guaranteeType"
 

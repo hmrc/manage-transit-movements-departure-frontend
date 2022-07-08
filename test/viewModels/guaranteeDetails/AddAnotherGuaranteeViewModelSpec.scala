@@ -41,12 +41,12 @@ class AddAnotherGuaranteeViewModelSpec extends SpecBase with Generators {
       ListItem(
         name = "(R) Guarantee not required – goods carried on the Rhine, the Danube or their waterways",
         changeUrl = "#",
-        removeUrl = "#"
+        removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, Index(0)).url
       ),
       ListItem(
         name = "(0) Guarantee waiver",
         changeUrl = gdRoutes.ReferenceNumberController.onPageLoad(userAnswers.lrn, NormalMode, Index(1)).url,
-        removeUrl = "#"
+        removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, Index(1)).url
       )
     )
   }

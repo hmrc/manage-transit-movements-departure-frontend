@@ -62,7 +62,26 @@ class AddAnotherGuaranteeControllerSpec
   private val listItems         = Seq.fill(Gen.choose(1: Int, 8: Int).sample.value)(listItem)
   private val maxedOutListItems = Seq.fill(9: Int)(listItem)
 
-  "AddEvent Controller" - {
+  "AddAnotherGuaranteeController" - {
+
+    "redirect to add guarantee yes/no page" - {
+      "when 0 guarantees" in {
+        when(mockViewModelProvider.apply(any())(any()))
+          .thenReturn(AddAnotherGuaranteeViewModel(Nil))
+
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(GET, addAnotherGuaranteeRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.AddGuaranteeYesNoController.onPageLoad(lrn).url
+      }
+    }
 
     "must return OK and the correct view for a GET" - {
       "when max limit not reached" in {

@@ -16,6 +16,7 @@
 
 package utils.cyaHelpers
 
+import controllers.guaranteeDetails.{routes => gdRoutes}
 import models.guaranteeDetails.GuaranteeType
 import models.journeyDomain.guaranteeDetails.GuaranteeDomain
 import models.{Index, Mode, UserAnswers}
@@ -23,7 +24,6 @@ import pages.guaranteeDetails.GuaranteeTypePage
 import pages.sections.GuaranteeDetailsSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
-import play.api.mvc.Call
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 
 class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
@@ -36,7 +36,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mod
           page = GuaranteeTypePage(Index(position)),
           getName = _.`type`,
           formatName = formatEnumAsString(GuaranteeType.messageKeyPrefix),
-          removeRoute = Call("GET", "#") // TODO - update when remove page built
+          removeRoute = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, index)
         )(GuaranteeDomain.userAnswersReader(index), implicitly[Reads[GuaranteeType]])
     }
 }

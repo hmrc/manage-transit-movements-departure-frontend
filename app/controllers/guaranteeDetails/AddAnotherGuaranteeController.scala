@@ -47,8 +47,11 @@ class AddAnotherGuaranteeController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val (guarantees, _, allowMoreGuarantees) = viewData
-      Ok(view(form(allowMoreGuarantees), lrn, guarantees, allowMoreGuarantees))
+      val (guarantees, numberOfGuarantees, allowMoreGuarantees) = viewData
+      numberOfGuarantees match {
+        case 0 => Redirect(routes.AddGuaranteeYesNoController.onPageLoad(lrn))
+        case _ => Ok(view(form(allowMoreGuarantees), lrn, guarantees, allowMoreGuarantees))
+      }
   }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {

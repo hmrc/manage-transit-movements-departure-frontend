@@ -14,20 +14,12 @@
  * limitations under the License.
  */
 
-package pages.guaranteeDetails
+package pages.sections
 
-import models.{Index, Mode, UserAnswers}
-import pages.QuestionPage
-import pages.sections.GuaranteeSection
-import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import models.Index
+import play.api.libs.json.{JsObject, JsPath}
 
-case class ReferenceNumberPage(index: Index) extends QuestionPage[String] {
+case class GuaranteeSection(index: Index) extends Section[JsObject] {
 
-  override def path: JsPath = GuaranteeSection(index).path \ toString
-
-  override def toString: String = "referenceNumber"
-
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(controllers.guaranteeDetails.routes.ReferenceNumberController.onPageLoad(userAnswers.lrn, mode, index))
+  override def path: JsPath = GuaranteeDetailsSection.path \ index.position
 }

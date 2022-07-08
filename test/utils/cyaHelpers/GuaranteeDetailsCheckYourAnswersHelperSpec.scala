@@ -50,7 +50,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with Generator
           ListItem(
             name = "(A) Guarantee waiver by agreement",
             changeUrl = "#",
-            removeUrl = "#"
+            removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(0)).url
           )
         )
       )
@@ -71,14 +71,14 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with Generator
           ListItem(
             name = "(R) Guarantee not required – goods carried on the Rhine, the Danube or their waterways",
             changeUrl = "#",
-            removeUrl = "#"
+            removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(0)).url
           )
         ),
         Left(
           ListItem(
             name = "(0) Guarantee waiver",
             changeUrl = gdRoutes.ReferenceNumberController.onPageLoad(userAnswers.lrn, NormalMode, Index(1)).url,
-            removeUrl = "#"
+            removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(1)).url
           )
         )
       )
