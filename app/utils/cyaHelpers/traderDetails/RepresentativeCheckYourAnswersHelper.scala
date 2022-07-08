@@ -49,7 +49,7 @@ class RepresentativeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)
 
   def capacity: Option[SummaryListRow] = getAnswerAndBuildRow[RepresentativeCapacity](
     page = CapacityPage,
-    formatAnswer = formatAsEnum(RepresentativeCapacity.messageKeyPrefix),
+    formatAnswer = formatEnumAsText(RepresentativeCapacity.messageKeyPrefix),
     prefix = "traderDetails.representative.capacity",
     id = Some("representative-capacity")
   )

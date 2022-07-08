@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewModels
+package viewModels.preTaskList
 
 import base.SpecBase
 import models.reference.{CountryCode, CustomsOffice}
