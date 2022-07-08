@@ -16,7 +16,7 @@
 
 package forms
 
-import forms.Constants.maxRefNumberLength
+import forms.Constants.maxOtherRefLength
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.alphaNumericRegex
 import play.api.data.Form
@@ -30,7 +30,7 @@ class OtherReferenceFormProvider @Inject() extends Mappings {
       "value" -> textWithSpacesRemoved(s"$prefix.error.required")
         .verifying(
           StopOnFirstFail[String](
-            maxLength(maxRefNumberLength, s"$prefix.error.length"),
+            maxLength(maxOtherRefLength, s"$prefix.error.length"),
             regexp(alphaNumericRegex, s"$prefix.error.invalid")
           )
         )

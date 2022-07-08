@@ -16,7 +16,9 @@
 
 package forms
 
+import forms.Constants.maxRefNumberLength
 import forms.behaviours.StringFieldBehaviours
+import models.domain.StringFieldRegex.alphaNumericRegex
 import org.scalacheck.Gen
 import play.api.data.FormError
 
@@ -25,6 +27,7 @@ class OtherReferenceFormProviderSpec extends StringFieldBehaviours {
   private val prefix = Gen.alphaNumStr.sample.value
   val requiredKey    = s"$prefix.error.required"
   val lengthKey      = s"$prefix.error.length"
+  val invalidKey     = s"$prefix.error.invalid"
   val maxLength      = 35
 
   val form = new OtherReferenceFormProvider()(prefix)
@@ -51,5 +54,18 @@ class OtherReferenceFormProviderSpec extends StringFieldBehaviours {
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
+    behave like fieldWithInvalidCharacters(
+      form,
+      fieldName,
+      error = FormError(fieldName, invalidKey, Seq(alphaNumericRegex.regex)),
+      maxRefNumberLength
+    )
+
+    "must remove spaces on bound strings" in {
+      val result = form.bind(Map(fieldName -> "  01  GB1  234  567890120A  123456  "))
+      result.errors mustEqual Nil
+      result.get mustEqual "01GB1234567890120A123456"
+    }
   }
 }

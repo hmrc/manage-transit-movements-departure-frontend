@@ -27,7 +27,13 @@ import org.scalacheck.{Arbitrary, Gen}
 
 class OtherReferenceViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "guaranteeDetails.otherReference"
+  override val prefix: String = Gen
+    .oneOf(
+      "guaranteeDetails.otherReference.option3",
+      "guaranteeDetails.otherReference.option8"
+    )
+    .sample
+    .value
 
   override def form: Form[String] = new OtherReferenceFormProvider()(prefix)
 
@@ -42,7 +48,9 @@ class OtherReferenceViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithHeading()
 
-  behave like pageWithoutHint
+  behave like pageWithContent("p", "You must make sure this reference is up to date.")
+
+  behave like pageWithHint("This can be up to 35 characters long and include both letters and numbers.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 
