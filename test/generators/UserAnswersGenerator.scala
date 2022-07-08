@@ -18,7 +18,7 @@ package generators
 
 import models.domain.UserAnswersReader
 import models.journeyDomain.ReaderError
-import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
+import models.{RichJsObject, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
@@ -52,28 +52,20 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
     )
   }
 
-  protected def combineUserAnswers(gens: Gen[UserAnswers]*): Gen[UserAnswers] = {
-    import scala.collection.convert.ImplicitConversions._
-
-    for {
-      id         <- arbitrary[LocalReferenceNumber]
-      eoriNumber <- arbitrary[EoriNumber]
-      data       <- Gen.sequence(gens).map(_.toList)
-    } yield data.foldLeft(UserAnswers(id, eoriNumber)) {
-      (acc, ua) =>
-        acc.copy(data = acc.data.deepMerge(ua.data))
-    }
-  }
-
   protected def buildUserAnswers[T](initialUserAnswers: UserAnswers)(implicit userAnswersReader: UserAnswersReader[T]): Gen[UserAnswers] = {
 
     def rec(userAnswers: UserAnswers): Gen[UserAnswers] =
       UserAnswersReader[T].run(userAnswers) match {
         case Left(ReaderError(page, _)) =>
-          combineUserAnswers(
-            Gen.const(userAnswers),
-            arbitraryUserAnswers(generateAnswer.apply(page))
-          ).flatMap(rec)
+          generateAnswer
+            .apply(page)
+            .map {
+              value =>
+                userAnswers.copy(
+                  data = userAnswers.data.setObject(page.path, value).getOrElse(userAnswers.data)
+                )
+            }
+            .flatMap(rec)
         case Right(_) => Gen.const(userAnswers)
       }
 

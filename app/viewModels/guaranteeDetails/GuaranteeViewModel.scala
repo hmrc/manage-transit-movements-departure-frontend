@@ -38,6 +38,7 @@ object GuaranteeViewModel {
       val rows = Seq(
         helper.guaranteeType,
         helper.guaranteeReferenceNumber,
+        helper.otherReferenceYesNo,
         helper.otherReference
       ).flatten
 
