@@ -62,7 +62,7 @@ class AddAnotherGuaranteeControllerSpec
   private val listItems         = Seq.fill(Gen.choose(1: Int, 8: Int).sample.value)(listItem)
   private val maxedOutListItems = Seq.fill(9: Int)(listItem)
 
-  "AddEvent Controller" - {
+  "AddAnotherGuaranteeController" - {
 
     "must return OK and the correct view for a GET" - {
       "when max limit not reached" in {

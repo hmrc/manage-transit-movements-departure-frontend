@@ -42,7 +42,7 @@ class RemoveGuaranteeYesNoControllerSpec
   private val form                           = formProvider("guaranteeDetails.removeGuaranteeYesNo")
   private lazy val removeGuaranteeYesNoRoute = routes.RemoveGuaranteeYesNoController.onPageLoad(lrn, index).url
 
-  "EoriYesNo Controller" - {
+  "RemoveGuaranteeYesNoController" - {
 
     "must return OK and the correct view for a GET" in {
       setExistingUserAnswers(emptyUserAnswers)

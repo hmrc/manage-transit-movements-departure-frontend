@@ -22,3 +22,6 @@ POST       /:lrn/guarantee-details/:index/confirm-remove-guarantee              
 
 GET        /:lrn/guarantee-details/add-another-guarantee                            controllers.guaranteeDetails.AddAnotherGuaranteeController.onPageLoad(lrn: LocalReferenceNumber)
 POST       /:lrn/guarantee-details/add-another-guarantee                            controllers.guaranteeDetails.AddAnotherGuaranteeController.onSubmit(lrn: LocalReferenceNumber)
+
+GET        /:lrn/guarantee-details/add-guarantee                                    controllers.guaranteeDetails.AddGuaranteeYesNoController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/guarantee-details/add-guarantee                                    controllers.guaranteeDetails.AddGuaranteeYesNoController.onSubmit(lrn: LocalReferenceNumber)
