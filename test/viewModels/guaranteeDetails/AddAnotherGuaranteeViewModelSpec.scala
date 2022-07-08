@@ -40,7 +40,7 @@ class AddAnotherGuaranteeViewModelSpec extends SpecBase with Generators {
     result.listItems mustBe Seq(
       ListItem(
         name = "(R) Guarantee not required – goods carried on the Rhine, the Danube or their waterways",
-        changeUrl = "#",
+        changeUrl = gdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, Index(0)).url,
         removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, Index(0)).url
       ),
       ListItem(
