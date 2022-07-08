@@ -487,15 +487,15 @@ guaranteeDetails.otherReference.paragraph = You must make sure this reference is
 guaranteeDetails.otherReference.checkYourAnswersLabel = Reference for the guarantee
 guaranteeDetails.otherReference.change.hidden = reference for the guarantee
 
+guaranteeDetails.otherReferenceYesNo.title = Do you want to add a reference for the guarantee?
+guaranteeDetails.otherReferenceYesNo.heading = Do you want to add a reference for the guarantee?
+guaranteeDetails.otherReferenceYesNo.checkYourAnswersLabel = Reference for the guarantee
+guaranteeDetails.otherReferenceYesNo.error.required = Select yes if you want to add a reference for the guarantee
+guaranteeDetails.otherReferenceYesNo.change.hidden = reference for the guarantee
+
 guaranteeDetails.removeGuaranteeYesNo.title = Are you sure you want to remove this guarantee?
 guaranteeDetails.removeGuaranteeYesNo.heading = Are you sure you want to remove this guarantee?
 guaranteeDetails.removeGuaranteeYesNo.error.required = Select yes if you want to remove this guarantee
-
-guaranteeDetails.otherReferenceCashDeposit.title = Do you want to add a reference for the guarantee?
-guaranteeDetails.otherReferenceCashDeposit.heading = Do you want to add a reference for the guarantee?
-guaranteeDetails.otherReferenceCashDeposit.checkYourAnswersLabel = Reference for the guarantee
-guaranteeDetails.otherReferenceCashDeposit.error.required = Select yes if you want to add a reference for the guarantee
-guaranteeDetails.otherReferenceCashDeposit.change.hidden = reference for the guarantee
 
 guaranteeDetails.addAnotherGuarantee.singular.title = You have added {0} guarantee
 guaranteeDetails.addAnotherGuarantee.singular.heading = You have added {0} guarantee

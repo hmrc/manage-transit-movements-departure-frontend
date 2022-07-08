@@ -23,37 +23,37 @@ import navigation.GuaranteeNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.guaranteeDetails.OtherReferenceCashDepositPage
+import pages.guaranteeDetails.OtherReferenceYesNoPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.guaranteeDetails.OtherReferenceCashDepositView
+import views.html.guaranteeDetails.OtherReferenceYesNoView
 
 import scala.concurrent.Future
 
-class OtherReferenceCashDepositControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
+class OtherReferenceYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
-  private val formProvider                        = new YesNoFormProvider()
-  private val form                                = formProvider("guaranteeDetails.otherReferenceCashDeposit")
-  private val mode                                = NormalMode
-  private lazy val otherReferenceCashDepositRoute = routes.OtherReferenceCashDepositController.onPageLoad(lrn, mode, index).url
+  private val formProvider                  = new YesNoFormProvider()
+  private val form                          = formProvider("guaranteeDetails.otherReferenceYesNo")
+  private val mode                          = NormalMode
+  private lazy val otherReferenceYesNoRoute = routes.OtherReferenceYesNoController.onPageLoad(lrn, mode, index).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[GuaranteeNavigatorProvider]).toInstance(fakeGuaranteeNavigatorProvider))
 
-  "OtherReferenceCashDeposit Controller" - {
+  "OtherReferenceYesNo Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, otherReferenceCashDepositRoute)
+      val request = FakeRequest(GET, otherReferenceYesNoRoute)
       val result  = route(app, request).value
 
-      val view = injector.instanceOf[OtherReferenceCashDepositView]
+      val view = injector.instanceOf[OtherReferenceYesNoView]
 
       status(result) mustEqual OK
 
@@ -64,16 +64,16 @@ class OtherReferenceCashDepositControllerSpec extends SpecBase with AppWithDefau
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(OtherReferenceCashDepositPage(index), true).success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(OtherReferenceYesNoPage(index), true).success.value
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, otherReferenceCashDepositRoute)
+      val request = FakeRequest(GET, otherReferenceYesNoRoute)
 
       val result = route(app, request).value
 
       val filledForm = form.bind(Map("value" -> "true"))
 
-      val view = injector.instanceOf[OtherReferenceCashDepositView]
+      val view = injector.instanceOf[OtherReferenceYesNoView]
 
       status(result) mustEqual OK
 
@@ -89,7 +89,7 @@ class OtherReferenceCashDepositControllerSpec extends SpecBase with AppWithDefau
       setExistingUserAnswers(emptyUserAnswers)
 
       val request =
-        FakeRequest(POST, otherReferenceCashDepositRoute)
+        FakeRequest(POST, otherReferenceYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
@@ -104,14 +104,14 @@ class OtherReferenceCashDepositControllerSpec extends SpecBase with AppWithDefau
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, otherReferenceCashDepositRoute).withFormUrlEncodedBody(("value", ""))
+      val request   = FakeRequest(POST, otherReferenceYesNoRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[OtherReferenceCashDepositView]
+      val view = injector.instanceOf[OtherReferenceYesNoView]
 
       contentAsString(result) mustEqual
         view(boundForm, lrn, mode, index)(request, messages).toString
@@ -122,7 +122,7 @@ class OtherReferenceCashDepositControllerSpec extends SpecBase with AppWithDefau
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, otherReferenceCashDepositRoute)
+      val request = FakeRequest(GET, otherReferenceYesNoRoute)
 
       val result = route(app, request).value
 
@@ -137,7 +137,7 @@ class OtherReferenceCashDepositControllerSpec extends SpecBase with AppWithDefau
       setNoExistingUserAnswers()
 
       val request =
-        FakeRequest(POST, otherReferenceCashDepositRoute)
+        FakeRequest(POST, otherReferenceYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value

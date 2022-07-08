@@ -21,33 +21,33 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.{GuaranteeNavigator, GuaranteeNavigatorProvider}
-import pages.guaranteeDetails.OtherReferenceCashDepositPage
+import pages.guaranteeDetails.OtherReferenceYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.guaranteeDetails.OtherReferenceCashDepositView
+import views.html.guaranteeDetails.OtherReferenceYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class OtherReferenceCashDepositController @Inject() (
+class OtherReferenceYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: GuaranteeNavigatorProvider,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: OtherReferenceCashDepositView
+  view: OtherReferenceYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("guaranteeDetails.otherReferenceCashDeposit")
+  private val form = formProvider("guaranteeDetails.otherReferenceYesNo")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(OtherReferenceCashDepositPage(index)) match {
+      val preparedForm = request.userAnswers.get(OtherReferenceYesNoPage(index)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -63,7 +63,7 @@ class OtherReferenceCashDepositController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index))),
           value => {
             implicit val navigator: GuaranteeNavigator = navigatorProvider(index)
-            OtherReferenceCashDepositPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+            OtherReferenceYesNoPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
           }
         )
   }

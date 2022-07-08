@@ -16,18 +16,16 @@
 
 package pages.guaranteeDetails
 
-import models.{Index, Mode, UserAnswers}
-import pages.QuestionPage
-import pages.sections.GuaranteeDetailsSection
-import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import pages.behaviours.PageBehaviours
 
-case class OtherReferenceCashDepositPage(index: Index) extends QuestionPage[Boolean] {
+class OtherReferenceYesNoPageSpec extends PageBehaviours {
 
-  override def path: JsPath = GuaranteeDetailsSection.path \ index.position \ toString
+  "OtherReferenceYesNoPage" - {
 
-  override def toString: String = "otherReferenceCashDeposit"
+    beRetrievable[Boolean](OtherReferenceYesNoPage(index))
 
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(controllers.guaranteeDetails.routes.OtherReferenceCashDepositController.onPageLoad(userAnswers.lrn, mode, index))
+    beSettable[Boolean](OtherReferenceYesNoPage(index))
+
+    beRemovable[Boolean](OtherReferenceYesNoPage(index))
+  }
 }

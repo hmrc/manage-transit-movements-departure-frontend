@@ -30,19 +30,19 @@
 @(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, index: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("guaranteeDetails.otherReferenceCashDeposit.title"),
+    title = messages("guaranteeDetails.otherReferenceYesNo.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.OtherReferenceCashDepositController.onSubmit(lrn, mode, index), 'autoComplete -> "off") {
+    @formHelper(action = routes.OtherReferenceYesNoController.onSubmit(lrn, mode, index), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputYesNo(
             field = form("value"),
             yesNoType = OrdinaryYesNo(
-                heading = messages("guaranteeDetails.otherReferenceCashDeposit.heading"),
+                heading = messages("guaranteeDetails.otherReferenceYesNo.heading"),
                 caption = Some(messages("guaranteeDetails.caption"))
             )
         )

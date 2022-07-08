@@ -157,7 +157,7 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
           val userAnswers = emptyUserAnswers
             .setValue(DeclarationTypePage, declarationType)
             .setValue(GuaranteeTypePage(index), guaranteeType)
-            .setValue(OtherReferenceCashDepositPage(index), true)
+            .setValue(OtherReferenceYesNoPage(index), true)
             .setValue(OtherReferencePage(index), otherReference)
 
           val expectedResult = GuaranteeOfType3(
@@ -177,7 +177,7 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
           val userAnswers = emptyUserAnswers
             .setValue(DeclarationTypePage, declarationType)
             .setValue(GuaranteeTypePage(index), guaranteeType)
-            .setValue(OtherReferenceCashDepositPage(index), false)
+            .setValue(OtherReferenceYesNoPage(index), false)
 
           val expectedResult = GuaranteeOfType3(
             `type` = guaranteeType,
@@ -250,7 +250,7 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
 
             val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
 
-            result.left.value.page mustBe OtherReferenceCashDepositPage(index)
+            result.left.value.page mustBe OtherReferenceYesNoPage(index)
           }
 
           "when otherReferenceYesNoPage is true and otherReference is unanswered" in {
@@ -258,7 +258,7 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
             val userAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
               .setValue(GuaranteeTypePage(index), guaranteeType)
-              .setValue(OtherReferenceCashDepositPage(index), true)
+              .setValue(OtherReferenceYesNoPage(index), true)
 
             val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
 

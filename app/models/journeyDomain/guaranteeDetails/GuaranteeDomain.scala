@@ -150,9 +150,9 @@ object GuaranteeDomain {
     def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
       (
         UserAnswersReader(guaranteeType),
-        OtherReferenceCashDepositPage(index).filterOptionalDependent(identity)(OtherReferencePage(index).reader)
+        OtherReferenceYesNoPage(index).filterOptionalDependent(identity)(OtherReferencePage(index).reader)
       ).mapN {
-        (`type`, otherReferenceCashDeposit) => GuaranteeOfType3(`type`, otherReferenceCashDeposit)(index)
+        (`type`, otherReferenceYesNo) => GuaranteeOfType3(`type`, otherReferenceYesNo)(index)
       }
   }
 }

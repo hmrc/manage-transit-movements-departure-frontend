@@ -20,14 +20,14 @@ import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.guaranteeDetails.OtherReferenceCashDepositView
+import views.html.guaranteeDetails.OtherReferenceYesNoView
 
-class OtherReferenceCashDepositViewSpec extends YesNoViewBehaviours {
+class OtherReferenceYesNoViewSpec extends YesNoViewBehaviours {
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[OtherReferenceCashDepositView].apply(form, lrn, NormalMode, index)(fakeRequest, messages)
+    injector.instanceOf[OtherReferenceYesNoView].apply(form, lrn, NormalMode, index)(fakeRequest, messages)
 
-  override val prefix: String = "guaranteeDetails.otherReferenceCashDeposit"
+  override val prefix: String = "guaranteeDetails.otherReferenceYesNo"
 
   behave like pageWithTitle()
 
