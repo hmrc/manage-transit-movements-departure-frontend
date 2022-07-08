@@ -64,6 +64,25 @@ class AddAnotherGuaranteeControllerSpec
 
   "AddAnotherGuaranteeController" - {
 
+    "redirect to add guarantee yes/no page" - {
+      "when 0 guarantees" in {
+        when(mockViewModelProvider.apply(any())(any()))
+          .thenReturn(AddAnotherGuaranteeViewModel(Nil))
+
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(GET, addAnotherGuaranteeRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.AddGuaranteeYesNoController.onPageLoad(lrn).url
+      }
+    }
+
     "must return OK and the correct view for a GET" - {
       "when max limit not reached" in {
 
