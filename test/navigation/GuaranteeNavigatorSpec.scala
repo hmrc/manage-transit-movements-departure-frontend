@@ -55,12 +55,12 @@ class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with
       val mode = CheckMode
 
       "when answers complete" - {
-        "must redirect to check your answers" ignore {
+        "must redirect to check your answers" in {
           forAll(arbitraryGuaranteeAnswers(emptyUserAnswers, index), pageGen) {
             (answers, page) =>
               navigator
                 .nextPage(page, mode, answers)
-                .mustBe(???)
+                .mustBe(gdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn, index))
           }
         }
       }

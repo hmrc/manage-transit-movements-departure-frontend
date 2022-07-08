@@ -18,9 +18,12 @@ package controllers.guaranteeDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
+import models.DeclarationType
+import models.DeclarationType.Option4
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
+import pages.preTaskList.DeclarationTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -75,18 +78,37 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
-    "must redirect to add another guarantee" in {
-      setExistingUserAnswers(emptyUserAnswers)
+    "when TIR declaration type" - {
+      "must redirect to task list" in {
+        setExistingUserAnswers(emptyUserAnswers.setValue(DeclarationTypePage, Option4))
 
-      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-      val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn, index).url)
+        val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn, index).url)
 
-      val result = route(app, request).value
+        val result = route(app, request).value
 
-      status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.AddAnotherGuaranteeController.onPageLoad(lrn).url
+        redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
+      }
+    }
+
+    "when non-TIR declaration type" - {
+      "must redirect to add another guarantee" in {
+        val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+        setExistingUserAnswers(emptyUserAnswers.setValue(DeclarationTypePage, declarationType))
+
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+        val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn, index).url)
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual routes.AddAnotherGuaranteeController.onPageLoad(lrn).url
+      }
     }
   }
 }

@@ -17,8 +17,10 @@
 package controllers.guaranteeDetails
 
 import com.google.inject.Inject
-import controllers.actions.Actions
+import controllers.actions.{Actions, SpecificDataRequiredActionProvider}
+import models.DeclarationType.Option4
 import models.{Index, LocalReferenceNumber}
+import pages.preTaskList.DeclarationTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -28,6 +30,7 @@ import views.html.guaranteeDetails.CheckYourAnswersView
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
   viewModelProvider: GuaranteeViewModelProvider
@@ -40,7 +43,13 @@ class CheckYourAnswersController @Inject() (
       Ok(view(lrn, index, Seq(section)))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions.requireData(lrn) {
-    _ => Redirect(routes.AddAnotherGuaranteeController.onPageLoad(lrn))
-  }
+  def onSubmit(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(DeclarationTypePage)) {
+      implicit request =>
+        request.arg match {
+          case Option4 => Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
+          case _       => Redirect(routes.AddAnotherGuaranteeController.onPageLoad(lrn))
+        }
+    }
 }

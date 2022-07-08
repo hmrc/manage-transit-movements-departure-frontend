@@ -30,13 +30,13 @@
 @(lrn: LocalReferenceNumber, index: Index, sections: Seq[Section])(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("guaranteeDetails.guarantee.checkYourAnswers.title"),
+    title = messages("guaranteeDetails.checkYourAnswers.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
     @heading(
-        headingKey = "guaranteeDetails.guarantee.checkYourAnswers.heading",
+        headingKey = "guaranteeDetails.checkYourAnswers.heading",
         captionKey = "guaranteeDetails.caption"
     )
 

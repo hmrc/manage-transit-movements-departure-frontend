@@ -508,5 +508,5 @@ guaranteeDetails.addGuaranteeYesNo.title = Do you want to add a guarantee?
 guaranteeDetails.addGuaranteeYesNo.heading = Do you want to add a guarantee?
 guaranteeDetails.addGuaranteeYesNo.error.required = Select yes if you want to add a guarantee
 
-guaranteeDetails.guarantee.checkYourAnswers.title = Check your answers
-guaranteeDetails.guarantee.checkYourAnswers.heading = Check your answers
+guaranteeDetails.checkYourAnswers.title = Check your answers
+guaranteeDetails.checkYourAnswers.heading = Check your answers
