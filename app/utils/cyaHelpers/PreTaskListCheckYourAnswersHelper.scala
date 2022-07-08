@@ -41,14 +41,14 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
 
   def procedureType: Option[SummaryListRow] = getAnswerAndBuildRow[ProcedureType](
     page = ProcedureTypePage,
-    formatAnswer = formatAsEnum(ProcedureType.messageKeyPrefix),
+    formatAnswer = formatEnumAsText(ProcedureType.messageKeyPrefix),
     prefix = "procedureType",
     id = None
   )
 
   def declarationType: Option[SummaryListRow] = getAnswerAndBuildRow[DeclarationType](
     page = DeclarationTypePage,
-    formatAnswer = formatAsEnum(DeclarationType.messageKeyPrefix),
+    formatAnswer = formatEnumAsText(DeclarationType.messageKeyPrefix),
     prefix = "declarationType",
     id = None
   )
@@ -62,7 +62,7 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
 
   def securityType: Option[SummaryListRow] = getAnswerAndBuildRow[SecurityDetailsType](
     page = SecurityDetailsTypePage,
-    formatAnswer = formatAsEnum(SecurityDetailsType.messageKeyPrefix),
+    formatAnswer = formatEnumAsText(SecurityDetailsType.messageKeyPrefix),
     prefix = "securityDetailsType",
     id = None
   )

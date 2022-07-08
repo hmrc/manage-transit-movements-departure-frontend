@@ -52,10 +52,10 @@ object ViewUtils {
         case None        => radios.withHeading(Text(heading))
       }
 
-    def withLegend(label: String, legendIsVisible: Boolean = true): Radios = {
+    def withLegend(legend: String, legendIsVisible: Boolean = true): Radios = {
       val legendClass = if (legendIsVisible) "govuk-fieldset__legend--m" else "govuk-visually-hidden"
       radios.copy(
-        fieldset = Some(Fieldset(legend = Some(Legend(content = Text(label), classes = legendClass, isPageHeading = false))))
+        fieldset = Some(Fieldset(legend = Some(Legend(content = Text(legend), classes = legendClass, isPageHeading = false))))
       )
     }
   }

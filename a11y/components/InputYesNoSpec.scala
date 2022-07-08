@@ -22,7 +22,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Content
-import viewModels.components.InputYesNoViewModel.{OrdinaryYesNo, YesNoWithAdditionalHtml}
+import viewModels.components.InputYesNoViewModel.{OrdinaryYesNo, YesNoWithAdditionalHtml, YesNoWithLegend}
 import views.html.components.InputYesNo
 import views.html.templates.MainTemplate
 
@@ -34,6 +34,7 @@ class InputYesNoSpec extends A11ySpecBase {
 
     val prefix         = Gen.alphaNumStr.sample.value
     val title          = nonEmptyString.sample.value
+    val legend         = nonEmptyString.sample.value
     val caption        = Gen.option(nonEmptyString).sample.value
     val hint           = Gen.option(arbitrary[Content]).sample.value
     val additionalHtml = arbitrary[Html].sample.value
@@ -50,7 +51,14 @@ class InputYesNoSpec extends A11ySpecBase {
 
       "yes/no with additional html" in {
         val content = template.apply(title) {
-          component.apply(form("value"), YesNoWithAdditionalHtml(title, caption, additionalHtml))
+          component.apply(form("value"), YesNoWithAdditionalHtml(title, caption, additionalHtml), hint)
+        }
+        content.toString() must passAccessibilityChecks
+      }
+
+      "yes/no with legend" in {
+        val content = template.apply(title) {
+          component.apply(form("value"), YesNoWithLegend(legend), hint).withHeading(title)
         }
         content.toString() must passAccessibilityChecks
       }

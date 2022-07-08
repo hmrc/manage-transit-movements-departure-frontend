@@ -18,11 +18,11 @@ package utils.cyaHelpers
 
 import models.domain.UserAnswersReader
 import models.journeyDomain.JourneyDomainModel
-import models.{LocalReferenceNumber, Mode, NormalMode, UserAnswers}
-import navigation.UserAnswersNavigator
+import models.{LocalReferenceNumber, Mode, UserAnswers}
 import pages.QuestionPage
+import pages.sections.Section
 import play.api.i18n.Messages
-import play.api.libs.json.Reads
+import play.api.libs.json.{JsArray, Reads}
 import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.html.components.{Content, SummaryListRow}
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
@@ -49,17 +49,61 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
       args = args: _*
     )
 
-  protected def getAnswerAndBuildListItem[A, B <: JourneyDomainModel](
-    page: QuestionPage[A],
-    formatAnswer: A => String,
-    removeCall: Call
-  )(implicit rds: Reads[A], userAnswersReader: UserAnswersReader[B]): Option[ListItem] =
+  protected def buildListItems(
+    section: Section[JsArray]
+  )(block: Int => Option[Either[ListItem, ListItem]]): Seq[Either[ListItem, ListItem]] =
+    userAnswers
+      .get(section)
+      .map {
+        _.value.zipWithIndex.flatMap {
+          case (_, index) =>
+            block(index)
+        }
+      }
+      .getOrElse(Nil)
+
+  protected def buildListItem[A <: JourneyDomainModel, B](
+    page: QuestionPage[B],
+    getName: A => B,
+    formatName: B => String,
+    removeRoute: Call
+  )(implicit userAnswersReader: UserAnswersReader[A], rds: Reads[B]): Option[Either[ListItem, ListItem]] =
+    UserAnswersReader[A].run(userAnswers) match {
+      case Left(readerError) =>
+        readerError.page.route(userAnswers, mode).flatMap {
+          changeRoute =>
+            getNameAndBuildListItem[B](
+              page = page,
+              formatName = formatName,
+              changeUrl = changeRoute.url,
+              removeUrl = removeRoute.url
+            ).map(Left(_))
+        }
+      case Right(journeyDomainModel) =>
+        journeyDomainModel.routeIfCompleted(userAnswers).map {
+          changeRoute =>
+            Right(
+              ListItem(
+                name = formatName(getName(journeyDomainModel)),
+                changeUrl = changeRoute.url,
+                removeUrl = removeRoute.url
+              )
+            )
+        }
+    }
+
+  protected def getNameAndBuildListItem[T](
+    page: QuestionPage[T],
+    formatName: T => String,
+    changeUrl: String,
+    removeUrl: String
+  )(implicit rds: Reads[T]): Option[ListItem] =
     userAnswers.get(page) map {
-      answer =>
+      name =>
         ListItem(
-          name = formatAnswer(answer),
-          changeUrl = UserAnswersNavigator.nextPage[B](userAnswers, NormalMode).url,
-          removeUrl = removeCall.url
+          name = formatName(name),
+          changeUrl = changeUrl,
+          removeUrl = removeUrl
         )
     }
 }

@@ -38,8 +38,8 @@ trait Mappings extends Formatters with Constraints {
   protected def formattedPostcode(errorKey: String = "error.required", args: Seq[Any] = Seq.empty): FieldMapping[String] =
     of(postcodeFormatter(errorKey, args))
 
-  protected def mandatoryIfBoolean(condition: Boolean, requiredKey: String = "error.required", defaultResult: Boolean = true): FieldMapping[Boolean] =
-    if (condition) boolean(requiredKey) else of(ignoredFormat(defaultResult))
+  protected def mandatoryIfBoolean(errorKey: String = "error.required", condition: Boolean, defaultValue: Boolean): FieldMapping[Boolean] =
+    if (condition) boolean(errorKey) else of(ignoredFormat(defaultValue))
 
   protected def int(
     requiredKey: String = "error.required",

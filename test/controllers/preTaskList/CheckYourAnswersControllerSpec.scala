@@ -29,7 +29,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewModels.PreTaskListViewModel
+import viewModels.preTaskList.PreTaskListViewModel
 import viewModels.sections.Section
 import views.html.preTaskList.CheckYourAnswersView
 

@@ -30,8 +30,10 @@ import play.api.mvc.Call
 sealed trait GuaranteeDomain extends JourneyDomainModel {
   val index: Index
 
+  val `type`: GuaranteeType
+
   override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
-    None // TODO - update to check your answers when built
+    Some(Call("GET", "#")) // TODO - update to check your answers when built
 }
 
 object GuaranteeDomain {
