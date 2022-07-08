@@ -147,26 +147,50 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
         result.value mustBe expectedResult
       }
 
-      "when 3 guarantee type" in {
-        val declarationType           = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
-        val guaranteeType             = `3`.sample.value
-        val otherReferenceCashDeposit = arbitrary[Boolean].sample.value
+      "when 3 guarantee type" - {
+        val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+        val guaranteeType   = `3`.sample.value
+        val otherReference  = Gen.alphaNumStr.sample.value
 
-        val userAnswers = emptyUserAnswers
-          .setValue(DeclarationTypePage, declarationType)
-          .setValue(GuaranteeTypePage(index), guaranteeType)
-          .setValue(OtherReferenceCashDepositPage(index), otherReferenceCashDeposit)
+        "when otherReference provided" in {
 
-        val expectedResult = GuaranteeOfType3(
-          `type` = guaranteeType,
-          otherReferenceCashDeposit = otherReferenceCashDeposit
-        )(index)
+          val userAnswers = emptyUserAnswers
+            .setValue(DeclarationTypePage, declarationType)
+            .setValue(GuaranteeTypePage(index), guaranteeType)
+            .setValue(OtherReferenceCashDepositPage(index), true)
+            .setValue(OtherReferencePage(index), otherReference)
 
-        val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
-          GuaranteeDomain.userAnswersReader(index)
-        ).run(userAnswers)
+          val expectedResult = GuaranteeOfType3(
+            `type` = guaranteeType,
+            otherReference = Some(otherReference)
+          )(index)
 
-        result.value mustBe expectedResult
+          val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
+            GuaranteeDomain.userAnswersReader(index)
+          ).run(userAnswers)
+
+          result.value mustBe expectedResult
+        }
+
+        "when otherReference not provided" in {
+
+          val userAnswers = emptyUserAnswers
+            .setValue(DeclarationTypePage, declarationType)
+            .setValue(GuaranteeTypePage(index), guaranteeType)
+            .setValue(OtherReferenceCashDepositPage(index), false)
+
+          val expectedResult = GuaranteeOfType3(
+            `type` = guaranteeType,
+            otherReference = None
+          )(index)
+
+          val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
+            GuaranteeDomain.userAnswersReader(index)
+          ).run(userAnswers)
+
+          result.value mustBe expectedResult
+        }
+
       }
     }
 
@@ -214,18 +238,34 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
           result.left.value.page mustBe OtherReferencePage(index)
         }
 
-        "when 3 guarantee type" in {
+        "when 3 guarantee type" - {
           val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
           val guaranteeType   = `3`.sample.value
 
-          val userAnswers = emptyUserAnswers
-            .setValue(DeclarationTypePage, declarationType)
-            .setValue(GuaranteeTypePage(index), guaranteeType)
+          "when otherReferenceYesNoPage is unanswered" in {
 
-          val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
+            val userAnswers = emptyUserAnswers
+              .setValue(DeclarationTypePage, declarationType)
+              .setValue(GuaranteeTypePage(index), guaranteeType)
 
-          result.left.value.page mustBe OtherReferenceCashDepositPage(index)
+            val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
+
+            result.left.value.page mustBe OtherReferenceCashDepositPage(index)
+          }
+
+          "when otherReferenceYesNoPage is true and otherReference is unanswered" in {
+
+            val userAnswers = emptyUserAnswers
+              .setValue(DeclarationTypePage, declarationType)
+              .setValue(GuaranteeTypePage(index), guaranteeType)
+              .setValue(OtherReferenceCashDepositPage(index), true)
+
+            val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
+
+            result.left.value.page mustBe OtherReferencePage(index)
+          }
         }
+
       }
     }
   }
