@@ -36,7 +36,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mod
           page = GuaranteeTypePage(Index(position)),
           getName = _.`type`,
           formatName = formatEnumAsString(GuaranteeType.messageKeyPrefix),
-          removeRoute = Call("GET", "#")
+          removeRoute = Call("GET", "#") // TODO - update when remove page built
         )(GuaranteeDomain.userAnswersReader(index), implicitly[Reads[GuaranteeType]])
     }
 }

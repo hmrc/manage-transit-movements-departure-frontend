@@ -35,6 +35,7 @@ object AddAnotherGuaranteeViewModel {
     def apply(userAnswers: UserAnswers)(implicit messages: Messages): AddAnotherGuaranteeViewModel = {
       val helper = new GuaranteeDetailsCheckYourAnswersHelper(userAnswers, NormalMode)
 
+      // TODO - decide what to do with in progress guarantees (Lefts). Currently lumping them together with the completed ones (Rights).
       val listItems = helper.listItems.collect {
         case Left(value)  => value
         case Right(value) => value

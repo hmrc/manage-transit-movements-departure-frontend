@@ -51,17 +51,15 @@ class InputYesNoSpec extends A11ySpecBase {
 
       "yes/no with additional html" in {
         val content = template.apply(title) {
-          component.apply(form("value"), YesNoWithAdditionalHtml(title, caption, additionalHtml))
+          component.apply(form("value"), YesNoWithAdditionalHtml(title, caption, additionalHtml), hint)
         }
         content.toString() must passAccessibilityChecks
       }
 
       "yes/no with legend" in {
-        val content = template
-          .apply(title) {
-            component.apply(form("value"), YesNoWithLegend(legend))
-          }
-          .withHeading(title)
+        val content = template.apply(title) {
+          component.apply(form("value"), YesNoWithLegend(legend), hint).withHeading(title)
+        }
         content.toString() must passAccessibilityChecks
       }
     }
