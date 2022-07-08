@@ -25,6 +25,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import pages.guaranteeDetails.GuaranteeTypePage
 import pages.preTaskList.DeclarationTypePage
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
+import utils.cyaHelpers.guaranteeDetails.GuaranteeDetailsCheckYourAnswersHelper
 
 class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with Generators {
 

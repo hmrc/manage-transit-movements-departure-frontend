@@ -35,7 +35,7 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
   protected def formatAsAddress(address: Address): Content =
     HtmlContent(Seq(address.line1, address.line2, address.postalCode, address.country.description).mkString("<br>"))
 
-  protected def formatAsLiteral[T](answer: T): Content = s"$answer".toText
+  protected def formatAsText[T](answer: T): Content = s"$answer".toText
 
   protected def formatEnumAsText[T](messageKeyPrefix: String)(answer: T): Content =
     formatEnumAsString(messageKeyPrefix)(answer).toText
@@ -58,35 +58,49 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
       label = messages(s"$prefix.checkYourAnswersLabel", args: _*).toText,
       answer = answer,
       id = id,
-      call = call,
+      call = Some(call),
       args = args: _*
     )
 
-  protected def buildSimpleRow(
+  protected def buildRowWithNoChangeLink(
+    prefix: String,
+    answer: Content,
+    args: Any*
+  ): SummaryListRow =
+    buildSimpleRow(
+      prefix = prefix,
+      label = messages(s"$prefix.checkYourAnswersLabel", args: _*).toText,
+      answer = answer,
+      id = None,
+      call = None
+    )
+
+  private def buildSimpleRow(
     prefix: String,
     label: Content,
     answer: Content,
     id: Option[String],
-    call: Call,
+    call: Option[Call],
     args: Any*
   ): SummaryListRow =
     SummaryListRow(
       key = Key(label),
       value = Value(answer),
-      actions = Some(
-        Actions(
-          items = List(
-            ActionItem(
-              content = messages("site.edit").toText,
-              href = call.url,
-              visuallyHiddenText = Some(messages(s"$prefix.change.hidden", args: _*)),
-              attributes = id.fold[Map[String, String]](Map.empty)(
-                id => Map("id" -> id)
+      actions = call.map {
+        route =>
+          Actions(
+            items = List(
+              ActionItem(
+                content = messages("site.edit").toText,
+                href = route.url,
+                visuallyHiddenText = Some(messages(s"$prefix.change.hidden", args: _*)),
+                attributes = id.fold[Map[String, String]](Map.empty)(
+                  id => Map("id" -> id)
+                )
               )
             )
           )
-        )
-      )
+      }
     )
 
 }

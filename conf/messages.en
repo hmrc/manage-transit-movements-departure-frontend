@@ -489,9 +489,9 @@ guaranteeDetails.otherReference.change.hidden = reference for the guarantee
 
 guaranteeDetails.otherReferenceYesNo.title = Do you want to add a reference for the guarantee?
 guaranteeDetails.otherReferenceYesNo.heading = Do you want to add a reference for the guarantee?
-guaranteeDetails.otherReferenceYesNo.checkYourAnswersLabel = Reference for the guarantee
+guaranteeDetails.otherReferenceYesNo.checkYourAnswersLabel = Add reference for the guarantee
 guaranteeDetails.otherReferenceYesNo.error.required = Select yes if you want to add a reference for the guarantee
-guaranteeDetails.otherReferenceYesNo.change.hidden = reference for the guarantee
+guaranteeDetails.otherReferenceYesNo.change.hidden = if you want to add a reference for the guarantee
 
 guaranteeDetails.removeGuaranteeYesNo.title = Are you sure you want to remove this guarantee?
 guaranteeDetails.removeGuaranteeYesNo.heading = Are you sure you want to remove this guarantee?
