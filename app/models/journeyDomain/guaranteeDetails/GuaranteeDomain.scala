@@ -141,15 +141,15 @@ object GuaranteeDomain {
 
   case class GuaranteeOfType3(
     `type`: GuaranteeType,
-    otherReference: Option[String]
+    otherReferenceCashDeposit: Boolean
   )(override val index: Index)
       extends GuaranteeDomain
 
   object GuaranteeOfType3 {
 
     def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
-      UserAnswersReader(guaranteeType).map {
-        `type` => GuaranteeOfType3(`type`, None)(index) // TODO - read other ref. pages once built
+      (UserAnswersReader(guaranteeType), OtherReferenceCashDepositPage(index).reader).mapN {
+        (`type`, otherReferenceCashDeposit) => GuaranteeOfType3(`type`, otherReferenceCashDeposit)(index)
       }
   }
 }
