@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages.guaranteeDetails
 
-object Constants {
-  lazy val tirCarnetReferenceMaxLength = 12
-  lazy val maxEoriNumberLength: Int    = 17
-  lazy val minEoriNumberLength: Int    = 14
-  lazy val maxNameLength: Int          = 70
-  lazy val maxTelephoneNumberLength    = 35
-  lazy val minTelephoneNumberLength    = 6
-  lazy val maxRefNumberLength          = 24
-  lazy val maxOtherRefLength           = 35
+import pages.behaviours.PageBehaviours
+
+class OtherReferencePageSpec extends PageBehaviours {
+
+  "OtherReferencePage" - {
+
+    beRetrievable[String](OtherReferencePage(index))
+
+    beSettable[String](OtherReferencePage(index))
+
+    beRemovable[String](OtherReferencePage(index))
+  }
 }

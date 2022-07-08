@@ -115,7 +115,8 @@ trait UserAnswersEntryGenerators {
     import pages.guaranteeDetails._
     {
       case GuaranteeTypePage(index)   => arbitrary[GuaranteeType].map(Json.toJson(_)).map((GuaranteeTypePage(index), _))
-      case ReferenceNumberPage(index) => arbitrary[GuaranteeType].map(Json.toJson(_)).map((GuaranteeTypePage(index), _))
+      case ReferenceNumberPage(index) => Gen.alphaNumStr.map(JsString).map((ReferenceNumberPage(index), _))
+      case OtherReferencePage(index)  => Gen.alphaNumStr.map(JsString).map((OtherReferencePage(index), _))
     }
   }
 
