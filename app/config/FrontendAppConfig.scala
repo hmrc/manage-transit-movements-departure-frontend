@@ -61,4 +61,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val enrolmentProxyUrl: String = configuration.get[Service]("microservice.services.enrolment-store-proxy").fullServiceUrl
 
   lazy val mongoTtl: Int = configuration.get[Int]("mongodb.timeToLiveInSeconds")
+
+  lazy val maxGuarantees: Int = configuration.get[Int]("limits.maxGuarantees")
 }

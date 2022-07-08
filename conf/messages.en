@@ -469,3 +469,12 @@ guaranteeDetails.referenceNumber.hint = It can be up to 24 characters long and i
 guaranteeDetails.referenceNumber.error.length = The Guarantee Reference Number must be 24 characters or less
 guaranteeDetails.referenceNumber.error.invalid = The Guarantee Reference Number must only include the letters a to z and numbers 0 to 9
 guaranteeDetails.referenceNumber.error.format = The Guarantee Reference Number must follow this format: 2 numbers, then 2 letters, 13 numbers, 1 letter and then 6 numbers.
+
+guaranteeDetails.addAnotherGuarantee.singular.title = You have added {0} guarantee
+guaranteeDetails.addAnotherGuarantee.singular.heading = You have added {0} guarantee
+guaranteeDetails.addAnotherGuarantee.plural.title = You have added {0} guarantees
+guaranteeDetails.addAnotherGuarantee.plural.heading = You have added {0} guarantees
+guaranteeDetails.addAnotherGuarantee.error.required = Select yes if you need to add another guarantee
+guaranteeDetails.addAnotherGuarantee.label = Do you need to add another guarantee
+guaranteeDetails.addAnotherGuarantee.maxLimit.label = You cannot add any more guarantees
+

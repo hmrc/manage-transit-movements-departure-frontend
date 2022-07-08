@@ -14,26 +14,17 @@
  * limitations under the License.
  */
 
-package viewModels.components
+package forms
 
-import play.twirl.api.Html
+import forms.mappings.Mappings
+import play.api.data.Form
 
-sealed trait InputYesNoViewModel
+import javax.inject.Inject
 
-object InputYesNoViewModel {
+class AddAnotherFormProvider @Inject() extends Mappings {
 
-  case class OrdinaryYesNo(
-    heading: String,
-    caption: Option[String] = None
-  ) extends InputYesNoViewModel
-
-  case class YesNoWithAdditionalHtml(
-    heading: String,
-    caption: Option[String] = None,
-    additionalHtml: Html
-  ) extends InputYesNoViewModel
-
-  case class YesNoWithLegend(
-    legend: String
-  ) extends InputYesNoViewModel
+  def apply(prefix: String, allowMore: Boolean): Form[Boolean] =
+    Form(
+      "value" -> mandatoryIfBoolean(s"$prefix.error.required", allowMore, defaultValue = false)
+    )
 }

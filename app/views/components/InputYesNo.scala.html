@@ -64,4 +64,7 @@
         @additionalHtml
         @govukRadios(radios.withLegend(heading, false))
     }
+    case YesNoWithLegend(legend) => {
+        @govukRadios(radios.withLegend(legend))
+    }
 }
