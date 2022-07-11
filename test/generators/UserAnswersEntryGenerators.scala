@@ -118,7 +118,7 @@ trait UserAnswersEntryGenerators {
       case OtherReferenceYesNoPage(_) => arbitrary[Boolean].map(JsBoolean)
       case OtherReferencePage(_)      => Gen.alphaNumStr.map(JsString)
       case AccessCodePage(_)          => Gen.alphaNumStr.map(JsString)
-      case LiabilityAmountPage(_)     => Gen.double.map(Json.toJson(_))
+      case LiabilityAmountPage(_)     => arbitrary[BigDecimal].map(Json.toJson(_))
     }
   }
 

@@ -45,7 +45,7 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
         val guaranteeType   = `0,1,2,4,9`.sample.value
         val grn             = Gen.alphaNumStr.sample.value
         val accessCode      = Gen.alphaNumStr.sample.value
-        val liabilityAmount = Gen.double.sample.value
+        val liabilityAmount = arbitrary[BigDecimal].sample.value
 
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, declarationType)

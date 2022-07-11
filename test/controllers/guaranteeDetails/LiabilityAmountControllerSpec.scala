@@ -37,7 +37,7 @@ class LiabilityAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
   private val form                      = formProvider("guaranteeDetails.liabilityAmount")
   private val mode                      = NormalMode
   private lazy val referenceNumberRoute = routes.LiabilityAmountController.onPageLoad(lrn, mode, index).url
-  private val validAnswer: Double       = 999.99
+  private val validAnswer: BigDecimal   = 999.99
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

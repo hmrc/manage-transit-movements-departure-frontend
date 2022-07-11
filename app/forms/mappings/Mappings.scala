@@ -91,6 +91,6 @@ trait Mappings extends Formatters with Constraints {
     invalidCharactersKey: String = "error.invalidCharacters",
     invalidFormatKey: String = "error.invalidFormat",
     invalidValueKey: String = "error.invalidValue"
-  ): FieldMapping[Double] =
+  ): FieldMapping[BigDecimal] =
     of(currencyFormatter(requiredKey, invalidCharactersKey, invalidFormatKey, invalidValueKey))
 }

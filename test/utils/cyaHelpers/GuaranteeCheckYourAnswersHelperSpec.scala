@@ -302,7 +302,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
         "when LiabilityAmountPage defined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val answers = emptyUserAnswers.setValue(LiabilityAmountPage(index), 1000: Double)
+              val answers = emptyUserAnswers.setValue(LiabilityAmountPage(index), 1000: BigDecimal)
 
               val helper = new GuaranteeCheckYourAnswersHelper(answers, mode, index)
               val result = helper.liabilityAmount

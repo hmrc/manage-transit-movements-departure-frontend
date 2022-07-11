@@ -42,7 +42,7 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
 
   protected def formatAsPassword(answer: String): Content = ("•" * answer.length).toText
 
-  protected def formatAsCurrency(answer: Double): Content = {
+  protected def formatAsCurrency(answer: BigDecimal): Content = {
     val formatter = NumberFormat.getCurrencyInstance(Locale.UK)
     formatter.format(answer).toText
   }

@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 class MoneyFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String): Form[Double] =
+  def apply(prefix: String): Form[BigDecimal] =
     Form(
       "value" -> currency(
         requiredKey = s"$prefix.error.required",

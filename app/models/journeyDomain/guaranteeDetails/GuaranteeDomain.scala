@@ -93,7 +93,7 @@ object GuaranteeDomain {
     `type`: GuaranteeType,
     grn: String,
     accessCode: String,
-    liabilityAmount: Double
+    liabilityAmount: BigDecimal
   )(override val index: Index)
       extends GuaranteeDomain
 

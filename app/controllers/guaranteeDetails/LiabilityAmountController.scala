@@ -44,7 +44,7 @@ class LiabilityAmountController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form: Form[Double] = formProvider("guaranteeDetails.liabilityAmount")
+  private val form: Form[BigDecimal] = formProvider("guaranteeDetails.liabilityAmount")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

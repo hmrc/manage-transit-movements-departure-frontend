@@ -74,13 +74,13 @@ class MoneyFormProviderSpec extends DoubleFieldBehaviours {
     }
 
     "must allow commas but remove them" - {
-      "when there are no decimal places" in {
+      "when there are decimal places" in {
         val result = form.bind(Map(fieldName -> "1,000.00"))
         result.errors mustEqual Nil
         result.get mustEqual 1000.00
       }
 
-      "when there are decimal places" in {
+      "when there are no decimal places" in {
         val result = form.bind(Map(fieldName -> "1,000"))
         result.errors mustEqual Nil
         result.get mustEqual 1000
@@ -88,13 +88,13 @@ class MoneyFormProviderSpec extends DoubleFieldBehaviours {
     }
 
     "must allow spaces but remove them" - {
-      "when there are no decimal places" in {
+      "when there are decimal places" in {
         val result = form.bind(Map(fieldName -> "1 000.00"))
         result.errors mustEqual Nil
         result.get mustEqual 1000.00
       }
 
-      "when there are decimal places" in {
+      "when there are no decimal places" in {
         val result = form.bind(Map(fieldName -> "1 000"))
         result.errors mustEqual Nil
         result.get mustEqual 1000

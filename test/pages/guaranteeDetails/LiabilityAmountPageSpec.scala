@@ -22,10 +22,10 @@ class LiabilityAmountPageSpec extends PageBehaviours {
 
   "LiabilityAmountPage" - {
 
-    beRetrievable[Double](LiabilityAmountPage(index))
+    beRetrievable[BigDecimal](LiabilityAmountPage(index))
 
-    beSettable[Double](LiabilityAmountPage(index))
+    beSettable[BigDecimal](LiabilityAmountPage(index))
 
-    beRemovable[Double](LiabilityAmountPage(index))
+    beRemovable[BigDecimal](LiabilityAmountPage(index))
   }
 }

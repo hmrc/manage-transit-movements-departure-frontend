@@ -62,7 +62,7 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
     id = Some("access-code")
   )
 
-  def liabilityAmount: Option[SummaryListRow] = getAnswerAndBuildRow[Double](
+  def liabilityAmount: Option[SummaryListRow] = getAnswerAndBuildRow[BigDecimal](
     page = LiabilityAmountPage(index),
     formatAnswer = formatAsCurrency,
     prefix = "guaranteeDetails.liabilityAmount",

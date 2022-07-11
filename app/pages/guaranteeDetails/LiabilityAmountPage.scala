@@ -22,7 +22,7 @@ import pages.sections.GuaranteeSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case class LiabilityAmountPage(index: Index) extends QuestionPage[Double] {
+case class LiabilityAmountPage(index: Index) extends QuestionPage[BigDecimal] {
 
   override def path: JsPath = GuaranteeSection(index).path \ toString
 

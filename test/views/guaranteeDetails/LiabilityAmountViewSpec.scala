@@ -25,16 +25,16 @@ import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
 import views.html.guaranteeDetails.LiabilityAmountView
 
-class LiabilityAmountViewSpec extends InputTextViewBehaviours[Double] {
+class LiabilityAmountViewSpec extends InputTextViewBehaviours[BigDecimal] {
 
   override val prefix: String = "guaranteeDetails.liabilityAmount"
 
-  override def form: Form[Double] = new MoneyFormProvider()(prefix)
+  override def form: Form[BigDecimal] = new MoneyFormProvider()(prefix)
 
-  override def applyView(form: Form[Double]): HtmlFormat.Appendable =
+  override def applyView(form: Form[BigDecimal]): HtmlFormat.Appendable =
     injector.instanceOf[LiabilityAmountView].apply(form, lrn, NormalMode, index)(fakeRequest, messages)
 
-  implicit override val arbitraryT: Arbitrary[Double] = Arbitrary(Gen.double)
+  implicit override val arbitraryT: Arbitrary[BigDecimal] = Arbitrary(Gen.double.map(BigDecimal(_)))
 
   override val inputPrefix: Option[String] = Some("£")
 
