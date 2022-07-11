@@ -16,7 +16,7 @@
 
 package viewModels.guaranteeDetails
 
-import models.{Index, NormalMode, UserAnswers}
+import models.{CheckMode, Index, UserAnswers}
 import play.api.i18n.Messages
 import utils.cyaHelpers.guaranteeDetails.GuaranteeCheckYourAnswersHelper
 import viewModels.sections.Section
@@ -33,7 +33,7 @@ object GuaranteeViewModel {
   class GuaranteeViewModelProvider @Inject() () {
 
     def apply(userAnswers: UserAnswers, index: Index)(implicit messages: Messages): GuaranteeViewModel = {
-      val helper = new GuaranteeCheckYourAnswersHelper(userAnswers, NormalMode, index)
+      val helper = new GuaranteeCheckYourAnswersHelper(userAnswers, CheckMode, index)
 
       val rows = Seq(
         helper.guaranteeType,
