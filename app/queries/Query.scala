@@ -36,6 +36,6 @@ trait Settable[A] extends Query {
   def cleanup(value: Option[A], userAnswers: UserAnswers): Try[UserAnswers] =
     Success(userAnswers)
 
-  def cleanup(valueHasChanged: Boolean, userAnswers: UserAnswers): Try[UserAnswers] =
+  def cleanup(updatedValue: Option[A], previousValue: Option[A], userAnswers: UserAnswers): Try[UserAnswers] =
     Success(userAnswers)
 }

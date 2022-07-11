@@ -19,7 +19,7 @@ package models
 import derivable.Derivable
 import pages._
 import play.api.libs.json._
-import queries.{Gettable, Settable}
+import queries.Gettable
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
 import java.time.LocalDateTime
@@ -39,23 +39,16 @@ final case class UserAnswers(
   def get[A, B](derivable: Derivable[A, B])(implicit rds: Reads[A]): Option[B] =
     get(derivable: Gettable[A]).map(derivable.derive)
 
-  def set[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = {
-
-    val updatedData = data.setObject(page.path, Json.toJson(value)) match {
-      case JsSuccess(jsValue, _) =>
-        Success(jsValue)
+  def set[A](page: QuestionPage[A], value: A)(implicit format: Format[A]): Try[UserAnswers] =
+    data.setObject(page.path, Json.toJson(value)) match {
+      case JsSuccess(updatedData, _) =>
+        val updatedAnswers = copy(data = updatedData)
+        page
+          .cleanup(Some(value), updatedAnswers)
+          .flatMap(page.cleanup(Some(value), get(page), _))
       case JsError(errors) =>
         Failure(JsResultException(errors))
     }
-
-    updatedData.flatMap {
-      d =>
-        val updatedAnswers = copy(data = d)
-        page
-          .cleanup(Some(value), updatedAnswers)
-          .flatMap(page.cleanup(d != data, _))
-    }
-  }
 
   def remove[A](page: QuestionPage[A]): Try[UserAnswers] = {
 

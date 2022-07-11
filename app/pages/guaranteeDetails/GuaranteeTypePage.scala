@@ -34,16 +34,17 @@ case class GuaranteeTypePage(index: Index) extends QuestionPage[GuaranteeType] {
 
   override def toString: String = "guaranteeType"
 
-  override def cleanup(valueHasChanged: Boolean, userAnswers: UserAnswers): Try[UserAnswers] =
-    if (valueHasChanged) {
-      userAnswers
-        .remove(ReferenceNumberPage(index))
-        .flatMap(_.remove(AccessCodePage(index)))
-        .flatMap(_.remove(LiabilityAmountPage(index)))
-        .flatMap(_.remove(OtherReferenceYesNoPage(index)))
-        .flatMap(_.remove(OtherReferencePage(index)))
-    } else {
-      super.cleanup(valueHasChanged, userAnswers)
+  override def cleanup(updatedValue: Option[GuaranteeType], previousValue: Option[GuaranteeType], userAnswers: UserAnswers): Try[UserAnswers] =
+    (updatedValue, previousValue) match {
+      case (Some(x), Some(y)) if x == y =>
+        super.cleanup(updatedValue, previousValue, userAnswers)
+      case _ =>
+        userAnswers
+          .remove(ReferenceNumberPage(index))
+          .flatMap(_.remove(AccessCodePage(index)))
+          .flatMap(_.remove(LiabilityAmountPage(index)))
+          .flatMap(_.remove(OtherReferenceYesNoPage(index)))
+          .flatMap(_.remove(OtherReferencePage(index)))
     }
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =

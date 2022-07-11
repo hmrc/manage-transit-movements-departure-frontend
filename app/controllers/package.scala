@@ -20,7 +20,7 @@ import models.requests.MandatoryDataRequest
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.QuestionPage
-import play.api.libs.json.Writes
+import play.api.libs.json.Format
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{Call, Result}
 import repositories.SessionRepository
@@ -36,7 +36,7 @@ package object controllers {
 
   implicit class SettableOps[A](page: QuestionPage[A]) {
 
-    def writeToUserAnswers(value: A)(implicit writes: Writes[A]): UserAnswersWriter[Write[A]] =
+    def writeToUserAnswers(value: A)(implicit format: Format[A]): UserAnswersWriter[Write[A]] =
       ReaderT[EitherType, UserAnswers, Write[A]](
         userAnswers =>
           userAnswers.set[A](page, value) match {
