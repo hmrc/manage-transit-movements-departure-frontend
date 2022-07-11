@@ -102,9 +102,10 @@ object GuaranteeDomain {
     def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
       (
         UserAnswersReader(guaranteeType),
-        ReferenceNumberPage(index).reader
+        ReferenceNumberPage(index).reader,
+        AccessCodePage(index).reader
       ).mapN {
-        (`type`, grn) => GuaranteeOfTypes01249(`type`, grn, "", "")(index) // TODO - read access code and liability amount pages once built
+        (`type`, grn, accessCode) => GuaranteeOfTypes01249(`type`, grn, accessCode, "")(index) // TODO - read liability amount pages once built
       }
   }
 

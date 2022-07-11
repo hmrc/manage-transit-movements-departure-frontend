@@ -18,6 +18,7 @@ package utils.cyaHelpers
 
 import base.SpecBase
 import controllers.guaranteeDetails.routes
+import forms.Constants.accessCodeLength
 import generators.Generators
 import models.DeclarationType.Option4
 import models.guaranteeDetails.GuaranteeType
@@ -186,6 +187,50 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
                           href = routes.OtherReferenceYesNoController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("if you want to add a reference for the guarantee"),
                           attributes = Map("id" -> "add-other-reference")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "accessCode" - {
+      "must return None" - {
+        "when AccessCodePage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new GuaranteeCheckYourAnswersHelper(emptyUserAnswers, mode, index)
+              val result = helper.accessCode
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when AccessCodePage defined" in {
+          forAll(stringsWithLength(accessCodeLength), arbitrary[Mode]) {
+            (accessCode, mode) =>
+              val answers = emptyUserAnswers.setValue(AccessCodePage(index), accessCode)
+
+              val helper = new GuaranteeCheckYourAnswersHelper(answers, mode, index)
+              val result = helper.accessCode
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Access code".toText),
+                  value = Value("••••".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = routes.AccessCodeController.onPageLoad(answers.lrn, mode, index).url,
+                          visuallyHiddenText = Some("access code"),
+                          attributes = Map("id" -> "access-code")
                         )
                       )
                     )

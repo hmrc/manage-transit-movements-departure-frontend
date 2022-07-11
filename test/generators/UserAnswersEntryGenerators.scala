@@ -117,6 +117,7 @@ trait UserAnswersEntryGenerators {
       case ReferenceNumberPage(_)     => Gen.alphaNumStr.map(JsString)
       case OtherReferenceYesNoPage(_) => arbitrary[Boolean].map(JsBoolean)
       case OtherReferencePage(_)      => Gen.alphaNumStr.map(JsString)
+      case AccessCodePage(_)          => Gen.alphaNumStr.map(JsString)
     }
   }
 

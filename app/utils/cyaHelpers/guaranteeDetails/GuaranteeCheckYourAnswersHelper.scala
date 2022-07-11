@@ -54,4 +54,11 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
     prefix = "guaranteeDetails.otherReference",
     id = Some("other-reference")
   )
+
+  def accessCode: Option[SummaryListRow] = getAnswerAndBuildRow[String](
+    page = AccessCodePage(index),
+    formatAnswer = formatAsPassword,
+    prefix = "guaranteeDetails.accessCode",
+    id = Some("access-code")
+  )
 }
