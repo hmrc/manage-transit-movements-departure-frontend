@@ -41,14 +41,14 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
 
   def consignorEori: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignor.EoriPage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "traderDetails.consignment.consignor.eori",
     id = Some("consignor-eori-number")
   )
 
   def consignorName: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignor.NamePage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "traderDetails.consignment.consignor.name",
     id = Some("consignor-name")
   )
@@ -69,14 +69,14 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
 
   def consignorContactName: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignor.contact.NamePage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "traderDetails.consignment.consignor.contact.name",
     id = Some("consignor-contact-name")
   )
 
   def consignorContactTelephoneNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignor.contact.TelephoneNumberPage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "traderDetails.consignment.consignor.contact.telephoneNumber",
     id = Some("consignor-contact-phone-number")
   )
@@ -97,14 +97,14 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
 
   def consigneeEori: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignee.EoriNumberPage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "traderDetails.consignment.consignee.eoriNumber",
     id = Some("consignee-eori-number")
   )
 
   def consigneeName: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignee.NamePage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "traderDetails.consignment.consignee.name",
     id = Some("consignee-name")
   )

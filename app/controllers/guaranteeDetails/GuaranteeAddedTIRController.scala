@@ -47,9 +47,10 @@ class GuaranteeAddedTIRController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      GuaranteeTypePage(Index(0))
+      val index = Index(0)
+      GuaranteeTypePage(index)
         .writeToUserAnswers(TIRGuarantee)
         .writeToSession()
-        .navigateTo(controllers.routes.TaskListController.onPageLoad(lrn)) // TODO - change to summary page once built
+        .navigateTo(routes.CheckYourAnswersController.onPageLoad(lrn, index))
   }
 }

@@ -22,7 +22,6 @@ import models.reference.CustomsOffice
 import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.QuestionPage
 import pages.preTaskList._
 import pages.traderDetails._
 import play.api.libs.json.{JsBoolean, JsString, JsValue, Json}
@@ -31,93 +30,93 @@ import queries.Gettable
 trait UserAnswersEntryGenerators {
   self: Generators =>
 
-  def generateAnswer: PartialFunction[Gettable[_], Gen[(QuestionPage[_], JsValue)]] =
+  def generateAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
     generatePreTaskListAnswer orElse
       generateTraderDetailsAnswer orElse
       generateGuaranteeDetailsAnswer
 
-  private def generatePreTaskListAnswer: PartialFunction[Gettable[_], Gen[(QuestionPage[_], JsValue)]] = {
-    case OfficeOfDeparturePage   => arbitrary[CustomsOffice](arbitraryOfficeOfDeparture).map(Json.toJson(_)).map((OfficeOfDeparturePage, _))
-    case ProcedureTypePage       => arbitrary[ProcedureType].map(Json.toJson(_)).map((ProcedureTypePage, _))
-    case DeclarationTypePage     => arbitrary[DeclarationType].map(Json.toJson(_)).map((DeclarationTypePage, _))
-    case TIRCarnetReferencePage  => Gen.alphaNumStr.map(JsString).map((TIRCarnetReferencePage, _))
-    case SecurityDetailsTypePage => arbitrary[SecurityDetailsType].map(Json.toJson(_)).map((SecurityDetailsTypePage, _))
-    case DetailsConfirmedPage    => Gen.const(true).map(JsBoolean).map((DetailsConfirmedPage, _))
+  private def generatePreTaskListAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    case OfficeOfDeparturePage   => arbitrary[CustomsOffice](arbitraryOfficeOfDeparture).map(Json.toJson(_))
+    case ProcedureTypePage       => arbitrary[ProcedureType].map(Json.toJson(_))
+    case DeclarationTypePage     => arbitrary[DeclarationType].map(Json.toJson(_))
+    case TIRCarnetReferencePage  => Gen.alphaNumStr.map(JsString)
+    case SecurityDetailsTypePage => arbitrary[SecurityDetailsType].map(Json.toJson(_))
+    case DetailsConfirmedPage    => Gen.const(true).map(JsBoolean)
   }
 
-  private def generateTraderDetailsAnswer: PartialFunction[Gettable[_], Gen[(QuestionPage[_], JsValue)]] =
+  private def generateTraderDetailsAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
     generateHolderOfTransitAnswer orElse
       generateRepresentativeAnswer orElse
       generateConsignmentAnswer orElse {
-        case ActingAsRepresentativePage => arbitrary[Boolean].map(JsBoolean).map((ActingAsRepresentativePage, _))
+        case ActingAsRepresentativePage => arbitrary[Boolean].map(JsBoolean)
       }
 
-  private def generateHolderOfTransitAnswer: PartialFunction[Gettable[_], Gen[(QuestionPage[_], JsValue)]] = {
+  private def generateHolderOfTransitAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.traderDetails.holderOfTransit._
     {
-      case EoriYesNoPage               => arbitrary[Boolean].map(JsBoolean).map((EoriYesNoPage, _))
-      case EoriPage                    => Gen.alphaNumStr.map(JsString).map((EoriPage, _))
-      case TirIdentificationYesNoPage  => arbitrary[Boolean].map(JsBoolean).map((TirIdentificationYesNoPage, _))
-      case TirIdentificationPage       => Gen.alphaNumStr.map(JsString).map((TirIdentificationPage, _))
-      case NamePage                    => Gen.alphaNumStr.map(JsString).map((NamePage, _))
-      case AddressPage                 => arbitrary[Address].map(Json.toJson(_)).map((AddressPage, _))
-      case AddContactPage              => arbitrary[Boolean].map(JsBoolean).map((AddContactPage, _))
-      case contact.NamePage            => Gen.alphaNumStr.map(JsString).map((contact.NamePage, _))
-      case contact.TelephoneNumberPage => Gen.alphaNumStr.map(JsString).map((contact.TelephoneNumberPage, _))
+      case EoriYesNoPage               => arbitrary[Boolean].map(JsBoolean)
+      case EoriPage                    => Gen.alphaNumStr.map(JsString)
+      case TirIdentificationYesNoPage  => arbitrary[Boolean].map(JsBoolean)
+      case TirIdentificationPage       => Gen.alphaNumStr.map(JsString)
+      case NamePage                    => Gen.alphaNumStr.map(JsString)
+      case AddressPage                 => arbitrary[Address].map(Json.toJson(_))
+      case AddContactPage              => arbitrary[Boolean].map(JsBoolean)
+      case contact.NamePage            => Gen.alphaNumStr.map(JsString)
+      case contact.TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
     }
   }
 
-  private def generateRepresentativeAnswer: PartialFunction[Gettable[_], Gen[(QuestionPage[_], JsValue)]] = {
+  private def generateRepresentativeAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.traderDetails.representative._
     {
-      case EoriPage            => Gen.alphaNumStr.map(JsString).map((EoriPage, _))
-      case NamePage            => Gen.alphaNumStr.map(JsString).map((NamePage, _))
-      case CapacityPage        => arbitrary[RepresentativeCapacity].map(Json.toJson(_)).map((CapacityPage, _))
-      case TelephoneNumberPage => Gen.alphaNumStr.map(JsString).map((TelephoneNumberPage, _))
+      case EoriPage            => Gen.alphaNumStr.map(JsString)
+      case NamePage            => Gen.alphaNumStr.map(JsString)
+      case CapacityPage        => arbitrary[RepresentativeCapacity].map(Json.toJson(_))
+      case TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
     }
   }
 
-  private def generateConsignmentAnswer: PartialFunction[Gettable[_], Gen[(QuestionPage[_], JsValue)]] = {
+  private def generateConsignmentAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.traderDetails.consignment._
     {
       generateConsignorAnswer orElse
         generateConsigneeAnswer orElse {
-          case ApprovedOperatorPage     => arbitrary[Boolean].map(JsBoolean).map((ApprovedOperatorPage, _))
-          case MoreThanOneConsigneePage => arbitrary[Boolean].map(JsBoolean).map((MoreThanOneConsigneePage, _))
+          case ApprovedOperatorPage     => arbitrary[Boolean].map(JsBoolean)
+          case MoreThanOneConsigneePage => arbitrary[Boolean].map(JsBoolean)
         }
     }
   }
 
-  private def generateConsignorAnswer: PartialFunction[Gettable[_], Gen[(QuestionPage[_], JsValue)]] = {
+  private def generateConsignorAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.traderDetails.consignment.consignor._
     {
-      case EoriYesNoPage               => arbitrary[Boolean].map(JsBoolean).map((EoriYesNoPage, _))
-      case EoriPage                    => Gen.alphaNumStr.map(JsString).map((EoriPage, _))
-      case NamePage                    => Gen.alphaNumStr.map(JsString).map((NamePage, _))
-      case AddressPage                 => arbitrary[Address].map(Json.toJson(_)).map((AddressPage, _))
-      case AddContactPage              => arbitrary[Boolean].map(JsBoolean).map((AddContactPage, _))
-      case contact.NamePage            => Gen.alphaNumStr.map(JsString).map((contact.NamePage, _))
-      case contact.TelephoneNumberPage => Gen.alphaNumStr.map(JsString).map((contact.TelephoneNumberPage, _))
+      case EoriYesNoPage               => arbitrary[Boolean].map(JsBoolean)
+      case EoriPage                    => Gen.alphaNumStr.map(JsString)
+      case NamePage                    => Gen.alphaNumStr.map(JsString)
+      case AddressPage                 => arbitrary[Address].map(Json.toJson(_))
+      case AddContactPage              => arbitrary[Boolean].map(JsBoolean)
+      case contact.NamePage            => Gen.alphaNumStr.map(JsString)
+      case contact.TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
     }
   }
 
-  private def generateConsigneeAnswer: PartialFunction[Gettable[_], Gen[(QuestionPage[_], JsValue)]] = {
+  private def generateConsigneeAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.traderDetails.consignment.consignee._
     {
-      case EoriYesNoPage  => arbitrary[Boolean].map(JsBoolean).map((EoriYesNoPage, _))
-      case EoriNumberPage => Gen.alphaNumStr.map(JsString).map((EoriNumberPage, _))
-      case NamePage       => Gen.alphaNumStr.map(JsString).map((NamePage, _))
-      case AddressPage    => arbitrary[Address].map(Json.toJson(_)).map((AddressPage, _))
+      case EoriYesNoPage  => arbitrary[Boolean].map(JsBoolean)
+      case EoriNumberPage => Gen.alphaNumStr.map(JsString)
+      case NamePage       => Gen.alphaNumStr.map(JsString)
+      case AddressPage    => arbitrary[Address].map(Json.toJson(_))
     }
   }
 
-  private def generateGuaranteeDetailsAnswer: PartialFunction[Gettable[_], Gen[(QuestionPage[_], JsValue)]] = {
+  private def generateGuaranteeDetailsAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.guaranteeDetails._
     {
-      case GuaranteeTypePage(index)       => arbitrary[GuaranteeType].map(Json.toJson(_)).map((GuaranteeTypePage(index), _))
-      case ReferenceNumberPage(index)     => Gen.alphaNumStr.map(JsString).map((ReferenceNumberPage(index), _))
-      case OtherReferencePage(index)      => Gen.alphaNumStr.map(JsString).map((OtherReferencePage(index), _))
-      case OtherReferenceYesNoPage(index) => arbitrary[Boolean].map(JsBoolean).map((OtherReferenceYesNoPage(index), _))
+      case GuaranteeTypePage(_)       => arbitrary[GuaranteeType].map(Json.toJson(_))
+      case ReferenceNumberPage(_)     => Gen.alphaNumStr.map(JsString)
+      case OtherReferenceYesNoPage(_) => arbitrary[Boolean].map(JsBoolean)
+      case OtherReferencePage(_)      => Gen.alphaNumStr.map(JsString)
     }
   }
 

@@ -441,7 +441,6 @@ guaranteeDetails.guaranteeAddedTIR.paragraph2 = (B) Guarantee for goods dispatch
 guaranteeDetails.guaranteeAddedTIR.paragraph3 = This guarantee is required for all TIR declarations (goods moving under the cover of TIR carnet).
 guaranteeDetails.guaranteeAddedTIR.paragraph4 = You don’t need to do anything here – this is just for your reference.
 
-
 guaranteeDetails.guaranteeType.title = Which type of guarantee is it?
 guaranteeDetails.guaranteeType.heading = Which type of guarantee is it?
 guaranteeDetails.guaranteeType.0 = (0) Guarantee waiver
@@ -489,9 +488,9 @@ guaranteeDetails.otherReference.change.hidden = reference for the guarantee
 
 guaranteeDetails.otherReferenceYesNo.title = Do you want to add a reference for the guarantee?
 guaranteeDetails.otherReferenceYesNo.heading = Do you want to add a reference for the guarantee?
-guaranteeDetails.otherReferenceYesNo.checkYourAnswersLabel = Reference for the guarantee
+guaranteeDetails.otherReferenceYesNo.checkYourAnswersLabel = Add reference for the guarantee
 guaranteeDetails.otherReferenceYesNo.error.required = Select yes if you want to add a reference for the guarantee
-guaranteeDetails.otherReferenceYesNo.change.hidden = reference for the guarantee
+guaranteeDetails.otherReferenceYesNo.change.hidden = if you want to add a reference for the guarantee
 
 guaranteeDetails.removeGuaranteeYesNo.title = Are you sure you want to remove this guarantee?
 guaranteeDetails.removeGuaranteeYesNo.heading = Are you sure you want to remove this guarantee?
@@ -509,3 +508,5 @@ guaranteeDetails.addGuaranteeYesNo.title = Do you want to add a guarantee?
 guaranteeDetails.addGuaranteeYesNo.heading = Do you want to add a guarantee?
 guaranteeDetails.addGuaranteeYesNo.error.required = Select yes if you want to add a guarantee
 
+guaranteeDetails.checkYourAnswers.title = Check your answers
+guaranteeDetails.checkYourAnswers.heading = Check your answers

@@ -33,7 +33,7 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
 
   def tirIdentification: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = TirIdentificationPage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "traderDetails.holderOfTransit.tirIdentification",
     id = Some("transit-holder-tir-id-number")
   )
@@ -47,14 +47,14 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
 
   def eori: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = EoriPage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "traderDetails.holderOfTransit.eori",
     id = Some("transit-holder-eori-number")
   )
 
   def name: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = NamePage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "traderDetails.holderOfTransit.name",
     id = Some("transit-holder-name")
   )
@@ -75,14 +75,14 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
 
   def contactName: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = contact.NamePage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "traderDetails.holderOfTransit.contact.name",
     id = Some("transit-holder-contact-name")
   )
 
   def contactTelephoneNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = contact.TelephoneNumberPage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "traderDetails.holderOfTransit.contact.telephoneNumber",
     id = Some("transit-holder-contact-phone-number")
   )

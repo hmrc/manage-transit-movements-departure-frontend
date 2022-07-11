@@ -18,12 +18,12 @@
 @import models.LocalReferenceNumber
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 @import viewModels.components.InputYesNoViewModel._
-@import views.html.components.{Button, ErrorSummary, Heading, InputYesNo, ListWithActions}
+@import views.html.components.{Button, ErrorSummary, HeadingWithSectionCaption, InputYesNo, ListWithActions}
 
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
-    heading: Heading,
+    heading: HeadingWithSectionCaption,
     listWithActions: ListWithActions,
     inputYesNo: InputYesNo,
     errorSummary: ErrorSummary,
@@ -44,7 +44,11 @@
 
     @errorSummary(form.errors)
 
-    @heading(s"guaranteeDetails.addAnotherGuarantee.$singularOrPlural.heading", Seq(guarantees.length))
+    @heading(
+        headingKey = s"guaranteeDetails.addAnotherGuarantee.$singularOrPlural.heading",
+        captionKey = "guaranteeDetails.caption",
+        headingArgs = Seq(guarantees.length)
+    )
 
     @listWithActions(guarantees)
 

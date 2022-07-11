@@ -49,6 +49,33 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
       args = args: _*
     )
 
+  protected def getAnswerAndBuildRowWithDynamicLink[T](
+    page: QuestionPage[T],
+    formatAnswer: T => Content,
+    prefix: String,
+    id: Option[String],
+    args: Any*
+  )(predicate: T => Boolean)(implicit rds: Reads[T]): Option[SummaryListRow] =
+    for {
+      answer <- userAnswers.get(page)
+      call   <- page.route(userAnswers, mode)
+    } yield
+      if (predicate(answer)) {
+        buildRowWithNoChangeLink(
+          prefix = prefix,
+          answer = formatAnswer(answer),
+          args = args: _*
+        )
+      } else {
+        buildRow(
+          prefix = prefix,
+          answer = formatAnswer(answer),
+          id = id,
+          call = call,
+          args = args: _*
+        )
+      }
+
   protected def buildListItems(
     section: Section[JsArray]
   )(block: Int => Option[Either[ListItem, ListItem]]): Seq[Either[ListItem, ListItem]] =
