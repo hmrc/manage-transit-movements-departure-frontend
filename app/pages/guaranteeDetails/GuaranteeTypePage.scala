@@ -18,6 +18,7 @@ package pages.guaranteeDetails
 
 import models.DeclarationType.Option4
 import models.guaranteeDetails.GuaranteeType
+import models.guaranteeDetails.GuaranteeType._
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.preTaskList.DeclarationTypePage
@@ -25,11 +26,25 @@ import pages.sections.GuaranteeSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
+import scala.util.Try
+
 case class GuaranteeTypePage(index: Index) extends QuestionPage[GuaranteeType] {
 
   override def path: JsPath = GuaranteeSection(index).path \ toString
 
   override def toString: String = "guaranteeType"
+
+  override def cleanup(valueHasChanged: Boolean, userAnswers: UserAnswers): Try[UserAnswers] =
+    if (valueHasChanged) {
+      userAnswers
+        .remove(ReferenceNumberPage(index))
+        .flatMap(_.remove(AccessCodePage(index)))
+        .flatMap(_.remove(LiabilityAmountPage(index)))
+        .flatMap(_.remove(OtherReferenceYesNoPage(index)))
+        .flatMap(_.remove(OtherReferencePage(index)))
+    } else {
+      super.cleanup(valueHasChanged, userAnswers)
+    }
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     userAnswers.get(DeclarationTypePage) map {
