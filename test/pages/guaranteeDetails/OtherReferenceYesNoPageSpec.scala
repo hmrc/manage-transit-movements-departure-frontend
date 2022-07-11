@@ -35,7 +35,7 @@ class OtherReferenceYesNoPageSpec extends PageBehaviours {
           forAll(arbitrary[String]) {
             ref =>
               val preChange  = emptyUserAnswers.setValue(OtherReferencePage(index), ref)
-              val postChange = preChange.set(OtherReferenceYesNoPage(index), false).success.value
+              val postChange = preChange.setValue(OtherReferenceYesNoPage(index), false)
 
               postChange.get(OtherReferencePage(index)) mustNot be(defined)
           }
@@ -47,7 +47,7 @@ class OtherReferenceYesNoPageSpec extends PageBehaviours {
           forAll(arbitrary[String]) {
             ref =>
               val preChange  = emptyUserAnswers.setValue(OtherReferencePage(index), ref)
-              val postChange = preChange.set(OtherReferenceYesNoPage(index), true).success.value
+              val postChange = preChange.setValue(OtherReferenceYesNoPage(index), true)
 
               postChange.get(OtherReferencePage(index)) must be(defined)
           }

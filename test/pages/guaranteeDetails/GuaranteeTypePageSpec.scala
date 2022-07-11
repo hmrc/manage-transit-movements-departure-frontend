@@ -72,7 +72,7 @@ class GuaranteeTypePageSpec extends PageBehaviours {
                 .setValue(OtherReferenceYesNoPage(index), true)
                 .setValue(OtherReferencePage(index), str)
 
-              val postChange = preChange.set(GuaranteeTypePage(index), guaranteeType).success.value
+              val postChange = preChange.setValue(GuaranteeTypePage(index), guaranteeType)
 
               postChange.get(ReferenceNumberPage(index)) must be(defined)
               postChange.get(AccessCodePage(index)) must be(defined)

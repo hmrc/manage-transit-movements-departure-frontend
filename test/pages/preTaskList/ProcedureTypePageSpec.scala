@@ -16,6 +16,7 @@
 
 package pages.preTaskList
 
+import models.DeclarationType.Option4
 import models.ProcedureType
 import models.ProcedureType._
 import org.scalacheck.Arbitrary.arbitrary
@@ -33,26 +34,21 @@ class ProcedureTypePageSpec extends PageBehaviours {
 
     "cleanup" - {
 
-      "must remove TIRCarnetReferencePage" - {
-        "when Simplified selected" in {
-          forAll(arbitrary[String]) {
-            carnetReference =>
-              val preChange  = emptyUserAnswers.setValue(TIRCarnetReferencePage, carnetReference)
-              val postChange = preChange.set(ProcedureTypePage, Simplified).success.value
+      "when changing from Normal to Simplified" - {
+        "and declaration type is TIR" - {
+          "must clean up DeclarationTypePage and TIRCarnetReferencePage" in {
+            forAll(arbitrary[String]) {
+              ref =>
+                val preChange = emptyUserAnswers
+                  .setValue(ProcedureTypePage, Normal)
+                  .setValue(DeclarationTypePage, Option4)
+                  .setValue(TIRCarnetReferencePage, ref)
 
-              postChange.get(TIRCarnetReferencePage) mustNot be(defined)
-          }
-        }
-      }
+                val postChange = preChange.setValue(ProcedureTypePage, Simplified)
 
-      "must not remove TIRCarnetReferencePage" - {
-        "when Normal selected" in {
-          forAll(arbitrary[String]) {
-            carnetReference =>
-              val preChange  = emptyUserAnswers.setValue(TIRCarnetReferencePage, carnetReference)
-              val postChange = preChange.set(ProcedureTypePage, Normal).success.value
-
-              postChange.get(TIRCarnetReferencePage) must be(defined)
+                postChange.get(DeclarationTypePage) mustNot be(defined)
+                postChange.get(TIRCarnetReferencePage) mustNot be(defined)
+            }
           }
         }
       }
