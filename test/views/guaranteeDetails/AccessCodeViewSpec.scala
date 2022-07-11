@@ -16,29 +16,23 @@
 
 package views.guaranteeDetails
 
-import forms.OtherReferenceFormProvider
+import forms.AccessCodeFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.guaranteeDetails.OtherReferenceView
+import views.html.guaranteeDetails.AccessCodeView
 import org.scalacheck.{Arbitrary, Gen}
 
-class OtherReferenceViewSpec extends InputTextViewBehaviours[String] {
+class AccessCodeViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = Gen
-    .oneOf(
-      "guaranteeDetails.otherReference.option3",
-      "guaranteeDetails.otherReference.option8"
-    )
-    .sample
-    .value
+  override val prefix: String = "guaranteeDetails.accessCode"
 
-  override def form: Form[String] = new OtherReferenceFormProvider()(prefix)
+  override def form: Form[String] = new AccessCodeFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[OtherReferenceView].apply(form, lrn, NormalMode, index, prefix)(fakeRequest, messages)
+    injector.instanceOf[AccessCodeView].apply(form, lrn, NormalMode, index)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 
@@ -50,11 +44,11 @@ class OtherReferenceViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithHeading()
 
-  behave like pageWithContent("p", "You must make sure this reference is up to date.")
+  behave like pageWithContent("p", "This is set up by the Principal and works just like a bank PIN code.")
 
-  behave like pageWithHint("This can be up to 35 characters long and include both letters and numbers.")
+  behave like pageWithHint("The code will be 4 characters long, like 0000 or X9X9.")
 
-  behave like pageWithInputText(Some(InputSize.Width20))
+  behave like pageWithInputText(Some(InputSize.Width5))
 
   behave like pageWithSubmitButton("Save and continue")
 }

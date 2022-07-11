@@ -40,6 +40,8 @@ class ReferenceNumberViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink
 
+  behave like pageWithSectionCaption("Guarantee details")
+
   behave like pageWithHeading()
 
   behave like pageWithHint("It can be up to 24 characters long and include both letters and numbers. For example, 01GB1234567890120A123456.")

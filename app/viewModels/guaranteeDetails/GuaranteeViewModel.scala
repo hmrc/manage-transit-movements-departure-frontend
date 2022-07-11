@@ -39,7 +39,8 @@ object GuaranteeViewModel {
         helper.guaranteeType,
         helper.guaranteeReferenceNumber,
         helper.otherReferenceYesNo,
-        helper.otherReference
+        helper.otherReference,
+        helper.accessCode
       ).flatten
 
       new GuaranteeViewModel(Section(rows))

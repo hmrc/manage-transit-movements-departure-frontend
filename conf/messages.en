@@ -508,5 +508,15 @@ guaranteeDetails.addGuaranteeYesNo.title = Do you want to add a guarantee?
 guaranteeDetails.addGuaranteeYesNo.heading = Do you want to add a guarantee?
 guaranteeDetails.addGuaranteeYesNo.error.required = Select yes if you want to add a guarantee
 
+guaranteeDetails.accessCode.title = What is the access code?
+guaranteeDetails.accessCode.heading = What is the access code?
+guaranteeDetails.accessCode.paragraph = This is set up by the Principal and works just like a bank PIN code.
+guaranteeDetails.accessCode.hint = The code will be 4 characters long, like 0000 or X9X9.
+guaranteeDetails.accessCode.checkYourAnswersLabel = Access code
+guaranteeDetails.accessCode.error.required = Enter the access code
+guaranteeDetails.accessCode.error.length = The access code must be 4 characters long
+guaranteeDetails.accessCode.error.invalid = The access code must only include the letters a to z and numbers 0 to 9
+guaranteeDetails.accessCode.change.hidden = access code
+
 guaranteeDetails.checkYourAnswers.title = Check your answers
 guaranteeDetails.checkYourAnswers.heading = Check your answers

@@ -127,7 +127,10 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       "when non-TIR declaration type" in {
         val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
-        val initialAnswers  = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
+        val validAccessCode = "1234"
+        val initialAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, declarationType)
+          .setValue(AccessCodePage(index), validAccessCode)
         forAll(arbitraryGuaranteeDetailsAnswers(initialAnswers)) {
           userAnswers =>
             val task = GuaranteeDetailsTask(userAnswers)
