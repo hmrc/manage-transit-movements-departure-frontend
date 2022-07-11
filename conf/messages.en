@@ -506,11 +506,11 @@ guaranteeDetails.liabilityAmount.title = How much is the liability in pounds?
 guaranteeDetails.liabilityAmount.heading = How much is the liability in pounds?
 guaranteeDetails.liabilityAmount.checkYourAnswersLabel = Liability amount
 guaranteeDetails.liabilityAmount.hint = This can have up to 2 decimal places, for example 999.99.
-guaranteeDetails.liabilityAmount.change.hidden = liability amount
 guaranteeDetails.liabilityAmount.error.required = Enter the liability amount in pounds
 guaranteeDetails.liabilityAmount.error.invalidCharacters = The liability amount must only include numbers 0 to 9 and a decimal point
 guaranteeDetails.liabilityAmount.error.invalidFormat = The liability amount must only have up to 2 decimal places, for example 999.99
 guaranteeDetails.liabilityAmount.error.invalidValue = The liability amount must be £9,999,999,999,999,999.99 or less
+guaranteeDetails.liabilityAmount.change.hidden = liability amount
 
 guaranteeDetails.removeGuaranteeYesNo.title = Are you sure you want to remove this guarantee?
 guaranteeDetails.removeGuaranteeYesNo.heading = Are you sure you want to remove this guarantee?
