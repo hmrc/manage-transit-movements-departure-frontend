@@ -33,7 +33,7 @@ sealed trait GuaranteeDomain extends JourneyDomainModel {
   val `type`: GuaranteeType
 
   override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
-    Some(Call("GET", "#")) // TODO - update to check your answers when built
+    Some(controllers.guaranteeDetails.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, index))
 }
 
 object GuaranteeDomain {
@@ -102,9 +102,10 @@ object GuaranteeDomain {
     def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
       (
         UserAnswersReader(guaranteeType),
-        ReferenceNumberPage(index).reader
+        ReferenceNumberPage(index).reader,
+        AccessCodePage(index).reader
       ).mapN {
-        (`type`, grn) => GuaranteeOfTypes01249(`type`, grn, "", "")(index) // TODO - read access code and liability amount pages once built
+        (`type`, grn, accessCode) => GuaranteeOfTypes01249(`type`, grn, accessCode, "")(index) // TODO - read liability amount pages once built
       }
   }
 
@@ -134,7 +135,10 @@ object GuaranteeDomain {
   object GuaranteeOfType8 {
 
     def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
-      (UserAnswersReader(guaranteeType), OtherReferencePage(index).reader).mapN {
+      (
+        UserAnswersReader(guaranteeType),
+        OtherReferencePage(index).reader
+      ).mapN {
         (`type`, otherReference) => GuaranteeOfType8(`type`, otherReference)(index)
       }
   }
@@ -152,7 +156,7 @@ object GuaranteeDomain {
         UserAnswersReader(guaranteeType),
         OtherReferenceYesNoPage(index).filterOptionalDependent(identity)(OtherReferencePage(index).reader)
       ).mapN {
-        (`type`, otherReferenceYesNo) => GuaranteeOfType3(`type`, otherReferenceYesNo)(index)
+        (`type`, otherReference) => GuaranteeOfType3(`type`, otherReference)(index)
       }
   }
 }

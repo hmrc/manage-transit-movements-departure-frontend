@@ -44,6 +44,8 @@ class AddAnotherGuaranteeViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithBackLink
 
+  behave like pageWithSectionCaption("Guarantee details")
+
   behave like pageWithMoreItemsAllowed()
 
   behave like pageWithItemsMaxedOut()

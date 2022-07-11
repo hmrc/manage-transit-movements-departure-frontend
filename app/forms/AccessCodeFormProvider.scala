@@ -19,9 +19,9 @@ package forms
 import forms.Constants.accessCodeLength
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.alphaNumericRegex
+import play.api.data.Form
 
 import javax.inject.Inject
-import play.api.data.Form
 
 class AccessCodeFormProvider @Inject() extends Mappings {
 
@@ -29,8 +29,10 @@ class AccessCodeFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text(s"$prefix.error.required")
         .verifying(
-          StopOnFirstFail[String](exactLength(accessCodeLength, s"$prefix.error.length")),
-          regexp(alphaNumericRegex, s"$prefix.error.invalid")
+          StopOnFirstFail[String](
+            exactLength(accessCodeLength, s"$prefix.error.length"),
+            regexp(alphaNumericRegex, s"$prefix.error.invalid")
+          )
         )
     )
 }

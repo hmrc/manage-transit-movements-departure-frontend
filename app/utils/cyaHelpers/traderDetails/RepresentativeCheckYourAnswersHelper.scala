@@ -35,14 +35,14 @@ class RepresentativeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)
 
   def eori: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = EoriPage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "traderDetails.representative.eori",
     id = Some("representative-eori-number")
   )
 
   def name: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = NamePage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "traderDetails.representative.name",
     id = Some("representative-name")
   )
@@ -56,7 +56,7 @@ class RepresentativeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)
 
   def phoneNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = TelephoneNumberPage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "traderDetails.representative.telephoneNumber",
     id = Some("representative-phone-number")
   )

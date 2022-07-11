@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package utils.cyaHelpers
+package utils.cyaHelpers.guaranteeDetails
 
 import controllers.guaranteeDetails.{routes => gdRoutes}
 import models.guaranteeDetails.GuaranteeType
@@ -25,6 +25,7 @@ import pages.sections.GuaranteeDetailsSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
+import utils.cyaHelpers.AnswersHelper
 
 class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 

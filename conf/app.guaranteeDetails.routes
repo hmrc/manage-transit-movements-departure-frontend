@@ -35,3 +35,6 @@ GET        /:lrn/guarantee-details/:index/access-code                           
 POST       /:lrn/guarantee-details/:index/access-code                               controllers.guaranteeDetails.AccessCodeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode, index: Index)
 GET        /:lrn/guarantee-details/:index/change-access-code                        controllers.guaranteeDetails.AccessCodeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
 POST       /:lrn/guarantee-details/:index/change-access-code                        controllers.guaranteeDetails.AccessCodeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
+
+GET        /:lrn/guarantee-details/:index/check-answers                             controllers.guaranteeDetails.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
+POST       /:lrn/guarantee-details/:index/check-answers                             controllers.guaranteeDetails.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber, index: Index)

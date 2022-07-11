@@ -51,7 +51,7 @@ class GuaranteeAddedTIRControllerSpec extends SpecBase with AppWithDefaultMockFi
 
     }
 
-    "must redirect to Task List Page" in {
+    "must redirect to check your answers" in {
       setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
@@ -62,7 +62,7 @@ class GuaranteeAddedTIRControllerSpec extends SpecBase with AppWithDefaultMockFi
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
+      redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad(lrn, Index(0)).url
 
       val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
       verify(mockSessionRepository).set(userAnswersCaptor.capture())

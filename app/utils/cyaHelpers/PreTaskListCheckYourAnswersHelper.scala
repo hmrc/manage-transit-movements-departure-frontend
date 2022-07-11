@@ -27,14 +27,14 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
 
   def localReferenceNumber: SummaryListRow = buildRow(
     prefix = "localReferenceNumber",
-    answer = formatAsLiteral(lrn),
+    answer = formatAsText(lrn),
     id = None,
     call = LocalReferenceNumberController.onPageLoad()
   )
 
   def officeOfDeparture: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
     page = OfficeOfDeparturePage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "officeOfDeparture",
     id = None
   )
@@ -55,7 +55,7 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
 
   def tirCarnet: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = TIRCarnetReferencePage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "tirCarnetReference",
     id = None
   )

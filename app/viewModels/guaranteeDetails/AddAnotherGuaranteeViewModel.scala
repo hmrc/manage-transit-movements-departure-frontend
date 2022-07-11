@@ -19,7 +19,7 @@ package viewModels.guaranteeDetails
 import models.{NormalMode, UserAnswers}
 import play.api.i18n.Messages
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
-import utils.cyaHelpers.GuaranteeDetailsCheckYourAnswersHelper
+import utils.cyaHelpers.guaranteeDetails.GuaranteeDetailsCheckYourAnswersHelper
 
 import javax.inject.Inject
 

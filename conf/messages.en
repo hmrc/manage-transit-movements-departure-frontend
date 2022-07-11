@@ -488,9 +488,9 @@ guaranteeDetails.otherReference.change.hidden = reference for the guarantee
 
 guaranteeDetails.otherReferenceYesNo.title = Do you want to add a reference for the guarantee?
 guaranteeDetails.otherReferenceYesNo.heading = Do you want to add a reference for the guarantee?
-guaranteeDetails.otherReferenceYesNo.checkYourAnswersLabel = Reference for the guarantee
+guaranteeDetails.otherReferenceYesNo.checkYourAnswersLabel = Add reference for the guarantee
 guaranteeDetails.otherReferenceYesNo.error.required = Select yes if you want to add a reference for the guarantee
-guaranteeDetails.otherReferenceYesNo.change.hidden = reference for the guarantee
+guaranteeDetails.otherReferenceYesNo.change.hidden = if you want to add a reference for the guarantee
 
 guaranteeDetails.removeGuaranteeYesNo.title = Are you sure you want to remove this guarantee?
 guaranteeDetails.removeGuaranteeYesNo.heading = Are you sure you want to remove this guarantee?
@@ -517,3 +517,6 @@ guaranteeDetails.accessCode.error.required = Enter the access code
 guaranteeDetails.accessCode.error.length = The access code must be 4 characters long
 guaranteeDetails.accessCode.error.invalid = The access code must only include the letters a to z and numbers 0 to 9
 guaranteeDetails.accessCode.change.hidden = access code
+
+guaranteeDetails.checkYourAnswers.title = Check your answers
+guaranteeDetails.checkYourAnswers.heading = Check your answers
