@@ -17,42 +17,28 @@
 package generators
 
 import models.domain.UserAnswersReader
-import models.journeyDomain.ReaderError
-import models.{RichJsObject, UserAnswers}
+import models.journeyDomain.{PreTaskListDomain, ReaderError}
+import models.{EoriNumber, LocalReferenceNumber, RichJsObject, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
-import pages._
-import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
   self: Generators =>
 
   implicit lazy val arbitraryUserAnswers: Arbitrary[UserAnswers] =
     Arbitrary {
-      arbitraryUserAnswers()
+      for {
+        lrn        <- arbitrary[LocalReferenceNumber]
+        eoriNumber <- arbitrary[EoriNumber]
+        initialAnswers = UserAnswers(lrn, eoriNumber)
+        answers <- buildUserAnswers[PreTaskListDomain](initialAnswers) // TODO - eventually change to DepartureDomain
+      } yield answers
     }
 
-  protected def arbitraryUserAnswers(gens: Gen[(QuestionPage[_], JsValue)]*): Gen[UserAnswers] = {
-    import models._
-
-    import scala.collection.convert.ImplicitConversions._
-
-    for {
-      id         <- arbitrary[LocalReferenceNumber]
-      eoriNumber <- arbitrary[EoriNumber]
-      data       <- Gen.sequence(gens).map(_.toList)
-    } yield UserAnswers(
-      lrn = id,
-      eoriNumber = eoriNumber,
-      data = data.foldLeft(Json.obj()) {
-        case (obj, (path, value)) =>
-          obj.setObject(path.path, value).get
-      }
-    )
-  }
-
-  protected def buildUserAnswers[T](initialUserAnswers: UserAnswers)(implicit userAnswersReader: UserAnswersReader[T]): Gen[UserAnswers] = {
+  protected def buildUserAnswers[T](
+    initialUserAnswers: UserAnswers
+  )(implicit userAnswersReader: UserAnswersReader[T]): Gen[UserAnswers] = {
 
     def rec(userAnswers: UserAnswers): Gen[UserAnswers] =
       UserAnswersReader[T].run(userAnswers) match {
