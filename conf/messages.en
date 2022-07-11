@@ -492,6 +492,26 @@ guaranteeDetails.otherReferenceYesNo.checkYourAnswersLabel = Add reference for t
 guaranteeDetails.otherReferenceYesNo.error.required = Select yes if you want to add a reference for the guarantee
 guaranteeDetails.otherReferenceYesNo.change.hidden = if you want to add a reference for the guarantee
 
+guaranteeDetails.accessCode.title = What is the access code?
+guaranteeDetails.accessCode.heading = What is the access code?
+guaranteeDetails.accessCode.paragraph = This is set up by the Principal and works just like a bank PIN code.
+guaranteeDetails.accessCode.hint = The code will be 4 characters long, like 0000 or X9X9.
+guaranteeDetails.accessCode.checkYourAnswersLabel = Access code
+guaranteeDetails.accessCode.error.required = Enter the access code
+guaranteeDetails.accessCode.error.length = The access code must be 4 characters long
+guaranteeDetails.accessCode.error.invalid = The access code must only include the letters a to z and numbers 0 to 9
+guaranteeDetails.accessCode.change.hidden = access code
+
+guaranteeDetails.liabilityAmount.title = How much is the liability in pounds?
+guaranteeDetails.liabilityAmount.heading = How much is the liability in pounds?
+guaranteeDetails.liabilityAmount.checkYourAnswersLabel = Liability amount
+guaranteeDetails.liabilityAmount.hint = This can have up to 2 decimal places, for example 999.99.
+guaranteeDetails.liabilityAmount.error.required = Enter the liability amount in pounds
+guaranteeDetails.liabilityAmount.error.invalidCharacters = The liability amount must only include numbers 0 to 9 and a decimal point
+guaranteeDetails.liabilityAmount.error.invalidFormat = The liability amount must only have up to 2 decimal places, for example 999.99
+guaranteeDetails.liabilityAmount.error.invalidValue = The liability amount must be £9,999,999,999,999,999.99 or less
+guaranteeDetails.liabilityAmount.change.hidden = liability amount
+
 guaranteeDetails.removeGuaranteeYesNo.title = Are you sure you want to remove this guarantee?
 guaranteeDetails.removeGuaranteeYesNo.heading = Are you sure you want to remove this guarantee?
 guaranteeDetails.removeGuaranteeYesNo.error.required = Select yes if you want to remove this guarantee
@@ -507,16 +527,6 @@ guaranteeDetails.addAnotherGuarantee.maxLimit.label = You cannot add any more gu
 guaranteeDetails.addGuaranteeYesNo.title = Do you want to add a guarantee?
 guaranteeDetails.addGuaranteeYesNo.heading = Do you want to add a guarantee?
 guaranteeDetails.addGuaranteeYesNo.error.required = Select yes if you want to add a guarantee
-
-guaranteeDetails.accessCode.title = What is the access code?
-guaranteeDetails.accessCode.heading = What is the access code?
-guaranteeDetails.accessCode.paragraph = This is set up by the Principal and works just like a bank PIN code.
-guaranteeDetails.accessCode.hint = The code will be 4 characters long, like 0000 or X9X9.
-guaranteeDetails.accessCode.checkYourAnswersLabel = Access code
-guaranteeDetails.accessCode.error.required = Enter the access code
-guaranteeDetails.accessCode.error.length = The access code must be 4 characters long
-guaranteeDetails.accessCode.error.invalid = The access code must only include the letters a to z and numbers 0 to 9
-guaranteeDetails.accessCode.change.hidden = access code
 
 guaranteeDetails.checkYourAnswers.title = Check your answers
 guaranteeDetails.checkYourAnswers.heading = Check your answers

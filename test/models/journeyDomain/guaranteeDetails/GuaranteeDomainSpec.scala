@@ -45,18 +45,20 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
         val guaranteeType   = `0,1,2,4,9`.sample.value
         val grn             = Gen.alphaNumStr.sample.value
         val accessCode      = Gen.alphaNumStr.sample.value
+        val liabilityAmount = arbitrary[BigDecimal].sample.value
 
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, declarationType)
           .setValue(GuaranteeTypePage(index), guaranteeType)
           .setValue(ReferenceNumberPage(index), grn)
           .setValue(AccessCodePage(index), accessCode)
+          .setValue(LiabilityAmountPage(index), liabilityAmount)
 
         val expectedResult = GuaranteeOfTypes01249(
           `type` = guaranteeType,
           grn = grn,
           accessCode = accessCode,
-          liabilityAmount = ""
+          liabilityAmount = liabilityAmount
         )(index)
 
         val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
@@ -226,6 +228,23 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
             val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
 
             result.left.value.page mustBe AccessCodePage(index)
+          }
+
+          "when liability amount missing" in {
+            val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+            val guaranteeType   = `0,1,2,4,9`.sample.value
+            val grn             = Gen.alphaNumStr.sample.value
+            val accessCOde      = Gen.alphaNumStr.sample.value
+
+            val userAnswers = emptyUserAnswers
+              .setValue(DeclarationTypePage, declarationType)
+              .setValue(GuaranteeTypePage(index), guaranteeType)
+              .setValue(ReferenceNumberPage(index), grn)
+              .setValue(AccessCodePage(index), accessCOde)
+
+            val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
+
+            result.left.value.page mustBe LiabilityAmountPage(index)
           }
         }
 

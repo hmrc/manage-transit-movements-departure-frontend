@@ -23,6 +23,9 @@ import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.html.components._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 
+import java.text.NumberFormat
+import java.util.Locale
+
 private[utils] class SummaryListRowHelper(implicit messages: Messages) {
 
   protected def formatAsYesOrNo(answer: Boolean): Content =
@@ -38,6 +41,11 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
   protected def formatAsText[T](answer: T): Content = s"$answer".toText
 
   protected def formatAsPassword(answer: String): Content = ("•" * answer.length).toText
+
+  protected def formatAsCurrency(answer: BigDecimal): Content = {
+    val formatter = NumberFormat.getCurrencyInstance(Locale.UK)
+    formatter.format(answer).toText
+  }
 
   protected def formatEnumAsText[T](messageKeyPrefix: String)(answer: T): Content =
     formatEnumAsString(messageKeyPrefix)(answer).toText

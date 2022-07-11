@@ -48,7 +48,7 @@ class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with
 
       "when not TIR" - {
         "when 0,1,2,4,9 guarantee type" - {
-          "must return 4 rows" ignore {
+          "must return 4 rows" in {
             val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
             val guaranteeType   = arbitrary[GuaranteeType](arbitrary01249GuaranteeType).sample.value
             val initialAnswers = emptyUserAnswers

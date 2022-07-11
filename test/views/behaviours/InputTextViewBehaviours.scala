@@ -26,6 +26,8 @@ trait InputTextViewBehaviours[T] extends QuestionViewBehaviours[T] with Generato
   implicit val arbitraryT: Arbitrary[T]
   private lazy val validValue: T = arbitrary[T].sample.value
 
+  val inputPrefix: Option[String] = None
+
   def pageWithInputText(inputFieldClassSize: Option[InputSize] = None): Unit =
     "page with an input text field" - {
       "when rendered" - {
@@ -43,6 +45,13 @@ trait InputTextViewBehaviours[T] extends QuestionViewBehaviours[T] with Generato
             case Some(sizeClass) => assert(getElementById(doc, "value").hasClass(sizeClass.className))
             case None            => assert(getElementById(doc, "value").classNames().size == 1)
           }
+        }
+
+        inputPrefix.foreach {
+          value =>
+            "must have the correct prefix" in {
+              getElementByClass(doc, "govuk-input__prefix").text() mustBe value
+            }
         }
 
         "must not render an error summary" in {

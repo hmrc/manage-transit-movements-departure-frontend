@@ -93,7 +93,7 @@ object GuaranteeDomain {
     `type`: GuaranteeType,
     grn: String,
     accessCode: String,
-    liabilityAmount: String
+    liabilityAmount: BigDecimal
   )(override val index: Index)
       extends GuaranteeDomain
 
@@ -103,9 +103,10 @@ object GuaranteeDomain {
       (
         UserAnswersReader(guaranteeType),
         ReferenceNumberPage(index).reader,
-        AccessCodePage(index).reader
+        AccessCodePage(index).reader,
+        LiabilityAmountPage(index).reader
       ).mapN {
-        (`type`, grn, accessCode) => GuaranteeOfTypes01249(`type`, grn, accessCode, "")(index) // TODO - read liability amount pages once built
+        (`type`, grn, accessCode, liabilityAmount) => GuaranteeOfTypes01249(`type`, grn, accessCode, liabilityAmount)(index)
       }
   }
 

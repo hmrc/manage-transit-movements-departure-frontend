@@ -198,6 +198,50 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
       }
     }
 
+    "otherReference" - {
+      "must return None" - {
+        "when OtherReferencePage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new GuaranteeCheckYourAnswersHelper(emptyUserAnswers, mode, index)
+              val result = helper.otherReference
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when OtherReferencePage defined" in {
+          forAll(Gen.alphaNumStr, arbitrary[Mode]) {
+            (referenceNumber, mode) =>
+              val answers = emptyUserAnswers.setValue(OtherReferencePage(index), referenceNumber)
+
+              val helper = new GuaranteeCheckYourAnswersHelper(answers, mode, index)
+              val result = helper.otherReference
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Reference for the guarantee".toText),
+                  value = Value(referenceNumber.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = routes.OtherReferenceController.onPageLoad(answers.lrn, mode, index).url,
+                          visuallyHiddenText = Some("reference for the guarantee"),
+                          attributes = Map("id" -> "other-reference")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
     "accessCode" - {
       "must return None" - {
         "when AccessCodePage undefined" in {
@@ -242,39 +286,39 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
       }
     }
 
-    "otherReference" - {
+    "liabilityAmount" - {
       "must return None" - {
-        "when OtherReferencePage undefined" in {
+        "when LiabilityAmountPage undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new GuaranteeCheckYourAnswersHelper(emptyUserAnswers, mode, index)
-              val result = helper.otherReference
+              val result = helper.liabilityAmount
               result mustBe None
           }
         }
       }
 
       "must return Some(Row)" - {
-        "when OtherReferencePage defined" in {
-          forAll(Gen.alphaNumStr, arbitrary[Mode]) {
-            (referenceNumber, mode) =>
-              val answers = emptyUserAnswers.setValue(OtherReferencePage(index), referenceNumber)
+        "when LiabilityAmountPage defined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(LiabilityAmountPage(index), 1000: BigDecimal)
 
               val helper = new GuaranteeCheckYourAnswersHelper(answers, mode, index)
-              val result = helper.otherReference
+              val result = helper.liabilityAmount
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Reference for the guarantee".toText),
-                  value = Value(referenceNumber.toText),
+                  key = Key("Liability amount".toText),
+                  value = Value("£1,000.00".toText),
                   actions = Some(
                     Actions(
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.OtherReferenceController.onPageLoad(answers.lrn, mode, index).url,
-                          visuallyHiddenText = Some("reference for the guarantee"),
-                          attributes = Map("id" -> "other-reference")
+                          href = routes.LiabilityAmountController.onPageLoad(answers.lrn, mode, index).url,
+                          visuallyHiddenText = Some("liability amount"),
+                          attributes = Map("id" -> "liability-amount")
                         )
                       )
                     )
