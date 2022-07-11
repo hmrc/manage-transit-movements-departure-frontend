@@ -26,6 +26,7 @@ import java.time._
 import scala.util.matching.Regex
 
 // TODO: Move away from mixing style to using objects
+// scalastyle:off number.of.methods
 trait Generators extends ModelGenerators with ViewModelGenerators {
 
   lazy val stringMaxLength = 36
@@ -93,6 +94,9 @@ trait Generators extends ModelGenerators with ViewModelGenerators {
 
   def intsAboveValue(value: Int): Gen[Int] =
     arbitrary[Int] retryUntil (_ > value)
+
+  def doublesBelowValue(value: Double): Gen[Double] =
+    arbitrary[Double] retryUntil (_ < value)
 
   def positiveInts: Gen[Int] = Gen.choose(0, Int.MaxValue)
 
@@ -233,3 +237,4 @@ trait Generators extends ModelGenerators with ViewModelGenerators {
     Gen.oneOf[Any](Gen.alphaNumStr, arbitrary[Int])
   }
 }
+// scalastyle:on number.of.methods

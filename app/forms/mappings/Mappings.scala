@@ -85,4 +85,12 @@ trait Mappings extends Formatters with Constraints {
     args: Seq[Any] = Seq.empty
   ): FieldMapping[CustomsOffice] =
     of(customsOfficeFormatter(customsOfficeList, errorKey, args))
+
+  protected def currency(
+    requiredKey: String = "error.required",
+    invalidCharactersKey: String = "error.invalidCharacters",
+    invalidFormatKey: String = "error.invalidFormat",
+    invalidValueKey: String = "error.invalidValue"
+  ): FieldMapping[Double] =
+    of(currencyFormatter(requiredKey, invalidCharactersKey, invalidFormatKey, invalidValueKey))
 }

@@ -492,6 +492,15 @@ guaranteeDetails.otherReferenceYesNo.checkYourAnswersLabel = Add reference for t
 guaranteeDetails.otherReferenceYesNo.error.required = Select yes if you want to add a reference for the guarantee
 guaranteeDetails.otherReferenceYesNo.change.hidden = if you want to add a reference for the guarantee
 
+guaranteeDetails.liabilityAmount.title = How much is the liability in pounds?
+guaranteeDetails.liabilityAmount.heading = How much is the liability in pounds?
+guaranteeDetails.liabilityAmount.checkYourAnswersLabel = Liability amount
+guaranteeDetails.liabilityAmount.change.hidden = liability amount
+guaranteeDetails.liabilityAmount.error.required = Enter the liability amount in pounds
+guaranteeDetails.liabilityAmount.error.invalidCharacters = The liability amount must only include numbers 0 to 9 and a decimal point
+guaranteeDetails.liabilityAmount.error.invalidFormat = The liability amount must only have up to 2 decimal places, for example 999.99
+guaranteeDetails.liabilityAmount.error.invalidValue = The liability amount must be £9,999,999,999,999,999.99 or less
+
 guaranteeDetails.removeGuaranteeYesNo.title = Are you sure you want to remove this guarantee?
 guaranteeDetails.removeGuaranteeYesNo.heading = Are you sure you want to remove this guarantee?
 guaranteeDetails.removeGuaranteeYesNo.error.required = Select yes if you want to remove this guarantee
