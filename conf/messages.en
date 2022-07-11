@@ -441,7 +441,6 @@ guaranteeDetails.guaranteeAddedTIR.paragraph2 = (B) Guarantee for goods dispatch
 guaranteeDetails.guaranteeAddedTIR.paragraph3 = This guarantee is required for all TIR declarations (goods moving under the cover of TIR carnet).
 guaranteeDetails.guaranteeAddedTIR.paragraph4 = You don’t need to do anything here – this is just for your reference.
 
-
 guaranteeDetails.guaranteeType.title = Which type of guarantee is it?
 guaranteeDetails.guaranteeType.heading = Which type of guarantee is it?
 guaranteeDetails.guaranteeType.0 = (0) Guarantee waiver
@@ -509,3 +508,12 @@ guaranteeDetails.addGuaranteeYesNo.title = Do you want to add a guarantee?
 guaranteeDetails.addGuaranteeYesNo.heading = Do you want to add a guarantee?
 guaranteeDetails.addGuaranteeYesNo.error.required = Select yes if you want to add a guarantee
 
+guaranteeDetails.accessCode.title = What is the access code?
+guaranteeDetails.accessCode.heading = What is the access code?
+guaranteeDetails.accessCode.paragraph = This is set up by the Principal and works just like a bank PIN code.
+guaranteeDetails.accessCode.hint = The code will be 4 characters long, like 0000 or X9X9.
+guaranteeDetails.accessCode.checkYourAnswersLabel = Access code
+guaranteeDetails.accessCode.error.required = Enter the access code
+guaranteeDetails.accessCode.error.length = The access code must be 4 characters long
+guaranteeDetails.accessCode.error.invalid = The access code must only include the letters a to z and numbers 0 to 9
+guaranteeDetails.accessCode.change.hidden = access code
