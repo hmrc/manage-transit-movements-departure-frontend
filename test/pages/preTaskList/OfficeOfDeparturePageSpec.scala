@@ -16,7 +16,9 @@
 
 package pages.preTaskList
 
+import models.DeclarationType.Option4
 import models.reference.CustomsOffice
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class OfficeOfDeparturePageSpec extends PageBehaviours {
@@ -28,5 +30,30 @@ class OfficeOfDeparturePageSpec extends PageBehaviours {
     beSettable[CustomsOffice](OfficeOfDeparturePage)
 
     beRemovable[CustomsOffice](OfficeOfDeparturePage)
+
+    "cleanup" - {
+      "when changing from XI to GB" - {
+        "and declaration type is TIR" - {
+          "must clean up DeclarationTypePage and TIRCarnetReferencePage" in {
+            forAll(
+              arbitrary[CustomsOffice](arbitraryXiCustomsOffice),
+              arbitrary[CustomsOffice](arbitraryGbCustomsOffice),
+              arbitrary[String]
+            ) {
+              (xiCustomsOffice, gbCustomsOffice, ref) =>
+                val preChange = emptyUserAnswers
+                  .setValue(OfficeOfDeparturePage, xiCustomsOffice)
+                  .setValue(DeclarationTypePage, Option4)
+                  .setValue(TIRCarnetReferencePage, ref)
+
+                val postChange = preChange.setValue(OfficeOfDeparturePage, gbCustomsOffice)
+
+                postChange.get(DeclarationTypePage) mustNot be(defined)
+                postChange.get(TIRCarnetReferencePage) mustNot be(defined)
+            }
+          }
+        }
+      }
+    }
   }
 }

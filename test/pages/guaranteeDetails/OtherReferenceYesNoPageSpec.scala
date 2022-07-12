@@ -16,6 +16,7 @@
 
 package pages.guaranteeDetails
 
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class OtherReferenceYesNoPageSpec extends PageBehaviours {
@@ -27,5 +28,31 @@ class OtherReferenceYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](OtherReferenceYesNoPage(index))
 
     beRemovable[Boolean](OtherReferenceYesNoPage(index))
+
+    "cleanup" - {
+      "when NO selected" - {
+        "must clean up OtherReferencePage" in {
+          forAll(arbitrary[String]) {
+            ref =>
+              val preChange  = emptyUserAnswers.setValue(OtherReferencePage(index), ref)
+              val postChange = preChange.setValue(OtherReferenceYesNoPage(index), false)
+
+              postChange.get(OtherReferencePage(index)) mustNot be(defined)
+          }
+        }
+      }
+
+      "when YES selected" - {
+        "must not clean up OtherReferencePage" in {
+          forAll(arbitrary[String]) {
+            ref =>
+              val preChange  = emptyUserAnswers.setValue(OtherReferencePage(index), ref)
+              val postChange = preChange.setValue(OtherReferenceYesNoPage(index), true)
+
+              postChange.get(OtherReferencePage(index)) must be(defined)
+          }
+        }
+      }
+    }
   }
 }
