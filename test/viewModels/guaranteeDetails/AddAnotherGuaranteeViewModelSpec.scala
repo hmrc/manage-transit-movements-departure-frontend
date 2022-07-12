@@ -19,10 +19,10 @@ package viewModels.guaranteeDetails
 import base.SpecBase
 import controllers.guaranteeDetails.{routes => gdRoutes}
 import generators.Generators
-import models.guaranteeDetails.GuaranteeType.{GuaranteeNotRequired, GuaranteeWaiver}
+import models.guaranteeDetails.GuaranteeType._
 import models.{DeclarationType, Index, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.guaranteeDetails.GuaranteeTypePage
+import pages.guaranteeDetails.{GuaranteeTypePage, OtherReferenceYesNoPage}
 import pages.preTaskList.DeclarationTypePage
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 
@@ -33,13 +33,14 @@ class AddAnotherGuaranteeViewModelSpec extends SpecBase with Generators {
     val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
     val userAnswers = emptyUserAnswers
       .setValue(DeclarationTypePage, declarationType)
-      .setValue(GuaranteeTypePage(Index(0)), GuaranteeNotRequired)
+      .setValue(GuaranteeTypePage(Index(0)), CashDepositGuarantee)
+      .setValue(OtherReferenceYesNoPage(Index(0)), false)
       .setValue(GuaranteeTypePage(Index(1)), GuaranteeWaiver)
 
     val result = AddAnotherGuaranteeViewModel(userAnswers)
     result.listItems mustBe Seq(
       ListItem(
-        name = "(R) Guarantee not required – goods carried on the Rhine, the Danube or their waterways",
+        name = "(3) Individual guarantee in cash or an equivalent recognised by the customs authorities",
         changeUrl = gdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, Index(0)).url,
         removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, Index(0)).url
       ),

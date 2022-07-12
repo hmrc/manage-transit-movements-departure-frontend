@@ -22,7 +22,7 @@ import generators.Generators
 import models.guaranteeDetails.GuaranteeType._
 import models.{DeclarationType, Index, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.guaranteeDetails.GuaranteeTypePage
+import pages.guaranteeDetails._
 import pages.preTaskList.DeclarationTypePage
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import utils.cyaHelpers.guaranteeDetails.GuaranteeDetailsCheckYourAnswersHelper
@@ -43,13 +43,14 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with Generator
       val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
       val userAnswers = emptyUserAnswers
         .setValue(DeclarationTypePage, declarationType)
-        .setValue(GuaranteeTypePage(Index(0)), GuaranteeWaiverByAgreement)
+        .setValue(GuaranteeTypePage(Index(0)), CashDepositGuarantee)
+        .setValue(OtherReferenceYesNoPage(Index(0)), false)
 
       val helper = new GuaranteeDetailsCheckYourAnswersHelper(userAnswers, NormalMode)
       helper.listItems mustBe Seq(
         Right(
           ListItem(
-            name = "(A) Guarantee waiver by agreement",
+            name = "(3) Individual guarantee in cash or an equivalent recognised by the customs authorities",
             changeUrl = gdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, Index(0)).url,
             removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(0)).url
           )
@@ -63,14 +64,15 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with Generator
       val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
       val userAnswers = emptyUserAnswers
         .setValue(DeclarationTypePage, declarationType)
-        .setValue(GuaranteeTypePage(Index(0)), GuaranteeNotRequired)
+        .setValue(GuaranteeTypePage(Index(0)), CashDepositGuarantee)
+        .setValue(OtherReferenceYesNoPage(Index(0)), false)
         .setValue(GuaranteeTypePage(Index(1)), GuaranteeWaiver)
 
       val helper = new GuaranteeDetailsCheckYourAnswersHelper(userAnswers, NormalMode)
       helper.listItems mustBe Seq(
         Right(
           ListItem(
-            name = "(R) Guarantee not required – goods carried on the Rhine, the Danube or their waterways",
+            name = "(3) Individual guarantee in cash or an equivalent recognised by the customs authorities",
             changeUrl = gdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, Index(0)).url,
             removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(0)).url
           )
