@@ -33,7 +33,14 @@ sealed trait GuaranteeDomain extends JourneyDomainModel {
   val `type`: GuaranteeType
 
   override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
-    Some(controllers.guaranteeDetails.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, index))
+    Some {
+      `type` match {
+        case GuaranteeWaiverByAgreement | GuaranteeNotRequired =>
+          controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn)
+        case _ =>
+          controllers.guaranteeDetails.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, index)
+      }
+    }
 }
 
 object GuaranteeDomain {

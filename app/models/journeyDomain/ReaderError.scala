@@ -18,7 +18,7 @@ package models.journeyDomain
 
 import queries.{Gettable, Query, Settable}
 
-trait OpsError {
+sealed trait OpsError {
   val page: Query
   val message: Option[String]
 }

@@ -18,19 +18,14 @@ package navigation.traderDetails
 
 import base.SpecBase
 import controllers.traderDetails.routes
-import generators.{Generators, PreTaskListUserAnswersGenerator, TraderDetailsUserAnswersGenerator}
+import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.traderDetails.ActingAsRepresentativePage
 
-class TraderDetailsNavigatorSpec
-    extends SpecBase
-    with ScalaCheckPropertyChecks
-    with Generators
-    with TraderDetailsUserAnswersGenerator
-    with PreTaskListUserAnswersGenerator {
+class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
 
   private val navigator = new TraderDetailsNavigator
 

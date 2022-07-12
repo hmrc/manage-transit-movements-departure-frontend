@@ -62,9 +62,9 @@ class RemoveGuaranteeYesNoController @Inject() (
               GuaranteeSection(index)
                 .removeFromUserAnswers()
                 .writeToSession()
-                .navigateTo(routes.AddAnotherGuaranteeController.onSubmit(lrn))
+                .navigateTo(routes.AddAnotherGuaranteeController.onPageLoad(lrn))
             case false =>
-              Future.successful(Redirect(routes.AddAnotherGuaranteeController.onSubmit(lrn)))
+              Future.successful(Redirect(routes.AddAnotherGuaranteeController.onPageLoad(lrn)))
           }
         )
   }

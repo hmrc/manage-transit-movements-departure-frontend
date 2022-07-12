@@ -61,6 +61,20 @@ trait ModelGenerators {
       )
     }
 
+  lazy val arbitrary01234589GuaranteeType: Arbitrary[GuaranteeType] =
+    Arbitrary {
+      Gen.oneOf(
+        GuaranteeWaiver,
+        ComprehensiveGuarantee,
+        IndividualGuarantee,
+        CashDepositGuarantee,
+        FlatRateVoucher,
+        GuaranteeWaiverSecured,
+        GuaranteeNotRequiredExemptPublicBody,
+        IndividualGuaranteeMultiple
+      )
+    }
+
   lazy val arbitraryARGuaranteeType: Arbitrary[GuaranteeType] =
     Arbitrary {
       Gen.oneOf(

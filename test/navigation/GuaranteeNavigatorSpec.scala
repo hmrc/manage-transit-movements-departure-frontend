@@ -20,9 +20,13 @@ import base.SpecBase
 import controllers.guaranteeDetails.{routes => gdRoutes}
 import generators.{Generators, GuaranteeDetailsUserAnswersGenerator}
 import models._
+import models.guaranteeDetails.GuaranteeType
+import models.guaranteeDetails.GuaranteeType._
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.guaranteeDetails.GuaranteeTypePage
+import pages.guaranteeDetails._
+import pages.preTaskList.DeclarationTypePage
 
 class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with GuaranteeDetailsUserAnswersGenerator {
 
@@ -30,37 +34,46 @@ class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with
 
   "Guarantee Details Navigator" - {
 
-    val pageGen = Gen.const(
-      GuaranteeTypePage(index)
+    val pageGen = Gen.oneOf(
+      GuaranteeTypePage(index),
+      ReferenceNumberPage(index),
+      AccessCodePage(index),
+      LiabilityAmountPage(index),
+      OtherReferenceYesNoPage(index),
+      OtherReferencePage(index)
     )
 
-    "when in NormalMode" - {
-
-      val mode = NormalMode
-
-      "when answers complete" - {
+    "when answers complete" - {
+      "when not a single-page journey" - {
         "must redirect to check your answers" in {
-          forAll(arbitraryGuaranteeAnswers(emptyUserAnswers, index), pageGen) {
-            (answers, page) =>
+          val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+          val guaranteeType   = arbitrary[GuaranteeType](arbitrary01234589GuaranteeType).sample.value
+          val initialAnswers = emptyUserAnswers
+            .setValue(DeclarationTypePage, declarationType)
+            .setValue(GuaranteeTypePage(index), guaranteeType)
+
+          forAll(arbitraryGuaranteeAnswers(initialAnswers, index), pageGen, arbitrary[Mode]) {
+            (answers, page, mode) =>
               navigator
                 .nextPage(page, mode, answers)
                 .mustBe(gdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn, index))
           }
         }
       }
-    }
 
-    "when in CheckMode" - {
+      "when a single-page journey" - {
+        "must redirect to add another" in {
+          val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+          val guaranteeType   = arbitrary[GuaranteeType](arbitraryARGuaranteeType).sample.value
+          val initialAnswers = emptyUserAnswers
+            .setValue(DeclarationTypePage, declarationType)
+            .setValue(GuaranteeTypePage(index), guaranteeType)
 
-      val mode = CheckMode
-
-      "when answers complete" - {
-        "must redirect to check your answers" in {
-          forAll(arbitraryGuaranteeAnswers(emptyUserAnswers, index), pageGen) {
-            (answers, page) =>
+          forAll(arbitraryGuaranteeAnswers(initialAnswers, index), pageGen, arbitrary[Mode]) {
+            (answers, page, mode) =>
               navigator
                 .nextPage(page, mode, answers)
-                .mustBe(gdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn, index))
+                .mustBe(gdRoutes.AddAnotherGuaranteeController.onPageLoad(answers.lrn))
           }
         }
       }

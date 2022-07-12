@@ -48,7 +48,6 @@ class GuaranteeAddedTIRControllerSpec extends SpecBase with AppWithDefaultMockFi
 
       contentAsString(result) mustEqual
         view(lrn)(request, messages).toString
-
     }
 
     "must redirect to check your answers" in {
@@ -62,7 +61,7 @@ class GuaranteeAddedTIRControllerSpec extends SpecBase with AppWithDefaultMockFi
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad(lrn, Index(0)).url
+      redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
 
       val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
       verify(mockSessionRepository).set(userAnswersCaptor.capture())

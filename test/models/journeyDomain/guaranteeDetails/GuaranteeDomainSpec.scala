@@ -210,7 +210,9 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
               .setValue(DeclarationTypePage, declarationType)
               .setValue(GuaranteeTypePage(index), guaranteeType)
 
-            val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
+            val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
+              GuaranteeDomain.userAnswersReader(index)
+            ).run(userAnswers)
 
             result.left.value.page mustBe ReferenceNumberPage(index)
           }
@@ -225,7 +227,9 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
               .setValue(GuaranteeTypePage(index), guaranteeType)
               .setValue(ReferenceNumberPage(index), grn)
 
-            val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
+            val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
+              GuaranteeDomain.userAnswersReader(index)
+            ).run(userAnswers)
 
             result.left.value.page mustBe AccessCodePage(index)
           }
@@ -242,7 +246,9 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
               .setValue(ReferenceNumberPage(index), grn)
               .setValue(AccessCodePage(index), accessCOde)
 
-            val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
+            val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
+              GuaranteeDomain.userAnswersReader(index)
+            ).run(userAnswers)
 
             result.left.value.page mustBe LiabilityAmountPage(index)
           }
@@ -256,7 +262,9 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
             .setValue(DeclarationTypePage, declarationType)
             .setValue(GuaranteeTypePage(index), guaranteeType)
 
-          val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
+          val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
+            GuaranteeDomain.userAnswersReader(index)
+          ).run(userAnswers)
 
           result.left.value.page mustBe GuaranteeTypePage(index)
         }
@@ -269,7 +277,9 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
             .setValue(DeclarationTypePage, declarationType)
             .setValue(GuaranteeTypePage(index), guaranteeType)
 
-          val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
+          val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
+            GuaranteeDomain.userAnswersReader(index)
+          ).run(userAnswers)
 
           result.left.value.page mustBe OtherReferencePage(index)
         }
@@ -284,7 +294,9 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
               .setValue(DeclarationTypePage, declarationType)
               .setValue(GuaranteeTypePage(index), guaranteeType)
 
-            val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
+            val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
+              GuaranteeDomain.userAnswersReader(index)
+            ).run(userAnswers)
 
             result.left.value.page mustBe OtherReferenceYesNoPage(index)
           }
@@ -296,7 +308,9 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
               .setValue(GuaranteeTypePage(index), guaranteeType)
               .setValue(OtherReferenceYesNoPage(index), true)
 
-            val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
+            val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
+              GuaranteeDomain.userAnswersReader(index)
+            ).run(userAnswers)
 
             result.left.value.page mustBe OtherReferencePage(index)
           }
