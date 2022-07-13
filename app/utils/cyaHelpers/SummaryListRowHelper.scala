@@ -16,6 +16,7 @@
 
 package utils.cyaHelpers
 
+import ch.obermuhlner.math.big.BigDecimalMath
 import models.reference.CountryCode
 import models.{Address, CountryList}
 import play.api.i18n.Messages
@@ -23,8 +24,7 @@ import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.html.components._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 
-import java.text.NumberFormat
-import java.util.Locale
+import scala.math.BigDecimal.RoundingMode
 
 private[utils] class SummaryListRowHelper(implicit messages: Messages) {
 
@@ -43,8 +43,25 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
   protected def formatAsPassword(answer: String): Content = ("•" * answer.length).toText
 
   protected def formatAsCurrency(answer: BigDecimal): Content = {
-    val formatter = NumberFormat.getCurrencyInstance(Locale.UK)
-    formatter.format(answer).toText
+    val numberOfDigits: Int = if (answer == 0) {
+      1
+    } else {
+      val exponent = BigDecimalMath.log10(answer.bigDecimal, answer.mc).setScale(0, RoundingMode.DOWN)
+      exponent.toInt + 1
+    }
+
+    String
+      .valueOf(answer.setScale(2))
+      .zipWithIndex
+      .foldLeft("£") {
+        case (acc, (char, index)) =>
+          if (index % 3 == numberOfDigits % 3 && index > 0 && index < numberOfDigits) {
+            acc + ',' + char
+          } else {
+            acc + char
+          }
+      }
+      .toText
   }
 
   protected def formatEnumAsText[T](messageKeyPrefix: String)(answer: T): Content =
