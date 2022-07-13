@@ -109,7 +109,7 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
             val task = GuaranteeDetailsTask(userAnswers)
             task.status mustBe InProgress
-            task.href.get mustBe gdRoutes.ReferenceNumberController.onPageLoad(userAnswers.lrn, NormalMode, index).url
+            task.href.get mustBe gdRoutes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn).url
         }
       }
     }
