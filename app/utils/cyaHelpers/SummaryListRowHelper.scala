@@ -42,7 +42,7 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
   protected def formatAsPassword(answer: String): Content = ("•" * answer.length).toText
 
   /**
-    * @param answer the value to be formatted, assumed >= 0
+    * @param answer the value to be formatted
     * @return the value, comma separated if necessary, in pounds and pence
     */
   protected def formatAsCurrency(answer: BigDecimal): Content = {
