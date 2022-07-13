@@ -471,20 +471,22 @@ guaranteeDetails.referenceNumber.error.format = The Guarantee Reference Number m
 
 guaranteeDetails.otherReference.option3.title = What is the reference for the guarantee?
 guaranteeDetails.otherReference.option3.heading = What is the reference for the guarantee?
+guaranteeDetails.otherReference.option3.checkYourAnswersLabel = Reference for the guarantee
+guaranteeDetails.otherReference.option3.change.hidden = reference for the guarantee
 guaranteeDetails.otherReference.option3.error.required = Enter the reference for the guarantee
 guaranteeDetails.otherReference.option3.error.length = The reference for the guarantee must be 35 characters or less
 guaranteeDetails.otherReference.option3.error.invalid = The reference for the guarantee must only include the letters a to z and numbers 0 to 9
 
 guaranteeDetails.otherReference.option8.title = What is the reference?
 guaranteeDetails.otherReference.option8.heading = What is the reference?
+guaranteeDetails.otherReference.option8.checkYourAnswersLabel = Reference
+guaranteeDetails.otherReference.option8.change.hidden = reference
 guaranteeDetails.otherReference.option8.error.required = Enter the reference
 guaranteeDetails.otherReference.option8.error.length = The reference must be 35 characters or less
 guaranteeDetails.otherReference.option8.error.invalid = The reference must only include the letters a to z and numbers 0 to 9
 
 guaranteeDetails.otherReference.hint = This can be up to 35 characters long and include both letters and numbers.
 guaranteeDetails.otherReference.paragraph = You must make sure this reference is up to date.
-guaranteeDetails.otherReference.checkYourAnswersLabel = Reference for the guarantee
-guaranteeDetails.otherReference.change.hidden = reference for the guarantee
 
 guaranteeDetails.otherReferenceYesNo.title = Do you want to add a reference for the guarantee?
 guaranteeDetails.otherReferenceYesNo.heading = Do you want to add a reference for the guarantee?

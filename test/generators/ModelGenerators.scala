@@ -38,6 +38,15 @@ trait ModelGenerators {
       Gen.oneOf(models.guaranteeDetails.GuaranteeType.values.filterNot(_ == TIRGuarantee))
     }
 
+  lazy val arbitraryNonOption3Or8GuaranteeType: Arbitrary[GuaranteeType] =
+    Arbitrary {
+      Gen.oneOf(
+        models.guaranteeDetails.GuaranteeType.values
+          .filterNot(_ == CashDepositGuarantee)
+          .filterNot(_ == GuaranteeNotRequiredExemptPublicBody)
+      )
+    }
+
   lazy val arbitrary012459GuaranteeType: Arbitrary[GuaranteeType] =
     Arbitrary {
       Gen.oneOf(

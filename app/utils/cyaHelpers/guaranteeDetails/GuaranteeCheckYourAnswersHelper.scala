@@ -17,7 +17,7 @@
 package utils.cyaHelpers.guaranteeDetails
 
 import models.guaranteeDetails.GuaranteeType
-import models.guaranteeDetails.GuaranteeType.TIRGuarantee
+import models.guaranteeDetails.GuaranteeType._
 import models.{Index, Mode, UserAnswers}
 import pages.guaranteeDetails._
 import play.api.i18n.Messages
@@ -48,12 +48,20 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
     id = Some("add-other-reference")
   )
 
-  def otherReference: Option[SummaryListRow] = getAnswerAndBuildRow[String](
-    page = OtherReferencePage(index),
-    formatAnswer = formatAsText,
-    prefix = "guaranteeDetails.otherReference",
-    id = Some("other-reference")
-  )
+  def otherReference: Option[SummaryListRow] =
+    (userAnswers.get(GuaranteeTypePage(index)) match {
+      case Some(CashDepositGuarantee)                 => Some("guaranteeDetails.otherReference.option3")
+      case Some(GuaranteeNotRequiredExemptPublicBody) => Some("guaranteeDetails.otherReference.option8")
+      case _                                          => None
+    }).flatMap {
+      prefix =>
+        getAnswerAndBuildRow[String](
+          page = OtherReferencePage(index),
+          formatAnswer = formatAsText,
+          prefix = prefix,
+          id = Some("other-reference")
+        )
+    }
 
   def accessCode: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = AccessCodePage(index),
