@@ -30,9 +30,10 @@ class HeadingSpec extends A11ySpecBase {
     val title   = nonEmptyString.sample.value
     val heading = nonEmptyString.sample.value
     val caption = Gen.option(nonEmptyString).sample.value
+    val classes = Gen.oneOf(None, Some("govuk-heading-xl govuk-!-margin-top-0 govuk-!-margin-bottom-2")).sample.value
 
     val content = template.apply(title) {
-      component.apply(heading, caption)
+      component.apply(heading, caption, classes)
     }
 
     "pass accessibility checks" in {
