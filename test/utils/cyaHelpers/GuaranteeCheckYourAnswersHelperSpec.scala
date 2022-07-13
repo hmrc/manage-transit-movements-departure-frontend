@@ -64,7 +64,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
 
                 result mustBe Some(
                   SummaryListRow(
-                    key = Key("Type of guarantee".toText),
+                    key = Key("Guarantee type".toText),
                     value = Value("(B) Guarantee for goods dispatched under TIR procedure".toText),
                     actions = None
                   )
@@ -88,7 +88,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
 
                 result mustBe Some(
                   SummaryListRow(
-                    key = Key("Type of guarantee".toText),
+                    key = Key("Guarantee type".toText),
                     value = Value(messages(s"guaranteeDetails.guaranteeType.$guaranteeType").toText),
                     actions = Some(
                       Actions(
@@ -133,7 +133,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Guarantee Reference Number".toText),
+                  key = Key("Guarantee Reference Number (GRN)".toText),
                   value = Value(referenceNumber.toText),
                   actions = Some(
                     Actions(
@@ -309,7 +309,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Liability amount".toText),
+                  key = Key("Liability amount (in pounds)".toText),
                   value = Value("£1,000.00".toText),
                   actions = Some(
                     Actions(
