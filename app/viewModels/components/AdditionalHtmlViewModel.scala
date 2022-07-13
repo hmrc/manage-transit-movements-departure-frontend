@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,20 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this(hmrcPageHeading: HmrcPageHeading)
+package viewModels.components
 
-@(
-    heading: String,
-    caption: Option[String] = None,
-    classes: Option[String] = None
-)(implicit messages: Messages)
-
-@hmrcPageHeading(
-    PageHeading(
-        text = heading,
-        section = caption,
-        headingClasses = classes
-    )
-)
+trait AdditionalHtmlViewModel {
+  val headingClasses = "govuk-heading-xl govuk-!-margin-top-0 govuk-!-margin-bottom-2"
+}

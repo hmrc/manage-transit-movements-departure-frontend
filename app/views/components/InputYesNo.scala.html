@@ -55,8 +55,8 @@
     case OrdinaryYesNo(heading, caption) => {
         @govukRadios(radios.withHeadingAndCaption(heading, caption))
     }
-    case YesNoWithAdditionalHtml(heading, caption, additionalHtml) => {
-        @hmrcHeading(heading, caption)
+    case x @ YesNoWithAdditionalHtml(heading, caption, additionalHtml) => {
+        @hmrcHeading(heading, caption, Some(x.headingClasses))
         @additionalHtml
         @govukRadios(radios.withLegend(heading, false))
     }

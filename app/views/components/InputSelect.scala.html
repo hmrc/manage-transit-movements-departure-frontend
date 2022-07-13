@@ -51,8 +51,8 @@
     case OrdinarySelect(heading, caption) => {
         @govukSelect(select.withHeadingAndCaption(heading, caption))
     }
-    case SelectWithAdditionalHtml(heading, caption, additionalHtml) => {
-        @hmrcHeading(heading, caption)
+    case x @ SelectWithAdditionalHtml(heading, caption, additionalHtml) => {
+        @hmrcHeading(heading, caption, Some(x.headingClasses))
         @additionalHtml
         @govukSelect(select.copy(label = Label(content = Text(heading), isPageHeading = false, classes = "govuk-visually-hidden")))
     }
