@@ -24,4 +24,6 @@ object Constants {
   lazy val maxTelephoneNumberLength    = 35
   lazy val minTelephoneNumberLength    = 6
   lazy val maxRefNumberLength          = 24
+  lazy val maxOtherRefLength           = 35
+  lazy val accessCodeLength            = 4
 }

@@ -30,7 +30,10 @@ object GuaranteeDetailsTask {
 
   def apply(userAnswers: UserAnswers): GuaranteeDetailsTask = {
     val (status, href) = new TaskProvider(userAnswers).noDependencyOnOtherTask
-      .readUserAnswers[GuaranteeDetailsDomain, JsArray](GuaranteeDetailsSection)
+      .readUserAnswers[GuaranteeDetailsDomain, JsArray](
+        section = GuaranteeDetailsSection,
+        inProgressRoute = Some(controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn))
+      )
 
     new GuaranteeDetailsTask(status, href)
   }

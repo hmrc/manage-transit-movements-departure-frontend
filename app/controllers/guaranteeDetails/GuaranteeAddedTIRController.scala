@@ -50,6 +50,6 @@ class GuaranteeAddedTIRController @Inject() (
       GuaranteeTypePage(Index(0))
         .writeToUserAnswers(TIRGuarantee)
         .writeToSession()
-        .navigateTo(controllers.routes.TaskListController.onPageLoad(lrn)) // TODO - change to summary page once built
+        .navigateTo(controllers.routes.TaskListController.onPageLoad(lrn))
   }
 }

@@ -16,34 +16,34 @@
 
 package views.behaviours
 
+import generators.Generators
 import org.jsoup.nodes.Document
+import org.scalacheck.Arbitrary.arbitrary
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 
 import scala.collection.JavaConverters._
 
-trait ListWithActionsViewBehaviours extends YesNoViewBehaviours {
+trait ListWithActionsViewBehaviours extends YesNoViewBehaviours with Generators {
 
-  val listItem: Seq[ListItem] = Seq(
-    ListItem("1", "change-url-1", "remove-url-1")
-  )
+  def maxNumber: Int
 
-  val maxedOutListItems: Seq[ListItem] = Seq(
-    ListItem("1", "change-url-1", "remove-url-1"),
-    ListItem("2", "change-url-2", "remove-url-2"),
-    ListItem("3", "change-url-3", "remove-url-3")
-  )
+  private val listItem = arbitrary[ListItem].sample.value
+
+  val listItems: Seq[ListItem] = Seq(listItem)
+
+  val maxedOutListItems: Seq[ListItem] = Seq.fill(maxNumber)(listItem)
 
   def applyMaxedOutView: HtmlFormat.Appendable
 
   def pageWithMoreItemsAllowed(additionalBehaviours: Unit = ()): Unit =
     "page with more items allowed" - {
 
-      behave like pageWithTitle(doc, s"$prefix.singular", listItem.length)
+      behave like pageWithTitle(doc, s"$prefix.singular", listItems.length)
 
-      behave like pageWithHeading(doc, s"$prefix.singular", listItem.length)
+      behave like pageWithHeading(doc, s"$prefix.singular", listItems.length)
 
-      behave like pageWithListWithActions(doc, listItem)
+      behave like pageWithListWithActions(doc, listItems)
 
       behave like pageWithRadioItems(legendIsHeading = false)
 

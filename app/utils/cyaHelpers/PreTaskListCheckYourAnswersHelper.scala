@@ -27,42 +27,42 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
 
   def localReferenceNumber: SummaryListRow = buildRow(
     prefix = "localReferenceNumber",
-    answer = formatAsLiteral(lrn),
+    answer = formatAsText(lrn),
     id = None,
     call = LocalReferenceNumberController.onPageLoad()
   )
 
   def officeOfDeparture: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
     page = OfficeOfDeparturePage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "officeOfDeparture",
     id = None
   )
 
   def procedureType: Option[SummaryListRow] = getAnswerAndBuildRow[ProcedureType](
     page = ProcedureTypePage,
-    formatAnswer = formatAsEnum(ProcedureType.messageKeyPrefix),
+    formatAnswer = formatEnumAsText(ProcedureType.messageKeyPrefix),
     prefix = "procedureType",
     id = None
   )
 
   def declarationType: Option[SummaryListRow] = getAnswerAndBuildRow[DeclarationType](
     page = DeclarationTypePage,
-    formatAnswer = formatAsEnum(DeclarationType.messageKeyPrefix),
+    formatAnswer = formatEnumAsText(DeclarationType.messageKeyPrefix),
     prefix = "declarationType",
     id = None
   )
 
   def tirCarnet: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = TIRCarnetReferencePage,
-    formatAnswer = formatAsLiteral,
+    formatAnswer = formatAsText,
     prefix = "tirCarnetReference",
     id = None
   )
 
   def securityType: Option[SummaryListRow] = getAnswerAndBuildRow[SecurityDetailsType](
     page = SecurityDetailsTypePage,
-    formatAnswer = formatAsEnum(SecurityDetailsType.messageKeyPrefix),
+    formatAnswer = formatEnumAsText(SecurityDetailsType.messageKeyPrefix),
     prefix = "securityDetailsType",
     id = None
   )

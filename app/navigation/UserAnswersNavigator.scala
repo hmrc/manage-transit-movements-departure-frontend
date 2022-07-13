@@ -17,6 +17,7 @@
 package navigation
 
 import models.domain.UserAnswersReader
+import models.journeyDomain.Stage.CompletingJourney
 import models.journeyDomain.{JourneyDomainModel, ReaderError}
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
@@ -47,7 +48,7 @@ object UserAnswersNavigator {
       case Left(ReaderError(page, _)) =>
         page.route(userAnswers, mode)
       case Right(x) =>
-        x.routeIfCompleted(userAnswers)
+        x.routeIfCompleted(userAnswers, CompletingJourney)
     }).getOrElse(controllers.routes.ErrorController.notFound())
 }
 

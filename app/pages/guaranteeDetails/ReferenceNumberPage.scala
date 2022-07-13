@@ -18,13 +18,13 @@ package pages.guaranteeDetails
 
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.GuaranteeDetailsSection
+import pages.sections.GuaranteeSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case class ReferenceNumberPage(index: Index) extends QuestionPage[String] {
 
-  override def path: JsPath = GuaranteeDetailsSection.path \ index.position \ toString
+  override def path: JsPath = GuaranteeSection(index).path \ toString
 
   override def toString: String = "referenceNumber"
 

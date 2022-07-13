@@ -20,7 +20,7 @@ import models.requests.MandatoryDataRequest
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.QuestionPage
-import play.api.libs.json.Writes
+import play.api.libs.json.Format
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{Call, Result}
 import repositories.SessionRepository
@@ -36,14 +36,23 @@ package object controllers {
 
   implicit class SettableOps[A](page: QuestionPage[A]) {
 
-    def writeToUserAnswers(value: A)(implicit writes: Writes[A]): UserAnswersWriter[Write[A]] =
+    def writeToUserAnswers(value: A)(implicit format: Format[A]): UserAnswersWriter[Write[A]] =
       ReaderT[EitherType, UserAnswers, Write[A]](
         userAnswers =>
           userAnswers.set[A](page, value) match {
             case Success(value)     => Right((page, value))
-            case Failure(exception) => Left(WriterError(page, Some(s"Failed to write $value to page $page with exception: ${exception.toString}")))
+            case Failure(exception) => Left(WriterError(page, Some(s"Failed to write $value to page ${page.path} with exception: ${exception.toString}")))
           }
       )
+
+    def removeFromUserAnswers(): UserAnswersWriter[Write[A]] =
+      ReaderT[EitherType, UserAnswers, Write[A]] {
+        userAnswers =>
+          userAnswers.remove(page) match {
+            case Success(value)     => Right((page, value))
+            case Failure(exception) => Left(WriterError(page, Some(s"Failed to remove ${page.path} with exception: ${exception.toString}")))
+          }
+      }
   }
 
   implicit class SettableOpsRunner[A](userAnswersWriter: UserAnswersWriter[Write[A]]) {

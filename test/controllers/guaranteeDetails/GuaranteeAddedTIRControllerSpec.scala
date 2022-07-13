@@ -48,10 +48,9 @@ class GuaranteeAddedTIRControllerSpec extends SpecBase with AppWithDefaultMockFi
 
       contentAsString(result) mustEqual
         view(lrn)(request, messages).toString
-
     }
 
-    "must redirect to Task List Page" in {
+    "must redirect to check your answers" in {
       setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))

@@ -36,7 +36,7 @@ case class PreTaskListDomain(
   detailsConfirmed: Boolean
 ) extends JourneyDomainModel {
 
-  override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
+  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
     Some(controllers.preTaskList.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
 }
 

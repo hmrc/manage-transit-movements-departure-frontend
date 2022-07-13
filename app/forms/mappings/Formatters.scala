@@ -217,4 +217,36 @@ trait Formatters {
     override def unbind(key: String, customsOffice: CustomsOffice): Map[String, String] =
       Map(key -> customsOffice.id)
   }
+
+  private[mappings] def currencyFormatter(
+    requiredKey: String = "error.required",
+    invalidCharactersKey: String = "error.invalidCharacters",
+    invalidFormatKey: String = "error.invalidFormat",
+    invalidValueKey: String = "error.invalidValue"
+  ): Formatter[BigDecimal] =
+    new Formatter[BigDecimal] {
+
+      private val invalidCharactersRegex = """^[0-9.]*$"""
+      private val invalidFormatRegex     = """^[0-9]*(\.[0-9]{1,2})?$"""
+      private val invalidValueRegex      = """^[0-9]{0,16}(\.[0-9]{1,2})?$"""
+
+      private val baseFormatter = stringFormatter(requiredKey)
+
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], BigDecimal] =
+        baseFormatter
+          .bind(key, data)
+          .right
+          .map(_.replace(",", ""))
+          .map(_.replace(" ", ""))
+          .right
+          .flatMap {
+            case s if !s.matches(invalidCharactersRegex) => Left(Seq(FormError(key, invalidCharactersKey)))
+            case s if !s.matches(invalidFormatRegex)     => Left(Seq(FormError(key, invalidFormatKey)))
+            case s if !s.matches(invalidValueRegex)      => Left(Seq(FormError(key, invalidValueKey)))
+            case s                                       => Right(BigDecimal(s))
+          }
+
+      override def unbind(key: String, value: BigDecimal): Map[String, String] =
+        baseFormatter.unbind(key, value.toString())
+    }
 }

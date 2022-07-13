@@ -38,8 +38,8 @@ trait Mappings extends Formatters with Constraints {
   protected def formattedPostcode(errorKey: String = "error.required", args: Seq[Any] = Seq.empty): FieldMapping[String] =
     of(postcodeFormatter(errorKey, args))
 
-  protected def mandatoryIfBoolean(condition: Boolean, requiredKey: String = "error.required", defaultResult: Boolean = true): FieldMapping[Boolean] =
-    if (condition) boolean(requiredKey) else of(ignoredFormat(defaultResult))
+  protected def mandatoryIfBoolean(errorKey: String = "error.required", condition: Boolean, defaultValue: Boolean): FieldMapping[Boolean] =
+    if (condition) boolean(errorKey) else of(ignoredFormat(defaultValue))
 
   protected def int(
     requiredKey: String = "error.required",
@@ -85,4 +85,12 @@ trait Mappings extends Formatters with Constraints {
     args: Seq[Any] = Seq.empty
   ): FieldMapping[CustomsOffice] =
     of(customsOfficeFormatter(customsOfficeList, errorKey, args))
+
+  protected def currency(
+    requiredKey: String = "error.required",
+    invalidCharactersKey: String = "error.invalidCharacters",
+    invalidFormatKey: String = "error.invalidFormat",
+    invalidValueKey: String = "error.invalidValue"
+  ): FieldMapping[BigDecimal] =
+    of(currencyFormatter(requiredKey, invalidCharactersKey, invalidFormatKey, invalidValueKey))
 }

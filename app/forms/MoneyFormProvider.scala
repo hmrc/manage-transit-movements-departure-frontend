@@ -14,12 +14,22 @@
  * limitations under the License.
  */
 
-package derivable
+package forms
 
-import queries.Gettable
+import forms.mappings.Mappings
+import play.api.data.Form
 
-trait Derivable[A, B] extends Gettable[A] {
+import javax.inject.Inject
 
-  val derive: A => B
+class MoneyFormProvider @Inject() extends Mappings {
 
+  def apply(prefix: String): Form[BigDecimal] =
+    Form(
+      "value" -> currency(
+        requiredKey = s"$prefix.error.required",
+        invalidCharactersKey = s"$prefix.error.invalidCharacters",
+        invalidFormatKey = s"$prefix.error.invalidFormat",
+        invalidValueKey = s"$prefix.error.invalidValue"
+      )
+    )
 }

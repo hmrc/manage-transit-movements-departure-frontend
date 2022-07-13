@@ -17,10 +17,13 @@
 package models.journeyDomain.guaranteeDetails
 
 import cats.implicits._
+import controllers.guaranteeDetails.{routes => gdRoutes}
+import models.DeclarationType.Option4
 import models.domain.{UserAnswersReader, _}
-import models.journeyDomain.JourneyDomainModel
+import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{Index, UserAnswers}
 import pages.guaranteeDetails.GuaranteeTypePage
+import pages.preTaskList.DeclarationTypePage
 import pages.sections.GuaranteeDetailsSection
 import play.api.mvc.Call
 
@@ -28,8 +31,11 @@ case class GuaranteeDetailsDomain(
   guarantees: Seq[GuaranteeDomain]
 ) extends JourneyDomainModel {
 
-  override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
-    None // TODO - update to section summary when built
+  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
+    userAnswers.get(DeclarationTypePage) map {
+      case Option4 => gdRoutes.GuaranteeAddedTIRController.onPageLoad(userAnswers.lrn)
+      case _       => gdRoutes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn)
+    }
 }
 
 object GuaranteeDetailsDomain {

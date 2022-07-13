@@ -14,27 +14,18 @@
  * limitations under the License.
  */
 
-package viewModels
+package pages.guaranteeDetails
 
-import models.{CheckMode, UserAnswers}
-import play.api.i18n.Messages
-import utils.cyaHelpers.PreTaskListCheckYourAnswersHelper
-import viewModels.sections.Section
+import pages.behaviours.PageBehaviours
 
-class PreTaskListViewModel {
+class OtherReferencePageSpec extends PageBehaviours {
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): Section = {
-    val helper = new PreTaskListCheckYourAnswersHelper(userAnswers, CheckMode)
+  "OtherReferencePage" - {
 
-    val rows = Seq(
-      Some(helper.localReferenceNumber),
-      helper.officeOfDeparture,
-      helper.procedureType,
-      helper.declarationType,
-      helper.tirCarnet,
-      helper.securityType
-    ).flatten
+    beRetrievable[String](OtherReferencePage(index))
 
-    Section(rows)
+    beSettable[String](OtherReferencePage(index))
+
+    beRemovable[String](OtherReferencePage(index))
   }
 }

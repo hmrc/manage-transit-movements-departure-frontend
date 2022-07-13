@@ -28,7 +28,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.PreTaskListViewModel
+import viewModels.preTaskList.PreTaskListViewModel
 import views.html.preTaskList.CheckYourAnswersView
 
 import scala.concurrent.ExecutionContext

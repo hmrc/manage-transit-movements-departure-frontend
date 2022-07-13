@@ -23,6 +23,8 @@ import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.html.components._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 
+import scala.math.BigDecimal.RoundingMode
+
 private[utils] class SummaryListRowHelper(implicit messages: Messages) {
 
   protected def formatAsYesOrNo(answer: Boolean): Content =
@@ -35,9 +37,34 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
   protected def formatAsAddress(address: Address): Content =
     HtmlContent(Seq(address.line1, address.line2, address.postalCode, address.country.description).mkString("<br>"))
 
-  protected def formatAsLiteral[T](answer: T): Content = s"$answer".toText
+  protected def formatAsText[T](answer: T): Content = s"$answer".toText
 
-  protected def formatAsEnum[T](messageKeyPrefix: String)(answer: T): Content = messages(s"$messageKeyPrefix.$answer").toText
+  protected def formatAsPassword(answer: String): Content = ("•" * answer.length).toText
+
+  /**
+    * @param answer the value to be formatted
+    * @return the value, comma separated if necessary, in pounds and pence
+    */
+  protected def formatAsCurrency(answer: BigDecimal): Content = {
+    val str            = String.valueOf(answer.abs.setScale(2, RoundingMode.HALF_UP))
+    val numberOfDigits = str.takeWhile(_ != '.').length
+    str.zipWithIndex
+      .foldLeft(if (answer < 0) "-£" else "£") {
+        case (acc, (char, index)) =>
+          if (index % 3 == numberOfDigits % 3 && index > 0 && index < numberOfDigits) {
+            acc + ',' + char
+          } else {
+            acc + char
+          }
+      }
+      .toText
+  }
+
+  protected def formatEnumAsText[T](messageKeyPrefix: String)(answer: T): Content =
+    formatEnumAsString(messageKeyPrefix)(answer).toText
+
+  protected def formatEnumAsString[T](messageKeyPrefix: String)(answer: T): String =
+    messages(s"$messageKeyPrefix.$answer")
 
   protected def formatAsCountry(countryList: CountryList)(answer: CountryCode): Content =
     s"${countryList.getCountry(answer).map(_.description).getOrElse(answer.code)}".toText
@@ -54,35 +81,49 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
       label = messages(s"$prefix.checkYourAnswersLabel", args: _*).toText,
       answer = answer,
       id = id,
-      call = call,
+      call = Some(call),
       args = args: _*
     )
 
-  protected def buildSimpleRow(
+  protected def buildRowWithNoChangeLink(
+    prefix: String,
+    answer: Content,
+    args: Any*
+  ): SummaryListRow =
+    buildSimpleRow(
+      prefix = prefix,
+      label = messages(s"$prefix.checkYourAnswersLabel", args: _*).toText,
+      answer = answer,
+      id = None,
+      call = None
+    )
+
+  private def buildSimpleRow(
     prefix: String,
     label: Content,
     answer: Content,
     id: Option[String],
-    call: Call,
+    call: Option[Call],
     args: Any*
   ): SummaryListRow =
     SummaryListRow(
       key = Key(label),
       value = Value(answer),
-      actions = Some(
-        Actions(
-          items = List(
-            ActionItem(
-              content = messages("site.edit").toText,
-              href = call.url,
-              visuallyHiddenText = Some(messages(s"$prefix.change.hidden", args: _*)),
-              attributes = id.fold[Map[String, String]](Map.empty)(
-                id => Map("id" -> id)
+      actions = call.map {
+        route =>
+          Actions(
+            items = List(
+              ActionItem(
+                content = messages("site.edit").toText,
+                href = route.url,
+                visuallyHiddenText = Some(messages(s"$prefix.change.hidden", args: _*)),
+                attributes = id.fold[Map[String, String]](Map.empty)(
+                  id => Map("id" -> id)
+                )
               )
             )
           )
-        )
-      )
+      }
     )
 
 }

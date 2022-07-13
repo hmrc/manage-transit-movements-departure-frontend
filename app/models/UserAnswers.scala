@@ -16,14 +16,13 @@
 
 package models
 
-import derivable.Derivable
 import pages._
 import play.api.libs.json._
-import queries.{Gettable, Settable}
+import queries.Gettable
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
 import java.time.LocalDateTime
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Try}
 
 final case class UserAnswers(
   lrn: LocalReferenceNumber,
@@ -33,51 +32,32 @@ final case class UserAnswers(
   id: Id = Id()
 ) {
 
-  def get[A](gettable: Gettable[A])(implicit rds: Reads[A]): Option[A] =
-    Reads.optionNoError(Reads.at(gettable.path)).reads(data).getOrElse(None)
+  def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] =
+    Reads.optionNoError(Reads.at(page.path)).reads(data).getOrElse(None)
 
-  def get[A, B](derivable: Derivable[A, B])(implicit rds: Reads[A]): Option[B] =
-    get(derivable: Gettable[A]).map(derivable.derive)
-
-  def set[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = {
-
-    val updatedData = data.setObject(page.path, Json.toJson(value)) match {
-      case JsSuccess(jsValue, _) =>
-        Success(jsValue)
+  def set[A](page: QuestionPage[A], value: A)(implicit format: Format[A]): Try[UserAnswers] =
+    data.setObject(page.path, Json.toJson(value)) match {
+      case JsSuccess(updatedData, _) =>
+        val updatedAnswers = copy(data = updatedData)
+        page
+          .cleanup(Some(value), updatedAnswers)
+          .flatMap(page.cleanup(Some(value), get(page), _))
       case JsError(errors) =>
         Failure(JsResultException(errors))
     }
 
-    updatedData.flatMap {
-      d =>
-        val updatedAnswers = copy(data = d)
-        page.cleanup(Some(value), updatedAnswers)
-    }
-  }
-
   def remove[A](page: QuestionPage[A]): Try[UserAnswers] = {
-
-    val updatedData = data.removeObject(page.path) match {
-      case JsSuccess(jsValue, _) =>
-        Success(jsValue)
-      case JsError(_) =>
-        Success(data)
-    }
-
-    updatedData.flatMap {
-      d =>
-        val updatedAnswers = copy(data = d)
-        page.cleanup(None, updatedAnswers)
-    }
+    val updatedData    = data.removeObject(page.path).getOrElse(data)
+    val updatedAnswers = copy(data = updatedData)
+    page.cleanup(None, updatedAnswers)
   }
 }
 
 object UserAnswers {
 
-  implicit lazy val reads: Reads[UserAnswers] = {
+  import play.api.libs.functional.syntax._
 
-    import play.api.libs.functional.syntax._
-
+  implicit lazy val reads: Reads[UserAnswers] =
     (
       (__ \ "lrn").read[LocalReferenceNumber] and
         (__ \ "eoriNumber").read[EoriNumber] and
@@ -85,12 +65,8 @@ object UserAnswers {
         (__ \ "lastUpdated").read(MongoJavatimeFormats.localDateTimeReads) and
         (__ \ "_id").read[Id]
     )(UserAnswers.apply _)
-  }
 
-  implicit lazy val writes: OWrites[UserAnswers] = {
-
-    import play.api.libs.functional.syntax._
-
+  implicit lazy val writes: OWrites[UserAnswers] =
     (
       (__ \ "lrn").write[LocalReferenceNumber] and
         (__ \ "eoriNumber").write[EoriNumber] and
@@ -98,7 +74,6 @@ object UserAnswers {
         (__ \ "lastUpdated").write(MongoJavatimeFormats.localDateTimeWrites) and
         (__ \ "_id").write[Id]
     )(unlift(UserAnswers.unapply))
-  }
 
   implicit lazy val format: Format[UserAnswers] = Format(reads, writes)
 }

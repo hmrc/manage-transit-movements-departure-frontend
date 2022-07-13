@@ -17,7 +17,7 @@
 package viewModels.taskList
 
 import base.SpecBase
-import controllers.guaranteeDetails.{routes => guaranteeDetails}
+import controllers.guaranteeDetails.{routes => gdRoutes}
 import generators.{Generators, GuaranteeDetailsUserAnswersGenerator}
 import models.DeclarationType.Option4
 import models.guaranteeDetails.GuaranteeType
@@ -84,7 +84,7 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
         val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
         val task        = GuaranteeDetailsTask(userAnswers)
         task.status mustBe NotStarted
-        task.href.get mustBe guaranteeDetails.GuaranteeAddedTIRController.onPageLoad(userAnswers.lrn).url
+        task.href.get mustBe gdRoutes.GuaranteeAddedTIRController.onPageLoad(userAnswers.lrn).url
       }
 
       "and non-TIR declaration type" in {
@@ -93,7 +93,7 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
             val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
             val task        = GuaranteeDetailsTask(userAnswers)
             task.status mustBe NotStarted
-            task.href.get mustBe guaranteeDetails.GuaranteeTypeController.onPageLoad(userAnswers.lrn, NormalMode, Index(0)).url
+            task.href.get mustBe gdRoutes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, NormalMode, Index(0)).url
         }
       }
     }
@@ -109,18 +109,30 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
             val task = GuaranteeDetailsTask(userAnswers)
             task.status mustBe InProgress
-            task.href.get mustBe guaranteeDetails.ReferenceNumberController.onPageLoad(userAnswers.lrn, NormalMode, index).url
+            task.href.get mustBe gdRoutes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn).url
         }
       }
     }
 
     "when Completed" - {
-      "when valid journey is completed" ignore {
-        forAll(arbitraryGuaranteeDetailsAnswers(emptyUserAnswers)) {
+      "when TIR declaration type" in {
+        val initialAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
+        forAll(arbitraryGuaranteeDetailsAnswers(initialAnswers)) {
           userAnswers =>
             val task = GuaranteeDetailsTask(userAnswers)
             task.status mustBe Completed
-            task.href.get mustBe ???
+            task.href.get mustBe gdRoutes.GuaranteeAddedTIRController.onPageLoad(userAnswers.lrn).url
+        }
+      }
+
+      "when non-TIR declaration type" in {
+        val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+        val initialAnswers  = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
+        forAll(arbitraryGuaranteeDetailsAnswers(initialAnswers)) {
+          userAnswers =>
+            val task = GuaranteeDetailsTask(userAnswers)
+            task.status mustBe Completed
+            task.href.get mustBe gdRoutes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn).url
         }
       }
     }

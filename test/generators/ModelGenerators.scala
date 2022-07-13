@@ -33,6 +33,11 @@ trait ModelGenerators {
       Gen.oneOf(models.guaranteeDetails.GuaranteeType.values)
     }
 
+  lazy val arbitraryNonOption4GuaranteeType: Arbitrary[GuaranteeType] =
+    Arbitrary {
+      Gen.oneOf(models.guaranteeDetails.GuaranteeType.values.filterNot(_ == TIRGuarantee))
+    }
+
   lazy val arbitrary012459GuaranteeType: Arbitrary[GuaranteeType] =
     Arbitrary {
       Gen.oneOf(
@@ -52,6 +57,20 @@ trait ModelGenerators {
         ComprehensiveGuarantee,
         IndividualGuarantee,
         FlatRateVoucher,
+        IndividualGuaranteeMultiple
+      )
+    }
+
+  lazy val arbitrary01234589GuaranteeType: Arbitrary[GuaranteeType] =
+    Arbitrary {
+      Gen.oneOf(
+        GuaranteeWaiver,
+        ComprehensiveGuarantee,
+        IndividualGuarantee,
+        CashDepositGuarantee,
+        FlatRateVoucher,
+        GuaranteeWaiverSecured,
+        GuaranteeNotRequiredExemptPublicBody,
         IndividualGuaranteeMultiple
       )
     }

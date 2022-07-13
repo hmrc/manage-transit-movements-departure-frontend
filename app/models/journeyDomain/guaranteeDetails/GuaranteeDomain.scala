@@ -21,8 +21,9 @@ import models.DeclarationType.Option4
 import models.domain._
 import models.guaranteeDetails.GuaranteeType
 import models.guaranteeDetails.GuaranteeType._
-import models.journeyDomain.JourneyDomainModel
-import models.{Index, UserAnswers}
+import models.journeyDomain.Stage.{AccessingJourney, CompletingJourney}
+import models.journeyDomain.{JourneyDomainModel, Stage}
+import models.{CheckMode, Index, UserAnswers}
 import pages.guaranteeDetails._
 import pages.preTaskList.DeclarationTypePage
 import play.api.mvc.Call
@@ -30,8 +31,10 @@ import play.api.mvc.Call
 sealed trait GuaranteeDomain extends JourneyDomainModel {
   val index: Index
 
-  override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
-    None // TODO - update to check your answers when built
+  val `type`: GuaranteeType
+
+  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
+    Some(controllers.guaranteeDetails.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, index))
 }
 
 object GuaranteeDomain {
@@ -79,7 +82,17 @@ object GuaranteeDomain {
   case class GuaranteeOfTypesABR(
     `type`: GuaranteeType
   )(override val index: Index)
-      extends GuaranteeDomain
+      extends GuaranteeDomain {
+
+    override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] = Some {
+      stage match {
+        case AccessingJourney =>
+          controllers.guaranteeDetails.routes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, CheckMode, index)
+        case CompletingJourney =>
+          controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn)
+      }
+    }
+  }
 
   object GuaranteeOfTypesABR {
 
@@ -91,7 +104,7 @@ object GuaranteeDomain {
     `type`: GuaranteeType,
     grn: String,
     accessCode: String,
-    liabilityAmount: String
+    liabilityAmount: BigDecimal
   )(override val index: Index)
       extends GuaranteeDomain
 
@@ -100,9 +113,11 @@ object GuaranteeDomain {
     def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
       (
         UserAnswersReader(guaranteeType),
-        ReferenceNumberPage(index).reader
+        ReferenceNumberPage(index).reader,
+        AccessCodePage(index).reader,
+        LiabilityAmountPage(index).reader
       ).mapN {
-        (`type`, grn) => GuaranteeOfTypes01249(`type`, grn, "", "")(index) // TODO - read access code and liability amount pages once built
+        (`type`, grn, accessCode, liabilityAmount) => GuaranteeOfTypes01249(`type`, grn, accessCode, liabilityAmount)(index)
       }
   }
 
@@ -132,8 +147,11 @@ object GuaranteeDomain {
   object GuaranteeOfType8 {
 
     def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
-      UserAnswersReader(guaranteeType).map {
-        `type` => GuaranteeOfType8(`type`, "")(index) // TODO - read other ref. page once built
+      (
+        UserAnswersReader(guaranteeType),
+        OtherReferencePage(index).reader
+      ).mapN {
+        (`type`, otherReference) => GuaranteeOfType8(`type`, otherReference)(index)
       }
   }
 
@@ -146,8 +164,11 @@ object GuaranteeDomain {
   object GuaranteeOfType3 {
 
     def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
-      UserAnswersReader(guaranteeType).map {
-        `type` => GuaranteeOfType3(`type`, None)(index) // TODO - read other ref. pages once built
+      (
+        UserAnswersReader(guaranteeType),
+        OtherReferenceYesNoPage(index).filterOptionalDependent(identity)(OtherReferencePage(index).reader)
+      ).mapN {
+        (`type`, otherReference) => GuaranteeOfType3(`type`, otherReference)(index)
       }
   }
 }
