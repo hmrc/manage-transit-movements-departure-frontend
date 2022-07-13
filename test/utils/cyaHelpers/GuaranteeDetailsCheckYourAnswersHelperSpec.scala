@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.guaranteeDetails.{routes => gdRoutes}
 import generators.Generators
 import models.guaranteeDetails.GuaranteeType._
-import models.{DeclarationType, Index, NormalMode}
+import models.{CheckMode, DeclarationType, Index, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.guaranteeDetails._
 import pages.preTaskList.DeclarationTypePage
@@ -67,6 +67,8 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with Generator
         .setValue(GuaranteeTypePage(Index(0)), CashDepositGuarantee)
         .setValue(OtherReferenceYesNoPage(Index(0)), false)
         .setValue(GuaranteeTypePage(Index(1)), GuaranteeWaiver)
+        .setValue(GuaranteeTypePage(Index(2)), GuaranteeWaiverByAgreement)
+        .setValue(GuaranteeTypePage(Index(3)), GuaranteeNotRequired)
 
       val helper = new GuaranteeDetailsCheckYourAnswersHelper(userAnswers, NormalMode)
       helper.listItems mustBe Seq(
@@ -82,6 +84,20 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with Generator
             name = "(0) Guarantee waiver",
             changeUrl = gdRoutes.ReferenceNumberController.onPageLoad(userAnswers.lrn, NormalMode, Index(1)).url,
             removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(1)).url
+          )
+        ),
+        Right(
+          ListItem(
+            name = "(A) Guarantee waiver by agreement",
+            changeUrl = gdRoutes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, CheckMode, Index(2)).url,
+            removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(2)).url
+          )
+        ),
+        Right(
+          ListItem(
+            name = "(R) Guarantee not required – goods carried on the Rhine, the Danube or their waterways",
+            changeUrl = gdRoutes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, CheckMode, Index(3)).url,
+            removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(3)).url
           )
         )
       )

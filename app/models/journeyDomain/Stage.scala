@@ -16,9 +16,9 @@
 
 package models.journeyDomain
 
-import models.UserAnswers
-import play.api.mvc.Call
+sealed trait Stage
 
-trait JourneyDomainModel {
-  def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] = None
+object Stage {
+  case object AccessingJourney extends Stage
+  case object CompletingJourney extends Stage
 }

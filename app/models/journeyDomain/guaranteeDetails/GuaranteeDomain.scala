@@ -21,8 +21,9 @@ import models.DeclarationType.Option4
 import models.domain._
 import models.guaranteeDetails.GuaranteeType
 import models.guaranteeDetails.GuaranteeType._
-import models.journeyDomain.JourneyDomainModel
-import models.{Index, UserAnswers}
+import models.journeyDomain.Stage.{AccessingJourney, CompletingJourney}
+import models.journeyDomain.{JourneyDomainModel, Stage}
+import models.{CheckMode, Index, UserAnswers}
 import pages.guaranteeDetails._
 import pages.preTaskList.DeclarationTypePage
 import play.api.mvc.Call
@@ -32,15 +33,8 @@ sealed trait GuaranteeDomain extends JourneyDomainModel {
 
   val `type`: GuaranteeType
 
-  override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
-    Some {
-      `type` match {
-        case GuaranteeWaiverByAgreement | GuaranteeNotRequired =>
-          controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn)
-        case _ =>
-          controllers.guaranteeDetails.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, index)
-      }
-    }
+  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
+    Some(controllers.guaranteeDetails.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, index))
 }
 
 object GuaranteeDomain {
@@ -88,7 +82,17 @@ object GuaranteeDomain {
   case class GuaranteeOfTypesABR(
     `type`: GuaranteeType
   )(override val index: Index)
-      extends GuaranteeDomain
+      extends GuaranteeDomain {
+
+    override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] = Some {
+      stage match {
+        case AccessingJourney =>
+          controllers.guaranteeDetails.routes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, CheckMode, index)
+        case CompletingJourney =>
+          controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn)
+      }
+    }
+  }
 
   object GuaranteeOfTypesABR {
 

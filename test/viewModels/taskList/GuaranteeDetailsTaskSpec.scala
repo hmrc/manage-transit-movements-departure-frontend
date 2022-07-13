@@ -121,16 +121,13 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
           userAnswers =>
             val task = GuaranteeDetailsTask(userAnswers)
             task.status mustBe Completed
-            task.href.get mustBe gdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, Index(0)).url
+            task.href.get mustBe gdRoutes.GuaranteeAddedTIRController.onPageLoad(userAnswers.lrn).url
         }
       }
 
       "when non-TIR declaration type" in {
         val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
-        val validAccessCode = "1234"
-        val initialAnswers = emptyUserAnswers
-          .setValue(DeclarationTypePage, declarationType)
-          .setValue(AccessCodePage(index), validAccessCode)
+        val initialAnswers  = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
         forAll(arbitraryGuaranteeDetailsAnswers(initialAnswers)) {
           userAnswers =>
             val task = GuaranteeDetailsTask(userAnswers)

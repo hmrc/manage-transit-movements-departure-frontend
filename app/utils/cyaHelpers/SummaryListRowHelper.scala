@@ -42,6 +42,10 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
 
   protected def formatAsPassword(answer: String): Content = ("•" * answer.length).toText
 
+  /**
+    * @param answer the value to be formatted, assumed >= 0
+    * @return the value, comma separated if necessary, in pounds and pence
+    */
   protected def formatAsCurrency(answer: BigDecimal): Content = {
     val numberOfDigits: Int = if (answer == 0) {
       1
@@ -51,7 +55,7 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
     }
 
     String
-      .valueOf(answer.setScale(2))
+      .valueOf(answer.setScale(2, RoundingMode.HALF_UP))
       .zipWithIndex
       .foldLeft("£") {
         case (acc, (char, index)) =>

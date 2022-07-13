@@ -17,6 +17,7 @@
 package viewModels.taskList
 
 import models.domain.UserAnswersReader
+import models.journeyDomain.Stage.AccessingJourney
 import models.journeyDomain.{JourneyDomainModel, ReaderError}
 import models.{NormalMode, UserAnswers}
 import pages.sections.Section
@@ -55,7 +56,7 @@ private[viewModels] class TaskProvider(userAnswers: UserAnswers) {
             case Some(_) => (InProgress, route)
             case None    => (NotStarted, route)
           }
-        case Right(value) => (Completed, value.routeIfCompleted(userAnswers).map(_.url))
+        case Right(value) => (Completed, value.routeIfCompleted(userAnswers, AccessingJourney).map(_.url))
       }
 
       readerIfDependentTaskCompleted match {

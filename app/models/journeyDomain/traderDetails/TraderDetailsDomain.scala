@@ -19,9 +19,9 @@ package models.journeyDomain.traderDetails
 import cats.implicits._
 import models.UserAnswers
 import models.domain._
-import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.traderDetails.consignment.ConsignmentDomain
 import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain
+import models.journeyDomain.{JourneyDomainModel, Stage}
 import pages.traderDetails.ActingAsRepresentativePage
 import play.api.mvc.Call
 
@@ -31,7 +31,7 @@ case class TraderDetailsDomain(
   consignment: ConsignmentDomain
 ) extends JourneyDomainModel {
 
-  override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
+  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
     Some(controllers.traderDetails.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
 }
 
