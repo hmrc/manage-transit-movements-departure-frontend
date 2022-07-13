@@ -130,9 +130,9 @@ class SummaryListRowHelperSpec extends SpecBase {
     }
 
     "when input is -1234.56" - {
-      "must return £-1,234.56" in {
+      "must return -£1,234.56" in {
         val input = BigDecimal("-1234.56")
-        helper.formatAsCurrency(input) mustBe Text("£-1,234.56")
+        helper.formatAsCurrency(input) mustBe Text("-£1,234.56")
       }
     }
 

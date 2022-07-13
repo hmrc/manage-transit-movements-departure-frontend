@@ -46,10 +46,10 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
     * @return the value, comma separated if necessary, in pounds and pence
     */
   protected def formatAsCurrency(answer: BigDecimal): Content = {
-    val str            = String.valueOf(answer.setScale(2, RoundingMode.HALF_UP))
+    val str            = String.valueOf(answer.abs.setScale(2, RoundingMode.HALF_UP))
     val numberOfDigits = str.takeWhile(_ != '.').length
     str.zipWithIndex
-      .foldLeft("£") {
+      .foldLeft(if (answer < 0) "-£" else "£") {
         case (acc, (char, index)) =>
           if (index % 3 == numberOfDigits % 3 && index > 0 && index < numberOfDigits) {
             acc + ',' + char
