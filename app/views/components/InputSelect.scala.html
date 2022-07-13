@@ -17,13 +17,12 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 @import viewModels.components.InputSelectViewModel
 @import viewModels.components.InputSelectViewModel._
-@import views.html.components.{Heading, HeadingWithSectionCaption}
+@import views.html.components.Heading
 @import views.utils.ViewUtils._
 
 @this(
     govukSelect: GovukSelect,
-    headingWithNoCaption: Heading,
-    headingWithSectionCaption: HeadingWithSectionCaption
+    hmrcHeading: Heading
 )
 
 @(
@@ -52,11 +51,8 @@
     case OrdinarySelect(heading, caption) => {
         @govukSelect(select.withHeadingAndCaption(heading, caption))
     }
-    case SelectWithAdditionalHtml(heading, caption, additionalHtml) => {
-        @caption match {
-            case Some(value) => { @headingWithSectionCaption(heading, value) }
-            case None        => { @headingWithNoCaption(heading) }
-        }
+    case x @ SelectWithAdditionalHtml(heading, caption, additionalHtml) => {
+        @hmrcHeading(heading, caption, Some(x.headingClasses))
         @additionalHtml
         @govukSelect(select.copy(label = Label(content = Text(heading), isPageHeading = false, classes = "govuk-visually-hidden")))
     }

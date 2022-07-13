@@ -17,13 +17,12 @@
 @import config.FrontendAppConfig
 @import models.LocalReferenceNumber
 @import viewModels.taskList.Task
-@import views.html.components.{Button, Heading, HeadingCaption, TaskList}
+@import views.html.components.{Button, Heading, TaskList}
 
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
     config: FrontendAppConfig,
-    caption: HeadingCaption,
     heading: Heading,
     taskList: TaskList,
     button: Button
@@ -36,9 +35,8 @@
     lrn = Some(lrn)
 ) {
 
-    @caption(lrn.toString)
-
-    @heading("taskList.heading")
+    <span class="govuk-caption-xl">@lrn.toString</span>
+    @heading(heading = messages("taskList.heading"))
 
     @taskList("taskList.departureDetails", tasks)
 

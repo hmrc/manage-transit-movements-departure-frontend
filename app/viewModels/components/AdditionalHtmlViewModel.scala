@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this()
+package viewModels.components
 
-@(caption: String, styleClass: String = "govuk-caption-xl", id: String = "heading-caption")
-
-<span class=@styleClass id=@id>@caption</span>
+trait AdditionalHtmlViewModel {
+  val headingClasses = "govuk-heading-xl govuk-!-margin-top-0 govuk-!-margin-bottom-2"
+}

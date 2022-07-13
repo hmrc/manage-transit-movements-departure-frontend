@@ -32,6 +32,7 @@ object InputYesNoViewModel {
     caption: Option[String] = None,
     additionalHtml: Html
   ) extends InputYesNoViewModel
+      with AdditionalHtmlViewModel
 
   case class YesNoWithLegend(
     legend: String

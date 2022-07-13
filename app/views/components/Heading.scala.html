@@ -14,8 +14,18 @@
  * limitations under the License.
  *@
 
-@this()
+@this(hmrcPageHeading: HmrcPageHeading)
 
-@(headingKey: String, args: Seq[Any] = Nil, headingSize: String = "govuk-heading-xl")(implicit messages: Messages)
+@(
+    heading: String,
+    caption: Option[String] = None,
+    classes: Option[String] = None
+)(implicit messages: Messages)
 
-<h1 class="@headingSize">@messages(headingKey, args: _*)</h1>
+@hmrcPageHeading(
+    PageHeading(
+        text = heading,
+        section = caption,
+        headingClasses = classes
+    )
+)
