@@ -17,11 +17,11 @@
 @import controllers.guaranteeDetails.routes
 @import models.{Index, LocalReferenceNumber}
 @import viewModels.sections.Section
-@import views.html.components.{AnswerSections, Button, HeadingWithSectionCaption}
+@import views.html.components.{AnswerSections, Button, Heading}
 
 @this(
     mainTemplate: MainTemplate,
-    heading: HeadingWithSectionCaption,
+    heading: Heading,
     answerSections: AnswerSections,
     button: Button,
     formHelper: FormWithCSRF
@@ -36,8 +36,8 @@
 ) {
 
     @heading(
-        headingKey = "guaranteeDetails.checkYourAnswers.heading",
-        captionKey = "guaranteeDetails.caption"
+        heading = messages("guaranteeDetails.checkYourAnswers.heading"),
+        caption = Some(messages("guaranteeDetails.caption"))
     )
 
     @answerSections(sections)

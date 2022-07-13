@@ -27,13 +27,12 @@ class HeadingSpec extends A11ySpecBase {
     val template  = app.injector.instanceOf[MainTemplate]
     val component = app.injector.instanceOf[Heading]
 
-    val title       = nonEmptyString.sample.value
-    val headingKey  = nonEmptyString.sample.value
-    val args        = listWithMaxLength[Any]().sample.value
-    val headingSize = Gen.alphaNumStr.sample.value
+    val title   = nonEmptyString.sample.value
+    val heading = nonEmptyString.sample.value
+    val caption = Gen.option(nonEmptyString).sample.value
 
     val content = template.apply(title) {
-      component.apply(headingKey, args, headingSize)
+      component.apply(heading, caption)
     }
 
     "pass accessibility checks" in {
