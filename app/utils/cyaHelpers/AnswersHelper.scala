@@ -18,6 +18,7 @@ package utils.cyaHelpers
 
 import models.domain.UserAnswersReader
 import models.journeyDomain.JourneyDomainModel
+import models.journeyDomain.Stage.AccessingJourney
 import models.{LocalReferenceNumber, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.Section
@@ -107,7 +108,7 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
             ).map(Left(_))
         }
       case Right(journeyDomainModel) =>
-        journeyDomainModel.routeIfCompleted(userAnswers).map {
+        journeyDomainModel.routeIfCompleted(userAnswers, AccessingJourney).map {
           changeRoute =>
             Right(
               ListItem(

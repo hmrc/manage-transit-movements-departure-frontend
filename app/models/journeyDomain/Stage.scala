@@ -16,12 +16,9 @@
 
 package models.journeyDomain
 
-import queries.{Gettable, Query, Settable}
+sealed trait Stage
 
-sealed trait OpsError {
-  val page: Query
-  val message: Option[String]
+object Stage {
+  case object AccessingJourney extends Stage
+  case object CompletingJourney extends Stage
 }
-
-case class ReaderError(page: Gettable[_], message: Option[String] = None) extends OpsError
-case class WriterError(page: Settable[_], message: Option[String] = None) extends OpsError

@@ -47,10 +47,9 @@ class GuaranteeAddedTIRController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      val index = Index(0)
-      GuaranteeTypePage(index)
+      GuaranteeTypePage(Index(0))
         .writeToUserAnswers(TIRGuarantee)
         .writeToSession()
-        .navigateTo(routes.CheckYourAnswersController.onPageLoad(lrn, index))
+        .navigateTo(controllers.routes.TaskListController.onPageLoad(lrn))
   }
 }

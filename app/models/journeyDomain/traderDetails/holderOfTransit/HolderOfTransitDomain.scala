@@ -19,7 +19,7 @@ package models.journeyDomain.traderDetails.holderOfTransit
 import cats.implicits._
 import models.DeclarationType.Option4
 import models.domain._
-import models.journeyDomain.JourneyDomainModel
+import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{Address, EoriNumber, UserAnswers}
 import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.holderOfTransit._
@@ -30,7 +30,7 @@ trait HolderOfTransitDomain extends JourneyDomainModel {
   val address: Address
   val additionalContact: Option[AdditionalContactDomain]
 
-  override def routeIfCompleted(userAnswers: UserAnswers): Option[Call] =
+  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
     Some(controllers.traderDetails.holderOfTransit.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
 }
 

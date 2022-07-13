@@ -17,10 +17,12 @@
 package viewModels.taskList
 
 import models.domain.UserAnswersReader
+import models.journeyDomain.Stage.AccessingJourney
 import models.journeyDomain.{JourneyDomainModel, ReaderError}
 import models.{NormalMode, UserAnswers}
 import pages.sections.Section
 import play.api.libs.json.{JsValue, Reads}
+import play.api.mvc.Call
 import viewModels.taskList.TaskStatus._
 
 private[viewModels] class TaskProvider(userAnswers: UserAnswers) {
@@ -44,18 +46,18 @@ private[viewModels] class TaskProvider(userAnswers: UserAnswers) {
     readerIfDependentTaskCompleted: Option[UserAnswersReader[A]]
   ) {
 
-    def readUserAnswers[T <: JourneyDomainModel, U <: JsValue](section: Section[U])(implicit
-      rds: Reads[U],
-      userAnswersReader: UserAnswersReader[T]
-    ): (TaskStatus, Option[String]) = {
+    def readUserAnswers[T <: JourneyDomainModel, U <: JsValue](
+      section: Section[U],
+      inProgressRoute: Option[Call] = None
+    )(implicit rds: Reads[U], userAnswersReader: UserAnswersReader[T]): (TaskStatus, Option[String]) = {
       lazy val (status, onwardRoute) = UserAnswersReader[T].run(userAnswers) match {
         case Left(ReaderError(page, _)) =>
           val route = page.route(userAnswers, NormalMode).map(_.url)
           userAnswers.get(section) match {
-            case Some(_) => (InProgress, route)
+            case Some(_) => (InProgress, inProgressRoute.map(_.url).orElse(route))
             case None    => (NotStarted, route)
           }
-        case Right(value) => (Completed, value.routeIfCompleted(userAnswers).map(_.url))
+        case Right(value) => (Completed, value.routeIfCompleted(userAnswers, AccessingJourney).map(_.url))
       }
 
       readerIfDependentTaskCompleted match {

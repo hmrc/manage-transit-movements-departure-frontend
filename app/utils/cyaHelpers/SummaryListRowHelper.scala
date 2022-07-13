@@ -23,8 +23,7 @@ import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.html.components._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 
-import java.text.NumberFormat
-import java.util.Locale
+import scala.math.BigDecimal.RoundingMode
 
 private[utils] class SummaryListRowHelper(implicit messages: Messages) {
 
@@ -42,9 +41,23 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
 
   protected def formatAsPassword(answer: String): Content = ("•" * answer.length).toText
 
+  /**
+    * @param answer the value to be formatted
+    * @return the value, comma separated if necessary, in pounds and pence
+    */
   protected def formatAsCurrency(answer: BigDecimal): Content = {
-    val formatter = NumberFormat.getCurrencyInstance(Locale.UK)
-    formatter.format(answer).toText
+    val str            = String.valueOf(answer.abs.setScale(2, RoundingMode.HALF_UP))
+    val numberOfDigits = str.takeWhile(_ != '.').length
+    str.zipWithIndex
+      .foldLeft(if (answer < 0) "-£" else "£") {
+        case (acc, (char, index)) =>
+          if (index % 3 == numberOfDigits % 3 && index > 0 && index < numberOfDigits) {
+            acc + ',' + char
+          } else {
+            acc + char
+          }
+      }
+      .toText
   }
 
   protected def formatEnumAsText[T](messageKeyPrefix: String)(answer: T): Content =

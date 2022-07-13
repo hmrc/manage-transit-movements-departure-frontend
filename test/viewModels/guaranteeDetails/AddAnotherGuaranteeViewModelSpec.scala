@@ -17,14 +17,12 @@
 package viewModels.guaranteeDetails
 
 import base.SpecBase
-import controllers.guaranteeDetails.{routes => gdRoutes}
 import generators.Generators
-import models.guaranteeDetails.GuaranteeType.{GuaranteeNotRequired, GuaranteeWaiver}
-import models.{DeclarationType, Index, NormalMode}
+import models.guaranteeDetails.GuaranteeType._
+import models.{DeclarationType, Index}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.guaranteeDetails.GuaranteeTypePage
+import pages.guaranteeDetails.{GuaranteeTypePage, OtherReferenceYesNoPage}
 import pages.preTaskList.DeclarationTypePage
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 
 class AddAnotherGuaranteeViewModelSpec extends SpecBase with Generators {
 
@@ -33,22 +31,12 @@ class AddAnotherGuaranteeViewModelSpec extends SpecBase with Generators {
     val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
     val userAnswers = emptyUserAnswers
       .setValue(DeclarationTypePage, declarationType)
-      .setValue(GuaranteeTypePage(Index(0)), GuaranteeNotRequired)
+      .setValue(GuaranteeTypePage(Index(0)), CashDepositGuarantee)
+      .setValue(OtherReferenceYesNoPage(Index(0)), false)
       .setValue(GuaranteeTypePage(Index(1)), GuaranteeWaiver)
 
     val result = AddAnotherGuaranteeViewModel(userAnswers)
-    result.listItems mustBe Seq(
-      ListItem(
-        name = "(R) Guarantee not required – goods carried on the Rhine, the Danube or their waterways",
-        changeUrl = gdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, Index(0)).url,
-        removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, Index(0)).url
-      ),
-      ListItem(
-        name = "(0) Guarantee waiver",
-        changeUrl = gdRoutes.ReferenceNumberController.onPageLoad(userAnswers.lrn, NormalMode, Index(1)).url,
-        removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, Index(1)).url
-      )
-    )
+    result.listItems.length mustBe 2
   }
 
 }
