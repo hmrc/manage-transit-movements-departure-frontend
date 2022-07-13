@@ -17,11 +17,11 @@
 @import controllers.traderDetails.representative.routes
 @import models.LocalReferenceNumber
 @import viewModels.sections.Section
-@import views.html.components.{AnswerSections, Button, HeadingWithSectionCaption}
+@import views.html.components.{AnswerSections, Button, Heading}
 
 @this(
     mainTemplate: MainTemplate,
-    heading: HeadingWithSectionCaption,
+    heading: Heading,
     answerSections: AnswerSections,
     button: Button,
     formHelper: FormWithCSRF
@@ -36,8 +36,8 @@
 ) {
 
     @heading(
-        headingKey = "traderDetails.representative.checkYourAnswers.heading",
-        captionKey = "traderDetails.caption"
+        heading = messages("traderDetails.representative.checkYourAnswers.heading"),
+        caption = Some(messages("traderDetails.caption"))
     )
 
     @answerSections(sections)

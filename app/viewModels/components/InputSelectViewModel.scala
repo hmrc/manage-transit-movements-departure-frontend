@@ -32,6 +32,7 @@ object InputSelectViewModel {
     caption: Option[String] = None,
     additionalHtml: Html
   ) extends InputSelectViewModel
+      with AdditionalHtmlViewModel
 
   case class AddressCountrySelect(
     label: String

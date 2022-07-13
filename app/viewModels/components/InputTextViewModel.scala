@@ -32,6 +32,7 @@ object InputTextViewModel {
     caption: Option[String] = None,
     additionalHtml: Html
   ) extends InputTextViewModel
+      with AdditionalHtmlViewModel
 
   case class TextInputWithStatementHeading(
     heading: String,
@@ -39,6 +40,7 @@ object InputTextViewModel {
     label: String,
     additionalHtml: Html
   ) extends InputTextViewModel
+      with AdditionalHtmlViewModel
 
   case class AddressTextInput(
     label: String
