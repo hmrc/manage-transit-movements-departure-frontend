@@ -12,8 +12,7 @@ object AppDependencies {
     "uk.gov.hmrc"                %% "play-allowlist-filter"           % "1.1.0",
     "uk.gov.hmrc"                %% "play-frontend-hmrc"              % "3.21.0-play-28",
     "org.typelevel"              %% "cats-core"                       % "2.7.0",
-    "com.chuusai"                %% "shapeless"                       % "2.3.9",
-    "ch.obermuhlner"              % "big-math"                        % "2.3.0"
+    "com.chuusai"                %% "shapeless"                       % "2.3.9"
   )
 
   val test: Seq[ModuleID] = Seq(

@@ -16,7 +16,6 @@
 
 package utils.cyaHelpers
 
-import ch.obermuhlner.math.big.BigDecimalMath
 import models.reference.CountryCode
 import models.{Address, CountryList}
 import play.api.i18n.Messages
@@ -47,16 +46,9 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
     * @return the value, comma separated if necessary, in pounds and pence
     */
   protected def formatAsCurrency(answer: BigDecimal): Content = {
-    val numberOfDigits: Int = if (answer == 0) {
-      1
-    } else {
-      val exponent = BigDecimalMath.log10(answer.bigDecimal, answer.mc).setScale(0, RoundingMode.DOWN)
-      exponent.toInt + 1
-    }
-
-    String
-      .valueOf(answer.setScale(2, RoundingMode.HALF_UP))
-      .zipWithIndex
+    val str            = String.valueOf(answer.setScale(2, RoundingMode.HALF_UP))
+    val numberOfDigits = str.takeWhile(_ != '.').length
+    str.zipWithIndex
       .foldLeft("£") {
         case (acc, (char, index)) =>
           if (index % 3 == numberOfDigits % 3 && index > 0 && index < numberOfDigits) {
