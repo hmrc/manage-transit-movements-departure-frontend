@@ -466,7 +466,6 @@ guaranteeDetails.referenceNumber.paragraph = You must make sure this reference i
 guaranteeDetails.referenceNumber.hint = It can be up to 24 characters long and include both letters and numbers. For example, 01GB1234567890120A123456.
 guaranteeDetails.referenceNumber.error.length = The Guarantee Reference Number must be 24 characters or less
 guaranteeDetails.referenceNumber.error.invalid = The Guarantee Reference Number must only include the letters a to z and numbers 0 to 9
-guaranteeDetails.referenceNumber.error.format = The Guarantee Reference Number must follow this format: 2 numbers, then 2 letters, 13 numbers, 1 letter and then 6 numbers.
 
 guaranteeDetails.otherReference.option3.title = What is the reference for the guarantee?
 guaranteeDetails.otherReference.option3.heading = What is the reference for the guarantee?

@@ -32,7 +32,7 @@ class GuaranteeReferenceNumberFormProvider @Inject() extends Mappings {
           StopOnFirstFail[String](
             maxLength(maxRefNumberLength, s"$prefix.error.length"),
             regexp(alphaNumericRegex, s"$prefix.error.invalid"),
-            regexp(referenceNumberFormatRegex, s"$prefix.error.format")
+            regexp(referenceNumberFormatRegex, s"$prefix.error.invalid")
           )
         )
     )

@@ -30,7 +30,6 @@ class GuaranteeReferenceNumberFormProviderSpec extends StringFieldBehaviours {
   val requiredKey = s"$prefix.error.required"
   val lengthKey   = s"$prefix.error.length"
   val invalidKey  = s"$prefix.error.invalid"
-  val formatKey   = s"$prefix.error.format"
 
   val form = new GuaranteeReferenceNumberFormProvider()(prefix)
 
@@ -69,7 +68,7 @@ class GuaranteeReferenceNumberFormProviderSpec extends StringFieldBehaviours {
       fieldName = fieldName,
       regex = referenceNumberFormatRegex.regex,
       gen = invalidFormatRefNumber,
-      invalidKey = formatKey
+      invalidKey = invalidKey
     )
 
     "must remove spaces on bound strings" in {
