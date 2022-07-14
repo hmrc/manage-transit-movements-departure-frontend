@@ -81,7 +81,7 @@ package object controllers {
 
     def navigateWith(mode: Mode)(implicit navigator: Navigator, executionContext: ExecutionContext): Future[Result] =
       navigate {
-        result => navigator.nextPage(result._1, mode, result._2)
+        case (_, userAnswers) => navigator.nextPage(userAnswers, mode)
       }
 
     def navigateTo(call: Call)(implicit executionContext: ExecutionContext): Future[Result] =

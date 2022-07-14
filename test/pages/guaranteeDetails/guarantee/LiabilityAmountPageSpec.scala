@@ -17,7 +17,6 @@
 package pages.guaranteeDetails.guarantee
 
 import pages.behaviours.PageBehaviours
-import pages.guaranteeDetails.guarantee
 
 class LiabilityAmountPageSpec extends PageBehaviours {
 
@@ -25,8 +24,8 @@ class LiabilityAmountPageSpec extends PageBehaviours {
 
     beRetrievable[BigDecimal](LiabilityAmountPage(index))
 
-    beSettable[BigDecimal](guarantee.LiabilityAmountPage(index))
+    beSettable[BigDecimal](LiabilityAmountPage(index))
 
-    beRemovable[BigDecimal](guarantee.LiabilityAmountPage(index))
+    beRemovable[BigDecimal](LiabilityAmountPage(index))
   }
 }

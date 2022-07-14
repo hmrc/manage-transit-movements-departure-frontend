@@ -21,7 +21,6 @@ import models.guaranteeDetails.GuaranteeType
 import models.{DeclarationType, Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.guaranteeDetails.guarantee
 import pages.preTaskList.DeclarationTypePage
 
 class GuaranteeTypePageSpec extends PageBehaviours {
@@ -30,9 +29,9 @@ class GuaranteeTypePageSpec extends PageBehaviours {
 
     beRetrievable[GuaranteeType](GuaranteeTypePage(index))
 
-    beSettable[GuaranteeType](guarantee.GuaranteeTypePage(index))
+    beSettable[GuaranteeType](GuaranteeTypePage(index))
 
-    beRemovable[GuaranteeType](guarantee.GuaranteeTypePage(index))
+    beRemovable[GuaranteeType](GuaranteeTypePage(index))
 
     "cleanup" - {
       "when value has changed" - {
@@ -40,7 +39,7 @@ class GuaranteeTypePageSpec extends PageBehaviours {
           forAll(arbitrary[GuaranteeType], arbitrary[String], arbitrary[BigDecimal]) {
             (guaranteeType, str, amount) =>
               val preChange = emptyUserAnswers
-                .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
+                .setValue(GuaranteeTypePage(index), guaranteeType)
                 .setValue(ReferenceNumberPage(index), str)
                 .setValue(AccessCodePage(index), str)
                 .setValue(LiabilityAmountPage(index), amount)
@@ -49,13 +48,13 @@ class GuaranteeTypePageSpec extends PageBehaviours {
 
               forAll(arbitrary[GuaranteeType].suchThat(_ != guaranteeType)) {
                 changedGuaranteeType =>
-                  val postChange = preChange.set(guarantee.GuaranteeTypePage(index), changedGuaranteeType).success.value
+                  val postChange = preChange.set(GuaranteeTypePage(index), changedGuaranteeType).success.value
 
-                  postChange.get(guarantee.ReferenceNumberPage(index)) mustNot be(defined)
-                  postChange.get(guarantee.AccessCodePage(index)) mustNot be(defined)
-                  postChange.get(guarantee.LiabilityAmountPage(index)) mustNot be(defined)
-                  postChange.get(guarantee.OtherReferenceYesNoPage(index)) mustNot be(defined)
-                  postChange.get(guarantee.OtherReferencePage(index)) mustNot be(defined)
+                  postChange.get(ReferenceNumberPage(index)) mustNot be(defined)
+                  postChange.get(AccessCodePage(index)) mustNot be(defined)
+                  postChange.get(LiabilityAmountPage(index)) mustNot be(defined)
+                  postChange.get(OtherReferenceYesNoPage(index)) mustNot be(defined)
+                  postChange.get(OtherReferencePage(index)) mustNot be(defined)
               }
           }
         }
@@ -66,20 +65,20 @@ class GuaranteeTypePageSpec extends PageBehaviours {
           forAll(arbitrary[GuaranteeType], arbitrary[String], arbitrary[BigDecimal]) {
             (guaranteeType, str, amount) =>
               val preChange = emptyUserAnswers
-                .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
-                .setValue(guarantee.ReferenceNumberPage(index), str)
-                .setValue(guarantee.AccessCodePage(index), str)
-                .setValue(guarantee.LiabilityAmountPage(index), amount)
-                .setValue(guarantee.OtherReferenceYesNoPage(index), true)
-                .setValue(guarantee.OtherReferencePage(index), str)
+                .setValue(GuaranteeTypePage(index), guaranteeType)
+                .setValue(ReferenceNumberPage(index), str)
+                .setValue(AccessCodePage(index), str)
+                .setValue(LiabilityAmountPage(index), amount)
+                .setValue(OtherReferenceYesNoPage(index), true)
+                .setValue(OtherReferencePage(index), str)
 
-              val postChange = preChange.setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
+              val postChange = preChange.setValue(GuaranteeTypePage(index), guaranteeType)
 
-              postChange.get(guarantee.ReferenceNumberPage(index)) must be(defined)
-              postChange.get(guarantee.AccessCodePage(index)) must be(defined)
-              postChange.get(guarantee.LiabilityAmountPage(index)) must be(defined)
-              postChange.get(guarantee.OtherReferenceYesNoPage(index)) must be(defined)
-              postChange.get(guarantee.OtherReferencePage(index)) must be(defined)
+              postChange.get(ReferenceNumberPage(index)) must be(defined)
+              postChange.get(AccessCodePage(index)) must be(defined)
+              postChange.get(LiabilityAmountPage(index)) must be(defined)
+              postChange.get(OtherReferenceYesNoPage(index)) must be(defined)
+              postChange.get(OtherReferencePage(index)) must be(defined)
           }
         }
       }
@@ -91,7 +90,7 @@ class GuaranteeTypePageSpec extends PageBehaviours {
           forAll(arbitrary[Index], arbitrary[Mode]) {
             (index, mode) =>
               val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
-              guarantee.GuaranteeTypePage(index).route(userAnswers, mode).get.url mustBe
+              GuaranteeTypePage(index).route(userAnswers, mode).get.url mustBe
                 controllers.guaranteeDetails.routes.GuaranteeAddedTIRController.onPageLoad(userAnswers.lrn).url
           }
         }
@@ -102,7 +101,7 @@ class GuaranteeTypePageSpec extends PageBehaviours {
           forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType), arbitrary[Index], arbitrary[Mode]) {
             (declarationType, index, mode) =>
               val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
-              guarantee.GuaranteeTypePage(index).route(userAnswers, mode).get.url mustBe
+              GuaranteeTypePage(index).route(userAnswers, mode).get.url mustBe
                 controllers.guaranteeDetails.guarantee.routes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, mode, index).url
           }
         }

@@ -17,7 +17,6 @@
 package pages.guaranteeDetails.guarantee
 
 import pages.behaviours.PageBehaviours
-import pages.guaranteeDetails.guarantee
 
 class AccessCodePageSpec extends PageBehaviours {
 
@@ -25,8 +24,8 @@ class AccessCodePageSpec extends PageBehaviours {
 
     beRetrievable[String](AccessCodePage(index))
 
-    beSettable[String](guarantee.AccessCodePage(index))
+    beSettable[String](AccessCodePage(index))
 
-    beRemovable[String](guarantee.AccessCodePage(index))
+    beRemovable[String](AccessCodePage(index))
   }
 }

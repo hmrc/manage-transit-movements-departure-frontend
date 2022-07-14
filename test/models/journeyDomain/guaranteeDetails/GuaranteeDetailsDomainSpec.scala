@@ -24,7 +24,7 @@ import models.guaranteeDetails.GuaranteeType._
 import models.journeyDomain.guaranteeDetails.GuaranteeDomain.GuaranteeOfTypesABR
 import models.{DeclarationType, Index}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.guaranteeDetails.guarantee
+import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import pages.preTaskList.DeclarationTypePage
 
 class GuaranteeDetailsDomainSpec extends SpecBase with Generators {
@@ -35,7 +35,7 @@ class GuaranteeDetailsDomainSpec extends SpecBase with Generators {
       "when TIR declaration type" in {
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, Option4)
-          .setValue(guarantee.GuaranteeTypePage(Index(0)), TIRGuarantee)
+          .setValue(GuaranteeTypePage(Index(0)), TIRGuarantee)
 
         val expectedResult = GuaranteeDetailsDomain(
           Seq(
@@ -55,8 +55,8 @@ class GuaranteeDetailsDomainSpec extends SpecBase with Generators {
 
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, declarationType)
-          .setValue(guarantee.GuaranteeTypePage(Index(0)), GuaranteeWaiverByAgreement)
-          .setValue(guarantee.GuaranteeTypePage(Index(1)), GuaranteeNotRequired)
+          .setValue(GuaranteeTypePage(Index(0)), GuaranteeWaiverByAgreement)
+          .setValue(GuaranteeTypePage(Index(1)), GuaranteeNotRequired)
 
         val expectedResult = GuaranteeDetailsDomain(
           Seq(
@@ -84,7 +84,7 @@ class GuaranteeDetailsDomainSpec extends SpecBase with Generators {
 
         val result: EitherType[GuaranteeDetailsDomain] = UserAnswersReader[GuaranteeDetailsDomain].run(userAnswers)
 
-        result.left.value.page mustBe guarantee.GuaranteeTypePage(Index(0))
+        result.left.value.page mustBe GuaranteeTypePage(Index(0))
       }
     }
   }

@@ -24,10 +24,8 @@ import models._
 import models.guaranteeDetails.GuaranteeType
 import models.guaranteeDetails.GuaranteeType._
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.guaranteeDetails.guarantee
-import pages.guaranteeDetails.guarantee._
+import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import pages.preTaskList.DeclarationTypePage
 
 class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with GuaranteeDetailsUserAnswersGenerator {
@@ -36,15 +34,6 @@ class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with
 
   "Guarantee Details Navigator" - {
 
-    val pageGen = Gen.oneOf(
-      GuaranteeTypePage(index),
-      ReferenceNumberPage(index),
-      AccessCodePage(index),
-      LiabilityAmountPage(index),
-      OtherReferenceYesNoPage(index),
-      OtherReferencePage(index)
-    )
-
     "when answers complete" - {
       "when not a single-page journey" - {
         "must redirect to check your answers" in {
@@ -52,12 +41,12 @@ class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with
           val guaranteeType   = arbitrary[GuaranteeType](arbitrary01234589GuaranteeType).sample.value
           val initialAnswers = emptyUserAnswers
             .setValue(DeclarationTypePage, declarationType)
-            .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
+            .setValue(GuaranteeTypePage(index), guaranteeType)
 
-          forAll(arbitraryGuaranteeAnswers(initialAnswers, index), pageGen, arbitrary[Mode]) {
-            (answers, page, mode) =>
+          forAll(arbitraryGuaranteeAnswers(initialAnswers, index), arbitrary[Mode]) {
+            (answers, mode) =>
               navigator
-                .nextPage(page, mode, answers)
+                .nextPage(answers, mode)
                 .mustBe(guaranteeRoutes.CheckYourAnswersController.onPageLoad(answers.lrn, index))
           }
         }
@@ -69,12 +58,12 @@ class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with
           val guaranteeType   = arbitrary[GuaranteeType](arbitraryARGuaranteeType).sample.value
           val initialAnswers = emptyUserAnswers
             .setValue(DeclarationTypePage, declarationType)
-            .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
+            .setValue(GuaranteeTypePage(index), guaranteeType)
 
-          forAll(arbitraryGuaranteeAnswers(initialAnswers, index), pageGen, arbitrary[Mode]) {
-            (answers, page, mode) =>
+          forAll(arbitraryGuaranteeAnswers(initialAnswers, index), arbitrary[Mode]) {
+            (answers, mode) =>
               navigator
-                .nextPage(page, mode, answers)
+                .nextPage(answers, mode)
                 .mustBe(guaranteeDetailsRoutes.AddAnotherGuaranteeController.onPageLoad(answers.lrn))
           }
         }

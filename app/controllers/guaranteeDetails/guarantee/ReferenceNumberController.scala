@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.GuaranteeReferenceNumberFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.{GuaranteeNavigator, GuaranteeNavigatorProvider}
-import pages.guaranteeDetails.guarantee
+import pages.guaranteeDetails.guarantee.ReferenceNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -47,7 +47,7 @@ class ReferenceNumberController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(guarantee.ReferenceNumberPage(index)) match {
+      val preparedForm = request.userAnswers.get(ReferenceNumberPage(index)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -62,7 +62,7 @@ class ReferenceNumberController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index))),
           value => {
             implicit val navigator: GuaranteeNavigator = navigatorProvider(index)
-            guarantee.ReferenceNumberPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+            ReferenceNumberPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
           }
         )
   }

@@ -22,7 +22,6 @@ import generators.Generators
 import models.guaranteeDetails.GuaranteeType._
 import models.{CheckMode, DeclarationType, Index, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.guaranteeDetails.guarantee
 import pages.guaranteeDetails.guarantee.{GuaranteeTypePage, OtherReferenceYesNoPage}
 import pages.preTaskList.DeclarationTypePage
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
@@ -65,11 +64,11 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with Generator
       val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
       val userAnswers = emptyUserAnswers
         .setValue(DeclarationTypePage, declarationType)
-        .setValue(guarantee.GuaranteeTypePage(Index(0)), CashDepositGuarantee)
-        .setValue(guarantee.OtherReferenceYesNoPage(Index(0)), false)
-        .setValue(guarantee.GuaranteeTypePage(Index(1)), GuaranteeWaiver)
-        .setValue(guarantee.GuaranteeTypePage(Index(2)), GuaranteeWaiverByAgreement)
-        .setValue(guarantee.GuaranteeTypePage(Index(3)), GuaranteeNotRequired)
+        .setValue(GuaranteeTypePage(Index(0)), CashDepositGuarantee)
+        .setValue(OtherReferenceYesNoPage(Index(0)), false)
+        .setValue(GuaranteeTypePage(Index(1)), GuaranteeWaiver)
+        .setValue(GuaranteeTypePage(Index(2)), GuaranteeWaiverByAgreement)
+        .setValue(GuaranteeTypePage(Index(3)), GuaranteeNotRequired)
 
       val helper = new GuaranteeDetailsCheckYourAnswersHelper(userAnswers, NormalMode)
       helper.listItems mustBe Seq(

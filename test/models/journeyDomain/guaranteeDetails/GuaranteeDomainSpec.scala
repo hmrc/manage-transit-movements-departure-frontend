@@ -25,7 +25,6 @@ import models.guaranteeDetails.GuaranteeType._
 import models.journeyDomain.guaranteeDetails.GuaranteeDomain._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.guaranteeDetails.guarantee
 import pages.guaranteeDetails.guarantee._
 import pages.preTaskList.DeclarationTypePage
 
@@ -76,8 +75,8 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
 
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, declarationType)
-          .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
-          .setValue(guarantee.ReferenceNumberPage(index), grn)
+          .setValue(GuaranteeTypePage(index), guaranteeType)
+          .setValue(ReferenceNumberPage(index), grn)
 
         val expectedResult = GuaranteeOfType5(
           `type` = guaranteeType,
@@ -97,7 +96,7 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
 
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, declarationType)
-          .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
+          .setValue(GuaranteeTypePage(index), guaranteeType)
 
         val expectedResult = GuaranteeOfTypesABR(
           `type` = guaranteeType
@@ -117,7 +116,7 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, declarationType)
           .setValue(DeclarationTypePage, Option4)
-          .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
+          .setValue(GuaranteeTypePage(index), guaranteeType)
 
         val expectedResult = GuaranteeOfTypesABR(
           `type` = guaranteeType
@@ -137,7 +136,7 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
 
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, declarationType)
-          .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
+          .setValue(GuaranteeTypePage(index), guaranteeType)
           .setValue(OtherReferencePage(index), otherReference)
 
         val expectedResult = GuaranteeOfType8(
@@ -161,9 +160,9 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
 
           val userAnswers = emptyUserAnswers
             .setValue(DeclarationTypePage, declarationType)
-            .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
+            .setValue(GuaranteeTypePage(index), guaranteeType)
             .setValue(OtherReferenceYesNoPage(index), true)
-            .setValue(guarantee.OtherReferencePage(index), otherReference)
+            .setValue(OtherReferencePage(index), otherReference)
 
           val expectedResult = GuaranteeOfType3(
             `type` = guaranteeType,
@@ -181,8 +180,8 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
 
           val userAnswers = emptyUserAnswers
             .setValue(DeclarationTypePage, declarationType)
-            .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
-            .setValue(guarantee.OtherReferenceYesNoPage(index), false)
+            .setValue(GuaranteeTypePage(index), guaranteeType)
+            .setValue(OtherReferenceYesNoPage(index), false)
 
           val expectedResult = GuaranteeOfType3(
             `type` = guaranteeType,
@@ -209,13 +208,13 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
 
             val userAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
-              .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
+              .setValue(GuaranteeTypePage(index), guaranteeType)
 
             val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
               GuaranteeDomain.userAnswersReader(index)
             ).run(userAnswers)
 
-            result.left.value.page mustBe guarantee.ReferenceNumberPage(index)
+            result.left.value.page mustBe ReferenceNumberPage(index)
           }
 
           "when access code missing" in {
@@ -225,14 +224,14 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
 
             val userAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
-              .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
-              .setValue(guarantee.ReferenceNumberPage(index), grn)
+              .setValue(GuaranteeTypePage(index), guaranteeType)
+              .setValue(ReferenceNumberPage(index), grn)
 
             val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
               GuaranteeDomain.userAnswersReader(index)
             ).run(userAnswers)
 
-            result.left.value.page mustBe guarantee.AccessCodePage(index)
+            result.left.value.page mustBe AccessCodePage(index)
           }
 
           "when liability amount missing" in {
@@ -243,15 +242,15 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
 
             val userAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
-              .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
-              .setValue(guarantee.ReferenceNumberPage(index), grn)
-              .setValue(guarantee.AccessCodePage(index), accessCOde)
+              .setValue(GuaranteeTypePage(index), guaranteeType)
+              .setValue(ReferenceNumberPage(index), grn)
+              .setValue(AccessCodePage(index), accessCOde)
 
             val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
               GuaranteeDomain.userAnswersReader(index)
             ).run(userAnswers)
 
-            result.left.value.page mustBe guarantee.LiabilityAmountPage(index)
+            result.left.value.page mustBe LiabilityAmountPage(index)
           }
         }
 
@@ -261,13 +260,13 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
 
           val userAnswers = emptyUserAnswers
             .setValue(DeclarationTypePage, declarationType)
-            .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
+            .setValue(GuaranteeTypePage(index), guaranteeType)
 
           val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
             GuaranteeDomain.userAnswersReader(index)
           ).run(userAnswers)
 
-          result.left.value.page mustBe guarantee.GuaranteeTypePage(index)
+          result.left.value.page mustBe GuaranteeTypePage(index)
         }
 
         "when 8 guarantee type" in {
@@ -276,13 +275,13 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
 
           val userAnswers = emptyUserAnswers
             .setValue(DeclarationTypePage, declarationType)
-            .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
+            .setValue(GuaranteeTypePage(index), guaranteeType)
 
           val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
             GuaranteeDomain.userAnswersReader(index)
           ).run(userAnswers)
 
-          result.left.value.page mustBe guarantee.OtherReferencePage(index)
+          result.left.value.page mustBe OtherReferencePage(index)
         }
 
         "when 3 guarantee type" - {
@@ -293,27 +292,27 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
 
             val userAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
-              .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
+              .setValue(GuaranteeTypePage(index), guaranteeType)
 
             val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
               GuaranteeDomain.userAnswersReader(index)
             ).run(userAnswers)
 
-            result.left.value.page mustBe guarantee.OtherReferenceYesNoPage(index)
+            result.left.value.page mustBe OtherReferenceYesNoPage(index)
           }
 
           "when otherReferenceYesNoPage is true and otherReference is unanswered" in {
 
             val userAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
-              .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
-              .setValue(guarantee.OtherReferenceYesNoPage(index), true)
+              .setValue(GuaranteeTypePage(index), guaranteeType)
+              .setValue(OtherReferenceYesNoPage(index), true)
 
             val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
               GuaranteeDomain.userAnswersReader(index)
             ).run(userAnswers)
 
-            result.left.value.page mustBe guarantee.OtherReferencePage(index)
+            result.left.value.page mustBe OtherReferencePage(index)
           }
         }
 

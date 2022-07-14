@@ -22,7 +22,7 @@ import models.{NormalMode, UserAnswers}
 import navigation.GuaranteeNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.guaranteeDetails.guarantee
+import pages.guaranteeDetails.guarantee.LiabilityAmountPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -65,7 +65,7 @@ class LiabilityAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(guarantee.LiabilityAmountPage(index), validAnswer).success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(LiabilityAmountPage(index), validAnswer).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, referenceNumberRoute)

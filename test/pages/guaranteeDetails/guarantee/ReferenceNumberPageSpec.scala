@@ -17,7 +17,6 @@
 package pages.guaranteeDetails.guarantee
 
 import pages.behaviours.PageBehaviours
-import pages.guaranteeDetails.guarantee
 
 class ReferenceNumberPageSpec extends PageBehaviours {
 
@@ -25,8 +24,8 @@ class ReferenceNumberPageSpec extends PageBehaviours {
 
     beRetrievable[String](ReferenceNumberPage(index))
 
-    beSettable[String](guarantee.ReferenceNumberPage(index))
+    beSettable[String](ReferenceNumberPage(index))
 
-    beRemovable[String](guarantee.ReferenceNumberPage(index))
+    beRemovable[String](ReferenceNumberPage(index))
   }
 }

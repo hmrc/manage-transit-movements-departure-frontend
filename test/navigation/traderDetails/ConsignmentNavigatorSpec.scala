@@ -21,9 +21,7 @@ import controllers.traderDetails.consignment.{routes => consignmentRoutes}
 import controllers.traderDetails.{routes => tdRoutes}
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models._
-import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.traderDetails.consignment._
 
 class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
 
@@ -31,32 +29,16 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
   "Consignment Navigator" - {
 
-    val pageGen = Gen.oneOf(
-      ApprovedOperatorPage,
-      consignor.EoriYesNoPage,
-      consignor.EoriPage,
-      consignor.NamePage,
-      consignor.AddressPage,
-      consignor.AddContactPage,
-      consignor.contact.NamePage,
-      consignor.contact.TelephoneNumberPage,
-      MoreThanOneConsigneePage,
-      consignee.EoriYesNoPage,
-      consignee.EoriNumberPage,
-      consignee.NamePage,
-      consignee.AddressPage
-    )
-
     "when in NormalMode" - {
 
       val mode = NormalMode
 
       "when answers complete" - {
         "must redirect to check your answers" in {
-          forAll(arbitraryConsignmentAnswers(emptyUserAnswers), pageGen) {
-            (answers, page) =>
+          forAll(arbitraryConsignmentAnswers(emptyUserAnswers)) {
+            answers =>
               navigator
-                .nextPage(page, mode, answers)
+                .nextPage(answers, mode)
                 .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
@@ -69,10 +51,10 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       "when answers complete" - {
         "must redirect to check your answers" in {
-          forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers), pageGen) {
-            (answers, page) =>
+          forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers)) {
+            answers =>
               navigator
-                .nextPage(page, mode, answers)
+                .nextPage(answers, mode)
                 .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }

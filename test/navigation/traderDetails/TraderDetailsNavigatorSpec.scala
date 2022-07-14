@@ -21,9 +21,7 @@ import controllers.traderDetails.routes
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.traderDetails.ActingAsRepresentativePage
 
 class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
 
@@ -31,16 +29,12 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
   "Trader Details Navigator" - {
 
-    val pageGen = Gen.const(
-      ActingAsRepresentativePage
-    )
-
     "when answers complete" - {
       "must redirect to check your answers" in {
-        forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers), pageGen, arbitrary[Mode]) {
-          (answers, page, mode) =>
+        forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers), arbitrary[Mode]) {
+          (answers, mode) =>
             navigator
-              .nextPage(page, mode, answers)
+              .nextPage(answers, mode)
               .mustBe(routes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }

@@ -22,7 +22,7 @@ import models.DeclarationType.Option4
 import models.domain.{UserAnswersReader, _}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{Index, UserAnswers}
-import pages.guaranteeDetails.guarantee
+import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import pages.preTaskList.DeclarationTypePage
 import pages.sections.GuaranteeDetailsSection
 import play.api.mvc.Call
@@ -45,7 +45,7 @@ object GuaranteeDetailsDomain {
       .map(_.value.toList)
       .flatMap {
         case Nil =>
-          UserAnswersReader.fail[GuaranteeDetailsDomain](guarantee.GuaranteeTypePage(Index(0)))
+          UserAnswersReader.fail[GuaranteeDetailsDomain](GuaranteeTypePage(Index(0)))
         case x =>
           x.zipWithIndex
             .traverse[UserAnswersReader, GuaranteeDomain] {

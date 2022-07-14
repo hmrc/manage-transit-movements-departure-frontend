@@ -28,7 +28,7 @@ import pages.guaranteeDetails.guarantee
 import pages.guaranteeDetails.guarantee.{GuaranteeTypePage, OtherReferencePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.guaranteeDetails.guarantee.OtherReferenceView
@@ -51,38 +51,52 @@ class OtherReferenceController @Inject() (
 
   private type Request = SpecificDataRequestProvider1[GuaranteeType]#SpecificDataRequest[_]
 
-  private def form(implicit request: Request): Form[String] = formProvider(prefix)
+  private def form(prefix: String): Form[String] = formProvider(prefix)
 
-  private def prefix(implicit request: Request): String = request.arg match {
-    case CashDepositGuarantee                 => "guaranteeDetails.otherReference.option3"
-    case GuaranteeNotRequiredExemptPublicBody => "guaranteeDetails.otherReference.option8"
-    case _                                    => "" //todo decide what action to take
-  }
+  private def getValidPrefixOrRedirect(implicit request: Request): Either[(LocalReferenceNumber, Mode, Index) => Result, String] =
+    request.arg match {
+      case CashDepositGuarantee =>
+        Right("guaranteeDetails.otherReference.option3")
+      case GuaranteeNotRequiredExemptPublicBody =>
+        Right("guaranteeDetails.otherReference.option8")
+      case _ =>
+        Left(
+          (lrn, mode, index) => Redirect(routes.GuaranteeTypeController.onPageLoad(lrn, mode, index))
+        )
+    }
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
     .requireData(lrn)
     .andThen(getMandatoryPage(GuaranteeTypePage(index))) {
       implicit request =>
-        val preparedForm = request.userAnswers.get(OtherReferencePage(index)) match {
-          case None        => form
-          case Some(value) => form.fill(value)
+        getValidPrefixOrRedirect match {
+          case Left(redirect) => redirect(lrn, mode, index)
+          case Right(prefix) =>
+            val preparedForm = request.userAnswers.get(OtherReferencePage(index)) match {
+              case None        => form(prefix)
+              case Some(value) => form(prefix).fill(value)
+            }
+            Ok(view(preparedForm, lrn, mode, index, prefix))
         }
-        Ok(view(preparedForm, lrn, mode, index, prefix))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(guarantee.GuaranteeTypePage(index)))
+    .andThen(getMandatoryPage(GuaranteeTypePage(index)))
     .async {
       implicit request =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index, prefix))),
-            value => {
-              implicit val navigator: GuaranteeNavigator = navigatorProvider(index)
-              guarantee.OtherReferencePage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
-            }
-          )
+        getValidPrefixOrRedirect match {
+          case Left(redirect) => Future.successful(redirect(lrn, mode, index))
+          case Right(prefix) =>
+            form(prefix)
+              .bindFromRequest()
+              .fold(
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index, prefix))),
+                value => {
+                  implicit val navigator: GuaranteeNavigator = navigatorProvider(index)
+                  guarantee.OtherReferencePage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                }
+              )
+        }
     }
 }

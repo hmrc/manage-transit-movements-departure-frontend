@@ -22,7 +22,7 @@ import forms.guaranteeDetails.GuaranteeTypeFormProvider
 import models.guaranteeDetails.GuaranteeType
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.{GuaranteeNavigator, GuaranteeNavigatorProvider}
-import pages.guaranteeDetails.guarantee
+import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -48,7 +48,7 @@ class GuaranteeTypeController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(guarantee.GuaranteeTypePage(index)) match {
+      val preparedForm = request.userAnswers.get(GuaranteeTypePage(index)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -64,7 +64,7 @@ class GuaranteeTypeController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, GuaranteeType.radioItems, mode, index))),
           value => {
             implicit val navigator: GuaranteeNavigator = navigatorProvider(index)
-            guarantee.GuaranteeTypePage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+            GuaranteeTypePage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
           }
         )
   }

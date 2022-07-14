@@ -18,7 +18,6 @@ package pages.guaranteeDetails.guarantee
 
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.guaranteeDetails.guarantee
 
 class OtherReferenceYesNoPageSpec extends PageBehaviours {
 
@@ -26,9 +25,9 @@ class OtherReferenceYesNoPageSpec extends PageBehaviours {
 
     beRetrievable[Boolean](OtherReferenceYesNoPage(index))
 
-    beSettable[Boolean](guarantee.OtherReferenceYesNoPage(index))
+    beSettable[Boolean](OtherReferenceYesNoPage(index))
 
-    beRemovable[Boolean](guarantee.OtherReferenceYesNoPage(index))
+    beRemovable[Boolean](OtherReferenceYesNoPage(index))
 
     "cleanup" - {
       "when NO selected" - {
@@ -36,9 +35,9 @@ class OtherReferenceYesNoPageSpec extends PageBehaviours {
           forAll(arbitrary[String]) {
             ref =>
               val preChange  = emptyUserAnswers.setValue(OtherReferencePage(index), ref)
-              val postChange = preChange.setValue(guarantee.OtherReferenceYesNoPage(index), false)
+              val postChange = preChange.setValue(OtherReferenceYesNoPage(index), false)
 
-              postChange.get(guarantee.OtherReferencePage(index)) mustNot be(defined)
+              postChange.get(OtherReferencePage(index)) mustNot be(defined)
           }
         }
       }
@@ -47,10 +46,10 @@ class OtherReferenceYesNoPageSpec extends PageBehaviours {
         "must not clean up OtherReferencePage" in {
           forAll(arbitrary[String]) {
             ref =>
-              val preChange  = emptyUserAnswers.setValue(guarantee.OtherReferencePage(index), ref)
-              val postChange = preChange.setValue(guarantee.OtherReferenceYesNoPage(index), true)
+              val preChange  = emptyUserAnswers.setValue(OtherReferencePage(index), ref)
+              val postChange = preChange.setValue(OtherReferenceYesNoPage(index), true)
 
-              postChange.get(guarantee.OtherReferencePage(index)) must be(defined)
+              postChange.get(OtherReferencePage(index)) must be(defined)
           }
         }
       }

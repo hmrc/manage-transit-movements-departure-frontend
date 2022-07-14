@@ -20,7 +20,7 @@ import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
 import models.guaranteeDetails.GuaranteeType
 import models.journeyDomain.guaranteeDetails.GuaranteeDomain
 import models.{Index, Mode, UserAnswers}
-import pages.guaranteeDetails.guarantee
+import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import pages.sections.GuaranteeDetailsSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
@@ -34,7 +34,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mod
       position =>
         val index = Index(position)
         buildListItem[GuaranteeDomain, GuaranteeType](
-          page = guarantee.GuaranteeTypePage(Index(position)),
+          page = GuaranteeTypePage(Index(position)),
           getName = _.`type`,
           formatName = formatEnumAsString(GuaranteeType.messageKeyPrefix),
           removeRoute = guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, index)

@@ -19,7 +19,6 @@ package utils.cyaHelpers.guaranteeDetails
 import models.guaranteeDetails.GuaranteeType
 import models.guaranteeDetails.GuaranteeType._
 import models.{Index, Mode, UserAnswers}
-import pages.guaranteeDetails.guarantee
 import pages.guaranteeDetails.guarantee._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
@@ -50,7 +49,7 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
   )
 
   def otherReference: Option[SummaryListRow] =
-    (userAnswers.get(guarantee.GuaranteeTypePage(index)) match {
+    (userAnswers.get(GuaranteeTypePage(index)) match {
       case Some(CashDepositGuarantee)                 => Some("option3")
       case Some(GuaranteeNotRequiredExemptPublicBody) => Some("option8")
       case _                                          => None

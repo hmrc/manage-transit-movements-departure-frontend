@@ -23,7 +23,7 @@ import navigation.GuaranteeNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.guaranteeDetails.guarantee
+import pages.guaranteeDetails.guarantee.OtherReferenceYesNoPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -64,7 +64,7 @@ class OtherReferenceYesNoControllerSpec extends SpecBase with AppWithDefaultMock
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(guarantee.OtherReferenceYesNoPage(index), true).success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(OtherReferenceYesNoPage(index), true).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, otherReferenceYesNoRoute)
