@@ -24,7 +24,8 @@ import models.guaranteeDetails.GuaranteeType
 import models.guaranteeDetails.GuaranteeType._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.guaranteeDetails._
+import pages.guaranteeDetails.guarantee
+import pages.guaranteeDetails.guarantee.{GuaranteeTypePage, OtherReferenceYesNoPage}
 import pages.preTaskList._
 
 class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with GuaranteeDetailsUserAnswersGenerator {
@@ -70,7 +71,7 @@ class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with
             val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
             val initialAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
-              .setValue(GuaranteeTypePage(index), GuaranteeWaiverSecured)
+              .setValue(guarantee.GuaranteeTypePage(index), GuaranteeWaiverSecured)
 
             forAll(arbitraryGuaranteeAnswers(initialAnswers, index)) {
               answers =>
@@ -88,7 +89,7 @@ class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with
             val guaranteeType   = arbitrary[GuaranteeType](arbitraryARGuaranteeType).sample.value
             val initialAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
-              .setValue(GuaranteeTypePage(index), guaranteeType)
+              .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
 
             forAll(arbitraryGuaranteeAnswers(initialAnswers, index)) {
               answers =>
@@ -105,7 +106,7 @@ class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with
             val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
             val initialAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
-              .setValue(GuaranteeTypePage(index), GuaranteeNotRequiredExemptPublicBody)
+              .setValue(guarantee.GuaranteeTypePage(index), GuaranteeNotRequiredExemptPublicBody)
 
             forAll(arbitraryGuaranteeAnswers(initialAnswers, index)) {
               answers =>
@@ -123,7 +124,7 @@ class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with
               val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
               val initialAnswers = emptyUserAnswers
                 .setValue(DeclarationTypePage, declarationType)
-                .setValue(GuaranteeTypePage(index), CashDepositGuarantee)
+                .setValue(guarantee.GuaranteeTypePage(index), CashDepositGuarantee)
                 .setValue(OtherReferenceYesNoPage(index), true)
 
               forAll(arbitraryGuaranteeAnswers(initialAnswers, index)) {
@@ -141,8 +142,8 @@ class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with
               val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
               val initialAnswers = emptyUserAnswers
                 .setValue(DeclarationTypePage, declarationType)
-                .setValue(GuaranteeTypePage(index), CashDepositGuarantee)
-                .setValue(OtherReferenceYesNoPage(index), false)
+                .setValue(guarantee.GuaranteeTypePage(index), CashDepositGuarantee)
+                .setValue(guarantee.OtherReferenceYesNoPage(index), false)
 
               forAll(arbitraryGuaranteeAnswers(initialAnswers, index)) {
                 answers =>

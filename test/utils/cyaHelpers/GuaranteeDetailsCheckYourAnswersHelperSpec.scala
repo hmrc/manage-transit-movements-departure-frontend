@@ -17,12 +17,13 @@
 package utils.cyaHelpers
 
 import base.SpecBase
-import controllers.guaranteeDetails.{routes => gdRoutes}
+import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
 import generators.Generators
 import models.guaranteeDetails.GuaranteeType._
 import models.{CheckMode, DeclarationType, Index, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.guaranteeDetails._
+import pages.guaranteeDetails.guarantee
+import pages.guaranteeDetails.guarantee.{GuaranteeTypePage, OtherReferenceYesNoPage}
 import pages.preTaskList.DeclarationTypePage
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import utils.cyaHelpers.guaranteeDetails.GuaranteeDetailsCheckYourAnswersHelper
@@ -51,8 +52,8 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with Generator
         Right(
           ListItem(
             name = "(3) Individual guarantee in cash or an equivalent recognised by the customs authorities",
-            changeUrl = gdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, Index(0)).url,
-            removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(0)).url
+            changeUrl = guaranteeRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, Index(0)).url,
+            removeUrl = guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(0)).url
           )
         )
       )
@@ -64,40 +65,40 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with Generator
       val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
       val userAnswers = emptyUserAnswers
         .setValue(DeclarationTypePage, declarationType)
-        .setValue(GuaranteeTypePage(Index(0)), CashDepositGuarantee)
-        .setValue(OtherReferenceYesNoPage(Index(0)), false)
-        .setValue(GuaranteeTypePage(Index(1)), GuaranteeWaiver)
-        .setValue(GuaranteeTypePage(Index(2)), GuaranteeWaiverByAgreement)
-        .setValue(GuaranteeTypePage(Index(3)), GuaranteeNotRequired)
+        .setValue(guarantee.GuaranteeTypePage(Index(0)), CashDepositGuarantee)
+        .setValue(guarantee.OtherReferenceYesNoPage(Index(0)), false)
+        .setValue(guarantee.GuaranteeTypePage(Index(1)), GuaranteeWaiver)
+        .setValue(guarantee.GuaranteeTypePage(Index(2)), GuaranteeWaiverByAgreement)
+        .setValue(guarantee.GuaranteeTypePage(Index(3)), GuaranteeNotRequired)
 
       val helper = new GuaranteeDetailsCheckYourAnswersHelper(userAnswers, NormalMode)
       helper.listItems mustBe Seq(
         Right(
           ListItem(
             name = "(3) Individual guarantee in cash or an equivalent recognised by the customs authorities",
-            changeUrl = gdRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, Index(0)).url,
-            removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(0)).url
+            changeUrl = guaranteeRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, Index(0)).url,
+            removeUrl = guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(0)).url
           )
         ),
         Left(
           ListItem(
             name = "(0) Guarantee waiver",
-            changeUrl = gdRoutes.ReferenceNumberController.onPageLoad(userAnswers.lrn, NormalMode, Index(1)).url,
-            removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(1)).url
+            changeUrl = guaranteeRoutes.ReferenceNumberController.onPageLoad(userAnswers.lrn, NormalMode, Index(1)).url,
+            removeUrl = guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(1)).url
           )
         ),
         Right(
           ListItem(
             name = "(A) Guarantee waiver by agreement",
-            changeUrl = gdRoutes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, CheckMode, Index(2)).url,
-            removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(2)).url
+            changeUrl = guaranteeRoutes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, CheckMode, Index(2)).url,
+            removeUrl = guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(2)).url
           )
         ),
         Right(
           ListItem(
             name = "(R) Guarantee not required – goods carried on the Rhine, the Danube or their waterways",
-            changeUrl = gdRoutes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, CheckMode, Index(3)).url,
-            removeUrl = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(3)).url
+            changeUrl = guaranteeRoutes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, CheckMode, Index(3)).url,
+            removeUrl = guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(3)).url
           )
         )
       )

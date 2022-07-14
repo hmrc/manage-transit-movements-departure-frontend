@@ -17,7 +17,7 @@
 package utils.cyaHelpers
 
 import base.SpecBase
-import controllers.guaranteeDetails.routes
+import controllers.guaranteeDetails.guarantee.routes
 import forms.Constants.accessCodeLength
 import generators.Generators
 import models.DeclarationType.Option4
@@ -27,7 +27,8 @@ import models.{DeclarationType, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.guaranteeDetails._
+import pages.guaranteeDetails.guarantee
+import pages.guaranteeDetails.guarantee._
 import pages.preTaskList.DeclarationTypePage
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
@@ -81,7 +82,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
               (declarationType, guaranteeType, mode) =>
                 val answers = emptyUserAnswers
                   .setValue(DeclarationTypePage, declarationType)
-                  .setValue(GuaranteeTypePage(index), guaranteeType)
+                  .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
 
                 val helper = new GuaranteeCheckYourAnswersHelper(answers, mode, index)
                 val result = helper.guaranteeType
@@ -213,7 +214,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
           forAll(Gen.alphaNumStr, arbitrary[GuaranteeType](arbitraryNonOption3Or8GuaranteeType), arbitrary[Mode]) {
             (referenceNumber, guaranteeType, mode) =>
               val userAnswers = emptyUserAnswers
-                .setValue(GuaranteeTypePage(index), guaranteeType)
+                .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
                 .setValue(OtherReferencePage(index), referenceNumber)
 
               val helper = new GuaranteeCheckYourAnswersHelper(userAnswers, mode, index)
@@ -229,8 +230,8 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
             forAll(Gen.alphaNumStr, arbitrary[Mode]) {
               (referenceNumber, mode) =>
                 val answers = emptyUserAnswers
-                  .setValue(GuaranteeTypePage(index), CashDepositGuarantee)
-                  .setValue(OtherReferencePage(index), referenceNumber)
+                  .setValue(guarantee.GuaranteeTypePage(index), CashDepositGuarantee)
+                  .setValue(guarantee.OtherReferencePage(index), referenceNumber)
 
                 val helper = new GuaranteeCheckYourAnswersHelper(answers, mode, index)
                 val result = helper.otherReference
@@ -260,8 +261,8 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
             forAll(Gen.alphaNumStr, arbitrary[Mode]) {
               (referenceNumber, mode) =>
                 val answers = emptyUserAnswers
-                  .setValue(GuaranteeTypePage(index), GuaranteeNotRequiredExemptPublicBody)
-                  .setValue(OtherReferencePage(index), referenceNumber)
+                  .setValue(guarantee.GuaranteeTypePage(index), GuaranteeNotRequiredExemptPublicBody)
+                  .setValue(guarantee.OtherReferencePage(index), referenceNumber)
 
                 val helper = new GuaranteeCheckYourAnswersHelper(answers, mode, index)
                 val result = helper.otherReference

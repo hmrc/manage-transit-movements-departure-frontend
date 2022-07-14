@@ -13,6 +13,7 @@
 ->         /manage-transit-movements/departure                   app.traderDetails.consignment.consignee.Routes
 
 ->         /manage-transit-movements/departure                   app.guaranteeDetails.Routes
+->         /manage-transit-movements/departure                   app.guaranteeDetails.guarantee.Routes
 
 ->         /                                                     health.Routes
 

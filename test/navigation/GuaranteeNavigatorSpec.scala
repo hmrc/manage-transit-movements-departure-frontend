@@ -17,7 +17,8 @@
 package navigation
 
 import base.SpecBase
-import controllers.guaranteeDetails.{routes => gdRoutes}
+import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
+import controllers.guaranteeDetails.{routes => guaranteeDetailsRoutes}
 import generators.{Generators, GuaranteeDetailsUserAnswersGenerator}
 import models._
 import models.guaranteeDetails.GuaranteeType
@@ -25,7 +26,8 @@ import models.guaranteeDetails.GuaranteeType._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.guaranteeDetails._
+import pages.guaranteeDetails.guarantee
+import pages.guaranteeDetails.guarantee._
 import pages.preTaskList.DeclarationTypePage
 
 class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with GuaranteeDetailsUserAnswersGenerator {
@@ -50,13 +52,13 @@ class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with
           val guaranteeType   = arbitrary[GuaranteeType](arbitrary01234589GuaranteeType).sample.value
           val initialAnswers = emptyUserAnswers
             .setValue(DeclarationTypePage, declarationType)
-            .setValue(GuaranteeTypePage(index), guaranteeType)
+            .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
 
           forAll(arbitraryGuaranteeAnswers(initialAnswers, index), pageGen, arbitrary[Mode]) {
             (answers, page, mode) =>
               navigator
                 .nextPage(page, mode, answers)
-                .mustBe(gdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn, index))
+                .mustBe(guaranteeRoutes.CheckYourAnswersController.onPageLoad(answers.lrn, index))
           }
         }
       }
@@ -67,13 +69,13 @@ class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with
           val guaranteeType   = arbitrary[GuaranteeType](arbitraryARGuaranteeType).sample.value
           val initialAnswers = emptyUserAnswers
             .setValue(DeclarationTypePage, declarationType)
-            .setValue(GuaranteeTypePage(index), guaranteeType)
+            .setValue(guarantee.GuaranteeTypePage(index), guaranteeType)
 
           forAll(arbitraryGuaranteeAnswers(initialAnswers, index), pageGen, arbitrary[Mode]) {
             (answers, page, mode) =>
               navigator
                 .nextPage(page, mode, answers)
-                .mustBe(gdRoutes.AddAnotherGuaranteeController.onPageLoad(answers.lrn))
+                .mustBe(guaranteeDetailsRoutes.AddAnotherGuaranteeController.onPageLoad(answers.lrn))
           }
         }
       }

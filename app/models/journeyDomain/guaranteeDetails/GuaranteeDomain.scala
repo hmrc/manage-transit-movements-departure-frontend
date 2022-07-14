@@ -24,7 +24,8 @@ import models.guaranteeDetails.GuaranteeType._
 import models.journeyDomain.Stage.{AccessingJourney, CompletingJourney}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{CheckMode, Index, UserAnswers}
-import pages.guaranteeDetails._
+import pages.guaranteeDetails.guarantee
+import pages.guaranteeDetails.guarantee._
 import pages.preTaskList.DeclarationTypePage
 import play.api.mvc.Call
 
@@ -34,7 +35,7 @@ sealed trait GuaranteeDomain extends JourneyDomainModel {
   val `type`: GuaranteeType
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    Some(controllers.guaranteeDetails.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, index))
+    Some(controllers.guaranteeDetails.guarantee.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, index))
 }
 
 object GuaranteeDomain {
@@ -62,7 +63,7 @@ object GuaranteeDomain {
       case Option4 =>
         GuaranteeTypePage(index).mandatoryReader(_ == `B`).map(GuaranteeOfTypesABR(_)(index))
       case _ =>
-        GuaranteeTypePage(index).reader.flatMap {
+        guarantee.GuaranteeTypePage(index).reader.flatMap {
           case guaranteeType if `A,R`.contains(guaranteeType) =>
             GuaranteeOfTypesABR.userAnswersReader(index, guaranteeType)
           case guaranteeType if `0,1,2,4,9`.contains(guaranteeType) =>
@@ -74,7 +75,7 @@ object GuaranteeDomain {
           case guaranteeType if `3`.contains(guaranteeType) =>
             GuaranteeOfType3.userAnswersReader(index, guaranteeType)
           case `B` =>
-            UserAnswersReader.fail[GuaranteeDomain](GuaranteeTypePage(index))
+            UserAnswersReader.fail[GuaranteeDomain](guarantee.GuaranteeTypePage(index))
         }
     }
   // scalastyle:on cyclomatic.complexity
@@ -87,7 +88,7 @@ object GuaranteeDomain {
     override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] = Some {
       stage match {
         case AccessingJourney =>
-          controllers.guaranteeDetails.routes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, CheckMode, index)
+          controllers.guaranteeDetails.guarantee.routes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, CheckMode, index)
         case CompletingJourney =>
           controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn)
       }
@@ -132,7 +133,7 @@ object GuaranteeDomain {
     def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
       (
         UserAnswersReader(guaranteeType),
-        ReferenceNumberPage(index).reader
+        guarantee.ReferenceNumberPage(index).reader
       ).mapN {
         (`type`, grn) => GuaranteeOfType5(`type`, grn)(index)
       }
@@ -166,7 +167,7 @@ object GuaranteeDomain {
     def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
       (
         UserAnswersReader(guaranteeType),
-        OtherReferenceYesNoPage(index).filterOptionalDependent(identity)(OtherReferencePage(index).reader)
+        OtherReferenceYesNoPage(index).filterOptionalDependent(identity)(guarantee.OtherReferencePage(index).reader)
       ).mapN {
         (`type`, otherReference) => GuaranteeOfType3(`type`, otherReference)(index)
       }

@@ -16,11 +16,11 @@
 
 package utils.cyaHelpers.guaranteeDetails
 
-import controllers.guaranteeDetails.{routes => gdRoutes}
+import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
 import models.guaranteeDetails.GuaranteeType
 import models.journeyDomain.guaranteeDetails.GuaranteeDomain
 import models.{Index, Mode, UserAnswers}
-import pages.guaranteeDetails.GuaranteeTypePage
+import pages.guaranteeDetails.guarantee
 import pages.sections.GuaranteeDetailsSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
@@ -34,10 +34,10 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mod
       position =>
         val index = Index(position)
         buildListItem[GuaranteeDomain, GuaranteeType](
-          page = GuaranteeTypePage(Index(position)),
+          page = guarantee.GuaranteeTypePage(Index(position)),
           getName = _.`type`,
           formatName = formatEnumAsString(GuaranteeType.messageKeyPrefix),
-          removeRoute = gdRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, index)
+          removeRoute = guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, index)
         )(GuaranteeDomain.userAnswersReader(index), implicitly[Reads[GuaranteeType]])
     }
 }

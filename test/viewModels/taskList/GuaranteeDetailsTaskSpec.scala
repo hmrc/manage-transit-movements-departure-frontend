@@ -17,7 +17,8 @@
 package viewModels.taskList
 
 import base.SpecBase
-import controllers.guaranteeDetails.{routes => gdRoutes}
+import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
+import controllers.guaranteeDetails.{routes => guaranteeDetailsRoutes}
 import generators.{Generators, GuaranteeDetailsUserAnswersGenerator}
 import models.DeclarationType.Option4
 import models.guaranteeDetails.GuaranteeType
@@ -25,7 +26,7 @@ import models.{DeclarationType, Index, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.guaranteeDetails._
+import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import pages.preTaskList.DeclarationTypePage
 import viewModels.taskList.TaskStatus._
 
@@ -84,7 +85,7 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
         val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
         val task        = GuaranteeDetailsTask(userAnswers)
         task.status mustBe NotStarted
-        task.href.get mustBe gdRoutes.GuaranteeAddedTIRController.onPageLoad(userAnswers.lrn).url
+        task.href.get mustBe guaranteeDetailsRoutes.GuaranteeAddedTIRController.onPageLoad(userAnswers.lrn).url
       }
 
       "and non-TIR declaration type" in {
@@ -93,7 +94,7 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
             val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
             val task        = GuaranteeDetailsTask(userAnswers)
             task.status mustBe NotStarted
-            task.href.get mustBe gdRoutes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, NormalMode, Index(0)).url
+            task.href.get mustBe guaranteeRoutes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, NormalMode, Index(0)).url
         }
       }
     }
@@ -109,7 +110,7 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
             val task = GuaranteeDetailsTask(userAnswers)
             task.status mustBe InProgress
-            task.href.get mustBe gdRoutes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn).url
+            task.href.get mustBe guaranteeDetailsRoutes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn).url
         }
       }
     }
@@ -121,7 +122,7 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
           userAnswers =>
             val task = GuaranteeDetailsTask(userAnswers)
             task.status mustBe Completed
-            task.href.get mustBe gdRoutes.GuaranteeAddedTIRController.onPageLoad(userAnswers.lrn).url
+            task.href.get mustBe guaranteeDetailsRoutes.GuaranteeAddedTIRController.onPageLoad(userAnswers.lrn).url
         }
       }
 
@@ -132,7 +133,7 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
           userAnswers =>
             val task = GuaranteeDetailsTask(userAnswers)
             task.status mustBe Completed
-            task.href.get mustBe gdRoutes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn).url
+            task.href.get mustBe guaranteeDetailsRoutes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn).url
         }
       }
     }
