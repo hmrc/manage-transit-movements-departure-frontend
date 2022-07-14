@@ -22,7 +22,7 @@ import forms.Constants.accessCodeLength
 import generators.Generators
 import models.DeclarationType.Option4
 import models.guaranteeDetails.GuaranteeType
-import models.guaranteeDetails.GuaranteeType.TIRGuarantee
+import models.guaranteeDetails.GuaranteeType._
 import models.{DeclarationType, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -64,7 +64,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
 
                 result mustBe Some(
                   SummaryListRow(
-                    key = Key("Type of guarantee".toText),
+                    key = Key("Guarantee type".toText),
                     value = Value("(B) Guarantee for goods dispatched under TIR procedure".toText),
                     actions = None
                   )
@@ -88,7 +88,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
 
                 result mustBe Some(
                   SummaryListRow(
-                    key = Key("Type of guarantee".toText),
+                    key = Key("Guarantee type".toText),
                     value = Value(messages(s"guaranteeDetails.guaranteeType.$guaranteeType").toText),
                     actions = Some(
                       Actions(
@@ -133,7 +133,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Guarantee Reference Number".toText),
+                  key = Key("Guarantee Reference Number (GRN)".toText),
                   value = Value(referenceNumber.toText),
                   actions = Some(
                     Actions(
@@ -208,35 +208,83 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
               result mustBe None
           }
         }
+
+        "when guarantee is not of type 3 or type 8" in {
+          forAll(Gen.alphaNumStr, arbitrary[GuaranteeType](arbitraryNonOption3Or8GuaranteeType), arbitrary[Mode]) {
+            (referenceNumber, guaranteeType, mode) =>
+              val userAnswers = emptyUserAnswers
+                .setValue(GuaranteeTypePage(index), guaranteeType)
+                .setValue(OtherReferencePage(index), referenceNumber)
+
+              val helper = new GuaranteeCheckYourAnswersHelper(userAnswers, mode, index)
+              val result = helper.otherReference
+              result mustBe None
+          }
+        }
       }
 
       "must return Some(Row)" - {
-        "when OtherReferencePage defined" in {
-          forAll(Gen.alphaNumStr, arbitrary[Mode]) {
-            (referenceNumber, mode) =>
-              val answers = emptyUserAnswers.setValue(OtherReferencePage(index), referenceNumber)
+        "when OtherReferencePage defined" - {
+          "and guarantee type 3" in {
+            forAll(Gen.alphaNumStr, arbitrary[Mode]) {
+              (referenceNumber, mode) =>
+                val answers = emptyUserAnswers
+                  .setValue(GuaranteeTypePage(index), CashDepositGuarantee)
+                  .setValue(OtherReferencePage(index), referenceNumber)
 
-              val helper = new GuaranteeCheckYourAnswersHelper(answers, mode, index)
-              val result = helper.otherReference
+                val helper = new GuaranteeCheckYourAnswersHelper(answers, mode, index)
+                val result = helper.otherReference
 
-              result mustBe Some(
-                SummaryListRow(
-                  key = Key("Reference for the guarantee".toText),
-                  value = Value(referenceNumber.toText),
-                  actions = Some(
-                    Actions(
-                      items = List(
-                        ActionItem(
-                          content = "Change".toText,
-                          href = routes.OtherReferenceController.onPageLoad(answers.lrn, mode, index).url,
-                          visuallyHiddenText = Some("reference for the guarantee"),
-                          attributes = Map("id" -> "other-reference")
+                result mustBe Some(
+                  SummaryListRow(
+                    key = Key("Reference for the guarantee".toText),
+                    value = Value(referenceNumber.toText),
+                    actions = Some(
+                      Actions(
+                        items = List(
+                          ActionItem(
+                            content = "Change".toText,
+                            href = routes.OtherReferenceController.onPageLoad(answers.lrn, mode, index).url,
+                            visuallyHiddenText = Some("reference for the guarantee"),
+                            attributes = Map("id" -> "other-reference")
+                          )
                         )
                       )
                     )
                   )
                 )
-              )
+            }
+          }
+
+          "and guarantee type 8" in {
+            forAll(Gen.alphaNumStr, arbitrary[Mode]) {
+              (referenceNumber, mode) =>
+                val answers = emptyUserAnswers
+                  .setValue(GuaranteeTypePage(index), GuaranteeNotRequiredExemptPublicBody)
+                  .setValue(OtherReferencePage(index), referenceNumber)
+
+                val helper = new GuaranteeCheckYourAnswersHelper(answers, mode, index)
+                val result = helper.otherReference
+
+                result mustBe Some(
+                  SummaryListRow(
+                    key = Key("Reference".toText),
+                    value = Value(referenceNumber.toText),
+                    actions = Some(
+                      Actions(
+                        items = List(
+                          ActionItem(
+                            content = "Change".toText,
+                            href = routes.OtherReferenceController.onPageLoad(answers.lrn, mode, index).url,
+                            visuallyHiddenText = Some("reference"),
+                            attributes = Map("id" -> "other-reference")
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+            }
           }
         }
       }
@@ -309,7 +357,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Liability amount".toText),
+                  key = Key("Liability amount (in pounds)".toText),
                   value = Value("£1,000.00".toText),
                   actions = Some(
                     Actions(
