@@ -24,7 +24,6 @@ import models.guaranteeDetails.GuaranteeType.{CashDepositGuarantee, GuaranteeNot
 import models.requests.SpecificDataRequestProvider1
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.{GuaranteeNavigator, GuaranteeNavigatorProvider}
-import pages.guaranteeDetails.guarantee
 import pages.guaranteeDetails.guarantee.{GuaranteeTypePage, OtherReferencePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -94,7 +93,7 @@ class OtherReferenceController @Inject() (
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index, prefix))),
                 value => {
                   implicit val navigator: GuaranteeNavigator = navigatorProvider(index)
-                  guarantee.OtherReferencePage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                  OtherReferencePage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
                 }
               )
         }
