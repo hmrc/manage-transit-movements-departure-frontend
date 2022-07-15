@@ -179,7 +179,12 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
       setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, addressRoute)
-        .withFormUrlEncodedBody(("value", "true"))
+        .withFormUrlEncodedBody(
+          ("addressLine1", testAddress.line1),
+          ("addressLine2", testAddress.line2),
+          ("postalCode", testAddress.postalCode),
+          ("country", testAddress.country.code.code)
+        )
 
       val result = route(app, request).value
 
