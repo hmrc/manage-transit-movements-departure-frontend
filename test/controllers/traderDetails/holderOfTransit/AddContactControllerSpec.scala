@@ -65,7 +65,7 @@ class AddContactControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(AddContactPage, true).success.value
+      val userAnswers =emptyUserAnswers.set(AddContactPage, true).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, addContactRoute)

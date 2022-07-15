@@ -65,7 +65,7 @@ class ApprovedOperatorControllerSpec extends SpecBase with AppWithDefaultMockFix
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(ApprovedOperatorPage, true).success.value
+      val userAnswers =emptyUserAnswers.set(ApprovedOperatorPage, true).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, approvedOperatorRoute)

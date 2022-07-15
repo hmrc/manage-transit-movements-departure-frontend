@@ -65,7 +65,7 @@ class GuaranteeTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(GuaranteeTypePage(index), GuaranteeType.values.head).success.value
+      val userAnswers =emptyUserAnswers.set(GuaranteeTypePage(index), GuaranteeType.values.head).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, guaranteeTypeRoute)

@@ -65,7 +65,7 @@ class LiabilityAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(LiabilityAmountPage(index), validAnswer).success.value
+      val userAnswers =emptyUserAnswers.set(LiabilityAmountPage(index), validAnswer).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, referenceNumberRoute)

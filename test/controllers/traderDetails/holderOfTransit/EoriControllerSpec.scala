@@ -67,7 +67,7 @@ class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with M
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(EoriPage, validAnswer).success.value
+      val userAnswers =emptyUserAnswers.set(EoriPage, validAnswer).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, transitHolderEoriRoute)

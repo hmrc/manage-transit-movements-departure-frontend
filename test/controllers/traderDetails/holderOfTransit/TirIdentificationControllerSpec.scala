@@ -67,7 +67,7 @@ class TirIdentificationControllerSpec extends SpecBase with AppWithDefaultMockFi
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(TirIdentificationPage, validAnswer).success.value
+      val userAnswers =emptyUserAnswers.set(TirIdentificationPage, validAnswer).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, tirIdentificationRoute)

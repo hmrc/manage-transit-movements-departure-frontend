@@ -65,7 +65,7 @@ class NameControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(NamePage, "test string").success.value
+      val userAnswers =emptyUserAnswers.set(NamePage, "test string").success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, nameRoute)

@@ -11,14 +11,13 @@ import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.$package$.$className$Page
+import $addressHolderNameImport$
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CountriesService
 import views.html.$package$.$className$View
-import $addressHolderNameImport$
-import pages.$package$.$className$Page
 
 import scala.concurrent.Future
 
@@ -66,7 +65,6 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       contentAsString(result) mustEqual
         view(form, lrn, mode, countryList.countries, addressHolderName)(request, messages).toString
-
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
@@ -98,7 +96,6 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       contentAsString(result) mustEqual
         view(filledForm, lrn, mode, countryList.countries, addressHolderName)(request, messages).toString
-
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -122,7 +119,6 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual onwardRoute.url
-
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
@@ -143,7 +139,6 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       contentAsString(result) mustEqual
         view(boundForm, lrn, mode, countryList.countries, addressHolderName)(request, messages).toString
-
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
@@ -157,7 +152,6 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
@@ -172,7 +166,6 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
     }
   }
 }

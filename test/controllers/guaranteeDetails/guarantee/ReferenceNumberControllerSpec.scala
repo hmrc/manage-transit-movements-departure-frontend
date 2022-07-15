@@ -65,7 +65,7 @@ class ReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(ReferenceNumberPage(index), validRefNumber).success.value
+      val userAnswers = emptyUserAnswers.setValue(ReferenceNumberPage(index), validRefNumber)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, referenceNumberRoute)

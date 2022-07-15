@@ -64,7 +64,7 @@ class CapacityControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(CapacityPage, RepresentativeCapacity.values.head).success.value
+      val userAnswers =emptyUserAnswers.set(CapacityPage, RepresentativeCapacity.values.head).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, representativeCapacityRoute)

@@ -1,5 +1,6 @@
 package pages.$package$
 
+import controllers.$package$.routes
 import models.reference.$referenceClass$
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
@@ -14,5 +15,5 @@ case object $className$Page extends QuestionPage[$referenceClass$] {
   override def toString: String = "$className;format="decap"$"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(controllers.$package$.routes.$className;format="cap"$Controller.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.$className;format="cap"$Controller.onPageLoad(userAnswers.lrn, mode))
 }
