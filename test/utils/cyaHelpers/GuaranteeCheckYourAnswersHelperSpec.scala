@@ -17,7 +17,7 @@
 package utils.cyaHelpers
 
 import base.SpecBase
-import controllers.guaranteeDetails.routes
+import controllers.guaranteeDetails.guarantee.routes
 import forms.Constants.accessCodeLength
 import generators.Generators
 import models.DeclarationType.Option4
@@ -27,7 +27,7 @@ import models.{DeclarationType, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.guaranteeDetails._
+import pages.guaranteeDetails.guarantee._
 import pages.preTaskList.DeclarationTypePage
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}

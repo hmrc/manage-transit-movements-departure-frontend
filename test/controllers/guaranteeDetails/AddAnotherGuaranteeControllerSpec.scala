@@ -145,7 +145,7 @@ class AddAnotherGuaranteeControllerSpec
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            routes.GuaranteeTypeController.onPageLoad(lrn, NormalMode, Index(listItems.length)).url
+            controllers.guaranteeDetails.guarantee.routes.GuaranteeTypeController.onPageLoad(lrn, NormalMode, Index(listItems.length)).url
         }
       }
 

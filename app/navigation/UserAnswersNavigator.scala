@@ -20,7 +20,6 @@ import models.domain.UserAnswersReader
 import models.journeyDomain.Stage.CompletingJourney
 import models.journeyDomain.{JourneyDomainModel, ReaderError}
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
-import pages.Page
 import play.api.mvc.Call
 
 abstract class UserAnswersNavigator[A <: JourneyDomainModel, B <: JourneyDomainModel](implicit
@@ -31,7 +30,7 @@ abstract class UserAnswersNavigator[A <: JourneyDomainModel, B <: JourneyDomainM
   private type SubSection = A
   private type Section    = B
 
-  override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
+  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call =
     mode match {
       case NormalMode => UserAnswersNavigator.nextPage[SubSection](userAnswers, mode)
       case CheckMode  => UserAnswersNavigator.nextPage[Section](userAnswers, mode)

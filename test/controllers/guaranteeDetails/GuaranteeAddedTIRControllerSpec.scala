@@ -22,7 +22,7 @@ import models.{Index, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
-import pages.guaranteeDetails.GuaranteeTypePage
+import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.guaranteeDetails.GuaranteeAddedTIRView

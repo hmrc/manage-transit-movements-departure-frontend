@@ -21,9 +21,7 @@ import controllers.preTaskList.routes
 import generators.{Generators, PreTaskListUserAnswersGenerator}
 import models._
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.preTaskList._
 
 class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with PreTaskListUserAnswersGenerator {
 
@@ -31,20 +29,12 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
   "Pre Task List Navigator" - {
 
-    val pageGen = Gen.oneOf(
-      OfficeOfDeparturePage,
-      ProcedureTypePage,
-      DeclarationTypePage,
-      TIRCarnetReferencePage,
-      SecurityDetailsTypePage
-    )
-
     "when answers complete" - {
       "must redirect to check your answers" in {
-        forAll(arbitraryPreTaskListAnswers(emptyUserAnswers), pageGen, arbitrary[Mode]) {
-          (answers, page, mode) =>
+        forAll(arbitraryPreTaskListAnswers(emptyUserAnswers), arbitrary[Mode]) {
+          (answers, mode) =>
             navigator
-              .nextPage(page, mode, answers)
+              .nextPage(answers, mode)
               .mustBe(routes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }

@@ -21,9 +21,7 @@ import controllers.traderDetails.holderOfTransit.{routes => holderOfTransitRoute
 import controllers.traderDetails.{routes => tdRoutes}
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models._
-import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.traderDetails.holderOfTransit._
 
 class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
 
@@ -31,28 +29,16 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
   "Holder Of Transit Navigator" - {
 
-    val pageGen = Gen.oneOf(
-      EoriYesNoPage,
-      EoriPage,
-      TirIdentificationYesNoPage,
-      TirIdentificationPage,
-      NamePage,
-      AddressPage,
-      AddContactPage,
-      contact.NamePage,
-      contact.TelephoneNumberPage
-    )
-
     "when in NormalMode" - {
 
       val mode = NormalMode
 
       "when answers complete" - {
         "must redirect to check your answers" in {
-          forAll(arbitraryHolderOfTransitAnswers(emptyUserAnswers), pageGen) {
-            (answers, page) =>
+          forAll(arbitraryHolderOfTransitAnswers(emptyUserAnswers)) {
+            answers =>
               navigator
-                .nextPage(page, mode, answers)
+                .nextPage(answers, mode)
                 .mustBe(holderOfTransitRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
@@ -65,10 +51,10 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
       "when answers complete" - {
         "must redirect to check your answers" in {
-          forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers), pageGen) {
-            (answers, page) =>
+          forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers)) {
+            answers =>
               navigator
-                .nextPage(page, mode, answers)
+                .nextPage(answers, mode)
                 .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }

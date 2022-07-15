@@ -18,6 +18,8 @@ package controllers.guaranteeDetails
 
 import config.FrontendAppConfig
 import controllers.actions._
+import controllers.guaranteeDetails.guarantee.routes._
+import controllers.routes._
 import forms.AddAnotherFormProvider
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, NormalMode}
@@ -62,8 +64,8 @@ class AddAnotherGuaranteeController @Inject() (
         .fold(
           formWithErrors => BadRequest(view(formWithErrors, lrn, guarantees, allowMoreGuarantees)),
           {
-            case true  => Redirect(routes.GuaranteeTypeController.onPageLoad(lrn, NormalMode, Index(numberOfGuarantees)))
-            case false => Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
+            case true  => Redirect(GuaranteeTypeController.onPageLoad(lrn, NormalMode, Index(numberOfGuarantees)))
+            case false => Redirect(TaskListController.onPageLoad(lrn))
           }
         )
   }

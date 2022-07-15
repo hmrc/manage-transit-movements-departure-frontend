@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import cats.implicits._
+import models.domain.UserAnswersReader
 import play.api.libs.json._
 
 package object models {
@@ -25,6 +27,36 @@ package object models {
 
     def removeObject(path: JsPath): JsResult[JsObject] =
       jsObject.remove(path).flatMap(_.validate[JsObject])
+  }
+
+  implicit class RichJsArray(arr: JsArray) {
+
+    def zipWithIndex: List[(JsValue, Int)] = arr.value.toList.zipWithIndex
+
+    def filterWithIndex(f: (JsValue, Int) => Boolean): Seq[(JsValue, Int)] =
+      arr.zipWithIndex.filter {
+        case (value, i) => f(value, i)
+      }
+
+    def isEmpty: Boolean = arr.value.isEmpty
+
+    def traverse[T](implicit userAnswersReader: Index => UserAnswersReader[T]): UserAnswersReader[List[T]] =
+      arr.zipWithIndex
+        .traverse[UserAnswersReader, T] {
+          case (_, index) => UserAnswersReader[T](userAnswersReader(Index(index)))
+        }
+  }
+
+  implicit class RichOptionalJsArray(arr: Option[JsArray]) {
+
+    def mapWithIndex[T](f: (JsValue, Int) => Option[T]): Seq[T] =
+      arr
+        .map {
+          _.zipWithIndex.flatMap {
+            case (value, i) => f(value, i)
+          }
+        }
+        .getOrElse(Nil)
   }
 
   implicit class RichJsValue(jsValue: JsValue) {

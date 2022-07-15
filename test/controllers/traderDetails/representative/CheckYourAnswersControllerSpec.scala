@@ -19,11 +19,10 @@ package controllers.traderDetails.representative
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.traderDetails.representative.routes._
 import generators.Generators
-import models.DeclarationType.{Option1, Option4}
-import models.NormalMode
+import navigation.Navigator
+import navigation.annotations.TraderDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.preTaskList.DeclarationTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -32,8 +31,6 @@ import viewModels.sections.Section
 import viewModels.traderDetails.RepresentativeViewModel.RepresentativeSubSectionViewModel
 import views.html.traderDetails.representative.CheckYourAnswersView
 
-import scala.concurrent.Future
-
 class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private lazy val mockViewModel = mock[RepresentativeSubSectionViewModel]
@@ -41,6 +38,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
       .overrides(bind[RepresentativeSubSectionViewModel].toInstance(mockViewModel))
 
   "Check Your Answers Controller" - {
@@ -76,34 +74,16 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
-    "must redirect to EoriYesNo Page when declarationType is TIR" in {
-      val ua = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
-      setExistingUserAnswers(ua)
+    "must redirect to the next page" in {
+      setExistingUserAnswers(emptyUserAnswers)
 
-      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
-
-      val request = FakeRequest(POST, CheckYourAnswersController.onSubmit(ua.lrn).url)
+      val request = FakeRequest(POST, CheckYourAnswersController.onSubmit(lrn).url)
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.traderDetails.consignment.consignor.routes.EoriYesNoController.onPageLoad(ua.lrn, NormalMode).url
-    }
-
-    "must redirect to ApprovedOperator Page when declarationType is not TIR" in {
-      val ua = emptyUserAnswers.setValue(DeclarationTypePage, Option1)
-      setExistingUserAnswers(ua)
-
-      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
-
-      val request = FakeRequest(POST, CheckYourAnswersController.onSubmit(ua.lrn).url)
-
-      val result = route(app, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.traderDetails.consignment.routes.ApprovedOperatorController.onPageLoad(ua.lrn, NormalMode).url
+      redirectLocation(result).value mustEqual onwardRoute.url
     }
   }
 }

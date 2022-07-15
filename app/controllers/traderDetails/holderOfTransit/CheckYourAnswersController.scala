@@ -19,6 +19,8 @@ package controllers.traderDetails.holderOfTransit
 import com.google.inject.Inject
 import controllers.actions.Actions
 import models.{LocalReferenceNumber, NormalMode}
+import navigation.Navigator
+import navigation.annotations.TraderDetails
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -27,11 +29,12 @@ import views.html.traderDetails.holderOfTransit.CheckYourAnswersView
 
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
+  @TraderDetails navigator: Navigator,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
   viewModel: HolderOfTransitSubSectionViewModel
-)() extends FrontendBaseController
+) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
@@ -41,7 +44,7 @@ class CheckYourAnswersController @Inject() (
   }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
-    Redirect(controllers.traderDetails.routes.ActingAsRepresentativeController.onPageLoad(lrn, NormalMode))
+    implicit request => Redirect(navigator.nextPage(request.userAnswers, NormalMode))
   }
 
 }

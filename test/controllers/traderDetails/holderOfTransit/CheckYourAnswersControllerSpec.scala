@@ -19,7 +19,8 @@ package controllers.traderDetails.holderOfTransit
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.traderDetails.holderOfTransit.routes._
 import generators.Generators
-import models.NormalMode
+import navigation.Navigator
+import navigation.annotations.TraderDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.inject.bind
@@ -30,8 +31,6 @@ import viewModels.sections.Section
 import viewModels.traderDetails.HolderOfTransitViewModel.HolderOfTransitSubSectionViewModel
 import views.html.traderDetails.holderOfTransit.CheckYourAnswersView
 
-import scala.concurrent.Future
-
 class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private lazy val mockViewModel = mock[HolderOfTransitSubSectionViewModel]
@@ -39,6 +38,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
       .overrides(bind[HolderOfTransitSubSectionViewModel].toInstance(mockViewModel))
 
   "Check Your Answers Controller" - {
@@ -74,10 +74,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
-    "must redirect to representative section" in {
+    "must redirect to the next page" in {
       setExistingUserAnswers(emptyUserAnswers)
-
-      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn).url)
 
@@ -85,8 +83,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.traderDetails.routes.ActingAsRepresentativeController.onPageLoad(lrn, NormalMode).url
-
+      redirectLocation(result).value mustEqual onwardRoute.url
     }
   }
 }

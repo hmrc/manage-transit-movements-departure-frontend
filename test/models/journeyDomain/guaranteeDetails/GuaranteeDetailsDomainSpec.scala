@@ -24,7 +24,7 @@ import models.guaranteeDetails.GuaranteeType._
 import models.journeyDomain.guaranteeDetails.GuaranteeDomain.GuaranteeOfTypesABR
 import models.{DeclarationType, Index}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.guaranteeDetails.GuaranteeTypePage
+import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import pages.preTaskList.DeclarationTypePage
 
 class GuaranteeDetailsDomainSpec extends SpecBase with Generators {

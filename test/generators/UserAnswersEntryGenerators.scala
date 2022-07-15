@@ -111,7 +111,7 @@ trait UserAnswersEntryGenerators {
   }
 
   private def generateGuaranteeDetailsAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.guaranteeDetails._
+    import pages.guaranteeDetails.guarantee._
     {
       case GuaranteeTypePage(_)       => arbitrary[GuaranteeType].map(Json.toJson(_))
       case ReferenceNumberPage(_)     => Gen.alphaNumStr.map(JsString)

@@ -25,7 +25,7 @@ import models.guaranteeDetails.GuaranteeType._
 import models.journeyDomain.guaranteeDetails.GuaranteeDomain._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.guaranteeDetails._
+import pages.guaranteeDetails.guarantee._
 import pages.preTaskList.DeclarationTypePage
 
 class GuaranteeDomainSpec extends SpecBase with Generators {

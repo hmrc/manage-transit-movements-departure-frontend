@@ -20,7 +20,7 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import models.guaranteeDetails.GuaranteeType.TIRGuarantee
 import models.{Index, LocalReferenceNumber}
-import pages.guaranteeDetails.GuaranteeTypePage
+import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

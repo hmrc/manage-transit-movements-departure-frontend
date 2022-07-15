@@ -21,7 +21,7 @@ import generators.Generators
 import models.guaranteeDetails.GuaranteeType._
 import models.{DeclarationType, Index}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.guaranteeDetails.{GuaranteeTypePage, OtherReferenceYesNoPage}
+import pages.guaranteeDetails.guarantee.{GuaranteeTypePage, OtherReferenceYesNoPage}
 import pages.preTaskList.DeclarationTypePage
 
 class AddAnotherGuaranteeViewModelSpec extends SpecBase with Generators {
