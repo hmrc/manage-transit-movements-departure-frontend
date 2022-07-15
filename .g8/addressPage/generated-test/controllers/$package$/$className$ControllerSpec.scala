@@ -159,7 +159,12 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, $className;format="decap"$Route)
-        .withFormUrlEncodedBody(("value", "true"))
+        .withFormUrlEncodedBody(
+          ("addressLine1", testAddress.line1),
+          ("addressLine2", testAddress.line2),
+          ("postalCode", testAddress.postalCode),
+          ("country", testAddress.country.code.code)
+        )
 
       val result = route(app, request).value
 

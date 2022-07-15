@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.hmrcfrontend.views.Utils.toClasses
+
 @this(hmrcPageHeading: HmrcPageHeading)
 
 @(
@@ -22,10 +24,16 @@
     classes: Option[String] = None
 )(implicit messages: Messages)
 
-@hmrcPageHeading(
-    PageHeading(
-        text = heading,
-        section = caption,
-        headingClasses = classes
-    )
-)
+@headingClasses = @{
+    toClasses("govuk-heading-xl", "hmrc-page-heading", classes.getOrElse(""))
+}
+
+<h1 class="@headingClasses">
+    @heading
+    @caption.map { caption =>
+        <span class="hmrc-caption govuk-caption-xl">
+            <span class="govuk-visually-hidden">@messages("site.section")</span>
+            @caption
+        </span>
+    }
+</h1>

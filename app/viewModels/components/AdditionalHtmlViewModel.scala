@@ -17,5 +17,5 @@
 package viewModels.components
 
 trait AdditionalHtmlViewModel {
-  val headingClasses = "govuk-heading-xl govuk-!-margin-top-0 govuk-!-margin-bottom-2"
+  val headingClasses = "govuk-!-margin-top-0 govuk-!-margin-bottom-2"
 }

@@ -3,7 +3,7 @@ package pages.$package$
 import models.$package$.$className$
 import pages.behaviours.PageBehaviours
 
-class $className$Spec extends PageBehaviours {
+class $className$PageSpec extends PageBehaviours {
 
   "$className$Page" - {
 
