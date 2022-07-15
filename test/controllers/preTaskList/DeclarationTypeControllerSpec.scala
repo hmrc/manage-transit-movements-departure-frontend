@@ -62,7 +62,7 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-      val userAnswers = emptyUserAnswers.set(DeclarationTypePage, DeclarationType.values.head).success.value
+      val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, DeclarationType.values.head)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, declarationTypeRoute)

@@ -18,7 +18,7 @@ package controllers.traderDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.Navigator
 import navigation.annotations.TraderDetails
 import org.mockito.ArgumentMatchers.any
@@ -65,7 +65,7 @@ class ActingAsRepresentativeControllerSpec extends SpecBase with AppWithDefaultM
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers =emptyUserAnswers.set(ActingAsRepresentativePage, true).success.value
+      val userAnswers = emptyUserAnswers.setValue(ActingAsRepresentativePage, true)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, actingRepresentativeRoute)

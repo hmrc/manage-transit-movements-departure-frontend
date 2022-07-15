@@ -18,7 +18,7 @@ package controllers.guaranteeDetails.guarantee
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.MoneyFormProvider
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.GuaranteeNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -65,7 +65,7 @@ class LiabilityAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers =emptyUserAnswers.set(LiabilityAmountPage(index), validAnswer).success.value
+      val userAnswers = emptyUserAnswers.setValue(LiabilityAmountPage(index), validAnswer)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, referenceNumberRoute)

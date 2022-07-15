@@ -37,7 +37,7 @@ class AddContactPageSpec extends PageBehaviours {
               val preChange = emptyUserAnswers
                 .setValue(contact.NamePage, name)
                 .setValue(contact.TelephoneNumberPage, phoneNumber)
-              val postChange = preChange.set(AddContactPage, false).success.value
+              val postChange = preChange.setValue(AddContactPage, false)
 
               postChange.get(contact.NamePage) mustNot be(defined)
               postChange.get(contact.TelephoneNumberPage) mustNot be(defined)
@@ -52,7 +52,7 @@ class AddContactPageSpec extends PageBehaviours {
               val preChange = emptyUserAnswers
                 .setValue(contact.NamePage, name)
                 .setValue(contact.TelephoneNumberPage, phoneNumber)
-              val postChange = preChange.set(AddContactPage, true).success.value
+              val postChange = preChange.setValue(AddContactPage, true)
 
               postChange.get(contact.NamePage) must be(defined)
               postChange.get(contact.TelephoneNumberPage) must be(defined)

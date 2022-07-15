@@ -42,7 +42,7 @@ class ActingAsRepresentativePageSpec extends PageBehaviours {
                 .setValue(NamePage, name)
                 .setValue(CapacityPage, capacity)
                 .setValue(TelephoneNumberPage, telephone)
-              val postChange = preChange.set(ActingAsRepresentativePage, false).success.value
+              val postChange = preChange.setValue(ActingAsRepresentativePage, false)
 
               postChange.get(EoriPage) mustNot be(defined)
               postChange.get(NamePage) mustNot be(defined)
@@ -57,7 +57,7 @@ class ActingAsRepresentativePageSpec extends PageBehaviours {
           forAll(arbitrary[String]) {
             eori =>
               val preChange  = emptyUserAnswers.setValue(EoriPage, eori)
-              val postChange = preChange.set(ActingAsRepresentativePage, true).success.value
+              val postChange = preChange.setValue(ActingAsRepresentativePage, true)
 
               postChange.get(EoriPage) must be(defined)
           }

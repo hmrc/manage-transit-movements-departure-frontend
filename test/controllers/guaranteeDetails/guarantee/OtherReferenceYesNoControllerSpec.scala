@@ -18,7 +18,7 @@ package controllers.guaranteeDetails.guarantee
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.GuaranteeNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -64,7 +64,7 @@ class OtherReferenceYesNoControllerSpec extends SpecBase with AppWithDefaultMock
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers =emptyUserAnswers.set(OtherReferenceYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers.setValue(OtherReferenceYesNoPage(index), true)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, otherReferenceYesNoRoute)

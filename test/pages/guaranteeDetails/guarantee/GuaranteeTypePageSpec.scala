@@ -48,7 +48,7 @@ class GuaranteeTypePageSpec extends PageBehaviours {
 
               forAll(arbitrary[GuaranteeType].suchThat(_ != guaranteeType)) {
                 changedGuaranteeType =>
-                  val postChange = preChange.set(GuaranteeTypePage(index), changedGuaranteeType).success.value
+                  val postChange = preChange.setValue(GuaranteeTypePage(index), changedGuaranteeType)
 
                   postChange.get(ReferenceNumberPage(index)) mustNot be(defined)
                   postChange.get(AccessCodePage(index)) mustNot be(defined)

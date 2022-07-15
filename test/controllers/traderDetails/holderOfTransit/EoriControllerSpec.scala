@@ -18,7 +18,7 @@ package controllers.traderDetails.holderOfTransit
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.EoriNumberFormProvider
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.Navigator
 import navigation.annotations.HolderOfTransit
 import org.mockito.ArgumentMatchers.any
@@ -67,7 +67,7 @@ class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with M
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers =emptyUserAnswers.set(EoriPage, validAnswer).success.value
+      val userAnswers = emptyUserAnswers.setValue(EoriPage, validAnswer)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, transitHolderEoriRoute)

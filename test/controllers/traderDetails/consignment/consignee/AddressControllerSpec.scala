@@ -26,15 +26,13 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.traderDetails.consignment.consignee.AddressPage
+import pages.traderDetails.consignment.consignee.{AddressPage, NamePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CountriesService
 import views.html.traderDetails.consignment.consignee.AddressView
-import pages.traderDetails.consignment.consignee.NamePage
-import pages.traderDetails.consignment.consignee.AddressPage
 
 import scala.concurrent.Future
 

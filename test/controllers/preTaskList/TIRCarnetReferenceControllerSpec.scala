@@ -70,7 +70,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-      val userAnswers = baseAnswers.set(TIRCarnetReferencePage, "1234567890").success.value
+      val userAnswers = baseAnswers.setValue(TIRCarnetReferencePage, "1234567890")
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, tirCarnetReferenceRoute)

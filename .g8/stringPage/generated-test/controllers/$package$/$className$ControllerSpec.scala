@@ -48,7 +48,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers =emptyUserAnswers.setValue($className$Page, "test string")
+      val userAnswers = emptyUserAnswers.setValue($className$Page, "test string")
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, $className;format="decap"$Route)

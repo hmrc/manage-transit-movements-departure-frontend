@@ -48,7 +48,7 @@ class ApprovedOperatorPageSpec extends PageBehaviours {
                 .setValue(EoriPage, eori)
                 .setValue(NamePage, "name")
                 .setValue(AddressPage, testAddress)
-              val postChange = preChange.set(ApprovedOperatorPage, true).success.value
+              val postChange = preChange.setValue(ApprovedOperatorPage, true)
 
               postChange.get(EoriPage) mustNot be(defined)
               postChange.get(EoriYesNoPage) mustNot be(defined)
@@ -70,7 +70,7 @@ class ApprovedOperatorPageSpec extends PageBehaviours {
                 .setValue(NamePage, "name")
                 .setValue(AddressPage, testAddress)
 
-              val postChange = preChange.set(ApprovedOperatorPage, false).success.value
+              val postChange = preChange.setValue(ApprovedOperatorPage, false)
 
               postChange.get(EoriPage).isDefined must be(true)
               postChange.get(EoriYesNoPage).isDefined must be(true)
@@ -92,7 +92,7 @@ class ApprovedOperatorPageSpec extends PageBehaviours {
                 .setValue(NamePage, "name")
                 .setValue(AddressPage, testAddress)
 
-              val postChange = preChange.set(ApprovedOperatorPage, true).success.value
+              val postChange = preChange.setValue(ApprovedOperatorPage, true)
 
               postChange.get(EoriPage).isDefined must be(true)
               postChange.get(EoriYesNoPage).isDefined must be(true)
@@ -113,7 +113,7 @@ class ApprovedOperatorPageSpec extends PageBehaviours {
                 .setValue(NamePage, "name")
                 .setValue(AddressPage, testAddress)
 
-              val postChange = preChange.set(ApprovedOperatorPage, true).success.value
+              val postChange = preChange.setValue(ApprovedOperatorPage, true)
 
               postChange.get(EoriPage).isDefined must be(true)
               postChange.get(EoriYesNoPage).isDefined must be(true)
