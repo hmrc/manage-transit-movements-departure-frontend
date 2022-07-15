@@ -19,7 +19,7 @@ package utils.cyaHelpers
 import models.domain.UserAnswersReader
 import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.Stage.AccessingJourney
-import models.{LocalReferenceNumber, Mode, UserAnswers}
+import models.{LocalReferenceNumber, Mode, RichOptionalJsArray, UserAnswers}
 import pages.QuestionPage
 import pages.sections.Section
 import play.api.i18n.Messages
@@ -82,13 +82,9 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
   )(block: Int => Option[Either[ListItem, ListItem]]): Seq[Either[ListItem, ListItem]] =
     userAnswers
       .get(section)
-      .map {
-        _.value.zipWithIndex.flatMap {
-          case (_, index) =>
-            block(index)
-        }
+      .mapWithIndex {
+        (_, index) => block(index)
       }
-      .getOrElse(Nil)
 
   protected def buildListItem[A <: JourneyDomainModel, B](
     page: QuestionPage[B],
