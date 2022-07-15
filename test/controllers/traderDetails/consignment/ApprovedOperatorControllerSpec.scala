@@ -18,7 +18,7 @@ package controllers.traderDetails.consignment
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.Navigator
 import navigation.annotations.TraderDetailsConsignment
 import org.mockito.ArgumentMatchers.any
@@ -65,7 +65,7 @@ class ApprovedOperatorControllerSpec extends SpecBase with AppWithDefaultMockFix
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(ApprovedOperatorPage, true).success.value
+      val userAnswers = emptyUserAnswers.setValue(ApprovedOperatorPage, true)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, approvedOperatorRoute)

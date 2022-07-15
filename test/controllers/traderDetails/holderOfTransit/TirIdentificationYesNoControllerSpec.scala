@@ -17,19 +17,19 @@
 package controllers.traderDetails.holderOfTransit
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import models.{NormalMode, UserAnswers}
+import forms.YesNoFormProvider
+import models.NormalMode
 import navigation.Navigator
+import navigation.annotations.HolderOfTransit
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import pages.traderDetails.holderOfTransit.TirIdentificationYesNoPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.YesNoFormProvider
-import navigation.annotations.HolderOfTransit
 import views.html.traderDetails.holderOfTransit.TirIdentificationYesNoView
-import pages.traderDetails.holderOfTransit.TirIdentificationYesNoPage
 
 import scala.concurrent.Future
 
@@ -65,7 +65,7 @@ class TirIdentificationYesNoControllerSpec extends SpecBase with AppWithDefaultM
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(TirIdentificationYesNoPage, true).success.value
+      val userAnswers = emptyUserAnswers.setValue(TirIdentificationYesNoPage, true)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, tirIdentificationYesNoRoute)

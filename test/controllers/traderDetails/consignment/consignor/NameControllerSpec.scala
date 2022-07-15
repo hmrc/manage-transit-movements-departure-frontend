@@ -18,7 +18,7 @@ package controllers.traderDetails.consignment.consignor
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.NameFormProvider
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.Navigator
 import navigation.annotations.TraderDetailsConsignment
 import org.mockito.ArgumentMatchers.any
@@ -65,7 +65,7 @@ class NameControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(NamePage, "test string").success.value
+      val userAnswers = emptyUserAnswers.setValue(NamePage, "test string")
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, nameRoute)

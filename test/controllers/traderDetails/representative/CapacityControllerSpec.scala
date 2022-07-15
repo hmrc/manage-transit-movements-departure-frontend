@@ -18,8 +18,7 @@ package controllers.traderDetails.representative
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.traderDetails.representative.RepresentativeCapacityFormProvider
-import views.html.traderDetails.representative.CapacityView
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import models.traderDetails.representative.RepresentativeCapacity
 import navigation.Navigator
 import navigation.annotations.Representative
@@ -30,6 +29,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.traderDetails.representative.CapacityView
 
 import scala.concurrent.Future
 
@@ -64,7 +64,7 @@ class CapacityControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(CapacityPage, RepresentativeCapacity.values.head).success.value
+      val userAnswers = emptyUserAnswers.setValue(CapacityPage, RepresentativeCapacity.values.head)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, representativeCapacityRoute)

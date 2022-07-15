@@ -2,7 +2,6 @@ package controllers.$package$
 
 import base.{SpecBase, AppWithDefaultMockFixtures}
 import forms.$package$.$formProvider$
-import views.html.$package$.$className$View
 import models.{NormalMode, UserAnswers}
 import models.$package$.$className$
 import navigation.Navigator
@@ -14,6 +13,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.$package$.$className$View
 
 import scala.concurrent.Future
 
@@ -49,7 +49,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set($className$Page, $className$.values.head).success.value
+      val userAnswers = emptyUserAnswers.setValue($className$Page, $className$.values.head)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, $className;format="decap"$Route)
@@ -72,9 +72,8 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request =
-        FakeRequest(POST, $className;format="decap"$Route)
-      .withFormUrlEncodedBody(("value", $className$.values.head.toString))
+      val request = FakeRequest(POST, $className;format="decap"$Route)
+        .withFormUrlEncodedBody(("value", $className$.values.head.toString))
 
       val result = route(app, request).value
 
@@ -116,9 +115,8 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       setNoExistingUserAnswers()
 
-      val request =
-        FakeRequest(POST, $className;format="decap"$Route)
-      .withFormUrlEncodedBody(("value", $className$.values.head.toString))
+      val request = FakeRequest(POST, $className;format="decap"$Route)
+        .withFormUrlEncodedBody(("value", $className$.values.head.toString))
 
       val result = route(app, request).value
 

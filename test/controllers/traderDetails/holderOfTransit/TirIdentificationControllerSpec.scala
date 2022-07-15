@@ -18,7 +18,7 @@ package controllers.traderDetails.holderOfTransit
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.traderDetails.TirIdNumberFormProvider
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.Navigator
 import navigation.annotations.HolderOfTransit
 import org.mockito.ArgumentMatchers.any
@@ -67,7 +67,7 @@ class TirIdentificationControllerSpec extends SpecBase with AppWithDefaultMockFi
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(TirIdentificationPage, validAnswer).success.value
+      val userAnswers = emptyUserAnswers.setValue(TirIdentificationPage, validAnswer)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, tirIdentificationRoute)

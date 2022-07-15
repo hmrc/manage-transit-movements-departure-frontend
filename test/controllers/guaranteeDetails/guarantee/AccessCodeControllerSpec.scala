@@ -18,7 +18,7 @@ package controllers.guaranteeDetails.guarantee
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.AccessCodeFormProvider
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.GuaranteeNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -65,7 +65,7 @@ class AccessCodeControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(AccessCodePage(index), validAccessCode).success.value
+      val userAnswers = emptyUserAnswers.setValue(AccessCodePage(index), validAccessCode)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, accessCodeRoute)

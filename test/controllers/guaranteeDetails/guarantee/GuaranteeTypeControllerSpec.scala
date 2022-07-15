@@ -18,8 +18,8 @@ package controllers.guaranteeDetails.guarantee
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.guaranteeDetails.GuaranteeTypeFormProvider
+import models.NormalMode
 import models.guaranteeDetails.GuaranteeType
-import models.{NormalMode, UserAnswers}
 import navigation.GuaranteeNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -65,7 +65,7 @@ class GuaranteeTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(GuaranteeTypePage(index), GuaranteeType.values.head).success.value
+      val userAnswers = emptyUserAnswers.setValue(GuaranteeTypePage(index), GuaranteeType.values.head)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, guaranteeTypeRoute)

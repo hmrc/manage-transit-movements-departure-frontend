@@ -44,7 +44,7 @@ class MoreThanOneConsigneePageSpec extends PageBehaviours {
             .setValue(EoriNumberPage, consigneeEori.value)
             .setValue(NamePage, consigneeName)
             .setValue(AddressPage, consigneeAddress)
-          val postChange = preChange.set(MoreThanOneConsigneePage, true).success.value
+          val postChange = preChange.setValue(MoreThanOneConsigneePage, true)
 
           postChange.get(EoriNumberPage) mustNot be(defined)
           postChange.get(EoriYesNoPage) mustNot be(defined)
@@ -60,7 +60,7 @@ class MoreThanOneConsigneePageSpec extends PageBehaviours {
             .setValue(EoriNumberPage, consigneeEori.value)
             .setValue(NamePage, consigneeName)
             .setValue(AddressPage, consigneeAddress)
-          val postChange = preChange.set(MoreThanOneConsigneePage, false).success.value
+          val postChange = preChange.setValue(MoreThanOneConsigneePage, false)
 
           postChange.get(EoriNumberPage) must be(defined)
           postChange.get(EoriYesNoPage) must be(defined)

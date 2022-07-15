@@ -36,7 +36,7 @@ class DeclarationTypePageSpec extends PageBehaviours {
           forAll(arbitrary[String], arbitrary[DeclarationType].suchThat(_ != DeclarationType.Option4)) {
             (carnetReference, declarationType) =>
               val preChange  = emptyUserAnswers.setValue(TIRCarnetReferencePage, carnetReference)
-              val postChange = preChange.set(DeclarationTypePage, declarationType).success.value
+              val postChange = preChange.setValue(DeclarationTypePage, declarationType)
 
               postChange.get(TIRCarnetReferencePage) mustNot be(defined)
           }
@@ -48,7 +48,7 @@ class DeclarationTypePageSpec extends PageBehaviours {
           forAll(arbitrary[String]) {
             carnetReference =>
               val preChange  = emptyUserAnswers.setValue(TIRCarnetReferencePage, carnetReference)
-              val postChange = preChange.set(DeclarationTypePage, DeclarationType.Option4).success.value
+              val postChange = preChange.setValue(DeclarationTypePage, DeclarationType.Option4)
 
               postChange.get(TIRCarnetReferencePage) must be(defined)
           }

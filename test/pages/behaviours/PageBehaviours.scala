@@ -89,7 +89,7 @@ trait PageBehaviours extends SpecBase with ScalaCheckPropertyChecks with Generat
 
         forAll(gen) {
           case (page, newValue, userAnswers) =>
-            val updatedAnswers = userAnswers.set(page, newValue).success.value
+            val updatedAnswers = userAnswers.setValue(page, newValue)
             updatedAnswers.get(page).value mustEqual newValue
         }
       }
@@ -104,11 +104,11 @@ trait PageBehaviours extends SpecBase with ScalaCheckPropertyChecks with Generat
           page        <- genP
           savedValue  <- arbitrary[A]
           userAnswers <- arbitrary[UserAnswers]
-        } yield (page, userAnswers.set(page, savedValue).success.value)
+        } yield (page, userAnswers.setValue(page, savedValue))
 
         forAll(gen) {
           case (page, userAnswers) =>
-            val updatedAnswers = userAnswers.remove(page).success.value
+            val updatedAnswers = userAnswers.removeValue(page)
             updatedAnswers.get(page) must be(empty)
         }
       }

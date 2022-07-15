@@ -35,7 +35,7 @@ class TirIdentificationYesNoPageSpec extends PageBehaviours {
           forAll(arbitrary[String]) {
             tirId =>
               val preChange  = emptyUserAnswers.setValue(TirIdentificationPage, tirId)
-              val postChange = preChange.set(TirIdentificationYesNoPage, false).success.value
+              val postChange = preChange.setValue(TirIdentificationYesNoPage, false)
 
               postChange.get(TirIdentificationPage) mustNot be(defined)
           }
@@ -47,7 +47,7 @@ class TirIdentificationYesNoPageSpec extends PageBehaviours {
           forAll(arbitrary[String]) {
             tirId =>
               val preChange  = emptyUserAnswers.setValue(TirIdentificationPage, tirId)
-              val postChange = preChange.set(TirIdentificationYesNoPage, true).success.value
+              val postChange = preChange.setValue(TirIdentificationYesNoPage, true)
 
               postChange.get(TirIdentificationPage) must be(defined)
           }

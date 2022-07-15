@@ -35,7 +35,7 @@ class EoriYesNoPageSpec extends PageBehaviours {
           forAll(arbitrary[String]) {
             eori =>
               val preChange  = emptyUserAnswers.setValue(EoriPage, eori)
-              val postChange = preChange.set(EoriYesNoPage, false).success.value
+              val postChange = preChange.setValue(EoriYesNoPage, false)
 
               postChange.get(EoriPage) mustNot be(defined)
           }
@@ -47,7 +47,7 @@ class EoriYesNoPageSpec extends PageBehaviours {
           forAll(arbitrary[String]) {
             eori =>
               val preChange  = emptyUserAnswers.setValue(EoriPage, eori)
-              val postChange = preChange.set(EoriYesNoPage, true).success.value
+              val postChange = preChange.setValue(EoriYesNoPage, true)
 
               postChange.get(EoriPage) must be(defined)
           }

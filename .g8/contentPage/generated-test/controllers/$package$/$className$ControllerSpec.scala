@@ -24,7 +24,6 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       contentAsString(result) mustEqual
         view(lrn)(request, messages).toString
-
     }
   }
 }

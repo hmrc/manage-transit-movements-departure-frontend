@@ -17,19 +17,19 @@
 package controllers.traderDetails.consignment
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import models.{NormalMode, UserAnswers}
+import forms.YesNoFormProvider
+import models.NormalMode
 import navigation.Navigator
 import navigation.annotations.TraderDetailsConsignment
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import pages.traderDetails.consignment.MoreThanOneConsigneePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import forms.YesNoFormProvider
 import views.html.traderDetails.consignment.MoreThanOneConsigneeView
-import pages.traderDetails.consignment.MoreThanOneConsigneePage
 
 import scala.concurrent.Future
 
@@ -65,7 +65,7 @@ class MoreThanOneConsigneeControllerSpec extends SpecBase with AppWithDefaultMoc
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(MoreThanOneConsigneePage, true).success.value
+      val userAnswers = emptyUserAnswers.setValue(MoreThanOneConsigneePage, true)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, moreThanOneConsigneeRoute)
