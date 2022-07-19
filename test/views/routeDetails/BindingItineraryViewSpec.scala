@@ -33,6 +33,8 @@ class BindingItineraryViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithBackLink
 
+  behave like pageWithSectionCaption("Route details")
+
   behave like pageWithHeading()
 
   behave like pageWithContent("p", "This means transporting goods to the office of departure by an economically justifiable itinerary.")
