@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package utils.cyaHelpers
+package utils.cyaHelpers.traderDetails
 
 import base.SpecBase
 import controllers.traderDetails.representative.routes
@@ -29,7 +29,6 @@ import pages.traderDetails.representative._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
-import utils.cyaHelpers.traderDetails.RepresentativeCheckYourAnswersHelper
 
 class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 

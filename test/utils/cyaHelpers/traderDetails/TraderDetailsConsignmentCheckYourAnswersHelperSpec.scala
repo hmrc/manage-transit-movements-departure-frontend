@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package utils.cyaHelpers
+package utils.cyaHelpers.traderDetails
 
 import base.SpecBase
+import controllers.traderDetails.consignment.consignee.{routes => consigneeRoutes}
 import controllers.traderDetails.consignment.consignor.contact.{routes => contactRoutes}
 import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
-import controllers.traderDetails.consignment.consignee.{routes => consigneeRoutes}
 import controllers.traderDetails.consignment.{routes => consignmentRoutes}
 import generators.Generators
 import models.{Address, Mode}
@@ -31,7 +31,6 @@ import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
-import utils.cyaHelpers.traderDetails.TraderDetailsConsignmentCheckYourAnswersHelper
 
 class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 

@@ -137,6 +137,10 @@ task.traderDetails = Trader details
 task.traderDetails.add = Add trader details
 task.traderDetails.edit = Edit trader details
 
+task.routeDetails = Route details
+task.routeDetails.add = Add route details
+task.routeDetails.edit = Edit route details
+
 task.guaranteeDetails = Guarantee details
 task.guaranteeDetails.add = Add guarantee details
 task.guaranteeDetails.edit = Edit guarantee details

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package utils.cyaHelpers
+package utils.cyaHelpers.guaranteeDetails
 
 import base.SpecBase
 import controllers.guaranteeDetails.guarantee.routes
@@ -32,7 +32,6 @@ import pages.preTaskList.DeclarationTypePage
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
-import utils.cyaHelpers.guaranteeDetails.GuaranteeCheckYourAnswersHelper
 
 class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 

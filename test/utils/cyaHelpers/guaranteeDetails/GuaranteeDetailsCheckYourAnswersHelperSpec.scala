@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package utils.cyaHelpers
+package utils.cyaHelpers.guaranteeDetails
 
 import base.SpecBase
 import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
@@ -25,7 +25,6 @@ import org.scalacheck.Arbitrary.arbitrary
 import pages.guaranteeDetails.guarantee.{GuaranteeTypePage, OtherReferenceYesNoPage}
 import pages.preTaskList.DeclarationTypePage
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
-import utils.cyaHelpers.guaranteeDetails.GuaranteeDetailsCheckYourAnswersHelper
 
 class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with Generators {
 
