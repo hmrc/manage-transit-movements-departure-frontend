@@ -531,3 +531,15 @@ guaranteeDetails.addGuaranteeYesNo.error.required = Select yes if you want to ad
 
 guaranteeDetails.checkYourAnswers.title = Check your answers
 guaranteeDetails.checkYourAnswers.heading = Check your answers
+
+# Route details
+
+routeDetails.caption = Route details
+
+routeDetails.bindingItinerary.title = Do you want the transit to follow a binding itinerary?
+routeDetails.bindingItinerary.heading = Do you want the transit to follow a binding itinerary?
+routeDetails.bindingItinerary.paragraph1 = This means transporting goods to the office of departure by an economically justifiable itinerary.
+routeDetails.bindingItinerary.paragraph2 = This diverts the route around countries that represent a higher risk to the goods in transit.
+routeDetails.bindingItinerary.checkYourAnswersLabel = Do you want the transit to follow a binding itinerary?
+routeDetails.bindingItinerary.error.required = Select yes if you want the transit to follow a binding itinerary
+routeDetails.bindingItinerary.change.hidden = if you want the transit to follow a binding itinerary
