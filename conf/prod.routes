@@ -15,8 +15,8 @@
 ->         /manage-transit-movements/departure                   app.guaranteeDetails.Routes
 ->         /manage-transit-movements/departure                   app.guaranteeDetails.guarantee.Routes
 
-->         /                                                     health.Routes
-
 ->         /manage-transit-movements/departure                   app.routeDetails.Routes
+
+->         /                                                     health.Routes
 
 GET        /admin/metrics             @com.kenshoo.play.metrics.MetricsController.metrics

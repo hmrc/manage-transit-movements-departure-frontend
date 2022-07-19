@@ -1,5 +1,5 @@
 
-GET        /:lrn/routeDetails/binding-itinerary                        controllers.routeDetails.BindingItineraryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/routeDetails/binding-itinerary                        controllers.routeDetails.BindingItineraryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/routeDetails/change-binding-itinerary                 controllers.routeDetails.BindingItineraryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/routeDetails/change-binding-itinerary                 controllers.routeDetails.BindingItineraryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/route-details/binding-itinerary                        controllers.routeDetails.BindingItineraryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/binding-itinerary                        controllers.routeDetails.BindingItineraryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/change-binding-itinerary                 controllers.routeDetails.BindingItineraryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/change-binding-itinerary                 controllers.routeDetails.BindingItineraryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

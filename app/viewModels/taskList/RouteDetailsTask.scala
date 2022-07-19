@@ -17,7 +17,7 @@
 package viewModels.taskList
 
 import models.UserAnswers
-import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import pages.sections.RouteDetailsSection
 import play.api.libs.json.JsObject
 
@@ -30,7 +30,7 @@ object RouteDetailsTask {
 
   def apply(userAnswers: UserAnswers): RouteDetailsTask = {
     val (status, href) = new TaskProvider(userAnswers).noDependencyOnOtherTask
-      .readUserAnswers[GuaranteeDetailsDomain, JsObject](RouteDetailsSection)
+      .readUserAnswers[RouteDetailsDomain, JsObject](RouteDetailsSection)
 
     new RouteDetailsTask(status, href)
   }
