@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package navigation.annotations;
 
-import base.SpecBase
+import com.google.inject.BindingAnnotation;
 
-class TaskListViewModelSpec extends SpecBase {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  "apply" - {
-    "must create tasks" in {
-      val answers = emptyUserAnswers
-
-      val tasks = new TaskListViewModel().apply(answers)
-
-      tasks.size mustBe 3
-
-      tasks.head.name mustBe "Add trader details"
-      tasks(1).name mustBe "Add route details"
-      tasks(2).name mustBe "Add guarantee details"
-    }
-  }
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface RouteDetails {
 }

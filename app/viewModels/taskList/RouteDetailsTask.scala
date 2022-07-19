@@ -16,21 +16,22 @@
 
 package viewModels.taskList
 
-import base.SpecBase
+import models.UserAnswers
+import models.journeyDomain.routeDetails.RouteDetailsDomain
+import pages.sections.RouteDetailsSection
+import play.api.libs.json.JsObject
 
-class TaskListViewModelSpec extends SpecBase {
+case class RouteDetailsTask(status: TaskStatus, href: Option[String]) extends Task {
+  override val id: String         = "route-details"
+  override val messageKey: String = "routeDetails"
+}
 
-  "apply" - {
-    "must create tasks" in {
-      val answers = emptyUserAnswers
+object RouteDetailsTask {
 
-      val tasks = new TaskListViewModel().apply(answers)
+  def apply(userAnswers: UserAnswers): RouteDetailsTask = {
+    val (status, href) = new TaskProvider(userAnswers).noDependencyOnOtherTask
+      .readUserAnswers[RouteDetailsDomain, JsObject](RouteDetailsSection)
 
-      tasks.size mustBe 3
-
-      tasks.head.name mustBe "Add trader details"
-      tasks(1).name mustBe "Add route details"
-      tasks(2).name mustBe "Add guarantee details"
-    }
+    new RouteDetailsTask(status, href)
   }
 }

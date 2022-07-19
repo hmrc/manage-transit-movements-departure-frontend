@@ -14,23 +14,12 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package navigation.routeDetails
 
-import base.SpecBase
+import models.journeyDomain.routeDetails.RouteDetailsDomain
+import navigation.UserAnswersSectionNavigator
 
-class TaskListViewModelSpec extends SpecBase {
+import javax.inject.{Inject, Singleton}
 
-  "apply" - {
-    "must create tasks" in {
-      val answers = emptyUserAnswers
-
-      val tasks = new TaskListViewModel().apply(answers)
-
-      tasks.size mustBe 3
-
-      tasks.head.name mustBe "Add trader details"
-      tasks(1).name mustBe "Add route details"
-      tasks(2).name mustBe "Add guarantee details"
-    }
-  }
-}
+@Singleton
+class RouteDetailsNavigator @Inject() () extends UserAnswersSectionNavigator[RouteDetailsDomain]

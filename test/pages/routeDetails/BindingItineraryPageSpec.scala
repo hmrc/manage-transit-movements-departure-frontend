@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package pages.routeDetails
 
-import base.SpecBase
+import pages.behaviours.PageBehaviours
 
-class TaskListViewModelSpec extends SpecBase {
+class BindingItineraryPageSpec extends PageBehaviours {
 
-  "apply" - {
-    "must create tasks" in {
-      val answers = emptyUserAnswers
+  "BindingItineraryPage" - {
 
-      val tasks = new TaskListViewModel().apply(answers)
+    beRetrievable[Boolean](BindingItineraryPage)
 
-      tasks.size mustBe 3
+    beSettable[Boolean](BindingItineraryPage)
 
-      tasks.head.name mustBe "Add trader details"
-      tasks(1).name mustBe "Add route details"
-      tasks(2).name mustBe "Add guarantee details"
-    }
+    beRemovable[Boolean](BindingItineraryPage)
   }
 }

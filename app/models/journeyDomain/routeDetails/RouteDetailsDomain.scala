@@ -14,16 +14,26 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package models.journeyDomain.routeDetails
 
 import models.UserAnswers
+import models.domain.{GettableAsReaderOps, UserAnswersReader}
+import models.journeyDomain.{JourneyDomainModel, Stage}
+import pages.routeDetails._
+import play.api.mvc.Call
 
-class TaskListViewModel {
+case class RouteDetailsDomain(
+  bindingItinerary: Boolean
+) extends JourneyDomainModel {
 
-  def apply(userAnswers: UserAnswers): Seq[Task] =
-    Seq(
-      TraderDetailsTask(userAnswers),
-      RouteDetailsTask(userAnswers),
-      GuaranteeDetailsTask(userAnswers)
+  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
+    None
+}
+
+object RouteDetailsDomain {
+
+  implicit val userAnswersReader: UserAnswersReader[RouteDetailsDomain] =
+    BindingItineraryPage.reader.map(
+      x => RouteDetailsDomain(x)
     )
 }

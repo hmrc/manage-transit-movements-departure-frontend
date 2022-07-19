@@ -20,6 +20,7 @@ import com.google.inject.AbstractModule
 import controllers.actions._
 import navigation._
 import navigation.annotations._
+import navigation.routeDetails.RouteDetailsNavigator
 import navigation.traderDetails._
 
 import java.time.Clock
@@ -36,6 +37,8 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(classOf[TraderDetailsConsignment]).to(classOf[ConsignmentNavigator])
 
     bind(classOf[GuaranteeNavigatorProvider]).to(classOf[GuaranteeNavigatorProviderImpl])
+
+    bind(classOf[Navigator]).annotatedWith(classOf[RouteDetails]).to(classOf[RouteDetailsNavigator])
 
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])

@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package pages.routeDetails
 
-import base.SpecBase
+import controllers.routeDetails.routes
+import models.{Mode, UserAnswers}
+import pages.QuestionPage
+import pages.sections.RouteDetailsSection
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
-class TaskListViewModelSpec extends SpecBase {
+case object BindingItineraryPage extends QuestionPage[Boolean] {
 
-  "apply" - {
-    "must create tasks" in {
-      val answers = emptyUserAnswers
+  override def path: JsPath = RouteDetailsSection.path \ toString
 
-      val tasks = new TaskListViewModel().apply(answers)
+  override def toString: String = "bindingItinerary"
 
-      tasks.size mustBe 3
-
-      tasks.head.name mustBe "Add trader details"
-      tasks(1).name mustBe "Add route details"
-      tasks(2).name mustBe "Add guarantee details"
-    }
-  }
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.BindingItineraryController.onPageLoad(userAnswers.lrn, mode))
 }

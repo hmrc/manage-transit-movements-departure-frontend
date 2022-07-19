@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package pages.sections
 
-import base.SpecBase
+import play.api.libs.json.{JsObject, JsPath}
 
-class TaskListViewModelSpec extends SpecBase {
+case object RouteDetailsSection extends Section[JsObject] {
 
-  "apply" - {
-    "must create tasks" in {
-      val answers = emptyUserAnswers
+  override def path: JsPath = JsPath \ toString
 
-      val tasks = new TaskListViewModel().apply(answers)
-
-      tasks.size mustBe 3
-
-      tasks.head.name mustBe "Add trader details"
-      tasks(1).name mustBe "Add route details"
-      tasks(2).name mustBe "Add guarantee details"
-    }
-  }
+  override def toString: String = "routeDetails"
 }
