@@ -21,7 +21,7 @@ import play.api.libs.json.{JsObject, JsPath}
 
 case object RoutingSection extends Section[JsObject] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = RouteDetailsSection.path \ toString
 
-  override def toString: String = "routeDetails"
+  override def toString: String = "routing"
 }

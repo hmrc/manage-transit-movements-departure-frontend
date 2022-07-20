@@ -19,13 +19,13 @@ package pages.routeDetails.routing
 import controllers.routeDetails.routing.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.RouteDetailsSection
+import pages.sections.routeDetails.RoutingSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case object BindingItineraryPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = RouteDetailsSection.path \ toString
+  override def path: JsPath = RoutingSection.path \ toString
 
   override def toString: String = "bindingItinerary"
 
