@@ -17,7 +17,7 @@
 package generators
 
 import models.UserAnswers
-import models.journeyDomain.routeDetails.RouteDetailsDomain
+import models.journeyDomain.routeDetails._
 import org.scalacheck.Gen
 
 trait RouteDetailsUserAnswersGenerator extends UserAnswersGenerator {
@@ -25,4 +25,7 @@ trait RouteDetailsUserAnswersGenerator extends UserAnswersGenerator {
 
   def arbitraryRouteDetailsAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[RouteDetailsDomain](userAnswers)
+
+  def arbitraryRoutingAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[RoutingDomain](userAnswers)
 }

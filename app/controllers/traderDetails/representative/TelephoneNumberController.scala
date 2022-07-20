@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.TelephoneNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.Representative
+import navigation.annotations.traderDetails.Representative
 import pages.traderDetails.representative.TelephoneNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

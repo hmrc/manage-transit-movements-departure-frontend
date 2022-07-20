@@ -21,7 +21,7 @@ import forms.AddressFormProvider
 import generators.Generators
 import models.{Address, CountryList, NormalMode, UserAnswers}
 import navigation.Navigator
-import navigation.annotations.TraderDetailsConsignment
+import navigation.annotations.traderDetails.Consignment
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -59,7 +59,7 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetailsConsignment]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Consignment]).toInstance(fakeNavigator))
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "Address Controller" - {

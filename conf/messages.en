@@ -547,3 +547,9 @@ routeDetails.bindingItinerary.paragraph2 = This diverts the route around countri
 routeDetails.bindingItinerary.checkYourAnswersLabel = Do you want the transit to follow a binding itinerary?
 routeDetails.bindingItinerary.error.required = Select yes if you want the transit to follow a binding itinerary
 routeDetails.bindingItinerary.change.hidden = if you want the transit to follow a binding itinerary
+
+routeDetails.addCountryOfRoutingYesNo.title = Do you want to add a country to the transit route?
+routeDetails.addCountryOfRoutingYesNo.heading = Do you want to add a country to the transit route?
+routeDetails.addCountryOfRoutingYesNo.checkYourAnswersLabel = Do you want to add a country to the transit route?
+routeDetails.addCountryOfRoutingYesNo.error.required = Select yes if you want to add a country to the transit route
+routeDetails.addCountryOfRoutingYesNo.change.hidden = if you want to add a country to the transit route

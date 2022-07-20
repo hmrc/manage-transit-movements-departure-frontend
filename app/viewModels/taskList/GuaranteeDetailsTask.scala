@@ -18,7 +18,7 @@ package viewModels.taskList
 
 import models.UserAnswers
 import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
-import pages.sections.GuaranteeDetailsSection
+import pages.sections.guaranteeDetails.GuaranteeDetailsSection
 import play.api.libs.json.JsArray
 
 case class GuaranteeDetailsTask(status: TaskStatus, href: Option[String]) extends Task {

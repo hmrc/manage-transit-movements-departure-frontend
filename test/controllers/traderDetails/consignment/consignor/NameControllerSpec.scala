@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.NameFormProvider
 import models.NormalMode
 import navigation.Navigator
-import navigation.annotations.TraderDetailsConsignment
+import navigation.annotations.traderDetails.Consignment
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.traderDetails.consignment.consignor.NamePage
@@ -42,7 +42,7 @@ class NameControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetailsConsignment]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Consignment]).toInstance(fakeNavigator))
 
   "traderDetails.consignment.consignor.Name Controller" - {
 

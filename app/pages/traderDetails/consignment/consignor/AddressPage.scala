@@ -18,7 +18,7 @@ package pages.traderDetails.consignment.consignor
 
 import models.{Address, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.TraderDetailsConsignorSection
+import pages.sections.traderDetails.TraderDetailsConsignorSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

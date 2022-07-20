@@ -22,7 +22,7 @@ import forms.TelephoneNumberFormProvider
 import models.requests.SpecificDataRequestProvider1
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.HolderOfTransit
+import navigation.annotations.traderDetails.HolderOfTransit
 import pages.traderDetails.holderOfTransit.contact.{NamePage, TelephoneNumberPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}

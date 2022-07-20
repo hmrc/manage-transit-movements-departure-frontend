@@ -18,7 +18,7 @@ package pages.traderDetails.representative
 
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.RepresentativeSection
+import pages.sections.traderDetails.RepresentativeSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

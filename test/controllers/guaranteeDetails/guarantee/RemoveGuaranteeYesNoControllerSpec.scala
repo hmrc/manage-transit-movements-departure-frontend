@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, reset, verify, when}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.sections.GuaranteeSection
+import pages.sections.guaranteeDetails.GuaranteeSection
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.guaranteeDetails.guarantee.RemoveGuaranteeYesNoView

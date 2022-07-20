@@ -24,7 +24,7 @@ import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{Index, RichJsArray, UserAnswers}
 import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import pages.preTaskList.DeclarationTypePage
-import pages.sections.GuaranteeDetailsSection
+import pages.sections.guaranteeDetails.GuaranteeDetailsSection
 import play.api.mvc.Call
 
 case class GuaranteeDetailsDomain(

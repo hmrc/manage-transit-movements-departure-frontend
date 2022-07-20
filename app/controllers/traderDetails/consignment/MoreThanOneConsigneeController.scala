@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.TraderDetailsConsignment
+import navigation.annotations.traderDetails.Consignment
 import pages.traderDetails.consignment.MoreThanOneConsigneePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class MoreThanOneConsigneeController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @TraderDetailsConsignment implicit val navigator: Navigator,
+  @Consignment implicit val navigator: Navigator,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,

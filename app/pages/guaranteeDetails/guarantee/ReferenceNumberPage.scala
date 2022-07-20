@@ -19,7 +19,7 @@ package pages.guaranteeDetails.guarantee
 import controllers.guaranteeDetails.guarantee.routes
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.GuaranteeSection
+import pages.sections.guaranteeDetails.GuaranteeSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

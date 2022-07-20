@@ -21,7 +21,7 @@ import forms.AddressFormProvider
 import generators.Generators
 import models.{Address, CountryList, NormalMode, UserAnswers}
 import navigation.Navigator
-import navigation.annotations.HolderOfTransit
+import navigation.annotations.traderDetails.HolderOfTransit
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary

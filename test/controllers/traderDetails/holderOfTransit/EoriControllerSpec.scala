@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.EoriNumberFormProvider
 import models.NormalMode
 import navigation.Navigator
-import navigation.annotations.HolderOfTransit
+import navigation.annotations.traderDetails.HolderOfTransit
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar

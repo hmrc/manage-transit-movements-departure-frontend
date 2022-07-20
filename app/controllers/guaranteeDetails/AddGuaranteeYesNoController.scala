@@ -20,8 +20,7 @@ import controllers.actions._
 import forms.YesNoFormProvider
 import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
 import models.{LocalReferenceNumber, NormalMode}
-import navigation.annotations.TraderDetails
-import navigation.{Navigator, UserAnswersNavigator}
+import navigation.UserAnswersNavigator
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -33,7 +32,6 @@ import javax.inject.Inject
 class AddGuaranteeYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @TraderDetails implicit val navigator: Navigator,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,

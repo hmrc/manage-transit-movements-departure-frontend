@@ -18,7 +18,7 @@ package viewModels.taskList
 
 import models.UserAnswers
 import models.journeyDomain.traderDetails._
-import pages.sections.TraderDetailsSection
+import pages.sections.traderDetails.TraderDetailsSection
 import play.api.libs.json.JsObject
 
 case class TraderDetailsTask(status: TaskStatus, href: Option[String]) extends Task {

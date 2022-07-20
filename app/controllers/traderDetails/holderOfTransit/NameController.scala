@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.NameFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.HolderOfTransit
+import navigation.annotations.traderDetails.HolderOfTransit
 import pages.traderDetails.holderOfTransit.NamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
