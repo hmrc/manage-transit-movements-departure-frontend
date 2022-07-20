@@ -544,10 +544,10 @@ routeDetails.routing.officeOfDestination.title = Where is the office of destinat
 routeDetails.routing.officeOfDestination.heading = Where is the office of destination?
 routeDetails.routing.officeOfDestination.hintText = Enter the office location or code, like Dover or GB000060.
 routeDetails.routing.officeOfDestination.paragraph = This is the customs office where the transit ends.
-routeDetails.routing.officeOfDestination.placeholder = Select the office of destination
+routeDetails.routing.officeOfDestination.placeholder = Select a customs office
 routeDetails.routing.officeOfDestination.change.hidden = office of destination
 routeDetails.routing.officeOfDestination.checkYourAnswersLabel = Office of destination
-routeDetails.routing.officeOfDestination.error.required = Select the office of destination
+routeDetails.routing.officeOfDestination.error.required = Enter the office of destination
 
 routeDetails.routing.bindingItinerary.title = Do you want the transit to follow a binding itinerary?
 routeDetails.routing.bindingItinerary.heading = Do you want the transit to follow a binding itinerary?
