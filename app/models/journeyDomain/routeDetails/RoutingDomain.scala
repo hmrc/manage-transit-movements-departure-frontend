@@ -17,14 +17,18 @@
 package models.journeyDomain.routeDetails
 
 import cats.implicits._
+import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
+import models.reference.CustomsOffice
 import models.{Index, RichJsArray, UserAnswers}
-import pages.routeDetails.routing.{AddCountryOfRoutingYesNoPage, BindingItineraryPage, CountryOfRoutingPage}
+import pages.preTaskList.SecurityDetailsTypePage
+import pages.routeDetails.routing._
 import pages.sections.routeDetails.CountriesOfRoutingSection
 import play.api.mvc.Call
 
 case class RoutingDomain(
+  officeOfDestination: CustomsOffice,
   bindingItinerary: Boolean,
   countriesOfRouting: Seq[CountryOfRoutingDomain]
 ) extends JourneyDomainModel {
@@ -35,21 +39,31 @@ case class RoutingDomain(
 
 object RoutingDomain {
 
-  private val countriesOfRoutingReader: UserAnswersReader[Seq[CountryOfRoutingDomain]] =
-    AddCountryOfRoutingYesNoPage.reader.flatMap {
-      case true =>
-        CountriesOfRoutingSection.reader.flatMap {
-          case x if x.isEmpty =>
-            UserAnswersReader.fail[Seq[CountryOfRoutingDomain]](CountryOfRoutingPage(Index(0)))
-          case x =>
-            x.traverse[CountryOfRoutingDomain](CountryOfRoutingDomain.userAnswersReader).map(_.toSeq)
-        }
-      case false =>
-        UserAnswersReader(Nil)
+  private val countriesOfRoutingReader: UserAnswersReader[Seq[CountryOfRoutingDomain]] = {
+    val arrayReader: UserAnswersReader[Seq[CountryOfRoutingDomain]] = CountriesOfRoutingSection.reader.flatMap {
+      case x if x.isEmpty =>
+        UserAnswersReader.fail[Seq[CountryOfRoutingDomain]](CountryOfRoutingPage(Index(0)))
+      case x =>
+        x.traverse[CountryOfRoutingDomain](CountryOfRoutingDomain.userAnswersReader).map(_.toSeq)
     }
+
+    for {
+      securityDetailsType       <- SecurityDetailsTypePage.reader
+      followingBindingItinerary <- BindingItineraryPage.reader
+      reader <- (securityDetailsType, followingBindingItinerary) match {
+        case (NoSecurityDetails, false) =>
+          AddCountryOfRoutingYesNoPage.reader.flatMap {
+            case true  => arrayReader
+            case false => UserAnswersReader(Seq.empty[CountryOfRoutingDomain])
+          }
+        case _ => arrayReader
+      }
+    } yield reader
+  }
 
   implicit val userAnswersReader: UserAnswersReader[RoutingDomain] =
     (
+      OfficeOfDestinationPage.reader,
       BindingItineraryPage.reader,
       countriesOfRoutingReader
     ).tupled.map((RoutingDomain.apply _).tupled)

@@ -19,81 +19,185 @@ package models.journeyDomain.routeDetails
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
-import models.DeclarationType._
+import models.SecurityDetailsType._
 import models.domain.{EitherType, UserAnswersReader}
-import models.{DeclarationType, Index}
+import models.reference.{Country, CustomsOffice}
+import models.{Index, SecurityDetailsType}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.preTaskList._
-import pages.routeDetails.routing.{AddCountryOfRoutingYesNoPage, BindingItineraryPage, CountryOfRoutingPage}
+import pages.routeDetails.routing.{AddCountryOfRoutingYesNoPage, BindingItineraryPage, CountryOfRoutingPage, OfficeOfDestinationPage}
 
 class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
   "RoutingDomain" - {
 
+    val officeOfDestination = arbitrary[CustomsOffice].sample.value
+    val country             = arbitrary[Country].sample.value
+
     "can be parsed from UserAnswers" - {
 
-      "when a TIR declaration" in {
+      "when no security" - {
 
-        val userAnswers = emptyUserAnswers
-          .unsafeSetVal(DeclarationTypePage)(Option4)
-          .unsafeSetVal(BindingItineraryPage)(true)
-          .unsafeSetVal(AddCountryOfRoutingYesNoPage)(false)
+        val securityType = NoSecurityDetails
 
-        val expectedResult = RoutingDomain(
-          bindingItinerary = true,
-          countriesOfRouting = Nil
-        )
+        "and following binding itinerary" in {
 
-        val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(SecurityDetailsTypePage)(securityType)
+            .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
+            .unsafeSetVal(BindingItineraryPage)(true)
+            .unsafeSetVal(CountryOfRoutingPage(index))(country)
 
-        result.value mustBe expectedResult
+          val expectedResult = RoutingDomain(
+            officeOfDestination = officeOfDestination,
+            bindingItinerary = true,
+            countriesOfRouting = Seq(
+              CountryOfRoutingDomain(country)(index)
+            )
+          )
+
+          val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
+
+          result.value mustBe expectedResult
+        }
+
+        "and not following binding itinerary" in {
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(SecurityDetailsTypePage)(securityType)
+            .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
+            .unsafeSetVal(BindingItineraryPage)(false)
+            .unsafeSetVal(AddCountryOfRoutingYesNoPage)(false)
+
+          val expectedResult = RoutingDomain(
+            officeOfDestination = officeOfDestination,
+            bindingItinerary = false,
+            countriesOfRouting = Nil
+          )
+
+          val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
+
+          result.value mustBe expectedResult
+        }
       }
 
-      "when a non-TIR declaration" in {
+      "when there is security" - {
 
-        val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+        val securityType = arbitrary[SecurityDetailsType](arbitrarySomeSecurityDetailsType).sample.value
 
-        val userAnswers = emptyUserAnswers
-          .unsafeSetVal(DeclarationTypePage)(declarationType)
-          .unsafeSetVal(BindingItineraryPage)(true)
-          .unsafeSetVal(AddCountryOfRoutingYesNoPage)(false)
+        "and following binding itinerary" in {
 
-        val expectedResult = RoutingDomain(
-          bindingItinerary = true,
-          countriesOfRouting = Nil
-        )
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(SecurityDetailsTypePage)(securityType)
+            .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
+            .unsafeSetVal(BindingItineraryPage)(true)
+            .unsafeSetVal(CountryOfRoutingPage(index))(country)
 
-        val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
+          val expectedResult = RoutingDomain(
+            officeOfDestination = officeOfDestination,
+            bindingItinerary = true,
+            countriesOfRouting = Seq(
+              CountryOfRoutingDomain(country)(index)
+            )
+          )
 
-        result.value mustBe expectedResult
+          val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
+
+          result.value mustBe expectedResult
+        }
+
+        "and not following binding itinerary" in {
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(SecurityDetailsTypePage)(securityType)
+            .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
+            .unsafeSetVal(BindingItineraryPage)(false)
+            .unsafeSetVal(CountryOfRoutingPage(index))(country)
+
+          val expectedResult = RoutingDomain(
+            officeOfDestination = officeOfDestination,
+            bindingItinerary = false,
+            countriesOfRouting = Seq(
+              CountryOfRoutingDomain(country)(index)
+            )
+          )
+
+          val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
+
+          result.value mustBe expectedResult
+        }
       }
     }
 
     "cannot be parsed from UserAnswers" - {
 
+      "when office of destination page is missing" in {
+
+        val securityType = arbitrary[SecurityDetailsType].sample.value
+        val userAnswers  = emptyUserAnswers.unsafeSetVal(SecurityDetailsTypePage)(securityType)
+
+        val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
+
+        result.left.value.page mustBe OfficeOfDestinationPage
+      }
+
       "when binding itinerary page is missing" in {
 
+        val securityType = arbitrary[SecurityDetailsType].sample.value
         val userAnswers = emptyUserAnswers
+          .unsafeSetVal(SecurityDetailsTypePage)(securityType)
+          .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
 
         val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
 
         result.left.value.page mustBe BindingItineraryPage
       }
 
-      "when add country page is missing" in {
+      "when add country page is missing" - {
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(BindingItineraryPage)(true)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
+          .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
+          .unsafeSetVal(BindingItineraryPage)(false)
 
         val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
 
         result.left.value.page mustBe AddCountryOfRoutingYesNoPage
       }
 
+      "when binding itinerary is true and no countries added" in {
+
+        val securityType = arbitrary[SecurityDetailsType].sample.value
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(SecurityDetailsTypePage)(securityType)
+          .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
+          .unsafeSetVal(BindingItineraryPage)(true)
+
+        val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
+
+        result.left.value.page mustBe CountryOfRoutingPage(Index(0))
+      }
+
+      "when there's security and no countries added" in {
+
+        val securityType     = arbitrary[SecurityDetailsType](arbitrarySomeSecurityDetailsType).sample.value
+        val bindingItinerary = arbitrary[Boolean].sample.value
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(SecurityDetailsTypePage)(securityType)
+          .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
+          .unsafeSetVal(BindingItineraryPage)(bindingItinerary)
+
+        val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
+
+        result.left.value.page mustBe CountryOfRoutingPage(Index(0))
+      }
+
       "when add country is true and no countries added" in {
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(BindingItineraryPage)(true)
+          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
+          .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
+          .unsafeSetVal(BindingItineraryPage)(false)
           .unsafeSetVal(AddCountryOfRoutingYesNoPage)(true)
 
         val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)

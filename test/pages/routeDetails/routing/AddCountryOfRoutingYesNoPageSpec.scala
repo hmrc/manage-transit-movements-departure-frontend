@@ -16,6 +16,9 @@
 
 package pages.routeDetails.routing
 
+import models.Index
+import models.reference.Country
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class AddCountryOfRoutingYesNoPageSpec extends PageBehaviours {
@@ -27,5 +30,23 @@ class AddCountryOfRoutingYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](AddCountryOfRoutingYesNoPage)
 
     beRemovable[Boolean](AddCountryOfRoutingYesNoPage)
+
+    "cleanup" - {
+      "when NO selected" - {
+        "must remove countries of routing" in {
+          forAll(arbitrary[Country]) {
+            country =>
+              val preChange = emptyUserAnswers
+                .setValue(CountryOfRoutingPage(Index(0)), country)
+                .setValue(CountryOfRoutingPage(Index(1)), country)
+
+              val postChange = preChange.setValue(AddCountryOfRoutingYesNoPage, false)
+
+              postChange.get(CountryOfRoutingPage(Index(0))) mustNot be(defined)
+              postChange.get(CountryOfRoutingPage(Index(1))) mustNot be(defined)
+          }
+        }
+      }
+    }
   }
 }
