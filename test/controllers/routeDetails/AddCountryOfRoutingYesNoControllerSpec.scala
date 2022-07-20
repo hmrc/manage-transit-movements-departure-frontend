@@ -18,7 +18,7 @@ package controllers.routeDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.Navigator
 import navigation.annotations.RouteDetails
 import org.mockito.ArgumentMatchers.any

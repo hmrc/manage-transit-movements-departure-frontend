@@ -17,7 +17,7 @@
 package utils.cyaHelpers.routeDetails
 
 import models.{Mode, UserAnswers}
-import pages.routeDetails.BindingItineraryPage
+import pages.routeDetails._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
@@ -29,5 +29,12 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(i
     formatAnswer = formatAsYesOrNo,
     prefix = "routeDetails.bindingItinerary",
     id = Some("binding-itinerary")
+  )
+
+  def addCountryOfRouting: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+    page = AddCountryOfRoutingYesNoPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "routeDetails.addCountryOfRoutingYesNo",
+    id = Some("add-country-of-routing")
   )
 }

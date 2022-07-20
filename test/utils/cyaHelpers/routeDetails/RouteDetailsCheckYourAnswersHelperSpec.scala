@@ -20,10 +20,9 @@ import base.SpecBase
 import controllers.routeDetails.routes
 import generators.Generators
 import models.Mode
-import models.reference.CustomsOffice
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.BindingItineraryPage
+import pages.routeDetails._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
@@ -46,8 +45,8 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPro
 
       "must return Some(Row)" - {
         "when BindingItineraryPage defined" in {
-          forAll(arbitrary[CustomsOffice], arbitrary[Mode]) {
-            (customsOffice, mode) =>
+          forAll(arbitrary[Mode]) {
+            mode =>
               val answers = emptyUserAnswers.setValue(BindingItineraryPage, true)
 
               val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
@@ -65,6 +64,50 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPro
                           href = routes.BindingItineraryController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want the transit to follow a binding itinerary"),
                           attributes = Map("id" -> "binding-itinerary")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "addCountryOfRouting" - {
+      "must return None" - {
+        "when AddCountryOfRoutingYesNoPage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new RouteDetailsCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.addCountryOfRouting
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when AddCountryOfRoutingYesNoPage defined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(AddCountryOfRoutingYesNoPage, true)
+
+              val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
+              val result = helper.addCountryOfRouting
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Do you want to add a country to the transit route?".toText),
+                  value = Value("Yes".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = routes.AddCountryOfRoutingYesNoController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("if you want to add a country to the transit route"),
+                          attributes = Map("id" -> "add-country-of-routing")
                         )
                       )
                     )
