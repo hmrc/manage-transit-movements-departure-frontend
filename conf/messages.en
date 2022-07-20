@@ -558,6 +558,7 @@ routeDetails.routing.officeOfDestination.title = Where is the office of destinat
 routeDetails.routing.officeOfDestination.heading = Where is the office of destination?
 routeDetails.routing.officeOfDestination.hintText = Enter the office location or code, like Dover or GB000060.
 routeDetails.routing.officeOfDestination.paragraph = This is the customs office where the transit ends.
+routeDetails.routing.officeOfDestination.placeholder = Enter the office of destination
 routeDetails.routing.officeOfDestination.change.hidden = office of destination
 routeDetails.routing.officeOfDestination.checkYourAnswersLabel = Office of destination
 routeDetails.routing.officeOfDestination.error.required = Enter the office of destination
