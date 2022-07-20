@@ -21,7 +21,7 @@ import forms.traderDetails.representative.RepresentativeCapacityFormProvider
 import models.NormalMode
 import models.traderDetails.representative.RepresentativeCapacity
 import navigation.Navigator
-import navigation.annotations.Representative
+import navigation.annotations.traderDetails.Representative
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.traderDetails.representative.CapacityPage

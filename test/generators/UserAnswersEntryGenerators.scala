@@ -123,8 +123,11 @@ trait UserAnswersEntryGenerators {
     }
   }
 
-  private def generateRouteDetailsAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.routeDetails._
+  private def generateRouteDetailsAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
+    generateRoutingAnswer
+
+  private def generateRoutingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.routeDetails.routing._
     {
       case BindingItineraryPage => arbitrary[Boolean].map(JsBoolean)
     }

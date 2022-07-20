@@ -15,7 +15,7 @@
 ->         /manage-transit-movements/departure                   app.guaranteeDetails.Routes
 ->         /manage-transit-movements/departure                   app.guaranteeDetails.guarantee.Routes
 
-->         /manage-transit-movements/departure                   app.routeDetails.Routes
+->         /manage-transit-movements/departure                   app.routeDetails.routing.Routes
 
 ->         /                                                     health.Routes
 

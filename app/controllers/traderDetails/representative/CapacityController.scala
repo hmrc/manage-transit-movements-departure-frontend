@@ -22,7 +22,7 @@ import forms.traderDetails.representative.RepresentativeCapacityFormProvider
 import models.traderDetails.representative.RepresentativeCapacity
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.Representative
+import navigation.annotations.traderDetails.Representative
 import pages.traderDetails.representative.CapacityPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

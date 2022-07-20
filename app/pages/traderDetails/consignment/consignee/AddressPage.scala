@@ -19,7 +19,7 @@ package pages.traderDetails.consignment.consignee
 import models.{Address, Mode, UserAnswers}
 import play.api.libs.json.JsPath
 import pages.QuestionPage
-import pages.sections.TraderDetailsConsigneeSection
+import pages.sections.traderDetails.TraderDetailsConsigneeSection
 import play.api.mvc.Call
 
 case object AddressPage extends QuestionPage[Address] {

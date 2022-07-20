@@ -20,7 +20,7 @@ import models.SecurityDetailsType.NoSecurityDetails
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.preTaskList.SecurityDetailsTypePage
-import pages.sections.{TraderDetailsConsignmentSection, TraderDetailsConsignorSection}
+import pages.sections.traderDetails.{TraderDetailsConsignmentSection, TraderDetailsConsignorSection}
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

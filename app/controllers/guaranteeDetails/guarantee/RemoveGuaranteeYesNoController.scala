@@ -21,9 +21,7 @@ import controllers.guaranteeDetails.routes._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{Index, LocalReferenceNumber}
-import navigation.Navigator
-import navigation.annotations.TraderDetails
-import pages.sections.GuaranteeSection
+import pages.sections.guaranteeDetails
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -36,7 +34,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class RemoveGuaranteeYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @TraderDetails implicit val navigator: Navigator,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -60,7 +57,8 @@ class RemoveGuaranteeYesNoController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index))),
           {
             case true =>
-              GuaranteeSection(index)
+              guaranteeDetails
+                .GuaranteeSection(index)
                 .removeFromUserAnswers()
                 .writeToSession()
                 .navigateTo(AddAnotherGuaranteeController.onPageLoad(lrn))

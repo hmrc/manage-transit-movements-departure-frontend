@@ -18,7 +18,7 @@ package pages.traderDetails.holderOfTransit
 
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.{HolderOfTransitContactSection, HolderOfTransitSection}
+import pages.sections.traderDetails.{HolderOfTransitContactSection, HolderOfTransitSection}
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

@@ -19,7 +19,7 @@ package pages.traderDetails.representative
 import models.{Mode, UserAnswers}
 import play.api.libs.json.JsPath
 import pages.QuestionPage
-import pages.sections.RepresentativeSection
+import pages.sections.traderDetails.RepresentativeSection
 import play.api.mvc.Call
 
 case object EoriPage extends QuestionPage[String] {

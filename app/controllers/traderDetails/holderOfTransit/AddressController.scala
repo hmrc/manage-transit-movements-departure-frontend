@@ -22,7 +22,7 @@ import forms.AddressFormProvider
 import models.requests.SpecificDataRequestProvider1
 import models.{Address, CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.HolderOfTransit
+import navigation.annotations.traderDetails.HolderOfTransit
 import pages.traderDetails.holderOfTransit.{AddressPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}

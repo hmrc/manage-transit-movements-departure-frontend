@@ -20,7 +20,9 @@ import com.google.inject.AbstractModule
 import controllers.actions._
 import navigation._
 import navigation.annotations._
-import navigation.routeDetails.RouteDetailsNavigator
+import navigation.annotations.routeDetails.Routing
+import navigation.annotations.traderDetails.{Consignment, HolderOfTransit, Representative, TraderDetails}
+import navigation.routeDetails.RoutingNavigator
 import navigation.traderDetails._
 
 import java.time.Clock
@@ -34,11 +36,11 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(classOf[TraderDetails]).to(classOf[TraderDetailsNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[HolderOfTransit]).to(classOf[HolderOfTransitNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[Representative]).to(classOf[RepresentativeNavigator])
-    bind(classOf[Navigator]).annotatedWith(classOf[TraderDetailsConsignment]).to(classOf[ConsignmentNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[Consignment]).to(classOf[ConsignmentNavigator])
 
     bind(classOf[GuaranteeNavigatorProvider]).to(classOf[GuaranteeNavigatorProviderImpl])
 
-    bind(classOf[Navigator]).annotatedWith(classOf[RouteDetails]).to(classOf[RouteDetailsNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[Routing]).to(classOf[RoutingNavigator])
 
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])

@@ -21,7 +21,7 @@ import models.guaranteeDetails.GuaranteeType
 import models.journeyDomain.guaranteeDetails.GuaranteeDomain
 import models.{Index, Mode, UserAnswers}
 import pages.guaranteeDetails.guarantee.GuaranteeTypePage
-import pages.sections.GuaranteeDetailsSection
+import pages.sections.guaranteeDetails.GuaranteeDetailsSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem

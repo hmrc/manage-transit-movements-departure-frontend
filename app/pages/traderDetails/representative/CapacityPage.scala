@@ -20,7 +20,7 @@ import models.{Mode, UserAnswers}
 import models.traderDetails.representative.RepresentativeCapacity
 import play.api.libs.json.JsPath
 import pages.QuestionPage
-import pages.sections.RepresentativeSection
+import pages.sections.traderDetails.RepresentativeSection
 import play.api.mvc.Call
 
 case object CapacityPage extends QuestionPage[RepresentativeCapacity] {

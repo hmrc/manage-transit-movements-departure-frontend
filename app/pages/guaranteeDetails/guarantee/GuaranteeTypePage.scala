@@ -22,7 +22,7 @@ import models.guaranteeDetails.GuaranteeType
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.preTaskList.DeclarationTypePage
-import pages.sections.GuaranteeSection
+import pages.sections.guaranteeDetails.GuaranteeSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

@@ -19,7 +19,7 @@ package pages.traderDetails.holderOfTransit
 import models.{Address, Mode, UserAnswers}
 import play.api.libs.json.JsPath
 import pages.QuestionPage
-import pages.sections.HolderOfTransitSection
+import pages.sections.traderDetails.HolderOfTransitSection
 import play.api.mvc.Call
 
 case object AddressPage extends QuestionPage[Address] {

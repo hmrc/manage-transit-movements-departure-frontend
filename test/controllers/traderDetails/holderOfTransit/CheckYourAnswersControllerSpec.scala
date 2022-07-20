@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.traderDetails.holderOfTransit.routes._
 import generators.Generators
 import navigation.Navigator
-import navigation.annotations.TraderDetails
+import navigation.annotations.traderDetails.TraderDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.inject.bind

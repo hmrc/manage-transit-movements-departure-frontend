@@ -16,24 +16,21 @@
 
 package models.journeyDomain.routeDetails
 
-import models.UserAnswers
-import models.domain.{GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.{JourneyDomainModel, Stage}
-import pages.routeDetails._
-import play.api.mvc.Call
+import models.domain.UserAnswersReader
+import models.journeyDomain.JourneyDomainModel
 
 case class RouteDetailsDomain(
-  bindingItinerary: Boolean
-) extends JourneyDomainModel {
-
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    None
-}
+  routing: RoutingDomain
+) extends JourneyDomainModel
 
 object RouteDetailsDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[RouteDetailsDomain] =
-    BindingItineraryPage.reader.map(
-      x => RouteDetailsDomain(x)
+  implicit val userAnswersParser: UserAnswersReader[RouteDetailsDomain] = {
+
+    for {
+      routing <- UserAnswersReader[RoutingDomain]
+    } yield RouteDetailsDomain(
+      routing
     )
+  }
 }

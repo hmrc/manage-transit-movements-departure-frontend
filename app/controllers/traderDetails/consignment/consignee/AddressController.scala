@@ -22,7 +22,7 @@ import forms.AddressFormProvider
 import models.requests.SpecificDataRequestProvider1
 import models.{Address, CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.TraderDetailsConsignment
+import navigation.annotations.traderDetails.Consignment
 import pages.traderDetails.consignment.consignee.{AddressPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -38,7 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddressController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @TraderDetailsConsignment implicit val navigator: Navigator,
+  @Consignment implicit val navigator: Navigator,
   actions: Actions,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: AddressFormProvider,

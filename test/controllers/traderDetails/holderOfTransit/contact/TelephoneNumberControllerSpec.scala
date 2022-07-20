@@ -21,7 +21,7 @@ import forms.TelephoneNumberFormProvider
 import generators.Generators
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
-import navigation.annotations.HolderOfTransit
+import navigation.annotations.traderDetails.HolderOfTransit
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.traderDetails.holderOfTransit.contact.{NamePage, TelephoneNumberPage}

@@ -18,8 +18,8 @@ package pages.traderDetails.holderOfTransit
 
 import models.{Mode, UserAnswers}
 import play.api.libs.json.JsPath
-import pages.sections.HolderOfTransitSection
 import pages.QuestionPage
+import pages.sections.traderDetails.HolderOfTransitSection
 import play.api.mvc.Call
 
 case object NamePage extends QuestionPage[String] {
