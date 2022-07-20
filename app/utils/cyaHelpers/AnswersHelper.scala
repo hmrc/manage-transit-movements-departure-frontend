@@ -20,6 +20,7 @@ import models.domain.UserAnswersReader
 import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.Stage.AccessingJourney
 import models.{LocalReferenceNumber, Mode, RichOptionalJsArray, UserAnswers}
+import navigation.UserAnswersNavigator
 import pages.QuestionPage
 import pages.sections.Section
 import play.api.i18n.Messages
@@ -76,6 +77,25 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
           args = args: _*
         )
       }
+
+  def getAnswerAndBuildSectionRow[A <: JourneyDomainModel, B](
+    page: QuestionPage[B],
+    formatAnswer: B => Content,
+    prefix: String,
+    id: Option[String],
+    args: Any*
+  )(implicit userAnswersReader: UserAnswersReader[A], rds: Reads[B]): Option[SummaryListRow] =
+    userAnswers.get(page) map {
+      answer =>
+        buildSimpleRow(
+          prefix = prefix,
+          label = messages(s"$prefix.checkYourAnswersLabel", args: _*),
+          answer = formatAnswer(answer),
+          id = id,
+          call = Some(UserAnswersNavigator.nextPage[A](userAnswers, mode, AccessingJourney)),
+          args = args: _*
+        )
+    }
 
   protected def buildListItems(
     section: Section[JsArray]
