@@ -553,3 +553,12 @@ routeDetails.addCountryOfRoutingYesNo.heading = Do you want to add a country to 
 routeDetails.addCountryOfRoutingYesNo.checkYourAnswersLabel = Do you want to add a country to the transit route?
 routeDetails.addCountryOfRoutingYesNo.error.required = Select yes if you want to add a country to the transit route
 routeDetails.addCountryOfRoutingYesNo.change.hidden = if you want to add a country to the transit route
+
+routeDetails.routing.officeOfDestination.title = Where is the office of destination?
+routeDetails.routing.officeOfDestination.heading = Where is the office of destination?
+routeDetails.routing.officeOfDestination.hintText = Enter the office location or code, like Dover or GB000060.
+routeDetails.routing.officeOfDestination.paragraph = This is the customs office where the transit ends.
+routeDetails.routing.officeOfDestination.placeholder = Enter the office of destination
+routeDetails.routing.officeOfDestination.change.hidden = office of destination
+routeDetails.routing.officeOfDestination.checkYourAnswersLabel = Office of destination
+routeDetails.routing.officeOfDestination.error.required = Enter the office of destination
