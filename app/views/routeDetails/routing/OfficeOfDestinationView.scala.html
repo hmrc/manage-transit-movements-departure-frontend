@@ -16,7 +16,7 @@
 
 @import controllers.routeDetails.routing.routes
 @import models.LocalReferenceNumber
-@import models.reference.Country
+@import models.reference.CustomsOffice
 @import models.Selectable
 @import models.Selectable._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
@@ -31,26 +31,28 @@
     button: Button
 )
 
-@(form: Form[Country], lrn: LocalReferenceNumber, countries: Seq[Country], mode: Mode, index: Index)(implicit request: Request[_], messages: Messages)
+@(form: Form[CustomsOffice], lrn: LocalReferenceNumber, customsOffices: Seq[CustomsOffice], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.routing.countryOfRouting.title"),
+    title = messages("routeDetails.routing.officeOfDestination.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.CountryOfRoutingController.onSubmit(lrn, mode, index), 'autoComplete -> "off") {
+    @formHelper(action = routes.OfficeOfDestinationController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputSelect(
             field = form("value"),
-            selectType = OrdinarySelect(
-                heading = messages("routeDetails.routing.countryOfRouting.heading"),
-                caption = Some(messages("routeDetails.caption"))
+            selectType = SelectWithAdditionalHtml(
+                heading = messages("routeDetails.routing.officeOfDestination.heading"),
+                caption = Some(messages("routeDetails.caption")),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.routing.officeOfDestination.paragraph")}</p>""")
             ),
-            selectItems = countries.toSelectItems(form.value),
-            placeholder = messages("routeDetails.routing.countryOfRouting.placeholder")
+            hint = Some(messages("routeDetails.routing.officeOfDestination.hintText")),
+            selectItems = customsOffices.toSelectItems(form.value),
+            placeholder = messages("routeDetails.routing.officeOfDestination.placeholder")
         )
 
         @button(attributes = Map("id" -> "submit"))

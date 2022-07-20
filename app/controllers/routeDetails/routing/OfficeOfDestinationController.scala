@@ -18,51 +18,62 @@ package controllers.routeDetails.routing
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.YesNoFormProvider
-import models.{LocalReferenceNumber, Mode}
+import forms.CustomsOfficeFormProvider
+import models.reference.CustomsOffice
+import models.{CustomsOfficeList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.routeDetails.Routing
-import pages.routeDetails.routing.AddCountryOfRoutingYesNoPage
+import pages.routeDetails.routing.OfficeOfDestinationPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.CustomsOfficesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.routing.AddCountryOfRoutingYesNoView
+import views.html.routeDetails.routing.OfficeOfDestinationView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddCountryOfRoutingYesNoController @Inject() (
+class OfficeOfDestinationController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   @Routing implicit val navigator: Navigator,
   actions: Actions,
-  formProvider: YesNoFormProvider,
+  formProvider: CustomsOfficeFormProvider,
+  service: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
-  view: AddCountryOfRoutingYesNoView
+  view: OfficeOfDestinationView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.routing.addCountryOfRoutingYesNo")
+  private def form(customsOfficeList: CustomsOfficeList): Form[CustomsOffice] =
+    formProvider("routeDetails.routing.officeOfDestination", customsOfficeList)
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      val preparedForm = request.userAnswers.get(AddCountryOfRoutingYesNoPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+      service.getCustomsOfficesOfDeparture.map {
+        customsOfficeList =>
+          val preparedForm = request.userAnswers.get(OfficeOfDestinationPage) match {
+            case None        => form(customsOfficeList)
+            case Some(value) => form(customsOfficeList).fill(value)
+          }
 
-      Ok(view(preparedForm, lrn, mode))
+          Ok(view(preparedForm, lrn, customsOfficeList.customsOffices, mode))
+      }
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => AddCountryOfRoutingYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
-        )
+      service.getCustomsOfficesOfDeparture.flatMap {
+        customsOfficeList =>
+          form(customsOfficeList)
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
+              value => OfficeOfDestinationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+            )
+      }
   }
 }

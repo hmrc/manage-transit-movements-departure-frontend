@@ -36,7 +36,7 @@ import scala.concurrent.Future
 class BindingItineraryControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
   private val formProvider               = new YesNoFormProvider()
-  private val form                       = formProvider("routeDetails.bindingItinerary")
+  private val form                       = formProvider("routeDetails.routing.bindingItinerary")
   private val mode                       = NormalMode
   private lazy val bindingItineraryRoute = routes.BindingItineraryController.onPageLoad(lrn, mode).url
 

@@ -129,6 +129,7 @@ trait UserAnswersEntryGenerators {
   private def generateRoutingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.routeDetails.routing._
     {
+      case OfficeOfDestinationPage      => arbitrary[CustomsOffice].map(Json.toJson(_))
       case BindingItineraryPage         => arbitrary[Boolean].map(JsBoolean)
       case AddCountryOfRoutingYesNoPage => arbitrary[Boolean].map(JsBoolean)
       case CountryOfRoutingPage(_)      => arbitrary[Country].map(Json.toJson(_))

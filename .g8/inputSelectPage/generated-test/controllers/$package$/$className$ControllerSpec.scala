@@ -59,7 +59,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       when(mock$serviceName$.$lookupReferenceListMethod$(any())).thenReturn(Future.successful($referenceListClass;format="decap"$))
-      val userAnswers = emptyUseerAnswers.setValue($className$Page, $referenceClass;format="decap"$1)
+      val userAnswers = emptyUserAnswers.setValue($className$Page, $referenceClass;format="decap"$1)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, $className;format="decap"$Route)

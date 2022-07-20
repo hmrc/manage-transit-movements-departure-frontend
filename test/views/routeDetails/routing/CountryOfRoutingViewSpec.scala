@@ -18,8 +18,8 @@ package views.routeDetails.routing
 
 import forms.CountryFormProvider
 import generators.Generators
-import models.{CountryList, NormalMode}
 import models.reference.Country
+import models.{CountryList, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.InputSelectViewBehaviours
@@ -43,7 +43,7 @@ class CountryOfRoutingViewSpec extends InputSelectViewBehaviours[Country] with G
   override def applyView(form: Form[Country]): HtmlFormat.Appendable =
     injector.instanceOf[CountryOfRoutingView].apply(form, lrn, values, NormalMode, index)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.countryOfRouting"
+  override val prefix: String = "routeDetails.routing.countryOfRouting"
 
   behave like pageWithTitle()
 

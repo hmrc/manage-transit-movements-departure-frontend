@@ -47,7 +47,8 @@ class CountryOfRoutingController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private def form(countryList: CountryList): Form[Country] = formProvider("routeDetails.countryOfRouting", countryList)
+  private def form(countryList: CountryList): Form[Country] =
+    formProvider("routeDetails.routing.countryOfRouting", countryList)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>

@@ -30,7 +30,7 @@
 @(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.addCountryOfRoutingYesNo.title"),
+    title = messages("routeDetails.routing.addCountryOfRoutingYesNo.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -42,7 +42,7 @@
         @inputYesNo(
             field = form("value"),
             yesNoType = OrdinaryYesNo(
-                heading = messages("routeDetails.addCountryOfRoutingYesNo.heading"),
+                heading = messages("routeDetails.routing.addCountryOfRoutingYesNo.heading"),
                 caption = Some(messages("routeDetails.caption"))
             )
         )

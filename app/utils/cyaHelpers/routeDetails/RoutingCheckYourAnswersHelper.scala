@@ -27,14 +27,14 @@ class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
   def bindingItinerary: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = BindingItineraryPage,
     formatAnswer = formatAsYesOrNo,
-    prefix = "routeDetails.bindingItinerary",
+    prefix = "routeDetails.routing.bindingItinerary",
     id = Some("binding-itinerary")
   )
 
   def addCountryOfRouting: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = AddCountryOfRoutingYesNoPage,
     formatAnswer = formatAsYesOrNo,
-    prefix = "routeDetails.addCountryOfRoutingYesNo",
+    prefix = "routeDetails.routing.addCountryOfRoutingYesNo",
     id = Some("add-country-of-routing")
   )
 }
