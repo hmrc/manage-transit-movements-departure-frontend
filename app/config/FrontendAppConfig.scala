@@ -22,25 +22,18 @@ import play.api.Configuration
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
-  private val contactHost = configuration.get[String]("contact-frontend.host")
-
-  lazy val betaFeedbackUrl          = s"$contactHost/contact/beta-feedback"
   lazy val nctsEnquiriesUrl: String = configuration.get[String]("urls.nctsEnquiries")
   lazy val nctsGuidanceUrl: String  = configuration.get[String]("urls.nctsGuidance")
 
   lazy val trackingConsentUrl: String = configuration.get[String]("microservice.services.tracking-consent-frontend.url")
   lazy val gtmContainer: String       = configuration.get[String]("microservice.services.tracking-consent-frontend.gtm.container")
 
-  lazy val showPhaseBanner: Boolean        = configuration.get[Boolean]("banners.showPhase")
-  lazy val userResearchUrl: String         = configuration.get[String]("urls.userResearch")
-  lazy val showUserResearchBanner: Boolean = configuration.get[Boolean]("banners.showUserResearch")
-
   //TODO: Move out into it's own config object like `ManageTransitMovementsService`
   lazy val referenceDataUrl: String = configuration.get[Service]("microservice.services.referenceData").fullServiceUrl
 
   //TODO: Move out into it's own config object like `ManageTransitMovementsService`
-  lazy val departureHost    = configuration.get[Service]("microservice.services.departures").fullServiceUrl
-  lazy val departureBaseUrl = configuration.get[Service]("microservice.services.departures").baseUrl
+  lazy val departureHost: String    = configuration.get[Service]("microservice.services.departures").fullServiceUrl
+  lazy val departureBaseUrl: String = configuration.get[Service]("microservice.services.departures").baseUrl
 
   // TODO: Move config values for IdentifierAction to it's own config class
   // TODO: Make these values eagerly evaluated. I.e. non lazy
