@@ -21,7 +21,7 @@ import controllers.guaranteeDetails.routes._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{Index, LocalReferenceNumber}
-import pages.sections.guaranteeDetails
+import pages.sections.guaranteeDetails.GuaranteeSection
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -57,8 +57,7 @@ class RemoveGuaranteeYesNoController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index))),
           {
             case true =>
-              guaranteeDetails
-                .GuaranteeSection(index)
+              GuaranteeSection(index)
                 .removeFromUserAnswers()
                 .writeToSession()
                 .navigateTo(AddAnotherGuaranteeController.onPageLoad(lrn))
