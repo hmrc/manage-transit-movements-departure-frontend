@@ -18,7 +18,8 @@ package base
 
 import controllers.actions._
 import models.{Index, UserAnswers}
-import navigation.{FakeGuaranteeNavigator, FakeNavigator, GuaranteeNavigatorProvider, Navigator}
+import navigation.routeDetails.CountryOfRoutingNavigatorProvider
+import navigation._
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
 import org.mockito.Mockito.when
@@ -60,6 +61,9 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
 
   protected val fakeGuaranteeNavigatorProvider: GuaranteeNavigatorProvider =
     (index: Index) => new FakeGuaranteeNavigator(onwardRoute, index)
+
+  protected val fakeCountryOfRoutingNavigatorProvider: CountryOfRoutingNavigatorProvider =
+    (index: Index) => new FakeCountryOfRoutingNavigator(onwardRoute, index)
 
   def guiceApplicationBuilder(): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()

@@ -553,3 +553,8 @@ routeDetails.addCountryOfRoutingYesNo.heading = Do you want to add a country to 
 routeDetails.addCountryOfRoutingYesNo.checkYourAnswersLabel = Do you want to add a country to the transit route?
 routeDetails.addCountryOfRoutingYesNo.error.required = Select yes if you want to add a country to the transit route
 routeDetails.addCountryOfRoutingYesNo.change.hidden = if you want to add a country to the transit route
+
+routeDetails.countryOfRouting.title = Which country do you want to add to the transit route?
+routeDetails.countryOfRouting.heading = Which country do you want to add to the transit route?
+routeDetails.countryOfRouting.error.required = Enter the country you want to add to the transit route
+routeDetails.countryOfRouting.placeholder = Select a country

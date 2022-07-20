@@ -18,7 +18,7 @@ package generators
 
 import models._
 import models.guaranteeDetails.GuaranteeType
-import models.reference.CustomsOffice
+import models.reference.{Country, CustomsOffice}
 import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -129,7 +129,9 @@ trait UserAnswersEntryGenerators {
   private def generateRoutingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.routeDetails.routing._
     {
-      case BindingItineraryPage => arbitrary[Boolean].map(JsBoolean)
+      case BindingItineraryPage         => arbitrary[Boolean].map(JsBoolean)
+      case AddCountryOfRoutingYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case CountryOfRoutingPage(_)      => arbitrary[Country].map(Json.toJson(_))
     }
   }
 

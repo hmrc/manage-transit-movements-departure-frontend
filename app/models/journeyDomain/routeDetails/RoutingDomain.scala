@@ -16,14 +16,17 @@
 
 package models.journeyDomain.routeDetails
 
-import models.UserAnswers
-import models.domain.{GettableAsReaderOps, UserAnswersReader}
+import cats.implicits._
+import models.domain.{GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
-import pages.routeDetails.routing.BindingItineraryPage
+import models.{Index, RichJsArray, UserAnswers}
+import pages.routeDetails.routing.{AddCountryOfRoutingYesNoPage, BindingItineraryPage, CountryOfRoutingPage}
+import pages.sections.routeDetails.CountriesOfRoutingSection
 import play.api.mvc.Call
 
 case class RoutingDomain(
-  bindingItinerary: Boolean
+  bindingItinerary: Boolean,
+  countriesOfRouting: Seq[CountryOfRoutingDomain]
 ) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
@@ -32,8 +35,22 @@ case class RoutingDomain(
 
 object RoutingDomain {
 
+  private val countriesOfRoutingReader: UserAnswersReader[Seq[CountryOfRoutingDomain]] =
+    AddCountryOfRoutingYesNoPage.reader.flatMap {
+      case true =>
+        CountriesOfRoutingSection.reader.flatMap {
+          case x if x.isEmpty =>
+            UserAnswersReader.fail[Seq[CountryOfRoutingDomain]](CountryOfRoutingPage(Index(0)))
+          case x =>
+            x.traverse[CountryOfRoutingDomain](CountryOfRoutingDomain.userAnswersReader).map(_.toSeq)
+        }
+      case false =>
+        UserAnswersReader(Nil)
+    }
+
   implicit val userAnswersReader: UserAnswersReader[RoutingDomain] =
-    BindingItineraryPage.reader.map(
-      x => RoutingDomain(x)
-    )
+    (
+      BindingItineraryPage.reader,
+      countriesOfRoutingReader
+    ).tupled.map((RoutingDomain.apply _).tupled)
 }

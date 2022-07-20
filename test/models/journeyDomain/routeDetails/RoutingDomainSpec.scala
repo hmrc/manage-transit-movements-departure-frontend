@@ -19,12 +19,12 @@ package models.journeyDomain.routeDetails
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
-import models.DeclarationType
 import models.DeclarationType._
 import models.domain.{EitherType, UserAnswersReader}
+import models.{DeclarationType, Index}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.preTaskList._
-import pages.routeDetails.routing.BindingItineraryPage
+import pages.routeDetails.routing.{AddCountryOfRoutingYesNoPage, BindingItineraryPage, CountryOfRoutingPage}
 
 class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
@@ -37,9 +37,11 @@ class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(DeclarationTypePage)(Option4)
           .unsafeSetVal(BindingItineraryPage)(true)
+          .unsafeSetVal(AddCountryOfRoutingYesNoPage)(false)
 
         val expectedResult = RoutingDomain(
-          bindingItinerary = true
+          bindingItinerary = true,
+          countriesOfRouting = Nil
         )
 
         val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
@@ -54,9 +56,11 @@ class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(DeclarationTypePage)(declarationType)
           .unsafeSetVal(BindingItineraryPage)(true)
+          .unsafeSetVal(AddCountryOfRoutingYesNoPage)(false)
 
         val expectedResult = RoutingDomain(
-          bindingItinerary = true
+          bindingItinerary = true,
+          countriesOfRouting = Nil
         )
 
         val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
@@ -74,6 +78,27 @@ class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
         val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
 
         result.left.value.page mustBe BindingItineraryPage
+      }
+
+      "when add country page is missing" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(BindingItineraryPage)(true)
+
+        val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
+
+        result.left.value.page mustBe AddCountryOfRoutingYesNoPage
+      }
+
+      "when add country is true and no countries added" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(BindingItineraryPage)(true)
+          .unsafeSetVal(AddCountryOfRoutingYesNoPage)(true)
+
+        val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
+
+        result.left.value.page mustBe CountryOfRoutingPage(Index(0))
       }
     }
   }
