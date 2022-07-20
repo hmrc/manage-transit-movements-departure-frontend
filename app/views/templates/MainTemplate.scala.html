@@ -69,11 +69,11 @@
     additionalHeadBlock = Some(hmrcHead(
         headBlock = Some(headScripts)
     )),
-    userResearchBannerUrl = if (appConfig.showUserResearchBanner) Some(appConfig.userResearchUrl) else None,
+    userResearchBannerUrl = if (renderConfig.showUserResearchBanner) Some(renderConfig.userResearchUrl) else None,
     serviceName = Some(messages("site.service_name")),
     serviceUrl = Some(appConfig.serviceUrl),
     signOutUrl = if (canSignOut) Some(renderConfig.signOutUrl) else None,
-    phaseBanner = Some(standardBetaBanner(url = renderConfig.betaFeedbackUnauthenticatedUrl)),
+    phaseBanner = Some(standardBetaBanner(url = renderConfig.feedbackUrl)),
     backLinkUrl = if (showBackLink) Some("#") else None, // This is overridden in ctc.js
     nonce = CSPNonce.get,
     additionalScriptsBlock = Some(javascripts())
