@@ -34,7 +34,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mod
       position =>
         val index = Index(position)
         buildListItem[GuaranteeDomain, GuaranteeType](
-          page = GuaranteeTypePage(Index(position)),
+          page = GuaranteeTypePage(index),
           getName = _.`type`,
           formatName = formatEnumAsString(GuaranteeType.messageKeyPrefix),
           removeRoute = guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, index)

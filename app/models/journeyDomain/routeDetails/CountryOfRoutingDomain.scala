@@ -34,7 +34,7 @@ case class CountryOfRoutingDomain(
       case AccessingJourney =>
         controllers.routeDetails.routing.routes.CountryOfRoutingController.onPageLoad(userAnswers.lrn, NormalMode, index)
       case CompletingJourney =>
-        controllers.routes.ErrorController.notFound() // TODO - add another country of routing
+        controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(userAnswers.lrn)
     }
   }
 }

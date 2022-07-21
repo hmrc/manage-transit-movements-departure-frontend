@@ -55,5 +55,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val mongoTtl: Int = configuration.get[Int]("mongodb.timeToLiveInSeconds")
 
-  lazy val maxGuarantees: Int = configuration.get[Int]("limits.maxGuarantees")
+  lazy val maxGuarantees: Int         = configuration.get[Int]("limits.maxGuarantees")
+  lazy val maxCountriesOfRouting: Int = configuration.get[Int]("limits.maxCountriesOfRouting")
 }
