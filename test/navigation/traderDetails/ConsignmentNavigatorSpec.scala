@@ -17,7 +17,6 @@
 package navigation.traderDetails
 
 import base.SpecBase
-import controllers.traderDetails.consignment.{routes => consignmentRoutes}
 import controllers.traderDetails.{routes => tdRoutes}
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models._
@@ -39,7 +38,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(controllers.traderDetails.routes.CheckYourAnswersController.onPageLoad(answers.lrn))
+                .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
       }

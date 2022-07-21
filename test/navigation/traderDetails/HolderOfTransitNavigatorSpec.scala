@@ -17,11 +17,10 @@
 package navigation.traderDetails
 
 import base.SpecBase
-import controllers.traderDetails.representative.{routes => representativeRoutes}
-import controllers.traderDetails.{routes => tdRoutes}
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models._
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import controllers.traderDetails.{routes => tdRoutes}
 
 class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
 
@@ -34,12 +33,12 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       val mode = NormalMode
 
       "when answers complete" - {
-        "must redirect to check your answers" in {
+        "must redirect to acting as representative" in {
           forAll(arbitraryHolderOfTransitAnswers(emptyUserAnswers)) {
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(representativeRoutes.EoriController.onPageLoad(answers.lrn, NormalMode))
+                .mustBe(tdRoutes.ActingAsRepresentativeController.onPageLoad(answers.lrn, NormalMode))
           }
         }
       }
@@ -50,12 +49,12 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       val mode = CheckMode
 
       "when answers complete" - {
-        "must redirect to check your answers" in {
+        "must redirect to Check your answers page" in {
           forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers)) {
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(controllers.traderDetails.routes.ActingAsRepresentativeController.onPageLoad(answers.lrn, NormalMode))
+                .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
       }

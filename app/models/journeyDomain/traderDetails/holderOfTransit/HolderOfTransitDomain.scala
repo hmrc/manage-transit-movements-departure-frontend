@@ -20,7 +20,7 @@ import cats.implicits._
 import models.DeclarationType.Option4
 import models.domain._
 import models.journeyDomain.{JourneyDomainModel, Stage}
-import models.{Address, EoriNumber, Mode, NormalMode, UserAnswers}
+import models.{Address, EoriNumber, NormalMode, UserAnswers}
 import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.holderOfTransit._
 import play.api.mvc.Call
