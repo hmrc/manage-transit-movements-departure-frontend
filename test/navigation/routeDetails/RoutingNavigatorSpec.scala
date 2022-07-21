@@ -32,7 +32,7 @@ class RoutingNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with G
       val mode = NormalMode
 
       "when answers complete" - {
-        "must redirect to add another country of routing" in {
+        "must redirect to routing check your answers" in {
           forAll(arbitraryRoutingAnswers(emptyUserAnswers)) {
             answers =>
               navigator
