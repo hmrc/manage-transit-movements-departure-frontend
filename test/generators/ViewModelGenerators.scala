@@ -23,6 +23,7 @@ import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
+import viewModels.Link
 import viewModels.sections.Section
 import viewModels.taskList.{Task, TaskStatus}
 
@@ -86,7 +87,16 @@ trait ViewModelGenerators {
       sectionTitle <- nonEmptyString
       length       <- Gen.choose(1, maxSeqLength)
       rows         <- Gen.containerOfN[Seq, SummaryListRow](length, arbitrary[SummaryListRow])
-    } yield Section(sectionTitle, rows)
+      link         <- arbitrary[Link]
+    } yield Section(sectionTitle, rows, link)
+  }
+
+  implicit lazy val arbitraryLink: Arbitrary[Link] = Arbitrary {
+    for {
+      id   <- nonEmptyString
+      text <- nonEmptyString
+      href <- nonEmptyString
+    } yield Link(id, text, href)
   }
 
   implicit lazy val arbitraryTaskStatus: Arbitrary[TaskStatus] = Arbitrary {
