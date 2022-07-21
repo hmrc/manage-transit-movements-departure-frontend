@@ -562,3 +562,4 @@ routeDetails.routing.officeOfDestination.placeholder = Enter the office of desti
 routeDetails.routing.officeOfDestination.change.hidden = office of destination
 routeDetails.routing.officeOfDestination.checkYourAnswersLabel = Office of destination
 routeDetails.routing.officeOfDestination.error.required = Enter the office of destination
+routeDetails.routing.officeOfDestination.placeholder = Select a customs office
