@@ -158,7 +158,8 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
 
           status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual "#"
+          redirectLocation(result).value mustEqual
+            routes.CheckYourAnswersController.onPageLoad(lrn).url
         }
       }
     }
@@ -177,7 +178,8 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual "#"
+        redirectLocation(result).value mustEqual
+          routes.CheckYourAnswersController.onPageLoad(lrn).url
       }
     }
 

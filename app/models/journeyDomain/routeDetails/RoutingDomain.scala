@@ -34,7 +34,7 @@ case class RoutingDomain(
 ) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    None
+    Some(controllers.routeDetails.routing.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
 }
 
 object RoutingDomain {
