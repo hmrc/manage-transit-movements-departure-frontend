@@ -18,7 +18,7 @@ package navigation
 
 import models.domain.UserAnswersReader
 import models.journeyDomain.Stage.CompletingJourney
-import models.journeyDomain.{JourneyDomainModel, ReaderError}
+import models.journeyDomain.{JourneyDomainModel, ReaderError, Stage}
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import play.api.mvc.Call
 
@@ -41,13 +41,14 @@ object UserAnswersNavigator {
 
   def nextPage[T <: JourneyDomainModel](
     userAnswers: UserAnswers,
-    mode: Mode
+    mode: Mode,
+    stage: Stage = CompletingJourney
   )(implicit userAnswersReader: UserAnswersReader[T]): Call =
     (UserAnswersReader[T].run(userAnswers) match {
       case Left(ReaderError(page, _)) =>
         page.route(userAnswers, mode)
       case Right(x) =>
-        x.routeIfCompleted(userAnswers, CompletingJourney)
+        x.routeIfCompleted(userAnswers, stage)
     }).getOrElse(controllers.routes.ErrorController.notFound())
 }
 

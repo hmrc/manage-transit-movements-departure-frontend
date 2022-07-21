@@ -44,7 +44,7 @@ class BindingItineraryController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.bindingItinerary")
+  private val form = formProvider("routeDetails.routing.bindingItinerary")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

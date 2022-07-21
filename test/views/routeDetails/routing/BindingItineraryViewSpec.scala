@@ -27,7 +27,7 @@ class BindingItineraryViewSpec extends YesNoViewBehaviours {
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector.instanceOf[BindingItineraryView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.bindingItinerary"
+  override val prefix: String = "routeDetails.routing.bindingItinerary"
 
   behave like pageWithTitle()
 

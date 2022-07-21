@@ -540,25 +540,33 @@ guaranteeDetails.checkYourAnswers.heading = Check your answers
 
 routeDetails.caption = Route details
 
-routeDetails.bindingItinerary.title = Do you want the transit to follow a binding itinerary?
-routeDetails.bindingItinerary.heading = Do you want the transit to follow a binding itinerary?
-routeDetails.bindingItinerary.paragraph1 = This means transporting goods to the office of departure by an economically justifiable itinerary.
-routeDetails.bindingItinerary.paragraph2 = This diverts the route around countries that represent a higher risk to the goods in transit.
-routeDetails.bindingItinerary.checkYourAnswersLabel = Do you want the transit to follow a binding itinerary?
-routeDetails.bindingItinerary.error.required = Select yes if you want the transit to follow a binding itinerary
-routeDetails.bindingItinerary.change.hidden = if you want the transit to follow a binding itinerary
-
-routeDetails.addCountryOfRoutingYesNo.title = Do you want to add a country to the transit route?
-routeDetails.addCountryOfRoutingYesNo.heading = Do you want to add a country to the transit route?
-routeDetails.addCountryOfRoutingYesNo.checkYourAnswersLabel = Do you want to add a country to the transit route?
-routeDetails.addCountryOfRoutingYesNo.error.required = Select yes if you want to add a country to the transit route
-routeDetails.addCountryOfRoutingYesNo.change.hidden = if you want to add a country to the transit route
-
 routeDetails.routing.officeOfDestination.title = Where is the office of destination?
 routeDetails.routing.officeOfDestination.heading = Where is the office of destination?
 routeDetails.routing.officeOfDestination.hintText = Enter the office location or code, like Dover or GB000060.
 routeDetails.routing.officeOfDestination.paragraph = This is the customs office where the transit ends.
-routeDetails.routing.officeOfDestination.placeholder = Enter the office of destination
+routeDetails.routing.officeOfDestination.placeholder = Select a customs office
 routeDetails.routing.officeOfDestination.change.hidden = office of destination
 routeDetails.routing.officeOfDestination.checkYourAnswersLabel = Office of destination
 routeDetails.routing.officeOfDestination.error.required = Enter the office of destination
+
+routeDetails.routing.bindingItinerary.title = Do you want the transit to follow a binding itinerary?
+routeDetails.routing.bindingItinerary.heading = Do you want the transit to follow a binding itinerary?
+routeDetails.routing.bindingItinerary.paragraph1 = This means transporting goods to the office of departure by an economically justifiable itinerary.
+routeDetails.routing.bindingItinerary.paragraph2 = This diverts the route around countries that represent a higher risk to the goods in transit.
+routeDetails.routing.bindingItinerary.checkYourAnswersLabel = Do you want the transit to follow a binding itinerary?
+routeDetails.routing.bindingItinerary.error.required = Select yes if you want the transit to follow a binding itinerary
+routeDetails.routing.bindingItinerary.change.hidden = if you want the transit to follow a binding itinerary
+
+routeDetails.routing.addCountryOfRoutingYesNo.title = Do you want to add a country to the transit route?
+routeDetails.routing.addCountryOfRoutingYesNo.heading = Do you want to add a country to the transit route?
+routeDetails.routing.addCountryOfRoutingYesNo.checkYourAnswersLabel = Do you want to add a country to the transit route?
+routeDetails.routing.addCountryOfRoutingYesNo.error.required = Select yes if you want to add a country to the transit route
+routeDetails.routing.addCountryOfRoutingYesNo.change.hidden = if you want to add a country to the transit route
+
+routeDetails.routing.countryOfRouting.title = Which country do you want to add to the transit route?
+routeDetails.routing.countryOfRouting.heading = Which country do you want to add to the transit route?
+routeDetails.routing.countryOfRouting.error.required = Enter which country you want to add to the transit route
+routeDetails.routing.countryOfRouting.hint = Enter the country, like France or Portugal.
+routeDetails.routing.countryOfRouting.placeholder = Select a country
+routeDetails.routing.countryOfRouting.checkYourAnswersLabel = Country of routing {0}
+routeDetails.routing.countryOfRouting.change.hidden = country of routing {0}

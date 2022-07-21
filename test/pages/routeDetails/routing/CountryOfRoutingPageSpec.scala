@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.routeDetails
+package pages.routeDetails.routing
 
-import models.domain.UserAnswersReader
-import models.journeyDomain.JourneyDomainModel
+import models.reference.Country
+import pages.behaviours.PageBehaviours
 
-case class RouteDetailsDomain(
-  routing: RoutingDomain
-) extends JourneyDomainModel
+class CountryOfRoutingPageSpec extends PageBehaviours {
 
-object RouteDetailsDomain {
+  "CountryOfRoutingPage" - {
 
-  implicit val userAnswersReader: UserAnswersReader[RouteDetailsDomain] = {
+    beRetrievable[Country](CountryOfRoutingPage(index))
 
-    for {
-      routing <- UserAnswersReader[RoutingDomain]
-    } yield RouteDetailsDomain(
-      routing
-    )
+    beSettable[Country](CountryOfRoutingPage(index))
+
+    beRemovable[Country](CountryOfRoutingPage(index))
   }
 }

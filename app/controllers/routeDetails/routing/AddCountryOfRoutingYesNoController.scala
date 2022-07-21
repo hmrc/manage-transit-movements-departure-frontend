@@ -44,7 +44,7 @@ class AddCountryOfRoutingYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.addCountryOfRoutingYesNo")
+  private val form = formProvider("routeDetails.routing.addCountryOfRoutingYesNo")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

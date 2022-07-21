@@ -36,7 +36,7 @@ import scala.concurrent.Future
 class AddCountryOfRoutingYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
   private val formProvider                       = new YesNoFormProvider()
-  private val form                               = formProvider("routeDetails.addCountryOfRoutingYesNo")
+  private val form                               = formProvider("routeDetails.routing.addCountryOfRoutingYesNo")
   private val mode                               = NormalMode
   private lazy val addCountryOfRoutingYesNoRoute = routes.AddCountryOfRoutingYesNoController.onPageLoad(lrn, mode).url
 

@@ -16,25 +16,43 @@
 
 package utils.cyaHelpers.routeDetails
 
-import models.{Mode, UserAnswers}
-import pages.routeDetails.routing.{AddCountryOfRoutingYesNoPage, BindingItineraryPage}
+import models.journeyDomain.routeDetails.CountryOfRoutingDomain
+import models.reference.{Country, CustomsOffice}
+import models.{Index, Mode, UserAnswers}
+import pages.routeDetails.routing._
 import play.api.i18n.Messages
+import play.api.libs.json.Reads
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
 
 class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
+  def officeOfDestination: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
+    page = OfficeOfDestinationPage,
+    formatAnswer = formatAsText,
+    prefix = "routeDetails.routing.officeOfDestination",
+    id = Some("office-of-destination")
+  )
+
   def bindingItinerary: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = BindingItineraryPage,
     formatAnswer = formatAsYesOrNo,
-    prefix = "routeDetails.bindingItinerary",
+    prefix = "routeDetails.routing.bindingItinerary",
     id = Some("binding-itinerary")
   )
 
   def addCountryOfRouting: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = AddCountryOfRoutingYesNoPage,
     formatAnswer = formatAsYesOrNo,
-    prefix = "routeDetails.addCountryOfRoutingYesNo",
+    prefix = "routeDetails.routing.addCountryOfRoutingYesNo",
     id = Some("add-country-of-routing")
   )
+
+  def countryOfRouting(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[CountryOfRoutingDomain, Country](
+    page = CountryOfRoutingPage(index),
+    formatAnswer = formatAsText,
+    prefix = "routeDetails.routing.countryOfRouting",
+    id = Some(s"change-country-of-routing-${index.display}"),
+    args = index.display
+  )(CountryOfRoutingDomain.userAnswersReader(index), implicitly[Reads[Country]])
 }

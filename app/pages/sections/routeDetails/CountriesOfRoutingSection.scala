@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.routeDetails
+package pages.sections.routeDetails
 
-import models.domain.UserAnswersReader
-import models.journeyDomain.JourneyDomainModel
+import pages.sections.Section
+import play.api.libs.json.{JsArray, JsPath}
 
-case class RouteDetailsDomain(
-  routing: RoutingDomain
-) extends JourneyDomainModel
+case object CountriesOfRoutingSection extends Section[JsArray] {
 
-object RouteDetailsDomain {
+  override def path: JsPath = RoutingSection.path \ toString
 
-  implicit val userAnswersReader: UserAnswersReader[RouteDetailsDomain] = {
-
-    for {
-      routing <- UserAnswersReader[RoutingDomain]
-    } yield RouteDetailsDomain(
-      routing
-    )
-  }
+  override def toString: String = "countriesOfRouting"
 }

@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.routeDetails
+package forms
 
-import models.domain.UserAnswersReader
-import models.journeyDomain.JourneyDomainModel
+import forms.mappings.Mappings
+import models.CountryList
+import models.reference.Country
+import play.api.data.Form
 
-case class RouteDetailsDomain(
-  routing: RoutingDomain
-) extends JourneyDomainModel
+import javax.inject.Inject
 
-object RouteDetailsDomain {
+class CountryFormProvider @Inject() extends Mappings {
 
-  implicit val userAnswersReader: UserAnswersReader[RouteDetailsDomain] = {
-
-    for {
-      routing <- UserAnswersReader[RoutingDomain]
-    } yield RouteDetailsDomain(
-      routing
+  def apply(prefix: String, countryList: CountryList): Form[Country] =
+    Form(
+      "value" -> country(countryList, s"$prefix.error.required")
     )
-  }
 }

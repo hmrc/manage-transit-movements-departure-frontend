@@ -1,15 +1,20 @@
 
+GET        /:lrn/route-details/office-of-destination                        controllers.routeDetails.routing.OfficeOfDestinationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/office-of-destination                        controllers.routeDetails.routing.OfficeOfDestinationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/change-office-of-destination                 controllers.routeDetails.routing.OfficeOfDestinationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/change-office-of-destination                 controllers.routeDetails.routing.OfficeOfDestinationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
 GET        /:lrn/route-details/binding-itinerary                            controllers.routeDetails.routing.BindingItineraryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/route-details/binding-itinerary                            controllers.routeDetails.routing.BindingItineraryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/route-details/change-binding-itinerary                     controllers.routeDetails.routing.BindingItineraryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/route-details/change-binding-itinerary                     controllers.routeDetails.routing.BindingItineraryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/route-details/add-country-of-routing                       controllers.routeDetails.routing.AddCountryOfRoutingYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/route-details/add-country-of-routing                       controllers.routeDetails.routing.AddCountryOfRoutingYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/route-details/change-add-country-of-routing                controllers.routeDetails.routing.AddCountryOfRoutingYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/route-details/change-add-country-of-routing                controllers.routeDetails.routing.AddCountryOfRoutingYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/route-details/transit-route-add-country                    controllers.routeDetails.routing.AddCountryOfRoutingYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/transit-route-add-country                    controllers.routeDetails.routing.AddCountryOfRoutingYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/change-transit-route-add-country             controllers.routeDetails.routing.AddCountryOfRoutingYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/change-transit-route-add-country             controllers.routeDetails.routing.AddCountryOfRoutingYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/route-details/office-of-destination                        controllers.routeDetails.routing.OfficeOfDestinationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/route-details/office-of-destination                        controllers.routeDetails.routing.OfficeOfDestinationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/route-details/change-office-of-destination                 controllers.routeDetails.routing.OfficeOfDestinationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/route-details/change-office-of-destination                 controllers.routeDetails.routing.OfficeOfDestinationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/route-details/transit-route-country/:index                 controllers.routeDetails.routing.CountryOfRoutingController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode, index: Index)
+POST       /:lrn/route-details/transit-route-country/:index                 controllers.routeDetails.routing.CountryOfRoutingController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode, index: Index)
+GET        /:lrn/route-details/change-transit-route-country/:index          controllers.routeDetails.routing.CountryOfRoutingController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
+POST       /:lrn/route-details/change-transit-route-country/:index          controllers.routeDetails.routing.CountryOfRoutingController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)

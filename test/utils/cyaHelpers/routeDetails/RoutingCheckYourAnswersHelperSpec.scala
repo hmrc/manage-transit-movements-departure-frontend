@@ -19,17 +19,62 @@ package utils.cyaHelpers.routeDetails
 import base.SpecBase
 import controllers.routeDetails.routing.routes
 import generators.Generators
-import models.Mode
+import models.reference.{Country, CustomsOffice}
+import models.{Mode, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.routing.{AddCountryOfRoutingYesNoPage, BindingItineraryPage}
+import pages.routeDetails.routing._
+import uk.gov.hmrc.govukfrontend.views.Aliases.{Key, SummaryListRow, Value}
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
 
 class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "RoutingCheckYourAnswersHelper" - {
+
+    "officeOfDeparture" - {
+      "must return None" - {
+        "when OfficeOfDestinationPage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new RoutingCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.officeOfDestination
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when OfficeOfDestinationPage defined" in {
+          forAll(arbitrary[CustomsOffice], arbitrary[Mode]) {
+            (customsOffice, mode) =>
+              val answers = emptyUserAnswers.setValue(OfficeOfDestinationPage, customsOffice)
+
+              val helper = new RoutingCheckYourAnswersHelper(answers, mode)
+              val result = helper.officeOfDestination
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Office of destination".toText),
+                  value = Value(s"$customsOffice".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = routes.OfficeOfDestinationController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("office of destination"),
+                          attributes = Map("id" -> "office-of-destination")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
 
     "bindingItinerary" - {
       "must return None" - {
@@ -108,6 +153,51 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                           href = routes.AddCountryOfRoutingYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add a country to the transit route"),
                           attributes = Map("id" -> "add-country-of-routing")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "countryOfRouting" - {
+      "must return None" - {
+        "when CountryOfRoutingPage undefined at index" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new RoutingCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.countryOfRouting(index)
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when CountryOfRoutingPage defined at index" in {
+          forAll(arbitrary[Mode], arbitrary[Country]) {
+            (mode, country) =>
+              val answers = emptyUserAnswers
+                .setValue(CountryOfRoutingPage(index), country)
+
+              val helper = new RoutingCheckYourAnswersHelper(answers, mode)
+              val result = helper.countryOfRouting(index)
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Country of routing 1".toText),
+                  value = Value(country.description.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = routes.CountryOfRoutingController.onPageLoad(answers.lrn, NormalMode, index).url,
+                          visuallyHiddenText = Some("country of routing 1"),
+                          attributes = Map("id" -> "change-country-of-routing-1")
                         )
                       )
                     )

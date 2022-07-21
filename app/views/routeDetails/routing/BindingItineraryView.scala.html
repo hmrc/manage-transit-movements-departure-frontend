@@ -30,12 +30,12 @@
 @(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @html = {
-    <p class="govuk-body">@messages("routeDetails.bindingItinerary.paragraph1")</p>
-    <p class="govuk-body">@messages("routeDetails.bindingItinerary.paragraph2")</p>
+    <p class="govuk-body">@messages("routeDetails.routing.bindingItinerary.paragraph1")</p>
+    <p class="govuk-body">@messages("routeDetails.routing.bindingItinerary.paragraph2")</p>
 }
 
 @mainTemplate(
-    title = messages("routeDetails.bindingItinerary.title"),
+    title = messages("routeDetails.routing.bindingItinerary.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -47,7 +47,7 @@
         @inputYesNo(
             field = form("value"),
             yesNoType = YesNoWithAdditionalHtml(
-                heading = messages("routeDetails.bindingItinerary.heading"),
+                heading = messages("routeDetails.routing.bindingItinerary.heading"),
                 caption = Some(messages("routeDetails.caption")),
                 additionalHtml = html
             )

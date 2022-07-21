@@ -19,10 +19,12 @@ package controllers.routeDetails.routing
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CustomsOfficeFormProvider
-import models.{LocalReferenceNumber, Mode}
+import models.reference.CustomsOffice
+import models.{CustomsOfficeList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.routeDetails.Routing
 import pages.routeDetails.routing.OfficeOfDestinationPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -46,14 +48,16 @@ class OfficeOfDestinationController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  private def form(customsOfficeList: CustomsOfficeList): Form[CustomsOffice] =
+    formProvider("routeDetails.routing.officeOfDestination", customsOfficeList)
+
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       service.getCustomsOfficesOfDeparture.map {
         customsOfficeList =>
-          val form = formProvider("routeDetails.routing.officeOfDestination", customsOfficeList)
           val preparedForm = request.userAnswers.get(OfficeOfDestinationPage) match {
-            case None        => form
-            case Some(value) => form.fill(value)
+            case None        => form(customsOfficeList)
+            case Some(value) => form(customsOfficeList).fill(value)
           }
 
           Ok(view(preparedForm, lrn, customsOfficeList.customsOffices, mode))
@@ -64,8 +68,7 @@ class OfficeOfDestinationController @Inject() (
     implicit request =>
       service.getCustomsOfficesOfDeparture.flatMap {
         customsOfficeList =>
-          val form = formProvider("routeDetails.routing.officeOfDestination", customsOfficeList)
-          form
+          form(customsOfficeList)
             .bindFromRequest()
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),

@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.routeDetails.routing
 
+import controllers.routeDetails.routing.routes
+import models.reference.Country
 import models.{Index, Mode, UserAnswers}
-import navigation.routeDetails.CountryOfRoutingNavigator
+import pages.QuestionPage
+import pages.sections.routeDetails.CountriesOfRoutingSection
+import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-class FakeNavigator(desiredRoute: Call) extends Navigator {
-  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
-}
+case class CountryOfRoutingPage(index: Index) extends QuestionPage[Country] {
 
-class FakeGuaranteeNavigator(desiredRoute: Call, index: Index) extends GuaranteeNavigator(index) {
-  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
-}
+  override def path: JsPath = CountriesOfRoutingSection.path \ index.position \ toString
 
-class FakeCountryOfRoutingNavigator(desiredRoute: Call, index: Index) extends CountryOfRoutingNavigator(index) {
-  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+  override def toString: String = "countryOfRouting"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.CountryOfRoutingController.onPageLoad(userAnswers.lrn, mode, index))
 }

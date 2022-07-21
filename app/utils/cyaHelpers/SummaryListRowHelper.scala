@@ -78,7 +78,7 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
   ): SummaryListRow =
     buildSimpleRow(
       prefix = prefix,
-      label = messages(s"$prefix.checkYourAnswersLabel", args: _*).toText,
+      label = messages(s"$prefix.checkYourAnswersLabel", args: _*),
       answer = answer,
       id = id,
       call = Some(call),
@@ -92,22 +92,22 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
   ): SummaryListRow =
     buildSimpleRow(
       prefix = prefix,
-      label = messages(s"$prefix.checkYourAnswersLabel", args: _*).toText,
+      label = messages(s"$prefix.checkYourAnswersLabel", args: _*),
       answer = answer,
       id = None,
       call = None
     )
 
-  private def buildSimpleRow(
+  protected def buildSimpleRow(
     prefix: String,
-    label: Content,
+    label: String,
     answer: Content,
     id: Option[String],
     call: Option[Call],
     args: Any*
   ): SummaryListRow =
     SummaryListRow(
-      key = Key(label),
+      key = label.toKey,
       value = Value(answer),
       actions = call.map {
         route =>

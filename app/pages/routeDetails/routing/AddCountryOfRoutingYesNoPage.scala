@@ -19,15 +19,23 @@ package pages.routeDetails.routing
 import controllers.routeDetails.routing.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.RoutingSection
+import pages.sections.routeDetails.{CountriesOfRoutingSection, RoutingSection}
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
+
+import scala.util.Try
 
 case object AddCountryOfRoutingYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = RoutingSection.path \ toString
 
   override def toString: String = "addCountryOfRoutingYesNo"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(false) => userAnswers.remove(CountriesOfRoutingSection)
+      case _           => super.cleanup(value, userAnswers)
+    }
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.AddCountryOfRoutingYesNoController.onPageLoad(userAnswers.lrn, mode))
