@@ -64,7 +64,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
           formWithErrors => BadRequest(view(formWithErrors, lrn, countries, allowMoreCountries)),
           {
             case true  => Redirect(CountryOfRoutingController.onPageLoad(lrn, NormalMode, Index(numberOfCountries)))
-            case false => Redirect(Call("GET", "#")) // TODO - redirect to check your answers
+            case false => Redirect(CheckYourAnswersController.onPageLoad(lrn))
           }
         )
   }

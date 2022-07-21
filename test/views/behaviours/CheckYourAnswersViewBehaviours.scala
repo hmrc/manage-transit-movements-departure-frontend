@@ -53,6 +53,13 @@ trait CheckYourAnswersViewBehaviours extends SummaryListViewBehaviours with Gene
             behave like pageWithoutContent(doc, "h2", sectionTitle)
         })
       }
+
+      "must render link to addAnotherPage" - {
+        sections.foreach(_.addAnotherLink.map {
+          addAnotherLink =>
+            behave like pageWithLink(addAnotherLink.id, addAnotherLink.text, addAnotherLink.href)
+        })
+      }
     }
   }
 }
