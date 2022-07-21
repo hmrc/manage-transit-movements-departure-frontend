@@ -20,9 +20,12 @@ import models.journeyDomain.routeDetails.CountryOfRoutingDomain
 import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode, UserAnswers}
 import pages.routeDetails.routing._
+import pages.sections.routeDetails.CountriesOfRoutingSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
+import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
+import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import utils.cyaHelpers.AnswersHelper
 
 class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
@@ -55,4 +58,16 @@ class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
     id = Some(s"change-country-of-routing-${index.display}"),
     args = index.display
   )(CountryOfRoutingDomain.userAnswersReader(index), implicitly[Reads[Country]])
+
+  def listItems: Seq[Either[ListItem, ListItem]] =
+    buildListItems(CountriesOfRoutingSection) {
+      position =>
+        val index = Index(position)
+        buildListItem[CountryOfRoutingDomain, Country](
+          page = CountryOfRoutingPage(Index(position)),
+          getName = _.country,
+          formatName = _.toString,
+          removeRoute = Call("GET", "#") // TODO
+        )(CountryOfRoutingDomain.userAnswersReader(index), implicitly[Reads[Country]])
+    }
 }

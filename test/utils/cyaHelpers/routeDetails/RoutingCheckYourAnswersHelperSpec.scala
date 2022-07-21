@@ -19,14 +19,15 @@ package utils.cyaHelpers.routeDetails
 import base.SpecBase
 import controllers.routeDetails.routing.routes
 import generators.Generators
-import models.reference.{Country, CustomsOffice}
-import models.{Mode, NormalMode}
+import models.reference.{Country, CountryCode, CustomsOffice}
+import models.{Index, Mode, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.routing._
 import uk.gov.hmrc.govukfrontend.views.Aliases.{Key, SummaryListRow, Value}
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
+import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 
 class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -206,6 +207,33 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
               )
           }
         }
+      }
+    }
+
+    "listItems" - {
+      "must return list items" in {
+        def countryCode = arbitrary[CountryCode].sample.value
+        val answers = emptyUserAnswers
+          .setValue(CountryOfRoutingPage(Index(0)), Country(countryCode, "France"))
+          .setValue(CountryOfRoutingPage(Index(1)), Country(countryCode, "Portugal"))
+
+        val helper = new RoutingCheckYourAnswersHelper(answers, NormalMode)
+        helper.listItems mustBe Seq(
+          Right(
+            ListItem(
+              name = "France",
+              changeUrl = routes.CountryOfRoutingController.onPageLoad(answers.lrn, NormalMode, Index(0)).url,
+              removeUrl = "#" // TODO
+            )
+          ),
+          Right(
+            ListItem(
+              name = "Portugal",
+              changeUrl = routes.CountryOfRoutingController.onPageLoad(answers.lrn, NormalMode, Index(1)).url,
+              removeUrl = "#" // TODO
+            )
+          )
+        )
       }
     }
   }
