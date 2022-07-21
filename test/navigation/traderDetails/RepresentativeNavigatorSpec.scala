@@ -17,11 +17,13 @@
 package navigation.traderDetails
 
 import base.SpecBase
-import controllers.traderDetails.representative.{routes => repRoutes}
 import controllers.traderDetails.{routes => tdRoutes}
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
+import models.DeclarationType.{Option1, Option2, Option3, Option4}
 import models.{CheckMode, NormalMode}
+import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.preTaskList.DeclarationTypePage
 
 class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
 
@@ -34,12 +36,24 @@ class RepresentativeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
       val mode = NormalMode
 
       "when answers complete" - {
-        "must redirect to check your answers" in {
+        "must redirect to ApprovedOperator page when declaration is type not TIR" in {
           forAll(arbitraryRepresentativeAnswers(emptyUserAnswers)) {
             answers =>
+              val nonTir         = Gen.oneOf(Option1, Option2, Option3).sample.value
+              val updatedAnswers = answers.setValue(DeclarationTypePage, nonTir)
               navigator
-                .nextPage(answers, mode)
-                .mustBe(repRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+                .nextPage(updatedAnswers, mode)
+                .mustBe(controllers.traderDetails.consignment.routes.ApprovedOperatorController.onPageLoad(updatedAnswers.lrn, NormalMode))
+          }
+        }
+
+        "must redirect to EoriYesNo page when declaration is type TIR" in {
+          forAll(arbitraryRepresentativeAnswers(emptyUserAnswers)) {
+            answers =>
+              val updatedAnswers = answers.setValue(DeclarationTypePage, Option4)
+              navigator
+                .nextPage(updatedAnswers, mode)
+                .mustBe(controllers.traderDetails.consignment.consignor.routes.EoriYesNoController.onPageLoad(updatedAnswers.lrn, NormalMode))
           }
         }
       }

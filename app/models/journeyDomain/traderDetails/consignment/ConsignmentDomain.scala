@@ -32,7 +32,7 @@ case class ConsignmentDomain(
 ) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    Some(controllers.traderDetails.consignment.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+    Some(controllers.traderDetails.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
 }
 
 object ConsignmentDomain {

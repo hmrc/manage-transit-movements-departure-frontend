@@ -17,10 +17,12 @@
 package models.journeyDomain.traderDetails
 
 import cats.implicits._
+import models.DeclarationType.Option4
 import models.domain._
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.traderDetails.representative.RepresentativeCapacity
-import models.{EoriNumber, UserAnswers}
+import models.{EoriNumber, NormalMode, UserAnswers}
+import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.representative._
 import play.api.mvc.Call
 
@@ -32,7 +34,10 @@ case class RepresentativeDomain(
 ) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    Some(controllers.traderDetails.representative.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+    userAnswers.get(DeclarationTypePage) map {
+      case Option4 => controllers.traderDetails.consignment.consignor.routes.EoriYesNoController.onPageLoad(userAnswers.lrn, NormalMode)
+      case _       => controllers.traderDetails.consignment.routes.ApprovedOperatorController.onPageLoad(userAnswers.lrn, NormalMode)
+    }
 }
 
 object RepresentativeDomain {

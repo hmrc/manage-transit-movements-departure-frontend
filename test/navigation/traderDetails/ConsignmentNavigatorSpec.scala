@@ -39,7 +39,7 @@ class ConsignmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(consignmentRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+                .mustBe(controllers.traderDetails.routes.CheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
       }

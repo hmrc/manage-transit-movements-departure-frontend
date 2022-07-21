@@ -17,7 +17,7 @@
 package navigation.traderDetails
 
 import base.SpecBase
-import controllers.traderDetails.holderOfTransit.{routes => holderOfTransitRoutes}
+import controllers.traderDetails.representative.{routes => representativeRoutes}
 import controllers.traderDetails.{routes => tdRoutes}
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models._
@@ -39,7 +39,7 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(holderOfTransitRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+                .mustBe(representativeRoutes.EoriController.onPageLoad(answers.lrn, NormalMode))
           }
         }
       }
@@ -55,7 +55,7 @@ class HolderOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(tdRoutes.CheckYourAnswersController.onPageLoad(answers.lrn))
+                .mustBe(controllers.traderDetails.routes.ActingAsRepresentativeController.onPageLoad(answers.lrn, NormalMode))
           }
         }
       }
