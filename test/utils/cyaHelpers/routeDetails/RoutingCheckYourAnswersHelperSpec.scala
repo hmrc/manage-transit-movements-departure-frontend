@@ -223,14 +223,14 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
             ListItem(
               name = "France",
               changeUrl = routes.CountryOfRoutingController.onPageLoad(answers.lrn, NormalMode, Index(0)).url,
-              removeUrl = "#" // TODO
+              removeUrl = routes.RemoveCountryOfRoutingYesNoController.onPageLoad(answers.lrn, Index(0)).url
             )
           ),
           Right(
             ListItem(
               name = "Portugal",
               changeUrl = routes.CountryOfRoutingController.onPageLoad(answers.lrn, NormalMode, Index(1)).url,
-              removeUrl = "#" // TODO
+              removeUrl = routes.RemoveCountryOfRoutingYesNoController.onPageLoad(answers.lrn, Index(1)).url
             )
           )
         )
