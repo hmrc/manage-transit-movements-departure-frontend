@@ -565,7 +565,8 @@ routeDetails.routing.addCountryOfRoutingYesNo.change.hidden = if you want to add
 
 routeDetails.routing.countryOfRouting.title = Which country do you want to add to the transit route?
 routeDetails.routing.countryOfRouting.heading = Which country do you want to add to the transit route?
-routeDetails.routing.countryOfRouting.error.required = Enter the country you want to add to the transit route
+routeDetails.routing.countryOfRouting.error.required = Enter which country you want to add to the transit route
+routeDetails.routing.countryOfRouting.hint = Enter the country, like France or Portugal.
 routeDetails.routing.countryOfRouting.placeholder = Select a country
 routeDetails.routing.countryOfRouting.checkYourAnswersLabel = Country of routing {0}
 routeDetails.routing.countryOfRouting.change.hidden = country of routing {0}

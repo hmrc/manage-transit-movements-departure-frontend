@@ -55,7 +55,7 @@ class CountryOfRoutingViewSpec extends InputSelectViewBehaviours[Country] with G
 
   behave like pageWithSelect
 
-  behave like pageWithoutHint()
+  behave like pageWithHint("Enter the country, like France or Portugal.")
 
   behave like pageWithSubmitButton("Save and continue")
 }
