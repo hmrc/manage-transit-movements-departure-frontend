@@ -64,7 +64,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
     "must redirect to Session Expired for a GET if no existing data is found" in {
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, controllers.traderDetails.holderOfTransit.routes.CheckYourAnswersController.onPageLoad(lrn).url)
+      val request = FakeRequest(GET, controllers.traderDetails.routes.CheckYourAnswersController.onPageLoad(lrn).url)
 
       val result = route(app, request).value
 
