@@ -24,7 +24,7 @@ import models.{Address, EoriNumber}
 import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.holderOfTransit._
 
-trait HolderOfTransitDomain extends JourneyDomainModel {
+sealed trait HolderOfTransitDomain extends JourneyDomainModel {
   val name: String
   val address: Address
   val additionalContact: Option[AdditionalContactDomain]

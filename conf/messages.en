@@ -570,3 +570,20 @@ routeDetails.routing.countryOfRouting.hint = Enter the country, like France or P
 routeDetails.routing.countryOfRouting.placeholder = Select a country
 routeDetails.routing.countryOfRouting.checkYourAnswersLabel = Country of routing {0}
 routeDetails.routing.countryOfRouting.change.hidden = country of routing {0}
+
+routeDetails.routing.removeCountryOfRoutingYesNo.title = Are you sure you want to remove this country from the transit route?
+routeDetails.routing.removeCountryOfRoutingYesNo.heading = Are you sure you want to remove this country from the transit route?
+routeDetails.routing.removeCountryOfRoutingYesNo.error.required = Select yes if you want to remove this country from the transit route
+
+routeDetails.routing.addAnotherCountryOfRouting.singular.title = You have added {0} country to the transit route
+routeDetails.routing.addAnotherCountryOfRouting.singular.heading = You have added {0} country to the transit route
+routeDetails.routing.addAnotherCountryOfRouting.plural.title = You have added {0} countries to the transit route
+routeDetails.routing.addAnotherCountryOfRouting.plural.heading = You have added {0} countries to the transit route
+routeDetails.routing.addAnotherCountryOfRouting.error.required = Select yes if you need to add another country to the transit route
+routeDetails.routing.addAnotherCountryOfRouting.label = Do you want to add another country to the transit route?
+routeDetails.routing.addAnotherCountryOfRouting.maxLimit.label = You cannot add any more countries to the transit route. To add another country, you need to remove one first.
+
+routeDetails.routing.checkYourAnswers.title = Check your answers
+routeDetails.routing.checkYourAnswers.heading = Check your answers
+routeDetails.routing.checkYourAnswers.countries.subheading = Transit route countries
+routeDetails.routing.checkYourAnswers.addOrRemove = Add or remove transit route countries

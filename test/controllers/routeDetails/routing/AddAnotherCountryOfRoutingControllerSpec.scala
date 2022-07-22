@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.guaranteeDetails
+package controllers.routeDetails.routing
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.AddAnotherFormProvider
@@ -30,23 +30,23 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
-import viewModels.guaranteeDetails.AddAnotherGuaranteeViewModel
-import viewModels.guaranteeDetails.AddAnotherGuaranteeViewModel.AddAnotherGuaranteeViewModelProvider
-import views.html.guaranteeDetails.AddAnotherGuaranteeView
+import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel
+import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel.AddAnotherCountryOfRoutingViewModelProvider
+import views.html.routeDetails.routing.AddAnotherCountryOfRoutingView
 
-class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
+class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
-  private val formProvider                       = new AddAnotherFormProvider()
-  private def form(allowMoreGuarantees: Boolean) = formProvider("guaranteeDetails.addAnotherGuarantee", allowMoreGuarantees)
+  private val formProvider                      = new AddAnotherFormProvider()
+  private def form(allowMoreCountries: Boolean) = formProvider("routeDetails.routing.addAnotherCountryOfRouting", allowMoreCountries)
 
-  private lazy val addAnotherGuaranteeRoute = routes.AddAnotherGuaranteeController.onPageLoad(lrn).url
+  private lazy val addAnotherCountryOfRoutingRoute = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn).url
 
-  private val mockViewModelProvider = mock[AddAnotherGuaranteeViewModelProvider]
+  private val mockViewModelProvider = mock[AddAnotherCountryOfRoutingViewModelProvider]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[AddAnotherGuaranteeViewModelProvider]).toInstance(mockViewModelProvider))
+      .overrides(bind(classOf[AddAnotherCountryOfRoutingViewModelProvider]).toInstance(mockViewModelProvider))
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -57,16 +57,16 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
   private val listItems         = Seq.fill(Gen.choose(1: Int, 8: Int).sample.value)(listItem)
   private val maxedOutListItems = Seq.fill(9: Int)(listItem)
 
-  "AddAnotherGuaranteeController" - {
+  "AddAnotherCountryOfRoutingController" - {
 
-    "redirect to add guarantee yes/no page" - {
-      "when 0 guarantees" in {
+    "redirect to binding itinerary page" - {
+      "when 0 countries" in {
         when(mockViewModelProvider.apply(any())(any()))
-          .thenReturn(AddAnotherGuaranteeViewModel(Nil))
+          .thenReturn(AddAnotherCountryOfRoutingViewModel(Nil))
 
         setExistingUserAnswers(emptyUserAnswers)
 
-        val request = FakeRequest(GET, addAnotherGuaranteeRoute)
+        val request = FakeRequest(GET, addAnotherCountryOfRoutingRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(app, request).value
@@ -74,53 +74,53 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual
-          routes.AddGuaranteeYesNoController.onPageLoad(lrn).url
+          routes.BindingItineraryController.onPageLoad(lrn, NormalMode).url
       }
     }
 
     "must return OK and the correct view for a GET" - {
       "when max limit not reached" in {
 
-        val allowMoreGuarantees = true
+        val allowMoreCountries = true
 
         when(mockViewModelProvider.apply(any())(any()))
-          .thenReturn(AddAnotherGuaranteeViewModel(listItems))
+          .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
 
         setExistingUserAnswers(emptyUserAnswers)
 
-        val request = FakeRequest(GET, addAnotherGuaranteeRoute)
+        val request = FakeRequest(GET, addAnotherCountryOfRoutingRoute)
 
         val result = route(app, request).value
 
-        val view = injector.instanceOf[AddAnotherGuaranteeView]
+        val view = injector.instanceOf[AddAnotherCountryOfRoutingView]
 
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(allowMoreGuarantees), lrn, listItems, allowMoreGuarantees)(request, messages).toString
+          view(form(allowMoreCountries), lrn, listItems, allowMoreCountries)(request, messages).toString
       }
 
       "when max limit reached" in {
 
-        val allowMoreGuarantees = false
+        val allowMoreCountries = false
 
         val listItems = maxedOutListItems
 
         when(mockViewModelProvider.apply(any())(any()))
-          .thenReturn(AddAnotherGuaranteeViewModel(listItems))
+          .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
 
         setExistingUserAnswers(emptyUserAnswers)
 
-        val request = FakeRequest(GET, addAnotherGuaranteeRoute)
+        val request = FakeRequest(GET, addAnotherCountryOfRoutingRoute)
 
         val result = route(app, request).value
 
-        val view = injector.instanceOf[AddAnotherGuaranteeView]
+        val view = injector.instanceOf[AddAnotherCountryOfRoutingView]
 
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(allowMoreGuarantees), lrn, listItems, allowMoreGuarantees)(request, messages).toString
+          view(form(allowMoreCountries), lrn, listItems, allowMoreCountries)(request, messages).toString
       }
     }
 
@@ -128,11 +128,11 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
       "when yes submitted" - {
         "must redirect to guarantee type page at next index" in {
           when(mockViewModelProvider.apply(any())(any()))
-            .thenReturn(AddAnotherGuaranteeViewModel(listItems))
+            .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
 
           setExistingUserAnswers(emptyUserAnswers)
 
-          val request = FakeRequest(POST, addAnotherGuaranteeRoute)
+          val request = FakeRequest(POST, addAnotherCountryOfRoutingRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
           val result = route(app, request).value
@@ -140,18 +140,18 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.guaranteeDetails.guarantee.routes.GuaranteeTypeController.onPageLoad(lrn, NormalMode, Index(listItems.length)).url
+            controllers.routeDetails.routing.routes.CountryOfRoutingController.onPageLoad(lrn, NormalMode, Index(listItems.length)).url
         }
       }
 
       "when no submitted" - {
-        "must redirect to task list" in {
+        "must redirect to check your answers" in {
           when(mockViewModelProvider.apply(any())(any()))
-            .thenReturn(AddAnotherGuaranteeViewModel(listItems))
+            .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
 
           setExistingUserAnswers(emptyUserAnswers)
 
-          val request = FakeRequest(POST, addAnotherGuaranteeRoute)
+          val request = FakeRequest(POST, addAnotherCountryOfRoutingRoute)
             .withFormUrlEncodedBody(("value", "false"))
 
           val result = route(app, request).value
@@ -159,19 +159,19 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.routes.TaskListController.onPageLoad(lrn).url
+            routes.CheckYourAnswersController.onPageLoad(lrn).url
         }
       }
     }
 
     "when max limit reached" - {
-      "must redirect to task list" in {
+      "must redirect to check your answers" in {
         when(mockViewModelProvider.apply(any())(any()))
-          .thenReturn(AddAnotherGuaranteeViewModel(maxedOutListItems))
+          .thenReturn(AddAnotherCountryOfRoutingViewModel(maxedOutListItems))
 
         setExistingUserAnswers(emptyUserAnswers)
 
-        val request = FakeRequest(POST, addAnotherGuaranteeRoute)
+        val request = FakeRequest(POST, addAnotherCountryOfRoutingRoute)
           .withFormUrlEncodedBody(("value", ""))
 
         val result = route(app, request).value
@@ -179,32 +179,32 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual
-          controllers.routes.TaskListController.onPageLoad(lrn).url
+          routes.CheckYourAnswersController.onPageLoad(lrn).url
       }
     }
 
     "must return a Bad Request and errors" - {
       "when invalid data is submitted and max limit not reached" in {
         when(mockViewModelProvider.apply(any())(any()))
-          .thenReturn(AddAnotherGuaranteeViewModel(listItems))
+          .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
 
-        val allowMoreGuarantees = true
+        val allowMoreCountries = true
 
         setExistingUserAnswers(emptyUserAnswers)
 
-        val request = FakeRequest(POST, addAnotherGuaranteeRoute)
+        val request = FakeRequest(POST, addAnotherCountryOfRoutingRoute)
           .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form(allowMoreGuarantees).bind(Map("value" -> ""))
+        val boundForm = form(allowMoreCountries).bind(Map("value" -> ""))
 
         val result = route(app, request).value
 
-        val view = injector.instanceOf[AddAnotherGuaranteeView]
+        val view = injector.instanceOf[AddAnotherCountryOfRoutingView]
 
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, lrn, listItems, allowMoreGuarantees)(request, messages).toString
+          view(boundForm, lrn, listItems, allowMoreCountries)(request, messages).toString
       }
     }
 
@@ -212,7 +212,7 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, addAnotherGuaranteeRoute)
+      val request = FakeRequest(GET, addAnotherCountryOfRoutingRoute)
 
       val result = route(app, request).value
 
@@ -225,7 +225,7 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, addAnotherGuaranteeRoute)
+      val request = FakeRequest(POST, addAnotherCountryOfRoutingRoute)
         .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value

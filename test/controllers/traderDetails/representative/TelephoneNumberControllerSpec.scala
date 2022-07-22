@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.TelephoneNumberFormProvider
 import models.NormalMode
 import navigation.Navigator
-import navigation.annotations.traderDetails.{Representative, TraderDetails}
+import navigation.annotations.traderDetails.TraderDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.traderDetails.representative.TelephoneNumberPage

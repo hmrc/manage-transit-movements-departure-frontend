@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.traderDetails
+package controllers.routeDetails.routing
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
@@ -24,27 +24,29 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import viewModels.routeDetails.routing.CheckRoutingAnswersViewModel
+import viewModels.routeDetails.routing.CheckRoutingAnswersViewModel.CheckRoutingAnswersViewModelProvider
 import viewModels.sections.Section
-import viewModels.traderDetails.TraderDetailsViewModel
-import views.html.traderDetails.CheckYourAnswersView
+import views.html.routeDetails.routing.CheckYourAnswersView
 
 import scala.concurrent.Future
 
 class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private lazy val mockViewModel = mock[TraderDetailsViewModel]
+  private lazy val mockViewModelProvider = mock[CheckRoutingAnswersViewModelProvider]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind[TraderDetailsViewModel].toInstance(mockViewModel))
+      .overrides(bind[CheckRoutingAnswersViewModelProvider].toInstance(mockViewModelProvider))
 
   "Check Your Answers Controller" - {
 
     "must return OK and the correct view for a GET" in {
       val sampleSections = listWithMaxLength[Section]().sample.value
 
-      when(mockViewModel.apply(any())(any())).thenReturn(sampleSections)
+      when(mockViewModelProvider.apply(any(), any())(any()))
+        .thenReturn(CheckRoutingAnswersViewModel(sampleSections))
 
       setExistingUserAnswers(emptyUserAnswers)
 
@@ -84,7 +86,6 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
-
     }
   }
 }

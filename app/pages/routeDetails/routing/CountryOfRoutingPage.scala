@@ -20,13 +20,13 @@ import controllers.routeDetails.routing.routes
 import models.reference.Country
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.CountriesOfRoutingSection
+import pages.sections.routeDetails.CountryOfRoutingSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case class CountryOfRoutingPage(index: Index) extends QuestionPage[Country] {
 
-  override def path: JsPath = CountriesOfRoutingSection.path \ index.position \ toString
+  override def path: JsPath = CountryOfRoutingSection(index).path \ toString
 
   override def toString: String = "countryOfRouting"
 

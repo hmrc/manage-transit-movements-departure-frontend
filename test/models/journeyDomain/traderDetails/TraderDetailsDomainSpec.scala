@@ -109,7 +109,7 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
         }
       }
 
-      "when non TIR declaration type" - {
+      "when non-TIR declaration type" - {
         "and reduced data set is missing" in {
 
           val userAnswers = emptyUserAnswers
@@ -126,59 +126,65 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
           result.left.value.page mustBe ApprovedOperatorPage
         }
 
-        "and no security and a reduced data set and more than one consignee is missing" in {
+        "and there is no security" - {
+          "and using a reduced data set" - {
+            "and more than one consignee is missing" in {
 
-          val userAnswers = emptyUserAnswers
-            .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
-            .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
-            .unsafeSetVal(hot.EoriYesNoPage)(false)
-            .unsafeSetVal(hot.NamePage)(holderOfTransitName)
-            .unsafeSetVal(hot.AddressPage)(holderOfTransitAddress)
-            .unsafeSetVal(hot.AddContactPage)(false)
-            .unsafeSetVal(ActingAsRepresentativePage)(false)
-            .unsafeSetVal(ApprovedOperatorPage)(true)
+              val userAnswers = emptyUserAnswers
+                .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
+                .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
+                .unsafeSetVal(hot.EoriYesNoPage)(false)
+                .unsafeSetVal(hot.NamePage)(holderOfTransitName)
+                .unsafeSetVal(hot.AddressPage)(holderOfTransitAddress)
+                .unsafeSetVal(hot.AddContactPage)(false)
+                .unsafeSetVal(ActingAsRepresentativePage)(false)
+                .unsafeSetVal(ApprovedOperatorPage)(true)
 
-          val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain].run(userAnswers)
+              val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain].run(userAnswers)
 
-          result.left.value.page mustBe MoreThanOneConsigneePage
+              result.left.value.page mustBe MoreThanOneConsigneePage
+            }
+          }
+
+          "and not using a reduced data set" - {
+            "and consignor EORI yes/no is missing" in {
+
+              val userAnswers = emptyUserAnswers
+                .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
+                .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
+                .unsafeSetVal(hot.EoriYesNoPage)(false)
+                .unsafeSetVal(hot.NamePage)(holderOfTransitName)
+                .unsafeSetVal(hot.AddressPage)(holderOfTransitAddress)
+                .unsafeSetVal(hot.AddContactPage)(false)
+                .unsafeSetVal(ActingAsRepresentativePage)(false)
+                .unsafeSetVal(ApprovedOperatorPage)(false)
+
+              val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain].run(userAnswers)
+
+              result.left.value.page mustBe consignor.EoriYesNoPage
+            }
+          }
         }
 
-        "and security is present and consignor eori yes/no page is missing" in {
+        "and there is security" - {
+          "and consignor EORI yes/no is missing" in {
 
-          val userAnswers = emptyUserAnswers
-            .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
-            .unsafeSetVal(SecurityDetailsTypePage)(someSecurityType)
-            .unsafeSetVal(hot.EoriYesNoPage)(false)
-            .unsafeSetVal(hot.NamePage)(holderOfTransitName)
-            .unsafeSetVal(hot.AddressPage)(holderOfTransitAddress)
-            .unsafeSetVal(hot.AddContactPage)(false)
-            .unsafeSetVal(ActingAsRepresentativePage)(false)
-            .unsafeSetVal(ApprovedOperatorPage)(arbitrary[Boolean].sample.value)
+            val userAnswers = emptyUserAnswers
+              .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
+              .unsafeSetVal(SecurityDetailsTypePage)(someSecurityType)
+              .unsafeSetVal(hot.EoriYesNoPage)(false)
+              .unsafeSetVal(hot.NamePage)(holderOfTransitName)
+              .unsafeSetVal(hot.AddressPage)(holderOfTransitAddress)
+              .unsafeSetVal(hot.AddContactPage)(false)
+              .unsafeSetVal(ActingAsRepresentativePage)(false)
+              .unsafeSetVal(ApprovedOperatorPage)(arbitrary[Boolean].sample.value)
 
-          val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain].run(userAnswers)
+            val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain].run(userAnswers)
 
-          result.left.value.page mustBe consignor.EoriYesNoPage
+            result.left.value.page mustBe consignor.EoriYesNoPage
+          }
         }
-
-        "and no security is present, reduced data set is false and consignor Eori yes/no page is missing" in {
-
-          val userAnswers = emptyUserAnswers
-            .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
-            .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
-            .unsafeSetVal(hot.EoriYesNoPage)(false)
-            .unsafeSetVal(hot.NamePage)(holderOfTransitName)
-            .unsafeSetVal(hot.AddressPage)(holderOfTransitAddress)
-            .unsafeSetVal(hot.AddContactPage)(false)
-            .unsafeSetVal(ActingAsRepresentativePage)(false)
-            .unsafeSetVal(ApprovedOperatorPage)(false)
-
-          val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain].run(userAnswers)
-
-          result.left.value.page mustBe consignor.EoriYesNoPage
-        }
-
       }
-
     }
   }
 }
