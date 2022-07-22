@@ -21,7 +21,7 @@ import forms.TelephoneNumberFormProvider
 import generators.Generators
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
-import navigation.annotations.traderDetails.HolderOfTransit
+import navigation.annotations.traderDetails.TraderDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.traderDetails.holderOfTransit.contact.{NamePage, TelephoneNumberPage}
@@ -46,7 +46,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[HolderOfTransit]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
 
   "traderDetails.holderOfTransit.contactTelephoneNumber Controller" - {
 

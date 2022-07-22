@@ -22,7 +22,7 @@ import forms.traderDetails.representative.RepresentativeCapacityFormProvider
 import models.traderDetails.representative.RepresentativeCapacity
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.traderDetails.Representative
+import navigation.annotations.traderDetails.TraderDetails
 import pages.traderDetails.representative.CapacityPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CapacityController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @Representative implicit val navigator: Navigator,
+  @TraderDetails implicit val navigator: Navigator,
   actions: Actions,
   formProvider: RepresentativeCapacityFormProvider,
   val controllerComponents: MessagesControllerComponents,

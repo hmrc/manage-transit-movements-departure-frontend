@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.EoriNumberFormProvider
 import models.NormalMode
 import navigation.Navigator
-import navigation.annotations.traderDetails.Consignment
+import navigation.annotations.traderDetails.TraderDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.traderDetails.consignment.consignee.EoriNumberPage
@@ -44,7 +44,7 @@ class EoriNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Consignment]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
 
   "EoriNumber Controller" - {
 

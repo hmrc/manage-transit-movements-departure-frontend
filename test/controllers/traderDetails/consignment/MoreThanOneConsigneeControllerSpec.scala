@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
 import models.NormalMode
 import navigation.Navigator
-import navigation.annotations.traderDetails.Consignment
+import navigation.annotations.traderDetails.TraderDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -43,7 +43,7 @@ class MoreThanOneConsigneeControllerSpec extends SpecBase with AppWithDefaultMoc
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Consignment]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
 
   "MoreThanOneConsignee Controller" - {
 

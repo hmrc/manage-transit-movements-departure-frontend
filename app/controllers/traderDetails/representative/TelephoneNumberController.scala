@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.TelephoneNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.traderDetails.Representative
+import navigation.annotations.traderDetails.TraderDetails
 import pages.traderDetails.representative.TelephoneNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class TelephoneNumberController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @Representative implicit val navigator: Navigator,
+  @TraderDetails implicit val navigator: Navigator,
   formProvider: TelephoneNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,

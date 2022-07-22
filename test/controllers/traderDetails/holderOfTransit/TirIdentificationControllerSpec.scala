@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.traderDetails.TirIdNumberFormProvider
 import models.NormalMode
 import navigation.Navigator
-import navigation.annotations.traderDetails.HolderOfTransit
+import navigation.annotations.traderDetails.TraderDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.traderDetails.holderOfTransit.TirIdentificationPage
@@ -44,7 +44,7 @@ class TirIdentificationControllerSpec extends SpecBase with AppWithDefaultMockFi
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[HolderOfTransit]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
 
   "TirIdentificationController" - {
 

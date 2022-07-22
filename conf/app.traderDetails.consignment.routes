@@ -9,5 +9,3 @@ POST       /:lrn/trader-details/consignment/more-than-one-consignee             
 GET        /:lrn/trader-details/consignment/change-more-than-one-consignee           controllers.traderDetails.consignment.MoreThanOneConsigneeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/trader-details/consignment/change-more-than-one-consignee           controllers.traderDetails.consignment.MoreThanOneConsigneeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/trader-details/consignment/check-answers                            controllers.traderDetails.consignment.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
-POST       /:lrn/trader-details/consignment/check-answers                            controllers.traderDetails.consignment.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)

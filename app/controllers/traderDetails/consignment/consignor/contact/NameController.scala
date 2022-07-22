@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.NameFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.traderDetails.Consignment
+import navigation.annotations.traderDetails.TraderDetails
 import pages.traderDetails.consignment.consignor.contact.NamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class NameController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @Consignment implicit val navigator: Navigator,
+  @TraderDetails implicit val navigator: Navigator,
   formProvider: NameFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
