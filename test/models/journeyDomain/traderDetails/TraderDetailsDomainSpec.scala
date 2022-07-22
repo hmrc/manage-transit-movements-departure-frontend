@@ -178,6 +178,7 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
         }
 
       }
+
     }
   }
 }
