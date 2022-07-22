@@ -17,7 +17,6 @@
 package controllers.traderDetails.representative
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import controllers.traderDetails.representative.routes._
 import generators.Generators
 import navigation.Navigator
 import navigation.annotations.traderDetails.TraderDetails
@@ -50,7 +49,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad(lrn).url)
+      val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(lrn).url)
 
       val result = route(app, request).value
 
@@ -65,7 +64,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
     "must redirect to Session Expired for a GET if no existing data is found" in {
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad(lrn).url)
+      val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(lrn).url)
 
       val result = route(app, request).value
 
@@ -77,7 +76,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
     "must redirect to the next page" in {
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, CheckYourAnswersController.onSubmit(lrn).url)
+      val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn).url)
 
       val result = route(app, request).value
 
