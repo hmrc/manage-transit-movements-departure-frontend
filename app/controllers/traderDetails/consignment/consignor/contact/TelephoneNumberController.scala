@@ -22,7 +22,7 @@ import forms.TelephoneNumberFormProvider
 import models.requests.SpecificDataRequestProvider1
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.traderDetails.Consignment
+import navigation.annotations.traderDetails.TraderDetails
 import pages.traderDetails.consignment.consignor.contact.{NamePage, TelephoneNumberPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -37,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class TelephoneNumberController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @Consignment implicit val navigator: Navigator,
+  @TraderDetails implicit val navigator: Navigator,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: TelephoneNumberFormProvider,
   actions: Actions,

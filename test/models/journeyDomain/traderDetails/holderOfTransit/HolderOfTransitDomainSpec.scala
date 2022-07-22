@@ -21,6 +21,7 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.DeclarationType.Option4
 import models.domain.{EitherType, UserAnswersReader}
+import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain.{HolderOfTransitEori, HolderOfTransitTIR}
 import models.{Address, DeclarationType, EoriNumber}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen

@@ -19,21 +19,15 @@ package models.journeyDomain.traderDetails.consignment
 import cats.implicits._
 import models.DeclarationType.Option4
 import models.SecurityDetailsType.NoSecurityDetails
-import models.UserAnswers
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.{JourneyDomainModel, Stage}
+import models.journeyDomain.JourneyDomainModel
 import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 import pages.traderDetails.consignment._
-import play.api.mvc.Call
 
 case class ConsignmentDomain(
   consignor: Option[ConsignmentConsignorDomain],
   consignee: Option[ConsignmentConsigneeDomain]
-) extends JourneyDomainModel {
-
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    Some(controllers.traderDetails.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
-}
+) extends JourneyDomainModel
 
 object ConsignmentDomain {
 

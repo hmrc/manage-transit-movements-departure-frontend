@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EoriNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.traderDetails.HolderOfTransit
+import navigation.annotations.traderDetails.TraderDetails
 import pages.traderDetails.holderOfTransit.EoriPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class EoriController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @HolderOfTransit implicit val navigator: Navigator,
+  @TraderDetails implicit val navigator: Navigator,
   actions: Actions,
   formProvider: EoriNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
