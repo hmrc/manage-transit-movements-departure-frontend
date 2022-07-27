@@ -23,11 +23,16 @@ import pages.sections.routeDetails.RoutingSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
+import scala.util.Try
+
 case object BindingItineraryPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = RoutingSection.path \ toString
 
   override def toString: String = "bindingItinerary"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    super.cleanup(value, userAnswers)
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.BindingItineraryController.onPageLoad(userAnswers.lrn, mode))

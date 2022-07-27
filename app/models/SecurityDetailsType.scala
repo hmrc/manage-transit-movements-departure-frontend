@@ -52,4 +52,10 @@ object SecurityDetailsType extends RadioModel[SecurityDetailsType] {
     ExitSummaryDeclarationSecurityDetails,
     EntryAndExitSummaryDeclarationSecurityDetails
   )
+
+  val securityValues: Seq[SecurityDetailsType] = Seq(
+    EntrySummaryDeclarationSecurityDetails,
+    ExitSummaryDeclarationSecurityDetails,
+    EntryAndExitSummaryDeclarationSecurityDetails
+  )
 }
