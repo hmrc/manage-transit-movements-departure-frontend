@@ -34,10 +34,8 @@ case object BindingItineraryPage extends QuestionPage[Boolean] {
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     (value, userAnswers.get(SecurityDetailsTypePage)) match {
-      case (Some(true), _) => userAnswers.remove(AddCountryOfRoutingYesNoPage)
-      case (Some(false), Some(securityValue)) if SecurityDetailsType.securityValues.contains(securityValue) =>
-        userAnswers.remove(AddCountryOfRoutingYesNoPage)
-      case _ => super.cleanup(value, userAnswers)
+      case (Some(false), Some(SecurityDetailsType.NoSecurityDetails)) => super.cleanup(value, userAnswers)
+      case _                                                          => userAnswers.remove(AddCountryOfRoutingYesNoPage)
     }
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
