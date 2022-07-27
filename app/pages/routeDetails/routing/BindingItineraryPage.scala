@@ -17,8 +17,9 @@
 package pages.routeDetails.routing
 
 import controllers.routeDetails.routing.routes
-import models.{Mode, UserAnswers}
+import models.{Mode, SecurityDetailsType, UserAnswers}
 import pages.QuestionPage
+import pages.preTaskList.SecurityDetailsTypePage
 import pages.sections.routeDetails.RoutingSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
@@ -32,7 +33,12 @@ case object BindingItineraryPage extends QuestionPage[Boolean] {
   override def toString: String = "bindingItinerary"
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    super.cleanup(value, userAnswers)
+    (value, userAnswers.get(SecurityDetailsTypePage)) match {
+      case (Some(true), _) => userAnswers.remove(AddCountryOfRoutingYesNoPage)
+      case (Some(false), Some(securityValue)) if SecurityDetailsType.securityValues.contains(securityValue) =>
+        userAnswers.remove(AddCountryOfRoutingYesNoPage)
+      case _ => super.cleanup(value, userAnswers)
+    }
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.BindingItineraryController.onPageLoad(userAnswers.lrn, mode))
