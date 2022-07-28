@@ -17,18 +17,19 @@
 package pages.routeDetails.transit
 
 import controllers.routeDetails.transit.routes
-import models.{Mode, UserAnswers}
+import models.reference.Country
+import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.TransitSection
+import pages.sections.routeDetails.OfficeOfTransitCountrySection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object AddOfficeOfTransitYesNoPage extends QuestionPage[Boolean] {
+case class OfficeOfTransitCountryPage(index: Index) extends QuestionPage[Country] {
 
-  override def path: JsPath = TransitSection.path \ toString
+  override def path: JsPath = OfficeOfTransitCountrySection(index).path \ toString
 
-  override def toString: String = "addOfficeOfTransitYesNo"
+  override def toString: String = "officeOfTransitCountry"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.AddOfficeOfTransitYesNoController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.lrn, mode, index))
 }

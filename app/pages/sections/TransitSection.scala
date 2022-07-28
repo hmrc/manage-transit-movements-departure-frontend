@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.transit
+package pages.sections
 
-import controllers.routeDetails.transit.routes
-import models.{Mode, UserAnswers}
-import pages.QuestionPage
-import pages.sections.routeDetails.TransitSection
 import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import pages.QuestionPage
 
-case object AddOfficeOfTransitYesNoPage extends QuestionPage[Boolean] {
+case object TransitSection extends QuestionPage[Nothing] {
 
-  override def path: JsPath = TransitSection.path \ toString
+  override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "addOfficeOfTransitYesNo"
-
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.AddOfficeOfTransitYesNoController.onPageLoad(userAnswers.lrn, mode))
+  override def toString: String = "officeOfTransitCountry"
 }
