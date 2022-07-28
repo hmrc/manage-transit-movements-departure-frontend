@@ -37,6 +37,8 @@ class T2DeclarationTypeYesNoViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithHeading()
 
+  behave like pageWithContent("p", "This type of declaration covers goods originating inside the European Union.")
+
   behave like pageWithRadioItems()
 
   behave like pageWithSubmitButton("Save and continue")
