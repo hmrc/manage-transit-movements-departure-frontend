@@ -19,16 +19,17 @@ package pages.routeDetails.transit
 import controllers.routeDetails.transit.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
+import pages.sections.RouteDetailsSection
 import pages.sections.routeDetails.TransitSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object T2DeclarationTypeYesNoPage extends QuestionPage[Boolean] {
+case object AddOfficeOfTransitYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = TransitSection.path \ toString
 
-  override def toString: String = "t2DeclarationTypeYesNo"
+  override def toString: String = "addOfficeOfTransitYesNo"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.T2DeclarationTypeYesNoController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.AddOfficeOfTransitYesNoController.onPageLoad(userAnswers.lrn, mode))
 }

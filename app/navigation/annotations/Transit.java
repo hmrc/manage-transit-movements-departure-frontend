@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.transit
+package navigation.annotations;
 
-import controllers.routeDetails.transit.routes
-import models.{Mode, UserAnswers}
-import pages.QuestionPage
-import pages.sections.routeDetails.TransitSection
-import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import com.google.inject.BindingAnnotation;
 
-case object T2DeclarationTypeYesNoPage extends QuestionPage[Boolean] {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  override def path: JsPath = TransitSection.path \ toString
-
-  override def toString: String = "t2DeclarationTypeYesNo"
-
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.T2DeclarationTypeYesNoController.onPageLoad(userAnswers.lrn, mode))
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface Transit {
 }

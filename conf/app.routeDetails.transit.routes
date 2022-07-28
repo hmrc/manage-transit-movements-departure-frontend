@@ -3,3 +3,8 @@ GET        /:lrn/route-details/transit/t2-declaration-type                      
 POST       /:lrn/route-details/transit/t2-declaration-type                        controllers.routeDetails.transit.T2DeclarationTypeYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/route-details/transit/change-t2-declaration-type                 controllers.routeDetails.transit.T2DeclarationTypeYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/route-details/transit/change-t2-declaration-type                 controllers.routeDetails.transit.T2DeclarationTypeYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/route-details/transit/add-office-of-transit                        controllers.routeDetails.transit.AddOfficeOfTransitYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/transit/add-office-of-transit                        controllers.routeDetails.transit.AddOfficeOfTransitYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/transit/change-add-office-of-transit                 controllers.routeDetails.transit.AddOfficeOfTransitYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/transit/change-add-office-of-transit                 controllers.routeDetails.transit.AddOfficeOfTransitYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

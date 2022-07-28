@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.transit
+package navigation.routeDetails
 
-import controllers.routeDetails.transit.routes
-import models.{Mode, UserAnswers}
-import pages.QuestionPage
-import pages.sections.routeDetails.TransitSection
-import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import models.journeyDomain.routeDetails.{RouteDetailsDomain, RoutingDomain}
+import navigation.UserAnswersNavigator
 
-case object T2DeclarationTypeYesNoPage extends QuestionPage[Boolean] {
+import javax.inject.{Inject, Singleton}
 
-  override def path: JsPath = TransitSection.path \ toString
-
-  override def toString: String = "t2DeclarationTypeYesNo"
-
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.T2DeclarationTypeYesNoController.onPageLoad(userAnswers.lrn, mode))
-}
+@Singleton
+class TransitNavigator @Inject() () extends UserAnswersNavigator[RoutingDomain, RouteDetailsDomain]
