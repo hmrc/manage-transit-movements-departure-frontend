@@ -587,3 +587,9 @@ routeDetails.routing.checkYourAnswers.title = Check your answers
 routeDetails.routing.checkYourAnswers.heading = Check your answers
 routeDetails.routing.checkYourAnswers.countries.subheading = Transit route countries
 routeDetails.routing.checkYourAnswers.addOrRemove = Add or remove transit route countries
+
+routeDetails.transit.t2DeclarationTypeYesNo.title = Does the transit include any T2 declarations?
+routeDetails.transit.t2DeclarationTypeYesNo.heading = Does the transit include any T2 declarations?
+routeDetails.transit.t2DeclarationTypeYesNo.checkYourAnswersLabel = Does the transit include any T2 declarations?
+routeDetails.transit.t2DeclarationTypeYesNo.paragraph = This type of declaration covers goods originating inside the European Union.
+routeDetails.transit.t2DeclarationTypeYesNo.error.required = Select yes if your transit includes any T2 declarations
