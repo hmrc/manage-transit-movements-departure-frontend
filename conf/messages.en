@@ -587,3 +587,8 @@ routeDetails.routing.checkYourAnswers.title = Check your answers
 routeDetails.routing.checkYourAnswers.heading = Check your answers
 routeDetails.routing.checkYourAnswers.countries.subheading = Transit route countries
 routeDetails.routing.checkYourAnswers.addOrRemove = Add or remove transit route countries
+
+routeDetails.transit.t2DeclarationTypeYesNo.title = Are any of your items a T2 declaration type?
+routeDetails.transit.t2DeclarationTypeYesNo.heading = Are any of your items a T2 declaration type?
+routeDetails.transit.t2DeclarationTypeYesNo.checkYourAnswersLabel = Are any of your items a T2 declaration type?
+routeDetails.transit.t2DeclarationTypeYesNo.error.required = Select yes if any of your items are a T2 declaration type
