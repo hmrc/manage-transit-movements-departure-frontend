@@ -22,33 +22,33 @@ import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.Transit
-import pages.routeDetails.transit.T2DeclarationTypeYesNoPage
+import pages.routeDetails.transit.AddOfficeOfTransitYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.transit.T2DeclarationTypeYesNoView
+import views.html.routeDetails.transit.AddOfficeOfTransitYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class T2DeclarationTypeYesNoController @Inject() (
+class AddOfficeOfTransitYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   @Transit implicit val navigator: Navigator,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: T2DeclarationTypeYesNoView
+  view: AddOfficeOfTransitYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.transit.t2DeclarationTypeYesNo")
+  private val form = formProvider("routeDetails.transit.addOfficeOfTransitYesNo")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(T2DeclarationTypeYesNoPage) match {
+      val preparedForm = request.userAnswers.get(AddOfficeOfTransitYesNoPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -62,7 +62,7 @@ class T2DeclarationTypeYesNoController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => T2DeclarationTypeYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+          value => AddOfficeOfTransitYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

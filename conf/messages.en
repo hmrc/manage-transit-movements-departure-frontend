@@ -593,3 +593,9 @@ routeDetails.transit.t2DeclarationTypeYesNo.heading = Does the transit include a
 routeDetails.transit.t2DeclarationTypeYesNo.checkYourAnswersLabel = Does the transit include any T2 declarations?
 routeDetails.transit.t2DeclarationTypeYesNo.paragraph = This type of declaration covers goods originating inside the European Union.
 routeDetails.transit.t2DeclarationTypeYesNo.error.required = Select yes if your transit includes any T2 declarations
+
+routeDetails.transit.addOfficeOfTransitYesNo.title = Do you want to add an office of transit?
+routeDetails.transit.addOfficeOfTransitYesNo.heading = Do you want to add an office of transit?
+routeDetails.transit.addOfficeOfTransitYesNo.checkYourAnswersLabel = Do you want to add an office of transit
+routeDetails.transit.addOfficeOfTransitYesNo.paragraph = This is the first arrival point for goods entering a new customs territory.
+routeDetails.transit.addOfficeOfTransitYesNo.error.required = Select yes if you want to add an office of transit
