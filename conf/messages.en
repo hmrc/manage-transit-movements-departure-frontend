@@ -599,3 +599,11 @@ routeDetails.transit.addOfficeOfTransitYesNo.heading = Do you want to add an off
 routeDetails.transit.addOfficeOfTransitYesNo.checkYourAnswersLabel = Do you want to add an office of transit
 routeDetails.transit.addOfficeOfTransitYesNo.paragraph = This is the first arrival point for goods entering a new customs territory.
 routeDetails.transit.addOfficeOfTransitYesNo.error.required = Select yes if you want to add an office of transit
+
+routeDetails.transit.officeOfTransitCountry.title = Which country is the office of transit in?
+routeDetails.transit.officeOfTransitCountry.heading = Which country is the office of transit in?
+routeDetails.transit.officeOfTransitCountry.hint = Enter the country, like France or Portugal.
+routeDetails.transit.officeOfTransitCountry.placeholder = Select a country
+routeDetails.transit.officeOfTransitCountry.change.hidden = Which country is the office of transit in
+routeDetails.transit.officeOfTransitCountry.checkYourAnswersLabel = Which country is the office of transit in?
+routeDetails.transit.officeOfTransitCountry.error.required = Enter the country the office of transit is in

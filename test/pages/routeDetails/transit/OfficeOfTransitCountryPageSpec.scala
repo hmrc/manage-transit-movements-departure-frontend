@@ -16,19 +16,17 @@
 
 package pages.routeDetails.transit
 
-import controllers.routeDetails.transit.routes
-import models.{Mode, UserAnswers}
-import pages.QuestionPage
-import pages.sections.routeDetails.TransitSection
-import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import models.reference.Country
+import pages.behaviours.PageBehaviours
 
-case object AddOfficeOfTransitYesNoPage extends QuestionPage[Boolean] {
+class OfficeOfTransitCountryPageSpec extends PageBehaviours {
 
-  override def path: JsPath = TransitSection.path \ toString
+  "OfficeOfTransitCountryPage" - {
 
-  override def toString: String = "addOfficeOfTransitYesNo"
+    beRetrievable[Country](OfficeOfTransitCountryPage(index))
 
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.AddOfficeOfTransitYesNoController.onPageLoad(userAnswers.lrn, mode))
+    beSettable[Country](OfficeOfTransitCountryPage(index))
+
+    beRemovable[Country](OfficeOfTransitCountryPage(index))
+  }
 }

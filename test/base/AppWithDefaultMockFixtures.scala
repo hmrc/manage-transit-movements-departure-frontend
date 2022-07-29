@@ -18,7 +18,7 @@ package base
 
 import controllers.actions._
 import models.{Index, UserAnswers}
-import navigation.routeDetails.CountryOfRoutingNavigatorProvider
+import navigation.routeDetails.{CountryOfRoutingNavigatorProvider, OfficeOfTransitCountryNavigatorProvider}
 import navigation._
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
@@ -64,6 +64,9 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
 
   protected val fakeCountryOfRoutingNavigatorProvider: CountryOfRoutingNavigatorProvider =
     (index: Index) => new FakeCountryOfRoutingNavigator(onwardRoute, index)
+
+  protected val fakeOfficeOfTransitCountryNavigatorProvider: OfficeOfTransitCountryNavigatorProvider =
+    (index: Index) => new FakeOfficeOfTransitCountryNavigator(onwardRoute, index)
 
   def guiceApplicationBuilder(): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
