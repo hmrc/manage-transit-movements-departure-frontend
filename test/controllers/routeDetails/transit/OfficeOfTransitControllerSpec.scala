@@ -17,9 +17,9 @@
 package controllers.routeDetails.transit
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.CustomsOfficeFormProvider
-import models.{CustomsOfficeList, NormalMode}
+import forms.OfficeOfTransitFormProvider
 import generators.Generators
+import models.{CustomsOfficeList, NormalMode}
 import navigation.Navigator
 import navigation.annotations.Transit
 import org.mockito.ArgumentMatchers.any
@@ -41,8 +41,8 @@ class OfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixt
   private val customsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
   private val country           = arbitraryCountry.arbitrary.sample.get
 
-  private val formProvider = new CustomsOfficeFormProvider()
-  private val form         = formProvider("routeDetails.transit.officeOfTransit", customsOfficeList)
+  private val formProvider = new OfficeOfTransitFormProvider()
+  private val form         = formProvider("routeDetails.transit.officeOfTransit", customsOfficeList, country.description)
   private val mode         = NormalMode
 
   private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]

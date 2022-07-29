@@ -18,8 +18,7 @@ package controllers.routeDetails.transit
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.CustomsOfficeFormProvider
-import models.reference.Country
+import forms.OfficeOfTransitFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.Transit
@@ -39,7 +38,7 @@ class OfficeOfTransitController @Inject() (
   implicit val sessionRepository: SessionRepository,
   @Transit implicit val navigator: Navigator,
   actions: Actions,
-  formProvider: CustomsOfficeFormProvider,
+  formProvider: OfficeOfTransitFormProvider,
   service: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
   view: OfficeOfTransitView
@@ -49,35 +48,45 @@ class OfficeOfTransitController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      val country: Country = request.userAnswers
+      request.userAnswers
         .get(OfficeOfTransitCountryPage(index))
-        .get
-
-      service.getCustomsOfficesForCountry(country.code).flatMap {
-        customsOfficeList =>
-          val form = formProvider("routeDetails.transit.officeOfTransit", customsOfficeList)
-          val preparedForm = request.userAnswers.get(OfficeOfTransitPage(index)) match {
-            case None        => form
-            case Some(value) => form.fill(value)
-          }
-          Future.successful(Ok(view(preparedForm, lrn, customsOfficeList.customsOffices, country.description, mode, index)))
-      }
+        .map {
+          country =>
+            service.getCustomsOfficesForCountry(country.code).flatMap {
+              customsOfficeList =>
+                val form = formProvider("routeDetails.transit.officeOfTransit", customsOfficeList, country.description)
+                val preparedForm = request.userAnswers.get(OfficeOfTransitPage(index)) match {
+                  case None        => form
+                  case Some(value) => form.fill(value)
+                }
+                Future.successful(Ok(view(preparedForm, lrn, customsOfficeList.customsOffices, country.description, mode, index)))
+            }
+        }
+        .getOrElse(
+          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+        )
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      val country: Country = request.userAnswers
+      request.userAnswers
         .get(OfficeOfTransitCountryPage(index))
-        .get
-      service.getCustomsOfficesForCountry(country.code).flatMap {
-        customsOfficeList =>
-          val form = formProvider("routeDetails.transit.officeOfTransit", customsOfficeList)
-          form
-            .bindFromRequest()
-            .fold(
-              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, country.description, mode, index))),
-              value => OfficeOfTransitPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
-            )
-      }
+        .map {
+          country =>
+            service.getCustomsOfficesForCountry(country.code).flatMap {
+              customsOfficeList =>
+                val form = formProvider("routeDetails.transit.officeOfTransit", customsOfficeList, country.description)
+                form
+                  .bindFromRequest()
+                  .fold(
+                    formWithErrors =>
+                      Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, country.description, mode, index))),
+                    value => OfficeOfTransitPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                  )
+            }
+        }
+        .getOrElse(
+          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+        )
   }
 }
