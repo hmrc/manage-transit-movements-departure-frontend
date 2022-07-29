@@ -607,3 +607,12 @@ routeDetails.transit.officeOfTransitCountry.placeholder = Select a country
 routeDetails.transit.officeOfTransitCountry.change.hidden = Which country is the office of transit in
 routeDetails.transit.officeOfTransitCountry.checkYourAnswersLabel = Which country is the office of transit in?
 routeDetails.transit.officeOfTransitCountry.error.required = Enter the country the office of transit is in
+
+routeDetails.transit.officeOfTransit.title = Where in {0} is the office of transit?
+routeDetails.transit.officeOfTransit.heading = Where in {0} is the office of transit?
+routeDetails.transit.officeOfTransit.hint = Enter the office location or code, like Calais or FR620001.
+routeDetails.transit.officeOfTransit.placeholder = Select a customs office
+routeDetails.transit.officeOfTransit.change.hidden = Where in {0} is the office of transit
+routeDetails.transit.officeOfTransit.checkYourAnswersLabel = Office of transit
+routeDetails.transit.officeOfTransit.error.required = Enter where the office of transit is in {0}
+

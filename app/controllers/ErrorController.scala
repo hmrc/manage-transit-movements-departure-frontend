@@ -59,7 +59,7 @@ class ErrorController @Inject() (
         errorTemplate(
           title = "global.error.InternalServerError500.title",
           header = "global.error.InternalServerError500.heading",
-          message = "global.error.InternalServerError500.message"
+          message = "git"
         )
       )
   }
