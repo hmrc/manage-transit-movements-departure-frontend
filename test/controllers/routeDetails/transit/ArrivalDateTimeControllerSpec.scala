@@ -38,7 +38,7 @@ class ArrivalDateTimeControllerSpec extends SpecBase with AppWithDefaultMockFixt
   private val formProvider              = new DateTimeFormProvider()
   private val form                      = formProvider("routeDetails.transit.arrivalDateTime")
   private val mode                      = NormalMode
-  private lazy val arrivalDateTimeRoute = routes.ArrivalDateTimeController.onPageLoad(lrn, mode).url
+  private lazy val arrivalDateTimeRoute = routes.ArrivalDateTimeController.onPageLoad(lrn, mode, index).url
   private val date                      = LocalDateTime.now
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
@@ -61,12 +61,12 @@ class ArrivalDateTimeControllerSpec extends SpecBase with AppWithDefaultMockFixt
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode)(request, messages).toString
+        view(form, lrn, mode, index)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(ArrivalDateTimePage, date)
+      val userAnswers = emptyUserAnswers.setValue(ArrivalDateTimePage(index), date)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, arrivalDateTimeRoute)
@@ -88,7 +88,7 @@ class ArrivalDateTimeControllerSpec extends SpecBase with AppWithDefaultMockFixt
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
+        view(filledForm, lrn, mode, index)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -129,7 +129,7 @@ class ArrivalDateTimeControllerSpec extends SpecBase with AppWithDefaultMockFixt
       val view = injector.instanceOf[ArrivalDateTimeView]
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
+        view(filledForm, lrn, mode, index)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

@@ -24,10 +24,10 @@ class ArrivalDateTimePageSpec extends PageBehaviours {
 
   "ArrivalDateTimePage" - {
 
-    beRetrievable[LocalDateTime](ArrivalDateTimePage)
+    beRetrievable[LocalDateTime](ArrivalDateTimePage(index))
 
-    beSettable[LocalDateTime](ArrivalDateTimePage)
+    beSettable[LocalDateTime](ArrivalDateTimePage(index))
 
-    beRemovable[LocalDateTime](ArrivalDateTimePage)
+    beRemovable[LocalDateTime](ArrivalDateTimePage(index))
   }
 }

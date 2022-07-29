@@ -30,7 +30,7 @@ class ArrivalDateTimeViewSpec extends DateTimeInputViewBehaviours {
   override def form: Form[LocalDateTime] = new DateTimeFormProvider()(prefix)
 
   override def applyView(form: Form[LocalDateTime]): HtmlFormat.Appendable =
-    injector.instanceOf[ArrivalDateTimeView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[ArrivalDateTimeView].apply(form, lrn, NormalMode, index)(fakeRequest, messages)
 
   override val prefix: String = "routeDetails.transit.arrivalDateTime"
 

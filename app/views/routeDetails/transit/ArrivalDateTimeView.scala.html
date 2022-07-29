@@ -29,7 +29,7 @@
     button: Button
 )
 
-@(form: Form[LocalDateTime], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[LocalDateTime], lrn: LocalReferenceNumber, mode: Mode, index: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("routeDetails.transit.arrivalDateTime.title"),
@@ -37,7 +37,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.ArrivalDateTimeController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.ArrivalDateTimeController.onSubmit(lrn, mode, index), 'autoComplete -> "off") {
 
         @errorSummary(form)
 

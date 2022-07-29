@@ -19,7 +19,7 @@ package controllers.routeDetails.transit
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.DateTimeFormProvider
-import models.{LocalReferenceNumber, Mode}
+import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.Transit
 import pages.routeDetails.transit.ArrivalDateTimePage
@@ -28,8 +28,8 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.transit.ArrivalDateTimeView
-
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class ArrivalDateTimeController @Inject() (
@@ -46,22 +46,22 @@ class ArrivalDateTimeController @Inject() (
 
   private val form = formProvider("routeDetails.transit.arrivalDateTime")
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(ArrivalDateTimePage) match {
+      val preparedForm = request.userAnswers.get(ArrivalDateTimePage(index)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
-      Ok(view(preparedForm, lrn, mode))
+      Ok(view(preparedForm, lrn, mode, index))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => ArrivalDateTimePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index))),
+          value => ArrivalDateTimePage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }
