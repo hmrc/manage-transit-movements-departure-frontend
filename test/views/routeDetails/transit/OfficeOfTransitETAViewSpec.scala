@@ -46,7 +46,7 @@ class OfficeOfTransitETAViewSpec extends DateTimeInputViewBehaviours with Genera
 
   behave like pageWithHeading(transitCustomsOffice.name, transitCountry.description)
 
-  behave like pageWithDateInput
+  behave like pageWithDateTimeInput
 
   behave like pageWithSubmitButton("Save and continue")
 }
