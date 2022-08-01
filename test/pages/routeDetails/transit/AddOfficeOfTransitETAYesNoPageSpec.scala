@@ -16,8 +16,6 @@
 
 package pages.routeDetails.transit
 
-import java.time.LocalDateTime
-
 import pages.behaviours.PageBehaviours
 
 class AddOfficeOfTransitETAYesNoPageSpec extends PageBehaviours {
@@ -31,7 +29,7 @@ class AddOfficeOfTransitETAYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](AddOfficeOfTransitETAYesNoPage(index))
 
     "cleanup" - {
-      val eta                  = LocalDateTime.now
+      val eta = arbitraryLocalDateTime.arbitrary.sample.get
 
       "when No selected" - {
         "must clean up Office Of Transit ETA page" in {

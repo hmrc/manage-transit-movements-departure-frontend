@@ -16,8 +16,6 @@
 
 package pages.routeDetails.transit
 
-import java.time.LocalDateTime
-
 import generators.Generators
 import pages.behaviours.PageBehaviours
 
@@ -34,7 +32,7 @@ class AddOfficeOfTransitYesNoPageSpec extends PageBehaviours with Generators {
     "cleanup" - {
       val transitCountry       = arbitraryCountry.arbitrary.sample.get
       val transitCustomsOffice = arbitraryCustomsOffice.arbitrary.sample.get
-      val eta                  = LocalDateTime.now
+      val eta                  = arbitraryLocalDateTime.arbitrary.sample.get
 
       "when No selected" - {
         "must clean up Office Of Transit pages" in {

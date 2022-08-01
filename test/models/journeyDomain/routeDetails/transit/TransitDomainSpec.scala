@@ -16,8 +16,6 @@
 
 package models.journeyDomain.routeDetails.transit
 
-import java.time.LocalDateTime
-
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
@@ -34,7 +32,7 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
     val customsOffice              = arbitrary[CustomsOffice].sample.value
     val country                    = arbitrary[Country].sample.value
     val addOfficeOfTransitETAYesNo = true
-    val officeOfTransitETA         = LocalDateTime.now
+    val officeOfTransitETA         = arbitraryLocalDateTime.arbitrary.sample.get
 
     "can be parsed from UserAnswers" - {
 

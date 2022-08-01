@@ -16,8 +16,6 @@
 
 package models.JourneyDomain.routeDetails.transit
 
-import java.time.LocalDateTime
-
 import base.SpecBase
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
@@ -35,7 +33,7 @@ class OfficeOfTransitCountryDomainSpec extends SpecBase with Generators {
         val country                    = arbitrary[Country].sample.value
         val customsOffice              = arbitrary[CustomsOffice].sample.value
         val addOfficeOfTransitETAYesNo = true
-        val officeOfTransitETA         = LocalDateTime.now
+        val officeOfTransitETA         = arbitraryLocalDateTime.arbitrary.sample.get
 
         val userAnswers = emptyUserAnswers
           .setValue(OfficeOfTransitCountryPage(index), country)

@@ -16,8 +16,6 @@
 
 package controllers.routeDetails.transit
 
-import java.time.LocalDateTime
-
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.DateTimeFormProvider
 import generators.Generators
@@ -40,7 +38,7 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
   private val form                      = formProvider("routeDetails.transit.officeOfTransitETA")
   private val mode                      = NormalMode
   private lazy val arrivalDateTimeRoute = routes.OfficeOfTransitETAController.onPageLoad(lrn, mode, index).url
-  private val date                      = LocalDateTime.now
+  private val date                      = arbitraryLocalDateTime.arbitrary.sample.get
   private val transitCountry            = arbitraryCountry.arbitrary.sample.get
   private val transitCustomsOffice      = arbitraryCustomsOffice.arbitrary.sample.get
 
