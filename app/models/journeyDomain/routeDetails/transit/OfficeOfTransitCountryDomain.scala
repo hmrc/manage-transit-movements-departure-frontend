@@ -20,16 +20,16 @@ import java.time.LocalDateTime
 
 import cats.implicits._
 import models.Index
-import models.domain.{GettableAsReaderOps, UserAnswersReader}
+import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
 import models.reference.{Country, CustomsOffice}
-import pages.routeDetails.transit._
+import pages.routeDetails.transit.{AddOfficeOfTransitETAYesNoPage, _}
 
 case class OfficeOfTransitCountryDomain(
   country: Country,
   customsOffice: CustomsOffice,
   addOfficeOfTransitETA: Boolean,
-  officeOfTransitETA: LocalDateTime
+  officeOfTransitETA: Option[LocalDateTime]
 )(index: Index)
     extends JourneyDomainModel {}
 
@@ -40,7 +40,7 @@ object OfficeOfTransitCountryDomain {
       OfficeOfTransitCountryPage(index).reader,
       OfficeOfTransitPage(index).reader,
       AddOfficeOfTransitETAYesNoPage(index).reader,
-      OfficeOfTransitETAPage(index).reader
+      AddOfficeOfTransitETAYesNoPage(index).filterOptionalDependent(identity)(OfficeOfTransitETAPage(index).reader)
     ).mapN {
       (officeOfTransitCountry, officeOfTransit, addOfficeOfTransitETAYesNo, officeOfTransitETA) =>
         OfficeOfTransitCountryDomain(officeOfTransitCountry, officeOfTransit, addOfficeOfTransitETAYesNo, officeOfTransitETA)(index)

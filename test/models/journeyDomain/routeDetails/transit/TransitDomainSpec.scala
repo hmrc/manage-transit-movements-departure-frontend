@@ -50,7 +50,7 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
           t2DeclarationType = t2DeclarationType,
           addOfficeOfTransit = addOfficeOfTransitYesNo,
           officesOfTransitCountries = Seq(
-            OfficeOfTransitCountryDomain(country, customsOffice, addOfficeOfTransitETAYesNo, officeOfTransitETA)(index)
+            OfficeOfTransitCountryDomain(country, customsOffice, addOfficeOfTransitETAYesNo, Some(officeOfTransitETA))(index)
           )
         )
 
