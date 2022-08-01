@@ -616,3 +616,7 @@ routeDetails.transit.officeOfTransit.change.hidden = Where in {0} is the office 
 routeDetails.transit.officeOfTransit.checkYourAnswersLabel = Office of transit
 routeDetails.transit.officeOfTransit.error.required = Enter where the office of transit is in {0}
 
+routeDetails.transit.addOfficeOfTransitETAYesNo.title = Do you want to add a time of arrival in {0}?
+routeDetails.transit.addOfficeOfTransitETAYesNo.heading = Do you want to add a time of arrival in {0}?
+routeDetails.transit.addOfficeOfTransitETAYesNo.checkYourAnswersLabel = Do you want to add a time of arrival in {0}?
+routeDetails.transit.addOfficeOfTransitETAYesNo.error.required = Select yes if you want to add a time of arrival for the office of transit

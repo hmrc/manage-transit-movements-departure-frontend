@@ -18,30 +18,28 @@ package controllers.routeDetails.transit
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.OfficeOfTransitFormProvider
+import forms.YesNoFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.Transit
-import pages.routeDetails.transit.{OfficeOfTransitCountryPage, OfficeOfTransitPage}
+import pages.routeDetails.transit.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.CustomsOfficesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.transit.OfficeOfTransitView
+import views.html.routeDetails.transit.AddOfficeOfTransitETAYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class OfficeOfTransitController @Inject() (
+class AddOfficeOfTransitETAYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   @Transit implicit val navigator: Navigator,
   actions: Actions,
-  formProvider: OfficeOfTransitFormProvider,
-  service: CustomsOfficesService,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: OfficeOfTransitView,
+  view: AddOfficeOfTransitETAYesNoView,
   getMandatoryPage: SpecificDataRequiredActionProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
@@ -50,38 +48,30 @@ class OfficeOfTransitController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] =
     actions
       .requireData(lrn)
-      .andThen(getMandatoryPage(OfficeOfTransitCountryPage(index)))
-      .async {
+      .andThen(getMandatoryPage(OfficeOfTransitPage(index))) {
         implicit request =>
-          val country = request.arg
-          service.getCustomsOfficesForCountry(country.code).map {
-            customsOfficeList =>
-              val form = formProvider("routeDetails.transit.officeOfTransit", customsOfficeList, country.description)
-              val preparedForm = request.userAnswers.get(OfficeOfTransitPage(index)) match {
-                case None        => form
-                case Some(value) => form.fill(value)
-              }
-              Ok(view(preparedForm, lrn, customsOfficeList.customsOffices, country.description, mode, index))
+          val officeOfTransit = request.arg
+          val form            = formProvider("routeDetails.transit.addOfficeOfTransitETAYesNo")
+          val preparedForm = request.userAnswers.get(AddOfficeOfTransitETAYesNoPage(index)) match {
+            case None        => form
+            case Some(value) => form.fill(value)
           }
+          Ok(view(preparedForm, lrn, mode, officeOfTransit, index))
       }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] =
     actions
       .requireData(lrn)
-      .andThen(getMandatoryPage(OfficeOfTransitCountryPage(index)))
+      .andThen(getMandatoryPage(OfficeOfTransitPage(index)))
       .async {
         implicit request =>
-          val country = request.arg
-          service.getCustomsOfficesForCountry(country.code).flatMap {
-            customsOfficeList =>
-              val form = formProvider("routeDetails.transit.officeOfTransit", customsOfficeList, country.description)
-              form
-                .bindFromRequest()
-                .fold(
-                  formWithErrors =>
-                    Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, country.description, mode, index))),
-                  value => OfficeOfTransitPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
-                )
-          }
+          val officeOfTransit = request.arg
+          val form            = formProvider("routeDetails.transit.addOfficeOfTransitETAYesNo")
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, officeOfTransit, index))),
+              value => AddOfficeOfTransitETAYesNoPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+            )
       }
 }
