@@ -61,5 +61,27 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
         result.value mustBe expectedResult
       }
     }
+
+    "cannot be parsed from UserAnswers" - {
+
+      "when t2DeclarationType is missing" in {
+
+        val userAnswers = emptyUserAnswers
+
+        val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain].run(userAnswers)
+
+        result.left.value.page mustBe T2DeclarationTypeYesNoPage
+      }
+
+      "when AddOfficeOfTransitYesNoPage is missing" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(T2DeclarationTypeYesNoPage)(t2DeclarationType)
+
+        val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain].run(userAnswers)
+
+        result.left.value.page mustBe AddOfficeOfTransitYesNoPage
+      }
+    }
   }
 }
