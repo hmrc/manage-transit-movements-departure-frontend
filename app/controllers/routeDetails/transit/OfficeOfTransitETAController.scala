@@ -29,7 +29,6 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.transit.OfficeOfTransitETAView
 import javax.inject.Inject
-import models.reference.{Country, CustomsOffice}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -55,14 +54,12 @@ class OfficeOfTransitETAController @Inject() (
 
       implicit request =>
         request.arg match {
-          case (country: Country, customsOffice: CustomsOffice) =>
+          case (country, customsOffice) =>
             val preparedForm = request.userAnswers.get(OfficeOfTransitETAPage(index)) match {
               case None        => form
               case Some(value) => form.fill(value)
             }
             Ok(view(preparedForm, lrn, country.description, customsOffice.name, mode, index))
-          case _ =>
-            Redirect(controllers.routes.SessionExpiredController.onPageLoad())
         }
     }
 
@@ -74,15 +71,13 @@ class OfficeOfTransitETAController @Inject() (
 
       implicit request =>
         request.arg match {
-          case (country: Country, customsOffice: CustomsOffice) =>
+          case (country, customsOffice) =>
             form
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, country.description, customsOffice.name, mode, index))),
                 value => OfficeOfTransitETAPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
               )
-          case _ =>
-            Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
         }
     }
 }
