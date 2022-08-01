@@ -16,9 +16,12 @@
 
 package pages.routeDetails.transit
 
+import java.time.LocalDateTime
+
+import generators.Generators
 import pages.behaviours.PageBehaviours
 
-class AddOfficeOfTransitYesNoPageSpec extends PageBehaviours {
+class AddOfficeOfTransitYesNoPageSpec extends PageBehaviours with Generators {
 
   "AddOfficeOfTransitYesNoPage" - {
 
@@ -27,5 +30,44 @@ class AddOfficeOfTransitYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](AddOfficeOfTransitYesNoPage)
 
     beRemovable[Boolean](AddOfficeOfTransitYesNoPage)
+
+    "cleanup" - {
+      val transitCountry       = arbitraryCountry.arbitrary.sample.get
+      val transitCustomsOffice = arbitraryCustomsOffice.arbitrary.sample.get
+      val eta                  = LocalDateTime.now
+
+      "when No selected" - {
+        "must clean up Office Of Transit pages" in {
+          val preChange = emptyUserAnswers
+            .setValue(OfficeOfTransitCountryPage(index), transitCountry)
+            .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
+            .setValue(AddOfficeOfTransitETAYesNoPage(index), true)
+            .setValue(OfficeOfTransitETAPage(index), eta)
+
+          val postChange = preChange.setValue(AddOfficeOfTransitYesNoPage, false)
+
+          postChange.get(OfficeOfTransitCountryPage(index)) mustNot be(defined)
+          postChange.get(OfficeOfTransitPage(index)) mustNot be(defined)
+          postChange.get(AddOfficeOfTransitETAYesNoPage(index)) mustNot be(defined)
+          postChange.get(OfficeOfTransitETAPage(index)) mustNot be(defined)
+        }
+      }
+
+      "when Yes selected" - {
+        "must do nothing" in {
+          val preChange = emptyUserAnswers
+            .setValue(OfficeOfTransitCountryPage(index), transitCountry)
+            .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
+            .setValue(AddOfficeOfTransitETAYesNoPage(index), true)
+            .setValue(OfficeOfTransitETAPage(index), eta)
+          val postChange = preChange.setValue(AddOfficeOfTransitYesNoPage, true)
+
+          postChange.get(OfficeOfTransitCountryPage(index)) must be(defined)
+          postChange.get(OfficeOfTransitPage(index)) must be(defined)
+          postChange.get(AddOfficeOfTransitETAYesNoPage(index)) must be(defined)
+          postChange.get(OfficeOfTransitETAPage(index)) must be(defined)
+        }
+      }
+    }
   }
 }
