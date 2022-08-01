@@ -616,3 +616,10 @@ routeDetails.transit.officeOfTransit.change.hidden = Where in {0} is the office 
 routeDetails.transit.officeOfTransit.checkYourAnswersLabel = Office of transit
 routeDetails.transit.officeOfTransit.error.required = Enter where the office of transit is in {0}
 
+routeDetails.transit.addAnotherOfficeOfTransit.singular.title = You’ve added {0} office of transit
+routeDetails.transit.addAnotherOfficeOfTransit.singular.heading = You’ve added {0} office of transit
+routeDetails.transit.addAnotherOfficeOfTransit.plural.title = You’ve added {0} offices of transit
+routeDetails.transit.addAnotherOfficeOfTransit.plural.heading = You’ve added {0} offices of transit
+routeDetails.transit.addAnotherOfficeOfTransit.error.required = Select yes if you need to add another office of transit
+routeDetails.transit.addAnotherOfficeOfTransit.label = Do you want to add another office of transit?
+routeDetails.transit.addAnotherOfficeOfTransit.maxLimit.label = You cannot add any more offices of transit. To add another office, you need to remove one first.
