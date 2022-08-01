@@ -36,6 +36,23 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
 
     "can be parsed from UserAnswers" - {
 
+      "when we don't need Office Of Transit Country UserAnswers answered" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(T2DeclarationTypeYesNoPage)(t2DeclarationType)
+          .unsafeSetVal(AddOfficeOfTransitYesNoPage)(false)
+
+        val expectedResult = TransitDomain(
+          t2DeclarationType = t2DeclarationType,
+          addOfficeOfTransit = false,
+          officesOfTransitCountries = Nil
+        )
+
+        val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain].run(userAnswers)
+
+        result.value mustBe expectedResult
+      }
+
       "when all mandatory pages are answered" in {
 
         val userAnswers = emptyUserAnswers

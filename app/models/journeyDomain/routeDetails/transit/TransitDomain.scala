@@ -16,7 +16,7 @@
 
 package models.journeyDomain.routeDetails.transit
 
-import models.domain.{GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
+import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
 import models.{Index, RichJsArray}
 import pages.routeDetails.transit.{AddOfficeOfTransitYesNoPage, OfficeOfTransitCountryPage, T2DeclarationTypeYesNoPage}
@@ -43,11 +43,11 @@ object TransitDomain {
     for {
       t2DeclarationType         <- T2DeclarationTypeYesNoPage.reader
       addOfficeOfTransit        <- AddOfficeOfTransitYesNoPage.reader
-      officesOfTransitCountries <- officeOfTransitCountriesReader
+      officesOfTransitCountries <- AddOfficeOfTransitYesNoPage.filterOptionalDependent(identity)(officeOfTransitCountriesReader)
     } yield TransitDomain(
       t2DeclarationType,
       addOfficeOfTransit,
-      officesOfTransitCountries
+      officesOfTransitCountries.getOrElse(Nil)
     )
   }
 }
