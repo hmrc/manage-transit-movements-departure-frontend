@@ -14,6 +14,11 @@ POST       /:lrn/route-details/transit/:index/office-of-transit-country         
 GET        /:lrn/route-details/transit/:index/change-office-of-transit-country                controllers.routeDetails.transit.OfficeOfTransitCountryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
 POST       /:lrn/route-details/transit/:index/change-office-of-transit-country                controllers.routeDetails.transit.OfficeOfTransitCountryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
 
+GET        /:lrn/route-details/transit/:index/office-of-transit                               controllers.routeDetails.transit.OfficeOfTransitController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode, index: Index)
+POST       /:lrn/route-details/transit/:index/office-of-transit                               controllers.routeDetails.transit.OfficeOfTransitController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode, index: Index)
+GET        /:lrn/route-details/transit/:index/change-office-of-transit                        controllers.routeDetails.transit.OfficeOfTransitController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
+POST       /:lrn/route-details/transit/:index/change-office-of-transit                        controllers.routeDetails.transit.OfficeOfTransitController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
+
 GET        /:lrn/route-details/transit/:index/arrival-date-time                               controllers.routeDetails.transit.ArrivalDateTimeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode, index: Index)
 POST       /:lrn/route-details/transit/:index/arrival-date-time                               controllers.routeDetails.transit.ArrivalDateTimeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode, index: Index)
 GET        /:lrn/route-details/transit/:index/change-arrival-date-time                        controllers.routeDetails.transit.ArrivalDateTimeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)

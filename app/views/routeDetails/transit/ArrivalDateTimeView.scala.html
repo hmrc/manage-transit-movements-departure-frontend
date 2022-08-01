@@ -29,10 +29,10 @@
     button: Button
 )
 
-@(form: Form[LocalDateTime], lrn: LocalReferenceNumber, mode: Mode, index: Index)(implicit request: Request[_], messages: Messages)
+@(form: Form[LocalDateTime], lrn: LocalReferenceNumber, countryName: String, customsOffice: String, mode: Mode, index: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.transit.arrivalDateTime.title"),
+    title = messages("routeDetails.transit.arrivalDateTime.title", customsOffice, countryName),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -41,7 +41,7 @@
 
         @errorSummary(form)
 
-        @heading(messages("routeDetails.transit.arrivalDateTime.heading"))
+        @heading(messages("routeDetails.transit.arrivalDateTime.heading", customsOffice, countryName))
 
         @inputDate(
             field = form("value"),

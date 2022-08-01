@@ -610,8 +610,16 @@ routeDetails.transit.officeOfTransitCountry.change.hidden = Which country is the
 routeDetails.transit.officeOfTransitCountry.checkYourAnswersLabel = Which country is the office of transit in?
 routeDetails.transit.officeOfTransitCountry.error.required = Enter the country the office of transit is in
 
-routeDetails.transit.arrivalDateTime.title = When do you expect the transit to arrive?
-routeDetails.transit.arrivalDateTime.heading = When do you expect the transit to arrive in {0}?
+routeDetails.transit.officeOfTransit.title = Where in {0} is the office of transit?
+routeDetails.transit.officeOfTransit.heading = Where in {0} is the office of transit?
+routeDetails.transit.officeOfTransit.hint = Enter the office location or code, like Calais or FR620001.
+routeDetails.transit.officeOfTransit.placeholder = Select a customs office
+routeDetails.transit.officeOfTransit.change.hidden = Where in {0} is the office of transit
+routeDetails.transit.officeOfTransit.checkYourAnswersLabel = Office of transit
+routeDetails.transit.officeOfTransit.error.required = Enter where the office of transit is in {0}
+
+routeDetails.transit.arrivalDateTime.title = When do you expect the transit to arrive in {0}, {1}?
+routeDetails.transit.arrivalDateTime.heading = When do you expect the transit to arrive in {0}, {1}?
 routeDetails.transit.arrivalDateTime.checkYourAnswersLabel = Expected transit arrival time
 routeDetails.transit.arrivalDateTime.change.hidden = expected transit arrival time
 routeDetails.transit.arrivalDateTime.date.title = Date
@@ -622,3 +630,4 @@ routeDetails.transit.arrivalDateTime.error.required.all = Enter the date you exp
 routeDetails.transit.arrivalDateTime.error.required.multiple = The date you expect the transit to arrive must include the missing fields
 routeDetails.transit.arrivalDateTime.error.required = The date you expect the transit to arrive must include {0}
 routeDetails.transit.arrivalDateTime.error.invalid = Enter a real date and time that you expect the transit to arrive
+

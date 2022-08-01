@@ -23,7 +23,7 @@ import navigation.Navigator
 import navigation.annotations.Transit
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.routeDetails.transit.ArrivalDateTimePage
+import pages.routeDetails.transit.{ArrivalDateTimePage, OfficeOfTransitCountryPage, OfficeOfTransitPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -31,15 +31,19 @@ import play.api.test.Helpers._
 import views.html.routeDetails.transit.ArrivalDateTimeView
 import java.time.LocalDateTime
 
+import generators.Generators
+
 import scala.concurrent.Future
 
-class ArrivalDateTimeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class ArrivalDateTimeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val formProvider              = new DateTimeFormProvider()
   private val form                      = formProvider("routeDetails.transit.arrivalDateTime")
   private val mode                      = NormalMode
   private lazy val arrivalDateTimeRoute = routes.ArrivalDateTimeController.onPageLoad(lrn, mode, index).url
   private val date                      = LocalDateTime.now
+  private val transitCountry            = arbitraryCountry.arbitrary.sample.get
+  private val transitCustomsOffice      = arbitraryCustomsOffice.arbitrary.sample.get
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -50,7 +54,10 @@ class ArrivalDateTimeControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
     "must return OK and the correct view for a GET" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers
+        .setValue(OfficeOfTransitCountryPage(index), transitCountry)
+        .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
+      setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, arrivalDateTimeRoute)
 
@@ -61,12 +68,16 @@ class ArrivalDateTimeControllerSpec extends SpecBase with AppWithDefaultMockFixt
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode, index)(request, messages).toString
+        view(form, lrn, transitCountry.description, transitCustomsOffice.name, mode, index)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(ArrivalDateTimePage(index), date)
+      val userAnswers = emptyUserAnswers
+        .setValue(ArrivalDateTimePage(index), date)
+        .setValue(OfficeOfTransitCountryPage(index), transitCountry)
+        .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
+
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, arrivalDateTimeRoute)
@@ -88,12 +99,15 @@ class ArrivalDateTimeControllerSpec extends SpecBase with AppWithDefaultMockFixt
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, index)(request, messages).toString
+        view(filledForm, lrn, transitCountry.description, transitCustomsOffice.name, mode, index)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers
+        .setValue(OfficeOfTransitCountryPage(index), transitCountry)
+        .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
+      setExistingUserAnswers(userAnswers)
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
@@ -115,7 +129,10 @@ class ArrivalDateTimeControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers
+        .setValue(OfficeOfTransitCountryPage(index), transitCountry)
+        .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
+      setExistingUserAnswers(userAnswers)
 
       val invalidAnswer = ""
 
@@ -129,7 +146,7 @@ class ArrivalDateTimeControllerSpec extends SpecBase with AppWithDefaultMockFixt
       val view = injector.instanceOf[ArrivalDateTimeView]
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, index)(request, messages).toString
+        view(filledForm, lrn, transitCountry.description, transitCustomsOffice.name, mode, index)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
