@@ -15,20 +15,25 @@
  *@
 
 @import views.utils.ViewUtils._
-@import views.html.components.{InputDate, InputTime}
+@import views.html.components.{Heading, InputDate, InputTime}
 
 @this(
+    heading: Heading,
     inputDate: InputDate,
     inputTime: InputTime
 )
 
 @(
+    caption: Option[String] = None,
+    legend: String,
     field: Field,
     dateLabel: String,
     dateHint: Option[String] = None,
     timeLabel: String,
     timeHint: Option[String] = None
 )(implicit messages: Messages)
+
+    @heading(legend, caption)
 
     @inputDate(
         field = field,

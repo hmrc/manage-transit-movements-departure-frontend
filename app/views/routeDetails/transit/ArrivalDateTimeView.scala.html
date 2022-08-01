@@ -17,12 +17,11 @@
 @import controllers.routeDetails.transit.routes
 @import java.time.LocalDateTime
 @import models.LocalReferenceNumber
-@import views.html.components.{Button, DateTimeErrorSummary, Heading, InputDateTime}
+@import views.html.components.{Button, DateTimeErrorSummary, InputDateTime}
 
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
-    heading: Heading,
     inputDateTime: InputDateTime,
     errorSummary: DateTimeErrorSummary,
     button: Button
@@ -40,9 +39,9 @@
 
         @errorSummary(form)
 
-        @heading(messages("routeDetails.transit.arrivalDateTime.heading", customsOffice, countryName))
-
         @inputDateTime(
+            caption = Some(messages("routeDetails.caption")),
+            legend = messages("routeDetails.transit.arrivalDateTime.heading", customsOffice, countryName),
             field = form("value"),
             dateLabel = messages("routeDetails.transit.arrivalDateTime.date.title"),
             dateHint = Some(messages("routeDetails.transit.arrivalDateTime.date.hint")),
