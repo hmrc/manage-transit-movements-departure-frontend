@@ -49,7 +49,7 @@
                 id = s"${field.id}_hour"
             ),
             InputItem(
-                classes = s"govuk-input--width-4 ${errorClass(field.error, "minute")}",
+                classes = s"govuk-input--width-2 ${errorClass(field.error, "minute")}",
                 name = s"${field.id}.minute",
                 label = Some(messages("date.minute.capitalized")),
                 value = field("minute").value,

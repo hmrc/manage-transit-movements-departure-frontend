@@ -620,14 +620,14 @@ routeDetails.transit.officeOfTransit.error.required = Enter where the office of 
 
 routeDetails.transit.arrivalDateTime.title = When do you expect the transit to arrive in {0}, {1}?
 routeDetails.transit.arrivalDateTime.heading = When do you expect the transit to arrive in {0}, {1}?
-routeDetails.transit.arrivalDateTime.checkYourAnswersLabel = Expected transit arrival time
-routeDetails.transit.arrivalDateTime.change.hidden = expected transit arrival time
+routeDetails.transit.arrivalDateTime.checkYourAnswersLabel = Estimated date and time of arrival at the office of transit
+routeDetails.transit.arrivalDateTime.change.hidden = the estimated date and time of arrival at the office of transit
 routeDetails.transit.arrivalDateTime.date.title = Date
 routeDetails.transit.arrivalDateTime.date.hint = For example, 14 1 2020
 routeDetails.transit.arrivalDateTime.time.title = Time
 routeDetails.transit.arrivalDateTime.time.hint = Use the 24-hour format. For example. 14 30
-routeDetails.transit.arrivalDateTime.error.required.all = Enter the date you expect the transit to arrive
-routeDetails.transit.arrivalDateTime.error.required.multiple = The date you expect the transit to arrive must include the missing fields
-routeDetails.transit.arrivalDateTime.error.required = The date you expect the transit to arrive must include {0}
+routeDetails.transit.arrivalDateTime.error.required.all = Enter the estimated date and time of arrival at the office of transit
+routeDetails.transit.arrivalDateTime.error.required.multiple = The estimated date and time of arrival at the office of transit must include the missing fields
+routeDetails.transit.arrivalDateTime.error.required = The the estimated date and time of arrival at the office of transit must include {0}
 routeDetails.transit.arrivalDateTime.error.invalid = Enter a real date and time that you expect the transit to arrive
 

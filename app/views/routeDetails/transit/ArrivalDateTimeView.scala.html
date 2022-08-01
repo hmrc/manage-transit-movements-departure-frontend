@@ -17,14 +17,13 @@
 @import controllers.routeDetails.transit.routes
 @import java.time.LocalDateTime
 @import models.LocalReferenceNumber
-@import views.html.components.{Button, DateTimeErrorSummary, Heading, InputDate, InputTime}
+@import views.html.components.{Button, DateTimeErrorSummary, Heading, InputDateTime}
 
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
     heading: Heading,
-    inputDate: InputDate,
-    inputTime: InputTime,
+    inputDateTime: InputDateTime,
     errorSummary: DateTimeErrorSummary,
     button: Button
 )
@@ -43,20 +42,12 @@
 
         @heading(messages("routeDetails.transit.arrivalDateTime.heading", customsOffice, countryName))
 
-        @inputDate(
+        @inputDateTime(
             field = form("value"),
-            legend = messages("routeDetails.transit.arrivalDateTime.date.title"),
-            legendClass = "govuk-fieldset__legend--m",
-            hint = Some(messages("routeDetails.transit.arrivalDateTime.date.hint")),
-            legendAsHeading = false
-        )
-
-        @inputTime(
-            field = form("value"),
-            legend = messages("routeDetails.transit.arrivalDateTime.time.title"),
-            legendClass = "govuk-fieldset__legend--m",
-            hint = Some(messages("routeDetails.transit.arrivalDateTime.time.hint")),
-            legendAsHeading = false
+            dateLabel = messages("routeDetails.transit.arrivalDateTime.date.title"),
+            dateHint = Some(messages("routeDetails.transit.arrivalDateTime.date.hint")),
+            timeLabel = messages("routeDetails.transit.arrivalDateTime.time.title"),
+            timeHint = Some(messages("routeDetails.transit.arrivalDateTime.time.hint"))
         )
 
         @button(attributes = Map("id" -> "submit"))
