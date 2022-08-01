@@ -21,12 +21,12 @@ import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.DateTimeInputViewBehaviours
-import views.html.routeDetails.transit.ArrivalDateTimeView
+import views.html.routeDetails.transit.OfficeOfTransitETAView
 import java.time.LocalDateTime
 
 import generators.Generators
 
-class ArrivalDateTimeViewSpec extends DateTimeInputViewBehaviours with Generators {
+class OfficeOfTransitETAViewSpec extends DateTimeInputViewBehaviours with Generators {
 
   private val transitCountry       = arbitraryCountry.arbitrary.sample.get
   private val transitCustomsOffice = arbitraryCustomsOffice.arbitrary.sample.get
@@ -34,9 +34,11 @@ class ArrivalDateTimeViewSpec extends DateTimeInputViewBehaviours with Generator
   override def form: Form[LocalDateTime] = new DateTimeFormProvider()(prefix)
 
   override def applyView(form: Form[LocalDateTime]): HtmlFormat.Appendable =
-    injector.instanceOf[ArrivalDateTimeView].apply(form, lrn, transitCountry.description, transitCustomsOffice.name, NormalMode, index)(fakeRequest, messages)
+    injector
+      .instanceOf[OfficeOfTransitETAView]
+      .apply(form, lrn, transitCountry.description, transitCustomsOffice.name, NormalMode, index)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.transit.arrivalDateTime"
+  override val prefix: String = "routeDetails.transit.officeOfTransitETA"
 
   behave like pageWithTitle(transitCustomsOffice.name, transitCountry.description)
 

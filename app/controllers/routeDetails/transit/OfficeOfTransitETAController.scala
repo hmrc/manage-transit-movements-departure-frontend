@@ -22,18 +22,18 @@ import forms.DateTimeFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.Transit
-import pages.routeDetails.transit.{ArrivalDateTimePage, OfficeOfTransitCountryPage, OfficeOfTransitPage}
+import pages.routeDetails.transit.{OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.transit.ArrivalDateTimeView
+import views.html.routeDetails.transit.OfficeOfTransitETAView
 import javax.inject.Inject
 import models.reference.{Country, CustomsOffice}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ArrivalDateTimeController @Inject() (
+class OfficeOfTransitETAController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   @Transit implicit val navigator: Navigator,
@@ -41,12 +41,12 @@ class ArrivalDateTimeController @Inject() (
   actions: Actions,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ArrivalDateTimeView
+  view: OfficeOfTransitETAView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.transit.arrivalDateTime")
+  private val form = formProvider("routeDetails.transit.officeOfTransitETA")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
     .requireData(lrn)
@@ -56,7 +56,7 @@ class ArrivalDateTimeController @Inject() (
       implicit request =>
         request.arg match {
           case (country: Country, customsOffice: CustomsOffice) =>
-            val preparedForm = request.userAnswers.get(ArrivalDateTimePage(index)) match {
+            val preparedForm = request.userAnswers.get(OfficeOfTransitETAPage(index)) match {
               case None        => form
               case Some(value) => form.fill(value)
             }
@@ -79,7 +79,7 @@ class ArrivalDateTimeController @Inject() (
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, country.description, customsOffice.name, mode, index))),
-                value => ArrivalDateTimePage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                value => OfficeOfTransitETAPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
               )
           case _ =>
             Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))

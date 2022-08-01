@@ -20,14 +20,14 @@ import pages.behaviours.PageBehaviours
 
 import java.time.LocalDateTime
 
-class ArrivalDateTimePageSpec extends PageBehaviours {
+class OfficeOfTransitETAPageSpec extends PageBehaviours {
 
-  "ArrivalDateTimePage" - {
+  "OfficeOfTransitETAPage" - {
 
-    beRetrievable[LocalDateTime](ArrivalDateTimePage(index))
+    beRetrievable[LocalDateTime](OfficeOfTransitETAPage(index))
 
-    beSettable[LocalDateTime](ArrivalDateTimePage(index))
+    beSettable[LocalDateTime](OfficeOfTransitETAPage(index))
 
-    beRemovable[LocalDateTime](ArrivalDateTimePage(index))
+    beRemovable[LocalDateTime](OfficeOfTransitETAPage(index))
   }
 }

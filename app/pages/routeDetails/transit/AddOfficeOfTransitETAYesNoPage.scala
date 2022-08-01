@@ -19,18 +19,16 @@ package pages.routeDetails.transit
 import controllers.routeDetails.transit.routes
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
+import pages.sections.routeDetails.OfficeOfTransitCountrySection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
-import java.time.LocalDateTime
 
-import pages.sections.routeDetails.OfficeOfTransitCountrySection
-
-case class ArrivalDateTimePage(index: Index) extends QuestionPage[LocalDateTime] {
+case class AddOfficeOfTransitETAYesNoPage(index: Index) extends QuestionPage[Boolean] {
 
   override def path: JsPath = OfficeOfTransitCountrySection(index).path \ toString
 
-  override def toString: String = "arrivalDateTime"
+  override def toString: String = "addOfficeOfTransitETAYesNo"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.ArrivalDateTimeController.onPageLoad(userAnswers.lrn, mode, index))
+    Some(routes.AddOfficeOfTransitETAYesNoController.onPageLoad(userAnswers.lrn, mode, index))
 }
