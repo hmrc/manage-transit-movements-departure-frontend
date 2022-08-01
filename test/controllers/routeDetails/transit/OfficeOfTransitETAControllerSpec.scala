@@ -16,11 +16,13 @@
 
 package controllers.routeDetails.transit
 
+import java.time.LocalDateTime
+
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.DateTimeFormProvider
+import generators.Generators
 import models.NormalMode
-import navigation.Navigator
-import navigation.annotations.Transit
+import navigation.routeDetails.OfficeOfTransitCountryNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.routeDetails.transit.{OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
@@ -29,9 +31,6 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.routeDetails.transit.OfficeOfTransitETAView
-import java.time.LocalDateTime
-
-import generators.Generators
 
 import scala.concurrent.Future
 
@@ -48,7 +47,7 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Transit]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[OfficeOfTransitCountryNavigatorProvider]).toInstance(fakeOfficeOfTransitCountryNavigatorProvider))
 
   "ArrivalDateTime Controller" - {
 

@@ -18,7 +18,6 @@ package navigation.routeDetails
 
 import models.journeyDomain.routeDetails.{RouteDetailsDomain, RoutingDomain}
 import navigation.UserAnswersNavigator
-
 import javax.inject.{Inject, Singleton}
 
 @Singleton

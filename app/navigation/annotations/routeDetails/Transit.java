@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package navigation.annotations;
+package navigation.annotations.routeDetails;
 
 import com.google.inject.BindingAnnotation;
 

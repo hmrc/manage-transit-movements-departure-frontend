@@ -19,6 +19,7 @@ package controllers.routeDetails.transit
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
+import javax.inject.Inject
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.routeDetails.{OfficeOfTransitCountryNavigator, OfficeOfTransitCountryNavigatorProvider}
 import pages.routeDetails.transit.OfficeOfTransitCountryPage
@@ -29,7 +30,6 @@ import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.transit.OfficeOfTransitCountryView
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class OfficeOfTransitCountryController @Inject() (

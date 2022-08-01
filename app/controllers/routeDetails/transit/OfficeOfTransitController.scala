@@ -19,9 +19,9 @@ package controllers.routeDetails.transit
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.OfficeOfTransitFormProvider
+import javax.inject.Inject
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.Transit
+import navigation.routeDetails.{OfficeOfTransitCountryNavigator, OfficeOfTransitCountryNavigatorProvider}
 import pages.routeDetails.transit.{OfficeOfTransitCountryPage, OfficeOfTransitPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -30,13 +30,12 @@ import services.CustomsOfficesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.transit.OfficeOfTransitView
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class OfficeOfTransitController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @Transit implicit val navigator: Navigator,
+  navigatorProvider: OfficeOfTransitCountryNavigatorProvider,
   actions: Actions,
   formProvider: OfficeOfTransitFormProvider,
   service: CustomsOfficesService,
@@ -80,7 +79,10 @@ class OfficeOfTransitController @Inject() (
                 .fold(
                   formWithErrors =>
                     Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, country.description, mode, index))),
-                  value => OfficeOfTransitPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                  value => {
+                    implicit val navigator: OfficeOfTransitCountryNavigator = navigatorProvider(index)
+                    OfficeOfTransitPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                  }
                 )
           }
       }

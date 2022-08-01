@@ -17,10 +17,9 @@
 package navigation.routeDetails
 
 import models._
-import models.journeyDomain.routeDetails.{OfficeOfTransitCountryDomain, RouteDetailsDomain}
 import navigation.UserAnswersNavigator
-
 import javax.inject.{Inject, Singleton}
+import models.journeyDomain.routeDetails.transit.{OfficeOfTransitCountryDomain, TransitDomain}
 
 @Singleton
 class OfficeOfTransitCountryNavigatorProviderImpl @Inject() () extends OfficeOfTransitCountryNavigatorProvider {
@@ -36,7 +35,7 @@ trait OfficeOfTransitCountryNavigatorProvider {
 
 class OfficeOfTransitCountryNavigator(
   index: Index
-) extends UserAnswersNavigator[OfficeOfTransitCountryDomain, RouteDetailsDomain]()(
+) extends UserAnswersNavigator[OfficeOfTransitCountryDomain, TransitDomain]()(
       OfficeOfTransitCountryDomain.userAnswersReader(index),
-      RouteDetailsDomain.userAnswersReader
+      TransitDomain.userAnswersReader
     )
