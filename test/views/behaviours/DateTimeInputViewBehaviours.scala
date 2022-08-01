@@ -140,7 +140,6 @@ trait DateTimeInputViewBehaviours extends QuestionViewBehaviours[LocalDateTime] 
             assertElementContainsHref(link, "#value_day")
           }
 
-
           "when error in hour and minute inputs" in {
             val docWithError = parseView(applyView(form.withError(FormError("value", errorMessage, Seq("hour", "minute")))))
             val link         = docWithError.select(".govuk-error-summary__list > li > a").first()
@@ -152,7 +151,6 @@ trait DateTimeInputViewBehaviours extends QuestionViewBehaviours[LocalDateTime] 
             val link         = docWithError.select(".govuk-error-summary__list > li > a").first()
             assertElementContainsHref(link, "#value_day")
           }
-
 
           "when error has other args" in {
             forAll(arbitrary[String]) {
