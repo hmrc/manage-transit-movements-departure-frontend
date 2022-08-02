@@ -14,27 +14,22 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.routeDetails
+package forms
 
-import models.domain.UserAnswersReader
-import models.journeyDomain.JourneyDomainModel
-import models.journeyDomain.routeDetails.transit.TransitDomain
+import javax.inject.Inject
+import forms.mappings.Mappings
+import play.api.data.Form
+import java.time.LocalDateTime
 
-case class RouteDetailsDomain(
-  routing: RoutingDomain,
-  transit: TransitDomain
-) extends JourneyDomainModel
+class DateTimeFormProvider @Inject() extends Mappings {
 
-object RouteDetailsDomain {
-
-  implicit val userAnswersReader: UserAnswersReader[RouteDetailsDomain] = {
-
-    for {
-      routing <- UserAnswersReader[RoutingDomain]
-      transit <- UserAnswersReader[TransitDomain]
-    } yield RouteDetailsDomain(
-      routing,
-      transit
+  def apply(prefix: String): Form[LocalDateTime] =
+    Form(
+      "value" -> localDateTime(
+        invalidKey = s"$prefix.error.invalid",
+        allRequiredKey = s"$prefix.error.required.all",
+        multipleRequiredKey = s"$prefix.error.required.multiple",
+        requiredKey = s"$prefix.error.required"
+      )
     )
-  }
 }

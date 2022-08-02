@@ -14,27 +14,17 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.routeDetails
+package navigation.annotations.routeDetails;
 
-import models.domain.UserAnswersReader
-import models.journeyDomain.JourneyDomainModel
-import models.journeyDomain.routeDetails.transit.TransitDomain
+import com.google.inject.BindingAnnotation;
 
-case class RouteDetailsDomain(
-  routing: RoutingDomain,
-  transit: TransitDomain
-) extends JourneyDomainModel
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-object RouteDetailsDomain {
-
-  implicit val userAnswersReader: UserAnswersReader[RouteDetailsDomain] = {
-
-    for {
-      routing <- UserAnswersReader[RoutingDomain]
-      transit <- UserAnswersReader[TransitDomain]
-    } yield RouteDetailsDomain(
-      routing,
-      transit
-    )
-  }
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface Transit {
 }

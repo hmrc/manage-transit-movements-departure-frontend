@@ -17,26 +17,20 @@
 package pages.routeDetails.transit
 
 import controllers.routeDetails.transit.routes
-import models.{Mode, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.{OfficeOfTransitCountriesSection, TransitSection}
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
+import java.time.LocalDateTime
 
-import scala.util.Try
+import pages.sections.routeDetails.OfficeOfTransitCountrySection
 
-case object AddOfficeOfTransitYesNoPage extends QuestionPage[Boolean] {
+case class OfficeOfTransitETAPage(index: Index) extends QuestionPage[LocalDateTime] {
 
-  override def path: JsPath = TransitSection.path \ toString
+  override def path: JsPath = OfficeOfTransitCountrySection(index).path \ toString
 
-  override def toString: String = "addOfficeOfTransitYesNo"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(false) => userAnswers.remove(OfficeOfTransitCountriesSection)
-      case _           => super.cleanup(value, userAnswers)
-    }
+  override def toString: String = "arrivalDateTime"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.AddOfficeOfTransitYesNoController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.OfficeOfTransitETAController.onPageLoad(userAnswers.lrn, mode, index))
 }

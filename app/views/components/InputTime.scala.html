@@ -42,25 +42,18 @@
         id = field.id,
         items = Seq(
             InputItem(
-                classes = s"govuk-input--width-2 ${errorClass(field.error, "day")}",
-                name = s"${field.id}.day",
-                label = Some(messages("date.day.capitalized")),
-                value = field("day").value,
-                id = s"${field.id}_day"
+                classes = s"govuk-input--width-2 ${errorClass(field.error, "hour")}",
+                name = s"${field.id}.hour",
+                label = Some(messages("date.hour.capitalized")),
+                value = field("hour").value,
+                id = s"${field.id}_hour"
             ),
             InputItem(
-                classes = s"govuk-input--width-2 ${errorClass(field.error, "month")}",
-                name = s"${field.id}.month",
-                label = Some(messages("date.month.capitalized")),
-                value = field("month").value,
-                id = s"${field.id}_month"
-            ),
-            InputItem(
-                classes = s"govuk-input--width-4 ${errorClass(field.error, "year")}",
-                name = s"${field.id}.year",
-                label = Some(messages("date.year.capitalized")),
-                value = field("year").value,
-                id = s"${field.id}_year"
+                classes = s"govuk-input--width-2 ${errorClass(field.error, "minute")}",
+                name = s"${field.id}.minute",
+                label = Some(messages("date.minute.capitalized")),
+                value = field("minute").value,
+                id = s"${field.id}_minute"
             )
         ),
         hint = hint.map(hint => Hint(content = Text(messages(hint)))),

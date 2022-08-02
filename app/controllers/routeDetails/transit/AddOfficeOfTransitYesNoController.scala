@@ -21,15 +21,15 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.Transit
 import pages.routeDetails.transit.AddOfficeOfTransitYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.transit.AddOfficeOfTransitYesNoView
-
 import javax.inject.Inject
+import navigation.annotations.routeDetails.Transit
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddOfficeOfTransitYesNoController @Inject() (

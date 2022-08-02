@@ -17,7 +17,7 @@
 package navigation
 
 import models.{Index, Mode, UserAnswers}
-import navigation.routeDetails.{CountryOfRoutingNavigator, OfficeOfTransitCountryNavigator}
+import navigation.routeDetails.{CountryOfRoutingNavigator, OfficeOfTransitNavigator}
 import play.api.mvc.Call
 
 class FakeNavigator(desiredRoute: Call) extends Navigator {
@@ -32,6 +32,6 @@ class FakeCountryOfRoutingNavigator(desiredRoute: Call, index: Index) extends Co
   override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
 }
 
-class FakeOfficeOfTransitCountryNavigator(desiredRoute: Call, index: Index) extends OfficeOfTransitCountryNavigator(index) {
+class FakeOfficeOfTransitCountryNavigator(desiredRoute: Call, index: Index) extends OfficeOfTransitNavigator(index) {
   override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
 }
