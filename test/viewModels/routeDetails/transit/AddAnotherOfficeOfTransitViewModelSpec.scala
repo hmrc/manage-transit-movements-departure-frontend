@@ -35,9 +35,9 @@ class AddAnotherOfficeOfTransitViewModelSpec extends SpecBase with Generators {
     val userAnswers = (0 until noOfOfficesOfTransit).foldLeft(emptyUserAnswers) {
       (acc, i) =>
         acc
-          .setValue(OfficeOfTransitCountryPage(Index(0)), country)
-          .setValue(OfficeOfTransitPage(Index(0)), customsOffice)
-          .setValue(AddOfficeOfTransitETAYesNoPage(Index(0)), false)
+          .setValue(OfficeOfTransitCountryPage(Index(i)), country)
+          .setValue(OfficeOfTransitPage(Index(i)), customsOffice)
+          .setValue(AddOfficeOfTransitETAYesNoPage(Index(i)), false)
     }
 
     val result = AddAnotherOfficeOfTransitViewModel(userAnswers)
