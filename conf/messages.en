@@ -635,3 +635,12 @@ routeDetails.transit.officeOfTransitETA.error.required.all = Enter the estimated
 routeDetails.transit.officeOfTransitETA.error.required.multiple = The estimated date and time of arrival at the office of transit must include the missing fields
 routeDetails.transit.officeOfTransitETA.error.required = The the estimated date and time of arrival at the office of transit must include {0}
 routeDetails.transit.officeOfTransitETA.error.invalid = Enter a real date and time that you expect the transit to arrive
+
+routeDetails.transit.addAnotherOfficeOfTransit.singular.title = You’ve added {0} office of transit
+routeDetails.transit.addAnotherOfficeOfTransit.singular.heading = You’ve added {0} office of transit
+routeDetails.transit.addAnotherOfficeOfTransit.plural.title = You’ve added {0} offices of transit
+routeDetails.transit.addAnotherOfficeOfTransit.plural.heading = You’ve added {0} offices of transit
+routeDetails.transit.addAnotherOfficeOfTransit.error.required = Select yes if you need to add another office of transit
+routeDetails.transit.addAnotherOfficeOfTransit.label = Do you want to add another office of transit?
+routeDetails.transit.addAnotherOfficeOfTransit.maxLimit.label = You cannot add any more offices of transit. To add another office, you need to remove one first.
+
