@@ -16,7 +16,7 @@
 
 package utils.cyaHelpers.routeDetails
 
-import controllers.routeDetails.routing.routes
+import controllers.routeDetails.transit.routes
 import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
 import models.reference.Country
 import models.{Index, Mode, UserAnswers}
@@ -37,8 +37,7 @@ class TransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
           page = OfficeOfTransitCountryPage(index),
           getName = _.country,
           formatName = _.toString,
-          removeRoute =
-            routes.RemoveCountryOfRoutingYesNoController.onPageLoad(userAnswers.lrn, index) //ToDo Change to RemoveOfficeOfTransitYesNoController once written
+          removeRoute = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, index)
         )(OfficeOfTransitDomain.userAnswersReader(index), implicitly[Reads[Country]])
     }
 }
