@@ -32,4 +32,6 @@ POST       /:lrn/route-details/transit/:index/change-office-of-transit-eta      
 GET        /:lrn/route-details/transit/add-another-office-of-transit                          controllers.routeDetails.transit.AddAnotherOfficeOfTransitController.onPageLoad(lrn: LocalReferenceNumber)
 POST       /:lrn/route-details/transit/add-another-office-of-transit                          controllers.routeDetails.transit.AddAnotherOfficeOfTransitController.onSubmit(lrn: LocalReferenceNumber)
 
+GET        /:lrn/route-details/transit/:index/confirm-remove-office-of-transit                controllers.routeDetails.transit.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
+POST       /:lrn/route-details/transit/:index/confirm-remove-office-of-transit                controllers.routeDetails.transit.ConfirmRemoveOfficeOfTransitController.onSubmit(lrn: LocalReferenceNumber, index: Index)
 
