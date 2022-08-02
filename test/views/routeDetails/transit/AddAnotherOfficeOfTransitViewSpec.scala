@@ -16,26 +16,39 @@
 
 package views.routeDetails.transit
 
-import models.NormalMode
+import forms.AddAnotherFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
+import views.behaviours.ListWithActionsViewBehaviours
 import views.html.routeDetails.transit.AddAnotherOfficeOfTransitView
 
-class AddAnotherOfficeOfTransitViewSpec extends YesNoViewBehaviours {
+class AddAnotherOfficeOfTransitViewSpec extends ListWithActionsViewBehaviours {
+
+  override def maxNumber: Int = frontendAppConfig.maxGuarantees
+
+  private def formProvider = new AddAnotherFormProvider()
+
+  override def form: Form[Boolean] = formProvider(prefix, allowMore = true)
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[AddAnotherOfficeOfTransitView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector
+      .instanceOf[AddAnotherOfficeOfTransitView]
+      .apply(form, lrn, listItems, allowMoreOfficesOfTransit = true)(fakeRequest, messages)
+
+  override def applyMaxedOutView: HtmlFormat.Appendable =
+    injector
+      .instanceOf[AddAnotherOfficeOfTransitView]
+      .apply(formProvider(prefix, allowMore = false), lrn, maxedOutListItems, allowMoreOfficesOfTransit = false)(fakeRequest, messages)
 
   override val prefix: String = "routeDetails.transit.addAnotherOfficeOfTransit"
 
-  behave like pageWithTitle()
-
   behave like pageWithBackLink
 
-  behave like pageWithHeading()
+  behave like pageWithSectionCaption("Route details")
 
-  behave like pageWithRadioItems()
+  behave like pageWithMoreItemsAllowed()
 
-  behave like pageWithSubmitButton("Save and continue")
+  behave like pageWithItemsMaxedOut()
+
+  behave like pageWithSubmitButton("Continue")
 }

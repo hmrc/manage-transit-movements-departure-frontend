@@ -16,22 +16,23 @@
 
 package controllers.routeDetails.transit
 
+import config.FrontendAppConfig
 import controllers.actions._
-import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
+import controllers.routes.TaskListController
 import forms.AddAnotherFormProvider
-import models.{LocalReferenceNumber, Mode}
+import javax.inject.Inject
+import models.requests.DataRequest
+import models.{Index, LocalReferenceNumber, NormalMode}
 import navigation.Navigator
-import pages.routeDetails.transit.AddAnotherOfficeOfTransitPage
+import navigation.annotations.routeDetails.Transit
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel.AddAnotherOfficeOfTransitViewModelProvider
 import views.html.routeDetails.transit.AddAnotherOfficeOfTransitView
-import javax.inject.Inject
-import navigation.annotations.routeDetails.Transit
-import play.api.data.Form
-
-import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherOfficeOfTransitController @Inject() (
   override val messagesApi: MessagesApi,
@@ -39,32 +40,42 @@ class AddAnotherOfficeOfTransitController @Inject() (
   @Transit implicit val navigator: Navigator,
   actions: Actions,
   formProvider: AddAnotherFormProvider,
+  config: FrontendAppConfig,
+  viewModelProvider: AddAnotherOfficeOfTransitViewModelProvider,
   val controllerComponents: MessagesControllerComponents,
   view: AddAnotherOfficeOfTransitView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+) extends FrontendBaseController
     with I18nSupport {
 
   private def form(allowMoreOfficesOfTransit: Boolean): Form[Boolean] =
-    formProvider("guaranteeDetails.addAnotherOfficeOfTransit", allowMoreOfficesOfTransit)
+    formProvider("routeDetails.transit.addAnotherOfficeOfTransit", allowMoreOfficesOfTransit)
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(AddAnotherOfficeOfTransitPage) match {
-        case None        => form(true)
-        case Some(value) => form(true).fill(value)
+      val (officesOfTransit, numberOfOfficesOfTransit, allowMoreOfficesOfTransit) = viewData
+      numberOfOfficesOfTransit match {
+        case 0 => Redirect(routes.AddOfficeOfTransitYesNoController.onPageLoad(lrn, NormalMode))
+        case _ => Ok(view(form(allowMoreOfficesOfTransit), lrn, officesOfTransit, allowMoreOfficesOfTransit))
       }
-
-      Ok(view(preparedForm, lrn, mode))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
+  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      form(true)
+      val (officesOfTransit, numberOfOfficesOfTransit, allowMoreOfficesOfTransit) = viewData
+      form(allowMoreOfficesOfTransit)
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => AddAnotherOfficeOfTransitPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+          formWithErrors => BadRequest(view(formWithErrors, lrn, officesOfTransit, allowMoreOfficesOfTransit)),
+          {
+            case true  => Redirect(routes.OfficeOfTransitCountryController.onPageLoad(lrn, NormalMode, Index(numberOfOfficesOfTransit)))
+            case false => Redirect(TaskListController.onPageLoad(lrn))
+          }
         )
+  }
+
+  private def viewData(implicit request: DataRequest[_]): (Seq[ListItem], Int, Boolean) = {
+    val officesOfTransit         = viewModelProvider.apply(request.userAnswers).listItems
+    val numberOfOfficesOfTransit = officesOfTransit.length
+    (officesOfTransit, numberOfOfficesOfTransit, numberOfOfficesOfTransit < config.maxOfficesOfTransit)
   }
 }

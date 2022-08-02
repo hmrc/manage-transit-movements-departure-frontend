@@ -17,108 +17,202 @@
 package controllers.routeDetails.transit
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.YesNoFormProvider
-import models.NormalMode
-import navigation.Navigator
-import navigation.annotations.routeDetails.Transit
+import forms.AddAnotherFormProvider
+import generators.Generators
+import models.{Index, NormalMode}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
-import pages.routeDetails.transit.AddAnotherOfficeOfTransitPage
+import org.mockito.Mockito.{reset, when}
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
+import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel
+import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel.AddAnotherOfficeOfTransitViewModelProvider
 import views.html.routeDetails.transit.AddAnotherOfficeOfTransitView
 
-import scala.concurrent.Future
+class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
-class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
+  private val formProvider                            = new AddAnotherFormProvider()
+  private def form(allowMoreOfficeOfTransit: Boolean) = formProvider("routeDetails.transit.addAnotherOfficeOfTransit", allowMoreOfficeOfTransit)
 
-  private val formProvider                        = new YesNoFormProvider()
-  private val form                                = formProvider("routeDetails.transit.addAnotherOfficeOfTransit")
-  private val mode                                = NormalMode
-  private lazy val addAnotherOfficeOfTransitRoute = routes.AddAnotherOfficeOfTransitController.onPageLoad(lrn, mode).url
+  private lazy val addAnotherRoute = routes.AddAnotherOfficeOfTransitController.onPageLoad(lrn).url
+
+  private val mockViewModelProvider = mock[AddAnotherOfficeOfTransitViewModelProvider]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Transit]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[AddAnotherOfficeOfTransitViewModelProvider]).toInstance(mockViewModelProvider))
 
-  "AddAnotherOfficeOfTransit Controller" - {
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(mockViewModelProvider)
+  }
 
-    "must return OK and the correct view for a GET" in {
+  private val listItem          = arbitrary[ListItem].sample.value
+  private val listItems         = Seq.fill(Gen.choose(1: Int, 8: Int).sample.value)(listItem)
+  private val maxedOutListItems = Seq.fill(9: Int)(listItem)
 
-      setExistingUserAnswers(emptyUserAnswers)
+  "AddAnotherOfficeOfTransitController" - {
 
-      val request = FakeRequest(GET, addAnotherOfficeOfTransitRoute)
-      val result  = route(app, request).value
+    "redirect to add office of transit yes/no page" - {
+      "when 0 offices of transit" in {
+        when(mockViewModelProvider.apply(any())(any()))
+          .thenReturn(AddAnotherOfficeOfTransitViewModel(Nil))
 
-      val view = injector.instanceOf[AddAnotherOfficeOfTransitView]
+        setExistingUserAnswers(emptyUserAnswers)
 
-      status(result) mustEqual OK
+        val request = FakeRequest(GET, addAnotherRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
-      contentAsString(result) mustEqual
-        view(form, lrn, mode)(request, messages).toString
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.AddOfficeOfTransitYesNoController.onPageLoad(lrn, NormalMode).url
+      }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must return OK and the correct view for a GET" - {
+      "when max limit not reached" in {
 
-      val userAnswers = emptyUserAnswers.setValue(AddAnotherOfficeOfTransitPage, true)
-      setExistingUserAnswers(userAnswers)
+        val allowMoreOfficesOfTransit = true
 
-      val request = FakeRequest(GET, addAnotherOfficeOfTransitRoute)
+        when(mockViewModelProvider.apply(any())(any()))
+          .thenReturn(AddAnotherOfficeOfTransitViewModel(listItems))
 
-      val result = route(app, request).value
+        setExistingUserAnswers(emptyUserAnswers)
 
-      val filledForm = form.bind(Map("value" -> "true"))
+        val request = FakeRequest(GET, addAnotherRoute)
 
-      val view = injector.instanceOf[AddAnotherOfficeOfTransitView]
+        val result = route(app, request).value
 
-      status(result) mustEqual OK
+        val view = injector.instanceOf[AddAnotherOfficeOfTransitView]
 
-      contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form(allowMoreOfficesOfTransit), lrn, listItems, allowMoreOfficesOfTransit)(request, messages).toString
+      }
+
+      "when max limit reached" in {
+
+        val allowMoreOfficesOfTransit = false
+
+        val listItems = maxedOutListItems
+
+        when(mockViewModelProvider.apply(any())(any()))
+          .thenReturn(AddAnotherOfficeOfTransitViewModel(listItems))
+
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(GET, addAnotherRoute)
+
+        val result = route(app, request).value
+
+        val view = injector.instanceOf[AddAnotherOfficeOfTransitView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form(allowMoreOfficesOfTransit), lrn, listItems, allowMoreOfficesOfTransit)(request, messages).toString
+      }
     }
 
-    "must redirect to the next page when valid data is submitted" in {
+    "when max limit not reached" - {
+      "when yes submitted" - {
+        "must redirect to office of transit country page at next index" in {
+          when(mockViewModelProvider.apply(any())(any()))
+            .thenReturn(AddAnotherOfficeOfTransitViewModel(listItems))
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+          setExistingUserAnswers(emptyUserAnswers)
 
-      setExistingUserAnswers(emptyUserAnswers)
+          val request = FakeRequest(POST, addAnotherRoute)
+            .withFormUrlEncodedBody(("value", "true"))
 
-      val request = FakeRequest(POST, addAnotherOfficeOfTransitRoute)
-        .withFormUrlEncodedBody(("value", "true"))
+          val result = route(app, request).value
 
-      val result = route(app, request).value
+          status(result) mustEqual SEE_OTHER
 
-      status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual
+            controllers.routeDetails.transit.routes.OfficeOfTransitCountryController.onPageLoad(lrn, NormalMode, Index(listItems.length)).url
+        }
+      }
 
-      redirectLocation(result).value mustEqual onwardRoute.url
+      "when no submitted" - {
+        "must redirect to task list" in {
+          when(mockViewModelProvider.apply(any())(any()))
+            .thenReturn(AddAnotherOfficeOfTransitViewModel(listItems))
+
+          setExistingUserAnswers(emptyUserAnswers)
+
+          val request = FakeRequest(POST, addAnotherRoute)
+            .withFormUrlEncodedBody(("value", "false"))
+
+          val result = route(app, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.routes.TaskListController.onPageLoad(lrn).url
+        }
+      }
     }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+    "when max limit reached" - {
+      "must redirect to task list" in {
+        when(mockViewModelProvider.apply(any())(any()))
+          .thenReturn(AddAnotherOfficeOfTransitViewModel(maxedOutListItems))
 
-      setExistingUserAnswers(emptyUserAnswers)
+        setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, addAnotherOfficeOfTransitRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm = form.bind(Map("value" -> ""))
+        val request = FakeRequest(POST, addAnotherRoute)
+          .withFormUrlEncodedBody(("value", ""))
 
-      val result = route(app, request).value
+        val result = route(app, request).value
 
-      status(result) mustEqual BAD_REQUEST
+        status(result) mustEqual SEE_OTHER
 
-      val view = injector.instanceOf[AddAnotherOfficeOfTransitView]
+        redirectLocation(result).value mustEqual
+          controllers.routes.TaskListController.onPageLoad(lrn).url
+      }
+    }
 
-      contentAsString(result) mustEqual
-        view(boundForm, lrn, mode)(request, messages).toString
+    "must return a Bad Request and errors" - {
+      "when invalid data is submitted and max limit not reached" in {
+        when(mockViewModelProvider.apply(any())(any()))
+          .thenReturn(AddAnotherOfficeOfTransitViewModel(listItems))
+
+        val allowMoreOfficesOfTransit = true
+
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(POST, addAnotherRoute)
+          .withFormUrlEncodedBody(("value", ""))
+
+        val boundForm = form(allowMoreOfficesOfTransit).bind(Map("value" -> ""))
+
+        val result = route(app, request).value
+
+        val view = injector.instanceOf[AddAnotherOfficeOfTransitView]
+
+        status(result) mustEqual BAD_REQUEST
+
+        contentAsString(result) mustEqual
+          view(boundForm, lrn, listItems, allowMoreOfficesOfTransit)(request, messages).toString
+      }
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, addAnotherOfficeOfTransitRoute)
+      val request = FakeRequest(GET, addAnotherRoute)
 
       val result = route(app, request).value
 
@@ -131,7 +225,7 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, addAnotherOfficeOfTransitRoute)
+      val request = FakeRequest(POST, addAnotherRoute)
         .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value

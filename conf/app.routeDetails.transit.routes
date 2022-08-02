@@ -29,8 +29,7 @@ POST       /:lrn/route-details/transit/:index/office-of-transit-eta             
 GET        /:lrn/route-details/transit/:index/change-office-of-transit-eta                    controllers.routeDetails.transit.OfficeOfTransitETAController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
 POST       /:lrn/route-details/transit/:index/change-office-of-transit-eta                    controllers.routeDetails.transit.OfficeOfTransitETAController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
 
-GET        /:lrn/route-details/transit/add-another-office-of-transit                          controllers.routeDetails.transit.AddAnotherOfficeOfTransitController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/route-details/transit/add-another-office-of-transit                          controllers.routeDetails.transit.AddAnotherOfficeOfTransitController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/route-details/transit/change-add-another-office-of-transit                   controllers.routeDetails.transit.AddAnotherOfficeOfTransitController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/route-details/transit/change-add-another-office-of-transit                   controllers.routeDetails.transit.AddAnotherOfficeOfTransitController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/route-details/transit/add-another-office-of-transit                          controllers.routeDetails.transit.AddAnotherOfficeOfTransitController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/route-details/transit/add-another-office-of-transit                          controllers.routeDetails.transit.AddAnotherOfficeOfTransitController.onSubmit(lrn: LocalReferenceNumber)
+
 
