@@ -20,23 +20,23 @@ import models._
 import navigation.UserAnswersNavigator
 import javax.inject.{Inject, Singleton}
 import models.journeyDomain.routeDetails.RouteDetailsDomain
-import models.journeyDomain.routeDetails.transit.OfficeOfTransitCountryDomain
+import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
 
 @Singleton
-class OfficeOfTransitCountryNavigatorProviderImpl @Inject() () extends OfficeOfTransitCountryNavigatorProvider {
+class OfficeOfTransitNavigatorProviderImpl @Inject() () extends OfficeOfTransitNavigatorProvider {
 
-  def apply(index: Index): OfficeOfTransitCountryNavigator =
-    new OfficeOfTransitCountryNavigator(index)
+  def apply(index: Index): OfficeOfTransitNavigator =
+    new OfficeOfTransitNavigator(index)
 }
 
-trait OfficeOfTransitCountryNavigatorProvider {
+trait OfficeOfTransitNavigatorProvider {
 
-  def apply(index: Index): OfficeOfTransitCountryNavigator
+  def apply(index: Index): OfficeOfTransitNavigator
 }
 
-class OfficeOfTransitCountryNavigator(
+class OfficeOfTransitNavigator(
   index: Index
-) extends UserAnswersNavigator[OfficeOfTransitCountryDomain, RouteDetailsDomain]()(
-      OfficeOfTransitCountryDomain.userAnswersReader(index),
+) extends UserAnswersNavigator[OfficeOfTransitDomain, RouteDetailsDomain]()(
+      OfficeOfTransitDomain.userAnswersReader(index),
       RouteDetailsDomain.userAnswersReader
     )

@@ -24,17 +24,17 @@ import pages.sections.routeDetails.OfficeOfTransitCountriesSection
 
 case class TransitDomain(
   t2DeclarationType: Boolean,
-  officesOfTransitCountries: Seq[OfficeOfTransitCountryDomain]
+  officesOfTransitCountries: Seq[OfficeOfTransitDomain]
 ) extends JourneyDomainModel
 
 object TransitDomain {
 
-  private val officeOfTransitCountriesReader: UserAnswersReader[Seq[OfficeOfTransitCountryDomain]] =
+  private val officeOfTransitCountriesReader: UserAnswersReader[Seq[OfficeOfTransitDomain]] =
     OfficeOfTransitCountriesSection.reader.flatMap {
       case x if x.isEmpty =>
-        UserAnswersReader.fail[Seq[OfficeOfTransitCountryDomain]](OfficeOfTransitCountryPage(Index(0)))
+        UserAnswersReader.fail[Seq[OfficeOfTransitDomain]](OfficeOfTransitCountryPage(Index(0)))
       case x =>
-        x.traverse[OfficeOfTransitCountryDomain](OfficeOfTransitCountryDomain.userAnswersReader).map(_.toSeq)
+        x.traverse[OfficeOfTransitDomain](OfficeOfTransitDomain.userAnswersReader).map(_.toSeq)
     }
 
   implicit val userAnswersReader: UserAnswersReader[TransitDomain] = {

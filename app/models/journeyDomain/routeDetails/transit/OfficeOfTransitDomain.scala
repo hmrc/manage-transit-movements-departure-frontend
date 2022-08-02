@@ -25,22 +25,22 @@ import models.journeyDomain.JourneyDomainModel
 import models.reference.{Country, CustomsOffice}
 import pages.routeDetails.transit.{AddOfficeOfTransitETAYesNoPage, _}
 
-case class OfficeOfTransitCountryDomain(
+case class OfficeOfTransitDomain(
   country: Country,
   customsOffice: CustomsOffice,
   officeOfTransitETA: Option[LocalDateTime]
 )(index: Index)
     extends JourneyDomainModel {}
 
-object OfficeOfTransitCountryDomain {
+object OfficeOfTransitDomain {
 
-  implicit def userAnswersReader(index: Index): UserAnswersReader[OfficeOfTransitCountryDomain] =
+  implicit def userAnswersReader(index: Index): UserAnswersReader[OfficeOfTransitDomain] =
     (
       OfficeOfTransitCountryPage(index).reader,
       OfficeOfTransitPage(index).reader,
       AddOfficeOfTransitETAYesNoPage(index).filterOptionalDependent(identity)(OfficeOfTransitETAPage(index).reader)
     ).mapN {
       (officeOfTransitCountry, officeOfTransit, officeOfTransitETA) =>
-        OfficeOfTransitCountryDomain(officeOfTransitCountry, officeOfTransit, officeOfTransitETA)(index)
+        OfficeOfTransitDomain(officeOfTransitCountry, officeOfTransit, officeOfTransitETA)(index)
     }
 }

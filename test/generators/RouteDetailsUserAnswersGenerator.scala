@@ -17,7 +17,7 @@
 package generators
 
 import models.journeyDomain.routeDetails._
-import models.journeyDomain.routeDetails.transit.{OfficeOfTransitCountryDomain, TransitDomain}
+import models.journeyDomain.routeDetails.transit.{OfficeOfTransitDomain, TransitDomain}
 import models.{Index, UserAnswers}
 import org.scalacheck.Gen
 
@@ -37,5 +37,5 @@ trait RouteDetailsUserAnswersGenerator extends UserAnswersGenerator {
     buildUserAnswers[TransitDomain](userAnswers)
 
   def arbitraryOfficeOfTransitCountryAnswers(userAnswers: UserAnswers, index: Index): Gen[UserAnswers] =
-    buildUserAnswers[OfficeOfTransitCountryDomain](userAnswers)(OfficeOfTransitCountryDomain.userAnswersReader(index))
+    buildUserAnswers[OfficeOfTransitDomain](userAnswers)(OfficeOfTransitDomain.userAnswersReader(index))
 }

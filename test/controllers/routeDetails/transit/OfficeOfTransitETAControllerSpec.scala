@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.DateTimeFormProvider
 import generators.Generators
 import models.NormalMode
-import navigation.routeDetails.OfficeOfTransitCountryNavigatorProvider
+import navigation.routeDetails.OfficeOfTransitNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.routeDetails.transit.{OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
@@ -45,7 +45,7 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[OfficeOfTransitCountryNavigatorProvider]).toInstance(fakeOfficeOfTransitCountryNavigatorProvider))
+      .overrides(bind(classOf[OfficeOfTransitNavigatorProvider]).toInstance(fakeOfficeOfTransitNavigatorProvider))
 
   "ArrivalDateTime Controller" - {
 

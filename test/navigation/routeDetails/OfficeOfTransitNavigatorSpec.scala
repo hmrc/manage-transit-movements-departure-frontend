@@ -21,9 +21,9 @@ import generators.{Generators, RouteDetailsUserAnswersGenerator}
 import models._
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class OfficeOfTransitCountryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class OfficeOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
-  private val navigator = new OfficeOfTransitCountryNavigator(index)
+  private val navigator = new OfficeOfTransitNavigator(index)
 
   "Office of Transit Country Navigator" - {
 

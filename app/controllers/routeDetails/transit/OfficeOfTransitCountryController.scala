@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
 import javax.inject.Inject
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.routeDetails.{OfficeOfTransitCountryNavigator, OfficeOfTransitCountryNavigatorProvider}
+import navigation.routeDetails.{OfficeOfTransitNavigator, OfficeOfTransitNavigatorProvider}
 import pages.routeDetails.transit.OfficeOfTransitCountryPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class OfficeOfTransitCountryController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: OfficeOfTransitCountryNavigatorProvider,
+  navigatorProvider: OfficeOfTransitNavigatorProvider,
   actions: Actions,
   formProvider: CountryFormProvider,
   service: CountriesService,
@@ -69,7 +69,7 @@ class OfficeOfTransitCountryController @Inject() (
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode, index))),
               value => {
-                implicit val navigator: OfficeOfTransitCountryNavigator = navigatorProvider(index)
+                implicit val navigator: OfficeOfTransitNavigator = navigatorProvider(index)
                 OfficeOfTransitCountryPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
               }
             )

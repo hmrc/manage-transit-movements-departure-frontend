@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.OfficeOfTransitFormProvider
 import generators.Generators
 import models.{CustomsOfficeList, NormalMode}
-import navigation.routeDetails.OfficeOfTransitCountryNavigatorProvider
+import navigation.routeDetails.OfficeOfTransitNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.routeDetails.transit.{OfficeOfTransitCountryPage, OfficeOfTransitPage}
@@ -50,7 +50,7 @@ class OfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixt
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[OfficeOfTransitCountryNavigatorProvider]).toInstance(fakeOfficeOfTransitCountryNavigatorProvider))
+      .overrides(bind(classOf[OfficeOfTransitNavigatorProvider]).toInstance(fakeOfficeOfTransitNavigatorProvider))
       .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
   "OfficeOfTransit Controller" - {
