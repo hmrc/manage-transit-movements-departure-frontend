@@ -24,7 +24,6 @@ import pages.sections.routeDetails.OfficeOfTransitCountriesSection
 
 case class TransitDomain(
   t2DeclarationType: Boolean,
-  addOfficeOfTransit: Boolean,
   officesOfTransitCountries: Seq[OfficeOfTransitCountryDomain]
 ) extends JourneyDomainModel
 
@@ -42,11 +41,9 @@ object TransitDomain {
 
     for {
       t2DeclarationType         <- T2DeclarationTypeYesNoPage.reader
-      addOfficeOfTransit        <- AddOfficeOfTransitYesNoPage.reader
       officesOfTransitCountries <- AddOfficeOfTransitYesNoPage.filterOptionalDependent(identity)(officeOfTransitCountriesReader)
     } yield TransitDomain(
       t2DeclarationType,
-      addOfficeOfTransit,
       officesOfTransitCountries.getOrElse(Nil)
     )
   }

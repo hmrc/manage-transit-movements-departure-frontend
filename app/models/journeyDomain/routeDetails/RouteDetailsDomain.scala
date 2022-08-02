@@ -18,9 +18,11 @@ package models.journeyDomain.routeDetails
 
 import models.domain.UserAnswersReader
 import models.journeyDomain.JourneyDomainModel
+import models.journeyDomain.routeDetails.transit.TransitDomain
 
 case class RouteDetailsDomain(
-  routing: RoutingDomain
+  routing: RoutingDomain,
+  transit: TransitDomain
 ) extends JourneyDomainModel
 
 object RouteDetailsDomain {
@@ -29,8 +31,10 @@ object RouteDetailsDomain {
 
     for {
       routing <- UserAnswersReader[RoutingDomain]
+      transit <- UserAnswersReader[TransitDomain]
     } yield RouteDetailsDomain(
-      routing
+      routing,
+      transit
     )
   }
 }

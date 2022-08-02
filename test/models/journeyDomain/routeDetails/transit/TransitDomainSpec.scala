@@ -44,7 +44,6 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
 
         val expectedResult = TransitDomain(
           t2DeclarationType = t2DeclarationType,
-          addOfficeOfTransit = false,
           officesOfTransitCountries = Nil
         )
 
@@ -65,9 +64,8 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
 
         val expectedResult = TransitDomain(
           t2DeclarationType = t2DeclarationType,
-          addOfficeOfTransit = addOfficeOfTransitYesNo,
           officesOfTransitCountries = Seq(
-            OfficeOfTransitCountryDomain(country, customsOffice, addOfficeOfTransitETAYesNo, Some(officeOfTransitETA))(index)
+            OfficeOfTransitCountryDomain(country, customsOffice, Some(officeOfTransitETA))(index)
           )
         )
 

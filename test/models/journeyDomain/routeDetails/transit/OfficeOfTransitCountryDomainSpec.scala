@@ -44,7 +44,6 @@ class OfficeOfTransitCountryDomainSpec extends SpecBase with Generators {
         val expectedResult = OfficeOfTransitCountryDomain(
           country = country,
           customsOffice = customsOffice,
-          addOfficeOfTransitETA = addOfficeOfTransitETAYesNo,
           officeOfTransitETA = Some(officeOfTransitETA)
         )(index)
 
@@ -68,7 +67,6 @@ class OfficeOfTransitCountryDomainSpec extends SpecBase with Generators {
         val expectedResult = OfficeOfTransitCountryDomain(
           country = country,
           customsOffice = customsOffice,
-          addOfficeOfTransitETA = addOfficeOfTransitETAYesNo,
           officeOfTransitETA = None
         )(index)
 

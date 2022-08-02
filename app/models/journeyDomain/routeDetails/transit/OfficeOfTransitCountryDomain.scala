@@ -28,7 +28,6 @@ import pages.routeDetails.transit.{AddOfficeOfTransitETAYesNoPage, _}
 case class OfficeOfTransitCountryDomain(
   country: Country,
   customsOffice: CustomsOffice,
-  addOfficeOfTransitETA: Boolean,
   officeOfTransitETA: Option[LocalDateTime]
 )(index: Index)
     extends JourneyDomainModel {}
@@ -39,10 +38,9 @@ object OfficeOfTransitCountryDomain {
     (
       OfficeOfTransitCountryPage(index).reader,
       OfficeOfTransitPage(index).reader,
-      AddOfficeOfTransitETAYesNoPage(index).reader,
       AddOfficeOfTransitETAYesNoPage(index).filterOptionalDependent(identity)(OfficeOfTransitETAPage(index).reader)
     ).mapN {
-      (officeOfTransitCountry, officeOfTransit, addOfficeOfTransitETAYesNo, officeOfTransitETA) =>
-        OfficeOfTransitCountryDomain(officeOfTransitCountry, officeOfTransit, addOfficeOfTransitETAYesNo, officeOfTransitETA)(index)
+      (officeOfTransitCountry, officeOfTransit, officeOfTransitETA) =>
+        OfficeOfTransitCountryDomain(officeOfTransitCountry, officeOfTransit, officeOfTransitETA)(index)
     }
 }
