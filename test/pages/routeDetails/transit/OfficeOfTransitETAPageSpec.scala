@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package navigation.annotations;
+package pages.routeDetails.transit
 
-import com.google.inject.BindingAnnotation;
+import pages.behaviours.PageBehaviours
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.time.LocalDateTime
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
-@BindingAnnotation
-public @interface Transit {
+class OfficeOfTransitETAPageSpec extends PageBehaviours {
+
+  "OfficeOfTransitETAPage" - {
+
+    beRetrievable[LocalDateTime](OfficeOfTransitETAPage(index))
+
+    beSettable[LocalDateTime](OfficeOfTransitETAPage(index))
+
+    beRemovable[LocalDateTime](OfficeOfTransitETAPage(index))
+  }
 }

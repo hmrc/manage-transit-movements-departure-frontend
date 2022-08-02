@@ -18,76 +18,83 @@ package controllers.routeDetails.transit
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
+import generators.Generators
 import models.NormalMode
-import navigation.Navigator
-import navigation.annotations.routeDetails.Transit
+import navigation.routeDetails.OfficeOfTransitNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.routeDetails.transit.T2DeclarationTypeYesNoPage
+import pages.routeDetails.transit.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.routeDetails.transit.T2DeclarationTypeYesNoView
+import views.html.routeDetails.transit.AddOfficeOfTransitETAYesNoView
 
 import scala.concurrent.Future
 
-class T2DeclarationTypeYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
+class AddOfficeOfTransitETAYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with Generators {
 
-  private val formProvider                     = new YesNoFormProvider()
-  private val form                             = formProvider("routeDetails.transit.t2DeclarationTypeYesNo")
-  private val mode                             = NormalMode
-  private lazy val t2DeclarationTypeYesNoRoute = routes.T2DeclarationTypeYesNoController.onPageLoad(lrn, mode).url
+  private val formProvider                         = new YesNoFormProvider()
+  private val officeOfTransit                      = arbitraryCustomsOffice.arbitrary.sample.get
+  private val form                                 = formProvider("routeDetails.transit.addOfficeOfTransitETAYesNo")
+  private val mode                                 = NormalMode
+  private lazy val addOfficeOfTransitETAYesNoRoute = routes.AddOfficeOfTransitETAYesNoController.onPageLoad(lrn, mode, index).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Transit]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[OfficeOfTransitNavigatorProvider]).toInstance(fakeOfficeOfTransitNavigatorProvider))
 
-  "T2DeclarationTypeYesNo Controller" - {
+  "AddOfficeOfTransitETAYesNo Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val updatedUserAnswers = emptyUserAnswers.setValue(OfficeOfTransitPage(index), officeOfTransit)
 
-      val request = FakeRequest(GET, t2DeclarationTypeYesNoRoute)
+      setExistingUserAnswers(updatedUserAnswers)
+
+      val request = FakeRequest(GET, addOfficeOfTransitETAYesNoRoute)
       val result  = route(app, request).value
 
-      val view = injector.instanceOf[T2DeclarationTypeYesNoView]
+      val view = injector.instanceOf[AddOfficeOfTransitETAYesNoView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode)(request, messages).toString
+        view(form, lrn, mode, officeOfTransit, index)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(T2DeclarationTypeYesNoPage, true)
+      val userAnswers = emptyUserAnswers
+        .setValue(OfficeOfTransitPage(index), officeOfTransit)
+        .setValue(AddOfficeOfTransitETAYesNoPage(index), true)
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, t2DeclarationTypeYesNoRoute)
+      val request = FakeRequest(GET, addOfficeOfTransitETAYesNoRoute)
 
       val result = route(app, request).value
 
       val filledForm = form.bind(Map("value" -> "true"))
 
-      val view = injector.instanceOf[T2DeclarationTypeYesNoView]
+      val view = injector.instanceOf[AddOfficeOfTransitETAYesNoView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
+        view(filledForm, lrn, mode, officeOfTransit, index)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val updatedUserAnswers = emptyUserAnswers.setValue(OfficeOfTransitPage(index), officeOfTransit)
 
-      val request = FakeRequest(POST, t2DeclarationTypeYesNoRoute)
+      setExistingUserAnswers(updatedUserAnswers)
+
+      val request = FakeRequest(POST, addOfficeOfTransitETAYesNoRoute)
         .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
@@ -99,26 +106,27 @@ class T2DeclarationTypeYesNoControllerSpec extends SpecBase with AppWithDefaultM
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val updatedUserAnswers = emptyUserAnswers.setValue(OfficeOfTransitPage(index), officeOfTransit)
+      setExistingUserAnswers(updatedUserAnswers)
 
-      val request   = FakeRequest(POST, t2DeclarationTypeYesNoRoute).withFormUrlEncodedBody(("value", ""))
+      val request   = FakeRequest(POST, addOfficeOfTransitETAYesNoRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[T2DeclarationTypeYesNoView]
+      val view = injector.instanceOf[AddOfficeOfTransitETAYesNoView]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, mode)(request, messages).toString
+        view(boundForm, lrn, mode, officeOfTransit, index)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, t2DeclarationTypeYesNoRoute)
+      val request = FakeRequest(GET, addOfficeOfTransitETAYesNoRoute)
 
       val result = route(app, request).value
 
@@ -131,7 +139,7 @@ class T2DeclarationTypeYesNoControllerSpec extends SpecBase with AppWithDefaultM
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, t2DeclarationTypeYesNoRoute)
+      val request = FakeRequest(POST, addOfficeOfTransitETAYesNoRoute)
         .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value

@@ -18,18 +18,19 @@ package controllers.routeDetails.transit
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.YesNoFormProvider
+import forms.AddAnotherFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.Transit
 import pages.routeDetails.transit.AddAnotherOfficeOfTransitPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.transit.AddAnotherOfficeOfTransitView
-
 import javax.inject.Inject
+import navigation.annotations.routeDetails.Transit
+import play.api.data.Form
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherOfficeOfTransitController @Inject() (
@@ -37,20 +38,21 @@ class AddAnotherOfficeOfTransitController @Inject() (
   implicit val sessionRepository: SessionRepository,
   @Transit implicit val navigator: Navigator,
   actions: Actions,
-  formProvider: YesNoFormProvider,
+  formProvider: AddAnotherFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: AddAnotherOfficeOfTransitView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form(allowMoreOfficesOfTransit) = formProvider("routeDetails.transit.addAnotherOfficeOfTransit", allowMoreOfficesOfTransit)
+  private def form(allowMoreOfficesOfTransit: Boolean): Form[Boolean] =
+    formProvider("guaranteeDetails.addAnotherOfficeOfTransit", allowMoreOfficesOfTransit)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
       val preparedForm = request.userAnswers.get(AddAnotherOfficeOfTransitPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
+        case None        => form(true)
+        case Some(value) => form(true).fill(value)
       }
 
       Ok(view(preparedForm, lrn, mode))
@@ -58,7 +60,7 @@ class AddAnotherOfficeOfTransitController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      form
+      form(true)
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),

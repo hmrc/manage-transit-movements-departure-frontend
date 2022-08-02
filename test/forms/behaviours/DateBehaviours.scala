@@ -18,8 +18,7 @@ package forms.behaviours
 
 import org.scalacheck.Gen
 import play.api.data.{Form, FormError}
-
-import java.time.LocalDate
+import java.time.{LocalDate, LocalDateTime}
 import java.time.format.DateTimeFormatter
 
 class DateBehaviours extends FieldBehaviours {
@@ -38,6 +37,25 @@ class DateBehaviours extends FieldBehaviours {
           val result = form.bind(data)
 
           result.value.value mustEqual date
+      }
+    }
+
+  def dateTimeField(form: Form[_], key: String, validData: Gen[LocalDateTime]): Unit =
+    "must bind valid data" in {
+
+      forAll(validData -> "valid date") {
+        date =>
+          val data = Map(
+            s"$key.day"    -> date.getDayOfMonth.toString,
+            s"$key.month"  -> date.getMonthValue.toString,
+            s"$key.year"   -> date.getYear.toString,
+            s"$key.hour"   -> date.getHour.toString,
+            s"$key.minute" -> date.getMinute.toString
+          )
+
+          val result = form.bind(data)
+
+          result.value.value mustEqual date.minusSeconds(date.getSecond).minusNanos(date.getNano)
       }
     }
 

@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.routeDetails
+package forms
 
-import models.domain.UserAnswersReader
-import models.journeyDomain.JourneyDomainModel
-import models.journeyDomain.routeDetails.transit.TransitDomain
+import forms.behaviours.DateBehaviours
+import org.scalacheck.Gen
+import java.time.{LocalDateTime, ZoneOffset}
 
-case class RouteDetailsDomain(
-  routing: RoutingDomain,
-  transit: TransitDomain
-) extends JourneyDomainModel
+class DateTimeFormProviderSpec extends DateBehaviours {
 
-object RouteDetailsDomain {
+  private val prefix = Gen.alphaNumStr.sample.value
+  val form           = new DateTimeFormProvider()(prefix)
 
-  implicit val userAnswersReader: UserAnswersReader[RouteDetailsDomain] = {
+  ".value" - {
 
-    for {
-      routing <- UserAnswersReader[RoutingDomain]
-      transit <- UserAnswersReader[TransitDomain]
-    } yield RouteDetailsDomain(
-      routing,
-      transit
+    val validData = dateTimesBetween(
+      min = LocalDateTime.of(2000, 1, 1, 23, 55, 0),
+      max = LocalDateTime.now(ZoneOffset.UTC)
     )
+
+    behave like dateTimeField(form, "value", validData)
+
+    behave like mandatoryDateField(form, "value", s"$prefix.error.required.all")
   }
 }

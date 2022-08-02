@@ -18,9 +18,9 @@ package controllers.routeDetails.transit
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.Navigator
-import navigation.annotations.Transit
+import navigation.annotations.routeDetails.Transit
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar

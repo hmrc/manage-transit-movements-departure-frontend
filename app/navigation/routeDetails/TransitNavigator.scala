@@ -16,10 +16,10 @@
 
 package navigation.routeDetails
 
-import models.journeyDomain.routeDetails.{RouteDetailsDomain, RoutingDomain}
 import navigation.UserAnswersNavigator
-
 import javax.inject.{Inject, Singleton}
+import models.journeyDomain.routeDetails.RouteDetailsDomain
+import models.journeyDomain.routeDetails.transit.TransitDomain
 
 @Singleton
-class TransitNavigator @Inject() () extends UserAnswersNavigator[RoutingDomain, RouteDetailsDomain]
+class TransitNavigator @Inject() () extends UserAnswersNavigator[TransitDomain, RouteDetailsDomain]
