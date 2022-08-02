@@ -19,18 +19,26 @@ package models.journeyDomain.routeDetails.transit
 import java.time.LocalDateTime
 
 import cats.implicits._
-import models.Index
+import models.{Index, UserAnswers}
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.JourneyDomainModel
+import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{Country, CustomsOffice}
 import pages.routeDetails.transit.{AddOfficeOfTransitETAYesNoPage, _}
+import play.api.mvc.Call
 
 case class OfficeOfTransitDomain(
   country: Country,
   customsOffice: CustomsOffice,
   officeOfTransitETA: Option[LocalDateTime]
 )(index: Index)
-    extends JourneyDomainModel {}
+    extends JourneyDomainModel {
+
+  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
+    Some(
+      controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(userAnswers.lrn)
+    ) //ToDo Change to OfficeOfTransitCYAController once written
+
+}
 
 object OfficeOfTransitDomain {
 

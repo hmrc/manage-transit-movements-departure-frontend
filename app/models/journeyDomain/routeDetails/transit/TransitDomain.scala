@@ -17,15 +17,20 @@
 package models.journeyDomain.routeDetails.transit
 
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.JourneyDomainModel
-import models.{Index, RichJsArray}
+import models.journeyDomain.{JourneyDomainModel, Stage}
+import models.{Index, RichJsArray, UserAnswers}
 import pages.routeDetails.transit.{AddOfficeOfTransitYesNoPage, OfficeOfTransitCountryPage, T2DeclarationTypeYesNoPage}
 import pages.sections.routeDetails.OfficeOfTransitCountriesSection
+import play.api.mvc.Call
 
 case class TransitDomain(
   t2DeclarationType: Boolean,
   officesOfTransitCountries: Seq[OfficeOfTransitDomain]
-) extends JourneyDomainModel
+) extends JourneyDomainModel {
+
+  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
+    Some(controllers.routes.TaskListController.onPageLoad(userAnswers.lrn))
+}
 
 object TransitDomain {
 
