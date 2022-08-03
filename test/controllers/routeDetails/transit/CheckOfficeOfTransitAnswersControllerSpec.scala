@@ -32,7 +32,7 @@ import views.html.routeDetails.transit.CheckOfficeOfTransitAnswersView
 
 import scala.concurrent.Future
 
-class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+class CheckOfficeOfTransitAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private lazy val mockViewModelProvider = mock[OfficeOfTransitViewModelProvider]
 
@@ -41,7 +41,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       .guiceApplicationBuilder()
       .overrides(bind[OfficeOfTransitViewModelProvider].toInstance(mockViewModelProvider))
 
-  "Check Your Answers Controller" - {
+  "Check Office Of Transit Answers Controller" - {
 
     "must return OK and the correct view for a GET" in {
       val sampleSection = arbitrary[Section].sample.value
@@ -51,7 +51,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(lrn, index).url)
+      val request = FakeRequest(GET, routes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, index).url)
 
       val result = route(app, request).value
 
@@ -66,7 +66,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
     "must redirect to Session Expired for a GET if no existing data is found" in {
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(lrn, index).url)
+      val request = FakeRequest(GET, routes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, index).url)
 
       val result = route(app, request).value
 
@@ -80,7 +80,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-      val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn, index).url)
+      val request = FakeRequest(POST, routes.CheckOfficeOfTransitAnswersController.onSubmit(lrn, index).url)
 
       val result = route(app, request).value
 

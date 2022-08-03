@@ -49,14 +49,14 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
           Right(
             ListItem(
               name = country1.description,
-              changeUrl = controllers.routeDetails.transit.routes.CheckYourAnswersController.onPageLoad(answers.lrn, Index(0)).url,
+              changeUrl = controllers.routeDetails.transit.routes.CheckOfficeOfTransitAnswersController.onPageLoad(answers.lrn, Index(0)).url,
               removeUrl = controllers.routeDetails.transit.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(answers.lrn, Index(0)).url
             )
           ),
           Right(
             ListItem(
               name = country2.description,
-              changeUrl = controllers.routeDetails.transit.routes.CheckYourAnswersController.onPageLoad(answers.lrn, Index(1)).url,
+              changeUrl = controllers.routeDetails.transit.routes.CheckOfficeOfTransitAnswersController.onPageLoad(answers.lrn, Index(1)).url,
               removeUrl = controllers.routeDetails.transit.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(answers.lrn, Index(1)).url
             )
           ),

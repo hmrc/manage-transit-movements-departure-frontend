@@ -46,7 +46,7 @@ class OfficeOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(controllers.routeDetails.transit.routes.CheckYourAnswersController.onPageLoad(lrn, index))
+                .mustBe(controllers.routeDetails.transit.routes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, index))
           }
         }
       }

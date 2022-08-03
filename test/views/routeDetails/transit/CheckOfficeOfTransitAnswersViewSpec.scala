@@ -41,7 +41,7 @@ class CheckOfficeOfTransitAnswersViewSpec extends CheckYourAnswersViewBehaviours
 
   behave like pageWithCheckYourAnswers()
 
-  behave like pageWithFormAction(routes.CheckYourAnswersController.onSubmit(lrn, index).url)
+  behave like pageWithFormAction(routes.CheckOfficeOfTransitAnswersController.onSubmit(lrn, index).url)
 
   behave like pageWithSubmitButton("Save and continue")
 

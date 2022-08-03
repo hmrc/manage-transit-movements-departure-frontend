@@ -35,5 +35,5 @@ POST       /:lrn/route-details/transit/add-another-office-of-transit            
 GET        /:lrn/route-details/transit/:index/confirm-remove-office-of-transit                controllers.routeDetails.transit.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
 POST       /:lrn/route-details/transit/:index/confirm-remove-office-of-transit                controllers.routeDetails.transit.ConfirmRemoveOfficeOfTransitController.onSubmit(lrn: LocalReferenceNumber, index: Index)
 
-GET        /:lrn/route-details/transit/:index/check-office-of-transit-answers                 controllers.routeDetails.transit.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
-POST       /:lrn/route-details/transit/:index/check-office-of-transit-answers                 controllers.routeDetails.transit.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber, index: Index)
+GET        /:lrn/route-details/transit/:index/check-office-of-transit-answers                 controllers.routeDetails.transit.CheckOfficeOfTransitAnswersController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
+POST       /:lrn/route-details/transit/:index/check-office-of-transit-answers                 controllers.routeDetails.transit.CheckOfficeOfTransitAnswersController.onSubmit(lrn: LocalReferenceNumber, index: Index)
