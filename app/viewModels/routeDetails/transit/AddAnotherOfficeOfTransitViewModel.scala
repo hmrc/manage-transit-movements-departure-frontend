@@ -35,6 +35,7 @@ object AddAnotherOfficeOfTransitViewModel {
       val helper = new TransitCheckYourAnswersHelper(userAnswers, NormalMode)
 
       val listItems = helper.listItems.collect {
+        case Left(value)  => value
         case Right(value) => value
       }
 
