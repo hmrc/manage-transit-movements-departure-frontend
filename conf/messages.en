@@ -631,10 +631,13 @@ routeDetails.transit.officeOfTransitETA.date.title = Date
 routeDetails.transit.officeOfTransitETA.date.hint = For example, 14 1 2020
 routeDetails.transit.officeOfTransitETA.time.title = Time
 routeDetails.transit.officeOfTransitETA.time.hint = Use the 24-hour format. For example. 14 30
-routeDetails.transit.officeOfTransitETA.error.required.all = Enter the estimated date and time of arrival at the office of transit
-routeDetails.transit.officeOfTransitETA.error.required.multiple = The estimated date and time of arrival at the office of transit must include the missing fields
-routeDetails.transit.officeOfTransitETA.error.required = The the estimated date and time of arrival at the office of transit must include {0}
-routeDetails.transit.officeOfTransitETA.error.invalid = Enter a real date and time that you expect the transit to arrive
+routeDetails.transit.officeOfTransitETA.date.error.invalid = Enter a real date that you expect the transit to arrive
+routeDetails.transit.officeOfTransitETA.date.error.required.all = Enter the estimated date of arrival at the office of transit
+routeDetails.transit.officeOfTransitETA.date.error.required.multiple = The estimated date of arrival at the office of transit must include {0} and {1}
+routeDetails.transit.officeOfTransitETA.date.error.required = The estimated date of arrival at the office of transit must include {0}
+routeDetails.transit.officeOfTransitETA.time.error.invalid = Enter a real time that you expect the transit to arrive
+routeDetails.transit.officeOfTransitETA.time.error.required.all = Enter the estimated time of arrival at the office of transit
+routeDetails.transit.officeOfTransitETA.time.error.required = The estimated time of arrival at the office of transit must include {0}
 
 routeDetails.transit.addAnotherOfficeOfTransit.singular.title = You’ve added {0} office of transit
 routeDetails.transit.addAnotherOfficeOfTransit.singular.heading = You’ve added {0} office of transit

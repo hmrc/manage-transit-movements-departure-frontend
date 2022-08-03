@@ -22,7 +22,7 @@
     govUkErrorSummary: GovukErrorSummary
 )
 
-@(form: Form[LocalDateTime], fieldName: String = "value")(implicit messages: Messages)
+@(form: Form[DateTime], fieldName: String = "value")(implicit messages: Messages)
 
 @if(form.errors.nonEmpty) {
     @govUkErrorSummary(
