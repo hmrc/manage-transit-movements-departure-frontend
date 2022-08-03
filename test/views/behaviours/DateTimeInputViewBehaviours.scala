@@ -16,13 +16,12 @@
 
 package views.behaviours
 
-import java.time.LocalDateTime
-
+import models.DateTime
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.data.FormError
 
-trait DateTimeInputViewBehaviours extends QuestionViewBehaviours[LocalDateTime] with ScalaCheckPropertyChecks {
+trait DateTimeInputViewBehaviours extends QuestionViewBehaviours[DateTime] with ScalaCheckPropertyChecks {
 
   // scalastyle:off method.length
   def pageWithDateTimeInput(): Unit =

@@ -29,7 +29,7 @@ class AddOfficeOfTransitETAYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](AddOfficeOfTransitETAYesNoPage(index))
 
     "cleanup" - {
-      val eta = arbitraryLocalDateTime.arbitrary.sample.get
+      val eta = arbitraryDateTime.arbitrary.sample.get
 
       "when No selected" - {
         "must clean up Office Of Transit ETA page" in {

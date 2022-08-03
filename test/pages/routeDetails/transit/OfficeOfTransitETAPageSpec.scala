@@ -16,18 +16,17 @@
 
 package pages.routeDetails.transit
 
+import models.DateTime
 import pages.behaviours.PageBehaviours
-
-import java.time.LocalDateTime
 
 class OfficeOfTransitETAPageSpec extends PageBehaviours {
 
   "OfficeOfTransitETAPage" - {
 
-    beRetrievable[LocalDateTime](OfficeOfTransitETAPage(index))
+    beRetrievable[DateTime](OfficeOfTransitETAPage(index))
 
-    beSettable[LocalDateTime](OfficeOfTransitETAPage(index))
+    beSettable[DateTime](OfficeOfTransitETAPage(index))
 
-    beRemovable[LocalDateTime](OfficeOfTransitETAPage(index))
+    beRemovable[DateTime](OfficeOfTransitETAPage(index))
   }
 }

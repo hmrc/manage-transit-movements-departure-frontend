@@ -38,7 +38,7 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
   private val form                      = formProvider("routeDetails.transit.officeOfTransitETA")
   private val mode                      = NormalMode
   private lazy val arrivalDateTimeRoute = routes.OfficeOfTransitETAController.onPageLoad(lrn, mode, index).url
-  private val date                      = arbitraryLocalDateTime.arbitrary.sample.get
+  private val dateTime                  = arbitraryDateTime.arbitrary.sample.get
   private val transitCountry            = arbitraryCountry.arbitrary.sample.get
   private val transitCustomsOffice      = arbitraryCustomsOffice.arbitrary.sample.get
 
@@ -71,7 +71,7 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(OfficeOfTransitETAPage(index), date)
+        .setValue(OfficeOfTransitETAPage(index), dateTime)
         .setValue(OfficeOfTransitCountryPage(index), transitCountry)
         .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
 
@@ -83,11 +83,11 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
 
       val filledForm = form.bind(
         Map(
-          "value.day"    -> date.getDayOfMonth.toString,
-          "value.month"  -> date.getMonthValue.toString,
-          "value.year"   -> date.getYear.toString,
-          "value.hour"   -> date.getHour.toString,
-          "value.minute" -> date.getMinute.toString
+          "value.day"    -> dateTime.date.getDayOfMonth.toString,
+          "value.month"  -> dateTime.date.getMonthValue.toString,
+          "value.year"   -> dateTime.date.getYear.toString,
+          "value.hour"   -> dateTime.time.getHour.toString,
+          "value.minute" -> dateTime.time.getMinute.toString
         )
       )
 
@@ -110,11 +110,11 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
 
       val request = FakeRequest(POST, arrivalDateTimeRoute)
         .withFormUrlEncodedBody(
-          "value.day"    -> date.getDayOfMonth.toString,
-          "value.month"  -> date.getMonthValue.toString,
-          "value.year"   -> date.getYear.toString,
-          "value.hour"   -> date.getHour.toString,
-          "value.minute" -> date.getMinute.toString
+          "value.day"    -> dateTime.date.getDayOfMonth.toString,
+          "value.month"  -> dateTime.date.getMonthValue.toString,
+          "value.year"   -> dateTime.date.getYear.toString,
+          "value.hour"   -> dateTime.time.getHour.toString,
+          "value.minute" -> dateTime.time.getMinute.toString
         )
 
       val result = route(app, request).value
@@ -165,11 +165,11 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
 
       val request = FakeRequest(POST, arrivalDateTimeRoute)
         .withFormUrlEncodedBody(
-          "value.day"    -> date.getDayOfMonth.toString,
-          "value.month"  -> date.getMonthValue.toString,
-          "value.year"   -> date.getYear.toString,
-          "value.hour"   -> date.getHour.toString,
-          "value.minute" -> date.getMinute.toString
+          "value.day"    -> dateTime.date.getDayOfMonth.toString,
+          "value.month"  -> dateTime.date.getMonthValue.toString,
+          "value.year"   -> dateTime.date.getYear.toString,
+          "value.hour"   -> dateTime.time.getHour.toString,
+          "value.minute" -> dateTime.time.getMinute.toString
         )
 
       val result = route(app, request).value

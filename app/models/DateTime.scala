@@ -29,7 +29,7 @@ case class DateTime(date: LocalDate, time: LocalTime) {
 
 object DateTime {
 
-  private def deconcatenate(localDateTime: LocalDateTime): DateTime = {
+  def deconcatenate(localDateTime: LocalDateTime): DateTime = {
     val date = localDateTime.toLocalDate
     val time = localDateTime.toLocalTime
 

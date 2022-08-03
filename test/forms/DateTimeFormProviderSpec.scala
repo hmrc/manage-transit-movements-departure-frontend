@@ -27,12 +27,7 @@ class DateTimeFormProviderSpec extends DateBehaviours {
 
   ".value" - {
 
-    val validData = dateTimesBetween(
-      min = LocalDateTime.of(2000, 1, 1, 23, 55, 0),
-      max = LocalDateTime.now(ZoneOffset.UTC)
-    )
-
-    behave like dateTimeField(form, "value", validData)
+    behave like dateTimeField(form, "value")
 
     behave like mandatoryDateField(form, "value", s"$prefix.error.required.all")
   }

@@ -33,7 +33,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
         val country                    = arbitrary[Country].sample.value
         val customsOffice              = arbitrary[CustomsOffice].sample.value
         val addOfficeOfTransitETAYesNo = true
-        val officeOfTransitETA         = arbitraryLocalDateTime.arbitrary.sample.get
+        val officeOfTransitETA         = arbitraryDateTime.arbitrary.sample.get
 
         val userAnswers = emptyUserAnswers
           .setValue(OfficeOfTransitCountryPage(index), country)
