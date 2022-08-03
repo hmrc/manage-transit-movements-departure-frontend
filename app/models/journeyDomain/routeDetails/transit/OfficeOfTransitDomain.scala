@@ -35,8 +35,8 @@ case class OfficeOfTransitDomain(
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
     Some(
-      controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(userAnswers.lrn)
-    ) //ToDo Change to OfficeOfTransitCYAController once written
+      controllers.routeDetails.transit.routes.CheckOfficeOfTransitAnswersController.onPageLoad(userAnswers.lrn, index)
+    )
 
 }
 

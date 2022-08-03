@@ -25,7 +25,7 @@ import play.api.mvc.Call
 
 case class TransitDomain(
   t2DeclarationType: Boolean,
-  officesOfTransitCountries: Seq[OfficeOfTransitDomain]
+  officesOfTransit: Seq[OfficeOfTransitDomain]
 ) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =

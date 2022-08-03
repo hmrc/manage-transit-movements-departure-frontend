@@ -17,10 +17,11 @@
 package navigation.routeDetails
 
 import models._
-import navigation.UserAnswersNavigator
-import javax.inject.{Inject, Singleton}
 import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
+import navigation.UserAnswersNavigator
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class OfficeOfTransitNavigatorProviderImpl @Inject() () extends OfficeOfTransitNavigatorProvider {
