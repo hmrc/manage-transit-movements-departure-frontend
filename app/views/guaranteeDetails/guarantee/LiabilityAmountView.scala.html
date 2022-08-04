@@ -47,7 +47,9 @@
             ),
             hint = Some(messages("guaranteeDetails.liabilityAmount.hint")),
             inputClass = InputSize.Width10,
-            prefix = Some("£")
+            prefix = Some("£"),
+            pattern = Some("[0-9]*"),
+            inputMode = Some("numeric")
         )
 
         @button(attributes = Map("id" -> "submit"))
