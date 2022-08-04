@@ -28,6 +28,7 @@ trait InputTextViewBehaviours[T] extends QuestionViewBehaviours[T] with Generato
 
   val inputPrefix: Option[String] = None
 
+  // scalastyle:off method.length
   def pageWithInputText(inputFieldClassSize: Option[InputSize] = None): Unit =
     "page with an input text field" - {
       "when rendered" - {
@@ -82,5 +83,6 @@ trait InputTextViewBehaviours[T] extends QuestionViewBehaviours[T] with Generato
         }
       }
     }
+  // scalastyle:on method.length
 
 }
