@@ -17,8 +17,9 @@
 package models
 
 import play.api.libs.json._
+import utils.Format._
 
-import java.time.format.{DateTimeFormatter, DateTimeParseException}
+import java.time.format.DateTimeParseException
 import java.time.{LocalDate, LocalDateTime, LocalTime}
 
 case class DateTime(date: LocalDate, time: LocalTime) {
@@ -36,15 +37,12 @@ object DateTime {
     DateTime(date, time)
   }
 
-  // TODO move this to formatter file for reuse
-  private val formatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HH:mm:ss")
-
-  implicit val writes: Writes[DateTime] = (o: DateTime) => Json.toJson(formatter.format(o.concat))
+  implicit val writes: Writes[DateTime] = (o: DateTime) => Json.toJson(dateTimeFormattedIE015(o.concat))
 
   implicit val reads: Reads[DateTime] = (json: JsValue) => {
     json.validate[String].flatMap {
       x =>
-        try JsSuccess(deconcatenate(LocalDateTime.parse(x, formatter)))
+        try JsSuccess(deconcatenate(LocalDateTime.parse(x, dateTimeFormatIE015)))
         catch {
           case exception: DateTimeParseException =>
             JsError(s"Failed to parse $json to LocalDateTime with the following exception: $exception")
