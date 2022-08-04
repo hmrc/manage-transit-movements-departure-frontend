@@ -16,7 +16,6 @@
 
 package forms.behaviours
 
-import models.DateTime
 import org.scalacheck.Gen
 import play.api.data.{Form, FormError}
 

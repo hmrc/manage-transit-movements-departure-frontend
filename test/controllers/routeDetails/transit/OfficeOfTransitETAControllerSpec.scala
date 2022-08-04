@@ -83,11 +83,11 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
 
       val filledForm = form.bind(
         Map(
-          "value.day"    -> dateTime.date.getDayOfMonth.toString,
-          "value.month"  -> dateTime.date.getMonthValue.toString,
-          "value.year"   -> dateTime.date.getYear.toString,
-          "value.hour"   -> dateTime.time.getHour.toString,
-          "value.minute" -> dateTime.time.getMinute.toString
+          "date.day"    -> dateTime.date.getDayOfMonth.toString,
+          "date.month"  -> dateTime.date.getMonthValue.toString,
+          "date.year"   -> dateTime.date.getYear.toString,
+          "time.hour"   -> dateTime.time.getHour.toString,
+          "time.minute" -> dateTime.time.getMinute.toString
         )
       )
 
@@ -110,11 +110,11 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
 
       val request = FakeRequest(POST, arrivalDateTimeRoute)
         .withFormUrlEncodedBody(
-          "value.day"    -> dateTime.date.getDayOfMonth.toString,
-          "value.month"  -> dateTime.date.getMonthValue.toString,
-          "value.year"   -> dateTime.date.getYear.toString,
-          "value.hour"   -> dateTime.time.getHour.toString,
-          "value.minute" -> dateTime.time.getMinute.toString
+          "date.day"    -> dateTime.date.getDayOfMonth.toString,
+          "date.month"  -> dateTime.date.getMonthValue.toString,
+          "date.year"   -> dateTime.date.getYear.toString,
+          "time.hour"   -> dateTime.time.getHour.toString,
+          "time.minute" -> dateTime.time.getMinute.toString
         )
 
       val result = route(app, request).value
@@ -165,11 +165,11 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
 
       val request = FakeRequest(POST, arrivalDateTimeRoute)
         .withFormUrlEncodedBody(
-          "value.day"    -> dateTime.date.getDayOfMonth.toString,
-          "value.month"  -> dateTime.date.getMonthValue.toString,
-          "value.year"   -> dateTime.date.getYear.toString,
-          "value.hour"   -> dateTime.time.getHour.toString,
-          "value.minute" -> dateTime.time.getMinute.toString
+          "date.day"    -> dateTime.date.getDayOfMonth.toString,
+          "date.month"  -> dateTime.date.getMonthValue.toString,
+          "date.year"   -> dateTime.date.getYear.toString,
+          "time.hour"   -> dateTime.time.getHour.toString,
+          "time.minute" -> dateTime.time.getMinute.toString
         )
 
       val result = route(app, request).value

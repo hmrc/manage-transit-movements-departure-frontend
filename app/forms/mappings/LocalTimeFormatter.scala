@@ -32,7 +32,7 @@ private[mappings] class LocalTimeFormatter(
 
   private val fieldKeys: List[String] = List("hour", "minute")
 
-  private def toDateTime(key: String, hour: Int, minute: Int): Either[Seq[FormError], LocalTime] =
+  private def toTime(key: String, hour: Int, minute: Int): Either[Seq[FormError], LocalTime] =
     Try(LocalTime.of(hour, minute, 0)) match {
       case Success(date) =>
         Right(date)
@@ -51,7 +51,7 @@ private[mappings] class LocalTimeFormatter(
     for {
       hour     <- int.bind(s"$key.hour".replaceAll("\\s", ""), data).right
       minute   <- int.bind(s"$key.minute".replaceAll("\\s", ""), data).right
-      dateTime <- toDateTime(key, hour, minute).right
+      dateTime <- toTime(key, hour, minute).right
     } yield dateTime
   }
 
