@@ -23,12 +23,9 @@ import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.preTaskList._
-import pages.routeDetails.transit.T2DeclarationTypeYesNoPage
 import pages.traderDetails._
 import play.api.libs.json.{JsBoolean, JsString, JsValue, Json}
 import queries.Gettable
-
-import java.time.LocalDateTime
 
 trait UserAnswersEntryGenerators {
   self: Generators =>
@@ -147,7 +144,7 @@ trait UserAnswersEntryGenerators {
       case OfficeOfTransitCountryPage(_)     => arbitrary[Country].map(Json.toJson(_))
       case OfficeOfTransitPage(_)            => arbitrary[CustomsOffice].map(Json.toJson(_))
       case AddOfficeOfTransitETAYesNoPage(_) => arbitrary[Boolean].map(JsBoolean)
-      case OfficeOfTransitETAPage(_)         => arbitrary[LocalDateTime].map(Json.toJson(_))
+      case OfficeOfTransitETAPage(_)         => arbitrary[DateTime].map(Json.toJson(_))
     }
   }
 

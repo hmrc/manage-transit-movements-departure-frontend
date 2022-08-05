@@ -18,12 +18,11 @@ package viewModels.routeDetails.transit
 
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import models.DateTime
 import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.transit.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
-
-import java.time.LocalDateTime
 
 class OfficeOfTransitViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
@@ -50,13 +49,13 @@ class OfficeOfTransitViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
 
       "when ETA is required" - {
         "must return 4 rows" in {
-          forAll(arbitrary[Country], arbitrary[CustomsOffice]) {
-            (country, office) =>
+          forAll(arbitrary[Country], arbitrary[CustomsOffice], arbitrary[DateTime]) {
+            (country, office, dateTime) =>
               val answers = emptyUserAnswers
                 .setValue(OfficeOfTransitCountryPage(index), country)
                 .setValue(OfficeOfTransitPage(index), office)
                 .setValue(AddOfficeOfTransitETAYesNoPage(index), true)
-                .setValue(OfficeOfTransitETAPage(index), LocalDateTime.now)
+                .setValue(OfficeOfTransitETAPage(index), dateTime)
 
               val section = OfficeOfTransitViewModel.apply(answers, index).section
 
