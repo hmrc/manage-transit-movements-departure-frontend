@@ -16,7 +16,7 @@
 
 package utils
 
-import java.time.LocalDateTime
+import java.time.{LocalDate, LocalDateTime}
 import java.time.format.DateTimeFormatter
 
 object Format {
@@ -24,5 +24,9 @@ object Format {
   val dateTimeFormatIE015: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HH:mm:ss")
 
   def dateTimeFormattedIE015(dateTime: LocalDateTime): String = dateTime.format(dateTimeFormatIE015)
+
+  val dateFormatterDDMMYYYY: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MM yyyy")
+
+  def dateFormattedDDMMYYYY(dateTime: LocalDate): String = dateTime.format(dateFormatterDDMMYYYY)
 
 }
