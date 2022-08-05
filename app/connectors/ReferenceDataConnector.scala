@@ -21,8 +21,9 @@ import models._
 import models.reference._
 import play.api.Logging
 import play.api.http.Status.{NOT_FOUND, OK}
+import play.api.mvc.RequestHeader
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HeaderNames, HttpClient, HttpReads, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -66,7 +67,11 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
 
   def getCountries(queryParameters: Seq[(String, String)])(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
     val serviceUrl = s"${config.referenceDataUrl}/countries"
-    http.GET[Seq[Country]](serviceUrl, queryParameters)
+    http.GET[Seq[Country]](serviceUrl, queryParameters, headers = setHeaders)
   }
+
+  private def setHeaders = Seq(
+    "Accept" -> "application/vnd.hmrc.2.0+json"
+  )
 
 }
