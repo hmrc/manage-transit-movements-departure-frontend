@@ -36,6 +36,6 @@ trait RouteDetailsUserAnswersGenerator extends UserAnswersGenerator {
   def arbitraryTransitAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[TransitDomain](userAnswers)
 
-  def arbitraryOfficeOfTransitCountryAnswers(userAnswers: UserAnswers, index: Index): Gen[UserAnswers] =
+  def arbitraryOfficeOfTransitAnswers(userAnswers: UserAnswers, index: Index): Gen[UserAnswers] =
     buildUserAnswers[OfficeOfTransitDomain](userAnswers)(OfficeOfTransitDomain.userAnswersReader(index))
 }

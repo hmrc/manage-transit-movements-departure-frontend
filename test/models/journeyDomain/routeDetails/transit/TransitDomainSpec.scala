@@ -44,7 +44,7 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
 
         val expectedResult = TransitDomain(
           t2DeclarationType = t2DeclarationType,
-          officesOfTransitCountries = Nil
+          officesOfTransit = Nil
         )
 
         val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain].run(userAnswers)
@@ -64,7 +64,7 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
 
         val expectedResult = TransitDomain(
           t2DeclarationType = t2DeclarationType,
-          officesOfTransitCountries = Seq(
+          officesOfTransit = Seq(
             OfficeOfTransitDomain(country, customsOffice, Some(officeOfTransitETA))(index)
           )
         )

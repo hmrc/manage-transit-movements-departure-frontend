@@ -18,7 +18,7 @@ package utils.cyaHelpers.routeDetails
 
 import base.SpecBase
 import generators.Generators
-import models.reference.{Country, CountryCode, CustomsOffice}
+import models.reference.{Country, CustomsOffice}
 import models.{Index, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -31,30 +31,40 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
 
     "listItems" - {
       "must return list items" in {
-        val countryCode    = arbitrary[CountryCode].sample.value
+        val country1       = arbitrary[Country].sample.value
+        val country2       = arbitrary[Country].sample.value
+        val country3       = arbitrary[Country].sample.value
         val customsOffice1 = arbitrary[CustomsOffice].sample.value
         val customsOffice2 = arbitrary[CustomsOffice].sample.value
         val answers = emptyUserAnswers
-          .setValue(OfficeOfTransitCountryPage(Index(0)), Country(countryCode, "France"))
+          .setValue(OfficeOfTransitCountryPage(Index(0)), country1)
           .setValue(OfficeOfTransitPage(Index(0)), customsOffice1)
           .setValue(AddOfficeOfTransitETAYesNoPage(Index(0)), false)
-          .setValue(OfficeOfTransitCountryPage(Index(1)), Country(countryCode, "Portugal"))
+          .setValue(OfficeOfTransitCountryPage(Index(1)), country2)
           .setValue(OfficeOfTransitPage(Index(1)), customsOffice2)
           .setValue(AddOfficeOfTransitETAYesNoPage(Index(1)), false)
+          .setValue(OfficeOfTransitCountryPage(Index(2)), country3)
         val helper = new TransitCheckYourAnswersHelper(answers, NormalMode)
         helper.listItems mustBe Seq(
           Right(
             ListItem(
-              name = "France",
-              changeUrl = controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(answers.lrn).url,
+              name = country1.description,
+              changeUrl = controllers.routeDetails.transit.routes.CheckOfficeOfTransitAnswersController.onPageLoad(answers.lrn, Index(0)).url,
               removeUrl = controllers.routeDetails.transit.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(answers.lrn, Index(0)).url
             )
           ),
           Right(
             ListItem(
-              name = "Portugal",
-              changeUrl = controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(answers.lrn).url,
+              name = country2.description,
+              changeUrl = controllers.routeDetails.transit.routes.CheckOfficeOfTransitAnswersController.onPageLoad(answers.lrn, Index(1)).url,
               removeUrl = controllers.routeDetails.transit.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(answers.lrn, Index(1)).url
+            )
+          ),
+          Left(
+            ListItem(
+              name = country3.description,
+              changeUrl = controllers.routeDetails.transit.routes.OfficeOfTransitController.onPageLoad(answers.lrn, NormalMode, Index(2)).url,
+              removeUrl = controllers.routeDetails.transit.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(answers.lrn, Index(2)).url
             )
           )
         )

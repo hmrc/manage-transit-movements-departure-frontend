@@ -23,9 +23,12 @@ import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.preTaskList._
+import pages.routeDetails.transit.T2DeclarationTypeYesNoPage
 import pages.traderDetails._
 import play.api.libs.json.{JsBoolean, JsString, JsValue, Json}
 import queries.Gettable
+
+import java.time.LocalDateTime
 
 trait UserAnswersEntryGenerators {
   self: Generators =>
@@ -124,7 +127,7 @@ trait UserAnswersEntryGenerators {
   }
 
   private def generateRouteDetailsAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
-    generateRoutingAnswer
+    generateRoutingAnswer orElse generateTransitAnswer
 
   private def generateRoutingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.routeDetails.routing._
@@ -133,6 +136,18 @@ trait UserAnswersEntryGenerators {
       case BindingItineraryPage         => arbitrary[Boolean].map(JsBoolean)
       case AddCountryOfRoutingYesNoPage => arbitrary[Boolean].map(JsBoolean)
       case CountryOfRoutingPage(_)      => arbitrary[Country].map(Json.toJson(_))
+    }
+  }
+
+  private def generateTransitAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.routeDetails.transit._
+    {
+      case T2DeclarationTypeYesNoPage        => arbitrary[Boolean].map(JsBoolean)
+      case AddOfficeOfTransitYesNoPage       => arbitrary[Boolean].map(JsBoolean)
+      case OfficeOfTransitCountryPage(_)     => arbitrary[Country].map(Json.toJson(_))
+      case OfficeOfTransitPage(_)            => arbitrary[CustomsOffice].map(Json.toJson(_))
+      case AddOfficeOfTransitETAYesNoPage(_) => arbitrary[Boolean].map(JsBoolean)
+      case OfficeOfTransitETAPage(_)         => arbitrary[LocalDateTime].map(Json.toJson(_))
     }
   }
 

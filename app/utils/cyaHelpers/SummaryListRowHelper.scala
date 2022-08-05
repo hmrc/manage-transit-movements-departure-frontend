@@ -23,6 +23,8 @@ import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.html.components._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import scala.math.BigDecimal.RoundingMode
 
 private[utils] class SummaryListRowHelper(implicit messages: Messages) {
@@ -33,6 +35,11 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
     } else {
       messages("site.no").toText
     }
+
+  def formatAsDateTime(answer: LocalDateTime): Content = {
+    val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy HH:mm")
+    answer.format(formatter).toText
+  }
 
   protected def formatAsAddress(address: Address): Content =
     HtmlContent(Seq(address.line1, address.line2, address.postalCode, address.country.description).mkString("<br>"))

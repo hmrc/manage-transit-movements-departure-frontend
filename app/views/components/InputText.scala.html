@@ -35,7 +35,8 @@
     autocomplete: Option[String] = None,
     inputMode: Option[String] = None,
     caption: Option[String] = None,
-    inputType: String = "text"
+    inputType: String = "text",
+    pattern: Option[String] = None
 )(implicit messages: Messages)
 
 @input = @{
@@ -50,7 +51,8 @@
         prefix = prefix.map(x => PrefixOrSuffix(content = Text(x))),
         suffix = suffix.map(x => PrefixOrSuffix(content = Text(x))),
         classes = inputClass.getOrElse(""),
-        inputType = inputType
+        inputType = inputType,
+        pattern = pattern
     )
     .withFormField(field)
 }

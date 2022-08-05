@@ -19,7 +19,16 @@ package navigation.routeDetails
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
 import models._
+import models.reference.{Country, CustomsOffice}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.routeDetails.transit.{
+  AddOfficeOfTransitETAYesNoPage,
+  AddOfficeOfTransitYesNoPage,
+  OfficeOfTransitCountryPage,
+  OfficeOfTransitPage,
+  T2DeclarationTypeYesNoPage
+}
 
 class OfficeOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
@@ -32,12 +41,12 @@ class OfficeOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       val mode = NormalMode
 
       "when answers complete" - {
-        "must redirect to add another country of routing" ignore {
-          forAll(arbitraryOfficeOfTransitCountryAnswers(emptyUserAnswers, index)) {
+        "must redirect to check your answers for office of transit" in {
+          forAll(arbitraryOfficeOfTransitAnswers(emptyUserAnswers, index)) {
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(???)
+                .mustBe(controllers.routeDetails.transit.routes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, index))
           }
         }
       }
@@ -48,12 +57,18 @@ class OfficeOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       val mode = CheckMode
 
       "when answers complete" - {
-        "must redirect to route details check your answers" ignore {
-          forAll(arbitraryTransitAnswers(emptyUserAnswers)) {
-            answers =>
+        "must redirect to the task list" ignore {
+          forAll(arbitrary[Country], arbitrary[CustomsOffice], arbitraryRoutingAnswers(emptyUserAnswers)) {
+            (country, office, routingAnswers) =>
+              val answers = routingAnswers
+                .setValue(T2DeclarationTypeYesNoPage, false)
+                .setValue(AddOfficeOfTransitYesNoPage, true)
+                .setValue(OfficeOfTransitCountryPage(index), country)
+                .setValue(OfficeOfTransitPage(index), office)
+                .setValue(AddOfficeOfTransitETAYesNoPage(index), false)
               navigator
                 .nextPage(answers, mode)
-                .mustBe(???)
+                .mustBe(controllers.routes.TaskListController.onPageLoad(lrn))
           }
         }
       }
