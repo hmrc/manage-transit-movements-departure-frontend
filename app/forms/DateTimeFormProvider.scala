@@ -20,12 +20,14 @@ import forms.mappings.Mappings
 import models.DateTime
 import play.api.data.Form
 import play.api.data.Forms.mapping
+import utils.Format
 
+import java.time.LocalDate
 import javax.inject.Inject
 
 class DateTimeFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String): Form[DateTime] =
+  def apply(prefix: String, dateMin: LocalDate, dateMax: LocalDate, args: Any*): Form[DateTime] =
     Form(
       mapping(
         "date" -> {
@@ -34,6 +36,9 @@ class DateTimeFormProvider @Inject() extends Mappings {
             allRequiredKey = s"$prefix.date.error.required.all",
             twoRequiredKey = s"$prefix.date.error.required.multiple",
             requiredKey = s"$prefix.date.error.required"
+          ).verifying(
+            maxDate(dateMax, s"$prefix.date.error.futureDate", Format.dateFormatterDDMMYYYY.format(dateMax.plusDays(1))),
+            minDate(dateMin, s"$prefix.date.error.pastDate", Format.dateFormatterDDMMYYYY.format(dateMin.minusDays(1)))
           )
         },
         "time" -> {

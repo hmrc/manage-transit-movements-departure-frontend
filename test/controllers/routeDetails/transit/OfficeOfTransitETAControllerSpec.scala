@@ -19,7 +19,7 @@ package controllers.routeDetails.transit
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.DateTimeFormProvider
 import generators.Generators
-import models.NormalMode
+import models.{DateTime, NormalMode}
 import navigation.routeDetails.OfficeOfTransitNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -30,17 +30,25 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.routeDetails.transit.OfficeOfTransitETAView
 
+import java.time.LocalDateTime
 import scala.concurrent.Future
 
 class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private val formProvider              = new DateTimeFormProvider()
-  private val form                      = formProvider("routeDetails.transit.officeOfTransitETA")
   private val mode                      = NormalMode
   private lazy val arrivalDateTimeRoute = routes.OfficeOfTransitETAController.onPageLoad(lrn, mode, index).url
-  private val dateTime                  = arbitraryDateTime.arbitrary.sample.get
-  private val transitCountry            = arbitraryCountry.arbitrary.sample.get
-  private val transitCustomsOffice      = arbitraryCustomsOffice.arbitrary.sample.get
+
+  private val transitCountry       = arbitraryCountry.arbitrary.sample.get
+  private val transitCustomsOffice = arbitraryCustomsOffice.arbitrary.sample.get
+
+  private val localDateTime = LocalDateTime.now()
+  private val dateTime      = DateTime(localDateTime.toLocalDate, localDateTime.toLocalTime)
+
+  private val dateBefore = localDateTime.toLocalDate.minusDays(1)
+  private val dateAfter  = localDateTime.toLocalDate.plusDays(1)
+
+  private val formProvider = new DateTimeFormProvider()
+  private val form         = formProvider("routeDetails.transit.officeOfTransitETA", dateBefore, dateAfter)
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -104,6 +112,7 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
       val userAnswers = emptyUserAnswers
         .setValue(OfficeOfTransitCountryPage(index), transitCountry)
         .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
+
       setExistingUserAnswers(userAnswers)
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)

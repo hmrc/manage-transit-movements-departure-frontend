@@ -21,6 +21,9 @@ import generators.Generators
 import models.DateTime
 import org.scalacheck.Gen
 import play.api.data.{Field, Form, FormError}
+import utils.Format
+
+import java.time.LocalDate
 
 class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
 
@@ -30,12 +33,18 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
   private val requiredAllDate   = s"$prefix.date.error.required.all"
   private val requiredMultiDate = s"$prefix.date.error.required.multiple"
   private val requiredOneDate   = s"$prefix.date.error.required"
+  private val maxDate           = s"$prefix.date.error.futureDate"
+  private val minDate           = s"$prefix.date.error.pastDate"
 
   private val invalidTime     = s"$prefix.time.error.invalid"
   private val requiredAllTime = s"$prefix.time.error.required.all"
   private val requiredOneTime = s"$prefix.time.error.required"
 
-  private val form = new DateTimeFormProvider()(prefix)
+  private val localDate  = LocalDate.now()
+  private val dateBefore = localDate.minusDays(1)
+  private val dateAfter  = localDate.plusDays(1)
+
+  private val form = new DateTimeFormProvider()(prefix, dateBefore, dateAfter)
 
   "dateTime" - {
 
@@ -52,6 +61,11 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
             "date.month"  -> dateTime.getMonthValue.toString,
             "date.year"   -> dateTime.getYear.toString
           )
+
+          val dateBefore = dateTime.toLocalDate.minusDays(1)
+          val dateAfter  = dateTime.toLocalDate.plusDays(1)
+
+          val form = new DateTimeFormProvider()(prefix, dateBefore, dateAfter)
 
           val result: Form[DateTime] = form.bind(data)
 
@@ -215,6 +229,64 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
           val result = form.bind(data).apply(fieldName)
 
           result.errors mustBe Seq(FormError(fieldName, List(invalidDate), List.empty))
+      }
+    }
+
+    "must not bind when date is above max date" in {
+
+      val localDateTime = arbitraryLocalDateTime.arbitrary
+
+      forAll(localDateTime) {
+        dateTime =>
+          val invalidDateTime = dateTime.plusDays(2)
+
+          val data: Map[String, String] = Map(
+            "time.hour"   -> invalidDateTime.getHour.toString,
+            "time.minute" -> invalidDateTime.getMinute.toString,
+            "date.day"    -> invalidDateTime.getDayOfMonth.toString,
+            "date.month"  -> invalidDateTime.getMonthValue.toString,
+            "date.year"   -> invalidDateTime.getYear.toString
+          )
+
+          val dateBefore = dateTime.toLocalDate.minusDays(1)
+          val dateAfter  = dateTime.toLocalDate.plusDays(1)
+
+          val form = new DateTimeFormProvider()(prefix, dateBefore, dateAfter)
+
+          val result: Form[DateTime] = form.bind(data)
+
+          val formattedArg = Format.dateFormatterDDMMYYYY.format(invalidDateTime)
+
+          result.errors mustBe Seq(FormError(fieldName, List(maxDate), List(formattedArg)))
+      }
+    }
+
+    "must not bind when date is below min date" in {
+
+      val localDateTime = arbitraryLocalDateTime.arbitrary
+
+      forAll(localDateTime) {
+        dateTime =>
+          val invalidDateTime = dateTime.minusDays(2)
+
+          val data: Map[String, String] = Map(
+            "time.hour"   -> invalidDateTime.getHour.toString,
+            "time.minute" -> invalidDateTime.getMinute.toString,
+            "date.day"    -> invalidDateTime.getDayOfMonth.toString,
+            "date.month"  -> invalidDateTime.getMonthValue.toString,
+            "date.year"   -> invalidDateTime.getYear.toString
+          )
+
+          val dateBefore = dateTime.toLocalDate.minusDays(1)
+          val dateAfter  = dateTime.toLocalDate.plusDays(1)
+
+          val form = new DateTimeFormProvider()(prefix, dateBefore, dateAfter)
+
+          val result: Form[DateTime] = form.bind(data)
+
+          val formattedArg = Format.dateFormatterDDMMYYYY.format(invalidDateTime)
+
+          result.errors mustBe Seq(FormError(fieldName, List(minDate), List(formattedArg)))
       }
     }
   }

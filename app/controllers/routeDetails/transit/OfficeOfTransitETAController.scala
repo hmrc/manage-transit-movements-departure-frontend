@@ -16,9 +16,11 @@
 
 package controllers.routeDetails.transit
 
+import config.FrontendAppConfig
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.DateTimeFormProvider
+
 import javax.inject.Inject
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.routeDetails.{OfficeOfTransitNavigator, OfficeOfTransitNavigatorProvider}
@@ -29,11 +31,13 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.transit.OfficeOfTransitETAView
 
+import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 
 class OfficeOfTransitETAController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
+  appConfig: FrontendAppConfig,
   navigatorProvider: OfficeOfTransitNavigatorProvider,
   formProvider: DateTimeFormProvider,
   actions: Actions,
@@ -44,7 +48,11 @@ class OfficeOfTransitETAController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.transit.officeOfTransitETA")
+  private val localDate  = LocalDate.now()
+  private val pastDate   = localDate.minusDays(appConfig.daysBefore)
+  private val futureDate = localDate.plusDays(appConfig.daysAfter)
+
+  private val form = formProvider("routeDetails.transit.officeOfTransitETA", pastDate, futureDate)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
     .requireData(lrn)

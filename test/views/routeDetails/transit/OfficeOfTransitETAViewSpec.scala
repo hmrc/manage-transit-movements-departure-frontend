@@ -23,7 +23,7 @@ import play.twirl.api.HtmlFormat
 import views.behaviours.DateTimeInputViewBehaviours
 import views.html.routeDetails.transit.OfficeOfTransitETAView
 
-import java.time.LocalDateTime
+import java.time.{LocalDate, LocalDateTime}
 import generators.Generators
 
 class OfficeOfTransitETAViewSpec extends DateTimeInputViewBehaviours with Generators {
@@ -31,7 +31,11 @@ class OfficeOfTransitETAViewSpec extends DateTimeInputViewBehaviours with Genera
   private val transitCountry       = arbitraryCountry.arbitrary.sample.get
   private val transitCustomsOffice = arbitraryCustomsOffice.arbitrary.sample.get
 
-  override def form: Form[DateTime] = new DateTimeFormProvider()(prefix)
+  private val localDate  = LocalDate.now()
+  private val dateBefore = localDate.minusDays(1)
+  private val dateAfter  = localDate.plusDays(1)
+
+  override def form: Form[DateTime] = new DateTimeFormProvider()(prefix, dateBefore, dateAfter)
 
   override def applyView(form: Form[DateTime]): HtmlFormat.Appendable =
     injector
