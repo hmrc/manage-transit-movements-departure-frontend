@@ -26,7 +26,7 @@
 @(
     caption: Option[String] = None,
     legend: String,
-    field: Field,
+    form: Form[DateTime],
     dateLabel: String,
     dateHint: Option[String] = None,
     timeLabel: String,
@@ -36,7 +36,7 @@
     @heading(legend, caption)
 
     @inputDate(
-        field = field,
+        field = form("date"),
         legend = dateLabel,
         legendClass = "form-label",
         hint = dateHint,
@@ -44,7 +44,7 @@
     )
 
     @inputTime(
-        field = field,
+        field = form("time"),
         legend = timeLabel,
         legendClass = "form-label",
         hint = timeHint,

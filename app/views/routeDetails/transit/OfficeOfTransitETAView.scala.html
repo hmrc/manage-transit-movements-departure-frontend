@@ -27,7 +27,7 @@
     button: Button
 )
 
-@(form: Form[LocalDateTime], lrn: LocalReferenceNumber, countryName: String, customsOffice: String, mode: Mode, index: Index)(implicit request: Request[_], messages: Messages)
+@(form: Form[DateTime], lrn: LocalReferenceNumber, countryName: String, customsOffice: String, mode: Mode, index: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("routeDetails.transit.officeOfTransitETA.title", customsOffice, countryName),
@@ -42,7 +42,7 @@
         @inputDateTime(
             caption = Some(messages("routeDetails.caption")),
             legend = messages("routeDetails.transit.officeOfTransitETA.heading", customsOffice, countryName),
-            field = form("value"),
+            form = form,
             dateLabel = messages("routeDetails.transit.officeOfTransitETA.date.title"),
             dateHint = Some(messages("routeDetails.transit.officeOfTransitETA.date.hint")),
             timeLabel = messages("routeDetails.transit.officeOfTransitETA.time.title"),

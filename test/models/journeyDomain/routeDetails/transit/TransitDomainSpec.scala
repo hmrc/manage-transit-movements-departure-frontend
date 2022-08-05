@@ -32,7 +32,7 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
     val customsOffice              = arbitrary[CustomsOffice].sample.value
     val country                    = arbitrary[Country].sample.value
     val addOfficeOfTransitETAYesNo = true
-    val officeOfTransitETA         = arbitraryLocalDateTime.arbitrary.sample.get
+    val officeOfTransitETA         = arbitraryDateTime.arbitrary.sample.get
 
     "can be parsed from UserAnswers" - {
 

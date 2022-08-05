@@ -17,13 +17,13 @@
 package views.routeDetails.transit
 
 import forms.DateTimeFormProvider
-import models.NormalMode
+import models.{DateTime, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.DateTimeInputViewBehaviours
 import views.html.routeDetails.transit.OfficeOfTransitETAView
-import java.time.LocalDateTime
 
+import java.time.LocalDateTime
 import generators.Generators
 
 class OfficeOfTransitETAViewSpec extends DateTimeInputViewBehaviours with Generators {
@@ -31,9 +31,9 @@ class OfficeOfTransitETAViewSpec extends DateTimeInputViewBehaviours with Genera
   private val transitCountry       = arbitraryCountry.arbitrary.sample.get
   private val transitCustomsOffice = arbitraryCustomsOffice.arbitrary.sample.get
 
-  override def form: Form[LocalDateTime] = new DateTimeFormProvider()(prefix)
+  override def form: Form[DateTime] = new DateTimeFormProvider()(prefix)
 
-  override def applyView(form: Form[LocalDateTime]): HtmlFormat.Appendable =
+  override def applyView(form: Form[DateTime]): HtmlFormat.Appendable =
     injector
       .instanceOf[OfficeOfTransitETAView]
       .apply(form, lrn, transitCountry.description, transitCustomsOffice.name, NormalMode, index)(fakeRequest, messages)

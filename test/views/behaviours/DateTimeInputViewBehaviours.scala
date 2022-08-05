@@ -16,13 +16,12 @@
 
 package views.behaviours
 
-import java.time.LocalDateTime
-
+import models.DateTime
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.data.FormError
 
-trait DateTimeInputViewBehaviours extends QuestionViewBehaviours[LocalDateTime] with ScalaCheckPropertyChecks {
+trait DateTimeInputViewBehaviours extends QuestionViewBehaviours[DateTime] with ScalaCheckPropertyChecks {
 
   // scalastyle:off method.length
   def pageWithDateTimeInput(): Unit =
@@ -30,23 +29,23 @@ trait DateTimeInputViewBehaviours extends QuestionViewBehaviours[LocalDateTime] 
       "when rendered" - {
 
         "must display day" in {
-          assertRenderedById(doc, "value_day")
+          assertRenderedById(doc, "date_day")
         }
 
         "must display month" in {
-          assertRenderedById(doc, "value_month")
+          assertRenderedById(doc, "date_month")
         }
 
         "must display year" in {
-          assertRenderedById(doc, "value_year")
+          assertRenderedById(doc, "date_year")
         }
 
         "must display hour" in {
-          assertRenderedById(doc, "value_hour")
+          assertRenderedById(doc, "time_hour")
         }
 
         "must display minute" in {
-          assertRenderedById(doc, "value_minute")
+          assertRenderedById(doc, "time_minute")
         }
       }
 
@@ -55,27 +54,26 @@ trait DateTimeInputViewBehaviours extends QuestionViewBehaviours[LocalDateTime] 
           assertRenderedById(docWithError(), "error-summary-title")
         }
 
-        "must show an error in the value field's label" in {
-          val errorSpan = docWithError().getElementsByClass("govuk-error-message").first
-          assertElementContainsText(errorSpan, s"${messages("error.title.prefix")} ${messages(errorMessage)}")
-        }
+        "must show an error class on the inputs for date" in {
+          val docWithError = parseView(applyView(form.withError(FormError("date", errorMessage, Seq("day", "month", "year")))))
 
-        "must show an error class on the inputs" in {
-          val docWithError = parseView(applyView(form.withError(FormError("value", errorMessage, Seq("day", "month", "year", "hour", "minute")))))
-
-          val dayInput = docWithError.getElementById("value_day")
+          val dayInput = docWithError.getElementById("date_day")
           assert(dayInput.hasClass("govuk-input--error"))
 
-          val monthInput = docWithError.getElementById("value_month")
+          val monthInput = docWithError.getElementById("date_month")
           assert(monthInput.hasClass("govuk-input--error"))
 
-          val yearInput = docWithError.getElementById("value_year")
+          val yearInput = docWithError.getElementById("date_year")
           assert(yearInput.hasClass("govuk-input--error"))
+        }
 
-          val hourInput = docWithError.getElementById("value_hour")
+        "must show an error class on the inputs for time" in {
+          val docWithError = parseView(applyView(form.withError(FormError("time", errorMessage, Seq("hour", "minute")))))
+
+          val hourInput = docWithError.getElementById("time_hour")
           assert(hourInput.hasClass("govuk-input--error"))
 
-          val minuteInput = docWithError.getElementById("value_minute")
+          val minuteInput = docWithError.getElementById("time_minute")
           assert(minuteInput.hasClass("govuk-input--error"))
         }
 

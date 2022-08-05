@@ -16,20 +16,18 @@
 
 package models.journeyDomain.routeDetails.transit
 
-import java.time.LocalDateTime
-
 import cats.implicits._
-import models.{Index, UserAnswers}
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{Country, CustomsOffice}
+import models.{DateTime, Index, UserAnswers}
 import pages.routeDetails.transit.{AddOfficeOfTransitETAYesNoPage, _}
 import play.api.mvc.Call
 
 case class OfficeOfTransitDomain(
   country: Country,
   customsOffice: CustomsOffice,
-  officeOfTransitETA: Option[LocalDateTime]
+  officeOfTransitETA: Option[DateTime]
 )(index: Index)
     extends JourneyDomainModel {
 

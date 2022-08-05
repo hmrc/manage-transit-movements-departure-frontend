@@ -16,11 +16,10 @@
 
 package forms.mappings
 
-import java.time.LocalDateTime
-
 import play.api.data.FormError
 import play.api.data.format.Formatter
 
+import java.time.LocalDateTime
 import scala.util.{Failure, Success, Try}
 
 private[mappings] class LocalDateTimeFormatter(

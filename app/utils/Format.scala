@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.transit
+package utils
 
-import models.DateTime
-import pages.behaviours.PageBehaviours
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-class OfficeOfTransitETAPageSpec extends PageBehaviours {
+object Format {
 
-  "OfficeOfTransitETAPage" - {
+  val dateTimeFormatIE015: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HH:mm:ss")
 
-    beRetrievable[DateTime](OfficeOfTransitETAPage(index))
+  def dateTimeFormattedIE015(dateTime: LocalDateTime): String = dateTime.format(dateTimeFormatIE015)
 
-    beSettable[DateTime](OfficeOfTransitETAPage(index))
-
-    beRemovable[DateTime](OfficeOfTransitETAPage(index))
-  }
 }

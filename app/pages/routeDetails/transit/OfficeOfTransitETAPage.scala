@@ -17,15 +17,15 @@
 package pages.routeDetails.transit
 
 import controllers.routeDetails.transit.routes
-import models.{Index, Mode, UserAnswers}
+import models.{DateTime, Index, Mode, UserAnswers}
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
-import java.time.LocalDateTime
 
+import java.time.LocalDateTime
 import pages.sections.routeDetails.OfficeOfTransitCountrySection
 
-case class OfficeOfTransitETAPage(index: Index) extends QuestionPage[LocalDateTime] {
+case class OfficeOfTransitETAPage(index: Index) extends QuestionPage[DateTime] {
 
   override def path: JsPath = OfficeOfTransitCountrySection(index).path \ toString
 

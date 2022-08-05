@@ -19,7 +19,7 @@ package utils.cyaHelpers.routeDetails
 import base.SpecBase
 import controllers.routeDetails.transit.routes
 import generators.Generators
-import models.Mode
+import models.{DateTime, Mode}
 import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -190,8 +190,10 @@ class OfficeOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         "when OfficeOfTransitETAPage defined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val date    = LocalDateTime.of(2000: Int, 1: Int, 1: Int, 23: Int, 12: Int, 0: Int)
-              val answers = emptyUserAnswers.setValue(OfficeOfTransitETAPage(index), date)
+              val date     = LocalDateTime.of(2000: Int, 1: Int, 1: Int, 23: Int, 12: Int, 0: Int)
+              val dateTime = DateTime(date.toLocalDate, date.toLocalTime)
+
+              val answers = emptyUserAnswers.setValue(OfficeOfTransitETAPage(index), dateTime)
 
               val helper = new OfficeOfTransitCheckYourAnswersHelper(answers, mode, index)
               val result = helper.officeOfTransitETA

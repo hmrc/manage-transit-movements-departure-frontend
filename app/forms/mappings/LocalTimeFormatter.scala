@@ -19,30 +19,28 @@ package forms.mappings
 import play.api.data.FormError
 import play.api.data.format.Formatter
 
-import java.time.LocalDate
+import java.time.LocalTime
 import scala.util.{Failure, Success, Try}
 
-private[mappings] class LocalDateFormatter(
+private[mappings] class LocalTimeFormatter(
   invalidKey: String,
   allRequiredKey: String,
-  twoRequiredKey: String,
   requiredKey: String,
   args: Seq[String] = Seq.empty
-) extends Formatter[LocalDate]
+) extends Formatter[LocalTime]
     with Formatters {
 
-  private val fieldKeys: List[String] = List("day", "month", "year")
+  private val fieldKeys: List[String] = List("hour", "minute")
 
-  private def toDate(key: String, day: Int, month: Int, year: Int): Either[Seq[FormError], LocalDate] =
-    Try(LocalDate.of(year, month, day)) match {
+  private def toTime(key: String, hour: Int, minute: Int): Either[Seq[FormError], LocalTime] =
+    Try(LocalTime.of(hour, minute, 0)) match {
       case Success(date) =>
         Right(date)
       case Failure(_) =>
         Left(Seq(FormError(key, invalidKey, args)))
     }
 
-  private def formatDate(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
-
+  private def formatTime(key: String, data: Map[String, String]): Either[Seq[FormError], LocalTime] = {
     val int = intFormatter(
       requiredKey = invalidKey,
       wholeNumberKey = invalidKey,
@@ -51,16 +49,13 @@ private[mappings] class LocalDateFormatter(
     )
 
     for {
-      day   <- int.bind(s"$key.day".replaceAll("\\s", ""), data).right
-      month <- int.bind(s"$key.month".replaceAll("\\s", ""), data).right
-      year  <- int.bind(s"$key.year".replaceAll("\\s", ""), data).right
-      date  <- toDate(key, day, month, year).right
-
-    } yield date
+      hour     <- int.bind(s"$key.hour".replaceAll("\\s", ""), data).right
+      minute   <- int.bind(s"$key.minute".replaceAll("\\s", ""), data).right
+      dateTime <- toTime(key, hour, minute).right
+    } yield dateTime
   }
 
-  override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
-
+  override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalTime] = {
     val fields: Map[String, Option[String]] = fieldKeys.map {
       field =>
         field -> data.get(s"$key.$field").filter(_.nonEmpty).map(_.replaceAll("\\s", ""))
@@ -72,23 +67,20 @@ private[mappings] class LocalDateFormatter(
       .toList
 
     fields.count(_._2.isDefined) match {
-      case 3 =>
-        formatDate(key, data).left.map {
+      case 2 =>
+        formatTime(key, data).left.map {
           _.map(_.copy(key = key, args = args))
         }
-      case 2 =>
-        Left(List(FormError(key, requiredKey, missingFields ++ args)))
       case 1 =>
-        Left(List(FormError(key, twoRequiredKey, missingFields ++ args)))
+        Left(List(FormError(key, requiredKey, missingFields ++ args)))
       case 0 =>
-        Left(List(FormError(key, allRequiredKey, args)))
+        Left(List(FormError(key, allRequiredKey, missingFields ++ args)))
     }
   }
 
-  override def unbind(key: String, value: LocalDate): Map[String, String] =
+  override def unbind(key: String, value: LocalTime): Map[String, String] =
     Map(
-      s"$key.day"   -> value.getDayOfMonth.toString.replaceAll("\\s", ""),
-      s"$key.month" -> value.getMonthValue.toString.replaceAll("\\s", ""),
-      s"$key.year"  -> value.getYear.toString.replaceAll("\\s", "")
+      s"$key.hour"   -> value.getHour.toString.replaceAll("\\s", ""),
+      s"$key.minute" -> value.getMinute.toString.replaceAll("\\s", "")
     )
 }

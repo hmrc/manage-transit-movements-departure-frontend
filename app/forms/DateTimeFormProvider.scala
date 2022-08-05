@@ -16,20 +16,33 @@
 
 package forms
 
-import javax.inject.Inject
 import forms.mappings.Mappings
+import models.DateTime
 import play.api.data.Form
-import java.time.LocalDateTime
+import play.api.data.Forms.mapping
+
+import javax.inject.Inject
 
 class DateTimeFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String): Form[LocalDateTime] =
+  def apply(prefix: String): Form[DateTime] =
     Form(
-      "value" -> localDateTime(
-        invalidKey = s"$prefix.error.invalid",
-        allRequiredKey = s"$prefix.error.required.all",
-        multipleRequiredKey = s"$prefix.error.required.multiple",
-        requiredKey = s"$prefix.error.required"
-      )
+      mapping(
+        "date" -> {
+          localDate(
+            invalidKey = s"$prefix.date.error.invalid",
+            allRequiredKey = s"$prefix.date.error.required.all",
+            twoRequiredKey = s"$prefix.date.error.required.multiple",
+            requiredKey = s"$prefix.date.error.required"
+          )
+        },
+        "time" -> {
+          localTime(
+            invalidKey = s"$prefix.time.error.invalid",
+            allRequiredKey = s"$prefix.time.error.required.all",
+            requiredKey = s"$prefix.time.error.required"
+          )
+        }
+      )(DateTime.apply)(DateTime.unapply)
     )
 }

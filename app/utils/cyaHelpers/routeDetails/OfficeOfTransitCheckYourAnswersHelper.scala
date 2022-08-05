@@ -17,13 +17,11 @@
 package utils.cyaHelpers.routeDetails
 
 import models.reference.{Country, CustomsOffice}
-import models.{Index, Mode, UserAnswers}
+import models.{DateTime, Index, Mode, UserAnswers}
 import pages.routeDetails.transit.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
-
-import java.time.LocalDateTime
 
 class OfficeOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, index: Index)(implicit messages: Messages)
     extends AnswersHelper(userAnswers, mode) {
@@ -49,7 +47,7 @@ class OfficeOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     id = Some("office-of-transit-add-eta")
   )
 
-  def officeOfTransitETA: Option[SummaryListRow] = getAnswerAndBuildRow[LocalDateTime](
+  def officeOfTransitETA: Option[SummaryListRow] = getAnswerAndBuildRow[DateTime](
     page = OfficeOfTransitETAPage(index),
     formatAnswer = formatAsDateTime,
     prefix = "routeDetails.transit.officeOfTransitETA",

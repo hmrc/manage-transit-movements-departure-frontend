@@ -16,24 +16,206 @@
 
 package forms
 
-import forms.behaviours.DateBehaviours
+import forms.behaviours.FieldBehaviours
+import generators.Generators
+import models.DateTime
 import org.scalacheck.Gen
-import java.time.{LocalDateTime, ZoneOffset}
+import play.api.data.{Field, Form, FormError}
 
-class DateTimeFormProviderSpec extends DateBehaviours {
+class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
 
   private val prefix = Gen.alphaNumStr.sample.value
-  val form           = new DateTimeFormProvider()(prefix)
 
-  ".value" - {
+  private val invalidDate       = s"$prefix.date.error.invalid"
+  private val requiredAllDate   = s"$prefix.date.error.required.all"
+  private val requiredMultiDate = s"$prefix.date.error.required.multiple"
+  private val requiredOneDate   = s"$prefix.date.error.required"
 
-    val validData = dateTimesBetween(
-      min = LocalDateTime.of(2000, 1, 1, 23, 55, 0),
-      max = LocalDateTime.now(ZoneOffset.UTC)
-    )
+  private val invalidTime     = s"$prefix.time.error.invalid"
+  private val requiredAllTime = s"$prefix.time.error.required.all"
+  private val requiredOneTime = s"$prefix.time.error.required"
 
-    behave like dateTimeField(form, "value", validData)
+  private val form = new DateTimeFormProvider()(prefix)
 
-    behave like mandatoryDateField(form, "value", s"$prefix.error.required.all")
+  "dateTime" - {
+
+    "must bind valid data" in {
+
+      val localDateTime = arbitraryLocalDateTime.arbitrary
+
+      forAll(localDateTime) {
+        dateTime =>
+          val data: Map[String, String] = Map(
+            "time.hour"   -> dateTime.getHour.toString,
+            "time.minute" -> dateTime.getMinute.toString,
+            "date.day"    -> dateTime.getDayOfMonth.toString,
+            "date.month"  -> dateTime.getMonthValue.toString,
+            "date.year"   -> dateTime.getYear.toString
+          )
+
+          val result: Form[DateTime] = form.bind(data)
+
+          val date = dateTime.toLocalDate
+          val time = dateTime.toLocalTime
+
+          result.errors mustBe List.empty
+          result.value.value mustBe DateTime(date, time)
+      }
+    }
+  }
+
+  "time" - {
+
+    val fieldName = "time"
+
+    "must not bind when empty" in {
+      val result: Field = form.bind(emptyForm).apply(fieldName)
+
+      result.errors mustBe Seq(FormError(fieldName, List(requiredAllTime), List("hour", "minute")))
+    }
+
+    "must not bind when hour is missing" in {
+
+      val data: Map[String, String] = Map(
+        "time.minute" -> "20"
+      )
+
+      val result = form.bind(data).apply(fieldName)
+      result.errors mustBe Seq(FormError(fieldName, List(requiredOneTime), List("hour")))
+    }
+
+    "must not bind when hour is invalid" in {
+
+      val data: Map[String, String] = Map(
+        "time.hour"   -> "65",
+        "time.minute" -> "20"
+      )
+
+      val result = form.bind(data).apply(fieldName)
+      result.errors mustBe Seq(FormError(fieldName, List(invalidTime), List.empty))
+    }
+
+    "must not bind when minute is missing" in {
+
+      val data: Map[String, String] = Map(
+        "time.hour" -> "20"
+      )
+
+      val result = form.bind(data).apply(fieldName)
+      result.errors mustBe Seq(FormError(fieldName, List(requiredOneTime), List("minute")))
+    }
+
+    "must not bind when minute is invalid" in {
+
+      val data: Map[String, String] = Map(
+        "time.hour"   -> "20",
+        "time.minute" -> "65"
+      )
+
+      val result = form.bind(data).apply(fieldName)
+      result.errors mustBe Seq(FormError(fieldName, List(invalidTime), List.empty))
+    }
+  }
+
+  "date" - {
+
+    val fieldName = "date"
+
+    "must not bind when empty" in {
+      val result: Field = form.bind(emptyForm).apply(fieldName)
+
+      result.errors mustBe Seq(FormError(fieldName, List(requiredAllDate), List()))
+    }
+
+    "must not bind when one field is missing" in {
+
+      val data: Map[String, String] = Map(
+        "date.day"   -> "1",
+        "date.month" -> "1",
+        "date.year"  -> "2000"
+      )
+
+      val dataKeys = Seq("day", "month", "year")
+
+      dataKeys.foreach {
+        key =>
+          val missingData = data.-("date." + key)
+
+          val result = form.bind(missingData).apply(fieldName)
+
+          result.errors mustBe Seq(FormError(fieldName, List(requiredOneDate), List(key)))
+      }
+    }
+
+    "must not bind when multiple fields are missing" in {
+
+      val data: Map[String, String] = Map(
+        "date.day"   -> "1",
+        "date.month" -> "1",
+        "date.year"  -> "2000"
+      )
+
+      val dataKeys = Seq("day", "month", "year")
+
+      dataKeys.foreach {
+        key =>
+          val keys: Seq[String] = dataKeys.filterNot(_ == key)
+
+          val missingData1 = data.-("date." + keys.head)
+          val missingData2 = missingData1.-("date." + keys(1))
+
+          val result = form.bind(missingData2).apply(fieldName)
+
+          result.errors mustBe Seq(FormError(fieldName, List(requiredMultiDate), keys))
+      }
+    }
+
+    "must not bind when day is invalid" in {
+
+      forAll(intsAboveValue(31)) {
+        invalidDay =>
+          val data: Map[String, String] = Map(
+            "date.day"   -> invalidDay.toString,
+            "date.month" -> "1",
+            "date.year"  -> "2000"
+          )
+
+          val result = form.bind(data).apply(fieldName)
+
+          result.errors mustBe Seq(FormError(fieldName, List(invalidDate), List.empty))
+      }
+    }
+
+    "must not bind when month is invalid" in {
+
+      forAll(intsAboveValue(12)) {
+        invalidMonth =>
+          val data: Map[String, String] = Map(
+            "date.day"   -> "1",
+            "date.month" -> invalidMonth.toString,
+            "date.year"  -> "2000"
+          )
+
+          val result = form.bind(data).apply(fieldName)
+
+          result.errors mustBe Seq(FormError(fieldName, List(invalidDate), List.empty))
+      }
+    }
+
+    "must not bind when year is invalid" in {
+
+      forAll(nonNumerics) {
+        invalidYear =>
+          val data: Map[String, String] = Map(
+            "date.day"   -> "1",
+            "date.month" -> "1",
+            "date.year"  -> invalidYear
+          )
+
+          val result = form.bind(data).apply(fieldName)
+
+          result.errors mustBe Seq(FormError(fieldName, List(invalidDate), List.empty))
+      }
+    }
   }
 }

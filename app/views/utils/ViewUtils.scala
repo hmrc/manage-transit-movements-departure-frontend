@@ -16,6 +16,7 @@
 
 package views.utils
 
+import models.DateTime
 import play.api.data.{Field, Form, FormError}
 import play.api.i18n.Messages
 import play.twirl.api.Html
@@ -24,6 +25,7 @@ import uk.gov.hmrc.govukfrontend.views.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Content
 import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 import uk.gov.hmrc.hmrcfrontend.views.implicits.RichErrorSummarySupport
+
 import java.time.{LocalDate, LocalDateTime}
 
 object ViewUtils {
@@ -97,7 +99,7 @@ object ViewUtils {
       errorSummary.withFormErrorsAsText(form, mapping = Map(fieldName -> s"${fieldName}_$arg"))
     }
 
-    def withDateTimeErrorMapping(form: Form[LocalDateTime], fieldName: String): ErrorSummary = {
+    def withDateTimeErrorMapping(form: Form[DateTime], fieldName: String): ErrorSummary = {
       val args = Seq("day", "month", "year", "hour", "minute")
       val arg = form.errors.flatMap(_.args).filter(args.contains) match {
         case Nil       => args.head
