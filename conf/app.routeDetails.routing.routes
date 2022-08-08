@@ -19,8 +19,8 @@ POST       /:lrn/route-details/routing/transit-route-country/:index             
 GET        /:lrn/route-details/routing/change-transit-route-country/:index              controllers.routeDetails.routing.CountryOfRoutingController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
 POST       /:lrn/route-details/routing/change-transit-route-country/:index              controllers.routeDetails.routing.CountryOfRoutingController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
 
-GET        /:lrn/route-details/routing/add-another-transit-route-country                controllers.routeDetails.routing.AddAnotherCountryOfRoutingController.onPageLoad(lrn: LocalReferenceNumber)
-POST       /:lrn/route-details/routing/add-another-transit-route-country                controllers.routeDetails.routing.AddAnotherCountryOfRoutingController.onSubmit(lrn: LocalReferenceNumber)
+GET        /:lrn/route-details/routing/transit-route-add-another-country                controllers.routeDetails.routing.AddAnotherCountryOfRoutingController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/route-details/routing/transit-route-add-another-country                controllers.routeDetails.routing.AddAnotherCountryOfRoutingController.onSubmit(lrn: LocalReferenceNumber)
 
 GET        /:lrn/route-details/routing/:index/confirm-remove-transit-route-country      controllers.routeDetails.routing.RemoveCountryOfRoutingYesNoController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
 POST       /:lrn/route-details/routing/:index/confirm-remove-transit-route-country      controllers.routeDetails.routing.RemoveCountryOfRoutingYesNoController.onSubmit(lrn: LocalReferenceNumber, index: Index)
