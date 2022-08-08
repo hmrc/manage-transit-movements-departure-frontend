@@ -16,27 +16,32 @@
 
 package views.routeDetails.routing
 
+import generators.Generators
+import models.reference.Country
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.routeDetails.routing.RemoveCountryOfRoutingYesNoView
 
-class RemoveCountryOfRoutingYesNoViewSpec extends YesNoViewBehaviours {
+class RemoveCountryOfRoutingYesNoViewSpec extends YesNoViewBehaviours with Generators {
+
+  private val country: Country = arbitrary[Country].sample.value
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[RemoveCountryOfRoutingYesNoView].apply(form, lrn, index)(fakeRequest, messages)
+    injector.instanceOf[RemoveCountryOfRoutingYesNoView].apply(form, lrn, index, country)(fakeRequest, messages)
 
   override val prefix: String = "routeDetails.routing.removeCountryOfRoutingYesNo"
 
-  behave like pageWithTitle()
+  behave like pageWithTitle(country.toString)
 
   behave like pageWithBackLink
 
   behave like pageWithSectionCaption("Route details")
 
-  behave like pageWithHeading()
+  behave like pageWithHeading(country.toString)
 
-  behave like pageWithRadioItems()
+  behave like pageWithRadioItems(args = Seq(country.toString))
 
   behave like pageWithSubmitButton("Save and continue")
 }

@@ -19,8 +19,12 @@ package controllers.routeDetails.routing
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
+import models.reference.Country
+import models.requests.SpecificDataRequestProvider1
 import models.{Index, LocalReferenceNumber}
+import pages.routeDetails.routing.CountryOfRoutingPage
 import pages.sections.routeDetails.CountryOfRoutingSection
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -34,6 +38,7 @@ class RemoveCountryOfRoutingYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   actions: Actions,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: RemoveCountryOfRoutingYesNoView
@@ -41,28 +46,36 @@ class RemoveCountryOfRoutingYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.routing.removeCountryOfRoutingYesNo")
+  private type Request = SpecificDataRequestProvider1[Country]#SpecificDataRequest[_]
 
-  def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      Ok(view(form, lrn, index))
-  }
+  private def form(implicit request: Request): Form[Boolean] =
+    formProvider("routeDetails.routing.removeCountryOfRoutingYesNo", request.arg.toString)
 
-  def onSubmit(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index))),
-          {
-            case true =>
-              CountryOfRoutingSection(index)
-                .removeFromUserAnswers()
-                .writeToSession()
-                .navigateTo(routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn))
-            case false =>
-              Future.successful(Redirect(routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn)))
-          }
-        )
-  }
+  def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(CountryOfRoutingPage(index))) {
+      implicit request =>
+        Ok(view(form, lrn, index, request.arg))
+    }
+
+  def onSubmit(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(CountryOfRoutingPage(index)))
+    .async {
+      implicit request =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index, request.arg))),
+            {
+              case true =>
+                CountryOfRoutingSection(index)
+                  .removeFromUserAnswers()
+                  .writeToSession()
+                  .navigateTo(routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn))
+              case false =>
+                Future.successful(Redirect(routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn)))
+            }
+          )
+    }
 }

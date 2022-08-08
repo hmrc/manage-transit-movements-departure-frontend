@@ -16,6 +16,7 @@
 
 @import controllers.routeDetails.routing.routes
 @import models.{LocalReferenceNumber, Index}
+@import models.reference.Country
 @import viewModels.components.InputYesNoViewModel._
 @import views.html.components.{Button, ErrorSummary, InputYesNo}
 
@@ -27,10 +28,10 @@
     button: Button
 )
 
-@(form: Form[Boolean], lrn: LocalReferenceNumber, index: Index)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], lrn: LocalReferenceNumber, index: Index, country: Country)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.routing.removeCountryOfRoutingYesNo.title"),
+    title = messages("routeDetails.routing.removeCountryOfRoutingYesNo.title", country.toString),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -42,7 +43,7 @@
         @inputYesNo(
             field = form("value"),
             yesNoType = OrdinaryYesNo(
-                heading = messages("routeDetails.routing.removeCountryOfRoutingYesNo.heading"),
+                heading = messages("routeDetails.routing.removeCountryOfRoutingYesNo.heading", country.toString),
                 caption = Some(messages("routeDetails.caption"))
             )
         )
