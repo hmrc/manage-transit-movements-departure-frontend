@@ -26,4 +26,4 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-uglify" % "2.0.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
 
-addSbtPlugin("uk.gov.hmrc" % "sbt-accessibility-linter" % "0.22.0")
+addSbtPlugin("uk.gov.hmrc" % "sbt-accessibility-linter" % "0.26.0")
