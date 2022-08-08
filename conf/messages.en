@@ -542,6 +542,8 @@ guaranteeDetails.checkYourAnswers.heading = Check your answers
 
 routeDetails.caption = Route details
 
+# Routing
+
 routeDetails.routing.officeOfDestination.title = Where is the office of destination?
 routeDetails.routing.officeOfDestination.heading = Where is the office of destination?
 routeDetails.routing.officeOfDestination.hintText = Enter the office location or code, like Dover or GB000060.
@@ -589,6 +591,8 @@ routeDetails.routing.checkYourAnswers.title = Check your answers
 routeDetails.routing.checkYourAnswers.heading = Check your answers
 routeDetails.routing.checkYourAnswers.countries.subheading = Transit route countries
 routeDetails.routing.checkYourAnswers.addOrRemove = Add or remove transit route countries
+
+# Transit
 
 routeDetails.transit.t2DeclarationTypeYesNo.title = Does the transit include any T2 declarations?
 routeDetails.transit.t2DeclarationTypeYesNo.heading = Does the transit include any T2 declarations?
@@ -642,10 +646,10 @@ routeDetails.transit.officeOfTransitETA.time.error.invalid = Enter a real time t
 routeDetails.transit.officeOfTransitETA.time.error.required.all = Enter the estimated time of arrival at the office of transit
 routeDetails.transit.officeOfTransitETA.time.error.required = The estimated time of arrival at the office of transit must include {0}
 
-routeDetails.transit.addAnotherOfficeOfTransit.singular.title = You’ve added {0} office of transit
-routeDetails.transit.addAnotherOfficeOfTransit.singular.heading = You’ve added {0} office of transit
-routeDetails.transit.addAnotherOfficeOfTransit.plural.title = You’ve added {0} offices of transit
-routeDetails.transit.addAnotherOfficeOfTransit.plural.heading = You’ve added {0} offices of transit
+routeDetails.transit.addAnotherOfficeOfTransit.singular.title = You have added {0} office of transit
+routeDetails.transit.addAnotherOfficeOfTransit.singular.heading = You have added {0} office of transit
+routeDetails.transit.addAnotherOfficeOfTransit.plural.title = You have added {0} offices of transit
+routeDetails.transit.addAnotherOfficeOfTransit.plural.heading = You have added {0} offices of transit
 routeDetails.transit.addAnotherOfficeOfTransit.error.required = Select yes if you need to add another office of transit
 routeDetails.transit.addAnotherOfficeOfTransit.label = Do you want to add another office of transit?
 routeDetails.transit.addAnotherOfficeOfTransit.maxLimit.label = You cannot add any more offices of transit. To add another office, you need to remove one first.
