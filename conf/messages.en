@@ -575,9 +575,9 @@ routeDetails.routing.countryOfRouting.placeholder = Select a country
 routeDetails.routing.countryOfRouting.checkYourAnswersLabel = Country of routing {0}
 routeDetails.routing.countryOfRouting.change.hidden = country of routing {0}
 
-routeDetails.routing.removeCountryOfRoutingYesNo.title = Are you sure you want to remove this country from the transit route?
-routeDetails.routing.removeCountryOfRoutingYesNo.heading = Are you sure you want to remove this country from the transit route?
-routeDetails.routing.removeCountryOfRoutingYesNo.error.required = Select yes if you want to remove this country from the transit route
+routeDetails.routing.removeCountryOfRoutingYesNo.title = Are you sure you want to remove {0} from the transit route?
+routeDetails.routing.removeCountryOfRoutingYesNo.heading = Are you sure you want to remove {0} from the transit route?
+routeDetails.routing.removeCountryOfRoutingYesNo.error.required = Select yes if you want to remove {0} from the transit route
 
 routeDetails.routing.addAnotherCountryOfRouting.singular.title = You have added {0} country to the transit route
 routeDetails.routing.addAnotherCountryOfRouting.singular.heading = You have added {0} country to the transit route

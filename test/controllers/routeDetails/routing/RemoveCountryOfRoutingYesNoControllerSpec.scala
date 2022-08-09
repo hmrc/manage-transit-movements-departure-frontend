@@ -20,10 +20,13 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
 import models.UserAnswers
+import models.reference.Country
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, reset, verify, when}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.routeDetails.routing.CountryOfRoutingPage
 import pages.sections.routeDetails.CountryOfRoutingSection
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -38,14 +41,17 @@ class RemoveCountryOfRoutingYesNoControllerSpec
     with Generators
     with RouteDetailsUserAnswersGenerator {
 
-  private val formProvider                          = new YesNoFormProvider()
-  private val form                                  = formProvider("routeDetails.routing.removeCountryOfRoutingYesNo")
+  private val country = arbitrary[Country].sample.value
+
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("routeDetails.routing.removeCountryOfRoutingYesNo", country.toString)
+
   private lazy val removeCountryOfROutingYesNoRoute = routes.RemoveCountryOfRoutingYesNoController.onPageLoad(lrn, index).url
 
   "RemoveCountryOfRoutingYesNoController" - {
 
     "must return OK and the correct view for a GET" in {
-      setExistingUserAnswers(emptyUserAnswers)
+      setExistingUserAnswers(emptyUserAnswers.setValue(CountryOfRoutingPage(index), country))
 
       val request = FakeRequest(GET, removeCountryOfROutingYesNoRoute)
       val result  = route(app, request).value
@@ -55,7 +61,7 @@ class RemoveCountryOfRoutingYesNoControllerSpec
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, index)(request, messages).toString
+        view(form, lrn, index, country)(request, messages).toString
     }
 
     "when yes submitted" - {
@@ -108,7 +114,7 @@ class RemoveCountryOfRoutingYesNoControllerSpec
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      setExistingUserAnswers(emptyUserAnswers)
+      setExistingUserAnswers(emptyUserAnswers.setValue(CountryOfRoutingPage(index), country))
 
       val request   = FakeRequest(POST, removeCountryOfROutingYesNoRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
@@ -120,32 +126,61 @@ class RemoveCountryOfRoutingYesNoControllerSpec
       val view = injector.instanceOf[RemoveCountryOfRoutingYesNoView]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, index)(request, messages).toString
+        view(boundForm, lrn, index, country)(request, messages).toString
     }
 
-    "must redirect to Session Expired for a GET if no existing data is found" in {
-      setNoExistingUserAnswers()
+    "must redirect to Session Expired for a GET" - {
+      "when no existing data found" in {
+        setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, removeCountryOfROutingYesNoRoute)
+        val request = FakeRequest(GET, removeCountryOfROutingYesNoRoute)
 
-      val result = route(app, request).value
+        val result = route(app, request).value
 
-      status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
+
+      "when country not found at index" in {
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(GET, removeCountryOfROutingYesNoRoute)
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
     }
 
-    "must redirect to Session Expired for a POST if no existing data is found" in {
-      setNoExistingUserAnswers()
+    "must redirect to Session Expired for a POST if no existing data is found" - {
+      "when no existing data found" in {
+        setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, removeCountryOfROutingYesNoRoute)
-        .withFormUrlEncodedBody(("value", "true"))
+        val request = FakeRequest(POST, removeCountryOfROutingYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
-      val result = route(app, request).value
+        val result = route(app, request).value
 
-      status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
+
+      "when country not found at index" in {
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(POST, removeCountryOfROutingYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
     }
   }
 }
