@@ -63,7 +63,6 @@ class InputTextSpec extends A11ySpecBase {
             suffix,
             autocomplete,
             inputMode,
-            caption,
             inputType
           )
         }
@@ -82,7 +81,6 @@ class InputTextSpec extends A11ySpecBase {
               suffix,
               autocomplete,
               inputMode,
-              caption,
               inputType
             )
         }
@@ -101,7 +99,6 @@ class InputTextSpec extends A11ySpecBase {
               suffix,
               autocomplete,
               inputMode,
-              caption,
               inputType
             )
         }
@@ -120,7 +117,6 @@ class InputTextSpec extends A11ySpecBase {
               suffix,
               autocomplete,
               inputMode,
-              caption,
               inputType
             )
             .withHeading(title)
