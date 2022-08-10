@@ -17,6 +17,7 @@
 package generators
 
 import models.journeyDomain.routeDetails._
+import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
 import models.journeyDomain.routeDetails.transit.{OfficeOfTransitDomain, TransitDomain}
 import models.{Index, UserAnswers}
 import org.scalacheck.Gen

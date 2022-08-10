@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.routeDetails
+package models.journeyDomain.routeDetails.routing
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper

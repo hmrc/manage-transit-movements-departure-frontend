@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.routeDetails
+package models.journeyDomain.routeDetails.routing
 
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.Stage._

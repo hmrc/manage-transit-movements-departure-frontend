@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.routeDetails
+package models.journeyDomain.routeDetails.routing
 
 import cats.implicits._
 import models.SecurityDetailsType.NoSecurityDetails

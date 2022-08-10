@@ -17,7 +17,7 @@
 package viewModels.taskList
 
 import models.UserAnswers
-import models.journeyDomain.routeDetails.RoutingDomain
+import models.journeyDomain.routeDetails.routing.RoutingDomain
 import pages.sections.routeDetails.RouteDetailsSection
 import play.api.libs.json.JsObject
 

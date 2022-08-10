@@ -17,8 +17,10 @@
 package navigation.routeDetails
 
 import models._
-import models.journeyDomain.routeDetails.{CountryOfRoutingDomain, RouteDetailsDomain}
+import models.journeyDomain.routeDetails.RouteDetailsDomain
+import models.journeyDomain.routeDetails.routing.CountryOfRoutingDomain
 import navigation.UserAnswersNavigator
+
 import javax.inject.{Inject, Singleton}
 
 @Singleton

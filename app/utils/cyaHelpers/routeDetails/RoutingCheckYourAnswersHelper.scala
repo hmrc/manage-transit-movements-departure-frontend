@@ -17,7 +17,7 @@
 package utils.cyaHelpers.routeDetails
 
 import controllers.routeDetails.routing.index.routes
-import models.journeyDomain.routeDetails.CountryOfRoutingDomain
+import models.journeyDomain.routeDetails.routing.CountryOfRoutingDomain
 import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode, UserAnswers}
 import pages.routeDetails.routing._
