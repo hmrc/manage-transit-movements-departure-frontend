@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.routing
+package pages.routeDetails.routing.index
 
-import controllers.routeDetails.routing.routes
+import controllers.routeDetails.routing.index.routes
 import models.reference.Country
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage

@@ -16,11 +16,12 @@
 
 package utils.cyaHelpers.routeDetails
 
-import controllers.routeDetails.routing.routes
+import controllers.routeDetails.routing.index.routes
 import models.journeyDomain.routeDetails.CountryOfRoutingDomain
 import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode, UserAnswers}
 import pages.routeDetails.routing._
+import pages.routeDetails.routing.index.CountryOfRoutingPage
 import pages.sections.routeDetails.CountriesOfRoutingSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads

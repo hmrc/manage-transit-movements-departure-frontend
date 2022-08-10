@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails.routing
+package controllers.routeDetails.routing.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.CountryFormProvider
@@ -23,13 +23,13 @@ import models.{CountryList, NormalMode}
 import navigation.routeDetails.CountryOfRoutingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.routeDetails.routing.CountryOfRoutingPage
+import pages.routeDetails.routing.index.CountryOfRoutingPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CountriesService
-import views.html.routeDetails.routing.CountryOfRoutingView
+import views.html.routeDetails.routing.index.CountryOfRoutingView
 
 import scala.concurrent.Future
 

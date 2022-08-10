@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.routeDetails.routing
+package views.routeDetails.routing.index
 
 import generators.Generators
 import models.reference.Country
@@ -22,7 +22,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.routeDetails.routing.RemoveCountryOfRoutingYesNoView
+import views.html.routeDetails.routing.index.RemoveCountryOfRoutingYesNoView
 
 class RemoveCountryOfRoutingYesNoViewSpec extends YesNoViewBehaviours with Generators {
 

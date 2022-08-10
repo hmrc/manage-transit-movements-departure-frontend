@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.routing
+package pages.routeDetails.routing.index
 
 import models.Index
 import models.reference.Country
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.routeDetails.routing.AddCountryOfRoutingYesNoPage
 
 class AddCountryOfRoutingYesNoPageSpec extends PageBehaviours {
 

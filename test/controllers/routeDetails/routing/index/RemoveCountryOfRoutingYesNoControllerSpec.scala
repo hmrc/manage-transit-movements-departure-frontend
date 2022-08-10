@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails.routing
+package controllers.routeDetails.routing.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import controllers.routeDetails.routing.{routes => routingRoutes}
 import forms.YesNoFormProvider
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
 import models.UserAnswers
@@ -26,11 +27,11 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, reset, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.routing.CountryOfRoutingPage
+import pages.routeDetails.routing.index.CountryOfRoutingPage
 import pages.sections.routeDetails.CountryOfRoutingSection
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.routeDetails.routing.RemoveCountryOfRoutingYesNoView
+import views.html.routeDetails.routing.index.RemoveCountryOfRoutingYesNoView
 
 import scala.concurrent.Future
 
@@ -81,7 +82,7 @@ class RemoveCountryOfRoutingYesNoControllerSpec
             status(result) mustEqual SEE_OTHER
 
             redirectLocation(result).value mustEqual
-              routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn).url
+              routingRoutes.AddAnotherCountryOfRoutingController.onPageLoad(lrn).url
 
             val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
             verify(mockSessionRepository).set(userAnswersCaptor.capture())
@@ -106,7 +107,7 @@ class RemoveCountryOfRoutingYesNoControllerSpec
             status(result) mustEqual SEE_OTHER
 
             redirectLocation(result).value mustEqual
-              routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn).url
+              routingRoutes.AddAnotherCountryOfRoutingController.onPageLoad(lrn).url
 
             verify(mockSessionRepository, never()).set(any())
         }

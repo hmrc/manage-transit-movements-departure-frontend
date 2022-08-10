@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.routeDetails.routing
+package views.routeDetails.routing.index
 
 import forms.CountryFormProvider
 import generators.Generators
@@ -23,7 +23,7 @@ import models.{CountryList, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.InputSelectViewBehaviours
-import views.html.routeDetails.routing.CountryOfRoutingView
+import views.html.routeDetails.routing.index.CountryOfRoutingView
 
 class CountryOfRoutingViewSpec extends InputSelectViewBehaviours[Country] with Generators {
 

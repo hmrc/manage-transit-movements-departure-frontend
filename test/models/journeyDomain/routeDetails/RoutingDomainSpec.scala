@@ -25,7 +25,8 @@ import models.reference.{Country, CustomsOffice}
 import models.{Index, SecurityDetailsType}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.preTaskList._
-import pages.routeDetails.routing.{AddCountryOfRoutingYesNoPage, BindingItineraryPage, CountryOfRoutingPage, OfficeOfDestinationPage}
+import pages.routeDetails.routing.index.CountryOfRoutingPage
+import pages.routeDetails.routing.{AddCountryOfRoutingYesNoPage, BindingItineraryPage, OfficeOfDestinationPage}
 
 class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 

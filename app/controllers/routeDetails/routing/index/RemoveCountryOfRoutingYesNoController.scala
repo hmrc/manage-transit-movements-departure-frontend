@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails.routing
+package controllers.routeDetails.routing.index
 
 import controllers.actions._
+import controllers.routeDetails.routing.{routes => routingRoutes}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.reference.Country
 import models.requests.SpecificDataRequestProvider1
 import models.{Index, LocalReferenceNumber}
-import pages.routeDetails.routing.CountryOfRoutingPage
+import pages.routeDetails.routing.index.CountryOfRoutingPage
 import pages.sections.routeDetails.CountryOfRoutingSection
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.routing.RemoveCountryOfRoutingYesNoView
+import views.html.routeDetails.routing.index.RemoveCountryOfRoutingYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -72,9 +73,9 @@ class RemoveCountryOfRoutingYesNoController @Inject() (
                 CountryOfRoutingSection(index)
                   .removeFromUserAnswers()
                   .writeToSession()
-                  .navigateTo(routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn))
+                  .navigateTo(routingRoutes.AddAnotherCountryOfRoutingController.onPageLoad(lrn))
               case false =>
-                Future.successful(Redirect(routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn)))
+                Future.successful(Redirect(routingRoutes.AddAnotherCountryOfRoutingController.onPageLoad(lrn)))
             }
           )
     }

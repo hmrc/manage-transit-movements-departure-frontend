@@ -21,7 +21,7 @@ import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import models.reference.Country
 import org.scalacheck.Arbitrary.arbitrary
-import pages.routeDetails.routing.CountryOfRoutingPage
+import pages.routeDetails.routing.index.CountryOfRoutingPage
 
 class CountryOfRoutingDomainSpec extends SpecBase with Generators {
 
