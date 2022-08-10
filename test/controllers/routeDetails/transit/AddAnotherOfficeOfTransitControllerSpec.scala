@@ -140,7 +140,7 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.routeDetails.transit.routes.OfficeOfTransitCountryController.onPageLoad(lrn, NormalMode, Index(listItems.length)).url
+            controllers.routeDetails.transit.index.routes.OfficeOfTransitCountryController.onPageLoad(lrn, NormalMode, Index(listItems.length)).url
         }
       }
 

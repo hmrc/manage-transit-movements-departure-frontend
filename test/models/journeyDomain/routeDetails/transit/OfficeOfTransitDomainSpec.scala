@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package models.JourneyDomain.routeDetails.transit
+package models.journeyDomain.routeDetails.transit
 
 import base.SpecBase
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
-import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
 import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.routeDetails.transit._
+import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
 
 class OfficeOfTransitDomainSpec extends SpecBase with Generators {
 

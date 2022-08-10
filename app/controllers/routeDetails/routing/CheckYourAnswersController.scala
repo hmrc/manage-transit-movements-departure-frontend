@@ -19,6 +19,8 @@ package controllers.routeDetails.routing
 import com.google.inject.Inject
 import controllers.actions.Actions
 import models.{LocalReferenceNumber, NormalMode}
+import navigation.Navigator
+import navigation.annotations.routeDetails.RouteDetails
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -27,6 +29,7 @@ import views.html.routeDetails.routing.CheckYourAnswersView
 
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
+  @RouteDetails navigator: Navigator,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
@@ -41,7 +44,7 @@ class CheckYourAnswersController @Inject() (
   }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
-    Redirect(controllers.routes.TaskListController.onPageLoad(lrn)) // TODO redirect to transit subsection when built
+    implicit request => Redirect(navigator.nextPage(request.userAnswers, NormalMode))
   }
 
 }

@@ -18,6 +18,7 @@ package models.journeyDomain.routeDetails
 
 import models.domain.UserAnswersReader
 import models.journeyDomain.JourneyDomainModel
+import models.journeyDomain.routeDetails.routing.RoutingDomain
 import models.journeyDomain.routeDetails.transit.TransitDomain
 
 case class RouteDetailsDomain(

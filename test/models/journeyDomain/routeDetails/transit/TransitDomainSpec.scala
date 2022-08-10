@@ -23,6 +23,7 @@ import models.domain.{EitherType, UserAnswersReader}
 import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.routeDetails.transit._
+import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
 
 class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 

@@ -18,7 +18,7 @@ package controllers.routeDetails.routing
 
 import config.FrontendAppConfig
 import controllers.actions._
-import controllers.routeDetails.routing.routes._
+import controllers.routeDetails.routing.index.{routes => indexRoutes}
 import forms.AddAnotherFormProvider
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, NormalMode}
@@ -63,8 +63,8 @@ class AddAnotherCountryOfRoutingController @Inject() (
         .fold(
           formWithErrors => BadRequest(view(formWithErrors, lrn, countries, allowMoreCountries)),
           {
-            case true  => Redirect(CountryOfRoutingController.onPageLoad(lrn, NormalMode, Index(numberOfCountries)))
-            case false => Redirect(CheckYourAnswersController.onPageLoad(lrn))
+            case true  => Redirect(indexRoutes.CountryOfRoutingController.onPageLoad(lrn, NormalMode, Index(numberOfCountries)))
+            case false => Redirect(routes.CheckYourAnswersController.onPageLoad(lrn))
           }
         )
   }

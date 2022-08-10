@@ -21,7 +21,7 @@ import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, Use
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{Country, CustomsOffice}
 import models.{DateTime, Index, UserAnswers}
-import pages.routeDetails.transit.{AddOfficeOfTransitETAYesNoPage, _}
+import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
 import play.api.mvc.Call
 
 case class OfficeOfTransitDomain(
@@ -33,7 +33,7 @@ case class OfficeOfTransitDomain(
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
     Some(
-      controllers.routeDetails.transit.routes.CheckOfficeOfTransitAnswersController.onPageLoad(userAnswers.lrn, index)
+      controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(userAnswers.lrn, index)
     )
 
 }
@@ -46,7 +46,6 @@ object OfficeOfTransitDomain {
       OfficeOfTransitPage(index).reader,
       AddOfficeOfTransitETAYesNoPage(index).filterOptionalDependent(identity)(OfficeOfTransitETAPage(index).reader)
     ).mapN {
-      (officeOfTransitCountry, officeOfTransit, officeOfTransitETA) =>
-        OfficeOfTransitDomain(officeOfTransitCountry, officeOfTransit, officeOfTransitETA)(index)
+      (country, office, eta) => OfficeOfTransitDomain(country, office, eta)(index)
     }
 }

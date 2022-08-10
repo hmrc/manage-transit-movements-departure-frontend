@@ -22,7 +22,7 @@ import models.Index
 import models.reference.Country
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.routeDetails.routing.CountryOfRoutingPage
+import pages.routeDetails.routing.index.CountryOfRoutingPage
 
 class AddAnotherCountryOfRoutingViewModelSpec extends SpecBase with Generators {
 

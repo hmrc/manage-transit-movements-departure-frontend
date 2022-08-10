@@ -17,13 +17,15 @@
 package utils.cyaHelpers.routeDetails
 
 import base.SpecBase
-import controllers.routeDetails.routing.routes
+import controllers.routeDetails.routing.index.{routes => indexRoutes}
+import controllers.routeDetails.routing.{routes => routingRoutes}
 import generators.Generators
 import models.reference.{Country, CountryCode, CustomsOffice}
 import models.{Index, Mode, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.routing._
+import pages.routeDetails.routing.index.CountryOfRoutingPage
 import uk.gov.hmrc.govukfrontend.views.Aliases.{Key, SummaryListRow, Value}
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
@@ -63,7 +65,7 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.OfficeOfDestinationController.onPageLoad(answers.lrn, mode).url,
+                          href = routingRoutes.OfficeOfDestinationController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("office of destination"),
                           attributes = Map("id" -> "office-of-destination")
                         )
@@ -107,7 +109,7 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.BindingItineraryController.onPageLoad(answers.lrn, mode).url,
+                          href = routingRoutes.BindingItineraryController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want the transit to follow a binding itinerary"),
                           attributes = Map("id" -> "binding-itinerary")
                         )
@@ -151,7 +153,7 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.AddCountryOfRoutingYesNoController.onPageLoad(answers.lrn, mode).url,
+                          href = routingRoutes.AddCountryOfRoutingYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add a country to the transit route"),
                           attributes = Map("id" -> "add-country-of-routing")
                         )
@@ -196,7 +198,7 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.CountryOfRoutingController.onPageLoad(answers.lrn, NormalMode, index).url,
+                          href = indexRoutes.CountryOfRoutingController.onPageLoad(answers.lrn, NormalMode, index).url,
                           visuallyHiddenText = Some("country of routing 1"),
                           attributes = Map("id" -> "change-country-of-routing-1")
                         )
@@ -222,15 +224,15 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
           Right(
             ListItem(
               name = "France",
-              changeUrl = routes.CountryOfRoutingController.onPageLoad(answers.lrn, NormalMode, Index(0)).url,
-              removeUrl = routes.RemoveCountryOfRoutingYesNoController.onPageLoad(answers.lrn, Index(0)).url
+              changeUrl = indexRoutes.CountryOfRoutingController.onPageLoad(answers.lrn, NormalMode, Index(0)).url,
+              removeUrl = indexRoutes.RemoveCountryOfRoutingYesNoController.onPageLoad(answers.lrn, Index(0)).url
             )
           ),
           Right(
             ListItem(
               name = "Portugal",
-              changeUrl = routes.CountryOfRoutingController.onPageLoad(answers.lrn, NormalMode, Index(1)).url,
-              removeUrl = routes.RemoveCountryOfRoutingYesNoController.onPageLoad(answers.lrn, Index(1)).url
+              changeUrl = indexRoutes.CountryOfRoutingController.onPageLoad(answers.lrn, NormalMode, Index(1)).url,
+              removeUrl = indexRoutes.RemoveCountryOfRoutingYesNoController.onPageLoad(answers.lrn, Index(1)).url
             )
           )
         )
