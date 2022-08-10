@@ -18,7 +18,7 @@ package utils.cyaHelpers.routeDetails
 
 import models.reference.{Country, CustomsOffice}
 import models.{DateTime, Index, Mode, UserAnswers}
-import pages.routeDetails.transit.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
+import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper

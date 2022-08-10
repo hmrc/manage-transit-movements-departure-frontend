@@ -18,6 +18,7 @@
 ->         /manage-transit-movements/departure                   app.routeDetails.routing.Routes
 ->         /manage-transit-movements/departure                   app.routeDetails.routing.index.Routes
 ->         /manage-transit-movements/departure                   app.routeDetails.transit.Routes
+->         /manage-transit-movements/departure                   app.routeDetails.transit.index.Routes
 
 ->         /                                                     health.Routes
 

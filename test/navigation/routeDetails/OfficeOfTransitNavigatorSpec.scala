@@ -22,13 +22,8 @@ import models._
 import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.transit.{
-  AddOfficeOfTransitETAYesNoPage,
-  AddOfficeOfTransitYesNoPage,
-  OfficeOfTransitCountryPage,
-  OfficeOfTransitPage,
-  T2DeclarationTypeYesNoPage
-}
+import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitPage}
+import pages.routeDetails.transit.{AddOfficeOfTransitYesNoPage, T2DeclarationTypeYesNoPage}
 
 class OfficeOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
@@ -46,7 +41,7 @@ class OfficeOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(controllers.routeDetails.transit.routes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, index))
+                .mustBe(controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, index))
           }
         }
       }

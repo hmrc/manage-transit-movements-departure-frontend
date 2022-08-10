@@ -18,9 +18,9 @@ package controllers.routeDetails.transit
 
 import config.FrontendAppConfig
 import controllers.actions._
+import controllers.routeDetails.transit.index.{routes => indexRoutes}
 import controllers.routes.TaskListController
 import forms.AddAnotherFormProvider
-import javax.inject.Inject
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, NormalMode}
 import navigation.Navigator
@@ -33,6 +33,8 @@ import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel.AddAnotherOfficeOfTransitViewModelProvider
 import views.html.routeDetails.transit.AddAnotherOfficeOfTransitView
+
+import javax.inject.Inject
 
 class AddAnotherOfficeOfTransitController @Inject() (
   override val messagesApi: MessagesApi,
@@ -67,7 +69,7 @@ class AddAnotherOfficeOfTransitController @Inject() (
         .fold(
           formWithErrors => BadRequest(view(formWithErrors, lrn, officesOfTransit, allowMoreOfficesOfTransit)),
           {
-            case true  => Redirect(routes.OfficeOfTransitCountryController.onPageLoad(lrn, NormalMode, Index(numberOfOfficesOfTransit)))
+            case true  => Redirect(indexRoutes.OfficeOfTransitCountryController.onPageLoad(lrn, NormalMode, Index(numberOfOfficesOfTransit)))
             case false => Redirect(TaskListController.onPageLoad(lrn))
           }
         )

@@ -24,6 +24,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.preTaskList._
 import pages.routeDetails.routing.index.CountryOfRoutingPage
+import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
 import pages.traderDetails._
 import play.api.libs.json.{JsBoolean, JsString, JsValue, Json}
 import queries.Gettable
