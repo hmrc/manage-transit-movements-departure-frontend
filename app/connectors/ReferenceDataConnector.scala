@@ -66,7 +66,12 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
 
   def getCountries(queryParameters: Seq[(String, String)])(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
     val serviceUrl = s"${config.referenceDataUrl}/countries"
-    http.GET[Seq[Country]](serviceUrl, queryParameters)
+    http.GET[Seq[Country]](serviceUrl, queryParameters, headers = setHeaders)
+
   }
+
+  private def setHeaders = Seq(
+    "Accept" -> "application/vnd.hmrc.2.0+json"
+  )
 
 }

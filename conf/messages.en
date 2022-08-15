@@ -661,3 +661,12 @@ routeDetails.transit.confirmRemoveOfficeOfTransit.error.required = Select yes if
 routeDetails.transit.checkOfficeOfTransitAnswers.title = Check your answers
 routeDetails.transit.checkOfficeOfTransitAnswers.heading = Check your answers
 
+
+routeDetails.routing.countryOfDestination.title = Which country is the transit movement ending in
+routeDetails.routing.countryOfDestination.heading = Which country is the transit movement ending in
+routeDetails.routing.countryOfDestination.hintText = Enter the country, like France or Portugal, countries that are part of the CTC community.
+routeDetails.routing.countryOfDestination.label = Which country is the transit movement ending in
+routeDetails.routing.countryOfDestination.placeholder = Select a country
+routeDetails.routing.countryOfDestination.change.hidden = Which country is the transit movement ending in
+routeDetails.routing.countryOfDestination.checkYourAnswersLabel = Which country is the transit movement ending in
+routeDetails.routing.countryOfDestination.error.required = Select the country
