@@ -25,7 +25,7 @@ import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.UserAnswersReader
 import models.journeyDomain.PreTaskListDomain
 import models.journeyDomain.traderDetails.TraderDetailsDomain
-import models.reference.{CountryCode, CustomsOffice}
+import models.reference.CustomsOffice
 import models.requests.DataRequest
 import models.{EoriNumber, UserAnswers}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -59,7 +59,7 @@ class CheckDependentTaskCompletedActionSpec extends SpecBase with GuiceOneAppPer
     "return None if dependent section is completed" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("code"), None))
+        .setValue(OfficeOfDeparturePage, CustomsOffice("GB1", "name", None))
         .setValue(ProcedureTypePage, Normal)
         .setValue(DeclarationTypePage, Option1)
         .setValue(SecurityDetailsTypePage, NoSecurityDetails)

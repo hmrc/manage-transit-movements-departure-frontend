@@ -23,7 +23,7 @@ import models.DeclarationType.Option1
 import models.ProcedureType.Normal
 import models.SecurityDetailsType.NoSecurityDetails
 import models.journeyDomain.PreTaskListDomain
-import models.reference.{CountryCode, CustomsOffice}
+import models.reference.CustomsOffice
 import models.requests.DataRequest
 import models.{EoriNumber, UserAnswers}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -63,7 +63,7 @@ class CheckTaskAlreadyCompletedActionSpec extends SpecBase with GuiceOneAppPerSu
     "return to task list page if section has already been completed" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("code"), None))
+        .setValue(OfficeOfDeparturePage, CustomsOffice("id", "name", None))
         .setValue(ProcedureTypePage, Normal)
         .setValue(DeclarationTypePage, Option1)
         .setValue(SecurityDetailsTypePage, NoSecurityDetails)

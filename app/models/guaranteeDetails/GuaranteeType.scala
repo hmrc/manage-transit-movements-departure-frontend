@@ -64,7 +64,7 @@ object GuaranteeType extends RadioModelU[GuaranteeType] {
 
   override def valuesU(userAnswers: UserAnswers): Seq[GuaranteeType] = {
     val valuesExcludingTIRGuarantee = values.filterNot(_ == TIRGuarantee)
-    userAnswers.get(OfficeOfDeparturePage).map(_.countryId.code) match {
+    userAnswers.get(OfficeOfDeparturePage).map(_.countryCode) match {
       case Some(XI) => valuesExcludingTIRGuarantee.filterNot(_ == IndividualGuaranteeMultiple)
       case _        => valuesExcludingTIRGuarantee
     }

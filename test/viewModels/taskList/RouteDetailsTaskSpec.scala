@@ -19,11 +19,11 @@ package viewModels.taskList
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
 import models.NormalMode
-import models.reference.CustomsOffice
+import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.routing.OfficeOfDestinationPage
+import pages.routeDetails.routing.{CountryOfDestinationPage, OfficeOfDestinationPage}
 import viewModels.taskList.TaskStatus._
 
 class RouteDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
@@ -81,11 +81,12 @@ class RouteDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with G
       val task        = RouteDetailsTask(userAnswers)
       task.status mustBe NotStarted
       task.href.get mustBe
-        controllers.routeDetails.routing.routes.OfficeOfDestinationController.onPageLoad(userAnswers.lrn, NormalMode).url
+        controllers.routeDetails.routing.routes.CountryOfDestinationController.onPageLoad(userAnswers.lrn, NormalMode).url
     }
 
     "when InProgress" in {
       val userAnswers = emptyUserAnswers
+        .setValue(CountryOfDestinationPage, arbitrary[Country].sample.value)
         .setValue(OfficeOfDestinationPage, arbitrary[CustomsOffice].sample.value)
       val task = RouteDetailsTask(userAnswers)
       task.status mustBe InProgress

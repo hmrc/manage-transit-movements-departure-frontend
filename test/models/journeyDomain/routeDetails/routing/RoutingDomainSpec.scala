@@ -26,7 +26,7 @@ import models.{Index, SecurityDetailsType}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.preTaskList._
 import pages.routeDetails.routing.index.CountryOfRoutingPage
-import pages.routeDetails.routing.{AddCountryOfRoutingYesNoPage, BindingItineraryPage, OfficeOfDestinationPage}
+import pages.routeDetails.routing.{AddCountryOfRoutingYesNoPage, BindingItineraryPage, CountryOfDestinationPage, OfficeOfDestinationPage}
 
 class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
@@ -45,11 +45,13 @@ class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
 
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(SecurityDetailsTypePage)(securityType)
+            .unsafeSetVal(CountryOfDestinationPage)(country)
             .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
             .unsafeSetVal(BindingItineraryPage)(true)
             .unsafeSetVal(CountryOfRoutingPage(index))(country)
 
           val expectedResult = RoutingDomain(
+            countryOfDestination = country,
             officeOfDestination = officeOfDestination,
             bindingItinerary = true,
             countriesOfRouting = Seq(
@@ -66,11 +68,13 @@ class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
 
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(SecurityDetailsTypePage)(securityType)
+            .unsafeSetVal(CountryOfDestinationPage)(country)
             .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
             .unsafeSetVal(BindingItineraryPage)(false)
             .unsafeSetVal(AddCountryOfRoutingYesNoPage)(false)
 
           val expectedResult = RoutingDomain(
+            countryOfDestination = country,
             officeOfDestination = officeOfDestination,
             bindingItinerary = false,
             countriesOfRouting = Nil
@@ -90,11 +94,13 @@ class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
 
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(SecurityDetailsTypePage)(securityType)
+            .unsafeSetVal(CountryOfDestinationPage)(country)
             .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
             .unsafeSetVal(BindingItineraryPage)(true)
             .unsafeSetVal(CountryOfRoutingPage(index))(country)
 
           val expectedResult = RoutingDomain(
+            countryOfDestination = country,
             officeOfDestination = officeOfDestination,
             bindingItinerary = true,
             countriesOfRouting = Seq(
@@ -111,11 +117,13 @@ class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
 
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(SecurityDetailsTypePage)(securityType)
+            .unsafeSetVal(CountryOfDestinationPage)(country)
             .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
             .unsafeSetVal(BindingItineraryPage)(false)
             .unsafeSetVal(CountryOfRoutingPage(index))(country)
 
           val expectedResult = RoutingDomain(
+            countryOfDestination = country,
             officeOfDestination = officeOfDestination,
             bindingItinerary = false,
             countriesOfRouting = Seq(
@@ -132,10 +140,22 @@ class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
 
     "cannot be parsed from UserAnswers" - {
 
-      "when office of destination page is missing" in {
+      "when country of destination page is missing" in {
 
         val securityType = arbitrary[SecurityDetailsType].sample.value
         val userAnswers  = emptyUserAnswers.unsafeSetVal(SecurityDetailsTypePage)(securityType)
+
+        val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
+
+        result.left.value.page mustBe CountryOfDestinationPage
+      }
+
+      "when office of destination page is missing" in {
+
+        val securityType = arbitrary[SecurityDetailsType].sample.value
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(SecurityDetailsTypePage)(securityType)
+          .unsafeSetVal(CountryOfDestinationPage)(country)
 
         val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
 
@@ -147,6 +167,7 @@ class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
         val securityType = arbitrary[SecurityDetailsType].sample.value
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(SecurityDetailsTypePage)(securityType)
+          .unsafeSetVal(CountryOfDestinationPage)(country)
           .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
 
         val result: EitherType[RoutingDomain] = UserAnswersReader[RoutingDomain].run(userAnswers)
@@ -154,10 +175,11 @@ class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
         result.left.value.page mustBe BindingItineraryPage
       }
 
-      "when add country page is missing" - {
+      "when add country page is missing" in {
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
+          .unsafeSetVal(CountryOfDestinationPage)(country)
           .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
           .unsafeSetVal(BindingItineraryPage)(false)
 
@@ -171,6 +193,7 @@ class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
         val securityType = arbitrary[SecurityDetailsType].sample.value
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(SecurityDetailsTypePage)(securityType)
+          .unsafeSetVal(CountryOfDestinationPage)(country)
           .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
           .unsafeSetVal(BindingItineraryPage)(true)
 
@@ -185,6 +208,7 @@ class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
         val bindingItinerary = arbitrary[Boolean].sample.value
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(SecurityDetailsTypePage)(securityType)
+          .unsafeSetVal(CountryOfDestinationPage)(country)
           .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
           .unsafeSetVal(BindingItineraryPage)(bindingItinerary)
 
@@ -197,6 +221,7 @@ class RoutingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
+          .unsafeSetVal(CountryOfDestinationPage)(country)
           .unsafeSetVal(OfficeOfDestinationPage)(officeOfDestination)
           .unsafeSetVal(BindingItineraryPage)(false)
           .unsafeSetVal(AddCountryOfRoutingYesNoPage)(true)

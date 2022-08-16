@@ -48,14 +48,14 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
     """
       |[
       | {
-      |   "id" : "testId1",
+      |   "id" : "GB1",
       |   "name" : "testName1",
       |   "roles" : ["role1", "role2"],
       |   "countryId" : "GB",
       |   "phoneNumber" : "testPhoneNumber"
       | },
       | {
-      |   "id" : "testId2",
+      |   "id" : "GB2",
       |   "name" : "testName2",
       |   "countryId" : "GB",
       |   "roles" : ["role1", "role2"]
@@ -80,7 +80,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
   private val customsOfficeJson: String =
     """
       |  {
-      |    "id": "1",
+      |    "id": "GB1",
       |    "name": "Data1",
       |    "roles" : ["role1", "role2"],
       |    "countryId" : "GB",
@@ -98,8 +98,8 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
         )
 
         val expectedResult = Seq(
-          CustomsOffice("testId1", "testName1", CountryCode("GB"), Some("testPhoneNumber")),
-          CustomsOffice("testId2", "testName2", CountryCode("GB"), None)
+          CustomsOffice("GB1", "testName1", Some("testPhoneNumber")),
+          CustomsOffice("GB2", "testName2", None)
         )
 
         connector.getCustomsOffices().futureValue mustBe expectedResult
@@ -112,8 +112,8 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
         )
 
         val expectedResult = Seq(
-          CustomsOffice("testId1", "testName1", CountryCode("GB"), Some("testPhoneNumber")),
-          CustomsOffice("testId2", "testName2", CountryCode("GB"), None)
+          CustomsOffice("GB1", "testName1", Some("testPhoneNumber")),
+          CustomsOffice("GB2", "testName2", None)
         )
 
         connector.getCustomsOffices(Seq("NPM")).futureValue mustBe expectedResult
@@ -134,8 +134,8 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
         val expectedResult =
           CustomsOfficeList(
             Seq(
-              CustomsOffice("testId1", "testName1", CountryCode("GB"), Some("testPhoneNumber")),
-              CustomsOffice("testId2", "testName2", CountryCode("GB"), None)
+              CustomsOffice("GB1", "testName1", Some("testPhoneNumber")),
+              CustomsOffice("GB2", "testName2", None)
             )
           )
 
@@ -151,8 +151,8 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
         val expectedResult =
           CustomsOfficeList(
             Seq(
-              CustomsOffice("testId1", "testName1", CountryCode("GB"), Some("testPhoneNumber")),
-              CustomsOffice("testId2", "testName2", CountryCode("GB"), None)
+              CustomsOffice("GB1", "testName1", Some("testPhoneNumber")),
+              CustomsOffice("GB2", "testName2", None)
             )
           )
 
@@ -210,18 +210,18 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
       "must return a Customs Office when successful" in {
         server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/customs-office/1"))
+          get(urlEqualTo(s"/$baseUrl/customs-office/GB1"))
             .willReturn(okJson(customsOfficeJson))
         )
 
-        val expectedResult: CustomsOffice = CustomsOffice("1", "Data1", CountryCode("GB"), Some("testPhoneNumber"))
+        val expectedResult: CustomsOffice = CustomsOffice("GB1", "Data1", Some("testPhoneNumber"))
 
-        connector.getCustomsOffice("1").futureValue mustEqual expectedResult
+        connector.getCustomsOffice("GB1").futureValue mustEqual expectedResult
       }
 
       "must return an exception when an error response is returned" in {
 
-        checkErrorResponse(s"/$baseUrl/customs-office/1", connector.getCustomsOffice("1"))
+        checkErrorResponse(s"/$baseUrl/customs-office/GB1", connector.getCustomsOffice("GB1"))
       }
     }
   }
