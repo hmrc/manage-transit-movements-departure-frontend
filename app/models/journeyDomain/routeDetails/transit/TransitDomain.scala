@@ -17,16 +17,20 @@
 package models.journeyDomain.routeDetails.transit
 
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
+import models.journeyDomain.routeDetails.transit.TransitDomain.OfficesOfTransit
 import models.journeyDomain.{JourneyDomainModel, Stage}
-import models.{Index, RichJsArray, UserAnswers}
+import models.reference.CountryCode
+import models.{DeclarationType, Index, RichJsArray, UserAnswers}
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage}
+import pages.routeDetails.routing.OfficeOfDestinationPage
 import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
 import pages.routeDetails.transit.{AddOfficeOfTransitYesNoPage, T2DeclarationTypeYesNoPage}
 import pages.sections.routeDetails.OfficeOfTransitCountriesSection
 import play.api.mvc.Call
 
 case class TransitDomain(
-  t2DeclarationType: Boolean,
-  officesOfTransit: Seq[OfficeOfTransitDomain]
+  isT2DeclarationType: Option[Boolean],
+  officesOfTransit: OfficesOfTransit
 ) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
@@ -35,22 +39,41 @@ case class TransitDomain(
 
 object TransitDomain {
 
-  private val officeOfTransitCountriesReader: UserAnswersReader[Seq[OfficeOfTransitDomain]] =
-    OfficeOfTransitCountriesSection.reader.flatMap {
-      case x if x.isEmpty =>
-        UserAnswersReader.fail[Seq[OfficeOfTransitDomain]](OfficeOfTransitCountryPage(Index(0)))
-      case x =>
-        x.traverse[OfficeOfTransitDomain](OfficeOfTransitDomain.userAnswersReader).map(_.toSeq)
+  type OfficesOfTransit = Seq[OfficeOfTransitDomain]
+
+  implicit def userAnswersReader(ctcCountryCodes: Seq[CountryCode], euCountryCodes: Seq[CountryCode]): UserAnswersReader[TransitDomain] = {
+
+    implicit val officeOfTransitCountriesReader: UserAnswersReader[OfficesOfTransit] =
+      OfficeOfTransitCountriesSection.reader.flatMap {
+        case x if x.isEmpty =>
+          UserAnswersReader.fail[Seq[OfficeOfTransitDomain]](OfficeOfTransitCountryPage(Index(0)))
+        case x =>
+          x.traverse[OfficeOfTransitDomain](OfficeOfTransitDomain.userAnswersReader(_, ctcCountryCodes, euCountryCodes)).map(_.toSeq)
+      }
+
+    OfficeOfDeparturePage.reader.flatMap {
+      officeOfDeparture =>
+        OfficeOfDestinationPage.reader.flatMap {
+          officeOfDestination =>
+            if (
+              ctcCountryCodes.contains(officeOfDeparture.countryId) &&
+              ctcCountryCodes.contains(officeOfDestination.countryId) &&
+              officeOfDeparture.countryId.code == officeOfDestination.countryId.code
+            ) {
+              AddOfficeOfTransitYesNoPage.filterOptionalDependent(identity)(officeOfTransitCountriesReader).map(_.getOrElse(Nil)).map(TransitDomain(None, _))
+            } else {
+              DeclarationTypePage.reader.flatMap {
+                case DeclarationType.Option2 =>
+                  UserAnswersReader[OfficesOfTransit].map(TransitDomain(None, _))
+                case DeclarationType.Option5 =>
+                  for {
+                    isT2DeclarationType <- T2DeclarationTypeYesNoPage.reader
+                    officesOfTransit    <- UserAnswersReader[OfficesOfTransit]
+                  } yield TransitDomain(Some(isT2DeclarationType), officesOfTransit)
+                case _ => UserAnswersReader.apply(TransitDomain(None, Nil)) // TODO
+              }
+            }
+        }
     }
-
-  implicit val userAnswersReader: UserAnswersReader[TransitDomain] = {
-
-    for {
-      t2DeclarationType         <- T2DeclarationTypeYesNoPage.reader
-      officesOfTransitCountries <- AddOfficeOfTransitYesNoPage.filterOptionalDependent(identity)(officeOfTransitCountriesReader)
-    } yield TransitDomain(
-      t2DeclarationType,
-      officesOfTransitCountries.getOrElse(Nil)
-    )
   }
 }

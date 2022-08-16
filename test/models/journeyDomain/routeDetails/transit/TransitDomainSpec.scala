@@ -19,82 +19,94 @@ package models.journeyDomain.routeDetails.transit
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
+import models.DeclarationType.Option2
 import models.domain.{EitherType, UserAnswersReader}
-import models.reference.{Country, CustomsOffice}
+import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage}
+import pages.routeDetails.routing.OfficeOfDestinationPage
 import pages.routeDetails.transit._
-import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
 
 class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
   "TransitDomain" - {
-    val t2DeclarationType          = true
-    val addOfficeOfTransitYesNo    = true
-    val customsOffice              = arbitrary[CustomsOffice].sample.value
-    val country                    = arbitrary[Country].sample.value
-    val addOfficeOfTransitETAYesNo = true
-    val officeOfTransitETA         = arbitraryDateTime.arbitrary.sample.get
+
+    val countryCode     = arbitrary[CountryCode].sample.value
+    val ctcCountryCodes = Seq(countryCode)
+    def customsOffice   = arbitrary[CustomsOffice].sample.value.copy(countryId = countryCode)
 
     "can be parsed from UserAnswers" - {
 
-      "when we don't need Office Of Transit Country UserAnswers answered" in {
-
+      "when offices of departure and destination country codes are in set CL112 and both have same country code" in {
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(T2DeclarationTypeYesNoPage)(t2DeclarationType)
-          .unsafeSetVal(AddOfficeOfTransitYesNoPage)(false)
+          .setValue(OfficeOfDeparturePage, customsOffice)
+          .setValue(OfficeOfDestinationPage, customsOffice)
+          .setValue(AddOfficeOfTransitYesNoPage, false)
 
         val expectedResult = TransitDomain(
-          t2DeclarationType = t2DeclarationType,
+          isT2DeclarationType = None,
           officesOfTransit = Nil
         )
 
-        val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain].run(userAnswers)
+        val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain](TransitDomain.userAnswersReader(ctcCountryCodes, Nil)).run(userAnswers)
 
         result.value mustBe expectedResult
       }
 
-      "when all mandatory pages are answered" in {
-
+      "when T2 declaration type" ignore {
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(T2DeclarationTypeYesNoPage)(t2DeclarationType)
-          .unsafeSetVal(AddOfficeOfTransitYesNoPage)(addOfficeOfTransitYesNo)
-          .unsafeSetVal(OfficeOfTransitCountryPage(index))(country)
-          .unsafeSetVal(OfficeOfTransitPage(index))(customsOffice)
-          .unsafeSetVal(AddOfficeOfTransitETAYesNoPage(index))(addOfficeOfTransitETAYesNo)
-          .unsafeSetVal(OfficeOfTransitETAPage(index))(officeOfTransitETA)
+          .setValue(OfficeOfDeparturePage, customsOffice)
+          .setValue(DeclarationTypePage, Option2)
+          .setValue(OfficeOfDestinationPage, customsOffice)
 
         val expectedResult = TransitDomain(
-          t2DeclarationType = t2DeclarationType,
-          officesOfTransit = Seq(
-            OfficeOfTransitDomain(country, customsOffice, Some(officeOfTransitETA))(index)
-          )
+          isT2DeclarationType = None,
+          officesOfTransit = Nil
         )
 
-        val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain].run(userAnswers)
+        val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain](TransitDomain.userAnswersReader(Nil, Nil)).run(userAnswers)
 
         result.value mustBe expectedResult
+      }
+
+      "when T declaration type" - {
+
+        "and some items are T2 declaration type" in {}
+
+        "and no items are T2 declaration type" - {
+          "and country code for office of departure or office of destination is in set CL112" in {}
+
+          "and country code for neither office of departure nor office of destination is in set CL112" - {
+            "and at least one country of routing is in set CL112" in {}
+
+            "and no countries of routing are in set CL112" in {}
+          }
+        }
+      }
+
+      "when declaration type is neither T nor T2" - {
+        "and country code for office of departure or office of destination is in set CL112" in {}
+
+        "and country code for neither office of departure nor office of destination is in set CL112" - {
+          "and at least one country of routing is in set CL112" in {}
+
+          "and no countries of routing are in set CL112" in {}
+        }
       }
     }
 
     "cannot be parsed from UserAnswers" - {
 
-      "when t2DeclarationType is missing" in {
+      "when offices of departure and destination are in CL112 and have same country code" - {
+        "must return AddOfficeOfTransitYesNoPage" in {
+          val userAnswers = emptyUserAnswers
+            .setValue(OfficeOfDeparturePage, customsOffice)
+            .setValue(OfficeOfDestinationPage, customsOffice)
 
-        val userAnswers = emptyUserAnswers
+          val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain](TransitDomain.userAnswersReader(ctcCountryCodes, Nil)).run(userAnswers)
 
-        val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain].run(userAnswers)
-
-        result.left.value.page mustBe T2DeclarationTypeYesNoPage
-      }
-
-      "when AddOfficeOfTransitYesNoPage is missing" in {
-
-        val userAnswers = emptyUserAnswers
-          .unsafeSetVal(T2DeclarationTypeYesNoPage)(t2DeclarationType)
-
-        val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain].run(userAnswers)
-
-        result.left.value.page mustBe AddOfficeOfTransitYesNoPage
+          result.left.value.page mustBe AddOfficeOfTransitYesNoPage
+        }
       }
     }
   }

@@ -47,7 +47,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
         )(index)
 
         val result: EitherType[OfficeOfTransitDomain] = UserAnswersReader[OfficeOfTransitDomain](
-          OfficeOfTransitDomain.userAnswersReader(index)
+          OfficeOfTransitDomain.userAnswersReader(index, Nil, Nil)
         ).run(userAnswers)
 
         result.value mustBe expectedResult
@@ -70,7 +70,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
         )(index)
 
         val result: EitherType[OfficeOfTransitDomain] = UserAnswersReader[OfficeOfTransitDomain](
-          OfficeOfTransitDomain.userAnswersReader(index)
+          OfficeOfTransitDomain.userAnswersReader(index, Nil, Nil)
         ).run(userAnswers)
 
         result.value mustBe expectedResult
@@ -82,7 +82,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
         val userAnswers = emptyUserAnswers
 
         val result: EitherType[OfficeOfTransitDomain] = UserAnswersReader[OfficeOfTransitDomain](
-          OfficeOfTransitDomain.userAnswersReader(index)
+          OfficeOfTransitDomain.userAnswersReader(index, Nil, Nil)
         ).run(userAnswers)
 
         result.left.value.page mustBe OfficeOfTransitCountryPage(index)
@@ -95,7 +95,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
           .setValue(OfficeOfTransitCountryPage(index), country)
 
         val result: EitherType[OfficeOfTransitDomain] = UserAnswersReader[OfficeOfTransitDomain](
-          OfficeOfTransitDomain.userAnswersReader(index)
+          OfficeOfTransitDomain.userAnswersReader(index, Nil, Nil)
         ).run(userAnswers)
 
         result.left.value.page mustBe OfficeOfTransitPage(index)
@@ -110,7 +110,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
           .setValue(OfficeOfTransitPage(index), customsOffice)
 
         val result: EitherType[OfficeOfTransitDomain] = UserAnswersReader[OfficeOfTransitDomain](
-          OfficeOfTransitDomain.userAnswersReader(index)
+          OfficeOfTransitDomain.userAnswersReader(index, Nil, Nil)
         ).run(userAnswers)
 
         result.left.value.page mustBe AddOfficeOfTransitETAYesNoPage(index)
@@ -126,7 +126,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
           .setValue(OfficeOfTransitPage(index), customsOffice)
           .setValue(AddOfficeOfTransitETAYesNoPage(index), addOfficeOfTransitETAYesNo)
         val result: EitherType[OfficeOfTransitDomain] = UserAnswersReader[OfficeOfTransitDomain](
-          OfficeOfTransitDomain.userAnswersReader(index)
+          OfficeOfTransitDomain.userAnswersReader(index, Nil, Nil)
         ).run(userAnswers)
 
         result.left.value.page mustBe OfficeOfTransitETAPage(index)

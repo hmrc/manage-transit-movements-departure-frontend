@@ -16,10 +16,41 @@
 
 package navigation.routeDetails
 
-import navigation.UserAnswersNavigator
-import javax.inject.{Inject, Singleton}
 import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.journeyDomain.routeDetails.transit.TransitDomain
+import models.reference.CountryCode
+import navigation.UserAnswersNavigator
+import services.CountriesService
+import uk.gov.hmrc.http.HeaderCarrier
+
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class TransitNavigator @Inject() () extends UserAnswersNavigator[TransitDomain, RouteDetailsDomain]
+class TransitNavigatorProviderImpl @Inject() (
+  countriesService: CountriesService
+)(implicit ec: ExecutionContext)
+    extends TransitNavigatorProvider {
+
+  def apply()(implicit hc: HeaderCarrier): Future[TransitNavigator] =
+    for {
+      ctcCountries <- countriesService.getTransitCountries()
+      euCountries  <- countriesService.getCommunityCountries()
+    } yield new TransitNavigator(
+      ctcCountries.countries.map(_.code),
+      euCountries.countries.map(_.code)
+    )
+}
+
+trait TransitNavigatorProvider {
+
+  def apply()(implicit hc: HeaderCarrier): Future[TransitNavigator]
+}
+
+class TransitNavigator(
+  ctcCountryCodes: Seq[CountryCode],
+  euCountryCodes: Seq[CountryCode]
+) extends UserAnswersNavigator[TransitDomain, RouteDetailsDomain]()(
+      TransitDomain.userAnswersReader(ctcCountryCodes, euCountryCodes),
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes)
+    )

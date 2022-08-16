@@ -51,7 +51,10 @@ class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector
   def getCountries()(implicit hc: HeaderCarrier): Future[CountryList] =
     getCountries(Nil)
 
-  def getTransitCountries(excludedCountries: Seq[CountryCode] = Nil)(implicit hc: HeaderCarrier): Future[CountryList] = {
+  def getTransitCountries()(implicit hc: HeaderCarrier): Future[CountryList] =
+    getTransitCountries(Nil)
+
+  def getTransitCountries(excludedCountries: Seq[CountryCode])(implicit hc: HeaderCarrier): Future[CountryList] = {
     val excludedCountriesQuery                 = excludedCountries.map(_.code).map("exclude" -> _)
     val membershipQuery                        = Seq("membership" -> "ctc")
     val queryParameters: Seq[(String, String)] = excludedCountriesQuery ++ membershipQuery
@@ -60,6 +63,11 @@ class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector
 
   def getNonEuTransitCountries()(implicit hc: HeaderCarrier): Future[CountryList] = {
     val queryParameters = Seq("membership" -> "non_eu")
+    getCountries(queryParameters)
+  }
+
+  def getCommunityCountries()(implicit hc: HeaderCarrier): Future[CountryList] = {
+    val queryParameters = Seq("membership" -> "eu")
     getCountries(queryParameters)
   }
 

@@ -21,8 +21,7 @@ import forms.CustomsOfficeFormProvider
 import generators.Generators
 import models.reference.{Country, CountryCode}
 import models.{CustomsOfficeList, NormalMode}
-import navigation.Navigator
-import navigation.annotations.routeDetails.Routing
+import navigation.routeDetails.RoutingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.routeDetails.routing.{CountryOfDestinationPage, OfficeOfDestinationPage}
@@ -52,7 +51,7 @@ class OfficeOfDestinationControllerSpec extends SpecBase with AppWithDefaultMock
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Routing]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[RoutingNavigatorProvider]).toInstance(fakeRoutingNavigatorProvider))
       .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
   "OfficeOfDestination Controller" - {

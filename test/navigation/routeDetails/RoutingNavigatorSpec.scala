@@ -23,7 +23,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class RoutingNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
-  private val navigator = new RoutingNavigator()
+  private val navigator = new RoutingNavigator(Nil, Nil)
 
   "Country of Routing Navigator" - {
 

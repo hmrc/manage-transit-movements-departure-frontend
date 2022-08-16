@@ -44,7 +44,7 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
           .setValue(OfficeOfTransitPage(Index(1)), customsOffice2)
           .setValue(AddOfficeOfTransitETAYesNoPage(Index(1)), false)
           .setValue(OfficeOfTransitCountryPage(Index(2)), country3)
-        val helper = new TransitCheckYourAnswersHelper(answers, NormalMode)
+        val helper = new TransitCheckYourAnswersHelper(answers, NormalMode)(Nil, Nil)
         helper.listItems mustBe Seq(
           Right(
             ListItem(

@@ -19,25 +19,41 @@ package navigation.routeDetails
 import models._
 import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
+import models.reference.CountryCode
 import navigation.UserAnswersNavigator
+import services.CountriesService
+import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class OfficeOfTransitNavigatorProviderImpl @Inject() () extends OfficeOfTransitNavigatorProvider {
+class OfficeOfTransitNavigatorProviderImpl @Inject() (
+  countriesService: CountriesService
+)(implicit ec: ExecutionContext)
+    extends OfficeOfTransitNavigatorProvider {
 
-  def apply(index: Index): OfficeOfTransitNavigator =
-    new OfficeOfTransitNavigator(index)
+  def apply(index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfTransitNavigator] =
+    for {
+      ctcCountries <- countriesService.getTransitCountries()
+      euCountries  <- countriesService.getCommunityCountries()
+    } yield new OfficeOfTransitNavigator(
+      index,
+      ctcCountries.countries.map(_.code),
+      euCountries.countries.map(_.code)
+    )
 }
 
 trait OfficeOfTransitNavigatorProvider {
 
-  def apply(index: Index): OfficeOfTransitNavigator
+  def apply(index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfTransitNavigator]
 }
 
 class OfficeOfTransitNavigator(
-  index: Index
+  index: Index,
+  ctcCountryCodes: Seq[CountryCode],
+  euCountryCodes: Seq[CountryCode]
 ) extends UserAnswersNavigator[OfficeOfTransitDomain, RouteDetailsDomain]()(
-      OfficeOfTransitDomain.userAnswersReader(index),
-      RouteDetailsDomain.userAnswersReader
+      OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes),
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes)
     )

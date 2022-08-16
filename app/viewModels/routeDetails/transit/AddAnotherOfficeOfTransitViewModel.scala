@@ -18,28 +18,38 @@ package viewModels.routeDetails.transit
 
 import models.{NormalMode, UserAnswers}
 import play.api.i18n.Messages
+import services.CountriesService
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
+import uk.gov.hmrc.http.HeaderCarrier
 import utils.cyaHelpers.routeDetails.TransitCheckYourAnswersHelper
+
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 case class AddAnotherOfficeOfTransitViewModel(listItems: Seq[ListItem])
 
 object AddAnotherOfficeOfTransitViewModel {
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): AddAnotherOfficeOfTransitViewModel =
-    new AddAnotherOfficeOfTransitViewModelProvider()(userAnswers)
+  def apply(countriesService: CountriesService)(
+    userAnswers: UserAnswers
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier, messages: Messages): Future[AddAnotherOfficeOfTransitViewModel] =
+    new AddAnotherOfficeOfTransitViewModelProvider(countriesService)(ec)(userAnswers)
 
-  class AddAnotherOfficeOfTransitViewModelProvider @Inject() () {
+  class AddAnotherOfficeOfTransitViewModelProvider @Inject() (countriesService: CountriesService)(implicit ec: ExecutionContext) {
 
-    def apply(userAnswers: UserAnswers)(implicit messages: Messages): AddAnotherOfficeOfTransitViewModel = {
-      val helper = new TransitCheckYourAnswersHelper(userAnswers, NormalMode)
+    def apply(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): Future[AddAnotherOfficeOfTransitViewModel] =
+      for {
+        ctcCountries <- countriesService.getTransitCountries()
+        euCountries  <- countriesService.getCommunityCountries()
+      } yield {
+        val helper = new TransitCheckYourAnswersHelper(userAnswers, NormalMode)(ctcCountries.countries.map(_.code), euCountries.countries.map(_.code))
 
-      val listItems = helper.listItems.collect {
-        case Left(value)  => value
-        case Right(value) => value
+        val listItems = helper.listItems.collect {
+          case Left(value)  => value
+          case Right(value) => value
+        }
+
+        new AddAnotherOfficeOfTransitViewModel(listItems)
       }
-
-      new AddAnotherOfficeOfTransitViewModel(listItems)
-    }
   }
 }

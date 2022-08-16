@@ -23,7 +23,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class TransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
-  private val navigator = new TransitNavigator()
+  private val navigator = new TransitNavigator(Nil, Nil)
 
   "Transit Navigator" - {
 
@@ -32,12 +32,12 @@ class TransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with G
       val mode = NormalMode
 
       "when answers complete" - {
-        "must redirect to routing check your answers" ignore {
-          forAll(arbitraryRoutingAnswers(emptyUserAnswers)) {
+        "must redirect to transit check your answers" ignore {
+          forAll(arbitraryTransitAnswers(emptyUserAnswers)) {
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(???)
+                .mustBe(controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(answers.lrn))
           }
         }
       }

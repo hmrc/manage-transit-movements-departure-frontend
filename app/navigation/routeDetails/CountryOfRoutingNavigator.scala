@@ -19,25 +19,41 @@ package navigation.routeDetails
 import models._
 import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.journeyDomain.routeDetails.routing.CountryOfRoutingDomain
+import models.reference.CountryCode
 import navigation.UserAnswersNavigator
+import services.CountriesService
+import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CountryOfRoutingNavigatorProviderImpl @Inject() () extends CountryOfRoutingNavigatorProvider {
+class CountryOfRoutingNavigatorProviderImpl @Inject() (
+  countriesService: CountriesService
+)(implicit ec: ExecutionContext)
+    extends CountryOfRoutingNavigatorProvider {
 
-  def apply(index: Index): CountryOfRoutingNavigator =
-    new CountryOfRoutingNavigator(index)
+  def apply(index: Index)(implicit hc: HeaderCarrier): Future[CountryOfRoutingNavigator] =
+    for {
+      ctcCountries <- countriesService.getTransitCountries()
+      euCountries  <- countriesService.getCommunityCountries()
+    } yield new CountryOfRoutingNavigator(
+      index,
+      ctcCountries.countries.map(_.code),
+      euCountries.countries.map(_.code)
+    )
 }
 
 trait CountryOfRoutingNavigatorProvider {
 
-  def apply(index: Index): CountryOfRoutingNavigator
+  def apply(index: Index)(implicit hc: HeaderCarrier): Future[CountryOfRoutingNavigator]
 }
 
 class CountryOfRoutingNavigator(
-  index: Index
+  index: Index,
+  ctcCountryCodes: Seq[CountryCode],
+  euCountryCodes: Seq[CountryCode]
 ) extends UserAnswersNavigator[CountryOfRoutingDomain, RouteDetailsDomain]()(
       CountryOfRoutingDomain.userAnswersReader(index),
-      RouteDetailsDomain.userAnswersReader
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes)
     )

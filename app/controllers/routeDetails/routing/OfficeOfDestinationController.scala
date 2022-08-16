@@ -21,6 +21,8 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CustomsOfficeFormProvider
 import models.reference.CustomsOffice
 import models.{CustomsOfficeList, LocalReferenceNumber, Mode}
+import navigation.routeDetails.RoutingNavigatorProvider
+import pages.routeDetails.routing.OfficeOfDestinationPage
 import navigation.Navigator
 import navigation.annotations.routeDetails.Routing
 import pages.routeDetails.routing.{CountryOfDestinationPage, OfficeOfDestinationPage}
@@ -38,7 +40,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class OfficeOfDestinationController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @Routing implicit val navigator: Navigator,
+  navigatorProvider: RoutingNavigatorProvider,
   actions: Actions,
   formProvider: CustomsOfficeFormProvider,
   service: CustomsOfficesService,
@@ -81,7 +83,10 @@ class OfficeOfDestinationController @Inject() (
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
-                value => OfficeOfDestinationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                value => navigatorProvider().flatMap {
+                  implicit navigator =>
+                    OfficeOfDestinationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                }
               )
         }
     }

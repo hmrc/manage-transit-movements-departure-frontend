@@ -19,22 +19,24 @@ package controllers.routeDetails.routing
 import com.google.inject.Inject
 import controllers.actions.Actions
 import models.{LocalReferenceNumber, NormalMode}
-import navigation.Navigator
-import navigation.annotations.routeDetails.RouteDetails
+import navigation.routeDetails.RouteDetailsNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.routeDetails.routing.CheckRoutingAnswersViewModel.CheckRoutingAnswersViewModelProvider
 import views.html.routeDetails.routing.CheckYourAnswersView
 
+import scala.concurrent.ExecutionContext
+
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
-  @RouteDetails navigator: Navigator,
+  navigatorProvider: RouteDetailsNavigatorProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
   viewModelProvider: CheckRoutingAnswersViewModelProvider
-)() extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
@@ -43,8 +45,12 @@ class CheckYourAnswersController @Inject() (
       Ok(view(lrn, sections))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request => Redirect(navigator.nextPage(request.userAnswers, NormalMode))
+  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
+    implicit request =>
+      navigatorProvider().map {
+        implicit navigator =>
+          Redirect(navigator.nextPage(request.userAnswers, NormalMode))
+      }
   }
 
 }

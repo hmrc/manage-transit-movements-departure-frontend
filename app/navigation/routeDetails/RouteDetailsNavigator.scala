@@ -17,9 +17,38 @@
 package navigation.routeDetails
 
 import models.journeyDomain.routeDetails.RouteDetailsDomain
+import models.reference.CountryCode
 import navigation.UserAnswersSectionNavigator
+import services.CountriesService
+import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RouteDetailsNavigator @Inject() () extends UserAnswersSectionNavigator[RouteDetailsDomain]
+class RouteDetailsNavigatorProviderImpl @Inject() (
+  countriesService: CountriesService
+)(implicit ec: ExecutionContext)
+    extends RouteDetailsNavigatorProvider {
+
+  def apply()(implicit hc: HeaderCarrier): Future[RouteDetailsNavigator] =
+    for {
+      ctcCountries <- countriesService.getTransitCountries()
+      euCountries  <- countriesService.getCommunityCountries()
+    } yield new RouteDetailsNavigator(
+      ctcCountries.countries.map(_.code),
+      euCountries.countries.map(_.code)
+    )
+}
+
+trait RouteDetailsNavigatorProvider {
+
+  def apply()(implicit hc: HeaderCarrier): Future[RouteDetailsNavigator]
+}
+
+class RouteDetailsNavigator(
+  ctcCountryCodes: Seq[CountryCode],
+  euCountryCodes: Seq[CountryCode]
+) extends UserAnswersSectionNavigator[RouteDetailsDomain]()(
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes)
+    )

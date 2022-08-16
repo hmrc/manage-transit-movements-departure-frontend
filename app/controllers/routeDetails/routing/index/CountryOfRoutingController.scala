@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
 import models.reference.Country
 import models.{CountryList, Index, LocalReferenceNumber, Mode}
-import navigation.routeDetails.{CountryOfRoutingNavigator, CountryOfRoutingNavigatorProvider}
+import navigation.routeDetails.CountryOfRoutingNavigatorProvider
 import pages.routeDetails.routing.index.CountryOfRoutingPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -71,10 +71,11 @@ class CountryOfRoutingController @Inject() (
             .bindFromRequest()
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode, index))),
-              value => {
-                implicit val navigator: CountryOfRoutingNavigator = navigatorProvider(index)
-                CountryOfRoutingPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
-              }
+              value =>
+                navigatorProvider(index).flatMap {
+                  implicit navigator =>
+                    CountryOfRoutingPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                }
             )
       }
   }

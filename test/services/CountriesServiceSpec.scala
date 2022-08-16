@@ -160,5 +160,22 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach {
         verify(mockRefDataConnector).getCountries(eqTo(expectedQueryParameters))(any(), any())
       }
     }
+
+    "getCommunityCountries" - {
+      "must return a list of sorted EU transit countries" in {
+
+        when(mockRefDataConnector.getCountries(any())(any(), any()))
+          .thenReturn(Future.successful(countries))
+
+        service.getCommunityCountries().futureValue mustBe
+          CountryList(Seq(country2, country3, country1))
+
+        val expectedQueryParameters = Seq(
+          "membership" -> "eu"
+        )
+
+        verify(mockRefDataConnector).getCountries(eqTo(expectedQueryParameters))(any(), any())
+      }
+    }
   }
 }

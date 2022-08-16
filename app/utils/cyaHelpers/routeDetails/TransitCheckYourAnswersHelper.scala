@@ -18,7 +18,7 @@ package utils.cyaHelpers.routeDetails
 
 import controllers.routeDetails.transit.index.routes
 import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
-import models.reference.Country
+import models.reference.{Country, CountryCode}
 import models.{Index, Mode, UserAnswers}
 import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
 import pages.sections.routeDetails.OfficeOfTransitCountriesSection
@@ -27,7 +27,14 @@ import play.api.libs.json.Reads
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import utils.cyaHelpers.AnswersHelper
 
-class TransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
+class TransitCheckYourAnswersHelper(
+  userAnswers: UserAnswers,
+  mode: Mode
+)(
+  ctcCountryCodes: Seq[CountryCode],
+  euCountryCodes: Seq[CountryCode]
+)(implicit messages: Messages)
+    extends AnswersHelper(userAnswers, mode) {
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(OfficeOfTransitCountriesSection) {
@@ -38,6 +45,6 @@ class TransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
           getName = _.country,
           formatName = _.toString,
           removeRoute = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, index)
-        )(OfficeOfTransitDomain.userAnswersReader(index), implicitly[Reads[Country]])
+        )(OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes), implicitly[Reads[Country]])
     }
 }

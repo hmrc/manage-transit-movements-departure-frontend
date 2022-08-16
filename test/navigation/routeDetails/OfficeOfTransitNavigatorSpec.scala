@@ -19,15 +19,11 @@ package navigation.routeDetails
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
 import models._
-import models.reference.{Country, CustomsOffice}
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitPage}
-import pages.routeDetails.transit.{AddOfficeOfTransitYesNoPage, T2DeclarationTypeYesNoPage}
 
 class OfficeOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
-  private val navigator = new OfficeOfTransitNavigator(index)
+  private val navigator = new OfficeOfTransitNavigator(index, Nil, Nil)
 
   "Office of Transit Country Navigator" - {
 
@@ -52,18 +48,12 @@ class OfficeOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       val mode = CheckMode
 
       "when answers complete" - {
-        "must redirect to the task list" ignore {
-          forAll(arbitrary[Country], arbitrary[CustomsOffice], arbitraryRoutingAnswers(emptyUserAnswers)) {
-            (country, office, routingAnswers) =>
-              val answers = routingAnswers
-                .setValue(T2DeclarationTypeYesNoPage, false)
-                .setValue(AddOfficeOfTransitYesNoPage, true)
-                .setValue(OfficeOfTransitCountryPage(index), country)
-                .setValue(OfficeOfTransitPage(index), office)
-                .setValue(AddOfficeOfTransitETAYesNoPage(index), false)
+        "must redirect to route details check your answers" ignore {
+          forAll(arbitraryRouteDetailsAnswers(emptyUserAnswers)) {
+            answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(controllers.routes.TaskListController.onPageLoad(lrn))
+                .mustBe(???)
           }
         }
       }

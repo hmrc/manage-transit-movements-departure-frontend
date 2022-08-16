@@ -19,7 +19,7 @@ package models.journeyDomain.routeDetails.transit
 import cats.implicits._
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
-import models.reference.{Country, CustomsOffice}
+import models.reference.{Country, CountryCode, CustomsOffice}
 import models.{DateTime, Index, UserAnswers}
 import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
 import play.api.mvc.Call
@@ -40,7 +40,7 @@ case class OfficeOfTransitDomain(
 
 object OfficeOfTransitDomain {
 
-  implicit def userAnswersReader(index: Index): UserAnswersReader[OfficeOfTransitDomain] =
+  implicit def userAnswersReader(index: Index, ctcCountryCodes: Seq[CountryCode], euCountryCodes: Seq[CountryCode]): UserAnswersReader[OfficeOfTransitDomain] =
     (
       OfficeOfTransitCountryPage(index).reader,
       OfficeOfTransitPage(index).reader,
