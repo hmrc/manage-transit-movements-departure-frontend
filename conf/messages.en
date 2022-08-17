@@ -544,6 +544,14 @@ routeDetails.caption = Route details
 
 # Routing
 
+routeDetails.routing.countryOfDestination.title = Which country is the transit movement ending in?
+routeDetails.routing.countryOfDestination.heading = Which country is the transit movement ending in?
+routeDetails.routing.countryOfDestination.hintText = Enter the country, like France or Portugal, countries that are part of the CTC community.
+routeDetails.routing.countryOfDestination.placeholder = Select a country
+routeDetails.routing.countryOfDestination.change.hidden = country of destination
+routeDetails.routing.countryOfDestination.checkYourAnswersLabel = Country of destination
+routeDetails.routing.countryOfDestination.error.required = Select the country
+
 routeDetails.routing.officeOfDestination.title = Where is the office of destination?
 routeDetails.routing.officeOfDestination.heading = Where is the office of destination?
 routeDetails.routing.officeOfDestination.hintText = Enter the office location or code, like Dover or GB000060.
@@ -660,4 +668,5 @@ routeDetails.transit.confirmRemoveOfficeOfTransit.error.required = Select yes if
 
 routeDetails.transit.checkOfficeOfTransitAnswers.title = Check your answers
 routeDetails.transit.checkOfficeOfTransitAnswers.heading = Check your answers
+
 

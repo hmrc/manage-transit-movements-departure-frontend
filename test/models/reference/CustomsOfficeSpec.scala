@@ -29,14 +29,13 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks {
 
     "must serialise" - {
       "when phone number defined" in {
-        forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr) {
-          (id, name, code, phoneNumber) =>
-            val customsOffice = CustomsOffice(id, name, CountryCode(code), Some(phoneNumber))
+        forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr) {
+          (id, name, phoneNumber) =>
+            val customsOffice = CustomsOffice(id, name, Some(phoneNumber))
             Json.toJson(customsOffice) mustBe Json.parse(s"""
                 |{
                 |  "id": "$id",
                 |  "name": "$name",
-                |  "countryId": "$code",
                 |  "phoneNumber": "$phoneNumber"
                 |}
                 |""".stripMargin)
@@ -44,14 +43,13 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks {
       }
 
       "when phone number undefined" in {
-        forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr) {
-          (id, name, code) =>
-            val customsOffice = CustomsOffice(id, name, CountryCode(code), None)
+        forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
+          (id, name) =>
+            val customsOffice = CustomsOffice(id, name, None)
             Json.toJson(customsOffice) mustBe Json.parse(s"""
                 |{
                 |  "id": "$id",
-                |  "name": "$name",
-                |  "countryId": "$code"
+                |  "name": "$name"
                 |}
                 |""".stripMargin)
         }
@@ -60,15 +58,14 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks {
 
     "must deserialise" - {
       "when phone number defined" in {
-        forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr) {
-          (id, name, code, phoneNumber) =>
-            val customsOffice = CustomsOffice(id, name, CountryCode(code), Some(phoneNumber))
+        forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr) {
+          (id, name, phoneNumber) =>
+            val customsOffice = CustomsOffice(id, name, Some(phoneNumber))
             Json
               .parse(s"""
                 |{
                 |  "id": "$id",
                 |  "name": "$name",
-                |  "countryId": "$code",
                 |  "phoneNumber": "$phoneNumber"
                 |}
                 |""".stripMargin)
@@ -77,15 +74,14 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks {
       }
 
       "when phone number undefined" in {
-        forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr) {
-          (id, name, code) =>
-            val customsOffice = CustomsOffice(id, name, CountryCode(code), None)
+        forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
+          (id, name) =>
+            val customsOffice = CustomsOffice(id, name, None)
             Json
               .parse(s"""
                 |{
                 |  "id": "$id",
-                |  "name": "$name",
-                |  "countryId": "$code"
+                |  "name": "$name"
                 |}
                 |""".stripMargin)
               .as[CustomsOffice] mustBe customsOffice
@@ -96,7 +92,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks {
     "must convert to select item" in {
       forAll(Gen.alphaNumStr, Gen.alphaNumStr, arbitrary[Boolean]) {
         (id, name, selected) =>
-          val customsOffice = CustomsOffice(id, name, CountryCode("code"), None)
+          val customsOffice = CustomsOffice(id, name, None)
           customsOffice.toSelectItem(selected) mustBe SelectItem(Some(id), s"$name ($id)", selected)
       }
     }
@@ -104,7 +100,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks {
     "must format as string" in {
       forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
         (id, name) =>
-          val customsOffice = CustomsOffice(id, name, CountryCode("code"), None)
+          val customsOffice = CustomsOffice(id, name, None)
           customsOffice.toString mustBe s"$name ($id)"
       }
     }

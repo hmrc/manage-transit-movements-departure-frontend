@@ -31,6 +31,13 @@ import utils.cyaHelpers.AnswersHelper
 
 class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
+  def countryOfDestination: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
+    page = CountryOfDestinationPage,
+    formatAnswer = formatAsText,
+    prefix = "routeDetails.routing.countryOfDestination",
+    id = Some("country-of-destination")
+  )
+
   def officeOfDestination: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
     page = OfficeOfDestinationPage,
     formatAnswer = formatAsText,

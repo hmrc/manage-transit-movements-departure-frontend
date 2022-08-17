@@ -16,7 +16,6 @@
 
 package generators
 
-import config.Constants.{GB, XI}
 import models.AddressLine.{AddressLine1, AddressLine2, PostalCode}
 import models._
 import models.guaranteeDetails.GuaranteeType
@@ -158,9 +157,8 @@ trait ModelGenerators {
       for {
         id          <- nonEmptyString
         name        <- nonEmptyString
-        countryId   <- arbitrary[CountryCode]
         phoneNumber <- Gen.option(Gen.alphaNumStr)
-      } yield CustomsOffice(id, name, countryId, phoneNumber)
+      } yield CustomsOffice(id, name, phoneNumber)
     }
 
   lazy val arbitraryXiCustomsOffice: Arbitrary[CustomsOffice] =
@@ -168,9 +166,8 @@ trait ModelGenerators {
       for {
         id          <- stringsWithMaxLength(stringMaxLength)
         name        <- stringsWithMaxLength(stringMaxLength)
-        countryId   <- Gen.const(CountryCode(XI))
         phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
-      } yield CustomsOffice(id, name, countryId, phoneNumber)
+      } yield CustomsOffice(id, name, phoneNumber)
     }
 
   lazy val arbitraryGbCustomsOffice: Arbitrary[CustomsOffice] =
@@ -178,9 +175,8 @@ trait ModelGenerators {
       for {
         id          <- stringsWithMaxLength(stringMaxLength)
         name        <- stringsWithMaxLength(stringMaxLength)
-        countryId   <- Gen.const(CountryCode(GB))
         phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
-      } yield CustomsOffice(id, name, countryId, phoneNumber)
+      } yield CustomsOffice(id, name, phoneNumber)
     }
 
   lazy val arbitraryOfficeOfDeparture: Arbitrary[CustomsOffice] =

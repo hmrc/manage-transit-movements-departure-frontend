@@ -20,7 +20,7 @@ import cats.implicits._
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
-import models.reference.CustomsOffice
+import models.reference.{Country, CustomsOffice}
 import models.{Index, RichJsArray, UserAnswers}
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.routeDetails.routing._
@@ -29,6 +29,7 @@ import pages.sections.routeDetails.CountriesOfRoutingSection
 import play.api.mvc.Call
 
 case class RoutingDomain(
+  countryOfDestination: Country,
   officeOfDestination: CustomsOffice,
   bindingItinerary: Boolean,
   countriesOfRouting: Seq[CountryOfRoutingDomain]
@@ -64,6 +65,7 @@ object RoutingDomain {
 
   implicit val userAnswersReader: UserAnswersReader[RoutingDomain] =
     (
+      CountryOfDestinationPage.reader,
       OfficeOfDestinationPage.reader,
       BindingItineraryPage.reader,
       countriesOfRoutingReader

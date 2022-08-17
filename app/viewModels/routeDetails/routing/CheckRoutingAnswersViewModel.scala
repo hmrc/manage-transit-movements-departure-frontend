@@ -40,6 +40,7 @@ object CheckRoutingAnswersViewModel {
 
       val preQuestionsSection = Section(
         rows = Seq(
+          helper.countryOfDestination,
           helper.officeOfDestination,
           helper.bindingItinerary,
           helper.addCountryOfRouting

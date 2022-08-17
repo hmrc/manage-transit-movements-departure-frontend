@@ -48,7 +48,7 @@ object PreTaskListDomain {
   }
 
   private val tirCarnetReference: UserAnswersReader[Option[String]] =
-    OfficeOfDeparturePage.reader.map(_.countryId.code).flatMap {
+    OfficeOfDeparturePage.reader.map(_.countryCode).flatMap {
       case XI =>
         ProcedureTypePage
           .filterOptionalDependent(_ == Normal) {

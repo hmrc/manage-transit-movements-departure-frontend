@@ -35,9 +35,9 @@ class OfficeOfDepartureViewSpec extends InputSelectViewBehaviours[CustomsOffice]
   override val prefix: String = "officeOfDeparture"
 
   override def values: Seq[CustomsOffice] = Seq(
-    CustomsOffice("id1", "name1", CountryCode("GB"), None),
-    CustomsOffice("id2", "name2", CountryCode("XI"), None),
-    CustomsOffice("id3", "name3", CountryCode("AD"), None)
+    CustomsOffice("GB1", "name1", None),
+    CustomsOffice("GB2", "name2", None),
+    CustomsOffice("XI3", "name3", None)
   )
 
   behave like pageWithTitle()

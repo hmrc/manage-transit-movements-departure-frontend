@@ -284,7 +284,7 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
 
   "customsOffice" - {
 
-    val office            = CustomsOffice("id", "name", CountryCode("code"), None)
+    val office            = CustomsOffice("id", "name", None)
     val customsOfficeList = CustomsOfficeList(Seq(office))
 
     val testForm: Form[CustomsOffice] =

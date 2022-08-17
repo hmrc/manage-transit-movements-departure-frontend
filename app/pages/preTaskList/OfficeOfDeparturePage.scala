@@ -35,8 +35,8 @@ case object OfficeOfDeparturePage extends QuestionPage[CustomsOffice] {
 
   override def cleanup(updatedValue: Option[CustomsOffice], previousValue: Option[CustomsOffice], userAnswers: UserAnswers): Try[UserAnswers] =
     (
-      updatedValue.map(_.countryId.code),
-      previousValue.map(_.countryId.code),
+      updatedValue.map(_.countryCode),
+      previousValue.map(_.countryCode),
       userAnswers.get(DeclarationTypePage)
     ) match {
       case (Some(GB), Some(XI), Some(Option4)) =>

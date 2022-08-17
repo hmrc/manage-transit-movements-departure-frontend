@@ -20,8 +20,10 @@ import models.Selectable
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 
-case class CustomsOffice(id: String, name: String, countryId: CountryCode, phoneNumber: Option[String]) extends Selectable {
+case class CustomsOffice(id: String, name: String, phoneNumber: Option[String]) extends Selectable {
   override def toString: String = s"$name ($id)"
+
+  val countryCode: String = id.take(2)
 
   override def toSelectItem(selected: Boolean): SelectItem = SelectItem(Some(id), this.toString, selected)
 }

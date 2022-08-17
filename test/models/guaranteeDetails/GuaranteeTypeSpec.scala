@@ -19,7 +19,7 @@ package models.guaranteeDetails
 import base.SpecBase
 import generators.Generators
 import models.guaranteeDetails.GuaranteeType._
-import models.reference.{CountryCode, CustomsOffice}
+import models.reference.CustomsOffice
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -65,7 +65,7 @@ class GuaranteeTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
       "Must return the correct number of radios" - {
         "When Office of Departure is 'XI'" in {
           val answers = emptyUserAnswers
-            .setValue(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("XI"), None))
+            .setValue(OfficeOfDeparturePage, CustomsOffice("XI1", "name", None))
 
           val radios = GuaranteeType.valuesU(answers)
           val expected = Seq(
@@ -85,7 +85,7 @@ class GuaranteeTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
 
         "When Office of Departure is 'GB'" in {
           val answers = emptyUserAnswers
-            .setValue(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("GB"), None))
+            .setValue(OfficeOfDeparturePage, CustomsOffice("GB1", "name", None))
 
           val radios = GuaranteeType.valuesU(answers)
           val expected = Seq(

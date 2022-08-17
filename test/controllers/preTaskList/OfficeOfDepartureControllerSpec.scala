@@ -19,7 +19,7 @@ package controllers.preTaskList
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.CustomsOfficeFormProvider
-import models.reference.{CountryCode, CustomsOffice}
+import models.reference.CustomsOffice
 import models.{CustomsOfficeList, NormalMode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
@@ -38,8 +38,8 @@ import scala.concurrent.Future
 
 class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val customsOffice1: CustomsOffice     = CustomsOffice("officeId", "someName", CountryCode("GB"), None)
-  private val customsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("GB"), None)
+  private val customsOffice1: CustomsOffice     = CustomsOffice("GB1", "someName", None)
+  private val customsOffice2: CustomsOffice     = CustomsOffice("GB2", "name", None)
   private val customsOffices: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
 
   private val gbForm = new CustomsOfficeFormProvider()("officeOfDeparture", customsOffices)
@@ -91,7 +91,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
 
       status(result) mustEqual OK
 
-      val filledForm = gbForm.bind(Map("value" -> "officeId"))
+      val filledForm = gbForm.bind(Map("value" -> "GB1"))
 
       contentAsString(result) mustEqual
         view(filledForm, lrn, customsOffices.customsOffices, mode)(request, messages).toString
@@ -103,7 +103,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
       when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
 
       val request = FakeRequest(POST, officeOfDepartureRoute)
-        .withFormUrlEncodedBody(("value", "id"))
+        .withFormUrlEncodedBody(("value", "GB1"))
 
       val result: Future[Result] = route(app, request).value
 
