@@ -20,7 +20,7 @@ import generators.Generators
 import org.jsoup.nodes.Document
 import org.scalacheck.Arbitrary.arbitrary
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
+import viewModels.ListItem
 
 import scala.collection.JavaConverters._
 
@@ -111,7 +111,7 @@ trait ListWithActionsViewBehaviours extends YesNoViewBehaviours with Generators 
               }
 
             withActionLink("Change", 0, listItem.changeUrl)
-            withActionLink("Remove", 1, listItem.removeUrl)
+            listItem.removeUrl.map(withActionLink("Remove", 1, _))
           }
       }
     }

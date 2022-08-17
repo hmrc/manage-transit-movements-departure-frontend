@@ -26,8 +26,8 @@ import pages.sections.routeDetails.CountriesOfRoutingSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import utils.cyaHelpers.AnswersHelper
+import viewModels.ListItem
 
 class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
@@ -75,7 +75,7 @@ class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
           page = CountryOfRoutingPage(index),
           formatJourneyDomainModel = _.country.toString,
           formatType = _.toString,
-          removeRoute = routes.RemoveCountryOfRoutingYesNoController.onPageLoad(userAnswers.lrn, index)
+          removeRoute = Some(routes.RemoveCountryOfRoutingYesNoController.onPageLoad(userAnswers.lrn, index))
         )(CountryOfRoutingDomain.userAnswersReader(index), implicitly[Reads[Country]])
     }
 }

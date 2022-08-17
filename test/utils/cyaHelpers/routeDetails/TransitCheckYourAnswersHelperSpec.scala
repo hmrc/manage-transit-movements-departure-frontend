@@ -26,7 +26,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.routeDetails.routing.OfficeOfDestinationPage
 import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitPage}
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
+import viewModels.ListItem
 
 class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -57,21 +57,21 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
             ListItem(
               name = s"$customsOffice1",
               changeUrl = controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(answers.lrn, Index(0)).url,
-              removeUrl = controllers.routeDetails.transit.index.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(answers.lrn, Index(0)).url
+              removeUrl = None
             )
           ),
           Right(
             ListItem(
               name = s"$country2 - $customsOffice2",
               changeUrl = controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(answers.lrn, Index(1)).url,
-              removeUrl = controllers.routeDetails.transit.index.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(answers.lrn, Index(1)).url
+              removeUrl = Some(controllers.routeDetails.transit.index.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(answers.lrn, Index(1)).url)
             )
           ),
           Left(
             ListItem(
               name = s"$country3",
               changeUrl = controllers.routeDetails.transit.index.routes.OfficeOfTransitController.onPageLoad(answers.lrn, NormalMode, Index(2)).url,
-              removeUrl = controllers.routeDetails.transit.index.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(answers.lrn, Index(2)).url
+              removeUrl = Some(controllers.routeDetails.transit.index.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(answers.lrn, Index(2)).url)
             )
           )
         )

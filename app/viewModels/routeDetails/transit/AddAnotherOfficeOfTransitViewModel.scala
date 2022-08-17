@@ -19,9 +19,9 @@ package viewModels.routeDetails.transit
 import models.{NormalMode, UserAnswers}
 import play.api.i18n.Messages
 import services.CountriesService
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.cyaHelpers.routeDetails.TransitCheckYourAnswersHelper
+import viewModels.ListItem
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

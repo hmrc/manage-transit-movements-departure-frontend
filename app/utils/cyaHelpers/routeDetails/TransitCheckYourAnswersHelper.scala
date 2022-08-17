@@ -24,8 +24,8 @@ import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
 import pages.sections.routeDetails.OfficeOfTransitCountriesSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import utils.cyaHelpers.AnswersHelper
+import viewModels.ListItem
 
 class TransitCheckYourAnswersHelper(
   userAnswers: UserAnswers,
@@ -45,7 +45,7 @@ class TransitCheckYourAnswersHelper(
           page = OfficeOfTransitCountryPage(index),
           formatJourneyDomainModel = _.label,
           formatType = _.toString,
-          removeRoute = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, index)
+          removeRoute = if (position == 0) None else Some(routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, index))
         )(OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes), implicitly[Reads[Country]])
     }
 }

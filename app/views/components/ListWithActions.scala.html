@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
+@import viewModels.ListItem
 
 @this(hmrcListWithActions: HmrcListWithActions)
 
@@ -30,17 +30,22 @@
                     ListWithActionsItem(
                         name = Text(listItem.name),
                         actions = Seq(
-                            ListWithActionsAction(
-                                content = Text(messages("site.edit")),
-                                visuallyHiddenText = Some(messages("site.edit.hidden", listItem.name)),
-                                href = listItem.changeUrl
+                            Some(
+                                ListWithActionsAction(
+                                    content = Text(messages("site.edit")),
+                                    visuallyHiddenText = Some(messages("site.edit.hidden", listItem.name)),
+                                    href = listItem.changeUrl
+                                )
                             ),
-                            ListWithActionsAction(
-                                content = Text(messages("site.delete")),
-                                visuallyHiddenText = Some(messages("site.delete.hidden", listItem.name)),
-                                href = listItem.removeUrl
+                            listItem.removeUrl.map (
+                                url =>
+                                    ListWithActionsAction(
+                                        content = Text(messages("site.delete")),
+                                        visuallyHiddenText = Some(messages("site.delete.hidden", listItem.name)),
+                                        href = url
+                                    )
                             )
-                        )
+                        ).flatten
                     )
             )
         )

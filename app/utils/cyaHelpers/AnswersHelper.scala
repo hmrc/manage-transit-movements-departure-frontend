@@ -27,7 +27,7 @@ import play.api.i18n.Messages
 import play.api.libs.json.{JsArray, Reads}
 import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.html.components.{Content, SummaryListRow}
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
+import viewModels.ListItem
 
 class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends SummaryListRowHelper {
 
@@ -110,7 +110,7 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
     page: QuestionPage[B],
     formatJourneyDomainModel: A => String,
     formatType: B => String,
-    removeRoute: Call
+    removeRoute: Option[Call]
   )(implicit userAnswersReader: UserAnswersReader[A], rds: Reads[B]): Option[Either[ListItem, ListItem]] =
     UserAnswersReader[A].run(userAnswers) match {
       case Left(readerError) =>
@@ -120,7 +120,7 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
               page = page,
               formatName = formatType,
               changeUrl = changeRoute.url,
-              removeUrl = removeRoute.url
+              removeUrl = removeRoute.map(_.url)
             ).map(Left(_))
         }
       case Right(journeyDomainModel) =>
@@ -130,7 +130,7 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
               ListItem(
                 name = formatJourneyDomainModel(journeyDomainModel),
                 changeUrl = changeRoute.url,
-                removeUrl = removeRoute.url
+                removeUrl = removeRoute.map(_.url)
               )
             )
         }
@@ -140,7 +140,7 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
     page: QuestionPage[T],
     formatName: T => String,
     changeUrl: String,
-    removeUrl: String
+    removeUrl: Option[String]
   )(implicit rds: Reads[T]): Option[ListItem] =
     userAnswers.get(page) map {
       name =>
