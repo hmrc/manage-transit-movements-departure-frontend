@@ -23,6 +23,7 @@ import controllers.routes.TaskListController
 import forms.AddAnotherFormProvider
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, NormalMode}
+import navigation.routeDetails.RouteDetailsNavigatorProvider
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -38,6 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddAnotherOfficeOfTransitController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
+  navigatorProvider: RouteDetailsNavigatorProvider,
   actions: Actions,
   formProvider: AddAnotherFormProvider,
   config: FrontendAppConfig,
@@ -53,27 +55,35 @@ class AddAnotherOfficeOfTransitController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      viewData map {
+      viewData flatMap {
         case (officesOfTransit, numberOfOfficesOfTransit, allowMoreOfficesOfTransit) =>
           numberOfOfficesOfTransit match {
             case 0 =>
-              Redirect(routes.AddOfficeOfTransitYesNoController.onPageLoad(lrn, NormalMode)) // TODO - we don't always ask this question so this is wrong
-            case _ => Ok(view(form(allowMoreOfficesOfTransit), lrn, officesOfTransit, allowMoreOfficesOfTransit))
+              navigatorProvider() map {
+                implicit navigator =>
+                  Redirect(navigator.nextPage(request.userAnswers, NormalMode))
+              }
+            case _ => Future.successful(Ok(view(form(allowMoreOfficesOfTransit), lrn, officesOfTransit, allowMoreOfficesOfTransit)))
           }
       }
   }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      viewData map {
+      viewData flatMap {
         case (officesOfTransit, numberOfOfficesOfTransit, allowMoreOfficesOfTransit) =>
           form(allowMoreOfficesOfTransit)
             .bindFromRequest()
             .fold(
-              formWithErrors => BadRequest(view(formWithErrors, lrn, officesOfTransit, allowMoreOfficesOfTransit)),
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, officesOfTransit, allowMoreOfficesOfTransit))),
               {
-                case true  => Redirect(indexRoutes.OfficeOfTransitCountryController.onPageLoad(lrn, NormalMode, Index(numberOfOfficesOfTransit)))
-                case false => Redirect(TaskListController.onPageLoad(lrn)) // TODO - wrong
+                case true =>
+                  Future.successful(Redirect(indexRoutes.OfficeOfTransitCountryController.onPageLoad(lrn, NormalMode, Index(numberOfOfficesOfTransit))))
+                case false =>
+                  navigatorProvider() map {
+                    implicit navigator =>
+                      Redirect(navigator.nextPage(request.userAnswers, NormalMode))
+                  }
               }
             )
       }

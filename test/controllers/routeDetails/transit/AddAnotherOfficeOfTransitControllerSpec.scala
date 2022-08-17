@@ -20,6 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.AddAnotherFormProvider
 import generators.Generators
 import models.{Index, NormalMode}
+import navigation.routeDetails.RouteDetailsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -48,6 +49,7 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
+      .overrides(bind(classOf[RouteDetailsNavigatorProvider]).toInstance(fakeRouteDetailsNavigatorProvider))
       .overrides(bind(classOf[AddAnotherOfficeOfTransitViewModelProvider]).toInstance(mockViewModelProvider))
 
   override def beforeEach(): Unit = {
@@ -61,7 +63,7 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
 
   "AddAnotherOfficeOfTransitController" - {
 
-    "redirect to add office of transit yes/no page" - {
+    "redirect to correct start page in this sub-section" - {
       "when 0 offices of transit" in {
         when(mockViewModelProvider.apply(any())(any(), any()))
           .thenReturn(Future.successful(AddAnotherOfficeOfTransitViewModel(Nil)))
@@ -75,8 +77,7 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual
-          routes.AddOfficeOfTransitYesNoController.onPageLoad(lrn, NormalMode).url
+        redirectLocation(result).value mustEqual onwardRoute.url
       }
     }
 
@@ -147,7 +148,7 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
       }
 
       "when no submitted" - {
-        "must redirect to task list" in {
+        "must redirect to the next page" in {
           when(mockViewModelProvider.apply(any())(any(), any()))
             .thenReturn(Future.successful(AddAnotherOfficeOfTransitViewModel(listItems)))
 
@@ -160,14 +161,13 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
 
           status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual
-            controllers.routes.TaskListController.onPageLoad(lrn).url
+          redirectLocation(result).value mustEqual onwardRoute.url
         }
       }
     }
 
     "when max limit reached" - {
-      "must redirect to task list" in {
+      "must redirect to the next page" in {
         when(mockViewModelProvider.apply(any())(any(), any()))
           .thenReturn(Future.successful(AddAnotherOfficeOfTransitViewModel(maxedOutListItems)))
 
@@ -180,8 +180,7 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual
-          controllers.routes.TaskListController.onPageLoad(lrn).url
+        redirectLocation(result).value mustEqual onwardRoute.url
       }
     }
 
