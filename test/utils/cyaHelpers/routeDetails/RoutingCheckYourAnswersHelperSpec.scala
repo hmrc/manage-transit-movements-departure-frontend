@@ -35,7 +35,51 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
 
   "RoutingCheckYourAnswersHelper" - {
 
-    "officeOfDeparture" - {
+    "countryOfDestination" - {
+      "must return None" - {
+        "when CountryOfDestinationPage undefined at index" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new RoutingCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.countryOfDestination
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when CountryOfDestinationPage defined" in {
+          forAll(arbitrary[Country], arbitrary[Mode]) {
+            (country, mode) =>
+              val answers = emptyUserAnswers.setValue(CountryOfDestinationPage, country)
+
+              val helper = new RoutingCheckYourAnswersHelper(answers, mode)
+              val result = helper.countryOfDestination
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Country of destination".toText),
+                  value = Value(s"$country".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = routingRoutes.CountryOfDestinationController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("country of destination"),
+                          attributes = Map("id" -> "country-of-destination")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "officeOfDestination" - {
       "must return None" - {
         "when OfficeOfDestinationPage undefined" in {
           forAll(arbitrary[Mode]) {

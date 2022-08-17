@@ -63,6 +63,20 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       |]
       |""".stripMargin
 
+  private val customsOfficeDestinationResponseJson: String =
+    """
+      |[
+      | {
+      |   "id" : "GB1",
+      |   "name" : "testName1"
+      | },
+      | {
+      |   "id" : "GB2",
+      |   "name" : "testName2"
+      | }
+      |]
+      |""".stripMargin
+
   private val countriesResponseJson: String =
     """
       |[
@@ -176,6 +190,44 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
       "must return an exception when an error response is returned" in {
         checkErrorResponse(s"/$baseUrl/customs-offices/GB", connector.getCustomsOfficesForCountry(CountryCode("GB")))
+      }
+    }
+
+    "getCustomsOfficesOfDestinationForCountry" - {
+      "must return a successful future response with a sequence of CustomsOffices" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$baseUrl/customs-office-destination/GB"))
+            .willReturn(okJson(customsOfficeDestinationResponseJson))
+        )
+
+        val expectedResult =
+          CustomsOfficeList(
+            Seq(
+              CustomsOffice("GB1", "testName1", None),
+              CustomsOffice("GB2", "testName2", None)
+            )
+          )
+
+        connector.getCustomsOfficesOfDestinationForCountry(CountryCode("GB")).futureValue mustBe expectedResult
+      }
+
+      "must return a successful future response when CustomsOffice is not found" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$baseUrl/customs-office-destination/AR")).willReturn(
+            aResponse()
+              .withStatus(NOT_FOUND)
+              .withHeader(CONTENT_TYPE, JSON)
+          )
+        )
+
+        val expectedResult =
+          CustomsOfficeList(Nil)
+
+        connector.getCustomsOfficesOfDestinationForCountry(CountryCode("AR")).futureValue mustBe expectedResult
+      }
+
+      "must return an exception when an error response is returned" in {
+        checkErrorResponse(s"/$baseUrl/customs-office-destination/GB", connector.getCustomsOfficesOfDestinationForCountry(CountryCode("GB")))
       }
     }
 

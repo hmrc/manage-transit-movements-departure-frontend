@@ -16,8 +16,9 @@
 
 package pages.routeDetails.routing
 
-import models.reference.Country
+import models.reference.{Country, CountryCode}
 import pages.behaviours.PageBehaviours
+import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitPage}
 
 class CountryOfDestinationPageSpec extends PageBehaviours {
 
@@ -28,5 +29,35 @@ class CountryOfDestinationPageSpec extends PageBehaviours {
     beSettable[Country](CountryOfDestinationPage)
 
     beRemovable[Country](CountryOfDestinationPage)
+  }
+
+  "cleanup" - {
+    val destinationCountry        = Country(CountryCode("IT"), "Italy")
+    val updatedDestinationCountry = Country(CountryCode("GB"), "United Kingdom")
+    val customsOffice             = arbitraryCustomsOffice.arbitrary.sample.get
+
+    "when value changes" - {
+      "must clean up Country of Destination page" in {
+        val preChange = emptyUserAnswers
+          .setValue(CountryOfDestinationPage, destinationCountry)
+          .setValue(OfficeOfDestinationPage, customsOffice)
+
+        val postChange = preChange.setValue(CountryOfDestinationPage, updatedDestinationCountry)
+
+        postChange.get(OfficeOfDestinationPage) mustNot be(defined)
+      }
+    }
+
+    "when value has not changed" - {
+      "must not clean up Office of Destination page" in {
+        val preChange = emptyUserAnswers
+          .setValue(CountryOfDestinationPage, destinationCountry)
+          .setValue(OfficeOfDestinationPage, customsOffice)
+
+        val postChange = preChange.setValue(CountryOfDestinationPage, destinationCountry)
+
+        postChange.get(OfficeOfDestinationPage) mustBe defined
+      }
+    }
   }
 }
