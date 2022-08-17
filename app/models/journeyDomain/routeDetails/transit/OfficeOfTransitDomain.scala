@@ -90,23 +90,16 @@ object OfficeOfTransitDomain {
 
     index.position match {
       case 0 =>
-        OfficeOfDestinationPage.reader.flatMap {
-          case x if ctcCountryCodes.contains(x.countryId) => readsWithoutCountry
-          case _ =>
-            OfficeOfDeparturePage.reader.map(_.countryId.code).flatMap {
-              case GB =>
-                OfficeOfDestinationPage.reader.flatMap {
-                  case x if euCountryCodes.contains(x.countryId) => readsWithoutCountry
-                  case x if x.countryId.code == AD               => readsWithoutCountry
-                  case _                                         => readsWithCountry
-                }
-              case _ =>
-                OfficeOfDestinationPage.reader.map(_.countryId.code).flatMap {
-                  case AD => readsWithoutCountry
-                  case _  => readsWithCountry
-                }
-            }
-        }
+        for {
+          officeOfDeparture   <- OfficeOfDeparturePage.reader.map(_.countryId)
+          officeOfDestination <- OfficeOfDestinationPage.reader.map(_.countryId)
+          reader <- (officeOfDeparture, officeOfDestination) match {
+            case (_, dest) if ctcCountryCodes.contains(dest)                    => readsWithoutCountry
+            case (dep, dest) if dep.code == GB && euCountryCodes.contains(dest) => readsWithoutCountry
+            case (_, dest) if dest.code == AD                                   => readsWithoutCountry
+            case _                                                              => readsWithCountry
+          }
+        } yield reader
       case _ => readsWithCountry
     }
   }

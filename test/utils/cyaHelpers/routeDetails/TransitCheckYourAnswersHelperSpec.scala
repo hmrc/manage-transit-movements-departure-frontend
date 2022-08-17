@@ -23,7 +23,7 @@ import models.reference.{Country, CustomsOffice}
 import models.{Index, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.preTaskList.SecurityDetailsTypePage
+import pages.preTaskList.{OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails.routing.OfficeOfDestinationPage
 import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitPage}
 import viewModels.ListItem
@@ -37,10 +37,12 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
         val country1       = arbitrary[Country].sample.value
         val country2       = arbitrary[Country].sample.value
         val country3       = arbitrary[Country].sample.value
-        val customsOffice1 = arbitrary[CustomsOffice].sample.value.copy(countryId = country1.code)
-        val customsOffice2 = arbitrary[CustomsOffice].sample.value.copy(countryId = country2.code)
+        def customsOffice  = arbitrary[CustomsOffice].sample.value
+        val customsOffice1 = customsOffice.copy(countryId = country1.code)
+        val customsOffice2 = customsOffice.copy(countryId = country2.code)
 
         val answers = emptyUserAnswers
+          .setValue(OfficeOfDeparturePage, customsOffice)
           .setValue(SecurityDetailsTypePage, NoSecurityDetails)
           .setValue(OfficeOfDestinationPage, customsOffice1)
           .setValue(OfficeOfTransitPage(Index(0)), customsOffice1)

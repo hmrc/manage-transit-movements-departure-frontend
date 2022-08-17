@@ -52,6 +52,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
 
         "and office of destination is in set CL112" in {
           val userAnswers = emptyUserAnswers
+            .setValue(OfficeOfDeparturePage, customsOffice)
             .setValue(SecurityDetailsTypePage, NoSecurityDetails)
             .setValue(OfficeOfDestinationPage, customsOffice)
             .setValue(OfficeOfTransitPage(index), officeOfTransit)

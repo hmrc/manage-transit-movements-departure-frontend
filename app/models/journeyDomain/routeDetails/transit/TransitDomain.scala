@@ -50,7 +50,7 @@ object TransitDomain {
     customsSecurityAgreementAreaCountryCodes: Seq[CountryCode]
   ): UserAnswersReader[TransitDomain] = {
 
-    implicit val officeOfTransitCountriesReader: UserAnswersReader[OfficesOfTransit] =
+    implicit val officesOfTransitReader: UserAnswersReader[OfficesOfTransit] =
       OfficeOfTransitCountriesSection.reader.flatMap {
         case x if x.isEmpty =>
           UserAnswersReader.fail[Seq[OfficeOfTransitDomain]](OfficeOfTransitCountryPage(Index(0)))
@@ -60,19 +60,38 @@ object TransitDomain {
           ).map(_.toSeq)
       }
 
+    lazy val addOfficesOfTransitReader: UserAnswersReader[OfficesOfTransit] =
+      AddOfficeOfTransitYesNoPage
+        .filterOptionalDependent(identity)(officesOfTransitReader)
+        .map(_.getOrElse(Nil))
+
     OfficeOfDeparturePage.reader.flatMap {
       officeOfDeparture =>
         OfficeOfDestinationPage.reader.flatMap {
           officeOfDestination =>
+            def countriesOfRoutingReader(isT2DeclarationType: Option[Boolean]): UserAnswersReader[TransitDomain] = {
+              val officesOfTransit = if (ctcCountryCodes.contains(officeOfDeparture.countryId) || ctcCountryCodes.contains(officeOfDestination.countryId)) {
+                UserAnswersReader[OfficesOfTransit]
+              } else {
+                UserAnswersReader[Seq[CountryOfRoutingDomain]]
+                  .map(_.map(_.country.code))
+                  .flatMap {
+                    _.filter(ctcCountryCodes.contains(_)) match {
+                      case Nil => addOfficesOfTransitReader
+                      case _   => UserAnswersReader[OfficesOfTransit]
+                    }
+                  }
+              }
+
+              officesOfTransit.map(TransitDomain(isT2DeclarationType, _))
+            }
+
             if (
               ctcCountryCodes.contains(officeOfDeparture.countryId) &&
               ctcCountryCodes.contains(officeOfDestination.countryId) &&
               officeOfDeparture.countryId.code == officeOfDestination.countryId.code
             ) {
-              AddOfficeOfTransitYesNoPage
-                .filterOptionalDependent(identity)(officeOfTransitCountriesReader)
-                .map(_.getOrElse(Nil))
-                .map(TransitDomain(None, _))
+              addOfficesOfTransitReader.map(TransitDomain(None, _))
             } else {
               DeclarationTypePage.reader.flatMap {
                 case DeclarationType.Option2 =>
@@ -82,42 +101,10 @@ object TransitDomain {
                     case true =>
                       UserAnswersReader[OfficesOfTransit].map(TransitDomain(Some(true), _))
                     case false =>
-                      if (ctcCountryCodes.contains(officeOfDeparture.countryId) || ctcCountryCodes.contains(officeOfDestination.countryId)) {
-                        UserAnswersReader[OfficesOfTransit].map(TransitDomain(Some(false), _))
-                      } else {
-                        UserAnswersReader[Seq[CountryOfRoutingDomain]]
-                          .map(_.map(_.country.code))
-                          .flatMap {
-                            _.filter(ctcCountryCodes.contains(_)) match {
-                              case Nil =>
-                                AddOfficeOfTransitYesNoPage
-                                  .filterOptionalDependent(identity)(officeOfTransitCountriesReader)
-                                  .map(_.getOrElse(Nil))
-                                  .map(TransitDomain(Some(false), _))
-                              case _ =>
-                                UserAnswersReader[OfficesOfTransit].map(TransitDomain(Some(false), _))
-                            }
-                          }
-                      }
+                      countriesOfRoutingReader(Some(false))
                   }
                 case _ =>
-                  if (ctcCountryCodes.contains(officeOfDeparture.countryId) || ctcCountryCodes.contains(officeOfDestination.countryId)) {
-                    UserAnswersReader[OfficesOfTransit].map(TransitDomain(None, _))
-                  } else {
-                    UserAnswersReader[Seq[CountryOfRoutingDomain]]
-                      .map(_.map(_.country.code))
-                      .flatMap {
-                        _.filter(ctcCountryCodes.contains(_)) match {
-                          case Nil =>
-                            AddOfficeOfTransitYesNoPage
-                              .filterOptionalDependent(identity)(officeOfTransitCountriesReader)
-                              .map(_.getOrElse(Nil))
-                              .map(TransitDomain(None, _))
-                          case _ =>
-                            UserAnswersReader[OfficesOfTransit].map(TransitDomain(None, _))
-                        }
-                      }
-                  }
+                  countriesOfRoutingReader(None)
               }
             }
         }
