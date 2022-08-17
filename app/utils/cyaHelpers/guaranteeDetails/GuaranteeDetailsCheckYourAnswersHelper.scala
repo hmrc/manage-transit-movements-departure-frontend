@@ -35,8 +35,8 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mod
         val index = Index(position)
         buildListItem[GuaranteeDomain, GuaranteeType](
           page = GuaranteeTypePage(index),
-          getName = _.`type`,
-          formatName = formatEnumAsString(GuaranteeType.messageKeyPrefix),
+          formatJourneyDomainModel = x => formatEnumAsString(GuaranteeType.messageKeyPrefix)(x.`type`),
+          formatType = formatEnumAsString(GuaranteeType.messageKeyPrefix),
           removeRoute = guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, index)
         )(GuaranteeDomain.userAnswersReader(index), implicitly[Reads[GuaranteeType]])
     }

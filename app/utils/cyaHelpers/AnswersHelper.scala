@@ -108,8 +108,8 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
 
   protected def buildListItem[A <: JourneyDomainModel, B](
     page: QuestionPage[B],
-    getName: A => B,
-    formatName: B => String,
+    formatJourneyDomainModel: A => String,
+    formatType: B => String,
     removeRoute: Call
   )(implicit userAnswersReader: UserAnswersReader[A], rds: Reads[B]): Option[Either[ListItem, ListItem]] =
     UserAnswersReader[A].run(userAnswers) match {
@@ -118,7 +118,7 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
           changeRoute =>
             getNameAndBuildListItem[B](
               page = page,
-              formatName = formatName,
+              formatName = formatType,
               changeUrl = changeRoute.url,
               removeUrl = removeRoute.url
             ).map(Left(_))
@@ -128,7 +128,7 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
           changeRoute =>
             Right(
               ListItem(
-                name = formatName(getName(journeyDomainModel)),
+                name = formatJourneyDomainModel(journeyDomainModel),
                 changeUrl = changeRoute.url,
                 removeUrl = removeRoute.url
               )

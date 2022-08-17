@@ -28,8 +28,7 @@ import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeO
 import services.CountriesService
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Future
 
 class AddAnotherOfficeOfTransitViewModelSpec extends SpecBase with Generators {
 
@@ -38,6 +37,7 @@ class AddAnotherOfficeOfTransitViewModelSpec extends SpecBase with Generators {
     val countriesService = mock[CountriesService]
     when(countriesService.getTransitCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
     when(countriesService.getCommunityCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
+    when(countriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
 
     val noOfOfficesOfTransit = Gen.choose(1, frontendAppConfig.maxOfficesOfTransit).sample.value
     val country              = arbitrary[Country].sample.value
@@ -51,7 +51,7 @@ class AddAnotherOfficeOfTransitViewModelSpec extends SpecBase with Generators {
           .setValue(AddOfficeOfTransitETAYesNoPage(Index(i)), false)
     }
 
-    val result = Await.result(AddAnotherOfficeOfTransitViewModel(countriesService)(userAnswers), Duration.Inf)
+    val result = AddAnotherOfficeOfTransitViewModel(countriesService)(userAnswers).futureValue
     result.listItems.length mustBe noOfOfficesOfTransit
   }
 

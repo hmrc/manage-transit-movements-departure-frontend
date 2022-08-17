@@ -40,6 +40,11 @@ case class OfficeOfTransitDomain(
       controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(userAnswers.lrn, index)
     )
 
+  val label: String = country match {
+    case Some(value) => s"$value - $customsOffice"
+    case None        => customsOffice.toString
+  }
+
 }
 
 object OfficeOfTransitDomain {

@@ -73,8 +73,8 @@ class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
         val index = Index(position)
         buildListItem[CountryOfRoutingDomain, Country](
           page = CountryOfRoutingPage(index),
-          getName = _.country,
-          formatName = _.toString,
+          formatJourneyDomainModel = _.country.toString,
+          formatType = _.toString,
           removeRoute = routes.RemoveCountryOfRoutingYesNoController.onPageLoad(userAnswers.lrn, index)
         )(CountryOfRoutingDomain.userAnswersReader(index), implicitly[Reads[Country]])
     }
