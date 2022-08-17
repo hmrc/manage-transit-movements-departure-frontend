@@ -85,9 +85,19 @@ trait ListWithActionsViewBehaviours extends YesNoViewBehaviours with Generators 
               name mustBe listItem.name
             }
 
-            "must contain 2 actions" in {
-              val actions = renderedItem.getElementsByClass("govuk-summary-list__actions-list-item")
-              actions.size() mustBe 2
+            val actions = renderedItem.getElementsByClass("govuk-summary-list__actions-list-item")
+            listItem.removeUrl match {
+              case Some(removeUrl) =>
+                "must contain 2 actions" in {
+                  actions.size() mustBe 2
+                }
+                withActionLink("Change", 0, listItem.changeUrl)
+                withActionLink("Remove", 1, removeUrl)
+              case None =>
+                "must contain 1 action" in {
+                  actions.size() mustBe 1
+                }
+                withActionLink("Change", 0, listItem.changeUrl)
             }
 
             def withActionLink(linkType: String, index: Int, url: String): Unit =
@@ -109,9 +119,6 @@ trait ListWithActionsViewBehaviours extends YesNoViewBehaviours with Generators 
                 spans.last().text() mustBe s"$linkType ${listItem.name}"
                 assert(spans.last().hasClass("govuk-visually-hidden"))
               }
-
-            withActionLink("Change", 0, listItem.changeUrl)
-            listItem.removeUrl.map(withActionLink("Remove", 1, _))
           }
       }
     }
