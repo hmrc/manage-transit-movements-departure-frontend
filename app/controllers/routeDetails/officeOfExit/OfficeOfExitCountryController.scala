@@ -19,12 +19,11 @@ package controllers.routeDetails.officeOfExit
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
-import models.reference.Country
-import models.{Index, LocalReferenceNumber, Mode}
+import models.{CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.OfficeOfExit
 import pages.routeDetails.officeOfExit.OfficeOfExitCountryPage
-import pages.routeDetails.routing.index.CountryOfRoutingPage
+import pages.routeDetails.routing.index.CountryOfRoutingPageAll
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -48,10 +47,14 @@ class OfficeOfExitCountryController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val countryList: Option[Country] = request.userAnswers.get(CountryOfRoutingPage())
-      val form = formProvider("routeDetails.officeOfExit.officeOfExitCountry", countryList)
+
+      val countryList: CountryList = request.userAnswers.get(CountryOfRoutingPageAll()).getOrElse(
+        throw new IllegalStateException("OfficeOfExitCountryController::onPageLoad - There must be a country list!")
+      )
+
+      val form                         = formProvider("routeDetails.officeOfExit.officeOfExitCountry", countryList)
       val preparedForm = request.userAnswers.get(OfficeOfExitCountryPage) match {
         case None        => form
         case Some(value) => form.fill(value)
