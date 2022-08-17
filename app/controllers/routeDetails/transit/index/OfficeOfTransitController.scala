@@ -21,6 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.OfficeOfTransitFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.routeDetails.OfficeOfTransitNavigatorProvider
+import pages.routeDetails.routing.CountryOfDestinationPage
 import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -49,7 +50,7 @@ class OfficeOfTransitController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] =
     actions
       .requireData(lrn)
-      .andThen(getMandatoryPage(OfficeOfTransitCountryPage(index)))
+      .andThen(getMandatoryPage(OfficeOfTransitCountryPage(index), CountryOfDestinationPage))
       .async {
         implicit request =>
           val country = request.arg
@@ -67,7 +68,7 @@ class OfficeOfTransitController @Inject() (
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] =
     actions
       .requireData(lrn)
-      .andThen(getMandatoryPage(OfficeOfTransitCountryPage(index)))
+      .andThen(getMandatoryPage(OfficeOfTransitCountryPage(index), CountryOfDestinationPage))
       .async {
         implicit request =>
           val country = request.arg
