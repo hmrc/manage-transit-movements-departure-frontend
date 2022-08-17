@@ -17,6 +17,7 @@
 package models.journeyDomain.routeDetails.transit
 
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
+import models.journeyDomain.routeDetails.routing.CountryOfRoutingDomain
 import models.journeyDomain.routeDetails.transit.TransitDomain.OfficesOfTransit
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.CountryCode
@@ -41,6 +42,8 @@ object TransitDomain {
 
   type OfficesOfTransit = Seq[OfficeOfTransitDomain]
 
+  // scalastyle:off cyclomatic.complexity
+  // scalastyle:off method.length
   implicit def userAnswersReader(
     ctcCountryCodes: Seq[CountryCode],
     euCountryCodes: Seq[CountryCode],
@@ -66,20 +69,60 @@ object TransitDomain {
               ctcCountryCodes.contains(officeOfDestination.countryId) &&
               officeOfDeparture.countryId.code == officeOfDestination.countryId.code
             ) {
-              AddOfficeOfTransitYesNoPage.filterOptionalDependent(identity)(officeOfTransitCountriesReader).map(_.getOrElse(Nil)).map(TransitDomain(None, _))
+              AddOfficeOfTransitYesNoPage
+                .filterOptionalDependent(identity)(officeOfTransitCountriesReader)
+                .map(_.getOrElse(Nil))
+                .map(TransitDomain(None, _))
             } else {
               DeclarationTypePage.reader.flatMap {
                 case DeclarationType.Option2 =>
                   UserAnswersReader[OfficesOfTransit].map(TransitDomain(None, _))
                 case DeclarationType.Option5 =>
-                  for {
-                    isT2DeclarationType <- T2DeclarationTypeYesNoPage.reader
-                    officesOfTransit    <- UserAnswersReader[OfficesOfTransit]
-                  } yield TransitDomain(Some(isT2DeclarationType), officesOfTransit)
-                case _ => UserAnswersReader.apply(TransitDomain(None, Nil)) // TODO
+                  T2DeclarationTypeYesNoPage.reader.flatMap {
+                    case true =>
+                      UserAnswersReader[OfficesOfTransit].map(TransitDomain(Some(true), _))
+                    case false =>
+                      if (ctcCountryCodes.contains(officeOfDeparture.countryId) || ctcCountryCodes.contains(officeOfDestination.countryId)) {
+                        UserAnswersReader[OfficesOfTransit].map(TransitDomain(Some(false), _))
+                      } else {
+                        UserAnswersReader[Seq[CountryOfRoutingDomain]]
+                          .map(_.map(_.country.code))
+                          .flatMap {
+                            _.filter(ctcCountryCodes.contains(_)) match {
+                              case Nil =>
+                                AddOfficeOfTransitYesNoPage
+                                  .filterOptionalDependent(identity)(officeOfTransitCountriesReader)
+                                  .map(_.getOrElse(Nil))
+                                  .map(TransitDomain(Some(false), _))
+                              case _ =>
+                                UserAnswersReader[OfficesOfTransit].map(TransitDomain(Some(false), _))
+                            }
+                          }
+                      }
+                  }
+                case _ =>
+                  if (ctcCountryCodes.contains(officeOfDeparture.countryId) || ctcCountryCodes.contains(officeOfDestination.countryId)) {
+                    UserAnswersReader[OfficesOfTransit].map(TransitDomain(None, _))
+                  } else {
+                    UserAnswersReader[Seq[CountryOfRoutingDomain]]
+                      .map(_.map(_.country.code))
+                      .flatMap {
+                        _.filter(ctcCountryCodes.contains(_)) match {
+                          case Nil =>
+                            AddOfficeOfTransitYesNoPage
+                              .filterOptionalDependent(identity)(officeOfTransitCountriesReader)
+                              .map(_.getOrElse(Nil))
+                              .map(TransitDomain(None, _))
+                          case _ =>
+                            UserAnswersReader[OfficesOfTransit].map(TransitDomain(None, _))
+                        }
+                      }
+                  }
               }
             }
         }
     }
   }
+  // scalastyle:on cyclomatic.complexity
+  // scalastyle:on method.length
 }

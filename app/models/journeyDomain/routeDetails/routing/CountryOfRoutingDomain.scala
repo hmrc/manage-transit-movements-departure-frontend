@@ -43,4 +43,7 @@ object CountryOfRoutingDomain {
 
   implicit def userAnswersReader(index: Index): UserAnswersReader[CountryOfRoutingDomain] =
     CountryOfRoutingPage(index).reader.map(CountryOfRoutingDomain(_)(index))
+
+  implicit val countriesOfRoutingReader: UserAnswersReader[Seq[CountryOfRoutingDomain]] =
+    CountriesOfRoutingDomain.userAnswersReader
 }

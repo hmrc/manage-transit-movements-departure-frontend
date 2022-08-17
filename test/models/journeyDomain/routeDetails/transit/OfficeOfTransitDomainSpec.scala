@@ -17,6 +17,7 @@
 package models.journeyDomain.routeDetails.transit
 
 import base.SpecBase
+import config.Constants._
 import generators.Generators
 import models.SecurityDetailsType._
 import models.domain.{EitherType, UserAnswersReader}
@@ -71,7 +72,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
 
         "and office of departure is in 'GB' and office of destination is in set CL010" in {
           val userAnswers = emptyUserAnswers
-            .setValue(OfficeOfDeparturePage, customsOffice.copy(countryId = CountryCode("GB")))
+            .setValue(OfficeOfDeparturePage, customsOffice.copy(countryId = CountryCode(GB)))
             .setValue(SecurityDetailsTypePage, NoSecurityDetails)
             .setValue(OfficeOfDestinationPage, customsOffice)
             .setValue(OfficeOfTransitPage(index), officeOfTransit)
@@ -94,7 +95,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
           val userAnswers = emptyUserAnswers
             .setValue(OfficeOfDeparturePage, customsOffice)
             .setValue(SecurityDetailsTypePage, NoSecurityDetails)
-            .setValue(OfficeOfDestinationPage, customsOffice.copy(countryId = CountryCode("AD")))
+            .setValue(OfficeOfDestinationPage, customsOffice.copy(countryId = CountryCode(AD)))
             .setValue(OfficeOfTransitPage(index), officeOfTransit)
             .setValue(AddOfficeOfTransitETAYesNoPage(index), false)
 
