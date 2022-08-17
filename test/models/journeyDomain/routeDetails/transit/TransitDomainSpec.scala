@@ -20,6 +20,7 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.DeclarationType._
+import models.Index
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{EitherType, UserAnswersReader}
 import models.reference.{Country, CustomsOffice}
@@ -315,6 +316,34 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
           val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain](TransitDomain.userAnswersReader(countryCodes, Nil, Nil)).run(userAnswers)
 
           result.left.value.page mustBe AddOfficeOfTransitYesNoPage
+        }
+      }
+
+      "when declaration type is T2" - {
+        "and office of destination in set CL112" - {
+          "and empty json at index 0" in {
+            val userAnswers = emptyUserAnswers
+              .setValue(OfficeOfDeparturePage, customsOfficeFromUnlistedCountry)
+              .setValue(DeclarationTypePage, Option2)
+              .setValue(OfficeOfDestinationPage, customsOfficeFromListedCountry)
+
+            val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain](TransitDomain.userAnswersReader(countryCodes, Nil, Nil)).run(userAnswers)
+
+            result.left.value.page mustBe OfficeOfTransitPage(Index(0))
+          }
+        }
+
+        "and office of destination not in set CL112" - {
+          "and empty json at index 0" in {
+            val userAnswers = emptyUserAnswers
+              .setValue(OfficeOfDeparturePage, customsOfficeFromUnlistedCountry)
+              .setValue(DeclarationTypePage, Option2)
+              .setValue(OfficeOfDestinationPage, customsOfficeFromUnlistedCountry)
+
+            val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain](TransitDomain.userAnswersReader(countryCodes, Nil, Nil)).run(userAnswers)
+
+            result.left.value.page mustBe OfficeOfTransitCountryPage(Index(0))
+          }
         }
       }
 

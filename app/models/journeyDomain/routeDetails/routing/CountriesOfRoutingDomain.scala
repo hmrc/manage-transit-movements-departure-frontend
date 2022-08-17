@@ -22,7 +22,6 @@ import models.domain.{GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswe
 import models.{Index, RichJsArray}
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.routeDetails.routing._
-import pages.routeDetails.routing.index.CountryOfRoutingPage
 import pages.sections.routeDetails.CountriesOfRoutingSection
 
 object CountriesOfRoutingDomain {
@@ -30,7 +29,7 @@ object CountriesOfRoutingDomain {
   implicit val userAnswersReader: UserAnswersReader[Seq[CountryOfRoutingDomain]] = {
     val arrayReader: UserAnswersReader[Seq[CountryOfRoutingDomain]] = CountriesOfRoutingSection.reader.flatMap {
       case x if x.isEmpty =>
-        UserAnswersReader.fail[Seq[CountryOfRoutingDomain]](CountryOfRoutingPage(Index(0)))
+        UserAnswersReader[CountryOfRoutingDomain](CountryOfRoutingDomain.userAnswersReader(Index(0))).map(Seq(_))
       case x =>
         x.traverse[CountryOfRoutingDomain](CountryOfRoutingDomain.userAnswersReader).map(_.toSeq)
     }

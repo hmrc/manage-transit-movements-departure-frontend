@@ -24,7 +24,6 @@ import models.reference.CountryCode
 import models.{DeclarationType, Index, RichJsArray, UserAnswers}
 import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage}
 import pages.routeDetails.routing.OfficeOfDestinationPage
-import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
 import pages.routeDetails.transit.{AddOfficeOfTransitYesNoPage, T2DeclarationTypeYesNoPage}
 import pages.sections.routeDetails.OfficeOfTransitCountriesSection
 import play.api.mvc.Call
@@ -53,7 +52,9 @@ object TransitDomain {
     implicit val officesOfTransitReader: UserAnswersReader[OfficesOfTransit] =
       OfficeOfTransitCountriesSection.reader.flatMap {
         case x if x.isEmpty =>
-          UserAnswersReader.fail[Seq[OfficeOfTransitDomain]](OfficeOfTransitCountryPage(Index(0)))
+          UserAnswersReader[OfficeOfTransitDomain](
+            OfficeOfTransitDomain.userAnswersReader(Index(0), ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+          ).map(Seq(_))
         case x =>
           x.traverse[OfficeOfTransitDomain](
             OfficeOfTransitDomain.userAnswersReader(_, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
