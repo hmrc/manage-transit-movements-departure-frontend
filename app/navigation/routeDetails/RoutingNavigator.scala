@@ -34,11 +34,13 @@ class RoutingNavigatorProviderImpl @Inject() (
 
   def apply()(implicit hc: HeaderCarrier): Future[RoutingNavigator] =
     for {
-      ctcCountries <- countriesService.getTransitCountries()
-      euCountries  <- countriesService.getCommunityCountries()
+      ctcCountries                             <- countriesService.getTransitCountries()
+      euCountries                              <- countriesService.getCommunityCountries()
+      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
     } yield new RoutingNavigator(
-      ctcCountries.countries.map(_.code),
-      euCountries.countries.map(_.code)
+      ctcCountries.countryCodes,
+      euCountries.countryCodes,
+      customsSecurityAgreementAreaCountryCodes.countryCodes
     )
 }
 
@@ -49,8 +51,9 @@ trait RoutingNavigatorProvider {
 
 class RoutingNavigator(
   ctcCountryCodes: Seq[CountryCode],
-  euCountryCodes: Seq[CountryCode]
+  euCountryCodes: Seq[CountryCode],
+  customsSecurityAgreementAreaCountryCodes: Seq[CountryCode]
 ) extends UserAnswersNavigator[RoutingDomain, RouteDetailsDomain]()(
       RoutingDomain.userAnswersReader,
-      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes)
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
     )

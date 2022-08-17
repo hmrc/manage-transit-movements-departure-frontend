@@ -32,7 +32,8 @@ class TransitCheckYourAnswersHelper(
   mode: Mode
 )(
   ctcCountryCodes: Seq[CountryCode],
-  euCountryCodes: Seq[CountryCode]
+  euCountryCodes: Seq[CountryCode],
+  customsSecurityAgreementAreaCountryCodes: Seq[CountryCode]
 )(implicit messages: Messages)
     extends AnswersHelper(userAnswers, mode) {
 
@@ -42,9 +43,9 @@ class TransitCheckYourAnswersHelper(
         val index = Index(position)
         buildListItem[OfficeOfTransitDomain, Country](
           page = OfficeOfTransitCountryPage(index),
-          getName = _.country,
+          getName = _.country.getOrElse(Country(CountryCode(""), "")), // TODO
           formatName = _.toString,
           removeRoute = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, index)
-        )(OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes), implicitly[Reads[Country]])
+        )(OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes), implicitly[Reads[Country]])
     }
 }

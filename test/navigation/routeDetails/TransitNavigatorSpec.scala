@@ -23,7 +23,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class TransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
-  private val navigator = new TransitNavigator(Nil, Nil)
+  private val navigator = new TransitNavigator(Nil, Nil, Nil)
 
   "Transit Navigator" - {
 

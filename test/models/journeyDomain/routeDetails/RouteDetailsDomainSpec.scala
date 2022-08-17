@@ -53,7 +53,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
         )
 
         val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
-          RouteDetailsDomain.userAnswersReader(Nil, Nil)
+          RouteDetailsDomain.userAnswersReader(Nil, Nil, Nil)
         ).run(userAnswers)
 
         result.value mustBe expectedResult

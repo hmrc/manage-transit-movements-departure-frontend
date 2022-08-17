@@ -177,5 +177,18 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach {
         verify(mockRefDataConnector).getCountries(eqTo(expectedQueryParameters))(any(), any())
       }
     }
+
+    "getCustomsSecurityAgreementAreaCountries" - {
+      "must return a list of sorted customs security agreement area countries" in {
+
+        when(mockRefDataConnector.getCustomsSecurityAgreementAreaCountries()(any(), any()))
+          .thenReturn(Future.successful(countries))
+
+        service.getCustomsSecurityAgreementAreaCountries().futureValue mustBe
+          CountryList(Seq(country2, country3, country1))
+
+        verify(mockRefDataConnector).getCustomsSecurityAgreementAreaCountries()(any(), any())
+      }
+    }
   }
 }

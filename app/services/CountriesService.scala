@@ -71,6 +71,11 @@ class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector
     getCountries(queryParameters)
   }
 
+  def getCustomsSecurityAgreementAreaCountries()(implicit hc: HeaderCarrier): Future[CountryList] =
+    referenceDataConnector
+      .getCustomsSecurityAgreementAreaCountries()
+      .map(sort)
+
   private def getCountries(queryParameters: Seq[(String, String)])(implicit hc: HeaderCarrier): Future[CountryList] =
     referenceDataConnector
       .getCountries(queryParameters)

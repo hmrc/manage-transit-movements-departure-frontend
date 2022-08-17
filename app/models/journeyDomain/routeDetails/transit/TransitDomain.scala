@@ -41,14 +41,20 @@ object TransitDomain {
 
   type OfficesOfTransit = Seq[OfficeOfTransitDomain]
 
-  implicit def userAnswersReader(ctcCountryCodes: Seq[CountryCode], euCountryCodes: Seq[CountryCode]): UserAnswersReader[TransitDomain] = {
+  implicit def userAnswersReader(
+    ctcCountryCodes: Seq[CountryCode],
+    euCountryCodes: Seq[CountryCode],
+    customsSecurityAgreementAreaCountryCodes: Seq[CountryCode]
+  ): UserAnswersReader[TransitDomain] = {
 
     implicit val officeOfTransitCountriesReader: UserAnswersReader[OfficesOfTransit] =
       OfficeOfTransitCountriesSection.reader.flatMap {
         case x if x.isEmpty =>
           UserAnswersReader.fail[Seq[OfficeOfTransitDomain]](OfficeOfTransitCountryPage(Index(0)))
         case x =>
-          x.traverse[OfficeOfTransitDomain](OfficeOfTransitDomain.userAnswersReader(_, ctcCountryCodes, euCountryCodes)).map(_.toSeq)
+          x.traverse[OfficeOfTransitDomain](
+            OfficeOfTransitDomain.userAnswersReader(_, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+          ).map(_.toSeq)
       }
 
     OfficeOfDeparturePage.reader.flatMap {

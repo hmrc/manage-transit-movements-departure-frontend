@@ -34,11 +34,13 @@ class TransitNavigatorProviderImpl @Inject() (
 
   def apply()(implicit hc: HeaderCarrier): Future[TransitNavigator] =
     for {
-      ctcCountries <- countriesService.getTransitCountries()
-      euCountries  <- countriesService.getCommunityCountries()
+      ctcCountries                             <- countriesService.getTransitCountries()
+      euCountries                              <- countriesService.getCommunityCountries()
+      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
     } yield new TransitNavigator(
-      ctcCountries.countries.map(_.code),
-      euCountries.countries.map(_.code)
+      ctcCountries.countryCodes,
+      euCountries.countryCodes,
+      customsSecurityAgreementAreaCountryCodes.countryCodes
     )
 }
 
@@ -49,8 +51,9 @@ trait TransitNavigatorProvider {
 
 class TransitNavigator(
   ctcCountryCodes: Seq[CountryCode],
-  euCountryCodes: Seq[CountryCode]
+  euCountryCodes: Seq[CountryCode],
+  customsSecurityAgreementAreaCountryCodes: Seq[CountryCode]
 ) extends UserAnswersNavigator[TransitDomain, RouteDetailsDomain]()(
-      TransitDomain.userAnswersReader(ctcCountryCodes, euCountryCodes),
-      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes)
+      TransitDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes),
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
     )

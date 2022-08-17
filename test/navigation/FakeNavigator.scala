@@ -28,22 +28,22 @@ class FakeGuaranteeNavigator(desiredRoute: Call, index: Index) extends Guarantee
   override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
 }
 
-class FakeRouteDetailsNavigator(desiredRoute: Call) extends RouteDetailsNavigator(Nil, Nil) {
+class FakeRouteDetailsNavigator(desiredRoute: Call) extends RouteDetailsNavigator(Nil, Nil, Nil) {
   override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
 }
 
-class FakeRoutingNavigator(desiredRoute: Call) extends RoutingNavigator(Nil, Nil) {
+class FakeRoutingNavigator(desiredRoute: Call) extends RoutingNavigator(Nil, Nil, Nil) {
   override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
 }
 
-class FakeCountryOfRoutingNavigator(desiredRoute: Call, index: Index) extends CountryOfRoutingNavigator(index, Nil, Nil) {
+class FakeCountryOfRoutingNavigator(desiredRoute: Call, index: Index) extends CountryOfRoutingNavigator(index, Nil, Nil, Nil) {
   override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
 }
 
-class FakeTransitNavigator(desiredRoute: Call) extends TransitNavigator(Nil, Nil) {
+class FakeTransitNavigator(desiredRoute: Call) extends TransitNavigator(Nil, Nil, Nil) {
   override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
 }
 
-class FakeOfficeOfTransitNavigator(desiredRoute: Call, index: Index) extends OfficeOfTransitNavigator(index, Nil, Nil) {
+class FakeOfficeOfTransitNavigator(desiredRoute: Call, index: Index) extends OfficeOfTransitNavigator(index, Nil, Nil, Nil) {
   override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
 }

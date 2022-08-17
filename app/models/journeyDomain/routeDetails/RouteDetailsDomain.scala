@@ -32,12 +32,23 @@ case class RouteDetailsDomain(
 
 object RouteDetailsDomain {
 
-  implicit def userAnswersReader(ctcCountryCodes: Seq[CountryCode], euCountryCodes: Seq[CountryCode]): UserAnswersReader[RouteDetailsDomain] = {
+  implicit def userAnswersReader(
+    ctcCountryCodes: Seq[CountryCode],
+    euCountryCodes: Seq[CountryCode],
+    customsSecurityAgreementAreaCountryCodes: Seq[CountryCode]
+  ): UserAnswersReader[RouteDetailsDomain] = {
 
     implicit val transitReads: UserAnswersReader[Option[TransitDomain]] =
       DeclarationTypePage.reader.flatMap {
-        case Option4 => none[TransitDomain].pure[UserAnswersReader]
-        case _       => UserAnswersReader[TransitDomain](TransitDomain.userAnswersReader(ctcCountryCodes, euCountryCodes)).map(Some(_))
+        case Option4 =>
+          none[TransitDomain].pure[UserAnswersReader]
+        case _ =>
+          implicit val reads: UserAnswersReader[TransitDomain] = TransitDomain.userAnswersReader(
+            ctcCountryCodes,
+            euCountryCodes,
+            customsSecurityAgreementAreaCountryCodes
+          )
+          UserAnswersReader[TransitDomain].map(Some(_))
       }
 
     for {

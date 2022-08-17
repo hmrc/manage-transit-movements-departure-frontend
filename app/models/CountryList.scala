@@ -22,6 +22,8 @@ import play.api.libs.json.{JsArray, JsError, JsSuccess, Json, OFormat, Reads}
 case class CountryList(countries: Seq[Country]) {
   def getCountry(countryCode: CountryCode): Option[Country] = countries.find(_.code == countryCode)
 
+  def countryCodes: Seq[CountryCode] = countries.map(_.code)
+
   override def equals(obj: Any): Boolean =
     obj match {
       case value: CountryList => value.countries == countries

@@ -48,7 +48,7 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
           officesOfTransit = Nil
         )
 
-        val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain](TransitDomain.userAnswersReader(ctcCountryCodes, Nil)).run(userAnswers)
+        val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain](TransitDomain.userAnswersReader(ctcCountryCodes, Nil, Nil)).run(userAnswers)
 
         result.value mustBe expectedResult
       }
@@ -64,7 +64,7 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
           officesOfTransit = Nil
         )
 
-        val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain](TransitDomain.userAnswersReader(Nil, Nil)).run(userAnswers)
+        val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain](TransitDomain.userAnswersReader(Nil, Nil, Nil)).run(userAnswers)
 
         result.value mustBe expectedResult
       }
@@ -103,7 +103,7 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
             .setValue(OfficeOfDeparturePage, customsOffice)
             .setValue(OfficeOfDestinationPage, customsOffice)
 
-          val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain](TransitDomain.userAnswersReader(ctcCountryCodes, Nil)).run(userAnswers)
+          val result: EitherType[TransitDomain] = UserAnswersReader[TransitDomain](TransitDomain.userAnswersReader(ctcCountryCodes, Nil, Nil)).run(userAnswers)
 
           result.left.value.page mustBe AddOfficeOfTransitYesNoPage
         }

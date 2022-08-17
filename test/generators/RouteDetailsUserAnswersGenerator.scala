@@ -26,11 +26,14 @@ import org.scalacheck.Gen
 trait RouteDetailsUserAnswersGenerator extends UserAnswersGenerator {
   self: Generators =>
 
-  private val ctcCountryCodes: Seq[CountryCode] = listWithMaxLength[CountryCode]().sample.get
-  private val euCountryCodes: Seq[CountryCode]  = listWithMaxLength[CountryCode]().sample.get
+  private val ctcCountryCodes: Seq[CountryCode]                          = listWithMaxLength[CountryCode]().sample.get
+  private val euCountryCodes: Seq[CountryCode]                           = listWithMaxLength[CountryCode]().sample.get
+  private val customsSecurityAgreementAreaCountryCodes: Seq[CountryCode] = listWithMaxLength[CountryCode]().sample.get
 
   def arbitraryRouteDetailsAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
-    buildUserAnswers[RouteDetailsDomain](userAnswers)(RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes))
+    buildUserAnswers[RouteDetailsDomain](userAnswers)(
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+    )
 
   def arbitraryRoutingAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[RoutingDomain](userAnswers)
@@ -39,8 +42,12 @@ trait RouteDetailsUserAnswersGenerator extends UserAnswersGenerator {
     buildUserAnswers[CountryOfRoutingDomain](userAnswers)(CountryOfRoutingDomain.userAnswersReader(index))
 
   def arbitraryTransitAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
-    buildUserAnswers[TransitDomain](userAnswers)(TransitDomain.userAnswersReader(ctcCountryCodes, euCountryCodes))
+    buildUserAnswers[TransitDomain](userAnswers)(
+      TransitDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+    )
 
   def arbitraryOfficeOfTransitAnswers(userAnswers: UserAnswers, index: Index): Gen[UserAnswers] =
-    buildUserAnswers[OfficeOfTransitDomain](userAnswers)(OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes))
+    buildUserAnswers[OfficeOfTransitDomain](userAnswers)(
+      OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+    )
 }
