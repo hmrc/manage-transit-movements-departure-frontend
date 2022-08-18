@@ -39,7 +39,7 @@ class TransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with G
       val mode = NormalMode
 
       "when answers complete" - {
-        "must redirect to transit check your answers" ignore {
+        "must redirect to transit check your answers" in {
           forAll(arbitraryTransitAnswers(emptyUserAnswers)) {
             answers =>
               navigator

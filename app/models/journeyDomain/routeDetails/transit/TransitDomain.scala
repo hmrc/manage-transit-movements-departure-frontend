@@ -34,7 +34,7 @@ case class TransitDomain(
 ) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    Some(controllers.routes.TaskListController.onPageLoad(userAnswers.lrn))
+    Some(controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(userAnswers.lrn))
 }
 
 object TransitDomain {
