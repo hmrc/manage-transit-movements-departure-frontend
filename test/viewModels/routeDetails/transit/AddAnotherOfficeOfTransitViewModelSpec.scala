@@ -35,7 +35,7 @@ class AddAnotherOfficeOfTransitViewModelSpec extends SpecBase with Generators {
   "must get list items" in {
 
     val countriesService = mock[CountriesService]
-    when(countriesService.getTransitCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
+    when(countriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(CountryList(Nil)))
     when(countriesService.getCommunityCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
     when(countriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
 

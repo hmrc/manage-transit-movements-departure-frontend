@@ -33,7 +33,7 @@ class RouteDetailsNavigatorProviderImpl @Inject() (
 
   def apply()(implicit hc: HeaderCarrier): Future[RouteDetailsNavigator] =
     for {
-      ctcCountries                             <- countriesService.getTransitCountries()
+      ctcCountries                             <- countriesService.getCountryCodesCTC()
       euCountries                              <- countriesService.getCommunityCountries()
       customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
     } yield new RouteDetailsNavigator(

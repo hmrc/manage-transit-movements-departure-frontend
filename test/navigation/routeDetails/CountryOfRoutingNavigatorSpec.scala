@@ -76,7 +76,7 @@ class CountryOfRoutingNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
       val euCountries                           = arbitrary[CountryList].sample.value
       val customsSecurityAgreementAreaCountries = arbitrary[CountryList].sample.value
 
-      when(mockService.getTransitCountries()(any()))
+      when(mockService.getCountryCodesCTC()(any()))
         .thenReturn(Future.successful(ctcCountries))
       when(mockService.getCommunityCountries()(any()))
         .thenReturn(Future.successful(euCountries))
@@ -86,7 +86,7 @@ class CountryOfRoutingNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
       val provider = new CountryOfRoutingNavigatorProviderImpl(mockService)
       provider.apply(index).futureValue
 
-      verify(mockService).getTransitCountries()(any())
+      verify(mockService).getCountryCodesCTC()(any())
       verify(mockService).getCommunityCountries()(any())
       verify(mockService).getCustomsSecurityAgreementAreaCountries()(any())
     }

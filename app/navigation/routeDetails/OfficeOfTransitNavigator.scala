@@ -35,7 +35,7 @@ class OfficeOfTransitNavigatorProviderImpl @Inject() (
 
   def apply(index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfTransitNavigator] =
     for {
-      ctcCountries                             <- countriesService.getTransitCountries()
+      ctcCountries                             <- countriesService.getCountryCodesCTC()
       euCountries                              <- countriesService.getCommunityCountries()
       customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
     } yield new OfficeOfTransitNavigator(

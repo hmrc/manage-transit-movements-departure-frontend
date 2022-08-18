@@ -39,7 +39,7 @@ object AddAnotherOfficeOfTransitViewModel {
 
     def apply(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): Future[AddAnotherOfficeOfTransitViewModel] =
       for {
-        ctcCountries                             <- countriesService.getTransitCountries()
+        ctcCountries                             <- countriesService.getCountryCodesCTC()
         euCountries                              <- countriesService.getCommunityCountries()
         customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
       } yield {
