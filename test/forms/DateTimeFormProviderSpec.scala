@@ -55,11 +55,11 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
       forAll(localDateTime) {
         dateTime =>
           val data: Map[String, String] = Map(
-            "time.hour"   -> dateTime.getHour.toString,
-            "time.minute" -> dateTime.getMinute.toString,
-            "date.day"    -> dateTime.getDayOfMonth.toString,
-            "date.month"  -> dateTime.getMonthValue.toString,
-            "date.year"   -> dateTime.getYear.toString
+            "timeHour"   -> dateTime.getHour.toString,
+            "timeMinute" -> dateTime.getMinute.toString,
+            "dateDay"    -> dateTime.getDayOfMonth.toString,
+            "dateMonth"  -> dateTime.getMonthValue.toString,
+            "dateYear"   -> dateTime.getYear.toString
           )
 
           val dateBefore = dateTime.toLocalDate.minusDays(1)
@@ -91,7 +91,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
     "must not bind when hour is missing" in {
 
       val data: Map[String, String] = Map(
-        "time.minute" -> "20"
+        "timeMinute" -> "20"
       )
 
       val result = form.bind(data).apply(fieldName)
@@ -101,8 +101,8 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
     "must not bind when hour is invalid" in {
 
       val data: Map[String, String] = Map(
-        "time.hour"   -> "65",
-        "time.minute" -> "20"
+        "timeHour"   -> "65",
+        "timeMinute" -> "20"
       )
 
       val result = form.bind(data).apply(fieldName)
@@ -112,7 +112,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
     "must not bind when minute is missing" in {
 
       val data: Map[String, String] = Map(
-        "time.hour" -> "20"
+        "timeHour" -> "20"
       )
 
       val result = form.bind(data).apply(fieldName)
@@ -122,8 +122,8 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
     "must not bind when minute is invalid" in {
 
       val data: Map[String, String] = Map(
-        "time.hour"   -> "20",
-        "time.minute" -> "65"
+        "timeHour"   -> "20",
+        "timeMinute" -> "65"
       )
 
       val result = form.bind(data).apply(fieldName)
@@ -144,43 +144,43 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
     "must not bind when one field is missing" in {
 
       val data: Map[String, String] = Map(
-        "date.day"   -> "1",
-        "date.month" -> "1",
-        "date.year"  -> "2000"
+        "dateDay"   -> "1",
+        "dateMonth" -> "1",
+        "dateYear"  -> "2000"
       )
 
-      val dataKeys = Seq("day", "month", "year")
+      val dataKeys = Seq("Day", "Month", "Year")
 
       dataKeys.foreach {
         key =>
-          val missingData = data.-("date." + key)
+          val missingData = data.-("date" + key)
 
           val result = form.bind(missingData).apply(fieldName)
 
-          result.errors mustBe Seq(FormError(fieldName, List(requiredOneDate), List(key)))
+          result.errors mustBe Seq(FormError(fieldName, List(requiredOneDate), List(key.toLowerCase)))
       }
     }
 
     "must not bind when multiple fields are missing" in {
 
       val data: Map[String, String] = Map(
-        "date.day"   -> "1",
-        "date.month" -> "1",
-        "date.year"  -> "2000"
+        "dateDay"   -> "1",
+        "dateMonth" -> "1",
+        "dateYear"  -> "2000"
       )
 
-      val dataKeys = Seq("day", "month", "year")
+      val dataKeys = Seq("Day", "Month", "Year")
 
       dataKeys.foreach {
         key =>
           val keys: Seq[String] = dataKeys.filterNot(_ == key)
 
-          val missingData1 = data.-("date." + keys.head)
-          val missingData2 = missingData1.-("date." + keys(1))
+          val missingData1 = data.-("date" + keys.head)
+          val missingData2 = missingData1.-("date" + keys(1))
 
           val result = form.bind(missingData2).apply(fieldName)
 
-          result.errors mustBe Seq(FormError(fieldName, List(requiredMultiDate), keys))
+          result.errors mustBe Seq(FormError(fieldName, List(requiredMultiDate), keys.map(_.toLowerCase)))
       }
     }
 
@@ -189,9 +189,9 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
       forAll(intsAboveValue(31)) {
         invalidDay =>
           val data: Map[String, String] = Map(
-            "date.day"   -> invalidDay.toString,
-            "date.month" -> "1",
-            "date.year"  -> "2000"
+            "dateDay"   -> invalidDay.toString,
+            "dateMonth" -> "1",
+            "dateYear"  -> "2000"
           )
 
           val result = form.bind(data).apply(fieldName)
@@ -205,9 +205,9 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
       forAll(intsAboveValue(12)) {
         invalidMonth =>
           val data: Map[String, String] = Map(
-            "date.day"   -> "1",
-            "date.month" -> invalidMonth.toString,
-            "date.year"  -> "2000"
+            "dateDay"   -> "1",
+            "dateMonth" -> invalidMonth.toString,
+            "dateYear"  -> "2000"
           )
 
           val result = form.bind(data).apply(fieldName)
@@ -221,9 +221,9 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
       forAll(nonNumerics) {
         invalidYear =>
           val data: Map[String, String] = Map(
-            "date.day"   -> "1",
-            "date.month" -> "1",
-            "date.year"  -> invalidYear
+            "dateDay"   -> "1",
+            "dateMonth" -> "1",
+            "dateYear"  -> invalidYear
           )
 
           val result = form.bind(data).apply(fieldName)
@@ -241,11 +241,11 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
           val invalidDateTime = dateTime.plusDays(2)
 
           val data: Map[String, String] = Map(
-            "time.hour"   -> invalidDateTime.getHour.toString,
-            "time.minute" -> invalidDateTime.getMinute.toString,
-            "date.day"    -> invalidDateTime.getDayOfMonth.toString,
-            "date.month"  -> invalidDateTime.getMonthValue.toString,
-            "date.year"   -> invalidDateTime.getYear.toString
+            "timeHour"   -> invalidDateTime.getHour.toString,
+            "timeMinute" -> invalidDateTime.getMinute.toString,
+            "dateDay"    -> invalidDateTime.getDayOfMonth.toString,
+            "dateMonth"  -> invalidDateTime.getMonthValue.toString,
+            "dateYear"   -> invalidDateTime.getYear.toString
           )
 
           val dateBefore = dateTime.toLocalDate.minusDays(1)
@@ -270,11 +270,11 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
           val invalidDateTime = dateTime.minusDays(2)
 
           val data: Map[String, String] = Map(
-            "time.hour"   -> invalidDateTime.getHour.toString,
-            "time.minute" -> invalidDateTime.getMinute.toString,
-            "date.day"    -> invalidDateTime.getDayOfMonth.toString,
-            "date.month"  -> invalidDateTime.getMonthValue.toString,
-            "date.year"   -> invalidDateTime.getYear.toString
+            "timeHour"   -> invalidDateTime.getHour.toString,
+            "timeMinute" -> invalidDateTime.getMinute.toString,
+            "dateDay"    -> invalidDateTime.getDayOfMonth.toString,
+            "dateMonth"  -> invalidDateTime.getMonthValue.toString,
+            "dateYear"   -> invalidDateTime.getYear.toString
           )
 
           val dateBefore = dateTime.toLocalDate.minusDays(1)
