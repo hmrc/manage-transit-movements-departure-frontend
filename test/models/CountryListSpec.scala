@@ -20,6 +20,7 @@ import base.SpecBase
 import generators.Generators
 import models.reference.{Country, CountryCode}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import play.api.libs.json.{JsArray, Json}
 
 class CountryListSpec extends SpecBase with Generators with ScalaCheckPropertyChecks {
 
@@ -72,6 +73,31 @@ class CountryListSpec extends SpecBase with Generators with ScalaCheckPropertyCh
       val c1 = CountryList(Seq(Country(CountryCode("a"), "a"), Country(CountryCode("a"), "a")))
       val c2 = CountryList(Seq(Country(CountryCode("a"), "a")))
       c1 == c2 mustEqual false
+    }
+  }
+
+  "reads" - {
+    "must read JsArray of countries as a country list" in {
+      val json = Json
+        .parse("""
+          |[
+          |  {
+          |    "code": "GB",
+          |    "description": "United Kingdom"
+          |  },
+          |  {
+          |    "code": "IT",
+          |    "description": "Italy"
+          |  }
+          |]""".stripMargin)
+        .as[JsArray]
+
+      json.as[CountryList] mustEqual CountryList(
+        Seq(
+          Country(CountryCode("GB"), "United Kingdom"),
+          Country(CountryCode("IT"), "Italy")
+        )
+      )
     }
   }
 }

@@ -17,17 +17,13 @@
 package controllers.routeDetails.officeOfExit
 
 import controllers.actions._
-import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
 import models.{CountryList, LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.OfficeOfExit
 import pages.routeDetails.officeOfExit.OfficeOfExitCountryPage
-import pages.routeDetails.routing.index.CountryOfRoutingPageAll
+import pages.sections.routeDetails.CountriesOfRoutingSection
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.officeOfExit.OfficeOfExitCountryView
 
@@ -37,44 +33,41 @@ import scala.concurrent.{ExecutionContext, Future}
 class OfficeOfExitCountryController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @OfficeOfExit implicit val navigator: Navigator,
+  //@OfficeOfExit implicit val navigator: Navigator,
   actions: Actions,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: CountryFormProvider,
-  service: CountriesService,
   val controllerComponents: MessagesControllerComponents,
   view: OfficeOfExitCountryView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).andThen(getMandatoryPage(CountriesOfRoutingSection)) {
     implicit request =>
+      val countryList: CountryList = request.arg.as[CountryList]
 
-      val countryList: CountryList = request.userAnswers.get(CountryOfRoutingPageAll()).getOrElse(
-        throw new IllegalStateException("OfficeOfExitCountryController::onPageLoad - There must be a country list!")
-      )
-
-      val form                         = formProvider("routeDetails.officeOfExit.officeOfExitCountry", countryList)
+      val form = formProvider("routeDetails.officeOfExit.officeOfExitCountry", countryList)
       val preparedForm = request.userAnswers.get(OfficeOfExitCountryPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
       Ok(view(preparedForm, lrn, countryList.countries, mode))
-
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      service.getCustomsOfficesOfDeparture.flatMap {
-        countryList =>
-          val form = formProvider("routeDetails.officeOfExit.officeOfExitCountry", countryList)
-          form
-            .bindFromRequest()
-            .fold(
-              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode))),
-              value => OfficeOfExitCountryPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
-            )
-      }
-  }
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(CountriesOfRoutingSection))
+    .async {
+      implicit request =>
+        val countryList: CountryList = request.arg.as[CountryList]
+        val form                     = formProvider("routeDetails.officeOfExit.officeOfExitCountry", countryList)
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode))),
+            value => ??? //OfficeOfExitCountryPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+          )
+    }
 }

@@ -17,7 +17,7 @@
 package models
 
 import models.reference.{Country, CountryCode}
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{JsValue, Reads}
 
 case class CountryList(countries: Seq[Country]) {
   def getCountry(countryCode: CountryCode): Option[Country] = countries.find(_.code == countryCode)
@@ -30,8 +30,10 @@ case class CountryList(countries: Seq[Country]) {
 }
 
 object CountryList {
-  implicit def jsonFormats: OFormat[CountryList] =
-    Json.using[Json.WithDefaultValues].format[CountryList]
+
+  implicit val reads: Reads[CountryList] = (json: JsValue) => {
+    json.validate[Seq[Country]].map(CountryList(_))
+  }
 
   def apply(countries: Seq[Country]): CountryList = new CountryList(countries)
 }
