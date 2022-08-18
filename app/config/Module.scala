@@ -45,6 +45,7 @@ class Module extends AbstractModule {
     bind(classOf[CountryOfRoutingNavigatorProvider]).to(classOf[CountryOfRoutingNavigatorProviderImpl])
     bind(classOf[OfficeOfTransitNavigatorProvider]).to(classOf[OfficeOfTransitNavigatorProviderImpl])
     bind(classOf[Navigator]).annotatedWith(classOf[Transit]).to(classOf[TransitNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[OfficeOfExit]).to(classOf[RoutingNavigator])
 
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])

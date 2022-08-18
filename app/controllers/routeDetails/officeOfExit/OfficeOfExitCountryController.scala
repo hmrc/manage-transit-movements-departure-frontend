@@ -19,12 +19,12 @@ package controllers.routeDetails.officeOfExit
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
-import models.reference.Country
-import models.{Index, LocalReferenceNumber, Mode}
+import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.OfficeOfExit
 import pages.routeDetails.officeOfExit.OfficeOfExitCountryPage
-import pages.routeDetails.routing.index.CountryOfRoutingPage
+import pages.routeDetails.routing.index.CountriesOfRoutingPage
+import pages.sections.routeDetails.CountriesOfRoutingSection
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -40,6 +40,7 @@ class OfficeOfExitCountryController @Inject() (
   implicit val sessionRepository: SessionRepository,
   @OfficeOfExit implicit val navigator: Navigator,
   actions: Actions,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: CountryFormProvider,
   service: CountriesService,
   val controllerComponents: MessagesControllerComponents,
@@ -48,30 +49,49 @@ class OfficeOfExitCountryController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      val countryList: Option[Country] = request.userAnswers.get(CountryOfRoutingPage())
-      val form = formProvider("routeDetails.officeOfExit.officeOfExitCountry", countryList)
-      val preparedForm = request.userAnswers.get(OfficeOfExitCountryPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
+    actions
+      .requireData(lrn)
+      .andThen(getMandatoryPage(CountriesOfRoutingSection))
+      .async {
+        implicit request =>
+          println(s"\n\n\n: ${request.userAnswers.get(CountriesOfRoutingSection)}")
+          println(s"\n\n\n: ${CountriesOfRoutingSection.path}")
+          println(s"\n\n\n: ${CountriesOfRoutingPage.path}")
+          println(s"\n\n\n: ${request.userAnswers}")
+          println(s"\n\n\n: ${request.userAnswers.get(CountriesOfRoutingPage)}")
+          (request.userAnswers.get(CountriesOfRoutingPage) match {
+            case Some(x) if x.countries.nonEmpty => Future.successful(x)
+            case _                               => service.getCountries()
+          }).map {
+            countryList =>
+              val form = formProvider("routeDetails.officeOfExit.officeOfExitCountry", countryList)
+              val preparedForm = request.userAnswers.get(OfficeOfExitCountryPage) match {
+                case None        => form
+                case Some(value) => form.fill(value)
+              }
+              Ok(view(preparedForm, lrn, countryList.countries, mode))
+          }
       }
 
-      Ok(view(preparedForm, lrn, countryList.countries, mode))
-
-  }
-
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      service.getCustomsOfficesOfDeparture.flatMap {
-        countryList =>
-          val form = formProvider("routeDetails.officeOfExit.officeOfExitCountry", countryList)
-          form
-            .bindFromRequest()
-            .fold(
-              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode))),
-              value => OfficeOfExitCountryPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
-            )
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
+    actions
+      .requireData(lrn)
+      .andThen(getMandatoryPage(CountriesOfRoutingSection))
+      .async {
+        implicit request =>
+          (request.userAnswers.get(CountriesOfRoutingPage) match {
+            case Some(x) if x.countries.nonEmpty => Future.successful(x)
+            case _                               => service.getCountries()
+          }).flatMap {
+            countryList =>
+              val form = formProvider("routeDetails.officeOfExit.officeOfExitCountry", countryList)
+              form
+                .bindFromRequest()
+                .fold(
+                  formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode))),
+                  value => OfficeOfExitCountryPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                )
+          }
       }
-  }
 }

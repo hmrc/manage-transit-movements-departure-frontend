@@ -18,7 +18,6 @@ package pages.routeDetails.routing
 
 import models.reference.{Country, CountryCode}
 import pages.behaviours.PageBehaviours
-import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitPage}
 
 class CountryOfDestinationPageSpec extends PageBehaviours {
 

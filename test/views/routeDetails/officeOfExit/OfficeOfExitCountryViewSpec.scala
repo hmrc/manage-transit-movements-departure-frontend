@@ -50,13 +50,15 @@ class OfficeOfExitCountryViewSpec extends InputSelectViewBehaviours[Country] wit
 
   behave like pageWithBackLink
 
+  behave like pageWithSectionCaption("Route details")
+
   behave like pageWithHeading()
 
   behave like pageWithSelect
 
-  behave like pageWithHint("Which country is the office of exit in hint")
+  behave like pageWithContent("p", "This is the exit point for goods leaving a customs territory.")
 
-  behave like pageWithContent("label", "Which country is the office of exit in label")
+  behave like pageWithHint("Enter the country, like France or Portugal.")
 
   behave like pageWithSubmitButton("Save and continue")
 }

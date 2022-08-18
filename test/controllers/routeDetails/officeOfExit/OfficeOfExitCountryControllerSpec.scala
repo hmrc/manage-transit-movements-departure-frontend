@@ -18,13 +18,15 @@ package controllers.routeDetails.officeOfExit
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.CountryFormProvider
-import models.{CountryList, NormalMode, UserAnswers}
 import generators.Generators
+import models.reference.{Country, CountryCode}
+import models.{CountryList, Index, NormalMode}
 import navigation.Navigator
 import navigation.annotations.OfficeOfExit
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.routeDetails.officeOfExit.OfficeOfExitCountryPage
+import pages.routeDetails.routing.index.CountryOfRoutingPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -36,13 +38,17 @@ import scala.concurrent.Future
 
 class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private val country1    = arbitraryCountry.arbitrary.sample.get
-  private val country2    = arbitraryCountry.arbitrary.sample.get
-  private val countryList = CountryList(Seq(country1, country2))
+  private val france                 = Country(CountryCode("FR"), "France")
+  private val italy                  = Country(CountryCode("IT"), "Italy")
+  private val countriesOfRoutingList = CountryList(Seq(france, italy))
 
-  private val formProvider = new CountryFormProvider()
-  private val form         = formProvider("routeDetails.officeOfExit.officeOfExitCountry", countryList)
-  private val mode         = NormalMode
+  private val austria                = Country(CountryCode("AT"), "Austria")
+  private val unitedKingdom          = Country(CountryCode("GB"), "United Kingdom")
+  private val countriesReferenceData = CountryList(Seq(austria, unitedKingdom))
+
+  private val formProvider                   = new CountryFormProvider()
+  private def form(countryList: CountryList) = formProvider("routeDetails.officeOfExit.officeOfExitCountry", countryList)
+  private val mode                           = NormalMode
 
   private val mockCountriesService: CountriesService = mock[CountriesService]
   private lazy val officeOfExitCountryRoute          = routes.OfficeOfExitCountryController.onPageLoad(lrn, mode).url
@@ -55,9 +61,30 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
 
   "OfficeOfExitCountry Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET when using CountriesOfRouting" in {
 
-      when(mockCountriesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(countryList))
+      val updatedUserAnswers = emptyUserAnswers
+        .setValue(CountryOfRoutingPage(Index(0)), france)
+        .setValue(CountryOfRoutingPage(Index(1)), italy)
+
+      setExistingUserAnswers(updatedUserAnswers)
+
+      val request = FakeRequest(GET, officeOfExitCountryRoute)
+
+      val result = route(app, request).value
+
+      val view = injector.instanceOf[OfficeOfExitCountryView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(form(countriesOfRoutingList), lrn, countriesOfRoutingList.countries, mode)(request, messages).toString
+    }
+
+    "must return OK and the correct view for a GET when using reference data" in {
+
+      when(mockCountriesService.getCountries()).thenReturn(Future.successful(countriesReferenceData))
+
       setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, officeOfExitCountryRoute)
@@ -69,38 +96,36 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, countryList.countries, mode)(request, messages).toString
+        view(form(countriesReferenceData), lrn, countriesReferenceData.countries, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      when(mockCountriesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(countryList))
-      val userAnswers = emptyUserAnswers.setValue(OfficeOfExitCountryPage, country1)
+      val userAnswers = emptyUserAnswers.setValue(OfficeOfExitCountryPage, france)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, officeOfExitCountryRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> country1.id))
+      val filledForm = form(countriesOfRoutingList).bind(Map("value" -> france.code.code))
 
       val view = injector.instanceOf[OfficeOfExitCountryView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, countryList.countries, mode)(request, messages).toString
+        view(filledForm, lrn, countriesOfRoutingList.countries, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
-      when(mockCountriesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(countryList))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(POST, officeOfExitCountryRoute)
-        .withFormUrlEncodedBody(("value", country1.id))
+        .withFormUrlEncodedBody(("value", france.code.code))
 
       val result = route(app, request).value
 
@@ -111,11 +136,10 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      when(mockCountriesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(countryList))
       setExistingUserAnswers(emptyUserAnswers)
 
       val request   = FakeRequest(POST, officeOfExitCountryRoute).withFormUrlEncodedBody(("value", "invalid value"))
-      val boundForm = form.bind(Map("value" -> "invalid value"))
+      val boundForm = form(countriesOfRoutingList).bind(Map("value" -> "invalid value"))
 
       val result = route(app, request).value
 
@@ -124,7 +148,7 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, countryList.countries, mode)(request, messages).toString
+        view(boundForm, lrn, countriesOfRoutingList.countries, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
@@ -144,7 +168,7 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
       setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, officeOfExitCountryRoute)
-        .withFormUrlEncodedBody(("value", country1.id))
+        .withFormUrlEncodedBody(("value", france.code.code))
 
       val result = route(app, request).value
 
