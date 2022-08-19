@@ -22,7 +22,7 @@ import play.api.data.FieldMapping
 import play.api.data.Forms.of
 import play.api.data.format.Formats.ignoredFormat
 
-import java.time.{LocalDate, LocalDateTime, LocalTime}
+import java.time.{LocalDate, LocalTime}
 
 trait Mappings extends Formatters with Constraints {
 
@@ -79,15 +79,6 @@ trait Mappings extends Formatters with Constraints {
     args: Seq[String] = Seq.empty
   ): FieldMapping[LocalTime] =
     of(new LocalTimeFormatter(invalidKey, allRequiredKey, requiredKey, args))
-
-  protected def localDateTime(
-    invalidKey: String,
-    allRequiredKey: String,
-    multipleRequiredKey: String,
-    requiredKey: String,
-    args: Seq[String] = Seq.empty
-  ): FieldMapping[LocalDateTime] =
-    of(new LocalDateTimeFormatter(invalidKey, allRequiredKey, multipleRequiredKey, requiredKey, args))
 
   protected def country(
     countryList: CountryList,
