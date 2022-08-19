@@ -40,7 +40,7 @@ object CountryList {
           )
         )
       )
-    case _ => JsError("error")
+    case _ => JsError("CountryList::customReads: Failed to read country list from cache")
   }
 
   implicit def jsonFormats: OFormat[CountryList] =
