@@ -22,5 +22,5 @@ case object OfficeOfExitSection extends Section[JsObject] {
 
   override def path: JsPath = RouteDetailsSection.path \ toString
 
-  override def toString: String = "routing"
+  override def toString: String = "officeOfExit"
 }
