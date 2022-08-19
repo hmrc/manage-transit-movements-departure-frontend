@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.routing.index
+package pages.sections
 
-import models.CountryList
-import pages.QuestionPage
-import pages.sections.routeDetails.CountriesOfRoutingSection
-import play.api.libs.json.JsPath
+import play.api.libs.json.{JsArray, JsPath}
 
-case object CountriesOfRoutingPage extends QuestionPage[CountryList] {
+case object OfficesOfExitForTransitSection extends Section[JsArray] {
 
-  override def path: JsPath = CountriesOfRoutingSection.path
+  override def path: JsPath = OfficeOfExitSection.path \ toString
 
+  override def toString: String = "officesOfExit"
 }

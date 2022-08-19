@@ -42,7 +42,7 @@ class OfficeOfExitCountryViewSpec extends InputSelectViewBehaviours[Country] wit
   override def form: Form[Country] = new CountryFormProvider()(prefix, CountryList(values))
 
   override def applyView(form: Form[Country]): HtmlFormat.Appendable =
-    injector.instanceOf[OfficeOfExitCountryView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[OfficeOfExitCountryView].apply(form, lrn, values, index, NormalMode)(fakeRequest, messages)
 
   override val prefix: String = "routeDetails.officeOfExit.officeOfExitCountry"
 

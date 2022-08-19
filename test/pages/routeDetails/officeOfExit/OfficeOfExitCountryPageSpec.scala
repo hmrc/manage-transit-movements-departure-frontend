@@ -23,10 +23,10 @@ class OfficeOfExitCountryPageSpec extends PageBehaviours {
 
   "OfficeOfExitCountryPage" - {
 
-    beRetrievable[Country](OfficeOfExitCountryPage)
+    beRetrievable[Country](OfficeOfExitCountryPage(index))
 
-    beSettable[Country](OfficeOfExitCountryPage)
+    beSettable[Country](OfficeOfExitCountryPage(index))
 
-    beRemovable[Country](OfficeOfExitCountryPage)
+    beRemovable[Country](OfficeOfExitCountryPage(index))
   }
 }

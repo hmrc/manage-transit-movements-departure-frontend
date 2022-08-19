@@ -31,7 +31,7 @@
     button: Button
 )
 
-@(form: Form[Country], lrn: LocalReferenceNumber, countries: Seq[Country], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[Country], lrn: LocalReferenceNumber, countries: Seq[Country], index: Index, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("routeDetails.officeOfExit.officeOfExitCountry.title"),
@@ -39,7 +39,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.OfficeOfExitCountryController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.OfficeOfExitCountryController.onSubmit(lrn, index, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 

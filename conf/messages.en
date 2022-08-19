@@ -678,4 +678,4 @@ routeDetails.officeOfExit.officeOfExitCountry.hintText = Enter the country, like
 routeDetails.officeOfExit.officeOfExitCountry.placeholder = Select a country
 routeDetails.officeOfExit.officeOfExitCountry.change.hidden = office of exit country
 routeDetails.officeOfExit.officeOfExitCountry.checkYourAnswersLabel = Office of exit country
-routeDetails.officeOfExit.officeOfExitCountry.error.required = Select the country
+routeDetails.officeOfExit.officeOfExitCountry.error.required = Enter the country the office of exit is in

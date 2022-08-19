@@ -19,12 +19,12 @@ package controllers.routeDetails.officeOfExit
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
-import models.{LocalReferenceNumber, Mode}
+import models.CountryList.customReads
+import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.OfficeOfExit
 import pages.routeDetails.officeOfExit.OfficeOfExitCountryPage
 import pages.routeDetails.routing.index.CountriesOfRoutingPage
-import pages.sections.routeDetails.CountriesOfRoutingSection
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -49,38 +49,31 @@ class OfficeOfExitCountryController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
+  def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     actions
       .requireData(lrn)
-      .andThen(getMandatoryPage(CountriesOfRoutingSection))
       .async {
         implicit request =>
-          println(s"\n\n\n: ${request.userAnswers.get(CountriesOfRoutingSection)}")
-          println(s"\n\n\n: ${CountriesOfRoutingSection.path}")
-          println(s"\n\n\n: ${CountriesOfRoutingPage.path}")
-          println(s"\n\n\n: ${request.userAnswers}")
-          println(s"\n\n\n: ${request.userAnswers.get(CountriesOfRoutingPage)}")
-          (request.userAnswers.get(CountriesOfRoutingPage) match {
+          (request.userAnswers.get(CountriesOfRoutingPage)(customReads) match {
             case Some(x) if x.countries.nonEmpty => Future.successful(x)
             case _                               => service.getCountries()
           }).map {
             countryList =>
               val form = formProvider("routeDetails.officeOfExit.officeOfExitCountry", countryList)
-              val preparedForm = request.userAnswers.get(OfficeOfExitCountryPage) match {
+              val preparedForm = request.userAnswers.get(OfficeOfExitCountryPage(index)) match {
                 case None        => form
                 case Some(value) => form.fill(value)
               }
-              Ok(view(preparedForm, lrn, countryList.countries, mode))
+              Ok(view(preparedForm, lrn, countryList.countries, index, mode))
           }
       }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
+  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     actions
       .requireData(lrn)
-      .andThen(getMandatoryPage(CountriesOfRoutingSection))
       .async {
         implicit request =>
-          (request.userAnswers.get(CountriesOfRoutingPage) match {
+          (request.userAnswers.get(CountriesOfRoutingPage)(customReads) match {
             case Some(x) if x.countries.nonEmpty => Future.successful(x)
             case _                               => service.getCountries()
           }).flatMap {
@@ -89,8 +82,8 @@ class OfficeOfExitCountryController @Inject() (
               form
                 .bindFromRequest()
                 .fold(
-                  formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode))),
-                  value => OfficeOfExitCountryPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                  formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, index, mode))),
+                  value => OfficeOfExitCountryPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
                 )
           }
       }
