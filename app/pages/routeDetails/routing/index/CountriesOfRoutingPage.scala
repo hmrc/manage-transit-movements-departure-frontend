@@ -25,6 +25,4 @@ case object CountriesOfRoutingPage extends QuestionPage[CountryList] {
 
   override def path: JsPath = CountriesOfRoutingSection.path
 
-  override def toString: String = "countriesOfRouting"
-
 }

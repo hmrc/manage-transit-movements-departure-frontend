@@ -19,6 +19,7 @@ package controllers.routeDetails.officeOfExit
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
+import models.CountryList.customReads
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.OfficeOfExit
@@ -49,18 +50,14 @@ class OfficeOfExitCountryController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
     actions
       .requireData(lrn)
       .andThen(getMandatoryPage(CountriesOfRoutingSection))
       .async {
         implicit request =>
-          println(s"\n\n\n: ${request.userAnswers.get(CountriesOfRoutingSection)}")
-          println(s"\n\n\n: ${CountriesOfRoutingSection.path}")
-          println(s"\n\n\n: ${CountriesOfRoutingPage.path}")
-          println(s"\n\n\n: ${request.userAnswers}")
-          println(s"\n\n\n: ${request.userAnswers.get(CountriesOfRoutingPage)}")
-          (request.userAnswers.get(CountriesOfRoutingPage) match {
+          (request.userAnswers.get(CountriesOfRoutingPage)(customReads) match {
             case Some(x) if x.countries.nonEmpty => Future.successful(x)
             case _                               => service.getCountries()
           }).map {
@@ -89,7 +86,7 @@ class OfficeOfExitCountryController @Inject() (
               form
                 .bindFromRequest()
                 .fold(
-                  formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode))),
+                  formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, Seq.empty, mode))),
                   value => OfficeOfExitCountryPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
                 )
           }
