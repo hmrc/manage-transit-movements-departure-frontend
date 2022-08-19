@@ -30,7 +30,7 @@ private[mappings] class LocalTimeFormatter(
 ) extends Formatter[LocalTime]
     with Formatters {
 
-  private val fieldKeys: List[String] = List("hour", "minute")
+  private val fieldKeys: List[String] = List("Hour", "Minute")
 
   private def toTime(key: String, hour: Int, minute: Int): Either[Seq[FormError], LocalTime] =
     Try(LocalTime.of(hour, minute, 0)) match {
@@ -49,8 +49,8 @@ private[mappings] class LocalTimeFormatter(
     )
 
     for {
-      hour     <- int.bind(s"$key.hour".replaceAll("\\s", ""), data).right
-      minute   <- int.bind(s"$key.minute".replaceAll("\\s", ""), data).right
+      hour     <- int.bind(s"${key}Hour".replaceAll("\\s", ""), data).right
+      minute   <- int.bind(s"${key}Minute".replaceAll("\\s", ""), data).right
       dateTime <- toTime(key, hour, minute).right
     } yield dateTime
   }
@@ -58,12 +58,12 @@ private[mappings] class LocalTimeFormatter(
   override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalTime] = {
     val fields: Map[String, Option[String]] = fieldKeys.map {
       field =>
-        field -> data.get(s"$key.$field").filter(_.nonEmpty).map(_.replaceAll("\\s", ""))
+        field -> data.get(s"$key$field").filter(_.nonEmpty).map(_.replaceAll("\\s", ""))
     }.toMap
 
     lazy val missingFields = fields
       .withFilter(_._2.isEmpty)
-      .map(_._1)
+      .map(_._1.toLowerCase)
       .toList
 
     fields.count(_._2.isDefined) match {
@@ -80,7 +80,7 @@ private[mappings] class LocalTimeFormatter(
 
   override def unbind(key: String, value: LocalTime): Map[String, String] =
     Map(
-      s"$key.hour"   -> value.getHour.toString.replaceAll("\\s", ""),
-      s"$key.minute" -> value.getMinute.toString.replaceAll("\\s", "")
+      s"${key}Hour"   -> value.getHour.toString.replaceAll("\\s", ""),
+      s"${key}Minute" -> value.getMinute.toString.replaceAll("\\s", "")
     )
 }

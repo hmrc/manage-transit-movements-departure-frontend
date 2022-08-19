@@ -18,35 +18,93 @@
 @import views.html.components.{Heading, InputDate, InputTime}
 
 @this(
-    heading: Heading,
-    inputDate: InputDate,
-    inputTime: InputTime
+        heading: Heading,
+        govukDateInput: GovukDateInput,
+        govukRadios: GovukRadios
 )
 
 @(
-    caption: Option[String] = None,
-    legend: String,
-    form: Form[DateTime],
-    dateLabel: String,
-    dateHint: Option[String] = None,
-    timeLabel: String,
-    timeHint: Option[String] = None
+        caption: Option[String] = None,
+        legend: String,
+        form: Form[DateTime],
+        dateLabel: String,
+        dateHint: Option[String] = None,
+        timeLabel: String,
+        timeHint: Option[String] = None
 )(implicit messages: Messages)
 
-    @heading(legend, caption)
+@heading(legend, caption)
 
-    @inputDate(
-        field = form("date"),
-        legend = dateLabel,
-        legendClass = "form-label",
-        hint = dateHint,
-        legendAsHeading = false
+@govukDateInput(
+    DateInput(
+        fieldset = Some(Fieldset(
+            legend = Some(
+                Legend(
+                    content = Text(messages(dateLabel)),
+                    isPageHeading = false,
+                    classes = "form-label"
+                )
+            )
+        )),
+        id = form("date").id,
+        items = Seq(
+            InputItem(
+                classes = s"govuk-input--width-2 ${errorClass(form("date").error, "day")}",
+                name = s"dateDay",
+                label = Some(messages("date.day.capitalized")),
+                value = form("dateDay").value,
+                id = "dateDay"
+            ),
+            InputItem(
+                classes = s"govuk-input--width-2 ${errorClass(form("date").error, "month")}",
+                name = s"dateMonth",
+                label = Some(messages("date.month.capitalized")),
+                value = form("dateMonth").value,
+                id = "dateMonth"
+            ),
+            InputItem(
+                classes = s"govuk-input--width-4 ${errorClass(form("date").error, "year")}",
+                name = s"dateYear",
+                label = Some(messages("date.year.capitalized")),
+                value = form("dateYear").value,
+                id = "dateYear"
+            )
+        ),
+        hint = dateHint.map(hint => Hint(content = Text(messages(hint)))),
+        errorMessage = form("date").error.map(err => ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(err.message, err.args: _*))))
     )
+)
 
-    @inputTime(
-        field = form("time"),
-        legend = timeLabel,
-        legendClass = "form-label",
-        hint = timeHint,
-        legendAsHeading = false
+@govukDateInput(
+    DateInput(
+        fieldset = Some(Fieldset(
+            legend = Some(
+                Legend(
+                    content = Text(messages(timeLabel)),
+                    isPageHeading = false,
+                    classes = "form-label"
+                )
+            )
+        )),
+        id = form("time").id,
+        items = Seq(
+            InputItem(
+                classes = s"govuk-input--width-2 ${errorClass(form("time").error, "hour")}",
+                name = s"timeHour",
+                label = Some(messages("date.hour.capitalized")),
+                value = form("timeHour").value,
+                id = "timeHour"
+            ),
+            InputItem(
+                classes = s"govuk-input--width-2 ${errorClass(form("time").error, "minute")}",
+                name = "timeMinute",
+                label = Some(messages("date.minute.capitalized")),
+                value = form("timeMinute").value,
+                id = "timeMinute"
+            )
+        ),
+        hint = timeHint.map(hint => Hint(content = Text(messages(hint)))),
+        errorMessage = form("time").error.map(err => ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(err.message, err.args: _*))))
     )
+)
+

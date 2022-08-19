@@ -211,7 +211,9 @@ trait Generators extends ModelGenerators with ViewModelGenerators {
     dateTimesBetween(
       LocalDateTime.of(1900, 1, 1, 0, 0, 0),
       LocalDateTime.of(2100, 1, 1, 0, 0, 0)
-    ).map(_.toLocalTime)
+    ).map(
+      result => result.toLocalTime.minusSeconds(result.getSecond).minusNanos(result.getNano)
+    )
   }
 
   implicit lazy val arbitraryLocalDateTime: Arbitrary[LocalDateTime] = Arbitrary {

@@ -29,23 +29,23 @@ trait DateTimeInputViewBehaviours extends QuestionViewBehaviours[DateTime] with 
       "when rendered" - {
 
         "must display day" in {
-          assertRenderedById(doc, "date_day")
+          assertRenderedById(doc, "dateDay")
         }
 
         "must display month" in {
-          assertRenderedById(doc, "date_month")
+          assertRenderedById(doc, "dateMonth")
         }
 
         "must display year" in {
-          assertRenderedById(doc, "date_year")
+          assertRenderedById(doc, "dateYear")
         }
 
         "must display hour" in {
-          assertRenderedById(doc, "time_hour")
+          assertRenderedById(doc, "timeHour")
         }
 
         "must display minute" in {
-          assertRenderedById(doc, "time_minute")
+          assertRenderedById(doc, "timeMinute")
         }
       }
 
@@ -57,23 +57,23 @@ trait DateTimeInputViewBehaviours extends QuestionViewBehaviours[DateTime] with 
         "must show an error class on the inputs for date" in {
           val docWithError = parseView(applyView(form.withError(FormError("date", errorMessage, Seq("day", "month", "year")))))
 
-          val dayInput = docWithError.getElementById("date_day")
+          val dayInput = docWithError.getElementById("dateDay")
           assert(dayInput.hasClass("govuk-input--error"))
 
-          val monthInput = docWithError.getElementById("date_month")
+          val monthInput = docWithError.getElementById("dateMonth")
           assert(monthInput.hasClass("govuk-input--error"))
 
-          val yearInput = docWithError.getElementById("date_year")
+          val yearInput = docWithError.getElementById("dateYear")
           assert(yearInput.hasClass("govuk-input--error"))
         }
 
         "must show an error class on the inputs for time" in {
           val docWithError = parseView(applyView(form.withError(FormError("time", errorMessage, Seq("hour", "minute")))))
 
-          val hourInput = docWithError.getElementById("time_hour")
+          val hourInput = docWithError.getElementById("timeHour")
           assert(hourInput.hasClass("govuk-input--error"))
 
-          val minuteInput = docWithError.getElementById("time_minute")
+          val minuteInput = docWithError.getElementById("timeMinute")
           assert(minuteInput.hasClass("govuk-input--error"))
         }
 
