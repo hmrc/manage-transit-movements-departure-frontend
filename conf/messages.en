@@ -669,4 +669,13 @@ routeDetails.transit.confirmRemoveOfficeOfTransit.error.required = Select yes if
 routeDetails.transit.checkOfficeOfTransitAnswers.title = Check your answers
 routeDetails.transit.checkOfficeOfTransitAnswers.heading = Check your answers
 
+# OfficeOfExit
 
+routeDetails.officeOfExit.officeOfExitCountry.title = Which country is the office of exit in?
+routeDetails.officeOfExit.officeOfExitCountry.heading = Which country is the office of exit in?
+routeDetails.officeOfExit.officeOfExitCountry.paragraph = This is the exit point for goods leaving a customs territory.
+routeDetails.officeOfExit.officeOfExitCountry.hintText = Enter the country, like France or Portugal.
+routeDetails.officeOfExit.officeOfExitCountry.placeholder = Select a country
+routeDetails.officeOfExit.officeOfExitCountry.change.hidden = office of exit country
+routeDetails.officeOfExit.officeOfExitCountry.checkYourAnswersLabel = Office of exit country
+routeDetails.officeOfExit.officeOfExitCountry.error.required = Enter the country the office of exit is in
