@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package pages.sections
+package pages.sections.routeDetails
 
 import models.Index
-import play.api.libs.json.{JsObject, JsPath}
 import pages.QuestionPage
+import play.api.libs.json.{JsObject, JsPath}
 
 case class OfficeOfExitForTransitSection(index: Index) extends QuestionPage[JsObject] {
 
