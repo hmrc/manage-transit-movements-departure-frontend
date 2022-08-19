@@ -71,7 +71,7 @@ class OfficeOfTransitETAController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage.getFirst(OfficeOfTransitCountryPage(index)))
+    .andThen(getMandatoryPage(OfficeOfTransitCountryPage(index), CountryOfDestinationPage))
     .andThen(getMandatoryPage.getSecond(OfficeOfTransitPage(index)))
     .async {
       implicit request =>
