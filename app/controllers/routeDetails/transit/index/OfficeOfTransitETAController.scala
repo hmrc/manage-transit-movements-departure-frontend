@@ -22,6 +22,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.DateTimeFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.routeDetails.OfficeOfTransitNavigatorProvider
+import pages.routeDetails.routing.CountryOfDestinationPage
 import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -55,7 +56,7 @@ class OfficeOfTransitETAController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage.getFirst(OfficeOfTransitCountryPage(index)))
+    .andThen(getMandatoryPage(OfficeOfTransitCountryPage(index), CountryOfDestinationPage))
     .andThen(getMandatoryPage.getSecond(OfficeOfTransitPage(index))) {
       implicit request =>
         request.arg match {
