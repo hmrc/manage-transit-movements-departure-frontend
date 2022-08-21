@@ -22,7 +22,7 @@ import models.DeclarationType.Option4
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.routeDetails.routing.RoutingDomain
-import models.reference.CustomsOffice
+import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.preTaskList._
 import pages.routeDetails.routing._
@@ -34,17 +34,20 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
     "can be parsed from UserAnswers" - {
 
       "when TIR declaration type" in {
+        val country       = arbitrary[Country].sample.value
         val customsOffice = arbitrary[CustomsOffice].sample.value
 
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, Option4)
           .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+          .setValue(CountryOfDestinationPage, country)
           .setValue(OfficeOfDestinationPage, customsOffice)
           .setValue(BindingItineraryPage, false)
           .setValue(AddCountryOfRoutingYesNoPage, false)
 
         val expectedResult = RouteDetailsDomain(
           routing = RoutingDomain(
+            countryOfDestination = country,
             officeOfDestination = customsOffice,
             bindingItinerary = false,
             countriesOfRouting = Nil

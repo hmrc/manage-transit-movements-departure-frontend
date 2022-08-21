@@ -26,9 +26,9 @@ import org.scalacheck.Gen
 trait RouteDetailsUserAnswersGenerator extends UserAnswersGenerator {
   self: Generators =>
 
-  val ctcCountryCodes: Seq[CountryCode]                          = listWithMaxLength[CountryCode]().sample.get
-  val euCountryCodes: Seq[CountryCode]                           = listWithMaxLength[CountryCode]().sample.get
-  val customsSecurityAgreementAreaCountryCodes: Seq[CountryCode] = listWithMaxLength[CountryCode]().sample.get
+  val ctcCountryCodes: Seq[String]                          = listWithMaxLength[CountryCode]().sample.get.map(_.code)
+  val euCountryCodes: Seq[String]                           = listWithMaxLength[CountryCode]().sample.get.map(_.code)
+  val customsSecurityAgreementAreaCountryCodes: Seq[String] = listWithMaxLength[CountryCode]().sample.get.map(_.code)
 
   def arbitraryRouteDetailsAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[RouteDetailsDomain](userAnswers)(

@@ -21,7 +21,6 @@ import models.reference.Country
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.routeDetails
-import pages.sections.routeDetails.OfficeOfExitForTransitSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

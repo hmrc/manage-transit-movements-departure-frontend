@@ -38,8 +38,8 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
         val country2       = arbitrary[Country].sample.value
         val country3       = arbitrary[Country].sample.value
         def customsOffice  = arbitrary[CustomsOffice].sample.value
-        val customsOffice1 = customsOffice.copy(countryId = country1.code)
-        val customsOffice2 = customsOffice.copy(countryId = country2.code)
+        val customsOffice1 = customsOffice.copy(id = country1.code.code)
+        val customsOffice2 = customsOffice.copy(id = country2.code.code)
 
         val answers = emptyUserAnswers
           .setValue(OfficeOfDeparturePage, customsOffice)
@@ -52,7 +52,7 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
           .setValue(AddOfficeOfTransitETAYesNoPage(Index(1)), false)
           .setValue(OfficeOfTransitCountryPage(Index(2)), country3)
 
-        val helper = new TransitCheckYourAnswersHelper(answers, NormalMode)(Seq(country1.code), Nil, Nil)
+        val helper = new TransitCheckYourAnswersHelper(answers, NormalMode)(Seq(country1.code.code), Nil, Nil)
 
         helper.listItems mustBe Seq(
           Right(

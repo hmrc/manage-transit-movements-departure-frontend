@@ -19,7 +19,6 @@ package navigation.routeDetails
 import models._
 import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
-import models.reference.CountryCode
 import navigation.UserAnswersNavigator
 import services.CountriesService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -53,9 +52,9 @@ trait OfficeOfTransitNavigatorProvider {
 
 class OfficeOfTransitNavigator(
   index: Index,
-  ctcCountryCodes: Seq[CountryCode],
-  euCountryCodes: Seq[CountryCode],
-  customsSecurityAgreementAreaCountryCodes: Seq[CountryCode]
+  ctcCountryCodes: Seq[String],
+  euCountryCodes: Seq[String],
+  customsSecurityAgreementAreaCountryCodes: Seq[String]
 ) extends UserAnswersNavigator[OfficeOfTransitDomain, RouteDetailsDomain]()(
       OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes),
       RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)

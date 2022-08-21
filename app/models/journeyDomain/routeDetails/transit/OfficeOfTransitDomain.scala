@@ -21,7 +21,7 @@ import config.Constants._
 import models.SecurityDetailsType._
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
-import models.reference.{Country, CountryCode, CustomsOffice}
+import models.reference.{Country, CustomsOffice}
 import models.{DateTime, Index, UserAnswers}
 import pages.preTaskList.{OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails.routing.OfficeOfDestinationPage
@@ -53,16 +53,16 @@ object OfficeOfTransitDomain {
   // scalastyle:off method.length
   implicit def userAnswersReader(
     index: Index,
-    ctcCountryCodes: Seq[CountryCode],
-    euCountryCodes: Seq[CountryCode],
-    customsSecurityAgreementAreaCountryCodes: Seq[CountryCode]
+    ctcCountryCodes: Seq[String],
+    euCountryCodes: Seq[String],
+    customsSecurityAgreementAreaCountryCodes: Seq[String]
   ): UserAnswersReader[OfficeOfTransitDomain] = {
 
     lazy val etaReads: UserAnswersReader[Option[DateTime]] =
       SecurityDetailsTypePage.reader.flatMap {
         case EntrySummaryDeclarationSecurityDetails | EntryAndExitSummaryDeclarationSecurityDetails =>
           OfficeOfTransitPage(index).reader.flatMap {
-            case x if customsSecurityAgreementAreaCountryCodes.contains(x.countryId) =>
+            case x if customsSecurityAgreementAreaCountryCodes.contains(x.countryCode) =>
               OfficeOfTransitETAPage(index).reader.map(Some(_))
             case _ =>
               AddOfficeOfTransitETAYesNoPage(index).filterOptionalDependent(identity)(OfficeOfTransitETAPage(index).reader)
@@ -91,13 +91,13 @@ object OfficeOfTransitDomain {
     index.position match {
       case 0 =>
         for {
-          officeOfDeparture   <- OfficeOfDeparturePage.reader.map(_.countryId)
-          officeOfDestination <- OfficeOfDestinationPage.reader.map(_.countryId)
+          officeOfDeparture   <- OfficeOfDeparturePage.reader.map(_.countryCode)
+          officeOfDestination <- OfficeOfDestinationPage.reader.map(_.countryCode)
           reader <- (officeOfDeparture, officeOfDestination) match {
-            case (_, dest) if ctcCountryCodes.contains(dest)                    => readsWithoutCountry
-            case (dep, dest) if dep.code == GB && euCountryCodes.contains(dest) => readsWithoutCountry
-            case (_, dest) if dest.code == AD                                   => readsWithoutCountry
-            case _                                                              => readsWithCountry
+            case (_, dest) if ctcCountryCodes.contains(dest)               => readsWithoutCountry
+            case (dep, dest) if dep == GB && euCountryCodes.contains(dest) => readsWithoutCountry
+            case (_, dest) if dest == AD                                   => readsWithoutCountry
+            case _                                                         => readsWithCountry
           }
         } yield reader
       case _ => readsWithCountry

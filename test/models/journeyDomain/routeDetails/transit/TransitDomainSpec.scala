@@ -37,11 +37,11 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
   "TransitDomain" - {
 
     val country      = arbitrary[Country].sample.value
-    val countryCodes = Seq(country.code)
+    val countryCodes = Seq(country.code.code)
 
     def customsOffice                    = arbitrary[CustomsOffice].sample.value
-    def customsOfficeFromListedCountry   = arbitrary[CustomsOffice].sample.value.copy(countryId = country.code)
-    def customsOfficeFromUnlistedCountry = arbitrary[CustomsOffice].retryUntil(_.countryId.code != country.code.code).sample.value
+    def customsOfficeFromListedCountry   = arbitrary[CustomsOffice].sample.value.copy(id = country.code.code)
+    def customsOfficeFromUnlistedCountry = arbitrary[CustomsOffice].retryUntil(_.countryCode != country.code.code).sample.value
 
     val officeOfTransit = customsOffice
 
@@ -177,7 +177,7 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
             "and no countries of routing are in set CL112" in {
               val country = arbitrary[Country]
                 .retryUntil(
-                  x => !countryCodes.contains(x.code)
+                  x => !countryCodes.contains(x.code.code)
                 )
                 .sample
                 .value
@@ -277,7 +277,7 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
           "and no countries of routing are in set CL112" in {
             val country = arbitrary[Country]
               .retryUntil(
-                x => !countryCodes.contains(x.code)
+                x => !countryCodes.contains(x.code.code)
               )
               .sample
               .value
@@ -356,7 +356,7 @@ class TransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
             "and add office of transit yes/no unanswered" in {
               val country = arbitrary[Country]
                 .retryUntil(
-                  x => !countryCodes.contains(x.code)
+                  x => !countryCodes.contains(x.code.code)
                 )
                 .sample
                 .value

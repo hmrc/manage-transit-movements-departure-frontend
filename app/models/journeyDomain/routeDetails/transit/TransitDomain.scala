@@ -20,7 +20,6 @@ import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, JsA
 import models.journeyDomain.routeDetails.routing.CountryOfRoutingDomain
 import models.journeyDomain.routeDetails.transit.TransitDomain.OfficesOfTransit
 import models.journeyDomain.{JourneyDomainModel, Stage}
-import models.reference.CountryCode
 import models.{DeclarationType, Index, RichJsArray, UserAnswers}
 import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage}
 import pages.routeDetails.routing.OfficeOfDestinationPage
@@ -44,9 +43,9 @@ object TransitDomain {
   // scalastyle:off cyclomatic.complexity
   // scalastyle:off method.length
   implicit def userAnswersReader(
-    ctcCountryCodes: Seq[CountryCode],
-    euCountryCodes: Seq[CountryCode],
-    customsSecurityAgreementAreaCountryCodes: Seq[CountryCode]
+    ctcCountryCodes: Seq[String],
+    euCountryCodes: Seq[String],
+    customsSecurityAgreementAreaCountryCodes: Seq[String]
   ): UserAnswersReader[TransitDomain] = {
 
     implicit val officesOfTransitReader: UserAnswersReader[OfficesOfTransit] =
@@ -71,11 +70,11 @@ object TransitDomain {
         OfficeOfDestinationPage.reader.flatMap {
           officeOfDestination =>
             def countriesOfRoutingReader(isT2DeclarationType: Option[Boolean]): UserAnswersReader[TransitDomain] = {
-              val officesOfTransit = if (ctcCountryCodes.contains(officeOfDeparture.countryId) || ctcCountryCodes.contains(officeOfDestination.countryId)) {
+              val officesOfTransit = if (ctcCountryCodes.contains(officeOfDeparture.countryCode) || ctcCountryCodes.contains(officeOfDestination.countryCode)) {
                 UserAnswersReader[OfficesOfTransit]
               } else {
                 UserAnswersReader[Seq[CountryOfRoutingDomain]]
-                  .map(_.map(_.country.code))
+                  .map(_.map(_.country.code.code))
                   .flatMap {
                     _.filter(ctcCountryCodes.contains(_)) match {
                       case Nil => addOfficesOfTransitReader
@@ -88,9 +87,9 @@ object TransitDomain {
             }
 
             if (
-              ctcCountryCodes.contains(officeOfDeparture.countryId) &&
-              ctcCountryCodes.contains(officeOfDestination.countryId) &&
-              officeOfDeparture.countryId.code == officeOfDestination.countryId.code
+              ctcCountryCodes.contains(officeOfDeparture.countryCode) &&
+              ctcCountryCodes.contains(officeOfDestination.countryCode) &&
+              officeOfDeparture.countryCode == officeOfDestination.countryCode
             ) {
               addOfficesOfTransitReader.map(TransitDomain(None, _))
             } else {

@@ -22,7 +22,6 @@ import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.routeDetails.routing.RoutingDomain
 import models.journeyDomain.routeDetails.transit.TransitDomain
-import models.reference.CountryCode
 import pages.preTaskList.DeclarationTypePage
 
 case class RouteDetailsDomain(
@@ -33,9 +32,9 @@ case class RouteDetailsDomain(
 object RouteDetailsDomain {
 
   implicit def userAnswersReader(
-    ctcCountryCodes: Seq[CountryCode],
-    euCountryCodes: Seq[CountryCode],
-    customsSecurityAgreementAreaCountryCodes: Seq[CountryCode]
+    ctcCountryCodes: Seq[String],
+    euCountryCodes: Seq[String],
+    customsSecurityAgreementAreaCountryCodes: Seq[String]
   ): UserAnswersReader[RouteDetailsDomain] = {
 
     implicit val transitReads: UserAnswersReader[Option[TransitDomain]] =

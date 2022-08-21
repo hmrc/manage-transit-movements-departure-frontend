@@ -17,7 +17,6 @@
 package navigation.routeDetails
 
 import models.journeyDomain.routeDetails.RouteDetailsDomain
-import models.reference.CountryCode
 import navigation.UserAnswersSectionNavigator
 import services.CountriesService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -49,9 +48,9 @@ trait RouteDetailsNavigatorProvider {
 }
 
 class RouteDetailsNavigator(
-  ctcCountryCodes: Seq[CountryCode],
-  euCountryCodes: Seq[CountryCode],
-  customsSecurityAgreementAreaCountryCodes: Seq[CountryCode]
+  ctcCountryCodes: Seq[String],
+  euCountryCodes: Seq[String],
+  customsSecurityAgreementAreaCountryCodes: Seq[String]
 ) extends UserAnswersSectionNavigator[RouteDetailsDomain]()(
       RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
     )

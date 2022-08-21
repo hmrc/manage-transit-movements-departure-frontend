@@ -19,7 +19,6 @@ package controllers.routeDetails.transit
 import config.FrontendAppConfig
 import controllers.actions._
 import controllers.routeDetails.transit.index.{routes => indexRoutes}
-import controllers.routes.TaskListController
 import forms.AddAnotherFormProvider
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, NormalMode}

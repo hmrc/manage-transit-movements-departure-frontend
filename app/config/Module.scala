@@ -45,8 +45,7 @@ class Module extends AbstractModule {
     bind(classOf[TransitNavigatorProvider]).to(classOf[TransitNavigatorProviderImpl])
     bind(classOf[OfficeOfTransitNavigatorProvider]).to(classOf[OfficeOfTransitNavigatorProviderImpl])
 
-    //TODO change to use OfficeOfExitNagivigator along with OfficeOfExitDomain etc. once built
-    bind(classOf[Navigator]).annotatedWith(classOf[OfficeOfExit]).to(classOf[RoutingNavigator])
+    //TODO add OfficeOfExitNavigator along with OfficeOfExitDomain to use for OfficeOfExitController  etc. once built
 
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])

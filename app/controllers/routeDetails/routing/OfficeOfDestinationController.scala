@@ -22,9 +22,6 @@ import forms.CustomsOfficeFormProvider
 import models.reference.CustomsOffice
 import models.{CustomsOfficeList, LocalReferenceNumber, Mode}
 import navigation.routeDetails.RoutingNavigatorProvider
-import pages.routeDetails.routing.OfficeOfDestinationPage
-import navigation.Navigator
-import navigation.annotations.routeDetails.Routing
 import pages.routeDetails.routing.{CountryOfDestinationPage, OfficeOfDestinationPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -83,10 +80,11 @@ class OfficeOfDestinationController @Inject() (
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
-                value => navigatorProvider().flatMap {
-                  implicit navigator =>
-                    OfficeOfDestinationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
-                }
+                value =>
+                  navigatorProvider().flatMap {
+                    implicit navigator =>
+                      OfficeOfDestinationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                  }
               )
         }
     }

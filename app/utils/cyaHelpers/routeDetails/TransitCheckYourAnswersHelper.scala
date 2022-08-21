@@ -18,7 +18,7 @@ package utils.cyaHelpers.routeDetails
 
 import controllers.routeDetails.transit.index.routes
 import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
-import models.reference.{Country, CountryCode}
+import models.reference.Country
 import models.{Index, Mode, UserAnswers}
 import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
 import pages.sections.routeDetails.OfficeOfTransitCountriesSection
@@ -31,9 +31,9 @@ class TransitCheckYourAnswersHelper(
   userAnswers: UserAnswers,
   mode: Mode
 )(
-  ctcCountryCodes: Seq[CountryCode],
-  euCountryCodes: Seq[CountryCode],
-  customsSecurityAgreementAreaCountryCodes: Seq[CountryCode]
+  ctcCountryCodes: Seq[String],
+  euCountryCodes: Seq[String],
+  customsSecurityAgreementAreaCountryCodes: Seq[String]
 )(implicit messages: Messages)
     extends AnswersHelper(userAnswers, mode) {
 
