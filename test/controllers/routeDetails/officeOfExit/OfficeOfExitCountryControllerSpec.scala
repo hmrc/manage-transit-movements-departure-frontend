@@ -24,7 +24,7 @@ import models.{CountryList, Index, NormalMode}
 import navigation.routeDetails.RoutingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
-import pages.routeDetails.officeOfExit.OfficeOfExitCountryPage
+import pages.routeDetails.officeOfExit.index.OfficeOfExitCountryPage
 import pages.routeDetails.routing.index.CountryOfRoutingPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder

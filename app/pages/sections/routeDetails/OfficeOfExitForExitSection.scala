@@ -20,8 +20,8 @@ import models.Index
 import pages.QuestionPage
 import play.api.libs.json.{JsObject, JsPath}
 
-case class OfficeOfExitForTransitSection(index: Index) extends QuestionPage[JsObject] {
+case class OfficeOfExitForExitSection(index: Index) extends QuestionPage[JsObject] {
 
-  override def path: JsPath = OfficesOfExitForTransitSection.path \ index.position
+  override def path: JsPath = OfficesOfExitForExitSection.path \ index.position
 
 }

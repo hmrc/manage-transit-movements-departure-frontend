@@ -681,3 +681,11 @@ routeDetails.officeOfExit.officeOfExitCountry.placeholder = Select a country
 routeDetails.officeOfExit.officeOfExitCountry.change.hidden = office of exit country
 routeDetails.officeOfExit.officeOfExitCountry.checkYourAnswersLabel = Office of exit country
 routeDetails.officeOfExit.officeOfExitCountry.error.required = Enter the country the office of exit is in
+
+routeDetails.officeOfExit.officeOfExit.title = Where in {0} is the office of exit?
+routeDetails.officeOfExit.officeOfExit.heading = Where in {0} is the office of exit?
+routeDetails.officeOfExit.officeOfExit.hintText = Enter the office location or code, like Dover or GB000060.
+routeDetails.officeOfExit.officeOfExit.placeholder = Select a customs office
+routeDetails.officeOfExit.officeOfExit.change.hidden = office Of exit
+routeDetails.officeOfExit.officeOfExit.checkYourAnswersLabel = Office Of exit
+routeDetails.officeOfExit.officeOfExit.error.required = Enter where the office of exit is in {0}

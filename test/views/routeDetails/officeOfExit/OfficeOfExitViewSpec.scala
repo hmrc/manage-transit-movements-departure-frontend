@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package views.routeDetails.transit.index
+package views.routeDetails.officeOfExit
 
-import forms.{CustomsOfficeForCountryFormProvider, CustomsOfficeFormProvider}
+import forms.CustomsOfficeForCountryFormProvider
 import generators.Generators
-import models.reference.CustomsOffice
 import models.{CustomsOfficeList, NormalMode}
+import models.reference.CustomsOffice
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.InputSelectViewBehaviours
-import views.html.routeDetails.transit.index.OfficeOfTransitView
+import views.html.routeDetails.officeOfExit.OfficeOfExitView
 
-class OfficeOfTransitViewSpec extends InputSelectViewBehaviours[CustomsOffice] with Generators {
+class OfficeOfExitViewSpec extends InputSelectViewBehaviours[CustomsOffice] with Generators {
 
   private lazy val customsOffice1 = arbitraryCustomsOffice.arbitrary.sample.get
   private lazy val customsOffice2 = arbitraryCustomsOffice.arbitrary.sample.get
@@ -42,9 +42,9 @@ class OfficeOfTransitViewSpec extends InputSelectViewBehaviours[CustomsOffice] w
   override def form: Form[CustomsOffice] = new CustomsOfficeForCountryFormProvider()(prefix, CustomsOfficeList(values), countryName)
 
   override def applyView(form: Form[CustomsOffice]): HtmlFormat.Appendable =
-    injector.instanceOf[OfficeOfTransitView].apply(form, lrn, values, countryName, NormalMode, index)(fakeRequest, messages)
+    injector.instanceOf[OfficeOfExitView].apply(form, lrn, values, countryName, index, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.transit.officeOfTransit"
+  override val prefix: String = "routeDetails.officeOfExit.officeOfExit"
 
   behave like pageWithTitle(countryName)
 
@@ -56,7 +56,7 @@ class OfficeOfTransitViewSpec extends InputSelectViewBehaviours[CustomsOffice] w
 
   behave like pageWithSelect
 
-  behave like pageWithHint("Enter the office location or code, like Calais or FR620001.")
+  behave like pageWithHint("Enter the office location or code, like Dover or GB000060.")
 
   behave like pageWithSubmitButton("Save and continue")
 }
