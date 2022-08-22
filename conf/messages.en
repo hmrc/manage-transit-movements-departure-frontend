@@ -544,18 +544,20 @@ routeDetails.caption = Route details
 
 # Routing
 
-routeDetails.routing.countryOfDestination.title = Which country is the transit movement ending in?
-routeDetails.routing.countryOfDestination.heading = Which country is the transit movement ending in?
-routeDetails.routing.countryOfDestination.hintText = Enter the country, like France or Portugal, countries that are part of the CTC community.
+routeDetails.routing.countryOfDestination.title = What is the country of destination?
+routeDetails.routing.countryOfDestination.heading = What is the country of destination?
+routeDetails.routing.countryOfDestination.hintText = Enter the country, like France or Portugal.
+routeDetails.routing.countryOfDestination.paragraph = This is the country where the CTC transit ends.
 routeDetails.routing.countryOfDestination.placeholder = Select a country
 routeDetails.routing.countryOfDestination.change.hidden = country of destination
 routeDetails.routing.countryOfDestination.checkYourAnswersLabel = Country of destination
-routeDetails.routing.countryOfDestination.error.required = Select the country
+routeDetails.routing.countryOfDestination.error.required = Enter the country of destination
 
 routeDetails.routing.officeOfDestination.title = Where is the office of destination?
 routeDetails.routing.officeOfDestination.heading = Where is the office of destination?
 routeDetails.routing.officeOfDestination.hintText = Enter the office location or code, like Dover or GB000060.
-routeDetails.routing.officeOfDestination.paragraph = This is the customs office where the transit ends.
+routeDetails.routing.officeOfDestination.paragraph = This is the customs office where the CTC transit ends.
+routeDetails.routing.officeOfDestination.placeholder = Select a customs office
 routeDetails.routing.officeOfDestination.placeholder = Select a customs office
 routeDetails.routing.officeOfDestination.change.hidden = office of destination
 routeDetails.routing.officeOfDestination.checkYourAnswersLabel = Office of destination
