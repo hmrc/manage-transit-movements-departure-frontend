@@ -56,7 +56,9 @@ class CountryOfDestinationViewSpec extends InputSelectViewBehaviours[Country] wi
 
   behave like pageWithSelect
 
-  behave like pageWithHint("Enter the country, like France or Portugal, countries that are part of the CTC community.")
+  behave like pageWithHint("Enter the country, like France or Portugal.")
+
+  behave like pageWithContent("p", "This is the country where the CTC transit ends.")
 
   behave like pageWithSubmitButton("Save and continue")
 }

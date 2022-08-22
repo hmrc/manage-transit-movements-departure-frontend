@@ -56,7 +56,7 @@ class OfficeOfDestinationViewSpec extends InputSelectViewBehaviours[CustomsOffic
 
   behave like pageWithHint("Enter the office location or code, like Dover or GB000060.")
 
-  behave like pageWithContent("p", "This is the customs office where the transit ends.")
+  behave like pageWithContent("p", "This is the customs office where the CTC transit ends.")
 
   behave like pageWithSubmitButton("Save and continue")
 }

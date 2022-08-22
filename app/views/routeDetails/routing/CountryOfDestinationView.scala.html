@@ -45,9 +45,10 @@
 
         @inputSelect(
             field = form("value"),
-            selectType = OrdinarySelect(
+            selectType = SelectWithAdditionalHtml(
                 heading = messages("routeDetails.routing.countryOfDestination.heading"),
-                caption = Some(messages("routeDetails.caption"))
+                caption = Some(messages("routeDetails.caption")),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.routing.countryOfDestination.paragraph")}</p>""")
             ),
             hint = Some(messages("routeDetails.routing.countryOfDestination.hintText")),
             selectItems = countries.toSelectItems(form.value),
