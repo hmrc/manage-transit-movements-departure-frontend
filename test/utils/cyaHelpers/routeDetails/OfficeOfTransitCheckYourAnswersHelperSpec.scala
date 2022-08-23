@@ -80,7 +80,7 @@ class OfficeOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
     }
 
-    "officeOfTransit" - {
+    "officeOfExit" - {
       "must return None" - {
         "when OfficeOfTransitPage undefined" in {
           forAll(arbitrary[Mode]) {

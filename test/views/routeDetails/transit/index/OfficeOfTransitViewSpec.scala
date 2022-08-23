@@ -44,7 +44,7 @@ class OfficeOfTransitViewSpec extends InputSelectViewBehaviours[CustomsOffice] w
   override def applyView(form: Form[CustomsOffice]): HtmlFormat.Appendable =
     injector.instanceOf[OfficeOfTransitView].apply(form, lrn, values, countryName, NormalMode, index)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.transit.officeOfTransit"
+  override val prefix: String = "routeDetails.transit.officeOfExit"
 
   behave like pageWithTitle(countryName)
 

@@ -36,7 +36,7 @@ class OfficeOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
   def officeOfTransit: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
     page = OfficeOfTransitPage(index),
     formatAnswer = formatAsText,
-    prefix = "routeDetails.transit.officeOfTransit",
+    prefix = "routeDetails.transit.officeOfExit",
     id = Some("office-of-transit")
   )
 
