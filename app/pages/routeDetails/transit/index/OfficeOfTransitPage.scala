@@ -28,7 +28,7 @@ case class OfficeOfTransitPage(index: Index) extends QuestionPage[CustomsOffice]
 
   override def path: JsPath = OfficeOfTransitCountrySection(index).path \ toString
 
-  override def toString: String = "officeOfExit"
+  override def toString: String = "officeOfTransit"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.OfficeOfTransitController.onPageLoad(userAnswers.lrn, mode, index))

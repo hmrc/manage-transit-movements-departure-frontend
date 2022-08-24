@@ -35,8 +35,12 @@
     lrn = Some(lrn)
 ) {
 
-    @heading(messages("routeDetails.officeOfExit.checkOfficeOfExitAnswers.heading")),
-    caption = Some(messages("routeDetails.caption"))
+    @heading(
+        heading =messages("routeDetails.officeOfExit.checkOfficeOfExitAnswers.heading"),
+        caption = Some(messages("routeDetails.caption"))
+    )
+
+    @answerSections(sections)
 
     @formHelper(action = routes.CheckOfficeOfExitAnswersController.onSubmit(lrn, index), 'autoComplete -> "off") {
     @button(attributes = Map("id" -> "submit"))

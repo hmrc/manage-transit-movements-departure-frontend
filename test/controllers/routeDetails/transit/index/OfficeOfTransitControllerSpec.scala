@@ -41,7 +41,7 @@ class OfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixt
   private val country           = arbitraryCountry.arbitrary.sample.get
 
   private val formProvider = new OfficeOfTransitFormProvider()
-  private val form         = formProvider("routeDetails.transit.officeOfExit", customsOfficeList, country.description)
+  private val form         = formProvider("routeDetails.transit.officeOfTransit", customsOfficeList, country.description)
   private val mode         = NormalMode
 
   private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]

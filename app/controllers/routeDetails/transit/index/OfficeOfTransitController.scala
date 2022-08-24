@@ -73,7 +73,7 @@ class OfficeOfTransitController @Inject() (
           val country = request.arg
           service.getCustomsOfficesForCountry(country.code).flatMap {
             customsOfficeList =>
-              val form = formProvider("routeDetails.transit.officeOfExit", customsOfficeList, country.description)
+              val form = formProvider("routeDetails.transit.officeOfTransit", customsOfficeList, country.description)
               form
                 .bindFromRequest()
                 .fold(
