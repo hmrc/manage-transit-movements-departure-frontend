@@ -43,6 +43,6 @@ class CheckOfficeOfExitAnswersController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions.requireData(lrn) {
     Redirect(controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(lrn))
-    //todo redirect to  new page once built
+    //todo change transit to exit once add another office of exit page built
   }
 }

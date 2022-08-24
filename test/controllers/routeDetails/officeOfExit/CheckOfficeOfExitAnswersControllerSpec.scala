@@ -17,17 +17,38 @@
 package controllers.routeDetails.officeOfExit
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import generators.Generators
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
+import org.scalacheck.Arbitrary.arbitrary
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import viewModels.routeDetails.officeOfExit.OfficeOfExitViewModel
+import viewModels.routeDetails.officeOfExit.OfficeOfExitViewModel.OfficeOfExitViewModelProvider
+import viewModels.sections.Section
 import views.html.routeDetails.officeOfExit.CheckOfficeOfExitAnswersView
 
-class CheckOfficeOfExitAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+import scala.concurrent.Future
 
-  private lazy val checkOfficeOfExitAnswersRoute = routes.CheckOfficeOfExitAnswersController.onPageLoad(lrn).url
+class CheckOfficeOfExitAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+
+  private lazy val mockViewModelProvider         = mock[OfficeOfExitViewModelProvider]
+  private lazy val checkOfficeOfExitAnswersRoute = routes.CheckOfficeOfExitAnswersController.onPageLoad(lrn, index).url
+
+  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
+    super
+      .guiceApplicationBuilder()
+      .overrides(bind[OfficeOfExitViewModelProvider].toInstance(mockViewModelProvider))
 
   "CheckOfficeOfExitAnswers Controller" - {
 
     "must return OK and the correct view for a GET" in {
+      val sampleSection = arbitrary[Section].sample.value
+
+      when(mockViewModelProvider.apply(any(), any())(any()))
+        .thenReturn(OfficeOfExitViewModel(sampleSection))
 
       setExistingUserAnswers(emptyUserAnswers)
 
@@ -39,7 +60,35 @@ class CheckOfficeOfExitAnswersControllerSpec extends SpecBase with AppWithDefaul
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(lrn)(request, messages).toString
+        view(lrn, index, Seq(sampleSection))(request, messages).toString
+    }
+
+    "must redirect to Session Expired for a GET if no existing data is found" in {
+      setNoExistingUserAnswers()
+
+      val request = FakeRequest(GET, routes.CheckOfficeOfExitAnswersController.onPageLoad(lrn, index).url)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+    }
+
+    "must redirect to add another" in {
+      setExistingUserAnswers(emptyUserAnswers)
+
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+      val request = FakeRequest(POST, routes.CheckOfficeOfExitAnswersController.onSubmit(lrn, index).url)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual
+        controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(lrn).url
+      //todo change transit to exit when add another office of exit page built
     }
   }
 }
