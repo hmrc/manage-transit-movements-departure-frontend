@@ -33,9 +33,9 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
       "must return list items" in {
         val country1       = arbitrary[Country].sample.value
         val country2       = arbitrary[Country].sample.value
-        val country3       = arbitrary[Country].sample.value
         val customsOffice1 = arbitrary[CustomsOffice].sample.value
         val customsOffice2 = arbitrary[CustomsOffice].sample.value
+        val customsOffice3 = arbitrary[CustomsOffice].sample.value
         val answers = emptyUserAnswers
           .setValue(OfficeOfTransitCountryPage(Index(0)), country1)
           .setValue(OfficeOfTransitPage(Index(0)), customsOffice1)
@@ -43,27 +43,27 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
           .setValue(OfficeOfTransitCountryPage(Index(1)), country2)
           .setValue(OfficeOfTransitPage(Index(1)), customsOffice2)
           .setValue(AddOfficeOfTransitETAYesNoPage(Index(1)), false)
-          .setValue(OfficeOfTransitCountryPage(Index(2)), country3)
+          .setValue(OfficeOfTransitPage(Index(2)), customsOffice3)
         val helper = new TransitCheckYourAnswersHelper(answers, NormalMode)
         helper.listItems mustBe Seq(
           Right(
             ListItem(
-              name = country1.description,
+              name = customsOffice1.toString,
               changeUrl = controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(answers.lrn, Index(0)).url,
               removeUrl = controllers.routeDetails.transit.index.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(answers.lrn, Index(0)).url
             )
           ),
           Right(
             ListItem(
-              name = country2.description,
+              name = customsOffice2.toString,
               changeUrl = controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(answers.lrn, Index(1)).url,
               removeUrl = controllers.routeDetails.transit.index.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(answers.lrn, Index(1)).url
             )
           ),
           Left(
             ListItem(
-              name = country3.description,
-              changeUrl = controllers.routeDetails.transit.index.routes.OfficeOfTransitController.onPageLoad(answers.lrn, NormalMode, Index(2)).url,
+              name = customsOffice3.toString,
+              changeUrl = controllers.routeDetails.transit.index.routes.OfficeOfTransitCountryController.onPageLoad(answers.lrn, NormalMode, Index(2)).url,
               removeUrl = controllers.routeDetails.transit.index.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(answers.lrn, Index(2)).url
             )
           )

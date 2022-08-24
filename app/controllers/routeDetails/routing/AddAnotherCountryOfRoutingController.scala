@@ -50,7 +50,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
     implicit request =>
       val (countries, numberOfCountries, allowMoreCountries) = viewData
       numberOfCountries match {
-        case 0 => Redirect(routes.BindingItineraryController.onPageLoad(lrn, NormalMode))
+        case 0 => Redirect(routes.AddCountryOfRoutingYesNoController.onPageLoad(lrn, NormalMode))
         case _ => Ok(view(form(allowMoreCountries), lrn, countries, allowMoreCountries))
       }
   }
