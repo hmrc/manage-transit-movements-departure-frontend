@@ -60,7 +60,9 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[RoutingNavigatorProvider]).toInstance(fakeRoutingNavigatorProvider))
+      .overrides(
+        bind(classOf[RoutingNavigatorProvider]).toInstance(fakeRoutingNavigatorProvider)
+      ) // TODO: Update to use OfficeOfExitNavigatorProvider once built
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "OfficeOfExitCountry Controller" - {
