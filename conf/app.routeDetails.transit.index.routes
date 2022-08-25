@@ -19,8 +19,8 @@ POST       /:lrn/route-details/transit/:index/office-of-transit-eta             
 GET        /:lrn/route-details/transit/:index/change-office-of-transit-eta                    controllers.routeDetails.transit.index.OfficeOfTransitETAController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
 POST       /:lrn/route-details/transit/:index/change-office-of-transit-eta                    controllers.routeDetails.transit.index.OfficeOfTransitETAController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
 
-GET        /:lrn/route-details/transit/:index/confirm-remove-office-of-transit                controllers.routeDetails.transit.index.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
-POST       /:lrn/route-details/transit/:index/confirm-remove-office-of-transit                controllers.routeDetails.transit.index.ConfirmRemoveOfficeOfTransitController.onSubmit(lrn: LocalReferenceNumber, index: Index)
+GET        /:lrn/route-details/transit/:index/transit-route-remove-office-of-transit          controllers.routeDetails.transit.index.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
+POST       /:lrn/route-details/transit/:index/transit-route-remove-office-of-transit          controllers.routeDetails.transit.index.ConfirmRemoveOfficeOfTransitController.onSubmit(lrn: LocalReferenceNumber, index: Index)
 
 GET        /:lrn/route-details/transit/:index/check-office-of-transit-answers                 controllers.routeDetails.transit.index.CheckOfficeOfTransitAnswersController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
 POST       /:lrn/route-details/transit/:index/check-office-of-transit-answers                 controllers.routeDetails.transit.index.CheckOfficeOfTransitAnswersController.onSubmit(lrn: LocalReferenceNumber, index: Index)

@@ -43,15 +43,23 @@ class ConfirmRemoveOfficeOfTransitControllerSpec
     with RouteDetailsUserAnswersGenerator
     with ScalaCheckPropertyChecks {
 
-  private val formProvider                           = new YesNoFormProvider()
-  private val form                                   = formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit")
+  private val formProvider  = new YesNoFormProvider()
+  private val customsOffice = arbitrary[CustomsOffice].sample.value
+  private val countryCode   = arbitrary[CountryCode].sample.value
+
+  private val form = formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit", customsOffice.name)
+
   private lazy val confirmRemoveOfficeOfTransitRoute = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, index).url
 
   "ConfirmRemoveOfficeOfTransit Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val answers = emptyUserAnswers
+        .setValue(OfficeOfTransitCountryPage(Index(0)), Country(countryCode, "France"))
+        .setValue(OfficeOfTransitPage(Index(0)), customsOffice)
+
+      setExistingUserAnswers(answers)
 
       val request = FakeRequest(GET, confirmRemoveOfficeOfTransitRoute)
       val result  = route(app, request).value
@@ -61,13 +69,11 @@ class ConfirmRemoveOfficeOfTransitControllerSpec
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, index)(request, messages).toString
+        view(form, lrn, index, customsOffice.name)(request, messages).toString
     }
 
     "when yes submitted" - {
       "must redirect to add another office of transit and remove office of transit at specified index" in {
-        val countryCode   = arbitrary[CountryCode].sample.value
-        val customsOffice = arbitrary[CustomsOffice].sample.value
         val answers = emptyUserAnswers
           .setValue(OfficeOfTransitCountryPage(Index(0)), Country(countryCode, "France"))
           .setValue(OfficeOfTransitPage(Index(0)), customsOffice)
@@ -95,8 +101,6 @@ class ConfirmRemoveOfficeOfTransitControllerSpec
 
     "when no submitted" - {
       "must redirect to add another office of transit and not remove office of transit at specified index" in {
-        val countryCode   = arbitrary[CountryCode].sample.value
-        val customsOffice = arbitrary[CustomsOffice].sample.value
         val answers = emptyUserAnswers
           .setValue(OfficeOfTransitCountryPage(Index(0)), Country(countryCode, "France"))
           .setValue(OfficeOfTransitPage(Index(0)), customsOffice)
@@ -120,7 +124,11 @@ class ConfirmRemoveOfficeOfTransitControllerSpec
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      setExistingUserAnswers(emptyUserAnswers)
+      val answers = emptyUserAnswers
+        .setValue(OfficeOfTransitCountryPage(Index(0)), Country(countryCode, "France"))
+        .setValue(OfficeOfTransitPage(Index(0)), customsOffice)
+
+      setExistingUserAnswers(answers)
 
       val request   = FakeRequest(POST, confirmRemoveOfficeOfTransitRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
@@ -132,7 +140,7 @@ class ConfirmRemoveOfficeOfTransitControllerSpec
       val view = injector.instanceOf[ConfirmRemoveOfficeOfTransitView]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, index)(request, messages).toString
+        view(boundForm, lrn, index, customsOffice.name)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

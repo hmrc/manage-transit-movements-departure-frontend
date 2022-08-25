@@ -16,25 +16,28 @@
 
 package views.routeDetails.transit.index
 
+import generators.Generators
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.routeDetails.transit.index.ConfirmRemoveOfficeOfTransitView
 
-class ConfirmRemoveOfficeOfTransitViewSpec extends YesNoViewBehaviours {
+class ConfirmRemoveOfficeOfTransitViewSpec extends YesNoViewBehaviours with Generators {
+
+  private lazy val transitOfficeName = arbitraryCustomsOffice.arbitrary.sample.get.name
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[ConfirmRemoveOfficeOfTransitView].apply(form, lrn, index)(fakeRequest, messages)
+    injector.instanceOf[ConfirmRemoveOfficeOfTransitView].apply(form, lrn, index, transitOfficeName)(fakeRequest, messages)
 
   override val prefix: String = "routeDetails.transit.confirmRemoveOfficeOfTransit"
 
-  behave like pageWithTitle()
+  behave like pageWithTitle(transitOfficeName)
 
   behave like pageWithBackLink
 
   behave like pageWithSectionCaption("Route details")
 
-  behave like pageWithHeading()
+  behave like pageWithHeading(transitOfficeName)
 
   behave like pageWithRadioItems()
 

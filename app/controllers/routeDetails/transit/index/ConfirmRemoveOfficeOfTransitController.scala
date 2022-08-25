@@ -21,6 +21,7 @@ import controllers.routeDetails.transit.{routes => transitRoutes}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{Index, LocalReferenceNumber}
+import pages.routeDetails.transit.index.OfficeOfTransitPage
 import pages.sections.routeDetails.OfficeOfTransitCountrySection
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -37,33 +38,42 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ConfirmRemoveOfficeOfTransitView
+  view: ConfirmRemoveOfficeOfTransitView,
+  getMandatoryPage: SpecificDataRequiredActionProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit")
+  def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] =
+    actions
+      .requireData(lrn)
+      .andThen(getMandatoryPage(OfficeOfTransitPage(index))) {
+        implicit request =>
+          val officeOfTransit = request.userAnswers.get(OfficeOfTransitPage(index)).get
+          val form            = formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit", officeOfTransit.name)
+          Ok(view(form, lrn, index, officeOfTransit.name))
+      }
 
-  def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      Ok(view(form, lrn, index))
-  }
-
-  def onSubmit(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index))),
-          {
-            case true =>
-              OfficeOfTransitCountrySection(index)
-                .removeFromUserAnswers()
-                .writeToSession()
-                .navigateTo(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn))
-            case false =>
-              Future.successful(Redirect(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn)))
-          }
-        )
-  }
+  def onSubmit(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(OfficeOfTransitPage(index)))
+    .async {
+      implicit request =>
+        val officeOfTransit = request.userAnswers.get(OfficeOfTransitPage(index)).get
+        val form            = formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit", officeOfTransit.name)
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index, officeOfTransit.name))),
+            {
+              case true =>
+                OfficeOfTransitCountrySection(index)
+                  .removeFromUserAnswers()
+                  .writeToSession()
+                  .navigateTo(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn))
+              case false =>
+                Future.successful(Redirect(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn)))
+            }
+          )
+    }
 }
