@@ -24,8 +24,8 @@ import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import pages.sections.guaranteeDetails.GuaranteeDetailsSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import utils.cyaHelpers.AnswersHelper
+import viewModels.ListItem
 
 class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
@@ -35,9 +35,9 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mod
         val index = Index(position)
         buildListItem[GuaranteeDomain, GuaranteeType](
           page = GuaranteeTypePage(index),
-          getName = _.`type`,
-          formatName = formatEnumAsString(GuaranteeType.messageKeyPrefix),
-          removeRoute = guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, index)
+          formatJourneyDomainModel = x => formatEnumAsString(GuaranteeType.messageKeyPrefix)(x.`type`),
+          formatType = formatEnumAsString(GuaranteeType.messageKeyPrefix),
+          removeRoute = Some(guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, index))
         )(GuaranteeDomain.userAnswersReader(index), implicitly[Reads[GuaranteeType]])
     }
 }

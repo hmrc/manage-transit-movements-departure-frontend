@@ -20,7 +20,7 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.routeDetails.{OfficeOfTransitNavigator, OfficeOfTransitNavigatorProvider}
+import navigation.routeDetails.OfficeOfTransitNavigatorProvider
 import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -70,10 +70,11 @@ class AddOfficeOfTransitETAYesNoController @Inject() (
             .bindFromRequest()
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, officeOfTransit, index))),
-              value => {
-                implicit val navigator: OfficeOfTransitNavigator = navigatorProvider(index)
-                AddOfficeOfTransitETAYesNoPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
-              }
+              value =>
+                navigatorProvider(index).flatMap {
+                  implicit navigator =>
+                    AddOfficeOfTransitETAYesNoPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                }
             )
       }
 }

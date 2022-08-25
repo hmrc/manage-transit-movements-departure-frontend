@@ -20,7 +20,8 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.OfficeOfTransitFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.routeDetails.{OfficeOfTransitNavigator, OfficeOfTransitNavigatorProvider}
+import navigation.routeDetails.OfficeOfTransitNavigatorProvider
+import pages.routeDetails.routing.CountryOfDestinationPage
 import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -49,7 +50,7 @@ class OfficeOfTransitController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] =
     actions
       .requireData(lrn)
-      .andThen(getMandatoryPage(OfficeOfTransitCountryPage(index)))
+      .andThen(getMandatoryPage(OfficeOfTransitCountryPage(index), CountryOfDestinationPage))
       .async {
         implicit request =>
           val country = request.arg
@@ -67,7 +68,7 @@ class OfficeOfTransitController @Inject() (
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] =
     actions
       .requireData(lrn)
-      .andThen(getMandatoryPage(OfficeOfTransitCountryPage(index)))
+      .andThen(getMandatoryPage(OfficeOfTransitCountryPage(index), CountryOfDestinationPage))
       .async {
         implicit request =>
           val country = request.arg
@@ -79,10 +80,11 @@ class OfficeOfTransitController @Inject() (
                 .fold(
                   formWithErrors =>
                     Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, country.description, mode, index))),
-                  value => {
-                    implicit val navigator: OfficeOfTransitNavigator = navigatorProvider(index)
-                    OfficeOfTransitPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
-                  }
+                  value =>
+                    navigatorProvider(index).flatMap {
+                      implicit navigator =>
+                        OfficeOfTransitPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                    }
                 )
           }
       }

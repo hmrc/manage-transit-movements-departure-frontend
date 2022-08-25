@@ -20,7 +20,6 @@ import com.google.inject.AbstractModule
 import controllers.actions._
 import navigation._
 import navigation.annotations._
-import navigation.annotations.routeDetails._
 import navigation.annotations.traderDetails._
 import navigation.routeDetails._
 import navigation.traderDetails._
@@ -40,14 +39,13 @@ class Module extends AbstractModule {
 
     bind(classOf[GuaranteeNavigatorProvider]).to(classOf[GuaranteeNavigatorProviderImpl])
 
-    bind(classOf[Navigator]).annotatedWith(classOf[RouteDetails]).to(classOf[RouteDetailsNavigator])
-    bind(classOf[Navigator]).annotatedWith(classOf[Routing]).to(classOf[RoutingNavigator])
+    bind(classOf[RouteDetailsNavigatorProvider]).to(classOf[RouteDetailsNavigatorProviderImpl])
+    bind(classOf[RoutingNavigatorProvider]).to(classOf[RoutingNavigatorProviderImpl])
     bind(classOf[CountryOfRoutingNavigatorProvider]).to(classOf[CountryOfRoutingNavigatorProviderImpl])
+    bind(classOf[TransitNavigatorProvider]).to(classOf[TransitNavigatorProviderImpl])
     bind(classOf[OfficeOfTransitNavigatorProvider]).to(classOf[OfficeOfTransitNavigatorProviderImpl])
-    bind(classOf[Navigator]).annotatedWith(classOf[Transit]).to(classOf[TransitNavigator])
 
-    //TODO change to use OfficeOfExitNagivigator along with OfficeOfExitDomain etc. once built
-    bind(classOf[Navigator]).annotatedWith(classOf[OfficeOfExit]).to(classOf[RoutingNavigator])
+    //TODO add OfficeOfExitNavigator along with OfficeOfExitDomain to use for OfficeOfExitController  etc. once built
 
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])

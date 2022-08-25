@@ -20,22 +20,21 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
-import navigation.Navigator
+import navigation.routeDetails.TransitNavigatorProvider
 import pages.routeDetails.transit.T2DeclarationTypeYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.transit.T2DeclarationTypeYesNoView
-import javax.inject.Inject
-import navigation.annotations.routeDetails.Transit
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class T2DeclarationTypeYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @Transit implicit val navigator: Navigator,
+  navigatorProvider: TransitNavigatorProvider,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -62,7 +61,11 @@ class T2DeclarationTypeYesNoController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => T2DeclarationTypeYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+          value =>
+            navigatorProvider().flatMap {
+              implicit navigator =>
+                T2DeclarationTypeYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+            }
         )
   }
 }

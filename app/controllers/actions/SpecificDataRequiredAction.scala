@@ -18,6 +18,7 @@ package controllers.actions
 
 import models.UserAnswers
 import models.requests._
+import play.api.Logging
 import play.api.libs.json.Reads
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
@@ -31,11 +32,11 @@ import scala.concurrent.{ExecutionContext, Future}
 class SpecificDataRequiredActionImpl @Inject() (implicit val ec: ExecutionContext) extends SpecificDataRequiredActionProvider {
 
   override def getFirst[T1](
-    page: Gettable[T1]
+    pages: Gettable[T1]*
   )(implicit rds: Reads[T1]): ActionRefiner[
     DataRequest,
     SpecificDataRequestProvider1[T1]#SpecificDataRequest
-  ] = new SpecificDataRequiredAction1(page)
+  ] = new SpecificDataRequiredAction1(pages: _*)
 
   override def getSecond[T1, T2](
     page: Gettable[T2]
@@ -55,11 +56,11 @@ class SpecificDataRequiredActionImpl @Inject() (implicit val ec: ExecutionContex
 trait SpecificDataRequiredActionProvider {
 
   def apply[T1](
-    page: Gettable[T1]
-  )(implicit rds: Reads[T1]): ActionRefiner[DataRequest, SpecificDataRequestProvider1[T1]#SpecificDataRequest] = getFirst(page)
+    pages: Gettable[T1]*
+  )(implicit rds: Reads[T1]): ActionRefiner[DataRequest, SpecificDataRequestProvider1[T1]#SpecificDataRequest] = getFirst(pages: _*)
 
   def getFirst[T1](
-    page: Gettable[T1]
+    pages: Gettable[T1]*
   )(implicit rds: Reads[T1]): ActionRefiner[
     DataRequest,
     SpecificDataRequestProvider1[T1]#SpecificDataRequest
@@ -80,7 +81,9 @@ trait SpecificDataRequiredActionProvider {
   ]
 }
 
-trait SpecificDataRequiredAction {
+trait SpecificDataRequiredAction extends Logging {
+
+  lazy val defaultRedirect: Result = Redirect(controllers.routes.SessionExpiredController.onPageLoad())
 
   def getPage[T, R](userAnswers: UserAnswers, page: Gettable[T])(block: T => R)(implicit rds: Reads[T]): Future[Either[Result, R]] =
     Future.successful {
@@ -88,13 +91,14 @@ trait SpecificDataRequiredAction {
         case Some(value) =>
           Right(block(value))
         case None =>
-          Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+          logger.warn(s"${page.path} is missing from user answers. Redirecting to session expired.")
+          Left(defaultRedirect)
       }
     }
 }
 
 class SpecificDataRequiredAction1[T1](
-  page: Gettable[T1]
+  pages: Gettable[T1]*
 )(implicit val executionContext: ExecutionContext, rds: Reads[T1])
     extends ActionRefiner[
       DataRequest,
@@ -104,16 +108,28 @@ class SpecificDataRequiredAction1[T1](
 
   override protected def refine[A](
     request: DataRequest[A]
-  ): Future[Either[Result, SpecificDataRequestProvider1[T1]#SpecificDataRequest[A]]] =
-    getPage(request.userAnswers, page) {
-      value =>
-        new SpecificDataRequestProvider1[T1].SpecificDataRequest(
-          request = request,
-          eoriNumber = request.eoriNumber,
-          userAnswers = request.userAnswers,
-          arg = value
-        )
-    }
+  ): Future[Either[Result, SpecificDataRequestProvider1[T1]#SpecificDataRequest[A]]] = {
+    def rec(pages: Seq[Gettable[T1]]): Future[Either[Result, SpecificDataRequestProvider1[T1]#SpecificDataRequest[A]]] =
+      pages match {
+        case Nil =>
+          Future.successful(Left(defaultRedirect))
+        case _ =>
+          getPage(request.userAnswers, pages.head) {
+            value =>
+              new SpecificDataRequestProvider1[T1].SpecificDataRequest(
+                request = request,
+                eoriNumber = request.eoriNumber,
+                userAnswers = request.userAnswers,
+                arg = value
+              )
+          }.flatMap {
+            case Left(_) => rec(pages.tail)
+            case x       => Future.successful(x)
+          }
+      }
+
+    rec(pages)
+  }
 }
 
 class SpecificDataRequiredAction2[T1, T2](

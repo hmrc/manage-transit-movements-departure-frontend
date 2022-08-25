@@ -20,24 +20,42 @@ import models._
 import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.journeyDomain.routeDetails.routing.CountryOfRoutingDomain
 import navigation.UserAnswersNavigator
+import services.CountriesService
+import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CountryOfRoutingNavigatorProviderImpl @Inject() () extends CountryOfRoutingNavigatorProvider {
+class CountryOfRoutingNavigatorProviderImpl @Inject() (
+  countriesService: CountriesService
+)(implicit ec: ExecutionContext)
+    extends CountryOfRoutingNavigatorProvider {
 
-  def apply(index: Index): CountryOfRoutingNavigator =
-    new CountryOfRoutingNavigator(index)
+  def apply(index: Index)(implicit hc: HeaderCarrier): Future[CountryOfRoutingNavigator] =
+    for {
+      ctcCountries                             <- countriesService.getCountryCodesCTC()
+      euCountries                              <- countriesService.getCommunityCountries()
+      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
+    } yield new CountryOfRoutingNavigator(
+      index,
+      ctcCountries.countryCodes,
+      euCountries.countryCodes,
+      customsSecurityAgreementAreaCountryCodes.countryCodes
+    )
 }
 
 trait CountryOfRoutingNavigatorProvider {
 
-  def apply(index: Index): CountryOfRoutingNavigator
+  def apply(index: Index)(implicit hc: HeaderCarrier): Future[CountryOfRoutingNavigator]
 }
 
 class CountryOfRoutingNavigator(
-  index: Index
+  index: Index,
+  ctcCountryCodes: Seq[String],
+  euCountryCodes: Seq[String],
+  customsSecurityAgreementAreaCountryCodes: Seq[String]
 ) extends UserAnswersNavigator[CountryOfRoutingDomain, RouteDetailsDomain]()(
       CountryOfRoutingDomain.userAnswersReader(index),
-      RouteDetailsDomain.userAnswersReader
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
     )

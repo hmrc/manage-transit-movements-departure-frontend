@@ -26,8 +26,8 @@ import models.{Index, LocalReferenceNumber, NormalMode}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewModels.ListItem
 import viewModels.guaranteeDetails.AddAnotherGuaranteeViewModel.AddAnotherGuaranteeViewModelProvider
 import views.html.guaranteeDetails.AddAnotherGuaranteeView
 

@@ -17,7 +17,7 @@
 package components
 
 import a11ySpecBase.A11ySpecBase
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
+import viewModels.ListItem
 import views.html.components.ListWithActions
 import views.html.templates.MainTemplate
 

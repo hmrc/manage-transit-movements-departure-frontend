@@ -17,15 +17,11 @@
 package models.journeyDomain.routeDetails.routing
 
 import cats.implicits._
-import models.SecurityDetailsType.NoSecurityDetails
-import models.domain.{GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
+import models.UserAnswers
+import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{Country, CustomsOffice}
-import models.{Index, RichJsArray, UserAnswers}
-import pages.preTaskList.SecurityDetailsTypePage
 import pages.routeDetails.routing._
-import pages.routeDetails.routing.index.CountryOfRoutingPage
-import pages.sections.routeDetails.CountriesOfRoutingSection
 import play.api.mvc.Call
 
 case class RoutingDomain(
@@ -41,33 +37,11 @@ case class RoutingDomain(
 
 object RoutingDomain {
 
-  private val countriesOfRoutingReader: UserAnswersReader[Seq[CountryOfRoutingDomain]] = {
-    val arrayReader: UserAnswersReader[Seq[CountryOfRoutingDomain]] = CountriesOfRoutingSection.reader.flatMap {
-      case x if x.isEmpty =>
-        UserAnswersReader.fail[Seq[CountryOfRoutingDomain]](CountryOfRoutingPage(Index(0)))
-      case x =>
-        x.traverse[CountryOfRoutingDomain](CountryOfRoutingDomain.userAnswersReader).map(_.toSeq)
-    }
-
-    for {
-      securityDetailsType       <- SecurityDetailsTypePage.reader
-      followingBindingItinerary <- BindingItineraryPage.reader
-      reader <- (securityDetailsType, followingBindingItinerary) match {
-        case (NoSecurityDetails, false) =>
-          AddCountryOfRoutingYesNoPage.reader.flatMap {
-            case true  => arrayReader
-            case false => UserAnswersReader(Seq.empty[CountryOfRoutingDomain])
-          }
-        case _ => arrayReader
-      }
-    } yield reader
-  }
-
   implicit val userAnswersReader: UserAnswersReader[RoutingDomain] =
     (
       CountryOfDestinationPage.reader,
       OfficeOfDestinationPage.reader,
       BindingItineraryPage.reader,
-      countriesOfRoutingReader
+      UserAnswersReader[Seq[CountryOfRoutingDomain]]
     ).tupled.map((RoutingDomain.apply _).tupled)
 }

@@ -66,18 +66,27 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
 
   def getCountries(queryParameters: Seq[(String, String)])(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
     val serviceUrl = s"${config.referenceDataUrl}/countries"
-    http.GET[Seq[Country]](serviceUrl, queryParameters, headers = setHeaders)
+    http.GET[Seq[Country]](serviceUrl, queryParameters, headers = version2Header)
   }
 
   def getCustomsOfficesOfDestinationForCountry(
     countryCode: CountryCode
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
     val serviceUrl = s"${config.referenceDataUrl}/customs-office-destination/${countryCode.code}"
-    http.GET[CustomsOfficeList](serviceUrl, headers = setHeaders)
+    http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
   }
 
-  private def setHeaders = Seq(
+  def getCustomsSecurityAgreementAreaCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
+    val serviceUrl = s"${config.referenceDataUrl}/country-customs-office-security-agreement-area"
+    http.GET[Seq[Country]](serviceUrl, headers = version2Header)
+  }
+
+  def getCountryCodesCTC()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
+    val serviceUrl = s"${config.referenceDataUrl}/country-codes-ctc"
+    http.GET[Seq[Country]](serviceUrl, headers = version2Header)
+  }
+
+  private def version2Header = Seq(
     "Accept" -> "application/vnd.hmrc.2.0+json"
   )
-
 }

@@ -18,8 +18,8 @@ package base
 
 import controllers.actions._
 import models.{Index, UserAnswers}
-import navigation.routeDetails.{CountryOfRoutingNavigatorProvider, OfficeOfTransitNavigatorProvider}
 import navigation._
+import navigation.routeDetails._
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
 import org.mockito.Mockito.when
@@ -31,6 +31,9 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Call
 import repositories.SessionRepository
+import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.Future
 
 trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerSuite with GuiceFakeApplicationFactory with MockitoSugar {
   self: TestSuite =>
@@ -62,11 +65,40 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
   protected val fakeGuaranteeNavigatorProvider: GuaranteeNavigatorProvider =
     (index: Index) => new FakeGuaranteeNavigator(onwardRoute, index)
 
+  protected val fakeRouteDetailsNavigatorProvider: RouteDetailsNavigatorProvider =
+    new RouteDetailsNavigatorProvider {
+
+      override def apply()(implicit hc: HeaderCarrier): Future[RouteDetailsNavigator] =
+        Future.successful(new FakeRouteDetailsNavigator(onwardRoute))
+    }
+
+  val fakeRoutingNavigatorProvider: RoutingNavigatorProvider =
+    new RoutingNavigatorProvider {
+
+      override def apply()(implicit hc: HeaderCarrier): Future[RoutingNavigator] =
+        Future.successful(new FakeRoutingNavigator(onwardRoute))
+    }
+
   protected val fakeCountryOfRoutingNavigatorProvider: CountryOfRoutingNavigatorProvider =
-    (index: Index) => new FakeCountryOfRoutingNavigator(onwardRoute, index)
+    new CountryOfRoutingNavigatorProvider {
+
+      override def apply(index: Index)(implicit hc: HeaderCarrier): Future[CountryOfRoutingNavigator] =
+        Future.successful(new FakeCountryOfRoutingNavigator(onwardRoute, index))
+    }
+
+  val fakeTransitNavigatorProvider: TransitNavigatorProvider =
+    new TransitNavigatorProvider {
+
+      override def apply()(implicit hc: HeaderCarrier): Future[TransitNavigator] =
+        Future.successful(new FakeTransitNavigator(onwardRoute))
+    }
 
   protected val fakeOfficeOfTransitNavigatorProvider: OfficeOfTransitNavigatorProvider =
-    (index: Index) => new FakeOfficeOfTransitCountryNavigator(onwardRoute, index)
+    new OfficeOfTransitNavigatorProvider {
+
+      override def apply(index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfTransitNavigator] =
+        Future.successful(new FakeOfficeOfTransitNavigator(onwardRoute, index))
+    }
 
   def guiceApplicationBuilder(): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
