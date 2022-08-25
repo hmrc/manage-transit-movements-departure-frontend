@@ -39,7 +39,7 @@ class ConfirmRemoveOfficeOfTransitViewSpec extends YesNoViewBehaviours with Gene
 
   behave like pageWithHeading(transitOfficeName)
 
-  behave like pageWithRadioItems()
+  behave like pageWithRadioItems(args = Seq(transitOfficeName))
 
   behave like pageWithSubmitButton("Save and continue")
 }
