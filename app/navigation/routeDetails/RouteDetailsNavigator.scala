@@ -18,8 +18,39 @@ package navigation.routeDetails
 
 import models.journeyDomain.routeDetails.RouteDetailsDomain
 import navigation.UserAnswersSectionNavigator
+import services.CountriesService
+import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RouteDetailsNavigator @Inject() () extends UserAnswersSectionNavigator[RouteDetailsDomain]
+class RouteDetailsNavigatorProviderImpl @Inject() (
+  countriesService: CountriesService
+)(implicit ec: ExecutionContext)
+    extends RouteDetailsNavigatorProvider {
+
+  def apply()(implicit hc: HeaderCarrier): Future[RouteDetailsNavigator] =
+    for {
+      ctcCountries                             <- countriesService.getCountryCodesCTC()
+      euCountries                              <- countriesService.getCommunityCountries()
+      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
+    } yield new RouteDetailsNavigator(
+      ctcCountries.countryCodes,
+      euCountries.countryCodes,
+      customsSecurityAgreementAreaCountryCodes.countryCodes
+    )
+}
+
+trait RouteDetailsNavigatorProvider {
+
+  def apply()(implicit hc: HeaderCarrier): Future[RouteDetailsNavigator]
+}
+
+class RouteDetailsNavigator(
+  ctcCountryCodes: Seq[String],
+  euCountryCodes: Seq[String],
+  customsSecurityAgreementAreaCountryCodes: Seq[String]
+) extends UserAnswersSectionNavigator[RouteDetailsDomain]()(
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+    )

@@ -18,8 +18,8 @@ package viewModels.guaranteeDetails
 
 import models.{NormalMode, UserAnswers}
 import play.api.i18n.Messages
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import utils.cyaHelpers.guaranteeDetails.GuaranteeDetailsCheckYourAnswersHelper
+import viewModels.ListItem
 
 import javax.inject.Inject
 

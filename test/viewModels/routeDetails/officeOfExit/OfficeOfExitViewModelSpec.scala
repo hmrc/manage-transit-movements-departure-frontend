@@ -18,10 +18,10 @@ package viewModels.routeDetails.officeOfExit
 
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
-import models.reference.{Country, CustomsOffice}
+import models.reference.Country
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.officeOfExit.OfficeOfExitCountryPage
+import pages.routeDetails.officeOfExit.index.OfficeOfExitCountryPage
 
 class OfficeOfExitViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 

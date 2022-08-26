@@ -21,11 +21,10 @@ import forms.CountryFormProvider
 import generators.Generators
 import models.reference.{Country, CountryCode}
 import models.{CountryList, Index, NormalMode}
-import navigation.Navigator
-import navigation.annotations.OfficeOfExit
+import navigation.routeDetails.RoutingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
-import pages.routeDetails.officeOfExit.OfficeOfExitCountryPage
+import pages.routeDetails.officeOfExit.index.OfficeOfExitCountryPage
 import pages.routeDetails.routing.index.CountryOfRoutingPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -61,7 +60,9 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[OfficeOfExit]).toInstance(fakeNavigator))
+      .overrides(
+        bind(classOf[RoutingNavigatorProvider]).toInstance(fakeRoutingNavigatorProvider)
+      ) // TODO: Update to use OfficeOfExitNavigatorProvider once built
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "OfficeOfExitCountry Controller" - {

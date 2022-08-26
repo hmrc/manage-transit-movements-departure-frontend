@@ -19,65 +19,80 @@ package controllers.routeDetails.transit
 import config.FrontendAppConfig
 import controllers.actions._
 import controllers.routeDetails.transit.index.{routes => indexRoutes}
-import controllers.routes.TaskListController
 import forms.AddAnotherFormProvider
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, NormalMode}
-import navigation.Navigator
-import navigation.annotations.routeDetails.Transit
+import navigation.routeDetails.RouteDetailsNavigatorProvider
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewModels.ListItem
 import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel.AddAnotherOfficeOfTransitViewModelProvider
 import views.html.routeDetails.transit.AddAnotherOfficeOfTransitView
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherOfficeOfTransitController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @Transit implicit val navigator: Navigator,
+  navigatorProvider: RouteDetailsNavigatorProvider,
   actions: Actions,
   formProvider: AddAnotherFormProvider,
   config: FrontendAppConfig,
   viewModelProvider: AddAnotherOfficeOfTransitViewModelProvider,
   val controllerComponents: MessagesControllerComponents,
   view: AddAnotherOfficeOfTransitView
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   private def form(allowMoreOfficesOfTransit: Boolean): Form[Boolean] =
     formProvider("routeDetails.transit.addAnotherOfficeOfTransit", allowMoreOfficesOfTransit)
 
-  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      val (officesOfTransit, numberOfOfficesOfTransit, allowMoreOfficesOfTransit) = viewData
-      numberOfOfficesOfTransit match {
-        case 0 => Redirect(routes.AddOfficeOfTransitYesNoController.onPageLoad(lrn, NormalMode))
-        case _ => Ok(view(form(allowMoreOfficesOfTransit), lrn, officesOfTransit, allowMoreOfficesOfTransit))
+      viewData flatMap {
+        case (officesOfTransit, numberOfOfficesOfTransit, allowMoreOfficesOfTransit) =>
+          numberOfOfficesOfTransit match {
+            case 0 =>
+              navigatorProvider() map {
+                implicit navigator =>
+                  Redirect(navigator.nextPage(request.userAnswers, NormalMode))
+              }
+            case _ => Future.successful(Ok(view(form(allowMoreOfficesOfTransit), lrn, officesOfTransit, allowMoreOfficesOfTransit)))
+          }
       }
   }
 
-  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
+  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      val (officesOfTransit, numberOfOfficesOfTransit, allowMoreOfficesOfTransit) = viewData
-      form(allowMoreOfficesOfTransit)
-        .bindFromRequest()
-        .fold(
-          formWithErrors => BadRequest(view(formWithErrors, lrn, officesOfTransit, allowMoreOfficesOfTransit)),
-          {
-            case true  => Redirect(indexRoutes.OfficeOfTransitCountryController.onPageLoad(lrn, NormalMode, Index(numberOfOfficesOfTransit)))
-            case false => Redirect(TaskListController.onPageLoad(lrn))
-          }
-        )
+      viewData flatMap {
+        case (officesOfTransit, numberOfOfficesOfTransit, allowMoreOfficesOfTransit) =>
+          form(allowMoreOfficesOfTransit)
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, officesOfTransit, allowMoreOfficesOfTransit))),
+              {
+                case true =>
+                  Future.successful(Redirect(indexRoutes.OfficeOfTransitCountryController.onPageLoad(lrn, NormalMode, Index(numberOfOfficesOfTransit))))
+                case false =>
+                  navigatorProvider() map {
+                    implicit navigator =>
+                      Redirect(navigator.nextPage(request.userAnswers, NormalMode))
+                  }
+              }
+            )
+      }
   }
 
-  private def viewData(implicit request: DataRequest[_]): (Seq[ListItem], Int, Boolean) = {
-    val officesOfTransit         = viewModelProvider.apply(request.userAnswers).listItems
-    val numberOfOfficesOfTransit = officesOfTransit.length
-    (officesOfTransit, numberOfOfficesOfTransit, numberOfOfficesOfTransit < config.maxOfficesOfTransit)
-  }
+  private def viewData(implicit request: DataRequest[_], ec: ExecutionContext): Future[(Seq[ListItem], Int, Boolean)] =
+    viewModelProvider.apply(request.userAnswers).map {
+      viewModel =>
+        val officesOfTransit         = viewModel.listItems
+        val numberOfOfficesOfTransit = officesOfTransit.length
+        (officesOfTransit, numberOfOfficesOfTransit, numberOfOfficesOfTransit < config.maxOfficesOfTransit)
+    }
 }

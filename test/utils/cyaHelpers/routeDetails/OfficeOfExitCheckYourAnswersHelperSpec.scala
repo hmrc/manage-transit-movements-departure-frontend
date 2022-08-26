@@ -23,7 +23,7 @@ import models.Mode
 import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.officeOfExit.OfficeOfExitCountryPage
+import pages.routeDetails.officeOfExit.index.OfficeOfExitCountryPage
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
 

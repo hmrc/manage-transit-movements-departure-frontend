@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package utils.cyaHelpers.routeDetails
+package pages.routeDetails.officeOfExit.index
 
+import controllers.routeDetails.officeOfExit.routes
 import models.reference.Country
 import models.{Index, Mode, UserAnswers}
-import pages.routeDetails.officeOfExit.index.OfficeOfExitCountryPage
-import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
-import utils.cyaHelpers.AnswersHelper
+import pages.QuestionPage
+import pages.sections.routeDetails
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
-class OfficeOfExitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, index: Index)(implicit messages: Messages)
-    extends AnswersHelper(userAnswers, mode) {
+case class OfficeOfExitCountryPage(index: Index) extends QuestionPage[Country] {
 
-  def officeOfExitCountry: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
-    page = OfficeOfExitCountryPage(index),
-    formatAnswer = formatAsText,
-    prefix = "routeDetails.officeOfExit.officeOfExitCountry",
-    id = Some("office-of-exit-country")
-  )
+  override def path: JsPath = routeDetails.OfficeOfExitForExitSection(index).path \ toString
 
+  override def toString: String = "officeOfExitCountry"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.OfficeOfExitCountryController.onPageLoad(userAnswers.lrn, index, mode))
 }

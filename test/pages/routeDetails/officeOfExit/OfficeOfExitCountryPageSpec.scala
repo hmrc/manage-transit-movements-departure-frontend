@@ -18,6 +18,8 @@ package pages.routeDetails.officeOfExit
 
 import models.reference.Country
 import pages.behaviours.PageBehaviours
+import pages.routeDetails.officeOfExit
+import pages.routeDetails.officeOfExit.index.OfficeOfExitCountryPage
 
 class OfficeOfExitCountryPageSpec extends PageBehaviours {
 
@@ -25,8 +27,8 @@ class OfficeOfExitCountryPageSpec extends PageBehaviours {
 
     beRetrievable[Country](OfficeOfExitCountryPage(index))
 
-    beSettable[Country](OfficeOfExitCountryPage(index))
+    beSettable[Country](officeOfExit.index.OfficeOfExitCountryPage(index))
 
-    beRemovable[Country](OfficeOfExitCountryPage(index))
+    beRemovable[Country](officeOfExit.index.OfficeOfExitCountryPage(index))
   }
 }

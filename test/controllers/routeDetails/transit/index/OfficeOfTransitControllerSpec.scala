@@ -17,12 +17,15 @@
 package controllers.routeDetails.transit.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.OfficeOfTransitFormProvider
+import forms.CustomsOfficeForCountryFormProvider
 import generators.Generators
-import models.{CustomsOfficeList, NormalMode}
+import models.reference.{Country, CustomsOffice}
+import models.{reference, CustomsOfficeList, NormalMode}
 import navigation.routeDetails.OfficeOfTransitNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import org.scalacheck.Arbitrary.arbitrary
+import pages.routeDetails.routing.CountryOfDestinationPage
 import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -35,12 +38,12 @@ import scala.concurrent.Future
 
 class OfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private val customsOffice1    = arbitraryCustomsOffice.arbitrary.sample.get
-  private val customsOffice2    = arbitraryCustomsOffice.arbitrary.sample.get
+  private val customsOffice1    = arbitrary[reference.CustomsOffice].sample.value
+  private val customsOffice2    = arbitrary[CustomsOffice].sample.value
   private val customsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
-  private val country           = arbitraryCountry.arbitrary.sample.get
+  private val country           = arbitrary[Country].sample.value
 
-  private val formProvider = new OfficeOfTransitFormProvider()
+  private val formProvider = new CustomsOfficeForCountryFormProvider()
   private val form         = formProvider("routeDetails.transit.officeOfTransit", customsOfficeList, country.description)
   private val mode         = NormalMode
 
@@ -55,46 +58,94 @@ class OfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
   "OfficeOfTransit Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET" - {
+      "when country defined at index" in {
+        val destinationCountry = arbitrary[Country].sample.value
 
-      val updatedAnswers = emptyUserAnswers.setValue(OfficeOfTransitCountryPage(index), country)
+        val updatedAnswers = emptyUserAnswers
+          .setValue(CountryOfDestinationPage, destinationCountry)
+          .setValue(OfficeOfTransitCountryPage(index), country)
 
-      when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
-      setExistingUserAnswers(updatedAnswers)
+        when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
+        setExistingUserAnswers(updatedAnswers)
 
-      val request = FakeRequest(GET, officeOfTransitRoute)
+        val request = FakeRequest(GET, officeOfTransitRoute)
 
-      val result = route(app, request).value
+        val result = route(app, request).value
 
-      val view = injector.instanceOf[OfficeOfTransitView]
+        val view = injector.instanceOf[OfficeOfTransitView]
 
-      status(result) mustEqual OK
+        status(result) mustEqual OK
 
-      contentAsString(result) mustEqual
-        view(form, lrn, customsOfficeList.customsOffices, country.description, mode, index)(request, messages).toString
+        contentAsString(result) mustEqual
+          view(form, lrn, customsOfficeList.customsOffices, country.description, mode, index)(request, messages).toString
+      }
+
+      "when only country of destination defined" in {
+        val updatedAnswers = emptyUserAnswers.setValue(CountryOfDestinationPage, country)
+
+        when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
+        setExistingUserAnswers(updatedAnswers)
+
+        val request = FakeRequest(GET, officeOfTransitRoute)
+
+        val result = route(app, request).value
+
+        val view = injector.instanceOf[OfficeOfTransitView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form, lrn, customsOfficeList.customsOffices, country.description, mode, index)(request, messages).toString
+      }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must populate the view correctly on a GET when the question has previously been answered" - {
+      "when country defined at index" in {
+        when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
 
-      when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
-      val userAnswers = emptyUserAnswers
-        .setValue(OfficeOfTransitPage(index), customsOffice1)
-        .setValue(OfficeOfTransitCountryPage(index), country)
+        val userAnswers = emptyUserAnswers
+          .setValue(OfficeOfTransitCountryPage(index), country)
+          .setValue(OfficeOfTransitPage(index), customsOffice1)
 
-      setExistingUserAnswers(userAnswers)
+        setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, officeOfTransitRoute)
+        val request = FakeRequest(GET, officeOfTransitRoute)
 
-      val result = route(app, request).value
+        val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> customsOffice1.id))
+        val filledForm = form.bind(Map("value" -> customsOffice1.id))
 
-      val view = injector.instanceOf[OfficeOfTransitView]
+        val view = injector.instanceOf[OfficeOfTransitView]
 
-      status(result) mustEqual OK
+        status(result) mustEqual OK
 
-      contentAsString(result) mustEqual
-        view(filledForm, lrn, customsOfficeList.customsOffices, country.description, mode, index)(request, messages).toString
+        contentAsString(result) mustEqual
+          view(filledForm, lrn, customsOfficeList.customsOffices, country.description, mode, index)(request, messages).toString
+      }
+
+      "when only country of destination defined" in {
+        when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
+
+        val userAnswers = emptyUserAnswers
+          .setValue(CountryOfDestinationPage, country)
+          .setValue(OfficeOfTransitPage(index), customsOffice1)
+
+        setExistingUserAnswers(userAnswers)
+
+        val request = FakeRequest(GET, officeOfTransitRoute)
+
+        val result = route(app, request).value
+
+        val filledForm = form.bind(Map("value" -> customsOffice1.id))
+
+        val view = injector.instanceOf[OfficeOfTransitView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(filledForm, lrn, customsOfficeList.customsOffices, country.description, mode, index)(request, messages).toString
+      }
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -116,24 +167,48 @@ class OfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixt
       redirectLocation(result).value mustEqual onwardRoute.url
     }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+    "must return a Bad Request and errors when invalid data is submitted" - {
+      "when country defined at index" in {
+        val destinationCountry = arbitrary[Country].sample.value
 
-      val updatedAnswers = emptyUserAnswers.setValue(OfficeOfTransitCountryPage(index), country)
+        val updatedAnswers = emptyUserAnswers
+          .setValue(CountryOfDestinationPage, destinationCountry)
+          .setValue(OfficeOfTransitCountryPage(index), country)
 
-      when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
-      setExistingUserAnswers(updatedAnswers)
+        when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
+        setExistingUserAnswers(updatedAnswers)
 
-      val request   = FakeRequest(POST, officeOfTransitRoute).withFormUrlEncodedBody(("value", "invalid value"))
-      val boundForm = form.bind(Map("value" -> "invalid value"))
+        val request   = FakeRequest(POST, officeOfTransitRoute).withFormUrlEncodedBody(("value", "invalid value"))
+        val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val result = route(app, request).value
+        val result = route(app, request).value
 
-      val view = injector.instanceOf[OfficeOfTransitView]
+        val view = injector.instanceOf[OfficeOfTransitView]
 
-      status(result) mustEqual BAD_REQUEST
+        status(result) mustEqual BAD_REQUEST
 
-      contentAsString(result) mustEqual
-        view(boundForm, lrn, customsOfficeList.customsOffices, country.description, mode, index)(request, messages).toString
+        contentAsString(result) mustEqual
+          view(boundForm, lrn, customsOfficeList.customsOffices, country.description, mode, index)(request, messages).toString
+      }
+
+      "when only country of destination defined" in {
+        val updatedAnswers = emptyUserAnswers.setValue(CountryOfDestinationPage, country)
+
+        when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
+        setExistingUserAnswers(updatedAnswers)
+
+        val request   = FakeRequest(POST, officeOfTransitRoute).withFormUrlEncodedBody(("value", "invalid value"))
+        val boundForm = form.bind(Map("value" -> "invalid value"))
+
+        val result = route(app, request).value
+
+        val view = injector.instanceOf[OfficeOfTransitView]
+
+        status(result) mustEqual BAD_REQUEST
+
+        contentAsString(result) mustEqual
+          view(boundForm, lrn, customsOfficeList.customsOffices, country.description, mode, index)(request, messages).toString
+      }
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

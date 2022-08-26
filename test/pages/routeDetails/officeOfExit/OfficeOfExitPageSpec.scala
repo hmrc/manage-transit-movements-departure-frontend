@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package forms
+package pages.routeDetails.officeOfExit
 
-import forms.mappings.Mappings
-import models.CustomsOfficeList
 import models.reference.CustomsOffice
-import play.api.data.Form
+import pages.behaviours.PageBehaviours
+import pages.routeDetails.officeOfExit.index.OfficeOfExitPage
 
-import javax.inject.Inject
+class OfficeOfExitPageSpec extends PageBehaviours {
 
-class OfficeOfTransitFormProvider @Inject() extends Mappings {
+  "OfficeOfExitPage" - {
 
-  def apply(prefix: String, customsOfficeList: CustomsOfficeList, countryName: String): Form[CustomsOffice] =
-    Form(
-      "value" -> customsOffice(customsOfficeList, s"$prefix.error.required", Seq(countryName))
-    )
+    beRetrievable[CustomsOffice](OfficeOfExitPage(index))
+
+    beSettable[CustomsOffice](OfficeOfExitPage(index))
+
+    beRemovable[CustomsOffice](OfficeOfExitPage(index))
+  }
 }

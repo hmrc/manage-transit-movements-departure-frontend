@@ -16,23 +16,43 @@
 
 package models.journeyDomain.routeDetails
 
-import models.domain.UserAnswersReader
+import cats.implicits._
+import models.DeclarationType.Option4
+import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.routeDetails.routing.RoutingDomain
 import models.journeyDomain.routeDetails.transit.TransitDomain
+import pages.preTaskList.DeclarationTypePage
 
 case class RouteDetailsDomain(
   routing: RoutingDomain,
-  transit: TransitDomain
+  transit: Option[TransitDomain]
 ) extends JourneyDomainModel
 
 object RouteDetailsDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[RouteDetailsDomain] = {
+  implicit def userAnswersReader(
+    ctcCountryCodes: Seq[String],
+    euCountryCodes: Seq[String],
+    customsSecurityAgreementAreaCountryCodes: Seq[String]
+  ): UserAnswersReader[RouteDetailsDomain] = {
+
+    implicit val transitReads: UserAnswersReader[Option[TransitDomain]] =
+      DeclarationTypePage.reader.flatMap {
+        case Option4 =>
+          none[TransitDomain].pure[UserAnswersReader]
+        case _ =>
+          implicit val reads: UserAnswersReader[TransitDomain] = TransitDomain.userAnswersReader(
+            ctcCountryCodes,
+            euCountryCodes,
+            customsSecurityAgreementAreaCountryCodes
+          )
+          UserAnswersReader[TransitDomain].map(Some(_))
+      }
 
     for {
       routing <- UserAnswersReader[RoutingDomain]
-      transit <- UserAnswersReader[TransitDomain]
+      transit <- UserAnswersReader[Option[TransitDomain]]
     } yield RouteDetailsDomain(
       routing,
       transit

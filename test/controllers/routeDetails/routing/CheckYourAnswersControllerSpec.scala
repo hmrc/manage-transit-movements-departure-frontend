@@ -18,8 +18,7 @@ package controllers.routeDetails.routing
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
-import navigation.Navigator
-import navigation.annotations.routeDetails.RouteDetails
+import navigation.routeDetails.RouteDetailsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.inject.bind
@@ -38,7 +37,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[RouteDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[RouteDetailsNavigatorProvider]).toInstance(fakeRouteDetailsNavigatorProvider))
       .overrides(bind[CheckRoutingAnswersViewModelProvider].toInstance(mockViewModelProvider))
 
   "Check Your Answers Controller" - {

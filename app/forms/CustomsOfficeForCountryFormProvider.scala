@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package navigation.annotations.routeDetails;
+package forms
 
-import com.google.inject.BindingAnnotation;
+import forms.mappings.Mappings
+import models.CustomsOfficeList
+import models.reference.CustomsOffice
+import play.api.data.Form
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.inject.Inject
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
-@BindingAnnotation
-public @interface Transit {
+class CustomsOfficeForCountryFormProvider @Inject() extends Mappings {
+
+  def apply(prefix: String, customsOfficeList: CustomsOfficeList, countryName: String): Form[CustomsOffice] =
+    Form(
+      "value" -> customsOffice(customsOfficeList, s"$prefix.error.required", Seq(countryName))
+    )
 }

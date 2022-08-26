@@ -24,7 +24,7 @@ import models.{CheckMode, DeclarationType, Index, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.guaranteeDetails.guarantee.{GuaranteeTypePage, OtherReferenceYesNoPage}
 import pages.preTaskList.DeclarationTypePage
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
+import viewModels.ListItem
 
 class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with Generators {
 
@@ -51,7 +51,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with Generator
           ListItem(
             name = "(3) Individual guarantee in cash or an equivalent recognised by the customs authorities",
             changeUrl = guaranteeRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, Index(0)).url,
-            removeUrl = guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(0)).url
+            removeUrl = Some(guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(0)).url)
           )
         )
       )
@@ -75,28 +75,28 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with Generator
           ListItem(
             name = "(3) Individual guarantee in cash or an equivalent recognised by the customs authorities",
             changeUrl = guaranteeRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, Index(0)).url,
-            removeUrl = guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(0)).url
+            removeUrl = Some(guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(0)).url)
           )
         ),
         Left(
           ListItem(
             name = "(0) Guarantee waiver",
             changeUrl = guaranteeRoutes.ReferenceNumberController.onPageLoad(userAnswers.lrn, NormalMode, Index(1)).url,
-            removeUrl = guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(1)).url
+            removeUrl = Some(guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(1)).url)
           )
         ),
         Right(
           ListItem(
             name = "(A) Guarantee waiver by agreement",
             changeUrl = guaranteeRoutes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, CheckMode, Index(2)).url,
-            removeUrl = guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(2)).url
+            removeUrl = Some(guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(2)).url)
           )
         ),
         Right(
           ListItem(
             name = "(R) Guarantee not required – goods carried on the Rhine, the Danube or their waterways",
             changeUrl = guaranteeRoutes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, CheckMode, Index(3)).url,
-            removeUrl = guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(3)).url
+            removeUrl = Some(guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(3)).url)
           )
         )
       )

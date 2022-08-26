@@ -20,24 +20,42 @@ import models._
 import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
 import navigation.UserAnswersNavigator
+import services.CountriesService
+import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class OfficeOfTransitNavigatorProviderImpl @Inject() () extends OfficeOfTransitNavigatorProvider {
+class OfficeOfTransitNavigatorProviderImpl @Inject() (
+  countriesService: CountriesService
+)(implicit ec: ExecutionContext)
+    extends OfficeOfTransitNavigatorProvider {
 
-  def apply(index: Index): OfficeOfTransitNavigator =
-    new OfficeOfTransitNavigator(index)
+  def apply(index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfTransitNavigator] =
+    for {
+      ctcCountries                             <- countriesService.getCountryCodesCTC()
+      euCountries                              <- countriesService.getCommunityCountries()
+      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
+    } yield new OfficeOfTransitNavigator(
+      index,
+      ctcCountries.countryCodes,
+      euCountries.countryCodes,
+      customsSecurityAgreementAreaCountryCodes.countryCodes
+    )
 }
 
 trait OfficeOfTransitNavigatorProvider {
 
-  def apply(index: Index): OfficeOfTransitNavigator
+  def apply(index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfTransitNavigator]
 }
 
 class OfficeOfTransitNavigator(
-  index: Index
+  index: Index,
+  ctcCountryCodes: Seq[String],
+  euCountryCodes: Seq[String],
+  customsSecurityAgreementAreaCountryCodes: Seq[String]
 ) extends UserAnswersNavigator[OfficeOfTransitDomain, RouteDetailsDomain]()(
-      OfficeOfTransitDomain.userAnswersReader(index),
-      RouteDetailsDomain.userAnswersReader
+      OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes),
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
     )

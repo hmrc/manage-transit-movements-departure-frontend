@@ -276,6 +276,46 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
         checkErrorResponse(s"/$baseUrl/customs-office/GB1", connector.getCustomsOffice("GB1"))
       }
     }
+
+    "getCustomsSecurityAgreementAreaCountries" - {
+      "must return Seq of Country when successful" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$baseUrl/country-customs-office-security-agreement-area"))
+            .willReturn(okJson(countriesResponseJson))
+        )
+
+        val expectedResult: Seq[Country] = Seq(
+          Country(CountryCode("GB"), "United Kingdom"),
+          Country(CountryCode("AD"), "Andorra")
+        )
+
+        connector.getCustomsSecurityAgreementAreaCountries().futureValue mustEqual expectedResult
+      }
+
+      "must return an exception when an error response is returned" in {
+        checkErrorResponse(s"/$baseUrl/country-customs-office-security-agreement-area", connector.getCustomsSecurityAgreementAreaCountries())
+      }
+    }
+
+    "getCountryCodesCTC" - {
+      "must return Seq of Country when successful" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$baseUrl/country-codes-ctc"))
+            .willReturn(okJson(countriesResponseJson))
+        )
+
+        val expectedResult: Seq[Country] = Seq(
+          Country(CountryCode("GB"), "United Kingdom"),
+          Country(CountryCode("AD"), "Andorra")
+        )
+
+        connector.getCountryCodesCTC().futureValue mustEqual expectedResult
+      }
+
+      "must return an exception when an error response is returned" in {
+        checkErrorResponse(s"/$baseUrl/country-codes-ctc", connector.getCountryCodesCTC())
+      }
+    }
   }
 
   private def checkErrorResponse(url: String, result: => Future[_]): Assertion = {

@@ -6,3 +6,8 @@ POST       /:lrn/route-details/office-of-exit/change-office-of-exit-country/:ind
 
 GET        /:lrn/route-details/officeOfExit/:index/check-office-of-exit-answers                    controllers.routeDetails.officeOfExit.CheckOfficeOfExitAnswersController.onPageLoad(lrn: LocalReferenceNumber,  index: Index)
 POST        /:lrn/route-details/officeOfExit/:index/check-office-of-exit-answers                   controllers.routeDetails.officeOfExit.CheckOfficeOfExitAnswersController.onSubmit(lrn: LocalReferenceNumber,  index: Index)
+
+GET        /:lrn/route-details/office-of-exit/office-of-exit/:index                                controllers.routeDetails.officeOfExit.OfficeOfExitController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+POST       /:lrn/route-details/office-of-exit/office-of-exit/:index                                controllers.routeDetails.officeOfExit.OfficeOfExitController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+GET        /:lrn/route-details/office-of-exit/change-office-of-exit/:index                         controllers.routeDetails.officeOfExit.OfficeOfExitController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+POST       /:lrn/route-details/office-of-exit/change-office-of-exit/:index                         controllers.routeDetails.officeOfExit.OfficeOfExitController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)

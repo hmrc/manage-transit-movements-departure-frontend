@@ -19,8 +19,7 @@ package controllers.routeDetails.routing
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
 import models.NormalMode
-import navigation.Navigator
-import navigation.annotations.routeDetails.Routing
+import navigation.routeDetails.RoutingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -43,7 +42,7 @@ class AddCountryOfRoutingYesNoControllerSpec extends SpecBase with AppWithDefaul
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Routing]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[RoutingNavigatorProvider]).toInstance(fakeRoutingNavigatorProvider))
 
   "AddCountryOfRoutingYesNo Controller" - {
 

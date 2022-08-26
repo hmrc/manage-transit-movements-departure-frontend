@@ -19,8 +19,40 @@ package navigation.routeDetails
 import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.journeyDomain.routeDetails.routing.RoutingDomain
 import navigation.UserAnswersNavigator
+import services.CountriesService
+import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RoutingNavigator @Inject() () extends UserAnswersNavigator[RoutingDomain, RouteDetailsDomain]
+class RoutingNavigatorProviderImpl @Inject() (
+  countriesService: CountriesService
+)(implicit ec: ExecutionContext)
+    extends RoutingNavigatorProvider {
+
+  def apply()(implicit hc: HeaderCarrier): Future[RoutingNavigator] =
+    for {
+      ctcCountries                             <- countriesService.getCountryCodesCTC()
+      euCountries                              <- countriesService.getCommunityCountries()
+      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
+    } yield new RoutingNavigator(
+      ctcCountries.countryCodes,
+      euCountries.countryCodes,
+      customsSecurityAgreementAreaCountryCodes.countryCodes
+    )
+}
+
+trait RoutingNavigatorProvider {
+
+  def apply()(implicit hc: HeaderCarrier): Future[RoutingNavigator]
+}
+
+class RoutingNavigator(
+  ctcCountryCodes: Seq[String],
+  euCountryCodes: Seq[String],
+  customsSecurityAgreementAreaCountryCodes: Seq[String]
+) extends UserAnswersNavigator[RoutingDomain, RouteDetailsDomain]()(
+      RoutingDomain.userAnswersReader,
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+    )

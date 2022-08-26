@@ -20,8 +20,7 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
 import models.{LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.routeDetails.Routing
+import navigation.routeDetails.RoutingNavigatorProvider
 import pages.routeDetails.routing.CountryOfDestinationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CountryOfDestinationController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @Routing implicit val navigator: Navigator,
+  navigatorProvider: RoutingNavigatorProvider,
   actions: Actions,
   formProvider: CountryFormProvider,
   service: CountriesService,
@@ -69,7 +68,11 @@ class CountryOfDestinationController @Inject() (
             .bindFromRequest()
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode))),
-              value => CountryOfDestinationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+              value =>
+                navigatorProvider().flatMap {
+                  implicit navigator =>
+                    CountryOfDestinationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                }
             )
       }
   }
