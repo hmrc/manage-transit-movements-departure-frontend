@@ -38,6 +38,7 @@ class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector
     getCountriesWithCustomsOffices(excludedCountries, Seq("membership" -> membership))
   }
 
+  @deprecated("Works with P4, needs to be changed")
   def getCountriesWithCustomsOffices(
     excludedCountries: Seq[CountryCode],
     membershipQuery: Seq[(String, String)] = Nil
@@ -76,10 +77,12 @@ class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector
       .getCustomsSecurityAgreementAreaCountries()
       .map(sort)
 
-  def getCountryCodesCTC()(implicit hc: HeaderCarrier): Future[CountryList] =
+  def getCountryCodesCTC()(implicit hc: HeaderCarrier): Future[CountryList] = {
+    println("I was here")
     referenceDataConnector
       .getCountryCodesCTC()
       .map(sort)
+  }
 
   private def getCountries(queryParameters: Seq[(String, String)])(implicit hc: HeaderCarrier): Future[CountryList] =
     referenceDataConnector

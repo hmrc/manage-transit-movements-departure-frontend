@@ -16,9 +16,9 @@
 
 package utils.cyaHelpers.routeDetails
 
-import models.reference.Country
+import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode, UserAnswers}
-import pages.routeDetails.officeOfExit.index.OfficeOfExitCountryPage
+import pages.routeDetails.officeOfExit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
@@ -31,6 +31,13 @@ class OfficeOfExitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, i
     formatAnswer = formatAsText,
     prefix = "routeDetails.officeOfExit.officeOfExitCountry",
     id = Some("office-of-exit-country")
+  )
+
+  def officeOfExit: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
+    page = OfficeOfExitPage(index),
+    formatAnswer = formatAsText,
+    prefix = "routeDetails.officeOfExit.officeOfExit",
+    id = Some("office-of-exit")
   )
 
 }

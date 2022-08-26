@@ -36,7 +36,8 @@ object OfficeOfExitViewModel {
       val helper = new OfficeOfExitCheckYourAnswersHelper(userAnswers, NormalMode, index)
 
       val rows = Seq(
-        helper.officeOfExitCountry
+        helper.officeOfExitCountry,
+        helper.officeOfExit
       ).flatten
 
       new OfficeOfExitViewModel(Section(rows))
