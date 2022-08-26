@@ -17,7 +17,7 @@
 package controllers.routeDetails.transit.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.OfficeOfTransitFormProvider
+import forms.CustomsOfficeForCountryFormProvider
 import generators.Generators
 import models.reference.{Country, CustomsOffice}
 import models.{reference, CustomsOfficeList, NormalMode}
@@ -43,7 +43,7 @@ class OfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixt
   private val customsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
   private val country           = arbitrary[Country].sample.value
 
-  private val formProvider = new OfficeOfTransitFormProvider()
+  private val formProvider = new CustomsOfficeForCountryFormProvider()
   private val form         = formProvider("routeDetails.transit.officeOfTransit", customsOfficeList, country.description)
   private val mode         = NormalMode
 

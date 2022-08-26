@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package pages.sections.routeDetails
+package forms
 
-import pages.sections.Section
-import play.api.libs.json.{JsArray, JsPath}
+import forms.mappings.Mappings
+import models.CustomsOfficeList
+import models.reference.CustomsOffice
+import play.api.data.Form
 
-case object OfficesOfExitForTransitSection extends Section[JsArray] {
+import javax.inject.Inject
 
-  override def path: JsPath = OfficeOfExitSection.path \ toString
+class CustomsOfficeForCountryFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "officesOfExit"
+  def apply(prefix: String, customsOfficeList: CustomsOfficeList, countryName: String): Form[CustomsOffice] =
+    Form(
+      "value" -> customsOffice(customsOfficeList, s"$prefix.error.required", Seq(countryName))
+    )
 }

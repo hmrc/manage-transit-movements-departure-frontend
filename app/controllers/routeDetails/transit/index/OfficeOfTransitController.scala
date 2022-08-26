@@ -18,7 +18,7 @@ package controllers.routeDetails.transit.index
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.OfficeOfTransitFormProvider
+import forms.CustomsOfficeForCountryFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.routeDetails.OfficeOfTransitNavigatorProvider
 import pages.routeDetails.routing.CountryOfDestinationPage
@@ -38,7 +38,7 @@ class OfficeOfTransitController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: OfficeOfTransitNavigatorProvider,
   actions: Actions,
-  formProvider: OfficeOfTransitFormProvider,
+  formProvider: CustomsOfficeForCountryFormProvider,
   service: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
   view: OfficeOfTransitView,

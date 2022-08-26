@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.officeOfExit
+package pages.sections.routeDetails
 
-import models.reference.Country
-import pages.behaviours.PageBehaviours
-import pages.routeDetails.officeOfExit
-import pages.routeDetails.officeOfExit.index.OfficeOfExitCountryPage
+import pages.sections.Section
+import play.api.libs.json.{JsArray, JsPath}
 
-class OfficeOfExitCountryPageSpec extends PageBehaviours {
+case object OfficesOfExitForExitSection extends Section[JsArray] {
 
-  "OfficeOfExitCountryPage" - {
+  override def path: JsPath = OfficeOfExitSection.path \ toString
 
-    beRetrievable[Country](OfficeOfExitCountryPage(index))
-
-    beSettable[Country](officeOfExit.index.OfficeOfExitCountryPage(index))
-
-    beRemovable[Country](officeOfExit.index.OfficeOfExitCountryPage(index))
-  }
+  override def toString: String = "officesOfExit"
 }
