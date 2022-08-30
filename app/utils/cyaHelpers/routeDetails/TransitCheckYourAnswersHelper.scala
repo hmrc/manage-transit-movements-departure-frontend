@@ -18,9 +18,9 @@ package utils.cyaHelpers.routeDetails
 
 import controllers.routeDetails.transit.index.routes
 import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
-import models.reference.CustomsOffice
+import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode, UserAnswers}
-import pages.routeDetails.transit.index.OfficeOfTransitPage
+import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
 import pages.sections.routeDetails.OfficeOfTransitCountriesSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
@@ -41,14 +41,14 @@ class TransitCheckYourAnswersHelper(
     buildListItems(OfficeOfTransitCountriesSection) {
       position =>
         val index = Index(position)
-        buildListItem[OfficeOfTransitDomain, CustomsOffice](
-          page = OfficeOfTransitPage(index),
+        buildListItem[OfficeOfTransitDomain, Country](
+          page = OfficeOfTransitCountryPage(index),
           formatJourneyDomainModel = _.label,
           formatType = _.toString,
           removeRoute = if (position == 0) None else Some(routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, index))
         )(
           OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes),
-          implicitly[Reads[CustomsOffice]]
+          implicitly[Reads[Country]]
         )
     }
 }
