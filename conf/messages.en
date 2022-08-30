@@ -682,6 +682,10 @@ routeDetails.officeOfExit.officeOfExitCountry.change.hidden = office of exit cou
 routeDetails.officeOfExit.officeOfExitCountry.checkYourAnswersLabel = Office of exit country
 routeDetails.officeOfExit.officeOfExitCountry.error.required = Enter the country the office of exit is in
 
+routeDetails.officeOfExit.confirmRemoveOfficeOfExit.title = Are you sure you want to remove {0} as an office of exit?
+routeDetails.officeOfExit.confirmRemoveOfficeOfExit.heading = Are you sure you want to remove {0} as an office of exit?
+routeDetails.officeOfExit.confirmRemoveOfficeOfExit.error.required = Select yes if you want to remove {0} as an office of exit
+
 routeDetails.officeOfExit.officeOfExit.title = Where in {0} is the office of exit?
 routeDetails.officeOfExit.officeOfExit.heading = Where in {0} is the office of exit?
 routeDetails.officeOfExit.officeOfExit.hintText = Enter the office location or code, like Dover or GB000060.
