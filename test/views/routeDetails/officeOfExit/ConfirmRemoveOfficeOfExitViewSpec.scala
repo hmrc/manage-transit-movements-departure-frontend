@@ -16,28 +16,31 @@
 
 package views.routeDetails.officeOfExit
 
+import generators.Generators
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.routeDetails.officeOfExit.ConfirmRemoveOfficeOfExitView
 
-class ConfirmRemoveOfficeOfExitViewSpec extends YesNoViewBehaviours {
+class ConfirmRemoveOfficeOfExitViewSpec extends YesNoViewBehaviours with Generators {
+
+  private lazy val exitOfficeName = arbitraryCustomsOffice.arbitrary.sample.get.name
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[ConfirmRemoveOfficeOfExitView].apply(form, lrn, index)(fakeRequest, messages)
+    injector.instanceOf[ConfirmRemoveOfficeOfExitView].apply(form, lrn, index, exitOfficeName)(fakeRequest, messages)
 
   override val prefix: String = "routeDetails.officeOfExit.confirmRemoveOfficeOfExit"
 
-  behave like pageWithTitle()
+  behave like pageWithTitle(exitOfficeName)
 
   behave like pageWithBackLink
 
   behave like pageWithSectionCaption("Route details")
 
-  behave like pageWithHeading()
+  behave like pageWithHeading(exitOfficeName)
 
-  behave like pageWithRadioItems()
+  behave like pageWithRadioItems(args = Seq(exitOfficeName))
 
   behave like pageWithSubmitButton("Save and continue")
 }

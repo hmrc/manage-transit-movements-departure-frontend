@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
 import models.reference.{Country, CountryCode, CustomsOffice}
-import models.{Index, NormalMode, UserAnswers}
+import models.{Index, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentCaptor
@@ -29,8 +29,9 @@ import org.mockito.Mockito.{never, reset, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitPage}
-import pages.sections.routeDetails.OfficeOfExitForTransitSection
+import pages.routeDetails.officeOfExit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
+import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitPage}
+import pages.sections.routeDetails.OfficeOfExitForExitSection
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -47,9 +48,11 @@ class ConfirmRemoveOfficeOfExitControllerSpec
     with RouteDetailsUserAnswersGenerator
     with ScalaCheckPropertyChecks {
 
-  private val formProvider                        = new YesNoFormProvider()
-  private val form                                = formProvider("routeDetails.officeOfExit.confirmRemoveOfficeOfExit")
-  private val mode                                = NormalMode
+  private val customsOffice = arbitrary[CustomsOffice].sample.value
+  private val countryCode   = arbitrary[CountryCode].sample.value
+  private val formProvider  = new YesNoFormProvider()
+  private val form          = formProvider("routeDetails.officeOfExit.confirmRemoveOfficeOfExit", customsOffice.name)
+
   private lazy val confirmRemoveOfficeOfExitRoute = routes.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn, index).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
@@ -61,7 +64,11 @@ class ConfirmRemoveOfficeOfExitControllerSpec
 
     "must return OK and the correct view for a GET" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val answers = emptyUserAnswers
+        .setValue(OfficeOfExitCountryPage(Index(0)), Country(countryCode, "France"))
+        .setValue(OfficeOfExitPage(Index(0)), customsOffice)
+
+      setExistingUserAnswers(answers)
 
       val request = FakeRequest(GET, confirmRemoveOfficeOfExitRoute)
       val result  = route(app, request).value
@@ -71,72 +78,65 @@ class ConfirmRemoveOfficeOfExitControllerSpec
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, index)(request, messages).toString
+        view(form, lrn, index, customsOffice.name)(request, messages).toString
     }
 
-    // TODO: Update tests to use the correct page and controllers.
-    "must redirect to the next page when valid data is submitted" ignore {
+    "when yes submitted" - {
+      "must redirect to add another office of exit and remove office of exit at specified index" in {
+        val answers = emptyUserAnswers
+          .setValue(OfficeOfExitCountryPage(Index(0)), Country(countryCode, "France"))
+          .setValue(OfficeOfExitPage(Index(0)), customsOffice)
+        reset(mockSessionRepository)
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      "when yes submitted" - {
-        "must redirect to add another office of transit and remove office of transit at specified index" in {
-          val countryCode   = arbitrary[CountryCode].sample.value
-          val customsOffice = arbitrary[CustomsOffice].sample.value
-          val answers = emptyUserAnswers
-            .setValue(OfficeOfTransitCountryPage(Index(0)), Country(countryCode, "France"))
-            .setValue(OfficeOfTransitPage(Index(0)), customsOffice)
-            .setValue(AddOfficeOfTransitETAYesNoPage(Index(0)), false)
-          reset(mockSessionRepository)
-          when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        setExistingUserAnswers(answers)
 
-          setExistingUserAnswers(answers)
+        val request = FakeRequest(POST, confirmRemoveOfficeOfExitRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
-          val request = FakeRequest(POST, confirmRemoveOfficeOfExitRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+        val result = route(app, request).value
 
-          val result = route(app, request).value
+        status(result) mustEqual SEE_OTHER
 
-          status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual
+          controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(lrn).url
 
-          redirectLocation(result).value mustEqual
-            controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(lrn).url
-
-          val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-          verify(mockSessionRepository).set(userAnswersCaptor.capture())
-          userAnswersCaptor.getValue.get(OfficeOfExitForTransitSection(index)) mustNot be(defined)
-        }
+        val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(mockSessionRepository).set(userAnswersCaptor.capture())
+        userAnswersCaptor.getValue.get(OfficeOfExitForExitSection(index)) mustNot be(defined)
       }
+    }
 
-      "when no submitted" - {
-        "must redirect to add another office of transit and not remove office of transit at specified index" in {
-          val countryCode   = arbitrary[CountryCode].sample.value
-          val customsOffice = arbitrary[CustomsOffice].sample.value
-          val answers = emptyUserAnswers
-            .setValue(OfficeOfTransitCountryPage(Index(0)), Country(countryCode, "France"))
-            .setValue(OfficeOfTransitPage(Index(0)), customsOffice)
-            .setValue(AddOfficeOfTransitETAYesNoPage(Index(0)), false)
-          reset(mockSessionRepository)
+    "when no submitted" - {
+      "must redirect to add another office of exit and not remove office of exit at specified index" in {
+        val answers = emptyUserAnswers
+          .setValue(OfficeOfExitCountryPage(Index(0)), Country(countryCode, "France"))
+          .setValue(OfficeOfExitPage(Index(0)), customsOffice)
+        reset(mockSessionRepository)
 
-          setExistingUserAnswers(answers)
+        setExistingUserAnswers(answers)
 
-          val request = FakeRequest(POST, confirmRemoveOfficeOfExitRoute)
-            .withFormUrlEncodedBody(("value", "false"))
+        val request = FakeRequest(POST, confirmRemoveOfficeOfExitRoute)
+          .withFormUrlEncodedBody(("value", "false"))
 
-          val result = route(app, request).value
+        val result = route(app, request).value
 
-          status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual
-            controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(lrn).url
+        redirectLocation(result).value mustEqual
+          controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(lrn).url
 
-          verify(mockSessionRepository, never()).set(any())
-        }
+        verify(mockSessionRepository, never()).set(any())
       }
-
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val answers = emptyUserAnswers
+        .setValue(OfficeOfExitCountryPage(Index(0)), Country(countryCode, "France"))
+        .setValue(OfficeOfExitPage(Index(0)), customsOffice)
+
+      setExistingUserAnswers(answers)
 
       val request   = FakeRequest(POST, confirmRemoveOfficeOfExitRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
@@ -148,7 +148,7 @@ class ConfirmRemoveOfficeOfExitControllerSpec
       val view = injector.instanceOf[ConfirmRemoveOfficeOfExitView]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, index)(request, messages).toString
+        view(boundForm, lrn, index, customsOffice.name)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
