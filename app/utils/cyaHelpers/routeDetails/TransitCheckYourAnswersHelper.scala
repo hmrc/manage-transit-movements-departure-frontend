@@ -18,7 +18,7 @@ package utils.cyaHelpers.routeDetails
 
 import controllers.routeDetails.transit.index.routes
 import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
-import models.reference.{Country, CustomsOffice}
+import models.reference.Country
 import models.{Index, Mode, UserAnswers}
 import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
 import pages.sections.routeDetails.OfficeOfTransitCountriesSection

@@ -38,11 +38,10 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
         val country2 = arbitrary[Country].sample.value
         val country3 = arbitrary[Country].sample.value
 
-        def customsOffice = arbitrary[CustomsOffice].sample.value
-
+        def customsOffice  = arbitrary[CustomsOffice].sample.value
         val customsOffice1 = customsOffice.copy(id = country1.code.code)
         val customsOffice2 = customsOffice.copy(id = country2.code.code)
-        val customsOffice3 = customsOffice.copy(id = country3.code.code)
+
         val answers = emptyUserAnswers
           .setValue(OfficeOfDeparturePage, customsOffice)
           .setValue(SecurityDetailsTypePage, NoSecurityDetails)
@@ -53,7 +52,7 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
           .setValue(OfficeOfTransitCountryPage(Index(1)), country2)
           .setValue(OfficeOfTransitPage(Index(1)), customsOffice2)
           .setValue(AddOfficeOfTransitETAYesNoPage(Index(1)), false)
-          .setValue(OfficeOfTransitPage(Index(2)), customsOffice3)
+          .setValue(OfficeOfTransitCountryPage(Index(2)), country3)
 
         val helper = new TransitCheckYourAnswersHelper(answers, NormalMode)(Seq(country1.code.code), Nil, Nil)
         helper.listItems mustBe Seq(
@@ -73,8 +72,8 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
           ),
           Left(
             ListItem(
-              name = s"$customsOffice3",
-              changeUrl = controllers.routeDetails.transit.index.routes.OfficeOfTransitCountryController.onPageLoad(lrn, NormalMode, Index(2)).url,
+              name = s"$country3",
+              changeUrl = controllers.routeDetails.transit.index.routes.OfficeOfTransitController.onPageLoad(lrn, NormalMode, Index(2)).url,
               removeUrl = Some(controllers.routeDetails.transit.index.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, Index(2)).url)
             )
           )

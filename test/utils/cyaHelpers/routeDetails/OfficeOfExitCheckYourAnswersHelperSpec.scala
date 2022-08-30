@@ -54,7 +54,7 @@ class OfficeOfExitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPro
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Office of exit country".toText),
+                  key = Key("Country".toText),
                   value = Value(country.description.toText),
                   actions = Some(
                     Actions(
@@ -62,7 +62,7 @@ class OfficeOfExitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPro
                         ActionItem(
                           content = "Change".toText,
                           href = routes.OfficeOfExitCountryController.onPageLoad(answers.lrn, index, mode).url,
-                          visuallyHiddenText = Some("office of exit country"),
+                          visuallyHiddenText = Some("office of exit’s country"),
                           attributes = Map("id" -> "office-of-exit-country")
                         )
                       )
