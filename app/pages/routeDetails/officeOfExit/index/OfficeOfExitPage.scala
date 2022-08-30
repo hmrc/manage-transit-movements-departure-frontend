@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.officeOfExit
+package pages.routeDetails.officeOfExit.index
 
 import controllers.routeDetails.officeOfExit.routes
-import models.reference.Country
+import models.reference.CustomsOffice
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails
+import pages.sections.routeDetails.OfficeOfExitForExitSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case class OfficeOfExitCountryPage(index: Index) extends QuestionPage[Country] {
+case class OfficeOfExitPage(index: Index) extends QuestionPage[CustomsOffice] {
 
-  override def path: JsPath = routeDetails.OfficeOfExitForTransitSection(index).path \ toString
+  override def path: JsPath = OfficeOfExitForExitSection(index).path \ toString
 
-  override def toString: String = "officeOfExitCountry"
+  override def toString: String = "officeOfExit"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.OfficeOfExitCountryController.onPageLoad(userAnswers.lrn, index, mode))
+    Some(routes.OfficeOfExitController.onPageLoad(userAnswers.lrn, index, mode))
 }

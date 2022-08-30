@@ -19,14 +19,21 @@ package generators
 import models.journeyDomain.routeDetails._
 import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
 import models.journeyDomain.routeDetails.transit.{OfficeOfTransitDomain, TransitDomain}
+import models.reference.CountryCode
 import models.{Index, UserAnswers}
 import org.scalacheck.Gen
 
 trait RouteDetailsUserAnswersGenerator extends UserAnswersGenerator {
   self: Generators =>
 
+  val ctcCountryCodes: Seq[String]                          = listWithMaxLength[CountryCode]().sample.get.map(_.code)
+  val euCountryCodes: Seq[String]                           = listWithMaxLength[CountryCode]().sample.get.map(_.code)
+  val customsSecurityAgreementAreaCountryCodes: Seq[String] = listWithMaxLength[CountryCode]().sample.get.map(_.code)
+
   def arbitraryRouteDetailsAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
-    buildUserAnswers[RouteDetailsDomain](userAnswers)
+    buildUserAnswers[RouteDetailsDomain](userAnswers)(
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+    )
 
   def arbitraryRoutingAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[RoutingDomain](userAnswers)
@@ -35,8 +42,12 @@ trait RouteDetailsUserAnswersGenerator extends UserAnswersGenerator {
     buildUserAnswers[CountryOfRoutingDomain](userAnswers)(CountryOfRoutingDomain.userAnswersReader(index))
 
   def arbitraryTransitAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
-    buildUserAnswers[TransitDomain](userAnswers)
+    buildUserAnswers[TransitDomain](userAnswers)(
+      TransitDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+    )
 
   def arbitraryOfficeOfTransitAnswers(userAnswers: UserAnswers, index: Index): Gen[UserAnswers] =
-    buildUserAnswers[OfficeOfTransitDomain](userAnswers)(OfficeOfTransitDomain.userAnswersReader(index))
+    buildUserAnswers[OfficeOfTransitDomain](userAnswers)(
+      OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+    )
 }

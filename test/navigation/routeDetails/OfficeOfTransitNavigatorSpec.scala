@@ -19,17 +19,20 @@ package navigation.routeDetails
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
 import models._
-import models.reference.{Country, CustomsOffice}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitPage}
-import pages.routeDetails.transit.{AddOfficeOfTransitYesNoPage, T2DeclarationTypeYesNoPage}
+import services.CountriesService
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class OfficeOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
-  private val navigator = new OfficeOfTransitNavigator(index)
+  private val navigator = new OfficeOfTransitNavigator(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
 
-  "Office of Transit Country Navigator" - {
+  "Office of Transit Navigator" - {
 
     "when in NormalMode" - {
 
@@ -52,21 +55,40 @@ class OfficeOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       val mode = CheckMode
 
       "when answers complete" - {
-        "must redirect to the task list" ignore {
-          forAll(arbitrary[Country], arbitrary[CustomsOffice], arbitraryRoutingAnswers(emptyUserAnswers)) {
-            (country, office, routingAnswers) =>
-              val answers = routingAnswers
-                .setValue(T2DeclarationTypeYesNoPage, false)
-                .setValue(AddOfficeOfTransitYesNoPage, true)
-                .setValue(OfficeOfTransitCountryPage(index), country)
-                .setValue(OfficeOfTransitPage(index), office)
-                .setValue(AddOfficeOfTransitETAYesNoPage(index), false)
+        "must redirect to route details check your answers" ignore {
+          forAll(arbitraryRouteDetailsAnswers(emptyUserAnswers)) {
+            answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(controllers.routes.TaskListController.onPageLoad(lrn))
+                .mustBe(???)
           }
         }
       }
+    }
+  }
+
+  "Office of Transit Navigator Provider" - {
+
+    "must retrieve reference data lists" in {
+      val mockService = mock[CountriesService]
+
+      val ctcCountries                          = arbitrary[CountryList].sample.value
+      val euCountries                           = arbitrary[CountryList].sample.value
+      val customsSecurityAgreementAreaCountries = arbitrary[CountryList].sample.value
+
+      when(mockService.getCountryCodesCTC()(any()))
+        .thenReturn(Future.successful(ctcCountries))
+      when(mockService.getCommunityCountries()(any()))
+        .thenReturn(Future.successful(euCountries))
+      when(mockService.getCustomsSecurityAgreementAreaCountries()(any()))
+        .thenReturn(Future.successful(customsSecurityAgreementAreaCountries))
+
+      val provider = new OfficeOfTransitNavigatorProviderImpl(mockService)
+      provider.apply(index).futureValue
+
+      verify(mockService).getCountryCodesCTC()(any())
+      verify(mockService).getCommunityCountries()(any())
+      verify(mockService).getCustomsSecurityAgreementAreaCountries()(any())
     }
   }
 }

@@ -14,17 +14,10 @@
  * limitations under the License.
  */
 
-package navigation.annotations.routeDetails;
+package viewModels
 
-import com.google.inject.BindingAnnotation;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
-@BindingAnnotation
-public @interface RouteDetails {
-}
+case class ListItem(
+  name: String,
+  changeUrl: String,
+  removeUrl: Option[String]
+)

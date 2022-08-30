@@ -29,7 +29,7 @@ import pages.routeDetails.routing.index.CountryOfRoutingPage
 import uk.gov.hmrc.govukfrontend.views.Aliases.{Key, SummaryListRow, Value}
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
+import viewModels.ListItem
 
 class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -269,14 +269,14 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
             ListItem(
               name = "France",
               changeUrl = indexRoutes.CountryOfRoutingController.onPageLoad(answers.lrn, NormalMode, Index(0)).url,
-              removeUrl = indexRoutes.RemoveCountryOfRoutingYesNoController.onPageLoad(answers.lrn, Index(0)).url
+              removeUrl = Some(indexRoutes.RemoveCountryOfRoutingYesNoController.onPageLoad(answers.lrn, Index(0)).url)
             )
           ),
           Right(
             ListItem(
               name = "Portugal",
               changeUrl = indexRoutes.CountryOfRoutingController.onPageLoad(answers.lrn, NormalMode, Index(1)).url,
-              removeUrl = indexRoutes.RemoveCountryOfRoutingYesNoController.onPageLoad(answers.lrn, Index(1)).url
+              removeUrl = Some(indexRoutes.RemoveCountryOfRoutingYesNoController.onPageLoad(answers.lrn, Index(1)).url)
             )
           )
         )

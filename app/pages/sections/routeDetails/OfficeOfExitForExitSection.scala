@@ -16,12 +16,12 @@
 
 package pages.sections.routeDetails
 
-import pages.sections.Section
-import play.api.libs.json.{JsArray, JsPath}
+import models.Index
+import pages.QuestionPage
+import play.api.libs.json.{JsObject, JsPath}
 
-case object OfficesOfExitForTransitSection extends Section[JsArray] {
+case class OfficeOfExitForExitSection(index: Index) extends QuestionPage[JsObject] {
 
-  override def path: JsPath = OfficeOfExitSection.path \ toString
+  override def path: JsPath = OfficesOfExitForExitSection.path \ index.position
 
-  override def toString: String = "officesOfExit"
 }

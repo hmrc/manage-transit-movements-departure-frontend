@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package navigation.annotations.routeDetails;
+package pages.sections.routeDetails
 
-import com.google.inject.BindingAnnotation;
+import pages.sections.Section
+import play.api.libs.json.{JsArray, JsPath}
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+case object OfficesOfExitForExitSection extends Section[JsArray] {
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
-@BindingAnnotation
-public @interface Routing {
+  override def path: JsPath = OfficeOfExitSection.path \ toString
+
+  override def toString: String = "officesOfExit"
 }

@@ -23,6 +23,7 @@ import models.{DateTime, NormalMode}
 import navigation.routeDetails.OfficeOfTransitNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import pages.routeDetails.routing.CountryOfDestinationPage
 import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -57,54 +58,109 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
 
   "ArrivalDateTime Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET" - {
+      "when country defined at index" in {
 
-      val userAnswers = emptyUserAnswers
-        .setValue(OfficeOfTransitCountryPage(index), transitCountry)
-        .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
-      setExistingUserAnswers(userAnswers)
+        val updatedAnswers = emptyUserAnswers
+          .setValue(OfficeOfTransitCountryPage(index), transitCountry)
+          .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
 
-      val request = FakeRequest(GET, arrivalDateTimeRoute)
+        setExistingUserAnswers(updatedAnswers)
 
-      val result = route(app, request).value
+        val request = FakeRequest(GET, arrivalDateTimeRoute)
 
-      val view = injector.instanceOf[OfficeOfTransitETAView]
+        val result = route(app, request).value
 
-      status(result) mustEqual OK
+        val view = injector.instanceOf[OfficeOfTransitETAView]
 
-      contentAsString(result) mustEqual
-        view(form, lrn, transitCountry.description, transitCustomsOffice.name, mode, index)(request, messages).toString
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form, lrn, transitCountry.description, transitCustomsOffice.name, mode, index)(request, messages).toString
+      }
+
+      "when only country of destination defined" in {
+        val updatedAnswers = emptyUserAnswers
+          .setValue(CountryOfDestinationPage, transitCountry)
+          .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
+
+        setExistingUserAnswers(updatedAnswers)
+
+        val request = FakeRequest(GET, arrivalDateTimeRoute)
+
+        val result = route(app, request).value
+
+        val view = injector.instanceOf[OfficeOfTransitETAView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form, lrn, transitCountry.description, transitCustomsOffice.name, mode, index)(request, messages).toString
+      }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must populate the view correctly on a GET when the question has previously been answered" - {
+      "when country defined at index" in {
 
-      val userAnswers = emptyUserAnswers
-        .setValue(OfficeOfTransitETAPage(index), dateTime)
-        .setValue(OfficeOfTransitCountryPage(index), transitCountry)
-        .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
+        val userAnswers = emptyUserAnswers
+          .setValue(OfficeOfTransitETAPage(index), dateTime)
+          .setValue(OfficeOfTransitCountryPage(index), transitCountry)
+          .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
 
-      setExistingUserAnswers(userAnswers)
+        setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, arrivalDateTimeRoute)
+        val request = FakeRequest(GET, arrivalDateTimeRoute)
 
-      val result = route(app, request).value
+        val result = route(app, request).value
 
-      val filledForm = form.bind(
-        Map(
-          "dateDay"    -> dateTime.date.getDayOfMonth.toString,
-          "dateMonth"  -> dateTime.date.getMonthValue.toString,
-          "dateYear"   -> dateTime.date.getYear.toString,
-          "timeHour"   -> dateTime.time.getHour.toString,
-          "timeMinute" -> dateTime.time.getMinute.toString
+        val filledForm = form.bind(
+          Map(
+            "dateDay"    -> dateTime.date.getDayOfMonth.toString,
+            "dateMonth"  -> dateTime.date.getMonthValue.toString,
+            "dateYear"   -> dateTime.date.getYear.toString,
+            "timeHour"   -> dateTime.time.getHour.toString,
+            "timeMinute" -> dateTime.time.getMinute.toString
+          )
         )
-      )
 
-      val view = injector.instanceOf[OfficeOfTransitETAView]
+        val view = injector.instanceOf[OfficeOfTransitETAView]
 
-      status(result) mustEqual OK
+        status(result) mustEqual OK
 
-      contentAsString(result) mustEqual
-        view(filledForm, lrn, transitCountry.description, transitCustomsOffice.name, mode, index)(request, messages).toString
+        contentAsString(result) mustEqual
+          view(filledForm, lrn, transitCountry.description, transitCustomsOffice.name, mode, index)(request, messages).toString
+      }
+
+      "when only country of destination defined" in {
+
+        val userAnswers = emptyUserAnswers
+          .setValue(OfficeOfTransitETAPage(index), dateTime)
+          .setValue(CountryOfDestinationPage, transitCountry)
+          .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
+
+        setExistingUserAnswers(userAnswers)
+
+        val request = FakeRequest(GET, arrivalDateTimeRoute)
+
+        val result = route(app, request).value
+
+        val filledForm = form.bind(
+          Map(
+            "dateDay"    -> dateTime.date.getDayOfMonth.toString,
+            "dateMonth"  -> dateTime.date.getMonthValue.toString,
+            "dateYear"   -> dateTime.date.getYear.toString,
+            "timeHour"   -> dateTime.time.getHour.toString,
+            "timeMinute" -> dateTime.time.getMinute.toString
+          )
+        )
+
+        val view = injector.instanceOf[OfficeOfTransitETAView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(filledForm, lrn, transitCountry.description, transitCustomsOffice.name, mode, index)(request, messages).toString
+      }
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -133,26 +189,48 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
       redirectLocation(result).value mustEqual onwardRoute.url
     }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+    "must return a Bad Request and errors when invalid data is submitted" - {
+      "when country defined at index" in {
+        val userAnswers = emptyUserAnswers
+          .setValue(OfficeOfTransitCountryPage(index), transitCountry)
+          .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
+        setExistingUserAnswers(userAnswers)
 
-      val userAnswers = emptyUserAnswers
-        .setValue(OfficeOfTransitCountryPage(index), transitCountry)
-        .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
-      setExistingUserAnswers(userAnswers)
+        val invalidAnswer = ""
 
-      val invalidAnswer = ""
+        val request    = FakeRequest(POST, arrivalDateTimeRoute).withFormUrlEncodedBody(("value", ""))
+        val filledForm = form.bind(Map("value" -> invalidAnswer))
 
-      val request    = FakeRequest(POST, arrivalDateTimeRoute).withFormUrlEncodedBody(("value", ""))
-      val filledForm = form.bind(Map("value" -> invalidAnswer))
+        val result = route(app, request).value
 
-      val result = route(app, request).value
+        status(result) mustEqual BAD_REQUEST
 
-      status(result) mustEqual BAD_REQUEST
+        val view = injector.instanceOf[OfficeOfTransitETAView]
 
-      val view = injector.instanceOf[OfficeOfTransitETAView]
+        contentAsString(result) mustEqual
+          view(filledForm, lrn, transitCountry.description, transitCustomsOffice.name, mode, index)(request, messages).toString
+      }
 
-      contentAsString(result) mustEqual
-        view(filledForm, lrn, transitCountry.description, transitCustomsOffice.name, mode, index)(request, messages).toString
+      "when only country of destination defined" in {
+        val userAnswers = emptyUserAnswers
+          .setValue(CountryOfDestinationPage, transitCountry)
+          .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
+        setExistingUserAnswers(userAnswers)
+
+        val invalidAnswer = ""
+
+        val request    = FakeRequest(POST, arrivalDateTimeRoute).withFormUrlEncodedBody(("value", ""))
+        val filledForm = form.bind(Map("value" -> invalidAnswer))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual BAD_REQUEST
+
+        val view = injector.instanceOf[OfficeOfTransitETAView]
+
+        contentAsString(result) mustEqual
+          view(filledForm, lrn, transitCountry.description, transitCustomsOffice.name, mode, index)(request, messages).toString
+      }
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

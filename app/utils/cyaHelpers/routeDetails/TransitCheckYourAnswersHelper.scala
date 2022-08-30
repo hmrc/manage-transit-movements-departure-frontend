@@ -24,10 +24,18 @@ import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
 import pages.sections.routeDetails.OfficeOfTransitCountriesSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import utils.cyaHelpers.AnswersHelper
+import viewModels.ListItem
 
-class TransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
+class TransitCheckYourAnswersHelper(
+  userAnswers: UserAnswers,
+  mode: Mode
+)(
+  ctcCountryCodes: Seq[String],
+  euCountryCodes: Seq[String],
+  customsSecurityAgreementAreaCountryCodes: Seq[String]
+)(implicit messages: Messages)
+    extends AnswersHelper(userAnswers, mode) {
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(OfficeOfTransitCountriesSection) {
@@ -35,9 +43,9 @@ class TransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
         val index = Index(position)
         buildListItem[OfficeOfTransitDomain, Country](
           page = OfficeOfTransitCountryPage(index),
-          getName = _.country,
-          formatName = _.toString,
-          removeRoute = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, index)
-        )(OfficeOfTransitDomain.userAnswersReader(index), implicitly[Reads[Country]])
+          formatJourneyDomainModel = _.label,
+          formatType = _.toString,
+          removeRoute = if (position == 0) None else Some(routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, index))
+        )(OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes), implicitly[Reads[Country]])
     }
 }

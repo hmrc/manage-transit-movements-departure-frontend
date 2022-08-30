@@ -18,10 +18,9 @@ package controllers.routeDetails.routing
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.CountryFormProvider
-import models.{CountryList, NormalMode}
 import generators.Generators
-import navigation.Navigator
-import navigation.annotations.routeDetails.Routing
+import models.{CountryList, NormalMode}
+import navigation.routeDetails.RoutingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.routeDetails.routing.CountryOfDestinationPage
@@ -50,7 +49,7 @@ class CountryOfDestinationControllerSpec extends SpecBase with AppWithDefaultMoc
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Routing]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[RoutingNavigatorProvider]).toInstance(fakeRoutingNavigatorProvider))
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "CountryOfDestination Controller" - {

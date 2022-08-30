@@ -21,7 +21,8 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.DateTimeFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.routeDetails.{OfficeOfTransitNavigator, OfficeOfTransitNavigatorProvider}
+import navigation.routeDetails.OfficeOfTransitNavigatorProvider
+import pages.routeDetails.routing.CountryOfDestinationPage
 import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -55,7 +56,7 @@ class OfficeOfTransitETAController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage.getFirst(OfficeOfTransitCountryPage(index)))
+    .andThen(getMandatoryPage(OfficeOfTransitCountryPage(index), CountryOfDestinationPage))
     .andThen(getMandatoryPage.getSecond(OfficeOfTransitPage(index))) {
       implicit request =>
         request.arg match {
@@ -70,7 +71,7 @@ class OfficeOfTransitETAController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage.getFirst(OfficeOfTransitCountryPage(index)))
+    .andThen(getMandatoryPage(OfficeOfTransitCountryPage(index), CountryOfDestinationPage))
     .andThen(getMandatoryPage.getSecond(OfficeOfTransitPage(index)))
     .async {
       implicit request =>
@@ -80,10 +81,11 @@ class OfficeOfTransitETAController @Inject() (
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, country.description, customsOffice.name, mode, index))),
-                value => {
-                  implicit val navigator: OfficeOfTransitNavigator = navigatorProvider(index)
-                  OfficeOfTransitETAPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
-                }
+                value =>
+                  navigatorProvider(index).flatMap {
+                    implicit navigator =>
+                      OfficeOfTransitETAPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                  }
               )
         }
     }

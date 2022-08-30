@@ -16,10 +16,43 @@
 
 package navigation.routeDetails
 
-import navigation.UserAnswersNavigator
-import javax.inject.{Inject, Singleton}
 import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.journeyDomain.routeDetails.transit.TransitDomain
+import navigation.UserAnswersNavigator
+import services.CountriesService
+import uk.gov.hmrc.http.HeaderCarrier
+
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class TransitNavigator @Inject() () extends UserAnswersNavigator[TransitDomain, RouteDetailsDomain]
+class TransitNavigatorProviderImpl @Inject() (
+  countriesService: CountriesService
+)(implicit ec: ExecutionContext)
+    extends TransitNavigatorProvider {
+
+  def apply()(implicit hc: HeaderCarrier): Future[TransitNavigator] =
+    for {
+      ctcCountries                             <- countriesService.getCountryCodesCTC()
+      euCountries                              <- countriesService.getCommunityCountries()
+      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
+    } yield new TransitNavigator(
+      ctcCountries.countryCodes,
+      euCountries.countryCodes,
+      customsSecurityAgreementAreaCountryCodes.countryCodes
+    )
+}
+
+trait TransitNavigatorProvider {
+
+  def apply()(implicit hc: HeaderCarrier): Future[TransitNavigator]
+}
+
+class TransitNavigator(
+  ctcCountryCodes: Seq[String],
+  euCountryCodes: Seq[String],
+  customsSecurityAgreementAreaCountryCodes: Seq[String]
+) extends UserAnswersNavigator[TransitDomain, RouteDetailsDomain]()(
+      TransitDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes),
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+    )
