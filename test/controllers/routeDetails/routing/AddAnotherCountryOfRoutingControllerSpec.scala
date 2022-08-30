@@ -74,7 +74,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual
-          routes.AddCountryOfRoutingYesNoController.onPageLoad(lrn, NormalMode).url
+          routes.BindingItineraryController.onPageLoad(lrn, NormalMode).url
       }
     }
 

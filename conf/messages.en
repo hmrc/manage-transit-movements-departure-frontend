@@ -682,8 +682,8 @@ routeDetails.officeOfExit.officeOfExitCountry.change.hidden = office of exit cou
 routeDetails.officeOfExit.officeOfExitCountry.checkYourAnswersLabel = Office of exit country
 routeDetails.officeOfExit.officeOfExitCountry.error.required = Enter the country the office of exit is in
 
-routeDetails.officeOfExit.checkOfficeOfExitAnswers.title = Check your answers
-routeDetails.officeOfExit.checkOfficeOfExitAnswers.heading = Check your answers
+routeDetails.officeOfExit.checkOfficeOfExitAnswers.title = Office of exit
+routeDetails.officeOfExit.checkOfficeOfExitAnswers.heading = Office of exit
 
 routeDetails.officeOfExit.officeOfExit.title = Where in {0} is the office of exit?
 routeDetails.officeOfExit.officeOfExit.heading = Where in {0} is the office of exit?
