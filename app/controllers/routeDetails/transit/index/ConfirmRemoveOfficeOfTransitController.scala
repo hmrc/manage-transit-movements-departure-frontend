@@ -22,7 +22,6 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{Index, LocalReferenceNumber}
 import pages.routeDetails.transit.index.OfficeOfTransitPage
-import pages.sections.routeDetails.transit
 import pages.sections.routeDetails.transit.OfficeOfTransitSection
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -45,22 +44,21 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] =
-    actions
-      .requireData(lrn)
-      .andThen(getMandatoryPage(OfficeOfTransitPage(index))) {
-        implicit request =>
-          val officeOfTransit = request.userAnswers.get(OfficeOfTransitPage(index)).get
-          val form            = formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit", officeOfTransit.name)
-          Ok(view(form, lrn, index, officeOfTransit.name))
-      }
+  def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(OfficeOfTransitPage(index))) {
+      implicit request =>
+        val officeOfTransit = request.arg
+        val form            = formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit", officeOfTransit.name)
+        Ok(view(form, lrn, index, officeOfTransit.name))
+    }
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions
     .requireData(lrn)
     .andThen(getMandatoryPage(OfficeOfTransitPage(index)))
     .async {
       implicit request =>
-        val officeOfTransit = request.userAnswers.get(OfficeOfTransitPage(index)).get
+        val officeOfTransit = request.arg
         val form            = formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit", officeOfTransit.name)
         form
           .bindFromRequest()
