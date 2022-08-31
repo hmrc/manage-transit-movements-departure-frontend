@@ -60,7 +60,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
 
     "redirect to correct start page in this sub-section" - {
       "when 0 offices of exit" in {
-        when(mockViewModelProvider.apply(any())(any(), any()))
+        when(mockViewModelProvider.apply(any())(any()))
           .thenReturn(AddAnotherOfficeOfExitViewModel(Nil))
 
         setExistingUserAnswers(emptyUserAnswers)
@@ -72,8 +72,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual
-          controllers.routeDetails.officeOfExit.routes.OfficeOfExitCountryController.onPageLoad(lrn, Index(0), NormalMode).url
+        redirectLocation(result).value mustEqual onwardRoute.url
       }
     }
 
@@ -82,7 +81,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
 
         val allowMoreOfficesOfExit = true
 
-        when(mockViewModelProvider.apply(any())(any(), any()))
+        when(mockViewModelProvider.apply(any())(any()))
           .thenReturn(AddAnotherOfficeOfExitViewModel(listItems))
 
         setExistingUserAnswers(emptyUserAnswers)
@@ -105,7 +104,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
 
         val listItems = maxedOutListItems
 
-        when(mockViewModelProvider.apply(any())(any(), any()))
+        when(mockViewModelProvider.apply(any())(any()))
           .thenReturn(AddAnotherOfficeOfExitViewModel(listItems))
 
         setExistingUserAnswers(emptyUserAnswers)
@@ -126,7 +125,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
     "when max limit not reached" - {
       "when yes submitted" - {
         "must redirect to office of exit country page at next index" in {
-          when(mockViewModelProvider.apply(any())(any(), any()))
+          when(mockViewModelProvider.apply(any())(any()))
             .thenReturn(AddAnotherOfficeOfExitViewModel(listItems))
 
           setExistingUserAnswers(emptyUserAnswers)
@@ -144,8 +143,8 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
       }
 
       "when no submitted" - {
-        "must redirect to the next page" ignore {
-          when(mockViewModelProvider.apply(any())(any(), any()))
+        "must redirect to the next page" in {
+          when(mockViewModelProvider.apply(any())(any()))
             .thenReturn(AddAnotherOfficeOfExitViewModel(listItems))
 
           setExistingUserAnswers(emptyUserAnswers)
@@ -157,14 +156,14 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
 
           status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual onwardRoute.url //TODO Update to correct URL when location of goods is built
+          redirectLocation(result).value mustEqual onwardRoute.url
         }
       }
     }
 
     "when max limit reached" - {
-      "must redirect to the next page" ignore {
-        when(mockViewModelProvider.apply(any())(any(), any()))
+      "must redirect to the next page" in {
+        when(mockViewModelProvider.apply(any())(any()))
           .thenReturn(AddAnotherOfficeOfExitViewModel(maxedOutListItems))
 
         setExistingUserAnswers(emptyUserAnswers)
@@ -176,13 +175,13 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual onwardRoute.url //TODO Update to correct URL when location of goods is built
+        redirectLocation(result).value mustEqual onwardRoute.url
       }
     }
 
     "must return a Bad Request and errors" - {
       "when invalid data is submitted and max limit not reached" in {
-        when(mockViewModelProvider.apply(any())(any(), any()))
+        when(mockViewModelProvider.apply(any())(any()))
           .thenReturn(AddAnotherOfficeOfExitViewModel(listItems))
 
         val allowMoreOfficesOfExit = true

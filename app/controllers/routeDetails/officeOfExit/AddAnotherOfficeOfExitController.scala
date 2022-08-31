@@ -32,7 +32,7 @@ import viewModels.routeDetails.officeOfExit.AddAnotherOfficeOfExitViewModel.AddA
 import views.html.routeDetails.officeOfExit.AddAnotherOfficeOfExitView
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherOfficeOfExitController @Inject() (
   override val messagesApi: MessagesApi,
@@ -51,31 +51,39 @@ class AddAnotherOfficeOfExitController @Inject() (
   private def form(allowMoreOfficesOfExit: Boolean): Form[Boolean] =
     formProvider("routeDetails.officeOfExit.addAnotherOfficeOfExit", allowMoreOfficesOfExit)
 
-  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       lazy val (officesOfExit, numberOfOfficesOfExit, allowMoreOfficesOfExit) = viewData
       numberOfOfficesOfExit match {
-        case 0 => Redirect(routes.OfficeOfExitCountryController.onPageLoad(lrn, Index(0), NormalMode))
-        case _ => Ok(view(form(allowMoreOfficesOfExit), lrn, officesOfExit, allowMoreOfficesOfExit))
+        case 0 =>
+          navigatorProvider().map {
+            navigator => Redirect(navigator.nextPage(request.userAnswers, NormalMode))
+          }
+        case _ => Future.successful(Ok(view(form(allowMoreOfficesOfExit), lrn, officesOfExit, allowMoreOfficesOfExit)))
       }
   }
 
-  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
+  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       lazy val (officesOfExit, numberOfOfficesOfExit, allowMoreOfficesOfExit) = viewData
       form(allowMoreOfficesOfExit)
         .bindFromRequest()
         .fold(
-          formWithErrors => BadRequest(view(formWithErrors, lrn, officesOfExit, allowMoreOfficesOfExit)),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, officesOfExit, allowMoreOfficesOfExit))),
           {
             case true =>
-              Redirect(routes.OfficeOfExitCountryController.onPageLoad(lrn, Index(numberOfOfficesOfExit), NormalMode))
-            case false => ??? //TODO direct to correct page in location of goods section when built
+              Future.successful(
+                Redirect(routes.OfficeOfExitCountryController.onPageLoad(lrn, Index(numberOfOfficesOfExit), NormalMode))
+              )
+            case false =>
+              navigatorProvider().map {
+                navigator => Redirect(navigator.nextPage(request.userAnswers, NormalMode))
+              }
           }
         )
   }
 
-  private def viewData(implicit request: DataRequest[_], ec: ExecutionContext): (Seq[ListItem], Int, Boolean) = {
+  private def viewData(implicit request: DataRequest[_]): (Seq[ListItem], Int, Boolean) = {
     val officesOfExit       = viewModelProvider.apply(request.userAnswers).listItems
     val numberOfOfficesExit = officesOfExit.length
     (officesOfExit, numberOfOfficesExit, numberOfOfficesExit < config.maxOfficesOfExit)

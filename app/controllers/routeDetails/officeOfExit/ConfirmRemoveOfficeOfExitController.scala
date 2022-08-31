@@ -21,8 +21,6 @@ import controllers.routeDetails.officeOfExit.{routes => exitRoutes}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{Index, LocalReferenceNumber}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
 import pages.routeDetails.officeOfExit.index.OfficeOfExitPage
 import pages.sections.routeDetails.exit.OfficeOfExitSection
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -37,7 +35,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class ConfirmRemoveOfficeOfExitController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @PreTaskListDetails implicit val navigator: Navigator,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -51,7 +48,7 @@ class ConfirmRemoveOfficeOfExitController @Inject() (
     .requireData(lrn)
     .andThen(getMandatoryPage(OfficeOfExitPage(index))) {
       implicit request =>
-        val officeOfExit = request.userAnswers.get(OfficeOfExitPage(index)).get
+        val officeOfExit = request.arg
         val form         = formProvider("routeDetails.officeOfExit.confirmRemoveOfficeOfExit", officeOfExit.name)
         Ok(view(form, lrn, index, officeOfExit.name))
     }
@@ -61,7 +58,7 @@ class ConfirmRemoveOfficeOfExitController @Inject() (
     .andThen(getMandatoryPage(OfficeOfExitPage(index)))
     .async {
       implicit request =>
-        val officeOfExit = request.userAnswers.get(OfficeOfExitPage(index)).get
+        val officeOfExit = request.arg
         val form         = formProvider("routeDetails.officeOfExit.confirmRemoveOfficeOfExit", officeOfExit.name)
         form
           .bindFromRequest()

@@ -25,7 +25,6 @@ import models.reference.Country
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, reset, verify, when}
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.routing.index.CountryOfRoutingPage
 import pages.sections.routeDetails.routing.CountryOfRoutingSection
@@ -42,27 +41,29 @@ class RemoveCountryOfRoutingYesNoControllerSpec
     with Generators
     with RouteDetailsUserAnswersGenerator {
 
-  private val country = arbitrary[Country].sample.value
-
-  private val formProvider = new YesNoFormProvider()
-  private val form         = formProvider("routeDetails.routing.removeCountryOfRoutingYesNo", country.toString)
+  private val formProvider           = new YesNoFormProvider()
+  private def form(country: Country) = formProvider("routeDetails.routing.removeCountryOfRoutingYesNo", country.toString)
 
   private lazy val removeCountryOfROutingYesNoRoute = routes.RemoveCountryOfRoutingYesNoController.onPageLoad(lrn, index).url
 
   "RemoveCountryOfRoutingYesNoController" - {
 
     "must return OK and the correct view for a GET" in {
-      setExistingUserAnswers(emptyUserAnswers.setValue(CountryOfRoutingPage(index), country))
+      forAll(arbitraryCountryOfRoutingAnswers(emptyUserAnswers, index)) {
+        answers =>
+          setExistingUserAnswers(answers)
+          val country = answers.getValue(CountryOfRoutingPage(index))
 
-      val request = FakeRequest(GET, removeCountryOfROutingYesNoRoute)
-      val result  = route(app, request).value
+          val request = FakeRequest(GET, removeCountryOfROutingYesNoRoute)
+          val result  = route(app, request).value
 
-      val view = injector.instanceOf[RemoveCountryOfRoutingYesNoView]
+          val view = injector.instanceOf[RemoveCountryOfRoutingYesNoView]
 
-      status(result) mustEqual OK
+          status(result) mustEqual OK
 
-      contentAsString(result) mustEqual
-        view(form, lrn, index, country)(request, messages).toString
+          contentAsString(result) mustEqual
+            view(form(country), lrn, index, country)(request, messages).toString
+      }
     }
 
     "when yes submitted" - {
@@ -115,19 +116,25 @@ class RemoveCountryOfRoutingYesNoControllerSpec
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      setExistingUserAnswers(emptyUserAnswers.setValue(CountryOfRoutingPage(index), country))
+      forAll(arbitraryCountryOfRoutingAnswers(emptyUserAnswers, index)) {
+        answers =>
+          setExistingUserAnswers(answers)
+          val country = answers.getValue(CountryOfRoutingPage(index))
 
-      val request   = FakeRequest(POST, removeCountryOfROutingYesNoRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm = form.bind(Map("value" -> ""))
+          setExistingUserAnswers(answers)
 
-      val result = route(app, request).value
+          val request   = FakeRequest(POST, removeCountryOfROutingYesNoRoute).withFormUrlEncodedBody(("value", ""))
+          val boundForm = form(country).bind(Map("value" -> ""))
 
-      status(result) mustEqual BAD_REQUEST
+          val result = route(app, request).value
 
-      val view = injector.instanceOf[RemoveCountryOfRoutingYesNoView]
+          status(result) mustEqual BAD_REQUEST
 
-      contentAsString(result) mustEqual
-        view(boundForm, lrn, index, country)(request, messages).toString
+          val view = injector.instanceOf[RemoveCountryOfRoutingYesNoView]
+
+          contentAsString(result) mustEqual
+            view(boundForm, lrn, index, country)(request, messages).toString
+      }
     }
 
     "must redirect to Session Expired for a GET" - {

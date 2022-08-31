@@ -18,26 +18,21 @@ package viewModels.routeDetails.officeOfExit
 
 import models.{NormalMode, UserAnswers}
 import play.api.i18n.Messages
-import services.CountriesService
-import uk.gov.hmrc.http.HeaderCarrier
 import utils.cyaHelpers.routeDetails.ExitCheckYourAnswersHelper
 import viewModels.ListItem
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 
 case class AddAnotherOfficeOfExitViewModel(listItems: Seq[ListItem])
 
 object AddAnotherOfficeOfExitViewModel {
 
-  def apply(countriesService: CountriesService)(
-    userAnswers: UserAnswers
-  )(implicit ec: ExecutionContext, hc: HeaderCarrier, messages: Messages): AddAnotherOfficeOfExitViewModel =
-    new AddAnotherOfficeOfExitViewModelProvider(countriesService)(ec)(userAnswers)
+  def apply(userAnswers: UserAnswers)(implicit messages: Messages): AddAnotherOfficeOfExitViewModel =
+    new AddAnotherOfficeOfExitViewModelProvider()(userAnswers)
 
-  class AddAnotherOfficeOfExitViewModelProvider @Inject() (countriesService: CountriesService)(implicit ec: ExecutionContext) {
+  class AddAnotherOfficeOfExitViewModelProvider @Inject() () {
 
-    def apply(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): AddAnotherOfficeOfExitViewModel = {
+    def apply(userAnswers: UserAnswers)(implicit messages: Messages): AddAnotherOfficeOfExitViewModel = {
       val helper = new ExitCheckYourAnswersHelper(userAnswers, NormalMode)
 
       val listItems = helper.listItems.collect {
