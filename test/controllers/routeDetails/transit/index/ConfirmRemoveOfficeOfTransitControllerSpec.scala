@@ -29,7 +29,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitPage}
 import pages.sections.routeDetails.transit
-import pages.sections.routeDetails.transit.OfficeOfTransitSection
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.routeDetails.transit.index.ConfirmRemoveOfficeOfTransitView

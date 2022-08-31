@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.CustomsOfficeForCountryFormProvider
 import generators.Generators
 import models.{CustomsOfficeList, NormalMode}
-import navigation.routeDetails.RoutingNavigatorProvider
+import navigation.routeDetails.OfficeOfExitNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.routeDetails.officeOfExit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
@@ -50,9 +50,7 @@ class OfficeOfExitControllerSpec extends SpecBase with AppWithDefaultMockFixture
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(
-        bind(classOf[RoutingNavigatorProvider]).toInstance(fakeRoutingNavigatorProvider)
-      ) // TODO: Update to use OfficeOfExitNavigatorProvider once built
+      .overrides(bind(classOf[OfficeOfExitNavigatorProvider]).toInstance(fakeOfficeOfExitNavigatorProvider))
       .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
   "OfficeOfExit Controller" - {
