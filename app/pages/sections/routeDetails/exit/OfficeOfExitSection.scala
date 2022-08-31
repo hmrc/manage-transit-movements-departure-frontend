@@ -22,6 +22,6 @@ import play.api.libs.json.{JsObject, JsPath}
 
 case class OfficeOfExitSection(index: Index) extends QuestionPage[JsObject] {
 
-  override def path: JsPath = ExitSection.path \ index.position
+  override def path: JsPath = OfficesOfExitSection.path \ index.position
 
 }

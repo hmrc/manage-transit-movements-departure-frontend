@@ -68,8 +68,7 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index, officeOfTransit.name))),
             {
               case true =>
-                transit
-                  .OfficeOfTransitSection(index)
+                OfficeOfTransitSection(index)
                   .removeFromUserAnswers()
                   .writeToSession()
                   .navigateTo(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn))

@@ -20,14 +20,13 @@ import controllers.routeDetails.officeOfExit.routes
 import models.reference.CustomsOffice
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.exit
 import pages.sections.routeDetails.exit.OfficeOfExitSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case class OfficeOfExitPage(index: Index) extends QuestionPage[CustomsOffice] {
 
-  override def path: JsPath = exit.OfficeOfExitSection(index).path \ toString
+  override def path: JsPath = OfficeOfExitSection(index).path \ toString
 
   override def toString: String = "officeOfExit"
 
