@@ -16,12 +16,13 @@
 
 package utils.cyaHelpers.routeDetails
 
-import controllers.routeDetails.transit.index.routes
+import controllers.routeDetails.officeOfExit.routes
+import models.journeyDomain.routeDetails.exit.OfficeOfExitDomain
 import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
 import models.reference.Country
 import models.{Index, Mode, UserAnswers}
-import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
-import pages.sections.routeDetails.OfficeOfTransitCountriesSection
+import pages.routeDetails.officeOfExit.index.OfficeOfExitCountryPage
+import pages.sections.routeDetails.exit.OfficesOfExitSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import utils.cyaHelpers.AnswersHelper
@@ -38,11 +39,11 @@ class ExitCheckYourAnswersHelper(
     extends AnswersHelper(userAnswers, mode) {
 
   def listItems: Seq[Either[ListItem, ListItem]] =
-    buildListItems(OfficeOfTransitCountriesSection) {
+    buildListItems(OfficesOfExitSection) {
       position =>
         val index = Index(position)
-        buildListItem[OfficeOfTransitDomain, Country](
-          page = OfficeOfTransitCountryPage(index),
+        buildListItem[OfficeOfExitDomain, Country](
+          page = OfficeOfExitCountryPage(index),
           formatJourneyDomainModel = _.label,
           formatType = _.toString,
           removeRoute = if (position == 0) None else Some(routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, index))
