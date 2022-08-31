@@ -42,15 +42,13 @@ class AddAnotherOfficeOfExitViewSpec extends ListWithActionsViewBehaviours {
 
   override val prefix: String = "routeDetails.officeOfExit.addAnotherOfficeOfExit"
 
-  behave like pageWithTitle()
+  behave like pageWithBackLink
 
   behave like pageWithSectionCaption("Route details")
 
-  behave like pageWithBackLink
+  behave like pageWithMoreItemsAllowed()
 
-  behave like pageWithHeading()
-
-  behave like pageWithRadioItems()
+  behave like pageWithItemsMaxedOut()
 
   behave like pageWithSubmitButton("Continue")
 }
