@@ -28,7 +28,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitPage}
-import pages.sections.routeDetails.OfficeOfTransitCountrySection
+import pages.sections.routeDetails.transit.OfficeOfTransitSection
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.routeDetails.transit.index.ConfirmRemoveOfficeOfTransitView
@@ -95,7 +95,7 @@ class ConfirmRemoveOfficeOfTransitControllerSpec
 
         val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(mockSessionRepository).set(userAnswersCaptor.capture())
-        userAnswersCaptor.getValue.get(OfficeOfTransitCountrySection(index)) mustNot be(defined)
+        userAnswersCaptor.getValue.get(OfficeOfTransitSection(index)) mustNot be(defined)
       }
     }
 

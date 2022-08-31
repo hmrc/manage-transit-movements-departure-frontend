@@ -22,7 +22,8 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{Index, LocalReferenceNumber}
 import pages.routeDetails.transit.index.OfficeOfTransitPage
-import pages.sections.routeDetails.OfficeOfTransitCountrySection
+import pages.sections.routeDetails.transit
+import pages.sections.routeDetails.transit.OfficeOfTransitSection
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -67,7 +68,7 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index, officeOfTransit.name))),
             {
               case true =>
-                OfficeOfTransitCountrySection(index)
+                OfficeOfTransitSection(index)
                   .removeFromUserAnswers()
                   .writeToSession()
                   .navigateTo(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn))

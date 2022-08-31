@@ -24,7 +24,7 @@ import models.{DeclarationType, Index, RichJsArray, UserAnswers}
 import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage}
 import pages.routeDetails.routing.OfficeOfDestinationPage
 import pages.routeDetails.transit.{AddOfficeOfTransitYesNoPage, T2DeclarationTypeYesNoPage}
-import pages.sections.routeDetails.OfficeOfTransitCountriesSection
+import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import play.api.mvc.Call
 
 case class TransitDomain(
@@ -49,7 +49,7 @@ object TransitDomain {
   ): UserAnswersReader[TransitDomain] = {
 
     implicit val officesOfTransitReader: UserAnswersReader[OfficesOfTransit] =
-      OfficeOfTransitCountriesSection.reader.flatMap {
+      OfficesOfTransitSection.reader.flatMap {
         case x if x.isEmpty =>
           UserAnswersReader[OfficeOfTransitDomain](
             OfficeOfTransitDomain.userAnswersReader(Index(0), ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)

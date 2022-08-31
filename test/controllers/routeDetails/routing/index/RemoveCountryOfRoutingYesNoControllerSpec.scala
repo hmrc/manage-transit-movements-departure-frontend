@@ -28,7 +28,7 @@ import org.mockito.Mockito.{never, reset, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.routing.index.CountryOfRoutingPage
-import pages.sections.routeDetails.CountryOfRoutingSection
+import pages.sections.routeDetails.routing.CountryOfRoutingSection
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.routeDetails.routing.index.RemoveCountryOfRoutingYesNoView

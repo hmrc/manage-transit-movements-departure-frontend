@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package pages.sections.routeDetails
+package pages.sections.routeDetails.transit
 
-import models.Index
 import pages.sections.Section
-import play.api.libs.json.{JsObject, JsPath}
+import play.api.libs.json.{JsArray, JsPath}
 
-case class CountryOfRoutingSection(index: Index) extends Section[JsObject] {
+case object OfficesOfTransitSection extends Section[JsArray] {
 
-  override def path: JsPath = CountriesOfRoutingSection.path \ index.position
+  override def path: JsPath = TransitSection.path \ toString
+
+  override def toString: String = "officesOfTransit"
 }

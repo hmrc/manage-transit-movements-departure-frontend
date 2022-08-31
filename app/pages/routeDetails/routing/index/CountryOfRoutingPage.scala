@@ -20,7 +20,7 @@ import controllers.routeDetails.routing.index.routes
 import models.reference.Country
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.CountryOfRoutingSection
+import pages.sections.routeDetails.routing.CountryOfRoutingSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

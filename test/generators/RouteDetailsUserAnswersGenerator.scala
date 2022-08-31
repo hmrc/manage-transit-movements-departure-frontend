@@ -17,6 +17,7 @@
 package generators
 
 import models.journeyDomain.routeDetails._
+import models.journeyDomain.routeDetails.exit.OfficeOfExitDomain
 import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
 import models.journeyDomain.routeDetails.transit.{OfficeOfTransitDomain, TransitDomain}
 import models.reference.CountryCode
@@ -49,5 +50,10 @@ trait RouteDetailsUserAnswersGenerator extends UserAnswersGenerator {
   def arbitraryOfficeOfTransitAnswers(userAnswers: UserAnswers, index: Index): Gen[UserAnswers] =
     buildUserAnswers[OfficeOfTransitDomain](userAnswers)(
       OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+    )
+
+  def arbitraryOfficeOfExitAnswers(userAnswers: UserAnswers, index: Index): Gen[UserAnswers] =
+    buildUserAnswers[OfficeOfExitDomain](userAnswers)(
+      OfficeOfExitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
     )
 }
