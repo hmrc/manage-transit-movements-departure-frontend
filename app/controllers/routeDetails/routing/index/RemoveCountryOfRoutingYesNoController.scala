@@ -24,7 +24,8 @@ import models.reference.Country
 import models.requests.SpecificDataRequestProvider1
 import models.{Index, LocalReferenceNumber}
 import pages.routeDetails.routing.index.CountryOfRoutingPage
-import pages.sections.routeDetails.CountryOfRoutingSection
+import pages.sections.routeDetails.routing
+import pages.sections.routeDetails.routing.CountryOfRoutingSection
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -70,7 +71,8 @@ class RemoveCountryOfRoutingYesNoController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index, request.arg))),
             {
               case true =>
-                CountryOfRoutingSection(index)
+                routing
+                  .CountryOfRoutingSection(index)
                   .removeFromUserAnswers()
                   .writeToSession()
                   .navigateTo(routingRoutes.AddAnotherCountryOfRoutingController.onPageLoad(lrn))

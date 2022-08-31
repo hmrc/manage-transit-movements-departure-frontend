@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package pages.sections.routeDetails
+package pages.sections.routeDetails.routing
 
 import pages.sections.Section
+import pages.sections.routeDetails.RouteDetailsSection
 import play.api.libs.json.{JsObject, JsPath}
 
 case object RoutingSection extends Section[JsObject] {

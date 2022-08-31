@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package pages.sections.routeDetails
+package pages.sections.routeDetails.exit
 
 import pages.sections.Section
-import play.api.libs.json.{JsObject, JsPath}
+import pages.sections.routeDetails.RouteDetailsSection
+import play.api.libs.json.{JsArray, JsPath}
 
-case object OfficeOfExitSection extends Section[JsObject] {
+case object ExitSection extends Section[JsArray] {
 
   override def path: JsPath = RouteDetailsSection.path \ toString
 
-  override def toString: String = "officeOfExit"
+  override def toString: String = "exit"
 }

@@ -21,7 +21,7 @@ import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
 import models.reference.Country
 import models.{Index, Mode, UserAnswers}
 import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
-import pages.sections.routeDetails.OfficeOfTransitCountriesSection
+import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import utils.cyaHelpers.AnswersHelper
@@ -38,7 +38,7 @@ class TransitCheckYourAnswersHelper(
     extends AnswersHelper(userAnswers, mode) {
 
   def listItems: Seq[Either[ListItem, ListItem]] =
-    buildListItems(OfficeOfTransitCountriesSection) {
+    buildListItems(OfficesOfTransitSection) {
       position =>
         val index = Index(position)
         buildListItem[OfficeOfTransitDomain, Country](
