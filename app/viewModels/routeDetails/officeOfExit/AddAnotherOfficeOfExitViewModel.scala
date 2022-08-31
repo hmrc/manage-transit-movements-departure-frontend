@@ -20,7 +20,7 @@ import models.{NormalMode, UserAnswers}
 import play.api.i18n.Messages
 import services.CountriesService
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.cyaHelpers.routeDetails.TransitCheckYourAnswersHelper
+import utils.cyaHelpers.routeDetails.{OfficeOfExitCheckYourAnswersHelper, TransitCheckYourAnswersHelper}
 import viewModels.ListItem
 
 import javax.inject.Inject
@@ -43,7 +43,7 @@ object AddAnotherOfficeOfExitViewModel {
         euCountries                              <- countriesService.getCommunityCountries()
         customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
       } yield {
-        val helper = new TransitCheckYourAnswersHelper(userAnswers, NormalMode)(
+        val helper = new OfficeOfExitCheckYourAnswersHelper(userAnswers, NormalMode,index)(
           ctcCountries.countryCodes,
           euCountries.countryCodes,
           customsSecurityAgreementAreaCountryCodes.countryCodes
