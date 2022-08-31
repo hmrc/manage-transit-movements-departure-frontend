@@ -20,7 +20,7 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CustomsOfficeForCountryFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.routeDetails.RoutingNavigatorProvider // TODO: replace with OfficeOfExitNavigatorProvider when built
+import navigation.routeDetails.OfficeOfExitNavigatorProvider
 import pages.routeDetails.officeOfExit
 import pages.routeDetails.officeOfExit.index.OfficeOfExitCountryPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class OfficeOfExitController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: RoutingNavigatorProvider,
+  navigatorProvider: OfficeOfExitNavigatorProvider,
   actions: Actions,
   formProvider: CustomsOfficeForCountryFormProvider,
   service: CustomsOfficesService,
@@ -79,7 +79,7 @@ class OfficeOfExitController @Inject() (
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, country.description, index, mode))),
                 value =>
-                  navigatorProvider().flatMap {
+                  navigatorProvider(index).flatMap {
                     implicit navigator =>
                       officeOfExit.index.OfficeOfExitPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
                   }
