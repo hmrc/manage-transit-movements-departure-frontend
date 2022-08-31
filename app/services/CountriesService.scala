@@ -38,6 +38,7 @@ class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector
     getCountriesWithCustomsOffices(excludedCountries, Seq("membership" -> membership))
   }
 
+  @deprecated("Works with P4, needs to be changed")
   def getCountriesWithCustomsOffices(
     excludedCountries: Seq[CountryCode],
     membershipQuery: Seq[(String, String)] = Nil

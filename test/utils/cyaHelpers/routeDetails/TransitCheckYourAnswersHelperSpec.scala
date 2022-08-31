@@ -34,9 +34,10 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
 
     "listItems" - {
       "must return list items" in {
-        val country1       = arbitrary[Country].sample.value
-        val country2       = arbitrary[Country].sample.value
-        val country3       = arbitrary[Country].sample.value
+        val country1 = arbitrary[Country].sample.value
+        val country2 = arbitrary[Country].sample.value
+        val country3 = arbitrary[Country].sample.value
+
         def customsOffice  = arbitrary[CustomsOffice].sample.value
         val customsOffice1 = customsOffice.copy(id = country1.code.code)
         val customsOffice2 = customsOffice.copy(id = country2.code.code)
@@ -45,6 +46,7 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
           .setValue(OfficeOfDeparturePage, customsOffice)
           .setValue(SecurityDetailsTypePage, NoSecurityDetails)
           .setValue(OfficeOfDestinationPage, customsOffice1)
+          .setValue(OfficeOfTransitCountryPage(Index(0)), country1)
           .setValue(OfficeOfTransitPage(Index(0)), customsOffice1)
           .setValue(AddOfficeOfTransitETAYesNoPage(Index(0)), false)
           .setValue(OfficeOfTransitCountryPage(Index(1)), country2)
@@ -53,27 +55,26 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
           .setValue(OfficeOfTransitCountryPage(Index(2)), country3)
 
         val helper = new TransitCheckYourAnswersHelper(answers, NormalMode)(Seq(country1.code.code), Nil, Nil)
-
         helper.listItems mustBe Seq(
           Right(
             ListItem(
               name = s"$customsOffice1",
-              changeUrl = controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(answers.lrn, Index(0)).url,
+              changeUrl = controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, Index(0)).url,
               removeUrl = None
             )
           ),
           Right(
             ListItem(
               name = s"$country2 - $customsOffice2",
-              changeUrl = controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(answers.lrn, Index(1)).url,
-              removeUrl = Some(controllers.routeDetails.transit.index.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(answers.lrn, Index(1)).url)
+              changeUrl = controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, Index(1)).url,
+              removeUrl = Some(controllers.routeDetails.transit.index.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, Index(1)).url)
             )
           ),
           Left(
             ListItem(
               name = s"$country3",
-              changeUrl = controllers.routeDetails.transit.index.routes.OfficeOfTransitController.onPageLoad(answers.lrn, NormalMode, Index(2)).url,
-              removeUrl = Some(controllers.routeDetails.transit.index.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(answers.lrn, Index(2)).url)
+              changeUrl = controllers.routeDetails.transit.index.routes.OfficeOfTransitController.onPageLoad(lrn, NormalMode, Index(2)).url,
+              removeUrl = Some(controllers.routeDetails.transit.index.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, Index(2)).url)
             )
           )
         )
