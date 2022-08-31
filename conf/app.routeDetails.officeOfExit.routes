@@ -11,3 +11,8 @@ POST       /:lrn/route-details/office-of-exit/change-office-of-exit/:index      
 
 GET        /:lrn/route-details/officeOfExit/:index/check-office-of-exit-answers                    controllers.routeDetails.officeOfExit.CheckOfficeOfExitAnswersController.onPageLoad(lrn: LocalReferenceNumber,  index: Index)
 POST       /:lrn/route-details/officeOfExit/:index/check-office-of-exit-answers                    controllers.routeDetails.officeOfExit.CheckOfficeOfExitAnswersController.onSubmit(lrn: LocalReferenceNumber,  index: Index)
+
+GET        /:lrn/route-details/officeOfExit/add-another-office-of-exit                        controllers.routeDetails.officeOfExit.AddAnotherOfficeOfExitController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/route-details/officeOfExit/add-another-office-of-exit                        controllers.routeDetails.officeOfExit.AddAnotherOfficeOfExitController.onSubmit(lrn: LocalReferenceNumber)
+GET        /:lrn/route-details/officeOfExit/change-add-another-office-of-exit                 controllers.routeDetails.officeOfExit.AddAnotherOfficeOfExitController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/route-details/officeOfExit/change-add-another-office-of-exit                 controllers.routeDetails.officeOfExit.AddAnotherOfficeOfExitController.onSubmit(lrn: LocalReferenceNumber)

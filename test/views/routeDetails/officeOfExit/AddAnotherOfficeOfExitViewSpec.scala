@@ -14,41 +14,41 @@
  * limitations under the License.
  */
 
-package views.routeDetails.transit
+package views.routeDetails.officeOfExit
 
 import forms.AddAnotherFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.ListWithActionsViewBehaviours
-import views.html.routeDetails.transit.AddAnotherOfficeOfTransitView
+import views.html.routeDetails.officeOfExit.AddAnotherOfficeOfExitView
 
-class AddAnotherOfficeOfTransitViewSpec extends ListWithActionsViewBehaviours {
+class AddAnotherOfficeOfExitViewSpec extends ListWithActionsViewBehaviours {
 
-  override def maxNumber: Int = frontendAppConfig.maxOfficesOfTransit
+  override def maxNumber: Int = frontendAppConfig.maxOfficesOfExit
+
+  override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
+    injector.instanceOf[AddAnotherOfficeOfExitView].apply(form, lrn, listItems, true)(fakeRequest, messages)
 
   private def formProvider = new AddAnotherFormProvider()
 
   override def form: Form[Boolean] = formProvider(prefix, allowMore = true)
 
-  override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector
-      .instanceOf[AddAnotherOfficeOfTransitView]
-      .apply(form, lrn, listItems, allowMoreOfficesOfTransit = true)(fakeRequest, messages)
-
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
-      .instanceOf[AddAnotherOfficeOfTransitView]
-      .apply(formProvider(prefix, allowMore = false), lrn, maxedOutListItems, allowMoreOfficesOfTransit = false)(fakeRequest, messages)
+      .instanceOf[AddAnotherOfficeOfExitView]
+      .apply(formProvider(prefix, allowMore = false), lrn, maxedOutListItems, allowMoreOfficesOfExit = false)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.transit.addAnotherOfficeOfTransit"
+  override val prefix: String = "routeDetails.officeOfExit.addAnotherOfficeOfExit"
 
-  behave like pageWithBackLink
+  behave like pageWithTitle()
 
   behave like pageWithSectionCaption("Route details")
 
-  behave like pageWithMoreItemsAllowed()
+  behave like pageWithBackLink
 
-  behave like pageWithItemsMaxedOut()
+  behave like pageWithHeading()
+
+  behave like pageWithRadioItems()
 
   behave like pageWithSubmitButton("Continue")
 }

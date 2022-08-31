@@ -693,3 +693,12 @@ routeDetails.officeOfExit.officeOfExit.placeholder = Select a customs office
 routeDetails.officeOfExit.officeOfExit.change.hidden = office of exit’s location
 routeDetails.officeOfExit.officeOfExit.checkYourAnswersLabel = Office location
 routeDetails.officeOfExit.officeOfExit.error.required = Enter where the office of exit is in {0}
+
+routeDetails.officeOfExit.addAnotherOfficeOfExit.singular.title = You have added {0} office of exit
+routeDetails.officeOfExit.addAnotherOfficeOfExit.singular.heading = You have added {0} office of exit
+routeDetails.officeOfExit.addAnotherOfficeOfExit.plural.title = You have added {0} offices of exit
+routeDetails.officeOfExit.addAnotherOfficeOfExit.plural.heading = You have added {0} offices of transit
+routeDetails.officeOfExit.addAnotherOfficeOfExit.error.required =  Select yes if you need to add another office of exit
+routeDetails.officeOfExit.addAnotherOfficeOfExit.label = Do you want to add another office of exit?
+routeDetails.officeOfExit.addAnotherOfficeOfExit.hint = You can add up to 9 offices.
+routeDetails.transit.addAnotherOfficeOfTransit.maxLimit.label = You cannot add any more offices of exit. To add another office, you need to remove one first.
