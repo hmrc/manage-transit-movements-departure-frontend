@@ -48,7 +48,7 @@ class ExitDomainSpec extends SpecBase with Generators {
         )
 
         val result: EitherType[ExitDomain] = UserAnswersReader[ExitDomain](
-          ExitDomain.userAnswersReader(Nil, Nil, Nil)
+          ExitDomain.userAnswersReader
         ).run(userAnswers)
 
         result.value mustBe expectedResult
@@ -60,7 +60,7 @@ class ExitDomainSpec extends SpecBase with Generators {
         val userAnswers = emptyUserAnswers
 
         val result: EitherType[ExitDomain] = UserAnswersReader[ExitDomain](
-          ExitDomain.userAnswersReader(Nil, Nil, Nil)
+          ExitDomain.userAnswersReader
         ).run(userAnswers)
 
         result.left.value.page mustBe OfficeOfExitCountryPage(Index(0))

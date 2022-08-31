@@ -87,8 +87,7 @@ class CheckOfficeOfExitAnswersControllerSpec extends SpecBase with AppWithDefaul
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual
-        controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(lrn).url
-      //todo change transit to exit when add another office of exit page built
+        controllers.routeDetails.officeOfExit.routes.AddAnotherOfficeOfExitController.onPageLoad(lrn).url
     }
   }
 }

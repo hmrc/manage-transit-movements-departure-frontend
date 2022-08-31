@@ -43,7 +43,7 @@ class OfficeOfExitDomainSpec extends SpecBase with Generators {
         )(index)
 
         val result: EitherType[OfficeOfExitDomain] = UserAnswersReader[OfficeOfExitDomain](
-          OfficeOfExitDomain.userAnswersReader(index, Nil, Nil, Nil)
+          OfficeOfExitDomain.userAnswersReader(index)
         ).run(userAnswers)
 
         result.value mustBe expectedResult
@@ -55,7 +55,7 @@ class OfficeOfExitDomainSpec extends SpecBase with Generators {
         val userAnswers = emptyUserAnswers
 
         val result: EitherType[OfficeOfExitDomain] = UserAnswersReader[OfficeOfExitDomain](
-          OfficeOfExitDomain.userAnswersReader(index, Nil, Nil, Nil)
+          OfficeOfExitDomain.userAnswersReader(index)
         ).run(userAnswers)
 
         result.left.value.page mustBe OfficeOfExitCountryPage(index)
@@ -66,7 +66,7 @@ class OfficeOfExitDomainSpec extends SpecBase with Generators {
           .setValue(OfficeOfExitCountryPage(index), country)
 
         val result: EitherType[OfficeOfExitDomain] = UserAnswersReader[OfficeOfExitDomain](
-          OfficeOfExitDomain.userAnswersReader(index, Nil, Nil, Nil)
+          OfficeOfExitDomain.userAnswersReader(index)
         ).run(userAnswers)
 
         result.left.value.page mustBe OfficeOfExitPage(index)

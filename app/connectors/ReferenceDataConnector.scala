@@ -51,6 +51,7 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[Seq[CustomsOffice]](serviceUrl, roleQueryParams(roles))
   }
 
+  @deprecated("TODO: Should be deprecated for P5")
   def getCustomsOfficesForCountry(
     countryCode: CountryCode,
     roles: Seq[String] = Nil

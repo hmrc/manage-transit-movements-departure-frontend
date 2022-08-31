@@ -56,6 +56,6 @@ class OfficeOfExitNavigator(
   euCountryCodes: Seq[String],
   customsSecurityAgreementAreaCountryCodes: Seq[String]
 ) extends UserAnswersNavigator[OfficeOfExitDomain, RouteDetailsDomain]()(
-      OfficeOfExitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes),
+      OfficeOfExitDomain.userAnswersReader(index),
       RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
     )

@@ -18,7 +18,6 @@ package utils.cyaHelpers.routeDetails
 
 import controllers.routeDetails.officeOfExit.routes
 import models.journeyDomain.routeDetails.exit.OfficeOfExitDomain
-import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
 import models.reference.Country
 import models.{Index, Mode, UserAnswers}
 import pages.routeDetails.officeOfExit.index.OfficeOfExitCountryPage
@@ -31,10 +30,6 @@ import viewModels.ListItem
 class ExitCheckYourAnswersHelper(
   userAnswers: UserAnswers,
   mode: Mode
-)(
-  ctcCountryCodes: Seq[String],
-  euCountryCodes: Seq[String],
-  customsSecurityAgreementAreaCountryCodes: Seq[String]
 )(implicit messages: Messages)
     extends AnswersHelper(userAnswers, mode) {
 
@@ -46,9 +41,9 @@ class ExitCheckYourAnswersHelper(
           page = OfficeOfExitCountryPage(index),
           formatJourneyDomainModel = _.label,
           formatType = _.toString,
-          removeRoute = if (position == 0) None else Some(routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, index))
+          removeRoute = Some(routes.ConfirmRemoveOfficeOfExitController.onPageLoad(userAnswers.lrn, index))
         )(
-          OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes),
+          OfficeOfExitDomain.userAnswersReader(index),
           implicitly[Reads[Country]]
         )
     }

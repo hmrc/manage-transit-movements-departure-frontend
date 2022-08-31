@@ -39,19 +39,4 @@ class OfficeOfExitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, i
     prefix = "routeDetails.officeOfExit.officeOfExit",
     id = Some("office-of-exit")
   )
-
-//  def listItems: Seq[Either[ListItem, ListItem]] =
-//    buildListItems(OfficesOfExitForExitSection) {
-//      position =>
-//        val index = Index(position)
-//        buildListItem[OfficeOfTransitDomain, Country](
-//          page = OfficeOfExitCountryPage(index),
-//          formatJourneyDomainModel = _.label,
-//          formatType = _.toString,
-//          removeRoute = if (position == 0) None else Some(routes.ConfirmRemoveOfficeOfExitController.onPageLoad(userAnswers.lrn, index))
-//        )(
-//          OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes),
-//          implicitly[Reads[Country]]
-//        )
-//    }
 }

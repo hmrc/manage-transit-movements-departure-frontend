@@ -20,11 +20,11 @@ import models.{NormalMode, UserAnswers}
 import play.api.i18n.Messages
 import services.CountriesService
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.cyaHelpers.routeDetails.{OfficeOfExitCheckYourAnswersHelper, TransitCheckYourAnswersHelper}
+import utils.cyaHelpers.routeDetails.ExitCheckYourAnswersHelper
 import viewModels.ListItem
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 case class AddAnotherOfficeOfExitViewModel(listItems: Seq[ListItem])
 
@@ -32,29 +32,20 @@ object AddAnotherOfficeOfExitViewModel {
 
   def apply(countriesService: CountriesService)(
     userAnswers: UserAnswers
-  )(implicit ec: ExecutionContext, hc: HeaderCarrier, messages: Messages): Future[AddAnotherOfficeOfExitViewModel] =
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier, messages: Messages): AddAnotherOfficeOfExitViewModel =
     new AddAnotherOfficeOfExitViewModelProvider(countriesService)(ec)(userAnswers)
 
   class AddAnotherOfficeOfExitViewModelProvider @Inject() (countriesService: CountriesService)(implicit ec: ExecutionContext) {
 
-    def apply(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): Future[AddAnotherOfficeOfExitViewModel] =
-      for {
-        ctcCountries                             <- countriesService.getCountryCodesCTC()
-        euCountries                              <- countriesService.getCommunityCountries()
-        customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
-      } yield {
-        val helper = new OfficeOfExitCheckYourAnswersHelper(userAnswers, NormalMode,index)(
-          ctcCountries.countryCodes,
-          euCountries.countryCodes,
-          customsSecurityAgreementAreaCountryCodes.countryCodes
-        )
+    def apply(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): AddAnotherOfficeOfExitViewModel = {
+      val helper = new ExitCheckYourAnswersHelper(userAnswers, NormalMode)
 
-        val listItems = helper.listItems.collect {
-          case Left(value)  => value
-          case Right(value) => value
-        }
-
-        new AddAnotherOfficeOfExitViewModel(listItems)
+      val listItems = helper.listItems.collect {
+        case Left(value)  => value
+        case Right(value) => value
       }
+
+      new AddAnotherOfficeOfExitViewModel(listItems)
+    }
   }
 }

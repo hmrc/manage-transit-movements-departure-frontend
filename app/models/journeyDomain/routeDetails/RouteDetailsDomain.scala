@@ -69,11 +69,7 @@ object RouteDetailsDomain {
                 .flatMap {
                   _.filter(customsSecurityAgreementAreaCountryCodes.contains(_)) match {
                     case Nil =>
-                      implicit val reads: UserAnswersReader[ExitDomain] = ExitDomain.userAnswersReader(
-                        ctcCountryCodes,
-                        euCountryCodes,
-                        customsSecurityAgreementAreaCountryCodes
-                      )
+                      implicit val reads: UserAnswersReader[ExitDomain] = ExitDomain.userAnswersReader
                       UserAnswersReader[ExitDomain].map(Some(_))
                     case _ =>
                       none[ExitDomain].pure[UserAnswersReader]
