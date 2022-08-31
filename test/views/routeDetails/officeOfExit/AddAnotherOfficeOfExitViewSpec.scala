@@ -46,6 +46,8 @@ class AddAnotherOfficeOfExitViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Route details")
 
+  behave like pageWithHint("You can add up to 9 offices.")
+
   behave like pageWithMoreItemsAllowed()
 
   behave like pageWithItemsMaxedOut()

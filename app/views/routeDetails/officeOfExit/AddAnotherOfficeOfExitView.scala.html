@@ -58,7 +58,8 @@
                 field = form("value"),
                 yesNoType = YesNoWithLegend(
                     legend = messages("routeDetails.officeOfExit.addAnotherOfficeOfExit.label")
-                )
+                ),
+                hint = Some(Text(messages("routeDetails.officeOfExit.addAnotherOfficeOfExit.hint")))
              )
         } else {
             <p class="govuk-body" data-testId="maxLimit">@messages("routeDetails.officeOfExit.addAnotherOfficeOfExit.maxLimit.label")</p>
