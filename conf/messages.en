@@ -702,3 +702,12 @@ routeDetails.officeOfExit.addAnotherOfficeOfExit.error.required =  Select yes if
 routeDetails.officeOfExit.addAnotherOfficeOfExit.label = Do you want to add another office of exit?
 routeDetails.officeOfExit.addAnotherOfficeOfExit.hint = You can add up to 9 offices.
 routeDetails.transit.addAnotherOfficeOfTransit.maxLimit.label = You cannot add any more offices of exit. To add another office, you need to remove one first.
+
+routeDetails.transit.addAnotherOfficeOfTransit.singular.title = You have added {0} office of transit
+routeDetails.transit.addAnotherOfficeOfTransit.singular.heading = You have added {0} office of transit
+routeDetails.transit.addAnotherOfficeOfTransit.plural.title = You have added {0} offices of transit
+routeDetails.transit.addAnotherOfficeOfTransit.plural.heading = You have added {0} offices of transit
+routeDetails.transit.addAnotherOfficeOfTransit.error.required = Select yes if you need to add another office of transit
+routeDetails.transit.addAnotherOfficeOfTransit.label = Do you want to add another office of transit?
+routeDetails.transit.addAnotherOfficeOfTransit.maxLimit.label = You cannot add any more offices of transit. To add another office, you need to remove one first.
+

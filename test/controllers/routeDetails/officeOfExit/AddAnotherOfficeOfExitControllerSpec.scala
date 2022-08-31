@@ -81,7 +81,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
     "must return OK and the correct view for a GET" - {
       "when max limit not reached" in {
 
-        val allowMoreOfficesOfTransit = true
+        val allowMoreOfficesOfExit = true
 
         when(mockViewModelProvider.apply(any())(any(), any()))
           .thenReturn(Future.successful(AddAnotherOfficeOfExitViewModel(listItems)))
@@ -97,12 +97,12 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(allowMoreOfficesOfTransit), lrn, listItems, allowMoreOfficesOfTransit)(request, messages).toString
+          view(form(allowMoreOfficesOfExit), lrn, listItems, allowMoreOfficesOfExit)(request, messages).toString
       }
 
       "when max limit reached" in {
 
-        val allowMoreOfficesOfTransit = false
+        val allowMoreOfficesOfExit = false
 
         val listItems = maxedOutListItems
 
@@ -120,13 +120,13 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(allowMoreOfficesOfTransit), lrn, listItems, allowMoreOfficesOfTransit)(request, messages).toString
+          view(form(allowMoreOfficesOfExit), lrn, listItems, allowMoreOfficesOfExit)(request, messages).toString
       }
     }
 
     "when max limit not reached" - {
       "when yes submitted" - {
-        "must redirect to office of transit country page at next index" in {
+        "must redirect to office of exit country page at next index" in {
           when(mockViewModelProvider.apply(any())(any(), any()))
             .thenReturn(Future.successful(AddAnotherOfficeOfExitViewModel(listItems)))
 
@@ -140,7 +140,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.routeDetails.transit.index.routes.OfficeOfTransitCountryController.onPageLoad(lrn, NormalMode, Index(listItems.length)).url
+            controllers.routeDetails.officeOfExit.routes.OfficeOfExitCountryController.onPageLoad(lrn, Index(listItems.length), NormalMode).url
         }
       }
 
@@ -186,14 +186,14 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
         when(mockViewModelProvider.apply(any())(any(), any()))
           .thenReturn(Future.successful(AddAnotherOfficeOfExitViewModel(listItems)))
 
-        val allowMoreOfficesOfTransit = true
+        val allowMoreOfficesOfExit = true
 
         setExistingUserAnswers(emptyUserAnswers)
 
         val request = FakeRequest(POST, addAnotherOfficeOfExitRoute)
           .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form(allowMoreOfficesOfTransit).bind(Map("value" -> ""))
+        val boundForm = form(allowMoreOfficesOfExit).bind(Map("value" -> ""))
 
         val result = route(app, request).value
 
@@ -202,7 +202,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, lrn, listItems, allowMoreOfficesOfTransit)(request, messages).toString
+          view(boundForm, lrn, listItems, allowMoreOfficesOfExit)(request, messages).toString
       }
     }
 

@@ -26,12 +26,14 @@ class AddAnotherOfficeOfExitViewSpec extends ListWithActionsViewBehaviours {
 
   override def maxNumber: Int = frontendAppConfig.maxOfficesOfExit
 
-  override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[AddAnotherOfficeOfExitView].apply(form, lrn, listItems, true)(fakeRequest, messages)
-
   private def formProvider = new AddAnotherFormProvider()
 
   override def form: Form[Boolean] = formProvider(prefix, allowMore = true)
+
+  override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
+    injector
+      .instanceOf[AddAnotherOfficeOfExitView]
+      .apply(form, lrn, listItems, allowMoreOfficesOfExit = true)(fakeRequest, messages)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector

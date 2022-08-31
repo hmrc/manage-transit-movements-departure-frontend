@@ -54,14 +54,14 @@ class AddAnotherOfficeOfExitController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       viewData flatMap {
-        case (officesOfTransit, numberOfOfficesOfExit, allowMoreOfficesOfExit) =>
+        case (officesOfExit, numberOfOfficesOfExit, allowMoreOfficesOfExit) =>
           numberOfOfficesOfExit match {
             case 0 =>
               navigatorProvider() map {
                 implicit navigator =>
                   Redirect(navigator.nextPage(request.userAnswers, NormalMode))
               }
-            case _ => Future.successful(Ok(view(form(allowMoreOfficesOfExit), lrn, officesOfTransit, allowMoreOfficesOfExit)))
+            case _ => Future.successful(Ok(view(form(allowMoreOfficesOfExit), lrn, officesOfExit, allowMoreOfficesOfExit)))
           }
       }
   }
@@ -90,8 +90,8 @@ class AddAnotherOfficeOfExitController @Inject() (
   private def viewData(implicit request: DataRequest[_], ec: ExecutionContext): Future[(Seq[ListItem], Int, Boolean)] =
     viewModelProvider.apply(request.userAnswers).map {
       viewModel =>
-        val officesOfTransit         = viewModel.listItems
-        val numberOfOfficesOfTransit = officesOfTransit.length
-        (officesOfTransit, numberOfOfficesOfTransit, numberOfOfficesOfTransit < config.maxOfficesOfTransit)
+        val officesOfExit       = viewModel.listItems
+        val numberOfOfficesExit = officesOfExit.length
+        (officesOfExit, numberOfOfficesExit, numberOfOfficesExit < config.maxOfficesOfTransit)
     }
 }
