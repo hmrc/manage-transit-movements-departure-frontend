@@ -18,9 +18,9 @@ package pages.sections.routeDetails.exit
 
 import pages.sections.Section
 import pages.sections.routeDetails.RouteDetailsSection
-import play.api.libs.json.{JsArray, JsPath}
+import play.api.libs.json.{JsObject, JsPath}
 
-case object ExitSection extends Section[JsArray] {
+case object ExitSection extends Section[JsObject] {
 
   override def path: JsPath = RouteDetailsSection.path \ toString
 
