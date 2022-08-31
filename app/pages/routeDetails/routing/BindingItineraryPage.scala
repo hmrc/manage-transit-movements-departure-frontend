@@ -20,7 +20,7 @@ import controllers.routeDetails.routing.routes
 import models.{Mode, SecurityDetailsType, UserAnswers}
 import pages.QuestionPage
 import pages.preTaskList.SecurityDetailsTypePage
-import pages.sections.routeDetails.RoutingSection
+import pages.sections.routeDetails.routing.RoutingSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

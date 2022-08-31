@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.sections.routeDetails
+package pages.sections.routeDetails.routing
 
 import pages.sections.Section
 import play.api.libs.json.{JsArray, JsPath}

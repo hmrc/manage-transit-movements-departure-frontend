@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.sections.routeDetails
+package pages.sections.routeDetails.transit
 
 import pages.sections.Section
 import play.api.libs.json.{JsArray, JsPath}
 
-case object OfficesOfExitForExitSection extends Section[JsArray] {
+case object OfficesOfTransitSection extends Section[JsArray] {
 
-  override def path: JsPath = OfficeOfExitSection.path \ toString
+  override def path: JsPath = TransitSection.path \ toString
 
-  override def toString: String = "officesOfExit"
+  override def toString: String = "officesOfTransit"
 }

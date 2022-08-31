@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package pages.sections.routeDetails
+package pages.sections.routeDetails.routing
 
 import models.Index
 import pages.sections.Section
 import play.api.libs.json.{JsObject, JsPath}
 
-case class OfficeOfTransitCountrySection(index: Index) extends Section[JsObject] {
+case class CountryOfRoutingSection(index: Index) extends Section[JsObject] {
 
-  override def path: JsPath = OfficeOfTransitCountriesSection.path \ index.position
+  override def path: JsPath = CountriesOfRoutingSection.path \ index.position
 }

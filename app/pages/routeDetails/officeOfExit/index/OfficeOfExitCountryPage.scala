@@ -21,12 +21,13 @@ import models.reference.Country
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.routeDetails
+import pages.sections.routeDetails.exit.OfficeOfExitSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case class OfficeOfExitCountryPage(index: Index) extends QuestionPage[Country] {
 
-  override def path: JsPath = routeDetails.OfficeOfExitForExitSection(index).path \ toString
+  override def path: JsPath = OfficeOfExitSection(index).path \ toString
 
   override def toString: String = "officeOfExitCountry"
 

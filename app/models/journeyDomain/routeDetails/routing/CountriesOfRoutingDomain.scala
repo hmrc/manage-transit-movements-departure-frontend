@@ -22,7 +22,7 @@ import models.domain.{GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswe
 import models.{Index, RichJsArray}
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.routeDetails.routing._
-import pages.sections.routeDetails.CountriesOfRoutingSection
+import pages.sections.routeDetails.routing.CountriesOfRoutingSection
 
 object CountriesOfRoutingDomain {
 

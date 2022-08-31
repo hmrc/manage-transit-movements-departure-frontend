@@ -19,7 +19,7 @@ package pages.routeDetails.transit
 import controllers.routeDetails.transit.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.{OfficeOfTransitCountriesSection, TransitSection}
+import pages.sections.routeDetails.transit.{OfficesOfTransitSection, TransitSection}
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
@@ -33,7 +33,7 @@ case object AddOfficeOfTransitYesNoPage extends QuestionPage[Boolean] {
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) => userAnswers.remove(OfficeOfTransitCountriesSection)
+      case Some(false) => userAnswers.remove(OfficesOfTransitSection)
       case _           => super.cleanup(value, userAnswers)
     }
 

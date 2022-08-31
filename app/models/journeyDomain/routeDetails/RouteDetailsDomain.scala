@@ -18,19 +18,24 @@ package models.journeyDomain.routeDetails
 
 import cats.implicits._
 import models.DeclarationType.Option4
+import models.SecurityDetailsType._
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
-import models.journeyDomain.routeDetails.routing.RoutingDomain
+import models.journeyDomain.routeDetails.exit.ExitDomain
+import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
 import models.journeyDomain.routeDetails.transit.TransitDomain
-import pages.preTaskList.DeclarationTypePage
+import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 
 case class RouteDetailsDomain(
   routing: RoutingDomain,
-  transit: Option[TransitDomain]
+  transit: Option[TransitDomain],
+  exit: Option[ExitDomain]
 ) extends JourneyDomainModel
 
 object RouteDetailsDomain {
 
+  // scalastyle:off cyclomatic.complexity
+  // scalastyle:off method.length
   implicit def userAnswersReader(
     ctcCountryCodes: Seq[String],
     euCountryCodes: Seq[String],
@@ -50,12 +55,43 @@ object RouteDetailsDomain {
           UserAnswersReader[TransitDomain].map(Some(_))
       }
 
+    implicit val exitReads: UserAnswersReader[Option[ExitDomain]] =
+      DeclarationTypePage.reader.flatMap {
+        case Option4 =>
+          none[ExitDomain].pure[UserAnswersReader]
+        case _ =>
+          SecurityDetailsTypePage.reader.flatMap {
+            case NoSecurityDetails | EntrySummaryDeclarationSecurityDetails =>
+              none[ExitDomain].pure[UserAnswersReader]
+            case _ =>
+              UserAnswersReader[Seq[CountryOfRoutingDomain]]
+                .map(_.map(_.country.code.code))
+                .flatMap {
+                  _.filter(customsSecurityAgreementAreaCountryCodes.contains(_)) match {
+                    case Nil =>
+                      implicit val reads: UserAnswersReader[ExitDomain] = ExitDomain.userAnswersReader(
+                        ctcCountryCodes,
+                        euCountryCodes,
+                        customsSecurityAgreementAreaCountryCodes
+                      )
+                      UserAnswersReader[ExitDomain].map(Some(_))
+                    case _ =>
+                      none[ExitDomain].pure[UserAnswersReader]
+                  }
+                }
+          }
+      }
+
     for {
       routing <- UserAnswersReader[RoutingDomain]
       transit <- UserAnswersReader[Option[TransitDomain]]
+      exit    <- UserAnswersReader[Option[ExitDomain]]
     } yield RouteDetailsDomain(
       routing,
-      transit
+      transit,
+      exit
     )
   }
+  // scalastyle:on cyclomatic.complexity
+  // scalastyle:on method.length
 }

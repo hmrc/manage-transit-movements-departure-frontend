@@ -20,13 +20,14 @@ import controllers.routeDetails.transit.index.routes
 import models.reference.CustomsOffice
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.OfficeOfTransitCountrySection
+import pages.sections.routeDetails.transit
+import pages.sections.routeDetails.transit.OfficeOfTransitSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case class OfficeOfTransitPage(index: Index) extends QuestionPage[CustomsOffice] {
 
-  override def path: JsPath = OfficeOfTransitCountrySection(index).path \ toString
+  override def path: JsPath = transit.OfficeOfTransitSection(index).path \ toString
 
   override def toString: String = "officeOfTransit"
 

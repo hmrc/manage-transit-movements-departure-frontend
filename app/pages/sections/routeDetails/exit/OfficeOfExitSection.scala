@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package pages.sections.routeDetails
+package pages.sections.routeDetails.exit
 
 import models.Index
-import pages.sections.Section
+import pages.QuestionPage
 import play.api.libs.json.{JsObject, JsPath}
 
-case class CountryOfRoutingSection(index: Index) extends Section[JsObject] {
+case class OfficeOfExitSection(index: Index) extends QuestionPage[JsObject] {
 
-  override def path: JsPath = CountriesOfRoutingSection.path \ index.position
+  override def path: JsPath = ExitSection.path \ index.position
+
 }

@@ -22,7 +22,7 @@ import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode, UserAnswers}
 import pages.routeDetails.routing._
 import pages.routeDetails.routing.index.CountryOfRoutingPage
-import pages.sections.routeDetails.CountriesOfRoutingSection
+import pages.sections.routeDetails.routing.CountriesOfRoutingSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow

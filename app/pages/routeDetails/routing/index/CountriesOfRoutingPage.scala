@@ -18,7 +18,7 @@ package pages.routeDetails.routing.index
 
 import models.CountryList
 import pages.QuestionPage
-import pages.sections.routeDetails.CountriesOfRoutingSection
+import pages.sections.routeDetails.routing.CountriesOfRoutingSection
 import play.api.libs.json.JsPath
 
 case object CountriesOfRoutingPage extends QuestionPage[CountryList] {
