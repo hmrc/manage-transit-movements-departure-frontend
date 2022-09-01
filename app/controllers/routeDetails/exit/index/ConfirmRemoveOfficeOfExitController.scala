@@ -14,34 +14,34 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails.transit.index
+package controllers.routeDetails.exit.index
 
 import controllers.actions._
-import controllers.routeDetails.transit.{routes => transitRoutes}
+import controllers.routeDetails.exit.{routes => exitRoutes}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.reference.CustomsOffice
 import models.requests.SpecificDataRequestProvider1
 import models.{Index, LocalReferenceNumber}
-import pages.routeDetails.transit.index.OfficeOfTransitPage
-import pages.sections.routeDetails.transit.OfficeOfTransitSection
+import pages.routeDetails.exit.index.OfficeOfExitPage
+import pages.sections.routeDetails.exit.OfficeOfExitSection
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.transit.index.ConfirmRemoveOfficeOfTransitView
+import views.html.routeDetails.exit.index.ConfirmRemoveOfficeOfExitView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConfirmRemoveOfficeOfTransitController @Inject() (
+class ConfirmRemoveOfficeOfExitController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ConfirmRemoveOfficeOfTransitView,
+  view: ConfirmRemoveOfficeOfExitView,
   getMandatoryPage: SpecificDataRequiredActionProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
@@ -50,18 +50,18 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
   private type Request = SpecificDataRequestProvider1[CustomsOffice]#SpecificDataRequest[_]
 
   private def form(implicit request: Request): Form[Boolean] =
-    formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit", request.arg.name)
+    formProvider("routeDetails.exit.confirmRemoveOfficeOfExit", request.arg.name)
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(OfficeOfTransitPage(index))) {
+    .andThen(getMandatoryPage(OfficeOfExitPage(index))) {
       implicit request =>
         Ok(view(form, lrn, index, request.arg.name))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(OfficeOfTransitPage(index)))
+    .andThen(getMandatoryPage(OfficeOfExitPage(index)))
     .async {
       implicit request =>
         form
@@ -70,12 +70,12 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index, request.arg.name))),
             {
               case true =>
-                OfficeOfTransitSection(index)
+                OfficeOfExitSection(index)
                   .removeFromUserAnswers()
                   .writeToSession()
-                  .navigateTo(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn))
+                  .navigateTo(exitRoutes.AddAnotherOfficeOfExitController.onPageLoad(lrn))
               case false =>
-                Future.successful(Redirect(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn)))
+                Future.successful(Redirect(exitRoutes.AddAnotherOfficeOfExitController.onPageLoad(lrn)))
             }
           )
     }

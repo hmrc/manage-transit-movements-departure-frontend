@@ -671,40 +671,38 @@ routeDetails.transit.confirmRemoveOfficeOfTransit.error.required = Select yes if
 routeDetails.transit.checkOfficeOfTransitAnswers.title = Check your answers
 routeDetails.transit.checkOfficeOfTransitAnswers.heading = Check your answers
 
-# OfficeOfExit
+# Exit
 
-routeDetails.officeOfExit.officeOfExitCountry.title = Which country is the office of exit in?
-routeDetails.officeOfExit.officeOfExitCountry.heading = Which country is the office of exit in?
-routeDetails.officeOfExit.officeOfExitCountry.paragraph = This is the exit point for goods leaving a customs territory.
-routeDetails.officeOfExit.officeOfExitCountry.hintText = Enter the country, like France or Portugal.
-routeDetails.officeOfExit.officeOfExitCountry.placeholder = Select a country
-routeDetails.officeOfExit.officeOfExitCountry.change.hidden = office of exit’s country
-routeDetails.officeOfExit.officeOfExitCountry.checkYourAnswersLabel = Country
-routeDetails.officeOfExit.officeOfExitCountry.error.required = Enter the country the office of exit is in
+routeDetails.exit.officeOfExitCountry.title = Which country is the office of exit in?
+routeDetails.exit.officeOfExitCountry.heading = Which country is the office of exit in?
+routeDetails.exit.officeOfExitCountry.paragraph = This is the exit point for goods leaving a customs territory.
+routeDetails.exit.officeOfExitCountry.hintText = Enter the country, like France or Portugal.
+routeDetails.exit.officeOfExitCountry.placeholder = Select a country
+routeDetails.exit.officeOfExitCountry.change.hidden = office of exit’s country
+routeDetails.exit.officeOfExitCountry.checkYourAnswersLabel = Country
+routeDetails.exit.officeOfExitCountry.error.required = Enter the country the office of exit is in
 
-routeDetails.officeOfExit.confirmRemoveOfficeOfExit.title = Are you sure you want to remove {0} as an office of exit?
-routeDetails.officeOfExit.confirmRemoveOfficeOfExit.heading = Are you sure you want to remove {0} as an office of exit?
-routeDetails.officeOfExit.confirmRemoveOfficeOfExit.error.required = Select yes if you want to remove {0} as an office of exit
+routeDetails.exit.officeOfExit.title = Where in {0} is the office of exit?
+routeDetails.exit.officeOfExit.heading = Where in {0} is the office of exit?
+routeDetails.exit.officeOfExit.hintText = Enter the office location or code, like Dover or GB000060.
+routeDetails.exit.officeOfExit.placeholder = Select a customs office
+routeDetails.exit.officeOfExit.change.hidden = office of exit’s location
+routeDetails.exit.officeOfExit.checkYourAnswersLabel = Office location
+routeDetails.exit.officeOfExit.error.required = Enter where the office of exit is in {0}
 
-routeDetails.officeOfExit.checkOfficeOfExitAnswers.title = Check your answers
-routeDetails.officeOfExit.checkOfficeOfExitAnswers.heading = Check your answers
-routeDetails.officeOfExit.checkOfficeOfExitAnswers.subHeading = Office of exit
+routeDetails.exit.confirmRemoveOfficeOfExit.title = Are you sure you want to remove {0} as an office of exit?
+routeDetails.exit.confirmRemoveOfficeOfExit.heading = Are you sure you want to remove {0} as an office of exit?
+routeDetails.exit.confirmRemoveOfficeOfExit.error.required = Select yes if you want to remove {0} as an office of exit
 
-routeDetails.officeOfExit.officeOfExit.title = Where in {0} is the office of exit?
-routeDetails.officeOfExit.officeOfExit.heading = Where in {0} is the office of exit?
-routeDetails.officeOfExit.officeOfExit.hintText = Enter the office location or code, like Dover or GB000060.
-routeDetails.officeOfExit.officeOfExit.placeholder = Select a customs office
-routeDetails.officeOfExit.officeOfExit.change.hidden = office of exit’s location
-routeDetails.officeOfExit.officeOfExit.checkYourAnswersLabel = Office location
-routeDetails.officeOfExit.officeOfExit.error.required = Enter where the office of exit is in {0}
+routeDetails.exit.checkOfficeOfExitAnswers.title = Check your answers
+routeDetails.exit.checkOfficeOfExitAnswers.heading = Check your answers
+routeDetails.exit.checkOfficeOfExitAnswers.subHeading = Office of exit
 
-routeDetails.officeOfExit.addAnotherOfficeOfExit.singular.title = You have added {0} office of exit
-routeDetails.officeOfExit.addAnotherOfficeOfExit.singular.heading = You have added {0} office of exit
-routeDetails.officeOfExit.addAnotherOfficeOfExit.plural.title = You have added {0} offices of exit
-routeDetails.officeOfExit.addAnotherOfficeOfExit.plural.heading = You have added {0} offices of exit
-routeDetails.officeOfExit.addAnotherOfficeOfExit.error.required =  Select yes if you need to add another office of exit
-routeDetails.officeOfExit.addAnotherOfficeOfExit.label = Do you want to add another office of exit?
-routeDetails.officeOfExit.addAnotherOfficeOfExit.hint = You can add up to 9 offices.
-routeDetails.officeOfExit.addAnotherOfficeOfExit.maxLimit.label = You cannot add any more offices of exit. To add another office, you need to remove one first.
-
-
+routeDetails.exit.addAnotherOfficeOfExit.singular.title = You have added {0} office of exit
+routeDetails.exit.addAnotherOfficeOfExit.singular.heading = You have added {0} office of exit
+routeDetails.exit.addAnotherOfficeOfExit.plural.title = You have added {0} offices of exit
+routeDetails.exit.addAnotherOfficeOfExit.plural.heading = You have added {0} offices of exit
+routeDetails.exit.addAnotherOfficeOfExit.error.required =  Select yes if you need to add another office of exit
+routeDetails.exit.addAnotherOfficeOfExit.label = Do you want to add another office of exit?
+routeDetails.exit.addAnotherOfficeOfExit.hint = You can add up to 9 offices.
+routeDetails.exit.addAnotherOfficeOfExit.maxLimit.label = You cannot add any more offices of exit. To add another office, you need to remove one first.

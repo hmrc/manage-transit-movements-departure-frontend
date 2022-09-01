@@ -17,12 +17,13 @@
 package utils.cyaHelpers.routeDetails
 
 import base.SpecBase
+import controllers.routeDetails.exit.index.routes
 import generators.Generators
 import models.reference.{Country, CustomsOffice}
 import models.{Index, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.officeOfExit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
+import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
 import viewModels.ListItem
 
 class ExitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -45,15 +46,15 @@ class ExitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChe
           Right(
             ListItem(
               name = s"$country - $customsOffice",
-              changeUrl = controllers.routeDetails.officeOfExit.routes.CheckOfficeOfExitAnswersController.onPageLoad(lrn, Index(0)).url,
-              removeUrl = Some(controllers.routeDetails.officeOfExit.routes.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn, Index(0)).url)
+              changeUrl = routes.CheckOfficeOfExitAnswersController.onPageLoad(lrn, Index(0)).url,
+              removeUrl = Some(routes.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn, Index(0)).url)
             )
           ),
           Left(
             ListItem(
               name = s"$country",
-              changeUrl = controllers.routeDetails.officeOfExit.routes.OfficeOfExitController.onPageLoad(lrn, Index(1), NormalMode).url,
-              removeUrl = Some(controllers.routeDetails.officeOfExit.routes.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn, Index(1)).url)
+              changeUrl = routes.OfficeOfExitController.onPageLoad(lrn, Index(1), NormalMode).url,
+              removeUrl = Some(routes.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn, Index(1)).url)
             )
           )
         )

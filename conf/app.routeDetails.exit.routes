@@ -1,0 +1,3 @@
+
+GET        /:lrn/route-details/exit/add-another-office-of-exit                           controllers.routeDetails.exit.AddAnotherOfficeOfExitController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/route-details/exit/add-another-office-of-exit                           controllers.routeDetails.exit.AddAnotherOfficeOfExitController.onSubmit(lrn: LocalReferenceNumber)

@@ -159,7 +159,7 @@ trait UserAnswersEntryGenerators {
   }
 
   private def generateExitAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.routeDetails.officeOfExit.index._
+    import pages.routeDetails.exit.index._
     {
       case OfficeOfExitCountryPage(_) => arbitrary[Country].map(Json.toJson(_))
       case OfficeOfExitPage(_)        => arbitrary[CustomsOffice].map(Json.toJson(_))
