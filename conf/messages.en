@@ -681,6 +681,7 @@ routeDetails.exit.officeOfExitCountry.placeholder = Select a country
 routeDetails.exit.officeOfExitCountry.change.hidden = office of exit’s country
 routeDetails.exit.officeOfExitCountry.checkYourAnswersLabel = Country
 routeDetails.exit.officeOfExitCountry.error.required = Enter the country the office of exit is in
+routeDetails.exit.officeOfExitCountry.error.noOffices = You cannot use this country as it does not have any offices of exit
 
 routeDetails.exit.officeOfExit.title = Where in {0} is the office of exit?
 routeDetails.exit.officeOfExit.heading = Where in {0} is the office of exit?

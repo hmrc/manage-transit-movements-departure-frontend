@@ -20,17 +20,19 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.CountryFormProvider
 import generators.Generators
 import models.reference.{Country, CountryCode}
-import models.{CountryList, Index, NormalMode}
+import models.{CountryList, CustomsOfficeList, Index, NormalMode}
 import navigation.routeDetails.OfficeOfExitNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.routeDetails.exit.index.OfficeOfExitCountryPage
 import pages.routeDetails.routing.index.CountryOfRoutingPage
+import play.api.data.FormError
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.CountriesService
+import services.{CountriesService, CustomsOfficesService}
 import views.html.routeDetails.exit.index.OfficeOfExitCountryView
 
 import scala.concurrent.Future
@@ -49,8 +51,9 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
   private def form(countryList: CountryList) = formProvider("routeDetails.exit.officeOfExitCountry", countryList)
   private val mode                           = NormalMode
 
-  private val mockCountriesService: CountriesService = mock[CountriesService]
-  private lazy val officeOfExitCountryRoute          = routes.OfficeOfExitCountryController.onPageLoad(lrn, index, mode).url
+  private val mockCountriesService: CountriesService           = mock[CountriesService]
+  private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
+  private lazy val officeOfExitCountryRoute                    = routes.OfficeOfExitCountryController.onPageLoad(lrn, index, mode).url
 
   override def beforeEach(): Unit = {
     reset(mockCountriesService)
@@ -62,6 +65,7 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
       .guiceApplicationBuilder()
       .overrides(bind(classOf[OfficeOfExitNavigatorProvider]).toInstance(fakeOfficeOfExitNavigatorProvider))
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
+      .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
   "OfficeOfExitCountry Controller" - {
 
@@ -153,6 +157,9 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
+      when(mockCustomsOfficesService.getCustomsOfficesOfExitForCountry(any())(any()))
+        .thenReturn(Future.successful(arbitrary[CustomsOfficeList].sample.value))
+
       val updatedUserAnswers = emptyUserAnswers
         .setValue(CountryOfRoutingPage(Index(0)), france)
         .setValue(CountryOfRoutingPage(Index(1)), italy)
@@ -179,6 +186,34 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
 
       val request   = FakeRequest(POST, officeOfExitCountryRoute).withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form(countriesOfRoutingList).bind(Map("value" -> "invalid value"))
+
+      val result = route(app, request).value
+
+      val view = injector.instanceOf[OfficeOfExitCountryView]
+
+      status(result) mustEqual BAD_REQUEST
+
+      contentAsString(result) mustEqual
+        view(boundForm, lrn, countriesOfRoutingList.countries, index, mode)(request, messages).toString
+    }
+
+    "must return a Bad Request and errors when submitted country has no corresponding customs offices" in {
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      when(mockCustomsOfficesService.getCustomsOfficesOfExitForCountry(any())(any()))
+        .thenReturn(Future.successful(CustomsOfficeList(Nil)))
+
+      val updatedUserAnswers = emptyUserAnswers
+        .setValue(CountryOfRoutingPage(Index(0)), france)
+        .setValue(CountryOfRoutingPage(Index(1)), italy)
+
+      setExistingUserAnswers(updatedUserAnswers)
+
+      val request = FakeRequest(POST, officeOfExitCountryRoute).withFormUrlEncodedBody(("value", france.code.code))
+
+      val boundForm = form(countriesOfRoutingList)
+        .withError(FormError("value", "You cannot use this country as it does not have any offices of exit"))
 
       val result = route(app, request).value
 
