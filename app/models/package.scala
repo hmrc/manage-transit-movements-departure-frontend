@@ -57,6 +57,9 @@ package object models {
           }
         }
         .getOrElse(Nil)
+
+    def validate[T](implicit rds: Reads[T]): Option[T] =
+      arr.flatMap(_.validate[T].asOpt)
   }
 
   implicit class RichJsValue(jsValue: JsValue) {

@@ -19,11 +19,11 @@ package controllers.routeDetails.exit.index
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
-import models.CountryList.customReads
-import models.{Index, LocalReferenceNumber, Mode}
+import models.CountryList.countriesOfRoutingReads
+import models.{Index, LocalReferenceNumber, Mode, RichOptionalJsArray}
 import navigation.routeDetails.OfficeOfExitNavigatorProvider
 import pages.routeDetails.exit.index.OfficeOfExitCountryPage
-import pages.routeDetails.routing.index.CountriesOfRoutingPage
+import pages.sections.routeDetails.routing.CountriesOfRoutingSection
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -52,7 +52,7 @@ class OfficeOfExitCountryController @Inject() (
       .requireData(lrn)
       .async {
         implicit request =>
-          (request.userAnswers.get(CountriesOfRoutingPage)(customReads) match {
+          (request.userAnswers.get(CountriesOfRoutingSection).validate(countriesOfRoutingReads) match {
             case Some(x) if x.countries.nonEmpty => Future.successful(x)
             case _                               => service.getCountries()
           }).map {
@@ -71,7 +71,7 @@ class OfficeOfExitCountryController @Inject() (
       .requireData(lrn)
       .async {
         implicit request =>
-          (request.userAnswers.get(CountriesOfRoutingPage)(customReads) match {
+          (request.userAnswers.get(CountriesOfRoutingSection).validate(countriesOfRoutingReads) match {
             case Some(x) if x.countries.nonEmpty => Future.successful(x)
             case _                               => service.getCountries()
           }).flatMap {
