@@ -706,3 +706,10 @@ routeDetails.exit.addAnotherOfficeOfExit.error.required =  Select yes if you nee
 routeDetails.exit.addAnotherOfficeOfExit.label = Do you want to add another office of exit?
 routeDetails.exit.addAnotherOfficeOfExit.hint = You can add up to 9 offices.
 routeDetails.exit.addAnotherOfficeOfExit.maxLimit.label = You cannot add any more offices of exit. To add another office, you need to remove one first.
+
+routeDetails.locationOfGoods.addLocationOfGoods.title = Do you want to add a location of goods?
+routeDetails.locationOfGoods.addLocationOfGoods.heading = Do you want to add a location of goods?
+routeDetails.locationOfGoods.addLocationOfGoods.paragraph1 = This is where Customs will carry out any physical checks.
+routeDetails.locationOfGoods.addLocationOfGoods.paragraph2 = For goods not present at a customs office, this is their location at the time they’re declared.
+routeDetails.locationOfGoods.addLocationOfGoods.checkYourAnswersLabel = Do you want to add a location of goods?
+routeDetails.locationOfGoods.addLocationOfGoods.error.required = Select yes if you want to add a location of goods
