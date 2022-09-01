@@ -38,7 +38,7 @@ import views.html.routeDetails.exit.AddAnotherOfficeOfExitView
 class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   private val formProvider                          = new AddAnotherFormProvider()
-  private def form(allowMoreOfficesOfExit: Boolean) = formProvider("routeDetails.officeOfExit.addAnotherOfficeOfExit", allowMoreOfficesOfExit)
+  private def form(allowMoreOfficesOfExit: Boolean) = formProvider("routeDetails.exit.addAnotherOfficeOfExit", allowMoreOfficesOfExit)
   private lazy val addAnotherOfficeOfExitRoute      = routes.AddAnotherOfficeOfExitController.onPageLoad(lrn).url
   private val mockViewModelProvider                 = mock[AddAnotherOfficeOfExitViewModelProvider]
   private val listItem                              = arbitrary[ListItem].sample.value

@@ -20,9 +20,12 @@ import controllers.actions._
 import controllers.routeDetails.transit.{routes => transitRoutes}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
+import models.reference.CustomsOffice
+import models.requests.SpecificDataRequestProvider1
 import models.{Index, LocalReferenceNumber}
 import pages.routeDetails.transit.index.OfficeOfTransitPage
 import pages.sections.routeDetails.transit.OfficeOfTransitSection
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -44,13 +47,16 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  private type Request = SpecificDataRequestProvider1[CustomsOffice]#SpecificDataRequest[_]
+
+  private def form(implicit request: Request): Form[Boolean] =
+    formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit", request.arg.name)
+
   def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions
     .requireData(lrn)
     .andThen(getMandatoryPage(OfficeOfTransitPage(index))) {
       implicit request =>
-        val officeOfTransit = request.arg
-        val form            = formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit", officeOfTransit.name)
-        Ok(view(form, lrn, index, officeOfTransit.name))
+        Ok(view(form, lrn, index, request.arg.name))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions
@@ -58,12 +64,10 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
     .andThen(getMandatoryPage(OfficeOfTransitPage(index)))
     .async {
       implicit request =>
-        val officeOfTransit = request.arg
-        val form            = formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit", officeOfTransit.name)
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index, officeOfTransit.name))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index, request.arg.name))),
             {
               case true =>
                 OfficeOfTransitSection(index)

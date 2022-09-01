@@ -40,7 +40,7 @@ class AddAnotherOfficeOfExitViewSpec extends ListWithActionsViewBehaviours {
       .instanceOf[AddAnotherOfficeOfExitView]
       .apply(formProvider(prefix, allowMore = false), lrn, maxedOutListItems, allowMoreOfficesOfExit = false)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.officeOfExit.addAnotherOfficeOfExit"
+  override val prefix: String = "routeDetails.exit.addAnotherOfficeOfExit"
 
   behave like pageWithBackLink
 

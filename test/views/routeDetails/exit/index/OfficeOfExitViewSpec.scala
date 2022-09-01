@@ -44,7 +44,7 @@ class OfficeOfExitViewSpec extends InputSelectViewBehaviours[CustomsOffice] with
   override def applyView(form: Form[CustomsOffice]): HtmlFormat.Appendable =
     injector.instanceOf[OfficeOfExitView].apply(form, lrn, values, countryName, index, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.officeOfExit.officeOfExit"
+  override val prefix: String = "routeDetails.exit.officeOfExit"
 
   behave like pageWithTitle(countryName)
 

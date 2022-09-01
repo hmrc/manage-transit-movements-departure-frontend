@@ -46,7 +46,7 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
   private val countriesReferenceData = CountryList(Seq(austria, unitedKingdom))
 
   private val formProvider                   = new CountryFormProvider()
-  private def form(countryList: CountryList) = formProvider("routeDetails.officeOfExit.officeOfExitCountry", countryList)
+  private def form(countryList: CountryList) = formProvider("routeDetails.exit.officeOfExitCountry", countryList)
   private val mode                           = NormalMode
 
   private val mockCountriesService: CountriesService = mock[CountriesService]

@@ -50,7 +50,7 @@ class AddAnotherOfficeOfExitController @Inject() (
     with I18nSupport {
 
   private def form(allowMoreOfficesOfExit: Boolean): Form[Boolean] =
-    formProvider("routeDetails.officeOfExit.addAnotherOfficeOfExit", allowMoreOfficesOfExit)
+    formProvider("routeDetails.exit.addAnotherOfficeOfExit", allowMoreOfficesOfExit)
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>

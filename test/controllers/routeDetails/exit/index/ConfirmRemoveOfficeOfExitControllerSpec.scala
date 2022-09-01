@@ -41,7 +41,7 @@ class ConfirmRemoveOfficeOfExitControllerSpec
     with ScalaCheckPropertyChecks {
 
   private val formProvider                       = new YesNoFormProvider()
-  private def form(customsOffice: CustomsOffice) = formProvider("routeDetails.officeOfExit.confirmRemoveOfficeOfExit", customsOffice.name)
+  private def form(customsOffice: CustomsOffice) = formProvider("routeDetails.exit.confirmRemoveOfficeOfExit", customsOffice.name)
 
   private lazy val confirmRemoveOfficeOfExitRoute = routes.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn, index).url
 

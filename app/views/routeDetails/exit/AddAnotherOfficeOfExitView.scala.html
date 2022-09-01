@@ -37,7 +37,7 @@
 }
 
 @mainTemplate(
-    title = messages(s"routeDetails.officeOfExit.addAnotherOfficeOfExit.$singularOrPlural.title", officesOfExit.length),
+    title = messages(s"routeDetails.exit.addAnotherOfficeOfExit.$singularOrPlural.title", officesOfExit.length),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -45,7 +45,7 @@
     @errorSummary(form.errors)
 
     @heading(
-        heading = messages(s"routeDetails.officeOfExit.addAnotherOfficeOfExit.$singularOrPlural.heading", officesOfExit.length),
+        heading = messages(s"routeDetails.exit.addAnotherOfficeOfExit.$singularOrPlural.heading", officesOfExit.length),
         caption = Some(messages("routeDetails.caption"))
     )
 
@@ -57,12 +57,12 @@
             @inputYesNo(
                 field = form("value"),
                 yesNoType = YesNoWithLegend(
-                    legend = messages("routeDetails.officeOfExit.addAnotherOfficeOfExit.label")
+                    legend = messages("routeDetails.exit.addAnotherOfficeOfExit.label")
                 ),
-                hint = Some(Text(messages("routeDetails.officeOfExit.addAnotherOfficeOfExit.hint")))
+                hint = Some(Text(messages("routeDetails.exit.addAnotherOfficeOfExit.hint")))
              )
         } else {
-            <p class="govuk-body" data-testId="maxLimit">@messages("routeDetails.officeOfExit.addAnotherOfficeOfExit.maxLimit.label")</p>
+            <p class="govuk-body" data-testId="maxLimit">@messages("routeDetails.exit.addAnotherOfficeOfExit.maxLimit.label")</p>
         }
 
         @button(

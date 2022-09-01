@@ -57,7 +57,7 @@ class OfficeOfExitCountryController @Inject() (
             case _                               => service.getCountries()
           }).map {
             countryList =>
-              val form = formProvider("routeDetails.officeOfExit.officeOfExitCountry", countryList)
+              val form = formProvider("routeDetails.exit.officeOfExitCountry", countryList)
               val preparedForm = request.userAnswers.get(exit.index.OfficeOfExitCountryPage(index)) match {
                 case None        => form
                 case Some(value) => form.fill(value)
@@ -76,7 +76,7 @@ class OfficeOfExitCountryController @Inject() (
             case _                               => service.getCountries()
           }).flatMap {
             countryList =>
-              val form = formProvider("routeDetails.officeOfExit.officeOfExitCountry", countryList)
+              val form = formProvider("routeDetails.exit.officeOfExitCountry", countryList)
               form
                 .bindFromRequest()
                 .fold(

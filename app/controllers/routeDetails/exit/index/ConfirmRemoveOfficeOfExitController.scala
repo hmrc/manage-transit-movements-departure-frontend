@@ -20,9 +20,12 @@ import controllers.actions._
 import controllers.routeDetails.exit.{routes => exitRoutes}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
+import models.reference.CustomsOffice
+import models.requests.SpecificDataRequestProvider1
 import models.{Index, LocalReferenceNumber}
 import pages.routeDetails.exit.index.OfficeOfExitPage
 import pages.sections.routeDetails.exit.OfficeOfExitSection
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -44,13 +47,16 @@ class ConfirmRemoveOfficeOfExitController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  private type Request = SpecificDataRequestProvider1[CustomsOffice]#SpecificDataRequest[_]
+
+  private def form(implicit request: Request): Form[Boolean] =
+    formProvider("routeDetails.exit.confirmRemoveOfficeOfExit", request.arg.name)
+
   def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions
     .requireData(lrn)
     .andThen(getMandatoryPage(OfficeOfExitPage(index))) {
       implicit request =>
-        val officeOfExit = request.arg
-        val form         = formProvider("routeDetails.officeOfExit.confirmRemoveOfficeOfExit", officeOfExit.name)
-        Ok(view(form, lrn, index, officeOfExit.name))
+        Ok(view(form, lrn, index, request.arg.name))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions
@@ -58,12 +64,10 @@ class ConfirmRemoveOfficeOfExitController @Inject() (
     .andThen(getMandatoryPage(OfficeOfExitPage(index)))
     .async {
       implicit request =>
-        val officeOfExit = request.arg
-        val form         = formProvider("routeDetails.officeOfExit.confirmRemoveOfficeOfExit", officeOfExit.name)
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index, officeOfExit.name))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index, request.arg.name))),
             {
               case true =>
                 OfficeOfExitSection(index)

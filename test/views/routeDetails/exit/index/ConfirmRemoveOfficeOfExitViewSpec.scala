@@ -29,7 +29,7 @@ class ConfirmRemoveOfficeOfExitViewSpec extends YesNoViewBehaviours with Generat
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector.instanceOf[ConfirmRemoveOfficeOfExitView].apply(form, lrn, index, exitOfficeName)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.officeOfExit.confirmRemoveOfficeOfExit"
+  override val prefix: String = "routeDetails.exit.confirmRemoveOfficeOfExit"
 
   behave like pageWithTitle(exitOfficeName)
 
