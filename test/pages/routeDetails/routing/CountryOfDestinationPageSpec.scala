@@ -17,7 +17,9 @@
 package pages.routeDetails.routing
 
 import models.reference.{Country, CountryCode}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
 
 class CountryOfDestinationPageSpec extends PageBehaviours {
 
@@ -44,6 +46,18 @@ class CountryOfDestinationPageSpec extends PageBehaviours {
         val postChange = preChange.setValue(CountryOfDestinationPage, updatedDestinationCountry)
 
         postChange.get(OfficeOfDestinationPage) mustNot be(defined)
+      }
+
+      "must clean up transit section" in {
+        val country = arbitrary[Country].sample.value
+
+        val preChange = emptyUserAnswers
+          .setValue(CountryOfDestinationPage, destinationCountry)
+          .setValue(OfficeOfTransitCountryPage(index), country)
+
+        val postChange = preChange.setValue(CountryOfDestinationPage, updatedDestinationCountry)
+
+        postChange.get(OfficeOfTransitCountryPage(index)) mustNot be(defined)
       }
     }
 

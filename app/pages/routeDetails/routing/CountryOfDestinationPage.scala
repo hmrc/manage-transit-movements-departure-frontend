@@ -21,6 +21,7 @@ import models.reference.Country
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.routeDetails.routing.RoutingSection
+import pages.sections.routeDetails.transit.TransitSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
@@ -34,7 +35,7 @@ case object CountryOfDestinationPage extends QuestionPage[Country] {
 
   override def cleanup(updatedValue: Option[Country], previousValue: Option[Country], userAnswers: UserAnswers): Try[UserAnswers] =
     (previousValue, updatedValue) match {
-      case (Some(x), Some(y)) if x != y => userAnswers.remove(OfficeOfDestinationPage)
+      case (Some(x), Some(y)) if x != y => userAnswers.remove(OfficeOfDestinationPage).flatMap(_.remove(TransitSection))
       case _                            => super.cleanup(updatedValue, previousValue, userAnswers)
     }
 

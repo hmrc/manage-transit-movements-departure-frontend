@@ -16,8 +16,11 @@
 
 package pages.routeDetails.routing.index
 
-import models.reference.Country
+import models.reference.{Country, CountryCode}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.routeDetails.exit.index.OfficeOfExitCountryPage
+import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
 
 class CountryOfRoutingPageSpec extends PageBehaviours {
 
@@ -28,5 +31,25 @@ class CountryOfRoutingPageSpec extends PageBehaviours {
     beSettable[Country](CountryOfRoutingPage(index))
 
     beRemovable[Country](CountryOfRoutingPage(index))
+
+    "cleanup" - {
+      "when value changes" - {
+        "must clean up transit and exit sections" in {
+          val france  = Country(CountryCode("FR"), "France")
+          val italy   = Country(CountryCode("IT"), "Italy")
+          val country = arbitrary[Country].sample.value
+
+          val preChange = emptyUserAnswers
+            .setValue(CountryOfRoutingPage(index), france)
+            .setValue(OfficeOfTransitCountryPage(index), country)
+            .setValue(OfficeOfExitCountryPage(index), country)
+
+          val postChange = preChange.setValue(CountryOfRoutingPage(index), italy)
+
+          postChange.get(OfficeOfTransitCountryPage(index)) mustNot be(defined)
+          postChange.get(OfficeOfExitCountryPage(index)) mustNot be(defined)
+        }
+      }
+    }
   }
 }
