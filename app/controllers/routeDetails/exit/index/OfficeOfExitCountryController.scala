@@ -22,7 +22,7 @@ import forms.CountryFormProvider
 import models.CountryList.customReads
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.routeDetails.OfficeOfExitNavigatorProvider
-import pages.routeDetails.exit
+import pages.routeDetails.exit.index.OfficeOfExitCountryPage
 import pages.routeDetails.routing.index.CountriesOfRoutingPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -58,7 +58,7 @@ class OfficeOfExitCountryController @Inject() (
           }).map {
             countryList =>
               val form = formProvider("routeDetails.exit.officeOfExitCountry", countryList)
-              val preparedForm = request.userAnswers.get(exit.index.OfficeOfExitCountryPage(index)) match {
+              val preparedForm = request.userAnswers.get(OfficeOfExitCountryPage(index)) match {
                 case None        => form
                 case Some(value) => form.fill(value)
               }
@@ -84,7 +84,7 @@ class OfficeOfExitCountryController @Inject() (
                   value =>
                     navigatorProvider(index).flatMap {
                       implicit navigator =>
-                        exit.index.OfficeOfExitCountryPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                        OfficeOfExitCountryPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
                     }
                 )
           }

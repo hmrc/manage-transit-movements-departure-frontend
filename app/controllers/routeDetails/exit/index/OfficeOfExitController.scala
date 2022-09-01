@@ -22,7 +22,7 @@ import forms.CustomsOfficeForCountryFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.routeDetails.OfficeOfExitNavigatorProvider
 import pages.routeDetails.exit
-import pages.routeDetails.exit.index.OfficeOfExitCountryPage
+import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -56,7 +56,7 @@ class OfficeOfExitController @Inject() (
         service.getCustomsOfficesOfExitForCountry(country.code).map {
           customsOfficeList =>
             val form = formProvider("routeDetails.exit.officeOfExit", customsOfficeList, country.description)
-            val preparedForm = request.userAnswers.get(exit.index.OfficeOfExitPage(index)) match {
+            val preparedForm = request.userAnswers.get(OfficeOfExitPage(index)) match {
               case None        => form
               case Some(value) => form.fill(value)
             }
@@ -67,7 +67,7 @@ class OfficeOfExitController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(exit.index.OfficeOfExitCountryPage(index)))
+    .andThen(getMandatoryPage(OfficeOfExitCountryPage(index)))
     .async {
       implicit request =>
         val country = request.arg
