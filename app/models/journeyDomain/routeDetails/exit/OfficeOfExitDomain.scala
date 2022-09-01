@@ -33,15 +33,14 @@ case class OfficeOfExitDomain(
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
     Some(routes.CheckOfficeOfExitAnswersController.onPageLoad(userAnswers.lrn, index))
+
+  val label: String = s"$country - $customsOffice"
 }
 
 object OfficeOfExitDomain {
 
   implicit def userAnswersReader(
-    index: Index,
-    ctcCountryCodes: Seq[String],
-    euCountryCodes: Seq[String],
-    customsSecurityAgreementAreaCountryCodes: Seq[String]
+    index: Index
   ): UserAnswersReader[OfficeOfExitDomain] =
     (
       OfficeOfExitCountryPage(index).reader,

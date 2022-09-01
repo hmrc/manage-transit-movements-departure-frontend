@@ -54,6 +54,6 @@ trait RouteDetailsUserAnswersGenerator extends UserAnswersGenerator {
 
   def arbitraryOfficeOfExitAnswers(userAnswers: UserAnswers, index: Index): Gen[UserAnswers] =
     buildUserAnswers[OfficeOfExitDomain](userAnswers)(
-      OfficeOfExitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+      OfficeOfExitDomain.userAnswersReader(index)
     )
 }

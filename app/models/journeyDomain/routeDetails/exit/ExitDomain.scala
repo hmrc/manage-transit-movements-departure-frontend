@@ -27,26 +27,22 @@ case class ExitDomain(
 ) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    None // TODO - add another office of exit page
+    Some(controllers.routeDetails.officeOfExit.routes.AddAnotherOfficeOfExitController.onPageLoad(userAnswers.lrn))
 }
 
 object ExitDomain {
 
-  implicit def userAnswersReader(
-    ctcCountryCodes: Seq[String],
-    euCountryCodes: Seq[String],
-    customsSecurityAgreementAreaCountryCodes: Seq[String]
-  ): UserAnswersReader[ExitDomain] = {
+  implicit val userAnswersReader: UserAnswersReader[ExitDomain] = {
 
     implicit val officesOfExitReader: UserAnswersReader[Seq[OfficeOfExitDomain]] =
       OfficesOfExitSection.reader.flatMap {
         case x if x.isEmpty =>
           UserAnswersReader[OfficeOfExitDomain](
-            OfficeOfExitDomain.userAnswersReader(Index(0), ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+            OfficeOfExitDomain.userAnswersReader(Index(0))
           ).map(Seq(_))
         case x =>
           x.traverse[OfficeOfExitDomain](
-            OfficeOfExitDomain.userAnswersReader(_, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+            OfficeOfExitDomain.userAnswersReader
           ).map(_.toSeq)
       }
 

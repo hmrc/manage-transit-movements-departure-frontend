@@ -39,5 +39,4 @@ class OfficeOfExitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, i
     prefix = "routeDetails.officeOfExit.officeOfExit",
     id = Some("office-of-exit")
   )
-
 }

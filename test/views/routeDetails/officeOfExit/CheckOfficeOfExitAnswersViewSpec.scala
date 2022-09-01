@@ -16,6 +16,7 @@
 
 package views.routeDetails.officeOfExit
 
+import controllers.routeDetails.officeOfExit.routes
 import play.twirl.api.HtmlFormat
 import viewModels.sections.Section
 import views.behaviours.CheckYourAnswersViewBehaviours
@@ -23,18 +24,26 @@ import views.html.routeDetails.officeOfExit.CheckOfficeOfExitAnswersView
 
 class CheckOfficeOfExitAnswersViewSpec extends CheckYourAnswersViewBehaviours {
 
+  override val prefix: String = "routeDetails.officeOfExit.checkOfficeOfExitAnswers"
+
   override def view: HtmlFormat.Appendable = viewWithSections(sections)
 
   override def viewWithSections(sections: Seq[Section]): HtmlFormat.Appendable =
     injector.instanceOf[CheckOfficeOfExitAnswersView].apply(lrn, index, sections)(fakeRequest, messages)
 
-  override val urlContainsLrn: Boolean = true
-
-  override val prefix: String = "routeDetails.officeOfExit.checkOfficeOfExitAnswers"
-
   behave like pageWithTitle()
 
   behave like pageWithBackLink
 
+  behave like pageWithSectionCaption("Route details")
+
   behave like pageWithHeading()
+
+  behave like pageWithContent("h2", "Office of exit")
+
+  behave like pageWithCheckYourAnswers()
+
+  behave like pageWithFormAction(routes.CheckOfficeOfExitAnswersController.onSubmit(lrn, index).url)
+
+  behave like pageWithSubmitButton("Save and continue")
 }
