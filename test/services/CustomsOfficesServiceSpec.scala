@@ -81,7 +81,7 @@ class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
         when(mockRefDataConnector.getCustomsOfficesForCountry(eqTo(CountryCode("GB")), eqTo(Nil))(any(), any()))
           .thenReturn(Future.successful(gbCustomsOffices))
 
-        service.getCustomsOfficesForCountry(CountryCode("GB")).futureValue.getAll mustBe
+        service.getCustomsOfficesForCountry(CountryCode("GB"), Nil).futureValue.getAll mustBe
           CustomsOfficeList(Seq(gbCustomsOffice2, gbCustomsOffice1)).getAll
 
         verify(mockRefDataConnector).getCustomsOfficesForCountry(eqTo(CountryCode("GB")), eqTo(Nil))(any(), any())

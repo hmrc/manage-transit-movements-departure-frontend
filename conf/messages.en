@@ -552,6 +552,7 @@ routeDetails.routing.countryOfDestination.placeholder = Select a country
 routeDetails.routing.countryOfDestination.change.hidden = country of destination
 routeDetails.routing.countryOfDestination.checkYourAnswersLabel = Country of destination
 routeDetails.routing.countryOfDestination.error.required = Enter the country of destination
+routeDetails.routing.countryOfDestination.error.noOffices = You cannot use this country as it does not have any offices of destination
 
 routeDetails.routing.officeOfDestination.title = Where is the office of destination?
 routeDetails.routing.officeOfDestination.heading = Where is the office of destination?
@@ -623,6 +624,7 @@ routeDetails.transit.officeOfTransitCountry.placeholder = Select a country
 routeDetails.transit.officeOfTransitCountry.change.hidden = office of transit country
 routeDetails.transit.officeOfTransitCountry.checkYourAnswersLabel = Office of transit country
 routeDetails.transit.officeOfTransitCountry.error.required = Enter the country the office of transit is in
+routeDetails.transit.officeOfTransitCountry.error.noOffices = You cannot use this country as it does not have any offices of transit
 
 routeDetails.transit.officeOfTransit.title = Where in {0} is the office of transit?
 routeDetails.transit.officeOfTransit.heading = Where in {0} is the office of transit?

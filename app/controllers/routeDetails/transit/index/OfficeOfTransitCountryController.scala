@@ -22,10 +22,11 @@ import forms.CountryFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.routeDetails.OfficeOfTransitNavigatorProvider
 import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
+import play.api.data.FormError
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.CountriesService
+import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.transit.index.OfficeOfTransitCountryView
 
@@ -38,19 +39,22 @@ class OfficeOfTransitCountryController @Inject() (
   navigatorProvider: OfficeOfTransitNavigatorProvider,
   actions: Actions,
   formProvider: CountryFormProvider,
-  service: CountriesService,
+  countriesService: CountriesService,
+  customsOfficesService: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
   view: OfficeOfTransitCountryView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
+  private val prefix: String = "routeDetails.transit.officeOfTransitCountry"
+
   //TODO: Change service function to fetch P5 custom offices
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      service.getCountriesWithCustomsOffices(Nil).map {
+      countriesService.getCountriesWithCustomsOffices(Nil).map {
         countryList =>
-          val form = formProvider("routeDetails.transit.officeOfTransitCountry", countryList)
+          val form = formProvider(prefix, countryList)
           val preparedForm = request.userAnswers.get(OfficeOfTransitCountryPage(index)) match {
             case None        => form
             case Some(value) => form.fill(value)
@@ -62,17 +66,23 @@ class OfficeOfTransitCountryController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      service.getCountriesWithCustomsOffices(Nil).flatMap {
+      countriesService.getCountriesWithCustomsOffices(Nil).flatMap {
         countryList =>
-          val form = formProvider("routeDetails.transit.officeOfTransitCountry", countryList)
+          val form = formProvider(prefix, countryList)
           form
             .bindFromRequest()
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode, index))),
               value =>
-                navigatorProvider(index).flatMap {
-                  implicit navigator =>
-                    OfficeOfTransitCountryPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                customsOfficesService.getCustomsOfficesForCountry(value.code, Nil).flatMap {
+                  case x if x.customsOffices.nonEmpty =>
+                    navigatorProvider(index).flatMap {
+                      implicit navigator =>
+                        OfficeOfTransitCountryPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                    }
+                  case _ =>
+                    val formWithErrors = form.withError(FormError("value", s"$prefix.error.noOffices"))
+                    Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode, index)))
                 }
             )
       }

@@ -22,10 +22,11 @@ import forms.CountryFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.RoutingNavigatorProvider
 import pages.routeDetails.routing.CountryOfDestinationPage
+import play.api.data.FormError
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.CountriesService
+import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.routing.CountryOfDestinationView
 
@@ -38,18 +39,21 @@ class CountryOfDestinationController @Inject() (
   navigatorProvider: RoutingNavigatorProvider,
   actions: Actions,
   formProvider: CountryFormProvider,
-  service: CountriesService,
+  countriesService: CountriesService,
+  customsOfficesService: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
   view: CountryOfDestinationView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
+  private val prefix: String = "routeDetails.routing.countryOfDestination"
+
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      service.getDestinationCountries(request.userAnswers, Nil).map {
+      countriesService.getDestinationCountries(request.userAnswers, Nil).map {
         countryList =>
-          val form = formProvider("routeDetails.routing.countryOfDestination", countryList)
+          val form = formProvider(prefix, countryList)
           val preparedForm = request.userAnswers.get(CountryOfDestinationPage) match {
             case None        => form
             case Some(value) => form.fill(value)
@@ -61,17 +65,23 @@ class CountryOfDestinationController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      service.getDestinationCountries(request.userAnswers, Nil).flatMap {
+      countriesService.getDestinationCountries(request.userAnswers, Nil).flatMap {
         countryList =>
-          val form = formProvider("routeDetails.routing.countryOfDestination", countryList)
+          val form = formProvider(prefix, countryList)
           form
             .bindFromRequest()
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode))),
               value =>
-                navigatorProvider().flatMap {
-                  implicit navigator =>
-                    CountryOfDestinationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                customsOfficesService.getCustomsOfficesOfExitForCountry(value.code).flatMap {
+                  case x if x.customsOffices.nonEmpty =>
+                    navigatorProvider().flatMap {
+                      implicit navigator =>
+                        CountryOfDestinationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                    }
+                  case _ =>
+                    val formWithErrors = form.withError(FormError("value", s"$prefix.error.noOffices"))
+                    Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode)))
                 }
             )
       }

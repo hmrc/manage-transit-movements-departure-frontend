@@ -19,16 +19,18 @@ package controllers.routeDetails.transit.index
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.CountryFormProvider
 import generators.Generators
-import models.{CountryList, NormalMode}
+import models.{CountryList, CustomsOfficeList, NormalMode}
 import navigation.routeDetails.OfficeOfTransitNavigatorProvider
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{reset, when}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
+import play.api.data.FormError
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.CountriesService
+import services.{CountriesService, CustomsOfficesService}
 import views.html.routeDetails.transit.index.OfficeOfTransitCountryView
 
 import scala.concurrent.Future
@@ -43,20 +45,30 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
   private val form         = formProvider("routeDetails.transit.officeOfTransitCountry", countryList)
   private val mode         = NormalMode
 
-  private val mockCountriesService: CountriesService = mock[CountriesService]
-  private lazy val officeOfTransitCountryRoute       = routes.OfficeOfTransitCountryController.onPageLoad(lrn, mode, index).url
+  private val mockCountriesService: CountriesService           = mock[CountriesService]
+  private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
+
+  private lazy val officeOfTransitCountryRoute = routes.OfficeOfTransitCountryController.onPageLoad(lrn, mode, index).url
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(mockCountriesService, mockCustomsOfficesService)
+  }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[OfficeOfTransitNavigatorProvider]).toInstance(fakeOfficeOfTransitNavigatorProvider))
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
+      .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
   "OfficeOfTransitCountry Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      when(mockCountriesService.getCountriesWithCustomsOffices(any(), any())(any())).thenReturn(Future.successful(countryList))
+      when(mockCountriesService.getCountriesWithCustomsOffices(any(), any())(any()))
+        .thenReturn(Future.successful(countryList))
+
       setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, officeOfTransitCountryRoute)
@@ -73,7 +85,9 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      when(mockCountriesService.getCountriesWithCustomsOffices(any(), any())(any())).thenReturn(Future.successful(countryList))
+      when(mockCountriesService.getCountriesWithCustomsOffices(any(), any())(any()))
+        .thenReturn(Future.successful(countryList))
+
       val userAnswers = emptyUserAnswers.setValue(OfficeOfTransitCountryPage(index), country1)
       setExistingUserAnswers(userAnswers)
 
@@ -93,8 +107,12 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
     "must redirect to the next page when valid data is submitted" in {
 
-      when(mockCountriesService.getCountriesWithCustomsOffices(any(), any())(any())).thenReturn(Future.successful(countryList))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      when(mockCountriesService.getCountriesWithCustomsOffices(any(), any())(any()))
+        .thenReturn(Future.successful(countryList))
+      when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any()))
+        .thenReturn(Future.successful(arbitrary[CustomsOfficeList].sample.value))
 
       setExistingUserAnswers(emptyUserAnswers)
 
@@ -110,11 +128,39 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      when(mockCountriesService.getCountriesWithCustomsOffices(any(), any())(any())).thenReturn(Future.successful(countryList))
+      when(mockCountriesService.getCountriesWithCustomsOffices(any(), any())(any()))
+        .thenReturn(Future.successful(countryList))
+
       setExistingUserAnswers(emptyUserAnswers)
 
       val request   = FakeRequest(POST, officeOfTransitCountryRoute).withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))
+
+      val result = route(app, request).value
+
+      val view = injector.instanceOf[OfficeOfTransitCountryView]
+
+      status(result) mustEqual BAD_REQUEST
+
+      contentAsString(result) mustEqual
+        view(boundForm, lrn, countryList.countries, mode, index)(request, messages).toString
+    }
+
+    "must return a Bad Request and errors when submitted country has no corresponding customs offices" in {
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      when(mockCountriesService.getCountriesWithCustomsOffices(any(), any())(any()))
+        .thenReturn(Future.successful(countryList))
+      when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any()))
+        .thenReturn(Future.successful(CustomsOfficeList(Nil)))
+
+      setExistingUserAnswers(emptyUserAnswers)
+
+      val request = FakeRequest(POST, officeOfTransitCountryRoute).withFormUrlEncodedBody(("value", country1.code.code))
+
+      val boundForm = form
+        .withError(FormError("value", "You cannot use this country as it does not have any offices of transit"))
 
       val result = route(app, request).value
 

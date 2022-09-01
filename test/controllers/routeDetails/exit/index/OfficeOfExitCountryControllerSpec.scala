@@ -53,11 +53,12 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
 
   private val mockCountriesService: CountriesService           = mock[CountriesService]
   private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
-  private lazy val officeOfExitCountryRoute                    = routes.OfficeOfExitCountryController.onPageLoad(lrn, index, mode).url
+
+  private lazy val officeOfExitCountryRoute = routes.OfficeOfExitCountryController.onPageLoad(lrn, index, mode).url
 
   override def beforeEach(): Unit = {
-    reset(mockCountriesService)
     super.beforeEach()
+    reset(mockCountriesService, mockCustomsOfficesService)
   }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
