@@ -21,16 +21,12 @@ import forms.YesNoFormProvider
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
 import models.UserAnswers
 import models.reference.CustomsOffice
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, reset, verify, when}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.officeOfExit.index.OfficeOfExitPage
 import pages.sections.routeDetails.exit.OfficeOfExitSection
-import play.api.inject.bind
-import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.routeDetails.officeOfExit.ConfirmRemoveOfficeOfExitView
@@ -48,11 +44,6 @@ class ConfirmRemoveOfficeOfExitControllerSpec
   private def form(customsOffice: CustomsOffice) = formProvider("routeDetails.officeOfExit.confirmRemoveOfficeOfExit", customsOffice.name)
 
   private lazy val confirmRemoveOfficeOfExitRoute = routes.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn, index).url
-
-  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
-    super
-      .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
 
   "ConfirmRemoveOfficeOfExit Controller" - {
 

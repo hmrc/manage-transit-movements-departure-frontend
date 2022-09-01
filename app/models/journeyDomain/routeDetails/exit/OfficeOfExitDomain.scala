@@ -34,8 +34,7 @@ case class OfficeOfExitDomain(
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
     Some(routes.CheckOfficeOfExitAnswersController.onPageLoad(userAnswers.lrn, index))
 
-  val label: String =
-    s"$country - $customsOffice"
+  val label: String = s"$country - $customsOffice"
 }
 
 object OfficeOfExitDomain {

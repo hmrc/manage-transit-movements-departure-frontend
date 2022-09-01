@@ -47,9 +47,7 @@ class ExitDomainSpec extends SpecBase with Generators {
           )
         )
 
-        val result: EitherType[ExitDomain] = UserAnswersReader[ExitDomain](
-          ExitDomain.userAnswersReader
-        ).run(userAnswers)
+        val result: EitherType[ExitDomain] = UserAnswersReader[ExitDomain].run(userAnswers)
 
         result.value mustBe expectedResult
       }
@@ -59,9 +57,7 @@ class ExitDomainSpec extends SpecBase with Generators {
       "when no offices of exit" in {
         val userAnswers = emptyUserAnswers
 
-        val result: EitherType[ExitDomain] = UserAnswersReader[ExitDomain](
-          ExitDomain.userAnswersReader
-        ).run(userAnswers)
+        val result: EitherType[ExitDomain] = UserAnswersReader[ExitDomain].run(userAnswers)
 
         result.left.value.page mustBe OfficeOfExitCountryPage(Index(0))
       }
