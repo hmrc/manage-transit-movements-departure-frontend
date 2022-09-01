@@ -17,13 +17,13 @@
 package utils.cyaHelpers.routeDetails
 
 import base.SpecBase
-import controllers.routeDetails.officeOfExit.routes
+import controllers.routeDetails.exit.index.routes
 import generators.Generators
 import models.Mode
 import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.officeOfExit.index.OfficeOfExitCountryPage
+import pages.routeDetails.exit.index.OfficeOfExitCountryPage
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
 

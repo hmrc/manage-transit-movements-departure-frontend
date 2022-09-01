@@ -16,11 +16,11 @@
 
 package utils.cyaHelpers.routeDetails
 
-import controllers.routeDetails.officeOfExit.routes
+import controllers.routeDetails.exit.index.routes
 import models.journeyDomain.routeDetails.exit.OfficeOfExitDomain
 import models.reference.Country
 import models.{Index, Mode, UserAnswers}
-import pages.routeDetails.officeOfExit.index.OfficeOfExitCountryPage
+import pages.routeDetails.exit.index.OfficeOfExitCountryPage
 import pages.sections.routeDetails.exit.OfficesOfExitSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads

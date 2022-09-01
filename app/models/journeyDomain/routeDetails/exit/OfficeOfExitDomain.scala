@@ -17,12 +17,12 @@
 package models.journeyDomain.routeDetails.exit
 
 import cats.implicits._
-import controllers.routeDetails.officeOfExit.routes
+import controllers.routeDetails.exit.index.routes
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{Country, CustomsOffice}
 import models.{Index, UserAnswers}
-import pages.routeDetails.officeOfExit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
+import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
 import play.api.mvc.Call
 
 case class OfficeOfExitDomain(

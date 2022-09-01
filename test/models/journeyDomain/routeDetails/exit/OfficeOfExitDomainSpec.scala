@@ -21,7 +21,7 @@ import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.routeDetails.officeOfExit.index._
+import pages.routeDetails.exit.index._
 
 class OfficeOfExitDomainSpec extends SpecBase with Generators {
 

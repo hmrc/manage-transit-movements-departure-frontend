@@ -29,7 +29,7 @@ import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.preTaskList._
-import pages.routeDetails.officeOfExit.index._
+import pages.routeDetails.exit.index._
 import pages.routeDetails.routing._
 import pages.routeDetails.routing.index.CountryOfRoutingPage
 import pages.routeDetails.transit.AddOfficeOfTransitYesNoPage

@@ -18,7 +18,7 @@ package utils.cyaHelpers.routeDetails
 
 import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode, UserAnswers}
-import pages.routeDetails.officeOfExit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
+import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper

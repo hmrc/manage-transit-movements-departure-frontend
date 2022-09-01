@@ -27,7 +27,7 @@ case class ExitDomain(
 ) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    Some(controllers.routeDetails.officeOfExit.routes.AddAnotherOfficeOfExitController.onPageLoad(userAnswers.lrn))
+    Some(controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(userAnswers.lrn))
 }
 
 object ExitDomain {
