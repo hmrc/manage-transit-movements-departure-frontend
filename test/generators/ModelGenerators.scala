@@ -27,6 +27,11 @@ import org.scalacheck.{Arbitrary, Gen}
 trait ModelGenerators {
   self: Generators =>
 
+  implicit lazy val arbitraryLocationOfGoodsType: Arbitrary[models.LocationType] =
+    Arbitrary {
+      Gen.oneOf(models.LocationType.values)
+    }
+
   implicit lazy val arbitraryGuaranteeType: Arbitrary[GuaranteeType] =
     Arbitrary {
       Gen.oneOf(models.guaranteeDetails.GuaranteeType.values)
