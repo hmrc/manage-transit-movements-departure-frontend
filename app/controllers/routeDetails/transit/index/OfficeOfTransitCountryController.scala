@@ -19,9 +19,12 @@ package controllers.routeDetails.transit.index
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
-import models.{Index, LocalReferenceNumber, Mode}
+import models.CountryList.countriesOfRoutingReads
+import models.requests.DataRequest
+import models.{CountryList, Index, LocalReferenceNumber, Mode, RichOptionalJsArray}
 import navigation.routeDetails.OfficeOfTransitNavigatorProvider
 import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
+import pages.sections.routeDetails.routing.CountriesOfRoutingSection
 import play.api.data.FormError
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -49,10 +52,9 @@ class OfficeOfTransitCountryController @Inject() (
 
   private val prefix: String = "routeDetails.transit.officeOfTransitCountry"
 
-  //TODO: Change service function to fetch P5 custom offices
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      countriesService.getCountriesWithCustomsOffices(Nil).map {
+      getCountries.map {
         countryList =>
           val form = formProvider(prefix, countryList)
           val preparedForm = request.userAnswers.get(OfficeOfTransitCountryPage(index)) match {
@@ -66,7 +68,7 @@ class OfficeOfTransitCountryController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      countriesService.getCountriesWithCustomsOffices(Nil).flatMap {
+      getCountries.flatMap {
         countryList =>
           val form = formProvider(prefix, countryList)
           form
@@ -87,4 +89,11 @@ class OfficeOfTransitCountryController @Inject() (
             )
       }
   }
+
+  //TODO: Change service function to fetch P5 custom offices
+  private def getCountries(implicit request: DataRequest[_]): Future[CountryList] =
+    request.userAnswers.get(CountriesOfRoutingSection).validate(countriesOfRoutingReads) match {
+      case Some(x) if x.countries.nonEmpty => Future.successful(x)
+      case _                               => countriesService.getCountriesWithCustomsOffices(Nil)
+    }
 }

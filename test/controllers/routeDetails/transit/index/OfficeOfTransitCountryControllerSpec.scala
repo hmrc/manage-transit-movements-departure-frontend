@@ -19,11 +19,12 @@ package controllers.routeDetails.transit.index
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.CountryFormProvider
 import generators.Generators
-import models.{CountryList, CustomsOfficeList, NormalMode}
+import models.{CountryList, CustomsOfficeList, Index, NormalMode}
 import navigation.routeDetails.OfficeOfTransitNavigatorProvider
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.{never, reset, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
+import pages.routeDetails.routing.index.CountryOfRoutingPage
 import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
 import play.api.data.FormError
 import play.api.inject.bind
@@ -81,6 +82,28 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
       contentAsString(result) mustEqual
         view(form, lrn, countryList.countries, mode, index)(request, messages).toString
+    }
+
+    "must use countries of routing if populated in user answers" in {
+
+      val userAnswers = emptyUserAnswers
+        .setValue(CountryOfRoutingPage(Index(0)), country1)
+        .setValue(CountryOfRoutingPage(Index(1)), country2)
+
+      setExistingUserAnswers(userAnswers)
+
+      val request = FakeRequest(GET, officeOfTransitCountryRoute)
+
+      val result = route(app, request).value
+
+      val view = injector.instanceOf[OfficeOfTransitCountryView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(form, lrn, countryList.countries, mode, index)(request, messages).toString
+
+      verify(mockCountriesService, never()).getCountriesWithCustomsOffices(any(), any())(any())
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
