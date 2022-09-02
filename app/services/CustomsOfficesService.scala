@@ -18,7 +18,7 @@ package services
 
 import config.Constants._
 import connectors.ReferenceDataConnector
-import models.{CustomsOfficeList}
+import models.CustomsOfficeList
 import models.reference.{CountryCode, CustomsOffice}
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -55,6 +55,15 @@ class CustomsOfficesService @Inject() (
   )(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
     referenceDataConnector
       .getCustomsOfficesForCountry(countryCode, roles)
+      .map(
+        customsOfficeList => sort(customsOfficeList.customsOffices)
+      )
+
+  def getCustomsOfficesOfTransitForCountry(
+    countryCode: CountryCode
+  )(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
+    referenceDataConnector
+      .getCustomsOfficesOfTransitForCountry(countryCode)
       .map(
         customsOfficeList => sort(customsOfficeList.customsOffices)
       )

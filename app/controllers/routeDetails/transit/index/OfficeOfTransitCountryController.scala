@@ -76,7 +76,7 @@ class OfficeOfTransitCountryController @Inject() (
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode, index))),
               value =>
-                customsOfficesService.getCustomsOfficesForCountry(value.code, Nil).flatMap {
+                customsOfficesService.getCustomsOfficesOfTransitForCountry(value.code).flatMap {
                   case x if x.customsOffices.nonEmpty =>
                     navigatorProvider(index).flatMap {
                       implicit navigator =>

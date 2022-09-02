@@ -134,7 +134,7 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
       when(mockCountriesService.getCommunityCountries()(any()))
         .thenReturn(Future.successful(countryList))
-      when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any()))
+      when(mockCustomsOfficesService.getCustomsOfficesOfTransitForCountry(any())(any()))
         .thenReturn(Future.successful(arbitrary[CustomsOfficeList].sample.value))
 
       setExistingUserAnswers(emptyUserAnswers)
@@ -175,7 +175,7 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
       when(mockCountriesService.getCommunityCountries()(any()))
         .thenReturn(Future.successful(countryList))
-      when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any()))
+      when(mockCustomsOfficesService.getCustomsOfficesOfTransitForCountry(any())(any()))
         .thenReturn(Future.successful(CustomsOfficeList(Nil)))
 
       setExistingUserAnswers(emptyUserAnswers)
