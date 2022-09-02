@@ -19,15 +19,16 @@ package controllers.routeDetails.exit.index
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
-import models.CountryList.customReads
-import models.{Index, LocalReferenceNumber, Mode}
+import models.CountryList.countriesOfRoutingReads
+import models.{Index, LocalReferenceNumber, Mode, RichOptionalJsArray}
 import navigation.routeDetails.OfficeOfExitNavigatorProvider
 import pages.routeDetails.exit.index.OfficeOfExitCountryPage
-import pages.routeDetails.routing.index.CountriesOfRoutingPage
+import pages.sections.routeDetails.routing.CountriesOfRoutingSection
+import play.api.data.FormError
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.CountriesService
+import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.exit.index.OfficeOfExitCountryView
 
@@ -40,24 +41,27 @@ class OfficeOfExitCountryController @Inject() (
   navigatorProvider: OfficeOfExitNavigatorProvider,
   actions: Actions,
   formProvider: CountryFormProvider,
-  service: CountriesService,
+  countriesService: CountriesService,
+  customsOfficesService: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
   view: OfficeOfExitCountryView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
+  private val prefix: String = "routeDetails.exit.officeOfExitCountry"
+
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     actions
       .requireData(lrn)
       .async {
         implicit request =>
-          (request.userAnswers.get(CountriesOfRoutingPage)(customReads) match {
+          (request.userAnswers.get(CountriesOfRoutingSection).validate(countriesOfRoutingReads) match {
             case Some(x) if x.countries.nonEmpty => Future.successful(x)
-            case _                               => service.getCountries()
+            case _                               => countriesService.getCountries()
           }).map {
             countryList =>
-              val form = formProvider("routeDetails.exit.officeOfExitCountry", countryList)
+              val form = formProvider(prefix, countryList)
               val preparedForm = request.userAnswers.get(OfficeOfExitCountryPage(index)) match {
                 case None        => form
                 case Some(value) => form.fill(value)
@@ -71,20 +75,26 @@ class OfficeOfExitCountryController @Inject() (
       .requireData(lrn)
       .async {
         implicit request =>
-          (request.userAnswers.get(CountriesOfRoutingPage)(customReads) match {
+          (request.userAnswers.get(CountriesOfRoutingSection).validate(countriesOfRoutingReads) match {
             case Some(x) if x.countries.nonEmpty => Future.successful(x)
-            case _                               => service.getCountries()
+            case _                               => countriesService.getCountries()
           }).flatMap {
             countryList =>
-              val form = formProvider("routeDetails.exit.officeOfExitCountry", countryList)
+              val form = formProvider(prefix, countryList)
               form
                 .bindFromRequest()
                 .fold(
                   formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, index, mode))),
                   value =>
-                    navigatorProvider(index).flatMap {
-                      implicit navigator =>
-                        OfficeOfExitCountryPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                    customsOfficesService.getCustomsOfficesOfExitForCountry(value.code).flatMap {
+                      case x if x.customsOffices.nonEmpty =>
+                        navigatorProvider(index).flatMap {
+                          implicit navigator =>
+                            OfficeOfExitCountryPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                        }
+                      case _ =>
+                        val formWithErrors = form.withError(FormError("value", s"$prefix.error.noOffices"))
+                        Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, index, mode)))
                     }
                 )
           }

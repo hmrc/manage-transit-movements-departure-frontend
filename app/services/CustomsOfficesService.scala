@@ -51,7 +51,7 @@ class CustomsOfficesService @Inject() (
   @deprecated("TODO: Should be deprecated for P5")
   def getCustomsOfficesForCountry(
     countryCode: CountryCode,
-    roles: Seq[String] = Nil
+    roles: Seq[String]
   )(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
     referenceDataConnector
       .getCustomsOfficesForCountry(countryCode, roles)

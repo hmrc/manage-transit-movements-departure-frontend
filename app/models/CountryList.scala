@@ -17,7 +17,7 @@
 package models
 
 import models.reference.{Country, CountryCode}
-import play.api.libs.json.{JsArray, JsError, JsSuccess, Json, OFormat, Reads}
+import play.api.libs.json._
 
 case class CountryList(countries: Seq[Country]) {
   def getCountry(countryCode: CountryCode): Option[Country] = countries.find(_.code == countryCode)
@@ -33,20 +33,20 @@ case class CountryList(countries: Seq[Country]) {
 
 object CountryList {
 
-  val customReads: Reads[CountryList] = Reads[CountryList] {
-    case JsArray(value) =>
+  def apply(countries: Seq[Country]): CountryList = new CountryList(countries)
+
+  private def countriesReads(key: String): Reads[CountryList] = Reads[CountryList] {
+    case JsArray(values) =>
       JsSuccess(
         CountryList(
-          value.map(
-            entry => (entry \ "countryOfRouting").as[Country]
-          )
+          values.flatMap {
+            value => (value \ key).validate[Country].asOpt
+          }
         )
       )
     case _ => JsError("CountryList::customReads: Failed to read country list from cache")
   }
 
-  implicit def jsonFormats: OFormat[CountryList] =
-    Json.using[Json.WithDefaultValues].format[CountryList]
+  val countriesOfRoutingReads: Reads[CountryList] = countriesReads("countryOfRouting")
 
-  def apply(countries: Seq[Country]): CountryList = new CountryList(countries)
 }
