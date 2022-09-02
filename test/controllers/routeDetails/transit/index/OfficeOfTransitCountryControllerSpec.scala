@@ -67,7 +67,7 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
     "must return OK and the correct view for a GET" in {
 
-      when(mockCountriesService.getCountriesWithCustomsOffices(any(), any())(any()))
+      when(mockCountriesService.getCommunityCountries()(any()))
         .thenReturn(Future.successful(countryList))
 
       setExistingUserAnswers(emptyUserAnswers)
@@ -103,12 +103,12 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
       contentAsString(result) mustEqual
         view(form, lrn, countryList.countries, mode, index)(request, messages).toString
 
-      verify(mockCountriesService, never()).getCountriesWithCustomsOffices(any(), any())(any())
+      verify(mockCountriesService, never()).getCommunityCountries()(any())
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      when(mockCountriesService.getCountriesWithCustomsOffices(any(), any())(any()))
+      when(mockCountriesService.getCommunityCountries()(any()))
         .thenReturn(Future.successful(countryList))
 
       val userAnswers = emptyUserAnswers.setValue(OfficeOfTransitCountryPage(index), country1)
@@ -132,7 +132,7 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      when(mockCountriesService.getCountriesWithCustomsOffices(any(), any())(any()))
+      when(mockCountriesService.getCommunityCountries()(any()))
         .thenReturn(Future.successful(countryList))
       when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any()))
         .thenReturn(Future.successful(arbitrary[CustomsOfficeList].sample.value))
@@ -151,7 +151,7 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      when(mockCountriesService.getCountriesWithCustomsOffices(any(), any())(any()))
+      when(mockCountriesService.getCommunityCountries()(any()))
         .thenReturn(Future.successful(countryList))
 
       setExistingUserAnswers(emptyUserAnswers)
@@ -173,7 +173,7 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      when(mockCountriesService.getCountriesWithCustomsOffices(any(), any())(any()))
+      when(mockCountriesService.getCommunityCountries()(any()))
         .thenReturn(Future.successful(countryList))
       when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any()))
         .thenReturn(Future.successful(CustomsOfficeList(Nil)))

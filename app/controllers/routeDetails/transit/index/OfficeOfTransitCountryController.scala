@@ -90,10 +90,9 @@ class OfficeOfTransitCountryController @Inject() (
       }
   }
 
-  //TODO: Change service function to fetch P5 custom offices
   private def getCountries(implicit request: DataRequest[_]): Future[CountryList] =
     request.userAnswers.get(CountriesOfRoutingSection).validate(countriesOfRoutingReads) match {
       case Some(x) if x.countries.nonEmpty => Future.successful(x)
-      case _                               => countriesService.getCountriesWithCustomsOffices(Nil)
+      case _                               => countriesService.getCommunityCountries()
     }
 }
