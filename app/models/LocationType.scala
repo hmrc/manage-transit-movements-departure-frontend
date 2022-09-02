@@ -26,16 +26,16 @@ object LocationType extends RadioModel[LocationType] {
 
   override val messageKeyPrefix = "routeDetails.locationOfGoods.locationOfGoodsType"
 
-  case object Option1 extends WithName("DesignatedLocation") with LocationType
-  case object Option2 extends WithName("AuthorisedPlace") with LocationType
-  case object Option3 extends WithName("ApprovedPlace") with LocationType
-  case object Option4 extends WithName("Other") with LocationType
+  case object DesignatedLocation extends WithName("DesignatedLocation") with LocationType
+  case object AuthorisedPlace extends WithName("AuthorisedPlace") with LocationType
+  case object ApprovedPlace extends WithName("ApprovedPlace") with LocationType
+  case object Other extends WithName("Other") with LocationType
 
   override val values: Seq[LocationType] = Seq(
-    Option1,
-    Option2,
-    Option3,
-    Option4
+    DesignatedLocation,
+    AuthorisedPlace,
+    ApprovedPlace,
+    Other
   )
 
 }

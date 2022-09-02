@@ -42,7 +42,8 @@
         @inputRadio(
             field = form("value"),
             legend = messages("routeDetails.locationOfGoods.locationOfGoodsType.heading"),
-            radioItems = fieldId => radios(fieldId, form.value)
+            radioItems = fieldId => radios(fieldId, form.value),
+            caption = Some(messages("routeDetails.caption"))
         )
 
         @button(attributes = Map("id" -> "submit"))

@@ -42,6 +42,8 @@ class LocationOfGoodsTypeViewSpec extends RadioViewBehaviours[LocationType] {
 
   behave like pageWithBackLink
 
+  behave like pageWithSectionCaption("Route details")
+
   behave like pageWithHeading()
 
   behave like pageWithRadioItems()
