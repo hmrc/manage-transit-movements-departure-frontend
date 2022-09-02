@@ -19,10 +19,9 @@ package controllers.guaranteeDetails.guarantee
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.OtherReferenceFormProvider
-import models.guaranteeDetails.GuaranteeType
-import models.guaranteeDetails.GuaranteeType.{CashDepositGuarantee, GuaranteeNotRequiredExemptPublicBody}
+import models.GuaranteeType.{CashDepositGuarantee, GuaranteeNotRequiredExemptPublicBody}
 import models.requests.SpecificDataRequestProvider1
-import models.{Index, LocalReferenceNumber, Mode}
+import models.{GuaranteeType, Index, LocalReferenceNumber, Mode}
 import navigation.{GuaranteeNavigator, GuaranteeNavigatorProvider}
 import pages.guaranteeDetails.guarantee.{GuaranteeTypePage, OtherReferencePage}
 import play.api.data.Form

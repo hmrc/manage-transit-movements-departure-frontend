@@ -16,9 +16,8 @@
 
 package views.guaranteeDetails.guarantee
 
-import forms.guaranteeDetails.GuaranteeTypeFormProvider
-import models.NormalMode
-import models.guaranteeDetails.GuaranteeType
+import forms.GuaranteeTypeFormProvider
+import models.{GuaranteeType, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem

@@ -716,3 +716,16 @@ routeDetails.locationOfGoods.addLocationOfGoods.paragraph1 = This is where Custo
 routeDetails.locationOfGoods.addLocationOfGoods.paragraph2 = For goods not present at a customs office, this is their location at the time they’re declared.
 routeDetails.locationOfGoods.addLocationOfGoods.checkYourAnswersLabel = Do you want to add a location of goods?
 routeDetails.locationOfGoods.addLocationOfGoods.error.required = Select yes if you want to add a location of goods
+
+routeDetails.locationOfGoods.locationOfGoodsIdentification.title = How do you want to identify the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsIdentification.heading = How do you want to identify the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsIdentification.hint = This needs to be precise enough for Customs to locate the goods and carry out their checks.
+routeDetails.locationOfGoods.locationOfGoodsIdentification.customsOfficeIdentifier = Customs office identifier
+routeDetails.locationOfGoods.locationOfGoodsIdentification.eoriNumber = EORI number
+routeDetails.locationOfGoods.locationOfGoodsIdentification.authorisationNumber = Authorisation number
+routeDetails.locationOfGoods.locationOfGoodsIdentification.coordinates = Coordinates
+routeDetails.locationOfGoods.locationOfGoodsIdentification.unlocode = UN/LOCODE
+routeDetails.locationOfGoods.locationOfGoodsIdentification.address = Address
+routeDetails.locationOfGoods.locationOfGoodsIdentification.postalCode = Postal code
+routeDetails.locationOfGoods.locationOfGoodsIdentification.checkYourAnswersLabel = identifier type for the location of goods
+routeDetails.locationOfGoods.locationOfGoodsIdentification.error.required = Select how you want to identify the location of goods

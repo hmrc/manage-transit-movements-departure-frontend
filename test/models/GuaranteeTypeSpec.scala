@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package models.guaranteeDetails
+package models
 
 import base.SpecBase
 import generators.Generators
-import models.guaranteeDetails.GuaranteeType._
+import models.GuaranteeType._
 import models.reference.CustomsOffice
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen

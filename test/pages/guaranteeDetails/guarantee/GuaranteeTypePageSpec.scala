@@ -17,8 +17,7 @@
 package pages.guaranteeDetails.guarantee
 
 import models.DeclarationType.Option4
-import models.guaranteeDetails.GuaranteeType
-import models.{DeclarationType, Index, Mode}
+import models.{DeclarationType, GuaranteeType, Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 import pages.preTaskList.DeclarationTypePage

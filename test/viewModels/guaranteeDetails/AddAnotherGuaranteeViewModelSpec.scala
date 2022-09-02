@@ -18,7 +18,7 @@ package viewModels.guaranteeDetails
 
 import base.SpecBase
 import generators.Generators
-import models.guaranteeDetails.GuaranteeType._
+import models.GuaranteeType._
 import models.{DeclarationType, Index}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.guaranteeDetails.guarantee.{GuaranteeTypePage, OtherReferenceYesNoPage}
