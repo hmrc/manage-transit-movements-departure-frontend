@@ -111,7 +111,7 @@ class CountryOfDestinationControllerSpec extends SpecBase with AppWithDefaultMoc
 
       when(mockCountriesService.getDestinationCountries(any(), any())(any()))
         .thenReturn(Future.successful(countryList))
-      when(mockCustomsOfficesService.getCustomsOfficesOfExitForCountry(any())(any()))
+      when(mockCustomsOfficesService.getCustomsOfficesOfDestinationForCountry(any())(any()))
         .thenReturn(Future.successful(arbitrary[CustomsOfficeList].sample.value))
 
       setExistingUserAnswers(emptyUserAnswers)
@@ -152,7 +152,7 @@ class CountryOfDestinationControllerSpec extends SpecBase with AppWithDefaultMoc
 
       when(mockCountriesService.getDestinationCountries(any(), any())(any()))
         .thenReturn(Future.successful(countryList))
-      when(mockCustomsOfficesService.getCustomsOfficesOfExitForCountry(any())(any()))
+      when(mockCustomsOfficesService.getCustomsOfficesOfDestinationForCountry(any())(any()))
         .thenReturn(Future.successful(CustomsOfficeList(Nil)))
 
       setExistingUserAnswers(emptyUserAnswers)
