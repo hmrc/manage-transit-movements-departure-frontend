@@ -18,8 +18,8 @@ package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
+import forms.LocationOfGoodsTypeFormProvider
 import forms.preTaskList.DeclarationTypeFormProvider
-import forms.routeDetails.locationOfGoods.LocationOfGoodsTypeFormProvider
 import models.journeyDomain.PreTaskListDomain
 import models.requests.DataRequest
 import models.{DeclarationType, LocalReferenceNumber, LocationType, Mode}

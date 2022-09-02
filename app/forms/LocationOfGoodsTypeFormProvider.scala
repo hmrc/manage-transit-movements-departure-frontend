@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package forms.routeDetails.locationOfGoods
+package forms
 
-import javax.inject.Inject
 import forms.mappings.Mappings
 import models.LocationType
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class LocationOfGoodsTypeFormProvider @Inject() extends Mappings {
 

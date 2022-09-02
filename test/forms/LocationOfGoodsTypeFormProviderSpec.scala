@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms.routeDetails.locationOfGoods
+package forms
 
 import forms.behaviours.OptionFieldBehaviours
 import models.LocationType

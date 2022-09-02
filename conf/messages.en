@@ -718,7 +718,8 @@ routeDetails.locationOfGoods.locationOfGoodsType.title = Which type of location 
 routeDetails.locationOfGoods.locationOfGoodsType.heading = Which type of location is it?
 routeDetails.locationOfGoods.locationOfGoodsType.checkYourAnswersLabel = Which type of location is it?
 routeDetails.locationOfGoods.locationOfGoodsType.error.required = Select which type of location it is
-routeDetails.locationOfGoods.locationOfGoodsType.DesignatedLocation = Designated location - XXX
+# TODO: Add placeholder for designated location
+routeDetails.locationOfGoods.locationOfGoodsType.DesignatedLocation = Designated location -
 routeDetails.locationOfGoods.locationOfGoodsType.AuthorisedPlace = Authorised place - the authorised consignor’s approved premises
 routeDetails.locationOfGoods.locationOfGoodsType.ApprovedPlace = Approved place - a designated location approved and controlled by the office of departure or destination
 routeDetails.locationOfGoods.locationOfGoodsType.Other = Other
