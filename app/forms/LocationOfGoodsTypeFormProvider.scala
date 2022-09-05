@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package pages.sections
+package forms
 
-import pages.QuestionPage
-import play.api.libs.json.{JsObject, JsPath}
+import forms.mappings.Mappings
+import models.LocationType
+import play.api.data.Form
 
-case object LocationOfGoodsSection extends QuestionPage[JsObject] {
+import javax.inject.Inject
 
-  override def path: JsPath = JsPath \ toString
+class LocationOfGoodsTypeFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "locationOfGoods"
+  def apply(): Form[LocationType] =
+    Form(
+      "value" -> enumerable[LocationType]("routeDetails.locationOfGoods.locationOfGoodsType.error.required")
+    )
 }

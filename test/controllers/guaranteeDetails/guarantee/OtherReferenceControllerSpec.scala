@@ -19,9 +19,8 @@ package controllers.guaranteeDetails.guarantee
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.OtherReferenceFormProvider
 import generators.Generators
-import models.NormalMode
-import models.guaranteeDetails.GuaranteeType
-import models.guaranteeDetails.GuaranteeType.{CashDepositGuarantee, GuaranteeNotRequiredExemptPublicBody}
+import models.{GuaranteeType, NormalMode}
+import models.GuaranteeType.{CashDepositGuarantee, GuaranteeNotRequiredExemptPublicBody}
 import navigation.GuaranteeNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when

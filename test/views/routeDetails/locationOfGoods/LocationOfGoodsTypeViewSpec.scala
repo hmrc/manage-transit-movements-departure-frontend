@@ -14,35 +14,35 @@
  * limitations under the License.
  */
 
-package views.guaranteeDetails.guarantee
+package views.routeDetails.locationOfGoods
 
-import forms.GuaranteeTypeFormProvider
-import models.{GuaranteeType, NormalMode}
+import forms.LocationOfGoodsTypeFormProvider
+import models.{LocationType, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import views.behaviours.RadioViewBehaviours
-import views.html.guaranteeDetails.guarantee.GuaranteeTypeView
+import views.html.routeDetails.locationOfGoods.LocationOfGoodsTypeView
 
-class GuaranteeTypeViewSpec extends RadioViewBehaviours[GuaranteeType] {
+class LocationOfGoodsTypeViewSpec extends RadioViewBehaviours[LocationType] {
 
-  override def form: Form[GuaranteeType] = new GuaranteeTypeFormProvider()()
+  override def form: Form[LocationType] = new LocationOfGoodsTypeFormProvider()()
 
-  override def applyView(form: Form[GuaranteeType]): HtmlFormat.Appendable =
-    injector.instanceOf[GuaranteeTypeView].apply(form, lrn, GuaranteeType.radioItems, NormalMode, index)(fakeRequest, messages)
+  override def applyView(form: Form[LocationType]): HtmlFormat.Appendable =
+    injector.instanceOf[LocationOfGoodsTypeView].apply(form, lrn, LocationType.radioItems, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "guaranteeDetails.guaranteeType"
+  override val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsType"
 
-  override def radioItems(fieldId: String, checkedValue: Option[GuaranteeType] = None): Seq[RadioItem] =
-    GuaranteeType.radioItems(fieldId, checkedValue)
+  override def radioItems(fieldId: String, checkedValue: Option[LocationType] = None): Seq[RadioItem] =
+    LocationType.radioItems(fieldId, checkedValue)
 
-  override def values: Seq[GuaranteeType] = GuaranteeType.values
+  override def values: Seq[LocationType] = LocationType.values
 
   behave like pageWithTitle()
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Guarantee details")
+  behave like pageWithSectionCaption("Route details")
 
   behave like pageWithHeading()
 

@@ -14,82 +14,83 @@
  * limitations under the License.
  */
 
-package controllers.guaranteeDetails.guarantee
+package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.GuaranteeTypeFormProvider
-import models.{GuaranteeType, NormalMode}
-import navigation.GuaranteeNavigatorProvider
+import forms.LocationOfGoodsIdentificationFormProvider
+import models.{LocationOfGoodsIdentification, NormalMode}
+import navigation.Navigator
+import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.guaranteeDetails.guarantee.GuaranteeTypePage
+import pages.routeDetails.locationOfGoods.LocationOfGoodsIdentificationPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.guaranteeDetails.guarantee.GuaranteeTypeView
+import views.html.routeDetails.locationOfGoods.LocationOfGoodsIdentificationView
 
 import scala.concurrent.Future
 
-class GuaranteeTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class LocationOfGoodsIdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider            = new GuaranteeTypeFormProvider()
-  private val form                    = formProvider()
-  private val mode                    = NormalMode
-  private lazy val guaranteeTypeRoute = routes.GuaranteeTypeController.onPageLoad(lrn, mode, index).url
+  private val formProvider                            = new LocationOfGoodsIdentificationFormProvider()
+  private val form                                    = formProvider()
+  private val mode                                    = NormalMode
+  private lazy val locationOfGoodsIdentificationRoute = routes.LocationOfGoodsIdentificationController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[GuaranteeNavigatorProvider]).toInstance(fakeGuaranteeNavigatorProvider))
+      .overrides(
+        bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator)
+      ) //TODO to be corrected when location of goods navigation is implemented
 
-  "GuaranteeType Controller" - {
+  "LocationOfGoodsIdentification Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers
-      setExistingUserAnswers(userAnswers)
+      setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, guaranteeTypeRoute)
+      val request = FakeRequest(GET, locationOfGoodsIdentificationRoute)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[GuaranteeTypeView]
+      val view = injector.instanceOf[LocationOfGoodsIdentificationView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, GuaranteeType.radioItemsU(userAnswers), mode, index)(request, messages).toString
+        view(form, lrn, LocationOfGoodsIdentification.radioItems, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(GuaranteeTypePage(index), GuaranteeType.values.head)
+      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsIdentificationPage, LocationOfGoodsIdentification.values.head)
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, guaranteeTypeRoute)
+      val request = FakeRequest(GET, locationOfGoodsIdentificationRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> GuaranteeType.values.head.toString))
+      val filledForm = form.bind(Map("value" -> LocationOfGoodsIdentification.values.head.toString))
 
-      val view = injector.instanceOf[GuaranteeTypeView]
+      val view = injector.instanceOf[LocationOfGoodsIdentificationView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, GuaranteeType.radioItemsU(userAnswers), mode, index)(request, messages).toString
+        view(filledForm, lrn, LocationOfGoodsIdentification.radioItems, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
-      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request =
-        FakeRequest(POST, guaranteeTypeRoute)
-          .withFormUrlEncodedBody(("value", GuaranteeType.values.head.toString))
+      val request = FakeRequest(POST, locationOfGoodsIdentificationRoute)
+        .withFormUrlEncodedBody(("value", LocationOfGoodsIdentification.values.head.toString))
 
       val result = route(app, request).value
 
@@ -102,24 +103,24 @@ class GuaranteeTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, guaranteeTypeRoute).withFormUrlEncodedBody(("value", "invalid value"))
+      val request   = FakeRequest(POST, locationOfGoodsIdentificationRoute).withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[GuaranteeTypeView]
+      val view = injector.instanceOf[LocationOfGoodsIdentificationView]
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, GuaranteeType.radioItems, mode, index)(request, messages).toString
+        view(boundForm, lrn, LocationOfGoodsIdentification.radioItems, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, guaranteeTypeRoute)
+      val request = FakeRequest(GET, locationOfGoodsIdentificationRoute)
 
       val result = route(app, request).value
 
@@ -131,9 +132,8 @@ class GuaranteeTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
 
       setNoExistingUserAnswers()
 
-      val request =
-        FakeRequest(POST, guaranteeTypeRoute)
-          .withFormUrlEncodedBody(("value", GuaranteeType.values.head.toString))
+      val request = FakeRequest(POST, locationOfGoodsIdentificationRoute)
+        .withFormUrlEncodedBody(("value", LocationOfGoodsIdentification.values.head.toString))
 
       val result = route(app, request).value
 

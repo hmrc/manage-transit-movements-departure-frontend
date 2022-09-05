@@ -21,9 +21,8 @@ import controllers.guaranteeDetails.guarantee.routes
 import forms.Constants.accessCodeLength
 import generators.Generators
 import models.DeclarationType.Option4
-import models.guaranteeDetails.GuaranteeType
-import models.guaranteeDetails.GuaranteeType._
-import models.{DeclarationType, Mode}
+import models.GuaranteeType._
+import models.{DeclarationType, GuaranteeType, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

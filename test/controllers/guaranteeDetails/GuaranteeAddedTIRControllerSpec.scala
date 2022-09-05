@@ -17,7 +17,7 @@
 package controllers.guaranteeDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import models.guaranteeDetails.GuaranteeType.TIRGuarantee
+import models.GuaranteeType.TIRGuarantee
 import models.{Index, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
