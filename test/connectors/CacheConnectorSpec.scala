@@ -41,11 +41,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
       |    "lrn" : "1234567890",
       |    "eoriNumber" : "GB1234567",
       |    "data" : {},
-      |    "lastUpdated" : {
-      |        "$date" : {
-      |            "$numberLong" : "946684800000"
-      |        }
-      |    }
+      |    "lastUpdated" : "2022-09-05T15:58:44.188"
       |}
       |""".stripMargin
 

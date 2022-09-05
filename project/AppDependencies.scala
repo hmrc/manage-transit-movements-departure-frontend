@@ -3,11 +3,8 @@ import play.core.PlayVersion.current
 
 object AppDependencies {
 
-  private val mongoVersion = "0.71.0"
-
   val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
-    "uk.gov.hmrc.mongo"          %% "hmrc-mongo-play-28"              % mongoVersion,
     "uk.gov.hmrc"                %% "logback-json-logger"             % "5.2.0",
     "uk.gov.hmrc"                %% "play-conditional-form-mapping"   % "1.11.0-play-28",
     "uk.gov.hmrc"                %% "bootstrap-frontend-play-28"      % "5.24.0",
@@ -18,7 +15,6 @@ object AppDependencies {
   )
 
   val test: Seq[ModuleID] = Seq(
-    "uk.gov.hmrc.mongo"          %% "hmrc-mongo-test-play-28"  % mongoVersion,
     "org.scalatest"              %% "scalatest"                % "3.2.12",
     "org.scalatestplus"          %% "mockito-4-5"              % "3.2.12.0",
     "org.scalatestplus.play"     %% "scalatestplus-play"       % "5.1.0",
