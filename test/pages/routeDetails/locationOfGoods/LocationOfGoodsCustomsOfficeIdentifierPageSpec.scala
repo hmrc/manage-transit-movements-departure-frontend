@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package pages.sections
+package pages.routeDetails.locationOfGoods
 
-import pages.QuestionPage
-import play.api.libs.json.{JsObject, JsPath}
+import models.reference.CustomsOffice
+import pages.behaviours.PageBehaviours
 
-case object LocationOfGoodsSection extends QuestionPage[JsObject] {
+class LocationOfGoodsCustomsOfficeIdentifierPageSpec extends PageBehaviours {
 
-  override def path: JsPath = JsPath \ toString
+  "LocationOfGoodsCustomsOfficeIdentifierPage" - {
 
-  override def toString: String = "locationOfGoods"
+    beRetrievable[CustomsOffice](LocationOfGoodsCustomsOfficeIdentifierPage)
+
+    beSettable[CustomsOffice](LocationOfGoodsCustomsOfficeIdentifierPage)
+
+    beRemovable[CustomsOffice](LocationOfGoodsCustomsOfficeIdentifierPage)
+  }
 }

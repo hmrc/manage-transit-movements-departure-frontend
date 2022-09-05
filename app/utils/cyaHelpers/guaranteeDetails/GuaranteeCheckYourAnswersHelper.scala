@@ -16,9 +16,8 @@
 
 package utils.cyaHelpers.guaranteeDetails
 
-import models.guaranteeDetails.GuaranteeType
-import models.guaranteeDetails.GuaranteeType._
-import models.{Index, Mode, UserAnswers}
+import models.GuaranteeType._
+import models.{GuaranteeType, Index, Mode, UserAnswers}
 import pages.guaranteeDetails.guarantee._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow

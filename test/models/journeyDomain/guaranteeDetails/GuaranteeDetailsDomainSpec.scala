@@ -20,7 +20,7 @@ import base.SpecBase
 import generators.Generators
 import models.DeclarationType.Option4
 import models.domain._
-import models.guaranteeDetails.GuaranteeType._
+import models.GuaranteeType._
 import models.journeyDomain.guaranteeDetails.GuaranteeDomain.GuaranteeOfTypesABR
 import models.{DeclarationType, Index}
 import org.scalacheck.Arbitrary.arbitrary

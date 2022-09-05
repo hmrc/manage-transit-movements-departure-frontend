@@ -17,7 +17,6 @@
 package generators
 
 import models._
-import models.guaranteeDetails.GuaranteeType
 import models.reference.{Country, CustomsOffice}
 import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary

@@ -21,8 +21,7 @@ import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
 import controllers.guaranteeDetails.{routes => guaranteeDetailsRoutes}
 import generators.{Generators, GuaranteeDetailsUserAnswersGenerator}
 import models._
-import models.guaranteeDetails.GuaranteeType
-import models.guaranteeDetails.GuaranteeType._
+import models.GuaranteeType._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.guaranteeDetails.guarantee.GuaranteeTypePage

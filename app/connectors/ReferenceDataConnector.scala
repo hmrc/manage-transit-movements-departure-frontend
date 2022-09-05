@@ -91,6 +91,13 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
   }
 
+  def getCustomsOfficesOfDepartureForCountry(
+    countryCode: String
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
+    val serviceUrl = s"${config.referenceDataUrl}/customs-office-departure/$countryCode"
+    http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
+  }
+
   def getCustomsSecurityAgreementAreaCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
     val serviceUrl = s"${config.referenceDataUrl}/country-customs-office-security-agreement-area"
     http.GET[Seq[Country]](serviceUrl, headers = version2Header)

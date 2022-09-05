@@ -14,57 +14,55 @@
  * limitations under the License.
  */
 
-package controllers.guaranteeDetails.guarantee
+package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.GuaranteeTypeFormProvider
-import models.{GuaranteeType, Index, LocalReferenceNumber, Mode}
-import navigation.{GuaranteeNavigator, GuaranteeNavigatorProvider}
-import pages.guaranteeDetails.guarantee.GuaranteeTypePage
+import forms.LocationOfGoodsIdentificationFormProvider
+import models.{LocalReferenceNumber, LocationOfGoodsIdentification, Mode}
+import navigation.Navigator
+import navigation.annotations.PreTaskListDetails
+import pages.routeDetails.locationOfGoods.LocationOfGoodsIdentificationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.guaranteeDetails.guarantee.GuaranteeTypeView
+import views.html.routeDetails.locationOfGoods.LocationOfGoodsIdentificationView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class GuaranteeTypeController @Inject() (
+class LocationOfGoodsIdentificationController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: GuaranteeNavigatorProvider,
+  @PreTaskListDetails implicit val navigator: Navigator, //TODO to be corrected when location of goods navigation is implemented
   actions: Actions,
-  formProvider: GuaranteeTypeFormProvider,
+  formProvider: LocationOfGoodsIdentificationFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: GuaranteeTypeView
+  view: LocationOfGoodsIdentificationView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   private val form = formProvider()
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(GuaranteeTypePage(index)) match {
+      val preparedForm = request.userAnswers.get(LocationOfGoodsIdentificationPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, lrn, GuaranteeType.radioItemsU(request.userAnswers), mode, index))
+      Ok(view(preparedForm, lrn, LocationOfGoodsIdentification.radioItems, mode))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, GuaranteeType.radioItems, mode, index))),
-          value => {
-            implicit val navigator: GuaranteeNavigator = navigatorProvider(index)
-            GuaranteeTypePage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
-          }
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, LocationOfGoodsIdentification.radioItems, mode))),
+          value => LocationOfGoodsIdentificationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
         )
   }
 }

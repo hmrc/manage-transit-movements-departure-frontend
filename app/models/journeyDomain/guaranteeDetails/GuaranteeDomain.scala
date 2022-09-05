@@ -19,11 +19,10 @@ package models.journeyDomain.guaranteeDetails
 import cats.implicits._
 import models.DeclarationType.Option4
 import models.domain._
-import models.guaranteeDetails.GuaranteeType
-import models.guaranteeDetails.GuaranteeType._
+import models.GuaranteeType._
 import models.journeyDomain.Stage.{AccessingJourney, CompletingJourney}
 import models.journeyDomain.{JourneyDomainModel, Stage}
-import models.{CheckMode, Index, UserAnswers}
+import models.{CheckMode, GuaranteeType, Index, UserAnswers}
 import pages.guaranteeDetails.guarantee._
 import pages.preTaskList.DeclarationTypePage
 import play.api.mvc.Call

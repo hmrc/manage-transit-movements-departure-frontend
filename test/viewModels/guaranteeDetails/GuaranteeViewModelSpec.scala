@@ -18,10 +18,9 @@ package viewModels.guaranteeDetails
 
 import base.SpecBase
 import generators.{Generators, GuaranteeDetailsUserAnswersGenerator}
-import models.DeclarationType
+import models.{DeclarationType, GuaranteeType}
 import models.DeclarationType.Option4
-import models.guaranteeDetails.GuaranteeType
-import models.guaranteeDetails.GuaranteeType._
+import models.GuaranteeType._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.guaranteeDetails.guarantee.{GuaranteeTypePage, OtherReferenceYesNoPage}

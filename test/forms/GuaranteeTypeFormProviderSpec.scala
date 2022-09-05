@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package forms.guaranteeDetails
+package forms
 
 import forms.behaviours.OptionFieldBehaviours
-import models.guaranteeDetails.GuaranteeType
+import models.GuaranteeType
 import play.api.data.FormError
 
 class GuaranteeTypeFormProviderSpec extends OptionFieldBehaviours {

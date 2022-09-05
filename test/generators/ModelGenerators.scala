@@ -17,9 +17,8 @@
 package generators
 
 import models.AddressLine.{AddressLine1, AddressLine2, PostalCode}
+import models.GuaranteeType._
 import models._
-import models.guaranteeDetails.GuaranteeType
-import models.guaranteeDetails.GuaranteeType._
 import models.reference._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
@@ -27,20 +26,30 @@ import org.scalacheck.{Arbitrary, Gen}
 trait ModelGenerators {
   self: Generators =>
 
+  implicit lazy val arbitraryLocationOfGoodsType: Arbitrary[models.LocationType] =
+    Arbitrary {
+      Gen.oneOf(models.LocationType.values)
+    }
+
+  implicit lazy val arbitraryLocationOfGoodsIdentification: Arbitrary[LocationOfGoodsIdentification] =
+    Arbitrary {
+      Gen.oneOf(LocationOfGoodsIdentification.values)
+    }
+
   implicit lazy val arbitraryGuaranteeType: Arbitrary[GuaranteeType] =
     Arbitrary {
-      Gen.oneOf(models.guaranteeDetails.GuaranteeType.values)
+      Gen.oneOf(GuaranteeType.values)
     }
 
   lazy val arbitraryNonOption4GuaranteeType: Arbitrary[GuaranteeType] =
     Arbitrary {
-      Gen.oneOf(models.guaranteeDetails.GuaranteeType.values.filterNot(_ == TIRGuarantee))
+      Gen.oneOf(GuaranteeType.values.filterNot(_ == TIRGuarantee))
     }
 
   lazy val arbitraryNonOption3Or8GuaranteeType: Arbitrary[GuaranteeType] =
     Arbitrary {
       Gen.oneOf(
-        models.guaranteeDetails.GuaranteeType.values
+        GuaranteeType.values
           .filterNot(_ == CashDepositGuarantee)
           .filterNot(_ == GuaranteeNotRequiredExemptPublicBody)
       )
