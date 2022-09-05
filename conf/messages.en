@@ -716,3 +716,15 @@ routeDetails.locationOfGoods.addLocationOfGoods.paragraph1 = This is where Custo
 routeDetails.locationOfGoods.addLocationOfGoods.paragraph2 = For goods not present at a customs office, this is their location at the time they’re declared.
 routeDetails.locationOfGoods.addLocationOfGoods.checkYourAnswersLabel = Do you want to add a location of goods?
 routeDetails.locationOfGoods.addLocationOfGoods.error.required = Select yes if you want to add a location of goods
+
+routeDetails.locationOfGoods.locationOfGoodsType.title = Which type of location is it?
+routeDetails.locationOfGoods.locationOfGoodsType.heading = Which type of location is it?
+routeDetails.locationOfGoods.locationOfGoodsType.checkYourAnswersLabel = Which type of location is it?
+routeDetails.locationOfGoods.locationOfGoodsType.error.required = Select which type of location it is
+# TODO: Add placeholder for designated location
+routeDetails.locationOfGoods.locationOfGoodsType.DesignatedLocation = Designated location -
+routeDetails.locationOfGoods.locationOfGoodsType.AuthorisedPlace = Authorised place - the authorised consignor’s approved premises
+routeDetails.locationOfGoods.locationOfGoodsType.ApprovedPlace = Approved place - a designated location approved and controlled by the office of departure or destination
+routeDetails.locationOfGoods.locationOfGoodsType.Other = Other
+
+
