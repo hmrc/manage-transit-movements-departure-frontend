@@ -17,14 +17,14 @@
 package forms
 
 object Constants {
-  lazy val tirCarnetReferenceMaxLength                      = 12
+  lazy val tirCarnetReferenceMaxLength: Int                 = 12
   lazy val maxEoriNumberLength: Int                         = 17
   lazy val minEoriNumberLength: Int                         = 14
   lazy val maxNameLength: Int                               = 70
-  lazy val maxTelephoneNumberLength                         = 35
-  lazy val minTelephoneNumberLength                         = 6
-  lazy val maxRefNumberLength                               = 24
-  lazy val maxOtherRefLength                                = 35
-  lazy val accessCodeLength                                 = 4
+  lazy val maxTelephoneNumberLength: Int                    = 35
+  lazy val minTelephoneNumberLength: Int                    = 6
+  lazy val maxRefNumberLength: Int                          = 24
+  lazy val maxOtherRefLength: Int                           = 35
+  lazy val accessCodeLength: Int                            = 4
   lazy val maxLocationOfGoodsAuthorisationNumberLength: Int = 35
 }

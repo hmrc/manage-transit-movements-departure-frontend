@@ -22,7 +22,7 @@ import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
 import models.domain.StringFieldRegex.alphaNumericRegex
 
-class LocationOfGoodsAuthorisationNumberSpec extends StringFieldBehaviours {
+class LocationOfGoodsAuthorisationNumberFormProviderSpec extends StringFieldBehaviours {
 
   private val prefix               = Gen.alphaNumStr.sample.value
   private val invalidCharactersKey = s"$prefix.error.invalidCharacters"
