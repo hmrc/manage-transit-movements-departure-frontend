@@ -171,7 +171,7 @@ class OtherReferenceControllerSpec extends SpecBase with AppWithDefaultMockFixtu
       val userAnswers   = emptyUserAnswers.setValue(GuaranteeTypePage(index), guaranteeType)
       setExistingUserAnswers(userAnswers)
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       val request = FakeRequest(POST, otherReferenceRoute)
         .withFormUrlEncodedBody(("value", validAnswer))

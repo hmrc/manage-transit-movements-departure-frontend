@@ -99,7 +99,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
 
     "must redirect to the next page when valid data is submitted" in {
       setExistingUserAnswers(emptyUserAnswers)
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
       when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
 
       val request = FakeRequest(POST, officeOfDepartureRoute)

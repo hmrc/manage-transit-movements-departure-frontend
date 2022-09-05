@@ -29,7 +29,7 @@ class UserAnswersServiceSpec extends SpecBase with AppWithDefaultMockFixtures {
     "when answers exist in session repository" - {
       "must get answers from session repository" in {
         val userAnswers = emptyUserAnswers
-        when(mockSessionRepository.get(any(), any())).thenReturn(Future.successful(Some(userAnswers)))
+        when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
         val service = new UserAnswersService(mockSessionRepository)
         val result  = service.getOrCreateUserAnswers(eoriNumber, lrn).futureValue
         result mustBe userAnswers
@@ -39,7 +39,7 @@ class UserAnswersServiceSpec extends SpecBase with AppWithDefaultMockFixtures {
     "when answers don't exist in session repository" - {
       "must create new user answers" in {
         val userAnswers = emptyUserAnswers
-        when(mockSessionRepository.get(any(), any())).thenReturn(Future.successful(None))
+        when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(None))
         val service = new UserAnswersService(mockSessionRepository)
         val result  = service.getOrCreateUserAnswers(eoriNumber, lrn).futureValue
         assert(result.lastUpdated isAfter userAnswers.lastUpdated)

@@ -171,7 +171,7 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
 
       setExistingUserAnswers(userAnswers)
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       val request = FakeRequest(POST, arrivalDateTimeRoute)
         .withFormUrlEncodedBody(

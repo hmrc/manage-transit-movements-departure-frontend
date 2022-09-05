@@ -38,7 +38,7 @@ class KeepAliveController @Inject() (
     implicit request =>
       lrn match {
         case Some(refNumber) =>
-          sessionRepository.get(refNumber, request.eoriNumber) flatMap {
+          sessionRepository.get(refNumber) flatMap {
             case Some(ua) =>
               sessionRepository
                 .set(ua)

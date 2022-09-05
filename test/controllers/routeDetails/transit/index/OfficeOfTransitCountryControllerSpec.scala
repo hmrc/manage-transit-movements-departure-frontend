@@ -107,7 +107,7 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
     "must redirect to the next page when valid data is submitted" in {
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       when(mockCountriesService.getCountriesWithCustomsOffices(any(), any())(any()))
         .thenReturn(Future.successful(countryList))
@@ -148,7 +148,7 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
     "must return a Bad Request and errors when submitted country has no corresponding customs offices" in {
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       when(mockCountriesService.getCountriesWithCustomsOffices(any(), any())(any()))
         .thenReturn(Future.successful(countryList))

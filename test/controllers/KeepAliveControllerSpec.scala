@@ -31,15 +31,15 @@ class KeepAliveControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   "Keep alive controller" - {
     "touch mongo cache when lrn is available" in {
-      when(mockSessionRepository.get(any(), any())).thenReturn(Future.successful(Some(emptyUserAnswers)))
-      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+      when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(Some(emptyUserAnswers)))
+      when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
       val result = route(app, FakeRequest(GET, keepAliveRoute(Some(lrn)))).value
 
       status(result) mustBe NO_CONTENT
 
-      verify(mockSessionRepository, times(1)).get(any(), any())
-      verify(mockSessionRepository, times(1)).set(any())
+      verify(mockSessionRepository, times(1)).get(any())(any())
+      verify(mockSessionRepository, times(1)).set(any())(any())
     }
 
     "not touch mongo cache when lrn is not available" in {
@@ -47,19 +47,19 @@ class KeepAliveControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       status(result) mustBe NO_CONTENT
 
-      verify(mockSessionRepository, never()).get(any(), any())
-      verify(mockSessionRepository, never()).set(any())
+      verify(mockSessionRepository, never()).get(any())(any())
+      verify(mockSessionRepository, never()).set(any())(any())
     }
 
     "return NO_CONTENT when get from mongo cache returns None" in {
-      when(mockSessionRepository.get(any(), any())).thenReturn(Future.successful(None))
+      when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(None))
 
       val result = route(app, FakeRequest(GET, keepAliveRoute(Some(lrn)))).value
 
       status(result) mustBe NO_CONTENT
 
-      verify(mockSessionRepository, times(1)).get(any(), any())
-      verify(mockSessionRepository, never()).set(any())
+      verify(mockSessionRepository, times(1)).get(any())(any())
+      verify(mockSessionRepository, never()).set(any())(any())
     }
 
   }

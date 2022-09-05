@@ -153,7 +153,7 @@ class OfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixt
       val updatedAnswers = emptyUserAnswers.setValue(OfficeOfTransitCountryPage(index), country)
 
       when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(updatedAnswers)
 

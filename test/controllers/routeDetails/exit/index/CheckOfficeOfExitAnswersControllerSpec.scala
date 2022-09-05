@@ -78,7 +78,7 @@ class CheckOfficeOfExitAnswersControllerSpec extends SpecBase with AppWithDefaul
     "must redirect to add another" in {
       setExistingUserAnswers(emptyUserAnswers)
 
-      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+      when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(POST, routes.CheckOfficeOfExitAnswersController.onSubmit(lrn, index).url)
 

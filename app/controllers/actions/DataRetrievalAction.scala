@@ -21,6 +21,8 @@ import models.LocalReferenceNumber
 import models.requests.{IdentifierRequest, OptionalDataRequest}
 import play.api.mvc.ActionTransformer
 import repositories.SessionRepository
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,9 +45,11 @@ class DataRetrievalAction(
   sessionRepository: SessionRepository
 ) extends ActionTransformer[IdentifierRequest, OptionalDataRequest] {
 
-  override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] =
-    sessionRepository.get(lrn, request.eoriNumber).map {
+  override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = {
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequest(request)
+    sessionRepository.get(lrn).map {
       userAnswers =>
         OptionalDataRequest(request.request, request.eoriNumber, userAnswers)
     }
+  }
 }

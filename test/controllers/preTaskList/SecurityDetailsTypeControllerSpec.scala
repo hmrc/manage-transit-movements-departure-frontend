@@ -80,7 +80,7 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
 
     "must redirect to the next page when valid data is submitted" in {
       setExistingUserAnswers(emptyUserAnswers)
-      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+      when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(POST, securityDetailsTypeRoute)
         .withFormUrlEncodedBody(("value", SecurityDetailsType.values.head.toString))
