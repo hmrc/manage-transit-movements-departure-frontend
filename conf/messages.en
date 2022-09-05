@@ -739,3 +739,11 @@ routeDetails.locationOfGoods.locationOfGoodsIdentification.address = Address
 routeDetails.locationOfGoods.locationOfGoodsIdentification.postalCode = Postal code
 routeDetails.locationOfGoods.locationOfGoodsIdentification.checkYourAnswersLabel = identifier type for the location of goods
 routeDetails.locationOfGoods.locationOfGoodsIdentification.error.required = Select how you want to identify the location of goods
+
+routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.title = What is the customs office identifier for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.heading = What is the customs office identifier for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.hintText = Enter the office location or code, like Dover or GB000060.
+routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.placeholder = Select a customsOffice
+routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.change.hidden = What is the customs office identifier for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.checkYourAnswersLabel = What is the customs office identifier for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.error.required = Enter the customs office identifier for the location of goods
