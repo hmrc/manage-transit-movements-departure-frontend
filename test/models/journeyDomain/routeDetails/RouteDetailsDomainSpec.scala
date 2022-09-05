@@ -64,7 +64,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
         )
 
         val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
-          RouteDetailsDomain.userAnswersReader(Nil, Nil, Nil)
+          RouteDetailsDomain.userAnswersReader(Nil, Nil)
         ).run(userAnswers)
 
         result.value mustBe expectedResult
@@ -105,7 +105,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
         )
 
         val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
-          RouteDetailsDomain.userAnswersReader(Seq(customsOffice.countryCode), Nil, Nil)
+          RouteDetailsDomain.userAnswersReader(Seq(customsOffice.countryCode), Nil)
         ).run(userAnswers)
 
         result.value mustBe expectedResult
@@ -146,7 +146,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
         )
 
         val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
-          RouteDetailsDomain.userAnswersReader(Seq(customsOffice.countryCode), Nil, Seq(country.code.code))
+          RouteDetailsDomain.userAnswersReader(Seq(customsOffice.countryCode), Seq(country.code.code))
         ).run(userAnswers)
 
         result.value mustBe expectedResult
@@ -195,7 +195,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
         )
 
         val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
-          RouteDetailsDomain.userAnswersReader(Seq(customsOffice.countryCode), Nil, Nil)
+          RouteDetailsDomain.userAnswersReader(Seq(customsOffice.countryCode), Nil)
         ).run(userAnswers)
 
         result.value mustBe expectedResult

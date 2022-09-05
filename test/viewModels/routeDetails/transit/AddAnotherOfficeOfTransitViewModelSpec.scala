@@ -36,7 +36,6 @@ class AddAnotherOfficeOfTransitViewModelSpec extends SpecBase with Generators {
 
     val countriesService = mock[CountriesService]
     when(countriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(CountryList(Nil)))
-    when(countriesService.getCommunityCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
     when(countriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
 
     val noOfOfficesOfTransit = Gen.choose(1, frontendAppConfig.maxOfficesOfTransit).sample.value

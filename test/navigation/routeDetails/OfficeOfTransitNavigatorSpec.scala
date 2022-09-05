@@ -30,7 +30,7 @@ import scala.concurrent.Future
 
 class OfficeOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
-  private val navigator = new OfficeOfTransitNavigator(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+  private val navigator = new OfficeOfTransitNavigator(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
 
   "Office of Transit Navigator" - {
 
@@ -73,13 +73,10 @@ class OfficeOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       val mockService = mock[CountriesService]
 
       val ctcCountries                          = arbitrary[CountryList].sample.value
-      val euCountries                           = arbitrary[CountryList].sample.value
       val customsSecurityAgreementAreaCountries = arbitrary[CountryList].sample.value
 
       when(mockService.getCountryCodesCTC()(any()))
         .thenReturn(Future.successful(ctcCountries))
-      when(mockService.getCommunityCountries()(any()))
-        .thenReturn(Future.successful(euCountries))
       when(mockService.getCustomsSecurityAgreementAreaCountries()(any()))
         .thenReturn(Future.successful(customsSecurityAgreementAreaCountries))
 
@@ -87,7 +84,6 @@ class OfficeOfTransitNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       provider.apply(index).futureValue
 
       verify(mockService).getCountryCodesCTC()(any())
-      verify(mockService).getCommunityCountries()(any())
       verify(mockService).getCustomsSecurityAgreementAreaCountries()(any())
     }
   }

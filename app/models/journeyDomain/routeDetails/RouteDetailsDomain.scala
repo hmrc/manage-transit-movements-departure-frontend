@@ -38,7 +38,6 @@ object RouteDetailsDomain {
   // scalastyle:off method.length
   implicit def userAnswersReader(
     ctcCountryCodes: Seq[String],
-    euCountryCodes: Seq[String],
     customsSecurityAgreementAreaCountryCodes: Seq[String]
   ): UserAnswersReader[RouteDetailsDomain] = {
 
@@ -49,7 +48,6 @@ object RouteDetailsDomain {
         case _ =>
           implicit val reads: UserAnswersReader[TransitDomain] = TransitDomain.userAnswersReader(
             ctcCountryCodes,
-            euCountryCodes,
             customsSecurityAgreementAreaCountryCodes
           )
           UserAnswersReader[TransitDomain].map(Some(_))
