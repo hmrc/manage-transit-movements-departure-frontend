@@ -46,7 +46,7 @@ class DataRetrievalAction(
 ) extends ActionTransformer[IdentifierRequest, OptionalDataRequest] {
 
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = {
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequest(request)
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
     sessionRepository.get(lrn).map {
       userAnswers =>
         OptionalDataRequest(request.request, request.eoriNumber, userAnswers)
