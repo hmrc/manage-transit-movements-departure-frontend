@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package forms.guaranteeDetails
-
-import javax.inject.Inject
+package forms
 
 import forms.mappings.Mappings
+import models.GuaranteeType
 import play.api.data.Form
-import models.guaranteeDetails.GuaranteeType
+
+import javax.inject.Inject
 
 class GuaranteeTypeFormProvider @Inject() extends Mappings {
 

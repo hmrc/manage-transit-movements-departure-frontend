@@ -727,4 +727,15 @@ routeDetails.locationOfGoods.locationOfGoodsType.AuthorisedPlace = Authorised pl
 routeDetails.locationOfGoods.locationOfGoodsType.ApprovedPlace = Approved place - a designated location approved and controlled by the office of departure or destination
 routeDetails.locationOfGoods.locationOfGoodsType.Other = Other
 
-
+routeDetails.locationOfGoods.locationOfGoodsIdentification.title = How do you want to identify the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsIdentification.heading = How do you want to identify the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsIdentification.hint = This needs to be precise enough for Customs to locate the goods and carry out their checks.
+routeDetails.locationOfGoods.locationOfGoodsIdentification.customsOfficeIdentifier = Customs office identifier
+routeDetails.locationOfGoods.locationOfGoodsIdentification.eoriNumber = EORI number
+routeDetails.locationOfGoods.locationOfGoodsIdentification.authorisationNumber = Authorisation number
+routeDetails.locationOfGoods.locationOfGoodsIdentification.coordinates = Coordinates
+routeDetails.locationOfGoods.locationOfGoodsIdentification.unlocode = UN/LOCODE
+routeDetails.locationOfGoods.locationOfGoodsIdentification.address = Address
+routeDetails.locationOfGoods.locationOfGoodsIdentification.postalCode = Postal code
+routeDetails.locationOfGoods.locationOfGoodsIdentification.checkYourAnswersLabel = identifier type for the location of goods
+routeDetails.locationOfGoods.locationOfGoodsIdentification.error.required = Select how you want to identify the location of goods

@@ -17,9 +17,8 @@
 package utils.cyaHelpers.guaranteeDetails
 
 import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
-import models.guaranteeDetails.GuaranteeType
 import models.journeyDomain.guaranteeDetails.GuaranteeDomain
-import models.{Index, Mode, UserAnswers}
+import models.{GuaranteeType, Index, Mode, UserAnswers}
 import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import pages.sections.guaranteeDetails.GuaranteeDetailsSection
 import play.api.i18n.Messages

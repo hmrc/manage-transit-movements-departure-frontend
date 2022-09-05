@@ -18,9 +18,8 @@ package controllers.guaranteeDetails.guarantee
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.guaranteeDetails.GuaranteeTypeFormProvider
-import models.guaranteeDetails.GuaranteeType
-import models.{Index, LocalReferenceNumber, Mode}
+import forms.GuaranteeTypeFormProvider
+import models.{GuaranteeType, Index, LocalReferenceNumber, Mode}
 import navigation.{GuaranteeNavigator, GuaranteeNavigatorProvider}
 import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}

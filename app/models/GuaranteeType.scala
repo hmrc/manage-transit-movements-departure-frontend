@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package models.guaranteeDetails
+package models
 
 import config.Constants.XI
-import models.{RadioModelU, UserAnswers, WithName}
 import pages.preTaskList.OfficeOfDeparturePage
 
 sealed trait GuaranteeType

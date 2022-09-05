@@ -18,55 +18,51 @@ package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.LocationOfGoodsTypeFormProvider
-import models.requests.DataRequest
-import models.{LocalReferenceNumber, LocationType, Mode}
+import forms.LocationOfGoodsIdentificationFormProvider
+import models.{LocalReferenceNumber, LocationOfGoodsIdentification, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import pages.routeDetails.locationOfGoods.LocationOfGoodsTypePage
+import pages.routeDetails.locationOfGoods.LocationOfGoodsIdentificationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsTypeView
+import views.html.routeDetails.locationOfGoods.LocationOfGoodsIdentificationView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LocationOfGoodsTypeController @Inject() (
+class LocationOfGoodsIdentificationController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @PreTaskListDetails implicit val navigator: Navigator,
+  @PreTaskListDetails implicit val navigator: Navigator, //TODO to be corrected when location of goods navigation is implemented
   actions: Actions,
-  formProvider: LocationOfGoodsTypeFormProvider,
+  formProvider: LocationOfGoodsIdentificationFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: LocationOfGoodsTypeView
+  view: LocationOfGoodsIdentificationView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   private val form = formProvider()
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
-    .requireData(lrn) {
-      implicit request =>
-        val preparedForm = request.userAnswers.get(LocationOfGoodsTypePage) match {
-          case None        => form
-          case Some(value) => form.fill(value)
-        }
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+    implicit request =>
+      val preparedForm = request.userAnswers.get(LocationOfGoodsIdentificationPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
 
-        Ok(view(preparedForm, lrn, LocationType.radioItems, mode))
-    }
+      Ok(view(preparedForm, lrn, LocationOfGoodsIdentification.radioItems, mode))
+  }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
-    .requireData(lrn)
-    .async {
-      implicit request: DataRequest[AnyContent] =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, LocationType.radioItems, mode))),
-            value => LocationOfGoodsTypePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
-          )
-    }
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
+    implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, LocationOfGoodsIdentification.radioItems, mode))),
+          value => LocationOfGoodsIdentificationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+        )
+  }
 }

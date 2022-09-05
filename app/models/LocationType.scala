@@ -16,10 +16,6 @@
 
 package models
 
-import config.Constants.XI
-import models.ProcedureType.Normal
-import pages.preTaskList.{OfficeOfDeparturePage, ProcedureTypePage}
-
 sealed trait LocationType
 
 object LocationType extends RadioModel[LocationType] {

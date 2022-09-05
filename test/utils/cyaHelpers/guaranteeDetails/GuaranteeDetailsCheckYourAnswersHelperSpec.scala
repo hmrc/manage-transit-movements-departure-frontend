@@ -19,7 +19,7 @@ package utils.cyaHelpers.guaranteeDetails
 import base.SpecBase
 import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
 import generators.Generators
-import models.guaranteeDetails.GuaranteeType._
+import models.GuaranteeType._
 import models.{CheckMode, DeclarationType, Index, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.guaranteeDetails.guarantee.{GuaranteeTypePage, OtherReferenceYesNoPage}

@@ -18,8 +18,7 @@ package pages.guaranteeDetails.guarantee
 
 import controllers.guaranteeDetails.guarantee.routes
 import models.DeclarationType.Option4
-import models.guaranteeDetails.GuaranteeType
-import models.{Index, Mode, UserAnswers}
+import models.{GuaranteeType, Index, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.preTaskList.DeclarationTypePage
 import pages.sections.guaranteeDetails.GuaranteeSection
