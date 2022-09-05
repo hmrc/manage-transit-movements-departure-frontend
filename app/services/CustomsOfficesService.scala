@@ -77,6 +77,15 @@ class CustomsOfficesService @Inject() (
         customsOfficeList => sort(customsOfficeList.customsOffices)
       )
 
+  def getCustomsOfficesOfDepartureForCountry(
+    countryCode: String
+  )(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
+    referenceDataConnector
+      .getCustomsOfficesOfDepartureForCountry(countryCode)
+      .map(
+        customsOfficeList => sort(customsOfficeList.customsOffices)
+      )
+
   private def sort(customsOffices: Seq[CustomsOffice]): CustomsOfficeList =
     CustomsOfficeList(customsOffices.sortBy(_.name.toLowerCase))
 
