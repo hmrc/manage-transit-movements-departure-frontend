@@ -22,6 +22,8 @@ import play.api.Configuration
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
+  val appName: String = configuration.get[String]("appName")
+
   lazy val daysBefore: Int = configuration.get[Int]("limits.officeOfTransitETA.daysBefore")
   lazy val daysAfter: Int  = configuration.get[Int]("limits.officeOfTransitETA.daysAfter")
 
