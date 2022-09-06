@@ -193,6 +193,44 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       }
     }
 
+    "getCustomsOfficesOfTransitForCountry" - {
+      "must return a successful future response with a sequence of CustomsOffices" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$baseUrl/customs-office-transit/GB"))
+            .willReturn(okJson(customsOfficeDestinationResponseJson))
+        )
+
+        val expectedResult =
+          CustomsOfficeList(
+            Seq(
+              CustomsOffice("GB1", "testName1", None),
+              CustomsOffice("GB2", "testName2", None)
+            )
+          )
+
+        connector.getCustomsOfficesOfTransitForCountry(CountryCode("GB")).futureValue mustBe expectedResult
+      }
+
+      "must return a successful future response when CustomsOffice is not found" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$baseUrl/customs-office-transit/AR")).willReturn(
+            aResponse()
+              .withStatus(NOT_FOUND)
+              .withHeader(CONTENT_TYPE, JSON)
+          )
+        )
+
+        val expectedResult =
+          CustomsOfficeList(Nil)
+
+        connector.getCustomsOfficesOfTransitForCountry(CountryCode("AR")).futureValue mustBe expectedResult
+      }
+
+      "must return an exception when an error response is returned" in {
+        checkErrorResponse(s"/$baseUrl/customs-office-transit/GB", connector.getCustomsOfficesOfTransitForCountry(CountryCode("GB")))
+      }
+    }
+
     "getCustomsOfficesOfDestinationForCountry" - {
       "must return a successful future response with a sequence of CustomsOffices" in {
         server.stubFor(

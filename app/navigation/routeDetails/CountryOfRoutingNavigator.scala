@@ -35,12 +35,10 @@ class CountryOfRoutingNavigatorProviderImpl @Inject() (
   def apply(index: Index)(implicit hc: HeaderCarrier): Future[CountryOfRoutingNavigator] =
     for {
       ctcCountries                             <- countriesService.getCountryCodesCTC()
-      euCountries                              <- countriesService.getCommunityCountries()
       customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
     } yield new CountryOfRoutingNavigator(
       index,
       ctcCountries.countryCodes,
-      euCountries.countryCodes,
       customsSecurityAgreementAreaCountryCodes.countryCodes
     )
 }
@@ -53,9 +51,8 @@ trait CountryOfRoutingNavigatorProvider {
 class CountryOfRoutingNavigator(
   index: Index,
   ctcCountryCodes: Seq[String],
-  euCountryCodes: Seq[String],
   customsSecurityAgreementAreaCountryCodes: Seq[String]
 ) extends UserAnswersNavigator[CountryOfRoutingDomain, RouteDetailsDomain]()(
       CountryOfRoutingDomain.userAnswersReader(index),
-      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
     )

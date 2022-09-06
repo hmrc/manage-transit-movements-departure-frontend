@@ -66,7 +66,7 @@ class OfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixt
           .setValue(CountryOfDestinationPage, destinationCountry)
           .setValue(OfficeOfTransitCountryPage(index), country)
 
-        when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
+        when(mockCustomsOfficesService.getCustomsOfficesOfTransitForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
         setExistingUserAnswers(updatedAnswers)
 
         val request = FakeRequest(GET, officeOfTransitRoute)
@@ -84,7 +84,7 @@ class OfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixt
       "when only country of destination defined" in {
         val updatedAnswers = emptyUserAnswers.setValue(CountryOfDestinationPage, country)
 
-        when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
+        when(mockCustomsOfficesService.getCustomsOfficesOfTransitForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
         setExistingUserAnswers(updatedAnswers)
 
         val request = FakeRequest(GET, officeOfTransitRoute)
@@ -102,7 +102,7 @@ class OfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
     "must populate the view correctly on a GET when the question has previously been answered" - {
       "when country defined at index" in {
-        when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
+        when(mockCustomsOfficesService.getCustomsOfficesOfTransitForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
 
         val userAnswers = emptyUserAnswers
           .setValue(OfficeOfTransitCountryPage(index), country)
@@ -125,7 +125,7 @@ class OfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixt
       }
 
       "when only country of destination defined" in {
-        when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
+        when(mockCustomsOfficesService.getCustomsOfficesOfTransitForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
 
         val userAnswers = emptyUserAnswers
           .setValue(CountryOfDestinationPage, country)
@@ -152,7 +152,7 @@ class OfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       val updatedAnswers = emptyUserAnswers.setValue(OfficeOfTransitCountryPage(index), country)
 
-      when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockCustomsOfficesService.getCustomsOfficesOfTransitForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(updatedAnswers)
@@ -175,7 +175,7 @@ class OfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixt
           .setValue(CountryOfDestinationPage, destinationCountry)
           .setValue(OfficeOfTransitCountryPage(index), country)
 
-        when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
+        when(mockCustomsOfficesService.getCustomsOfficesOfTransitForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
         setExistingUserAnswers(updatedAnswers)
 
         val request   = FakeRequest(POST, officeOfTransitRoute).withFormUrlEncodedBody(("value", "invalid value"))
@@ -194,7 +194,7 @@ class OfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixt
       "when only country of destination defined" in {
         val updatedAnswers = emptyUserAnswers.setValue(CountryOfDestinationPage, country)
 
-        when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
+        when(mockCustomsOfficesService.getCustomsOfficesOfTransitForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
         setExistingUserAnswers(updatedAnswers)
 
         val request   = FakeRequest(POST, officeOfTransitRoute).withFormUrlEncodedBody(("value", "invalid value"))

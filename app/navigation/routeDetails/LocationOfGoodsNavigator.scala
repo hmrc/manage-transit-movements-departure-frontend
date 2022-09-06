@@ -17,7 +17,7 @@
 package navigation.routeDetails
 
 import models.journeyDomain.routeDetails.RouteDetailsDomain
-import models.journeyDomain.routeDetails.routing.RoutingDomain
+import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
 import navigation.UserAnswersNavigator
 import services.CountriesService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -26,30 +26,30 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RoutingNavigatorProviderImpl @Inject() (
+class LocationOfGoodsNavigatorProviderImpl @Inject() (
   countriesService: CountriesService
 )(implicit ec: ExecutionContext)
-    extends RoutingNavigatorProvider {
+    extends LocationOfGoodsNavigatorProvider {
 
-  def apply()(implicit hc: HeaderCarrier): Future[RoutingNavigator] =
+  def apply()(implicit hc: HeaderCarrier): Future[LocationOfGoodsNavigator] =
     for {
       ctcCountries                             <- countriesService.getCountryCodesCTC()
       customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
-    } yield new RoutingNavigator(
+    } yield new LocationOfGoodsNavigator(
       ctcCountries.countryCodes,
       customsSecurityAgreementAreaCountryCodes.countryCodes
     )
 }
 
-trait RoutingNavigatorProvider {
+trait LocationOfGoodsNavigatorProvider {
 
-  def apply()(implicit hc: HeaderCarrier): Future[RoutingNavigator]
+  def apply()(implicit hc: HeaderCarrier): Future[LocationOfGoodsNavigator]
 }
 
-class RoutingNavigator(
+class LocationOfGoodsNavigator(
   ctcCountryCodes: Seq[String],
   customsSecurityAgreementAreaCountryCodes: Seq[String]
-) extends UserAnswersNavigator[RoutingDomain, RouteDetailsDomain]()(
-      RoutingDomain.userAnswersReader,
+) extends UserAnswersNavigator[LocationOfGoodsDomain, RouteDetailsDomain]()(
+      LocationOfGoodsDomain.userAnswersReader,
       RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
     )

@@ -28,23 +28,23 @@ import services.CountriesService
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class OfficeOfExitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class LocationOfGoodsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
-  private val navigator = new OfficeOfExitNavigator(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+  private val navigator = new LocationOfGoodsNavigator(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
 
-  "Office of Exit Navigator" - {
+  "Location Of Goods Navigator" - {
 
     "when in NormalMode" - {
 
       val mode = NormalMode
 
       "when answers complete" - {
-        "must redirect to check your answers for office of exit" in {
-          forAll(arbitraryOfficeOfExitAnswers(emptyUserAnswers, index)) {
+        "must redirect to location of goods check your answers" ignore {
+          forAll(arbitraryLocationOfGoodsAnswers(emptyUserAnswers)) {
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(controllers.routeDetails.exit.index.routes.CheckOfficeOfExitAnswersController.onPageLoad(lrn, index))
+                .mustBe(???)
           }
         }
       }
@@ -67,7 +67,7 @@ class OfficeOfExitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
     }
   }
 
-  "Office of Exit Navigator Provider" - {
+  "Location Of Goods Navigator Provider" - {
 
     "must retrieve reference data lists" in {
       val mockService = mock[CountriesService]
@@ -80,8 +80,8 @@ class OfficeOfExitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
       when(mockService.getCustomsSecurityAgreementAreaCountries()(any()))
         .thenReturn(Future.successful(customsSecurityAgreementAreaCountries))
 
-      val provider = new OfficeOfExitNavigatorProviderImpl(mockService)
-      provider.apply(index).futureValue
+      val provider = new LocationOfGoodsNavigatorProviderImpl(mockService)
+      provider.apply().futureValue
 
       verify(mockService).getCountryCodesCTC()(any())
       verify(mockService).getCustomsSecurityAgreementAreaCountries()(any())

@@ -35,12 +35,10 @@ class OfficeOfExitNavigatorProviderImpl @Inject() (
   def apply(index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfExitNavigator] =
     for {
       ctcCountries                             <- countriesService.getCountryCodesCTC()
-      euCountries                              <- countriesService.getCommunityCountries()
       customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
     } yield new OfficeOfExitNavigator(
       index,
       ctcCountries.countryCodes,
-      euCountries.countryCodes,
       customsSecurityAgreementAreaCountryCodes.countryCodes
     )
 }
@@ -53,9 +51,8 @@ trait OfficeOfExitNavigatorProvider {
 class OfficeOfExitNavigator(
   index: Index,
   ctcCountryCodes: Seq[String],
-  euCountryCodes: Seq[String],
   customsSecurityAgreementAreaCountryCodes: Seq[String]
 ) extends UserAnswersNavigator[OfficeOfExitDomain, RouteDetailsDomain]()(
       OfficeOfExitDomain.userAnswersReader(index),
-      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
     )
