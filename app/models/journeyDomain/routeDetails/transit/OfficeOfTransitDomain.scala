@@ -23,7 +23,7 @@ import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, Use
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{Country, CustomsOffice}
 import models.{DateTime, Index, UserAnswers}
-import pages.preTaskList.{OfficeOfDeparturePage, SecurityDetailsTypePage}
+import pages.preTaskList.SecurityDetailsTypePage
 import pages.routeDetails.routing.OfficeOfDestinationPage
 import pages.routeDetails.transit.index._
 import play.api.mvc.Call
@@ -54,7 +54,6 @@ object OfficeOfTransitDomain {
   implicit def userAnswersReader(
     index: Index,
     ctcCountryCodes: Seq[String],
-    euCountryCodes: Seq[String],
     customsSecurityAgreementAreaCountryCodes: Seq[String]
   ): UserAnswersReader[OfficeOfTransitDomain] = {
 
@@ -90,16 +89,11 @@ object OfficeOfTransitDomain {
 
     index.position match {
       case 0 =>
-        for {
-          officeOfDeparture   <- OfficeOfDeparturePage.reader.map(_.countryCode)
-          officeOfDestination <- OfficeOfDestinationPage.reader.map(_.countryCode)
-          reader <- (officeOfDeparture, officeOfDestination) match {
-            case (_, dest) if ctcCountryCodes.contains(dest)               => readsWithoutCountry
-            case (dep, dest) if dep == GB && euCountryCodes.contains(dest) => readsWithoutCountry
-            case (_, dest) if dest == AD                                   => readsWithoutCountry
-            case _                                                         => readsWithCountry
-          }
-        } yield reader
+        OfficeOfDestinationPage.reader.map(_.countryCode).flatMap {
+          case x if ctcCountryCodes.contains(x) => readsWithoutCountry
+          case AD                               => readsWithoutCountry
+          case _                                => readsWithCountry
+        }
       case _ => readsWithCountry
     }
   }

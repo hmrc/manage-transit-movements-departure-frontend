@@ -34,11 +34,9 @@ class LocationOfGoodsNavigatorProviderImpl @Inject() (
   def apply()(implicit hc: HeaderCarrier): Future[LocationOfGoodsNavigator] =
     for {
       ctcCountries                             <- countriesService.getCountryCodesCTC()
-      euCountries                              <- countriesService.getCommunityCountries()
       customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
     } yield new LocationOfGoodsNavigator(
       ctcCountries.countryCodes,
-      euCountries.countryCodes,
       customsSecurityAgreementAreaCountryCodes.countryCodes
     )
 }
@@ -50,9 +48,8 @@ trait LocationOfGoodsNavigatorProvider {
 
 class LocationOfGoodsNavigator(
   ctcCountryCodes: Seq[String],
-  euCountryCodes: Seq[String],
   customsSecurityAgreementAreaCountryCodes: Seq[String]
 ) extends UserAnswersNavigator[LocationOfGoodsDomain, RouteDetailsDomain]()(
       LocationOfGoodsDomain.userAnswersReader,
-      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
     )

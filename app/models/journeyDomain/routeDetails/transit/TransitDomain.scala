@@ -44,7 +44,6 @@ object TransitDomain {
   // scalastyle:off method.length
   implicit def userAnswersReader(
     ctcCountryCodes: Seq[String],
-    euCountryCodes: Seq[String],
     customsSecurityAgreementAreaCountryCodes: Seq[String]
   ): UserAnswersReader[TransitDomain] = {
 
@@ -52,11 +51,11 @@ object TransitDomain {
       OfficesOfTransitSection.reader.flatMap {
         case x if x.isEmpty =>
           UserAnswersReader[OfficeOfTransitDomain](
-            OfficeOfTransitDomain.userAnswersReader(Index(0), ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+            OfficeOfTransitDomain.userAnswersReader(Index(0), ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
           ).map(Seq(_))
         case x =>
           x.traverse[OfficeOfTransitDomain](
-            OfficeOfTransitDomain.userAnswersReader(_, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+            OfficeOfTransitDomain.userAnswersReader(_, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
           ).map(_.toSeq)
       }
 
