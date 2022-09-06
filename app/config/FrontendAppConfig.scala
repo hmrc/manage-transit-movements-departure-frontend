@@ -22,6 +22,8 @@ import play.api.Configuration
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
+  val appName: String = configuration.get[String]("appName")
+
   lazy val daysBefore: Int = configuration.get[Int]("limits.officeOfTransitETA.daysBefore")
   lazy val daysAfter: Int  = configuration.get[Int]("limits.officeOfTransitETA.daysAfter")
 
@@ -56,7 +58,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val enrolmentProxyUrl: String = configuration.get[Service]("microservice.services.enrolment-store-proxy").fullServiceUrl
 
-  lazy val mongoTtl: Int = configuration.get[Int]("mongodb.timeToLiveInSeconds")
+  lazy val cacheUrl: String = configuration.get[Service]("microservice.services.manage-transit-movements-departure-cache").fullServiceUrl
 
   lazy val maxGuarantees: Int         = configuration.get[Int]("limits.maxGuarantees")
   lazy val maxCountriesOfRouting: Int = configuration.get[Int]("limits.maxCountriesOfRouting")

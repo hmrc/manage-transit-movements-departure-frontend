@@ -17,9 +17,6 @@ lazy val root = (project in file("."))
     SbtDistributablesPlugin
   )
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
-  .configs(IntegrationTest)
-  .settings(inConfig(IntegrationTest)(itSettings): _*)
-  .settings(inConfig(IntegrationTest)(org.scalafmt.sbt.ScalafmtPlugin.scalafmtConfigSettings): _*)
   .configs(A11yTest)
   .settings(inConfig(A11yTest)(org.scalafmt.sbt.ScalafmtPlugin.scalafmtConfigSettings): _*)
   .settings(DefaultBuildSettings.scalaSettings: _*)
@@ -28,8 +25,6 @@ lazy val root = (project in file("."))
   .settings(inConfig(Test)(testSettings): _*)
   .settings(majorVersion := 0)
   .settings(scalaVersion := "2.12.15")
-  .settings(headerSettings(IntegrationTest): _*)
-  .settings(automateHeaderSettings(IntegrationTest))
   .settings(headerSettings(A11yTest): _*)
   .settings(automateHeaderSettings(A11yTest))
   .settings(
@@ -101,19 +96,5 @@ lazy val testSettings: Seq[Def.Setting[_]] = Seq(
   unmanagedResourceDirectories += baseDirectory.value / "test" / "resources",
   javaOptions ++= Seq(
     "-Dconfig.resource=test.application.conf"
-  )
-)
-
-lazy val itSettings = Defaults.itSettings ++ Seq(
-  unmanagedSourceDirectories := Seq(
-    baseDirectory.value / "it"
-  ),
-  unmanagedResourceDirectories := Seq(
-    baseDirectory.value / "it" / "resources"
-  ),
-  parallelExecution := false,
-  fork              := true,
-  javaOptions ++= Seq(
-    "-Dconfig.resource=it.application.conf"
   )
 )

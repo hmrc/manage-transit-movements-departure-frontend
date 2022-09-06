@@ -76,7 +76,7 @@ class DataRetrievalActionSpec extends AnyFreeSpec with Matchers with GuiceOneApp
 
       "where there are no existing answers for this LRN" in {
 
-        when(sessionRepository.get(any(), any())) thenReturn Future.successful(None)
+        when(sessionRepository.get(any())(any())) thenReturn Future.successful(None)
 
         harness(lrn, request => request.userAnswers must not be defined)
       }
@@ -86,7 +86,7 @@ class DataRetrievalActionSpec extends AnyFreeSpec with Matchers with GuiceOneApp
 
       "when there are existing answers for this LRN" in {
 
-        when(sessionRepository.get(any(), any())) thenReturn Future.successful(Some(UserAnswers(lrn, eoriNumber)))
+        when(sessionRepository.get(any())(any())) thenReturn Future.successful(Some(UserAnswers(lrn, eoriNumber)))
 
         harness(lrn, request => request.userAnswers mustBe defined)
       }

@@ -100,7 +100,7 @@ class LocationOfGoodsCustomsOfficeIdentifierControllerSpec extends SpecBase with
 
       val userAnswers = emptyUserAnswers.setValue(OfficeOfDeparturePage, customsOffice1)
       when(mockCustomsOfficesService.getCustomsOfficesOfDepartureForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(userAnswers)
 

@@ -71,7 +71,7 @@ class RemoveCountryOfRoutingYesNoControllerSpec
         forAll(arbitraryCountryOfRoutingAnswers(emptyUserAnswers, index)) {
           answers =>
             reset(mockSessionRepository)
-            when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+            when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
             setExistingUserAnswers(answers)
 
@@ -86,7 +86,7 @@ class RemoveCountryOfRoutingYesNoControllerSpec
               routingRoutes.AddAnotherCountryOfRoutingController.onPageLoad(lrn).url
 
             val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-            verify(mockSessionRepository).set(userAnswersCaptor.capture())
+            verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
             userAnswersCaptor.getValue.get(CountryOfRoutingSection(index)) mustNot be(defined)
         }
       }
@@ -110,7 +110,7 @@ class RemoveCountryOfRoutingYesNoControllerSpec
             redirectLocation(result).value mustEqual
               routingRoutes.AddAnotherCountryOfRoutingController.onPageLoad(lrn).url
 
-            verify(mockSessionRepository, never()).set(any())
+            verify(mockSessionRepository, never()).set(any())(any())
         }
       }
     }

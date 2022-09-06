@@ -84,7 +84,7 @@ class LocationOfGoodsEoriControllerSpec extends SpecBase with AppWithDefaultMock
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       val request = FakeRequest(POST, locationOfGoodsEoriRoute)
         .withFormUrlEncodedBody(("value", "GB1234567890000"))

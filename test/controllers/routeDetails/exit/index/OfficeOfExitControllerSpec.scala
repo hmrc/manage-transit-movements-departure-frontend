@@ -101,7 +101,7 @@ class OfficeOfExitControllerSpec extends SpecBase with AppWithDefaultMockFixture
       val userAnswers = emptyUserAnswers.setValue(OfficeOfExitCountryPage(index), country)
 
       when(mockCustomsOfficesService.getCustomsOfficesOfExitForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(userAnswers)
 
