@@ -31,7 +31,7 @@ private[mappings] class LocalDateFormatter(
 ) extends Formatter[LocalDate]
     with Formatters {
 
-  private val fieldKeys: List[String] = List("day", "month", "year")
+  private val fieldKeys: List[String] = List("Day", "Month", "Year")
 
   private def toDate(key: String, day: Int, month: Int, year: Int): Either[Seq[FormError], LocalDate] =
     Try(LocalDate.of(year, month, day)) match {
@@ -51,9 +51,9 @@ private[mappings] class LocalDateFormatter(
     )
 
     for {
-      day   <- int.bind(s"$key.day".replaceAll("\\s", ""), data).right
-      month <- int.bind(s"$key.month".replaceAll("\\s", ""), data).right
-      year  <- int.bind(s"$key.year".replaceAll("\\s", ""), data).right
+      day   <- int.bind(s"${key}Day".replaceAll("\\s", ""), data).right
+      month <- int.bind(s"${key}Month".replaceAll("\\s", ""), data).right
+      year  <- int.bind(s"${key}Year".replaceAll("\\s", ""), data).right
       date  <- toDate(key, day, month, year).right
 
     } yield date
@@ -63,12 +63,12 @@ private[mappings] class LocalDateFormatter(
 
     val fields: Map[String, Option[String]] = fieldKeys.map {
       field =>
-        field -> data.get(s"$key.$field").filter(_.nonEmpty).map(_.replaceAll("\\s", ""))
+        field -> data.get(s"$key$field").filter(_.nonEmpty).map(_.replaceAll("\\s", ""))
     }.toMap
 
     lazy val missingFields = fields
       .withFilter(_._2.isEmpty)
-      .map(_._1)
+      .map(_._1.toLowerCase)
       .toList
 
     fields.count(_._2.isDefined) match {
@@ -80,15 +80,15 @@ private[mappings] class LocalDateFormatter(
         Left(List(FormError(key, requiredKey, missingFields ++ args)))
       case 1 =>
         Left(List(FormError(key, twoRequiredKey, missingFields ++ args)))
-      case _ =>
+      case 0 =>
         Left(List(FormError(key, allRequiredKey, args)))
     }
   }
 
   override def unbind(key: String, value: LocalDate): Map[String, String] =
     Map(
-      s"$key.day"   -> value.getDayOfMonth.toString.replaceAll("\\s", ""),
-      s"$key.month" -> value.getMonthValue.toString.replaceAll("\\s", ""),
-      s"$key.year"  -> value.getYear.toString.replaceAll("\\s", "")
+      s"${key}Day"   -> value.getDayOfMonth.toString.replaceAll("\\s", ""),
+      s"${key}Month" -> value.getMonthValue.toString.replaceAll("\\s", ""),
+      s"${key}Year"  -> value.getYear.toString.replaceAll("\\s", "")
     )
 }

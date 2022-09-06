@@ -50,5 +50,5 @@ class AddAnotherGuaranteeViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithItemsMaxedOut()
 
-  behave like pageWithSubmitButton("Continue")
+  behave like pageWithSubmitButton("Save and continue")
 }

@@ -16,6 +16,13 @@
 ->         /manage-transit-movements/departure                   app.guaranteeDetails.guarantee.Routes
 
 ->         /manage-transit-movements/departure                   app.routeDetails.routing.Routes
+->         /manage-transit-movements/departure                   app.routeDetails.routing.index.Routes
+->         /manage-transit-movements/departure                   app.routeDetails.transit.Routes
+->         /manage-transit-movements/departure                   app.routeDetails.transit.index.Routes
+->         /manage-transit-movements/departure                   app.routeDetails.exit.Routes
+->         /manage-transit-movements/departure                   app.routeDetails.exit.index.Routes
+
+->         /manage-transit-movements/departure                   app.routeDetails.locationOfGoods.Routes
 
 ->         /                                                     health.Routes
 

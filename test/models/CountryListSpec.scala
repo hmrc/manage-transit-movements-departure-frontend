@@ -20,6 +20,7 @@ import base.SpecBase
 import generators.Generators
 import models.reference.{Country, CountryCode}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import play.api.libs.json.Json
 
 class CountryListSpec extends SpecBase with Generators with ScalaCheckPropertyChecks {
 
@@ -72,6 +73,36 @@ class CountryListSpec extends SpecBase with Generators with ScalaCheckPropertyCh
       val c1 = CountryList(Seq(Country(CountryCode("a"), "a"), Country(CountryCode("a"), "a")))
       val c2 = CountryList(Seq(Country(CountryCode("a"), "a")))
       c1 == c2 mustEqual false
+    }
+  }
+
+  "countriesOfRoutingReads" - {
+    "must read countries of routing as CountryList" in {
+      val json = Json.parse("""
+          |[
+          |  {
+          |    "countryOfRouting": {
+          |      "code": "IT",
+          |      "description": "Italy"
+          |    }
+          |  },
+          |  {
+          |    "countryOfRouting": {
+          |      "code": "FR",
+          |      "description": "France"
+          |    }
+          |  }
+          |]
+          |""".stripMargin)
+
+      val result = json.as[CountryList](CountryList.countriesOfRoutingReads)
+
+      result mustBe CountryList(
+        Seq(
+          Country(CountryCode("IT"), "Italy"),
+          Country(CountryCode("FR"), "France")
+        )
+      )
     }
   }
 }

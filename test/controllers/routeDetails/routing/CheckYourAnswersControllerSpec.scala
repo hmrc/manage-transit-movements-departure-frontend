@@ -18,6 +18,7 @@ package controllers.routeDetails.routing
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
+import navigation.routeDetails.RouteDetailsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.inject.bind
@@ -29,8 +30,6 @@ import viewModels.routeDetails.routing.CheckRoutingAnswersViewModel.CheckRouting
 import viewModels.sections.Section
 import views.html.routeDetails.routing.CheckYourAnswersView
 
-import scala.concurrent.Future
-
 class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private lazy val mockViewModelProvider = mock[CheckRoutingAnswersViewModelProvider]
@@ -38,6 +37,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
+      .overrides(bind(classOf[RouteDetailsNavigatorProvider]).toInstance(fakeRouteDetailsNavigatorProvider))
       .overrides(bind[CheckRoutingAnswersViewModelProvider].toInstance(mockViewModelProvider))
 
   "Check Your Answers Controller" - {
@@ -74,10 +74,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
-    "must redirect to task list" in {
+    "must redirect to the next page" in {
       setExistingUserAnswers(emptyUserAnswers)
-
-      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn).url)
 
@@ -85,7 +83,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
+      redirectLocation(result).value mustEqual onwardRoute.url
     }
   }
 }

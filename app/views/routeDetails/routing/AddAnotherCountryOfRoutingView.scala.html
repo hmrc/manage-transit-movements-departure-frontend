@@ -16,8 +16,8 @@
 
 @import controllers.routeDetails.routing.routes
 @import models.LocalReferenceNumber
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 @import viewModels.components.InputYesNoViewModel._
+@import viewModels.ListItem
 @import views.html.components.{Button, ErrorSummary, Heading, InputYesNo, ListWithActions}
 
 @this(
@@ -64,9 +64,6 @@
             <p class="govuk-body" data-testId="maxLimit">@messages("routeDetails.routing.addAnotherCountryOfRouting.maxLimit.label")</p>
         }
 
-        @button(
-            messageKey = "site.continue",
-            attributes = Map("id" -> "submit")
-        )
+        @button(attributes = Map("id" -> "submit"))
     }
 }

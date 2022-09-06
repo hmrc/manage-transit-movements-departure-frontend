@@ -17,12 +17,13 @@
 package utils.cyaHelpers
 
 import models.reference.CountryCode
-import models.{Address, CountryList}
+import models.{Address, CountryList, DateTime}
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.html.components._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 
+import java.time.format.DateTimeFormatter
 import scala.math.BigDecimal.RoundingMode
 
 private[utils] class SummaryListRowHelper(implicit messages: Messages) {
@@ -33,6 +34,11 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
     } else {
       messages("site.no").toText
     }
+
+  def formatAsDateTime(answer: DateTime): Content = {
+    val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy HH:mm")
+    answer.concat.format(formatter).toText
+  }
 
   protected def formatAsAddress(address: Address): Content =
     HtmlContent(Seq(address.line1, address.line2, address.postalCode, address.country.description).mkString("<br>"))

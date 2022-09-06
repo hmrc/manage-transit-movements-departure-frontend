@@ -22,6 +22,7 @@ import models.NormalMode
 import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.routeDetails.routing._
+import pages.routeDetails.routing.index.CountryOfRoutingPage
 import viewModels.Link
 
 class CheckRoutingAnswersViewModelSpec extends SpecBase with Generators {

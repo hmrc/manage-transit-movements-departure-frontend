@@ -17,15 +17,14 @@
 package utils.cyaHelpers.guaranteeDetails
 
 import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
-import models.guaranteeDetails.GuaranteeType
 import models.journeyDomain.guaranteeDetails.GuaranteeDomain
-import models.{Index, Mode, UserAnswers}
+import models.{GuaranteeType, Index, Mode, UserAnswers}
 import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import pages.sections.guaranteeDetails.GuaranteeDetailsSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import utils.cyaHelpers.AnswersHelper
+import viewModels.ListItem
 
 class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
@@ -35,9 +34,9 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mod
         val index = Index(position)
         buildListItem[GuaranteeDomain, GuaranteeType](
           page = GuaranteeTypePage(index),
-          getName = _.`type`,
-          formatName = formatEnumAsString(GuaranteeType.messageKeyPrefix),
-          removeRoute = guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, index)
+          formatJourneyDomainModel = x => formatEnumAsString(GuaranteeType.messageKeyPrefix)(x.`type`),
+          formatType = formatEnumAsString(GuaranteeType.messageKeyPrefix),
+          removeRoute = Some(guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, index))
         )(GuaranteeDomain.userAnswersReader(index), implicitly[Reads[GuaranteeType]])
     }
 }

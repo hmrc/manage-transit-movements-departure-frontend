@@ -51,6 +51,7 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[Seq[CustomsOffice]](serviceUrl, roleQueryParams(roles))
   }
 
+  @deprecated("TODO: Should be deprecated for P5")
   def getCustomsOfficesForCountry(
     countryCode: CountryCode,
     roles: Seq[String] = Nil
@@ -66,7 +67,48 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
 
   def getCountries(queryParameters: Seq[(String, String)])(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
     val serviceUrl = s"${config.referenceDataUrl}/countries"
-    http.GET[Seq[Country]](serviceUrl, queryParameters)
+    http.GET[Seq[Country]](serviceUrl, queryParameters, headers = version2Header)
   }
 
+  def getCustomsOfficesOfTransitForCountry(
+    countryCode: CountryCode
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
+    val serviceUrl = s"${config.referenceDataUrl}/customs-office-transit/${countryCode.code}"
+    http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
+  }
+
+  def getCustomsOfficesOfDestinationForCountry(
+    countryCode: CountryCode
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
+    val serviceUrl = s"${config.referenceDataUrl}/customs-office-destination/${countryCode.code}"
+    http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
+  }
+
+  def getCustomsOfficesOfExitForCountry(
+    countryCode: CountryCode
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
+    val serviceUrl = s"${config.referenceDataUrl}/customs-office-transit-exit/${countryCode.code}"
+    http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
+  }
+
+  def getCustomsOfficesOfDepartureForCountry(
+    countryCode: String
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
+    val serviceUrl = s"${config.referenceDataUrl}/customs-office-departure/$countryCode"
+    http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
+  }
+
+  def getCustomsSecurityAgreementAreaCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
+    val serviceUrl = s"${config.referenceDataUrl}/country-customs-office-security-agreement-area"
+    http.GET[Seq[Country]](serviceUrl, headers = version2Header)
+  }
+
+  def getCountryCodesCTC()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
+    val serviceUrl = s"${config.referenceDataUrl}/country-codes-ctc"
+    http.GET[Seq[Country]](serviceUrl, headers = version2Header)
+  }
+
+  private def version2Header = Seq(
+    "Accept" -> "application/vnd.hmrc.2.0+json"
+  )
 }

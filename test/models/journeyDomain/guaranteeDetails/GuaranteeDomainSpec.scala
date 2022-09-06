@@ -21,7 +21,7 @@ import generators.Generators
 import models.DeclarationType
 import models.DeclarationType.Option4
 import models.domain.{EitherType, UserAnswersReader}
-import models.guaranteeDetails.GuaranteeType._
+import models.GuaranteeType._
 import models.journeyDomain.guaranteeDetails.GuaranteeDomain._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen

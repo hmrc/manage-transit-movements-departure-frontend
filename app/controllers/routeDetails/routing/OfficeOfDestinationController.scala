@@ -21,9 +21,8 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CustomsOfficeFormProvider
 import models.reference.CustomsOffice
 import models.{CustomsOfficeList, LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.routeDetails.Routing
-import pages.routeDetails.routing.OfficeOfDestinationPage
+import navigation.routeDetails.RoutingNavigatorProvider
+import pages.routeDetails.routing.{CountryOfDestinationPage, OfficeOfDestinationPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -38,11 +37,12 @@ import scala.concurrent.{ExecutionContext, Future}
 class OfficeOfDestinationController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @Routing implicit val navigator: Navigator,
+  navigatorProvider: RoutingNavigatorProvider,
   actions: Actions,
   formProvider: CustomsOfficeFormProvider,
   service: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
   view: OfficeOfDestinationView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
@@ -51,29 +51,41 @@ class OfficeOfDestinationController @Inject() (
   private def form(customsOfficeList: CustomsOfficeList): Form[CustomsOffice] =
     formProvider("routeDetails.routing.officeOfDestination", customsOfficeList)
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      service.getCustomsOfficesOfDeparture.map {
-        customsOfficeList =>
-          val preparedForm = request.userAnswers.get(OfficeOfDestinationPage) match {
-            case None        => form(customsOfficeList)
-            case Some(value) => form(customsOfficeList).fill(value)
-          }
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(CountryOfDestinationPage))
+    .async {
+      implicit request =>
+        val countryCode = request.arg
+        service.getCustomsOfficesOfDestinationForCountry(countryCode.code).map {
+          customsOfficeList =>
+            val preparedForm = request.userAnswers.get(OfficeOfDestinationPage) match {
+              case None        => form(customsOfficeList)
+              case Some(value) => form(customsOfficeList).fill(value)
+            }
 
-          Ok(view(preparedForm, lrn, customsOfficeList.customsOffices, mode))
-      }
-  }
+            Ok(view(preparedForm, lrn, customsOfficeList.customsOffices, mode))
+        }
+    }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      service.getCustomsOfficesOfDeparture.flatMap {
-        customsOfficeList =>
-          form(customsOfficeList)
-            .bindFromRequest()
-            .fold(
-              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
-              value => OfficeOfDestinationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
-            )
-      }
-  }
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(CountryOfDestinationPage))
+    .async {
+      implicit request =>
+        val countryCode = request.arg
+        service.getCustomsOfficesOfDestinationForCountry(countryCode.code).flatMap {
+          customsOfficeList =>
+            form(customsOfficeList)
+              .bindFromRequest()
+              .fold(
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
+                value =>
+                  navigatorProvider().flatMap {
+                    implicit navigator =>
+                      OfficeOfDestinationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                  }
+              )
+        }
+    }
 }

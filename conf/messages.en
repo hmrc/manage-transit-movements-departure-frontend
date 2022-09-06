@@ -23,6 +23,8 @@ address.country = country
 date.day.capitalized = Day
 date.month.capitalized = Month
 date.year.capitalized = Year
+date.hour.capitalized = Hour
+date.minute.capitalized = Minute
 
 pageNotFound.title = Page not found
 pageNotFound.heading = Page not found
@@ -540,10 +542,23 @@ guaranteeDetails.checkYourAnswers.heading = Check your answers
 
 routeDetails.caption = Route details
 
+# Routing
+
+routeDetails.routing.countryOfDestination.title = What is the country of destination?
+routeDetails.routing.countryOfDestination.heading = What is the country of destination?
+routeDetails.routing.countryOfDestination.hintText = Enter the country, like France or Portugal.
+routeDetails.routing.countryOfDestination.paragraph = This is the country where the CTC transit ends.
+routeDetails.routing.countryOfDestination.placeholder = Select a country
+routeDetails.routing.countryOfDestination.change.hidden = country of destination
+routeDetails.routing.countryOfDestination.checkYourAnswersLabel = Country of destination
+routeDetails.routing.countryOfDestination.error.required = Enter the country of destination
+routeDetails.routing.countryOfDestination.error.noOffices = You cannot use this country as it does not have any offices of destination
+
 routeDetails.routing.officeOfDestination.title = Where is the office of destination?
 routeDetails.routing.officeOfDestination.heading = Where is the office of destination?
 routeDetails.routing.officeOfDestination.hintText = Enter the office location or code, like Dover or GB000060.
-routeDetails.routing.officeOfDestination.paragraph = This is the customs office where the transit ends.
+routeDetails.routing.officeOfDestination.paragraph = This is the customs office where the CTC transit ends.
+routeDetails.routing.officeOfDestination.placeholder = Select a customs office
 routeDetails.routing.officeOfDestination.placeholder = Select a customs office
 routeDetails.routing.officeOfDestination.change.hidden = office of destination
 routeDetails.routing.officeOfDestination.checkYourAnswersLabel = Office of destination
@@ -571,9 +586,9 @@ routeDetails.routing.countryOfRouting.placeholder = Select a country
 routeDetails.routing.countryOfRouting.checkYourAnswersLabel = Country of routing {0}
 routeDetails.routing.countryOfRouting.change.hidden = country of routing {0}
 
-routeDetails.routing.removeCountryOfRoutingYesNo.title = Are you sure you want to remove this country from the transit route?
-routeDetails.routing.removeCountryOfRoutingYesNo.heading = Are you sure you want to remove this country from the transit route?
-routeDetails.routing.removeCountryOfRoutingYesNo.error.required = Select yes if you want to remove this country from the transit route
+routeDetails.routing.removeCountryOfRoutingYesNo.title = Are you sure you want to remove {0} from the transit route?
+routeDetails.routing.removeCountryOfRoutingYesNo.heading = Are you sure you want to remove {0} from the transit route?
+routeDetails.routing.removeCountryOfRoutingYesNo.error.required = Select yes if you want to remove {0} from the transit route
 
 routeDetails.routing.addAnotherCountryOfRouting.singular.title = You have added {0} country to the transit route
 routeDetails.routing.addAnotherCountryOfRouting.singular.heading = You have added {0} country to the transit route
@@ -587,3 +602,167 @@ routeDetails.routing.checkYourAnswers.title = Check your answers
 routeDetails.routing.checkYourAnswers.heading = Check your answers
 routeDetails.routing.checkYourAnswers.countries.subheading = Transit route countries
 routeDetails.routing.checkYourAnswers.addOrRemove = Add or remove transit route countries
+
+# Transit
+
+routeDetails.transit.t2DeclarationTypeYesNo.title = Does the transit include any T2 declarations?
+routeDetails.transit.t2DeclarationTypeYesNo.heading = Does the transit include any T2 declarations?
+routeDetails.transit.t2DeclarationTypeYesNo.checkYourAnswersLabel = Does the transit include any T2 declarations?
+routeDetails.transit.t2DeclarationTypeYesNo.paragraph = This type of declaration covers goods originating inside the European Union.
+routeDetails.transit.t2DeclarationTypeYesNo.error.required = Select yes if your transit includes any T2 declarations
+
+routeDetails.transit.addOfficeOfTransitYesNo.title = Do you want to add an office of transit?
+routeDetails.transit.addOfficeOfTransitYesNo.heading = Do you want to add an office of transit?
+routeDetails.transit.addOfficeOfTransitYesNo.checkYourAnswersLabel = Do you want to add an office of transit
+routeDetails.transit.addOfficeOfTransitYesNo.paragraph = This is the first arrival point for goods entering a new customs territory.
+routeDetails.transit.addOfficeOfTransitYesNo.error.required = Select yes if you want to add an office of transit
+
+routeDetails.transit.officeOfTransitCountry.title = Which country is the office of transit in?
+routeDetails.transit.officeOfTransitCountry.heading = Which country is the office of transit in?
+routeDetails.transit.officeOfTransitCountry.hint = Enter the country, like France or Portugal.
+routeDetails.transit.officeOfTransitCountry.placeholder = Select a country
+routeDetails.transit.officeOfTransitCountry.change.hidden = office of transit country
+routeDetails.transit.officeOfTransitCountry.checkYourAnswersLabel = Office of transit country
+routeDetails.transit.officeOfTransitCountry.error.required = Enter the country the office of transit is in
+routeDetails.transit.officeOfTransitCountry.error.noOffices = You cannot use this country as it does not have any offices of transit
+
+routeDetails.transit.officeOfTransit.title = Where in {0} is the office of transit?
+routeDetails.transit.officeOfTransit.heading = Where in {0} is the office of transit?
+routeDetails.transit.officeOfTransit.hint = Enter the office location or code, like Calais or FR620001.
+routeDetails.transit.officeOfTransit.placeholder = Select a customs office
+routeDetails.transit.officeOfTransit.change.hidden = office of transit
+routeDetails.transit.officeOfTransit.checkYourAnswersLabel = Office of transit
+routeDetails.transit.officeOfTransit.error.required = Enter where the office of transit is in {0}
+
+routeDetails.transit.addOfficeOfTransitETAYesNo.title = Do you want to add a time of arrival in {0}?
+routeDetails.transit.addOfficeOfTransitETAYesNo.heading = Do you want to add a time of arrival in {0}?
+routeDetails.transit.addOfficeOfTransitETAYesNo.checkYourAnswersLabel = Do you want to add a time of arrival?
+routeDetails.transit.addOfficeOfTransitETAYesNo.change.hidden = do you want to add a time of arrival
+routeDetails.transit.addOfficeOfTransitETAYesNo.error.required = Select yes if you want to add a time of arrival for the office of transit
+
+routeDetails.transit.officeOfTransitETA.title = When do you expect the transit to arrive in {0}, {1}?
+routeDetails.transit.officeOfTransitETA.heading = When do you expect the transit to arrive in {0}, {1}?
+routeDetails.transit.officeOfTransitETA.checkYourAnswersLabel = Estimated date and time of arrival
+routeDetails.transit.officeOfTransitETA.change.hidden = the estimated date and time of arrival
+routeDetails.transit.officeOfTransitETA.date.title = Date
+routeDetails.transit.officeOfTransitETA.date.hint = For example, 14 1 2020
+routeDetails.transit.officeOfTransitETA.time.title = Time
+routeDetails.transit.officeOfTransitETA.time.hint = Use the 24-hour format. For example. 14 30
+routeDetails.transit.officeOfTransitETA.date.error.invalid = Enter a real date that you expect the transit to arrive
+routeDetails.transit.officeOfTransitETA.date.error.required.all = Enter the estimated date of arrival at the office of transit
+routeDetails.transit.officeOfTransitETA.date.error.required.multiple = The estimated date of arrival at the office of transit must include {0} and {1}
+routeDetails.transit.officeOfTransitETA.date.error.required = The estimated date of arrival at the office of transit must include {0}
+routeDetails.transit.officeOfTransitETA.date.error.pastDate = The estimated date of arrival at the office of transit must be after {0}
+routeDetails.transit.officeOfTransitETA.date.error.futureDate = The estimated date of arrival at the office of transit must be before {0}
+routeDetails.transit.officeOfTransitETA.time.error.invalid = Enter a real time that you expect the transit to arrive
+routeDetails.transit.officeOfTransitETA.time.error.required.all = Enter the estimated time of arrival at the office of transit
+routeDetails.transit.officeOfTransitETA.time.error.required = The estimated time of arrival at the office of transit must include {0}
+
+routeDetails.transit.addAnotherOfficeOfTransit.singular.title = You have added {0} office of transit
+routeDetails.transit.addAnotherOfficeOfTransit.singular.heading = You have added {0} office of transit
+routeDetails.transit.addAnotherOfficeOfTransit.plural.title = You have added {0} offices of transit
+routeDetails.transit.addAnotherOfficeOfTransit.plural.heading = You have added {0} offices of transit
+routeDetails.transit.addAnotherOfficeOfTransit.error.required = Select yes if you need to add another office of transit
+routeDetails.transit.addAnotherOfficeOfTransit.label = Do you want to add another office of transit?
+routeDetails.transit.addAnotherOfficeOfTransit.maxLimit.label = You cannot add any more offices of transit. To add another office, you need to remove one first.
+
+routeDetails.transit.confirmRemoveOfficeOfTransit.title = Are you sure you want to remove {0} as an office of transit?
+routeDetails.transit.confirmRemoveOfficeOfTransit.heading = Are you sure you want to remove {0} as an office of transit?
+routeDetails.transit.confirmRemoveOfficeOfTransit.error.required = Select yes if you want to remove {0} as an office of transit
+
+routeDetails.transit.checkOfficeOfTransitAnswers.title = Check your answers
+routeDetails.transit.checkOfficeOfTransitAnswers.heading = Check your answers
+
+# Exit
+
+routeDetails.exit.officeOfExitCountry.title = Which country is the office of exit in?
+routeDetails.exit.officeOfExitCountry.heading = Which country is the office of exit in?
+routeDetails.exit.officeOfExitCountry.paragraph = This is the exit point for goods leaving a customs territory.
+routeDetails.exit.officeOfExitCountry.hintText = Enter the country, like France or Portugal.
+routeDetails.exit.officeOfExitCountry.placeholder = Select a country
+routeDetails.exit.officeOfExitCountry.change.hidden = office of exit’s country
+routeDetails.exit.officeOfExitCountry.checkYourAnswersLabel = Country
+routeDetails.exit.officeOfExitCountry.error.required = Enter the country the office of exit is in
+routeDetails.exit.officeOfExitCountry.error.noOffices = You cannot use this country as it does not have any offices of exit
+
+routeDetails.exit.officeOfExit.title = Where in {0} is the office of exit?
+routeDetails.exit.officeOfExit.heading = Where in {0} is the office of exit?
+routeDetails.exit.officeOfExit.hintText = Enter the office location or code, like Dover or GB000060.
+routeDetails.exit.officeOfExit.placeholder = Select a customs office
+routeDetails.exit.officeOfExit.change.hidden = office of exit’s location
+routeDetails.exit.officeOfExit.checkYourAnswersLabel = Office location
+routeDetails.exit.officeOfExit.error.required = Enter where the office of exit is in {0}
+
+routeDetails.exit.confirmRemoveOfficeOfExit.title = Are you sure you want to remove {0} as an office of exit?
+routeDetails.exit.confirmRemoveOfficeOfExit.heading = Are you sure you want to remove {0} as an office of exit?
+routeDetails.exit.confirmRemoveOfficeOfExit.error.required = Select yes if you want to remove {0} as an office of exit
+
+routeDetails.exit.checkOfficeOfExitAnswers.title = Check your answers
+routeDetails.exit.checkOfficeOfExitAnswers.heading = Check your answers
+routeDetails.exit.checkOfficeOfExitAnswers.subHeading = Office of exit
+
+routeDetails.exit.addAnotherOfficeOfExit.singular.title = You have added {0} office of exit
+routeDetails.exit.addAnotherOfficeOfExit.singular.heading = You have added {0} office of exit
+routeDetails.exit.addAnotherOfficeOfExit.plural.title = You have added {0} offices of exit
+routeDetails.exit.addAnotherOfficeOfExit.plural.heading = You have added {0} offices of exit
+routeDetails.exit.addAnotherOfficeOfExit.error.required =  Select yes if you need to add another office of exit
+routeDetails.exit.addAnotherOfficeOfExit.label = Do you want to add another office of exit?
+routeDetails.exit.addAnotherOfficeOfExit.hint = You can add up to 9 offices.
+routeDetails.exit.addAnotherOfficeOfExit.maxLimit.label = You cannot add any more offices of exit. To add another office, you need to remove one first.
+
+routeDetails.locationOfGoods.addLocationOfGoods.title = Do you want to add a location of goods?
+routeDetails.locationOfGoods.addLocationOfGoods.heading = Do you want to add a location of goods?
+routeDetails.locationOfGoods.addLocationOfGoods.paragraph1 = This is where Customs will carry out any physical checks.
+routeDetails.locationOfGoods.addLocationOfGoods.paragraph2 = For goods not present at a customs office, this is their location at the time they’re declared.
+routeDetails.locationOfGoods.addLocationOfGoods.checkYourAnswersLabel = Do you want to add a location of goods?
+routeDetails.locationOfGoods.addLocationOfGoods.error.required = Select yes if you want to add a location of goods
+
+routeDetails.locationOfGoods.locationOfGoodsType.title = Which type of location is it?
+routeDetails.locationOfGoods.locationOfGoodsType.heading = Which type of location is it?
+routeDetails.locationOfGoods.locationOfGoodsType.checkYourAnswersLabel = Which type of location is it?
+routeDetails.locationOfGoods.locationOfGoodsType.error.required = Select which type of location it is
+# TODO: Add placeholder for designated location
+routeDetails.locationOfGoods.locationOfGoodsType.DesignatedLocation = Designated location -
+routeDetails.locationOfGoods.locationOfGoodsType.AuthorisedPlace = Authorised place - the authorised consignor’s approved premises
+routeDetails.locationOfGoods.locationOfGoodsType.ApprovedPlace = Approved place - a designated location approved and controlled by the office of departure or destination
+routeDetails.locationOfGoods.locationOfGoodsType.Other = Other
+
+routeDetails.locationOfGoods.locationOfGoodsIdentification.title = How do you want to identify the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsIdentification.heading = How do you want to identify the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsIdentification.hint = This needs to be precise enough for Customs to locate the goods and carry out their checks.
+routeDetails.locationOfGoods.locationOfGoodsIdentification.customsOfficeIdentifier = Customs office identifier
+routeDetails.locationOfGoods.locationOfGoodsIdentification.eoriNumber = EORI number
+routeDetails.locationOfGoods.locationOfGoodsIdentification.authorisationNumber = Authorisation number
+routeDetails.locationOfGoods.locationOfGoodsIdentification.coordinates = Coordinates
+routeDetails.locationOfGoods.locationOfGoodsIdentification.unlocode = UN/LOCODE
+routeDetails.locationOfGoods.locationOfGoodsIdentification.address = Address
+routeDetails.locationOfGoods.locationOfGoodsIdentification.postalCode = Postal code
+routeDetails.locationOfGoods.locationOfGoodsIdentification.checkYourAnswersLabel = identifier type for the location of goods
+routeDetails.locationOfGoods.locationOfGoodsIdentification.error.required = Select how you want to identify the location of goods
+
+routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.title = What is the customs office identifier for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.heading = What is the customs office identifier for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.hintText = Enter the office location or code, like Dover or GB000060.
+routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.placeholder = Select a customsOffice
+routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.change.hidden = What is the customs office identifier for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.checkYourAnswersLabel = What is the customs office identifier for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.error.required = Enter the customs office identifier for the location of goods
+
+routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.title = What is the authorisation number for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.heading = What is the authorisation number for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.checkYourAnswersLabel = What is the authorisation number for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.error.required = Enter the authorisation number for the location of goods.
+routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.error.maxLength = The authorisation number must be 35 characters or less.
+routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.error.invalidCharacters = The authorisation number must only include letters a to z and numbers 0 to 9.
+routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.hintText = This can be up to 35 characters long and include both letters and numbers.
+
+
+routeDetails.locationOfGoods.locationOfGoodsEori.title = What is the EORI number for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsEori.heading = What is the EORI number for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsEori.checkYourAnswersLabel = What is the EORI number for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsEori.error.required = Enter the EORI number for the location of goods
+routeDetails.locationOfGoods.locationOfGoodsEori.error.length = The EORI number must be between 14 and 17 characters long
+routeDetails.locationOfGoods.locationOfGoodsEori.error.invalidCharacters = The EORI number must only include letters a to z and numbers 0 to 9
+routeDetails.locationOfGoods.locationOfGoodsEori.error.invalidFormat = The EORI number must start with GB or XI, followed by between 12 and 15 numbers
+routeDetails.locationOfGoods.locationOfGoodsEori.hintText = This will start GB or XI, followed by 12 to 15 numbers. For example, GB123456789000.
+

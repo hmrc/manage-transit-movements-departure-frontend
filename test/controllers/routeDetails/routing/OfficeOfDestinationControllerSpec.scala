@@ -19,12 +19,12 @@ package controllers.routeDetails.routing
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.CustomsOfficeFormProvider
 import generators.Generators
+import models.reference.{Country, CountryCode}
 import models.{CustomsOfficeList, NormalMode}
-import navigation.Navigator
-import navigation.annotations.routeDetails.Routing
+import navigation.routeDetails.RoutingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.routeDetails.routing.OfficeOfDestinationPage
+import pages.routeDetails.routing.{CountryOfDestinationPage, OfficeOfDestinationPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -39,6 +39,7 @@ class OfficeOfDestinationControllerSpec extends SpecBase with AppWithDefaultMock
   private val customsOffice1    = arbitraryCustomsOffice.arbitrary.sample.get
   private val customsOffice2    = arbitraryCustomsOffice.arbitrary.sample.get
   private val customsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
+  private val country           = Country(CountryCode("FR"), "France")
 
   private val formProvider = new CustomsOfficeFormProvider()
   private val form         = formProvider("routeDetails.routing.officeOfDestination", customsOfficeList)
@@ -50,15 +51,16 @@ class OfficeOfDestinationControllerSpec extends SpecBase with AppWithDefaultMock
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Routing]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[RoutingNavigatorProvider]).toInstance(fakeRoutingNavigatorProvider))
       .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
   "OfficeOfDestination Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOfficeList))
-      setExistingUserAnswers(emptyUserAnswers)
+      when(mockCustomsOfficesService.getCustomsOfficesOfDestinationForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
+      val updatedUserAnswers = emptyUserAnswers.setValue(CountryOfDestinationPage, country)
+      setExistingUserAnswers(updatedUserAnswers)
 
       val request = FakeRequest(GET, officeOfDestinationRoute)
 
@@ -74,8 +76,11 @@ class OfficeOfDestinationControllerSpec extends SpecBase with AppWithDefaultMock
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOfficeList))
-      val userAnswers = emptyUserAnswers.setValue(OfficeOfDestinationPage, customsOffice1)
+      when(mockCustomsOfficesService.getCustomsOfficesOfDestinationForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
+      val userAnswers = emptyUserAnswers
+        .setValue(CountryOfDestinationPage, country)
+        .setValue(OfficeOfDestinationPage, customsOffice1)
+
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, officeOfDestinationRoute)
@@ -94,10 +99,12 @@ class OfficeOfDestinationControllerSpec extends SpecBase with AppWithDefaultMock
 
     "must redirect to the next page when valid data is submitted" in {
 
-      when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockCustomsOfficesService.getCustomsOfficesOfDestinationForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      val userAnswers = emptyUserAnswers
+        .setValue(CountryOfDestinationPage, country)
 
-      setExistingUserAnswers(emptyUserAnswers)
+      setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(POST, officeOfDestinationRoute)
         .withFormUrlEncodedBody(("value", customsOffice1.id))
@@ -111,8 +118,11 @@ class OfficeOfDestinationControllerSpec extends SpecBase with AppWithDefaultMock
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOfficeList))
-      setExistingUserAnswers(emptyUserAnswers)
+      when(mockCustomsOfficesService.getCustomsOfficesOfDestinationForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
+      val userAnswers = emptyUserAnswers
+        .setValue(CountryOfDestinationPage, country)
+
+      setExistingUserAnswers(userAnswers)
 
       val request   = FakeRequest(POST, officeOfDestinationRoute).withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))

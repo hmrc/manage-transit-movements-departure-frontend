@@ -23,6 +23,9 @@ import pages.behaviours.PageBehaviours
 
 class OfficeOfDeparturePageSpec extends PageBehaviours {
 
+  private val xiCustomsOffice = CustomsOffice("XI1", "Belfast", Some("phone number1"))
+  private val gbCustomsOffice = CustomsOffice("GB1", "Dover", Some("phone number2"))
+
   "OfficeOfDeparturePage" - {
 
     beRetrievable[CustomsOffice](OfficeOfDeparturePage)
@@ -36,11 +39,9 @@ class OfficeOfDeparturePageSpec extends PageBehaviours {
         "and declaration type is TIR" - {
           "must clean up DeclarationTypePage and TIRCarnetReferencePage" in {
             forAll(
-              arbitrary[CustomsOffice](arbitraryXiCustomsOffice),
-              arbitrary[CustomsOffice](arbitraryGbCustomsOffice),
               arbitrary[String]
             ) {
-              (xiCustomsOffice, gbCustomsOffice, ref) =>
+              ref =>
                 val preChange = emptyUserAnswers
                   .setValue(OfficeOfDeparturePage, xiCustomsOffice)
                   .setValue(DeclarationTypePage, Option4)

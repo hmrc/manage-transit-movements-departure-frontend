@@ -21,11 +21,10 @@ import models.NormalMode
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import viewModels.InputSize
-import views.behaviours.InputTextViewBehaviours
+import views.behaviours.CurrencyInputViewBehaviours
 import views.html.guaranteeDetails.guarantee.LiabilityAmountView
 
-class LiabilityAmountViewSpec extends InputTextViewBehaviours[BigDecimal] {
+class LiabilityAmountViewSpec extends CurrencyInputViewBehaviours {
 
   override val prefix: String = "guaranteeDetails.liabilityAmount"
 
@@ -48,7 +47,7 @@ class LiabilityAmountViewSpec extends InputTextViewBehaviours[BigDecimal] {
 
   behave like pageWithHint("This can have up to 2 decimal places, for example 999.99.")
 
-  behave like pageWithInputText(Some(InputSize.Width10))
+  behave like pageWithCurrencyInput()
 
   behave like pageWithSubmitButton("Save and continue")
 }

@@ -17,9 +17,12 @@
 package models
 
 import models.reference.{Country, CountryCode}
+import play.api.libs.json._
 
 case class CountryList(countries: Seq[Country]) {
   def getCountry(countryCode: CountryCode): Option[Country] = countries.find(_.code == countryCode)
+
+  def countryCodes: Seq[String] = countries.map(_.code.code)
 
   override def equals(obj: Any): Boolean =
     obj match {
@@ -29,5 +32,21 @@ case class CountryList(countries: Seq[Country]) {
 }
 
 object CountryList {
+
   def apply(countries: Seq[Country]): CountryList = new CountryList(countries)
+
+  private def countriesReads(key: String): Reads[CountryList] = Reads[CountryList] {
+    case JsArray(values) =>
+      JsSuccess(
+        CountryList(
+          values.flatMap {
+            value => (value \ key).validate[Country].asOpt
+          }
+        )
+      )
+    case _ => JsError("CountryList::customReads: Failed to read country list from cache")
+  }
+
+  val countriesOfRoutingReads: Reads[CountryList] = countriesReads("countryOfRouting")
+
 }

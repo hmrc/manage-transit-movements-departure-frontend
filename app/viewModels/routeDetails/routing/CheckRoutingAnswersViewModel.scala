@@ -17,7 +17,7 @@
 package viewModels.routeDetails.routing
 
 import models.{Index, Mode, RichOptionalJsArray, UserAnswers}
-import pages.sections.routeDetails.CountriesOfRoutingSection
+import pages.sections.routeDetails.routing.CountriesOfRoutingSection
 import play.api.i18n.Messages
 import utils.cyaHelpers.routeDetails.RoutingCheckYourAnswersHelper
 import viewModels.Link
@@ -40,6 +40,7 @@ object CheckRoutingAnswersViewModel {
 
       val preQuestionsSection = Section(
         rows = Seq(
+          helper.countryOfDestination,
           helper.officeOfDestination,
           helper.bindingItinerary,
           helper.addCountryOfRouting

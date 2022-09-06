@@ -17,7 +17,7 @@
 package navigation
 
 import models.{Index, Mode, UserAnswers}
-import navigation.routeDetails.CountryOfRoutingNavigator
+import navigation.routeDetails._
 import play.api.mvc.Call
 
 class FakeNavigator(desiredRoute: Call) extends Navigator {
@@ -28,6 +28,30 @@ class FakeGuaranteeNavigator(desiredRoute: Call, index: Index) extends Guarantee
   override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
 }
 
-class FakeCountryOfRoutingNavigator(desiredRoute: Call, index: Index) extends CountryOfRoutingNavigator(index) {
+class FakeRouteDetailsNavigator(desiredRoute: Call) extends RouteDetailsNavigator(Nil, Nil) {
+  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+}
+
+class FakeRoutingNavigator(desiredRoute: Call) extends RoutingNavigator(Nil, Nil) {
+  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+}
+
+class FakeCountryOfRoutingNavigator(desiredRoute: Call, index: Index) extends CountryOfRoutingNavigator(index, Nil, Nil) {
+  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+}
+
+class FakeTransitNavigator(desiredRoute: Call) extends TransitNavigator(Nil, Nil) {
+  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+}
+
+class FakeOfficeOfTransitNavigator(desiredRoute: Call, index: Index) extends OfficeOfTransitNavigator(index, Nil, Nil) {
+  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+}
+
+class FakeOfficeOfExitNavigator(desiredRoute: Call, index: Index) extends OfficeOfExitNavigator(index, Nil, Nil) {
+  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+}
+
+class FakeLocationOfGoodsNavigator(desiredRoute: Call) extends LocationOfGoodsNavigator(Nil, Nil) {
   override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
 }

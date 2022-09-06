@@ -18,9 +18,10 @@ package views.behaviours
 
 import generators.Generators
 import org.jsoup.nodes.Document
+import org.jsoup.select.Elements
 import org.scalacheck.Arbitrary.arbitrary
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
+import viewModels.ListItem
 
 import scala.collection.JavaConverters._
 
@@ -66,6 +67,7 @@ trait ListWithActionsViewBehaviours extends YesNoViewBehaviours with Generators 
       behave like pageWithContent(doc, "p", messages(s"$prefix.maxLimit.label"))
     }
 
+  // scalastyle:off method.length
   private def pageWithListWithActions(doc: Document, listItems: Seq[ListItem]): Unit =
     "page with a list with actions" - {
       "must contain a description list" in {
@@ -85,15 +87,25 @@ trait ListWithActionsViewBehaviours extends YesNoViewBehaviours with Generators 
               name mustBe listItem.name
             }
 
-            "must contain 2 actions" in {
-              val actions = renderedItem.getElementsByClass("govuk-summary-list__actions-list-item")
-              actions.size() mustBe 2
+            listItem.removeUrl match {
+              case Some(removeUrl) =>
+                val actions = renderedItem.getElementsByClass("govuk-summary-list__actions-list-item")
+                "must contain 2 actions" in {
+                  actions.size() mustBe 2
+                }
+                withActionLink(actions, "Change", 0, listItem.changeUrl)
+                withActionLink(actions, "Remove", 1, removeUrl)
+              case None =>
+                val actions = renderedItem.getElementsByClass("govuk-summary-list__actions")
+                "must contain 1 action" in {
+                  actions.size() mustBe 1
+                }
+                withActionLink(actions, "Change", 0, listItem.changeUrl)
             }
 
-            def withActionLink(linkType: String, index: Int, url: String): Unit =
+            def withActionLink(actions: Elements, linkType: String, index: Int, url: String): Unit =
               s"must contain a $linkType link" in {
-                val link = renderedItem
-                  .getElementsByClass("govuk-summary-list__actions-list-item")
+                val link = actions
                   .asScala(index)
                   .getElementsByClass("govuk-link")
                   .first()
@@ -109,10 +121,8 @@ trait ListWithActionsViewBehaviours extends YesNoViewBehaviours with Generators 
                 spans.last().text() mustBe s"$linkType ${listItem.name}"
                 assert(spans.last().hasClass("govuk-visually-hidden"))
               }
-
-            withActionLink("Change", 0, listItem.changeUrl)
-            withActionLink("Remove", 1, listItem.removeUrl)
           }
       }
     }
+  // scalastyle:on method.length
 }

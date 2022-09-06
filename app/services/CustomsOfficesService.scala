@@ -48,15 +48,45 @@ class CustomsOfficesService @Inject() (
     } yield offices
   }
 
+  @deprecated("TODO: Should be deprecated for P5")
   def getCustomsOfficesForCountry(
     countryCode: CountryCode,
-    roles: Seq[String] = Nil
+    roles: Seq[String]
   )(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
     referenceDataConnector
       .getCustomsOfficesForCountry(countryCode, roles)
-      .map(
-        customsOfficeList => sort(customsOfficeList.customsOffices)
-      )
+      .map(sort)
+
+  def getCustomsOfficesOfTransitForCountry(
+    countryCode: CountryCode
+  )(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
+    referenceDataConnector
+      .getCustomsOfficesOfTransitForCountry(countryCode)
+      .map(sort)
+
+  def getCustomsOfficesOfDestinationForCountry(
+    countryCode: CountryCode
+  )(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
+    referenceDataConnector
+      .getCustomsOfficesOfDestinationForCountry(countryCode)
+      .map(sort)
+
+  def getCustomsOfficesOfExitForCountry(
+    countryCode: CountryCode
+  )(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
+    referenceDataConnector
+      .getCustomsOfficesOfExitForCountry(countryCode)
+      .map(sort)
+
+  def getCustomsOfficesOfDepartureForCountry(
+    countryCode: String
+  )(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
+    referenceDataConnector
+      .getCustomsOfficesOfDepartureForCountry(countryCode)
+      .map(sort)
+
+  private def sort(customsOfficeList: CustomsOfficeList): CustomsOfficeList =
+    sort(customsOfficeList.customsOffices)
 
   private def sort(customsOffices: Seq[CustomsOffice]): CustomsOfficeList =
     CustomsOfficeList(customsOffices.sortBy(_.name.toLowerCase))

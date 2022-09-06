@@ -29,7 +29,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
+import viewModels.ListItem
 import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel
 import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel.AddAnotherCountryOfRoutingViewModelProvider
 import views.html.routeDetails.routing.AddAnotherCountryOfRoutingView
@@ -54,8 +54,8 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
   }
 
   private val listItem          = arbitrary[ListItem].sample.value
-  private val listItems         = Seq.fill(Gen.choose(1: Int, 8: Int).sample.value)(listItem)
-  private val maxedOutListItems = Seq.fill(9: Int)(listItem)
+  private val listItems         = Seq.fill(Gen.choose(1, frontendAppConfig.maxCountriesOfRouting - 1).sample.value)(listItem)
+  private val maxedOutListItems = Seq.fill(frontendAppConfig.maxCountriesOfRouting)(listItem)
 
   "AddAnotherCountryOfRoutingController" - {
 
@@ -140,7 +140,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.routeDetails.routing.routes.CountryOfRoutingController.onPageLoad(lrn, NormalMode, Index(listItems.length)).url
+            controllers.routeDetails.routing.index.routes.CountryOfRoutingController.onPageLoad(lrn, NormalMode, Index(listItems.length)).url
         }
       }
 

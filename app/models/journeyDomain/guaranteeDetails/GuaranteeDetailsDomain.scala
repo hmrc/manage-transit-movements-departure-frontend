@@ -22,7 +22,6 @@ import models.DeclarationType.Option4
 import models.domain.{UserAnswersReader, _}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{Index, RichJsArray, UserAnswers}
-import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import pages.preTaskList.DeclarationTypePage
 import pages.sections.guaranteeDetails.GuaranteeDetailsSection
 import play.api.mvc.Call
@@ -43,7 +42,7 @@ object GuaranteeDetailsDomain {
   implicit val userAnswersReader: UserAnswersReader[GuaranteeDetailsDomain] =
     GuaranteeDetailsSection.reader.flatMap {
       case x if x.isEmpty =>
-        UserAnswersReader.fail[GuaranteeDetailsDomain](GuaranteeTypePage(Index(0)))
+        UserAnswersReader[GuaranteeDomain](GuaranteeDomain.userAnswersReader(Index(0))).map(Seq(_)).map(GuaranteeDetailsDomain(_))
       case x =>
         x.traverse[GuaranteeDomain](GuaranteeDomain.userAnswersReader).map(GuaranteeDetailsDomain.apply)
     }

@@ -22,6 +22,9 @@ import play.api.Configuration
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
+  lazy val daysBefore: Int = configuration.get[Int]("limits.officeOfTransitETA.daysBefore")
+  lazy val daysAfter: Int  = configuration.get[Int]("limits.officeOfTransitETA.daysAfter")
+
   lazy val nctsEnquiriesUrl: String = configuration.get[String]("urls.nctsEnquiries")
   lazy val nctsGuidanceUrl: String  = configuration.get[String]("urls.nctsGuidance")
 
@@ -57,4 +60,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val maxGuarantees: Int         = configuration.get[Int]("limits.maxGuarantees")
   lazy val maxCountriesOfRouting: Int = configuration.get[Int]("limits.maxCountriesOfRouting")
+  lazy val maxOfficesOfTransit: Int   = configuration.get[Int]("limits.maxOfficesOfTransit")
+  lazy val maxOfficesOfExit: Int      = configuration.get[Int]("limits.maxOfficesOfExit")
 }

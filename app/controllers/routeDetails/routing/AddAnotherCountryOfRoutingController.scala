@@ -18,15 +18,15 @@ package controllers.routeDetails.routing
 
 import config.FrontendAppConfig
 import controllers.actions._
-import controllers.routeDetails.routing.routes._
+import controllers.routeDetails.routing.index.{routes => indexRoutes}
 import forms.AddAnotherFormProvider
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, NormalMode}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewModels.ListItem
 import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel.AddAnotherCountryOfRoutingViewModelProvider
 import views.html.routeDetails.routing.AddAnotherCountryOfRoutingView
 
@@ -63,8 +63,8 @@ class AddAnotherCountryOfRoutingController @Inject() (
         .fold(
           formWithErrors => BadRequest(view(formWithErrors, lrn, countries, allowMoreCountries)),
           {
-            case true  => Redirect(CountryOfRoutingController.onPageLoad(lrn, NormalMode, Index(numberOfCountries)))
-            case false => Redirect(CheckYourAnswersController.onPageLoad(lrn))
+            case true  => Redirect(indexRoutes.CountryOfRoutingController.onPageLoad(lrn, NormalMode, Index(numberOfCountries)))
+            case false => Redirect(routes.CheckYourAnswersController.onPageLoad(lrn))
           }
         )
   }

@@ -18,7 +18,6 @@ package models
 
 import config.Constants.XI
 import models.ProcedureType.Normal
-import models.reference.CountryCode
 import pages.preTaskList.{OfficeOfDeparturePage, ProcedureTypePage}
 
 sealed trait DeclarationType
@@ -45,10 +44,10 @@ object DeclarationType extends RadioModelU[DeclarationType] {
 
   override def valuesU(userAnswers: UserAnswers): Seq[DeclarationType] =
     (
-      userAnswers.get(OfficeOfDeparturePage).map(_.countryId),
+      userAnswers.get(OfficeOfDeparturePage).map(_.countryCode),
       userAnswers.get(ProcedureTypePage)
     ) match {
-      case (Some(CountryCode(XI)), Some(Normal)) => values
-      case _                                     => values.filterNot(_ == Option4)
+      case (Some(XI), Some(Normal)) => values
+      case _                        => values.filterNot(_ == Option4)
     }
 }

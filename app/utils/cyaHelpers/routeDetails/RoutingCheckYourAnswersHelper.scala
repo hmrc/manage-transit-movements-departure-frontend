@@ -16,19 +16,27 @@
 
 package utils.cyaHelpers.routeDetails
 
-import controllers.routeDetails.routing.routes
-import models.journeyDomain.routeDetails.CountryOfRoutingDomain
+import controllers.routeDetails.routing.index.routes
+import models.journeyDomain.routeDetails.routing.CountryOfRoutingDomain
 import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode, UserAnswers}
 import pages.routeDetails.routing._
-import pages.sections.routeDetails.CountriesOfRoutingSection
+import pages.routeDetails.routing.index.CountryOfRoutingPage
+import pages.sections.routeDetails.routing.CountriesOfRoutingSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import utils.cyaHelpers.AnswersHelper
+import viewModels.ListItem
 
 class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
+
+  def countryOfDestination: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
+    page = CountryOfDestinationPage,
+    formatAnswer = formatAsText,
+    prefix = "routeDetails.routing.countryOfDestination",
+    id = Some("country-of-destination")
+  )
 
   def officeOfDestination: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
     page = OfficeOfDestinationPage,
@@ -65,9 +73,9 @@ class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
         val index = Index(position)
         buildListItem[CountryOfRoutingDomain, Country](
           page = CountryOfRoutingPage(index),
-          getName = _.country,
-          formatName = _.toString,
-          removeRoute = routes.RemoveCountryOfRoutingYesNoController.onPageLoad(userAnswers.lrn, index)
+          formatJourneyDomainModel = _.country.toString,
+          formatType = _.toString,
+          removeRoute = Some(routes.RemoveCountryOfRoutingYesNoController.onPageLoad(userAnswers.lrn, index))
         )(CountryOfRoutingDomain.userAnswersReader(index), implicitly[Reads[Country]])
     }
 }

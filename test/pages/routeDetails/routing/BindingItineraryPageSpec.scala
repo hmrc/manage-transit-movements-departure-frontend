@@ -16,7 +16,10 @@
 
 package pages.routeDetails.routing
 
+import models.SecurityDetailsType
+import org.scalacheck.Gen
 import pages.behaviours.PageBehaviours
+import pages.preTaskList.SecurityDetailsTypePage
 
 class BindingItineraryPageSpec extends PageBehaviours {
 
@@ -27,5 +30,52 @@ class BindingItineraryPageSpec extends PageBehaviours {
     beSettable[Boolean](BindingItineraryPage)
 
     beRemovable[Boolean](BindingItineraryPage)
+
+    "cleanup" - {
+      "when Yes selected" - {
+        "must remove AddCountryOfRoutingYesNo" in {
+
+          val preChange = emptyUserAnswers
+            .setValue(AddCountryOfRoutingYesNoPage, true)
+
+          val postChange = preChange.setValue(BindingItineraryPage, true)
+
+          postChange.get(AddCountryOfRoutingYesNoPage) mustNot be(defined)
+        }
+      }
+
+      "when No selected" - {
+
+        "and securityDetailsTypePage has security" - {
+
+          "then must remove AddCountryOfRoutingYesNo" in {
+
+            val genSecurity = Gen.oneOf(SecurityDetailsType.securityValues).sample.value
+
+            val preChange = emptyUserAnswers
+              .setValue(AddCountryOfRoutingYesNoPage, true)
+              .setValue(SecurityDetailsTypePage, genSecurity)
+
+            val postChange = preChange.setValue(BindingItineraryPage, false)
+
+            postChange.get(AddCountryOfRoutingYesNoPage) mustNot be(defined)
+          }
+        }
+
+        "and securityDetailsTypePage has no security" - {
+
+          "then must not remove AddCountryOfRoutingYesNo" in {
+
+            val preChange = emptyUserAnswers
+              .setValue(AddCountryOfRoutingYesNoPage, true)
+              .setValue(SecurityDetailsTypePage, SecurityDetailsType.NoSecurityDetails)
+
+            val postChange = preChange.setValue(BindingItineraryPage, false)
+
+            postChange.get(AddCountryOfRoutingYesNoPage) must be(defined)
+          }
+        }
+      }
+    }
   }
 }

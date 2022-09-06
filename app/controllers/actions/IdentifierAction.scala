@@ -21,7 +21,6 @@ import config.FrontendAppConfig
 import connectors.EnrolmentStoreConnector
 import controllers.routes
 import models.EoriNumber
-import models.EoriNumber.prefixGBIfMissing
 import models.requests.IdentifierRequest
 import play.api.mvc.Results._
 import play.api.mvc._
@@ -65,7 +64,7 @@ class AuthenticatedIdentifierAction @Inject() (
               val identifier = newEnrolmentId orElse legacyEnrolmentId
               identifier match {
                 case Some(eoriNumber) =>
-                  block(IdentifierRequest(request, EoriNumber(prefixGBIfMissing(eoriNumber.value))))
+                  block(IdentifierRequest(request, EoriNumber(eoriNumber.value)))
                 case _ => Future.successful(Redirect(routes.UnauthorisedController.onPageLoad()))
               }
             case None => checkForGroupEnrolment(maybeGroupId, config)

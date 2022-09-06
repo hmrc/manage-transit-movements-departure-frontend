@@ -29,7 +29,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
+import viewModels.ListItem
 import viewModels.guaranteeDetails.AddAnotherGuaranteeViewModel
 import viewModels.guaranteeDetails.AddAnotherGuaranteeViewModel.AddAnotherGuaranteeViewModelProvider
 import views.html.guaranteeDetails.AddAnotherGuaranteeView
@@ -54,8 +54,8 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
   }
 
   private val listItem          = arbitrary[ListItem].sample.value
-  private val listItems         = Seq.fill(Gen.choose(1: Int, 8: Int).sample.value)(listItem)
-  private val maxedOutListItems = Seq.fill(9: Int)(listItem)
+  private val listItems         = Seq.fill(Gen.choose(1, frontendAppConfig.maxGuarantees - 1).sample.value)(listItem)
+  private val maxedOutListItems = Seq.fill(frontendAppConfig.maxGuarantees)(listItem)
 
   "AddAnotherGuaranteeController" - {
 

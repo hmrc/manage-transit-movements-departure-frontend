@@ -17,13 +17,10 @@
 package generators
 
 import models._
-import models.guaranteeDetails.GuaranteeType
 import models.reference.{Country, CustomsOffice}
 import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.preTaskList._
-import pages.traderDetails._
 import play.api.libs.json.{JsBoolean, JsString, JsValue, Json}
 import queries.Gettable
 
@@ -37,20 +34,27 @@ trait UserAnswersEntryGenerators {
       generateRouteDetailsAnswer
 
   private def generatePreTaskListAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    case OfficeOfDeparturePage   => arbitrary[CustomsOffice](arbitraryOfficeOfDeparture).map(Json.toJson(_))
-    case ProcedureTypePage       => arbitrary[ProcedureType].map(Json.toJson(_))
-    case DeclarationTypePage     => arbitrary[DeclarationType].map(Json.toJson(_))
-    case TIRCarnetReferencePage  => Gen.alphaNumStr.map(JsString)
-    case SecurityDetailsTypePage => arbitrary[SecurityDetailsType].map(Json.toJson(_))
-    case DetailsConfirmedPage    => Gen.const(true).map(JsBoolean)
+    import pages.preTaskList._
+    {
+      case OfficeOfDeparturePage   => arbitrary[CustomsOffice](arbitraryOfficeOfDeparture).map(Json.toJson(_))
+      case ProcedureTypePage       => arbitrary[ProcedureType].map(Json.toJson(_))
+      case DeclarationTypePage     => arbitrary[DeclarationType].map(Json.toJson(_))
+      case TIRCarnetReferencePage  => Gen.alphaNumStr.map(JsString)
+      case SecurityDetailsTypePage => arbitrary[SecurityDetailsType].map(Json.toJson(_))
+      case DetailsConfirmedPage    => Gen.const(true).map(JsBoolean)
+    }
   }
 
-  private def generateTraderDetailsAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
-    generateHolderOfTransitAnswer orElse
-      generateRepresentativeAnswer orElse
-      generateConsignmentAnswer orElse {
-        case ActingAsRepresentativePage => arbitrary[Boolean].map(JsBoolean)
-      }
+  private def generateTraderDetailsAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.traderDetails._
+    {
+      generateHolderOfTransitAnswer orElse
+        generateRepresentativeAnswer orElse
+        generateConsignmentAnswer orElse {
+          case ActingAsRepresentativePage => arbitrary[Boolean].map(JsBoolean)
+        }
+    }
+  }
 
   private def generateHolderOfTransitAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.traderDetails.holderOfTransit._
@@ -124,15 +128,53 @@ trait UserAnswersEntryGenerators {
   }
 
   private def generateRouteDetailsAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
-    generateRoutingAnswer
+    generateRoutingAnswer orElse
+      generateTransitAnswer orElse
+      generateExitAnswer orElse
+      generateLocationOfGoodsAnswer
 
   private def generateRoutingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.routeDetails.routing._
+    import pages.routeDetails.routing.index._
     {
+      case CountryOfDestinationPage     => arbitrary[Country].map(Json.toJson(_))
       case OfficeOfDestinationPage      => arbitrary[CustomsOffice].map(Json.toJson(_))
       case BindingItineraryPage         => arbitrary[Boolean].map(JsBoolean)
       case AddCountryOfRoutingYesNoPage => arbitrary[Boolean].map(JsBoolean)
       case CountryOfRoutingPage(_)      => arbitrary[Country].map(Json.toJson(_))
+    }
+  }
+
+  private def generateTransitAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.routeDetails.transit._
+    import pages.routeDetails.transit.index._
+    {
+      case T2DeclarationTypeYesNoPage        => arbitrary[Boolean].map(JsBoolean)
+      case AddOfficeOfTransitYesNoPage       => arbitrary[Boolean].map(JsBoolean)
+      case OfficeOfTransitCountryPage(_)     => arbitrary[Country].map(Json.toJson(_))
+      case OfficeOfTransitPage(_)            => arbitrary[CustomsOffice].map(Json.toJson(_))
+      case AddOfficeOfTransitETAYesNoPage(_) => arbitrary[Boolean].map(JsBoolean)
+      case OfficeOfTransitETAPage(_)         => arbitrary[DateTime].map(Json.toJson(_))
+    }
+  }
+
+  private def generateExitAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.routeDetails.exit.index._
+    {
+      case OfficeOfExitCountryPage(_) => arbitrary[Country].map(Json.toJson(_))
+      case OfficeOfExitPage(_)        => arbitrary[CustomsOffice].map(Json.toJson(_))
+    }
+  }
+
+  private def generateLocationOfGoodsAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.routeDetails.locationOfGoods._
+    {
+      case AddLocationOfGoodsPage                     => arbitrary[Boolean].map(JsBoolean)
+      case LocationOfGoodsTypePage                    => arbitrary[LocationType].map(Json.toJson(_))
+      case LocationOfGoodsIdentificationPage          => arbitrary[LocationOfGoodsIdentification].map(Json.toJson(_))
+      case LocationOfGoodsCustomsOfficeIdentifierPage => arbitrary[CustomsOffice].map(Json.toJson(_))
+      case LocationOfGoodsEoriPage                    => Gen.alphaNumStr.map(JsString)
+      case LocationOfGoodsAuthorisationNumberPage     => Gen.alphaNumStr.map(JsString)
     }
   }
 

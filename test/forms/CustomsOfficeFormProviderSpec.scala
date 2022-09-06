@@ -18,7 +18,7 @@ package forms
 
 import forms.behaviours.StringFieldBehaviours
 import models.CustomsOfficeList
-import models.reference.{CountryCode, CustomsOffice}
+import models.reference.CustomsOffice
 import org.scalacheck.Gen
 import play.api.data.FormError
 
@@ -29,7 +29,7 @@ class CustomsOfficeFormProviderSpec extends StringFieldBehaviours {
   private val maxLength   = 8
 
   private val customsOffices = CustomsOfficeList(
-    Seq(CustomsOffice("id", "name", CountryCode("GB"), None), CustomsOffice("officeId", "someName", CountryCode("GB"), None))
+    Seq(CustomsOffice("GB1", "name", None), CustomsOffice("GB2", "someName", None))
   )
   private val form = new CustomsOfficeFormProvider()(prefix, customsOffices)
 
@@ -58,7 +58,7 @@ class CustomsOfficeFormProviderSpec extends StringFieldBehaviours {
 
     "bind a customs office id which is in the list" in {
 
-      val boundForm = form.bind(Map("value" -> "officeId"))
+      val boundForm = form.bind(Map("value" -> "GB1"))
       val field     = boundForm("value")
       field.errors must be(empty)
     }
