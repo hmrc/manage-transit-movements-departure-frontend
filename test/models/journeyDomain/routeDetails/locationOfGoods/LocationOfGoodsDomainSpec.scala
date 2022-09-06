@@ -38,11 +38,12 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
       "when qualifier of identification" - {
 
         "is V (Customs office identifier)" in {
-          val customsOffice = arbitrary[CustomsOffice].sample.value
+          val qualifierOfIdentification = LocationOfGoodsIdentification.CustomsOfficeIdentifier
+          val customsOffice             = arbitrary[CustomsOffice].sample.value
 
           val userAnswers = emptyUserAnswers
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
-            .setValue(LocationOfGoodsIdentificationPage, LocationOfGoodsIdentification.CustomsOfficeIdentifier)
+            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
             .setValue(LocationOfGoodsCustomsOfficeIdentifierPage, customsOffice)
 
           val expectedResult = LocationOfGoodsV(
@@ -53,14 +54,16 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
 
           result.value mustBe expectedResult
+          result.value.qualifierOfIdentification mustBe qualifierOfIdentification
         }
 
         "is X (EORI number)" in {
-          val eoriNumber = Gen.alphaNumStr.sample.value
+          val qualifierOfIdentification = LocationOfGoodsIdentification.EoriNumber
+          val eoriNumber                = Gen.alphaNumStr.sample.value
 
           val userAnswers = emptyUserAnswers
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
-            .setValue(LocationOfGoodsIdentificationPage, LocationOfGoodsIdentification.EoriNumber)
+            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
             .setValue(LocationOfGoodsEoriPage, eoriNumber)
 
           val expectedResult = LocationOfGoodsX(
@@ -71,14 +74,16 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
 
           result.value mustBe expectedResult
+          result.value.qualifierOfIdentification mustBe qualifierOfIdentification
         }
 
         "is Y (Authorisation number)" in {
-          val authorisationNumber = Gen.alphaNumStr.sample.value
+          val qualifierOfIdentification = LocationOfGoodsIdentification.AuthorisationNumber
+          val authorisationNumber       = Gen.alphaNumStr.sample.value
 
           val userAnswers = emptyUserAnswers
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
-            .setValue(LocationOfGoodsIdentificationPage, LocationOfGoodsIdentification.AuthorisationNumber)
+            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
             .setValue(LocationOfGoodsAuthorisationNumberPage, authorisationNumber)
 
           val expectedResult = LocationOfGoodsY(
@@ -89,6 +94,7 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
 
           result.value mustBe expectedResult
+          result.value.qualifierOfIdentification mustBe qualifierOfIdentification
         }
       }
     }

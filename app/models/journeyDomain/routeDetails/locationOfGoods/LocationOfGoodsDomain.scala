@@ -76,7 +76,7 @@ object LocationOfGoodsDomain {
     identificationNumber: String
   ) extends LocationOfGoodsDomain {
 
-    override val qualifierOfIdentification: LocationOfGoodsIdentification = CustomsOfficeIdentifier
+    override val qualifierOfIdentification: LocationOfGoodsIdentification = EoriNumber
   }
 
   object LocationOfGoodsX {
@@ -96,7 +96,7 @@ object LocationOfGoodsDomain {
     authorisationNumber: String
   ) extends LocationOfGoodsDomain {
 
-    override val qualifierOfIdentification: LocationOfGoodsIdentification = CustomsOfficeIdentifier
+    override val qualifierOfIdentification: LocationOfGoodsIdentification = AuthorisationNumber
   }
 
   object LocationOfGoodsY {
