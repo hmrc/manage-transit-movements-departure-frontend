@@ -23,6 +23,7 @@ import models.requests.SpecificDataRequestProvider1
 import models.{Address, CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
+import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import pages.routeDetails.locationOfGoods.LocationOfGoodsAddressPage
 import pages.routeDetails.locationOfGoods.LocationOfGoodsAddressPage
 import play.api.data.Form
@@ -39,7 +40,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class LocationOfGoodsAddressController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @PreTaskListDetails implicit val navigator: Navigator,
+  navigatorProvider: LocationOfGoodsNavigatorProvider,
   actions: Actions,
   formProvider: LocationOfGoodsAddressFormProvider,
   countriesService: CountriesService,
@@ -80,8 +81,13 @@ class LocationOfGoodsAddressController @Inject() (
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countryList.countries))),
-                value => LocationOfGoodsAddressPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                value =>
+                  navigatorProvider().flatMap {
+                    implicit navigator =>
+                      LocationOfGoodsAddressPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                  }
               )
+
         }
     }
 }

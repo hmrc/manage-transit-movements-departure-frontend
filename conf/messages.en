@@ -776,15 +776,12 @@ routeDetails.locationOfGoods.locationOfGoodsAddress.country = Country
 routeDetails.locationOfGoods.locationOfGoodsAddress.checkYourAnswersLabel = What is the address for the location of goods?
 routeDetails.locationOfGoods.locationOfGoodsAddress.error.addressLine1.required = Enter the street name and number for the location of goods
 routeDetails.locationOfGoods.locationOfGoodsAddress.error.addressLine1.invalidCharacters = The street name and number must only include letters a to z, numbers 0 to 9 and spaces
-# TODO: Add placeholder for specified length
-routeDetails.locationOfGoods.locationOfGoodsAddress.error.addressLine1.length = The street name and number must be XXX characters or less
+routeDetails.locationOfGoods.locationOfGoodsAddress.error.addressLine1.length = The street name and number must be 35 characters or less
 routeDetails.locationOfGoods.locationOfGoodsAddress.error.addressLine2.required = Enter the town or city for the location of goods
 routeDetails.locationOfGoods.locationOfGoodsAddress.error.addressLine2.invalidCharacters = The town or city must only include letters a to z and spaces
-# TODO: Add placeholder for specified length
-routeDetails.locationOfGoods.locationOfGoodsAddress.error.addressLine2.length = The town or city must be XXX characters or less
+routeDetails.locationOfGoods.locationOfGoodsAddress.error.addressLine2.length = The town or city must be 35 characters or less
 routeDetails.locationOfGoods.locationOfGoodsAddress.error.postcode.required = Enter the postal code for the location of goods
 routeDetails.locationOfGoods.locationOfGoodsAddress.error.postcode.invalidCharacters = The postcode of address must only include letters a to z, numbers 0 to 9 and spaces
-# TODO: Add placeholder for specified length
-routeDetails.locationOfGoods.locationOfGoodsAddress.error.postcode.length = The postal code must be XXX characters or less
+routeDetails.locationOfGoods.locationOfGoodsAddress.error.postcode.length = The postal code must be 9 characters or less
 routeDetails.locationOfGoods.locationOfGoodsAddress.error.country.required = Enter the country for the location of goods
 
