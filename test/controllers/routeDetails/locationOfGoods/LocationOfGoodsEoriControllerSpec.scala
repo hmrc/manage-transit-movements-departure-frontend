@@ -17,7 +17,7 @@
 package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.LocationOfGoodsEoriFormProvider
+import forms.EoriNumberFormProvider
 import models.NormalMode
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
@@ -34,7 +34,7 @@ import scala.concurrent.Future
 
 class LocationOfGoodsEoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                  = new LocationOfGoodsEoriFormProvider()
+  private val formProvider                  = new EoriNumberFormProvider()
   private val form                          = formProvider("routeDetails.locationOfGoods.locationOfGoodsEori")
   private val mode                          = NormalMode
   private lazy val locationOfGoodsEoriRoute = routes.LocationOfGoodsEoriController.onPageLoad(lrn, mode).url
