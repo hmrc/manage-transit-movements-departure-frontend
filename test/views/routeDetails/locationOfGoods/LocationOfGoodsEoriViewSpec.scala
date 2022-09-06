@@ -16,7 +16,7 @@
 
 package views.routeDetails.locationOfGoods
 
-import forms.LocationOfGoodsEoriFormProvider
+import forms.EoriNumberFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -29,7 +29,7 @@ class LocationOfGoodsEoriViewSpec extends InputTextViewBehaviours[String] {
 
   override val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsEori"
 
-  override def form: Form[String] = new LocationOfGoodsEoriFormProvider()(prefix)
+  override def form: Form[String] = new EoriNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
     injector.instanceOf[LocationOfGoodsEoriView].apply(form, lrn, NormalMode)(fakeRequest, messages)
