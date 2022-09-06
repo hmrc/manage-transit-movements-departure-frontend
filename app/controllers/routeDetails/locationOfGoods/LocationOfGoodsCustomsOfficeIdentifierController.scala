@@ -20,10 +20,8 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CustomsOfficeFormProvider
 import models.{LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import pages.preTaskList.OfficeOfDeparturePage
-import pages.routeDetails.exit.index.OfficeOfExitCountryPage
 import pages.routeDetails.locationOfGoods.LocationOfGoodsCustomsOfficeIdentifierPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -38,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class LocationOfGoodsCustomsOfficeIdentifierController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @PreTaskListDetails implicit val navigator: Navigator,
+  navigatorProvider: LocationOfGoodsNavigatorProvider,
   actions: Actions,
   formProvider: CustomsOfficeFormProvider,
   service: CustomsOfficesService,
@@ -80,7 +78,11 @@ class LocationOfGoodsCustomsOfficeIdentifierController @Inject() (
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
-                value => LocationOfGoodsCustomsOfficeIdentifierPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                value =>
+                  navigatorProvider().flatMap {
+                    implicit navigator =>
+                      LocationOfGoodsCustomsOfficeIdentifierPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                  }
               )
         }
     }

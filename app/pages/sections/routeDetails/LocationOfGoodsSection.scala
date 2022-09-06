@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.sections
+package pages.sections.routeDetails
 
 import pages.QuestionPage
 import play.api.libs.json.{JsObject, JsPath}
 
 case object LocationOfGoodsSection extends QuestionPage[JsObject] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = RouteDetailsSection.path \ toString
 
   override def toString: String = "locationOfGoods"
 }

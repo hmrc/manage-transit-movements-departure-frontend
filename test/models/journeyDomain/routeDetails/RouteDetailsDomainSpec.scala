@@ -18,21 +18,23 @@ package models.journeyDomain.routeDetails
 
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
-import models.DeclarationType
 import models.DeclarationType.Option4
 import models.SecurityDetailsType._
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.routeDetails.exit.{ExitDomain, OfficeOfExitDomain}
+import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain.LocationOfGoodsV
 import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
 import models.journeyDomain.routeDetails.transit.TransitDomain
 import models.reference.{Country, CustomsOffice}
+import models.{DeclarationType, LocationOfGoodsIdentification, LocationType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.preTaskList._
 import pages.routeDetails.exit.index._
+import pages.routeDetails.locationOfGoods._
 import pages.routeDetails.routing._
-import pages.routeDetails.routing.index.CountryOfRoutingPage
-import pages.routeDetails.transit.AddOfficeOfTransitYesNoPage
+import pages.routeDetails.routing.index._
+import pages.routeDetails.transit._
 
 class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsUserAnswersGenerator {
 
@@ -45,12 +47,14 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
         val customsOffice = arbitrary[CustomsOffice].sample.value
 
         val userAnswers = emptyUserAnswers
+          .setValue(OfficeOfDeparturePage, customsOffice)
           .setValue(DeclarationTypePage, Option4)
           .setValue(SecurityDetailsTypePage, NoSecurityDetails)
           .setValue(CountryOfDestinationPage, country)
           .setValue(OfficeOfDestinationPage, customsOffice)
           .setValue(BindingItineraryPage, false)
           .setValue(AddCountryOfRoutingYesNoPage, false)
+          .setValue(AddLocationOfGoodsPage, false)
 
         val expectedResult = RouteDetailsDomain(
           routing = RoutingDomain(
@@ -60,11 +64,12 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
             countriesOfRouting = Nil
           ),
           transit = None,
-          exit = None
+          exit = None,
+          locationOfGoods = None
         )
 
         val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
-          RouteDetailsDomain.userAnswersReader(Nil, Nil)
+          RouteDetailsDomain.userAnswersReader(Nil, Seq(customsOffice.countryCode))
         ).run(userAnswers)
 
         result.value mustBe expectedResult
@@ -85,6 +90,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
           .setValue(BindingItineraryPage, true)
           .setValue(CountryOfRoutingPage(index), country)
           .setValue(AddOfficeOfTransitYesNoPage, false)
+          .setValue(AddLocationOfGoodsPage, false)
 
         val expectedResult = RouteDetailsDomain(
           routing = RoutingDomain(
@@ -101,11 +107,12 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
               officesOfTransit = Nil
             )
           ),
-          exit = None
+          exit = None,
+          locationOfGoods = None
         )
 
         val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
-          RouteDetailsDomain.userAnswersReader(Seq(customsOffice.countryCode), Nil)
+          RouteDetailsDomain.userAnswersReader(Seq(customsOffice.countryCode), Seq(customsOffice.countryCode))
         ).run(userAnswers)
 
         result.value mustBe expectedResult
@@ -126,6 +133,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
           .setValue(BindingItineraryPage, true)
           .setValue(CountryOfRoutingPage(index), country)
           .setValue(AddOfficeOfTransitYesNoPage, false)
+          .setValue(AddLocationOfGoodsPage, false)
 
         val expectedResult = RouteDetailsDomain(
           routing = RoutingDomain(
@@ -142,11 +150,12 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
               officesOfTransit = Nil
             )
           ),
-          exit = None
+          exit = None,
+          locationOfGoods = None
         )
 
         val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
-          RouteDetailsDomain.userAnswersReader(Seq(customsOffice.countryCode), Seq(country.code.code))
+          RouteDetailsDomain.userAnswersReader(Seq(customsOffice.countryCode), Seq(country.code.code, customsOffice.countryCode))
         ).run(userAnswers)
 
         result.value mustBe expectedResult
@@ -169,6 +178,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
           .setValue(AddOfficeOfTransitYesNoPage, false)
           .setValue(OfficeOfExitCountryPage(index), country)
           .setValue(OfficeOfExitPage(index), customsOffice)
+          .setValue(AddLocationOfGoodsPage, false)
 
         val expectedResult = RouteDetailsDomain(
           routing = RoutingDomain(
@@ -191,14 +201,60 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
                 OfficeOfExitDomain(country, customsOffice)(index)
               )
             )
-          )
+          ),
+          locationOfGoods = None
         )
 
         val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
-          RouteDetailsDomain.userAnswersReader(Seq(customsOffice.countryCode), Nil)
+          RouteDetailsDomain.userAnswersReader(Seq(customsOffice.countryCode), Seq(customsOffice.countryCode))
         ).run(userAnswers)
 
         result.value mustBe expectedResult
+      }
+
+      "when pre-lodging (D)" ignore {}
+
+      "when not pre-lodging" - {
+        "and office of departure is not in set CL147" in {
+          val country        = arbitrary[Country].sample.value
+          val customsOffice  = arbitrary[CustomsOffice].sample.value
+          val typeOfLocation = arbitrary[LocationType].sample.value
+
+          val userAnswers = emptyUserAnswers
+            .setValue(OfficeOfDeparturePage, customsOffice)
+            .setValue(DeclarationTypePage, Option4)
+            .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+            .setValue(CountryOfDestinationPage, country)
+            .setValue(OfficeOfDestinationPage, customsOffice)
+            .setValue(BindingItineraryPage, false)
+            .setValue(AddCountryOfRoutingYesNoPage, false)
+            .setValue(LocationOfGoodsTypePage, typeOfLocation)
+            .setValue(LocationOfGoodsIdentificationPage, LocationOfGoodsIdentification.CustomsOfficeIdentifier)
+            .setValue(LocationOfGoodsCustomsOfficeIdentifierPage, customsOffice)
+
+          val expectedResult = RouteDetailsDomain(
+            routing = RoutingDomain(
+              countryOfDestination = country,
+              officeOfDestination = customsOffice,
+              bindingItinerary = false,
+              countriesOfRouting = Nil
+            ),
+            transit = None,
+            exit = None,
+            locationOfGoods = Some(
+              LocationOfGoodsV(
+                typeOfLocation = typeOfLocation,
+                customsOffice = customsOffice
+              )
+            )
+          )
+
+          val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
+            RouteDetailsDomain.userAnswersReader(Nil, Nil)
+          ).run(userAnswers)
+
+          result.value mustBe expectedResult
+        }
       }
     }
   }

@@ -19,8 +19,7 @@ package controllers.routeDetails.locationOfGoods
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.LocationOfGoodsIdentificationFormProvider
 import models.{LocationOfGoodsIdentification, NormalMode}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.routeDetails.locationOfGoods.LocationOfGoodsIdentificationPage
@@ -42,9 +41,7 @@ class LocationOfGoodsIdentificationControllerSpec extends SpecBase with AppWithD
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(
-        bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator)
-      ) //TODO to be corrected when location of goods navigation is implemented
+      .overrides(bind(classOf[LocationOfGoodsNavigatorProvider]).toInstance(fakeLocationOfGoodsNavigatorProvider))
 
   "LocationOfGoodsIdentification Controller" - {
 
