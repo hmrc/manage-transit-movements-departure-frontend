@@ -21,8 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.LocationOfGoodsTypeFormProvider
 import models.requests.DataRequest
 import models.{LocalReferenceNumber, LocationType, Mode}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import pages.routeDetails.locationOfGoods.LocationOfGoodsTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class LocationOfGoodsTypeController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @PreTaskListDetails implicit val navigator: Navigator,
+  navigatorProvider: LocationOfGoodsNavigatorProvider,
   actions: Actions,
   formProvider: LocationOfGoodsTypeFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -66,7 +65,11 @@ class LocationOfGoodsTypeController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, LocationType.radioItems, mode))),
-            value => LocationOfGoodsTypePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+            value =>
+              navigatorProvider().flatMap {
+                implicit navigator =>
+                  LocationOfGoodsTypePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+              }
           )
     }
 }
