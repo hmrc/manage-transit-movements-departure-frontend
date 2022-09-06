@@ -173,6 +173,7 @@ trait UserAnswersEntryGenerators {
       case LocationOfGoodsTypePage                    => arbitrary[LocationType].map(Json.toJson(_))
       case LocationOfGoodsIdentificationPage          => arbitrary[LocationOfGoodsIdentification].map(Json.toJson(_))
       case LocationOfGoodsCustomsOfficeIdentifierPage => arbitrary[CustomsOffice].map(Json.toJson(_))
+      case LocationOfGoodsEoriPage                    => Gen.alphaNumStr.map(JsString)
       case LocationOfGoodsAuthorisationNumberPage     => Gen.alphaNumStr.map(JsString)
     }
   }

@@ -35,7 +35,6 @@ class LocationOfGoodsEoriController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LocationOfGoodsNavigatorProvider,
-
   formProvider: LocationOfGoodsEoriFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
@@ -61,7 +60,6 @@ class LocationOfGoodsEoriController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-
           value =>
             navigatorProvider().flatMap {
               implicit navigator =>
