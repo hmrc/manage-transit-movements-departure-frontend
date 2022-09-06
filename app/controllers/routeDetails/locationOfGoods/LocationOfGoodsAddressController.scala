@@ -18,15 +18,11 @@ package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.{AddressFormProvider, LocationOfGoodsAddressFormProvider}
+import forms.LocationOfGoodsAddressFormProvider
 import models.requests.SpecificDataRequestProvider1
-import models.{Address, CountryList, LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import pages.routeDetails.locationOfGoods.LocationOfGoodsAddressPage
-import pages.routeDetails.locationOfGoods.LocationOfGoodsAddressPage
-import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

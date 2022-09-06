@@ -40,6 +40,8 @@ class LocationOfGoodsAddressViewSpec extends AddressViewBehaviours with Generato
 
   behave like pageWithBackLink
 
+  behave like pageWithSectionCaption("Route details")
+
   behave like pageWithHeading()
 
   behave like pageWithAddressInput()
