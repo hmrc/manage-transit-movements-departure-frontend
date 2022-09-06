@@ -22,6 +22,7 @@ import models._
 import models.reference._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
+import wolfendale.scalacheck.regexp.RegexpGen
 
 trait ModelGenerators {
   self: Generators =>
@@ -225,5 +226,13 @@ trait ModelGenerators {
       position <- Gen.choose(0: Int, 10: Int)
     } yield Index(position)
   }
+
+  implicit lazy val arbitraryCoordinates: Arbitrary[Coordinates] =
+    Arbitrary {
+      for {
+        latitude  <- RegexpGen.from("^[+-]?([0-8]?[0-9]\\.[0-9]{5,7})$")
+        longitude <- RegexpGen.from("^[+-]?((0?[0-9]?|1[0-7])[0-9]\\.[0-9]{5,7})$")
+      } yield Coordinates(latitude, longitude)
+    }
 
 }

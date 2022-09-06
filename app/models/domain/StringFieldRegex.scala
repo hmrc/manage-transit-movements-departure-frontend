@@ -36,4 +36,7 @@ object StringFieldRegex {
 
   val postalCodeRegex: Regex = "^[a-zA-Z\\s*0-9]*$".r
 
+  val coordinatesCharacterRegex: Regex = "^[0-9.+-]+$".r
+  val latitudeFormatRegex: Regex       = "^[+-]?([0-8]?[0-9]\\.[0-9]{5,7})$".r
+  val longitudeFormatRegex: Regex      = "^[+-]?((0?[0-9]?|1[0-7])[0-9]\\.[0-9]{5,7})$".r
 }
