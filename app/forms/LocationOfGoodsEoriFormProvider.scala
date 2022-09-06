@@ -16,7 +16,10 @@
 
 package forms
 
+import forms.Constants.{maxEoriNumberLength, minEoriNumberLength}
 import forms.mappings.Mappings
+import models.domain.StringFieldRegex.{alphaNumericRegex, eoriNumberRegex}
+
 import javax.inject.Inject
 import play.api.data.Form
 
@@ -25,6 +28,13 @@ class LocationOfGoodsEoriFormProvider @Inject() extends Mappings {
   def apply(prefix: String): Form[String] =
     Form(
       "value" -> text(s"$prefix.error.required")
-        .verifying(maxLength(17, s"$prefix.error.length"))
+        .verifying(
+          forms.StopOnFirstFail[String](
+            regexp(alphaNumericRegex, s"$prefix.error.invalidCharacters"),
+            regexp(eoriNumberRegex, s"$prefix.error.invalidFormat"),
+            minLength(minEoriNumberLength, s"$prefix.error.minLength"),
+            maxLength(maxEoriNumberLength, s"$prefix.error.maxLength")
+          )
+        )
     )
 }

@@ -18,11 +18,11 @@ package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.LocationOfGoodsEoriFormProvider
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.when
 import pages.routeDetails.locationOfGoods.LocationOfGoodsEoriPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -64,14 +64,14 @@ class LocationOfGoodsEoriControllerSpec extends SpecBase with AppWithDefaultMock
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsEoriPage, "test string")
+      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsEoriPage, "GB1234567890000")
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, locationOfGoodsEoriRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> "test string"))
+      val filledForm = form.bind(Map("value" -> "GB1234567890000"))
 
       val view = injector.instanceOf[LocationOfGoodsEoriView]
 
@@ -88,7 +88,7 @@ class LocationOfGoodsEoriControllerSpec extends SpecBase with AppWithDefaultMock
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val request = FakeRequest(POST, locationOfGoodsEoriRoute)
-        .withFormUrlEncodedBody(("value", "test string"))
+        .withFormUrlEncodedBody(("value", "GB1234567890000"))
 
       val result = route(app, request).value
 

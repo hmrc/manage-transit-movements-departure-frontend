@@ -40,9 +40,11 @@ class LocationOfGoodsEoriViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink
 
+  behave like pageWithSectionCaption("Route details")
+
   behave like pageWithHeading()
 
-  behave like pageWithoutHint
+  behave like pageWithHint("This will start GB or XI, followed by 12 to 15 numbers. For example, GB123456789000.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 
