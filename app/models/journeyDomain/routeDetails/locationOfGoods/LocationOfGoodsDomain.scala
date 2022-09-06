@@ -84,7 +84,7 @@ object LocationOfGoodsDomain {
     def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
       (
         UserAnswersReader(typeOfLocation),
-        UserAnswersReader("") // TODO - read correct page
+        LocationOfGoodsEoriPage.reader
       ).mapN {
         (typeOfLocation, identificationNumber) =>
           LocationOfGoodsX(typeOfLocation, identificationNumber)

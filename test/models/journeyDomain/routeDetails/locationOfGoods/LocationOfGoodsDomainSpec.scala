@@ -56,13 +56,16 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
         }
 
         "is X (EORI number)" in {
+          val eoriNumber = Gen.alphaNumStr.sample.value
+
           val userAnswers = emptyUserAnswers
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
             .setValue(LocationOfGoodsIdentificationPage, LocationOfGoodsIdentification.EoriNumber)
+            .setValue(LocationOfGoodsEoriPage, eoriNumber)
 
           val expectedResult = LocationOfGoodsX(
             typeOfLocation = typeOfLocation,
-            identificationNumber = ""
+            identificationNumber = eoriNumber
           )
 
           val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
