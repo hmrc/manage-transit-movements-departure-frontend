@@ -18,12 +18,10 @@ package views.routeDetails.locationOfGoods
 
 import forms.LocationOfGoodsCoordinatesFormProvider
 import generators.Generators
-import models.{Address, Coordinates, CountryList, NormalMode}
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
+import models.{Coordinates, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.{AddressViewBehaviours, CoordinatesViewBehaviours}
+import views.behaviours.CoordinatesViewBehaviours
 import views.html.routeDetails.locationOfGoods.LocationOfGoodsCoordinatesView
 
 class LocationOfGoodsCoordinatesViewSpec extends CoordinatesViewBehaviours with Generators {
@@ -39,9 +37,13 @@ class LocationOfGoodsCoordinatesViewSpec extends CoordinatesViewBehaviours with 
 
   behave like pageWithBackLink
 
+  behave like pageWithSectionCaption("Route details")
+
   behave like pageWithHeading()
 
-  behave like pageWithAddressInput()
+  behave like pageWithHint("These numbers can be positive or negative and need between 5 and 7 decimal places. For example, 50.96622 or 1.86201.")
+
+  behave like pageWithCoordinatesInput()
 
   behave like pageWithSubmitButton("Save and continue")
 }

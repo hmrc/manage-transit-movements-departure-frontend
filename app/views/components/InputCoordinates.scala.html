@@ -32,6 +32,9 @@
 )(implicit messages: Messages)
 
 @html = {
+
+    <p class="govuk-hint">@messages(s"$messageKeyPrefix.hintText")</p>
+
     @inputText(
         field = form("latitude"),
         inputTextType = AddressTextInput(

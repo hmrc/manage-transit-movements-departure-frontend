@@ -763,5 +763,5 @@ routeDetails.locationOfGoods.locationOfGoodsCoordinates.longitude = Longitude
 routeDetails.locationOfGoods.locationOfGoodsCoordinates.hintText = These numbers can be positive or negative and need between 5 and 7 decimal places. For example, 50.96622 or 1.86201.
 routeDetails.locationOfGoods.locationOfGoodsCoordinates.checkYourAnswersLabel = What are the coordinates for the location of goods //TODO: check CYA ticket
 routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.invalid = The coordinates must only include numbers 0 to 9, a decimal place and a minus sign
-routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.required = Enter the coordinates for the location of goods
+routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.required = Enter the {0} coordinates for the location of goods
 routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.format = The coordinates must include between 5 and 7 decimal places

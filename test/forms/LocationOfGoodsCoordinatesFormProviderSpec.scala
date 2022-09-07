@@ -18,11 +18,9 @@ package forms
 
 import base.SpecBase
 import forms.behaviours.StringFieldBehaviours
-import models.AddressLine._
-import models.reference.{Country, CountryCode}
-import models.{AddressLine, Coordinates, CountryList}
-import org.scalacheck.{Arbitrary, Gen}
-import play.api.data.{Field, Form, FormError}
+import models.Coordinates
+import org.scalacheck.Gen
+import play.api.data.{Form, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
 
 class LocationOfGoodsCoordinatesFormProviderSpec extends StringFieldBehaviours with SpecBase {
@@ -39,25 +37,25 @@ class LocationOfGoodsCoordinatesFormProviderSpec extends StringFieldBehaviours w
 
     val arbCoordinates = arbitraryCoordinates.arbitrary
 
-//    "must bind valid data" in {
-//
-//      forAll(arbCoordinates) {
-//        coordinates =>
-//          val latitude  = coordinates.latitude
-//          val longitude = coordinates.longitude
-//
-//          val data = Map(
-//            "latitude"  -> latitude,
-//            "longitude" -> longitude
-//          )
-//
-//          val result: Form[Coordinates] = form.bind(data)
-//
-//          result.errors mustBe List.empty
-//          result.value.value mustBe Coordinates(latitude, longitude)
-//      }
-//
-//    }
+    "must bind valid data" in {
+
+      forAll(arbCoordinates) {
+        coordinates =>
+          val latitude  = coordinates.latitude
+          val longitude = coordinates.longitude
+
+          val data = Map(
+            "latitude"  -> latitude,
+            "longitude" -> longitude
+          )
+
+          val result: Form[Coordinates] = form.bind(data)
+
+          result.errors mustBe List.empty
+          result.value.value mustBe Coordinates(latitude, longitude)
+      }
+
+    }
 
     ".latitude" - {
 
@@ -72,7 +70,7 @@ class LocationOfGoodsCoordinatesFormProviderSpec extends StringFieldBehaviours w
       behave like mandatoryTrimmedField(
         form = form,
         fieldName = fieldName,
-        requiredError = FormError(fieldName, requiredKey, Seq(s"$prefix.$fieldName"))
+        requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
       )
 
       behave like fieldWithInvalidCharacters(
@@ -95,7 +93,7 @@ class LocationOfGoodsCoordinatesFormProviderSpec extends StringFieldBehaviours w
       behave like mandatoryTrimmedField(
         form = form,
         fieldName = fieldName,
-        requiredError = FormError(fieldName, requiredKey, Seq(s"$prefix.$fieldName"))
+        requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
       )
 
       behave like fieldWithInvalidCharacters(

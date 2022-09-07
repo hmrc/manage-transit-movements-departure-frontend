@@ -22,7 +22,7 @@ trait CoordinatesViewBehaviours extends QuestionViewBehaviours[Coordinates] {
 
   val fields = Seq("latitude", "longitude")
 
-  def pageWithAddressInput(): Unit =
+  def pageWithCoordinatesInput(): Unit =
     "page with a coordinates input" - {
 
       "when rendered" - {
