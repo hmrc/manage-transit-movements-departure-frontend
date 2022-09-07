@@ -19,7 +19,7 @@ package controllers.routeDetails.locationOfGoods
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.LocationOfGoodsCoordinatesFormProvider
 import generators.Generators
-import models.{Coordinates, NormalMode}
+import models.NormalMode
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentMatchers.any
@@ -101,7 +101,7 @@ class LocationOfGoodsCoordinatesControllerSpec extends SpecBase with AppWithDefa
 
     "must redirect to the next page when valid data is submitted" in {
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(emptyUserAnswers)
 
