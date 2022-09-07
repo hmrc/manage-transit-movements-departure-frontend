@@ -19,19 +19,15 @@ package models.journeyDomain.traderDetails.holderOfTransit
 import cats.implicits._
 import models.DeclarationType.Option4
 import models.domain._
-import models.journeyDomain.{JourneyDomainModel, Stage}
-import models.{Address, EoriNumber, UserAnswers}
+import models.journeyDomain.JourneyDomainModel
+import models.{Address, EoriNumber}
 import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.holderOfTransit._
-import play.api.mvc.Call
 
 sealed trait HolderOfTransitDomain extends JourneyDomainModel {
   val name: String
   val address: Address
   val additionalContact: Option[AdditionalContactDomain]
-
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    Some(controllers.traderDetails.holderOfTransit.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
 }
 
 object HolderOfTransitDomain {
