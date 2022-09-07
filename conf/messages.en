@@ -785,3 +785,12 @@ routeDetails.locationOfGoods.locationOfGoodsAddress.error.postcode.invalidCharac
 routeDetails.locationOfGoods.locationOfGoodsAddress.error.postcode.length = The postal code must be 9 characters or less
 routeDetails.locationOfGoods.locationOfGoodsAddress.error.country.required = Enter the country for the location of goods
 
+
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.title = What is the UN/LOCODE for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.heading = What is the UN/LOCODE for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.hintText = What is the UN/LOCODE for the location of goods? hint
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.label = What is the UN/LOCODE for the location of goods? label
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.placeholder = Select a customsOffice
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.change.hidden = What is the UN/LOCODE for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.checkYourAnswersLabel = What is the UN/LOCODE for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.error.required = Select the customsOffice

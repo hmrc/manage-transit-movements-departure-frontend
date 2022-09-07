@@ -108,6 +108,11 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[Seq[Country]](serviceUrl, headers = version2Header)
   }
 
+  def getUnLocodes(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[UnLocodeList] = {
+    val serviceUrl = s"${config.referenceDataUrl}/un-locodes"
+    http.GET[UnLocodeList](serviceUrl, headers = version2Header)
+  }
+
   private def version2Header = Seq(
     "Accept" -> "application/vnd.hmrc.2.0+json"
   )
