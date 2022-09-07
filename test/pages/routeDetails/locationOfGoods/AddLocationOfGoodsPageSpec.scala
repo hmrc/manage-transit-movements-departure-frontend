@@ -16,6 +16,8 @@
 
 package pages.routeDetails.locationOfGoods
 
+import models.{LocationOfGoodsIdentification, LocationType}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class AddLocationOfGoodsPageSpec extends PageBehaviours {
@@ -27,5 +29,23 @@ class AddLocationOfGoodsPageSpec extends PageBehaviours {
     beSettable[Boolean](AddLocationOfGoodsPage)
 
     beRemovable[Boolean](AddLocationOfGoodsPage)
+
+    "cleanup" - {
+      "when NO selected" - {
+        "must clean up location of goods pages" in {
+          forAll(arbitrary[LocationType], arbitrary[LocationOfGoodsIdentification]) {
+            (typeOfLocation, qualifierOfIdentification) =>
+              val preChange = emptyUserAnswers
+                .setValue(LocationOfGoodsTypePage, typeOfLocation)
+                .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+
+              val postChange = preChange.setValue(AddLocationOfGoodsPage, false)
+
+              postChange.get(LocationOfGoodsTypePage) mustNot be(defined)
+              postChange.get(LocationOfGoodsIdentificationPage) mustNot be(defined)
+          }
+        }
+      }
+    }
   }
 }

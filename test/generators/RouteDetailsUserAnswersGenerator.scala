@@ -18,6 +18,7 @@ package generators
 
 import models.journeyDomain.routeDetails._
 import models.journeyDomain.routeDetails.exit.OfficeOfExitDomain
+import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
 import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
 import models.journeyDomain.routeDetails.transit.{OfficeOfTransitDomain, TransitDomain}
 import models.reference.CountryCode
@@ -28,12 +29,11 @@ trait RouteDetailsUserAnswersGenerator extends UserAnswersGenerator {
   self: Generators =>
 
   val ctcCountryCodes: Seq[String]                          = listWithMaxLength[CountryCode]().sample.get.map(_.code)
-  val euCountryCodes: Seq[String]                           = listWithMaxLength[CountryCode]().sample.get.map(_.code)
   val customsSecurityAgreementAreaCountryCodes: Seq[String] = listWithMaxLength[CountryCode]().sample.get.map(_.code)
 
   def arbitraryRouteDetailsAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[RouteDetailsDomain](userAnswers)(
-      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
     )
 
   def arbitraryRoutingAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
@@ -44,16 +44,19 @@ trait RouteDetailsUserAnswersGenerator extends UserAnswersGenerator {
 
   def arbitraryTransitAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[TransitDomain](userAnswers)(
-      TransitDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+      TransitDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
     )
 
   def arbitraryOfficeOfTransitAnswers(userAnswers: UserAnswers, index: Index): Gen[UserAnswers] =
     buildUserAnswers[OfficeOfTransitDomain](userAnswers)(
-      OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+      OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
     )
 
   def arbitraryOfficeOfExitAnswers(userAnswers: UserAnswers, index: Index): Gen[UserAnswers] =
     buildUserAnswers[OfficeOfExitDomain](userAnswers)(
       OfficeOfExitDomain.userAnswersReader(index)
     )
+
+  def arbitraryLocationOfGoodsAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[LocationOfGoodsDomain](userAnswers)
 }

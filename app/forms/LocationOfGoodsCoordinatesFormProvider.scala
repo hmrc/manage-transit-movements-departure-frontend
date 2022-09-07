@@ -31,8 +31,8 @@ class LocationOfGoodsCoordinatesFormProvider @Inject() extends Mappings {
     Form(
       mapping(
         "latitude" -> {
-          lazy val args = Seq(messages(s"$prefix.latitude"))
-          trimmedText(s"$prefix.error.required", Seq("latitude"))
+          lazy val args = Seq("latitude")
+          trimmedText(s"$prefix.error.required", args)
             .verifying(
               StopOnFirstFail[String](
                 regexp(coordinatesCharacterRegex, s"$prefix.error.invalid", args),
@@ -41,8 +41,8 @@ class LocationOfGoodsCoordinatesFormProvider @Inject() extends Mappings {
             )
         },
         "longitude" -> {
-          lazy val args = Seq(messages(s"$prefix.longitude"))
-          trimmedText(s"$prefix.error.required", Seq("longitude"))
+          lazy val args = Seq("longitude")
+          trimmedText(s"$prefix.error.required", args)
             .verifying(
               StopOnFirstFail[String](
                 regexp(coordinatesCharacterRegex, s"$prefix.error.invalid", args),

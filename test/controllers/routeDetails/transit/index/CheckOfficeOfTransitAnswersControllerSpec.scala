@@ -78,7 +78,7 @@ class CheckOfficeOfTransitAnswersControllerSpec extends SpecBase with AppWithDef
     "must redirect to add another" in {
       setExistingUserAnswers(emptyUserAnswers)
 
-      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+      when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(POST, routes.CheckOfficeOfTransitAnswersController.onSubmit(lrn, index).url)
 

@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package itSpecBase
+package pages.sections.routeDetails
 
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
+import pages.QuestionPage
+import play.api.libs.json.{JsObject, JsPath}
 
-trait ItSpecBase extends AnyFreeSpec with Matchers with ScalaFutures with IntegrationPatience
+case object LocationOfGoodsSection extends QuestionPage[JsObject] {
+
+  override def path: JsPath = RouteDetailsSection.path \ toString
+
+  override def toString: String = "locationOfGoods"
+}

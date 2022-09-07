@@ -82,7 +82,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       "must redirect to task list" in {
         setExistingUserAnswers(emptyUserAnswers.setValue(DeclarationTypePage, Option4))
 
-        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+        when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
         val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn, index).url)
 
@@ -99,7 +99,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
         val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
         setExistingUserAnswers(emptyUserAnswers.setValue(DeclarationTypePage, declarationType))
 
-        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+        when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
         val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn, index).url)
 

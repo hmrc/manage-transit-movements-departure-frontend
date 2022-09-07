@@ -19,7 +19,6 @@ package models
 import pages._
 import play.api.libs.json._
 import queries.Gettable
-import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
 import java.time.LocalDateTime
 import scala.util.{Failure, Try}
@@ -28,6 +27,7 @@ final case class UserAnswers(
   lrn: LocalReferenceNumber,
   eoriNumber: EoriNumber,
   data: JsObject = Json.obj(),
+  createdAt: LocalDateTime = LocalDateTime.now,
   lastUpdated: LocalDateTime = LocalDateTime.now,
   id: Id = Id()
 ) {
@@ -62,18 +62,18 @@ object UserAnswers {
       (__ \ "lrn").read[LocalReferenceNumber] and
         (__ \ "eoriNumber").read[EoriNumber] and
         (__ \ "data").read[JsObject] and
-        (__ \ "lastUpdated").read(MongoJavatimeFormats.localDateTimeReads) and
+        (__ \ "createdAt").read[LocalDateTime] and
+        (__ \ "lastUpdated").read[LocalDateTime] and
         (__ \ "_id").read[Id]
     )(UserAnswers.apply _)
 
-  implicit lazy val writes: OWrites[UserAnswers] =
+  implicit lazy val writes: Writes[UserAnswers] =
     (
       (__ \ "lrn").write[LocalReferenceNumber] and
         (__ \ "eoriNumber").write[EoriNumber] and
         (__ \ "data").write[JsObject] and
-        (__ \ "lastUpdated").write(MongoJavatimeFormats.localDateTimeWrites) and
+        (__ \ "createdAt").write[LocalDateTime] and
+        (__ \ "lastUpdated").write[LocalDateTime] and
         (__ \ "_id").write[Id]
     )(unlift(UserAnswers.unapply))
-
-  implicit lazy val format: Format[UserAnswers] = Format(reads, writes)
 }

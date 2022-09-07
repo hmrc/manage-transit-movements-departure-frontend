@@ -35,12 +35,10 @@ class OfficeOfTransitNavigatorProviderImpl @Inject() (
   def apply(index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfTransitNavigator] =
     for {
       ctcCountries                             <- countriesService.getCountryCodesCTC()
-      euCountries                              <- countriesService.getCommunityCountries()
       customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
     } yield new OfficeOfTransitNavigator(
       index,
       ctcCountries.countryCodes,
-      euCountries.countryCodes,
       customsSecurityAgreementAreaCountryCodes.countryCodes
     )
 }
@@ -53,9 +51,8 @@ trait OfficeOfTransitNavigatorProvider {
 class OfficeOfTransitNavigator(
   index: Index,
   ctcCountryCodes: Seq[String],
-  euCountryCodes: Seq[String],
   customsSecurityAgreementAreaCountryCodes: Seq[String]
 ) extends UserAnswersNavigator[OfficeOfTransitDomain, RouteDetailsDomain]()(
-      OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes),
-      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes)
+      OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes),
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
     )

@@ -29,7 +29,6 @@ class LocationOfGoodsCoordinatesFormProviderSpec extends StringFieldBehaviours w
   private val prefix = Gen.alphaNumStr.sample.value
 
   private val requiredKey = s"$prefix.error.required"
-  private val lengthKey   = s"$prefix.error.length"
   private val invalidKey  = s"$prefix.error.invalid"
 
   private val form = new LocationOfGoodsCoordinatesFormProvider()(prefix)
@@ -77,7 +76,7 @@ class LocationOfGoodsCoordinatesFormProviderSpec extends StringFieldBehaviours w
       behave like fieldWithInvalidCharacters(
         form = form,
         fieldName = fieldName,
-        error = FormError(fieldName, invalidKey, Seq(s"$prefix.$fieldName"))
+        error = FormError(fieldName, invalidKey, Seq(fieldName))
       )
     }
 
@@ -100,7 +99,7 @@ class LocationOfGoodsCoordinatesFormProviderSpec extends StringFieldBehaviours w
       behave like fieldWithInvalidCharacters(
         form = form,
         fieldName = fieldName,
-        error = FormError(fieldName, invalidKey, Seq(s"$prefix.$fieldName"))
+        error = FormError(fieldName, invalidKey, Seq(fieldName))
       )
     }
   }

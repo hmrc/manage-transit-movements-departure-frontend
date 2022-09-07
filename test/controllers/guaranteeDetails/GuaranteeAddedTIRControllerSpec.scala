@@ -53,7 +53,7 @@ class GuaranteeAddedTIRControllerSpec extends SpecBase with AppWithDefaultMockFi
     "must redirect to check your answers" in {
       setExistingUserAnswers(emptyUserAnswers)
 
-      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+      when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(POST, routes.GuaranteeAddedTIRController.onSubmit(lrn).url)
 
@@ -64,7 +64,7 @@ class GuaranteeAddedTIRControllerSpec extends SpecBase with AppWithDefaultMockFi
       redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
 
       val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-      verify(mockSessionRepository).set(userAnswersCaptor.capture())
+      verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
       userAnswersCaptor.getValue.get(GuaranteeTypePage(Index(0))).get mustBe TIRGuarantee
     }
   }

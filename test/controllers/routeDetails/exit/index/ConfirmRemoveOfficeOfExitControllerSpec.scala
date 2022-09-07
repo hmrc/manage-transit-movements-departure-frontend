@@ -70,7 +70,7 @@ class ConfirmRemoveOfficeOfExitControllerSpec
         forAll(arbitraryOfficeOfExitAnswers(emptyUserAnswers, index)) {
           answers =>
             reset(mockSessionRepository)
-            when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+            when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
             setExistingUserAnswers(answers)
 
@@ -85,7 +85,7 @@ class ConfirmRemoveOfficeOfExitControllerSpec
               controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(lrn).url
 
             val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-            verify(mockSessionRepository).set(userAnswersCaptor.capture())
+            verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
             userAnswersCaptor.getValue.get(OfficeOfExitSection(index)) mustNot be(defined)
         }
       }
@@ -109,7 +109,7 @@ class ConfirmRemoveOfficeOfExitControllerSpec
             redirectLocation(result).value mustEqual
               controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(lrn).url
 
-            verify(mockSessionRepository, never()).set(any())
+            verify(mockSessionRepository, never()).set(any())(any())
         }
       }
     }

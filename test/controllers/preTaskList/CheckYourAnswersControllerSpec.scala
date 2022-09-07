@@ -100,7 +100,7 @@ class CheckYourAnswersControllerSpec
     "must redirect to task list / declaration summary" in {
       setExistingUserAnswers(emptyUserAnswers)
 
-      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+      when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn).url)
 
@@ -111,7 +111,7 @@ class CheckYourAnswersControllerSpec
       redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
 
       val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-      verify(mockSessionRepository).set(userAnswersCaptor.capture())
+      verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
       userAnswersCaptor.getValue.get(DetailsConfirmedPage).get mustBe true
     }
   }

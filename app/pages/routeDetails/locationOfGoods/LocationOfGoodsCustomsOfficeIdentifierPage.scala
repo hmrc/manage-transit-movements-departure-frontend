@@ -20,7 +20,7 @@ import controllers.routeDetails.locationOfGoods.routes
 import models.reference.CustomsOffice
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.LocationOfGoodsSection
+import pages.sections.routeDetails.LocationOfGoodsSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
@@ -28,7 +28,7 @@ case object LocationOfGoodsCustomsOfficeIdentifierPage extends QuestionPage[Cust
 
   override def path: JsPath = LocationOfGoodsSection.path \ toString
 
-  override def toString: String = "locationOfGoodsCustomsOfficeIdentifier"
+  override def toString: String = "customsOffice"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.LocationOfGoodsCustomsOfficeIdentifierController.onPageLoad(userAnswers.lrn, mode))

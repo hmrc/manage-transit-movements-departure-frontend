@@ -88,6 +88,19 @@ class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
       }
     }
 
+    "getCustomsOfficesOfTransitForCountry" - {
+      "must return a list of sorted customs offices of transit for a given country" in {
+
+        when(mockRefDataConnector.getCustomsOfficesOfTransitForCountry(eqTo(CountryCode("GB")))(any(), any()))
+          .thenReturn(Future.successful(gbCustomsOffices))
+
+        service.getCustomsOfficesOfTransitForCountry(CountryCode("GB")).futureValue.getAll mustBe
+          CustomsOfficeList(Seq(gbCustomsOffice2, gbCustomsOffice1)).getAll
+
+        verify(mockRefDataConnector).getCustomsOfficesOfTransitForCountry(eqTo(CountryCode("GB")))(any(), any())
+      }
+    }
+
     "getCustomsOfficesOfDestinationForCountry" - {
       "must return a list of sorted customs offices of destination for a given country" in {
 

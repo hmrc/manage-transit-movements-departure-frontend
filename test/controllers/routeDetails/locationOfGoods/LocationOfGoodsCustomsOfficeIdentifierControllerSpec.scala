@@ -20,8 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.CustomsOfficeFormProvider
 import generators.Generators
 import models.{CustomsOfficeList, NormalMode}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.preTaskList.OfficeOfDeparturePage
@@ -51,7 +50,7 @@ class LocationOfGoodsCustomsOfficeIdentifierControllerSpec extends SpecBase with
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[LocationOfGoodsNavigatorProvider]).toInstance(fakeLocationOfGoodsNavigatorProvider))
       .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
   "LocationOfGoodsCustomsOfficeIdentifier Controller" - {
@@ -101,7 +100,7 @@ class LocationOfGoodsCustomsOfficeIdentifierControllerSpec extends SpecBase with
 
       val userAnswers = emptyUserAnswers.setValue(OfficeOfDeparturePage, customsOffice1)
       when(mockCustomsOfficesService.getCustomsOfficesOfDepartureForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(userAnswers)
 

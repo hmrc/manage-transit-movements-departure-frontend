@@ -762,6 +762,16 @@ routeDetails.locationOfGoods.locationOfGoodsCoordinates.latitude = Latitude
 routeDetails.locationOfGoods.locationOfGoodsCoordinates.longitude = Longitude
 routeDetails.locationOfGoods.locationOfGoodsCoordinates.hintText = These numbers can be positive or negative and need between 5 and 7 decimal places. For example, 50.96622 or 1.86201.
 routeDetails.locationOfGoods.locationOfGoodsCoordinates.checkYourAnswersLabel = What are the coordinates for the location of goods //TODO: check CYA ticket
-routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.invalid = The coordinates must only include numbers 0 to 9, a decimal place and a minus sign
+routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.invalid = The {0} coordinates must only include numbers 0 to 9, a decimal place and a minus sign
 routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.required = Enter the {0} coordinates for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.format = The coordinates must include between 5 and 7 decimal places
+routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.format = The {0} coordinates must include between 5 and 7 decimal places
+
+routeDetails.locationOfGoods.locationOfGoodsEori.title = What is the EORI number for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsEori.heading = What is the EORI number for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsEori.checkYourAnswersLabel = What is the EORI number for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsEori.error.required = Enter the EORI number for the location of goods
+routeDetails.locationOfGoods.locationOfGoodsEori.error.length = The EORI number must be between 14 and 17 characters long
+routeDetails.locationOfGoods.locationOfGoodsEori.error.invalidCharacters = The EORI number must only include letters a to z and numbers 0 to 9
+routeDetails.locationOfGoods.locationOfGoodsEori.error.invalidFormat = The EORI number must start with GB or XI, followed by between 12 and 15 numbers
+routeDetails.locationOfGoods.locationOfGoodsEori.hintText = This will start GB or XI, followed by 12 to 15 numbers. For example, GB123456789000.
+

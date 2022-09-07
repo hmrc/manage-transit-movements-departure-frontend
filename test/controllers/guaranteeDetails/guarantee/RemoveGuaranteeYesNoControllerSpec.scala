@@ -63,7 +63,7 @@ class RemoveGuaranteeYesNoControllerSpec
         forAll(arbitraryGuaranteeAnswers(emptyUserAnswers, index)) {
           answers =>
             reset(mockSessionRepository)
-            when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+            when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
             setExistingUserAnswers(answers)
 
@@ -78,7 +78,7 @@ class RemoveGuaranteeYesNoControllerSpec
               controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(lrn).url
 
             val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-            verify(mockSessionRepository).set(userAnswersCaptor.capture())
+            verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
             userAnswersCaptor.getValue.get(GuaranteeSection(index)) mustNot be(defined)
         }
       }
@@ -102,7 +102,7 @@ class RemoveGuaranteeYesNoControllerSpec
             redirectLocation(result).value mustEqual
               controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(lrn).url
 
-            verify(mockSessionRepository, never()).set(any())
+            verify(mockSessionRepository, never()).set(any())(any())
         }
       }
     }

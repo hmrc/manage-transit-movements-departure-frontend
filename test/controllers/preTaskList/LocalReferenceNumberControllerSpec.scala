@@ -71,8 +71,8 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
     "must redirect to the next page when valid data is submitted" in {
       setNoExistingUserAnswers()
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockUserAnswersService.getOrCreateUserAnswers(any(), any())) thenReturn Future.successful(emptyUserAnswers)
+      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+      when(mockUserAnswersService.getOrCreateUserAnswers(any(), any())(any())) thenReturn Future.successful(emptyUserAnswers)
 
       val request = FakeRequest(POST, localReferenceNumberRoute)
         .withFormUrlEncodedBody(("value", lrn.toString))

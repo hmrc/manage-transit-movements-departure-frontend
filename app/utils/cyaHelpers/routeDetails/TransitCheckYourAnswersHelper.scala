@@ -32,7 +32,6 @@ class TransitCheckYourAnswersHelper(
   mode: Mode
 )(
   ctcCountryCodes: Seq[String],
-  euCountryCodes: Seq[String],
   customsSecurityAgreementAreaCountryCodes: Seq[String]
 )(implicit messages: Messages)
     extends AnswersHelper(userAnswers, mode) {
@@ -47,7 +46,7 @@ class TransitCheckYourAnswersHelper(
           formatType = _.toString,
           removeRoute = if (position == 0) None else Some(routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, index))
         )(
-          OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, euCountryCodes, customsSecurityAgreementAreaCountryCodes),
+          OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes),
           implicitly[Reads[Country]]
         )
     }

@@ -54,7 +54,7 @@ class OfficeOfTransitController @Inject() (
       .async {
         implicit request =>
           val country = request.arg
-          service.getCustomsOfficesForCountry(country.code, Nil).map {
+          service.getCustomsOfficesOfTransitForCountry(country.code).map {
             customsOfficeList =>
               val form = formProvider("routeDetails.transit.officeOfTransit", customsOfficeList, country.description)
               val preparedForm = request.userAnswers.get(OfficeOfTransitPage(index)) match {
@@ -72,7 +72,7 @@ class OfficeOfTransitController @Inject() (
       .async {
         implicit request =>
           val country = request.arg
-          service.getCustomsOfficesForCountry(country.code, Nil).flatMap {
+          service.getCustomsOfficesOfTransitForCountry(country.code).flatMap {
             customsOfficeList =>
               val form = formProvider("routeDetails.transit.officeOfTransit", customsOfficeList, country.description)
               form
