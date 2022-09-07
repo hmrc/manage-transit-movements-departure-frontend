@@ -42,7 +42,7 @@ class UserAnswersServiceSpec extends SpecBase with AppWithDefaultMockFixtures {
         when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(None))
         val service = new UserAnswersService(mockSessionRepository)
         val result  = service.getOrCreateUserAnswers(eoriNumber, lrn).futureValue
-        assert(result.lastUpdated isAfter userAnswers.lastUpdated)
+        assert(result.createdAt isAfter userAnswers.createdAt)
       }
     }
   }
