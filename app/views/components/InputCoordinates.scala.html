@@ -37,7 +37,7 @@
 
     @inputText(
         field = form("latitude"),
-        inputTextType = AddressTextInput(
+        inputTextType = TextInput(
             label = messages(s"$messageKeyPrefix.latitude")
         ),
         autocomplete = Some("latitude"),
@@ -46,7 +46,7 @@
 
     @inputText(
         field = form("longitude"),
-        inputTextType = AddressTextInput(
+        inputTextType = TextInput(
             label = messages(s"$messageKeyPrefix.longitude")
         ),
         autocomplete = Some("longitude"),

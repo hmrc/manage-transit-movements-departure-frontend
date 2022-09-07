@@ -70,7 +70,7 @@
         @additionalHtml
         @govukInput(input.copy(label = Label(isPageHeading = false, content = Text(label), classes = "govuk-label--m")))
     }
-    case AddressTextInput(label) => {
+    case TextInput(label) => {
         @govukInput(input.copy(label = Label(isPageHeading = false, content = Text(label))))
     }
 }

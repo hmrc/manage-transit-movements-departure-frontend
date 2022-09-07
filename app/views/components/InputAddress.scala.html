@@ -38,7 +38,7 @@
 @html = {
     @inputText(
         field = form("addressLine1"),
-        inputTextType = AddressTextInput(
+        inputTextType = TextInput(
             label = messages(s"$messageKeyPrefix.addressLine1")
         ),
         autocomplete = Some("address-line1"),
@@ -47,7 +47,7 @@
 
     @inputText(
         field = form("addressLine2"),
-        inputTextType = AddressTextInput(
+        inputTextType = TextInput(
             label = messages(s"$messageKeyPrefix.addressLine2")
         ),
         autocomplete = Some("address-line2"),
@@ -56,7 +56,7 @@
 
     @inputText(
         field = form("postalCode"),
-        inputTextType = AddressTextInput(
+        inputTextType = TextInput(
             label = messages(s"$messageKeyPrefix.postalCode")
         ),
         autocomplete = Some("postal-code"),
