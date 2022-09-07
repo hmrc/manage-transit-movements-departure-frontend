@@ -25,43 +25,43 @@ import play.api.i18n.Messages
 
 import javax.inject.Inject
 
-class AddressFormProvider @Inject() extends Mappings {
+class LocationOfGoodsAddressFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String, name: String, countryList: CountryList)(implicit messages: Messages): Form[Address] =
+  def apply(prefix: String, countryList: CountryList)(implicit messages: Messages): Form[Address] =
     Form(
       mapping(
         AddressLine1.field -> {
-          val args = Seq(AddressLine1.arg, name)
-          trimmedText(s"$prefix.error.required", args)
+          val args = Seq(AddressLine1.arg)
+          trimmedText(s"$prefix.error.addressLine1.required", args)
             .verifying(
               StopOnFirstFail[String](
-                maxLength(AddressLine1.length, s"$prefix.error.length", Seq(AddressLine1.arg.capitalize, name, AddressLine1.length)),
-                regexp(AddressLine1.regex, s"$prefix.error.invalid", Seq(AddressLine1.arg.capitalize, name))
+                maxLength(AddressLine1.length, s"$prefix.error.addressLine1.length", Seq(AddressLine1.arg.capitalize, AddressLine1.length)),
+                regexp(AddressLine1.regex, s"$prefix.error.addressLine1.invalidCharacters", Seq(AddressLine1.arg.capitalize))
               )
             )
         },
         AddressLine2.field -> {
-          val args = Seq(AddressLine2.arg, name)
-          trimmedText(s"$prefix.error.required", args)
+          val args = Seq(AddressLine2.arg)
+          trimmedText(s"$prefix.error.addressLine2.required", args)
             .verifying(
               StopOnFirstFail[String](
-                maxLength(AddressLine2.length, s"$prefix.error.length", Seq(AddressLine2.arg.capitalize, name, AddressLine2.length)),
-                regexp(AddressLine2.regex, s"$prefix.error.invalid", Seq(AddressLine2.arg.capitalize, name))
+                maxLength(AddressLine2.length, s"$prefix.error.addressLine2.length", Seq(AddressLine2.arg.capitalize, AddressLine2.length)),
+                regexp(AddressLine2.regex, s"$prefix.error.addressLine2.invalidCharacters", Seq(AddressLine2.arg.capitalize))
               )
             )
         },
         PostalCode.field -> {
-          val args = Seq(name)
-          trimmedText(s"$prefix.error.postalCode.required", args)
+          val args = Seq()
+          trimmedText(s"$prefix.error.postcode.required", args)
             .verifying(
               StopOnFirstFail[String](
-                maxLength(PostalCode.length, s"$prefix.error.postalCode.length", args :+ PostalCode.length),
-                regexp(PostalCode.regex, s"$prefix.error.postalCode.invalid", args)
+                maxLength(PostalCode.length, s"$prefix.error.postcode.length", args :+ PostalCode.length),
+                regexp(PostalCode.regex, s"$prefix.error.postcode.invalidCharacters", args)
               )
             )
         },
         Country.field -> {
-          country(countryList, s"$prefix.error.country.required", Seq(name))
+          country(countryList, s"$prefix.error.country.required", Seq())
         }
       )(Address.apply)(Address.unapply)
     )
