@@ -31,7 +31,7 @@ class LocationOfGoodsAddressFormProvider @Inject() extends Mappings {
     Form(
       mapping(
         AddressLine1.field -> {
-          lazy val args = Seq(AddressLine1.arg)
+          val args = Seq(AddressLine1.arg)
           trimmedText(s"$prefix.error.addressLine1.required", args)
             .verifying(
               StopOnFirstFail[String](
@@ -41,7 +41,7 @@ class LocationOfGoodsAddressFormProvider @Inject() extends Mappings {
             )
         },
         AddressLine2.field -> {
-          lazy val args = Seq(AddressLine2.arg)
+          val args = Seq(AddressLine2.arg)
           trimmedText(s"$prefix.error.addressLine2.required", args)
             .verifying(
               StopOnFirstFail[String](
@@ -51,7 +51,7 @@ class LocationOfGoodsAddressFormProvider @Inject() extends Mappings {
             )
         },
         PostalCode.field -> {
-          lazy val args = Seq()
+          val args = Seq()
           trimmedText(s"$prefix.error.postcode.required", args)
             .verifying(
               StopOnFirstFail[String](
