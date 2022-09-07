@@ -19,6 +19,7 @@ package forms
 import base.SpecBase
 import forms.behaviours.StringFieldBehaviours
 import models.Coordinates
+import models.domain.StringFieldRegex.{latitudeFormatRegex, longitudeFormatRegex}
 import org.scalacheck.Gen
 import play.api.data.{Form, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
@@ -64,7 +65,7 @@ class LocationOfGoodsCoordinatesFormProviderSpec extends StringFieldBehaviours w
       behave like fieldThatBindsValidData(
         form = form,
         fieldName = fieldName,
-        validDataGenerator = RegexpGen.from("^[+-]?([0-8]?[0-9]\\.[0-9]{5,7})$")
+        validDataGenerator = RegexpGen.from(latitudeFormatRegex.toString)
       )
 
       behave like mandatoryTrimmedField(
@@ -87,7 +88,7 @@ class LocationOfGoodsCoordinatesFormProviderSpec extends StringFieldBehaviours w
       behave like fieldThatBindsValidData(
         form = form,
         fieldName = fieldName,
-        validDataGenerator = RegexpGen.from("^[+-]?((0?[0-9]?|1[0-7])[0-9]\\.[0-9]{5,7})$")
+        validDataGenerator = RegexpGen.from(longitudeFormatRegex.toString)
       )
 
       behave like mandatoryTrimmedField(
