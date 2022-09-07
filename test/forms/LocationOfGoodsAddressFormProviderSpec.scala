@@ -31,10 +31,6 @@ class LocationOfGoodsAddressFormProviderSpec extends StringFieldBehaviours with 
   private val country   = Country(CountryCode("GB"), "United Kingdom")
   private val countries = CountryList(Seq(country))
 
-  private val requiredKey = s"$prefix.error.required"
-  private val lengthKey   = s"$prefix.error.length"
-  private val invalidKey  = s"$prefix.error.invalid"
-
   private val lengthAddressLine1Key   = s"$prefix.error.addressLine1.length"
   private val requiredAddressLine1Key = s"$prefix.error.addressLine1.required"
   private val invalidAddressLine1Key  = s"$prefix.error.addressLine1.invalidCharacters"
