@@ -36,7 +36,8 @@ class LocationOfGoodsCoordinatesFormProvider @Inject() extends Mappings {
             .verifying(
               StopOnFirstFail[String](
                 regexp(coordinatesCharacterRegex, s"$prefix.error.invalid", args),
-                regexp(latitudeFormatRegex, s"$prefix.error.format", args)
+                regexp(latitudeFormatRegex, s"$prefix.error.format", args),
+                regexp(coordinatesLatitudeMaxRegex, s"$prefix.error.latitude.maximum", args)
               )
             )
         },
@@ -46,7 +47,8 @@ class LocationOfGoodsCoordinatesFormProvider @Inject() extends Mappings {
             .verifying(
               StopOnFirstFail[String](
                 regexp(coordinatesCharacterRegex, s"$prefix.error.invalid", args),
-                regexp(longitudeFormatRegex, s"$prefix.error.format", args)
+                regexp(longitudeFormatRegex, s"$prefix.error.format", args),
+                regexp(coordinatesLongitudeMaxRegex, s"$prefix.error.longitude.maximum", args)
               )
             )
         }

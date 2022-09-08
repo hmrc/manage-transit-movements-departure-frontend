@@ -231,7 +231,7 @@ trait ModelGenerators {
     Arbitrary {
       for {
         latitude  <- RegexpGen.from("^[+-]?([0-8]?[0-9]\\.[0-9]{5,7})$")
-        longitude <- RegexpGen.from("^[+-]?((0?[0-9]?|1[0-7])[0-9]\\.[0-9]{5,7})$")
+        longitude <- RegexpGen.from("^[+-]?([0-1]?[0-7]?[0-9]\\.[0-9]{5,7})$")
       } yield Coordinates(latitude, longitude)
     }
 

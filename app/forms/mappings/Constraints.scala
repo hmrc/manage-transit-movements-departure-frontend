@@ -56,6 +56,12 @@ trait Constraints {
         }
     }
 
+  protected def maxValue(maximum: Int, errorKey: String, input: String) =
+    input.toInt match {
+      case x if x < maximum => Invalid(errorKey, maximum)
+      case _                => Valid
+    }
+
   protected def inRange[A](itemIndex: A, minimum: A, maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
     Constraint {
       input =>

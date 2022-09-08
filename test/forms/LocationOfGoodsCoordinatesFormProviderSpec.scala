@@ -21,15 +21,17 @@ import forms.behaviours.StringFieldBehaviours
 import models.Coordinates
 import models.domain.StringFieldRegex.{latitudeFormatRegex, longitudeFormatRegex}
 import org.scalacheck.Gen
-import play.api.data.{Form, FormError}
+import play.api.data.{Field, Form, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
 
 class LocationOfGoodsCoordinatesFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
   private val prefix = Gen.alphaNumStr.sample.value
 
-  private val requiredKey = s"$prefix.error.required"
-  private val invalidKey  = s"$prefix.error.invalid"
+  private val requiredKey     = s"$prefix.error.required"
+  private val invalidKey      = s"$prefix.error.invalid"
+  private val maxLongitudeKey = s"$prefix.error.longitude.maximum"
+  private val maxLatitudeKey  = s"$prefix.error.latitude.maximum"
 
   private val form = new LocationOfGoodsCoordinatesFormProvider()(prefix)
 
@@ -78,6 +80,25 @@ class LocationOfGoodsCoordinatesFormProviderSpec extends StringFieldBehaviours w
         fieldName = fieldName,
         error = FormError(fieldName, invalidKey, Seq(fieldName))
       )
+
+      "must throw error when latitude above maximum" in {
+
+        val invalidString = "90.11111"
+        val error         = FormError(fieldName, maxLatitudeKey, Seq(fieldName))
+
+        val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
+        result.errors must contain(error)
+      }
+
+      "must throw error when latitude below minimum" in {
+
+        val invalidString = "-90.11111"
+        val error         = FormError(fieldName, maxLatitudeKey, Seq(fieldName))
+
+        val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
+        result.errors must contain(error)
+      }
+
     }
 
     ".longitude" - {
@@ -101,6 +122,25 @@ class LocationOfGoodsCoordinatesFormProviderSpec extends StringFieldBehaviours w
         fieldName = fieldName,
         error = FormError(fieldName, invalidKey, Seq(fieldName))
       )
+
+      "must throw error when longitude above maximum" in {
+
+        val invalidString = "180.11111"
+        val error         = FormError(fieldName, maxLongitudeKey, Seq(fieldName))
+
+        val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
+        result.errors must contain(error)
+      }
+
+      "must throw error when longitude below minimum" in {
+
+        val invalidString = "-180.11111"
+        val error         = FormError(fieldName, maxLongitudeKey, Seq(fieldName))
+
+        val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
+        result.errors must contain(error)
+      }
+
     }
   }
 }
