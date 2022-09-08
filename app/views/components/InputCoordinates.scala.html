@@ -37,7 +37,7 @@
 
     @inputText(
         field = form("latitude"),
-        inputTextType = TextInput(
+        inputTextType = MultiTextInput(
             label = messages(s"$messageKeyPrefix.latitude")
         ),
         autocomplete = Some("latitude"),
@@ -46,10 +46,9 @@
 
     @inputText(
         field = form("longitude"),
-        inputTextType = TextInput(
+        inputTextType = MultiTextInput(
             label = messages(s"$messageKeyPrefix.longitude")
         ),
-        autocomplete = Some("longitude"),
         inputClass = Some("govuk-!-width-two-thirds")
     )
 }

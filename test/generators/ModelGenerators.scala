@@ -19,6 +19,7 @@ package generators
 import models.AddressLine.{AddressLine1, AddressLine2, PostalCode}
 import models.GuaranteeType._
 import models._
+import models.domain.StringFieldRegex.{coordinatesLatitudeMaxRegex, coordinatesLongitudeMaxRegex}
 import models.reference._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
@@ -230,8 +231,8 @@ trait ModelGenerators {
   implicit lazy val arbitraryCoordinates: Arbitrary[Coordinates] =
     Arbitrary {
       for {
-        latitude  <- RegexpGen.from("^[+-]?([0-8]?[0-9]\\.[0-9]{5,7})$")
-        longitude <- RegexpGen.from("^[+-]?([0-1]?[0-7]?[0-9]\\.[0-9]{5,7})$")
+        latitude  <- RegexpGen.from(coordinatesLatitudeMaxRegex)
+        longitude <- RegexpGen.from(coordinatesLongitudeMaxRegex)
       } yield Coordinates(latitude, longitude)
     }
 

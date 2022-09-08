@@ -42,7 +42,7 @@ object InputTextViewModel {
   ) extends InputTextViewModel
       with AdditionalHtmlViewModel
 
-  case class TextInput(
+  case class MultiTextInput(
     label: String
   ) extends InputTextViewModel
 

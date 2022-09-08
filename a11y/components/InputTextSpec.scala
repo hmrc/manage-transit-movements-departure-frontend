@@ -110,7 +110,7 @@ class InputTextSpec extends A11ySpecBase {
           component
             .apply(
               form("value"),
-              TextInput(label),
+              MultiTextInput(label),
               inputClass,
               hint,
               prefix,

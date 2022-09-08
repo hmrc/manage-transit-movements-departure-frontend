@@ -22,6 +22,7 @@ import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain._
 import models.reference.CustomsOffice
+import models.{Address, LocationOfGoodsIdentification, LocationType}
 import models.{Coordinates, LocationOfGoodsIdentification, LocationType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -116,6 +117,27 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           result.value mustBe expectedResult
           result.value.qualifierOfIdentification mustBe qualifierOfIdentification
         }
+
+        "is Z (Address)" in {
+          val qualifierOfIdentification = LocationOfGoodsIdentification.AddressIdentifier
+          val address                   = arbitrary[Address].sample.value
+
+          val userAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsTypePage, typeOfLocation)
+            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+            .setValue(LocationOfGoodsAddressPage, address)
+
+          val expectedResult = LocationOfGoodsZ(
+            typeOfLocation = typeOfLocation,
+            address = address
+          )
+
+          val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
+
+          result.value mustBe expectedResult
+          result.value.qualifierOfIdentification mustBe qualifierOfIdentification
+        }
+
       }
     }
 
