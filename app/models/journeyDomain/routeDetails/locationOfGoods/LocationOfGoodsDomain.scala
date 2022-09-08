@@ -21,7 +21,7 @@ import models.LocationOfGoodsIdentification._
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.CustomsOffice
-import models.{LocationOfGoodsIdentification, LocationType, UserAnswers}
+import models.{Coordinates, LocationOfGoodsIdentification, LocationType, UserAnswers}
 import pages.routeDetails.locationOfGoods._
 import play.api.mvc.Call
 
@@ -44,7 +44,7 @@ object LocationOfGoodsDomain {
           case CustomsOfficeIdentifier => LocationOfGoodsV.userAnswersReader(typeOfLocation)
           case EoriNumber              => LocationOfGoodsX.userAnswersReader(typeOfLocation)
           case AuthorisationNumber     => LocationOfGoodsY.userAnswersReader(typeOfLocation)
-          case Coordinates             => ???
+          case CoordinatesIdentifier   => LocationOfGoodsW.userAnswersReader(typeOfLocation)
           case Unlocode                => ???
           case Address                 => ???
           case PostalCode              => ???
@@ -108,6 +108,26 @@ object LocationOfGoodsDomain {
       ).mapN {
         (typeOfLocation, authorisationNumber) =>
           LocationOfGoodsY(typeOfLocation, authorisationNumber)
+      }
+  }
+
+  case class LocationOfGoodsW(
+    typeOfLocation: LocationType,
+    coordinates: Coordinates
+  ) extends LocationOfGoodsDomain {
+
+    override val qualifierOfIdentification: LocationOfGoodsIdentification = CoordinatesIdentifier
+  }
+
+  object LocationOfGoodsW {
+
+    def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
+      (
+        UserAnswersReader(typeOfLocation),
+        LocationOfGoodsCoordinatesPage.reader
+      ).mapN {
+        (typeOfLocation, coordinates) =>
+          LocationOfGoodsW(typeOfLocation, coordinates)
       }
   }
 }

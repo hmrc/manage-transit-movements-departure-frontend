@@ -23,7 +23,7 @@ object LocationOfGoodsIdentification extends RadioModel[LocationOfGoodsIdentific
   case object CustomsOfficeIdentifier extends WithName("customsOfficeIdentifier") with LocationOfGoodsIdentification
   case object EoriNumber extends WithName("eoriNumber") with LocationOfGoodsIdentification
   case object AuthorisationNumber extends WithName("authorisationNumber") with LocationOfGoodsIdentification
-  case object Coordinates extends WithName("coordinates") with LocationOfGoodsIdentification
+  case object CoordinatesIdentifier extends WithName("coordinates") with LocationOfGoodsIdentification
   case object Unlocode extends WithName("unlocode") with LocationOfGoodsIdentification
   case object Address extends WithName("address") with LocationOfGoodsIdentification
   case object PostalCode extends WithName("postalCode") with LocationOfGoodsIdentification
@@ -34,7 +34,7 @@ object LocationOfGoodsIdentification extends RadioModel[LocationOfGoodsIdentific
     CustomsOfficeIdentifier,
     EoriNumber,
     AuthorisationNumber,
-    Coordinates,
+    CoordinatesIdentifier,
     Unlocode,
     Address,
     PostalCode
