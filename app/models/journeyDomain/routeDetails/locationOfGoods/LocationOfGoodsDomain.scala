@@ -73,7 +73,8 @@ object LocationOfGoodsDomain {
 
   case class LocationOfGoodsX(
     typeOfLocation: LocationType,
-    identificationNumber: String
+    identificationNumber: String,
+    addIdentifier: Boolean
   ) extends LocationOfGoodsDomain {
 
     override val qualifierOfIdentification: LocationOfGoodsIdentification = EoriNumber
@@ -84,16 +85,18 @@ object LocationOfGoodsDomain {
     def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
       (
         UserAnswersReader(typeOfLocation),
-        LocationOfGoodsEoriPage.reader
+        LocationOfGoodsEoriPage.reader,
+        LocationOfGoodsAddIdentifierPage.reader
       ).mapN {
-        (typeOfLocation, identificationNumber) =>
-          LocationOfGoodsX(typeOfLocation, identificationNumber)
+        (typeOfLocation, identificationNumber, addIdentifier) =>
+          LocationOfGoodsX(typeOfLocation, identificationNumber, addIdentifier)
       }
   }
 
   case class LocationOfGoodsY(
     typeOfLocation: LocationType,
-    authorisationNumber: String
+    authorisationNumber: String,
+    addIdentifier: Boolean
   ) extends LocationOfGoodsDomain {
 
     override val qualifierOfIdentification: LocationOfGoodsIdentification = AuthorisationNumber
@@ -104,10 +107,11 @@ object LocationOfGoodsDomain {
     def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
       (
         UserAnswersReader(typeOfLocation),
-        LocationOfGoodsAuthorisationNumberPage.reader
+        LocationOfGoodsAuthorisationNumberPage.reader,
+        LocationOfGoodsAddIdentifierPage.reader
       ).mapN {
-        (typeOfLocation, authorisationNumber) =>
-          LocationOfGoodsY(typeOfLocation, authorisationNumber)
+        (typeOfLocation, authorisationNumber, addIdentifier) =>
+          LocationOfGoodsY(typeOfLocation, authorisationNumber, addIdentifier)
       }
   }
 

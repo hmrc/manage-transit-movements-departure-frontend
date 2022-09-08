@@ -785,3 +785,8 @@ routeDetails.locationOfGoods.locationOfGoodsAddress.error.postcode.invalidCharac
 routeDetails.locationOfGoods.locationOfGoodsAddress.error.postcode.length = The postal code must be 9 characters or less
 routeDetails.locationOfGoods.locationOfGoodsAddress.error.country.required = Enter the country for the location of goods
 
+
+routeDetails.locationOfGoods.locationOfGoodsAddIdentifier.title = Do you want to add another identifier for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsAddIdentifier.heading = Do you want to add another identifier for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsAddIdentifier.checkYourAnswersLabel = Do you want to add another identifier for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsAddIdentifier.error.required = Select yes if you want to add another identifier for the location of goods
