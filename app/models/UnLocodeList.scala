@@ -23,6 +23,9 @@ case class UnLocodeList(unLocodes: Seq[UnLocode]) {
   def getAll: Seq[UnLocode] =
     unLocodes
 
+  def getUnLocode(unLocodeExtendedCode: String): Option[UnLocode] =
+    unLocodes.find(_.unLocodeExtendedCode == unLocodeExtendedCode)
+
   override def equals(obj: Any): Boolean = obj match {
     case x: UnLocodeList => x.getAll == getAll
     case _               => false

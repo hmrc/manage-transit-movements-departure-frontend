@@ -45,8 +45,10 @@
 
         @inputSelect(
             field = form("value"),
-            selectType = OrdinarySelect(
-                heading = messages("routeDetails.locationOfGoods.locationOfGoodsUnLocode.heading")
+            selectType = SelectWithAdditionalHtml(
+                heading = messages("routeDetails.locationOfGoods.locationOfGoodsUnLocode.heading"),
+                caption = Some(messages("routeDetails.caption")),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.locationOfGoods.locationOfGoodsUnLocode.paragraph")}</p>""")
             ),
             hint = Some(messages("routeDetails.locationOfGoods.locationOfGoodsUnLocode.hintText")),
             selectItems = unLocodes.toSelectItems(form.value),

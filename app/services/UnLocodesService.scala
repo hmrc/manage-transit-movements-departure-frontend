@@ -28,12 +28,10 @@ class UnLocodesService @Inject() (
   referenceDataConnector: ReferenceDataConnector
 )(implicit ec: ExecutionContext) {
 
-  def getUnLocodes(implicit hc: HeaderCarrier): Future[UnLocodeList] =
-    referenceDataConnector.getUnLocodes
+  def getUnLocodes()(implicit hc: HeaderCarrier): Future[UnLocodeList] =
+    referenceDataConnector
+      .getUnLocodes()
       .map(sort)
-
-  private def sort(unLocodeList: UnLocodeList): UnLocodeList =
-    sort(unLocodeList.unLocodes)
 
   private def sort(unLocodes: Seq[UnLocode]): UnLocodeList =
     UnLocodeList(unLocodes.sortBy(_.name.toLowerCase))

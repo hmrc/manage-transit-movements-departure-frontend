@@ -108,9 +108,9 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[Seq[Country]](serviceUrl, headers = version2Header)
   }
 
-  def getUnLocodes(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[UnLocodeList] = {
+  def getUnLocodes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[UnLocode]] = {
     val serviceUrl = s"${config.referenceDataUrl}/un-locodes"
-    http.GET[UnLocodeList](serviceUrl, headers = version2Header)
+    http.GET[Seq[UnLocode]](serviceUrl, headers = version2Header)
   }
 
   private def version2Header = Seq(

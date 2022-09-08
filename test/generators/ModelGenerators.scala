@@ -229,20 +229,9 @@ trait ModelGenerators {
   implicit lazy val arbitraryUnLocode: Arbitrary[UnLocode] =
     Arbitrary {
       for {
-        state                         <- nonEmptyString
-        activeFrom                    <- nonEmptyString
-        unLocodeExtendedCode          <- nonEmptyString
-        name                          <- nonEmptyString
-        function                      <- nonEmptyString
-        status                        <- nonEmptyString
-        date                          <- nonEmptyString
-        subdivision                   <- Gen.option(Gen.alphaNumStr)
-        coordinates                   <- Gen.option(Gen.alphaNumStr)
-        comment                   <- Gen.option(Gen.alphaNumStr)
-      } yield UnLocode(
-        state,
-        activeFrom,
-        unLocodeExtendedCode, name, function, status, date, subdivision, coordinates, comment)
+        unLocodeExtendedCode <- nonEmptyString
+        name                 <- nonEmptyString
+      } yield UnLocode(unLocodeExtendedCode, name)
     }
 
 }

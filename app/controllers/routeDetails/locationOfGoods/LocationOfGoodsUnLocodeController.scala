@@ -19,12 +19,10 @@ package controllers.routeDetails.locationOfGoods
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.UnLocodeFormProvider
-import models.reference.UnLocode
-import models.{LocalReferenceNumber, Mode, UnLocodeList}
+import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import pages.routeDetails.locationOfGoods.LocationOfGoodsUnLocodePage
-import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -48,20 +46,20 @@ class LocationOfGoodsUnLocodeController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private def form(unLocodeList: UnLocodeList): Form[UnLocode] = formProvider("routeDetails.locationOfGoods.locationOfGoodsUnLocode", unLocodeList)
-
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
     .async {
       implicit request =>
-        service.getUnLocodes.map {
+        service.getUnLocodes().map {
           unLocodeList =>
             val form = formProvider("routeDetails.locationOfGoods.locationOfGoodsUnLocode", unLocodeList)
-            val preparedForm = request.userAnswers.get(LocationOfGoodsUnLocodePage) match {
-              case None        => form
-              case Some(value) => form.fill(value)
-            }
-
+            val preparedForm = request.userAnswers
+              .get(LocationOfGoodsUnLocodePage)
+              .flatMap(
+                x => unLocodeList.getUnLocode(x.unLocodeExtendedCode)
+              )
+              .map(form.fill)
+              .getOrElse(form)
             Ok(view(preparedForm, lrn, unLocodeList.unLocodes, mode))
         }
     }
@@ -70,7 +68,7 @@ class LocationOfGoodsUnLocodeController @Inject() (
     .requireData(lrn)
     .async {
       implicit request =>
-        service.getUnLocodes.flatMap {
+        service.getUnLocodes().flatMap {
           unLocodeList =>
             val form = formProvider("routeDetails.locationOfGoods.locationOfGoodsUnLocode", unLocodeList)
             form

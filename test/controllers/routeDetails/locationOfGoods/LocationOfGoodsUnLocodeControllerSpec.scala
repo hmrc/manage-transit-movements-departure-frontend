@@ -1,9 +1,25 @@
+/*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.{CustomsOfficeFormProvider, UnLocodeFormProvider}
-import models.{CustomsOfficeList, NormalMode, UnLocodeList, UserAnswers}
+import forms.UnLocodeFormProvider
 import generators.Generators
+import models.{NormalMode, UnLocodeList}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import org.mockito.ArgumentMatchers.any
@@ -13,7 +29,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{CustomsOfficesService, UnLocodesService}
+import services.UnLocodesService
 import views.html.routeDetails.locationOfGoods.LocationOfGoodsUnLocodeView
 
 import scala.concurrent.Future
@@ -29,7 +45,7 @@ class LocationOfGoodsUnLocodeControllerSpec extends SpecBase with AppWithDefault
   private val mode         = NormalMode
 
   private val mockUnLocodesService: UnLocodesService = mock[UnLocodesService]
-  private lazy val locationOfGoodsUnLocodeRoute                = routes.LocationOfGoodsUnLocodeController.onPageLoad(lrn, mode).url
+  private lazy val locationOfGoodsUnLocodeRoute      = routes.LocationOfGoodsUnLocodeController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -41,7 +57,7 @@ class LocationOfGoodsUnLocodeControllerSpec extends SpecBase with AppWithDefault
 
     "must return OK and the correct view for a GET" in {
 
-      when(mockUnLocodesService.getUnLocodes(any())).thenReturn(Future.successful(unLocodeList))
+      when(mockUnLocodesService.getUnLocodes()(any())).thenReturn(Future.successful(unLocodeList))
       setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, locationOfGoodsUnLocodeRoute)
@@ -58,7 +74,7 @@ class LocationOfGoodsUnLocodeControllerSpec extends SpecBase with AppWithDefault
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      when(mockUnLocodesService.getUnLocodes(any())).thenReturn(Future.successful(unLocodeList))
+      when(mockUnLocodesService.getUnLocodes()(any())).thenReturn(Future.successful(unLocodeList))
       val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsUnLocodePage, unLocode1)
       setExistingUserAnswers(userAnswers)
 
@@ -78,8 +94,8 @@ class LocationOfGoodsUnLocodeControllerSpec extends SpecBase with AppWithDefault
 
     "must redirect to the next page when valid data is submitted" in {
 
-      when(mockUnLocodesService.getUnLocodes(any())).thenReturn(Future.successful(unLocodeList))
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockUnLocodesService.getUnLocodes()(any())).thenReturn(Future.successful(unLocodeList))
+      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(emptyUserAnswers)
 
@@ -95,7 +111,7 @@ class LocationOfGoodsUnLocodeControllerSpec extends SpecBase with AppWithDefault
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      when(mockUnLocodesService.getUnLocodes(any())).thenReturn(Future.successful(unLocodeList))
+      when(mockUnLocodesService.getUnLocodes()(any())).thenReturn(Future.successful(unLocodeList))
       setExistingUserAnswers(emptyUserAnswers)
 
       val request   = FakeRequest(POST, locationOfGoodsUnLocodeRoute).withFormUrlEncodedBody(("value", "invalid value"))

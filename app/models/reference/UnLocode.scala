@@ -20,16 +20,9 @@ import models.Selectable
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 
-case class UnLocode(state: String,
-                    activeFrom: String,
-                    unLocodeExtendedCode: String,
-                    name: String,
-                    function: String,
-                    status: String,
-                    date: String,
-                    subdivision: Option[String],
-                    coordinates: Option[String],
-                    comment: Option[String]
+case class UnLocode(
+  unLocodeExtendedCode: String,
+  name: String
 ) extends Selectable {
 
   override def toString: String = s"$name ($unLocodeExtendedCode)"

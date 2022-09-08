@@ -30,8 +30,9 @@ class UnLocodeFormProviderSpec extends StringFieldBehaviours {
 
   private val unLocodes = UnLocodeList(
     Seq(
-      UnLocode("valid", "2021-02-15", "ADALV", "Andorra la Vella", "--34-6--", "AI", "0601", None, Some("4230N 00131E"), Some("Muy Vella")),
-      UnLocode("valid", "2021-02-15", "ADCAN", "Canillo", "--3-----", "RL", "0307", None, Some("4234N 00135E"), None))
+      UnLocode("ADALV", "Andorra la Vella"),
+      UnLocode("ADCAN", "Canillo")
+    )
   )
 
   private val form = new UnLocodeFormProvider()(prefix, unLocodes)

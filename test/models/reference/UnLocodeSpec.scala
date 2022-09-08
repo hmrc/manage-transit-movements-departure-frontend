@@ -25,83 +25,49 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 
 class UnLocodeSpec extends SpecBase with ScalaCheckPropertyChecks {
 
-  "CustomsOffice" - {
+  "UnLocode" - {
 
-    "must serialise" - {
-      "when phone number defined" in {
-        forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr) {
-          (id, name, phoneNumber) =>
-            val customsOffice = UnLocode(id, name, Some(phoneNumber))
-            Json.toJson(customsOffice) mustBe Json.parse(s"""
+    "must serialise" in {
+      forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
+        (unLocodeExtendedCode, name) =>
+          val unLocode = UnLocode(unLocodeExtendedCode, name)
+          Json.toJson(unLocode) mustBe Json.parse(s"""
                 |{
-                |  "id": "$id",
-                |  "name": "$name",
-                |  "phoneNumber": "$phoneNumber"
-                |}
-                |""".stripMargin)
-        }
-      }
-
-      "when phone number undefined" in {
-        forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
-          (id, name) =>
-            val customsOffice = CustomsOffice(id, name, None)
-            Json.toJson(customsOffice) mustBe Json.parse(s"""
-                |{
-                |  "id": "$id",
+                |  "unLocodeExtendedCode": "$unLocodeExtendedCode",
                 |  "name": "$name"
                 |}
                 |""".stripMargin)
-        }
       }
     }
 
-    "must deserialise" - {
-      "when phone number defined" in {
-        forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr) {
-          (id, name, phoneNumber) =>
-            val customsOffice = CustomsOffice(id, name, Some(phoneNumber))
-            Json
-              .parse(s"""
-                |{
-                |  "id": "$id",
-                |  "name": "$name",
-                |  "phoneNumber": "$phoneNumber"
-                |}
-                |""".stripMargin)
-              .as[CustomsOffice] mustBe customsOffice
-        }
-      }
-
-      "when phone number undefined" in {
-        forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
-          (id, name) =>
-            val customsOffice = CustomsOffice(id, name, None)
-            Json
-              .parse(s"""
-                |{
-                |  "id": "$id",
-                |  "name": "$name"
-                |}
-                |""".stripMargin)
-              .as[CustomsOffice] mustBe customsOffice
-        }
+    "must deserialise" in {
+      forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
+        (unLocodeExtendedCode, name) =>
+          val unLocode = UnLocode(unLocodeExtendedCode, name)
+          Json
+            .parse(s"""
+                        |{
+                        |  "unLocodeExtendedCode": "$unLocodeExtendedCode",
+                        |  "name": "$name"
+                        |}
+                        |""".stripMargin)
+            .as[UnLocode] mustBe unLocode
       }
     }
 
     "must convert to select item" in {
       forAll(Gen.alphaNumStr, Gen.alphaNumStr, arbitrary[Boolean]) {
-        (id, name, selected) =>
-          val customsOffice = CustomsOffice(id, name, None)
-          customsOffice.toSelectItem(selected) mustBe SelectItem(Some(id), s"$name ($id)", selected)
+        (unLocodeExtendedCode, name, selected) =>
+          val unLocode = UnLocode(unLocodeExtendedCode, name)
+          unLocode.toSelectItem(selected) mustBe SelectItem(Some(unLocodeExtendedCode), s"$name ($unLocodeExtendedCode)", selected)
       }
     }
 
     "must format as string" in {
       forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
-        (id, name) =>
-          val customsOffice = CustomsOffice(id, name, None)
-          customsOffice.toString mustBe s"$name ($id)"
+        (unLocodeExtendedCode, name) =>
+          val unLocode = UnLocode(unLocodeExtendedCode, name)
+          unLocode.toString mustBe s"$name ($unLocodeExtendedCode)"
       }
     }
   }

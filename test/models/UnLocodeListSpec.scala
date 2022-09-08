@@ -18,116 +18,20 @@ package models
 
 import base.SpecBase
 import generators.Generators
-import models.reference.CustomsOffice
+import models.reference.UnLocode
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class UnLocodeListSpec extends SpecBase with Generators with ScalaCheckPropertyChecks {
 
   "getAll" - {
-    "return the full list of customs offices" in {
+    "return the full list of unLocodes" in {
       forAll(nonEmptyListOf[UnLocode](10)) {
-        customsOffices =>
-          val customsOfficeList = CustomsOfficeList(customsOffices.toList)
+        unLocodes =>
+          val unLocodeList = UnLocodeList(unLocodes.toList)
 
-          customsOfficeList.getAll must contain theSameElementsAs customsOffices.toList
+          unLocodeList.getAll must contain theSameElementsAs unLocodes.toList
       }
     }
-  }
-
-  "getById" - {
-    "return a customs office if it exists" in {
-      forAll(nonEmptyListOf[CustomsOffice](10)) {
-        customsOffices =>
-          val customsOfficeList = CustomsOfficeList(customsOffices.toList)
-
-          val officeId = customsOffices.head.id
-
-          customsOfficeList.getCustomsOffice(officeId).value mustEqual customsOffices.head
-      }
-    }
-
-    "return a None if it does not exists" in {
-
-      val customsOffices = Seq(
-        CustomsOffice("GB1", "one", Some("phoneNumber")),
-        CustomsOffice("GB2", "two", None),
-        CustomsOffice("FR3", "three", None)
-      )
-
-      val customsOfficeList = CustomsOfficeList(customsOffices)
-
-      val officeId: String = "GB4"
-
-      customsOfficeList.getCustomsOffice(officeId) mustEqual None
-
-    }
-  }
-
-  "filter" - {
-    "return a list of customs offices without the office with matching id" in {
-      val customsOffices = Seq(
-        CustomsOffice("GB1", "one", Some("phoneNumber")),
-        CustomsOffice("GB2", "two", None),
-        CustomsOffice("GB3", "three", None),
-        CustomsOffice("GB4", "four", Some("phoneNumber")),
-        CustomsOffice("GB5", "five", None)
-      )
-
-      val customsOfficeList = CustomsOfficeList(customsOffices)
-
-      val officeIds = Seq("GB3")
-
-      val expectedOffices = Seq(
-        CustomsOffice("GB1", "one", Some("phoneNumber")),
-        CustomsOffice("GB2", "two", None),
-        CustomsOffice("GB4", "four", Some("phoneNumber")),
-        CustomsOffice("GB5", "five", None)
-      )
-
-      customsOfficeList.filterNot(officeIds) must contain theSameElementsAs expectedOffices
-
-    }
-
-    "return a list of customs offices without the offices with matching ids" in {
-      val customsOffices = Seq(
-        CustomsOffice("GB1", "one", Some("phoneNumber")),
-        CustomsOffice("GB2", "two", None),
-        CustomsOffice("GB3", "three", None),
-        CustomsOffice("GB4", "four", Some("phoneNumber")),
-        CustomsOffice("GB5", "five", None)
-      )
-
-      val customsOfficeList = CustomsOfficeList(customsOffices)
-
-      val officeIds = Seq("GB5", "GB3")
-
-      val expectedOffices = Seq(
-        CustomsOffice("GB1", "one", Some("phoneNumber")),
-        CustomsOffice("GB2", "two", None),
-        CustomsOffice("GB4", "four", Some("phoneNumber"))
-      )
-
-      customsOfficeList.filterNot(officeIds) must contain theSameElementsAs expectedOffices
-
-    }
-
-    "return the full list of customs offices when there are no offices with matching id" in {
-      val customsOffices = Seq(
-        CustomsOffice("GB1", "one", Some("phoneNumber")),
-        CustomsOffice("GB2", "two", None),
-        CustomsOffice("GB3", "three", None),
-        CustomsOffice("GB4", "four", Some("phoneNumber")),
-        CustomsOffice("GB5", "five", None)
-      )
-
-      val customsOfficeList = CustomsOfficeList(customsOffices)
-
-      val officeIds = Seq("13")
-
-      customsOfficeList.filterNot(officeIds) must contain theSameElementsAs customsOffices
-
-    }
-
   }
 
 }
