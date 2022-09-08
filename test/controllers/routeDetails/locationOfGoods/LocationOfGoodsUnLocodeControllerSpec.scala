@@ -22,6 +22,7 @@ import generators.Generators
 import models.{NormalMode, UnLocodeList}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
+import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.routeDetails.locationOfGoods.LocationOfGoodsUnLocodePage
@@ -50,7 +51,7 @@ class LocationOfGoodsUnLocodeControllerSpec extends SpecBase with AppWithDefault
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[LocationOfGoodsNavigatorProvider]).toInstance(fakeLocationOfGoodsNavigatorProvider))
       .overrides(bind(classOf[UnLocodesService]).toInstance(mockUnLocodesService))
 
   "LocationOfGoodsUnLocode Controller" - {
