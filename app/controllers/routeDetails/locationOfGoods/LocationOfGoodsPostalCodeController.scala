@@ -18,7 +18,7 @@ package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.{EoriNumberFormProvider, LocationOfGoodsAddressFormProvider}
+import forms.{EoriNumberFormProvider, LocationOfGoodsAddressFormProvider, LocationOfGoodsPostalCodeFormProvider}
 import models.requests.SpecificDataRequestProvider1
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
@@ -38,7 +38,7 @@ class LocationOfGoodsPostalCodeController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LocationOfGoodsNavigatorProvider,
   actions: Actions,
-  formProvider: LocationOfGoodsAddressFormProvider,
+  formProvider: LocationOfGoodsPostalCodeFormProvider,
   countriesService: CountriesService,
   val controllerComponents: MessagesControllerComponents,
   view: LocationOfGoodsPostalCodeView
@@ -46,15 +46,13 @@ class LocationOfGoodsPostalCodeController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private type Request = SpecificDataRequestProvider1[String]#SpecificDataRequest[_]
-
   private val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsPostalCode"
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
     .async {
       implicit request =>
-        countriesService.getTransitCountries.map {
+        countriesService.getAddressPostcodeBasedCountries.map {
           countryList =>
             val form = formProvider(prefix, countryList)
             val preparedForm = request.userAnswers.get(LocationOfGoodsPostalCodePage) match {
@@ -70,7 +68,7 @@ class LocationOfGoodsPostalCodeController @Inject() (
     .requireData(lrn)
     .async {
       implicit request =>
-        countriesService.getTransitCountries().flatMap {
+        countriesService.getAddressPostcodeBasedCountries.flatMap {
           countryList =>
             val form = formProvider(prefix, countryList)
             form

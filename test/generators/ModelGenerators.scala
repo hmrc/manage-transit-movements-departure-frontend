@@ -212,6 +212,15 @@ trait ModelGenerators {
       } yield Address(addressLine1, addressLine2, postalCode, country)
     }
 
+  implicit lazy val arbitraryPostalCodeAddress: Arbitrary[PostalCodeAddress] =
+    Arbitrary {
+      for {
+        addressLine1 <- stringsWithMaxLength(AddressLine1.streetNumberLength, Gen.alphaNumChar)
+        postalCode   <- stringsWithMaxLength(PostalCode.length, Gen.alphaNumChar)
+        country      <- arbitrary[Country]
+      } yield PostalCodeAddress(addressLine1, postalCode, country)
+    }
+
   implicit lazy val arbitraryMode: Arbitrary[Mode] = Arbitrary {
     Gen.oneOf(NormalMode, CheckMode)
   }

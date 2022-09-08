@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.locationOfGoods
+package models
 
-import pages.behaviours.PageBehaviours
-import models.PostalCodeAddress
+import models.reference.Country
+import play.api.libs.json.{Json, OFormat}
 
-class LocationOfGoodsPostalCodePageSpec extends PageBehaviours {
+case class PostalCodeAddress(
+  line1: String,
+  postalCode: String,
+  country: Country
+)
 
-  "LocationOfGoodsPostalCodePage" - {
-
-    beRetrievable[PostalCodeAddress](LocationOfGoodsPostalCodePage)
-
-    beSettable[PostalCodeAddress](LocationOfGoodsPostalCodePage)
-
-    beRemovable[PostalCodeAddress](LocationOfGoodsPostalCodePage)
-  }
+object PostalCodeAddress {
+  implicit val format: OFormat[PostalCodeAddress] = Json.format[PostalCodeAddress]
 }

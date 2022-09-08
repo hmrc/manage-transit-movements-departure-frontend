@@ -16,27 +16,24 @@
 
 package views.routeDetails.locationOfGoods
 
-import forms.LocationOfGoodsAddressFormProvider
+import forms.LocationOfGoodsPostalCodeFormProvider
 import generators.Generators
-import models.{Address, CountryList, NormalMode}
+import models.{CountryList, NormalMode, PostalCodeAddress}
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.AddressViewBehaviours
+import views.behaviours.PostalCodeAddressViewBehaviours
 import views.html.routeDetails.locationOfGoods.LocationOfGoodsPostalCodeView
 
-class LocationOfGoodsPostalCodeViewSpec extends AddressViewBehaviours with Generators {
-
-  private val addressHolderName = Gen.alphaNumStr.sample.value
+class LocationOfGoodsPostalCodeViewSpec extends PostalCodeAddressViewBehaviours with Generators {
 
   private val countryList = arbitrary[CountryList].sample.value
 
   override val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsPostalCode"
 
-  override def form: Form[Address] = new LocationOfGoodsAddressFormProvider()(prefix, countryList)
+  override def form: Form[PostalCodeAddress] = new LocationOfGoodsPostalCodeFormProvider()(prefix, countryList)
 
-  override def applyView(form: Form[Address]): HtmlFormat.Appendable =
+  def applyView(form: Form[PostalCodeAddress]): HtmlFormat.Appendable =
     injector.instanceOf[LocationOfGoodsPostalCodeView].apply(form, lrn, NormalMode, countryList.countries)(fakeRequest, messages)
 
   behave like pageWithTitle()

@@ -17,18 +17,18 @@
 @import controllers.routeDetails.locationOfGoods.routes
 @import models.LocalReferenceNumber
 @import models.reference.Country
-@import views.html.components.{Button, ErrorSummary, InputAddress}
+@import views.html.components.{Button, ErrorSummary, InputPostalCodeAddress}
 
 @this(
 mainTemplate: MainTemplate,
 formHelper: FormWithCSRF,
-inputAddress: InputAddress,
+inputPostalCodeAddress: InputPostalCodeAddress,
 errorSummary: ErrorSummary,
 button: Button
 )
 
 @(
-form: Form[Address],
+form: Form[PostalCodeAddress],
 lrn: LocalReferenceNumber,
 mode: Mode,
 countries: Seq[Country]
@@ -44,9 +44,9 @@ lrn = Some(lrn)
 
 @errorSummary(form.errors)
 
-@inputAddress(
+@inputPostalCodeAddress(
 form = form,
-messageKeyPrefix = "routeDetails.locationOfGoods.locationOfGoodsAddress",
+messageKeyPrefix = "routeDetails.locationOfGoods.locationOfGoodsPostalCode",
 caption = Some(messages("routeDetails.caption")),
 countries = countries
 )

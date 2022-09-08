@@ -21,6 +21,8 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain._
+import models.reference.CustomsOffice
+import models.{Address, LocationOfGoodsIdentification, LocationType, PostalCodeAddress}
 import models.reference.{CustomsOffice, UnLocode}
 import models.{Address, LocationOfGoodsIdentification, LocationType}
 import models.{Coordinates, LocationOfGoodsIdentification, LocationType}
@@ -150,6 +152,26 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           val expectedResult = LocationOfGoodsU(
             typeOfLocation = typeOfLocation,
             unLocode = unLocode
+          )
+
+          val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
+
+          result.value mustBe expectedResult
+          result.value.qualifierOfIdentification mustBe qualifierOfIdentification
+        }
+
+        "is T (PostalCode)" in {
+          val qualifierOfIdentification = LocationOfGoodsIdentification.PostalCode
+          val postalCodeAddress         = arbitrary[PostalCodeAddress].sample.value
+
+          val userAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsTypePage, typeOfLocation)
+            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+            .setValue(LocationOfGoodsPostalCodePage, postalCodeAddress)
+
+          val expectedResult = LocationOfGoodsT(
+            typeOfLocation = typeOfLocation,
+            postalCodeAddress = postalCodeAddress
           )
 
           val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)

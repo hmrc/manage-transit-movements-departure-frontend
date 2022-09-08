@@ -17,16 +17,13 @@
 package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.LocationOfGoodsAddressFormProvider
+import forms.LocationOfGoodsPostalCodeFormProvider
 import generators.Generators
-import models.{Address, CountryList, NormalMode, UserAnswers}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import models.{CountryList, NormalMode, PostalCodeAddress, UserAnswers}
+import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
-import pages.routeDetails.locationOfGoods.LocationOfGoodsPostalCodePage
 import pages.routeDetails.locationOfGoods.LocationOfGoodsPostalCodePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -39,12 +36,10 @@ import scala.concurrent.Future
 
 class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private val addressHolderName = Gen.alphaNumStr.sample.value
-
-  private val testAddress = arbitrary[Address].sample.value
+  private val testAddress = arbitrary[PostalCodeAddress].sample.value
   private val countryList = CountryList(Seq(testAddress.country))
 
-  private val formProvider = new LocationOfGoodsAddressFormProvider()
+  private val formProvider = new LocationOfGoodsPostalCodeFormProvider()
   private val form         = formProvider("routeDetails.locationOfGoods.locationOfGoodsPostalCode", countryList)
 
   private val mode                                = NormalMode
@@ -60,14 +55,14 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[LocationOfGoodsNavigatorProvider]).toInstance(fakeLocationOfGoodsNavigatorProvider))
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "LocationOfGoodsPostalCode Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      when(mockCountriesService.getTransitCountries()(any())).thenReturn(Future.successful(countryList))
+      when(mockCountriesService.getAddressPostcodeBasedCountries()(any())).thenReturn(Future.successful(countryList))
 
       setExistingUserAnswers(emptyUserAnswers)
 
@@ -84,7 +79,7 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      when(mockCountriesService.getTransitCountries()(any())).thenReturn(Future.successful(countryList))
+      when(mockCountriesService.getAddressPostcodeBasedCountries()(any())).thenReturn(Future.successful(countryList))
 
       val userAnswers = UserAnswers(lrn, eoriNumber)
         .setValue(LocationOfGoodsPostalCodePage, testAddress)
@@ -98,7 +93,6 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
       val filledForm = form.bind(
         Map(
           "addressLine1" -> testAddress.line1,
-          "addressLine2" -> testAddress.line2,
           "postalCode"   -> testAddress.postalCode,
           "country"      -> testAddress.country.code.code
         )
@@ -114,7 +108,7 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
 
     "must redirect to the next page when valid data is submitted" in {
 
-      when(mockCountriesService.getTransitCountries()(any())).thenReturn(Future.successful(countryList))
+      when(mockCountriesService.getAddressPostcodeBasedCountries()(any())).thenReturn(Future.successful(countryList))
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(emptyUserAnswers)
@@ -122,7 +116,6 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
       val request = FakeRequest(POST, locationOfGoodsPostalCodeRoute)
         .withFormUrlEncodedBody(
           ("addressLine1", testAddress.line1),
-          ("addressLine2", testAddress.line2),
           ("postalCode", testAddress.postalCode),
           ("country", testAddress.country.code.code)
         )
@@ -136,7 +129,7 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      when(mockCountriesService.getTransitCountries()(any())).thenReturn(Future.successful(countryList))
+      when(mockCountriesService.getAddressPostcodeBasedCountries()(any())).thenReturn(Future.successful(countryList))
 
       setExistingUserAnswers(emptyUserAnswers)
 
@@ -173,7 +166,6 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
       val request = FakeRequest(POST, locationOfGoodsPostalCodeRoute)
         .withFormUrlEncodedBody(
           ("addressLine1", testAddress.line1),
-          ("addressLine2", testAddress.line2),
           ("postalCode", testAddress.postalCode),
           ("country", testAddress.country.code.code)
         )
