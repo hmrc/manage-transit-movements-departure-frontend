@@ -19,6 +19,7 @@ package models.journeyDomain.routeDetails.locationOfGoods
 import cats.implicits._
 import models.domain._
 import models.journeyDomain.JourneyDomainModel
+import pages.routeDetails.locationOfGoods.LocationOfGoodsContactNamePage
 
 case class AdditionalContactDomain(
   name: String,
@@ -29,7 +30,7 @@ object AdditionalContactDomain {
 
   implicit val userAnswersReader: UserAnswersReader[AdditionalContactDomain] =
     (
-      UserAnswersReader(""), // TODO: Update with contact name page reader when built
+      LocationOfGoodsContactNamePage.reader,
       UserAnswersReader("") // TODO: Update with contact phoneNumber page reader when built
     ).tupled.map((AdditionalContactDomain.apply _).tupled)
 }

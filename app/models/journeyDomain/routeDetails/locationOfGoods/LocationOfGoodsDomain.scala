@@ -87,7 +87,7 @@ object LocationOfGoodsDomain {
       (
         UserAnswersReader(typeOfLocation),
         LocationOfGoodsEoriPage.reader,
-        LocationOfGoodsAddIdentifierPage.filterOptionalDependent(identity)(AdditionalIdentifierPage.reader),
+        LocationOfGoodsAddIdentifierYesNoPage.filterOptionalDependent(identity)(AdditionalIdentifierPage.reader),
         AddContactYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
       ).mapN {
         (typeOfLocation, identificationNumber, additionalIdentifier, additionalContact) =>
@@ -111,7 +111,7 @@ object LocationOfGoodsDomain {
       (
         UserAnswersReader(typeOfLocation),
         LocationOfGoodsAuthorisationNumberPage.reader,
-        LocationOfGoodsAddIdentifierPage.filterOptionalDependent(identity)(AdditionalIdentifierPage.reader),
+        LocationOfGoodsAddIdentifierYesNoPage.filterOptionalDependent(identity)(AdditionalIdentifierPage.reader),
         AddContactYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
       ).mapN {
         (typeOfLocation, authorisationNumber, additionalIdentifier, additionalContact) =>
