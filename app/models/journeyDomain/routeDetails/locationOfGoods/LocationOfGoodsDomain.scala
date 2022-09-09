@@ -86,7 +86,7 @@ object LocationOfGoodsDomain {
       (
         UserAnswersReader(typeOfLocation),
         LocationOfGoodsEoriPage.reader,
-        LocationOfGoodsAddIdentifierPage.filterOptionalDependent(identity)(UserAnswersReader(""))
+        LocationOfGoodsAddIdentifierPage.filterOptionalDependent(identity)(AdditionalIdentifierPage.reader)
       ).mapN {
         (typeOfLocation, identificationNumber, additionalIdentifier) =>
           LocationOfGoodsX(typeOfLocation, identificationNumber, additionalIdentifier)
@@ -108,7 +108,7 @@ object LocationOfGoodsDomain {
       (
         UserAnswersReader(typeOfLocation),
         LocationOfGoodsAuthorisationNumberPage.reader,
-        LocationOfGoodsAddIdentifierPage.filterOptionalDependent(identity)(UserAnswersReader(""))
+        LocationOfGoodsAddIdentifierPage.filterOptionalDependent(identity)(AdditionalIdentifierPage.reader)
       ).mapN {
         (typeOfLocation, authorisationNumber, additionalIdentifier) =>
           LocationOfGoodsY(typeOfLocation, authorisationNumber, additionalIdentifier)
