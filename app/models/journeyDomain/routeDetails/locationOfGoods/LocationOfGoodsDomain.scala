@@ -18,10 +18,10 @@ package models.journeyDomain.routeDetails.locationOfGoods
 
 import cats.implicits._
 import models.LocationOfGoodsIdentification._
-import models.domain.{GettableAsReaderOps, UserAnswersReader}
+import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{CustomsOffice, UnLocode}
-import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, UserAnswers}
+import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, PostalCodeAddress, UserAnswers}
 import pages.routeDetails.locationOfGoods._
 import play.api.mvc.Call
 
@@ -47,7 +47,7 @@ object LocationOfGoodsDomain {
           case UnlocodeIdentifier      => LocationOfGoodsU.userAnswersReader(typeOfLocation)
           case CoordinatesIdentifier   => LocationOfGoodsW.userAnswersReader(typeOfLocation)
           case AddressIdentifier       => LocationOfGoodsZ.userAnswersReader(typeOfLocation)
-          case PostalCode              => ???
+          case PostalCode              => LocationOfGoodsT.userAnswersReader(typeOfLocation)
         }
     }
 
@@ -73,7 +73,8 @@ object LocationOfGoodsDomain {
 
   case class LocationOfGoodsX(
     typeOfLocation: LocationType,
-    identificationNumber: String
+    identificationNumber: String,
+    additionalIdentifier: Option[String]
   ) extends LocationOfGoodsDomain {
 
     override val qualifierOfIdentification: LocationOfGoodsIdentification = EoriNumber
@@ -85,16 +86,17 @@ object LocationOfGoodsDomain {
       (
         UserAnswersReader(typeOfLocation),
         LocationOfGoodsEoriPage.reader,
-        AdditionalIdentifierPage.reader
+        LocationOfGoodsAddIdentifierPage.filterOptionalDependent(identity)(AdditionalIdentifierPage.reader)
       ).mapN {
-        (typeOfLocation, identificationNumber) =>
-          LocationOfGoodsX(typeOfLocation, identificationNumber)
+        (typeOfLocation, identificationNumber, additionalIdentifier) =>
+          LocationOfGoodsX(typeOfLocation, identificationNumber, additionalIdentifier)
       }
   }
 
   case class LocationOfGoodsY(
     typeOfLocation: LocationType,
-    authorisationNumber: String
+    authorisationNumber: String,
+    additionalIdentifier: Option[String]
   ) extends LocationOfGoodsDomain {
 
     override val qualifierOfIdentification: LocationOfGoodsIdentification = AuthorisationNumber
@@ -105,10 +107,11 @@ object LocationOfGoodsDomain {
     def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
       (
         UserAnswersReader(typeOfLocation),
-        LocationOfGoodsAuthorisationNumberPage.reader
+        LocationOfGoodsAuthorisationNumberPage.reader,
+        LocationOfGoodsAddIdentifierPage.filterOptionalDependent(identity)(AdditionalIdentifierPage.reader)
       ).mapN {
-        (typeOfLocation, authorisationNumber) =>
-          LocationOfGoodsY(typeOfLocation, authorisationNumber)
+        (typeOfLocation, authorisationNumber, additionalIdentifier) =>
+          LocationOfGoodsY(typeOfLocation, authorisationNumber, additionalIdentifier)
       }
   }
 
@@ -169,6 +172,26 @@ object LocationOfGoodsDomain {
       ).mapN {
         (typeOfLocation, unLocode) =>
           LocationOfGoodsU(typeOfLocation, unLocode)
+      }
+  }
+
+  case class LocationOfGoodsT(
+    typeOfLocation: LocationType,
+    postalCodeAddress: PostalCodeAddress
+  ) extends LocationOfGoodsDomain {
+
+    override val qualifierOfIdentification: LocationOfGoodsIdentification = PostalCode
+  }
+
+  object LocationOfGoodsT {
+
+    def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
+      (
+        UserAnswersReader(typeOfLocation),
+        LocationOfGoodsPostalCodePage.reader
+      ).mapN {
+        (typeOfLocation, postalCodeAddress) =>
+          LocationOfGoodsT(typeOfLocation, postalCodeAddress)
       }
   }
 

@@ -17,18 +17,18 @@
 package pages.routeDetails.locationOfGoods
 
 import controllers.routeDetails.locationOfGoods.routes
-import models.{Address, Mode, UserAnswers}
+import models.{Mode, PostalCodeAddress, UserAnswers}
 import pages.QuestionPage
 import pages.sections.routeDetails.LocationOfGoodsSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object LocationOfGoodsAddressPage extends QuestionPage[Address] {
+case object LocationOfGoodsPostalCodePage extends QuestionPage[PostalCodeAddress] {
 
   override def path: JsPath = LocationOfGoodsSection.path \ toString
 
-  override def toString: String = "address"
+  override def toString: String = "postalCode"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.LocationOfGoodsAddressController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.LocationOfGoodsPostalCodeController.onPageLoad(userAnswers.lrn, mode))
 }

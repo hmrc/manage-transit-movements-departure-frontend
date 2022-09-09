@@ -22,8 +22,7 @@ import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain._
 import models.reference.{CustomsOffice, UnLocode}
-import models.{Address, LocationOfGoodsIdentification, LocationType}
-import models.{Coordinates, LocationOfGoodsIdentification, LocationType}
+import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, PostalCodeAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.routeDetails.locationOfGoods._
@@ -78,7 +77,7 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           result.value.qualifierOfIdentification mustBe qualifierOfIdentification
         }
 
-        "is X (EORI number)" in {
+        "is X (EORI number) and LocationOfGoodsAddIdentifierPage is answered No" in {
           val qualifierOfIdentification = LocationOfGoodsIdentification.EoriNumber
           val eoriNumber                = Gen.alphaNumStr.sample.value
 
@@ -86,10 +85,12 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
             .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
             .setValue(LocationOfGoodsEoriPage, eoriNumber)
+            .setValue(LocationOfGoodsAddIdentifierPage, false)
 
           val expectedResult = LocationOfGoodsX(
             typeOfLocation = typeOfLocation,
-            identificationNumber = eoriNumber
+            identificationNumber = eoriNumber,
+            additionalIdentifier = None
           )
 
           val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
@@ -98,7 +99,30 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           result.value.qualifierOfIdentification mustBe qualifierOfIdentification
         }
 
-        "is Y (Authorisation number)" in {
+        "is X (EORI number) and LocationOfGoodsAddIdentifierPage is answered Yes" in {
+          val qualifierOfIdentification = LocationOfGoodsIdentification.EoriNumber
+          val eoriNumber                = Gen.alphaNumStr.sample.value
+
+          val userAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsTypePage, typeOfLocation)
+            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+            .setValue(LocationOfGoodsEoriPage, eoriNumber)
+            .setValue(LocationOfGoodsAddIdentifierPage, true)
+            .setValue(AdditionalIdentifierPage, "1234")
+
+          val expectedResult = LocationOfGoodsX(
+            typeOfLocation = typeOfLocation,
+            identificationNumber = eoriNumber,
+            additionalIdentifier = Some("1234")
+          )
+
+          val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
+
+          result.value mustBe expectedResult
+          result.value.qualifierOfIdentification mustBe qualifierOfIdentification
+        }
+
+        "is Y (Authorisation number) and LocationOfGoodsAddIdentifierPage is answered No" in {
           val qualifierOfIdentification = LocationOfGoodsIdentification.AuthorisationNumber
           val authorisationNumber       = Gen.alphaNumStr.sample.value
 
@@ -106,10 +130,35 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
             .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
             .setValue(LocationOfGoodsAuthorisationNumberPage, authorisationNumber)
+            .setValue(LocationOfGoodsAddIdentifierPage, false)
 
           val expectedResult = LocationOfGoodsY(
             typeOfLocation = typeOfLocation,
-            authorisationNumber = authorisationNumber
+            authorisationNumber = authorisationNumber,
+            additionalIdentifier = None
+          )
+
+          val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
+
+          result.value mustBe expectedResult
+          result.value.qualifierOfIdentification mustBe qualifierOfIdentification
+        }
+
+        "is Y (Authorisation number) and LocationOfGoodsAddIdentifierPage is answered Yes" in {
+          val qualifierOfIdentification = LocationOfGoodsIdentification.AuthorisationNumber
+          val authorisationNumber       = Gen.alphaNumStr.sample.value
+
+          val userAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsTypePage, typeOfLocation)
+            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+            .setValue(LocationOfGoodsAuthorisationNumberPage, authorisationNumber)
+            .setValue(LocationOfGoodsAddIdentifierPage, true)
+            .setValue(AdditionalIdentifierPage, "1234")
+
+          val expectedResult = LocationOfGoodsY(
+            typeOfLocation = typeOfLocation,
+            authorisationNumber = authorisationNumber,
+            additionalIdentifier = Some("1234")
           )
 
           val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
@@ -150,6 +199,26 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           val expectedResult = LocationOfGoodsU(
             typeOfLocation = typeOfLocation,
             unLocode = unLocode
+          )
+
+          val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
+
+          result.value mustBe expectedResult
+          result.value.qualifierOfIdentification mustBe qualifierOfIdentification
+        }
+
+        "is T (PostalCode)" in {
+          val qualifierOfIdentification = LocationOfGoodsIdentification.PostalCode
+          val postalCodeAddress         = arbitrary[PostalCodeAddress].sample.value
+
+          val userAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsTypePage, typeOfLocation)
+            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+            .setValue(LocationOfGoodsPostalCodePage, postalCodeAddress)
+
+          val expectedResult = LocationOfGoodsT(
+            typeOfLocation = typeOfLocation,
+            postalCodeAddress = postalCodeAddress
           )
 
           val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)

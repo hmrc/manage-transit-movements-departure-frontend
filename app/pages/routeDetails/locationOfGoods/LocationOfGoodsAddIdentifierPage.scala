@@ -17,18 +17,18 @@
 package pages.routeDetails.locationOfGoods
 
 import controllers.routeDetails.locationOfGoods.routes
-import models.{Address, Mode, UserAnswers}
+import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.routeDetails.LocationOfGoodsSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object LocationOfGoodsAddressPage extends QuestionPage[Address] {
+case object LocationOfGoodsAddIdentifierPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = LocationOfGoodsSection.path \ toString
 
-  override def toString: String = "address"
+  override def toString: String = "additionalIdentifier"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.LocationOfGoodsAddressController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.LocationOfGoodsAddIdentifierController.onPageLoad(userAnswers.lrn, mode))
 }

@@ -16,22 +16,15 @@
 
 package models
 
-sealed trait LocationType
+import models.reference.Country
+import play.api.libs.json.{Json, OFormat}
 
-object LocationType extends RadioModel[LocationType] {
+case class PostalCodeAddress(
+  streetNumber: String,
+  postalCode: String,
+  country: Country
+)
 
-  override val messageKeyPrefix = "routeDetails.locationOfGoods.locationOfGoodsType"
-
-  case object AuthorisedPlace extends WithName("AuthorisedPlace") with LocationType
-  case object DesignatedLocation extends WithName("DesignatedLocation") with LocationType
-  case object ApprovedPlace extends WithName("ApprovedPlace") with LocationType
-  case object Other extends WithName("Other") with LocationType
-
-  override val values: Seq[LocationType] = Seq(
-    AuthorisedPlace,
-    DesignatedLocation,
-    ApprovedPlace,
-    Other
-  )
-
+object PostalCodeAddress {
+  implicit val format: OFormat[PostalCodeAddress] = Json.format[PostalCodeAddress]
 }
