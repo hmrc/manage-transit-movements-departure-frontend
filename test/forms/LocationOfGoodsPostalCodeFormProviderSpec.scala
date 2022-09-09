@@ -24,91 +24,59 @@ import models.{AddressLine, CountryList}
 import org.scalacheck.Gen
 import play.api.data.FormError
 
-class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
+class LocationOfGoodsPostalCodeFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
   private val prefix = Gen.alphaNumStr.sample.value
-  private val name   = Gen.alphaNumStr.sample.value
 
   private val country   = Country(CountryCode("GB"), "United Kingdom")
   private val countries = CountryList(Seq(country))
 
-  private val requiredKey = s"$prefix.error.required"
-  private val lengthKey   = s"$prefix.error.length"
-  private val invalidKey  = s"$prefix.error.invalid"
+  private val lengthStreetNumberKey   = s"$prefix.error.streetNumber.length"
+  private val requiredStreetNumberKey = s"$prefix.error.streetNumber.required"
+  private val invalidStreetNumberKey  = s"$prefix.error.streetNumber.invalidCharacters"
 
-  private val form = new AddressFormProvider()(prefix, name, countries)
+  private val lengthPostalCodeKey   = s"$prefix.error.postalCode.length"
+  private val requiredPostalCodeKey = s"$prefix.error.postalCode.required"
+  private val invalidPostalCodeKey  = s"$prefix.error.postalCode.invalidCharacters"
 
-  ".addressLine1" - {
+  private val form = new LocationOfGoodsPostalCodeFormProvider()(prefix, countries)
 
-    val fieldName = AddressLine1.field
+  ".streetNumber" - {
+
+    val fieldName = StreetNumber.field
 
     behave like fieldThatBindsValidData(
       form = form,
       fieldName = fieldName,
-      validDataGenerator = stringsWithMaxLength(AddressLine1.length)
+      validDataGenerator = stringsWithMaxLength(StreetNumber.length)
     )
 
     behave like fieldWithMaxLength(
       form = form,
       fieldName = fieldName,
-      maxLength = AddressLine1.length,
-      lengthError = FormError(fieldName, lengthKey, Seq(AddressLine1.arg.capitalize, name, AddressLine1.length))
+      maxLength = StreetNumber.length,
+      lengthError = FormError(fieldName, lengthStreetNumberKey, Seq(StreetNumber.arg.capitalize, StreetNumber.length))
     )
 
     behave like mandatoryTrimmedField(
       form = form,
       fieldName = fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(AddressLine1.arg, name))
+      requiredError = FormError(fieldName, requiredStreetNumberKey, Seq(StreetNumber.arg))
     )
 
     behave like fieldWithInvalidCharacters(
       form = form,
       fieldName = fieldName,
-      error = FormError(fieldName, invalidKey, Seq(AddressLine1.arg.capitalize, name)),
-      length = AddressLine1.length
-    )
-  }
-
-  ".addressLine2" - {
-
-    val fieldName = AddressLine2.field
-
-    behave like fieldThatBindsValidData(
-      form = form,
-      fieldName = fieldName,
-      validDataGenerator = stringsWithMaxLength(AddressLine2.length)
-    )
-
-    behave like fieldWithMaxLength(
-      form = form,
-      fieldName = fieldName,
-      maxLength = AddressLine2.length,
-      lengthError = FormError(fieldName, lengthKey, Seq(AddressLine2.arg.capitalize, name, AddressLine2.length))
-    )
-
-    behave like mandatoryTrimmedField(
-      form = form,
-      fieldName = fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(AddressLine2.arg, name))
-    )
-
-    behave like fieldWithInvalidCharacters(
-      form = form,
-      fieldName = fieldName,
-      error = FormError(fieldName, invalidKey, Seq(AddressLine2.arg.capitalize, name)),
-      length = AddressLine2.length
+      error = FormError(fieldName, invalidStreetNumberKey, Seq(StreetNumber.arg.capitalize)),
+      length = StreetNumber.length
     )
   }
 
   ".postalCode" - {
 
-    val postcodeInvalidKey    = s"$prefix.error.postalCode.invalid"
-    val postalCodeRequiredKey = s"$prefix.error.postalCode.required"
-    val lengthKey             = s"$prefix.error.postalCode.length"
-
     val fieldName = PostalCode.field
 
-    val invalidPostalOverLength = stringsLongerThan(PostalCode.length + 1)
+    val invalidPostalOverLength: Gen[String] = stringsLongerThan(PostalCode.length + 1)
 
     behave like fieldThatBindsValidData(
       form = form,
@@ -120,20 +88,20 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
       form = form,
       fieldName = fieldName,
       maxLength = PostalCode.length,
-      lengthError = FormError(fieldName, lengthKey, Seq(name, PostalCode.length)),
+      lengthError = FormError(fieldName, lengthPostalCodeKey, Seq(PostalCode.length)),
       gen = invalidPostalOverLength
     )
 
     behave like mandatoryField(
       form = form,
       fieldName = fieldName,
-      requiredError = FormError(fieldName, postalCodeRequiredKey, Seq(name))
+      requiredError = FormError(fieldName, requiredPostalCodeKey, Seq())
     )
 
     behave like fieldWithInvalidCharacters(
       form = form,
       fieldName = fieldName,
-      error = FormError(fieldName, postcodeInvalidKey, Seq(name)),
+      error = FormError(fieldName, invalidPostalCodeKey, Seq()),
       length = PostalCode.length
     )
   }
@@ -155,12 +123,12 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
     behave like mandatoryField(
       form = form,
       fieldName = fieldName,
-      requiredError = FormError(fieldName, countryRequiredKey, Seq(name))
+      requiredError = FormError(fieldName, countryRequiredKey, Seq())
     )
 
     "not bind if country code does not exist in the country list" in {
       val result        = form.bind(Map(fieldName -> "foobar")).apply(fieldName)
-      val expectedError = FormError(fieldName, countryRequiredKey, Seq(name))
+      val expectedError = FormError(fieldName, countryRequiredKey, Seq())
       result.errors must contain(expectedError)
     }
 
