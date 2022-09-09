@@ -18,7 +18,7 @@ package models.journeyDomain.routeDetails.locationOfGoods
 
 import cats.implicits._
 import models.LocationOfGoodsIdentification._
-import models.domain.{GettableAsReaderOps, UserAnswersReader}
+import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{CustomsOffice, UnLocode}
 import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, PostalCodeAddress, UserAnswers}
@@ -73,7 +73,8 @@ object LocationOfGoodsDomain {
 
   case class LocationOfGoodsX(
     typeOfLocation: LocationType,
-    identificationNumber: String
+    identificationNumber: String,
+    additionalIdentifier: Option[String]
   ) extends LocationOfGoodsDomain {
 
     override val qualifierOfIdentification: LocationOfGoodsIdentification = EoriNumber
@@ -84,16 +85,18 @@ object LocationOfGoodsDomain {
     def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
       (
         UserAnswersReader(typeOfLocation),
-        LocationOfGoodsEoriPage.reader
+        LocationOfGoodsEoriPage.reader,
+        LocationOfGoodsAddIdentifierPage.filterOptionalDependent(identity)(UserAnswersReader(""))
       ).mapN {
-        (typeOfLocation, identificationNumber) =>
-          LocationOfGoodsX(typeOfLocation, identificationNumber)
+        (typeOfLocation, identificationNumber, additionalIdentifier) =>
+          LocationOfGoodsX(typeOfLocation, identificationNumber, additionalIdentifier)
       }
   }
 
   case class LocationOfGoodsY(
     typeOfLocation: LocationType,
-    authorisationNumber: String
+    authorisationNumber: String,
+    additionalIdentifier: Option[String]
   ) extends LocationOfGoodsDomain {
 
     override val qualifierOfIdentification: LocationOfGoodsIdentification = AuthorisationNumber
@@ -104,10 +107,11 @@ object LocationOfGoodsDomain {
     def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
       (
         UserAnswersReader(typeOfLocation),
-        LocationOfGoodsAuthorisationNumberPage.reader
+        LocationOfGoodsAuthorisationNumberPage.reader,
+        LocationOfGoodsAddIdentifierPage.filterOptionalDependent(identity)(UserAnswersReader(""))
       ).mapN {
-        (typeOfLocation, authorisationNumber) =>
-          LocationOfGoodsY(typeOfLocation, authorisationNumber)
+        (typeOfLocation, authorisationNumber, additionalIdentifier) =>
+          LocationOfGoodsY(typeOfLocation, authorisationNumber, additionalIdentifier)
       }
   }
 

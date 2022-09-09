@@ -88,10 +88,12 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
             .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
             .setValue(LocationOfGoodsEoriPage, eoriNumber)
+            .setValue(LocationOfGoodsAddIdentifierPage, false)
 
           val expectedResult = LocationOfGoodsX(
             typeOfLocation = typeOfLocation,
-            identificationNumber = eoriNumber
+            identificationNumber = eoriNumber,
+            additionalIdentifier = None
           )
 
           val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
@@ -108,10 +110,12 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
             .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
             .setValue(LocationOfGoodsAuthorisationNumberPage, authorisationNumber)
+            .setValue(LocationOfGoodsAddIdentifierPage, false)
 
           val expectedResult = LocationOfGoodsY(
             typeOfLocation = typeOfLocation,
-            authorisationNumber = authorisationNumber
+            authorisationNumber = authorisationNumber,
+            additionalIdentifier = None
           )
 
           val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
