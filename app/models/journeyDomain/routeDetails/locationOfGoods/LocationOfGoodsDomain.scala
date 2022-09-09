@@ -21,7 +21,7 @@ import models.LocationOfGoodsIdentification._
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{CustomsOffice, UnLocode}
-import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, UserAnswers, PostalCodeAddress}
+import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, PostalCodeAddress, UserAnswers}
 import pages.routeDetails.locationOfGoods._
 import play.api.mvc.Call
 
