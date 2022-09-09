@@ -28,7 +28,7 @@ case object LocationOfGoodsUnLocodePage extends QuestionPage[UnLocode] {
 
   override def path: JsPath = LocationOfGoodsSection.path \ toString
 
-  override def toString: String = "locationOfGoodsUnLocode"
+  override def toString: String = "unLocode"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.LocationOfGoodsUnLocodeController.onPageLoad(userAnswers.lrn, mode))
