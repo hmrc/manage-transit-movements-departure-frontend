@@ -76,10 +76,7 @@ class LocationOfGoodsPostalCodeFormProviderSpec extends StringFieldBehaviours wi
 
     val fieldName = PostalCode.field
 
-    val validPostalOverLength: Gen[String] = for {
-      num  <- Gen.chooseNum[Int](PostalCode.length + 1, PostalCode.length + 5)
-      list <- Gen.listOfN(num, Gen.alphaNumChar)
-    } yield list.mkString("")
+    val invalidPostalOverLength: Gen[String] = stringsLongerThan(PostalCode.length + 1)
 
     behave like fieldThatBindsValidData(
       form = form,
@@ -92,7 +89,7 @@ class LocationOfGoodsPostalCodeFormProviderSpec extends StringFieldBehaviours wi
       fieldName = fieldName,
       maxLength = PostalCode.length,
       lengthError = FormError(fieldName, lengthPostalCodeKey, Seq(PostalCode.length)),
-      gen = validPostalOverLength
+      gen = invalidPostalOverLength
     )
 
     behave like mandatoryField(
