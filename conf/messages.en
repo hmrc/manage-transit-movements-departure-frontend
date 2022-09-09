@@ -838,3 +838,10 @@ routeDetails.locationOfGoods.addContactLocationOfGoods.title = Do you want to ad
 routeDetails.locationOfGoods.addContactLocationOfGoods.heading = Do you want to add a contact for the location of goods?
 routeDetails.locationOfGoods.addContactLocationOfGoods.checkYourAnswersLabel = Do you want to add a contact for the location of goods?
 routeDetails.locationOfGoods.addContactLocationOfGoods.error.required = Select yes if you want to add a contact for the location of goods.
+
+routeDetails.locationOfGoods.locationOfGoodsContactName.title = Who is the contact for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsContactName.heading = Who is the contact for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsContactName.checkYourAnswersLabel = Who is the contact for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsContactName.error.required = Enter the contact for the location of goods
+routeDetails.locationOfGoods.locationOfGoodsContactName.error.invalid = The contact must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+routeDetails.locationOfGoods.locationOfGoodsContactName.error.length = The contact must be 70 characters or less
