@@ -21,8 +21,9 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain._
-import models.reference.CustomsOffice
+import models.reference.{CustomsOffice, UnLocode}
 import models.{Address, LocationOfGoodsIdentification, LocationType}
+import models.{Coordinates, LocationOfGoodsIdentification, LocationType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.routeDetails.locationOfGoods._
@@ -49,6 +50,26 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           val expectedResult = LocationOfGoodsV(
             typeOfLocation = typeOfLocation,
             customsOffice = customsOffice
+          )
+
+          val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
+
+          result.value mustBe expectedResult
+          result.value.qualifierOfIdentification mustBe qualifierOfIdentification
+        }
+
+        "is W (Coordinate identifier)" in {
+          val qualifierOfIdentification = LocationOfGoodsIdentification.CoordinatesIdentifier
+          val coordinate                = arbitrary[Coordinates].sample.value
+
+          val userAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsTypePage, typeOfLocation)
+            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+            .setValue(LocationOfGoodsCoordinatesPage, coordinate)
+
+          val expectedResult = LocationOfGoodsW(
+            typeOfLocation = typeOfLocation,
+            coordinates = coordinate
           )
 
           val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
@@ -109,6 +130,26 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           val expectedResult = LocationOfGoodsZ(
             typeOfLocation = typeOfLocation,
             address = address
+          )
+
+          val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
+
+          result.value mustBe expectedResult
+          result.value.qualifierOfIdentification mustBe qualifierOfIdentification
+        }
+
+        "is U (UnLocode)" in {
+          val qualifierOfIdentification = LocationOfGoodsIdentification.UnlocodeIdentifier
+          val unLocode                  = arbitrary[UnLocode].sample.value
+
+          val userAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsTypePage, typeOfLocation)
+            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+            .setValue(LocationOfGoodsUnLocodePage, unLocode)
+
+          val expectedResult = LocationOfGoodsU(
+            typeOfLocation = typeOfLocation,
+            unLocode = unLocode
           )
 
           val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)

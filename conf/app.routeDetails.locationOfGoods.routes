@@ -29,6 +29,11 @@ POST       /:lrn/route-details/location-of-goods/location-of-goods-authorisation
 GET        /:lrn/route-details/location-of-goods/change-location-of-goods-authorisation-number              controllers.routeDetails.locationOfGoods.LocationOfGoodsAuthorisationNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/route-details/location-of-goods/change-location-of-goods-authorisation-number              controllers.routeDetails.locationOfGoods.LocationOfGoodsAuthorisationNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
+GET        /:lrn/route-details/location-of-goods/location-of-goods-coordinates                              controllers.routeDetails.locationOfGoods.LocationOfGoodsCoordinatesController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/location-of-goods/location-of-goods-coordinates                              controllers.routeDetails.locationOfGoods.LocationOfGoodsCoordinatesController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/location-of-goods/change-location-of-goods-coordinates                       controllers.routeDetails.locationOfGoods.LocationOfGoodsCoordinatesController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/location-of-goods/change-location-of-goods-coordinates                       controllers.routeDetails.locationOfGoods.LocationOfGoodsCoordinatesController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
 GET        /:lrn/route-details/location-of-goods/location-of-goods-address                                  controllers.routeDetails.locationOfGoods.LocationOfGoodsAddressController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/route-details/location-of-goods/location-of-goods-address                                  controllers.routeDetails.locationOfGoods.LocationOfGoodsAddressController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/route-details/location-of-goods/change-location-of-goods-address                           controllers.routeDetails.locationOfGoods.LocationOfGoodsAddressController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
@@ -38,3 +43,8 @@ GET        /:lrn/route-details/location-of-goods/location-of-goods-additional-id
 POST       /:lrn/route-details/location-of-goods/location-of-goods-additional-identifier                    controllers.routeDetails.locationOfGoods.AdditionalIdentifierController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/route-details/location-of-goods/location-of-goods-change-additional-identifier             controllers.routeDetails.locationOfGoods.AdditionalIdentifierController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/route-details/location-of-goods/location-of-goods-change-additional-identifier             controllers.routeDetails.locationOfGoods.AdditionalIdentifierController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/route-details/location-of-goods/location-of-goods-un-locode                                controllers.routeDetails.locationOfGoods.LocationOfGoodsUnLocodeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/location-of-goods/location-of-goods-un-locode                                controllers.routeDetails.locationOfGoods.LocationOfGoodsUnLocodeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/location-of-goods/change-location-of-goods-un-locode                         controllers.routeDetails.locationOfGoods.LocationOfGoodsUnLocodeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/location-of-goods/change-location-of-goods-un-locode                         controllers.routeDetails.locationOfGoods.LocationOfGoodsUnLocodeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
