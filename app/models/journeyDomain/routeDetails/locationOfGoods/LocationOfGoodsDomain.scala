@@ -18,7 +18,7 @@ package models.journeyDomain.routeDetails.locationOfGoods
 
 import cats.implicits._
 import models.LocationOfGoodsIdentification._
-import models.domain.{GettableAsReaderOps, UserAnswersReader}
+import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{CustomsOffice, UnLocode}
 import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, PostalCodeAddress, UserAnswers}
@@ -74,7 +74,7 @@ object LocationOfGoodsDomain {
   case class LocationOfGoodsX(
     typeOfLocation: LocationType,
     identificationNumber: String,
-    addIdentifier: Boolean
+    addIdentifier: Option[String]
   ) extends LocationOfGoodsDomain {
 
     override val qualifierOfIdentification: LocationOfGoodsIdentification = EoriNumber
@@ -86,7 +86,7 @@ object LocationOfGoodsDomain {
       (
         UserAnswersReader(typeOfLocation),
         LocationOfGoodsEoriPage.reader,
-        LocationOfGoodsAddIdentifierPage.reader
+        LocationOfGoodsAddIdentifierPage.filterOptionalDependent(identity)(UserAnswersReader(""))
       ).mapN {
         (typeOfLocation, identificationNumber, addIdentifier) =>
           LocationOfGoodsX(typeOfLocation, identificationNumber, addIdentifier)
@@ -96,7 +96,7 @@ object LocationOfGoodsDomain {
   case class LocationOfGoodsY(
     typeOfLocation: LocationType,
     authorisationNumber: String,
-    addIdentifier: Boolean
+    addIdentifier: Option[String]
   ) extends LocationOfGoodsDomain {
 
     override val qualifierOfIdentification: LocationOfGoodsIdentification = AuthorisationNumber
@@ -108,7 +108,7 @@ object LocationOfGoodsDomain {
       (
         UserAnswersReader(typeOfLocation),
         LocationOfGoodsAuthorisationNumberPage.reader,
-        LocationOfGoodsAddIdentifierPage.reader
+        LocationOfGoodsAddIdentifierPage.filterOptionalDependent(identity)(UserAnswersReader(""))
       ).mapN {
         (typeOfLocation, authorisationNumber, addIdentifier) =>
           LocationOfGoodsY(typeOfLocation, authorisationNumber, addIdentifier)
