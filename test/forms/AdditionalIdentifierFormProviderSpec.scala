@@ -16,16 +16,19 @@
 
 package forms
 
+import forms.Constants.addiationalIdentifierMaxLength
 import forms.behaviours.StringFieldBehaviours
+import models.domain.StringFieldRegex.alphaNumericRegex
 import org.scalacheck.Gen
 import play.api.data.FormError
 
 class AdditionalIdentifierFormProviderSpec extends StringFieldBehaviours {
 
-  private val prefix = Gen.alphaNumStr.sample.value
-  val requiredKey    = s"$prefix.error.required"
-  val lengthKey      = s"$prefix.error.length"
-  val maxLength      = 4
+  private val prefix     = Gen.alphaNumStr.sample.value
+  val requiredKey        = s"$prefix.error.required"
+  val lengthKey          = s"$prefix.error.length"
+  val maxLength          = 4
+  private val invalidKey = s"$prefix.error.invalid"
 
   val form = new AdditionalIdentifierFormProvider()(prefix)
 
@@ -50,6 +53,13 @@ class AdditionalIdentifierFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
+    )
+
+    behave like fieldWithInvalidCharacters(
+      form,
+      fieldName,
+      error = FormError(fieldName, invalidKey, Seq(alphaNumericRegex.regex)),
+      addiationalIdentifierMaxLength
     )
   }
 }

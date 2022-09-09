@@ -16,15 +16,23 @@
 
 package forms
 
+import forms.Constants.addiationalIdentifierMaxLength
 import forms.mappings.Mappings
-import javax.inject.Inject
+import models.domain.StringFieldRegex.alphaNumericRegex
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class AdditionalIdentifierFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String): Form[String] =
     Form(
       "value" -> text(s"$prefix.error.required")
-        .verifying(maxLength(4, s"$prefix.error.length"))
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(addiationalIdentifierMaxLength, s"$prefix.error.length"),
+            regexp(alphaNumericRegex, s"$prefix.error.invalid")
+          )
+        )
     )
 }

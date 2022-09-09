@@ -84,7 +84,8 @@ object LocationOfGoodsDomain {
     def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
       (
         UserAnswersReader(typeOfLocation),
-        LocationOfGoodsEoriPage.reader
+        LocationOfGoodsEoriPage.reader,
+        AdditionalIdentifierPage.reader
       ).mapN {
         (typeOfLocation, identificationNumber) =>
           LocationOfGoodsX(typeOfLocation, identificationNumber)

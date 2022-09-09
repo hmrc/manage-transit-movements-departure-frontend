@@ -26,5 +26,6 @@ object Constants {
   lazy val maxRefNumberLength: Int                          = 24
   lazy val maxOtherRefLength: Int                           = 35
   lazy val accessCodeLength: Int                            = 4
+  lazy val addiationalIdentifierMaxLength: Int              = 4
   lazy val maxLocationOfGoodsAuthorisationNumberLength: Int = 35
 }
