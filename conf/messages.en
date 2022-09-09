@@ -834,3 +834,7 @@ routeDetails.locationOfGoods.locationOfGoodsUnLocode.error.invalidCharacters = T
 routeDetails.locationOfGoods.locationOfGoodsUnLocode.error.maxLength = The UN/LOCODE must be 5 characters long
 routeDetails.locationOfGoods.locationOfGoodsUnLocode.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
 
+routeDetails.locationOfGoods.addContactLocationOfGoods.title = Do you want to add a contact for the location of goods?
+routeDetails.locationOfGoods.addContactLocationOfGoods.heading = Do you want to add a contact for the location of goods?
+routeDetails.locationOfGoods.addContactLocationOfGoods.checkYourAnswersLabel = Do you want to add a contact for the location of goods?
+routeDetails.locationOfGoods.addContactLocationOfGoods.error.required = Select yes if you want to add a contact for the location of goods.

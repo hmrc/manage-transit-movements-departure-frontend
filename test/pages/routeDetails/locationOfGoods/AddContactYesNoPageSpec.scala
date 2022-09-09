@@ -16,19 +16,16 @@
 
 package pages.routeDetails.locationOfGoods
 
-import controllers.routeDetails.locationOfGoods.routes
-import models.{Mode, UserAnswers}
-import pages.QuestionPage
-import pages.sections.routeDetails.LocationOfGoodsSection
-import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import pages.behaviours.PageBehaviours
 
-case object LocationOfGoodsAddIdentifierPage extends QuestionPage[Boolean] {
+class AddContactYesNoPageSpec extends PageBehaviours {
 
-  override def path: JsPath = LocationOfGoodsSection.path \ toString
+  "AddContactLocationOfGoodsPage" - {
 
-  override def toString: String = "addAdditionalIdentifier"
+    beRetrievable[Boolean](AddContactYesNoPage)
 
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.LocationOfGoodsAddIdentifierController.onPageLoad(userAnswers.lrn, mode))
+    beSettable[Boolean](AddContactYesNoPage)
+
+    beRemovable[Boolean](AddContactYesNoPage)
+  }
 }
