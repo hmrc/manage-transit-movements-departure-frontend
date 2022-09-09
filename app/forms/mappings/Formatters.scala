@@ -261,7 +261,7 @@ trait Formatters {
       data.get(key) match {
         case None => error
         case Some(unLocodeExtendedCode) =>
-          unLocodeList.unLocodes.find(_.unLocodeExtendedCode == unLocodeExtendedCode) match {
+          unLocodeList.getUnLocode(unLocodeExtendedCode) match {
             case Some(unLocode: UnLocode) => Right(unLocode)
             case None                     => error
           }
