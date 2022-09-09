@@ -16,22 +16,22 @@
 
 package models
 
-sealed trait LocationType
+import base.SpecBase
+import generators.Generators
+import models.reference.UnLocode
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-object LocationType extends RadioModel[LocationType] {
+class UnLocodeListSpec extends SpecBase with Generators with ScalaCheckPropertyChecks {
 
-  override val messageKeyPrefix = "routeDetails.locationOfGoods.locationOfGoodsType"
+  "getAll" - {
+    "return the full list of unLocodes" in {
+      forAll(nonEmptyListOf[UnLocode](10)) {
+        unLocodes =>
+          val unLocodeList = UnLocodeList(unLocodes.toList)
 
-  case object AuthorisedPlace extends WithName("AuthorisedPlace") with LocationType
-  case object DesignatedLocation extends WithName("DesignatedLocation") with LocationType
-  case object ApprovedPlace extends WithName("ApprovedPlace") with LocationType
-  case object Other extends WithName("Other") with LocationType
-
-  override val values: Seq[LocationType] = Seq(
-    AuthorisedPlace,
-    DesignatedLocation,
-    ApprovedPlace,
-    Other
-  )
+          unLocodeList.getAll must contain theSameElementsAs unLocodes.toList
+      }
+    }
+  }
 
 }

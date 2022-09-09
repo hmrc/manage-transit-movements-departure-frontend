@@ -14,60 +14,41 @@
  * limitations under the License.
  *@
 
-@import models.Address
-@import models.reference.Country
-@import viewModels.components.InputSelectViewModel._
+@import models.Coordinates
 @import viewModels.components.InputTextViewModel._
-@import views.html.components.{InputSelect, InputText}
+@import views.html.components.InputText
 @import views.utils.ViewUtils._
 
 @this(
     inputText: InputText,
-    inputSelect: InputSelect,
     govukFieldset: GovukFieldset
 )
 
 @(
-    form: Form[Address],
+    form: Form[Coordinates],
     messageKeyPrefix: String,
     caption: Option[String],
-    countries: Seq[Country],
     headingArgs: Any*
 )(implicit messages: Messages)
 
 @html = {
+
+    <p class="govuk-hint">@messages(s"$messageKeyPrefix.hintText")</p>
+
     @inputText(
-        field = form("addressLine1"),
+        field = form("latitude"),
         inputTextType = MultiTextInput(
-            label = messages(s"$messageKeyPrefix.addressLine1")
+            label = messages(s"$messageKeyPrefix.latitude")
         ),
-        autocomplete = Some("address-line1"),
         inputClass = Some("govuk-!-width-two-thirds")
     )
 
     @inputText(
-        field = form("addressLine2"),
+        field = form("longitude"),
         inputTextType = MultiTextInput(
-            label = messages(s"$messageKeyPrefix.addressLine2")
+            label = messages(s"$messageKeyPrefix.longitude")
         ),
-        autocomplete = Some("address-line2"),
         inputClass = Some("govuk-!-width-two-thirds")
-    )
-
-    @inputText(
-        field = form("postalCode"),
-        inputTextType = MultiTextInput(
-            label = messages(s"$messageKeyPrefix.postalCode")
-        ),
-        autocomplete = Some("postal-code"),
-        inputClass = InputSize.Width10
-    )
-
-    @inputSelect(
-        field = form("country"),
-        selectType = AddressCountrySelect(messages(s"$messageKeyPrefix.country")),
-        selectItems = countries.toSelectItems(form.value.map(_.country)),
-        placeholder = messages(s"$messageKeyPrefix.placeholder")
     )
 }
 

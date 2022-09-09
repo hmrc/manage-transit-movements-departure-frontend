@@ -16,22 +16,25 @@
 
 package models
 
-sealed trait LocationType
+import models.reference.UnLocode
 
-object LocationType extends RadioModel[LocationType] {
+case class UnLocodeList(unLocodes: Seq[UnLocode]) {
 
-  override val messageKeyPrefix = "routeDetails.locationOfGoods.locationOfGoodsType"
+  def getAll: Seq[UnLocode] =
+    unLocodes
 
-  case object AuthorisedPlace extends WithName("AuthorisedPlace") with LocationType
-  case object DesignatedLocation extends WithName("DesignatedLocation") with LocationType
-  case object ApprovedPlace extends WithName("ApprovedPlace") with LocationType
-  case object Other extends WithName("Other") with LocationType
+  def getUnLocode(unLocodeExtendedCode: String): Option[UnLocode] =
+    unLocodes.find(_.unLocodeExtendedCode == unLocodeExtendedCode)
 
-  override val values: Seq[LocationType] = Seq(
-    AuthorisedPlace,
-    DesignatedLocation,
-    ApprovedPlace,
-    Other
-  )
+  override def equals(obj: Any): Boolean = obj match {
+    case x: UnLocodeList => x.getAll == getAll
+    case _               => false
+  }
 
+}
+
+object UnLocodeList {
+
+  def apply(unLocodes: Seq[UnLocode]): UnLocodeList =
+    new UnLocodeList(unLocodes)
 }

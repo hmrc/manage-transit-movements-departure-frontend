@@ -203,5 +203,18 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach {
         verify(mockRefDataConnector).getCountryCodesCTC()(any(), any())
       }
     }
+
+    "getAddressPostcodeBasedCountries" - {
+      "must return a list of sorted address postcode based countries" in {
+
+        when(mockRefDataConnector.getAddressPostcodeBasedCountries()(any(), any()))
+          .thenReturn(Future.successful(countries))
+
+        service.getAddressPostcodeBasedCountries().futureValue mustBe
+          CountryList(Seq(country2, country3, country1))
+
+        verify(mockRefDataConnector).getAddressPostcodeBasedCountries()(any(), any())
+      }
+    }
   }
 }

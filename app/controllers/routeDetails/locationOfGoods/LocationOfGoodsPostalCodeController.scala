@@ -18,43 +18,43 @@ package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.LocationOfGoodsAddressFormProvider
+import forms.LocationOfGoodsPostalCodeFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
-import pages.routeDetails.locationOfGoods.LocationOfGoodsAddressPage
+import pages.routeDetails.locationOfGoods.LocationOfGoodsPostalCodePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsAddressView
+import views.html.routeDetails.locationOfGoods.LocationOfGoodsPostalCodeView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LocationOfGoodsAddressController @Inject() (
+class LocationOfGoodsPostalCodeController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LocationOfGoodsNavigatorProvider,
   actions: Actions,
-  formProvider: LocationOfGoodsAddressFormProvider,
+  formProvider: LocationOfGoodsPostalCodeFormProvider,
   countriesService: CountriesService,
   val controllerComponents: MessagesControllerComponents,
-  view: LocationOfGoodsAddressView
+  view: LocationOfGoodsPostalCodeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsAddress"
+  private val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsPostalCode"
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
     .async {
       implicit request =>
-        countriesService.getTransitCountries.map {
+        countriesService.getAddressPostcodeBasedCountries.map {
           countryList =>
             val form = formProvider(prefix, countryList)
-            val preparedForm = request.userAnswers.get(LocationOfGoodsAddressPage) match {
+            val preparedForm = request.userAnswers.get(LocationOfGoodsPostalCodePage) match {
               case None        => form
               case Some(value) => form.fill(value)
             }
@@ -67,7 +67,7 @@ class LocationOfGoodsAddressController @Inject() (
     .requireData(lrn)
     .async {
       implicit request =>
-        countriesService.getTransitCountries().flatMap {
+        countriesService.getAddressPostcodeBasedCountries.flatMap {
           countryList =>
             val form = formProvider(prefix, countryList)
             form
@@ -77,7 +77,7 @@ class LocationOfGoodsAddressController @Inject() (
                 value =>
                   navigatorProvider().flatMap {
                     implicit navigator =>
-                      LocationOfGoodsAddressPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                      LocationOfGoodsPostalCodePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
                   }
               )
 

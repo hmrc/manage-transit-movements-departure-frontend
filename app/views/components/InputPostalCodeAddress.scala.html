@@ -28,7 +28,7 @@
 )
 
 @(
-    form: Form[Address],
+    form: Form[PostalCodeAddress],
     messageKeyPrefix: String,
     caption: Option[String],
     countries: Seq[Country],
@@ -37,20 +37,11 @@
 
 @html = {
     @inputText(
-        field = form("addressLine1"),
+        field = form("streetNumber"),
         inputTextType = MultiTextInput(
-            label = messages(s"$messageKeyPrefix.addressLine1")
+            label = messages(s"$messageKeyPrefix.streetNumber")
         ),
         autocomplete = Some("address-line1"),
-        inputClass = Some("govuk-!-width-two-thirds")
-    )
-
-    @inputText(
-        field = form("addressLine2"),
-        inputTextType = MultiTextInput(
-            label = messages(s"$messageKeyPrefix.addressLine2")
-        ),
-        autocomplete = Some("address-line2"),
         inputClass = Some("govuk-!-width-two-thirds")
     )
 

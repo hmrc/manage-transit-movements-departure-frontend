@@ -16,12 +16,14 @@
 
 package generators
 
-import models.AddressLine.{AddressLine1, AddressLine2, PostalCode}
+import models.AddressLine.{AddressLine1, AddressLine2, PostalCode, StreetNumber}
 import models.GuaranteeType._
 import models._
+import models.domain.StringFieldRegex.{coordinatesLatitudeMaxRegex, coordinatesLongitudeMaxRegex}
 import models.reference._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
+import wolfendale.scalacheck.regexp.RegexpGen
 
 trait ModelGenerators {
   self: Generators =>
@@ -210,6 +212,15 @@ trait ModelGenerators {
       } yield Address(addressLine1, addressLine2, postalCode, country)
     }
 
+  implicit lazy val arbitraryPostalCodeAddress: Arbitrary[PostalCodeAddress] =
+    Arbitrary {
+      for {
+        streetNumber <- stringsWithMaxLength(StreetNumber.length, Gen.alphaNumChar)
+        postalCode   <- stringsWithMaxLength(PostalCode.length, Gen.alphaNumChar)
+        country      <- arbitrary[Country]
+      } yield PostalCodeAddress(streetNumber, postalCode, country)
+    }
+
   implicit lazy val arbitraryMode: Arbitrary[Mode] = Arbitrary {
     Gen.oneOf(NormalMode, CheckMode)
   }
@@ -225,5 +236,21 @@ trait ModelGenerators {
       position <- Gen.choose(0: Int, 10: Int)
     } yield Index(position)
   }
+
+  implicit lazy val arbitraryCoordinates: Arbitrary[Coordinates] =
+    Arbitrary {
+      for {
+        latitude  <- RegexpGen.from(coordinatesLatitudeMaxRegex)
+        longitude <- RegexpGen.from(coordinatesLongitudeMaxRegex)
+      } yield Coordinates(latitude, longitude)
+    }
+
+  implicit lazy val arbitraryUnLocode: Arbitrary[UnLocode] =
+    Arbitrary {
+      for {
+        unLocodeExtendedCode <- nonEmptyString
+        name                 <- nonEmptyString
+      } yield UnLocode(unLocodeExtendedCode, name)
+    }
 
 }
