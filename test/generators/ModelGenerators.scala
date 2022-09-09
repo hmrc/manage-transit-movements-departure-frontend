@@ -226,4 +226,12 @@ trait ModelGenerators {
     } yield Index(position)
   }
 
+  implicit lazy val arbitraryUnLocode: Arbitrary[UnLocode] =
+    Arbitrary {
+      for {
+        unLocodeExtendedCode <- nonEmptyString
+        name                 <- nonEmptyString
+      } yield UnLocode(unLocodeExtendedCode, name)
+    }
+
 }

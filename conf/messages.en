@@ -785,3 +785,14 @@ routeDetails.locationOfGoods.locationOfGoodsAddress.error.postcode.invalidCharac
 routeDetails.locationOfGoods.locationOfGoodsAddress.error.postcode.length = The postal code must be 9 characters or less
 routeDetails.locationOfGoods.locationOfGoodsAddress.error.country.required = Enter the country for the location of goods
 
+
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.title = What is the UN/LOCODE for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.heading = What is the UN/LOCODE for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.hintText = Enter the location or code, like Berlin or DEBER.
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.placeholder = Select a UN/LOCODE.
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.change.hidden = What is the UN/LOCODE for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.checkYourAnswersLabel = UN/LOCODE for the location of goods
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.error.required = Enter the UN/LOCODE for the location of goods
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.error.invalidCharacters = The UN/LOCODE must only include letters a to z numbers 0 to 9
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.error.maxLength = The UN/LOCODE must be 5 characters long
+routeDetails.locationOfGoods.locationOfGoodsUnLocode.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.

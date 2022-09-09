@@ -18,48 +18,48 @@ package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.LocationOfGoodsAddressFormProvider
+import forms.UnLocodeFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
-import pages.routeDetails.locationOfGoods.LocationOfGoodsAddressPage
+import pages.routeDetails.locationOfGoods.LocationOfGoodsUnLocodePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.CountriesService
+import services.UnLocodesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsAddressView
+import views.html.routeDetails.locationOfGoods.LocationOfGoodsUnLocodeView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LocationOfGoodsAddressController @Inject() (
+class LocationOfGoodsUnLocodeController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LocationOfGoodsNavigatorProvider,
   actions: Actions,
-  formProvider: LocationOfGoodsAddressFormProvider,
-  countriesService: CountriesService,
+  formProvider: UnLocodeFormProvider,
+  service: UnLocodesService,
   val controllerComponents: MessagesControllerComponents,
-  view: LocationOfGoodsAddressView
+  view: LocationOfGoodsUnLocodeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
-
-  private val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsAddress"
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
     .async {
       implicit request =>
-        countriesService.getTransitCountries.map {
-          countryList =>
-            val form = formProvider(prefix, countryList)
-            val preparedForm = request.userAnswers.get(LocationOfGoodsAddressPage) match {
-              case None        => form
-              case Some(value) => form.fill(value)
-            }
-
-            Ok(view(preparedForm, lrn, mode, countryList.countries))
+        service.getUnLocodes().map {
+          unLocodeList =>
+            val form = formProvider("routeDetails.locationOfGoods.locationOfGoodsUnLocode", unLocodeList)
+            val preparedForm = request.userAnswers
+              .get(LocationOfGoodsUnLocodePage)
+              .flatMap(
+                x => unLocodeList.getUnLocode(x.unLocodeExtendedCode)
+              )
+              .map(form.fill)
+              .getOrElse(form)
+            Ok(view(preparedForm, lrn, unLocodeList.unLocodes, mode))
         }
     }
 
@@ -67,20 +67,19 @@ class LocationOfGoodsAddressController @Inject() (
     .requireData(lrn)
     .async {
       implicit request =>
-        countriesService.getTransitCountries().flatMap {
-          countryList =>
-            val form = formProvider(prefix, countryList)
+        service.getUnLocodes().flatMap {
+          unLocodeList =>
+            val form = formProvider("routeDetails.locationOfGoods.locationOfGoodsUnLocode", unLocodeList)
             form
               .bindFromRequest()
               .fold(
-                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countryList.countries))),
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, unLocodeList.unLocodes, mode))),
                 value =>
                   navigatorProvider().flatMap {
                     implicit navigator =>
-                      LocationOfGoodsAddressPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                      LocationOfGoodsUnLocodePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
                   }
               )
-
         }
     }
 }
