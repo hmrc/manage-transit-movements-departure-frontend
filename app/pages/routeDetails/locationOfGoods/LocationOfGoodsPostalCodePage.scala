@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-package pages.sections
+package pages.routeDetails.locationOfGoods
 
-import play.api.libs.json.JsPath
+import controllers.routeDetails.locationOfGoods.routes
+import models.{Address, Mode, UserAnswers}
 import pages.QuestionPage
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
-case object LocationOfGoodsSection extends QuestionPage[Nothing] {
+case object LocationOfGoodsPostalCodePage extends QuestionPage[Address] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = LocationOfGoodsSection.path \ toString
 
-  override def toString: String = "locationOfGoodsAddress"
+  override def toString: String = "locationOfGoodsPostalCode"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.LocationOfGoodsPostalCodeController.onPageLoad(userAnswers.lrn, mode))
 }
