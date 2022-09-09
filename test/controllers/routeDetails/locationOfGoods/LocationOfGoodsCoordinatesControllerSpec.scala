@@ -20,8 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.LocationOfGoodsCoordinatesFormProvider
 import generators.Generators
 import models.NormalMode
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import pages.routeDetails.locationOfGoods.LocationOfGoodsCoordinatesPage
@@ -54,7 +53,7 @@ class LocationOfGoodsCoordinatesControllerSpec extends SpecBase with AppWithDefa
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[LocationOfGoodsNavigatorProvider]).toInstance(fakeLocationOfGoodsNavigatorProvider))
 
   "LocationOfGoodsCoordinates Controller" - {
 

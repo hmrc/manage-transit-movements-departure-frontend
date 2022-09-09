@@ -19,13 +19,13 @@ package pages.routeDetails.locationOfGoods
 import controllers.routeDetails.locationOfGoods.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.RouteDetailsSection
+import pages.sections.routeDetails.LocationOfGoodsSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case object AdditionalIdentifierPage extends QuestionPage[String] {
 
-  override def path: JsPath = RouteDetailsSection.path \ toString
+  override def path: JsPath = LocationOfGoodsSection.path \ toString
 
   override def toString: String = "additionalIdentifier"
 

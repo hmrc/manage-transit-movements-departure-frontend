@@ -28,7 +28,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.routeDetails.locationOfGoods.AddContactLocationOfGoodsView
+import views.html.routeDetails.locationOfGoods.AddContactYesNoView
 
 import scala.concurrent.Future
 
@@ -53,7 +53,7 @@ class AddContactYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixt
       val request = FakeRequest(GET, addContactLocationOfGoodsRoute)
       val result  = route(app, request).value
 
-      val view = injector.instanceOf[AddContactLocationOfGoodsView]
+      val view = injector.instanceOf[AddContactYesNoView]
 
       status(result) mustEqual OK
 
@@ -72,7 +72,7 @@ class AddContactYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       val filledForm = form.bind(Map("value" -> "true"))
 
-      val view = injector.instanceOf[AddContactLocationOfGoodsView]
+      val view = injector.instanceOf[AddContactYesNoView]
 
       status(result) mustEqual OK
 
@@ -107,7 +107,7 @@ class AddContactYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[AddContactLocationOfGoodsView]
+      val view = injector.instanceOf[AddContactYesNoView]
 
       contentAsString(result) mustEqual
         view(boundForm, lrn, mode)(request, messages).toString

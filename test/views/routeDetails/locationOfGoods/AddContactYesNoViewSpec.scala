@@ -20,12 +20,12 @@ import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.routeDetails.locationOfGoods.AddContactLocationOfGoodsView
+import views.html.routeDetails.locationOfGoods.AddContactYesNoView
 
-class AddContactLocationOfGoodsViewSpec extends YesNoViewBehaviours {
+class AddContactYesNoViewSpec extends YesNoViewBehaviours {
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[AddContactLocationOfGoodsView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[AddContactYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
   override val prefix: String = "routeDetails.locationOfGoods.addContactLocationOfGoods"
 
