@@ -30,19 +30,19 @@
 @(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.locationOfGoods.locationOfGoodsAddIdentifier.title"),
+    title = messages("routeDetails.locationOfGoods.locationOfGoodsAddIdentifierYesNo.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.LocationOfGoodsAddIdentifierController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.LocationOfGoodsAddIdentifierYesNoController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputYesNo(
             field = form("value"),
             yesNoType = OrdinaryYesNo(
-                heading = messages("routeDetails.locationOfGoods.locationOfGoodsAddIdentifier.heading"),
+                heading = messages("routeDetails.locationOfGoods.locationOfGoodsAddIdentifierYesNo.heading"),
                 caption = Some(messages("routeDetails.caption"))
             )
         )

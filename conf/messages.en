@@ -817,11 +817,10 @@ routeDetails.locationOfGoods.additionalIdentifier.error.required = Enter the add
 routeDetails.locationOfGoods.additionalIdentifier.error.length = The additional identifier must be no more than 4 characters long
 routeDetails.locationOfGoods.additionalIdentifier.error.invalid = The additional identifier must only include the letters a to z and numbers 0 to 9
 
-
-routeDetails.locationOfGoods.locationOfGoodsAddIdentifier.title = Do you want to add another identifier for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsAddIdentifier.heading = Do you want to add another identifier for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsAddIdentifier.checkYourAnswersLabel = Do you want to add another identifier for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsAddIdentifier.error.required = Select yes if you want to add another identifier for the location of goods
+routeDetails.locationOfGoods.locationOfGoodsAddIdentifierYesNo.title = Do you want to add another identifier for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsAddIdentifierYesNo.heading = Do you want to add another identifier for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsAddIdentifierYesNo.checkYourAnswersLabel = Do you want to add another identifier for the location of goods?
+routeDetails.locationOfGoods.locationOfGoodsAddIdentifierYesNo.error.required = Select yes if you want to add another identifier for the location of goods
 
 routeDetails.locationOfGoods.locationOfGoodsUnLocode.title = What is the UN/LOCODE for the location of goods?
 routeDetails.locationOfGoods.locationOfGoodsUnLocode.heading = What is the UN/LOCODE for the location of goods?
