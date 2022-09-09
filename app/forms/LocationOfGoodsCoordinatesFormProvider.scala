@@ -21,13 +21,12 @@ import models.Coordinates
 import models.domain.StringFieldRegex._
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import play.api.i18n.Messages
 
 import javax.inject.Inject
 
 class LocationOfGoodsCoordinatesFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String)(implicit messages: Messages): Form[Coordinates] =
+  def apply(prefix: String): Form[Coordinates] =
     Form(
       mapping(
         "latitude" -> {

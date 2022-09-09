@@ -19,7 +19,6 @@ package controllers.routeDetails.locationOfGoods
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.LocationOfGoodsAddressFormProvider
-import models.requests.SpecificDataRequestProvider1
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import pages.routeDetails.locationOfGoods.LocationOfGoodsAddressPage
@@ -45,8 +44,6 @@ class LocationOfGoodsAddressController @Inject() (
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
-
-  private type Request = SpecificDataRequestProvider1[String]#SpecificDataRequest[_]
 
   private val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsAddress"
 
