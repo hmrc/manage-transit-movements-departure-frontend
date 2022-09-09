@@ -20,8 +20,6 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.UnLocodeFormProvider
 import generators.Generators
 import models.{NormalMode, UnLocodeList}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
