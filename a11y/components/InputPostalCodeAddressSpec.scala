@@ -31,15 +31,14 @@ class InputPostalCodeAddressSpec extends A11ySpecBase {
     val component = app.injector.instanceOf[InputPostalCodeAddress]
 
     val prefix      = Gen.alphaNumStr.sample.value
-    val name        = Gen.alphaNumStr.sample.value
     val countries   = arbitrary[CountryList].sample.value
     val title       = nonEmptyString.sample.value
     val caption     = Gen.option(nonEmptyString).sample.value
     val headingArgs = listWithMaxLength[Any]().sample.value
-    val form        = new LocationOfGoodsPostalCodeFormProvider()(prefix, name, countries)
+    val form        = new LocationOfGoodsPostalCodeFormProvider()(prefix, countries)
 
     val content = template.apply(title) {
-      component.apply(form, prefix, caption, countries.countries, name, headingArgs)
+      component.apply(form, prefix, caption, countries.countries, headingArgs)
     }
 
     "pass accessibility checks" in {
