@@ -236,4 +236,12 @@ trait ModelGenerators {
       } yield Coordinates(latitude, longitude)
     }
 
+  implicit lazy val arbitraryUnLocode: Arbitrary[UnLocode] =
+    Arbitrary {
+      for {
+        unLocodeExtendedCode <- nonEmptyString
+        name                 <- nonEmptyString
+      } yield UnLocode(unLocodeExtendedCode, name)
+    }
+
 }

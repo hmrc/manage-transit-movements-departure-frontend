@@ -20,9 +20,8 @@ import cats.implicits._
 import models.LocationOfGoodsIdentification._
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
-import models.reference.CustomsOffice
-import models.{Address, LocationOfGoodsIdentification, LocationType, UserAnswers}
-import models.{Coordinates, LocationOfGoodsIdentification, LocationType, UserAnswers}
+import models.reference.{CustomsOffice, UnLocode}
+import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, UserAnswers}
 import pages.routeDetails.locationOfGoods._
 import play.api.mvc.Call
 
@@ -45,8 +44,8 @@ object LocationOfGoodsDomain {
           case CustomsOfficeIdentifier => LocationOfGoodsV.userAnswersReader(typeOfLocation)
           case EoriNumber              => LocationOfGoodsX.userAnswersReader(typeOfLocation)
           case AuthorisationNumber     => LocationOfGoodsY.userAnswersReader(typeOfLocation)
+          case UnlocodeIdentifier      => LocationOfGoodsU.userAnswersReader(typeOfLocation)
           case CoordinatesIdentifier   => LocationOfGoodsW.userAnswersReader(typeOfLocation)
-          case Unlocode                => ???
           case AddressIdentifier       => LocationOfGoodsZ.userAnswersReader(typeOfLocation)
           case PostalCode              => ???
         }
@@ -149,6 +148,26 @@ object LocationOfGoodsDomain {
       ).mapN {
         (typeOfLocation, address) =>
           LocationOfGoodsZ(typeOfLocation, address)
+      }
+  }
+
+  case class LocationOfGoodsU(
+    typeOfLocation: LocationType,
+    unLocode: UnLocode
+  ) extends LocationOfGoodsDomain {
+
+    override val qualifierOfIdentification: LocationOfGoodsIdentification = UnlocodeIdentifier
+  }
+
+  object LocationOfGoodsU {
+
+    def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
+      (
+        UserAnswersReader(typeOfLocation),
+        LocationOfGoodsUnLocodePage.reader
+      ).mapN {
+        (typeOfLocation, unLocode) =>
+          LocationOfGoodsU(typeOfLocation, unLocode)
       }
   }
 
