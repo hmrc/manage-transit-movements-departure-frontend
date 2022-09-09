@@ -92,7 +92,7 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
 
       val filledForm = form.bind(
         Map(
-          "addressLine1" -> testAddress.line1,
+          "streetNumber" -> testAddress.streetNumber,
           "postalCode"   -> testAddress.postalCode,
           "country"      -> testAddress.country.code.code
         )
@@ -115,7 +115,7 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
 
       val request = FakeRequest(POST, locationOfGoodsPostalCodeRoute)
         .withFormUrlEncodedBody(
-          ("addressLine1", testAddress.line1),
+          ("streetNumber", testAddress.streetNumber),
           ("postalCode", testAddress.postalCode),
           ("country", testAddress.country.code.code)
         )
@@ -165,7 +165,7 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
 
       val request = FakeRequest(POST, locationOfGoodsPostalCodeRoute)
         .withFormUrlEncodedBody(
-          ("addressLine1", testAddress.line1),
+          ("streetNumber", testAddress.streetNumber),
           ("postalCode", testAddress.postalCode),
           ("country", testAddress.country.code.code)
         )

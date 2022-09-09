@@ -31,44 +31,44 @@ class LocationOfGoodsPostalCodeFormProviderSpec extends StringFieldBehaviours wi
   private val country   = Country(CountryCode("GB"), "United Kingdom")
   private val countries = CountryList(Seq(country))
 
-  private val lengthAddressLine1Key   = s"$prefix.error.addressLine1.length"
-  private val requiredAddressLine1Key = s"$prefix.error.addressLine1.required"
-  private val invalidAddressLine1Key  = s"$prefix.error.addressLine1.invalidCharacters"
+  private val lengthStreetNumberKey   = s"$prefix.error.streetNumber.length"
+  private val requiredStreetNumberKey = s"$prefix.error.streetNumber.required"
+  private val invalidStreetNumberKey  = s"$prefix.error.streetNumber.invalidCharacters"
 
-  private val lengthPostalCodeKey   = s"$prefix.error.postcode.length"
-  private val requiredPostalCodeKey = s"$prefix.error.postcode.required"
-  private val invalidPostalCodeKey  = s"$prefix.error.postcode.invalidCharacters"
+  private val lengthPostalCodeKey   = s"$prefix.error.postalCode.length"
+  private val requiredPostalCodeKey = s"$prefix.error.postalCode.required"
+  private val invalidPostalCodeKey  = s"$prefix.error.postalCode.invalidCharacters"
 
   private val form = new LocationOfGoodsPostalCodeFormProvider()(prefix, countries)
 
-  ".addressLine1" - {
+  ".streetNumber" - {
 
-    val fieldName = AddressLine1.field
+    val fieldName = StreetNumber.field
 
     behave like fieldThatBindsValidData(
       form = form,
       fieldName = fieldName,
-      validDataGenerator = stringsWithMaxLength(AddressLine1.streetNumberLength)
+      validDataGenerator = stringsWithMaxLength(StreetNumber.length)
     )
 
     behave like fieldWithMaxLength(
       form = form,
       fieldName = fieldName,
-      maxLength = AddressLine1.streetNumberLength,
-      lengthError = FormError(fieldName, lengthAddressLine1Key, Seq(AddressLine1.arg.capitalize, AddressLine1.streetNumberLength))
+      maxLength = StreetNumber.length,
+      lengthError = FormError(fieldName, lengthStreetNumberKey, Seq(StreetNumber.arg.capitalize, StreetNumber.length))
     )
 
     behave like mandatoryTrimmedField(
       form = form,
       fieldName = fieldName,
-      requiredError = FormError(fieldName, requiredAddressLine1Key, Seq(AddressLine1.arg))
+      requiredError = FormError(fieldName, requiredStreetNumberKey, Seq(StreetNumber.arg))
     )
 
     behave like fieldWithInvalidCharacters(
       form = form,
       fieldName = fieldName,
-      error = FormError(fieldName, invalidAddressLine1Key, Seq(AddressLine1.arg.capitalize)),
-      length = AddressLine1.streetNumberLength
+      error = FormError(fieldName, invalidStreetNumberKey, Seq(StreetNumber.arg.capitalize)),
+      length = StreetNumber.length
     )
   }
 

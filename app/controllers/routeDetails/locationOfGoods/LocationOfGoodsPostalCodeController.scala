@@ -18,17 +18,16 @@ package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.{EoriNumberFormProvider, LocationOfGoodsAddressFormProvider, LocationOfGoodsPostalCodeFormProvider}
-import models.requests.SpecificDataRequestProvider1
+import forms.LocationOfGoodsPostalCodeFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
-import pages.routeDetails.locationOfGoods.{LocationOfGoodsEoriPage, LocationOfGoodsPostalCodePage}
+import pages.routeDetails.locationOfGoods.LocationOfGoodsPostalCodePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.locationOfGoods.{LocationOfGoodsEoriView, LocationOfGoodsPostalCodeView}
+import views.html.routeDetails.locationOfGoods.LocationOfGoodsPostalCodeView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

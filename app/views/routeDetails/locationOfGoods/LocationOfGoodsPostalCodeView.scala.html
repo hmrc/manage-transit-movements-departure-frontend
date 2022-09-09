@@ -20,37 +20,37 @@
 @import views.html.components.{Button, ErrorSummary, InputPostalCodeAddress}
 
 @this(
-mainTemplate: MainTemplate,
-formHelper: FormWithCSRF,
-inputPostalCodeAddress: InputPostalCodeAddress,
-errorSummary: ErrorSummary,
-button: Button
+    mainTemplate: MainTemplate,
+    formHelper: FormWithCSRF,
+    inputPostalCodeAddress: InputPostalCodeAddress,
+    errorSummary: ErrorSummary,
+    button: Button
 )
 
 @(
-form: Form[PostalCodeAddress],
-lrn: LocalReferenceNumber,
-mode: Mode,
-countries: Seq[Country]
+    form: Form[PostalCodeAddress],
+    lrn: LocalReferenceNumber,
+    mode: Mode,
+    countries: Seq[Country]
 )(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-title = messages("routeDetails.locationOfGoods.locationOfGoodsPostalCode.title"),
-showBackLink = true,
-lrn = Some(lrn)
+    title = messages("routeDetails.locationOfGoods.locationOfGoodsPostalCode.title"),
+    showBackLink = true,
+    lrn = Some(lrn)
 ) {
 
-@formHelper(action = routes.LocationOfGoodsPostalCodeController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+   @formHelper(action = routes.LocationOfGoodsPostalCodeController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
-@errorSummary(form.errors)
+      @errorSummary(form.errors)
 
-@inputPostalCodeAddress(
-form = form,
-messageKeyPrefix = "routeDetails.locationOfGoods.locationOfGoodsPostalCode",
-caption = Some(messages("routeDetails.caption")),
-countries = countries
-)
+      @inputPostalCodeAddress(
+          form = form,
+          messageKeyPrefix = "routeDetails.locationOfGoods.locationOfGoodsPostalCode",
+          caption = Some(messages("routeDetails.caption")),
+          countries = countries
+      )
 
-@button(attributes = Map("id" -> "submit"))
-}
+      @button(attributes = Map("id" -> "submit"))
+   }
 }

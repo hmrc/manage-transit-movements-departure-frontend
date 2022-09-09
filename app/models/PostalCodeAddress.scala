@@ -20,7 +20,7 @@ import models.reference.Country
 import play.api.libs.json.{Json, OFormat}
 
 case class PostalCodeAddress(
-  line1: String,
+  streetNumber: String,
   postalCode: String,
   country: Country
 )

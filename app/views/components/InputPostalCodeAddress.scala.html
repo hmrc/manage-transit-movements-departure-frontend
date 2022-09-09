@@ -37,11 +37,11 @@
 
 @html = {
     @inputText(
-        field = form("addressLine1"),
+        field = form("streetNumber"),
         inputTextType = AddressTextInput(
-            label = messages(s"$messageKeyPrefix.addressLine1")
+            label = messages(s"$messageKeyPrefix.streetNumber")
         ),
-        autocomplete = Some("address-line1"),
+        autocomplete = Some("street-number"),
         inputClass = Some("govuk-!-width-two-thirds")
     )
 
