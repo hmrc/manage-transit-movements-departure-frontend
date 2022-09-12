@@ -16,21 +16,16 @@
 
 package models.journeyDomain.routeDetails.loading
 
-import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain.LocationOfGoodsV
-import models.journeyDomain.traderDetails.RepresentativeDomain
+import models.UserAnswers
+import models.domain.{GettableAsFilterForNextReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
-import models.reference.Country
-import models.{Index, RichJsArray, UserAnswers}
-import pages.routeDetails.locationOfGoods.LocationOfGoodsCustomsOfficeIdentifierPage
-import pages.sections.routeDetails.exit.OfficesOfExitSection
+import models.reference.UnLocode
+import pages.routeDetails.loading.PlaceOfLoadingAddUnLocodeYesNoPage
 import play.api.mvc.Call
 
+//TODO: Add country and location as params when creating the page
 case class LoadingDomain(
-  unLocode: Option[String],
-  country: Option[Country],
-  location: Option[String]
-
+  unLocode: Option[UnLocode]
 ) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
@@ -40,8 +35,6 @@ case class LoadingDomain(
 object LoadingDomain {
 
   implicit val userAnswersReader: UserAnswersReader[LoadingDomain] =
-     ???
+    PlaceOfLoadingAddUnLocodeYesNoPage.filterOptionalDependent(identity)(UserAnswersReader(UnLocode("GB", "test"))).map(LoadingDomain.apply)
 
 }
-
-

@@ -856,3 +856,10 @@ routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidCharacters = {
 routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidFormat = Enter {0}’s telephone number in the right format.
 routeDetails.locationOfGoods.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less.
 routeDetails.locationOfGoods.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more.
+
+routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.title = Do you want to add a UN/LOCODE for the place of loading?
+routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.heading = Do you want to add a UN/LOCODE for the place of loading?
+routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.checkYourAnswersLabel = Do you want to add a UN/LOCODE for the place of loading?
+routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.error.required = Select yes if you want to add a UN/LOCODE for the place of loading
+routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
+

@@ -16,10 +16,40 @@
 
 package navigation.routeDetails
 
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.journeyDomain.routeDetails.loading.LoadingDomain
-import navigation.UserAnswersSectionNavigator
+import navigation.UserAnswersNavigator
+import services.CountriesService
+import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class LoadingNavigator @Inject()() extends UserAnswersSectionNavigator[LoadingDomain]
+class LoadingNavigatorProviderImpl @Inject() (
+  countriesService: CountriesService
+)(implicit ec: ExecutionContext)
+    extends LoadingNavigatorProvider {
+
+  def apply()(implicit hc: HeaderCarrier): Future[LoadingNavigator] =
+    for {
+      ctcCountries                             <- countriesService.getCountryCodesCTC()
+      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
+    } yield new LoadingNavigator(
+      ctcCountries.countryCodes,
+      customsSecurityAgreementAreaCountryCodes.countryCodes
+    )
+}
+
+trait LoadingNavigatorProvider {
+
+  def apply()(implicit hc: HeaderCarrier): Future[LoadingNavigator]
+}
+
+class LoadingNavigator(
+  ctcCountryCodes: Seq[String],
+  customsSecurityAgreementAreaCountryCodes: Seq[String]
+) extends UserAnswersNavigator[LoadingDomain, RouteDetailsDomain]()(
+      LoadingDomain.userAnswersReader,
+      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+    )
