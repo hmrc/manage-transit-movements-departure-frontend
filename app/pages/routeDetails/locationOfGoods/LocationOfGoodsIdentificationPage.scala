@@ -19,9 +19,11 @@ package pages.routeDetails.locationOfGoods
 import controllers.routeDetails.locationOfGoods.routes
 import models.{LocationOfGoodsIdentification, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.LocationOfGoodsSection
+import pages.sections.routeDetails.locationOfGoods.{LocationOfGoodsIdentifierSection, LocationOfGoodsSection}
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
+
+import scala.util.Try
 
 case object LocationOfGoodsIdentificationPage extends QuestionPage[LocationOfGoodsIdentification] {
 
@@ -31,4 +33,14 @@ case object LocationOfGoodsIdentificationPage extends QuestionPage[LocationOfGoo
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.LocationOfGoodsIdentificationController.onPageLoad(userAnswers.lrn, mode))
+
+  override def cleanup(
+    updatedValue: Option[LocationOfGoodsIdentification],
+    previousValue: Option[LocationOfGoodsIdentification],
+    userAnswers: UserAnswers
+  ): Try[UserAnswers] =
+    (updatedValue, previousValue) match {
+      case (Some(x), Some(y)) if x == y => super.cleanup(updatedValue, previousValue, userAnswers)
+      case _                            => userAnswers.remove(LocationOfGoodsIdentifierSection)
+    }
 }

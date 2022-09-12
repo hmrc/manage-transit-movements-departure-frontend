@@ -19,13 +19,13 @@ package pages.routeDetails.locationOfGoods.contact
 import controllers.routeDetails.locationOfGoods.contact.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.LocationOfGoodsSection
+import pages.sections.routeDetails.locationOfGoods.LocationOfGoodsContactSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case object TelephoneNumberPage extends QuestionPage[String] {
 
-  override def path: JsPath = LocationOfGoodsSection.path \ toString
+  override def path: JsPath = LocationOfGoodsContactSection.path \ toString
 
   override def toString: String = "telephoneNumber"
 
