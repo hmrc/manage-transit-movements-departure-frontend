@@ -32,7 +32,8 @@ case class RouteDetailsDomain(
   routing: RoutingDomain,
   transit: Option[TransitDomain],
   exit: Option[ExitDomain],
-  locationOfGoods: Option[LocationOfGoodsDomain]
+  locationOfGoods: Option[LocationOfGoodsDomain],
+  loading: Option[LoadingDomain]
 ) extends JourneyDomainModel
 
 object RouteDetailsDomain {
@@ -89,11 +90,13 @@ object RouteDetailsDomain {
       transit         <- UserAnswersReader[Option[TransitDomain]]
       exit            <- UserAnswersReader[Option[ExitDomain]]
       locationOfGoods <- UserAnswersReader[Option[LocationOfGoodsDomain]]
+      loading         <- UserAnswersReader[Option[LoadingDomain]]
     } yield RouteDetailsDomain(
       routing,
       transit,
       exit,
-      locationOfGoods
+      locationOfGoods,
+      loading
     )
   }
   // scalastyle:on cyclomatic.complexity
