@@ -18,40 +18,39 @@ package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.YesNoFormProvider
+import forms.NameFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
-import pages.routeDetails.locationOfGoods.LocationOfGoodsAddIdentifierPage
+import pages.routeDetails.locationOfGoods.LocationOfGoodsContactNamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsAddIdentifierView
+import views.html.routeDetails.locationOfGoods.LocationOfGoodsContactNameView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LocationOfGoodsAddIdentifierController @Inject() (
+class LocationOfGoodsContactNameController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LocationOfGoodsNavigatorProvider,
+  formProvider: NameFormProvider,
   actions: Actions,
-  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: LocationOfGoodsAddIdentifierView
+  view: LocationOfGoodsContactNameView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.locationOfGoods.locationOfGoodsAddIdentifier")
+  private val form = formProvider("routeDetails.locationOfGoods.locationOfGoodsContactName")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(LocationOfGoodsAddIdentifierPage) match {
+      val preparedForm = request.userAnswers.get(LocationOfGoodsContactNamePage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
-
       Ok(view(preparedForm, lrn, mode))
   }
 
@@ -64,7 +63,7 @@ class LocationOfGoodsAddIdentifierController @Inject() (
           value =>
             navigatorProvider().flatMap {
               implicit navigator =>
-                LocationOfGoodsAddIdentifierPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                LocationOfGoodsContactNamePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
             }
         )
   }

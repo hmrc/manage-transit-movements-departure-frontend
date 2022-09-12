@@ -17,43 +17,43 @@
 package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.YesNoFormProvider
+import forms.NameFormProvider
 import models.NormalMode
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
-import pages.routeDetails.locationOfGoods.LocationOfGoodsAddIdentifierPage
+import pages.routeDetails.locationOfGoods.LocationOfGoodsContactNamePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsAddIdentifierView
+import views.html.routeDetails.locationOfGoods.LocationOfGoodsContactNameView
 
 import scala.concurrent.Future
 
-class LocationOfGoodsAddIdentifierControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
+class LocationOfGoodsContactNameControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                           = new YesNoFormProvider()
-  private val form                                   = formProvider("routeDetails.locationOfGoods.locationOfGoodsAddIdentifier")
-  private val mode                                   = NormalMode
-  private lazy val locationOfGoodsAddIdentifierRoute = routes.LocationOfGoodsAddIdentifierController.onPageLoad(lrn, mode).url
+  private val formProvider                     = new NameFormProvider()
+  private val form                             = formProvider("routeDetails.locationOfGoods.locationOfGoodsContactName")
+  private val mode                             = NormalMode
+  private lazy val locationOfGoodsContactRoute = routes.LocationOfGoodsContactNameController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[LocationOfGoodsNavigatorProvider]).toInstance(fakeLocationOfGoodsNavigatorProvider))
 
-  "LocationOfGoodsAddIdentifier Controller" - {
+  "LocationOfGoodsContact Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsAddIdentifierRoute)
-      val result  = route(app, request).value
+      val request = FakeRequest(GET, locationOfGoodsContactRoute)
 
-      val view = injector.instanceOf[LocationOfGoodsAddIdentifierView]
+      val result = route(app, request).value
+
+      val view = injector.instanceOf[LocationOfGoodsContactNameView]
 
       status(result) mustEqual OK
 
@@ -63,16 +63,16 @@ class LocationOfGoodsAddIdentifierControllerSpec extends SpecBase with AppWithDe
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsAddIdentifierPage, true)
+      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsContactNamePage, "test string")
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsAddIdentifierRoute)
+      val request = FakeRequest(GET, locationOfGoodsContactRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> "true"))
+      val filledForm = form.bind(Map("value" -> "test string"))
 
-      val view = injector.instanceOf[LocationOfGoodsAddIdentifierView]
+      val view = injector.instanceOf[LocationOfGoodsContactNameView]
 
       status(result) mustEqual OK
 
@@ -82,12 +82,12 @@ class LocationOfGoodsAddIdentifierControllerSpec extends SpecBase with AppWithDe
 
     "must redirect to the next page when valid data is submitted" in {
 
-      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
-
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, locationOfGoodsAddIdentifierRoute)
-        .withFormUrlEncodedBody(("value", "true"))
+      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+
+      val request = FakeRequest(POST, locationOfGoodsContactRoute)
+        .withFormUrlEncodedBody(("value", "test string"))
 
       val result = route(app, request).value
 
@@ -100,24 +100,26 @@ class LocationOfGoodsAddIdentifierControllerSpec extends SpecBase with AppWithDe
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, locationOfGoodsAddIdentifierRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm = form.bind(Map("value" -> ""))
+      val invalidAnswer = ""
+
+      val request    = FakeRequest(POST, locationOfGoodsContactRoute).withFormUrlEncodedBody(("value", ""))
+      val filledForm = form.bind(Map("value" -> invalidAnswer))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[LocationOfGoodsAddIdentifierView]
+      val view = injector.instanceOf[LocationOfGoodsContactNameView]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, mode)(request, messages).toString
+        view(filledForm, lrn, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, locationOfGoodsAddIdentifierRoute)
+      val request = FakeRequest(GET, locationOfGoodsContactRoute)
 
       val result = route(app, request).value
 
@@ -130,8 +132,8 @@ class LocationOfGoodsAddIdentifierControllerSpec extends SpecBase with AppWithDe
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, locationOfGoodsAddIdentifierRoute)
-        .withFormUrlEncodedBody(("value", "true"))
+      val request = FakeRequest(POST, locationOfGoodsContactRoute)
+        .withFormUrlEncodedBody(("value", "test string"))
 
       val result = route(app, request).value
 

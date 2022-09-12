@@ -16,18 +16,25 @@
 
 package views.routeDetails.locationOfGoods
 
+import forms.NameFormProvider
 import models.NormalMode
+import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsAddIdentifierView
+import viewModels.InputSize
+import views.behaviours.InputTextViewBehaviours
+import views.html.routeDetails.locationOfGoods.LocationOfGoodsContactNameView
 
-class LocationOfGoodsAddIdentifierViewSpec extends YesNoViewBehaviours {
+class LocationOfGoodsContactNameViewSpec extends InputTextViewBehaviours[String] {
 
-  override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[LocationOfGoodsAddIdentifierView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+  override val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsContactName"
 
-  override val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsAddIdentifier"
+  override def form: Form[String] = new NameFormProvider()(prefix)
+
+  override def applyView(form: Form[String]): HtmlFormat.Appendable =
+    injector.instanceOf[LocationOfGoodsContactNameView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+
+  implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 
   behave like pageWithTitle()
 
@@ -37,7 +44,9 @@ class LocationOfGoodsAddIdentifierViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithHeading()
 
-  behave like pageWithRadioItems()
+  behave like pageWithoutHint
+
+  behave like pageWithInputText(Some(InputSize.Width20))
 
   behave like pageWithSubmitButton("Save and continue")
 }

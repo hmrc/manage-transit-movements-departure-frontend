@@ -87,7 +87,7 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
             .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
             .setValue(LocationOfGoodsEoriPage, eoriNumber)
-            .setValue(LocationOfGoodsAddIdentifierPage, false)
+            .setValue(LocationOfGoodsAddIdentifierYesNoPage, false)
             .setValue(AddContactYesNoPage, false)
 
           val expectedResult = LocationOfGoodsX(
@@ -111,7 +111,7 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
             .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
             .setValue(LocationOfGoodsEoriPage, eoriNumber)
-            .setValue(LocationOfGoodsAddIdentifierPage, true)
+            .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
             .setValue(AdditionalIdentifierPage, "1234")
             .setValue(AddContactYesNoPage, false)
 
@@ -136,7 +136,7 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
             .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
             .setValue(LocationOfGoodsAuthorisationNumberPage, authorisationNumber)
-            .setValue(LocationOfGoodsAddIdentifierPage, false)
+            .setValue(LocationOfGoodsAddIdentifierYesNoPage, false)
             .setValue(AddContactYesNoPage, false)
 
           val expectedResult = LocationOfGoodsY(
@@ -160,7 +160,7 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
             .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
             .setValue(LocationOfGoodsAuthorisationNumberPage, authorisationNumber)
-            .setValue(LocationOfGoodsAddIdentifierPage, true)
+            .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
             .setValue(AdditionalIdentifierPage, "1234")
             .setValue(AddContactYesNoPage, false)
 
@@ -244,6 +244,7 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
         }
 
       }
+
     }
 
     "cannot be parsed from UserAnswers" - {}

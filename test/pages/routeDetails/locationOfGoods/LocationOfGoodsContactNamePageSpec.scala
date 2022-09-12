@@ -18,14 +18,14 @@ package pages.routeDetails.locationOfGoods
 
 import pages.behaviours.PageBehaviours
 
-class LocationOfGoodsAddIdentifierPageSpec extends PageBehaviours {
+class LocationOfGoodsContactNamePageSpec extends PageBehaviours {
 
-  "LocationOfGoodsAddIdentifierPage" - {
+  "LocationOfGoodsContactPage" - {
 
-    beRetrievable[Boolean](LocationOfGoodsAddIdentifierPage)
+    beRetrievable[String](LocationOfGoodsContactNamePage)
 
-    beSettable[Boolean](LocationOfGoodsAddIdentifierPage)
+    beSettable[String](LocationOfGoodsContactNamePage)
 
-    beRemovable[Boolean](LocationOfGoodsAddIdentifierPage)
+    beRemovable[String](LocationOfGoodsContactNamePage)
   }
 }
