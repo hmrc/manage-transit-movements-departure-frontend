@@ -18,21 +18,23 @@ package views.routeDetails.locationOfGoods.contact
 
 import forms.ContactTelephoneNumberFormProvider
 import models.NormalMode
+import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
-import views.behaviours.InputTextViewBehaviours
+import views.behaviours.TelephoneNumberViewBehaviours
 import views.html.routeDetails.locationOfGoods.contact.ContactTelephoneNumberView
-import org.scalacheck.{Arbitrary, Gen}
 
-class ContactTelephoneNumberViewSpec extends InputTextViewBehaviours[String] {
+class ContactTelephoneNumberViewSpec extends TelephoneNumberViewBehaviours {
 
   override val prefix: String = "routeDetails.locationOfGoods.contact.telephoneNumber"
+
+  private val name: String = Gen.alphaNumStr.sample.value
 
   override def form: Form[String] = new ContactTelephoneNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[ContactTelephoneNumberView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[ContactTelephoneNumberView].apply(form, lrn, name, NormalMode)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 
@@ -40,11 +42,13 @@ class ContactTelephoneNumberViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink
 
-  behave like pageWithHeading()
+  behave like pageWithHeading(name)
 
-  behave like pageWithoutHint
+  behave like pageWithSectionCaption("Route details")
 
-  behave like pageWithInputText(Some(InputSize.Width20))
+  behave like pageWithHint("For international numbers include the country code.")
+
+  behave like pageWithTelephoneNumberInput()
 
   behave like pageWithSubmitButton("Save and continue")
 }

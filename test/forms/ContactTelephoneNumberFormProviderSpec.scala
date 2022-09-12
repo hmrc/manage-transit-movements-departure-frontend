@@ -16,16 +16,20 @@
 
 package forms
 
+import forms.Constants.{maxTelephoneNumberLength, minTelephoneNumberLength}
 import forms.behaviours.StringFieldBehaviours
 import org.scalacheck.Gen
-import play.api.data.FormError
+import play.api.data.{Field, FormError}
 
 class ContactTelephoneNumberFormProviderSpec extends StringFieldBehaviours {
 
-  private val prefix = Gen.alphaNumStr.sample.value
-  val requiredKey    = s"$prefix.error.required"
-  val lengthKey      = s"$prefix.error.length"
-  val maxLength      = 35
+  private val prefix              = Gen.alphaNumStr.sample.value
+  private val name                = Gen.alphaNumStr.sample.value
+  private val requiredKey         = s"$prefix.error.required"
+  private val maxLengthKey        = s"$prefix.error.maxLength"
+  private val minLengthKey        = s"$prefix.error.minLength"
+  private val invalidFormatKey    = s"$prefix.error.invalidFormat"
+  private val invalidCharacterKey = s"$prefix.error.invalidCharacter"
 
   val form = new ContactTelephoneNumberFormProvider()(prefix)
 
@@ -33,23 +37,122 @@ class ContactTelephoneNumberFormProviderSpec extends StringFieldBehaviours {
 
     val fieldName = "value"
 
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      stringsWithMaxLength(maxLength)
-    )
+    "with form name" - {
+      val form = new TelephoneNumberFormProvider()(prefix, name)
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
+      behave like fieldThatBindsValidData(
+        form,
+        fieldName,
+        stringsWithMaxLength(maxTelephoneNumberLength, Gen.numChar)
+      )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+      behave like mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey, Seq(name))
+      )
+
+      s"must not bind strings longer than $maxTelephoneNumberLength characters" in {
+
+        val stringInt = "9" * maxTelephoneNumberLength
+
+        val expectedError = FormError(fieldName, maxLengthKey, Seq(name, maxTelephoneNumberLength))
+
+        val result = form.bind(Map(fieldName -> ("+" + stringInt))).apply(fieldName)
+        result.errors mustEqual Seq(expectedError)
+
+      }
+
+      s"must not bind strings less than $minTelephoneNumberLength characters" in {
+
+        val genInt = intsInsideRange(0, 9999).sample.value
+
+        val expectedError = FormError(fieldName, minLengthKey, Seq(name, minTelephoneNumberLength))
+
+        val result = form.bind(Map(fieldName -> ("+" + genInt))).apply(fieldName)
+        result.errors mustEqual Seq(expectedError)
+
+      }
+
+      "must not bind strings that do not match character regex" in {
+
+        val invalidCharacters = Gen.oneOf(Seq("%", "£", "!", "$", "^", "&", "(", ")"))
+
+        val expectedError = FormError("value", invalidCharacterKey, Seq(name))
+
+        forAll(invalidCharacters) {
+          invalidCharacter =>
+            val result: Field = form.bind(Map(fieldName -> invalidCharacter)).apply(fieldName)
+            result.errors must contain(expectedError)
+        }
+      }
+
+      "must not bind strings that do not match format regex" in {
+
+        val expectedError = FormError("value", invalidFormatKey, Seq(name))
+
+        val result: Field = form.bind(Map(fieldName -> "123456")).apply(fieldName)
+        result.errors must contain(expectedError)
+      }
+    }
+
+    "without form name" - {
+      val form = new TelephoneNumberFormProvider()(prefix)
+
+      behave like fieldThatBindsValidData(
+        form,
+        fieldName,
+        stringsWithMaxLength(maxTelephoneNumberLength, Gen.numChar)
+      )
+
+      behave like mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
+
+      s"must not bind strings longer than $maxTelephoneNumberLength characters" in {
+
+        val stringInt = "9" * maxTelephoneNumberLength
+
+        val expectedError = FormError(fieldName, maxLengthKey, Seq(maxTelephoneNumberLength))
+
+        val result = form.bind(Map(fieldName -> ("+" + stringInt))).apply(fieldName)
+        result.errors mustEqual Seq(expectedError)
+
+      }
+
+      s"must not bind strings less than $minTelephoneNumberLength characters" in {
+
+        val genInt = intsInsideRange(0, 9999).sample.value
+
+        val expectedError = FormError(fieldName, minLengthKey, Seq(minTelephoneNumberLength))
+
+        val result = form.bind(Map(fieldName -> ("+" + genInt))).apply(fieldName)
+        result.errors mustEqual Seq(expectedError)
+
+      }
+
+      "must not bind strings that do not match character regex" in {
+
+        val invalidCharacters = Gen.oneOf(Seq("%", "£", "!", "$", "^", "&", "(", ")"))
+
+        val expectedError = FormError("value", invalidCharacterKey)
+
+        forAll(invalidCharacters) {
+          invalidCharacter =>
+            val result: Field = form.bind(Map(fieldName -> invalidCharacter)).apply(fieldName)
+            result.errors must contain(expectedError)
+        }
+      }
+
+      "must not bind strings that do not match format regex" in {
+
+        val expectedError = FormError("value", invalidFormatKey)
+
+        val result: Field = form.bind(Map(fieldName -> "123456")).apply(fieldName)
+        result.errors must contain(expectedError)
+      }
+    }
   }
 }

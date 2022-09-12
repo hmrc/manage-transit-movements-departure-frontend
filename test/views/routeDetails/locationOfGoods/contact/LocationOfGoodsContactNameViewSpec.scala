@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.routeDetails.locationOfGoods
+package views.routeDetails.locationOfGoods.contact
 
 import forms.NameFormProvider
 import models.NormalMode
@@ -23,7 +23,7 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsContactNameView
+import views.html.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNameView
 
 class LocationOfGoodsContactNameViewSpec extends InputTextViewBehaviours[String] {
 

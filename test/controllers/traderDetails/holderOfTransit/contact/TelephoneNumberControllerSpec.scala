@@ -70,9 +70,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
     "must populate the view correctly on a GET when the question has previously been answered" in {
       val userAnswers = UserAnswers(lrn, eoriNumber)
         .setValue(NamePage, holderName)
-        .set(TelephoneNumberPage, validAnswer)
-        .success
-        .value
+        .setValue(TelephoneNumberPage, validAnswer)
 
       setExistingUserAnswers(userAnswers)
 

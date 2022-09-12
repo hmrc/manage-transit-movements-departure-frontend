@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.locationOfGoods
+package pages.routeDetails.locationOfGoods.contact
 
-import controllers.routeDetails.locationOfGoods.routes
+import controllers.routeDetails.locationOfGoods.contact.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.routeDetails.LocationOfGoodsSection

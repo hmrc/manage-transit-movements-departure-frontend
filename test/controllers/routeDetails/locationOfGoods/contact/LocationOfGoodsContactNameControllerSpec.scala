@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails.locationOfGoods
+package controllers.routeDetails.locationOfGoods.contact
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.NameFormProvider
@@ -22,12 +22,12 @@ import models.NormalMode
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.routeDetails.locationOfGoods.LocationOfGoodsContactNamePage
+import pages.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNamePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsContactNameView
+import views.html.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNameView
 
 import scala.concurrent.Future
 

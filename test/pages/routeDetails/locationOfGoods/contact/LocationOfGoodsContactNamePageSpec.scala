@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.locationOfGoods
+package pages.routeDetails.locationOfGoods.contact
 
 import pages.behaviours.PageBehaviours
 

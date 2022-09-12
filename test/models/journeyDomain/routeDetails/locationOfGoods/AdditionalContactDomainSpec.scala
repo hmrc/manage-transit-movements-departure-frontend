@@ -21,8 +21,7 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import org.scalacheck.Gen
-import pages.routeDetails.locationOfGoods.LocationOfGoodsContactNamePage
-import pages.traderDetails.holderOfTransit.contact._
+import pages.routeDetails.locationOfGoods.contact._
 
 class AdditionalContactDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
@@ -31,13 +30,16 @@ class AdditionalContactDomainSpec extends SpecBase with UserAnswersSpecHelper wi
     "can be parsed from UserAnswers" - {
 
       "when additional contact has a name and telephone number" in {
-        val name = Gen.alphaNumStr.sample.value
+        val name            = Gen.alphaNumStr.sample.value
+        val telephoneNumber = Gen.alphaNumStr.sample.value
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(LocationOfGoodsContactNamePage)(name)
+          .unsafeSetVal(TelephoneNumberPage)(telephoneNumber)
 
         val expectedResult = AdditionalContactDomain(
-          name = name
+          name = name,
+          telephoneNumber = telephoneNumber
         )
 
         val result: EitherType[AdditionalContactDomain] = UserAnswersReader[AdditionalContactDomain].run(userAnswers)
@@ -50,19 +52,21 @@ class AdditionalContactDomainSpec extends SpecBase with UserAnswersSpecHelper wi
 
       "when additional contact has no name" in {
 
+        val telephoneNumber = Gen.alphaNumStr.sample.value
+
         val userAnswers = emptyUserAnswers
+          .unsafeSetVal(TelephoneNumberPage)(telephoneNumber)
 
         val result: EitherType[AdditionalContactDomain] = UserAnswersReader[AdditionalContactDomain].run(userAnswers)
 
         result.left.value.page mustBe LocationOfGoodsContactNamePage
       }
 
-      //TODO: remove ignore when telephone page is added
-      "when additional contact has no telephone number" ignore {
+      "when additional contact has no telephone number" in {
         val name = Gen.alphaNumStr.sample.value
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(LocationOfGoodsContactNamePage)(name)
 
         val result: EitherType[AdditionalContactDomain] = UserAnswersReader[AdditionalContactDomain].run(userAnswers)
 

@@ -29,8 +29,6 @@ trait TelephoneNumberViewBehaviours extends InputTextViewBehaviours[String] {
 
     "page with a telephone number field" - {
 
-      behave like pageWithHint("Must include the country code, like +44 808 157 0192.")
-
       "must contain a telephone number input field" in {
         val input = getElementByTag(doc, "input")
         input.attr("type") mustBe "tel"

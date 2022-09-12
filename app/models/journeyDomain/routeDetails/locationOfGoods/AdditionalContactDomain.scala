@@ -19,17 +19,18 @@ package models.journeyDomain.routeDetails.locationOfGoods
 import cats.implicits._
 import models.domain._
 import models.journeyDomain.JourneyDomainModel
-import pages.routeDetails.locationOfGoods.LocationOfGoodsContactNamePage
+import pages.routeDetails.locationOfGoods.contact.{LocationOfGoodsContactNamePage, TelephoneNumberPage}
 
-//TODO: Add in telephone number when page is added
 case class AdditionalContactDomain(
-  name: String
+  name: String,
+  telephoneNumber: String
 ) extends JourneyDomainModel
 
 object AdditionalContactDomain {
 
   implicit val userAnswersReader: UserAnswersReader[AdditionalContactDomain] =
     (
-      LocationOfGoodsContactNamePage.reader
-    ).map(AdditionalContactDomain.apply)
+      LocationOfGoodsContactNamePage.reader,
+      TelephoneNumberPage.reader
+    ).tupled.map((AdditionalContactDomain.apply _).tupled)
 }
