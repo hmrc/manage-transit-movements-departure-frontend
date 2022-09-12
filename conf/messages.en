@@ -844,3 +844,14 @@ routeDetails.locationOfGoods.locationOfGoodsContactName.checkYourAnswersLabel = 
 routeDetails.locationOfGoods.locationOfGoodsContactName.error.required = Enter the contact for the location of goods
 routeDetails.locationOfGoods.locationOfGoodsContactName.error.invalid = The contact must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 routeDetails.locationOfGoods.locationOfGoodsContactName.error.length = The contact must be 70 characters or less
+
+routeDetails.locationOfGoods.contact.telephoneNumber.title = What is the contact for the location of goods’ telephone number?
+routeDetails.locationOfGoods.contact.telephoneNumber.heading = What is {0}'s' telephone number?
+routeDetails.locationOfGoods.contact.telephoneNumber.hintText = For international numbers include the country code.
+routeDetails.locationOfGoods.contact.telephoneNumber.checkYourAnswersLabel = What is the contact for the location of goods’ telephone number?
+routeDetails.locationOfGoods.contact.telephoneNumber.change.hidden = What is the contact for the location of goods’ telephone number?
+routeDetails.locationOfGoods.contact.telephoneNumber.error.required = Enter {0}’s telephone number.
+routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidCharacters = {0}’s telephone number must only include numbers 0 to 9 and a plus sign
+routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidFormat = Enter {0}’s telephone number in the right format.
+routeDetails.locationOfGoods.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be 35 characters or less.
+routeDetails.locationOfGoods.contact.telephoneNumber.error.minLength = {0}’s telephone number must be 6 characters or more.
