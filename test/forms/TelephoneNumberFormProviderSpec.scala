@@ -31,12 +31,14 @@ class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
   private val invalidFormatKey    = s"$prefix.error.invalidFormat"
   private val invalidCharacterKey = s"$prefix.error.invalidCharacter"
 
+  val form = new TelephoneNumberFormProvider()(prefix)
+
   ".value" - {
 
     val fieldName = "value"
 
     "with form name" - {
-      val form = new TelephoneNumberFormProvider()(prefix, name)
+      val form = new TelephoneNumberWithInternationalCodeFormProvider()(prefix, name)
 
       behave like fieldThatBindsValidData(
         form,
@@ -95,7 +97,7 @@ class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
     }
 
     "without form name" - {
-      val form = new TelephoneNumberFormProvider()(prefix)
+      val form = new TelephoneNumberWithInternationalCodeFormProvider()(prefix)
 
       behave like fieldThatBindsValidData(
         form,

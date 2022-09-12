@@ -19,11 +19,11 @@ package forms
 import forms.Constants.{maxTelephoneNumberLength, minTelephoneNumberLength}
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.{telephoneNumberCharacterRegex, telephoneNumberFormatRegex}
-
-import javax.inject.Inject
 import play.api.data.Form
 
-class ContactTelephoneNumberFormProvider @Inject() extends Mappings {
+import javax.inject.Inject
+
+class TelephoneNumberWithInternationalCodeFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String, args: String*): Form[String] =
     Form(

@@ -17,7 +17,7 @@
 package controllers.traderDetails.holderOfTransit.contact
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.TelephoneNumberFormProvider
+import forms.TelephoneNumberWithInternationalCodeFormProvider
 import generators.Generators
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
@@ -35,7 +35,7 @@ import scala.concurrent.Future
 
 class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private val formProvider                     = new TelephoneNumberFormProvider()
+  private val formProvider                     = new TelephoneNumberWithInternationalCodeFormProvider()
   private val holderName                       = "Test Holder Name"
   private val form                             = formProvider("traderDetails.holderOfTransit.contact.telephoneNumber", holderName)
   private val mode                             = NormalMode

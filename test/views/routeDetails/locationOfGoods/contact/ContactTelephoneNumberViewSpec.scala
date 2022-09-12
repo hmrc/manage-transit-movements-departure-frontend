@@ -16,7 +16,7 @@
 
 package views.routeDetails.locationOfGoods.contact
 
-import forms.ContactTelephoneNumberFormProvider
+import forms.TelephoneNumberFormProvider
 import models.NormalMode
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
@@ -31,7 +31,7 @@ class ContactTelephoneNumberViewSpec extends TelephoneNumberViewBehaviours {
 
   private val name: String = Gen.alphaNumStr.sample.value
 
-  override def form: Form[String] = new ContactTelephoneNumberFormProvider()(prefix)
+  override def form: Form[String] = new TelephoneNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
     injector.instanceOf[ContactTelephoneNumberView].apply(form, lrn, name, NormalMode)(fakeRequest, messages)

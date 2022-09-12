@@ -21,7 +21,7 @@ import forms.behaviours.StringFieldBehaviours
 import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
 
-class ContactTelephoneNumberFormProviderSpec extends StringFieldBehaviours {
+class TelephoneNumberWithInternationalCodeFormProviderSpec extends StringFieldBehaviours {
 
   private val prefix              = Gen.alphaNumStr.sample.value
   private val name                = Gen.alphaNumStr.sample.value
@@ -31,14 +31,12 @@ class ContactTelephoneNumberFormProviderSpec extends StringFieldBehaviours {
   private val invalidFormatKey    = s"$prefix.error.invalidFormat"
   private val invalidCharacterKey = s"$prefix.error.invalidCharacter"
 
-  val form = new ContactTelephoneNumberFormProvider()(prefix)
-
   ".value" - {
 
     val fieldName = "value"
 
     "with form name" - {
-      val form = new TelephoneNumberFormProvider()(prefix, name)
+      val form = new TelephoneNumberWithInternationalCodeFormProvider()(prefix, name)
 
       behave like fieldThatBindsValidData(
         form,
@@ -97,7 +95,7 @@ class ContactTelephoneNumberFormProviderSpec extends StringFieldBehaviours {
     }
 
     "without form name" - {
-      val form = new TelephoneNumberFormProvider()(prefix)
+      val form = new TelephoneNumberWithInternationalCodeFormProvider()(prefix)
 
       behave like fieldThatBindsValidData(
         form,

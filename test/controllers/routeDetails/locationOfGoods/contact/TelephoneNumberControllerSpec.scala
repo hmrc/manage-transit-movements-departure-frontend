@@ -17,7 +17,7 @@
 package controllers.routeDetails.locationOfGoods.contact
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.ContactTelephoneNumberFormProvider
+import forms.TelephoneNumberFormProvider
 import models.NormalMode
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
@@ -33,7 +33,7 @@ import scala.concurrent.Future
 
 class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider              = new ContactTelephoneNumberFormProvider()
+  private val formProvider              = new TelephoneNumberFormProvider()
   private val contactName               = "Contact Name"
   private val form                      = formProvider("routeDetails.locationOfGoods.contact.telephoneNumber", contactName)
   private val mode                      = NormalMode
