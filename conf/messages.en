@@ -839,12 +839,12 @@ routeDetails.locationOfGoods.addContactLocationOfGoods.heading = Do you want to 
 routeDetails.locationOfGoods.addContactLocationOfGoods.checkYourAnswersLabel = Do you want to add a contact for the location of goods?
 routeDetails.locationOfGoods.addContactLocationOfGoods.error.required = Select yes if you want to add a contact for the location of goods.
 
-routeDetails.locationOfGoods.locationOfGoodsContactName.title = Who is the contact for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsContactName.heading = Who is the contact for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsContactName.checkYourAnswersLabel = Who is the contact for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsContactName.error.required = Enter the contact for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsContactName.error.invalid = The contact must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-routeDetails.locationOfGoods.locationOfGoodsContactName.error.length = The contact must be 70 characters or less
+routeDetails.locationOfGoods.contact.locationOfGoodsContactName.title = Who is the contact for the location of goods?
+routeDetails.locationOfGoods.contact.locationOfGoodsContactName.heading = Who is the contact for the location of goods?
+routeDetails.locationOfGoods.contact.locationOfGoodsContactName.checkYourAnswersLabel = Who is the contact for the location of goods?
+routeDetails.locationOfGoods.contact.locationOfGoodsContactName.error.required = Enter the contact for the location of goods
+routeDetails.locationOfGoods.contact.locationOfGoodsContactName.error.invalid = The contact must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+routeDetails.locationOfGoods.contact.locationOfGoodsContactName.error.length = The contact must be 70 characters or less
 
 routeDetails.locationOfGoods.contact.telephoneNumber.title = What is the contact for the location of goods’ telephone number?
 routeDetails.locationOfGoods.contact.telephoneNumber.heading = What is {0}’s telephone number?
@@ -856,3 +856,6 @@ routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidCharacters = {
 routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidFormat = Enter {0}’s telephone number in the right format.
 routeDetails.locationOfGoods.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less.
 routeDetails.locationOfGoods.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more.
+
+routeDetails.locationOfGoods.checkYourAnswers.title = Check your answers
+routeDetails.locationOfGoods.checkYourAnswers.heading = Check your answers

@@ -34,7 +34,7 @@ import scala.concurrent.Future
 class LocationOfGoodsContactNameControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private val formProvider                     = new NameFormProvider()
-  private val form                             = formProvider("routeDetails.locationOfGoods.locationOfGoodsContactName")
+  private val form                             = formProvider("routeDetails.locationOfGoods.contact.locationOfGoodsContactName")
   private val mode                             = NormalMode
   private lazy val locationOfGoodsContactRoute = routes.LocationOfGoodsContactNameController.onPageLoad(lrn, mode).url
 
