@@ -21,7 +21,7 @@ import play.api.libs.json.{JsObject, JsPath}
 
 case object LocationOfGoodsContactSection extends QuestionPage[JsObject] {
 
-  override def path: JsPath = LocationOfGoodsIdentifierSection.path \ toString
+  override def path: JsPath = LocationOfGoodsSection.path \ toString
 
   override def toString: String = "contact"
 }
