@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.locationOfGoods
+package pages.sections.routeDetails.locationOfGoods
 
-import controllers.routeDetails.locationOfGoods.routes
-import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.locationOfGoods.LocationOfGoodsIdentifierSection
-import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import play.api.libs.json.{JsObject, JsPath}
 
-case object AdditionalIdentifierPage extends QuestionPage[String] {
+case object LocationOfGoodsIdentifierSection extends QuestionPage[JsObject] {
 
-  override def path: JsPath = LocationOfGoodsIdentifierSection.path \ toString
+  override def path: JsPath = LocationOfGoodsSection.path \ toString
 
-  override def toString: String = "additionalIdentifier"
-
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.AdditionalIdentifierController.onPageLoad(userAnswers.lrn, mode))
+  override def toString: String = "identifier"
 }

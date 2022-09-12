@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package pages.sections.routeDetails
+package pages.sections.routeDetails.locationOfGoods
 
 import pages.QuestionPage
+import pages.sections.routeDetails.RouteDetailsSection
 import play.api.libs.json.{JsObject, JsPath}
 
 case object LocationOfGoodsSection extends QuestionPage[JsObject] {

@@ -16,7 +16,9 @@
 
 package pages.routeDetails.locationOfGoods
 
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.routeDetails.locationOfGoods.contact._
 
 class AddContactYesNoPageSpec extends PageBehaviours {
 
@@ -27,5 +29,39 @@ class AddContactYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](AddContactYesNoPage)
 
     beRemovable[Boolean](AddContactYesNoPage)
+
+    "cleanup" - {
+      "when NO selected" - {
+        "must clean up LocationOfGoodsContactSection" in {
+          forAll(arbitrary[String]) {
+            str =>
+              val preChange = emptyUserAnswers
+                .setValue(LocationOfGoodsContactNamePage, str)
+                .setValue(TelephoneNumberPage, str)
+
+              val postChange = preChange.setValue(AddContactYesNoPage, false)
+
+              postChange.get(LocationOfGoodsContactNamePage) mustNot be(defined)
+              postChange.get(TelephoneNumberPage) mustNot be(defined)
+          }
+        }
+      }
+
+      "when YES selected" - {
+        "must do nothing" in {
+          forAll(arbitrary[String]) {
+            str =>
+              val preChange = emptyUserAnswers
+                .setValue(LocationOfGoodsContactNamePage, str)
+                .setValue(TelephoneNumberPage, str)
+
+              val postChange = preChange.setValue(AddContactYesNoPage, true)
+
+              postChange.get(LocationOfGoodsContactNamePage) must be(defined)
+              postChange.get(TelephoneNumberPage) must be(defined)
+          }
+        }
+      }
+    }
   }
 }
