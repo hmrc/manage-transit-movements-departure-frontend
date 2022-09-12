@@ -14,25 +14,27 @@
  * limitations under the License.
  */
 
-package views.routeDetails.locationOfGoods
+package views.routeDetails.locationOfGoods.contact
 
-import forms.NameFormProvider
+import forms.TelephoneNumberFormProvider
 import models.NormalMode
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
-import views.behaviours.InputTextViewBehaviours
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsContactNameView
+import views.behaviours.TelephoneNumberViewBehaviours
+import views.html.routeDetails.locationOfGoods.contact.ContactTelephoneNumberView
 
-class LocationOfGoodsContactNameViewSpec extends InputTextViewBehaviours[String] {
+class ContactTelephoneNumberViewSpec extends TelephoneNumberViewBehaviours {
 
-  override val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsContactName"
+  override val prefix: String = "routeDetails.locationOfGoods.contact.telephoneNumber"
 
-  override def form: Form[String] = new NameFormProvider()(prefix)
+  private val name: String = Gen.alphaNumStr.sample.value
+
+  override def form: Form[String] = new TelephoneNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[LocationOfGoodsContactNameView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[ContactTelephoneNumberView].apply(form, lrn, name, NormalMode)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 
@@ -40,13 +42,13 @@ class LocationOfGoodsContactNameViewSpec extends InputTextViewBehaviours[String]
 
   behave like pageWithBackLink
 
+  behave like pageWithHeading(name)
+
   behave like pageWithSectionCaption("Route details")
 
-  behave like pageWithHeading()
+  behave like pageWithHint("For international numbers include the country code.")
 
-  behave like pageWithoutHint
-
-  behave like pageWithInputText(Some(InputSize.Width20))
+  behave like pageWithTelephoneNumberInput()
 
   behave like pageWithSubmitButton("Save and continue")
 }

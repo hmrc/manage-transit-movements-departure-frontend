@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.locationOfGoods
+package pages.routeDetails.locationOfGoods.contact
 
-import controllers.routeDetails.locationOfGoods.routes
+import controllers.routeDetails.locationOfGoods.contact.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.routeDetails.LocationOfGoodsSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object LocationOfGoodsContactNamePage extends QuestionPage[String] {
+case object TelephoneNumberPage extends QuestionPage[String] {
 
   override def path: JsPath = LocationOfGoodsSection.path \ toString
 
-  override def toString: String = "contactName"
+  override def toString: String = "telephoneNumber"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.LocationOfGoodsContactNameController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.TelephoneNumberController.onPageLoad(userAnswers.lrn, mode))
 }

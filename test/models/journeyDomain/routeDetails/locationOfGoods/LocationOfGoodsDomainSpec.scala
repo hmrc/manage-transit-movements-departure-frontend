@@ -25,11 +25,15 @@ import models.reference.{CustomsOffice, UnLocode}
 import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, PostalCodeAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
+import pages.QuestionPage
 import pages.routeDetails.locationOfGoods._
 
 class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
   private val typeOfLocation = arbitrary[LocationType].sample.value
+  private val contactName    = Gen.alphaNumStr.sample.value
+  private val contactPhone   = Gen.alphaNumStr.sample.value
 
   "LocationOfGoodsDomain" - {
 
@@ -245,8 +249,115 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
 
       }
 
+      "when is Y(Authorisation Number) and all optional pages are answered" in {
+        val qualifierOfIdentification = LocationOfGoodsIdentification.AuthorisationNumber
+        val authorisationNumber       = Gen.alphaNumStr.sample.value
+
+        val userAnswers = emptyUserAnswers
+          .setValue(LocationOfGoodsTypePage, typeOfLocation)
+          .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+          .setValue(LocationOfGoodsAuthorisationNumberPage, authorisationNumber)
+          .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
+          .setValue(AdditionalIdentifierPage, "1234")
+          .setValue(AddContactYesNoPage, true)
+          .setValue(contact.LocationOfGoodsContactNamePage, contactName)
+          .setValue(contact.TelephoneNumberPage, contactPhone)
+
+        val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
+
+        val expectedResult = LocationOfGoodsY(
+          typeOfLocation = typeOfLocation,
+          authorisationNumber = authorisationNumber,
+          additionalIdentifier = Some("1234"),
+          additionalContact = Some(AdditionalContactDomain(contactName, contactPhone))
+        )
+
+        result.value mustBe expectedResult
+      }
+
     }
 
-    "cannot be parsed from UserAnswers" - {}
+    "cannot be parsed from UserAnswers" - {
+
+      "when is X(Eori Number) and a mandatory page is missing" in {
+        val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
+          LocationOfGoodsIdentificationPage,
+          LocationOfGoodsEoriPage,
+          LocationOfGoodsAddIdentifierYesNoPage,
+          AddContactYesNoPage
+        )
+
+        val qualifierOfIdentification = LocationOfGoodsIdentification.EoriNumber
+        val eoriNumber                = Gen.alphaNumStr.sample.value
+
+        val userAnswers = emptyUserAnswers
+          .setValue(LocationOfGoodsTypePage, typeOfLocation)
+          .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+          .setValue(LocationOfGoodsEoriPage, eoriNumber)
+          .setValue(LocationOfGoodsAddIdentifierYesNoPage, false)
+          .setValue(AddContactYesNoPage, false)
+
+        forAll(mandatoryPages) {
+          mandatoryPage =>
+            val invalidUserAnswers = userAnswers.unsafeRemove(mandatoryPage)
+
+            val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(invalidUserAnswers)
+
+            result.left.value.page mustBe mandatoryPage
+        }
+      }
+
+      "when is Y(Authorisation Number) and AdditionalIdentifier page is missing when required" in {
+        val qualifierOfIdentification = LocationOfGoodsIdentification.AuthorisationNumber
+        val authorisationNumber       = Gen.alphaNumStr.sample.value
+
+        val userAnswers = emptyUserAnswers
+          .setValue(LocationOfGoodsTypePage, typeOfLocation)
+          .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+          .setValue(LocationOfGoodsAuthorisationNumberPage, authorisationNumber)
+          .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
+          .setValue(AddContactYesNoPage, false)
+
+        val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
+
+        result.left.value.page mustBe AdditionalIdentifierPage
+
+      }
+
+      "when is Y(Authorisation Number) and contact name details is missing when required" in {
+        val qualifierOfIdentification = LocationOfGoodsIdentification.AuthorisationNumber
+        val authorisationNumber       = Gen.alphaNumStr.sample.value
+
+        val userAnswers = emptyUserAnswers
+          .setValue(LocationOfGoodsTypePage, typeOfLocation)
+          .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+          .setValue(LocationOfGoodsAuthorisationNumberPage, authorisationNumber)
+          .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
+          .setValue(AdditionalIdentifierPage, "1234")
+          .setValue(AddContactYesNoPage, true)
+
+        val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
+
+        result.left.value.page mustBe contact.LocationOfGoodsContactNamePage
+      }
+
+      "when is Y(Authorisation Number) and contact phone number details is missing when required" in {
+        val qualifierOfIdentification = LocationOfGoodsIdentification.AuthorisationNumber
+        val authorisationNumber       = Gen.alphaNumStr.sample.value
+
+        val userAnswers = emptyUserAnswers
+          .setValue(LocationOfGoodsTypePage, typeOfLocation)
+          .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+          .setValue(LocationOfGoodsAuthorisationNumberPage, authorisationNumber)
+          .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
+          .setValue(AdditionalIdentifierPage, "1234")
+          .setValue(AddContactYesNoPage, true)
+          .setValue(contact.LocationOfGoodsContactNamePage, contactName)
+
+        val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
+
+        result.left.value.page mustBe contact.TelephoneNumberPage
+      }
+    }
   }
 }

@@ -14,27 +14,18 @@
  * limitations under the License.
  */
 
-package views.behaviours
+package pages.routeDetails.locationOfGoods.contact
 
-import org.scalacheck.{Arbitrary, Gen}
-import viewModels.InputSize
+import pages.behaviours.PageBehaviours
 
-trait TelephoneNumberViewBehaviours extends InputTextViewBehaviours[String] {
+class TelephoneNumberPageSpec extends PageBehaviours {
 
-  implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
+  "TelephoneNumberPage" - {
 
-  def pageWithTelephoneNumberInput(): Unit = {
+    beRetrievable[String](TelephoneNumberPage)
 
-    behave like pageWithInputText(Some(InputSize.Width20))
+    beSettable[String](TelephoneNumberPage)
 
-    "page with a telephone number field" - {
-
-      "must contain a telephone number input field" in {
-        val input = getElementByTag(doc, "input")
-        input.attr("type") mustBe "tel"
-        input.attr("autocomplete") mustBe "tel"
-      }
-    }
+    beRemovable[String](TelephoneNumberPage)
   }
-
 }

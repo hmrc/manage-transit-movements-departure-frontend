@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails.locationOfGoods
+package controllers.routeDetails.locationOfGoods.contact
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.NameFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
-import pages.routeDetails.locationOfGoods.LocationOfGoodsContactNamePage
+import pages.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsContactNameView
+import views.html.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNameView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
