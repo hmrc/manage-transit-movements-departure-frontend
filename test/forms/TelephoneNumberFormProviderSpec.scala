@@ -38,7 +38,7 @@ class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
     val fieldName = "value"
 
     "with form name" - {
-      val form = new TelephoneNumberWithInternationalCodeFormProvider()(prefix, name)
+      val form = new TelephoneNumberFormProvider()(prefix, name)
 
       behave like fieldThatBindsValidData(
         form,
@@ -97,7 +97,7 @@ class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
     }
 
     "without form name" - {
-      val form = new TelephoneNumberWithInternationalCodeFormProvider()(prefix)
+      val form = new TelephoneNumberFormProvider()(prefix)
 
       behave like fieldThatBindsValidData(
         form,

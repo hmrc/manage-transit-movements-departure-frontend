@@ -18,7 +18,7 @@ package controllers.traderDetails.consignment.consignor.contact
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.TelephoneNumberWithInternationalCodeFormProvider
+import forms.TelephoneNumberFormProvider
 import models.requests.SpecificDataRequestProvider1
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -39,7 +39,7 @@ class TelephoneNumberController @Inject() (
   implicit val sessionRepository: SessionRepository,
   @TraderDetails implicit val navigator: Navigator,
   getMandatoryPage: SpecificDataRequiredActionProvider,
-  formProvider: TelephoneNumberWithInternationalCodeFormProvider,
+  formProvider: TelephoneNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: TelephoneNumberView

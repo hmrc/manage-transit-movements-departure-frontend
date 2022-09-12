@@ -16,7 +16,7 @@
 
 package views.traderDetails.consignment.consignor.contact
 
-import forms.TelephoneNumberWithInternationalCodeFormProvider
+import forms.TelephoneNumberFormProvider
 import models.NormalMode
 import org.scalacheck.Gen
 import play.api.data.Form
@@ -29,7 +29,7 @@ class TelephoneNumberViewSpec extends TelephoneNumberViewBehaviours {
   private val name: String    = Gen.alphaNumStr.sample.value
   override val prefix: String = "traderDetails.consignment.consignor.contact.telephoneNumber"
 
-  override def form: Form[String] = new TelephoneNumberWithInternationalCodeFormProvider()(prefix, name)
+  override def form: Form[String] = new TelephoneNumberFormProvider()(prefix, name)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
     injector.instanceOf[TelephoneNumberView].apply(form, lrn, NormalMode, name)(fakeRequest, messages)

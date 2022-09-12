@@ -17,7 +17,7 @@
 package controllers.traderDetails.representative
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.TelephoneNumberWithInternationalCodeFormProvider
+import forms.TelephoneNumberFormProvider
 import models.NormalMode
 import navigation.Navigator
 import navigation.annotations.traderDetails.TraderDetails
@@ -34,7 +34,7 @@ import scala.concurrent.Future
 
 class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                  = new TelephoneNumberWithInternationalCodeFormProvider()
+  private val formProvider                  = new TelephoneNumberFormProvider()
   private val form                          = formProvider("traderDetails.representative.telephoneNumber")
   private val mode                          = NormalMode
   private lazy val representativePhoneRoute = routes.TelephoneNumberController.onPageLoad(lrn, mode).url
