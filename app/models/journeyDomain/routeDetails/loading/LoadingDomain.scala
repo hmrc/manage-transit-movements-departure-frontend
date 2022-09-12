@@ -35,6 +35,6 @@ case class LoadingDomain(
 object LoadingDomain {
 
   implicit val userAnswersReader: UserAnswersReader[LoadingDomain] =
-    PlaceOfLoadingAddUnLocodeYesNoPage.filterOptionalDependent(identity)(UserAnswersReader(UnLocode("GB", "test"))).map(LoadingDomain.apply)
+    PlaceOfLoadingAddUnLocodeYesNoPage.filterOptionalDependent(identity)(UserAnswersReader(UnLocode("GB", "abc"))).map(LoadingDomain.apply)
 
 }
