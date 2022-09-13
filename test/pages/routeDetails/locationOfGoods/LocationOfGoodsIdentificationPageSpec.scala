@@ -17,7 +17,10 @@
 package pages.routeDetails.locationOfGoods
 
 import models.LocationOfGoodsIdentification
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.sections.routeDetails.locationOfGoods.LocationOfGoodsIdentifierSection
+import play.api.libs.json.Json
 
 class LocationOfGoodsIdentificationPageSpec extends PageBehaviours {
 
@@ -28,5 +31,40 @@ class LocationOfGoodsIdentificationPageSpec extends PageBehaviours {
     beSettable[LocationOfGoodsIdentification](LocationOfGoodsIdentificationPage)
 
     beRemovable[LocationOfGoodsIdentification](LocationOfGoodsIdentificationPage)
+
+    "cleanup" - {
+      "when answer has changed" - {
+        "must clean up LocationOfGoodsIdentifierSection" in {
+          forAll(arbitrary[LocationOfGoodsIdentification]) {
+            qualifierOfIdentification =>
+              forAll(arbitrary[LocationOfGoodsIdentification].retryUntil(_ != qualifierOfIdentification)) {
+                differentQualifierOfIdentification =>
+                  val preChange = emptyUserAnswers
+                    .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+                    .setValue(LocationOfGoodsIdentifierSection, Json.obj("foo" -> "bar"))
+
+                  val postChange = preChange.setValue(LocationOfGoodsIdentificationPage, differentQualifierOfIdentification)
+
+                  postChange.get(LocationOfGoodsIdentifierSection) mustNot be(defined)
+              }
+          }
+        }
+      }
+
+      "when answer has not changed" - {
+        "must do nothing" in {
+          forAll(arbitrary[LocationOfGoodsIdentification]) {
+            qualifierOfIdentification =>
+              val preChange = emptyUserAnswers
+                .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+                .setValue(LocationOfGoodsIdentifierSection, Json.obj("foo" -> "bar"))
+
+              val postChange = preChange.setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+
+              postChange.get(LocationOfGoodsIdentifierSection) must be(defined)
+          }
+        }
+      }
+    }
   }
 }

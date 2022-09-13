@@ -19,18 +19,22 @@ package controllers.routeDetails.locationOfGoods
 import controllers.actions._
 
 import javax.inject.Inject
-import models.LocalReferenceNumber
+import models.{LocalReferenceNumber, NormalMode}
+import navigation.routeDetails.RouteDetailsNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.routeDetails.locationOfGoods.LocationOfGoodsViewModel.LocationOfGoodsViewModelProvider
 import views.html.routeDetails.locationOfGoods.CheckYourAnswersView
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
+  navigatorProvider: RouteDetailsNavigatorProvider,
   viewModelProvider: LocationOfGoodsViewModelProvider
 ) extends FrontendBaseController
     with I18nSupport {
@@ -41,7 +45,10 @@ class CheckYourAnswersController @Inject() (
       Ok(view(lrn, Seq(section)))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
-    Redirect(???)
+  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
+    implicit request =>
+      navigatorProvider().map {
+        navigator => Redirect(navigator.nextPage(request.userAnswers, NormalMode))
+      }
   }
 }

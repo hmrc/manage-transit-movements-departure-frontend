@@ -19,15 +19,15 @@ package pages.routeDetails.locationOfGoods.contact
 import controllers.routeDetails.locationOfGoods.contact.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.LocationOfGoodsSection
+import pages.sections.routeDetails.locationOfGoods.LocationOfGoodsContactSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case object LocationOfGoodsContactNamePage extends QuestionPage[String] {
 
-  override def path: JsPath = LocationOfGoodsSection.path \ toString
+  override def path: JsPath = LocationOfGoodsContactSection.path \ toString
 
-  override def toString: String = "contactName"
+  override def toString: String = "name"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.LocationOfGoodsContactNameController.onPageLoad(userAnswers.lrn, mode))

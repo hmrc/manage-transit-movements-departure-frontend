@@ -20,13 +20,13 @@ import controllers.routeDetails.locationOfGoods.routes
 import models.reference.UnLocode
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.LocationOfGoodsSection
+import pages.sections.routeDetails.locationOfGoods.LocationOfGoodsIdentifierSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case object LocationOfGoodsUnLocodePage extends QuestionPage[UnLocode] {
 
-  override def path: JsPath = LocationOfGoodsSection.path \ toString
+  override def path: JsPath = LocationOfGoodsIdentifierSection.path \ toString
 
   override def toString: String = "unLocode"
 

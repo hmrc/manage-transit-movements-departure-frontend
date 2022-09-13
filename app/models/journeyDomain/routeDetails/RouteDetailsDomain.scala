@@ -22,6 +22,7 @@ import models.SecurityDetailsType._
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.routeDetails.exit.ExitDomain
+import models.journeyDomain.routeDetails.loading.LoadingDomain
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
 import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
 import models.journeyDomain.routeDetails.transit.TransitDomain
@@ -32,7 +33,8 @@ case class RouteDetailsDomain(
   routing: RoutingDomain,
   transit: Option[TransitDomain],
   exit: Option[ExitDomain],
-  locationOfGoods: Option[LocationOfGoodsDomain]
+  locationOfGoods: Option[LocationOfGoodsDomain],
+  loading: Option[LoadingDomain]
 ) extends JourneyDomainModel
 
 object RouteDetailsDomain {
@@ -84,16 +86,20 @@ object RouteDetailsDomain {
         case _ => UserAnswersReader[LocationOfGoodsDomain].map(Some(_))
       }
 
+    // When pre-lodge is in, add a loadingRead to handle nav logic if additional declaration type is  A or D
+
     for {
       routing         <- UserAnswersReader[RoutingDomain]
       transit         <- UserAnswersReader[Option[TransitDomain]]
       exit            <- UserAnswersReader[Option[ExitDomain]]
       locationOfGoods <- UserAnswersReader[Option[LocationOfGoodsDomain]]
+      loading         <- UserAnswersReader[LoadingDomain].map(Some(_))
     } yield RouteDetailsDomain(
       routing,
       transit,
       exit,
-      locationOfGoods
+      locationOfGoods,
+      loading
     )
   }
   // scalastyle:on cyclomatic.complexity

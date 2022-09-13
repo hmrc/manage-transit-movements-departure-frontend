@@ -848,14 +848,21 @@ routeDetails.locationOfGoods.contact.locationOfGoodsContactName.error.length = T
 
 routeDetails.locationOfGoods.contact.telephoneNumber.title = What is the contact for the location of goods’ telephone number?
 routeDetails.locationOfGoods.contact.telephoneNumber.heading = What is {0}’s telephone number?
-routeDetails.locationOfGoods.contact.telephoneNumber.hintText = For international numbers include the country code.
+routeDetails.locationOfGoods.contact.telephoneNumber.hintText = This has to include the country code, like +44 808 157 0192.
 routeDetails.locationOfGoods.contact.telephoneNumber.checkYourAnswersLabel = What is the contact for the location of goods’ telephone number?
 routeDetails.locationOfGoods.contact.telephoneNumber.change.hidden = What is the contact for the location of goods’ telephone number?
 routeDetails.locationOfGoods.contact.telephoneNumber.error.required = Enter {0}’s telephone number.
 routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidCharacters = {0}’s telephone number must only include numbers 0 to 9 and a plus sign
-routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidFormat = Enter {0}’s telephone number in the right format.
+routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidFormat = {0}’s telephone number must start with a plus sign
 routeDetails.locationOfGoods.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less.
 routeDetails.locationOfGoods.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more.
+
+routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.title = Do you want to add a UN/LOCODE for the place of loading?
+routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.heading = Do you want to add a UN/LOCODE for the place of loading?
+routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.checkYourAnswersLabel = Do you want to add a UN/LOCODE for the place of loading?
+routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.error.required = Select yes if you want to add a UN/LOCODE for the place of loading
+routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
+
 
 routeDetails.locationOfGoods.checkYourAnswers.title = Check your answers
 routeDetails.locationOfGoods.checkYourAnswers.heading = Check your answers
