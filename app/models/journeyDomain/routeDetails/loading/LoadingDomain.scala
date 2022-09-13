@@ -36,6 +36,6 @@ case class LoadingDomain(
 object LoadingDomain {
 
   implicit val userAnswersReader: UserAnswersReader[LoadingDomain] =
+    //TODO - Add PlaceOfLoadingAddExtraInformationPage when country and location domain built
     PlaceOfLoadingAddUnLocodeYesNoPage.filterOptionalDependent(identity)(PlaceOfLoadingUnLocodePage.reader).map(LoadingDomain.apply)
-
 }
