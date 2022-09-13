@@ -19,9 +19,7 @@ package controllers.routeDetails.loading
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
 import models.NormalMode
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
-import navigation.routeDetails.{LoadingNavigatorProvider, LocationOfGoodsNavigatorProvider}
+import navigation.routeDetails.LoadingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
