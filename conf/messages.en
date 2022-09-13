@@ -863,3 +863,8 @@ routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.checkYourAnswersLabel = Do y
 routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.error.required = Select yes if you want to add a UN/LOCODE for the place of loading
 routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
 
+routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.title = Do you want to add extra information for the place of loading?
+routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.heading = Do you want to add extra information for the place of loading?
+routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.paragraph = This includes the country and location of loading.
+routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.checkYourAnswersLabel = Do you want to add extra information for the place of loading? //TODO check CYA ticket content
+routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.error.required = Select yes if you want to add extra information for the place of loading
