@@ -17,10 +17,11 @@
 package models.journeyDomain.routeDetails.loading
 
 import models.UserAnswers
-import models.domain.{GettableAsFilterForNextReaderOps, UserAnswersReader}
+import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.UnLocode
 import pages.routeDetails.loading.PlaceOfLoadingAddUnLocodeYesNoPage
+import pages.routeDetails.loading.PlaceOfLoadingUnLocodePage
 import play.api.mvc.Call
 
 //TODO: Add country and location as params when creating the page
@@ -35,6 +36,6 @@ case class LoadingDomain(
 object LoadingDomain {
 
   implicit val userAnswersReader: UserAnswersReader[LoadingDomain] =
-    PlaceOfLoadingAddUnLocodeYesNoPage.filterOptionalDependent(identity)(UserAnswersReader(UnLocode("GB", "abc"))).map(LoadingDomain.apply)
-
+    //TODO - Add PlaceOfLoadingAddExtraInformationPage when country and location domain built
+    PlaceOfLoadingAddUnLocodeYesNoPage.filterOptionalDependent(identity)(PlaceOfLoadingUnLocodePage.reader).map(LoadingDomain.apply)
 }
