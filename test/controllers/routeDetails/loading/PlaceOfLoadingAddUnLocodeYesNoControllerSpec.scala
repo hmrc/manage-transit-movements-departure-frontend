@@ -21,6 +21,7 @@ import forms.YesNoFormProvider
 import models.NormalMode
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
+import navigation.routeDetails.{LoadingNavigatorProvider, LocationOfGoodsNavigatorProvider}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -43,7 +44,7 @@ class PlaceOfLoadingAddUnLocodeYesNoControllerSpec extends SpecBase with AppWith
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[LoadingNavigatorProvider]).toInstance(fakeLoadingNavigatorProvider))
 
   "PlaceOfLoadingAddUnLocodeYesNo Controller" - {
 

@@ -39,7 +39,7 @@ class LoadingNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with G
       val mode = NormalMode
 
       "when answers complete" - {
-        "must redirect to location of goods check your answers" ignore {
+        "must redirect to loading check your answers" ignore {
           forAll(arbitraryLocationOfGoodsAnswers(emptyUserAnswers)) {
             answers =>
               navigator

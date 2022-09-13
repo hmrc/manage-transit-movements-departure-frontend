@@ -22,6 +22,7 @@ import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
+import navigation.routeDetails.{LoadingNavigator, LoadingNavigatorProvider, LocationOfGoodsNavigatorProvider}
 import pages.routeDetails.loading.PlaceOfLoadingAddUnLocodeYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -35,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class PlaceOfLoadingAddUnLocodeYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @PreTaskListDetails implicit val navigator: Navigator,
+  navigatorProvider: LoadingNavigatorProvider,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -62,7 +63,11 @@ class PlaceOfLoadingAddUnLocodeYesNoController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => PlaceOfLoadingAddUnLocodeYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+          value =>
+            navigatorProvider().flatMap {
+              implicit navigator =>
+                PlaceOfLoadingAddUnLocodeYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+            }
         )
   }
 }
