@@ -18,138 +18,234 @@ package viewModels.routeDetails.locationOfGoods
 
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
-import models.reference.{CustomsOffice, UnLocode}
-import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, PostalCodeAddress}
-import org.scalacheck.Arbitrary.arbitrary
+import models.LocationOfGoodsIdentification._
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.locationOfGoods._
 
 class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+
   "apply" - {
-    "when 'v' customs office" - {
+    "when 'V' customs office" - {
+      val qualifier = CustomsOfficeIdentifier
+
       "must return 3 rows" in {
-        val userAnswers = emptyUserAnswers
-          .setValue(LocationOfGoodsTypePage, arbitrary[LocationType].sample.value)
-          .setValue(LocationOfGoodsIdentificationPage, arbitrary[LocationOfGoodsIdentification].sample.value)
-          .setValue(LocationOfGoodsCustomsOfficeIdentifierPage, arbitrary[CustomsOffice].sample.value)
+        val initialAnswers = emptyUserAnswers
+          .setValue(LocationOfGoodsIdentificationPage, qualifier)
 
-        val section = LocationOfGoodsViewModel.apply(userAnswers).section
-
-        section.rows.size mustBe 3
-        section.sectionTitle mustNot be(defined)
-
+        forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
+          userAnswers =>
+            val section = LocationOfGoodsViewModel.apply(userAnswers).section
+            section.rows.size mustBe 3
+            section.sectionTitle mustNot be(defined)
+        }
       }
     }
 
-    "when 'x' EORI" - {
-      "must return 8 rows" in {
-        val userAnswers = emptyUserAnswers
-          .setValue(LocationOfGoodsTypePage, arbitrary[LocationType].sample.value)
-          .setValue(LocationOfGoodsIdentificationPage, arbitrary[LocationOfGoodsIdentification].sample.value)
-          .setValue(LocationOfGoodsEoriPage, arbitrary[String].sample.value)
-          .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
-          .setValue(AdditionalIdentifierPage, arbitrary[String].sample.value)
-          .setValue(AddContactYesNoPage, true)
-          .setValue(contact.LocationOfGoodsContactNamePage, arbitrary[String].sample.value)
-          .setValue(contact.TelephoneNumberPage, arbitrary[String].sample.value)
+    "when 'X' EORI number" - {
+      val qualifier = EoriNumber
 
-        val section = LocationOfGoodsViewModel.apply(userAnswers).section
+      "when an additional identifier and a contact have been provided" - {
+        "must return 8 rows" in {
+          val initialAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsIdentificationPage, qualifier)
+            .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
+            .setValue(AddContactYesNoPage, true)
 
-        section.rows.size mustBe 8
-        section.sectionTitle mustNot be(defined)
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
+            userAnswers =>
+              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              section.rows.size mustBe 8
+              section.sectionTitle mustNot be(defined)
+          }
+        }
+      }
 
+      "when neither an additional identifier nor a contact have been provided" - {
+        "must return 5 rows" in {
+          val initialAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsIdentificationPage, qualifier)
+            .setValue(LocationOfGoodsAddIdentifierYesNoPage, false)
+            .setValue(AddContactYesNoPage, false)
+
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
+            userAnswers =>
+              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              section.rows.size mustBe 5
+              section.sectionTitle mustNot be(defined)
+          }
+        }
       }
     }
 
-    "when 'Y' Authorisation  number page" - {
-      "must return 8 rows" in {
-        val userAnswers = emptyUserAnswers
-          .setValue(LocationOfGoodsTypePage, arbitrary[LocationType].sample.value)
-          .setValue(LocationOfGoodsIdentificationPage, arbitrary[LocationOfGoodsIdentification].sample.value)
-          .setValue(LocationOfGoodsAuthorisationNumberPage, arbitrary[String].sample.value)
-          .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
-          .setValue(AdditionalIdentifierPage, arbitrary[String].sample.value)
-          .setValue(AddContactYesNoPage, true)
-          .setValue(contact.LocationOfGoodsContactNamePage, arbitrary[String].sample.value)
-          .setValue(contact.TelephoneNumberPage, arbitrary[String].sample.value)
+    "when 'Y' authorisation number" - {
+      val qualifier = AuthorisationNumber
 
-        val section = LocationOfGoodsViewModel.apply(userAnswers).section
+      "when an additional identifier and a contact have been provided" - {
+        "must return 8 rows" in {
+          val initialAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsIdentificationPage, qualifier)
+            .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
+            .setValue(AddContactYesNoPage, true)
 
-        section.rows.size mustBe 8
-        section.sectionTitle mustNot be(defined)
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
+            userAnswers =>
+              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              section.rows.size mustBe 8
+              section.sectionTitle mustNot be(defined)
+          }
+        }
+      }
 
+      "when neither an additional identifier nor a contact have been provided" - {
+        "must return 5 rows" in {
+          val initialAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsIdentificationPage, qualifier)
+            .setValue(LocationOfGoodsAddIdentifierYesNoPage, false)
+            .setValue(AddContactYesNoPage, false)
+
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
+            userAnswers =>
+              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              section.rows.size mustBe 5
+              section.sectionTitle mustNot be(defined)
+          }
+        }
       }
     }
 
-    "when 'W' coordinates page" - {
-      "must return 6 rows" in {
-        val userAnswers = emptyUserAnswers
-          .setValue(LocationOfGoodsTypePage, arbitrary[LocationType].sample.value)
-          .setValue(LocationOfGoodsIdentificationPage, arbitrary[LocationOfGoodsIdentification].sample.value)
-          .setValue(LocationOfGoodsCoordinatesPage, arbitrary[Coordinates].sample.value)
-          .setValue(AddContactYesNoPage, true)
-          .setValue(contact.LocationOfGoodsContactNamePage, arbitrary[String].sample.value)
-          .setValue(contact.TelephoneNumberPage, arbitrary[String].sample.value)
+    "when 'W' coordinates" - {
+      val qualifier = CoordinatesIdentifier
 
-        val section = LocationOfGoodsViewModel.apply(userAnswers).section
+      "when a contact has been provided" - {
+        "must return 6 rows" in {
+          val initialAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsIdentificationPage, qualifier)
+            .setValue(AddContactYesNoPage, true)
 
-        section.rows.size mustBe 6
-        section.sectionTitle mustNot be(defined)
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
+            userAnswers =>
+              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              section.rows.size mustBe 6
+              section.sectionTitle mustNot be(defined)
+          }
+        }
+      }
 
+      "when a contact has not been provided" - {
+        "must return 4 rows" in {
+          val initialAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsIdentificationPage, qualifier)
+            .setValue(AddContactYesNoPage, false)
+
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
+            userAnswers =>
+              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              section.rows.size mustBe 4
+              section.sectionTitle mustNot be(defined)
+          }
+        }
       }
     }
 
-    "when 'U' Un-locode page" - {
-      "must return 6 rows" in {
-        val userAnswers = emptyUserAnswers
-          .setValue(LocationOfGoodsTypePage, arbitrary[LocationType].sample.value)
-          .setValue(LocationOfGoodsIdentificationPage, arbitrary[LocationOfGoodsIdentification].sample.value)
-          .setValue(LocationOfGoodsUnLocodePage, arbitrary[UnLocode].sample.value)
-          .setValue(AddContactYesNoPage, true)
-          .setValue(contact.LocationOfGoodsContactNamePage, arbitrary[String].sample.value)
-          .setValue(contact.TelephoneNumberPage, arbitrary[String].sample.value)
+    "when 'U' UN-LOCODE" - {
+      val qualifier = UnlocodeIdentifier
 
-        val section = LocationOfGoodsViewModel.apply(userAnswers).section
+      "when a contact has been provided" - {
+        "must return 6 rows" in {
+          val initialAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsIdentificationPage, qualifier)
+            .setValue(AddContactYesNoPage, true)
 
-        section.rows.size mustBe 6
-        section.sectionTitle mustNot be(defined)
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
+            userAnswers =>
+              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              section.rows.size mustBe 6
+              section.sectionTitle mustNot be(defined)
+          }
+        }
+      }
 
+      "when a contact has not been provided" - {
+        "must return 4 rows" in {
+          val initialAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsIdentificationPage, qualifier)
+            .setValue(AddContactYesNoPage, false)
+
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
+            userAnswers =>
+              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              section.rows.size mustBe 4
+              section.sectionTitle mustNot be(defined)
+          }
+        }
       }
     }
 
-    "when 'Z' Location of goods address page" - {
-      "must return 6 rows" in {
-        val userAnswers = emptyUserAnswers
-          .setValue(LocationOfGoodsTypePage, arbitrary[LocationType].sample.value)
-          .setValue(LocationOfGoodsIdentificationPage, arbitrary[LocationOfGoodsIdentification].sample.value)
-          .setValue(LocationOfGoodsAddressPage, arbitrary[Address].sample.value)
-          .setValue(AddContactYesNoPage, true)
-          .setValue(contact.LocationOfGoodsContactNamePage, arbitrary[String].sample.value)
-          .setValue(contact.TelephoneNumberPage, arbitrary[String].sample.value)
+    "when 'Z' address" - {
+      val qualifier = AddressIdentifier
 
-        val section = LocationOfGoodsViewModel.apply(userAnswers).section
+      "when a contact has been provided" - {
+        "must return 6 rows" in {
+          val initialAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsIdentificationPage, qualifier)
+            .setValue(AddContactYesNoPage, true)
 
-        section.rows.size mustBe 6
-        section.sectionTitle mustNot be(defined)
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
+            userAnswers =>
+              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              section.rows.size mustBe 6
+              section.sectionTitle mustNot be(defined)
+          }
+        }
+      }
 
+      "when a contact has not been provided" - {
+        "must return 4 rows" in {
+          val initialAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsIdentificationPage, qualifier)
+            .setValue(AddContactYesNoPage, false)
+
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
+            userAnswers =>
+              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              section.rows.size mustBe 4
+              section.sectionTitle mustNot be(defined)
+          }
+        }
       }
     }
 
-    "when 'T' Location of goods postcode page" - {
-      "must return 6 rows" in {
-        val userAnswers = emptyUserAnswers
-          .setValue(LocationOfGoodsTypePage, arbitrary[LocationType].sample.value)
-          .setValue(LocationOfGoodsIdentificationPage, arbitrary[LocationOfGoodsIdentification].sample.value)
-          .setValue(LocationOfGoodsPostalCodePage, arbitrary[PostalCodeAddress].sample.value)
-          .setValue(AddContactYesNoPage, true)
-          .setValue(contact.LocationOfGoodsContactNamePage, arbitrary[String].sample.value)
-          .setValue(contact.TelephoneNumberPage, arbitrary[String].sample.value)
+    "when 'T' postal code" - {
+      val qualifier = PostalCode
 
-        val section = LocationOfGoodsViewModel.apply(userAnswers).section
+      "when a contact has been provided" - {
+        "must return 6 rows" in {
+          val initialAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsIdentificationPage, qualifier)
+            .setValue(AddContactYesNoPage, true)
 
-        section.rows.size mustBe 6
-        section.sectionTitle mustNot be(defined)
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
+            userAnswers =>
+              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              section.rows.size mustBe 6
+              section.sectionTitle mustNot be(defined)
+          }
+        }
+      }
 
+      "when a contact has not been provided" - {
+        "must return 4 rows" in {
+          val initialAnswers = emptyUserAnswers
+            .setValue(LocationOfGoodsIdentificationPage, qualifier)
+            .setValue(AddContactYesNoPage, false)
+
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
+            userAnswers =>
+              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              section.rows.size mustBe 4
+              section.sectionTitle mustNot be(defined)
+          }
+        }
       }
     }
   }
