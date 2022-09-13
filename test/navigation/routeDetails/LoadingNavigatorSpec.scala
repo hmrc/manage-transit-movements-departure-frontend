@@ -28,7 +28,7 @@ import services.CountriesService
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class LocationOfGoodsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class LoadingNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
   private val navigator = new LoadingNavigator(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
 
@@ -39,8 +39,8 @@ class LocationOfGoodsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       val mode = NormalMode
 
       "when answers complete" - {
-        "must redirect to location of goods check your answers" ignore {
-          forAll(arbitraryLoadingAnswers(emptyUserAnswers)) {
+        "must redirect to loading check your answers" ignore {
+          forAll(arbitraryLocationOfGoodsAnswers(emptyUserAnswers)) {
             answers =>
               navigator
                 .nextPage(answers, mode)
@@ -80,7 +80,7 @@ class LocationOfGoodsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       when(mockService.getCustomsSecurityAgreementAreaCountries()(any()))
         .thenReturn(Future.successful(customsSecurityAgreementAreaCountries))
 
-      val provider = new LocationOfGoodsNavigatorProviderImpl(mockService)
+      val provider = new LoadingNavigatorProviderImpl(mockService)
       provider.apply().futureValue
 
       verify(mockService).getCountryCodesCTC()(any())
