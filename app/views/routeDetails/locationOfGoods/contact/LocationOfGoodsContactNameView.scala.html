@@ -30,7 +30,7 @@
 @(form: Form[String], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.locationOfGoods.locationOfGoodsContactName.title"),
+    title = messages("routeDetails.locationOfGoods.contact.locationOfGoodsContactName.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -42,7 +42,7 @@
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages("routeDetails.locationOfGoods.locationOfGoodsContactName.heading"),
+                heading = messages("routeDetails.locationOfGoods.contact.locationOfGoodsContactName.heading"),
                 caption = Some(messages("routeDetails.caption"))
             ),
             inputClass = InputSize.Width20

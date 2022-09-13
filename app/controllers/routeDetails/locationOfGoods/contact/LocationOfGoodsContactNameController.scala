@@ -43,7 +43,7 @@ class LocationOfGoodsContactNameController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.locationOfGoods.locationOfGoodsContactName")
+  private val form = formProvider("routeDetails.locationOfGoods.contact.locationOfGoodsContactName")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

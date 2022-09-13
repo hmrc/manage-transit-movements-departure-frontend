@@ -39,12 +39,12 @@ class LocationOfGoodsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       val mode = NormalMode
 
       "when answers complete" - {
-        "must redirect to location of goods check your answers" ignore {
-          forAll(arbitraryLoadingAnswers(emptyUserAnswers)) {
+        "must redirect to location of goods check your answers" in {
+          forAll(arbitraryLocationOfGoodsAnswers(emptyUserAnswers)) {
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(???)
+                .mustBe(controllers.routeDetails.loading.routes.PlaceOfLoadingAddUnLocodeYesNoController.onPageLoad(answers.lrn, mode))
           }
         }
       }

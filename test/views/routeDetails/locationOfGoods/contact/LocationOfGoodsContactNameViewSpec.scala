@@ -27,7 +27,7 @@ import views.html.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNam
 
 class LocationOfGoodsContactNameViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsContactName"
+  override val prefix: String = "routeDetails.locationOfGoods.contact.locationOfGoodsContactName"
 
   override def form: Form[String] = new NameFormProvider()(prefix)
 
