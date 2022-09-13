@@ -20,8 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.UnLocodeFormProvider
 import generators.Generators
 import models.{NormalMode, UnLocodeList}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.routeDetails.LoadingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.routeDetails.loading.PlaceOfLoadingUnLocodePage
@@ -50,7 +49,7 @@ class PlaceOfLoadingUnLocodeControllerSpec extends SpecBase with AppWithDefaultM
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[LoadingNavigatorProvider]).toInstance(fakeLoadingNavigatorProvider))
       .overrides(bind(classOf[UnLocodesService]).toInstance(mockUnLocodesService))
 
   "PlaceOfLoadingUnLocode Controller" - {

@@ -22,6 +22,7 @@ import forms.UnLocodeFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
+import navigation.routeDetails.LoadingNavigatorProvider
 import pages.routeDetails.loading.PlaceOfLoadingUnLocodePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -40,6 +41,7 @@ class PlaceOfLoadingUnLocodeController @Inject() (
   actions: Actions,
   formProvider: UnLocodeFormProvider,
   service: UnLocodesService,
+  navigatorProvider: LoadingNavigatorProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PlaceOfLoadingUnLocodeView
 )(implicit ec: ExecutionContext)
@@ -69,7 +71,11 @@ class PlaceOfLoadingUnLocodeController @Inject() (
             .bindFromRequest()
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, unLocodeList.unLocodes, mode))),
-              value => PlaceOfLoadingUnLocodePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+              value =>
+                navigatorProvider().flatMap {
+                  implicit navigator =>
+                    PlaceOfLoadingUnLocodePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                }
             )
       }
   }
