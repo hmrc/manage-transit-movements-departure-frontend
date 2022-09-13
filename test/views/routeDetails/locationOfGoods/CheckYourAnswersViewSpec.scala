@@ -17,21 +17,28 @@
 package views.routeDetails.locationOfGoods
 
 import play.twirl.api.HtmlFormat
-import views.behaviours.ViewBehaviours
+import viewModels.sections.Section
+import views.behaviours.CheckYourAnswersViewBehaviours
 import views.html.routeDetails.locationOfGoods.CheckYourAnswersView
 
-class CheckYourAnswersViewSpec extends ViewBehaviours {
+class CheckYourAnswersViewSpec extends CheckYourAnswersViewBehaviours {
 
-  override val urlContainsLrn: Boolean = true
+  override def view: HtmlFormat.Appendable = viewWithSections(sections)
 
-  override def view: HtmlFormat.Appendable =
-    injector.instanceOf[CheckYourAnswersView].apply(lrn)(fakeRequest, messages)
+  override def viewWithSections(sections: Seq[Section]): HtmlFormat.Appendable =
+    injector.instanceOf[CheckYourAnswersView].apply(lrn, sections)(fakeRequest, messages)
 
   override val prefix: String = "routeDetails.locationOfGoods.checkYourAnswers"
 
   behave like pageWithTitle()
 
   behave like pageWithBackLink
+
+  behave like pageWithSectionCaption("Route details")
+
+  behave like pageWithCheckYourAnswers()
+
+  behave like pageWithFormAction(controllers.routeDetails.locationOfGoods.routes.CheckYourAnswersController.onSubmit(lrn).url)
 
   behave like pageWithHeading()
 }

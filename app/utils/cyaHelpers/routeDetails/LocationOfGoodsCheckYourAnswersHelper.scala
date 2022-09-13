@@ -28,14 +28,14 @@ class LocationOfGoodsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
 
   def locationOfGoodsType: Option[SummaryListRow] = getAnswerAndBuildRow[LocationType](
     page = LocationOfGoodsTypePage,
-    formatAnswer = formatAsText,
+    formatAnswer = formatEnumAsText(LocationType.messageKeyPrefix),
     prefix = "routeDetails.locationOfGoods.locationOfGoodsType",
     id = Some("location-of-goods-type")
   )
 
   def locationOfGoodsIdentification: Option[SummaryListRow] = getAnswerAndBuildRow[LocationOfGoodsIdentification](
     page = LocationOfGoodsIdentificationPage,
-    formatAnswer = formatAsText,
+    formatAnswer = formatEnumAsText(LocationOfGoodsIdentification.messageKeyPrefix),
     prefix = "routeDetails.locationOfGoods.locationOfGoodsIdentification",
     id = Some("location-of-goods-identification")
   )

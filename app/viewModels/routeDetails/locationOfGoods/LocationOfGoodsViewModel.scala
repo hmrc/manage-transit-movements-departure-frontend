@@ -35,10 +35,22 @@ object LocationOfGoodsViewModel {
     def apply(userAnswers: UserAnswers)(implicit messages: Messages): LocationOfGoodsViewModel = {
       val helper = new LocationOfGoodsCheckYourAnswersHelper(userAnswers, NormalMode)
 
-//      val rows = Seq(
-//      ).flatten
-
-      val rows = Seq.empty // TODO: Populate commented out rows above with related helper methods
+      val rows = Seq(
+        helper.locationOfGoodsEori,
+        helper.locationOfGoodsType,
+        helper.locationOfGoodsCoordinates,
+        helper.locationOfGoodsAuthorisationNumber,
+        helper.locationOfGoodsUnLocode,
+        helper.additionalIdentifierYesNo,
+        helper.additionalIdentifier,
+        helper.locationOfGoodsIdentification,
+        helper.locationOfGoodsCustomsOfficeIdentifier,
+        helper.locationOfGoodsAddress,
+        helper.locationOfGoodsPostalCode,
+        helper.contactYesNo,
+        helper.contactName,
+        helper.contactPhoneNumber
+      ).flatten
 
       new LocationOfGoodsViewModel(Section(rows))
     }

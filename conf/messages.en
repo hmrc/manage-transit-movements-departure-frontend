@@ -719,7 +719,7 @@ routeDetails.locationOfGoods.addLocationOfGoods.error.required = Select yes if y
 
 routeDetails.locationOfGoods.locationOfGoodsType.title = Which type of location is it?
 routeDetails.locationOfGoods.locationOfGoodsType.heading = Which type of location is it?
-routeDetails.locationOfGoods.locationOfGoodsType.checkYourAnswersLabel = Which type of location is it?
+routeDetails.locationOfGoods.locationOfGoodsType.checkYourAnswersLabel = Location type
 routeDetails.locationOfGoods.locationOfGoodsType.error.required = Select which type of location it is
 routeDetails.locationOfGoods.locationOfGoodsType.AuthorisedPlace = Authorised place - the authorised consignor’s own premises
 routeDetails.locationOfGoods.locationOfGoodsType.DesignatedLocation = Designated location - any other premises the consignor is authorised to use as an office of departure
@@ -736,7 +736,7 @@ routeDetails.locationOfGoods.locationOfGoodsIdentification.coordinates = Coordin
 routeDetails.locationOfGoods.locationOfGoodsIdentification.unlocode = UN/LOCODE
 routeDetails.locationOfGoods.locationOfGoodsIdentification.address = Address
 routeDetails.locationOfGoods.locationOfGoodsIdentification.postalCode = Postal code
-routeDetails.locationOfGoods.locationOfGoodsIdentification.checkYourAnswersLabel = identifier type for the location of goods
+routeDetails.locationOfGoods.locationOfGoodsIdentification.checkYourAnswersLabel = Identifier type for the location of goods
 routeDetails.locationOfGoods.locationOfGoodsIdentification.error.required = Select how you want to identify the location of goods
 
 routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.title = What is the customs office identifier for the location of goods?
@@ -760,7 +760,7 @@ routeDetails.locationOfGoods.locationOfGoodsCoordinates.heading = What are the c
 routeDetails.locationOfGoods.locationOfGoodsCoordinates.latitude = Latitude
 routeDetails.locationOfGoods.locationOfGoodsCoordinates.longitude = Longitude
 routeDetails.locationOfGoods.locationOfGoodsCoordinates.hintText = These numbers can be positive or negative and need between 5 and 7 decimal places. For example, 50.96622 or 1.86201.
-routeDetails.locationOfGoods.locationOfGoodsCoordinates.checkYourAnswersLabel = What are the coordinates for the location of goods //TODO: check CYA ticket
+routeDetails.locationOfGoods.locationOfGoodsCoordinates.checkYourAnswersLabel = Coordinates
 routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.invalid = The {0} coordinates must only include numbers 0 to 9, a decimal place and a minus sign
 routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.latitude.maximum = The latitude coordinates must be between -90 and 90
 routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.longitude.maximum = The longitude coordinates must be between -180 and 180

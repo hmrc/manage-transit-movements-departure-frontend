@@ -17,17 +17,35 @@
 package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import generators.Generators
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
+import org.scalacheck.Arbitrary.arbitrary
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import viewModels.routeDetails.locationOfGoods.LocationOfGoodsViewModel
+import viewModels.routeDetails.locationOfGoods.LocationOfGoodsViewModel.LocationOfGoodsViewModelProvider
+import viewModels.sections.Section
 import views.html.routeDetails.locationOfGoods.CheckYourAnswersView
 
-class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
+  private lazy val mockViewModelProvider = mock[LocationOfGoodsViewModelProvider]
   private lazy val checkYourAnswersRoute = routes.CheckYourAnswersController.onPageLoad(lrn).url
+
+  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
+    super
+      .guiceApplicationBuilder()
+      .overrides(bind[LocationOfGoodsViewModelProvider].toInstance(mockViewModelProvider))
 
   "CheckYourAnswers Controller" - {
 
     "must return OK and the correct view for a GET" in {
+      val sampleSection = arbitrary[Section].sample.value
+      when(mockViewModelProvider.apply(any())(any()))
+        .thenReturn(LocationOfGoodsViewModel(sampleSection))
 
       setExistingUserAnswers(emptyUserAnswers)
 
@@ -39,7 +57,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(lrn)(request, messages).toString
+        view(lrn, Seq(sampleSection))(request, messages).toString
     }
   }
 }

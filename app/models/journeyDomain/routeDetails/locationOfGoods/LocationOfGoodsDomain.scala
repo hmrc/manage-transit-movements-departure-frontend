@@ -32,7 +32,7 @@ sealed trait LocationOfGoodsDomain extends JourneyDomainModel {
   val qualifierOfIdentification: LocationOfGoodsIdentification
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    None // TODO - update to CYA once built
+    Some(controllers.routeDetails.locationOfGoods.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
 }
 
 object LocationOfGoodsDomain {

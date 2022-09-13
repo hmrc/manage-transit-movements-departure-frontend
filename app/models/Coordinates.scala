@@ -21,7 +21,9 @@ import play.api.libs.json.{Json, OFormat}
 case class Coordinates(
   latitude: String,
   longitude: String
-)
+) {
+  override def toString: String = s"($latitude, $longitude)"
+}
 
 object Coordinates {
   implicit val format: OFormat[Coordinates] = Json.format[Coordinates]
