@@ -863,3 +863,13 @@ routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.checkYourAnswersLabel = Do y
 routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.error.required = Select yes if you want to add a UN/LOCODE for the place of loading
 routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
 
+routeDetails.loading.placeOfLoadingUnLocode.title = What is the UN/LOCODE for the place of loading?
+routeDetails.loading.placeOfLoadingUnLocode.heading = What is the UN/LOCODE for the place of loading?
+routeDetails.loading.placeOfLoadingUnLocode.hintText = Enter the code, like GB BRS or GB MNC.
+routeDetails.loading.placeOfLoadingUnLocode.placeholder = Select a UN/LOCODE.
+routeDetails.loading.placeOfLoadingUnLocode.change.hidden = What is the UN/LOCODE for the place of loading?
+routeDetails.loading.placeOfLoadingUnLocode.checkYourAnswersLabel = What is the UN/LOCODE for the place of loading?
+routeDetails.loading.placeOfLoadingUnLocode.error.required = Enter the UN/LOCODE for the place of loading
+routeDetails.loading.placeOfLoadingUnLocode.error.invalidCharacters = The UN/LOCODE for the place of loading must only include letters a to z and spaces
+routeDetails.loading.placeOfLoadingUnLocode.error.maxLength = The UN/LOCODE for the place of loading must be 5 characters long
+
