@@ -20,9 +20,7 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
-import navigation.routeDetails.{LoadingNavigator, LoadingNavigatorProvider, LocationOfGoodsNavigatorProvider}
+import navigation.routeDetails.LoadingNavigatorProvider
 import pages.routeDetails.loading.PlaceOfLoadingAddUnLocodeYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

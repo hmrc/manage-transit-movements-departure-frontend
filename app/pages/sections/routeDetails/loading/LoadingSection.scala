@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package pages.sections
+package pages.sections.routeDetails.loading
 
-import play.api.libs.json.JsPath
 import pages.QuestionPage
+import pages.sections.routeDetails.RouteDetailsSection
+import play.api.libs.json.{JsObject, JsPath}
 
-case object LoadingSection extends QuestionPage[Nothing] {
+case object LoadingSection extends QuestionPage[JsObject] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = RouteDetailsSection.path \ toString
 
-  override def toString: String = "placeOfLoadingAddUnLocodeYesNo"
+  override def toString: String = "loading"
 }

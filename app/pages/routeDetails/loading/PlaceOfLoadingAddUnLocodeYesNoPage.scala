@@ -19,7 +19,7 @@ package pages.routeDetails.loading
 import controllers.routeDetails.loading.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.LoadingSection
+import pages.sections.routeDetails.loading.LoadingSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
@@ -27,7 +27,7 @@ case object PlaceOfLoadingAddUnLocodeYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = LoadingSection.path \ toString
 
-  override def toString: String = "placeOfLoadingAddUnLocodeYesNo"
+  override def toString: String = "addUnLocodeYesNo"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.PlaceOfLoadingAddUnLocodeYesNoController.onPageLoad(userAnswers.lrn, mode))
