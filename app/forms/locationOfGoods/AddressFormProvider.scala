@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package forms
+package forms.locationOfGoods
 
+import forms.StopOnFirstFail
 import forms.mappings.Mappings
 import models.AddressLine._
 import models.{Address, CountryList}
@@ -25,7 +26,7 @@ import play.api.i18n.Messages
 
 import javax.inject.Inject
 
-class LocationOfGoodsAddressFormProvider @Inject() extends Mappings {
+class AddressFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String, countryList: CountryList)(implicit messages: Messages): Form[Address] =
     Form(

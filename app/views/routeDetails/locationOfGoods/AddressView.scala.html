@@ -35,18 +35,18 @@
 )(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.locationOfGoods.locationOfGoodsAddress.title"),
+    title = messages("routeDetails.locationOfGoods.address.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.LocationOfGoodsAddressController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.AddressController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputAddress(
             form = form,
-            messageKeyPrefix = "routeDetails.locationOfGoods.locationOfGoodsAddress",
+            messageKeyPrefix = "routeDetails.locationOfGoods.address",
             caption = Some(messages("routeDetails.caption")),
             countries = countries
         )

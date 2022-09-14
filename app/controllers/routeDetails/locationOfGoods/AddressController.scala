@@ -18,34 +18,34 @@ package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.LocationOfGoodsAddressFormProvider
+import forms.locationOfGoods.AddressFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
-import pages.routeDetails.locationOfGoods.LocationOfGoodsAddressPage
+import pages.routeDetails.locationOfGoods.AddressPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsAddressView
+import views.html.routeDetails.locationOfGoods.AddressView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LocationOfGoodsAddressController @Inject() (
+class AddressController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LocationOfGoodsNavigatorProvider,
   actions: Actions,
-  formProvider: LocationOfGoodsAddressFormProvider,
+  formProvider: AddressFormProvider,
   countriesService: CountriesService,
   val controllerComponents: MessagesControllerComponents,
-  view: LocationOfGoodsAddressView
+  view: AddressView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsAddress"
+  private val prefix: String = "routeDetails.locationOfGoods.address"
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
@@ -54,7 +54,7 @@ class LocationOfGoodsAddressController @Inject() (
         countriesService.getTransitCountries.map {
           countryList =>
             val form = formProvider(prefix, countryList)
-            val preparedForm = request.userAnswers.get(LocationOfGoodsAddressPage) match {
+            val preparedForm = request.userAnswers.get(AddressPage) match {
               case None        => form
               case Some(value) => form.fill(value)
             }
@@ -77,7 +77,7 @@ class LocationOfGoodsAddressController @Inject() (
                 value =>
                   navigatorProvider().flatMap {
                     implicit navigator =>
-                      LocationOfGoodsAddressPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                      AddressPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
                   }
               )
 

@@ -16,25 +16,25 @@
 
 package views.routeDetails.locationOfGoods
 
-import forms.LocationOfGoodsAddressFormProvider
+import forms.locationOfGoods.AddressFormProvider
 import generators.Generators
 import models.{Address, CountryList, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.AddressViewBehaviours
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsAddressView
+import views.html.routeDetails.locationOfGoods.AddressView
 
-class LocationOfGoodsAddressViewSpec extends AddressViewBehaviours with Generators {
+class AddressViewSpec extends AddressViewBehaviours with Generators {
 
   private val countryList = arbitrary[CountryList].sample.value
 
-  override def form: Form[Address] = new LocationOfGoodsAddressFormProvider()(prefix, countryList)
+  override def form: Form[Address] = new AddressFormProvider()(prefix, countryList)
 
   override def applyView(form: Form[Address]): HtmlFormat.Appendable =
-    injector.instanceOf[LocationOfGoodsAddressView].apply(form, lrn, NormalMode, countryList.countries)(fakeRequest, messages)
+    injector.instanceOf[AddressView].apply(form, lrn, NormalMode, countryList.countries)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsAddress"
+  override val prefix: String = "routeDetails.locationOfGoods.address"
 
   behave like pageWithTitle()
 

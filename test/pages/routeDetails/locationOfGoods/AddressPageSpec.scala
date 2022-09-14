@@ -16,19 +16,17 @@
 
 package pages.routeDetails.locationOfGoods
 
-import controllers.routeDetails.locationOfGoods.routes
-import models.{Address, Mode, UserAnswers}
-import pages.QuestionPage
-import pages.sections.routeDetails.locationOfGoods.LocationOfGoodsIdentifierSection
-import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import pages.behaviours.PageBehaviours
+import models.Address
 
-case object LocationOfGoodsAddressPage extends QuestionPage[Address] {
+class AddressPageSpec extends PageBehaviours {
 
-  override def path: JsPath = LocationOfGoodsIdentifierSection.path \ toString
+  "AddressPage" - {
 
-  override def toString: String = "address"
+    beRetrievable[Address](AddressPage)
 
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.LocationOfGoodsAddressController.onPageLoad(userAnswers.lrn, mode))
+    beSettable[Address](AddressPage)
+
+    beRemovable[Address](AddressPage)
+  }
 }

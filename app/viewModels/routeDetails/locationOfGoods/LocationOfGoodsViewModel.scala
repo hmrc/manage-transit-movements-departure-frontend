@@ -45,7 +45,7 @@ object LocationOfGoodsViewModel {
         helper.additionalIdentifier,
         helper.locationOfGoodsCoordinates,
         helper.locationOfGoodsUnLocode,
-        helper.locationOfGoodsAddress,
+        helper.address,
         helper.locationOfGoodsPostalCode,
         helper.contactYesNo,
         helper.contactName,

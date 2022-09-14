@@ -155,7 +155,7 @@ object LocationOfGoodsDomain {
     def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
       (
         UserAnswersReader(typeOfLocation),
-        LocationOfGoodsAddressPage.reader,
+        AddressPage.reader,
         AddContactYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
       ).mapN {
         (typeOfLocation, address, additionalContact) =>

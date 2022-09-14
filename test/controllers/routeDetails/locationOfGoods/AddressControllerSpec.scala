@@ -17,33 +17,33 @@
 package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.LocationOfGoodsAddressFormProvider
+import forms.locationOfGoods.AddressFormProvider
 import generators.Generators
 import models.{Address, CountryList, NormalMode, UserAnswers}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.routeDetails.locationOfGoods.LocationOfGoodsAddressPage
+import pages.routeDetails.locationOfGoods.AddressPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CountriesService
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsAddressView
+import views.html.routeDetails.locationOfGoods.AddressView
 
 import scala.concurrent.Future
 
-class LocationOfGoodsAddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val testAddress = arbitrary[Address].sample.value
   private val countryList = CountryList(Seq(testAddress.country))
 
-  private val formProvider = new LocationOfGoodsAddressFormProvider()
-  private val form         = formProvider("routeDetails.locationOfGoods.locationOfGoodsAddress", countryList)
+  private val formProvider = new AddressFormProvider()
+  private val form         = formProvider("routeDetails.locationOfGoods.address", countryList)
 
-  private val mode                             = NormalMode
-  private lazy val locationOfGoodsAddressRoute = routes.LocationOfGoodsAddressController.onPageLoad(lrn, mode).url
+  private val mode              = NormalMode
+  private lazy val addressRoute = routes.AddressController.onPageLoad(lrn, mode).url
 
   private lazy val mockCountriesService: CountriesService = mock[CountriesService]
 
@@ -58,7 +58,7 @@ class LocationOfGoodsAddressControllerSpec extends SpecBase with AppWithDefaultM
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
       .overrides(bind(classOf[LocationOfGoodsNavigatorProvider]).toInstance(fakeLocationOfGoodsNavigatorProvider))
 
-  "LocationOfGoodsAddress Controller" - {
+  "Address Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -66,10 +66,10 @@ class LocationOfGoodsAddressControllerSpec extends SpecBase with AppWithDefaultM
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsAddressRoute)
+      val request = FakeRequest(GET, addressRoute)
       val result  = route(app, request).value
 
-      val view = injector.instanceOf[LocationOfGoodsAddressView]
+      val view = injector.instanceOf[AddressView]
 
       status(result) mustEqual OK
 
@@ -82,11 +82,11 @@ class LocationOfGoodsAddressControllerSpec extends SpecBase with AppWithDefaultM
       when(mockCountriesService.getTransitCountries()(any())).thenReturn(Future.successful(countryList))
 
       val userAnswers = UserAnswers(lrn, eoriNumber)
-        .setValue(LocationOfGoodsAddressPage, testAddress)
+        .setValue(AddressPage, testAddress)
 
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsAddressRoute)
+      val request = FakeRequest(GET, addressRoute)
 
       val result = route(app, request).value
 
@@ -99,7 +99,7 @@ class LocationOfGoodsAddressControllerSpec extends SpecBase with AppWithDefaultM
         )
       )
 
-      val view = injector.instanceOf[LocationOfGoodsAddressView]
+      val view = injector.instanceOf[AddressView]
 
       status(result) mustEqual OK
 
@@ -114,7 +114,7 @@ class LocationOfGoodsAddressControllerSpec extends SpecBase with AppWithDefaultM
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, locationOfGoodsAddressRoute)
+      val request = FakeRequest(POST, addressRoute)
         .withFormUrlEncodedBody(
           ("addressLine1", testAddress.line1),
           ("addressLine2", testAddress.line2),
@@ -135,14 +135,14 @@ class LocationOfGoodsAddressControllerSpec extends SpecBase with AppWithDefaultM
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, locationOfGoodsAddressRoute).withFormUrlEncodedBody(("value", ""))
+      val request   = FakeRequest(POST, addressRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[LocationOfGoodsAddressView]
+      val view = injector.instanceOf[AddressView]
 
       contentAsString(result) mustEqual
         view(boundForm, lrn, mode, countryList.countries)(request, messages).toString
@@ -152,7 +152,7 @@ class LocationOfGoodsAddressControllerSpec extends SpecBase with AppWithDefaultM
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, locationOfGoodsAddressRoute)
+      val request = FakeRequest(GET, addressRoute)
 
       val result = route(app, request).value
 
@@ -165,7 +165,7 @@ class LocationOfGoodsAddressControllerSpec extends SpecBase with AppWithDefaultM
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, locationOfGoodsAddressRoute)
+      val request = FakeRequest(POST, addressRoute)
         .withFormUrlEncodedBody(
           ("addressLine1", testAddress.line1),
           ("addressLine2", testAddress.line2),
