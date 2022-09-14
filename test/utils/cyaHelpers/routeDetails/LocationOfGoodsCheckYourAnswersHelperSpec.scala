@@ -26,8 +26,8 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.locationOfGoods.contact.{LocationOfGoodsContactNamePage, TelephoneNumberPage}
 import pages.routeDetails.locationOfGoods.{
   AddContactYesNoPage,
+  AddIdentifierYesNoPage,
   AdditionalIdentifierPage,
-  LocationOfGoodsAddIdentifierYesNoPage,
   LocationOfGoodsAddressPage,
   LocationOfGoodsAuthorisationNumberPage,
   LocationOfGoodsCoordinatesPage,
@@ -451,7 +451,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
     "additionalIdentifierYesNo" - {
       "must return None" - {
-        "when locationOfGoodsAddIdentifierYesNoPage is undefined" in {
+        "when addIdentifierYesNoPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -462,12 +462,12 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
 
       "must return Some(Row)" - {
-        "when locationOfGoodsAddIdentifierYesNoPage is defined" in {
+        "when addIdentifierYesNoPage is defined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val prefix = "routeDetails.locationOfGoods.locationOfGoodsAddIdentifierYesNo"
+              val prefix = "routeDetails.locationOfGoods.addIdentifierYesNo"
               val answers = emptyUserAnswers
-                .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
+                .setValue(AddIdentifierYesNoPage, true)
               val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
               val result = helper.additionalIdentifierYesNo
 
@@ -480,7 +480,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.LocationOfGoodsAddIdentifierYesNoController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.AddIdentifierYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
                           attributes = Map("id" -> "location-of-goods-add-identifier")
                         )

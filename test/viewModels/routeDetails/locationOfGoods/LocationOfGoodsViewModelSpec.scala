@@ -48,7 +48,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
         "must return 8 rows" in {
           val initialAnswers = emptyUserAnswers
             .setValue(LocationOfGoodsIdentificationPage, qualifier)
-            .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
+            .setValue(AddIdentifierYesNoPage, true)
             .setValue(AddContactYesNoPage, true)
 
           forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
@@ -64,7 +64,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
         "must return 5 rows" in {
           val initialAnswers = emptyUserAnswers
             .setValue(LocationOfGoodsIdentificationPage, qualifier)
-            .setValue(LocationOfGoodsAddIdentifierYesNoPage, false)
+            .setValue(AddIdentifierYesNoPage, false)
             .setValue(AddContactYesNoPage, false)
 
           forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
@@ -84,7 +84,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
         "must return 8 rows" in {
           val initialAnswers = emptyUserAnswers
             .setValue(LocationOfGoodsIdentificationPage, qualifier)
-            .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
+            .setValue(AddIdentifierYesNoPage, true)
             .setValue(AddContactYesNoPage, true)
 
           forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
@@ -100,7 +100,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
         "must return 5 rows" in {
           val initialAnswers = emptyUserAnswers
             .setValue(LocationOfGoodsIdentificationPage, qualifier)
-            .setValue(LocationOfGoodsAddIdentifierYesNoPage, false)
+            .setValue(AddIdentifierYesNoPage, false)
             .setValue(AddContactYesNoPage, false)
 
           forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {

@@ -25,14 +25,14 @@ import play.api.mvc.Call
 
 import scala.util.Try
 
-case object LocationOfGoodsAddIdentifierYesNoPage extends QuestionPage[Boolean] {
+case object AddIdentifierYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = LocationOfGoodsIdentifierSection.path \ toString
 
   override def toString: String = "addAdditionalIdentifier"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.LocationOfGoodsAddIdentifierYesNoController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.AddIdentifierYesNoController.onPageLoad(userAnswers.lrn, mode))
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {

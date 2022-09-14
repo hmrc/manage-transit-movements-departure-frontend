@@ -90,9 +90,9 @@ class LocationOfGoodsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
   )
 
   def additionalIdentifierYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
-    page = LocationOfGoodsAddIdentifierYesNoPage,
+    page = AddIdentifierYesNoPage,
     formatAnswer = formatAsYesOrNo,
-    prefix = "routeDetails.locationOfGoods.locationOfGoodsAddIdentifierYesNo",
+    prefix = "routeDetails.locationOfGoods.addIdentifierYesNo",
     id = Some("location-of-goods-add-identifier")
   )
 

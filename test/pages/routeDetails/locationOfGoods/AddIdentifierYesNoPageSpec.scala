@@ -19,15 +19,15 @@ package pages.routeDetails.locationOfGoods
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
-class LocationOfGoodsAddIdentifierYesNoPageSpec extends PageBehaviours {
+class AddIdentifierYesNoPageSpec extends PageBehaviours {
 
-  "LocationOfGoodsAddIdentifierPage" - {
+  "AddIdentifierYesNoPage" - {
 
-    beRetrievable[Boolean](LocationOfGoodsAddIdentifierYesNoPage)
+    beRetrievable[Boolean](AddIdentifierYesNoPage)
 
-    beSettable[Boolean](LocationOfGoodsAddIdentifierYesNoPage)
+    beSettable[Boolean](AddIdentifierYesNoPage)
 
-    beRemovable[Boolean](LocationOfGoodsAddIdentifierYesNoPage)
+    beRemovable[Boolean](AddIdentifierYesNoPage)
 
     "cleanup" - {
       "when NO selected" - {
@@ -36,7 +36,7 @@ class LocationOfGoodsAddIdentifierYesNoPageSpec extends PageBehaviours {
             str =>
               val preChange = emptyUserAnswers.setValue(AdditionalIdentifierPage, str)
 
-              val postChange = preChange.setValue(LocationOfGoodsAddIdentifierYesNoPage, false)
+              val postChange = preChange.setValue(AddIdentifierYesNoPage, false)
 
               postChange.get(AdditionalIdentifierPage) mustNot be(defined)
           }
@@ -49,7 +49,7 @@ class LocationOfGoodsAddIdentifierYesNoPageSpec extends PageBehaviours {
             str =>
               val preChange = emptyUserAnswers.setValue(AdditionalIdentifierPage, str)
 
-              val postChange = preChange.setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
+              val postChange = preChange.setValue(AddIdentifierYesNoPage, true)
 
               postChange.get(AdditionalIdentifierPage) must be(defined)
           }
