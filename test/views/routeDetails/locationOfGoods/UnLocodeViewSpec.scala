@@ -23,9 +23,9 @@ import models.{NormalMode, UnLocodeList}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.InputSelectViewBehaviours
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsUnLocodeView
+import views.html.routeDetails.locationOfGoods.UnLocodeView
 
-class LocationOfGoodsUnLocodeViewSpec extends InputSelectViewBehaviours[UnLocode] with Generators {
+class UnLocodeViewSpec extends InputSelectViewBehaviours[UnLocode] with Generators {
 
   private lazy val unLocode1 = arbitraryUnLocode.arbitrary.sample.get
   private lazy val unLocode2 = arbitraryUnLocode.arbitrary.sample.get
@@ -41,9 +41,9 @@ class LocationOfGoodsUnLocodeViewSpec extends InputSelectViewBehaviours[UnLocode
   override def form: Form[UnLocode] = new UnLocodeFormProvider()(prefix, UnLocodeList(values))
 
   override def applyView(form: Form[UnLocode]): HtmlFormat.Appendable =
-    injector.instanceOf[LocationOfGoodsUnLocodeView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[UnLocodeView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsUnLocode"
+  override val prefix: String = "routeDetails.locationOfGoods.unLocode"
 
   behave like pageWithTitle()
 

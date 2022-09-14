@@ -823,16 +823,16 @@ routeDetails.locationOfGoods.addIdentifierYesNo.heading = Do you want to add ano
 routeDetails.locationOfGoods.addIdentifierYesNo.checkYourAnswersLabel = Do you want to add another identifier for the location of goods?
 routeDetails.locationOfGoods.addIdentifierYesNo.error.required = Select yes if you want to add another identifier for the location of goods
 
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.title = What is the UN/LOCODE for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.heading = What is the UN/LOCODE for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.hintText = Enter the location or code, like Berlin or DEBER.
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.placeholder = Select a UN/LOCODE.
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.change.hidden = What is the UN/LOCODE for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.checkYourAnswersLabel = UN/LOCODE for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.error.required = Enter the UN/LOCODE for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.error.invalidCharacters = The UN/LOCODE must only include letters a to z numbers 0 to 9
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.error.maxLength = The UN/LOCODE must be 5 characters long
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
+routeDetails.locationOfGoods.unLocode.title = What is the UN/LOCODE for the location of goods?
+routeDetails.locationOfGoods.unLocode.heading = What is the UN/LOCODE for the location of goods?
+routeDetails.locationOfGoods.unLocode.hintText = Enter the location or code, like Berlin or DEBER.
+routeDetails.locationOfGoods.unLocode.placeholder = Select a UN/LOCODE.
+routeDetails.locationOfGoods.unLocode.change.hidden = What is the UN/LOCODE for the location of goods?
+routeDetails.locationOfGoods.unLocode.checkYourAnswersLabel = UN/LOCODE for the location of goods
+routeDetails.locationOfGoods.unLocode.error.required = Enter the UN/LOCODE for the location of goods
+routeDetails.locationOfGoods.unLocode.error.invalidCharacters = The UN/LOCODE must only include letters a to z numbers 0 to 9
+routeDetails.locationOfGoods.unLocode.error.maxLength = The UN/LOCODE must be 5 characters long
+routeDetails.locationOfGoods.unLocode.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
 
 routeDetails.locationOfGoods.addContactLocationOfGoods.title = Do you want to add a contact for the location of goods?
 routeDetails.locationOfGoods.addContactLocationOfGoods.heading = Do you want to add a contact for the location of goods?

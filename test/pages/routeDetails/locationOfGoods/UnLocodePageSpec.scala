@@ -19,14 +19,14 @@ package pages.routeDetails.locationOfGoods
 import models.reference.UnLocode
 import pages.behaviours.PageBehaviours
 
-class LocationOfGoodsUnLocodePageSpec extends PageBehaviours {
+class UnLocodePageSpec extends PageBehaviours {
 
-  "LocationOfGoodsUnLocodePage" - {
+  "UnLocodePage" - {
 
-    beRetrievable[UnLocode](LocationOfGoodsUnLocodePage)
+    beRetrievable[UnLocode](UnLocodePage)
 
-    beSettable[UnLocode](LocationOfGoodsUnLocodePage)
+    beSettable[UnLocode](UnLocodePage)
 
-    beRemovable[UnLocode](LocationOfGoodsUnLocodePage)
+    beRemovable[UnLocode](UnLocodePage)
   }
 }

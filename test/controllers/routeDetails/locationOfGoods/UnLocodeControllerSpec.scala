@@ -23,28 +23,28 @@ import models.{NormalMode, UnLocodeList}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.routeDetails.locationOfGoods.LocationOfGoodsUnLocodePage
+import pages.routeDetails.locationOfGoods.UnLocodePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UnLocodesService
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsUnLocodeView
+import views.html.routeDetails.locationOfGoods.UnLocodeView
 
 import scala.concurrent.Future
 
-class LocationOfGoodsUnLocodeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+class UnLocodeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val unLocode1    = arbitraryUnLocode.arbitrary.sample.get
   private val unLocode2    = arbitraryUnLocode.arbitrary.sample.get
   private val unLocodeList = UnLocodeList(Seq(unLocode1, unLocode2))
 
   private val formProvider = new UnLocodeFormProvider()
-  private val form         = formProvider("routeDetails.locationOfGoods.locationOfGoodsUnLocode", unLocodeList)
+  private val form         = formProvider("routeDetails.locationOfGoods.unLocode", unLocodeList)
   private val mode         = NormalMode
 
   private val mockUnLocodesService: UnLocodesService = mock[UnLocodesService]
-  private lazy val locationOfGoodsUnLocodeRoute      = routes.LocationOfGoodsUnLocodeController.onPageLoad(lrn, mode).url
+  private lazy val unLocodeRoute                     = routes.UnLocodeController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -52,18 +52,18 @@ class LocationOfGoodsUnLocodeControllerSpec extends SpecBase with AppWithDefault
       .overrides(bind(classOf[LocationOfGoodsNavigatorProvider]).toInstance(fakeLocationOfGoodsNavigatorProvider))
       .overrides(bind(classOf[UnLocodesService]).toInstance(mockUnLocodesService))
 
-  "LocationOfGoodsUnLocode Controller" - {
+  "UnLocode Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       when(mockUnLocodesService.getUnLocodes()(any())).thenReturn(Future.successful(unLocodeList))
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsUnLocodeRoute)
+      val request = FakeRequest(GET, unLocodeRoute)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[LocationOfGoodsUnLocodeView]
+      val view = injector.instanceOf[UnLocodeView]
 
       status(result) mustEqual OK
 
@@ -74,16 +74,16 @@ class LocationOfGoodsUnLocodeControllerSpec extends SpecBase with AppWithDefault
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       when(mockUnLocodesService.getUnLocodes()(any())).thenReturn(Future.successful(unLocodeList))
-      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsUnLocodePage, unLocode1)
+      val userAnswers = emptyUserAnswers.setValue(UnLocodePage, unLocode1)
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsUnLocodeRoute)
+      val request = FakeRequest(GET, unLocodeRoute)
 
       val result = route(app, request).value
 
       val filledForm = form.bind(Map("value" -> unLocode1.unLocodeExtendedCode))
 
-      val view = injector.instanceOf[LocationOfGoodsUnLocodeView]
+      val view = injector.instanceOf[UnLocodeView]
 
       status(result) mustEqual OK
 
@@ -98,7 +98,7 @@ class LocationOfGoodsUnLocodeControllerSpec extends SpecBase with AppWithDefault
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, locationOfGoodsUnLocodeRoute)
+      val request = FakeRequest(POST, unLocodeRoute)
         .withFormUrlEncodedBody(("value", unLocode1.unLocodeExtendedCode))
 
       val result = route(app, request).value
@@ -113,12 +113,12 @@ class LocationOfGoodsUnLocodeControllerSpec extends SpecBase with AppWithDefault
       when(mockUnLocodesService.getUnLocodes()(any())).thenReturn(Future.successful(unLocodeList))
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, locationOfGoodsUnLocodeRoute).withFormUrlEncodedBody(("value", "invalid value"))
+      val request   = FakeRequest(POST, unLocodeRoute).withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[LocationOfGoodsUnLocodeView]
+      val view = injector.instanceOf[UnLocodeView]
 
       status(result) mustEqual BAD_REQUEST
 
@@ -130,7 +130,7 @@ class LocationOfGoodsUnLocodeControllerSpec extends SpecBase with AppWithDefault
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, locationOfGoodsUnLocodeRoute)
+      val request = FakeRequest(GET, unLocodeRoute)
 
       val result = route(app, request).value
 
@@ -142,7 +142,7 @@ class LocationOfGoodsUnLocodeControllerSpec extends SpecBase with AppWithDefault
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, locationOfGoodsUnLocodeRoute)
+      val request = FakeRequest(POST, unLocodeRoute)
         .withFormUrlEncodedBody(("value", unLocode1.unLocodeExtendedCode))
 
       val result = route(app, request).value

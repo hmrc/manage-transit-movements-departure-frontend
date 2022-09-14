@@ -34,9 +34,9 @@ import pages.routeDetails.locationOfGoods.{
   CustomsOfficeIdentifierPage,
   EoriPage,
   IdentificationPage,
-  LocationOfGoodsUnLocodePage,
   LocationTypePage,
-  PostalCodePage
+  PostalCodePage,
+  UnLocodePage
 }
 import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
@@ -314,27 +314,27 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
     }
 
-    "locationOfGoodsUnLocode" - {
+    "unLocode" - {
       "must return None" - {
-        "when locationOfGoodsUnLocodePage is undefined" in {
+        "when unLocodePage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-              val result = helper.locationOfGoodsUnLocode
+              val result = helper.unLocode
               result mustBe None
           }
         }
       }
 
       "must return Some(Row)" - {
-        "when locationOfGoodsUnLocodePage is defined" in {
+        "when unLocodePage is defined" in {
           forAll(arbitrary[Mode], arbitrary[UnLocode]) {
             (mode, unLocode) =>
-              val prefix = "routeDetails.locationOfGoods.locationOfGoodsUnLocode"
+              val prefix = "routeDetails.locationOfGoods.unLocode"
               val answers = emptyUserAnswers
-                .setValue(LocationOfGoodsUnLocodePage, unLocode)
+                .setValue(UnLocodePage, unLocode)
               val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.locationOfGoodsUnLocode
+              val result = helper.unLocode
 
               result mustBe Some(
                 SummaryListRow(
@@ -345,7 +345,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.LocationOfGoodsUnLocodeController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.UnLocodeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
                           attributes = Map("id" -> "location-of-goods-un-locode")
                         )

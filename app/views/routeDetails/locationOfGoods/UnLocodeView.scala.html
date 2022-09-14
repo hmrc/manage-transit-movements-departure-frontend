@@ -34,25 +34,25 @@
 @(form: Form[UnLocode], lrn: LocalReferenceNumber, unLocodes: Seq[UnLocode], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.locationOfGoods.locationOfGoodsUnLocode.title"),
+    title = messages("routeDetails.locationOfGoods.unLocode.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.LocationOfGoodsUnLocodeController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.UnLocodeController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputSelect(
             field = form("value"),
             selectType = SelectWithAdditionalHtml(
-                heading = messages("routeDetails.locationOfGoods.locationOfGoodsUnLocode.heading"),
+                heading = messages("routeDetails.locationOfGoods.unLocode.heading"),
                 caption = Some(messages("routeDetails.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.locationOfGoods.locationOfGoodsUnLocode.paragraph")}</p>""")
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.locationOfGoods.unLocode.paragraph")}</p>""")
             ),
-            hint = Some(messages("routeDetails.locationOfGoods.locationOfGoodsUnLocode.hintText")),
+            hint = Some(messages("routeDetails.locationOfGoods.unLocode.hintText")),
             selectItems = unLocodes.toSelectItems(form.value),
-            placeholder = messages("routeDetails.locationOfGoods.locationOfGoodsUnLocode.placeholder")
+            placeholder = messages("routeDetails.locationOfGoods.unLocode.placeholder")
         )
 
         @button(attributes = Map("id" -> "submit"))

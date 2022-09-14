@@ -192,7 +192,7 @@ trait UserAnswersEntryGenerators {
       case AddIdentifierYesNoPage      => arbitrary[Boolean].map(JsBoolean)
       case AdditionalIdentifierPage    => Gen.alphaNumStr.map(JsString)
       case CoordinatesPage             => arbitrary[Coordinates].map(Json.toJson(_))
-      case LocationOfGoodsUnLocodePage => arbitrary[UnLocode].map(Json.toJson(_))
+      case UnLocodePage                => arbitrary[UnLocode].map(Json.toJson(_))
       case AddressPage                 => arbitrary[Address].map(Json.toJson(_))
       case PostalCodePage              => arbitrary[PostalCodeAddress].map(Json.toJson(_))
     }

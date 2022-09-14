@@ -68,10 +68,10 @@ class LocationOfGoodsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     id = Some("location-of-goods-coordinates")
   )
 
-  def locationOfGoodsUnLocode: Option[SummaryListRow] = getAnswerAndBuildRow[UnLocode](
-    page = LocationOfGoodsUnLocodePage,
+  def unLocode: Option[SummaryListRow] = getAnswerAndBuildRow[UnLocode](
+    page = UnLocodePage,
     formatAnswer = formatAsText,
-    prefix = "routeDetails.locationOfGoods.locationOfGoodsUnLocode",
+    prefix = "routeDetails.locationOfGoods.unLocode",
     id = Some("location-of-goods-un-locode")
   )
 
