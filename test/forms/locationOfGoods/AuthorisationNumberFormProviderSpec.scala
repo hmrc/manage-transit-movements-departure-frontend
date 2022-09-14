@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package forms
+package forms.locationOfGoods
 
-import forms.Constants.maxLocationOfGoodsAuthorisationNumberLength
+import forms.Constants.maxAuthorisationNumberLength
 import forms.behaviours.StringFieldBehaviours
+import models.domain.StringFieldRegex.alphaNumericRegex
 import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
-import models.domain.StringFieldRegex.alphaNumericRegex
 
-class LocationOfGoodsAuthorisationNumberFormProviderSpec extends StringFieldBehaviours {
+class AuthorisationNumberFormProviderSpec extends StringFieldBehaviours {
 
   private val prefix               = Gen.alphaNumStr.sample.value
   private val invalidCharactersKey = s"$prefix.error.invalidCharacters"
@@ -30,7 +30,7 @@ class LocationOfGoodsAuthorisationNumberFormProviderSpec extends StringFieldBeha
   private val maxLengthKey         = s"$prefix.error.maxLength"
   private val maxLength            = 35
 
-  val form = new LocationOfGoodsAuthorisationNumberFormProvider()(prefix)
+  val form = new AuthorisationNumberFormProvider()(prefix)
 
   ".value" - {
 
@@ -46,7 +46,7 @@ class LocationOfGoodsAuthorisationNumberFormProviderSpec extends StringFieldBeha
       form,
       fieldName,
       error = FormError(fieldName, invalidCharactersKey, Seq(alphaNumericRegex.regex)),
-      maxLocationOfGoodsAuthorisationNumberLength
+      maxAuthorisationNumberLength
     )
 
     behave like mandatoryField(
@@ -56,10 +56,10 @@ class LocationOfGoodsAuthorisationNumberFormProviderSpec extends StringFieldBeha
     )
 
     "must not bind valid strings over max length" in {
-      val expectedError = FormError(fieldName, maxLengthKey, Seq(maxLocationOfGoodsAuthorisationNumberLength))
+      val expectedError = FormError(fieldName, maxLengthKey, Seq(maxAuthorisationNumberLength))
 
       val gen = for {
-        str <- stringsLongerThan(maxLocationOfGoodsAuthorisationNumberLength, Gen.alphaNumChar)
+        str <- stringsLongerThan(maxAuthorisationNumberLength, Gen.alphaNumChar)
       } yield str
 
       forAll(gen) {

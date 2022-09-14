@@ -747,13 +747,13 @@ routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.change.hidde
 routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.checkYourAnswersLabel = What is the customs office identifier for the location of goods?
 routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.error.required = Enter the customs office identifier for the location of goods
 
-routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.title = What is the authorisation number for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.heading = What is the authorisation number for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.checkYourAnswersLabel = What is the authorisation number for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.error.required = Enter the authorisation number for the location of goods.
-routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.error.maxLength = The authorisation number must be 35 characters or less.
-routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.error.invalidCharacters = The authorisation number must only include letters a to z and numbers 0 to 9.
-routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.hintText = This can be up to 35 characters long and include both letters and numbers.
+routeDetails.locationOfGoods.authorisationNumber.title = What is the authorisation number for the location of goods?
+routeDetails.locationOfGoods.authorisationNumber.heading = What is the authorisation number for the location of goods?
+routeDetails.locationOfGoods.authorisationNumber.checkYourAnswersLabel = What is the authorisation number for the location of goods?
+routeDetails.locationOfGoods.authorisationNumber.error.required = Enter the authorisation number for the location of goods.
+routeDetails.locationOfGoods.authorisationNumber.error.maxLength = The authorisation number must be 35 characters or less.
+routeDetails.locationOfGoods.authorisationNumber.error.invalidCharacters = The authorisation number must only include letters a to z and numbers 0 to 9.
+routeDetails.locationOfGoods.authorisationNumber.hintText = This can be up to 35 characters long and include both letters and numbers.
 
 routeDetails.locationOfGoods.locationOfGoodsCoordinates.title = What are the coordinates for the location of goods?
 routeDetails.locationOfGoods.locationOfGoodsCoordinates.heading = What are the coordinates for the location of goods?

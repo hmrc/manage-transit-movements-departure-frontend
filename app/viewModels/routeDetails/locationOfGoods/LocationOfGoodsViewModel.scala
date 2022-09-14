@@ -40,7 +40,7 @@ object LocationOfGoodsViewModel {
         helper.locationOfGoodsIdentification,
         helper.locationOfGoodsCustomsOfficeIdentifier,
         helper.locationOfGoodsEori,
-        helper.locationOfGoodsAuthorisationNumber,
+        helper.authorisationNumber,
         helper.additionalIdentifierYesNo,
         helper.additionalIdentifier,
         helper.locationOfGoodsCoordinates,

@@ -29,7 +29,7 @@ import pages.routeDetails.locationOfGoods.{
   AddIdentifierYesNoPage,
   AdditionalIdentifierPage,
   AddressPage,
-  LocationOfGoodsAuthorisationNumberPage,
+  AuthorisationNumberPage,
   LocationOfGoodsCoordinatesPage,
   LocationOfGoodsCustomsOfficeIdentifierPage,
   LocationOfGoodsEoriPage,
@@ -224,38 +224,38 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
     }
 
-    "locationOfGoodsAuthorisationNumber" - {
+    "authorisationNumber" - {
       "must return None" - {
-        "when locationOfGoodsAuthorisationNumberPage is undefined" in {
+        "when authorisationNumberPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-              val result = helper.locationOfGoodsAuthorisationNumber
+              val result = helper.authorisationNumber
               result mustBe None
           }
         }
       }
 
       "must return Some(Row)" - {
-        "when locationOfGoodsAuthorisationNumberPage is defined" in {
+        "when authorisationNumberPage is defined" in {
           forAll(arbitrary[Mode], arbitrary[String]) {
-            (mode, locationOfGoodsAuthorisationNumber) =>
-              val prefix = "routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber"
+            (mode, authorisationNumber) =>
+              val prefix = "routeDetails.locationOfGoods.authorisationNumber"
               val answers = emptyUserAnswers
-                .setValue(LocationOfGoodsAuthorisationNumberPage, locationOfGoodsAuthorisationNumber)
+                .setValue(AuthorisationNumberPage, authorisationNumber)
               val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.locationOfGoodsAuthorisationNumber
+              val result = helper.authorisationNumber
 
               result mustBe Some(
                 SummaryListRow(
                   key = Key(messages(s"$prefix.checkYourAnswersLabel").toText),
-                  value = Value(locationOfGoodsAuthorisationNumber.toText),
+                  value = Value(authorisationNumber.toText),
                   actions = Some(
                     Actions(
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.LocationOfGoodsAuthorisationNumberController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.AuthorisationNumberController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
                           attributes = Map("id" -> "location-of-goods-authorisation-number")
                         )

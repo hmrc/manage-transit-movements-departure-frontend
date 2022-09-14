@@ -16,23 +16,23 @@
 
 package views.routeDetails.locationOfGoods
 
-import forms.LocationOfGoodsAuthorisationNumberFormProvider
+import forms.locationOfGoods.AuthorisationNumberFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsAuthorisationNumberView
+import views.html.routeDetails.locationOfGoods.AuthorisationNumberView
 import org.scalacheck.{Arbitrary, Gen}
 
-class LocationOfGoodsAuthorisationNumberViewSpec extends InputTextViewBehaviours[String] {
+class AuthorisationNumberViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber"
+  override val prefix: String = "routeDetails.locationOfGoods.authorisationNumber"
 
-  override def form: Form[String] = new LocationOfGoodsAuthorisationNumberFormProvider()(prefix)
+  override def form: Form[String] = new AuthorisationNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[LocationOfGoodsAuthorisationNumberView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[AuthorisationNumberView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 

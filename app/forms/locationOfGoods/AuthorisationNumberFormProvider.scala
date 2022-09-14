@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package forms
+package forms.locationOfGoods
 
-import forms.Constants.maxLocationOfGoodsAuthorisationNumberLength
+import forms.Constants.maxAuthorisationNumberLength
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.alphaNumericRegex
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class LocationOfGoodsAuthorisationNumberFormProvider @Inject() extends Mappings {
+class AuthorisationNumberFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String): Form[String] =
     Form(
@@ -31,7 +31,7 @@ class LocationOfGoodsAuthorisationNumberFormProvider @Inject() extends Mappings 
         .verifying(
           forms.StopOnFirstFail[String](
             regexp(alphaNumericRegex, s"$prefix.error.invalidCharacters"),
-            maxLength(maxLocationOfGoodsAuthorisationNumberLength, s"$prefix.error.maxLength")
+            maxLength(maxAuthorisationNumberLength, s"$prefix.error.maxLength")
           )
         )
     )

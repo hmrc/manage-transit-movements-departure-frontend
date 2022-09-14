@@ -18,36 +18,36 @@ package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.LocationOfGoodsAuthorisationNumberFormProvider
+import forms.locationOfGoods.AuthorisationNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
-import pages.routeDetails.locationOfGoods.LocationOfGoodsAuthorisationNumberPage
+import pages.routeDetails.locationOfGoods.AuthorisationNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsAuthorisationNumberView
+import views.html.routeDetails.locationOfGoods.AuthorisationNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LocationOfGoodsAuthorisationNumberController @Inject() (
+class AuthorisationNumberController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LocationOfGoodsNavigatorProvider,
-  formProvider: LocationOfGoodsAuthorisationNumberFormProvider,
+  formProvider: AuthorisationNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
-  view: LocationOfGoodsAuthorisationNumberView
+  view: AuthorisationNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber")
+  private val form = formProvider("routeDetails.locationOfGoods.authorisationNumber")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(LocationOfGoodsAuthorisationNumberPage) match {
+      val preparedForm = request.userAnswers.get(AuthorisationNumberPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -63,7 +63,7 @@ class LocationOfGoodsAuthorisationNumberController @Inject() (
           value =>
             navigatorProvider().flatMap {
               implicit navigator =>
-                LocationOfGoodsAuthorisationNumberPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                AuthorisationNumberPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
             }
         )
   }

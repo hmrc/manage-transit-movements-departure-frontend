@@ -23,12 +23,12 @@ import pages.sections.routeDetails.locationOfGoods.LocationOfGoodsIdentifierSect
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object LocationOfGoodsAuthorisationNumberPage extends QuestionPage[String] {
+case object AuthorisationNumberPage extends QuestionPage[String] {
 
   override def path: JsPath = LocationOfGoodsIdentifierSection.path \ toString
 
   override def toString: String = "authorisationNumber"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.LocationOfGoodsAuthorisationNumberController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.AuthorisationNumberController.onPageLoad(userAnswers.lrn, mode))
 }

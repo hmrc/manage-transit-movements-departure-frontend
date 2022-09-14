@@ -17,43 +17,43 @@
 package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.LocationOfGoodsAuthorisationNumberFormProvider
+import forms.locationOfGoods.AuthorisationNumberFormProvider
 import models.NormalMode
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.routeDetails.locationOfGoods.LocationOfGoodsAuthorisationNumberPage
+import pages.routeDetails.locationOfGoods.AuthorisationNumberPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsAuthorisationNumberView
+import views.html.routeDetails.locationOfGoods.AuthorisationNumberView
 
 import scala.concurrent.Future
 
-class LocationOfGoodsAuthorisationNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class AuthorisationNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                                 = new LocationOfGoodsAuthorisationNumberFormProvider()
-  private val form                                         = formProvider("routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber")
-  private val mode                                         = NormalMode
-  private lazy val locationOfGoodsAuthorisationNumberRoute = routes.LocationOfGoodsAuthorisationNumberController.onPageLoad(lrn, mode).url
+  private val formProvider                  = new AuthorisationNumberFormProvider()
+  private val form                          = formProvider("routeDetails.locationOfGoods.authorisationNumber")
+  private val mode                          = NormalMode
+  private lazy val authorisationNumberRoute = routes.AuthorisationNumberController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[LocationOfGoodsNavigatorProvider]).toInstance(fakeLocationOfGoodsNavigatorProvider))
 
-  "LocationOfGoodsAuthorisationNumber Controller" - {
+  "AuthorisationNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsAuthorisationNumberRoute)
+      val request = FakeRequest(GET, authorisationNumberRoute)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[LocationOfGoodsAuthorisationNumberView]
+      val view = injector.instanceOf[AuthorisationNumberView]
 
       status(result) mustEqual OK
 
@@ -63,16 +63,16 @@ class LocationOfGoodsAuthorisationNumberControllerSpec extends SpecBase with App
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsAuthorisationNumberPage, "testString")
+      val userAnswers = emptyUserAnswers.setValue(AuthorisationNumberPage, "testString")
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsAuthorisationNumberRoute)
+      val request = FakeRequest(GET, authorisationNumberRoute)
 
       val result = route(app, request).value
 
       val filledForm = form.bind(Map("value" -> "testString"))
 
-      val view = injector.instanceOf[LocationOfGoodsAuthorisationNumberView]
+      val view = injector.instanceOf[AuthorisationNumberView]
 
       status(result) mustEqual OK
 
@@ -86,7 +86,7 @@ class LocationOfGoodsAuthorisationNumberControllerSpec extends SpecBase with App
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      val request = FakeRequest(POST, locationOfGoodsAuthorisationNumberRoute)
+      val request = FakeRequest(POST, authorisationNumberRoute)
         .withFormUrlEncodedBody(("value", "testString"))
 
       val result = route(app, request).value
@@ -102,14 +102,14 @@ class LocationOfGoodsAuthorisationNumberControllerSpec extends SpecBase with App
 
       val invalidAnswer = ""
 
-      val request    = FakeRequest(POST, locationOfGoodsAuthorisationNumberRoute).withFormUrlEncodedBody(("value", ""))
+      val request    = FakeRequest(POST, authorisationNumberRoute).withFormUrlEncodedBody(("value", ""))
       val filledForm = form.bind(Map("value" -> invalidAnswer))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[LocationOfGoodsAuthorisationNumberView]
+      val view = injector.instanceOf[AuthorisationNumberView]
 
       contentAsString(result) mustEqual
         view(filledForm, lrn, mode)(request, messages).toString
@@ -119,7 +119,7 @@ class LocationOfGoodsAuthorisationNumberControllerSpec extends SpecBase with App
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, locationOfGoodsAuthorisationNumberRoute)
+      val request = FakeRequest(GET, authorisationNumberRoute)
 
       val result = route(app, request).value
 
@@ -132,7 +132,7 @@ class LocationOfGoodsAuthorisationNumberControllerSpec extends SpecBase with App
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, locationOfGoodsAuthorisationNumberRoute)
+      val request = FakeRequest(POST, authorisationNumberRoute)
         .withFormUrlEncodedBody(("value", "test string"))
 
       val result = route(app, request).value
