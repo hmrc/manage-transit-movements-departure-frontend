@@ -22,18 +22,18 @@ import forms.CustomsOfficeFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import pages.preTaskList.OfficeOfDeparturePage
-import pages.routeDetails.locationOfGoods.LocationOfGoodsCustomsOfficeIdentifierPage
+import pages.routeDetails.locationOfGoods.CustomsOfficeIdentifierPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.CustomsOfficesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsCustomsOfficeIdentifierView
+import views.html.routeDetails.locationOfGoods.CustomsOfficeIdentifierView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LocationOfGoodsCustomsOfficeIdentifierController @Inject() (
+class CustomsOfficeIdentifierController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LocationOfGoodsNavigatorProvider,
@@ -42,7 +42,7 @@ class LocationOfGoodsCustomsOfficeIdentifierController @Inject() (
   service: CustomsOfficesService,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: LocationOfGoodsCustomsOfficeIdentifierView
+  view: CustomsOfficeIdentifierView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -55,8 +55,8 @@ class LocationOfGoodsCustomsOfficeIdentifierController @Inject() (
         val office = request.arg
         service.getCustomsOfficesOfDepartureForCountry(office.countryCode).map {
           customsOfficeList =>
-            val form = formProvider("routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier", customsOfficeList)
-            val preparedForm = request.userAnswers.get(LocationOfGoodsCustomsOfficeIdentifierPage) match {
+            val form = formProvider("routeDetails.locationOfGoods.customsOfficeIdentifier", customsOfficeList)
+            val preparedForm = request.userAnswers.get(CustomsOfficeIdentifierPage) match {
               case None        => form
               case Some(value) => form.fill(value)
             }
@@ -73,7 +73,7 @@ class LocationOfGoodsCustomsOfficeIdentifierController @Inject() (
         val office = request.arg
         service.getCustomsOfficesOfDepartureForCountry(office.countryCode).flatMap {
           customsOfficeList =>
-            val form = formProvider("routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier", customsOfficeList)
+            val form = formProvider("routeDetails.locationOfGoods.customsOfficeIdentifier", customsOfficeList)
             form
               .bindFromRequest()
               .fold(
@@ -81,7 +81,7 @@ class LocationOfGoodsCustomsOfficeIdentifierController @Inject() (
                 value =>
                   navigatorProvider().flatMap {
                     implicit navigator =>
-                      LocationOfGoodsCustomsOfficeIdentifierPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                      CustomsOfficeIdentifierPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
                   }
               )
         }

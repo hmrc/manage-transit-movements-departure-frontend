@@ -24,28 +24,28 @@ import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.preTaskList.OfficeOfDeparturePage
-import pages.routeDetails.locationOfGoods.LocationOfGoodsCustomsOfficeIdentifierPage
+import pages.routeDetails.locationOfGoods.CustomsOfficeIdentifierPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CustomsOfficesService
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsCustomsOfficeIdentifierView
+import views.html.routeDetails.locationOfGoods.CustomsOfficeIdentifierView
 
 import scala.concurrent.Future
 
-class LocationOfGoodsCustomsOfficeIdentifierControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+class CustomsOfficeIdentifierControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val customsOffice1    = arbitraryCustomsOffice.arbitrary.sample.get
   private val customsOffice2    = arbitraryCustomsOffice.arbitrary.sample.get
   private val customsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
 
   private val formProvider = new CustomsOfficeFormProvider()
-  private val form         = formProvider("routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier", customsOfficeList)
+  private val form         = formProvider("routeDetails.locationOfGoods.customsOfficeIdentifier", customsOfficeList)
   private val mode         = NormalMode
 
   private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
-  private lazy val locationOfGoodsCustomsOfficeIdentifierRoute = routes.LocationOfGoodsCustomsOfficeIdentifierController.onPageLoad(lrn, mode).url
+  private lazy val customsOfficeIdentifierRoute                = routes.CustomsOfficeIdentifierController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -53,7 +53,7 @@ class LocationOfGoodsCustomsOfficeIdentifierControllerSpec extends SpecBase with
       .overrides(bind(classOf[LocationOfGoodsNavigatorProvider]).toInstance(fakeLocationOfGoodsNavigatorProvider))
       .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
-  "LocationOfGoodsCustomsOfficeIdentifier Controller" - {
+  "CustomsOfficeIdentifier Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -61,11 +61,11 @@ class LocationOfGoodsCustomsOfficeIdentifierControllerSpec extends SpecBase with
       when(mockCustomsOfficesService.getCustomsOfficesOfDepartureForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsCustomsOfficeIdentifierRoute)
+      val request = FakeRequest(GET, customsOfficeIdentifierRoute)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[LocationOfGoodsCustomsOfficeIdentifierView]
+      val view = injector.instanceOf[CustomsOfficeIdentifierView]
 
       status(result) mustEqual OK
 
@@ -78,17 +78,17 @@ class LocationOfGoodsCustomsOfficeIdentifierControllerSpec extends SpecBase with
       when(mockCustomsOfficesService.getCustomsOfficesOfDepartureForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
       val userAnswers = emptyUserAnswers
         .setValue(OfficeOfDeparturePage, customsOffice1)
-        .setValue(LocationOfGoodsCustomsOfficeIdentifierPage, customsOffice1)
+        .setValue(CustomsOfficeIdentifierPage, customsOffice1)
 
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsCustomsOfficeIdentifierRoute)
+      val request = FakeRequest(GET, customsOfficeIdentifierRoute)
 
       val result = route(app, request).value
 
       val filledForm = form.bind(Map("value" -> customsOffice1.id))
 
-      val view = injector.instanceOf[LocationOfGoodsCustomsOfficeIdentifierView]
+      val view = injector.instanceOf[CustomsOfficeIdentifierView]
 
       status(result) mustEqual OK
 
@@ -104,7 +104,7 @@ class LocationOfGoodsCustomsOfficeIdentifierControllerSpec extends SpecBase with
 
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(POST, locationOfGoodsCustomsOfficeIdentifierRoute)
+      val request = FakeRequest(POST, customsOfficeIdentifierRoute)
         .withFormUrlEncodedBody(("value", customsOffice1.id))
 
       val result = route(app, request).value
@@ -120,12 +120,12 @@ class LocationOfGoodsCustomsOfficeIdentifierControllerSpec extends SpecBase with
       when(mockCustomsOfficesService.getCustomsOfficesOfDepartureForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
       setExistingUserAnswers(userAnswers)
 
-      val request   = FakeRequest(POST, locationOfGoodsCustomsOfficeIdentifierRoute).withFormUrlEncodedBody(("value", "invalid value"))
+      val request   = FakeRequest(POST, customsOfficeIdentifierRoute).withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[LocationOfGoodsCustomsOfficeIdentifierView]
+      val view = injector.instanceOf[CustomsOfficeIdentifierView]
 
       status(result) mustEqual BAD_REQUEST
 
@@ -137,7 +137,7 @@ class LocationOfGoodsCustomsOfficeIdentifierControllerSpec extends SpecBase with
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, locationOfGoodsCustomsOfficeIdentifierRoute)
+      val request = FakeRequest(GET, customsOfficeIdentifierRoute)
 
       val result = route(app, request).value
 
@@ -149,7 +149,7 @@ class LocationOfGoodsCustomsOfficeIdentifierControllerSpec extends SpecBase with
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, locationOfGoodsCustomsOfficeIdentifierRoute)
+      val request = FakeRequest(POST, customsOfficeIdentifierRoute)
         .withFormUrlEncodedBody(("value", customsOffice1.id))
 
       val result = route(app, request).value

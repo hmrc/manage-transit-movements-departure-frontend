@@ -34,24 +34,24 @@
 @(form: Form[CustomsOffice], lrn: LocalReferenceNumber, customsOfficeList: Seq[CustomsOffice], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.title"),
+    title = messages("routeDetails.locationOfGoods.customsOfficeIdentifier.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.LocationOfGoodsCustomsOfficeIdentifierController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.CustomsOfficeIdentifierController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputSelect(
             field = form("value"),
             selectType = OrdinarySelect(
-                heading = messages("routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.heading"),
+                heading = messages("routeDetails.locationOfGoods.customsOfficeIdentifier.heading"),
                 caption = Some(messages("routeDetails.caption"))
             ),
-            hint = Some(messages("routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.hintText")),
+            hint = Some(messages("routeDetails.locationOfGoods.customsOfficeIdentifier.hintText")),
             selectItems = customsOfficeList.toSelectItems(form.value),
-            placeholder = messages("routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.placeholder")
+            placeholder = messages("routeDetails.locationOfGoods.customsOfficeIdentifier.placeholder")
         )
 
         @button(attributes = Map("id" -> "submit"))

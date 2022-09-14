@@ -40,10 +40,10 @@ class LocationOfGoodsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     id = Some("location-of-goods-identification")
   )
 
-  def locationOfGoodsCustomsOfficeIdentifier: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
-    page = LocationOfGoodsCustomsOfficeIdentifierPage,
+  def customsOfficeIdentifier: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
+    page = CustomsOfficeIdentifierPage,
     formatAnswer = formatAsText,
-    prefix = "routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier",
+    prefix = "routeDetails.locationOfGoods.customsOfficeIdentifier",
     id = Some("location-of-goods-customs-office-identifier")
   )
 

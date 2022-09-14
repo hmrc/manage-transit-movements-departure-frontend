@@ -24,9 +24,9 @@ import models.reference.CustomsOffice
 import models.CustomsOfficeList
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsCustomsOfficeIdentifierView
+import views.html.routeDetails.locationOfGoods.CustomsOfficeIdentifierView
 
-class LocationOfGoodsCustomsOfficeIdentifierViewSpec extends InputSelectViewBehaviours[CustomsOffice] with Generators {
+class CustomsOfficeIdentifierViewSpec extends InputSelectViewBehaviours[CustomsOffice] with Generators {
 
   private lazy val customsOffice1 = arbitraryCustomsOffice.arbitrary.sample.get
   private lazy val customsOffice2 = arbitraryCustomsOffice.arbitrary.sample.get
@@ -42,9 +42,9 @@ class LocationOfGoodsCustomsOfficeIdentifierViewSpec extends InputSelectViewBeha
   override def form: Form[CustomsOffice] = new CustomsOfficeFormProvider()(prefix, CustomsOfficeList(values))
 
   override def applyView(form: Form[CustomsOffice]): HtmlFormat.Appendable =
-    injector.instanceOf[LocationOfGoodsCustomsOfficeIdentifierView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[CustomsOfficeIdentifierView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier"
+  override val prefix: String = "routeDetails.locationOfGoods.customsOfficeIdentifier"
 
   behave like pageWithTitle()
 

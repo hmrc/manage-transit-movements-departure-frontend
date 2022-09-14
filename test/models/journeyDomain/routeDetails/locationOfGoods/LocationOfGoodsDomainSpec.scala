@@ -48,7 +48,7 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           val userAnswers = emptyUserAnswers
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
             .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-            .setValue(LocationOfGoodsCustomsOfficeIdentifierPage, customsOffice)
+            .setValue(CustomsOfficeIdentifierPage, customsOffice)
 
           val expectedResult = LocationOfGoodsV(
             typeOfLocation = typeOfLocation,

@@ -38,7 +38,7 @@ object LocationOfGoodsViewModel {
       val rows = Seq(
         helper.locationOfGoodsType,
         helper.locationOfGoodsIdentification,
-        helper.locationOfGoodsCustomsOfficeIdentifier,
+        helper.customsOfficeIdentifier,
         helper.locationOfGoodsEori,
         helper.authorisationNumber,
         helper.additionalIdentifierYesNo,

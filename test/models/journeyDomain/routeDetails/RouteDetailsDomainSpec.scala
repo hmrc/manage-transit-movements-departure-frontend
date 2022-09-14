@@ -240,7 +240,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
             .setValue(AddCountryOfRoutingYesNoPage, false)
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
             .setValue(LocationOfGoodsIdentificationPage, LocationOfGoodsIdentification.CustomsOfficeIdentifier)
-            .setValue(LocationOfGoodsCustomsOfficeIdentifierPage, customsOffice)
+            .setValue(CustomsOfficeIdentifierPage, customsOffice)
             .setValue(PlaceOfLoadingAddUnLocodeYesNoPage, false)
 
           val expectedResult = RouteDetailsDomain(

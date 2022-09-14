@@ -739,13 +739,13 @@ routeDetails.locationOfGoods.locationOfGoodsIdentification.postalCode = Postal c
 routeDetails.locationOfGoods.locationOfGoodsIdentification.checkYourAnswersLabel = Identifier type for the location of goods
 routeDetails.locationOfGoods.locationOfGoodsIdentification.error.required = Select how you want to identify the location of goods
 
-routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.title = What is the customs office identifier for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.heading = What is the customs office identifier for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.hintText = Enter the office location or code, like Dover or GB000060.
-routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.placeholder = Select a customsOffice
-routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.change.hidden = What is the customs office identifier for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.checkYourAnswersLabel = What is the customs office identifier for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.error.required = Enter the customs office identifier for the location of goods
+routeDetails.locationOfGoods.customsOfficeIdentifier.title = What is the customs office identifier for the location of goods?
+routeDetails.locationOfGoods.customsOfficeIdentifier.heading = What is the customs office identifier for the location of goods?
+routeDetails.locationOfGoods.customsOfficeIdentifier.hintText = Enter the office location or code, like Dover or GB000060.
+routeDetails.locationOfGoods.customsOfficeIdentifier.placeholder = Select a customsOffice
+routeDetails.locationOfGoods.customsOfficeIdentifier.change.hidden = What is the customs office identifier for the location of goods?
+routeDetails.locationOfGoods.customsOfficeIdentifier.checkYourAnswersLabel = What is the customs office identifier for the location of goods?
+routeDetails.locationOfGoods.customsOfficeIdentifier.error.required = Enter the customs office identifier for the location of goods
 
 routeDetails.locationOfGoods.authorisationNumber.title = What is the authorisation number for the location of goods?
 routeDetails.locationOfGoods.authorisationNumber.heading = What is the authorisation number for the location of goods?

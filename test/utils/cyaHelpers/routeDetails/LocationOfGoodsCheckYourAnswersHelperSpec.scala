@@ -31,7 +31,7 @@ import pages.routeDetails.locationOfGoods.{
   AddressPage,
   AuthorisationNumberPage,
   CoordinatesPage,
-  LocationOfGoodsCustomsOfficeIdentifierPage,
+  CustomsOfficeIdentifierPage,
   LocationOfGoodsEoriPage,
   LocationOfGoodsIdentificationPage,
   LocationOfGoodsPostalCodePage,
@@ -134,27 +134,27 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
     }
 
-    "locationOfGoodsCustomsOfficeIdentifier" - {
+    "customsOfficeIdentifier" - {
       "must return None" - {
-        "when locationOfGoodsCustomsOfficeIdentifierPage is undefined" in {
+        "when customsOfficeIdentifierPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-              val result = helper.locationOfGoodsCustomsOfficeIdentifier
+              val result = helper.customsOfficeIdentifier
               result mustBe None
           }
         }
       }
 
       "must return Some(Row)" - {
-        "when locationOfGoodsCustomsOfficeIdentifierPage is defined" in {
+        "when customsOfficeIdentifierPage is defined" in {
           forAll(arbitrary[Mode], arbitrary[CustomsOffice]) {
             (mode, customsOffice) =>
-              val prefix = "routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier"
+              val prefix = "routeDetails.locationOfGoods.customsOfficeIdentifier"
               val answers = emptyUserAnswers
-                .setValue(LocationOfGoodsCustomsOfficeIdentifierPage, customsOffice)
+                .setValue(CustomsOfficeIdentifierPage, customsOffice)
               val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.locationOfGoodsCustomsOfficeIdentifier
+              val result = helper.customsOfficeIdentifier
 
               result mustBe Some(
                 SummaryListRow(
@@ -165,7 +165,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.LocationOfGoodsCustomsOfficeIdentifierController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.CustomsOfficeIdentifierController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
                           attributes = Map("id" -> "location-of-goods-customs-office-identifier")
                         )

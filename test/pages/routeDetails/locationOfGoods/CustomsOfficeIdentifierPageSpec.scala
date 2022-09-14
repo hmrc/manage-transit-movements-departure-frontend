@@ -19,14 +19,14 @@ package pages.routeDetails.locationOfGoods
 import models.reference.CustomsOffice
 import pages.behaviours.PageBehaviours
 
-class LocationOfGoodsCustomsOfficeIdentifierPageSpec extends PageBehaviours {
+class CustomsOfficeIdentifierPageSpec extends PageBehaviours {
 
-  "LocationOfGoodsCustomsOfficeIdentifierPage" - {
+  "CustomsOfficeIdentifierPage" - {
 
-    beRetrievable[CustomsOffice](LocationOfGoodsCustomsOfficeIdentifierPage)
+    beRetrievable[CustomsOffice](CustomsOfficeIdentifierPage)
 
-    beSettable[CustomsOffice](LocationOfGoodsCustomsOfficeIdentifierPage)
+    beSettable[CustomsOffice](CustomsOfficeIdentifierPage)
 
-    beRemovable[CustomsOffice](LocationOfGoodsCustomsOfficeIdentifierPage)
+    beRemovable[CustomsOffice](CustomsOfficeIdentifierPage)
   }
 }
