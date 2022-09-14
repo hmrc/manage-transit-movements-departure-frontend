@@ -17,33 +17,33 @@
 package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.locationOfGoods.LocationOfGoodsPostalCodeFormProvider
+import forms.locationOfGoods.PostalCodeFormProvider
 import generators.Generators
 import models.{CountryList, NormalMode, PostalCodeAddress, UserAnswers}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.routeDetails.locationOfGoods.LocationOfGoodsPostalCodePage
+import pages.routeDetails.locationOfGoods.PostalCodePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CountriesService
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsPostalCodeView
+import views.html.routeDetails.locationOfGoods.PostalCodeView
 
 import scala.concurrent.Future
 
-class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+class PostalCodeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val testAddress = arbitrary[PostalCodeAddress].sample.value
   private val countryList = CountryList(Seq(testAddress.country))
 
-  private val formProvider = new LocationOfGoodsPostalCodeFormProvider()
-  private val form         = formProvider("routeDetails.locationOfGoods.locationOfGoodsPostalCode", countryList)
+  private val formProvider = new PostalCodeFormProvider()
+  private val form         = formProvider("routeDetails.locationOfGoods.postalCode", countryList)
 
-  private val mode                                = NormalMode
-  private lazy val locationOfGoodsPostalCodeRoute = routes.LocationOfGoodsPostalCodeController.onPageLoad(lrn, mode).url
+  private val mode                 = NormalMode
+  private lazy val postalCodeRoute = routes.PostalCodeController.onPageLoad(lrn, mode).url
 
   private lazy val mockCountriesService: CountriesService = mock[CountriesService]
 
@@ -58,7 +58,7 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
       .overrides(bind(classOf[LocationOfGoodsNavigatorProvider]).toInstance(fakeLocationOfGoodsNavigatorProvider))
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
-  "LocationOfGoodsPostalCode Controller" - {
+  "PostalCode Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -66,10 +66,10 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsPostalCodeRoute)
+      val request = FakeRequest(GET, postalCodeRoute)
       val result  = route(app, request).value
 
-      val view = injector.instanceOf[LocationOfGoodsPostalCodeView]
+      val view = injector.instanceOf[PostalCodeView]
 
       status(result) mustEqual OK
 
@@ -82,11 +82,11 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
       when(mockCountriesService.getAddressPostcodeBasedCountries()(any())).thenReturn(Future.successful(countryList))
 
       val userAnswers = UserAnswers(lrn, eoriNumber)
-        .setValue(LocationOfGoodsPostalCodePage, testAddress)
+        .setValue(PostalCodePage, testAddress)
 
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsPostalCodeRoute)
+      val request = FakeRequest(GET, postalCodeRoute)
 
       val result = route(app, request).value
 
@@ -98,7 +98,7 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
         )
       )
 
-      val view = injector.instanceOf[LocationOfGoodsPostalCodeView]
+      val view = injector.instanceOf[PostalCodeView]
 
       status(result) mustEqual OK
 
@@ -113,7 +113,7 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, locationOfGoodsPostalCodeRoute)
+      val request = FakeRequest(POST, postalCodeRoute)
         .withFormUrlEncodedBody(
           ("streetNumber", testAddress.streetNumber),
           ("postalCode", testAddress.postalCode),
@@ -133,14 +133,14 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, locationOfGoodsPostalCodeRoute).withFormUrlEncodedBody(("value", ""))
+      val request   = FakeRequest(POST, postalCodeRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[LocationOfGoodsPostalCodeView]
+      val view = injector.instanceOf[PostalCodeView]
 
       contentAsString(result) mustEqual
         view(boundForm, lrn, mode, countryList.countries)(request, messages).toString
@@ -150,7 +150,7 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, locationOfGoodsPostalCodeRoute)
+      val request = FakeRequest(GET, postalCodeRoute)
 
       val result = route(app, request).value
 
@@ -163,7 +163,7 @@ class LocationOfGoodsPostalCodeControllerSpec extends SpecBase with AppWithDefau
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, locationOfGoodsPostalCodeRoute)
+      val request = FakeRequest(POST, postalCodeRoute)
         .withFormUrlEncodedBody(
           ("streetNumber", testAddress.streetNumber),
           ("postalCode", testAddress.postalCode),

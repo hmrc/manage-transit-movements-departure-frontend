@@ -34,9 +34,9 @@ import pages.routeDetails.locationOfGoods.{
   CustomsOfficeIdentifierPage,
   EoriPage,
   IdentificationPage,
-  LocationOfGoodsPostalCodePage,
   LocationOfGoodsTypePage,
-  LocationOfGoodsUnLocodePage
+  LocationOfGoodsUnLocodePage,
+  PostalCodePage
 }
 import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
@@ -404,27 +404,27 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
     }
 
-    "locationOfGoodsPostalCode" - {
+    "postalCode" - {
       "must return None" - {
-        "when locationOfGoodsPostalCodePage is undefined" in {
+        "when postalCodePage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-              val result = helper.locationOfGoodsPostalCode
+              val result = helper.postalCode
               result mustBe None
           }
         }
       }
 
       "must return Some(Row)" - {
-        "when locationOfGoodsPostalCodePage is defined" in {
+        "when postalCodePage is defined" in {
           forAll(arbitrary[Mode], arbitrary[PostalCodeAddress]) {
             (mode, postalCode) =>
-              val prefix = "routeDetails.locationOfGoods.locationOfGoodsPostalCode"
+              val prefix = "routeDetails.locationOfGoods.postalCode"
               val answers = emptyUserAnswers
-                .setValue(LocationOfGoodsPostalCodePage, postalCode)
+                .setValue(PostalCodePage, postalCode)
               val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.locationOfGoodsPostalCode
+              val result = helper.postalCode
 
               result mustBe Some(
                 SummaryListRow(
@@ -435,7 +435,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.LocationOfGoodsPostalCodeController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.PostalCodeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
                           attributes = Map("id" -> "location-of-goods-postal-code")
                         )
@@ -507,7 +507,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
 
       "must return Some(Row)" - {
-        "when locationOfGoodsPostalCodePage is defined" in {
+        "when postalCodePage is defined" in {
           forAll(arbitrary[Mode], arbitrary[String]) {
             (mode, additionalIdentifier) =>
               val prefix = "routeDetails.locationOfGoods.additionalIdentifier"

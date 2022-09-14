@@ -35,18 +35,18 @@
 )(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.locationOfGoods.locationOfGoodsPostalCode.title"),
+    title = messages("routeDetails.locationOfGoods.postalCode.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-   @formHelper(action = routes.LocationOfGoodsPostalCodeController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+   @formHelper(action = routes.PostalCodeController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
       @errorSummary(form.errors)
 
       @inputPostalCodeAddress(
           form = form,
-          messageKeyPrefix = "routeDetails.locationOfGoods.locationOfGoodsPostalCode",
+          messageKeyPrefix = "routeDetails.locationOfGoods.postalCode",
           caption = Some(messages("routeDetails.caption")),
           countries = countries
       )

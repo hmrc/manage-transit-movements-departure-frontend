@@ -24,7 +24,7 @@ import models.{AddressLine, CountryList}
 import org.scalacheck.Gen
 import play.api.data.FormError
 
-class LocationOfGoodsPostalCodeFormProviderSpec extends StringFieldBehaviours with SpecBase {
+class PostalCodeFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
   private val prefix = Gen.alphaNumStr.sample.value
 
@@ -39,7 +39,7 @@ class LocationOfGoodsPostalCodeFormProviderSpec extends StringFieldBehaviours wi
   private val requiredPostalCodeKey = s"$prefix.error.postalCode.required"
   private val invalidPostalCodeKey  = s"$prefix.error.postalCode.invalidCharacters"
 
-  private val form = new LocationOfGoodsPostalCodeFormProvider()(prefix, countries)
+  private val form = new PostalCodeFormProvider()(prefix, countries)
 
   ".streetNumber" - {
 

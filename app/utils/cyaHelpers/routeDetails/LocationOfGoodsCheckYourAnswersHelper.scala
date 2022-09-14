@@ -82,10 +82,10 @@ class LocationOfGoodsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     id = Some("location-of-goods-address")
   )
 
-  def locationOfGoodsPostalCode: Option[SummaryListRow] = getAnswerAndBuildRow[PostalCodeAddress](
-    page = LocationOfGoodsPostalCodePage,
+  def postalCode: Option[SummaryListRow] = getAnswerAndBuildRow[PostalCodeAddress](
+    page = PostalCodePage,
     formatAnswer = formatAsPostalCodeAddress,
-    prefix = "routeDetails.locationOfGoods.locationOfGoodsPostalCode",
+    prefix = "routeDetails.locationOfGoods.postalCode",
     id = Some("location-of-goods-postal-code")
   )
 

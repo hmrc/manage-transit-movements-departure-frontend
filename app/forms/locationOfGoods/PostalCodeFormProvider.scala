@@ -26,7 +26,7 @@ import play.api.i18n.Messages
 
 import javax.inject.Inject
 
-class LocationOfGoodsPostalCodeFormProvider @Inject() extends Mappings {
+class PostalCodeFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String, countryList: CountryList)(implicit messages: Messages): Form[PostalCodeAddress] =
     Form(

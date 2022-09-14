@@ -778,19 +778,19 @@ routeDetails.locationOfGoods.eori.error.invalidFormat = The EORI number must sta
 routeDetails.locationOfGoods.eori.hintText = This will start GB or XI, followed by 12 to 15 numbers. For example, GB123456789000.
 
 
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.title = What is the address for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.heading = What is the address for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.streetNumber = Street number
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.postalCode = Postal code
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.country = Country
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.checkYourAnswersLabel = What is the address for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.error.streetNumber.required = Enter the street number for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.error.streetNumber.invalidCharacters = The street number must only include numbers 0 to 9 and letters a to z
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.error.streetNumber.length = The street number must be 6 characters or less
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.error.postalCode.required = Enter the postal code for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.error.postalCode.invalidCharacters = The postcode of address must only include letters a to z, numbers 0 to 9 and spaces
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.error.postalCode.length = The postal code must be 9 characters or less
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.error.country.required = Enter the country for the location of goods
+routeDetails.locationOfGoods.postalCode.title = What is the address for the location of goods?
+routeDetails.locationOfGoods.postalCode.heading = What is the address for the location of goods?
+routeDetails.locationOfGoods.postalCode.streetNumber = Street number
+routeDetails.locationOfGoods.postalCode.postalCode = Postal code
+routeDetails.locationOfGoods.postalCode.country = Country
+routeDetails.locationOfGoods.postalCode.checkYourAnswersLabel = What is the address for the location of goods?
+routeDetails.locationOfGoods.postalCode.error.streetNumber.required = Enter the street number for the location of goods
+routeDetails.locationOfGoods.postalCode.error.streetNumber.invalidCharacters = The street number must only include numbers 0 to 9 and letters a to z
+routeDetails.locationOfGoods.postalCode.error.streetNumber.length = The street number must be 6 characters or less
+routeDetails.locationOfGoods.postalCode.error.postalCode.required = Enter the postal code for the location of goods
+routeDetails.locationOfGoods.postalCode.error.postalCode.invalidCharacters = The postcode of address must only include letters a to z, numbers 0 to 9 and spaces
+routeDetails.locationOfGoods.postalCode.error.postalCode.length = The postal code must be 9 characters or less
+routeDetails.locationOfGoods.postalCode.error.country.required = Enter the country for the location of goods
 
 routeDetails.locationOfGoods.address.title = What is the address for the location of goods?
 routeDetails.locationOfGoods.address.heading = What is the address for the location of goods?
