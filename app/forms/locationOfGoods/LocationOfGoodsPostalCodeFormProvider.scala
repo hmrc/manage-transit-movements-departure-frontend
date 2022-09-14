@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package forms
+package forms.locationOfGoods
 
+import forms.StopOnFirstFail
 import forms.mappings.Mappings
 import models.AddressLine._
 import models.{CountryList, PostalCodeAddress}

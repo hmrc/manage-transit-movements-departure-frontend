@@ -16,7 +16,7 @@
 
 package views.routeDetails.locationOfGoods
 
-import forms.LocationOfGoodsIdentificationFormProvider
+import forms.locationOfGoods.LocationOfGoodsIdentificationFormProvider
 import models.{LocationOfGoodsIdentification, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat

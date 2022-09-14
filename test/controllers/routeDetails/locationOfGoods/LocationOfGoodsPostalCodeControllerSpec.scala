@@ -17,7 +17,7 @@
 package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.LocationOfGoodsPostalCodeFormProvider
+import forms.locationOfGoods.LocationOfGoodsPostalCodeFormProvider
 import generators.Generators
 import models.{CountryList, NormalMode, PostalCodeAddress, UserAnswers}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider

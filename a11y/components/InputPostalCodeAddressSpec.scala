@@ -17,7 +17,8 @@
 package components
 
 import a11ySpecBase.A11ySpecBase
-import forms.{AddressFormProvider, LocationOfGoodsPostalCodeFormProvider}
+import forms.AddressFormProvider
+import forms.locationOfGoods.LocationOfGoodsPostalCodeFormProvider
 import models.CountryList
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen

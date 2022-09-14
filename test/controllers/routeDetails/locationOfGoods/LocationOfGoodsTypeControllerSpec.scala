@@ -17,7 +17,7 @@
 package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.LocationOfGoodsTypeFormProvider
+import forms.locationOfGoods.LocationOfGoodsTypeFormProvider
 import models.{LocationType, NormalMode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any

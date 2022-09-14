@@ -16,7 +16,7 @@
 
 package views.routeDetails.locationOfGoods
 
-import forms.LocationOfGoodsPostalCodeFormProvider
+import forms.locationOfGoods.LocationOfGoodsPostalCodeFormProvider
 import generators.Generators
 import models.{CountryList, NormalMode, PostalCodeAddress}
 import org.scalacheck.Arbitrary.arbitrary

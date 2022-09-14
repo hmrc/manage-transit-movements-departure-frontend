@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package forms
+package forms.locationOfGoods
 
 import forms.behaviours.OptionFieldBehaviours
-import models.LocationOfGoodsIdentification
+import models.LocationType
 import play.api.data.FormError
 
-class LocationOfGoodsIdentificationFormProviderSpec extends OptionFieldBehaviours {
+class LocationOfGoodsTypeFormProviderSpec extends OptionFieldBehaviours {
 
-  val form = new LocationOfGoodsIdentificationFormProvider()()
+  val form = new LocationOfGoodsTypeFormProvider()()
 
   ".value" - {
 
     val fieldName   = "value"
-    val requiredKey = "routeDetails.locationOfGoods.locationOfGoodsIdentification.error.required"
+    val requiredKey = "routeDetails.locationOfGoods.locationOfGoodsType.error.required"
 
-    behave like optionsField[LocationOfGoodsIdentification](
+    behave like optionsField[LocationType](
       form,
       fieldName,
-      validValues = LocationOfGoodsIdentification.values,
+      validValues = LocationType.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 

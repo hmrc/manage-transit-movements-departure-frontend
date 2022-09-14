@@ -17,7 +17,7 @@
 package components
 
 import a11ySpecBase.A11ySpecBase
-import forms.LocationOfGoodsCoordinatesFormProvider
+import forms.locationOfGoods.LocationOfGoodsCoordinatesFormProvider
 import models.Coordinates
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen

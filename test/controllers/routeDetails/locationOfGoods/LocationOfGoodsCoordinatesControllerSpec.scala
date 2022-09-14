@@ -17,7 +17,7 @@
 package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.LocationOfGoodsCoordinatesFormProvider
+import forms.locationOfGoods.LocationOfGoodsCoordinatesFormProvider
 import generators.Generators
 import models.NormalMode
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider

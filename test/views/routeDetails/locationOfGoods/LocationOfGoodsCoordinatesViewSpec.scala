@@ -16,7 +16,7 @@
 
 package views.routeDetails.locationOfGoods
 
-import forms.LocationOfGoodsCoordinatesFormProvider
+import forms.locationOfGoods.LocationOfGoodsCoordinatesFormProvider
 import generators.Generators
 import models.{Coordinates, NormalMode}
 import play.api.data.Form

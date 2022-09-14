@@ -18,7 +18,7 @@ package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.LocationOfGoodsPostalCodeFormProvider
+import forms.locationOfGoods.LocationOfGoodsPostalCodeFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import pages.routeDetails.locationOfGoods.LocationOfGoodsPostalCodePage

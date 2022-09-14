@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms
+package forms.locationOfGoods
 
 import forms.mappings.Mappings
 import models.LocationOfGoodsIdentification
