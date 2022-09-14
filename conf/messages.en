@@ -882,3 +882,9 @@ routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.paragraph = This inc
 routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.checkYourAnswersLabel = Do you want to add extra information for the place of loading? //TODO check CYA ticket content
 routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.error.required = Select yes if you want to add extra information for the place of loading
 
+routeDetails.loading.placeOfLoadingLocation.title = Where in {0}} is the place of loading?
+routeDetails.loading.placeOfLoadingLocation.heading = Where in {0}} is the place of loading?
+routeDetails.loading.placeOfLoadingLocation.checkYourAnswersLabel = Place of loading location
+routeDetails.loading.placeOfLoadingLocation.hint = Describe the specific location of loading. This can be up to 35 characters long.
+routeDetails.loading.placeOfLoadingLocation.error.required = Enter the place of loading in {0}
+routeDetails.loading.placeOfLoadingLocation.error.length = The place of loading location must be 35 characters or less
