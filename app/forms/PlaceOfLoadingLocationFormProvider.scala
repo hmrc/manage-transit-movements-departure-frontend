@@ -16,15 +16,20 @@
 
 package forms
 
+import forms.Constants.{locationOfGoodsMaxLength, maxNameLength}
 import forms.mappings.Mappings
-import javax.inject.Inject
+import models.domain.StringFieldRegex.stringFieldRegex
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class PlaceOfLoadingLocationFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String): Form[String] =
+  def apply(prefix: String, args: String*): Form[String] =
     Form(
-      "value" -> text(s"$prefix.error.required")
-        .verifying(maxLength(35, s"$prefix.error.length"))
+      "value" -> text(s"$prefix.error.required", args)
+        .verifying(
+          StopOnFirstFail[String](maxLength(locationOfGoodsMaxLength, s"$prefix.error.length"), regexp(stringFieldRegex, s"$prefix.error.invalid"))
+        )
     )
 }

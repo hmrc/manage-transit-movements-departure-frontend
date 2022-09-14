@@ -27,10 +27,10 @@
     button: Button
 )
 
-@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[String], lrn: LocalReferenceNumber, loadingCountry:String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.loading.placeOfLoadingLocation.title"),
+    title = messages("routeDetails.loading.placeOfLoadingLocation.title", loadingCountry),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -42,8 +42,10 @@
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages("routeDetails.loading.placeOfLoadingLocation.heading")
+                heading = messages("routeDetails.loading.placeOfLoadingLocation.heading", loadingCountry),
+                caption = Some(messages("routeDetails.caption"))
             ),
+            hint = Some(messages("routeDetails.loading.placeOfLoadingLocation.hint")),
             inputClass = InputSize.Width20
         )
 

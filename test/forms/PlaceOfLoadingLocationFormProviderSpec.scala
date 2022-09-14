@@ -16,7 +16,9 @@
 
 package forms
 
+import forms.Constants.locationOfGoodsMaxLength
 import forms.behaviours.StringFieldBehaviours
+import models.domain.StringFieldRegex.stringFieldRegex
 import org.scalacheck.Gen
 import play.api.data.FormError
 
@@ -25,7 +27,7 @@ class PlaceOfLoadingLocationFormProviderSpec extends StringFieldBehaviours {
   private val prefix = Gen.alphaNumStr.sample.value
   val requiredKey    = s"$prefix.error.required"
   val lengthKey      = s"$prefix.error.length"
-  val maxLength      = 35
+  val invalidKey     = s"$prefix.error.invalid"
 
   val form = new PlaceOfLoadingLocationFormProvider()(prefix)
 
@@ -36,20 +38,27 @@ class PlaceOfLoadingLocationFormProviderSpec extends StringFieldBehaviours {
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(locationOfGoodsMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      maxLength = locationOfGoodsMaxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(locationOfGoodsMaxLength))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
+    )
+
+    behave like fieldWithInvalidCharacters(
+      form,
+      fieldName,
+      error = FormError(fieldName, invalidKey, Seq(stringFieldRegex.regex)),
+      locationOfGoodsMaxLength
     )
   }
 }

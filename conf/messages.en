@@ -671,9 +671,7 @@ routeDetails.transit.confirmRemoveOfficeOfTransit.heading = Are you sure you wan
 routeDetails.transit.confirmRemoveOfficeOfTransit.error.required = Select yes if you want to remove {0} as an office of transit
 
 routeDetails.transit.checkOfficeOfTransitAnswers.title = Check your answers
-routeDetails.transit.checkOfficeOfTransitAnswers.heading = Check your answers
-
-# Exit
+routeDetails.transit.checkOfficeOfTransitAnswers.heading = Check your answers# Exit
 
 routeDetails.exit.officeOfExitCountry.title = Which country is the office of exit in?
 routeDetails.exit.officeOfExitCountry.heading = Which country is the office of exit in?
@@ -883,8 +881,10 @@ routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.checkYourAnswersLabe
 routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.error.required = Select yes if you want to add extra information for the place of loading
 
 routeDetails.loading.placeOfLoadingLocation.title = Where in {0}} is the place of loading?
-routeDetails.loading.placeOfLoadingLocation.heading = Where in {0}} is the place of loading?
+routeDetails.loading.placeOfLoadingLocation.heading = Where in {0} is the place of loading?
 routeDetails.loading.placeOfLoadingLocation.checkYourAnswersLabel = Place of loading location
 routeDetails.loading.placeOfLoadingLocation.hint = Describe the specific location of loading. This can be up to 35 characters long.
 routeDetails.loading.placeOfLoadingLocation.error.required = Enter the place of loading in {0}
 routeDetails.loading.placeOfLoadingLocation.error.length = The place of loading location must be 35 characters or less
+routeDetails.loading.placeOfLoadingLocation.error.invalid = The place of loading must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+

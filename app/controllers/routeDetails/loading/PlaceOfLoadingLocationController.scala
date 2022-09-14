@@ -19,10 +19,12 @@ package controllers.routeDetails.loading
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.PlaceOfLoadingLocationFormProvider
+import models.requests.SpecificDataRequestProvider1
 import models.{LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.routeDetails.LoadingNavigatorProvider
 import pages.routeDetails.loading.PlaceOfLoadingLocationPage
+import pages.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNamePage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -35,33 +37,48 @@ import scala.concurrent.{ExecutionContext, Future}
 class PlaceOfLoadingLocationController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @PreTaskListDetails implicit val navigator: Navigator,
+  navigatorProvider: LoadingNavigatorProvider,
   formProvider: PlaceOfLoadingLocationFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
   view: PlaceOfLoadingLocationView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.loading.placeOfLoadingLocation")
+  private def form(implicit request: Request): Form[String] =
+    formProvider("routeDetails.loading.placeOfLoadingLocation", countryname)
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(PlaceOfLoadingLocationPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
-      Ok(view(preparedForm, lrn, mode))
-  }
+  private type Request = SpecificDataRequestProvider1[String]#SpecificDataRequest[_]
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => PlaceOfLoadingLocationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
-        )
-  }
+  private def countryname(implicit request: Request): String = request.arg
+
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(LocationOfGoodsContactNamePage)) { //todo change PlaceOfLoadingCountryPage once created
+      implicit request =>
+        val preparedForm = request.userAnswers.get(PlaceOfLoadingLocationPage) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
+        Ok(view(preparedForm, lrn, countryname, mode))
+    }
+
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(LocationOfGoodsContactNamePage)) //todo change to PlaceOfLoadingCountryPage once created
+    .async {
+      implicit request =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryname, mode))),
+            value =>
+              navigatorProvider().flatMap {
+                implicit navigator =>
+                  PlaceOfLoadingLocationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+              }
+          )
+    }
 }

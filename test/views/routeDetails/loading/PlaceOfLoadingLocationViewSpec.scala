@@ -16,6 +16,7 @@
 
 package views.routeDetails.loading
 
+import forms.Constants.locationOfGoodsMaxLength
 import forms.PlaceOfLoadingLocationFormProvider
 import models.NormalMode
 import play.api.data.Form
@@ -29,20 +30,24 @@ class PlaceOfLoadingLocationViewSpec extends InputTextViewBehaviours[String] {
 
   override val prefix: String = "routeDetails.loading.placeOfLoadingLocation"
 
+  private val countryName = Gen.alphaNumStr.sample.value.take(locationOfGoodsMaxLength)
+
   override def form: Form[String] = new PlaceOfLoadingLocationFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[PlaceOfLoadingLocationView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[PlaceOfLoadingLocationView].apply(form, lrn, countryName, NormalMode)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 
-  behave like pageWithTitle()
+  behave like pageWithTitle(countryName)
 
   behave like pageWithBackLink
 
-  behave like pageWithHeading()
+  behave like pageWithHeading(countryName)
 
-  behave like pageWithoutHint
+  behave like pageWithSectionCaption("Route details")
+
+  behave like pageWithHint("Describe the specific location of loading. This can be up to 35 characters long.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 

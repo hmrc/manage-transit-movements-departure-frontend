@@ -18,12 +18,14 @@ package controllers.routeDetails.loading
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.PlaceOfLoadingLocationFormProvider
-import models.{NormalMode, UserAnswers}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import generators.Generators
+import models.NormalMode
+import navigation.routeDetails.LoadingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.when
+import org.scalacheck.Gen
 import pages.routeDetails.loading.PlaceOfLoadingLocationPage
+import pages.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNamePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -32,63 +34,67 @@ import views.html.routeDetails.loading.PlaceOfLoadingLocationView
 
 import scala.concurrent.Future
 
-class PlaceOfLoadingLocationControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class PlaceOfLoadingLocationControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val formProvider                     = new PlaceOfLoadingLocationFormProvider()
-  private val form                             = formProvider("routeDetails.loading.placeOfLoadingLocation")
+  private val form                             = formProvider("routeDetails.loading.placeOfLoadingLocation", countryName)
   private val mode                             = NormalMode
   private lazy val placeOfLoadingLocationRoute = routes.PlaceOfLoadingLocationController.onPageLoad(lrn, mode).url
+  private val countryName                      = Gen.alphaNumStr.sample.value.take(35)
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[LoadingNavigatorProvider]).toInstance(fakeLoadingNavigatorProvider))
 
   "PlaceOfLoadingLocation Controller" - {
 
     "must return OK and the correct view for a GET" in {
-
-      setExistingUserAnswers(emptyUserAnswers)
-
-      val request = FakeRequest(GET, placeOfLoadingLocationRoute)
-
-      val result = route(app, request).value
-
-      val view = injector.instanceOf[PlaceOfLoadingLocationView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, lrn, mode)(request, messages).toString
-    }
-
-    "must populate the view correctly on a GET when the question has previously been answered" in {
-
-      val userAnswers = emptyUserAnswers.setValue(PlaceOfLoadingLocationPage, "test string")
+      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsContactNamePage, "Test") //todo change to location of goods country page when merged
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, placeOfLoadingLocationRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> "test string"))
+      val view = injector.instanceOf[PlaceOfLoadingLocationView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(form, lrn, "Test", mode)(request, messages).toString //todo change when country page merged
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered" in {
+
+      val userAnswers = emptyUserAnswers
+        .setValue(LocationOfGoodsContactNamePage, "Test") //todo change PlaceOfLoadingCountryPage once created
+        .setValue(PlaceOfLoadingLocationPage, "Test")
+      setExistingUserAnswers(userAnswers)
+
+      val request = FakeRequest(GET, placeOfLoadingLocationRoute)
+
+      val result = route(app, request).value
+
+      val filledForm = form.bind(Map("value" -> "Test"))
 
       val view = injector.instanceOf[PlaceOfLoadingLocationView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
+        view(filledForm, lrn, "Test", mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsContactNamePage, "Test") //todo change PlaceOfLoadingCountryPage once created
+      setExistingUserAnswers(userAnswers)
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       val request = FakeRequest(POST, placeOfLoadingLocationRoute)
-        .withFormUrlEncodedBody(("value", "test string"))
+        .withFormUrlEncodedBody(("value", "Test"))
 
       val result = route(app, request).value
 
@@ -99,11 +105,12 @@ class PlaceOfLoadingLocationControllerSpec extends SpecBase with AppWithDefaultM
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsContactNamePage, countryName) //todo change PlaceOfLoadingCountryPage once created
+      setExistingUserAnswers(userAnswers)
 
-      val invalidAnswer = ""
+      val invalidAnswer = ">"
 
-      val request    = FakeRequest(POST, placeOfLoadingLocationRoute).withFormUrlEncodedBody(("value", ""))
+      val request    = FakeRequest(POST, placeOfLoadingLocationRoute).withFormUrlEncodedBody(("value", invalidAnswer))
       val filledForm = form.bind(Map("value" -> invalidAnswer))
 
       val result = route(app, request).value
@@ -113,7 +120,7 @@ class PlaceOfLoadingLocationControllerSpec extends SpecBase with AppWithDefaultM
       val view = injector.instanceOf[PlaceOfLoadingLocationView]
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
+        view(filledForm, lrn, countryName, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
@@ -134,7 +141,7 @@ class PlaceOfLoadingLocationControllerSpec extends SpecBase with AppWithDefaultM
       setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, placeOfLoadingLocationRoute)
-        .withFormUrlEncodedBody(("value", "test string"))
+        .withFormUrlEncodedBody(("value", "test"))
 
       val result = route(app, request).value
 

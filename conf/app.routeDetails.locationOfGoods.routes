@@ -75,4 +75,4 @@ GET        /:lrn/route-details/location-of-goods/change-location-of-goods-contac
 POST       /:lrn/route-details/location-of-goods/change-location-of-goods-contact-telephone-number          controllers.routeDetails.locationOfGoods.contact.TelephoneNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/route-details/location-of-goods/check-your-answers                                         controllers.routeDetails.locationOfGoods.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
-POST        /:lrn/route-details/location-of-goods/check-your-answers                                        controllers.routeDetails.locationOfGoods.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)
+POST       /:lrn/route-details/location-of-goods/check-your-answers                                         controllers.routeDetails.locationOfGoods.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)
