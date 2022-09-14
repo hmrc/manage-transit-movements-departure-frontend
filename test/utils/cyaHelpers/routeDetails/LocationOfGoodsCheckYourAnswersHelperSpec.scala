@@ -30,7 +30,7 @@ import pages.routeDetails.locationOfGoods.{
   AdditionalIdentifierPage,
   AddressPage,
   AuthorisationNumberPage,
-  LocationOfGoodsCoordinatesPage,
+  CoordinatesPage,
   LocationOfGoodsCustomsOfficeIdentifierPage,
   LocationOfGoodsEoriPage,
   LocationOfGoodsIdentificationPage,
@@ -269,27 +269,27 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
     }
 
-    "locationOfGoodsCoordinates" - {
+    "coordinates" - {
       "must return None" - {
-        "when locationOfGoodsCoordinatesPage is undefined" in {
+        "when coordinatesPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-              val result = helper.locationOfGoodsCoordinates
+              val result = helper.coordinates
               result mustBe None
           }
         }
       }
 
       "must return Some(Row)" - {
-        "when locationOfGoodsCoordinatesPage is defined" in {
+        "when coordinatesPage is defined" in {
           forAll(arbitrary[Mode], arbitrary[Coordinates]) {
             (mode, coordinates) =>
-              val prefix = "routeDetails.locationOfGoods.locationOfGoodsCoordinates"
+              val prefix = "routeDetails.locationOfGoods.coordinates"
               val answers = emptyUserAnswers
-                .setValue(LocationOfGoodsCoordinatesPage, coordinates)
+                .setValue(CoordinatesPage, coordinates)
               val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.locationOfGoodsCoordinates
+              val result = helper.coordinates
 
               result mustBe Some(
                 SummaryListRow(
@@ -300,7 +300,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.LocationOfGoodsCoordinatesController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.CoordinatesController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
                           attributes = Map("id" -> "location-of-goods-coordinates")
                         )

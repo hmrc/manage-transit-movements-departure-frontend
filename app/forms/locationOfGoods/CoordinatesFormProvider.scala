@@ -25,7 +25,7 @@ import play.api.data.Forms.mapping
 
 import javax.inject.Inject
 
-class LocationOfGoodsCoordinatesFormProvider @Inject() extends Mappings {
+class CoordinatesFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String): Form[Coordinates] =
     Form(

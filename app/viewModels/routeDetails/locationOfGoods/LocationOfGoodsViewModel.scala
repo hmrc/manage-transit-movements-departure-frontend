@@ -43,7 +43,7 @@ object LocationOfGoodsViewModel {
         helper.authorisationNumber,
         helper.additionalIdentifierYesNo,
         helper.additionalIdentifier,
-        helper.locationOfGoodsCoordinates,
+        helper.coordinates,
         helper.locationOfGoodsUnLocode,
         helper.address,
         helper.locationOfGoodsPostalCode,

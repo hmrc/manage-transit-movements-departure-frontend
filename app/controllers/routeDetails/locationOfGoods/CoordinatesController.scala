@@ -18,27 +18,27 @@ package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.locationOfGoods.LocationOfGoodsCoordinatesFormProvider
+import forms.locationOfGoods.CoordinatesFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
-import pages.routeDetails.locationOfGoods.LocationOfGoodsCoordinatesPage
+import pages.routeDetails.locationOfGoods.CoordinatesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsCoordinatesView
+import views.html.routeDetails.locationOfGoods.CoordinatesView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LocationOfGoodsCoordinatesController @Inject() (
+class CoordinatesController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LocationOfGoodsNavigatorProvider,
   actions: Actions,
-  formProvider: LocationOfGoodsCoordinatesFormProvider,
+  formProvider: CoordinatesFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: LocationOfGoodsCoordinatesView
+  view: CoordinatesView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -46,8 +46,8 @@ class LocationOfGoodsCoordinatesController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn) {
       implicit request =>
-        val form = formProvider("routeDetails.locationOfGoods.locationOfGoodsCoordinates")
-        val preparedForm = request.userAnswers.get(LocationOfGoodsCoordinatesPage) match {
+        val form = formProvider("routeDetails.locationOfGoods.coordinates")
+        val preparedForm = request.userAnswers.get(CoordinatesPage) match {
           case None        => form
           case Some(value) => form.fill(value)
         }
@@ -58,7 +58,7 @@ class LocationOfGoodsCoordinatesController @Inject() (
     .requireData(lrn)
     .async {
       implicit request =>
-        val form = formProvider("routeDetails.locationOfGoods.locationOfGoodsCoordinates")
+        val form = formProvider("routeDetails.locationOfGoods.coordinates")
         form
           .bindFromRequest()
           .fold(
@@ -66,7 +66,7 @@ class LocationOfGoodsCoordinatesController @Inject() (
             value =>
               navigatorProvider().flatMap {
                 implicit navigator =>
-                  LocationOfGoodsCoordinatesPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                  CoordinatesPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
               }
           )
     }

@@ -24,7 +24,7 @@ import org.scalacheck.Gen
 import play.api.data.{Field, Form, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
 
-class LocationOfGoodsCoordinatesFormProviderSpec extends StringFieldBehaviours with SpecBase {
+class CoordinatesFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
   private val prefix = Gen.alphaNumStr.sample.value
 
@@ -33,7 +33,7 @@ class LocationOfGoodsCoordinatesFormProviderSpec extends StringFieldBehaviours w
   private val maxLongitudeKey = s"$prefix.error.longitude.maximum"
   private val maxLatitudeKey  = s"$prefix.error.latitude.maximum"
 
-  private val form = new LocationOfGoodsCoordinatesFormProvider()(prefix)
+  private val form = new CoordinatesFormProvider()(prefix)
 
   "coordinates" - {
 

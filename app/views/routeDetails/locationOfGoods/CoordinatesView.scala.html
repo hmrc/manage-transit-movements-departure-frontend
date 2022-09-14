@@ -33,18 +33,18 @@
 )(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.locationOfGoods.locationOfGoodsCoordinates.title"),
+    title = messages("routeDetails.locationOfGoods.coordinates.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.LocationOfGoodsCoordinatesController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.CoordinatesController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputCoordinates(
             form = form,
-            messageKeyPrefix = "routeDetails.locationOfGoods.locationOfGoodsCoordinates",
+            messageKeyPrefix = "routeDetails.locationOfGoods.coordinates",
             caption = Some(messages("routeDetails.caption"))
         )
 

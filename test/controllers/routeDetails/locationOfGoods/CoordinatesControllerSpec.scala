@@ -17,31 +17,31 @@
 package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.locationOfGoods.LocationOfGoodsCoordinatesFormProvider
+import forms.locationOfGoods.CoordinatesFormProvider
 import generators.Generators
 import models.NormalMode
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
-import pages.routeDetails.locationOfGoods.LocationOfGoodsCoordinatesPage
+import pages.routeDetails.locationOfGoods.CoordinatesPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CountriesService
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsCoordinatesView
+import views.html.routeDetails.locationOfGoods.CoordinatesView
 
 import scala.concurrent.Future
 
-class LocationOfGoodsCoordinatesControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+class CoordinatesControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val testCoordinates = arbitraryCoordinates.arbitrary.sample.value
 
-  private val formProvider = new LocationOfGoodsCoordinatesFormProvider()
-  private val form         = formProvider("routeDetails.locationOfGoods.locationOfGoodsCoordinates")
+  private val formProvider = new CoordinatesFormProvider()
+  private val form         = formProvider("routeDetails.locationOfGoods.coordinates")
 
-  private val mode                                 = NormalMode
-  private lazy val locationOfGoodsCoordinatesRoute = routes.LocationOfGoodsCoordinatesController.onPageLoad(lrn, mode).url
+  private val mode                  = NormalMode
+  private lazy val coordinatesRoute = routes.CoordinatesController.onPageLoad(lrn, mode).url
 
   private lazy val mockCountriesService: CountriesService = mock[CountriesService]
 
@@ -55,16 +55,16 @@ class LocationOfGoodsCoordinatesControllerSpec extends SpecBase with AppWithDefa
       .guiceApplicationBuilder()
       .overrides(bind(classOf[LocationOfGoodsNavigatorProvider]).toInstance(fakeLocationOfGoodsNavigatorProvider))
 
-  "LocationOfGoodsCoordinates Controller" - {
+  "Coordinates Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsCoordinatesRoute)
+      val request = FakeRequest(GET, coordinatesRoute)
       val result  = route(app, request).value
 
-      val view = injector.instanceOf[LocationOfGoodsCoordinatesView]
+      val view = injector.instanceOf[CoordinatesView]
 
       status(result) mustEqual OK
 
@@ -75,11 +75,11 @@ class LocationOfGoodsCoordinatesControllerSpec extends SpecBase with AppWithDefa
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(LocationOfGoodsCoordinatesPage, testCoordinates)
+        .setValue(CoordinatesPage, testCoordinates)
 
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsCoordinatesRoute)
+      val request = FakeRequest(GET, coordinatesRoute)
 
       val result = route(app, request).value
 
@@ -90,7 +90,7 @@ class LocationOfGoodsCoordinatesControllerSpec extends SpecBase with AppWithDefa
         )
       )
 
-      val view = injector.instanceOf[LocationOfGoodsCoordinatesView]
+      val view = injector.instanceOf[CoordinatesView]
 
       status(result) mustEqual OK
 
@@ -104,7 +104,7 @@ class LocationOfGoodsCoordinatesControllerSpec extends SpecBase with AppWithDefa
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, locationOfGoodsCoordinatesRoute)
+      val request = FakeRequest(POST, coordinatesRoute)
         .withFormUrlEncodedBody(
           ("latitude", testCoordinates.latitude),
           ("longitude", testCoordinates.longitude)
@@ -121,14 +121,14 @@ class LocationOfGoodsCoordinatesControllerSpec extends SpecBase with AppWithDefa
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, locationOfGoodsCoordinatesRoute).withFormUrlEncodedBody(("value", ""))
+      val request   = FakeRequest(POST, coordinatesRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[LocationOfGoodsCoordinatesView]
+      val view = injector.instanceOf[CoordinatesView]
 
       contentAsString(result) mustEqual
         view(boundForm, lrn, mode)(request, messages).toString
@@ -138,7 +138,7 @@ class LocationOfGoodsCoordinatesControllerSpec extends SpecBase with AppWithDefa
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, locationOfGoodsCoordinatesRoute)
+      val request = FakeRequest(GET, coordinatesRoute)
 
       val result = route(app, request).value
 
@@ -151,7 +151,7 @@ class LocationOfGoodsCoordinatesControllerSpec extends SpecBase with AppWithDefa
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, locationOfGoodsCoordinatesRoute)
+      val request = FakeRequest(POST, coordinatesRoute)
         .withFormUrlEncodedBody(
           ("latitude", testCoordinates.latitude),
           ("longitude", testCoordinates.longitude)
