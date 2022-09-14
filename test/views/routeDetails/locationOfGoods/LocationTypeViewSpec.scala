@@ -16,22 +16,22 @@
 
 package views.routeDetails.locationOfGoods
 
-import forms.locationOfGoods.LocationOfGoodsTypeFormProvider
+import forms.locationOfGoods.LocationTypeFormProvider
 import models.{LocationType, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import views.behaviours.RadioViewBehaviours
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsTypeView
+import views.html.routeDetails.locationOfGoods.LocationTypeView
 
-class LocationOfGoodsTypeViewSpec extends RadioViewBehaviours[LocationType] {
+class LocationTypeViewSpec extends RadioViewBehaviours[LocationType] {
 
-  override def form: Form[LocationType] = new LocationOfGoodsTypeFormProvider()()
+  override def form: Form[LocationType] = new LocationTypeFormProvider()()
 
   override def applyView(form: Form[LocationType]): HtmlFormat.Appendable =
-    injector.instanceOf[LocationOfGoodsTypeView].apply(form, lrn, LocationType.radioItems, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[LocationTypeView].apply(form, lrn, LocationType.radioItems, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsType"
+  override val prefix: String = "routeDetails.locationOfGoods.locationType"
 
   override def radioItems(fieldId: String, checkedValue: Option[LocationType] = None): Seq[RadioItem] =
     LocationType.radioItems(fieldId, checkedValue)

@@ -16,30 +16,16 @@
 
 package forms.locationOfGoods
 
-import forms.behaviours.OptionFieldBehaviours
+import forms.mappings.Mappings
 import models.LocationType
-import play.api.data.FormError
+import play.api.data.Form
 
-class LocationOfGoodsTypeFormProviderSpec extends OptionFieldBehaviours {
+import javax.inject.Inject
 
-  val form = new LocationOfGoodsTypeFormProvider()()
+class LocationTypeFormProvider @Inject() extends Mappings {
 
-  ".value" - {
-
-    val fieldName   = "value"
-    val requiredKey = "routeDetails.locationOfGoods.locationOfGoodsType.error.required"
-
-    behave like optionsField[LocationType](
-      form,
-      fieldName,
-      validValues = LocationType.values,
-      invalidError = FormError(fieldName, "error.invalid")
+  def apply(): Form[LocationType] =
+    Form(
+      "value" -> enumerable[LocationType]("routeDetails.locationOfGoods.locationType.error.required")
     )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
-  }
 }

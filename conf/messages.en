@@ -717,14 +717,14 @@ routeDetails.locationOfGoods.addLocationOfGoods.paragraph2 = For goods not prese
 routeDetails.locationOfGoods.addLocationOfGoods.checkYourAnswersLabel = Do you want to add a location of goods?
 routeDetails.locationOfGoods.addLocationOfGoods.error.required = Select yes if you want to add a location of goods
 
-routeDetails.locationOfGoods.locationOfGoodsType.title = Which type of location is it?
-routeDetails.locationOfGoods.locationOfGoodsType.heading = Which type of location is it?
-routeDetails.locationOfGoods.locationOfGoodsType.checkYourAnswersLabel = Location type
-routeDetails.locationOfGoods.locationOfGoodsType.error.required = Select which type of location it is
-routeDetails.locationOfGoods.locationOfGoodsType.AuthorisedPlace = Authorised place - the authorised consignor’s own premises
-routeDetails.locationOfGoods.locationOfGoodsType.DesignatedLocation = Designated location - any other premises the consignor is authorised to use as an office of departure
-routeDetails.locationOfGoods.locationOfGoodsType.ApprovedPlace = Approved place - a designated location approved and controlled by the office of departure or destination
-routeDetails.locationOfGoods.locationOfGoodsType.Other = Other
+routeDetails.locationOfGoods.locationType.title = Which type of location is it?
+routeDetails.locationOfGoods.locationType.heading = Which type of location is it?
+routeDetails.locationOfGoods.locationType.checkYourAnswersLabel = Location type
+routeDetails.locationOfGoods.locationType.error.required = Select which type of location it is
+routeDetails.locationOfGoods.locationType.AuthorisedPlace = Authorised place - the authorised consignor’s own premises
+routeDetails.locationOfGoods.locationType.DesignatedLocation = Designated location - any other premises the consignor is authorised to use as an office of departure
+routeDetails.locationOfGoods.locationType.ApprovedPlace = Approved place - a designated location approved and controlled by the office of departure or destination
+routeDetails.locationOfGoods.locationType.Other = Other
 
 routeDetails.locationOfGoods.identification.title = How do you want to identify the location of goods?
 routeDetails.locationOfGoods.identification.heading = How do you want to identify the location of goods?

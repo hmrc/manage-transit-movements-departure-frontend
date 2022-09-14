@@ -34,8 +34,8 @@ import pages.routeDetails.locationOfGoods.{
   CustomsOfficeIdentifierPage,
   EoriPage,
   IdentificationPage,
-  LocationOfGoodsTypePage,
   LocationOfGoodsUnLocodePage,
+  LocationTypePage,
   PostalCodePage
 }
 import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
@@ -46,26 +46,26 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
   "LocationOfGoodsCheckYourAnswersHelper" - {
 
-    "locationOfGoodsType" - {
+    "locationType" - {
       "must return None" - {
-        "when locationOfGoodsTypePage undefined" in {
+        "when locationTypePage undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-              val result = helper.locationOfGoodsType
+              val result = helper.locationType
               result mustBe None
           }
         }
       }
 
       "must return Some(Row)" - {
-        "when locationOfGoodsTypePage defined" in {
+        "when locationTypePage defined" in {
           forAll(arbitrary[Mode], arbitrary[LocationType]) {
             (mode, locationType) =>
               val answers = emptyUserAnswers
-                .setValue(LocationOfGoodsTypePage, locationType)
+                .setValue(LocationTypePage, locationType)
               val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.locationOfGoodsType
+              val result = helper.locationType
 
               result mustBe Some(
                 SummaryListRow(
@@ -76,7 +76,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.LocationOfGoodsTypeController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.LocationTypeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some(messages(s"${LocationType.messageKeyPrefix}.change.hidden")),
                           attributes = Map("id" -> "location-of-goods-type")
                         )

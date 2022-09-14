@@ -17,43 +17,43 @@
 package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.locationOfGoods.LocationOfGoodsTypeFormProvider
+import forms.locationOfGoods.LocationTypeFormProvider
 import models.{LocationType, NormalMode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.routeDetails.locationOfGoods.LocationOfGoodsTypePage
+import pages.routeDetails.locationOfGoods.LocationTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsTypeView
+import views.html.routeDetails.locationOfGoods.LocationTypeView
 
 import scala.concurrent.Future
 
-class LocationOfGoodsTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class LocationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                  = new LocationOfGoodsTypeFormProvider()
-  private val form                          = formProvider()
-  private val mode                          = NormalMode
-  private lazy val locationOfGoodsTypeRoute = routes.LocationOfGoodsTypeController.onPageLoad(lrn, mode).url
+  private val formProvider           = new LocationTypeFormProvider()
+  private val form                   = formProvider()
+  private val mode                   = NormalMode
+  private lazy val locationTypeRoute = routes.LocationTypeController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[LocationOfGoodsNavigatorProvider]).toInstance(fakeLocationOfGoodsNavigatorProvider))
 
-  "LocationOfGoodsType Controller" - {
+  "LocationType Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsTypeRoute)
+      val request = FakeRequest(GET, locationTypeRoute)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[LocationOfGoodsTypeView]
+      val view = injector.instanceOf[LocationTypeView]
 
       status(result) mustEqual OK
 
@@ -63,16 +63,16 @@ class LocationOfGoodsTypeControllerSpec extends SpecBase with AppWithDefaultMock
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsTypePage, LocationType.values.head)
+      val userAnswers = emptyUserAnswers.setValue(LocationTypePage, LocationType.values.head)
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsTypeRoute)
+      val request = FakeRequest(GET, locationTypeRoute)
 
       val result = route(app, request).value
 
       val filledForm = form.bind(Map("value" -> LocationType.values.head.toString))
 
-      val view = injector.instanceOf[LocationOfGoodsTypeView]
+      val view = injector.instanceOf[LocationTypeView]
 
       status(result) mustEqual OK
 
@@ -86,7 +86,7 @@ class LocationOfGoodsTypeControllerSpec extends SpecBase with AppWithDefaultMock
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, locationOfGoodsTypeRoute)
+      val request = FakeRequest(POST, locationTypeRoute)
         .withFormUrlEncodedBody(("value", LocationType.values.head.toString))
 
       val result = route(app, request).value
@@ -100,12 +100,12 @@ class LocationOfGoodsTypeControllerSpec extends SpecBase with AppWithDefaultMock
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, locationOfGoodsTypeRoute).withFormUrlEncodedBody(("value", "invalid value"))
+      val request   = FakeRequest(POST, locationTypeRoute).withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[LocationOfGoodsTypeView]
+      val view = injector.instanceOf[LocationTypeView]
 
       status(result) mustEqual BAD_REQUEST
 
@@ -117,7 +117,7 @@ class LocationOfGoodsTypeControllerSpec extends SpecBase with AppWithDefaultMock
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, locationOfGoodsTypeRoute)
+      val request = FakeRequest(GET, locationTypeRoute)
 
       val result = route(app, request).value
 
@@ -129,7 +129,7 @@ class LocationOfGoodsTypeControllerSpec extends SpecBase with AppWithDefaultMock
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, locationOfGoodsTypeRoute)
+      val request = FakeRequest(POST, locationTypeRoute)
         .withFormUrlEncodedBody(("value", LocationType.values.head.toString))
 
       val result = route(app, request).value

@@ -18,28 +18,28 @@ package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.locationOfGoods.LocationOfGoodsTypeFormProvider
+import forms.locationOfGoods.LocationTypeFormProvider
 import models.requests.DataRequest
 import models.{LocalReferenceNumber, LocationType, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
-import pages.routeDetails.locationOfGoods.LocationOfGoodsTypePage
+import pages.routeDetails.locationOfGoods.LocationTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsTypeView
+import views.html.routeDetails.locationOfGoods.LocationTypeView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LocationOfGoodsTypeController @Inject() (
+class LocationTypeController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LocationOfGoodsNavigatorProvider,
   actions: Actions,
-  formProvider: LocationOfGoodsTypeFormProvider,
+  formProvider: LocationTypeFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: LocationOfGoodsTypeView
+  view: LocationTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -49,7 +49,7 @@ class LocationOfGoodsTypeController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn) {
       implicit request =>
-        val preparedForm = request.userAnswers.get(LocationOfGoodsTypePage) match {
+        val preparedForm = request.userAnswers.get(LocationTypePage) match {
           case None        => form
           case Some(value) => form.fill(value)
         }
@@ -68,7 +68,7 @@ class LocationOfGoodsTypeController @Inject() (
             value =>
               navigatorProvider().flatMap {
                 implicit navigator =>
-                  LocationOfGoodsTypePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                  LocationTypePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
               }
           )
     }

@@ -20,7 +20,7 @@ sealed trait LocationType
 
 object LocationType extends RadioModel[LocationType] {
 
-  override val messageKeyPrefix = "routeDetails.locationOfGoods.locationOfGoodsType"
+  override val messageKeyPrefix = "routeDetails.locationOfGoods.locationType"
 
   case object AuthorisedPlace extends WithName("AuthorisedPlace") with LocationType
   case object DesignatedLocation extends WithName("DesignatedLocation") with LocationType

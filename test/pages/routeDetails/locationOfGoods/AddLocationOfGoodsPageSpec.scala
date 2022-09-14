@@ -36,12 +36,12 @@ class AddLocationOfGoodsPageSpec extends PageBehaviours {
           forAll(arbitrary[LocationType], arbitrary[LocationOfGoodsIdentification]) {
             (typeOfLocation, qualifierOfIdentification) =>
               val preChange = emptyUserAnswers
-                .setValue(LocationOfGoodsTypePage, typeOfLocation)
+                .setValue(LocationTypePage, typeOfLocation)
                 .setValue(IdentificationPage, qualifierOfIdentification)
 
               val postChange = preChange.setValue(AddLocationOfGoodsPage, false)
 
-              postChange.get(LocationOfGoodsTypePage) mustNot be(defined)
+              postChange.get(LocationTypePage) mustNot be(defined)
               postChange.get(IdentificationPage) mustNot be(defined)
           }
         }
