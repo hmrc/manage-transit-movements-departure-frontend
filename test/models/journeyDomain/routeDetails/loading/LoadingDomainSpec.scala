@@ -20,13 +20,19 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
-import models.reference.UnLocode
+import models.reference.{Country, UnLocode}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.routeDetails.loading.{PlaceOfLoadingAddUnLocodeYesNoPage, PlaceOfLoadingUnLocodePage}
+import pages.routeDetails.loading.{
+  PlaceOfLoadingAddExtraInformationYesNoPage,
+  PlaceOfLoadingAddUnLocodeYesNoPage,
+  PlaceOfLoadingCountryPage,
+  PlaceOfLoadingUnLocodePage
+}
 
 class LoadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
   private val unLocode1 = arbitrary[UnLocode].sample.value
+  private val country1  = arbitrary[Country].sample.value
 
   "LoadingDomain" - {
 
@@ -36,15 +42,34 @@ class LoadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(PlaceOfLoadingAddUnLocodeYesNoPage)(true)
           .unsafeSetVal(PlaceOfLoadingUnLocodePage)(unLocode1)
+          .unsafeSetVal(PlaceOfLoadingAddExtraInformationYesNoPage)(true)
+          .unsafeSetVal(PlaceOfLoadingCountryPage)(country1)
 
         val expectedResult = LoadingDomain(
-          unLocode = Some(unLocode1)
+          unLocode = Some(unLocode1),
+          additionalInformation = Some(AdditionalInformationDomain(country1))
         )
 
         val result: EitherType[LoadingDomain] = UserAnswersReader[LoadingDomain].run(userAnswers)
 
         result.value mustBe expectedResult
       }
+
+      "when addUnLocode is No" in {
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(PlaceOfLoadingAddUnLocodeYesNoPage)(false)
+          .unsafeSetVal(PlaceOfLoadingCountryPage)(country1)
+
+        val expectedResult = LoadingDomain(
+          unLocode = None,
+          additionalInformation = Some(AdditionalInformationDomain(country1))
+        )
+
+        val result: EitherType[LoadingDomain] = UserAnswersReader[LoadingDomain].run(userAnswers)
+
+        result.value mustBe expectedResult
+      }
+
     }
 
     "cannot be parsed from UserAnswers" - {}

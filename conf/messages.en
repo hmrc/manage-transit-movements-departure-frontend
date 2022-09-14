@@ -882,3 +882,10 @@ routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.paragraph = This inc
 routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.checkYourAnswersLabel = Do you want to add extra information for the place of loading? //TODO check CYA ticket content
 routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.error.required = Select yes if you want to add extra information for the place of loading
 
+routeDetails.loading.placeOfLoadingCountry.title = In which country is the place of loading?
+routeDetails.loading.placeOfLoadingCountry.heading = In which country is the place of loading?
+routeDetails.loading.placeOfLoadingCountry.hintText = Enter the country, like Italy or Spain.
+routeDetails.loading.placeOfLoadingCountry.placeholder = Select a country
+routeDetails.loading.placeOfLoadingCountry.change.hidden = In which country is the place of loading?
+routeDetails.loading.placeOfLoadingCountry.checkYourAnswersLabel = In which country is the place of loading?
+routeDetails.loading.placeOfLoadingCountry.error.required = Enter which country the place of loading is in
