@@ -39,7 +39,7 @@ object LocationOfGoodsViewModel {
         helper.locationOfGoodsType,
         helper.locationOfGoodsIdentification,
         helper.customsOfficeIdentifier,
-        helper.locationOfGoodsEori,
+        helper.eori,
         helper.authorisationNumber,
         helper.additionalIdentifierYesNo,
         helper.additionalIdentifier,

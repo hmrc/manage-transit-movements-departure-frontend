@@ -187,7 +187,7 @@ trait UserAnswersEntryGenerators {
     import pages.routeDetails.locationOfGoods._
     {
       case CustomsOfficeIdentifierPage   => arbitrary[CustomsOffice].map(Json.toJson(_))
-      case LocationOfGoodsEoriPage       => Gen.alphaNumStr.map(JsString)
+      case EoriPage                      => Gen.alphaNumStr.map(JsString)
       case AuthorisationNumberPage       => Gen.alphaNumStr.map(JsString)
       case AddIdentifierYesNoPage        => arbitrary[Boolean].map(JsBoolean)
       case AdditionalIdentifierPage      => Gen.alphaNumStr.map(JsString)

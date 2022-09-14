@@ -18,14 +18,14 @@ package pages.routeDetails.locationOfGoods
 
 import pages.behaviours.PageBehaviours
 
-class LocationOfGoodsEoriPageSpec extends PageBehaviours {
+class EoriPageSpec extends PageBehaviours {
 
-  "LocationOfGoodsEoriPage" - {
+  "EoriPage" - {
 
-    beRetrievable[String](LocationOfGoodsEoriPage)
+    beRetrievable[String](EoriPage)
 
-    beSettable[String](LocationOfGoodsEoriPage)
+    beSettable[String](EoriPage)
 
-    beRemovable[String](LocationOfGoodsEoriPage)
+    beRemovable[String](EoriPage)
   }
 }

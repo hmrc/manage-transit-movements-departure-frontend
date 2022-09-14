@@ -30,22 +30,22 @@
 @(form: Form[String], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.locationOfGoods.locationOfGoodsEori.title"),
+    title = messages("routeDetails.locationOfGoods.eori.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.LocationOfGoodsEoriController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.EoriController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages("routeDetails.locationOfGoods.locationOfGoodsEori.heading"),
+                heading = messages("routeDetails.locationOfGoods.eori.heading"),
                 caption = Some(messages("routeDetails.caption"))
             ),
-            hint= Some(messages("routeDetails.locationOfGoods.locationOfGoodsEori.hintText")),
+            hint= Some(messages("routeDetails.locationOfGoods.eori.hintText")),
             inputClass = InputSize.Width20
         )
 

@@ -32,7 +32,7 @@ import pages.routeDetails.locationOfGoods.{
   AuthorisationNumberPage,
   CoordinatesPage,
   CustomsOfficeIdentifierPage,
-  LocationOfGoodsEoriPage,
+  EoriPage,
   LocationOfGoodsIdentificationPage,
   LocationOfGoodsPostalCodePage,
   LocationOfGoodsTypePage,
@@ -179,27 +179,27 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
       }
     }
 
-    "locationOfGoodsEori" - {
+    "eori" - {
       "must return None" - {
-        "when locationOfGoodsEoriPage is undefined" in {
+        "when eoriPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-              val result = helper.locationOfGoodsEori
+              val result = helper.eori
               result mustBe None
           }
         }
       }
 
       "must return Some(Row)" - {
-        "when locationOfGoodsEoriPage is defined" in {
+        "when eoriPage is defined" in {
           forAll(arbitrary[Mode], arbitrary[String]) {
             (mode, eori) =>
-              val prefix = "routeDetails.locationOfGoods.locationOfGoodsEori"
+              val prefix = "routeDetails.locationOfGoods.eori"
               val answers = emptyUserAnswers
-                .setValue(LocationOfGoodsEoriPage, eori)
+                .setValue(EoriPage, eori)
               val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.locationOfGoodsEori
+              val result = helper.eori
 
               result mustBe Some(
                 SummaryListRow(
@@ -210,7 +210,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.LocationOfGoodsEoriController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.EoriController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
                           attributes = Map("id" -> "location-of-goods-eori")
                         )

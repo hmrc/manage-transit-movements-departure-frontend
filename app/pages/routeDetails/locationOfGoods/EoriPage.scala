@@ -23,12 +23,12 @@ import pages.sections.routeDetails.locationOfGoods.LocationOfGoodsIdentifierSect
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object LocationOfGoodsEoriPage extends QuestionPage[String] {
+case object EoriPage extends QuestionPage[String] {
 
   override def path: JsPath = LocationOfGoodsIdentifierSection.path \ toString
 
   override def toString: String = "eori"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.LocationOfGoodsEoriController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.EoriController.onPageLoad(userAnswers.lrn, mode))
 }

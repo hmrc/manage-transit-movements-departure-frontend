@@ -21,33 +21,33 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EoriNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
-import pages.routeDetails.locationOfGoods.LocationOfGoodsEoriPage
+import pages.routeDetails.locationOfGoods.EoriPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsEoriView
+import views.html.routeDetails.locationOfGoods.EoriView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LocationOfGoodsEoriController @Inject() (
+class EoriController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LocationOfGoodsNavigatorProvider,
   formProvider: EoriNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
-  view: LocationOfGoodsEoriView
+  view: EoriView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.locationOfGoods.locationOfGoodsEori")
+  private val form = formProvider("routeDetails.locationOfGoods.eori")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(LocationOfGoodsEoriPage) match {
+      val preparedForm = request.userAnswers.get(EoriPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -63,7 +63,7 @@ class LocationOfGoodsEoriController @Inject() (
           value =>
             navigatorProvider().flatMap {
               implicit navigator =>
-                LocationOfGoodsEoriPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                EoriPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
             }
         )
   }

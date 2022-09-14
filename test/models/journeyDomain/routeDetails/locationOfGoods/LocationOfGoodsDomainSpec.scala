@@ -90,7 +90,7 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           val userAnswers = emptyUserAnswers
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
             .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-            .setValue(LocationOfGoodsEoriPage, eoriNumber)
+            .setValue(EoriPage, eoriNumber)
             .setValue(AddIdentifierYesNoPage, false)
             .setValue(AddContactYesNoPage, false)
 
@@ -114,7 +114,7 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           val userAnswers = emptyUserAnswers
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
             .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-            .setValue(LocationOfGoodsEoriPage, eoriNumber)
+            .setValue(EoriPage, eoriNumber)
             .setValue(AddIdentifierYesNoPage, true)
             .setValue(AdditionalIdentifierPage, "1234")
             .setValue(AddContactYesNoPage, false)
@@ -282,7 +282,7 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
       "when is X(Eori Number) and a mandatory page is missing" in {
         val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
           LocationOfGoodsIdentificationPage,
-          LocationOfGoodsEoriPage,
+          EoriPage,
           AddIdentifierYesNoPage,
           AddContactYesNoPage
         )
@@ -293,7 +293,7 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val userAnswers = emptyUserAnswers
           .setValue(LocationOfGoodsTypePage, typeOfLocation)
           .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-          .setValue(LocationOfGoodsEoriPage, eoriNumber)
+          .setValue(EoriPage, eoriNumber)
           .setValue(AddIdentifierYesNoPage, false)
           .setValue(AddContactYesNoPage, false)
 

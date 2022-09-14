@@ -767,15 +767,15 @@ routeDetails.locationOfGoods.coordinates.error.longitude.maximum = The longitude
 routeDetails.locationOfGoods.coordinates.error.required = Enter the {0} coordinates for the location of goods
 routeDetails.locationOfGoods.coordinates.error.format = The {0} coordinates must include between 5 and 7 decimal places
 
-routeDetails.locationOfGoods.locationOfGoodsEori.title = What is the EORI number for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsEori.heading = What is the EORI number for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsEori.checkYourAnswersLabel = What is the EORI number for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsEori.error.required = Enter the EORI number for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsEori.error.minLength = The EORI number must be between 14 and 17 characters long
-routeDetails.locationOfGoods.locationOfGoodsEori.error.maxLength = The EORI number must be between 14 and 17 characters long
-routeDetails.locationOfGoods.locationOfGoodsEori.error.invalidCharacters = The EORI number must only include letters a to z and numbers 0 to 9
-routeDetails.locationOfGoods.locationOfGoodsEori.error.invalidFormat = The EORI number must start with GB or XI, followed by between 12 and 15 numbers
-routeDetails.locationOfGoods.locationOfGoodsEori.hintText = This will start GB or XI, followed by 12 to 15 numbers. For example, GB123456789000.
+routeDetails.locationOfGoods.eori.title = What is the EORI number for the location of goods?
+routeDetails.locationOfGoods.eori.heading = What is the EORI number for the location of goods?
+routeDetails.locationOfGoods.eori.checkYourAnswersLabel = What is the EORI number for the location of goods?
+routeDetails.locationOfGoods.eori.error.required = Enter the EORI number for the location of goods
+routeDetails.locationOfGoods.eori.error.minLength = The EORI number must be between 14 and 17 characters long
+routeDetails.locationOfGoods.eori.error.maxLength = The EORI number must be between 14 and 17 characters long
+routeDetails.locationOfGoods.eori.error.invalidCharacters = The EORI number must only include letters a to z and numbers 0 to 9
+routeDetails.locationOfGoods.eori.error.invalidFormat = The EORI number must start with GB or XI, followed by between 12 and 15 numbers
+routeDetails.locationOfGoods.eori.hintText = This will start GB or XI, followed by 12 to 15 numbers. For example, GB123456789000.
 
 
 routeDetails.locationOfGoods.locationOfGoodsPostalCode.title = What is the address for the location of goods?

@@ -47,10 +47,10 @@ class LocationOfGoodsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     id = Some("location-of-goods-customs-office-identifier")
   )
 
-  def locationOfGoodsEori: Option[SummaryListRow] = getAnswerAndBuildRow[String](
-    page = LocationOfGoodsEoriPage,
+  def eori: Option[SummaryListRow] = getAnswerAndBuildRow[String](
+    page = EoriPage,
     formatAnswer = formatAsText,
-    prefix = "routeDetails.locationOfGoods.locationOfGoodsEori",
+    prefix = "routeDetails.locationOfGoods.eori",
     id = Some("location-of-goods-eori")
   )
 

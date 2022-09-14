@@ -22,17 +22,17 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsEoriView
+import views.html.routeDetails.locationOfGoods.EoriView
 import org.scalacheck.{Arbitrary, Gen}
 
-class LocationOfGoodsEoriViewSpec extends InputTextViewBehaviours[String] {
+class EoriViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsEori"
+  override val prefix: String = "routeDetails.locationOfGoods.eori"
 
   override def form: Form[String] = new EoriNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[LocationOfGoodsEoriView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[EoriView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 

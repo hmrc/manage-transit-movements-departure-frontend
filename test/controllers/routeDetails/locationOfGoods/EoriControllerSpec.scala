@@ -22,38 +22,38 @@ import models.NormalMode
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.routeDetails.locationOfGoods.LocationOfGoodsEoriPage
+import pages.routeDetails.locationOfGoods.EoriPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsEoriView
+import views.html.routeDetails.locationOfGoods.EoriView
 
 import scala.concurrent.Future
 
-class LocationOfGoodsEoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class EoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                  = new EoriNumberFormProvider()
-  private val form                          = formProvider("routeDetails.locationOfGoods.locationOfGoodsEori")
-  private val mode                          = NormalMode
-  private lazy val locationOfGoodsEoriRoute = routes.LocationOfGoodsEoriController.onPageLoad(lrn, mode).url
+  private val formProvider   = new EoriNumberFormProvider()
+  private val form           = formProvider("routeDetails.locationOfGoods.eori")
+  private val mode           = NormalMode
+  private lazy val eoriRoute = routes.EoriController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[LocationOfGoodsNavigatorProvider]).toInstance(fakeLocationOfGoodsNavigatorProvider))
 
-  "LocationOfGoodsEori Controller" - {
+  "Eori Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsEoriRoute)
+      val request = FakeRequest(GET, eoriRoute)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[LocationOfGoodsEoriView]
+      val view = injector.instanceOf[EoriView]
 
       status(result) mustEqual OK
 
@@ -63,16 +63,16 @@ class LocationOfGoodsEoriControllerSpec extends SpecBase with AppWithDefaultMock
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsEoriPage, "GB1234567890000")
+      val userAnswers = emptyUserAnswers.setValue(EoriPage, "GB1234567890000")
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsEoriRoute)
+      val request = FakeRequest(GET, eoriRoute)
 
       val result = route(app, request).value
 
       val filledForm = form.bind(Map("value" -> "GB1234567890000"))
 
-      val view = injector.instanceOf[LocationOfGoodsEoriView]
+      val view = injector.instanceOf[EoriView]
 
       status(result) mustEqual OK
 
@@ -86,7 +86,7 @@ class LocationOfGoodsEoriControllerSpec extends SpecBase with AppWithDefaultMock
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      val request = FakeRequest(POST, locationOfGoodsEoriRoute)
+      val request = FakeRequest(POST, eoriRoute)
         .withFormUrlEncodedBody(("value", "GB1234567890000"))
 
       val result = route(app, request).value
@@ -102,14 +102,14 @@ class LocationOfGoodsEoriControllerSpec extends SpecBase with AppWithDefaultMock
 
       val invalidAnswer = ""
 
-      val request    = FakeRequest(POST, locationOfGoodsEoriRoute).withFormUrlEncodedBody(("value", ""))
+      val request    = FakeRequest(POST, eoriRoute).withFormUrlEncodedBody(("value", ""))
       val filledForm = form.bind(Map("value" -> invalidAnswer))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[LocationOfGoodsEoriView]
+      val view = injector.instanceOf[EoriView]
 
       contentAsString(result) mustEqual
         view(filledForm, lrn, mode)(request, messages).toString
@@ -119,7 +119,7 @@ class LocationOfGoodsEoriControllerSpec extends SpecBase with AppWithDefaultMock
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, locationOfGoodsEoriRoute)
+      val request = FakeRequest(GET, eoriRoute)
 
       val result = route(app, request).value
 
@@ -132,7 +132,7 @@ class LocationOfGoodsEoriControllerSpec extends SpecBase with AppWithDefaultMock
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, locationOfGoodsEoriRoute)
+      val request = FakeRequest(POST, eoriRoute)
         .withFormUrlEncodedBody(("value", "test string"))
 
       val result = route(app, request).value
