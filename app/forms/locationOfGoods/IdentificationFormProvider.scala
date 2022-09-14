@@ -22,10 +22,10 @@ import play.api.data.Form
 
 import javax.inject.Inject
 
-class LocationOfGoodsIdentificationFormProvider @Inject() extends Mappings {
+class IdentificationFormProvider @Inject() extends Mappings {
 
   def apply(): Form[LocationOfGoodsIdentification] =
     Form(
-      "value" -> enumerable[LocationOfGoodsIdentification]("routeDetails.locationOfGoods.locationOfGoodsIdentification.error.required")
+      "value" -> enumerable[LocationOfGoodsIdentification]("routeDetails.locationOfGoods.identification.error.required")
     )
 }

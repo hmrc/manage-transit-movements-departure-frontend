@@ -30,21 +30,21 @@
 @(form: Form[LocationOfGoodsIdentification], lrn: LocalReferenceNumber, radios: (String, Option[LocationOfGoodsIdentification]) => Seq[RadioItem], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.locationOfGoods.locationOfGoodsIdentification.title"),
+    title = messages("routeDetails.locationOfGoods.identification.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.LocationOfGoodsIdentificationController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.IdentificationController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputRadio(
             field = form("value"),
-            legend = messages("routeDetails.locationOfGoods.locationOfGoodsIdentification.heading"),
+            legend = messages("routeDetails.locationOfGoods.identification.heading"),
             radioItems = fieldId => radios(fieldId, form.value),
             caption = Some(messages("routeDetails.caption")),
-            hint = Some(messages("routeDetails.locationOfGoods.locationOfGoodsIdentification.hint"))
+            hint = Some(messages("routeDetails.locationOfGoods.identification.hint"))
         )
 
         @button(attributes = Map("id" -> "submit"))

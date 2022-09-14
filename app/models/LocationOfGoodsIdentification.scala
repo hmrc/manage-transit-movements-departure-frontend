@@ -28,7 +28,7 @@ object LocationOfGoodsIdentification extends RadioModel[LocationOfGoodsIdentific
   case object AddressIdentifier extends WithName("address") with LocationOfGoodsIdentification
   case object PostalCode extends WithName("postalCode") with LocationOfGoodsIdentification
 
-  override val messageKeyPrefix: String = "routeDetails.locationOfGoods.locationOfGoodsIdentification"
+  override val messageKeyPrefix: String = "routeDetails.locationOfGoods.identification"
 
   val values: Seq[LocationOfGoodsIdentification] = Seq(
     CustomsOfficeIdentifier,

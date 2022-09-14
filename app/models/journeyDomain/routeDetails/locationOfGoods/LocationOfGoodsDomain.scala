@@ -40,7 +40,7 @@ object LocationOfGoodsDomain {
   implicit val userAnswersReader: UserAnswersReader[LocationOfGoodsDomain] =
     LocationOfGoodsTypePage.reader.flatMap {
       typeOfLocation =>
-        LocationOfGoodsIdentificationPage.reader.flatMap {
+        IdentificationPage.reader.flatMap {
           case CustomsOfficeIdentifier => LocationOfGoodsV.userAnswersReader(typeOfLocation)
           case EoriNumber              => LocationOfGoodsX.userAnswersReader(typeOfLocation)
           case AuthorisationNumber     => LocationOfGoodsY.userAnswersReader(typeOfLocation)

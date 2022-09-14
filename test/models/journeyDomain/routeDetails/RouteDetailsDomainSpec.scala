@@ -239,7 +239,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
             .setValue(BindingItineraryPage, false)
             .setValue(AddCountryOfRoutingYesNoPage, false)
             .setValue(LocationOfGoodsTypePage, typeOfLocation)
-            .setValue(LocationOfGoodsIdentificationPage, LocationOfGoodsIdentification.CustomsOfficeIdentifier)
+            .setValue(IdentificationPage, LocationOfGoodsIdentification.CustomsOfficeIdentifier)
             .setValue(CustomsOfficeIdentifierPage, customsOffice)
             .setValue(PlaceOfLoadingAddUnLocodeYesNoPage, false)
 

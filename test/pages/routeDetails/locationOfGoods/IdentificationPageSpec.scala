@@ -22,15 +22,15 @@ import pages.behaviours.PageBehaviours
 import pages.sections.routeDetails.locationOfGoods.LocationOfGoodsIdentifierSection
 import play.api.libs.json.Json
 
-class LocationOfGoodsIdentificationPageSpec extends PageBehaviours {
+class IdentificationPageSpec extends PageBehaviours {
 
   "LocationOfGoodsIdentificationPage" - {
 
-    beRetrievable[LocationOfGoodsIdentification](LocationOfGoodsIdentificationPage)
+    beRetrievable[LocationOfGoodsIdentification](IdentificationPage)
 
-    beSettable[LocationOfGoodsIdentification](LocationOfGoodsIdentificationPage)
+    beSettable[LocationOfGoodsIdentification](IdentificationPage)
 
-    beRemovable[LocationOfGoodsIdentification](LocationOfGoodsIdentificationPage)
+    beRemovable[LocationOfGoodsIdentification](IdentificationPage)
 
     "cleanup" - {
       "when answer has changed" - {
@@ -40,10 +40,10 @@ class LocationOfGoodsIdentificationPageSpec extends PageBehaviours {
               forAll(arbitrary[LocationOfGoodsIdentification].retryUntil(_ != qualifierOfIdentification)) {
                 differentQualifierOfIdentification =>
                   val preChange = emptyUserAnswers
-                    .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+                    .setValue(IdentificationPage, qualifierOfIdentification)
                     .setValue(LocationOfGoodsIdentifierSection, Json.obj("foo" -> "bar"))
 
-                  val postChange = preChange.setValue(LocationOfGoodsIdentificationPage, differentQualifierOfIdentification)
+                  val postChange = preChange.setValue(IdentificationPage, differentQualifierOfIdentification)
 
                   postChange.get(LocationOfGoodsIdentifierSection) mustNot be(defined)
               }
@@ -56,10 +56,10 @@ class LocationOfGoodsIdentificationPageSpec extends PageBehaviours {
           forAll(arbitrary[LocationOfGoodsIdentification]) {
             qualifierOfIdentification =>
               val preChange = emptyUserAnswers
-                .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+                .setValue(IdentificationPage, qualifierOfIdentification)
                 .setValue(LocationOfGoodsIdentifierSection, Json.obj("foo" -> "bar"))
 
-              val postChange = preChange.setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
+              val postChange = preChange.setValue(IdentificationPage, qualifierOfIdentification)
 
               postChange.get(LocationOfGoodsIdentifierSection) must be(defined)
           }

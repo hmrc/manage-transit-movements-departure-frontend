@@ -34,9 +34,9 @@ class LocationOfGoodsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
   )
 
   def locationOfGoodsIdentification: Option[SummaryListRow] = getAnswerAndBuildRow[LocationOfGoodsIdentification](
-    page = LocationOfGoodsIdentificationPage,
+    page = IdentificationPage,
     formatAnswer = formatEnumAsText(LocationOfGoodsIdentification.messageKeyPrefix),
-    prefix = "routeDetails.locationOfGoods.locationOfGoodsIdentification",
+    prefix = "routeDetails.locationOfGoods.identification",
     id = Some("location-of-goods-identification")
   )
 

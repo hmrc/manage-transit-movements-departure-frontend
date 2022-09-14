@@ -16,22 +16,22 @@
 
 package views.routeDetails.locationOfGoods
 
-import forms.locationOfGoods.LocationOfGoodsIdentificationFormProvider
+import forms.locationOfGoods.IdentificationFormProvider
 import models.{LocationOfGoodsIdentification, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import views.behaviours.RadioViewBehaviours
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsIdentificationView
+import views.html.routeDetails.locationOfGoods.IdentificationView
 
-class LocationOfGoodsIdentificationViewSpec extends RadioViewBehaviours[LocationOfGoodsIdentification] {
+class IdentificationViewSpec extends RadioViewBehaviours[LocationOfGoodsIdentification] {
 
-  override def form: Form[LocationOfGoodsIdentification] = new LocationOfGoodsIdentificationFormProvider()()
+  override def form: Form[LocationOfGoodsIdentification] = new IdentificationFormProvider()()
 
   override def applyView(form: Form[LocationOfGoodsIdentification]): HtmlFormat.Appendable =
-    injector.instanceOf[LocationOfGoodsIdentificationView].apply(form, lrn, LocationOfGoodsIdentification.radioItems, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[IdentificationView].apply(form, lrn, LocationOfGoodsIdentification.radioItems, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.locationOfGoods.locationOfGoodsIdentification"
+  override val prefix: String = "routeDetails.locationOfGoods.identification"
 
   override def radioItems(fieldId: String, checkedValue: Option[LocationOfGoodsIdentification] = None): Seq[RadioItem] =
     LocationOfGoodsIdentification.radioItems(fieldId, checkedValue)

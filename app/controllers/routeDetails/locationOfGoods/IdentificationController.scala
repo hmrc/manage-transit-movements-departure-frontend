@@ -18,27 +18,27 @@ package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.locationOfGoods.LocationOfGoodsIdentificationFormProvider
+import forms.locationOfGoods.IdentificationFormProvider
 import models.{LocalReferenceNumber, LocationOfGoodsIdentification, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
-import pages.routeDetails.locationOfGoods.LocationOfGoodsIdentificationPage
+import pages.routeDetails.locationOfGoods.IdentificationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.locationOfGoods.LocationOfGoodsIdentificationView
+import views.html.routeDetails.locationOfGoods.IdentificationView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LocationOfGoodsIdentificationController @Inject() (
+class IdentificationController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LocationOfGoodsNavigatorProvider,
   actions: Actions,
-  formProvider: LocationOfGoodsIdentificationFormProvider,
+  formProvider: IdentificationFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: LocationOfGoodsIdentificationView
+  view: IdentificationView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -47,7 +47,7 @@ class LocationOfGoodsIdentificationController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(LocationOfGoodsIdentificationPage) match {
+      val preparedForm = request.userAnswers.get(IdentificationPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -64,7 +64,7 @@ class LocationOfGoodsIdentificationController @Inject() (
           value =>
             navigatorProvider().flatMap {
               implicit navigator =>
-                LocationOfGoodsIdentificationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                IdentificationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
             }
         )
   }

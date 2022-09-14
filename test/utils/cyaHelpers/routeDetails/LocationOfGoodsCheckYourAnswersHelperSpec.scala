@@ -33,7 +33,7 @@ import pages.routeDetails.locationOfGoods.{
   CoordinatesPage,
   CustomsOfficeIdentifierPage,
   EoriPage,
-  LocationOfGoodsIdentificationPage,
+  IdentificationPage,
   LocationOfGoodsPostalCodePage,
   LocationOfGoodsTypePage,
   LocationOfGoodsUnLocodePage
@@ -107,7 +107,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
           forAll(arbitrary[Mode], arbitrary[LocationOfGoodsIdentification]) {
             (mode, locationOfGoodsIdentification) =>
               val answers = emptyUserAnswers
-                .setValue(LocationOfGoodsIdentificationPage, locationOfGoodsIdentification)
+                .setValue(IdentificationPage, locationOfGoodsIdentification)
               val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
               val result = helper.locationOfGoodsIdentification
 
@@ -120,7 +120,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.LocationOfGoodsIdentificationController.onPageLoad(answers.lrn, mode).url,
+                          href = routes.IdentificationController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some(messages(s"${LocationOfGoodsIdentification.messageKeyPrefix}.change.hidden")),
                           attributes = Map("id" -> "location-of-goods-identification")
                         )

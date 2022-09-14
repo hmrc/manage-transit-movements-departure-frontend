@@ -171,10 +171,10 @@ trait UserAnswersEntryGenerators {
     import pages.routeDetails.locationOfGoods._
     {
       val pf: PartialFunction[Gettable[_], Gen[JsValue]] = {
-        case AddLocationOfGoodsPage            => arbitrary[Boolean].map(JsBoolean)
-        case LocationOfGoodsTypePage           => arbitrary[LocationType].map(Json.toJson(_))
-        case LocationOfGoodsIdentificationPage => arbitrary[LocationOfGoodsIdentification].map(Json.toJson(_))
-        case AddContactYesNoPage               => arbitrary[Boolean].map(JsBoolean)
+        case AddLocationOfGoodsPage  => arbitrary[Boolean].map(JsBoolean)
+        case LocationOfGoodsTypePage => arbitrary[LocationType].map(Json.toJson(_))
+        case IdentificationPage      => arbitrary[LocationOfGoodsIdentification].map(Json.toJson(_))
+        case AddContactYesNoPage     => arbitrary[Boolean].map(JsBoolean)
       }
 
       pf orElse
