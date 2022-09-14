@@ -865,6 +865,7 @@ routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.paragraph = This is a 5-char
 
 routeDetails.locationOfGoods.checkYourAnswers.title = Check your answers
 routeDetails.locationOfGoods.checkYourAnswers.heading = Check your answers
+routeDetails.locationOfGoods.checkYourAnswers.subHeading = Location of goods
 
 routeDetails.loading.placeOfLoadingUnLocode.title = What is the UN/LOCODE for the place of loading?
 routeDetails.loading.placeOfLoadingUnLocode.heading = What is the UN/LOCODE for the place of loading?
