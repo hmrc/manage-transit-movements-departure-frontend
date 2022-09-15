@@ -16,19 +16,23 @@
 
 package models.journeyDomain.routeDetails.loading
 
+import cats.implicits._
 import models.domain._
 import models.journeyDomain.JourneyDomainModel
 import models.reference.Country
-import pages.routeDetails.loading.PlaceOfLoadingCountryPage
-
-//TODO - Add PlaceOfLoadingAddExtraInformationPage when country and location domain built
+import pages.routeDetails.loading.{PlaceOfLoadingCountryPage, PlaceOfLoadingLocationPage}
 
 case class AdditionalInformationDomain(
-  country: Country
+  country: Country,
+  location: String
 ) extends JourneyDomainModel
 
 object AdditionalInformationDomain {
 
   implicit val userAnswersReader: UserAnswersReader[AdditionalInformationDomain] =
-    PlaceOfLoadingCountryPage.reader map AdditionalInformationDomain.apply
+    (
+      PlaceOfLoadingCountryPage.reader,
+      PlaceOfLoadingLocationPage.reader
+    ).tupled.map((AdditionalInformationDomain.apply _).tupled)
+
 }
