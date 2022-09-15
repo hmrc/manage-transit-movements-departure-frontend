@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.sections
+package pages.sections.routeDetails.loading
 
-import play.api.libs.json.JsPath
-import pages.QuestionPage
+import pages.sections.Section
+import play.api.libs.json.{JsObject, JsPath}
 
-case object LoadingSection extends QuestionPage[Nothing] {
+case object LocationOfGoodsInformationSection extends Section[JsObject] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = LoadingSection.path \ toString
 
-  override def toString: String = "placeOfLoadingLocation"
+  override def toString: String = "additionalInformation"
 }

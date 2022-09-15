@@ -76,6 +76,17 @@ class LoadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
       }
     }
 
-    "cannot be parsed from UserAnswers" - {}
+    "cannot be parsed from UserAnswers" - {
+      "when  add UnLocode is Yes but UnLocode has no value" in {
+
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(PlaceOfLoadingAddUnLocodeYesNoPage)(true)
+
+        val result: EitherType[LoadingDomain] = UserAnswersReader[LoadingDomain].run(userAnswers)
+
+        result.left.value.page mustBe PlaceOfLoadingUnLocodePage
+      }
+    }
   }
 }
