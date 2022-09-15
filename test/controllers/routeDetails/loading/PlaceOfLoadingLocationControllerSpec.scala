@@ -20,12 +20,12 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.PlaceOfLoadingLocationFormProvider
 import generators.Generators
 import models.NormalMode
+import models.reference.Country
 import navigation.routeDetails.LoadingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalacheck.Gen
-import pages.routeDetails.loading.PlaceOfLoadingLocationPage
-import pages.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNamePage
+import org.scalacheck.Arbitrary.arbitrary
+import pages.routeDetails.loading.{PlaceOfLoadingCountryPage, PlaceOfLoadingLocationPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -40,7 +40,8 @@ class PlaceOfLoadingLocationControllerSpec extends SpecBase with AppWithDefaultM
   private val form                             = formProvider("routeDetails.loading.placeOfLoadingLocation", countryName)
   private val mode                             = NormalMode
   private lazy val placeOfLoadingLocationRoute = routes.PlaceOfLoadingLocationController.onPageLoad(lrn, mode).url
-  private val countryName                      = Gen.alphaNumStr.sample.value.take(35)
+  private val country                          = arbitrary[Country].sample.value
+  private val countryName                      = country.description
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -50,7 +51,7 @@ class PlaceOfLoadingLocationControllerSpec extends SpecBase with AppWithDefaultM
   "PlaceOfLoadingLocation Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsContactNamePage, "Test") //todo change to location of goods country page when merged
+      val userAnswers = emptyUserAnswers.setValue(PlaceOfLoadingCountryPage, country)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, placeOfLoadingLocationRoute)
@@ -62,13 +63,13 @@ class PlaceOfLoadingLocationControllerSpec extends SpecBase with AppWithDefaultM
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, "Test", mode)(request, messages).toString //todo change when country page merged
+        view(form, lrn, country.description, mode)(request, messages).toString //todo change when country page merged
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(LocationOfGoodsContactNamePage, "Test") //todo change PlaceOfLoadingCountryPage once created
+        .setValue(PlaceOfLoadingCountryPage, country) //todo change PlaceOfLoadingCountryPage once created
         .setValue(PlaceOfLoadingLocationPage, "Test")
       setExistingUserAnswers(userAnswers)
 
@@ -83,12 +84,12 @@ class PlaceOfLoadingLocationControllerSpec extends SpecBase with AppWithDefaultM
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, "Test", mode)(request, messages).toString
+        view(filledForm, lrn, country.description, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsContactNamePage, "Test") //todo change PlaceOfLoadingCountryPage once created
+      val userAnswers = emptyUserAnswers.setValue(PlaceOfLoadingCountryPage, country)
       setExistingUserAnswers(userAnswers)
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
@@ -105,7 +106,7 @@ class PlaceOfLoadingLocationControllerSpec extends SpecBase with AppWithDefaultM
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsContactNamePage, countryName) //todo change PlaceOfLoadingCountryPage once created
+      val userAnswers = emptyUserAnswers.setValue(PlaceOfLoadingCountryPage, country)
       setExistingUserAnswers(userAnswers)
 
       val invalidAnswer = ">"

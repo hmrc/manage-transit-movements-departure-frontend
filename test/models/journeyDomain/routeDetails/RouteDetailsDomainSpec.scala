@@ -22,7 +22,7 @@ import models.DeclarationType.Option4
 import models.SecurityDetailsType._
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.routeDetails.exit.{ExitDomain, OfficeOfExitDomain}
-import models.journeyDomain.routeDetails.loading.LoadingDomain
+import models.journeyDomain.routeDetails.loading.{AdditionalInformationDomain, LoadingDomain}
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain.LocationOfGoodsV
 import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
 import models.journeyDomain.routeDetails.transit.TransitDomain
@@ -32,7 +32,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.preTaskList._
 import pages.routeDetails.exit.index._
-import pages.routeDetails.loading.PlaceOfLoadingAddUnLocodeYesNoPage
+import pages.routeDetails.loading.{PlaceOfLoadingAddUnLocodeYesNoPage, PlaceOfLoadingCountryPage, PlaceOfLoadingLocationPage}
 import pages.routeDetails.locationOfGoods._
 import pages.routeDetails.routing._
 import pages.routeDetails.routing.index._
@@ -46,6 +46,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
 
       "when TIR declaration type" in {
         val country       = arbitrary[Country].sample.value
+        val loadingPlace  = Gen.alphaNumStr.sample.value.take(35)
         val customsOffice = arbitrary[CustomsOffice].sample.value
 
         val userAnswers = emptyUserAnswers
@@ -58,6 +59,8 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
           .setValue(AddCountryOfRoutingYesNoPage, false)
           .setValue(AddLocationOfGoodsPage, false)
           .setValue(PlaceOfLoadingAddUnLocodeYesNoPage, false)
+          .setValue(PlaceOfLoadingCountryPage, country)
+          .setValue(PlaceOfLoadingLocationPage, loadingPlace)
 
         val expectedResult = RouteDetailsDomain(
           routing = RoutingDomain(
@@ -69,7 +72,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
           transit = None,
           exit = None,
           locationOfGoods = None,
-          loading = Some(LoadingDomain(None))
+          loading = Some(LoadingDomain(None, Some(AdditionalInformationDomain(country, loadingPlace))))
         )
 
         val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
@@ -84,6 +87,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
         val securityType    = Gen.oneOf(NoSecurityDetails, EntrySummaryDeclarationSecurityDetails).sample.value
         val country         = arbitrary[Country].sample.value
         val customsOffice   = arbitrary[CustomsOffice].sample.value
+        val loadingPlace    = Gen.alphaNumStr.sample.value.take(35)
 
         val userAnswers = emptyUserAnswers
           .setValue(OfficeOfDeparturePage, customsOffice)
@@ -96,6 +100,8 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
           .setValue(AddOfficeOfTransitYesNoPage, false)
           .setValue(AddLocationOfGoodsPage, false)
           .setValue(PlaceOfLoadingAddUnLocodeYesNoPage, false)
+          .setValue(PlaceOfLoadingCountryPage, country)
+          .setValue(PlaceOfLoadingLocationPage, loadingPlace)
 
         val expectedResult = RouteDetailsDomain(
           routing = RoutingDomain(
@@ -114,7 +120,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
           ),
           exit = None,
           locationOfGoods = None,
-          loading = Some(LoadingDomain(None))
+          loading = Some(LoadingDomain(None, Some(AdditionalInformationDomain(country, loadingPlace))))
         )
 
         val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
@@ -129,6 +135,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
         val securityType    = Gen.oneOf(ExitSummaryDeclarationSecurityDetails, EntryAndExitSummaryDeclarationSecurityDetails).sample.value
         val country         = arbitrary[Country].sample.value
         val customsOffice   = arbitrary[CustomsOffice].sample.value
+        val loadingPlace    = Gen.alphaNumStr.sample.value.take(35)
 
         val userAnswers = emptyUserAnswers
           .setValue(OfficeOfDeparturePage, customsOffice)
@@ -141,6 +148,8 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
           .setValue(AddOfficeOfTransitYesNoPage, false)
           .setValue(AddLocationOfGoodsPage, false)
           .setValue(PlaceOfLoadingAddUnLocodeYesNoPage, false)
+          .setValue(PlaceOfLoadingCountryPage, country)
+          .setValue(PlaceOfLoadingLocationPage, loadingPlace)
 
         val expectedResult = RouteDetailsDomain(
           routing = RoutingDomain(
@@ -159,7 +168,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
           ),
           exit = None,
           locationOfGoods = None,
-          loading = Some(LoadingDomain(None))
+          loading = Some(LoadingDomain(None, Some(AdditionalInformationDomain(country, loadingPlace))))
         )
 
         val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
@@ -174,6 +183,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
         val securityType    = Gen.oneOf(ExitSummaryDeclarationSecurityDetails, EntryAndExitSummaryDeclarationSecurityDetails).sample.value
         val country         = arbitrary[Country].sample.value
         val customsOffice   = arbitrary[CustomsOffice].sample.value
+        val loadingPlace    = Gen.alphaNumStr.sample.value.take(35)
 
         val userAnswers = emptyUserAnswers
           .setValue(OfficeOfDeparturePage, customsOffice)
@@ -188,6 +198,8 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
           .setValue(OfficeOfExitPage(index), customsOffice)
           .setValue(AddLocationOfGoodsPage, false)
           .setValue(PlaceOfLoadingAddUnLocodeYesNoPage, false)
+          .setValue(PlaceOfLoadingCountryPage, country)
+          .setValue(PlaceOfLoadingLocationPage, loadingPlace)
 
         val expectedResult = RouteDetailsDomain(
           routing = RoutingDomain(
@@ -212,7 +224,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
             )
           ),
           locationOfGoods = None,
-          loading = Some(LoadingDomain(None))
+          loading = Some(LoadingDomain(None, Some(AdditionalInformationDomain(country, loadingPlace))))
         )
 
         val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
@@ -229,6 +241,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
           val country        = arbitrary[Country].sample.value
           val customsOffice  = arbitrary[CustomsOffice].sample.value
           val typeOfLocation = arbitrary[LocationType].sample.value
+          val loadingPlace   = Gen.alphaNumStr.sample.value.take(35)
 
           val userAnswers = emptyUserAnswers
             .setValue(OfficeOfDeparturePage, customsOffice)
@@ -242,6 +255,8 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
             .setValue(LocationOfGoodsIdentificationPage, LocationOfGoodsIdentification.CustomsOfficeIdentifier)
             .setValue(LocationOfGoodsCustomsOfficeIdentifierPage, customsOffice)
             .setValue(PlaceOfLoadingAddUnLocodeYesNoPage, false)
+            .setValue(PlaceOfLoadingCountryPage, country)
+            .setValue(PlaceOfLoadingLocationPage, loadingPlace)
 
           val expectedResult = RouteDetailsDomain(
             routing = RoutingDomain(
@@ -258,7 +273,7 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
                 customsOffice = customsOffice
               )
             ),
-            loading = Some(LoadingDomain(None))
+            loading = Some(LoadingDomain(None, Some(AdditionalInformationDomain(country, loadingPlace))))
           )
 
           val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](

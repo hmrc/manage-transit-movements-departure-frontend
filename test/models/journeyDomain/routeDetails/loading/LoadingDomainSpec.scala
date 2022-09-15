@@ -20,13 +20,22 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
-import models.reference.UnLocode
+import models.reference.{Country, UnLocode}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.routeDetails.loading.{PlaceOfLoadingAddUnLocodeYesNoPage, PlaceOfLoadingUnLocodePage}
+import org.scalacheck.Gen
+import pages.routeDetails.loading.{
+  PlaceOfLoadingAddExtraInformationYesNoPage,
+  PlaceOfLoadingAddUnLocodeYesNoPage,
+  PlaceOfLoadingCountryPage,
+  PlaceOfLoadingLocationPage,
+  PlaceOfLoadingUnLocodePage
+}
 
 class LoadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
-  private val unLocode1 = arbitrary[UnLocode].sample.value
+  private val unLocode1    = arbitrary[UnLocode].sample.value
+  private val country      = arbitrary[Country].sample.value
+  private val loadingPlace = Gen.alphaNumStr.sample.value.take(35)
 
   "LoadingDomain" - {
 
@@ -36,9 +45,29 @@ class LoadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(PlaceOfLoadingAddUnLocodeYesNoPage)(true)
           .unsafeSetVal(PlaceOfLoadingUnLocodePage)(unLocode1)
+          .unsafeSetVal(PlaceOfLoadingAddExtraInformationYesNoPage)(true)
+          .unsafeSetVal(PlaceOfLoadingCountryPage)(country)
+          .unsafeSetVal(PlaceOfLoadingLocationPage)(loadingPlace)
 
         val expectedResult = LoadingDomain(
-          unLocode = Some(unLocode1)
+          unLocode = Some(unLocode1),
+          additionalInformation = Some(AdditionalInformationDomain(country, loadingPlace))
+        )
+
+        val result: EitherType[LoadingDomain] = UserAnswersReader[LoadingDomain].run(userAnswers)
+
+        result.value mustBe expectedResult
+      }
+
+      "when addUnLocode is No" in {
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(PlaceOfLoadingAddUnLocodeYesNoPage)(false)
+          .unsafeSetVal(PlaceOfLoadingCountryPage)(country)
+          .unsafeSetVal(PlaceOfLoadingLocationPage)(loadingPlace)
+
+        val expectedResult = LoadingDomain(
+          unLocode = None,
+          additionalInformation = Some(AdditionalInformationDomain(country, loadingPlace))
         )
 
         val result: EitherType[LoadingDomain] = UserAnswersReader[LoadingDomain].run(userAnswers)

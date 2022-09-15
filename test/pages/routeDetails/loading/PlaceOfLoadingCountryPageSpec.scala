@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 
-package forms
+package pages.routeDetails.loading
 
-import forms.Constants.locationOfGoodsMaxLength
-import forms.mappings.Mappings
-import models.domain.StringFieldRegex.stringFieldRegex
-import play.api.data.Form
+import models.reference.Country
+import pages.behaviours.PageBehaviours
 
-import javax.inject.Inject
+class PlaceOfLoadingCountryPageSpec extends PageBehaviours {
 
-class PlaceOfLoadingLocationFormProvider @Inject() extends Mappings {
+  "PlaceOfLoadingCountryPage" - {
 
-  def apply(prefix: String, args: String*): Form[String] =
-    Form(
-      "value" -> text(s"$prefix.error.required", args)
-        .verifying(
-          StopOnFirstFail[String](maxLength(locationOfGoodsMaxLength, s"$prefix.error.length"), regexp(stringFieldRegex, s"$prefix.error.invalid"))
-        )
-    )
+    beRetrievable[Country](PlaceOfLoadingCountryPage)
+
+    beSettable[Country](PlaceOfLoadingCountryPage)
+
+    beRemovable[Country](PlaceOfLoadingCountryPage)
+  }
 }

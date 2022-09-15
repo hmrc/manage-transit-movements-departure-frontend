@@ -19,12 +19,9 @@ package controllers.routeDetails.loading
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.PlaceOfLoadingLocationFormProvider
-import models.requests.SpecificDataRequestProvider1
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LoadingNavigatorProvider
-import pages.routeDetails.loading.PlaceOfLoadingLocationPage
-import pages.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNamePage
-import play.api.data.Form
+import pages.routeDetails.loading.{PlaceOfLoadingCountryPage, PlaceOfLoadingLocationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -47,33 +44,30 @@ class PlaceOfLoadingLocationController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private def form(implicit request: Request): Form[String] =
-    formProvider("routeDetails.loading.placeOfLoadingLocation", countryname)
-
-  private type Request = SpecificDataRequestProvider1[String]#SpecificDataRequest[_]
-
-  private def countryname(implicit request: Request): String = request.arg
-
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(LocationOfGoodsContactNamePage)) { //todo change PlaceOfLoadingCountryPage once created
+    .andThen(getMandatoryPage(PlaceOfLoadingCountryPage)) {
       implicit request =>
+        val countryName = request.arg.description
+        val form        = formProvider("routeDetails.loading.placeOfLoadingLocation", countryName)
         val preparedForm = request.userAnswers.get(PlaceOfLoadingLocationPage) match {
           case None        => form
           case Some(value) => form.fill(value)
         }
-        Ok(view(preparedForm, lrn, countryname, mode))
+        Ok(view(preparedForm, lrn, countryName, mode))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(LocationOfGoodsContactNamePage)) //todo change to PlaceOfLoadingCountryPage once created
+    .andThen(getMandatoryPage(PlaceOfLoadingCountryPage))
     .async {
       implicit request =>
+        val countryName = request.arg.description
+        val form        = formProvider("routeDetails.loading.placeOfLoadingLocation", countryName)
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryname, mode))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryName, mode))),
             value =>
               navigatorProvider().flatMap {
                 implicit navigator =>
