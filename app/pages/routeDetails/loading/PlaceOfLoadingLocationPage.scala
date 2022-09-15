@@ -17,19 +17,18 @@
 package pages.routeDetails.loading
 
 import controllers.routeDetails.loading.routes
-import models.reference.Country
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.routeDetails.loading.LoadingLocationSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object PlaceOfLoadingCountryPage extends QuestionPage[Country] {
+case object PlaceOfLoadingLocationPage extends QuestionPage[String] {
 
   override def path: JsPath = LoadingLocationSection.path \ toString
 
-  override def toString: String = "country"
+  override def toString: String = "placeOfLoadingLocation"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.PlaceOfLoadingCountryController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.PlaceOfLoadingLocationController.onPageLoad(userAnswers.lrn, mode))
 }

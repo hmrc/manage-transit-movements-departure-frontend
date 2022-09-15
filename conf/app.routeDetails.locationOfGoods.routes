@@ -76,3 +76,5 @@ POST       /:lrn/route-details/location-of-goods/change-location-of-goods-contac
 
 GET        /:lrn/route-details/location-of-goods/location-of-goods-check-answers                            controllers.routeDetails.locationOfGoods.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
 POST       /:lrn/route-details/location-of-goods/location-of-goods-check-answers                            controllers.routeDetails.locationOfGoods.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)
+GET        /:lrn/route-details/location-of-goods/check-your-answers                                         controllers.routeDetails.locationOfGoods.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/route-details/location-of-goods/check-your-answers                                         controllers.routeDetails.locationOfGoods.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber)
