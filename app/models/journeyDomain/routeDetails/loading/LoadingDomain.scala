@@ -16,16 +16,18 @@
 
 package models.journeyDomain.routeDetails.loading
 
+import cats.implicits._
 import models.UserAnswers
-import models.domain.{GettableAsFilterForNextReaderOps, UserAnswersReader}
+import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.UnLocode
-import pages.routeDetails.loading.PlaceOfLoadingAddUnLocodeYesNoPage
+import pages.routeDetails.loading.{PlaceOfLoadingAddExtraInformationYesNoPage, PlaceOfLoadingAddUnLocodeYesNoPage, PlaceOfLoadingUnLocodePage}
 import play.api.mvc.Call
 
 //TODO: Add country and location as params when creating the page
 case class LoadingDomain(
-  unLocode: Option[UnLocode]
+  unLocode: Option[UnLocode],
+  additionalInformation: Option[AdditionalInformationDomain]
 ) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
@@ -34,7 +36,23 @@ case class LoadingDomain(
 
 object LoadingDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[LoadingDomain] =
-    PlaceOfLoadingAddUnLocodeYesNoPage.filterOptionalDependent(identity)(UserAnswersReader(UnLocode("GB", "abc"))).map(LoadingDomain.apply)
+  implicit val userAnswersReader: UserAnswersReader[LoadingDomain] = {
 
+    implicit val unLocodeReads: UserAnswersReader[Option[UnLocode]] =
+      PlaceOfLoadingAddUnLocodeYesNoPage.reader.flatMap {
+        case true  => PlaceOfLoadingUnLocodePage.reader.map(Some(_))
+        case false => none[UnLocode].pure[UserAnswersReader]
+      }
+
+    implicit val additionalInformationReads: UserAnswersReader[Option[AdditionalInformationDomain]] =
+      PlaceOfLoadingAddUnLocodeYesNoPage.reader.flatMap {
+        case true  => PlaceOfLoadingAddExtraInformationYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalInformationDomain])
+        case false => UserAnswersReader[AdditionalInformationDomain].map(Some(_))
+      }
+
+    (
+      UserAnswersReader[Option[UnLocode]],
+      UserAnswersReader[Option[AdditionalInformationDomain]]
+    ).tupled.map((LoadingDomain.apply _).tupled)
+  }
 }

@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package models
+package pages.routeDetails.loading
 
-import play.api.libs.json.{Json, OFormat}
+import pages.behaviours.PageBehaviours
 
-case class Coordinates(
-  latitude: String,
-  longitude: String
-) {
-  override def toString: String = s"($latitude, $longitude)"
-}
+class PlaceOfLoadingLocationPageSpec extends PageBehaviours {
 
-object Coordinates {
-  implicit val format: OFormat[Coordinates] = Json.format[Coordinates]
+  "PlaceOfLoadingLocationPage" - {
+
+    beRetrievable[String](PlaceOfLoadingLocationPage)
+
+    beSettable[String](PlaceOfLoadingLocationPage)
+
+    beRemovable[String](PlaceOfLoadingLocationPage)
+  }
 }

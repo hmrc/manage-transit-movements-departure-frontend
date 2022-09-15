@@ -14,43 +14,44 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails.locationOfGoods.contact
+package controllers.routeDetails.loading
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.NameFormProvider
+import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
-import navigation.routeDetails.LocationOfGoodsNavigatorProvider
-import pages.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNamePage
+import navigation.routeDetails.LoadingNavigatorProvider
+import pages.routeDetails.loading.PlaceOfLoadingAddExtraInformationYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNameView
+import views.html.routeDetails.loading.PlaceOfLoadingAddExtraInformationYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LocationOfGoodsContactNameController @Inject() (
+class PlaceOfLoadingAddExtraInformationYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: LocationOfGoodsNavigatorProvider,
-  formProvider: NameFormProvider,
+  navigatorProvider: LoadingNavigatorProvider,
   actions: Actions,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: LocationOfGoodsContactNameView
+  view: PlaceOfLoadingAddExtraInformationYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.locationOfGoods.contact.locationOfGoodsContactName")
+  private val form = formProvider("routeDetails.loading.placeOfLoadingAddExtraInformationYesNo")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(LocationOfGoodsContactNamePage) match {
+      val preparedForm = request.userAnswers.get(PlaceOfLoadingAddExtraInformationYesNoPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
+
       Ok(view(preparedForm, lrn, mode))
   }
 
@@ -63,7 +64,7 @@ class LocationOfGoodsContactNameController @Inject() (
           value =>
             navigatorProvider().flatMap {
               implicit navigator =>
-                LocationOfGoodsContactNamePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                PlaceOfLoadingAddExtraInformationYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
             }
         )
   }

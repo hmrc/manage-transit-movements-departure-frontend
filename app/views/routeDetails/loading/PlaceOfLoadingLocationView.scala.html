@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.routeDetails.locationOfGoods.contact.routes
+@import controllers.routeDetails.loading.routes
 @import models.LocalReferenceNumber
 @import viewModels.components.InputTextViewModel._
 @import views.html.components.{Button, ErrorSummary, InputText}
@@ -27,24 +27,25 @@
     button: Button
 )
 
-@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[String], lrn: LocalReferenceNumber, loadingCountry:String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.locationOfGoods.contact.locationOfGoodsContactName.title"),
+    title = messages("routeDetails.loading.placeOfLoadingLocation.title", loadingCountry),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.LocationOfGoodsContactNameController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.PlaceOfLoadingLocationController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages("routeDetails.locationOfGoods.contact.locationOfGoodsContactName.heading"),
+                heading = messages("routeDetails.loading.placeOfLoadingLocation.heading", loadingCountry),
                 caption = Some(messages("routeDetails.caption"))
             ),
+            hint = Some(messages("routeDetails.loading.placeOfLoadingLocation.hint")),
             inputClass = InputSize.Width20
         )
 

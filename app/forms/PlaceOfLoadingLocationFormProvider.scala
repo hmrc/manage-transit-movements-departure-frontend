@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json.{Json, OFormat}
+import forms.Constants.placeOfLoadingMaxLength
+import forms.mappings.Mappings
+import models.domain.StringFieldRegex.stringFieldRegex
+import play.api.data.Form
 
-case class Coordinates(
-  latitude: String,
-  longitude: String
-) {
-  override def toString: String = s"($latitude, $longitude)"
-}
+import javax.inject.Inject
 
-object Coordinates {
-  implicit val format: OFormat[Coordinates] = Json.format[Coordinates]
+class PlaceOfLoadingLocationFormProvider @Inject() extends Mappings {
+
+  def apply(prefix: String, args: String*): Form[String] =
+    Form(
+      "value" -> text(s"$prefix.error.required", args)
+        .verifying(
+          StopOnFirstFail[String](maxLength(placeOfLoadingMaxLength, s"$prefix.error.length"), regexp(stringFieldRegex, s"$prefix.error.invalid"))
+        )
+    )
 }

@@ -14,37 +14,40 @@
  * limitations under the License.
  */
 
-package views.routeDetails.locationOfGoods.contact
+package views.routeDetails.loading
 
-import forms.NameFormProvider
+import forms.Constants.placeOfLoadingMaxLength
+import forms.PlaceOfLoadingLocationFormProvider
 import models.NormalMode
-import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNameView
+import views.html.routeDetails.loading.PlaceOfLoadingLocationView
+import org.scalacheck.{Arbitrary, Gen}
 
-class LocationOfGoodsContactNameViewSpec extends InputTextViewBehaviours[String] {
+class PlaceOfLoadingLocationViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "routeDetails.locationOfGoods.contact.locationOfGoodsContactName"
+  override val prefix: String = "routeDetails.loading.placeOfLoadingLocation"
 
-  override def form: Form[String] = new NameFormProvider()(prefix)
+  private val countryName = Gen.alphaNumStr.sample.value.take(placeOfLoadingMaxLength)
+
+  override def form: Form[String] = new PlaceOfLoadingLocationFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[LocationOfGoodsContactNameView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[PlaceOfLoadingLocationView].apply(form, lrn, countryName, NormalMode)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 
-  behave like pageWithTitle()
+  behave like pageWithTitle(countryName)
 
   behave like pageWithBackLink
 
+  behave like pageWithHeading(countryName)
+
   behave like pageWithSectionCaption("Route details")
 
-  behave like pageWithHeading()
-
-  behave like pageWithoutHint
+  behave like pageWithHint("Describe the specific location of loading. This can be up to 35 characters long.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 

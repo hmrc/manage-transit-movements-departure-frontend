@@ -14,38 +14,38 @@
  * limitations under the License.
  *@
 
-@import controllers.routeDetails.locationOfGoods.contact.routes
+@import controllers.routeDetails.loading.routes
 @import models.LocalReferenceNumber
-@import viewModels.components.InputTextViewModel._
-@import views.html.components.{Button, ErrorSummary, InputText}
+@import viewModels.components.InputYesNoViewModel._
+@import views.html.components.{Button, ErrorSummary, InputYesNo}
 
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
-    inputText: InputText,
+    inputYesNo: InputYesNo,
     errorSummary: ErrorSummary,
     button: Button
 )
 
-@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.locationOfGoods.contact.locationOfGoodsContactName.title"),
+    title = messages("routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.LocationOfGoodsContactNameController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.PlaceOfLoadingAddExtraInformationYesNoController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
-        @inputText(
+        @inputYesNo(
             field = form("value"),
-            inputTextType = OrdinaryTextInput(
-                heading = messages("routeDetails.locationOfGoods.contact.locationOfGoodsContactName.heading"),
-                caption = Some(messages("routeDetails.caption"))
-            ),
-            inputClass = InputSize.Width20
+            yesNoType = YesNoWithAdditionalHtml(
+                heading = messages("routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.heading"),
+                caption = Some(messages("routeDetails.caption")),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.paragraph")}</p>""")
+            )
         )
 
         @button(attributes = Map("id" -> "submit"))

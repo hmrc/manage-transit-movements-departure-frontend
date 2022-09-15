@@ -14,27 +14,20 @@
  * limitations under the License.
  */
 
-package views.routeDetails.locationOfGoods.contact
+package views.routeDetails.loading
 
-import forms.NameFormProvider
 import models.NormalMode
-import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import viewModels.InputSize
-import views.behaviours.InputTextViewBehaviours
-import views.html.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNameView
+import views.behaviours.YesNoViewBehaviours
+import views.html.routeDetails.loading.PlaceOfLoadingAddExtraInformationYesNoView
 
-class LocationOfGoodsContactNameViewSpec extends InputTextViewBehaviours[String] {
+class PlaceOfLoadingAddExtraInformationYesNoViewSpec extends YesNoViewBehaviours {
 
-  override val prefix: String = "routeDetails.locationOfGoods.contact.locationOfGoodsContactName"
+  override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
+    injector.instanceOf[PlaceOfLoadingAddExtraInformationYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
-  override def form: Form[String] = new NameFormProvider()(prefix)
-
-  override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[LocationOfGoodsContactNameView].apply(form, lrn, NormalMode)(fakeRequest, messages)
-
-  implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
+  override val prefix: String = "routeDetails.loading.placeOfLoadingAddExtraInformationYesNo"
 
   behave like pageWithTitle()
 
@@ -44,9 +37,9 @@ class LocationOfGoodsContactNameViewSpec extends InputTextViewBehaviours[String]
 
   behave like pageWithHeading()
 
-  behave like pageWithoutHint
+  behave like pageWithContent("p", "This includes the country and location of loading.")
 
-  behave like pageWithInputText(Some(InputSize.Width20))
+  behave like pageWithRadioItems()
 
   behave like pageWithSubmitButton("Save and continue")
 }

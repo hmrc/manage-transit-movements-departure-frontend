@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package models
+package pages.sections.routeDetails.loading
 
-import play.api.libs.json.{Json, OFormat}
+import pages.sections.Section
+import play.api.libs.json.{JsObject, JsPath}
 
-case class Coordinates(
-  latitude: String,
-  longitude: String
-) {
-  override def toString: String = s"($latitude, $longitude)"
-}
+case object LoadingLocationSection extends Section[JsObject] {
 
-object Coordinates {
-  implicit val format: OFormat[Coordinates] = Json.format[Coordinates]
+  override def path: JsPath = LoadingSection.path \ toString
+
+  override def toString: String = "location"
 }

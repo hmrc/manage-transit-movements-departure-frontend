@@ -12,7 +12,7 @@ POST       /:lrn/route-details/exit/change-office-of-exit/:index                
 GET        /:lrn/route-details/exit/:index/office-of-exit-check-answers                  controllers.routeDetails.exit.index.CheckOfficeOfExitAnswersController.onPageLoad(lrn: LocalReferenceNumber,  index: Index)
 POST       /:lrn/route-details/exit/:index/office-of-exit-check-answers                  controllers.routeDetails.exit.index.CheckOfficeOfExitAnswersController.onSubmit(lrn: LocalReferenceNumber,  index: Index)
 
-GET        /:lrn/routeDetails/exit/:index/confirm-remove-office-of-exit                  controllers.routeDetails.exit.index.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
-POST       /:lrn/routeDetails/exit/:index/confirm-remove-office-of-exit                  controllers.routeDetails.exit.index.ConfirmRemoveOfficeOfExitController.onSubmit(lrn: LocalReferenceNumber, index: Index)
-GET        /:lrn/routeDetails/exit/:index/change-confirm-remove-office-of-exit           controllers.routeDetails.exit.index.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
-POST       /:lrn/routeDetails/exit/:index/change-confirm-remove-office-of-exit           controllers.routeDetails.exit.index.ConfirmRemoveOfficeOfExitController.onSubmit(lrn: LocalReferenceNumber, index: Index)
+GET        /:lrn/route-details/exit/:index/remove-office-of-exit                         controllers.routeDetails.exit.index.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
+POST       /:lrn/route-details/exit/:index/remove-office-of-exit                         controllers.routeDetails.exit.index.ConfirmRemoveOfficeOfExitController.onSubmit(lrn: LocalReferenceNumber, index: Index)
+GET        /:lrn/route-details/exit/:index/change-remove-office-of-exit                  controllers.routeDetails.exit.index.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
+POST       /:lrn/route-details/exit/:index/change-remove-office-of-exit                  controllers.routeDetails.exit.index.ConfirmRemoveOfficeOfExitController.onSubmit(lrn: LocalReferenceNumber, index: Index)

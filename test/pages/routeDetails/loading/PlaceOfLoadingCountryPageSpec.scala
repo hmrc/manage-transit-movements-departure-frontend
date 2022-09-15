@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package models
+package pages.routeDetails.loading
 
-import play.api.libs.json.{Json, OFormat}
+import models.reference.Country
+import pages.behaviours.PageBehaviours
 
-case class Coordinates(
-  latitude: String,
-  longitude: String
-) {
-  override def toString: String = s"($latitude, $longitude)"
-}
+class PlaceOfLoadingCountryPageSpec extends PageBehaviours {
 
-object Coordinates {
-  implicit val format: OFormat[Coordinates] = Json.format[Coordinates]
+  "PlaceOfLoadingCountryPage" - {
+
+    beRetrievable[Country](PlaceOfLoadingCountryPage)
+
+    beSettable[Country](PlaceOfLoadingCountryPage)
+
+    beRemovable[Country](PlaceOfLoadingCountryPage)
+  }
 }
