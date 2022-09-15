@@ -17,7 +17,8 @@
 package components
 
 import a11ySpecBase.A11ySpecBase
-import forms.{AddressFormProvider, LocationOfGoodsPostalCodeFormProvider}
+import forms.AddressFormProvider
+import forms.locationOfGoods.PostalCodeFormProvider
 import models.CountryList
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -35,7 +36,7 @@ class InputPostalCodeAddressSpec extends A11ySpecBase {
     val title       = nonEmptyString.sample.value
     val caption     = Gen.option(nonEmptyString).sample.value
     val headingArgs = listWithMaxLength[Any]().sample.value
-    val form        = new LocationOfGoodsPostalCodeFormProvider()(prefix, countries)
+    val form        = new PostalCodeFormProvider()(prefix, countries)
 
     val content = template.apply(title) {
       component.apply(form, prefix, caption, countries.countries, headingArgs)

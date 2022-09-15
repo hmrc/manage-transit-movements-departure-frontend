@@ -17,7 +17,7 @@
 package components
 
 import a11ySpecBase.A11ySpecBase
-import forms.LocationOfGoodsCoordinatesFormProvider
+import forms.locationOfGoods.CoordinatesFormProvider
 import models.Coordinates
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -34,7 +34,7 @@ class InputCoordinatesSpec extends A11ySpecBase {
     val coordinates = arbitrary[Coordinates].sample.value
     val title       = nonEmptyString.sample.value
     val caption     = Gen.option(nonEmptyString).sample.value
-    val form        = new LocationOfGoodsCoordinatesFormProvider()(prefix)
+    val form        = new CoordinatesFormProvider()(prefix)
 
     val content = template.apply(title) {
       component.apply(form, prefix, caption, coordinates)

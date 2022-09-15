@@ -171,10 +171,10 @@ trait UserAnswersEntryGenerators {
     import pages.routeDetails.locationOfGoods._
     {
       val pf: PartialFunction[Gettable[_], Gen[JsValue]] = {
-        case AddLocationOfGoodsPage            => arbitrary[Boolean].map(JsBoolean)
-        case LocationOfGoodsTypePage           => arbitrary[LocationType].map(Json.toJson(_))
-        case LocationOfGoodsIdentificationPage => arbitrary[LocationOfGoodsIdentification].map(Json.toJson(_))
-        case AddContactYesNoPage               => arbitrary[Boolean].map(JsBoolean)
+        case AddLocationOfGoodsPage => arbitrary[Boolean].map(JsBoolean)
+        case LocationTypePage       => arbitrary[LocationType].map(Json.toJson(_))
+        case IdentificationPage     => arbitrary[LocationOfGoodsIdentification].map(Json.toJson(_))
+        case AddContactYesNoPage    => arbitrary[Boolean].map(JsBoolean)
       }
 
       pf orElse
@@ -186,23 +186,23 @@ trait UserAnswersEntryGenerators {
   private def generateLocationOfGoodsIdentifierAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.routeDetails.locationOfGoods._
     {
-      case LocationOfGoodsCustomsOfficeIdentifierPage => arbitrary[CustomsOffice].map(Json.toJson(_))
-      case LocationOfGoodsEoriPage                    => Gen.alphaNumStr.map(JsString)
-      case LocationOfGoodsAuthorisationNumberPage     => Gen.alphaNumStr.map(JsString)
-      case LocationOfGoodsAddIdentifierYesNoPage      => arbitrary[Boolean].map(JsBoolean)
-      case AdditionalIdentifierPage                   => Gen.alphaNumStr.map(JsString)
-      case LocationOfGoodsCoordinatesPage             => arbitrary[Coordinates].map(Json.toJson(_))
-      case LocationOfGoodsUnLocodePage                => arbitrary[UnLocode].map(Json.toJson(_))
-      case LocationOfGoodsAddressPage                 => arbitrary[Address].map(Json.toJson(_))
-      case LocationOfGoodsPostalCodePage              => arbitrary[PostalCodeAddress].map(Json.toJson(_))
+      case CustomsOfficeIdentifierPage => arbitrary[CustomsOffice].map(Json.toJson(_))
+      case EoriPage                    => Gen.alphaNumStr.map(JsString)
+      case AuthorisationNumberPage     => Gen.alphaNumStr.map(JsString)
+      case AddIdentifierYesNoPage      => arbitrary[Boolean].map(JsBoolean)
+      case AdditionalIdentifierPage    => Gen.alphaNumStr.map(JsString)
+      case CoordinatesPage             => arbitrary[Coordinates].map(Json.toJson(_))
+      case UnLocodePage                => arbitrary[UnLocode].map(Json.toJson(_))
+      case AddressPage                 => arbitrary[Address].map(Json.toJson(_))
+      case PostalCodePage              => arbitrary[PostalCodeAddress].map(Json.toJson(_))
     }
   }
 
   private def generateLocationOfGoodsContactAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.routeDetails.locationOfGoods.contact._
     {
-      case LocationOfGoodsContactNamePage => Gen.alphaNumStr.map(JsString)
-      case TelephoneNumberPage            => Gen.alphaNumStr.map(JsString)
+      case NamePage            => Gen.alphaNumStr.map(JsString)
+      case TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
     }
   }
 

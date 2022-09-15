@@ -46,9 +46,9 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           val customsOffice             = arbitrary[CustomsOffice].sample.value
 
           val userAnswers = emptyUserAnswers
-            .setValue(LocationOfGoodsTypePage, typeOfLocation)
-            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-            .setValue(LocationOfGoodsCustomsOfficeIdentifierPage, customsOffice)
+            .setValue(LocationTypePage, typeOfLocation)
+            .setValue(IdentificationPage, qualifierOfIdentification)
+            .setValue(CustomsOfficeIdentifierPage, customsOffice)
 
           val expectedResult = LocationOfGoodsV(
             typeOfLocation = typeOfLocation,
@@ -66,9 +66,9 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           val coordinate                = arbitrary[Coordinates].sample.value
 
           val userAnswers = emptyUserAnswers
-            .setValue(LocationOfGoodsTypePage, typeOfLocation)
-            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-            .setValue(LocationOfGoodsCoordinatesPage, coordinate)
+            .setValue(LocationTypePage, typeOfLocation)
+            .setValue(IdentificationPage, qualifierOfIdentification)
+            .setValue(CoordinatesPage, coordinate)
             .setValue(AddContactYesNoPage, false)
 
           val expectedResult = LocationOfGoodsW(
@@ -83,15 +83,15 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           result.value.qualifierOfIdentification mustBe qualifierOfIdentification
         }
 
-        "is X (EORI number) and LocationOfGoodsAddIdentifierPage is answered No" in {
+        "is X (EORI number) and AddIdentifierYesNoPage is answered No" in {
           val qualifierOfIdentification = LocationOfGoodsIdentification.EoriNumber
           val eoriNumber                = Gen.alphaNumStr.sample.value
 
           val userAnswers = emptyUserAnswers
-            .setValue(LocationOfGoodsTypePage, typeOfLocation)
-            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-            .setValue(LocationOfGoodsEoriPage, eoriNumber)
-            .setValue(LocationOfGoodsAddIdentifierYesNoPage, false)
+            .setValue(LocationTypePage, typeOfLocation)
+            .setValue(IdentificationPage, qualifierOfIdentification)
+            .setValue(EoriPage, eoriNumber)
+            .setValue(AddIdentifierYesNoPage, false)
             .setValue(AddContactYesNoPage, false)
 
           val expectedResult = LocationOfGoodsX(
@@ -107,15 +107,15 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           result.value.qualifierOfIdentification mustBe qualifierOfIdentification
         }
 
-        "is X (EORI number) and LocationOfGoodsAddIdentifierPage is answered Yes" in {
+        "is X (EORI number) and AddIdentifierYesNoPage is answered Yes" in {
           val qualifierOfIdentification = LocationOfGoodsIdentification.EoriNumber
           val eoriNumber                = Gen.alphaNumStr.sample.value
 
           val userAnswers = emptyUserAnswers
-            .setValue(LocationOfGoodsTypePage, typeOfLocation)
-            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-            .setValue(LocationOfGoodsEoriPage, eoriNumber)
-            .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
+            .setValue(LocationTypePage, typeOfLocation)
+            .setValue(IdentificationPage, qualifierOfIdentification)
+            .setValue(EoriPage, eoriNumber)
+            .setValue(AddIdentifierYesNoPage, true)
             .setValue(AdditionalIdentifierPage, "1234")
             .setValue(AddContactYesNoPage, false)
 
@@ -132,15 +132,15 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           result.value.qualifierOfIdentification mustBe qualifierOfIdentification
         }
 
-        "is Y (Authorisation number) and LocationOfGoodsAddIdentifierPage is answered No" in {
+        "is Y (Authorisation number) and AddIdentifierYesNoPage is answered No" in {
           val qualifierOfIdentification = LocationOfGoodsIdentification.AuthorisationNumber
           val authorisationNumber       = Gen.alphaNumStr.sample.value
 
           val userAnswers = emptyUserAnswers
-            .setValue(LocationOfGoodsTypePage, typeOfLocation)
-            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-            .setValue(LocationOfGoodsAuthorisationNumberPage, authorisationNumber)
-            .setValue(LocationOfGoodsAddIdentifierYesNoPage, false)
+            .setValue(LocationTypePage, typeOfLocation)
+            .setValue(IdentificationPage, qualifierOfIdentification)
+            .setValue(AuthorisationNumberPage, authorisationNumber)
+            .setValue(AddIdentifierYesNoPage, false)
             .setValue(AddContactYesNoPage, false)
 
           val expectedResult = LocationOfGoodsY(
@@ -156,15 +156,15 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           result.value.qualifierOfIdentification mustBe qualifierOfIdentification
         }
 
-        "is Y (Authorisation number) and LocationOfGoodsAddIdentifierPage is answered Yes" in {
+        "is Y (Authorisation number) and AddIdentifierYesNoPage is answered Yes" in {
           val qualifierOfIdentification = LocationOfGoodsIdentification.AuthorisationNumber
           val authorisationNumber       = Gen.alphaNumStr.sample.value
 
           val userAnswers = emptyUserAnswers
-            .setValue(LocationOfGoodsTypePage, typeOfLocation)
-            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-            .setValue(LocationOfGoodsAuthorisationNumberPage, authorisationNumber)
-            .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
+            .setValue(LocationTypePage, typeOfLocation)
+            .setValue(IdentificationPage, qualifierOfIdentification)
+            .setValue(AuthorisationNumberPage, authorisationNumber)
+            .setValue(AddIdentifierYesNoPage, true)
             .setValue(AdditionalIdentifierPage, "1234")
             .setValue(AddContactYesNoPage, false)
 
@@ -186,9 +186,9 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           val address                   = arbitrary[Address].sample.value
 
           val userAnswers = emptyUserAnswers
-            .setValue(LocationOfGoodsTypePage, typeOfLocation)
-            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-            .setValue(LocationOfGoodsAddressPage, address)
+            .setValue(LocationTypePage, typeOfLocation)
+            .setValue(IdentificationPage, qualifierOfIdentification)
+            .setValue(AddressPage, address)
             .setValue(AddContactYesNoPage, false)
 
           val expectedResult = LocationOfGoodsZ(
@@ -208,9 +208,9 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           val unLocode                  = arbitrary[UnLocode].sample.value
 
           val userAnswers = emptyUserAnswers
-            .setValue(LocationOfGoodsTypePage, typeOfLocation)
-            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-            .setValue(LocationOfGoodsUnLocodePage, unLocode)
+            .setValue(LocationTypePage, typeOfLocation)
+            .setValue(IdentificationPage, qualifierOfIdentification)
+            .setValue(UnLocodePage, unLocode)
             .setValue(AddContactYesNoPage, false)
 
           val expectedResult = LocationOfGoodsU(
@@ -230,9 +230,9 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           val postalCodeAddress         = arbitrary[PostalCodeAddress].sample.value
 
           val userAnswers = emptyUserAnswers
-            .setValue(LocationOfGoodsTypePage, typeOfLocation)
-            .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-            .setValue(LocationOfGoodsPostalCodePage, postalCodeAddress)
+            .setValue(LocationTypePage, typeOfLocation)
+            .setValue(IdentificationPage, qualifierOfIdentification)
+            .setValue(PostalCodePage, postalCodeAddress)
             .setValue(AddContactYesNoPage, false)
 
           val expectedResult = LocationOfGoodsT(
@@ -254,13 +254,13 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val authorisationNumber       = Gen.alphaNumStr.sample.value
 
         val userAnswers = emptyUserAnswers
-          .setValue(LocationOfGoodsTypePage, typeOfLocation)
-          .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-          .setValue(LocationOfGoodsAuthorisationNumberPage, authorisationNumber)
-          .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
+          .setValue(LocationTypePage, typeOfLocation)
+          .setValue(IdentificationPage, qualifierOfIdentification)
+          .setValue(AuthorisationNumberPage, authorisationNumber)
+          .setValue(AddIdentifierYesNoPage, true)
           .setValue(AdditionalIdentifierPage, "1234")
           .setValue(AddContactYesNoPage, true)
-          .setValue(contact.LocationOfGoodsContactNamePage, contactName)
+          .setValue(contact.NamePage, contactName)
           .setValue(contact.TelephoneNumberPage, contactPhone)
 
         val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
@@ -281,9 +281,9 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
 
       "when is X(Eori Number) and a mandatory page is missing" in {
         val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-          LocationOfGoodsIdentificationPage,
-          LocationOfGoodsEoriPage,
-          LocationOfGoodsAddIdentifierYesNoPage,
+          IdentificationPage,
+          EoriPage,
+          AddIdentifierYesNoPage,
           AddContactYesNoPage
         )
 
@@ -291,10 +291,10 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val eoriNumber                = Gen.alphaNumStr.sample.value
 
         val userAnswers = emptyUserAnswers
-          .setValue(LocationOfGoodsTypePage, typeOfLocation)
-          .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-          .setValue(LocationOfGoodsEoriPage, eoriNumber)
-          .setValue(LocationOfGoodsAddIdentifierYesNoPage, false)
+          .setValue(LocationTypePage, typeOfLocation)
+          .setValue(IdentificationPage, qualifierOfIdentification)
+          .setValue(EoriPage, eoriNumber)
+          .setValue(AddIdentifierYesNoPage, false)
           .setValue(AddContactYesNoPage, false)
 
         forAll(mandatoryPages) {
@@ -312,10 +312,10 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val authorisationNumber       = Gen.alphaNumStr.sample.value
 
         val userAnswers = emptyUserAnswers
-          .setValue(LocationOfGoodsTypePage, typeOfLocation)
-          .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-          .setValue(LocationOfGoodsAuthorisationNumberPage, authorisationNumber)
-          .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
+          .setValue(LocationTypePage, typeOfLocation)
+          .setValue(IdentificationPage, qualifierOfIdentification)
+          .setValue(AuthorisationNumberPage, authorisationNumber)
+          .setValue(AddIdentifierYesNoPage, true)
           .setValue(AddContactYesNoPage, false)
 
         val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
@@ -329,16 +329,16 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val authorisationNumber       = Gen.alphaNumStr.sample.value
 
         val userAnswers = emptyUserAnswers
-          .setValue(LocationOfGoodsTypePage, typeOfLocation)
-          .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-          .setValue(LocationOfGoodsAuthorisationNumberPage, authorisationNumber)
-          .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
+          .setValue(LocationTypePage, typeOfLocation)
+          .setValue(IdentificationPage, qualifierOfIdentification)
+          .setValue(AuthorisationNumberPage, authorisationNumber)
+          .setValue(AddIdentifierYesNoPage, true)
           .setValue(AdditionalIdentifierPage, "1234")
           .setValue(AddContactYesNoPage, true)
 
         val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
 
-        result.left.value.page mustBe contact.LocationOfGoodsContactNamePage
+        result.left.value.page mustBe contact.NamePage
       }
 
       "when is Y(Authorisation Number) and contact phone number details is missing when required" in {
@@ -346,13 +346,13 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val authorisationNumber       = Gen.alphaNumStr.sample.value
 
         val userAnswers = emptyUserAnswers
-          .setValue(LocationOfGoodsTypePage, typeOfLocation)
-          .setValue(LocationOfGoodsIdentificationPage, qualifierOfIdentification)
-          .setValue(LocationOfGoodsAuthorisationNumberPage, authorisationNumber)
-          .setValue(LocationOfGoodsAddIdentifierYesNoPage, true)
+          .setValue(LocationTypePage, typeOfLocation)
+          .setValue(IdentificationPage, qualifierOfIdentification)
+          .setValue(AuthorisationNumberPage, authorisationNumber)
+          .setValue(AddIdentifierYesNoPage, true)
           .setValue(AdditionalIdentifierPage, "1234")
           .setValue(AddContactYesNoPage, true)
-          .setValue(contact.LocationOfGoodsContactNamePage, contactName)
+          .setValue(contact.NamePage, contactName)
 
         val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
 
