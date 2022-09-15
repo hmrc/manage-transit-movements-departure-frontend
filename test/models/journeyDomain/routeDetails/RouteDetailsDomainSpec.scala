@@ -26,7 +26,7 @@ import models.journeyDomain.routeDetails.loading.{AdditionalInformationDomain, L
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain.LocationOfGoodsV
 import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
 import models.journeyDomain.routeDetails.transit.TransitDomain
-import models.reference.{Country, CustomsOffice}
+import models.reference.{Country, CountryCode, CustomsOffice}
 import models.{DeclarationType, LocationOfGoodsIdentification, LocationType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -183,6 +183,8 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
         val securityType    = Gen.oneOf(ExitSummaryDeclarationSecurityDetails, EntryAndExitSummaryDeclarationSecurityDetails).sample.value
         val country         = arbitrary[Country].sample.value
         val customsOffice   = arbitrary[CustomsOffice].sample.value
+        val CL147Countries =  Seq(customsOffice.countryCode)
+        val nonCL147Country = arbitrary[Country].retryUntil(x => !CL147Countries.contains(x.code.code)).sample.value
         val loadingPlace    = Gen.alphaNumStr.sample.value.take(35)
 
         val userAnswers = emptyUserAnswers
@@ -192,22 +194,22 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
           .setValue(CountryOfDestinationPage, country)
           .setValue(OfficeOfDestinationPage, customsOffice)
           .setValue(BindingItineraryPage, true)
-          .setValue(CountryOfRoutingPage(index), country)
+          .setValue(CountryOfRoutingPage(index), nonCL147Country)
           .setValue(AddOfficeOfTransitYesNoPage, false)
-          .setValue(OfficeOfExitCountryPage(index), country)
+          .setValue(OfficeOfExitCountryPage(index), nonCL147Country)
           .setValue(OfficeOfExitPage(index), customsOffice)
           .setValue(AddLocationOfGoodsPage, false)
           .setValue(PlaceOfLoadingAddUnLocodeYesNoPage, false)
-          .setValue(PlaceOfLoadingCountryPage, country)
+          .setValue(PlaceOfLoadingCountryPage, nonCL147Country)
           .setValue(PlaceOfLoadingLocationPage, loadingPlace)
 
         val expectedResult = RouteDetailsDomain(
           routing = RoutingDomain(
-            countryOfDestination = country,
+            countryOfDestination = nonCL147Country,
             officeOfDestination = customsOffice,
             bindingItinerary = true,
             countriesOfRouting = Seq(
-              CountryOfRoutingDomain(country)(index)
+              CountryOfRoutingDomain(nonCL147Country)(index)
             )
           ),
           transit = Some(
@@ -219,12 +221,12 @@ class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsU
           exit = Some(
             ExitDomain(
               Seq(
-                OfficeOfExitDomain(country, customsOffice)(index)
+                OfficeOfExitDomain(nonCL147Country, customsOffice)(index)
               )
             )
           ),
           locationOfGoods = None,
-          loading = Some(LoadingDomain(None, Some(AdditionalInformationDomain(country, loadingPlace))))
+          loading = Some(LoadingDomain(None, Some(AdditionalInformationDomain(nonCL147Country, loadingPlace))))
         )
 
         val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](

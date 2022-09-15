@@ -24,7 +24,6 @@ import models.reference.Country
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.routeDetails.loading.{PlaceOfLoadingCountryPage, PlaceOfLoadingLocationPage}
-import pages.routeDetails.locationOfGoods.contact._
 
 class AdditionalInformationDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
   "AdditionalInformation" - {
