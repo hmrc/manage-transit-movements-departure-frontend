@@ -93,6 +93,6 @@ class OfficeOfTransitCountryController @Inject() (
   private def getCountries(implicit request: DataRequest[_]): Future[CountryList] =
     request.userAnswers.get(CountriesOfRoutingSection).validate(countriesOfRoutingReads) match {
       case Some(x) if x.countries.nonEmpty => Future.successful(x)
-      case _                               => countriesService.getCommunityCountries()
+      case _                               => countriesService.getCountries()
     }
 }

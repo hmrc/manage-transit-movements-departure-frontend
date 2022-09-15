@@ -67,7 +67,7 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
     "must return OK and the correct view for a GET" in {
 
-      when(mockCountriesService.getCommunityCountries()(any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countryList))
 
       setExistingUserAnswers(emptyUserAnswers)
@@ -108,7 +108,7 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      when(mockCountriesService.getCommunityCountries()(any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countryList))
 
       val userAnswers = emptyUserAnswers.setValue(OfficeOfTransitCountryPage(index), country1)
@@ -132,7 +132,7 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      when(mockCountriesService.getCommunityCountries()(any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countryList))
       when(mockCustomsOfficesService.getCustomsOfficesOfTransitForCountry(any())(any()))
         .thenReturn(Future.successful(arbitrary[CustomsOfficeList].sample.value))
@@ -151,7 +151,7 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      when(mockCountriesService.getCommunityCountries()(any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countryList))
 
       setExistingUserAnswers(emptyUserAnswers)
@@ -173,7 +173,7 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      when(mockCountriesService.getCommunityCountries()(any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countryList))
       when(mockCustomsOfficesService.getCustomsOfficesOfTransitForCountry(any())(any()))
         .thenReturn(Future.successful(CustomsOfficeList(Nil)))
