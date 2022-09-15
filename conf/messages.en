@@ -721,10 +721,10 @@ routeDetails.locationOfGoods.locationType.title = Which type of location is it?
 routeDetails.locationOfGoods.locationType.heading = Which type of location is it?
 routeDetails.locationOfGoods.locationType.checkYourAnswersLabel = Location type
 routeDetails.locationOfGoods.locationType.error.required = Select which type of location it is
-routeDetails.locationOfGoods.locationType.AuthorisedPlace = Authorised place - the authorised consignor’s own premises
-routeDetails.locationOfGoods.locationType.DesignatedLocation = Designated location - any other premises the consignor is authorised to use as an office of departure
-routeDetails.locationOfGoods.locationType.ApprovedPlace = Approved place - a designated location approved and controlled by the office of departure or destination
-routeDetails.locationOfGoods.locationType.Other = Other
+routeDetails.locationOfGoods.locationType.authorisedPlace = Authorised place - the authorised consignor’s own premises
+routeDetails.locationOfGoods.locationType.designatedLocation = Designated location - any other premises the consignor is authorised to use as an office of departure
+routeDetails.locationOfGoods.locationType.approvedPlace = Approved place - a designated location approved and controlled by the office of departure or destination
+routeDetails.locationOfGoods.locationType.other = Other
 
 routeDetails.locationOfGoods.identification.title = How do you want to identify the location of goods?
 routeDetails.locationOfGoods.identification.heading = How do you want to identify the location of goods?
@@ -852,7 +852,7 @@ routeDetails.locationOfGoods.contact.telephoneNumber.hintText = This has to incl
 routeDetails.locationOfGoods.contact.telephoneNumber.checkYourAnswersLabel = What is the contact for the location of goods’ telephone number?
 routeDetails.locationOfGoods.contact.telephoneNumber.change.hidden = What is the contact for the location of goods’ telephone number?
 routeDetails.locationOfGoods.contact.telephoneNumber.error.required = Enter {0}’s telephone number.
-routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidCharacters = {0}’s telephone number must only include numbers 0 to 9 and a plus sign
+routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidCharacter = {0}’s telephone number must only include numbers 0 to 9 and a plus sign
 routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidFormat = {0}’s telephone number must start with a plus sign
 routeDetails.locationOfGoods.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less.
 routeDetails.locationOfGoods.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more.
@@ -865,6 +865,7 @@ routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.paragraph = This is a 5-char
 
 routeDetails.locationOfGoods.checkYourAnswers.title = Check your answers
 routeDetails.locationOfGoods.checkYourAnswers.heading = Check your answers
+routeDetails.locationOfGoods.checkYourAnswers.subHeading = Location of goods
 
 routeDetails.loading.placeOfLoadingUnLocode.title = What is the UN/LOCODE for the place of loading?
 routeDetails.loading.placeOfLoadingUnLocode.heading = What is the UN/LOCODE for the place of loading?
@@ -882,3 +883,10 @@ routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.paragraph = This inc
 routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.checkYourAnswersLabel = Do you want to add extra information for the place of loading? //TODO check CYA ticket content
 routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.error.required = Select yes if you want to add extra information for the place of loading
 
+routeDetails.loading.placeOfLoadingCountry.title = In which country is the place of loading?
+routeDetails.loading.placeOfLoadingCountry.heading = In which country is the place of loading?
+routeDetails.loading.placeOfLoadingCountry.hintText = Enter the country, like Italy or Spain.
+routeDetails.loading.placeOfLoadingCountry.placeholder = Select a country
+routeDetails.loading.placeOfLoadingCountry.change.hidden = In which country is the place of loading?
+routeDetails.loading.placeOfLoadingCountry.checkYourAnswersLabel = In which country is the place of loading?
+routeDetails.loading.placeOfLoadingCountry.error.required = Enter which country the place of loading is in

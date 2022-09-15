@@ -40,6 +40,8 @@
         caption = Some(messages("routeDetails.caption"))
     )
 
+    <h2 class="govuk-heading-m">@messages("routeDetails.locationOfGoods.checkYourAnswers.subHeading")</h2>
+
     @answerSections(sections)
 
     @formHelper(action = routes.CheckYourAnswersController.onSubmit(lrn), 'autoComplete -> "off") {
