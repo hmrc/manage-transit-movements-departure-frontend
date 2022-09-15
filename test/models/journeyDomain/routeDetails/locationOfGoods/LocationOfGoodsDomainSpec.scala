@@ -260,7 +260,7 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           .setValue(AddIdentifierYesNoPage, true)
           .setValue(AdditionalIdentifierPage, "1234")
           .setValue(AddContactYesNoPage, true)
-          .setValue(contact.LocationOfGoodsContactNamePage, contactName)
+          .setValue(contact.NamePage, contactName)
           .setValue(contact.TelephoneNumberPage, contactPhone)
 
         val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
@@ -338,7 +338,7 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
 
         val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
 
-        result.left.value.page mustBe contact.LocationOfGoodsContactNamePage
+        result.left.value.page mustBe contact.NamePage
       }
 
       "when is Y(Authorisation Number) and contact phone number details is missing when required" in {
@@ -352,7 +352,7 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
           .setValue(AddIdentifierYesNoPage, true)
           .setValue(AdditionalIdentifierPage, "1234")
           .setValue(AddContactYesNoPage, true)
-          .setValue(contact.LocationOfGoodsContactNamePage, contactName)
+          .setValue(contact.NamePage, contactName)
 
         val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
 

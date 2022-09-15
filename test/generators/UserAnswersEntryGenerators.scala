@@ -201,8 +201,8 @@ trait UserAnswersEntryGenerators {
   private def generateLocationOfGoodsContactAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.routeDetails.locationOfGoods.contact._
     {
-      case LocationOfGoodsContactNamePage => Gen.alphaNumStr.map(JsString)
-      case TelephoneNumberPage            => Gen.alphaNumStr.map(JsString)
+      case NamePage            => Gen.alphaNumStr.map(JsString)
+      case TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
     }
   }
 

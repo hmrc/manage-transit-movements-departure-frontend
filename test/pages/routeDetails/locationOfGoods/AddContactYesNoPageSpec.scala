@@ -36,12 +36,12 @@ class AddContactYesNoPageSpec extends PageBehaviours {
           forAll(arbitrary[String]) {
             str =>
               val preChange = emptyUserAnswers
-                .setValue(LocationOfGoodsContactNamePage, str)
+                .setValue(NamePage, str)
                 .setValue(TelephoneNumberPage, str)
 
               val postChange = preChange.setValue(AddContactYesNoPage, false)
 
-              postChange.get(LocationOfGoodsContactNamePage) mustNot be(defined)
+              postChange.get(NamePage) mustNot be(defined)
               postChange.get(TelephoneNumberPage) mustNot be(defined)
           }
         }
@@ -52,12 +52,12 @@ class AddContactYesNoPageSpec extends PageBehaviours {
           forAll(arbitrary[String]) {
             str =>
               val preChange = emptyUserAnswers
-                .setValue(LocationOfGoodsContactNamePage, str)
+                .setValue(NamePage, str)
                 .setValue(TelephoneNumberPage, str)
 
               val postChange = preChange.setValue(AddContactYesNoPage, true)
 
-              postChange.get(LocationOfGoodsContactNamePage) must be(defined)
+              postChange.get(NamePage) must be(defined)
               postChange.get(TelephoneNumberPage) must be(defined)
           }
         }

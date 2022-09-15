@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.TelephoneNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
-import pages.routeDetails.locationOfGoods.contact.{LocationOfGoodsContactNamePage, TelephoneNumberPage}
+import pages.routeDetails.locationOfGoods.contact.{NamePage, TelephoneNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -46,7 +46,7 @@ class TelephoneNumberController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(LocationOfGoodsContactNamePage)) {
+    .andThen(getMandatoryPage(NamePage)) {
       implicit request =>
         val contactName = request.arg
         val form        = formProvider("routeDetails.locationOfGoods.contact.telephoneNumber", contactName)
@@ -59,7 +59,7 @@ class TelephoneNumberController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(LocationOfGoodsContactNamePage))
+    .andThen(getMandatoryPage(NamePage))
     .async {
       implicit request =>
         val contactName = request.arg

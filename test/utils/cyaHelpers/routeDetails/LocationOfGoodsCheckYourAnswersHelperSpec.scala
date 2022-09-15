@@ -23,7 +23,7 @@ import models.reference.{CustomsOffice, UnLocode}
 import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.locationOfGoods.contact.{LocationOfGoodsContactNamePage, TelephoneNumberPage}
+import pages.routeDetails.locationOfGoods.contact.{NamePage, TelephoneNumberPage}
 import pages.routeDetails.locationOfGoods.{
   AddContactYesNoPage,
   AddIdentifierYesNoPage,
@@ -600,9 +600,9 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         "when contactNamePage is defined" in {
           forAll(arbitrary[Mode], arbitrary[String]) {
             (mode, contactName) =>
-              val prefix = "routeDetails.locationOfGoods.contact.locationOfGoodsContactName"
+              val prefix = "routeDetails.locationOfGoods.contact.name"
               val answers = emptyUserAnswers
-                .setValue(LocationOfGoodsContactNamePage, contactName)
+                .setValue(NamePage, contactName)
               val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
               val result = helper.contactName
 
@@ -615,7 +615,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = contact.routes.LocationOfGoodsContactNameController.onPageLoad(answers.lrn, mode).url,
+                          href = contact.routes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
                           attributes = Map("id" -> "location-of-goods-contact")
                         )

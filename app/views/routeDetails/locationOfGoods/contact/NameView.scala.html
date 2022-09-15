@@ -30,19 +30,19 @@
 @(form: Form[String], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.locationOfGoods.contact.locationOfGoodsContactName.title"),
+    title = messages("routeDetails.locationOfGoods.contact.name.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.LocationOfGoodsContactNameController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.NameController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages("routeDetails.locationOfGoods.contact.locationOfGoodsContactName.heading"),
+                heading = messages("routeDetails.locationOfGoods.contact.name.heading"),
                 caption = Some(messages("routeDetails.caption"))
             ),
             inputClass = InputSize.Width20

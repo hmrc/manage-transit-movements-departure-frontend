@@ -16,16 +16,19 @@
 
 package pages.routeDetails.locationOfGoods.contact
 
-import pages.behaviours.PageBehaviours
+import controllers.routeDetails.locationOfGoods.contact.routes
+import models.{Mode, UserAnswers}
+import pages.QuestionPage
+import pages.sections.routeDetails.locationOfGoods.LocationOfGoodsContactSection
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
-class LocationOfGoodsContactNamePageSpec extends PageBehaviours {
+case object NamePage extends QuestionPage[String] {
 
-  "LocationOfGoodsContactPage" - {
+  override def path: JsPath = LocationOfGoodsContactSection.path \ toString
 
-    beRetrievable[String](LocationOfGoodsContactNamePage)
+  override def toString: String = "name"
 
-    beSettable[String](LocationOfGoodsContactNamePage)
-
-    beRemovable[String](LocationOfGoodsContactNamePage)
-  }
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.NameController.onPageLoad(userAnswers.lrn, mode))
 }

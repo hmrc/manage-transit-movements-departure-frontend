@@ -34,7 +34,7 @@ class AdditionalContactDomainSpec extends SpecBase with UserAnswersSpecHelper wi
         val telephoneNumber = Gen.alphaNumStr.sample.value
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(LocationOfGoodsContactNamePage)(name)
+          .unsafeSetVal(NamePage)(name)
           .unsafeSetVal(TelephoneNumberPage)(telephoneNumber)
 
         val expectedResult = AdditionalContactDomain(
@@ -59,14 +59,14 @@ class AdditionalContactDomainSpec extends SpecBase with UserAnswersSpecHelper wi
 
         val result: EitherType[AdditionalContactDomain] = UserAnswersReader[AdditionalContactDomain].run(userAnswers)
 
-        result.left.value.page mustBe LocationOfGoodsContactNamePage
+        result.left.value.page mustBe NamePage
       }
 
       "when additional contact has no telephone number" in {
         val name = Gen.alphaNumStr.sample.value
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(LocationOfGoodsContactNamePage)(name)
+          .unsafeSetVal(NamePage)(name)
 
         val result: EitherType[AdditionalContactDomain] = UserAnswersReader[AdditionalContactDomain].run(userAnswers)
 

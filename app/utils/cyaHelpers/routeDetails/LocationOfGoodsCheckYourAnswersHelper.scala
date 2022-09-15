@@ -19,7 +19,7 @@ package utils.cyaHelpers.routeDetails
 import models.reference.{CustomsOffice, UnLocode}
 import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress, UserAnswers}
 import pages.routeDetails.locationOfGoods._
-import pages.routeDetails.locationOfGoods.contact.{LocationOfGoodsContactNamePage, TelephoneNumberPage}
+import pages.routeDetails.locationOfGoods.contact.{NamePage, TelephoneNumberPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
@@ -111,9 +111,9 @@ class LocationOfGoodsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
   )
 
   def contactName: Option[SummaryListRow] = getAnswerAndBuildRow[String](
-    page = LocationOfGoodsContactNamePage,
+    page = NamePage,
     formatAnswer = formatAsText,
-    prefix = "routeDetails.locationOfGoods.contact.locationOfGoodsContactName",
+    prefix = "routeDetails.locationOfGoods.contact.name",
     id = Some("location-of-goods-contact")
   )
 

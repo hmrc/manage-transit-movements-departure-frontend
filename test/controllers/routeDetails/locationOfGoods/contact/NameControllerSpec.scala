@@ -22,21 +22,21 @@ import models.NormalMode
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNamePage
+import pages.routeDetails.locationOfGoods.contact.NamePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNameView
+import views.html.routeDetails.locationOfGoods.contact.NameView
 
 import scala.concurrent.Future
 
-class LocationOfGoodsContactNameControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class NameControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                     = new NameFormProvider()
-  private val form                             = formProvider("routeDetails.locationOfGoods.contact.locationOfGoodsContactName")
-  private val mode                             = NormalMode
-  private lazy val locationOfGoodsContactRoute = routes.LocationOfGoodsContactNameController.onPageLoad(lrn, mode).url
+  private val formProvider   = new NameFormProvider()
+  private val form           = formProvider("routeDetails.locationOfGoods.contact.name")
+  private val mode           = NormalMode
+  private lazy val nameRoute = routes.NameController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -49,11 +49,11 @@ class LocationOfGoodsContactNameControllerSpec extends SpecBase with AppWithDefa
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsContactRoute)
+      val request = FakeRequest(GET, nameRoute)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[LocationOfGoodsContactNameView]
+      val view = injector.instanceOf[NameView]
 
       status(result) mustEqual OK
 
@@ -63,16 +63,16 @@ class LocationOfGoodsContactNameControllerSpec extends SpecBase with AppWithDefa
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsContactNamePage, "test string")
+      val userAnswers = emptyUserAnswers.setValue(NamePage, "test string")
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, locationOfGoodsContactRoute)
+      val request = FakeRequest(GET, nameRoute)
 
       val result = route(app, request).value
 
       val filledForm = form.bind(Map("value" -> "test string"))
 
-      val view = injector.instanceOf[LocationOfGoodsContactNameView]
+      val view = injector.instanceOf[NameView]
 
       status(result) mustEqual OK
 
@@ -86,7 +86,7 @@ class LocationOfGoodsContactNameControllerSpec extends SpecBase with AppWithDefa
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      val request = FakeRequest(POST, locationOfGoodsContactRoute)
+      val request = FakeRequest(POST, nameRoute)
         .withFormUrlEncodedBody(("value", "test string"))
 
       val result = route(app, request).value
@@ -102,14 +102,14 @@ class LocationOfGoodsContactNameControllerSpec extends SpecBase with AppWithDefa
 
       val invalidAnswer = ""
 
-      val request    = FakeRequest(POST, locationOfGoodsContactRoute).withFormUrlEncodedBody(("value", ""))
+      val request    = FakeRequest(POST, nameRoute).withFormUrlEncodedBody(("value", ""))
       val filledForm = form.bind(Map("value" -> invalidAnswer))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[LocationOfGoodsContactNameView]
+      val view = injector.instanceOf[NameView]
 
       contentAsString(result) mustEqual
         view(filledForm, lrn, mode)(request, messages).toString
@@ -119,7 +119,7 @@ class LocationOfGoodsContactNameControllerSpec extends SpecBase with AppWithDefa
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, locationOfGoodsContactRoute)
+      val request = FakeRequest(GET, nameRoute)
 
       val result = route(app, request).value
 
@@ -132,7 +132,7 @@ class LocationOfGoodsContactNameControllerSpec extends SpecBase with AppWithDefa
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, locationOfGoodsContactRoute)
+      val request = FakeRequest(POST, nameRoute)
         .withFormUrlEncodedBody(("value", "test string"))
 
       val result = route(app, request).value

@@ -22,7 +22,7 @@ import models.NormalMode
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.routeDetails.locationOfGoods.contact.{LocationOfGoodsContactNamePage, TelephoneNumberPage}
+import pages.routeDetails.locationOfGoods.contact.{NamePage, TelephoneNumberPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -48,7 +48,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
   "TelephoneNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsContactNamePage, contactName)
+      val userAnswers = emptyUserAnswers.setValue(NamePage, contactName)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, telephoneNumberRoute)
@@ -66,7 +66,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(LocationOfGoodsContactNamePage, contactName)
+        .setValue(NamePage, contactName)
         .setValue(TelephoneNumberPage, validAnswer)
       setExistingUserAnswers(userAnswers)
 
@@ -87,7 +87,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
     "must redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(LocationOfGoodsContactNamePage, contactName)
+        .setValue(NamePage, contactName)
       setExistingUserAnswers(userAnswers)
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
@@ -105,7 +105,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(LocationOfGoodsContactNamePage, contactName)
+        .setValue(NamePage, contactName)
       setExistingUserAnswers(userAnswers)
 
       val invalidAnswer = ""

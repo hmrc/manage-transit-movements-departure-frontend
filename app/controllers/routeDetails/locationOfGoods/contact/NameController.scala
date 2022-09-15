@@ -21,33 +21,33 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.NameFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
-import pages.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNamePage
+import pages.routeDetails.locationOfGoods.contact.NamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.locationOfGoods.contact.LocationOfGoodsContactNameView
+import views.html.routeDetails.locationOfGoods.contact.NameView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LocationOfGoodsContactNameController @Inject() (
+class NameController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LocationOfGoodsNavigatorProvider,
   formProvider: NameFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
-  view: LocationOfGoodsContactNameView
+  view: NameView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.locationOfGoods.contact.locationOfGoodsContactName")
+  private val form = formProvider("routeDetails.locationOfGoods.contact.name")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(LocationOfGoodsContactNamePage) match {
+      val preparedForm = request.userAnswers.get(NamePage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -63,7 +63,7 @@ class LocationOfGoodsContactNameController @Inject() (
           value =>
             navigatorProvider().flatMap {
               implicit navigator =>
-                LocationOfGoodsContactNamePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                NamePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
             }
         )
   }
