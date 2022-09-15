@@ -850,7 +850,7 @@ routeDetails.locationOfGoods.contact.telephoneNumber.hintText = This has to incl
 routeDetails.locationOfGoods.contact.telephoneNumber.checkYourAnswersLabel = What is the contact for the location of goods’ telephone number?
 routeDetails.locationOfGoods.contact.telephoneNumber.change.hidden = What is the contact for the location of goods’ telephone number?
 routeDetails.locationOfGoods.contact.telephoneNumber.error.required = Enter {0}’s telephone number.
-routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidCharacters = {0}’s telephone number must only include numbers 0 to 9 and a plus sign
+routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidCharacter = {0}’s telephone number must only include numbers 0 to 9 and a plus sign
 routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidFormat = {0}’s telephone number must start with a plus sign
 routeDetails.locationOfGoods.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less.
 routeDetails.locationOfGoods.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more.
@@ -863,6 +863,7 @@ routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.paragraph = This is a 5-char
 
 routeDetails.locationOfGoods.checkYourAnswers.title = Check your answers
 routeDetails.locationOfGoods.checkYourAnswers.heading = Check your answers
+routeDetails.locationOfGoods.checkYourAnswers.subHeading = Location of goods
 
 routeDetails.loading.placeOfLoadingUnLocode.title = What is the UN/LOCODE for the place of loading?
 routeDetails.loading.placeOfLoadingUnLocode.heading = What is the UN/LOCODE for the place of loading?

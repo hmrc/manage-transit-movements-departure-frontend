@@ -27,12 +27,11 @@ import pages.routeDetails.loading.{PlaceOfLoadingCountryPage, PlaceOfLoadingLoca
 import pages.routeDetails.locationOfGoods.contact._
 
 class AdditionalInformationDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
-  // TODO: Update tests once Place of loading has been added
   "AdditionalInformation" - {
 
     "can be parsed from UserAnswers" - {
 
-      "when additional information has a country" ignore {
+      "when additional information has a country" in {
         val country1      = arbitrary[Country].sample.value
         val loadingPlace1 = Gen.alphaNumStr.sample.value.take(35)
 
@@ -53,7 +52,7 @@ class AdditionalInformationDomainSpec extends SpecBase with UserAnswersSpecHelpe
 
     "cannot be parsed from UserAnswers" - {
 
-      "when additional contact has no country" in {
+      "when additional information has no country" in {
 
         val placeOfLoading = Gen.alphaNumStr.sample.value
 
