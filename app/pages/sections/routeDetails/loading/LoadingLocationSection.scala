@@ -19,9 +19,9 @@ package pages.sections.routeDetails.loading
 import pages.sections.Section
 import play.api.libs.json.{JsObject, JsPath}
 
-case object LocationOfGoodsInformationSection extends Section[JsObject] {
+case object LoadingLocationSection extends Section[JsObject] {
 
   override def path: JsPath = LoadingSection.path \ toString
 
-  override def toString: String = "additionalInformation"
+  override def toString: String = "location"
 }

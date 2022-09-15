@@ -16,7 +16,7 @@
 
 package forms
 
-import forms.Constants.locationOfGoodsMaxLength
+import forms.Constants.placeOfLoadingMaxLength
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.stringFieldRegex
 import play.api.data.Form
@@ -29,7 +29,7 @@ class PlaceOfLoadingLocationFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text(s"$prefix.error.required", args)
         .verifying(
-          StopOnFirstFail[String](maxLength(locationOfGoodsMaxLength, s"$prefix.error.length"), regexp(stringFieldRegex, s"$prefix.error.invalid"))
+          StopOnFirstFail[String](maxLength(placeOfLoadingMaxLength, s"$prefix.error.length"), regexp(stringFieldRegex, s"$prefix.error.invalid"))
         )
     )
 }

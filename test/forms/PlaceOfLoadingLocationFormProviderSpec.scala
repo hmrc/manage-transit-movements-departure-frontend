@@ -16,7 +16,7 @@
 
 package forms
 
-import forms.Constants.locationOfGoodsMaxLength
+import forms.Constants.placeOfLoadingMaxLength
 import forms.behaviours.StringFieldBehaviours
 import models.domain.StringFieldRegex.stringFieldRegex
 import org.scalacheck.Gen
@@ -38,14 +38,14 @@ class PlaceOfLoadingLocationFormProviderSpec extends StringFieldBehaviours {
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(locationOfGoodsMaxLength)
+      stringsWithMaxLength(placeOfLoadingMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength = locationOfGoodsMaxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(locationOfGoodsMaxLength))
+      maxLength = placeOfLoadingMaxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(placeOfLoadingMaxLength))
     )
 
     behave like mandatoryField(
@@ -58,7 +58,7 @@ class PlaceOfLoadingLocationFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       error = FormError(fieldName, invalidKey, Seq(stringFieldRegex.regex)),
-      locationOfGoodsMaxLength
+      placeOfLoadingMaxLength
     )
   }
 }

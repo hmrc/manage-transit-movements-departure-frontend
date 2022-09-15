@@ -16,7 +16,7 @@
 
 package views.routeDetails.loading
 
-import forms.Constants.locationOfGoodsMaxLength
+import forms.Constants.placeOfLoadingMaxLength
 import forms.PlaceOfLoadingLocationFormProvider
 import models.NormalMode
 import play.api.data.Form
@@ -30,7 +30,7 @@ class PlaceOfLoadingLocationViewSpec extends InputTextViewBehaviours[String] {
 
   override val prefix: String = "routeDetails.loading.placeOfLoadingLocation"
 
-  private val countryName = Gen.alphaNumStr.sample.value.take(locationOfGoodsMaxLength)
+  private val countryName = Gen.alphaNumStr.sample.value.take(placeOfLoadingMaxLength)
 
   override def form: Form[String] = new PlaceOfLoadingLocationFormProvider()(prefix)
 

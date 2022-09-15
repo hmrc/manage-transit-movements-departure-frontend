@@ -19,13 +19,13 @@ package pages.routeDetails.loading
 import controllers.routeDetails.loading.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.loading.LocationOfGoodsInformationSection
+import pages.sections.routeDetails.loading.LoadingLocationSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case object PlaceOfLoadingLocationPage extends QuestionPage[String] {
 
-  override def path: JsPath = LocationOfGoodsInformationSection.path \ toString
+  override def path: JsPath = LoadingLocationSection.path \ toString
 
   override def toString: String = "placeOfLoadingLocation"
 
