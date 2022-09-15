@@ -209,7 +209,11 @@ trait UserAnswersEntryGenerators {
   private def generateLoadingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.routeDetails.loading._
     {
-      case PlaceOfLoadingAddUnLocodeYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case PlaceOfLoadingAddUnLocodeYesNoPage         => arbitrary[Boolean].map(JsBoolean)
+      case PlaceOfLoadingUnLocodePage                 => arbitrary[UnLocode].map(Json.toJson(_))
+      case PlaceOfLoadingAddExtraInformationYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case PlaceOfLoadingCountryPage                  => arbitrary[Country].map(Json.toJson(_))
+      case PlaceOfLoadingLocationPage                 => Gen.alphaNumStr.map(JsString)
     }
   }
 
