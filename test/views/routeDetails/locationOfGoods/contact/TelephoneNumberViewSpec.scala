@@ -23,9 +23,9 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.TelephoneNumberViewBehaviours
-import views.html.routeDetails.locationOfGoods.contact.ContactTelephoneNumberView
+import views.html.routeDetails.locationOfGoods.contact.TelephoneNumberView
 
-class ContactTelephoneNumberViewSpec extends TelephoneNumberViewBehaviours {
+class TelephoneNumberViewSpec extends TelephoneNumberViewBehaviours {
 
   override val prefix: String = "routeDetails.locationOfGoods.contact.telephoneNumber"
 
@@ -34,7 +34,7 @@ class ContactTelephoneNumberViewSpec extends TelephoneNumberViewBehaviours {
   override def form: Form[String] = new TelephoneNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[ContactTelephoneNumberView].apply(form, lrn, name, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[TelephoneNumberView].apply(form, lrn, name, NormalMode)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 

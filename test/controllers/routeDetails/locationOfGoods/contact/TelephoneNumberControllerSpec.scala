@@ -27,7 +27,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.routeDetails.locationOfGoods.contact.ContactTelephoneNumberView
+import views.html.routeDetails.locationOfGoods.contact.TelephoneNumberView
 
 import scala.concurrent.Future
 
@@ -55,7 +55,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[ContactTelephoneNumberView]
+      val view = injector.instanceOf[TelephoneNumberView]
 
       status(result) mustEqual OK
 
@@ -76,7 +76,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       val filledForm = form.bind(Map("value" -> validAnswer))
 
-      val view = injector.instanceOf[ContactTelephoneNumberView]
+      val view = injector.instanceOf[TelephoneNumberView]
 
       status(result) mustEqual OK
 
@@ -117,7 +117,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[ContactTelephoneNumberView]
+      val view = injector.instanceOf[TelephoneNumberView]
 
       contentAsString(result) mustEqual
         view(filledForm, lrn, contactName, mode)(request, messages).toString
