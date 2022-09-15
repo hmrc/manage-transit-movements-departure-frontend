@@ -24,6 +24,7 @@ import models.requests.DataRequest
 import models.{CountryList, Index, LocalReferenceNumber, Mode, RichOptionalJsArray}
 import navigation.routeDetails.OfficeOfExitNavigatorProvider
 import pages.routeDetails.exit.index.OfficeOfExitCountryPage
+import pages.routeDetails.routing.CountryOfDestinationPage
 import pages.sections.routeDetails.routing.CountriesOfRoutingSection
 import play.api.data.FormError
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -52,18 +53,20 @@ class OfficeOfExitCountryController @Inject() (
 
   private val prefix: String = "routeDetails.exit.officeOfExitCountry"
 
-  def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      getCountries.map {
-        countryList =>
-          val form = formProvider(prefix, countryList)
-          val preparedForm = request.userAnswers.get(OfficeOfExitCountryPage(index)) match {
-            case None        => form
-            case Some(value) => form.fill(value)
-          }
-          Ok(view(preparedForm, lrn, countryList.countries, index, mode))
-      }
-  }
+  def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .async {
+      implicit request =>
+        getCountries.map {
+          countryList =>
+            val form = formProvider(prefix, countryList)
+            val preparedForm = request.userAnswers.get(OfficeOfExitCountryPage(index)) match {
+              case None        => form
+              case Some(value) => form.fill(value)
+            }
+            Ok(view(preparedForm, lrn, countryList.countries, index, mode))
+        }
+    }
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
@@ -89,9 +92,18 @@ class OfficeOfExitCountryController @Inject() (
       }
   }
 
-  private def getCountries(implicit request: DataRequest[_]): Future[CountryList] =
+  private def getCountries(implicit request: DataRequest[_]): Future[CountryList] = {
+    val securityCountries  = countriesService.getCustomsSecurityAgreementAreaCountries()
+    val destinationCountry = request.userAnswers.get(CountryOfDestinationPage).get
     request.userAnswers.get(CountriesOfRoutingSection).validate(countriesOfRoutingReads) match {
-      case Some(x) if x.countries.nonEmpty => Future.successful(x)
-      case _                               => countriesService.getCountries()
+      case Some(x) if x.countries.nonEmpty =>
+        val countriesWithoutDestination = x.countries.filterNot(
+           _ == destinationCountry
+        )
+        securityCountries.flatMap(
+          securityCountries => Future.successful(CountryList(countriesWithoutDestination.intersect(securityCountries.countries)))
+        )
+      case _ => countriesService.getCountries()
     }
+  }
 }
