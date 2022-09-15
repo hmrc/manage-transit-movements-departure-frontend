@@ -36,12 +36,12 @@ import scala.concurrent.Future
 
 class PlaceOfLoadingLocationControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
+  private val country                          = arbitrary[Country].sample.value
+  private val countryName                      = country.description
   private val formProvider                     = new PlaceOfLoadingLocationFormProvider()
   private val form                             = formProvider("routeDetails.loading.placeOfLoadingLocation", countryName)
   private val mode                             = NormalMode
   private lazy val placeOfLoadingLocationRoute = routes.PlaceOfLoadingLocationController.onPageLoad(lrn, mode).url
-  private val country                          = arbitrary[Country].sample.value
-  private val countryName                      = country.description
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

@@ -26,6 +26,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.routeDetails.exit.index.OfficeOfExitCountryPage
+import pages.routeDetails.routing.CountryOfDestinationPage
 import pages.routeDetails.routing.index.CountryOfRoutingPage
 import play.api.data.FormError
 import play.api.inject.bind
@@ -46,6 +47,8 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
   private val austria                = Country(CountryCode("AT"), "Austria")
   private val unitedKingdom          = Country(CountryCode("GB"), "United Kingdom")
   private val countriesReferenceData = CountryList(Seq(austria, unitedKingdom))
+
+  private val secAgreementCountries = CountryList(Seq(austria, italy, france))
 
   private val formProvider                   = new CountryFormProvider()
   private def form(countryList: CountryList) = formProvider("routeDetails.exit.officeOfExitCountry", countryList)
@@ -72,9 +75,13 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
 
     "must return OK and the correct view for a GET when using CountriesOfRouting" in {
 
+      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(secAgreementCountries))
+
       val updatedUserAnswers = emptyUserAnswers
+        .setValue(CountryOfDestinationPage, austria)
         .setValue(CountryOfRoutingPage(Index(0)), france)
         .setValue(CountryOfRoutingPage(Index(1)), italy)
+        .setValue(CountryOfRoutingPage(Index(2)), austria)
 
       setExistingUserAnswers(updatedUserAnswers)
 
@@ -94,7 +101,10 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
 
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countriesReferenceData))
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val updatedUserAnswers = emptyUserAnswers
+        .setValue(CountryOfDestinationPage, austria)
+
+      setExistingUserAnswers(updatedUserAnswers)
 
       val request = FakeRequest(GET, officeOfExitCountryRoute)
 
@@ -110,7 +120,10 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
 
     "must populate the view correctly on a GET when the question has previously been answered using countries of routing" in {
 
+      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(secAgreementCountries))
+
       val updatedUserAnswers = emptyUserAnswers
+        .setValue(CountryOfDestinationPage, austria)
         .setValue(CountryOfRoutingPage(Index(0)), france)
         .setValue(CountryOfRoutingPage(Index(1)), italy)
         .setValue(OfficeOfExitCountryPage(Index(0)), france)
@@ -136,6 +149,7 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countriesReferenceData))
 
       val updatedUserAnswers = emptyUserAnswers
+        .setValue(CountryOfDestinationPage, austria)
         .setValue(OfficeOfExitCountryPage(Index(0)), austria)
 
       setExistingUserAnswers(updatedUserAnswers)
@@ -158,10 +172,13 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
+      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(secAgreementCountries))
+
       when(mockCustomsOfficesService.getCustomsOfficesOfExitForCountry(any())(any()))
         .thenReturn(Future.successful(arbitrary[CustomsOfficeList].sample.value))
 
       val updatedUserAnswers = emptyUserAnswers
+        .setValue(CountryOfDestinationPage, austria)
         .setValue(CountryOfRoutingPage(Index(0)), france)
         .setValue(CountryOfRoutingPage(Index(1)), italy)
 
@@ -179,7 +196,10 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
+      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(secAgreementCountries))
+
       val updatedUserAnswers = emptyUserAnswers
+        .setValue(CountryOfDestinationPage, austria)
         .setValue(CountryOfRoutingPage(Index(0)), france)
         .setValue(CountryOfRoutingPage(Index(1)), italy)
 
@@ -202,10 +222,13 @@ class OfficeOfExitCountryControllerSpec extends SpecBase with AppWithDefaultMock
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
+      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(secAgreementCountries))
+
       when(mockCustomsOfficesService.getCustomsOfficesOfExitForCountry(any())(any()))
         .thenReturn(Future.successful(CustomsOfficeList(Nil)))
 
       val updatedUserAnswers = emptyUserAnswers
+        .setValue(CountryOfDestinationPage, austria)
         .setValue(CountryOfRoutingPage(Index(0)), france)
         .setValue(CountryOfRoutingPage(Index(1)), italy)
 
