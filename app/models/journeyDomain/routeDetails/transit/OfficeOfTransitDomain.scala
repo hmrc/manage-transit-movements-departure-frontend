@@ -31,7 +31,7 @@ import play.api.mvc.Call
 case class OfficeOfTransitDomain(
   country: Option[Country],
   customsOffice: CustomsOffice,
-  officeOfTransitETA: Option[DateTime]
+  eta: Option[DateTime]
 )(index: Index)
     extends JourneyDomainModel {
 

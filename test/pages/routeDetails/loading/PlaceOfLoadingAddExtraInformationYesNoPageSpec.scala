@@ -16,6 +16,8 @@
 
 package pages.routeDetails.loading
 
+import models.reference.Country
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class PlaceOfLoadingAddExtraInformationYesNoPageSpec extends PageBehaviours {
@@ -27,5 +29,39 @@ class PlaceOfLoadingAddExtraInformationYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](PlaceOfLoadingAddExtraInformationYesNoPage)
 
     beRemovable[Boolean](PlaceOfLoadingAddExtraInformationYesNoPage)
+
+    "cleanup" - {
+      "when NO selected" - {
+        "must clean up country and location" in {
+          forAll(arbitrary[Country], arbitrary[String]) {
+            (country, str) =>
+              val preChange = emptyUserAnswers
+                .setValue(PlaceOfLoadingCountryPage, country)
+                .setValue(PlaceOfLoadingLocationPage, str)
+
+              val postChange = preChange.setValue(PlaceOfLoadingAddExtraInformationYesNoPage, false)
+
+              postChange.get(PlaceOfLoadingCountryPage) mustNot be(defined)
+              postChange.get(PlaceOfLoadingLocationPage) mustNot be(defined)
+          }
+        }
+      }
+
+      "when YES selected" - {
+        "must do nothing" in {
+          forAll(arbitrary[Country], arbitrary[String]) {
+            (country, str) =>
+              val preChange = emptyUserAnswers
+                .setValue(PlaceOfLoadingCountryPage, country)
+                .setValue(PlaceOfLoadingLocationPage, str)
+
+              val postChange = preChange.setValue(PlaceOfLoadingAddExtraInformationYesNoPage, true)
+
+              postChange.get(PlaceOfLoadingCountryPage) must be(defined)
+              postChange.get(PlaceOfLoadingLocationPage) must be(defined)
+          }
+        }
+      }
+    }
   }
 }

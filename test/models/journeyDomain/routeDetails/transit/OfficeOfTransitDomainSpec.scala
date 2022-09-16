@@ -61,7 +61,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
           val expectedResult = OfficeOfTransitDomain(
             country = None,
             customsOffice = officeOfTransit,
-            officeOfTransitETA = None
+            eta = None
           )(index)
 
           val result: EitherType[OfficeOfTransitDomain] = UserAnswersReader[OfficeOfTransitDomain](
@@ -82,7 +82,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
           val expectedResult = OfficeOfTransitDomain(
             country = None,
             customsOffice = officeOfTransit,
-            officeOfTransitETA = None
+            eta = None
           )(index)
 
           val result: EitherType[OfficeOfTransitDomain] = UserAnswersReader[OfficeOfTransitDomain](
@@ -104,7 +104,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
           val expectedResult = OfficeOfTransitDomain(
             country = Some(country),
             customsOffice = officeOfTransit,
-            officeOfTransitETA = None
+            eta = None
           )(index)
 
           val result: EitherType[OfficeOfTransitDomain] = UserAnswersReader[OfficeOfTransitDomain](
@@ -131,7 +131,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
         val expectedResult = OfficeOfTransitDomain(
           country = Some(country),
           customsOffice = officeOfTransit,
-          officeOfTransitETA = Some(eta)
+          eta = Some(eta)
         )(index)
 
         val result: EitherType[OfficeOfTransitDomain] = UserAnswersReader[OfficeOfTransitDomain](
@@ -154,7 +154,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
           val expectedResult = OfficeOfTransitDomain(
             country = Some(country),
             customsOffice = officeOfTransit,
-            officeOfTransitETA = Some(eta)
+            eta = Some(eta)
           )(index)
 
           val result: EitherType[OfficeOfTransitDomain] = UserAnswersReader[OfficeOfTransitDomain](
@@ -176,7 +176,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
           val expectedResult = OfficeOfTransitDomain(
             country = Some(country),
             customsOffice = officeOfTransit,
-            officeOfTransitETA = None
+            eta = None
           )(index)
 
           val result: EitherType[OfficeOfTransitDomain] = UserAnswersReader[OfficeOfTransitDomain](
@@ -199,7 +199,7 @@ class OfficeOfTransitDomainSpec extends SpecBase with Generators {
         val expectedResult = OfficeOfTransitDomain(
           country = Some(country),
           customsOffice = officeOfTransit,
-          officeOfTransitETA = None
+          eta = None
         )(index)
 
         val result: EitherType[OfficeOfTransitDomain] = UserAnswersReader[OfficeOfTransitDomain](
