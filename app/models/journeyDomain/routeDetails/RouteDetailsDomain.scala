@@ -26,6 +26,7 @@ import models.journeyDomain.routeDetails.loading.LoadingDomain
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
 import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
 import models.journeyDomain.routeDetails.transit.TransitDomain
+import models.journeyDomain.routeDetails.unloading.UnloadingDomain
 import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails.locationOfGoods.AddLocationOfGoodsPage
 
@@ -34,7 +35,8 @@ case class RouteDetailsDomain(
   transit: Option[TransitDomain],
   exit: Option[ExitDomain],
   locationOfGoods: Option[LocationOfGoodsDomain],
-  loading: Option[LoadingDomain]
+  loading: Option[LoadingDomain],
+  unloading: Option[UnloadingDomain]
 ) extends JourneyDomainModel
 
 object RouteDetailsDomain {
@@ -50,12 +52,14 @@ object RouteDetailsDomain {
       exit            <- UserAnswersReader[Option[ExitDomain]](exitReader(customsSecurityAgreementAreaCountryCodes)(transit))
       locationOfGoods <- UserAnswersReader[Option[LocationOfGoodsDomain]](locationOfGoodsReader(customsSecurityAgreementAreaCountryCodes))
       loading         <- UserAnswersReader[LoadingDomain].map(Some(_))
+      unloading       <- UserAnswersReader[UnloadingDomain].map(Some(_))
     } yield RouteDetailsDomain(
       routing,
       transit,
       exit,
       locationOfGoods,
-      loading
+      loading,
+      unloading
     )
 
   implicit def transitReader(

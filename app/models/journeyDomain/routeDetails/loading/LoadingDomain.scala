@@ -17,22 +17,15 @@
 package models.journeyDomain.routeDetails.loading
 
 import cats.implicits._
-import models.UserAnswers
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.{JourneyDomainModel, Stage}
+import models.journeyDomain.JourneyDomainModel
 import models.reference.UnLocode
 import pages.routeDetails.loading.{PlaceOfLoadingAddExtraInformationYesNoPage, PlaceOfLoadingAddUnLocodeYesNoPage, PlaceOfLoadingUnLocodePage}
-import play.api.mvc.Call
 
-//TODO: Add country and location as params when creating the page
 case class LoadingDomain(
   unLocode: Option[UnLocode],
   additionalInformation: Option[AdditionalInformationDomain]
-) extends JourneyDomainModel {
-
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    None // TODO - update to CYA once built
-}
+) extends JourneyDomainModel
 
 object LoadingDomain {
 
