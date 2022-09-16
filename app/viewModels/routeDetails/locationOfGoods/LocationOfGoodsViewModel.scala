@@ -36,17 +36,17 @@ object LocationOfGoodsViewModel {
       val helper = new LocationOfGoodsCheckYourAnswersHelper(userAnswers, NormalMode)
 
       val rows = Seq(
-        helper.locationOfGoodsType,
+        helper.locationType,
         helper.locationOfGoodsIdentification,
-        helper.locationOfGoodsCustomsOfficeIdentifier,
-        helper.locationOfGoodsEori,
-        helper.locationOfGoodsAuthorisationNumber,
+        helper.customsOfficeIdentifier,
+        helper.eori,
+        helper.authorisationNumber,
         helper.additionalIdentifierYesNo,
         helper.additionalIdentifier,
-        helper.locationOfGoodsCoordinates,
-        helper.locationOfGoodsUnLocode,
-        helper.locationOfGoodsAddress,
-        helper.locationOfGoodsPostalCode,
+        helper.coordinates,
+        helper.unLocode,
+        helper.address,
+        helper.postalCode,
         helper.contactYesNo,
         helper.contactName,
         helper.contactPhoneNumber

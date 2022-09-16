@@ -22,12 +22,12 @@ import models.NormalMode
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.routeDetails.locationOfGoods.contact.{LocationOfGoodsContactNamePage, TelephoneNumberPage}
+import pages.routeDetails.locationOfGoods.contact.{NamePage, TelephoneNumberPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.routeDetails.locationOfGoods.contact.ContactTelephoneNumberView
+import views.html.routeDetails.locationOfGoods.contact.TelephoneNumberView
 
 import scala.concurrent.Future
 
@@ -48,14 +48,14 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
   "TelephoneNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val userAnswers = emptyUserAnswers.setValue(LocationOfGoodsContactNamePage, contactName)
+      val userAnswers = emptyUserAnswers.setValue(NamePage, contactName)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, telephoneNumberRoute)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[ContactTelephoneNumberView]
+      val view = injector.instanceOf[TelephoneNumberView]
 
       status(result) mustEqual OK
 
@@ -66,7 +66,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(LocationOfGoodsContactNamePage, contactName)
+        .setValue(NamePage, contactName)
         .setValue(TelephoneNumberPage, validAnswer)
       setExistingUserAnswers(userAnswers)
 
@@ -76,7 +76,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       val filledForm = form.bind(Map("value" -> validAnswer))
 
-      val view = injector.instanceOf[ContactTelephoneNumberView]
+      val view = injector.instanceOf[TelephoneNumberView]
 
       status(result) mustEqual OK
 
@@ -87,7 +87,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
     "must redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(LocationOfGoodsContactNamePage, contactName)
+        .setValue(NamePage, contactName)
       setExistingUserAnswers(userAnswers)
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
@@ -105,7 +105,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(LocationOfGoodsContactNamePage, contactName)
+        .setValue(NamePage, contactName)
       setExistingUserAnswers(userAnswers)
 
       val invalidAnswer = ""
@@ -117,7 +117,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[ContactTelephoneNumberView]
+      val view = injector.instanceOf[TelephoneNumberView]
 
       contentAsString(result) mustEqual
         view(filledForm, lrn, contactName, mode)(request, messages).toString

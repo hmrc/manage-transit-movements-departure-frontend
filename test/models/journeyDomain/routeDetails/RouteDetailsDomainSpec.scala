@@ -18,7 +18,7 @@ package models.journeyDomain.routeDetails
 
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
-import models.DeclarationType
+import models.{DeclarationType, Index}
 import models.DeclarationType.Option4
 import models.SecurityDetailsType._
 import models.domain.{EitherType, UserAnswersReader}
@@ -98,20 +98,26 @@ class RouteDetailsDomainSpec extends SpecBase with ScalaCheckPropertyChecks with
           "and security is not in set {0,1}" - {
             val security = Gen.oneOf(ExitSummaryDeclarationSecurityDetails, EntryAndExitSummaryDeclarationSecurityDetails).sample.value
 
-            "at least one of the countries of routing is not in set CL147" in {
-              val countryNotInCL147 = arbitrary[Country]
-                .retryUntil {
-                  x =>
-                    !customsSecurityAgreementAreaCountryCodes.contains(x.code.code)
-                }
-                .sample
-                .value
+            val countryInCL147 = arbitrary[Country]
+              .map(_.copy(code = CountryCode(customsSecurityAgreementAreaCountryCodes.head)))
+              .sample
+              .value
 
+            val countryNotInCL147 = arbitrary[Country]
+              .retryUntil {
+                x =>
+                  !customsSecurityAgreementAreaCountryCodes.contains(x.code.code)
+              }
+              .sample
+              .value
+
+            "at least one of the countries of routing is not in set CL147" in {
               val userAnswers = emptyUserAnswers
                 .setValue(DeclarationTypePage, declarationType)
                 .setValue(SecurityDetailsTypePage, security)
                 .setValue(BindingItineraryPage, true)
-                .setValue(CountryOfRoutingPage(index), countryNotInCL147)
+                .setValue(CountryOfRoutingPage(Index(0)), countryNotInCL147)
+                .setValue(CountryOfRoutingPage(Index(1)), countryInCL147)
 
               val result: EitherType[Option[ExitDomain]] = UserAnswersReader[Option[ExitDomain]](
                 RouteDetailsDomain.exitReader(customsSecurityAgreementAreaCountryCodes)
@@ -121,11 +127,6 @@ class RouteDetailsDomainSpec extends SpecBase with ScalaCheckPropertyChecks with
             }
 
             "and all of the countries of routing are in set CL147" in {
-              val countryInCL147 = arbitrary[Country]
-                .map(_.copy(code = CountryCode(customsSecurityAgreementAreaCountryCodes.head)))
-                .sample
-                .value
-
               val initialAnswers = emptyUserAnswers
                 .setValue(DeclarationTypePage, declarationType)
                 .setValue(SecurityDetailsTypePage, security)
