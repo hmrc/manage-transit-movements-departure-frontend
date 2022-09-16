@@ -47,7 +47,7 @@ object RouteDetailsDomain {
     for {
       routing         <- UserAnswersReader[RoutingDomain]
       transit         <- UserAnswersReader[Option[TransitDomain]](transitReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
-      exit            <- UserAnswersReader[Option[ExitDomain]](exitReader(customsSecurityAgreementAreaCountryCodes))
+      exit            <- UserAnswersReader[Option[ExitDomain]](exitReader(customsSecurityAgreementAreaCountryCodes)(transit))
       locationOfGoods <- UserAnswersReader[Option[LocationOfGoodsDomain]](locationOfGoodsReader(customsSecurityAgreementAreaCountryCodes))
       loading         <- UserAnswersReader[LoadingDomain].map(Some(_))
     } yield RouteDetailsDomain(
@@ -73,7 +73,9 @@ object RouteDetailsDomain {
         UserAnswersReader[TransitDomain].map(Some(_))
     }
 
-  implicit def exitReader(customsSecurityAgreementAreaCountryCodes: Seq[String]): UserAnswersReader[Option[ExitDomain]] =
+  implicit def exitReader(
+    customsSecurityAgreementAreaCountryCodes: Seq[String]
+  )(transit: Option[TransitDomain]): UserAnswersReader[Option[ExitDomain]] =
     DeclarationTypePage.reader.flatMap {
       case Option4 =>
         none[ExitDomain].pure[UserAnswersReader]
@@ -82,14 +84,14 @@ object RouteDetailsDomain {
           case NoSecurityDetails | EntrySummaryDeclarationSecurityDetails =>
             none[ExitDomain].pure[UserAnswersReader]
           case _ =>
-            UserAnswersReader[Seq[CountryOfRoutingDomain]]
-              .map(_.map(_.country.code.code))
-              .flatMap {
-                _.filter(!customsSecurityAgreementAreaCountryCodes.contains(_)) match {
-                  case Nil => UserAnswersReader[ExitDomain].map(Some(_))
-                  case _   => none[ExitDomain].pure[UserAnswersReader]
-                }
+            for {
+              countryOfRoutingCodes <- UserAnswersReader[Seq[CountryOfRoutingDomain]].map(_.map(_.country.code.code))
+              countriesOfRoutingNotInCL147 = countryOfRoutingCodes.filter(!customsSecurityAgreementAreaCountryCodes.contains(_))
+              reader <- (countriesOfRoutingNotInCL147, transit) match {
+                case (_ :: _, Some(TransitDomain(_, _ :: _))) => none[ExitDomain].pure[UserAnswersReader]
+                case _                                        => UserAnswersReader[ExitDomain].map(Some(_))
               }
+            } yield reader
         }
     }
 
