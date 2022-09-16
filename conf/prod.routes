@@ -26,4 +26,6 @@
 
 ->         /                                                     health.Routes
 
+->         /manage-transit-movements/departure                   app.routeDetails.unloading.Routes
+
 GET        /admin/metrics             @com.kenshoo.play.metrics.MetricsController.metrics
