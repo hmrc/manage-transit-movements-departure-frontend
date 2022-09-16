@@ -86,8 +86,9 @@ object RouteDetailsDomain {
           case _ =>
             for {
               countriesOfRouting <- UserAnswersReader[Seq[CountryOfRoutingDomain]]
-              countriesOfRoutingCodes      = countriesOfRouting.map(_.country.code.code)
-              countriesOfRoutingNotInCL147 = countriesOfRoutingCodes.filter(!customsSecurityAgreementAreaCountryCodes.contains(_))
+              countriesOfRoutingNotInCL147 = countriesOfRouting
+                .map(_.country.code.code)
+                .filter(!customsSecurityAgreementAreaCountryCodes.contains(_))
               reader <- (countriesOfRoutingNotInCL147, transit) match {
                 case (_ :: _, Some(TransitDomain(_, _ :: _))) => none[ExitDomain].pure[UserAnswersReader]
                 case _                                        => UserAnswersReader[ExitDomain].map(Some(_))
