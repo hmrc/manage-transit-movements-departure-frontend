@@ -29,10 +29,9 @@ sealed trait AddressLine {
 object AddressLine {
 
   case object AddressLine1 extends AddressLine {
-    override val field: String  = "addressLine1"
-    val length: Int             = 35
-    val streetNumberLength: Int = 6
-    val regex: Regex            = stringFieldRegex
+    override val field: String = "addressLine1"
+    val length: Int            = 35
+    val regex: Regex           = stringFieldRegex
   }
 
   case object AddressLine2 extends AddressLine {

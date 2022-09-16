@@ -39,60 +39,16 @@ case class RouteDetailsDomain(
 
 object RouteDetailsDomain {
 
-  // scalastyle:off cyclomatic.complexity
-  // scalastyle:off method.length
   implicit def userAnswersReader(
     ctcCountryCodes: Seq[String],
     customsSecurityAgreementAreaCountryCodes: Seq[String]
-  ): UserAnswersReader[RouteDetailsDomain] = {
-
-    implicit val transitReads: UserAnswersReader[Option[TransitDomain]] =
-      DeclarationTypePage.reader.flatMap {
-        case Option4 =>
-          none[TransitDomain].pure[UserAnswersReader]
-        case _ =>
-          implicit val reads: UserAnswersReader[TransitDomain] = TransitDomain.userAnswersReader(
-            ctcCountryCodes,
-            customsSecurityAgreementAreaCountryCodes
-          )
-          UserAnswersReader[TransitDomain].map(Some(_))
-      }
-
-    implicit val exitReads: UserAnswersReader[Option[ExitDomain]] =
-      DeclarationTypePage.reader.flatMap {
-        case Option4 =>
-          none[ExitDomain].pure[UserAnswersReader]
-        case _ =>
-          SecurityDetailsTypePage.reader.flatMap {
-            case NoSecurityDetails | EntrySummaryDeclarationSecurityDetails =>
-              none[ExitDomain].pure[UserAnswersReader]
-            case _ =>
-              UserAnswersReader[Seq[CountryOfRoutingDomain]]
-                .map(_.map(_.country.code.code))
-                .flatMap {
-                  _.filter(customsSecurityAgreementAreaCountryCodes.contains(_)) match {
-                    case Nil => UserAnswersReader[ExitDomain].map(Some(_))
-                    case _   => none[ExitDomain].pure[UserAnswersReader]
-                  }
-                }
-          }
-      }
-
-    implicit val locationOfGoodsReads: UserAnswersReader[Option[LocationOfGoodsDomain]] =
-      // additional declaration type is currently always normal (A) as we aren't doing pre-lodge (D) yet
-      OfficeOfDeparturePage.reader.flatMap {
-        case x if customsSecurityAgreementAreaCountryCodes.contains(x.countryCode) =>
-          AddLocationOfGoodsPage.filterOptionalDependent(identity)(UserAnswersReader[LocationOfGoodsDomain])
-        case _ => UserAnswersReader[LocationOfGoodsDomain].map(Some(_))
-      }
-
+  ): UserAnswersReader[RouteDetailsDomain] =
     // When pre-lodge is in, add a loadingRead to handle nav logic if additional declaration type is  A or D
-
     for {
       routing         <- UserAnswersReader[RoutingDomain]
-      transit         <- UserAnswersReader[Option[TransitDomain]]
-      exit            <- UserAnswersReader[Option[ExitDomain]]
-      locationOfGoods <- UserAnswersReader[Option[LocationOfGoodsDomain]]
+      transit         <- UserAnswersReader[Option[TransitDomain]](transitReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
+      exit            <- UserAnswersReader[Option[ExitDomain]](exitReader(customsSecurityAgreementAreaCountryCodes)(transit))
+      locationOfGoods <- UserAnswersReader[Option[LocationOfGoodsDomain]](locationOfGoodsReader(customsSecurityAgreementAreaCountryCodes))
       loading         <- UserAnswersReader[LoadingDomain].map(Some(_))
     } yield RouteDetailsDomain(
       routing,
@@ -101,7 +57,51 @@ object RouteDetailsDomain {
       locationOfGoods,
       loading
     )
-  }
-  // scalastyle:on cyclomatic.complexity
-  // scalastyle:on method.length
+
+  implicit def transitReader(
+    ctcCountryCodes: Seq[String],
+    customsSecurityAgreementAreaCountryCodes: Seq[String]
+  ): UserAnswersReader[Option[TransitDomain]] =
+    DeclarationTypePage.reader.flatMap {
+      case Option4 =>
+        none[TransitDomain].pure[UserAnswersReader]
+      case _ =>
+        implicit val reads: UserAnswersReader[TransitDomain] = TransitDomain.userAnswersReader(
+          ctcCountryCodes,
+          customsSecurityAgreementAreaCountryCodes
+        )
+        UserAnswersReader[TransitDomain].map(Some(_))
+    }
+
+  implicit def exitReader(
+    customsSecurityAgreementAreaCountryCodes: Seq[String]
+  )(transit: Option[TransitDomain]): UserAnswersReader[Option[ExitDomain]] =
+    DeclarationTypePage.reader.flatMap {
+      case Option4 =>
+        none[ExitDomain].pure[UserAnswersReader]
+      case _ =>
+        SecurityDetailsTypePage.reader.flatMap {
+          case NoSecurityDetails | EntrySummaryDeclarationSecurityDetails =>
+            none[ExitDomain].pure[UserAnswersReader]
+          case _ =>
+            for {
+              countriesOfRouting <- UserAnswersReader[Seq[CountryOfRoutingDomain]]
+              countriesOfRoutingNotInCL147 = countriesOfRouting
+                .map(_.country.code.code)
+                .filter(!customsSecurityAgreementAreaCountryCodes.contains(_))
+              reader <- (countriesOfRoutingNotInCL147, transit) match {
+                case (_ :: _, Some(TransitDomain(_, _ :: _))) => none[ExitDomain].pure[UserAnswersReader]
+                case _                                        => UserAnswersReader[ExitDomain].map(Some(_))
+              }
+            } yield reader
+        }
+    }
+
+  implicit def locationOfGoodsReader(customsSecurityAgreementAreaCountryCodes: Seq[String]): UserAnswersReader[Option[LocationOfGoodsDomain]] =
+    // additional declaration type is currently always normal (A) as we aren't doing pre-lodge (D) yet
+    OfficeOfDeparturePage.reader.flatMap {
+      case x if customsSecurityAgreementAreaCountryCodes.contains(x.countryCode) =>
+        AddLocationOfGoodsPage.filterOptionalDependent(identity)(UserAnswersReader[LocationOfGoodsDomain])
+      case _ => UserAnswersReader[LocationOfGoodsDomain].map(Some(_))
+    }
 }
