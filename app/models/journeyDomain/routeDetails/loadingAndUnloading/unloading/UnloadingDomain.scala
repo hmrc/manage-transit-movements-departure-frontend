@@ -17,7 +17,7 @@
 package models.journeyDomain.routeDetails.loadingAndUnloading.unloading
 
 import cats.implicits._
-import models.domain.{GettableAsReaderOps, UserAnswersReader}
+import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
 import models.reference.UnLocode
 import pages.routeDetails.loading.PlaceOfLoadingUnLocodePage
@@ -33,10 +33,7 @@ object UnloadingDomain {
   implicit val userAnswersReader: UserAnswersReader[UnloadingDomain] = {
 
     implicit val unLocodeReads: UserAnswersReader[Option[UnLocode]] =
-      AddPlaceOfUnloadingPage.reader.flatMap {
-        case true  => PlaceOfLoadingUnLocodePage.reader.map(Some(_))
-        case false => none[UnLocode].pure[UserAnswersReader]
-      }
+      AddPlaceOfUnloadingPage.filterOptionalDependent(identity)(PlaceOfLoadingUnLocodePage.reader)
 
     UserAnswersReader[Option[UnLocode]].map(UnloadingDomain.apply)
   }
