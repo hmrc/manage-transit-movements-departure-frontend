@@ -24,5 +24,5 @@ case object UnloadingSection extends QuestionPage[Nothing] {
 
   override def path: JsPath = RouteDetailsSection.path \ toString
 
-  override def toString: String = "addPlaceOfUnloading"
+  override def toString: String = "unloading"
 }
