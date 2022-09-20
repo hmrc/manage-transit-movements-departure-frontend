@@ -31,7 +31,7 @@ class CheckYourAnswersController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
   viewModel: TraderDetailsViewModel
-)() extends FrontendBaseController
+) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {

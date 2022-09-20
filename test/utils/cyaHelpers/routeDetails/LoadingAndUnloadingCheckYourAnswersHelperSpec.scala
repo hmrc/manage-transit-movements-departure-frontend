@@ -290,5 +290,48 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
         }
       }
     }
+
+    "addUnloadingUnLocode" - {
+      "must return None" - {
+        "when PlaceOfUnloadingUnLocodeYesNoPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new LoadingAndUnloadingCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.addUnloadingUnLocode
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when PlaceOfUnloadingUnLocodeYesNoPage is defined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(PlaceOfUnloadingUnLocodeYesNoPage, true)
+              val helper  = new LoadingAndUnloadingCheckYourAnswersHelper(answers, mode)
+              val result  = helper.addUnloadingUnLocode
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Do you want to add extra information for the place of unloading?".toText),
+                  value = Value("Yes".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = unloadingRoutes.PlaceOfUnloadingUnLocodeYesNoController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("if you want to add extra information for the place of unloading"),
+                          attributes = Map("id" -> "add-unloading-un-locode")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
   }
 }

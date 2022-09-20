@@ -675,6 +675,8 @@ routeDetails.transit.confirmRemoveOfficeOfTransit.error.required = Select yes if
 routeDetails.transit.checkOfficeOfTransitAnswers.title = Check your answers
 routeDetails.transit.checkOfficeOfTransitAnswers.heading = Check your answers
 
+# Exit
+
 routeDetails.exit.officeOfExitCountry.title = Which country is the office of exit in?
 routeDetails.exit.officeOfExitCountry.heading = Which country is the office of exit in?
 routeDetails.exit.officeOfExitCountry.paragraph = This is the exit point for goods leaving a customs territory.
@@ -709,6 +711,8 @@ routeDetails.exit.addAnotherOfficeOfExit.error.required =  Select yes if you nee
 routeDetails.exit.addAnotherOfficeOfExit.label = Do you want to add another office of exit?
 routeDetails.exit.addAnotherOfficeOfExit.hint = You can add up to 9 offices.
 routeDetails.exit.addAnotherOfficeOfExit.maxLimit.label = You cannot add any more offices of exit. To add another office, you need to remove one first.
+
+# Location of goods
 
 routeDetails.locationOfGoods.addLocationOfGoods.title = Do you want to add a location of goods?
 routeDetails.locationOfGoods.addLocationOfGoods.heading = Do you want to add a location of goods?
@@ -867,16 +871,25 @@ routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidFormat = {0}�
 routeDetails.locationOfGoods.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less.
 routeDetails.locationOfGoods.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more.
 
+routeDetails.locationOfGoods.checkYourAnswers.title = Check your answers
+routeDetails.locationOfGoods.checkYourAnswers.heading = Check your answers
+routeDetails.locationOfGoods.checkYourAnswers.subHeading = Location of goods
+
+# Loading and unloading
+
+routeDetails.loadingAndUnloading.checkYourAnswers.title = Check your answers
+routeDetails.loadingAndUnloading.checkYourAnswers.heading = Check your answers
+routeDetails.loadingAndUnloading.checkYourAnswers.loading = Loading
+routeDetails.loadingAndUnloading.checkYourAnswers.unloading = Unloading
+
+# Loading
+
 routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.title = Do you want to add a UN/LOCODE for the place of loading?
 routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.heading = Do you want to add a UN/LOCODE for the place of loading?
 routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.checkYourAnswersLabel = Do you want to add a UN/LOCODE for the place of loading?
 routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.change.hidden = if you want to add a UN/LOCODE for the place of loading
 routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.error.required = Select yes if you want to add a UN/LOCODE for the place of loading
 routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
-
-routeDetails.locationOfGoods.checkYourAnswers.title = Check your answers
-routeDetails.locationOfGoods.checkYourAnswers.heading = Check your answers
-routeDetails.locationOfGoods.checkYourAnswers.subHeading = Location of goods
 
 routeDetails.loading.placeOfLoadingUnLocode.title = What is the UN/LOCODE for the place of loading?
 routeDetails.loading.placeOfLoadingUnLocode.heading = What is the UN/LOCODE for the place of loading?
@@ -912,7 +925,8 @@ routeDetails.loading.placeOfLoadingCountry.change.hidden = which country the pla
 routeDetails.loading.placeOfLoadingCountry.checkYourAnswersLabel = In which country is the place of loading?
 routeDetails.loading.placeOfLoadingCountry.error.required = Enter which country the place of loading is in
 
-# RouteDetails - Unloading
+# Unloading
+
 routeDetails.unloading.addPlaceOfUnloading.title = Do you want to add a place of unloading?
 routeDetails.unloading.addPlaceOfUnloading.heading = Do you want to add a place of unloading?
 routeDetails.unloading.addPlaceOfUnloading.checkYourAnswersLabel = Do you want to add a place of unloading?
@@ -928,4 +942,5 @@ routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.paragraph = This is a 5-cha
 routeDetails.unloading.addExtraInformationYesNo.title = Do you want to add extra information for the place of unloading?
 routeDetails.unloading.addExtraInformationYesNo.heading = Do you want to add extra information for the place of unloading?
 routeDetails.unloading.addExtraInformationYesNo.checkYourAnswersLabel = Do you want to add extra information for the place of unloading?
+routeDetails.unloading.addExtraInformationYesNo.change.hidden = if you want to add extra information for the place of unloading
 routeDetails.unloading.addExtraInformationYesNo.error.required = Select yes if you want to add extra information for the place of unloading
