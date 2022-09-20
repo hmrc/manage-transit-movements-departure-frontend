@@ -1,0 +1,15 @@
+
+GET        /:lrn/route-details/unloading/add-place-of-unloading                                         controllers.routeDetails.unloading.AddPlaceOfUnloadingController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/unloading/add-place-of-unloading                                         controllers.routeDetails.unloading.AddPlaceOfUnloadingController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/unloading/change-add-place-of-unloading                                  controllers.routeDetails.unloading.AddPlaceOfUnloadingController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/unloading/change-add-place-of-unloading                                  controllers.routeDetails.unloading.AddPlaceOfUnloadingController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/route-details/unloading/place-of-unloading-add-extra-information                       controllers.routeDetails.unloading.AddExtraInformationYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/unloading/place-of-unloading-add-extra-information                       controllers.routeDetails.unloading.AddExtraInformationYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/unloading/place-of-unloading-add-extra-information                       controllers.routeDetails.unloading.AddExtraInformationYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/unloading/place-of-unloading-add-extra-information                       controllers.routeDetails.unloading.AddExtraInformationYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/route-details/unloading/place-of-unloading-location                                    controllers.routeDetails.unloading.LocationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/unloading/place-of-unloading-location                                    controllers.routeDetails.unloading.LocationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/unloading/place-of-unloading-location                                    controllers.routeDetails.unloading.LocationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/unloading/place-of-unloading-location                                    controllers.routeDetails.unloading.LocationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

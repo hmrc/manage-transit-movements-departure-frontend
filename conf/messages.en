@@ -675,6 +675,8 @@ routeDetails.transit.confirmRemoveOfficeOfTransit.error.required = Select yes if
 routeDetails.transit.checkOfficeOfTransitAnswers.title = Check your answers
 routeDetails.transit.checkOfficeOfTransitAnswers.heading = Check your answers
 
+# Office of Exit
+
 routeDetails.exit.officeOfExitCountry.title = Which country is the office of exit in?
 routeDetails.exit.officeOfExitCountry.heading = Which country is the office of exit in?
 routeDetails.exit.officeOfExitCountry.paragraph = This is the exit point for goods leaving a customs territory.
@@ -709,6 +711,8 @@ routeDetails.exit.addAnotherOfficeOfExit.error.required =  Select yes if you nee
 routeDetails.exit.addAnotherOfficeOfExit.label = Do you want to add another office of exit?
 routeDetails.exit.addAnotherOfficeOfExit.hint = You can add up to 9 offices.
 routeDetails.exit.addAnotherOfficeOfExit.maxLimit.label = You cannot add any more offices of exit. To add another office, you need to remove one first.
+
+# Location of Goods
 
 routeDetails.locationOfGoods.addLocationOfGoods.title = Do you want to add a location of goods?
 routeDetails.locationOfGoods.addLocationOfGoods.heading = Do you want to add a location of goods?
@@ -857,6 +861,8 @@ routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidFormat = {0}�
 routeDetails.locationOfGoods.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less.
 routeDetails.locationOfGoods.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more.
 
+# Loading
+
 routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.title = Do you want to add a UN/LOCODE for the place of loading?
 routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.heading = Do you want to add a UN/LOCODE for the place of loading?
 routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.checkYourAnswersLabel = Do you want to add a UN/LOCODE for the place of loading?
@@ -900,6 +906,7 @@ routeDetails.loading.placeOfLoadingCountry.checkYourAnswersLabel = In which coun
 routeDetails.loading.placeOfLoadingCountry.error.required = Enter which country the place of loading is in
 
 # RouteDetails - Unloading
+
 routeDetails.unloading.addPlaceOfUnloading.title = Do you want to add a place of unloading?
 routeDetails.unloading.addPlaceOfUnloading.heading = Do you want to add a place of unloading?
 routeDetails.unloading.addPlaceOfUnloading.checkYourAnswersLabel = Do you want to add a place of unloading?
@@ -911,11 +918,6 @@ routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.checkYourAnswersLabel = Do 
 routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.error.required = Select yes if you want to add a UN/LOCODE for the place of unloading
 routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
 
-routeDetails.unloading.addExtraInformationYesNo.title = Do you want to add extra information for the place of unloading?
-routeDetails.unloading.addExtraInformationYesNo.heading = Do you want to add extra information for the place of unloading?
-routeDetails.unloading.addExtraInformationYesNo.checkYourAnswersLabel = Do you want to add extra information for the place of unloading?
-routeDetails.unloading.addExtraInformationYesNo.error.required = Select yes if you want to add extra information for the place of unloading
-
 routeDetails.unloading.placeOfUnloadingUnLocode.title = What is the UN/LOCODE for the place of unloading?
 routeDetails.unloading.placeOfUnloadingUnLocode.heading = What is the UN/LOCODE for the place of unloading?
 routeDetails.unloading.placeOfUnloadingUnLocode.hintText = Enter the code, like DEBER or ESMAD.
@@ -926,6 +928,11 @@ routeDetails.unloading.placeOfUnloadingUnLocode.checkYourAnswersLabel = What is 
 routeDetails.unloading.placeOfUnloadingUnLocode.error.required = Enter the UN/LOCODE for the place of unloading
 routeDetails.unloading.placeOfUnloadingUnLocode.error.invalidCharacters = The UN/LOCODE for the place of loading must only include letters a to z and numbers 0 to 9
 
+routeDetails.unloading.addExtraInformationYesNo.title = Do you want to add extra information for the place of unloading?
+routeDetails.unloading.addExtraInformationYesNo.heading = Do you want to add extra information for the place of unloading?
+routeDetails.unloading.addExtraInformationYesNo.checkYourAnswersLabel = Do you want to add extra information for the place of unloading?
+routeDetails.unloading.addExtraInformationYesNo.error.required = Select yes if you want to add extra information for the place of unloading
+routeDetails.unloading.addExtraInformationYesNo.paragraph = This includes the country and location of unloading.
 
 routeDetails.unloading.country.title = Which country is the place of unloading in?
 routeDetails.unloading.country.heading = Which country is the place of unloading in?
@@ -934,3 +941,12 @@ routeDetails.unloading.country.placeholder = Select a country
 routeDetails.unloading.country.change.hidden = Which country is the place of unloading in
 routeDetails.unloading.country.checkYourAnswersLabel = Which country is the place of unloading in //TODO Check CYA content
 routeDetails.unloading.country.error.required = Enter which country the place of unloading is in
+
+routeDetails.unloading.location.title = Where in {0} is the place of unloading?
+routeDetails.unloading.location.heading = Where in {0} is the place of unloading?
+routeDetails.unloading.location.checkYourAnswersLabel = Where in {0} is the place of unloading?
+routeDetails.unloading.location.hint = Describe the specific location of unloading. This can be up to 35 characters long.
+routeDetails.unloading.location.error.required = Enter the place of unloading in {0}
+routeDetails.unloading.location.error.length = The place of unloading must be 35 characters or less
+routeDetails.unloading.location.error.invalid = The place of unloading must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
