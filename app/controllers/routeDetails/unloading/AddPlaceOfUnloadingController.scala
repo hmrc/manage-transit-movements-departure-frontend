@@ -20,8 +20,7 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
 import pages.routeDetails.unloading.AddPlaceOfUnloadingPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -35,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddPlaceOfUnloadingController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @PreTaskListDetails implicit val navigator: Navigator,
+  navigatorProvider: LoadingAndUnloadingNavigatorProvider,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -62,7 +61,11 @@ class AddPlaceOfUnloadingController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => AddPlaceOfUnloadingPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+          value =>
+            navigatorProvider().flatMap {
+              implicit navigator =>
+                AddPlaceOfUnloadingPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+            }
         )
   }
 }
