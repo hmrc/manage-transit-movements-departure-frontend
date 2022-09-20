@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package pages.sections.routeDetails.unloading
+package pages.routeDetails.unloading
 
-import pages.QuestionPage
-import pages.sections.routeDetails.RouteDetailsSection
-import play.api.libs.json.{JsObject, JsPath}
+import pages.behaviours.PageBehaviours
 
-case object UnloadingSection extends QuestionPage[JsObject] {
+class AddExtraInformationYesNoPageSpec extends PageBehaviours {
 
-  override def path: JsPath = RouteDetailsSection.path \ toString
+  "AddExtraInformationYesNoPage" - {
 
-  override def toString: String = "unloading"
+    beRetrievable[Boolean](AddExtraInformationYesNoPage)
+
+    beSettable[Boolean](AddExtraInformationYesNoPage)
+
+    beRemovable[Boolean](AddExtraInformationYesNoPage)
+  }
 }

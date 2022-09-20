@@ -34,7 +34,7 @@ case class RouteDetailsDomain(
   transit: Option[TransitDomain],
   exit: Option[ExitDomain],
   locationOfGoods: Option[LocationOfGoodsDomain],
-  loadUnload: Option[LoadingAndUnloadingDomain]
+  loadingAndUnloading: LoadingAndUnloadingDomain
 ) extends JourneyDomainModel
 
 object RouteDetailsDomain {
@@ -45,17 +45,17 @@ object RouteDetailsDomain {
   ): UserAnswersReader[RouteDetailsDomain] =
     // When pre-lodge is in, add a loadingRead to handle nav logic if additional declaration type is  A or D
     for {
-      routing         <- UserAnswersReader[RoutingDomain]
-      transit         <- UserAnswersReader[Option[TransitDomain]](transitReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
-      exit            <- UserAnswersReader[Option[ExitDomain]](exitReader(customsSecurityAgreementAreaCountryCodes)(transit))
-      locationOfGoods <- UserAnswersReader[Option[LocationOfGoodsDomain]](locationOfGoodsReader(customsSecurityAgreementAreaCountryCodes))
-      loadUnload      <- UserAnswersReader[LoadingAndUnloadingDomain].map(Some(_))
+      routing             <- UserAnswersReader[RoutingDomain]
+      transit             <- UserAnswersReader[Option[TransitDomain]](transitReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
+      exit                <- UserAnswersReader[Option[ExitDomain]](exitReader(customsSecurityAgreementAreaCountryCodes)(transit))
+      locationOfGoods     <- UserAnswersReader[Option[LocationOfGoodsDomain]](locationOfGoodsReader(customsSecurityAgreementAreaCountryCodes))
+      loadingAndUnloading <- UserAnswersReader[LoadingAndUnloadingDomain]
     } yield RouteDetailsDomain(
       routing,
       transit,
       exit,
       locationOfGoods,
-      loadUnload
+      loadingAndUnloading
     )
 
   implicit def transitReader(
