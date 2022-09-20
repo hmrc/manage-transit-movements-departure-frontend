@@ -541,6 +541,7 @@ guaranteeDetails.checkYourAnswers.heading = Check your answers
 # Route details
 
 routeDetails.caption = Route details
+routeDetails.unloading.caption = Route details - Place of unloading
 
 # Routing
 
@@ -901,3 +902,11 @@ routeDetails.unloading.addPlaceOfUnloading.title = Do you want to add a place of
 routeDetails.unloading.addPlaceOfUnloading.heading = Do you want to add a place of unloading?
 routeDetails.unloading.addPlaceOfUnloading.checkYourAnswersLabel = Do you want to add a place of unloading?
 routeDetails.unloading.addPlaceOfUnloading.error.required = Select yes if you want to add a place of unloading
+
+routeDetails.unloading.country.title = Which country is the place of unloading in?
+routeDetails.unloading.country.heading = Which country is the place of unloading in?
+routeDetails.unloading.country.hintText = Enter the country, like Italy or Spain.
+routeDetails.unloading.country.placeholder = Select a country
+routeDetails.unloading.country.change.hidden = Which country is the place of unloading in
+routeDetails.unloading.country.checkYourAnswersLabel = Which country is the place of unloading in //TODO Check CYA content
+routeDetails.unloading.country.error.required = Enter which country the place of unloading is in
