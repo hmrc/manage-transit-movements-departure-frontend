@@ -21,12 +21,9 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import models.reference.UnLocode
-import org.scalacheck.Arbitrary.arbitrary
 import pages.routeDetails.unloading.PlaceOfUnloadingUnLocodeYesNoPage
 
 class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
-  private val unLocode = arbitrary[UnLocode].sample.value
-//  private val addUnLocode = arbitrary[Boolean].sample.value
 
   "UnloadingDomain" - {
 
