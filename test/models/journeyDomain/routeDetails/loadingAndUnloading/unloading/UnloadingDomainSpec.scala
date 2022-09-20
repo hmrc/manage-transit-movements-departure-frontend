@@ -22,7 +22,7 @@ import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import models.reference.{Country, UnLocode}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.routeDetails.unloading.{CountryPage, PlaceOfUnloadingUnLocodeYesNoPage}
+import pages.routeDetails.unloading.{AddExtraInformationYesNoPage, CountryPage, PlaceOfUnloadingUnLocodeYesNoPage}
 
 class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
@@ -35,6 +35,7 @@ class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Gener
       "when add a place of unloading UN/LOCODE is yes" in {
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(PlaceOfUnloadingUnLocodeYesNoPage)(true)
+          .unsafeSetVal(AddExtraInformationYesNoPage)(true)
           .unsafeSetVal(CountryPage)(country)
 
         val expectedResult = UnloadingDomain(
