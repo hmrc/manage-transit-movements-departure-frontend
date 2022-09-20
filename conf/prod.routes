@@ -22,10 +22,10 @@
 ->         /manage-transit-movements/departure                   app.routeDetails.exit.Routes
 ->         /manage-transit-movements/departure                   app.routeDetails.exit.index.Routes
 ->         /manage-transit-movements/departure                   app.routeDetails.locationOfGoods.Routes
-->         /manage-transit-movements/departure                   app.routeDetails.loading.Routes
+->         /manage-transit-movements/departure                   app.routeDetails.loadingAndUnloading.loading.Routes
+->         /manage-transit-movements/departure                   app.routeDetails.loadingAndUnloading.unloading.Routes
 
 ->         /                                                     health.Routes
 
-->         /manage-transit-movements/departure                   app.routeDetails.unloading.Routes
 
 GET        /admin/metrics             @com.kenshoo.play.metrics.MetricsController.metrics

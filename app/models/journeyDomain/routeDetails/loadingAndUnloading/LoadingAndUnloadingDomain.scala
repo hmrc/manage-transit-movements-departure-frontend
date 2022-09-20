@@ -24,7 +24,7 @@ import models.journeyDomain.routeDetails.loadingAndUnloading.loading.LoadingDoma
 import models.journeyDomain.routeDetails.loadingAndUnloading.unloading.UnloadingDomain
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import pages.preTaskList.SecurityDetailsTypePage
-import pages.routeDetails.unloading.AddPlaceOfUnloadingPage
+import pages.routeDetails.loadingAndUnloading.unloading.AddPlaceOfUnloadingPage
 import play.api.mvc.Call
 
 case class LoadingAndUnloadingDomain(

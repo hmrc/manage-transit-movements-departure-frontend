@@ -21,7 +21,7 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import models.reference.UnLocode
-import pages.routeDetails.unloading.PlaceOfUnloadingUnLocodeYesNoPage
+import pages.routeDetails.loadingAndUnloading.unloading.PlaceOfUnloadingUnLocodeYesNoPage
 
 class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
