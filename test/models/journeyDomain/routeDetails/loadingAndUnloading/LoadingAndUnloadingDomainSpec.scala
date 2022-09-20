@@ -18,22 +18,12 @@ package models.journeyDomain.routeDetails.loadingAndUnloading
 
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
-import models.DeclarationType.Option4
 import models.SecurityDetailsType._
 import models.domain.{EitherType, UserAnswersReader}
-import models.journeyDomain.routeDetails.exit.ExitDomain
 import models.journeyDomain.routeDetails.loadingAndUnloading.unloading.UnloadingDomain
-import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
-import models.journeyDomain.routeDetails.transit.TransitDomain
-import models.reference.{Country, CountryCode, CustomsOffice}
-import models.{DeclarationType, Index}
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList._
-import pages.routeDetails.locationOfGoods.AddLocationOfGoodsPage
-import pages.routeDetails.routing._
-import pages.routeDetails.routing.index._
 import pages.routeDetails.unloading.AddPlaceOfUnloadingPage
 
 class LoadingAndUnloadingDomainSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
@@ -56,6 +46,16 @@ class LoadingAndUnloadingDomainSpec extends SpecBase with ScalaCheckPropertyChec
           }
         }
 
+        "when SecurityType is in Set{0}" in {
+          val initialAnswers = emptyUserAnswers.setValue(SecurityDetailsTypePage, NoSecurityDetails)
+
+          val result: EitherType[Option[UnloadingDomain]] = UserAnswersReader[Option[UnloadingDomain]](
+            LoadingAndUnloadingDomain.unloadingReader
+          ).run(initialAnswers)
+
+          result.value must not be defined
+        }
+
         "when SecurityType is in Set{2}" - {
           "And adding a place of unloading" in {
             val initialAnswers = emptyUserAnswers
@@ -68,10 +68,20 @@ class LoadingAndUnloadingDomainSpec extends SpecBase with ScalaCheckPropertyChec
                   LoadingAndUnloadingDomain.unloadingReader
                 ).run(answers)
 
-                println(result)
-
                 result.value mustBe defined
             }
+          }
+
+          "And not adding a place of unloading" in {
+            val initialAnswers = emptyUserAnswers
+              .setValue(SecurityDetailsTypePage, ExitSummaryDeclarationSecurityDetails)
+              .setValue(AddPlaceOfUnloadingPage, false)
+
+            val result: EitherType[Option[UnloadingDomain]] = UserAnswersReader[Option[UnloadingDomain]](
+              LoadingAndUnloadingDomain.unloadingReader
+            ).run(initialAnswers)
+
+            result.value must not be defined
           }
 
         }
