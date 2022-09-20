@@ -18,9 +18,9 @@ package pages.sections.routeDetails.unloading
 
 import pages.QuestionPage
 import pages.sections.routeDetails.RouteDetailsSection
-import play.api.libs.json.JsPath
+import play.api.libs.json.{JsObject, JsPath}
 
-case object UnloadingSection extends QuestionPage[Nothing] {
+case object UnloadingSection extends QuestionPage[JsObject] {
 
   override def path: JsPath = RouteDetailsSection.path \ toString
 
