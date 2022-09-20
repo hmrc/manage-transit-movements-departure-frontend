@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.routeDetails.loading.routes
+@import controllers.routeDetails.unloading.routes
 @import models.LocalReferenceNumber
 @import viewModels.components.InputYesNoViewModel._
 @import views.html.components.{Button, ErrorSummary, InputYesNo}
@@ -30,22 +30,23 @@
 @(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.title"),
+    title = messages("routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.PlaceOfLoadingAddUnLocodeYesNoController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.PlaceOfUnloadingUnLocodeYesNoController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputYesNo(
             field = form("value"),
             yesNoType = YesNoWithAdditionalHtml(
-                heading = messages("routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.heading"),
-                caption = Some(messages("routeDetails.loading.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.paragraph")}</p>"""))
+                heading = messages("routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.heading"),
+                caption = Some(messages("routeDetails.unloading.caption")),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.paragraph")}</p>"""))
             )
+        )
 
         @button(attributes = Map("id" -> "submit"))
     }

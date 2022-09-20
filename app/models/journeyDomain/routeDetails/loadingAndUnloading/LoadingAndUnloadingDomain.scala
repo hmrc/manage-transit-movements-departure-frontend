@@ -17,7 +17,7 @@
 package models.journeyDomain.routeDetails.loadingAndUnloading
 
 import cats.implicits._
-import models.SecurityDetailsType.ExitSummaryDeclarationSecurityDetails
+import models.SecurityDetailsType.{EntryAndExitSummaryDeclarationSecurityDetails, EntrySummaryDeclarationSecurityDetails, ExitSummaryDeclarationSecurityDetails}
 import models.UserAnswers
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.routeDetails.loadingAndUnloading.loading.LoadingDomain
@@ -41,6 +41,8 @@ object LoadingAndUnloadingDomain {
       case ExitSummaryDeclarationSecurityDetails =>
         AddPlaceOfUnloadingPage
           .filterOptionalDependent(identity)(UserAnswersReader[UnloadingDomain])
+      case EntrySummaryDeclarationSecurityDetails | EntryAndExitSummaryDeclarationSecurityDetails =>
+        UserAnswersReader[UnloadingDomain].map(Some(_))
       case _ =>
         none[UnloadingDomain].pure[UserAnswersReader]
     }
