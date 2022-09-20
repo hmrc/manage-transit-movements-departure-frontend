@@ -35,6 +35,8 @@ object UnloadingDomain {
     implicit val unLocodeReads: UserAnswersReader[Option[UnLocode]] =
       AddPlaceOfUnloadingPage.filterOptionalDependent(identity)(PlaceOfLoadingUnLocodePage.reader)
 
+    //TODO: Add AdditionalInformationDomain & additionalInformationReads when country page is added
+
     UserAnswersReader[Option[UnLocode]].map(UnloadingDomain.apply)
   }
 }
