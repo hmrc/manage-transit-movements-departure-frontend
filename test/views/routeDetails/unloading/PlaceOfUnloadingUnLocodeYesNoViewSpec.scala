@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package views.routeDetails.loading
+package views.routeDetails.unloading
 
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.routeDetails.loading.PlaceOfLoadingAddUnLocodeYesNoView
+import views.html.routeDetails.unloading.PlaceOfUnloadingUnLocodeYesNoView
 
-class PlaceOfLoadingAddUnLocodeYesNoViewSpec extends YesNoViewBehaviours {
+class PlaceOfUnloadingUnLocodeYesNoViewSpec extends YesNoViewBehaviours {
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[PlaceOfLoadingAddUnLocodeYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[PlaceOfUnloadingUnLocodeYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.loading.placeOfLoadingAddUnLocodeYesNo"
+  override val prefix: String = "routeDetails.unloading.placeOfUnloadingUnLocodeYesNo"
 
   behave like pageWithTitle()
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Route details - Place of loading")
+  behave like pageWithSectionCaption("Route details - Place of unloading")
 
   behave like pageWithHeading()
 

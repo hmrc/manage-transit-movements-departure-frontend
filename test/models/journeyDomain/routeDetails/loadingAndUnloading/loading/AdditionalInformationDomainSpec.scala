@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.routeDetails.loading
+package models.journeyDomain.routeDetails.loadingAndUnloading.loading
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper

@@ -17,11 +17,10 @@
 package models.journeyDomain.routeDetails.loadingAndUnloading.unloading
 
 import cats.implicits._
-import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
+import models.domain.{GettableAsFilterForNextReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
 import models.reference.UnLocode
-import pages.routeDetails.loading.PlaceOfLoadingUnLocodePage
-import pages.routeDetails.unloading.AddPlaceOfUnloadingPage
+import pages.routeDetails.unloading.PlaceOfUnloadingUnLocodeYesNoPage
 
 case class UnloadingDomain(
   unLocode: Option[UnLocode]
@@ -33,10 +32,10 @@ object UnloadingDomain {
   implicit val userAnswersReader: UserAnswersReader[UnloadingDomain] = {
 
     implicit val unLocodeReads: UserAnswersReader[Option[UnLocode]] =
-      AddPlaceOfUnloadingPage.filterOptionalDependent(identity)(PlaceOfLoadingUnLocodePage.reader)
+      PlaceOfUnloadingUnLocodeYesNoPage.filterOptionalDependent(identity)(UserAnswersReader(UnLocode.apply("", "")))
 
-    //TODO: Add AdditionalInformationDomain & additionalInformationReads when country page is added
-
-    UserAnswersReader[Option[UnLocode]].map(UnloadingDomain.apply)
+    UserAnswersReader[Option[UnLocode]]
+      .map(UnloadingDomain.apply)
   }
+
 }

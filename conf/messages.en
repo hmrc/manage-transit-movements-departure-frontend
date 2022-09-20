@@ -541,6 +541,8 @@ guaranteeDetails.checkYourAnswers.heading = Check your answers
 # Route details
 
 routeDetails.caption = Route details
+routeDetails.unloading.caption = Route details - Place of unloading
+routeDetails.loading.caption = Route details - Place of loading
 
 # Routing
 
@@ -897,10 +899,17 @@ routeDetails.loading.placeOfLoadingCountry.change.hidden = In which country is t
 routeDetails.loading.placeOfLoadingCountry.checkYourAnswersLabel = In which country is the place of loading?
 routeDetails.loading.placeOfLoadingCountry.error.required = Enter which country the place of loading is in
 
+# RouteDetails - Unloading
 routeDetails.unloading.addPlaceOfUnloading.title = Do you want to add a place of unloading?
 routeDetails.unloading.addPlaceOfUnloading.heading = Do you want to add a place of unloading?
 routeDetails.unloading.addPlaceOfUnloading.checkYourAnswersLabel = Do you want to add a place of unloading?
 routeDetails.unloading.addPlaceOfUnloading.error.required = Select yes if you want to add a place of unloading
+
+routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.title = Do you want to add a UN/LOCODE for the place of unloading?
+routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.heading = Do you want to add a UN/LOCODE for the place of unloading?
+routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.checkYourAnswersLabel = Do you want to add a UN/LOCODE for the place of unloading?
+routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.error.required = Select yes if you want to add a UN/LOCODE for the place of unloading
+routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
 
 routeDetails.unloading.addExtraInformationYesNo.title = Do you want to add extra information for the place of unloading?
 routeDetails.unloading.addExtraInformationYesNo.heading = Do you want to add extra information for the place of unloading?
