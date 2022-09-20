@@ -23,21 +23,8 @@ import models.reference.{CustomsOffice, UnLocode}
 import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.routeDetails.locationOfGoods._
 import pages.routeDetails.locationOfGoods.contact.{NamePage, TelephoneNumberPage}
-import pages.routeDetails.locationOfGoods.{
-  AddContactYesNoPage,
-  AddIdentifierYesNoPage,
-  AdditionalIdentifierPage,
-  AddressPage,
-  AuthorisationNumberPage,
-  CoordinatesPage,
-  CustomsOfficeIdentifierPage,
-  EoriPage,
-  IdentificationPage,
-  LocationTypePage,
-  PostalCodePage,
-  UnLocodePage
-}
 import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
@@ -62,14 +49,13 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         "when locationTypePage defined" in {
           forAll(arbitrary[Mode], arbitrary[LocationType]) {
             (mode, locationType) =>
-              val answers = emptyUserAnswers
-                .setValue(LocationTypePage, locationType)
-              val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.locationType
+              val answers = emptyUserAnswers.setValue(LocationTypePage, locationType)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.locationType
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key(messages(s"${LocationType.messageKeyPrefix}.checkYourAnswersLabel").toText),
+                  key = Key("Location type".toText),
                   value = Value(messages(s"${LocationType.messageKeyPrefix}.$locationType").toText),
                   actions = Some(
                     Actions(
@@ -77,8 +63,8 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = routes.LocationTypeController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some(messages(s"${LocationType.messageKeyPrefix}.change.hidden")),
-                          attributes = Map("id" -> "location-of-goods-type")
+                          visuallyHiddenText = Some("location type"),
+                          attributes = Map("id" -> "location-type")
                         )
                       )
                     )
@@ -106,14 +92,13 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         "when locationOfGoodsIdentificationPage is defined" in {
           forAll(arbitrary[Mode], arbitrary[LocationOfGoodsIdentification]) {
             (mode, locationOfGoodsIdentification) =>
-              val answers = emptyUserAnswers
-                .setValue(IdentificationPage, locationOfGoodsIdentification)
-              val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.locationOfGoodsIdentification
+              val answers = emptyUserAnswers.setValue(IdentificationPage, locationOfGoodsIdentification)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.locationOfGoodsIdentification
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key(messages(s"${LocationOfGoodsIdentification.messageKeyPrefix}.checkYourAnswersLabel").toText),
+                  key = Key("Identifier type for the location of goods".toText),
                   value = Value(messages(s"${LocationOfGoodsIdentification.messageKeyPrefix}.$locationOfGoodsIdentification").toText),
                   actions = Some(
                     Actions(
@@ -121,7 +106,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = routes.IdentificationController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some(messages(s"${LocationOfGoodsIdentification.messageKeyPrefix}.change.hidden")),
+                          visuallyHiddenText = Some("identifier type for the location of goods"),
                           attributes = Map("id" -> "location-of-goods-identification")
                         )
                       )
@@ -150,15 +135,13 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         "when customsOfficeIdentifierPage is defined" in {
           forAll(arbitrary[Mode], arbitrary[CustomsOffice]) {
             (mode, customsOffice) =>
-              val prefix = "routeDetails.locationOfGoods.customsOfficeIdentifier"
-              val answers = emptyUserAnswers
-                .setValue(CustomsOfficeIdentifierPage, customsOffice)
-              val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.customsOfficeIdentifier
+              val answers = emptyUserAnswers.setValue(CustomsOfficeIdentifierPage, customsOffice)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.customsOfficeIdentifier
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key(messages(s"$prefix.checkYourAnswersLabel").toText),
+                  key = Key("What is the customs office identifier for the location of goods?".toText),
                   value = Value(customsOffice.toString.toText),
                   actions = Some(
                     Actions(
@@ -166,7 +149,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = routes.CustomsOfficeIdentifierController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
+                          visuallyHiddenText = Some("the customs office identifier for the location of goods"),
                           attributes = Map("id" -> "location-of-goods-customs-office-identifier")
                         )
                       )
@@ -195,15 +178,13 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         "when eoriPage is defined" in {
           forAll(arbitrary[Mode], arbitrary[String]) {
             (mode, eori) =>
-              val prefix = "routeDetails.locationOfGoods.eori"
-              val answers = emptyUserAnswers
-                .setValue(EoriPage, eori)
-              val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.eori
+              val answers = emptyUserAnswers.setValue(EoriPage, eori)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.eori
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key(messages(s"$prefix.checkYourAnswersLabel").toText),
+                  key = Key("What is the EORI number for the location of goods?".toText),
                   value = Value(eori.toText),
                   actions = Some(
                     Actions(
@@ -211,7 +192,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = routes.EoriController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
+                          visuallyHiddenText = Some("the EORI number for the location of goods"),
                           attributes = Map("id" -> "location-of-goods-eori")
                         )
                       )
@@ -240,15 +221,13 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         "when authorisationNumberPage is defined" in {
           forAll(arbitrary[Mode], arbitrary[String]) {
             (mode, authorisationNumber) =>
-              val prefix = "routeDetails.locationOfGoods.authorisationNumber"
-              val answers = emptyUserAnswers
-                .setValue(AuthorisationNumberPage, authorisationNumber)
-              val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.authorisationNumber
+              val answers = emptyUserAnswers.setValue(AuthorisationNumberPage, authorisationNumber)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.authorisationNumber
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key(messages(s"$prefix.checkYourAnswersLabel").toText),
+                  key = Key("What is the authorisation number for the location of goods?".toText),
                   value = Value(authorisationNumber.toText),
                   actions = Some(
                     Actions(
@@ -256,7 +235,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = routes.AuthorisationNumberController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
+                          visuallyHiddenText = Some("the authorisation number for the location of goods"),
                           attributes = Map("id" -> "location-of-goods-authorisation-number")
                         )
                       )
@@ -285,15 +264,13 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         "when coordinatesPage is defined" in {
           forAll(arbitrary[Mode], arbitrary[Coordinates]) {
             (mode, coordinates) =>
-              val prefix = "routeDetails.locationOfGoods.coordinates"
-              val answers = emptyUserAnswers
-                .setValue(CoordinatesPage, coordinates)
-              val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.coordinates
+              val answers = emptyUserAnswers.setValue(CoordinatesPage, coordinates)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.coordinates
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key(messages(s"$prefix.checkYourAnswersLabel").toText),
+                  key = Key("Coordinates".toText),
                   value = Value(coordinates.toString.toText),
                   actions = Some(
                     Actions(
@@ -301,7 +278,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = routes.CoordinatesController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
+                          visuallyHiddenText = Some("coordinates"),
                           attributes = Map("id" -> "location-of-goods-coordinates")
                         )
                       )
@@ -330,15 +307,13 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         "when unLocodePage is defined" in {
           forAll(arbitrary[Mode], arbitrary[UnLocode]) {
             (mode, unLocode) =>
-              val prefix = "routeDetails.locationOfGoods.unLocode"
-              val answers = emptyUserAnswers
-                .setValue(UnLocodePage, unLocode)
-              val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.unLocode
+              val answers = emptyUserAnswers.setValue(UnLocodePage, unLocode)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.unLocode
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key(messages(s"$prefix.checkYourAnswersLabel").toText),
+                  key = Key("UN/LOCODE for the location of goods".toText),
                   value = Value(unLocode.toString.toText),
                   actions = Some(
                     Actions(
@@ -346,7 +321,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = routes.UnLocodeController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
+                          visuallyHiddenText = Some("the UN/LOCODE for the location of goods"),
                           attributes = Map("id" -> "location-of-goods-un-locode")
                         )
                       )
@@ -375,15 +350,13 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         "when addressPage is defined" in {
           forAll(arbitrary[Mode], arbitrary[Address]) {
             (mode, address) =>
-              val prefix = "routeDetails.locationOfGoods.address"
-              val answers = emptyUserAnswers
-                .setValue(AddressPage, address)
-              val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.address
+              val answers = emptyUserAnswers.setValue(AddressPage, address)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.address
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key(messages(s"$prefix.checkYourAnswersLabel").toText),
+                  key = Key("What is the address for the location of goods?".toText),
                   value = Value(HtmlContent(Seq(address.line1, address.line2, address.postalCode, address.country).mkString("<br>"))),
                   actions = Some(
                     Actions(
@@ -391,7 +364,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = routes.AddressController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
+                          visuallyHiddenText = Some("the address for the location of goods"),
                           attributes = Map("id" -> "location-of-goods-address")
                         )
                       )
@@ -420,15 +393,13 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         "when postalCodePage is defined" in {
           forAll(arbitrary[Mode], arbitrary[PostalCodeAddress]) {
             (mode, postalCode) =>
-              val prefix = "routeDetails.locationOfGoods.postalCode"
-              val answers = emptyUserAnswers
-                .setValue(PostalCodePage, postalCode)
-              val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.postalCode
+              val answers = emptyUserAnswers.setValue(PostalCodePage, postalCode)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.postalCode
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key(messages(s"$prefix.checkYourAnswersLabel").toText),
+                  key = Key("What is the address for the location of goods?".toText),
                   value = Value(HtmlContent(Seq(postalCode.streetNumber, postalCode.postalCode, postalCode.country).mkString("<br>"))),
                   actions = Some(
                     Actions(
@@ -436,7 +407,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = routes.PostalCodeController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
+                          visuallyHiddenText = Some("the address for the location of goods"),
                           attributes = Map("id" -> "location-of-goods-postal-code")
                         )
                       )
@@ -465,15 +436,13 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         "when addIdentifierYesNoPage is defined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val prefix = "routeDetails.locationOfGoods.addIdentifierYesNo"
-              val answers = emptyUserAnswers
-                .setValue(AddIdentifierYesNoPage, true)
-              val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.additionalIdentifierYesNo
+              val answers = emptyUserAnswers.setValue(AddIdentifierYesNoPage, true)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.additionalIdentifierYesNo
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key(messages(s"$prefix.checkYourAnswersLabel").toText),
+                  key = Key("Do you want to add another identifier for the location of goods?".toText),
                   value = Value("Yes".toText),
                   actions = Some(
                     Actions(
@@ -481,7 +450,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = routes.AddIdentifierYesNoController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
+                          visuallyHiddenText = Some("if you want to add another identifier for the location of goods"),
                           attributes = Map("id" -> "location-of-goods-add-identifier")
                         )
                       )
@@ -510,15 +479,13 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         "when postalCodePage is defined" in {
           forAll(arbitrary[Mode], arbitrary[String]) {
             (mode, additionalIdentifier) =>
-              val prefix = "routeDetails.locationOfGoods.additionalIdentifier"
-              val answers = emptyUserAnswers
-                .setValue(AdditionalIdentifierPage, additionalIdentifier)
-              val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.additionalIdentifier
+              val answers = emptyUserAnswers.setValue(AdditionalIdentifierPage, additionalIdentifier)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.additionalIdentifier
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key(messages(s"$prefix.checkYourAnswersLabel").toText),
+                  key = Key("Additional identifier".toText),
                   value = Value(additionalIdentifier.toText),
                   actions = Some(
                     Actions(
@@ -526,7 +493,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = routes.AdditionalIdentifierController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
+                          visuallyHiddenText = Some("additional identifier"),
                           attributes = Map("id" -> "location-of-goods-additional-identifier")
                         )
                       )
@@ -555,15 +522,13 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         "when addContactYesNoPage is defined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val prefix = "routeDetails.locationOfGoods.addContactLocationOfGoods"
-              val answers = emptyUserAnswers
-                .setValue(AddContactYesNoPage, true)
-              val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.contactYesNo
+              val answers = emptyUserAnswers.setValue(AddContactYesNoPage, true)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.contactYesNo
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key(messages(s"$prefix.checkYourAnswersLabel").toText),
+                  key = Key("Do you want to add a contact for the location of goods?".toText),
                   value = Value("Yes".toText),
                   actions = Some(
                     Actions(
@@ -571,7 +536,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = routes.AddContactYesNoController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
+                          visuallyHiddenText = Some("if you want to add a contact for the location of goods"),
                           attributes = Map("id" -> "location-of-goods-add-contact")
                         )
                       )
@@ -600,15 +565,13 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         "when contactNamePage is defined" in {
           forAll(arbitrary[Mode], arbitrary[String]) {
             (mode, contactName) =>
-              val prefix = "routeDetails.locationOfGoods.contact.name"
-              val answers = emptyUserAnswers
-                .setValue(NamePage, contactName)
-              val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.contactName
+              val answers = emptyUserAnswers.setValue(NamePage, contactName)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.contactName
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key(messages(s"$prefix.checkYourAnswersLabel").toText),
+                  key = Key("Who is the contact for the location of goods?".toText),
                   value = Value(contactName.toText),
                   actions = Some(
                     Actions(
@@ -616,7 +579,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = contact.routes.NameController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
+                          visuallyHiddenText = Some("the contact for the location of goods"),
                           attributes = Map("id" -> "location-of-goods-contact")
                         )
                       )
@@ -645,15 +608,13 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
         "when contactPhoneNumber is defined" in {
           forAll(arbitrary[Mode], arbitrary[String]) {
             (mode, contactPhoneNumber) =>
-              val prefix = "routeDetails.locationOfGoods.contact.telephoneNumber"
-              val answers = emptyUserAnswers
-                .setValue(TelephoneNumberPage, contactPhoneNumber)
-              val helper = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result = helper.contactPhoneNumber
+              val answers = emptyUserAnswers.setValue(TelephoneNumberPage, contactPhoneNumber)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.contactPhoneNumber
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key(messages(s"$prefix.checkYourAnswersLabel").toText),
+                  key = Key("What is the contact for the location of goods’ telephone number?".toText),
                   value = Value(contactPhoneNumber.toText),
                   actions = Some(
                     Actions(
@@ -661,7 +622,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = contact.routes.TelephoneNumberController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some(messages(s"$prefix.change.hidden")),
+                          visuallyHiddenText = Some("the contact for the location of goods’ telephone number"),
                           attributes = Map("id" -> "location-of-goods-contact-telephone-number")
                         )
                       )
