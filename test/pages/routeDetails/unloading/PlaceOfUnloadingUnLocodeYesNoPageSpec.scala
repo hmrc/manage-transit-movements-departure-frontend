@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.routeDetails.unloading
+package pages.routeDetails.unloading
 
-import base.SpecBase
-import commonTestUtils.UserAnswersSpecHelper
+import pages.behaviours.PageBehaviours
 
-class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper {
-  //TODO: Add tests when pages are built
+class PlaceOfUnloadingUnLocodeYesNoPageSpec extends PageBehaviours {
+
+  "PlaceOfUnloadingUnLocodeYesNoPage" - {
+
+    beRetrievable[Boolean](PlaceOfUnloadingUnLocodeYesNoPage)
+
+    beSettable[Boolean](PlaceOfUnloadingUnLocodeYesNoPage)
+
+    beRemovable[Boolean](PlaceOfUnloadingUnLocodeYesNoPage)
+  }
 }

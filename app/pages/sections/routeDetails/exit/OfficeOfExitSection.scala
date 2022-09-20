@@ -17,10 +17,10 @@
 package pages.sections.routeDetails.exit
 
 import models.Index
-import pages.QuestionPage
+import pages.sections.Section
 import play.api.libs.json.{JsObject, JsPath}
 
-case class OfficeOfExitSection(index: Index) extends QuestionPage[JsObject] {
+case class OfficeOfExitSection(index: Index) extends Section[JsObject] {
 
   override def path: JsPath = OfficesOfExitSection.path \ index.position
 

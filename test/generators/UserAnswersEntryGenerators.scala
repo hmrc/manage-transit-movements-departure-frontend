@@ -132,7 +132,8 @@ trait UserAnswersEntryGenerators {
       generateTransitAnswer orElse
       generateExitAnswer orElse
       generateLocationOfGoodsAnswer orElse
-      generateLoadingAnswer
+      generateLoadingAnswer orElse
+      generateUnloadingAnswer
 
   private def generateRoutingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.routeDetails.routing._
@@ -214,6 +215,15 @@ trait UserAnswersEntryGenerators {
       case PlaceOfLoadingAddExtraInformationYesNoPage => arbitrary[Boolean].map(JsBoolean)
       case PlaceOfLoadingCountryPage                  => arbitrary[Country].map(Json.toJson(_))
       case PlaceOfLoadingLocationPage                 => Gen.alphaNumStr.map(JsString)
+    }
+  }
+
+  private def generateUnloadingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.routeDetails.unloading._
+    {
+      case AddPlaceOfUnloadingPage           => arbitrary[Boolean].map(JsBoolean)
+      case PlaceOfUnloadingUnLocodeYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case CountryPage                       => arbitrary[Country].map(Json.toJson(_))
     }
   }
 

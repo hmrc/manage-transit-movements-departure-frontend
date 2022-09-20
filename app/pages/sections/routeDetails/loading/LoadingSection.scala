@@ -16,11 +16,11 @@
 
 package pages.sections.routeDetails.loading
 
-import pages.QuestionPage
+import pages.sections.Section
 import pages.sections.routeDetails.RouteDetailsSection
 import play.api.libs.json.{JsObject, JsPath}
 
-case object LoadingSection extends QuestionPage[JsObject] {
+case object LoadingSection extends Section[JsObject] {
 
   override def path: JsPath = RouteDetailsSection.path \ toString
 
