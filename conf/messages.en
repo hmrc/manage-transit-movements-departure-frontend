@@ -903,6 +903,11 @@ routeDetails.unloading.addPlaceOfUnloading.heading = Do you want to add a place 
 routeDetails.unloading.addPlaceOfUnloading.checkYourAnswersLabel = Do you want to add a place of unloading?
 routeDetails.unloading.addPlaceOfUnloading.error.required = Select yes if you want to add a place of unloading
 
+routeDetails.unloading.addExtraInformationYesNo.title = Do you want to add extra information for the place of unloading?
+routeDetails.unloading.addExtraInformationYesNo.heading = Do you want to add extra information for the place of unloading?
+routeDetails.unloading.addExtraInformationYesNo.checkYourAnswersLabel = Do you want to add extra information for the place of unloading?
+routeDetails.unloading.addExtraInformationYesNo.error.required = Select yes if you want to add extra information for the place of unloading
+
 routeDetails.unloading.country.title = Which country is the place of unloading in?
 routeDetails.unloading.country.heading = Which country is the place of unloading in?
 routeDetails.unloading.country.hintText = Enter the country, like Italy or Spain.

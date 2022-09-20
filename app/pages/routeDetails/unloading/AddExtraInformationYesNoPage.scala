@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
-package pages.sections.routeDetails.unloading
+package pages.routeDetails.unloading
 
+import controllers.routeDetails.unloading.routes
+import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.RouteDetailsSection
-import play.api.libs.json.{JsObject, JsPath}
+import pages.sections.routeDetails.unloading.UnloadingSection
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
-case object UnloadingSection extends QuestionPage[JsObject] {
+case object AddExtraInformationYesNoPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = RouteDetailsSection.path \ toString
+  override def path: JsPath = UnloadingSection.path \ toString
 
-  override def toString: String = "unloading"
+  override def toString: String = "addExtraInformationYesNo"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.AddExtraInformationYesNoController.onPageLoad(userAnswers.lrn, mode))
 }
