@@ -16,10 +16,10 @@
 
 package pages.sections.routeDetails.locationOfGoods
 
-import pages.QuestionPage
+import pages.sections.Section
 import play.api.libs.json.{JsObject, JsPath}
 
-case object LocationOfGoodsIdentifierSection extends QuestionPage[JsObject] {
+case object LocationOfGoodsIdentifierSection extends Section[JsObject] {
 
   override def path: JsPath = LocationOfGoodsSection.path \ toString
 
