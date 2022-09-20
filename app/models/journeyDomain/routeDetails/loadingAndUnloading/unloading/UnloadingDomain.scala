@@ -21,22 +21,29 @@ import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, Use
 import models.journeyDomain.JourneyDomainModel
 import models.reference.UnLocode
 import pages.routeDetails.loading.PlaceOfLoadingUnLocodePage
-import pages.routeDetails.unloading.AddPlaceOfUnloadingPage
+import pages.routeDetails.unloading.{AddExtraInformationYesNoPage, AddPlaceOfUnloadingPage}
 
 case class UnloadingDomain(
-  unLocode: Option[UnLocode]
+  unLocode: Option[UnLocode],
+  additionalInformation: Option[AdditionalInformationDomain]
 ) extends JourneyDomainModel
 
 object UnloadingDomain {
-  // TODO: replace with next page
 
   implicit val userAnswersReader: UserAnswersReader[UnloadingDomain] = {
 
     implicit val unLocodeReads: UserAnswersReader[Option[UnLocode]] =
       AddPlaceOfUnloadingPage.filterOptionalDependent(identity)(PlaceOfLoadingUnLocodePage.reader)
 
-    //TODO: Add AdditionalInformationDomain & additionalInformationReads when country page is added
+    implicit val additionalInformationReads: UserAnswersReader[Option[AdditionalInformationDomain]] =
+      AddPlaceOfUnloadingPage.reader.flatMap {
+        case true  => AddExtraInformationYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalInformationDomain])
+        case false => UserAnswersReader[AdditionalInformationDomain].map(Some(_))
+      }
 
-    UserAnswersReader[Option[UnLocode]].map(UnloadingDomain.apply)
+    (
+      UserAnswersReader[Option[UnLocode]],
+      UserAnswersReader[Option[AdditionalInformationDomain]]
+    ).tupled.map((UnloadingDomain.apply _).tupled)
   }
 }
