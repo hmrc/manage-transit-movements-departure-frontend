@@ -14,92 +14,80 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails.loading
+package controllers.routeDetails.unloading
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.UnLocodeFormProvider
-import generators.Generators
-import models.{NormalMode, UnLocodeList}
+import forms.YesNoFormProvider
+import models.NormalMode
 import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.routeDetails.loading.PlaceOfLoadingUnLocodePage
+import org.scalatestplus.mockito.MockitoSugar
+import pages.routeDetails.unloading.AddPlaceOfUnloadingPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.UnLocodesService
-import views.html.routeDetails.loading.PlaceOfLoadingUnLocodeView
+import views.html.routeDetails.unloading.AddPlaceOfUnloadingView
 
 import scala.concurrent.Future
 
-class PlaceOfLoadingUnLocodeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+class AddPlaceOfUnloadingControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
-  private val unLocode1    = arbitraryUnLocode.arbitrary.sample.get
-  private val unLocode2    = arbitraryUnLocode.arbitrary.sample.get
-  private val unLocodeList = UnLocodeList(Seq(unLocode1, unLocode2))
-
-  private val formProvider = new UnLocodeFormProvider()
-  private val form         = formProvider("routeDetails.loading.placeOfLoadingUnLocode", unLocodeList)
-  private val mode         = NormalMode
-
-  private val mockUnLocodesService: UnLocodesService = mock[UnLocodesService]
-  private lazy val placeOfLoadingUnLocodeRoute       = routes.PlaceOfLoadingUnLocodeController.onPageLoad(lrn, mode).url
+  private val formProvider                  = new YesNoFormProvider()
+  private val form                          = formProvider("routeDetails.unloading.addPlaceOfUnloading")
+  private val mode                          = NormalMode
+  private lazy val addPlaceOfUnloadingRoute = routes.AddPlaceOfUnloadingController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[LoadingAndUnloadingNavigatorProvider]).toInstance(fakeLoadingNavigatorProvider))
-      .overrides(bind(classOf[UnLocodesService]).toInstance(mockUnLocodesService))
 
-  "PlaceOfLoadingUnLocode Controller" - {
+  "AddPlaceOfUnloading Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      when(mockUnLocodesService.getUnLocodes()(any())).thenReturn(Future.successful(unLocodeList))
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, placeOfLoadingUnLocodeRoute)
+      val request = FakeRequest(GET, addPlaceOfUnloadingRoute)
+      val result  = route(app, request).value
 
-      val result = route(app, request).value
-
-      val view = injector.instanceOf[PlaceOfLoadingUnLocodeView]
+      val view = injector.instanceOf[AddPlaceOfUnloadingView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, unLocodeList.unLocodes, mode)(request, messages).toString
+        view(form, lrn, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      when(mockUnLocodesService.getUnLocodes()(any())).thenReturn(Future.successful(unLocodeList))
-      val userAnswers = emptyUserAnswers.setValue(PlaceOfLoadingUnLocodePage, unLocode1)
+      val userAnswers = emptyUserAnswers.setValue(AddPlaceOfUnloadingPage, true)
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, placeOfLoadingUnLocodeRoute)
+      val request = FakeRequest(GET, addPlaceOfUnloadingRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> unLocode1.unLocodeExtendedCode))
+      val filledForm = form.bind(Map("value" -> "true"))
 
-      val view = injector.instanceOf[PlaceOfLoadingUnLocodeView]
+      val view = injector.instanceOf[AddPlaceOfUnloadingView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, unLocodeList.unLocodes, mode)(request, messages).toString
+        view(filledForm, lrn, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
-      when(mockUnLocodesService.getUnLocodes()(any())).thenReturn(Future.successful(unLocodeList))
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, placeOfLoadingUnLocodeRoute)
-        .withFormUrlEncodedBody(("value", unLocode1.unLocodeExtendedCode))
+      val request = FakeRequest(POST, addPlaceOfUnloadingRoute)
+        .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
 
@@ -110,31 +98,31 @@ class PlaceOfLoadingUnLocodeControllerSpec extends SpecBase with AppWithDefaultM
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      when(mockUnLocodesService.getUnLocodes()(any())).thenReturn(Future.successful(unLocodeList))
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, placeOfLoadingUnLocodeRoute).withFormUrlEncodedBody(("value", "invalid value"))
-      val boundForm = form.bind(Map("value" -> "invalid value"))
+      val request   = FakeRequest(POST, addPlaceOfUnloadingRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[PlaceOfLoadingUnLocodeView]
-
       status(result) mustEqual BAD_REQUEST
 
+      val view = injector.instanceOf[AddPlaceOfUnloadingView]
+
       contentAsString(result) mustEqual
-        view(boundForm, lrn, unLocodeList.unLocodes, mode)(request, messages).toString
+        view(boundForm, lrn, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, placeOfLoadingUnLocodeRoute)
+      val request = FakeRequest(GET, addPlaceOfUnloadingRoute)
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
+
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
@@ -142,8 +130,8 @@ class PlaceOfLoadingUnLocodeControllerSpec extends SpecBase with AppWithDefaultM
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, placeOfLoadingUnLocodeRoute)
-        .withFormUrlEncodedBody(("value", unLocode1.unLocodeExtendedCode))
+      val request = FakeRequest(POST, addPlaceOfUnloadingRoute)
+        .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
 

@@ -896,3 +896,8 @@ routeDetails.loading.placeOfLoadingCountry.placeholder = Select a country
 routeDetails.loading.placeOfLoadingCountry.change.hidden = In which country is the place of loading?
 routeDetails.loading.placeOfLoadingCountry.checkYourAnswersLabel = In which country is the place of loading?
 routeDetails.loading.placeOfLoadingCountry.error.required = Enter which country the place of loading is in
+
+routeDetails.unloading.addPlaceOfUnloading.title = Do you want to add a place of unloading?
+routeDetails.unloading.addPlaceOfUnloading.heading = Do you want to add a place of unloading?
+routeDetails.unloading.addPlaceOfUnloading.checkYourAnswersLabel = Do you want to add a place of unloading?
+routeDetails.unloading.addPlaceOfUnloading.error.required = Select yes if you want to add a place of unloading

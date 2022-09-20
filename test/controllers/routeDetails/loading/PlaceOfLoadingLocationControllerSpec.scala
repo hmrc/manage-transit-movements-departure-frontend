@@ -21,7 +21,7 @@ import forms.PlaceOfLoadingLocationFormProvider
 import generators.Generators
 import models.NormalMode
 import models.reference.Country
-import navigation.routeDetails.LoadingNavigatorProvider
+import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
@@ -46,7 +46,7 @@ class PlaceOfLoadingLocationControllerSpec extends SpecBase with AppWithDefaultM
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[LoadingNavigatorProvider]).toInstance(fakeLoadingNavigatorProvider))
+      .overrides(bind(classOf[LoadingAndUnloadingNavigatorProvider]).toInstance(fakeLoadingNavigatorProvider))
 
   "PlaceOfLoadingLocation Controller" - {
 

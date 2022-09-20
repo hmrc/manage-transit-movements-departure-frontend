@@ -22,7 +22,7 @@ import models.SecurityDetailsType._
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.routeDetails.exit.ExitDomain
-import models.journeyDomain.routeDetails.loading.LoadingDomain
+import models.journeyDomain.routeDetails.loadingAndUnloading.LoadingAndUnloadingDomain
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
 import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
 import models.journeyDomain.routeDetails.transit.TransitDomain
@@ -34,7 +34,7 @@ case class RouteDetailsDomain(
   transit: Option[TransitDomain],
   exit: Option[ExitDomain],
   locationOfGoods: Option[LocationOfGoodsDomain],
-  loading: Option[LoadingDomain]
+  loadUnload: Option[LoadingAndUnloadingDomain]
 ) extends JourneyDomainModel
 
 object RouteDetailsDomain {
@@ -49,13 +49,13 @@ object RouteDetailsDomain {
       transit         <- UserAnswersReader[Option[TransitDomain]](transitReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
       exit            <- UserAnswersReader[Option[ExitDomain]](exitReader(customsSecurityAgreementAreaCountryCodes)(transit))
       locationOfGoods <- UserAnswersReader[Option[LocationOfGoodsDomain]](locationOfGoodsReader(customsSecurityAgreementAreaCountryCodes))
-      loading         <- UserAnswersReader[LoadingDomain].map(Some(_))
+      loadUnload      <- UserAnswersReader[LoadingAndUnloadingDomain].map(Some(_))
     } yield RouteDetailsDomain(
       routing,
       transit,
       exit,
       locationOfGoods,
-      loading
+      loadUnload
     )
 
   implicit def transitReader(

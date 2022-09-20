@@ -17,7 +17,7 @@
 package navigation.routeDetails
 
 import models.journeyDomain.routeDetails.RouteDetailsDomain
-import models.journeyDomain.routeDetails.loading.LoadingDomain
+import models.journeyDomain.routeDetails.loadingAndUnloading.LoadingAndUnloadingDomain
 import navigation.UserAnswersNavigator
 import services.CountriesService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -26,30 +26,30 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class LoadingNavigatorProviderImpl @Inject() (
+class LoadingAndUnloadingNavigatorProviderImpl @Inject() (
   countriesService: CountriesService
 )(implicit ec: ExecutionContext)
-    extends LoadingNavigatorProvider {
+    extends LoadingAndUnloadingNavigatorProvider {
 
-  def apply()(implicit hc: HeaderCarrier): Future[LoadingNavigator] =
+  def apply()(implicit hc: HeaderCarrier): Future[LoadingAndUnloadingNavigator] =
     for {
       ctcCountries                             <- countriesService.getCountryCodesCTC()
       customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
-    } yield new LoadingNavigator(
+    } yield new LoadingAndUnloadingNavigator(
       ctcCountries.countryCodes,
       customsSecurityAgreementAreaCountryCodes.countryCodes
     )
 }
 
-trait LoadingNavigatorProvider {
+trait LoadingAndUnloadingNavigatorProvider {
 
-  def apply()(implicit hc: HeaderCarrier): Future[LoadingNavigator]
+  def apply()(implicit hc: HeaderCarrier): Future[LoadingAndUnloadingNavigator]
 }
 
-class LoadingNavigator(
+class LoadingAndUnloadingNavigator(
   ctcCountryCodes: Seq[String],
   customsSecurityAgreementAreaCountryCodes: Seq[String]
-) extends UserAnswersNavigator[LoadingDomain, RouteDetailsDomain]()(
-      LoadingDomain.userAnswersReader,
+) extends UserAnswersNavigator[LoadingAndUnloadingDomain, RouteDetailsDomain]()(
+      LoadingAndUnloadingDomain.userAnswersReader,
       RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
     )

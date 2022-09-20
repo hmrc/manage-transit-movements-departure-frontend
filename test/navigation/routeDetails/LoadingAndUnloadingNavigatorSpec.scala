@@ -28,11 +28,11 @@ import services.CountriesService
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class LoadingNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class LoadingAndUnloadingNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
-  private val navigator = new LoadingNavigator(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+  private val navigator = new LoadingAndUnloadingNavigator(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
 
-  "Location Of Goods Navigator" - {
+  "LoadingAndUnloading Navigator" - {
 
     "when in NormalMode" - {
 
@@ -40,7 +40,7 @@ class LoadingNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with G
 
       "when answers complete" - {
         "must redirect to loading check your answers" ignore {
-          forAll(arbitraryLocationOfGoodsAnswers(emptyUserAnswers)) {
+          forAll(arbitraryLoadingAndUnloadingAnswers(emptyUserAnswers)) {
             answers =>
               navigator
                 .nextPage(answers, mode)
@@ -67,7 +67,7 @@ class LoadingNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with G
     }
   }
 
-  "Location Of Goods Navigator Provider" - {
+  "LoadingAndUnloading Navigator Provider" - {
 
     "must retrieve reference data lists" in {
       val mockService = mock[CountriesService]
@@ -80,7 +80,7 @@ class LoadingNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with G
       when(mockService.getCustomsSecurityAgreementAreaCountries()(any()))
         .thenReturn(Future.successful(customsSecurityAgreementAreaCountries))
 
-      val provider = new LoadingNavigatorProviderImpl(mockService)
+      val provider = new LoadingAndUnloadingNavigatorProviderImpl(mockService)
       provider.apply().futureValue
 
       verify(mockService).getCountryCodesCTC()(any())

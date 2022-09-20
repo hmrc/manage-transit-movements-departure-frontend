@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package pages.sections
+package pages.routeDetails.unloading
 
-import play.api.libs.json.JsPath
+import controllers.routeDetails.unloading.routes
+import models.{Mode, UserAnswers}
 import pages.QuestionPage
+import pages.sections.routeDetails.RouteDetailsSection
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
-case object RouteDetailsSection extends QuestionPage[Nothing] {
+case object AddPlaceOfUnloadingPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = RouteDetailsSection.path \ toString
 
-  override def toString: String = "additionalIdentifier"
+  override def toString: String = "addPlaceOfUnloading"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.AddPlaceOfUnloadingController.onPageLoad(userAnswers.lrn, mode))
 }
