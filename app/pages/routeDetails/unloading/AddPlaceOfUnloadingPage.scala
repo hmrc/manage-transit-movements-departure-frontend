@@ -19,13 +19,13 @@ package pages.routeDetails.unloading
 import controllers.routeDetails.unloading.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.UnloadingSection
+import pages.sections.routeDetails.RouteDetailsSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case object AddPlaceOfUnloadingPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = UnloadingSection.path \ toString
+  override def path: JsPath = RouteDetailsSection.path \ toString
 
   override def toString: String = "addPlaceOfUnloading"
 

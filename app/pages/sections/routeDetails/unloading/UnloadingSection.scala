@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package pages.sections
+package pages.sections.routeDetails.unloading
 
-import play.api.libs.json.JsPath
 import pages.QuestionPage
+import pages.sections.routeDetails.RouteDetailsSection
+import play.api.libs.json.JsPath
 
 case object UnloadingSection extends QuestionPage[Nothing] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = RouteDetailsSection.path \ toString
 
   override def toString: String = "addPlaceOfUnloading"
 }
