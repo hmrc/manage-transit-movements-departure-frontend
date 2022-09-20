@@ -18,7 +18,8 @@ package generators
 
 import models.journeyDomain.routeDetails._
 import models.journeyDomain.routeDetails.exit.OfficeOfExitDomain
-import models.journeyDomain.routeDetails.loading.LoadingDomain
+import models.journeyDomain.routeDetails.loadingAndUnloading.loading.LoadingDomain
+import models.journeyDomain.routeDetails.loadingAndUnloading.LoadingAndUnloadingDomain
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
 import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
 import models.journeyDomain.routeDetails.transit.{OfficeOfTransitDomain, TransitDomain}
@@ -63,4 +64,7 @@ trait RouteDetailsUserAnswersGenerator extends UserAnswersGenerator {
 
   def arbitraryLoadingAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[LoadingDomain](userAnswers)
+
+  def arbitraryLoadingAndUnloadingAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[LoadingAndUnloadingDomain](userAnswers)
 }

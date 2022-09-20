@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.routeDetails.unloading
+package models.journeyDomain.routeDetails.loadingAndUnloading.unloading
 
 import cats.implicits._
-import models.SecurityDetailsType.ExitSummaryDeclarationSecurityDetails
-import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
+import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
 import models.reference.UnLocode
-import pages.preTaskList.SecurityDetailsTypePage
+import pages.routeDetails.loading.PlaceOfLoadingUnLocodePage
 import pages.routeDetails.unloading.AddPlaceOfUnloadingPage
 
 case class UnloadingDomain(
@@ -31,12 +30,14 @@ case class UnloadingDomain(
 object UnloadingDomain {
   // TODO: replace with next page
 
-  implicit val userAnswersReader: UserAnswersReader[UnloadingDomain] =
-    SecurityDetailsTypePage.reader.flatMap {
-      case ExitSummaryDeclarationSecurityDetails =>
-        AddPlaceOfUnloadingPage
-          .filterOptionalDependent(identity)(UserAnswersReader(UnLocode("GB", "name1")))
-          .map(UnloadingDomain.apply)
-    }
+  implicit val userAnswersReader: UserAnswersReader[UnloadingDomain] = {
 
+    implicit val unLocodeReads: UserAnswersReader[Option[UnLocode]] =
+      AddPlaceOfUnloadingPage.reader.flatMap {
+        case true  => PlaceOfLoadingUnLocodePage.reader.map(Some(_))
+        case false => none[UnLocode].pure[UserAnswersReader]
+      }
+
+    UserAnswersReader[Option[UnLocode]].map(UnloadingDomain.apply)
+  }
 }

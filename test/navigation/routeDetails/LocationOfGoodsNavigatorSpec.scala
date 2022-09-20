@@ -30,7 +30,7 @@ import scala.concurrent.Future
 
 class LocationOfGoodsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
-  private val navigator = new LoadingNavigator(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+  private val navigator = new LoadingAndUnloadingNavigator(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
 
   "Location Of Goods Navigator" - {
 

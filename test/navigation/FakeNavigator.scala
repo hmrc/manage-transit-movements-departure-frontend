@@ -56,6 +56,6 @@ class FakeLocationOfGoodsNavigator(desiredRoute: Call) extends LocationOfGoodsNa
   override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
 }
 
-class FakeLoadingNavigator(desiredRoute: Call) extends LoadingNavigator(Nil, Nil) {
+class FakeLoadingAndUnloadingNavigator(desiredRoute: Call) extends LoadingAndUnloadingNavigator(Nil, Nil) {
   override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
 }

@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.CountryFormProvider
 import generators.Generators
 import models.{CountryList, NormalMode}
-import navigation.routeDetails.LoadingNavigatorProvider
+import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.routeDetails.loading.PlaceOfLoadingCountryPage
@@ -49,7 +49,7 @@ class PlaceOfLoadingCountryControllerSpec extends SpecBase with AppWithDefaultMo
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[LoadingNavigatorProvider]).toInstance(fakeLoadingNavigatorProvider))
+      .overrides(bind(classOf[LoadingAndUnloadingNavigatorProvider]).toInstance(fakeLoadingNavigatorProvider))
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "PlaceOfLoadingCountry Controller" - {

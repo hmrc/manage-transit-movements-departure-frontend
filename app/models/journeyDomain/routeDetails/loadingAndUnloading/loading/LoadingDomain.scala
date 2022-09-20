@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.routeDetails.loading
+package models.journeyDomain.routeDetails.loadingAndUnloading.loading
 
 import cats.implicits._
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}

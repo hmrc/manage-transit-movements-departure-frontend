@@ -20,7 +20,7 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
-import navigation.routeDetails.LoadingNavigatorProvider
+import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
 import pages.routeDetails.loading.PlaceOfLoadingAddExtraInformationYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class PlaceOfLoadingAddExtraInformationYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: LoadingNavigatorProvider,
+  navigatorProvider: LoadingAndUnloadingNavigatorProvider,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
