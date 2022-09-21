@@ -30,7 +30,7 @@ class LocationOfGoodsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     page = LocationTypePage,
     formatAnswer = formatEnumAsText(LocationType.messageKeyPrefix),
     prefix = "routeDetails.locationOfGoods.locationType",
-    id = Some("location-of-goods-type")
+    id = Some("location-type")
   )
 
   def locationOfGoodsIdentification: Option[SummaryListRow] = getAnswerAndBuildRow[LocationOfGoodsIdentification](

@@ -19,15 +19,17 @@ package models.journeyDomain.routeDetails
 import cats.implicits._
 import models.DeclarationType.Option4
 import models.SecurityDetailsType._
+import models.UserAnswers
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.routeDetails.exit.ExitDomain
 import models.journeyDomain.routeDetails.loadingAndUnloading.LoadingAndUnloadingDomain
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
 import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
 import models.journeyDomain.routeDetails.transit.TransitDomain
+import models.journeyDomain.{JourneyDomainModel, Stage}
 import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails.locationOfGoods.AddLocationOfGoodsPage
+import play.api.mvc.Call
 
 case class RouteDetailsDomain(
   routing: RoutingDomain,
@@ -35,7 +37,14 @@ case class RouteDetailsDomain(
   exit: Option[ExitDomain],
   locationOfGoods: Option[LocationOfGoodsDomain],
   loadingAndUnloading: LoadingAndUnloadingDomain
-) extends JourneyDomainModel
+) extends JourneyDomainModel {
+
+  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
+    // TODO - update when section CYA built. Also:
+    //  update all navigator spec unit tests when in CheckMode that are currently being ignored
+    //  update RouteDetailsTaskSpec unit test that is currently being ignored
+    None
+}
 
 object RouteDetailsDomain {
 
@@ -43,7 +52,6 @@ object RouteDetailsDomain {
     ctcCountryCodes: Seq[String],
     customsSecurityAgreementAreaCountryCodes: Seq[String]
   ): UserAnswersReader[RouteDetailsDomain] =
-    // When pre-lodge is in, add a loadingRead to handle nav logic if additional declaration type is  A or D
     for {
       routing             <- UserAnswersReader[RoutingDomain]
       transit             <- UserAnswersReader[Option[TransitDomain]](transitReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))

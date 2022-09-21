@@ -39,12 +39,12 @@ class LoadingAndUnloadingNavigatorSpec extends SpecBase with ScalaCheckPropertyC
       val mode = NormalMode
 
       "when answers complete" - {
-        "must redirect to loading check your answers" ignore {
+        "must redirect to loading check your answers" in {
           forAll(arbitraryLoadingAndUnloadingAnswers(emptyUserAnswers)) {
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(???)
+                .mustBe(controllers.routeDetails.loadingAndUnloading.routes.LoadingAndUnloadingAnswersController.onPageLoad(answers.lrn))
           }
         }
       }

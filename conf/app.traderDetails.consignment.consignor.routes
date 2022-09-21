@@ -1,3 +1,6 @@
+
+->         /                   app.traderDetails.consignment.consignor.contact.Routes
+
 GET        /:lrn/trader-details/consignment/consignor/is-eori-known                 controllers.traderDetails.consignment.consignor.EoriYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/trader-details/consignment/consignor/is-eori-known                 controllers.traderDetails.consignment.consignor.EoriYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/trader-details/consignment/consignor/change-is-eori-known          controllers.traderDetails.consignment.consignor.EoriYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

@@ -16,6 +16,8 @@
 
 package pages.routeDetails.loadingAndUnloading.unloading
 
+import models.reference.UnLocode
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class PlaceOfUnloadingUnLocodeYesNoPageSpec extends PageBehaviours {
@@ -27,5 +29,39 @@ class PlaceOfUnloadingUnLocodeYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](PlaceOfUnloadingUnLocodeYesNoPage)
 
     beRemovable[Boolean](PlaceOfUnloadingUnLocodeYesNoPage)
+
+    "cleanup" - {
+      "when NO selected" - {
+        "must clean up UN/LOCODE and add location yes/no" in {
+          forAll(arbitrary[UnLocode], arbitrary[Boolean]) {
+            (unLocode, bool) =>
+              val preChange = emptyUserAnswers
+                .setValue(PlaceOfUnloadingUnLocodePage, unLocode)
+                .setValue(AddExtraInformationYesNoPage, bool)
+
+              val postChange = preChange.setValue(PlaceOfUnloadingUnLocodeYesNoPage, false)
+
+              postChange.get(PlaceOfUnloadingUnLocodePage) mustNot be(defined)
+              postChange.get(AddExtraInformationYesNoPage) mustNot be(defined)
+          }
+        }
+      }
+
+      "when YES selected" - {
+        "must do nothing" in {
+          forAll(arbitrary[UnLocode], arbitrary[Boolean]) {
+            (unLocode, bool) =>
+              val preChange = emptyUserAnswers
+                .setValue(PlaceOfUnloadingUnLocodePage, unLocode)
+                .setValue(AddExtraInformationYesNoPage, bool)
+
+              val postChange = preChange.setValue(PlaceOfUnloadingUnLocodeYesNoPage, true)
+
+              postChange.get(PlaceOfUnloadingUnLocodePage) must be(defined)
+              postChange.get(AddExtraInformationYesNoPage) must be(defined)
+          }
+        }
+      }
+    }
   }
 }

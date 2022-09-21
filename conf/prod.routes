@@ -1,30 +1,6 @@
 # Add all the application routes to the app.routes file
 ->         /manage-transit-movements/departure                   app.Routes
 
-->         /manage-transit-movements/departure                   app.preTaskList.Routes
-
-->         /manage-transit-movements/departure                   app.traderDetails.Routes
-->         /manage-transit-movements/departure                   app.traderDetails.holderOfTransit.Routes
-->         /manage-transit-movements/departure                   app.traderDetails.holderOfTransit.contact.Routes
-->         /manage-transit-movements/departure                   app.traderDetails.representative.Routes
-->         /manage-transit-movements/departure                   app.traderDetails.consignment.Routes
-->         /manage-transit-movements/departure                   app.traderDetails.consignment.consignor.Routes
-->         /manage-transit-movements/departure                   app.traderDetails.consignment.consignor.contact.Routes
-->         /manage-transit-movements/departure                   app.traderDetails.consignment.consignee.Routes
-
-->         /manage-transit-movements/departure                   app.guaranteeDetails.Routes
-->         /manage-transit-movements/departure                   app.guaranteeDetails.guarantee.Routes
-
-->         /manage-transit-movements/departure                   app.routeDetails.routing.Routes
-->         /manage-transit-movements/departure                   app.routeDetails.routing.index.Routes
-->         /manage-transit-movements/departure                   app.routeDetails.transit.Routes
-->         /manage-transit-movements/departure                   app.routeDetails.transit.index.Routes
-->         /manage-transit-movements/departure                   app.routeDetails.exit.Routes
-->         /manage-transit-movements/departure                   app.routeDetails.exit.index.Routes
-->         /manage-transit-movements/departure                   app.routeDetails.locationOfGoods.Routes
-->         /manage-transit-movements/departure                   app.routeDetails.loadingAndUnloading.loading.Routes
-->         /manage-transit-movements/departure                   app.routeDetails.loadingAndUnloading.unloading.Routes
-
 ->         /                                                     health.Routes
 
 

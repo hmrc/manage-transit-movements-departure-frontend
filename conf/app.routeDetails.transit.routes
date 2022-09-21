@@ -1,4 +1,6 @@
 
+->         /                   app.routeDetails.transit.index.Routes
+
 GET        /:lrn/route-details/transit/t2-declaration                                         controllers.routeDetails.transit.T2DeclarationTypeYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/route-details/transit/t2-declaration                                         controllers.routeDetails.transit.T2DeclarationTypeYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/route-details/transit/change-t2-declaration                                  controllers.routeDetails.transit.T2DeclarationTypeYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

@@ -17,6 +17,8 @@
 package pages.routeDetails.loadingAndUnloading.unloading
 
 import pages.behaviours.PageBehaviours
+import pages.sections.routeDetails.unloading.UnloadingSection
+import play.api.libs.json.Json
 
 class AddPlaceOfUnloadingPageSpec extends PageBehaviours {
 
@@ -27,5 +29,27 @@ class AddPlaceOfUnloadingPageSpec extends PageBehaviours {
     beSettable[Boolean](AddPlaceOfUnloadingPage)
 
     beRemovable[Boolean](AddPlaceOfUnloadingPage)
+
+    "cleanup" - {
+      "when NO selected" - {
+        "must clean up unloading section" in {
+          val preChange = emptyUserAnswers.setValue(UnloadingSection, Json.obj("foo" -> "bar"))
+
+          val postChange = preChange.setValue(AddPlaceOfUnloadingPage, false)
+
+          postChange.get(UnloadingSection) mustNot be(defined)
+        }
+      }
+
+      "when YES selected" - {
+        "must do nothing" in {
+          val preChange = emptyUserAnswers.setValue(UnloadingSection, Json.obj("foo" -> "bar"))
+
+          val postChange = preChange.setValue(AddPlaceOfUnloadingPage, true)
+
+          postChange.get(UnloadingSection) must be(defined)
+        }
+      }
+    }
   }
 }

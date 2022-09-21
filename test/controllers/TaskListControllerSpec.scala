@@ -18,30 +18,39 @@ package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.{Generators, PreTaskListUserAnswersGenerator}
+import models.CountryList
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.CountriesService
 import viewModels.taskList.{Task, TaskListViewModel}
 import views.html.TaskListView
 
+import scala.concurrent.Future
+
 class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators with PreTaskListUserAnswersGenerator {
 
-  private lazy val mockViewModel = mock[TaskListViewModel]
+  private lazy val mockViewModel                     = mock[TaskListViewModel]
+  private val mockCountriesService: CountriesService = mock[CountriesService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind[TaskListViewModel].toInstance(mockViewModel))
+      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "Task List Controller" - {
 
     "must return OK and the correct view for a GET" in {
       val sampleTasks = listWithMaxLength[Task]()(arbitraryTask).sample.value
 
-      when(mockViewModel.apply(any())).thenReturn(sampleTasks)
+      when(mockViewModel.apply(any())(any(), any())).thenReturn(sampleTasks)
+
+      when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(CountryList(Nil)))
+      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
 
       val userAnswers = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
       setExistingUserAnswers(userAnswers)

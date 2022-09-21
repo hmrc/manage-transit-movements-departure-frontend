@@ -17,7 +17,7 @@
 package models.journeyDomain.routeDetails.loadingAndUnloading
 
 import cats.implicits._
-import models.SecurityDetailsType.{EntryAndExitSummaryDeclarationSecurityDetails, EntrySummaryDeclarationSecurityDetails, ExitSummaryDeclarationSecurityDetails}
+import models.SecurityDetailsType._
 import models.UserAnswers
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.routeDetails.loadingAndUnloading.loading.LoadingDomain
@@ -31,10 +31,14 @@ case class LoadingAndUnloadingDomain(
   loading: Option[LoadingDomain],
   unloading: Option[UnloadingDomain]
 ) extends JourneyDomainModel {
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] = None
+
+  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
+    Some(controllers.routeDetails.loadingAndUnloading.routes.LoadingAndUnloadingAnswersController.onPageLoad(userAnswers.lrn))
 }
 
 object LoadingAndUnloadingDomain {
+
+  // When pre-lodge is in, add a loadingReader to handle nav logic if additional declaration type is A or D
 
   implicit val unloadingReader: UserAnswersReader[Option[UnloadingDomain]] =
     SecurityDetailsTypePage.reader.flatMap {

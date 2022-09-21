@@ -14,34 +14,34 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails.exit.index
+package controllers.routeDetails.loadingAndUnloading
 
-import controllers.actions._
-import models.{Index, LocalReferenceNumber}
+import com.google.inject.Inject
+import controllers.actions.Actions
+import models.LocalReferenceNumber
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.routeDetails.exit.OfficeOfExitViewModel.OfficeOfExitViewModelProvider
-import views.html.routeDetails.exit.index.CheckOfficeOfExitAnswersView
+import viewModels.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersViewModel.LoadingAndUnloadingAnswersViewModelProvider
+import views.html.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersView
 
-import javax.inject.Inject
-
-class CheckOfficeOfExitAnswersController @Inject() (
+class LoadingAndUnloadingAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
-  view: CheckOfficeOfExitAnswersView,
-  viewModelProvider: OfficeOfExitViewModelProvider
+  view: LoadingAndUnloadingAnswersView,
+  viewModelProvider: LoadingAndUnloadingAnswersViewModelProvider
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val section = viewModelProvider(request.userAnswers, index).section
-      Ok(view(lrn, index, Seq(section)))
+      val sections = viewModelProvider(request.userAnswers).sections
+      Ok(view(lrn, sections))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions.requireData(lrn) {
-    Redirect(controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(lrn))
+  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
+    Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
   }
+
 }

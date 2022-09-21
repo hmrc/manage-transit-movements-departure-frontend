@@ -1,3 +1,8 @@
+
+->         /                   app.traderDetails.holderOfTransit.Routes
+->         /                   app.traderDetails.representative.Routes
+->         /                   app.traderDetails.consignment.Routes
+
 GET        /:lrn/trader-details/acting-as-representative                    controllers.traderDetails.ActingAsRepresentativeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/trader-details/acting-as-representative                    controllers.traderDetails.ActingAsRepresentativeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/trader-details/change-acting-as-representative             controllers.traderDetails.ActingAsRepresentativeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
