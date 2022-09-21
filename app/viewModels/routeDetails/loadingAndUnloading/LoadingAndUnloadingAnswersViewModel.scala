@@ -50,7 +50,9 @@ object LoadingAndUnloadingAnswersViewModel {
         sectionTitle = messages("routeDetails.loadingAndUnloading.checkYourAnswers.unloading"),
         rows = Seq(
           helper.addPlaceOfUnloading,
-          helper.addUnloadingUnLocode
+          helper.addUnloadingUnLocode,
+          helper.unloadingUnLocode,
+          helper.addUnloadingCountryAndLocation
         ).flatten
       )
 

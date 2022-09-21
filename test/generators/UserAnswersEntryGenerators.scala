@@ -223,6 +223,8 @@ trait UserAnswersEntryGenerators {
     {
       case AddPlaceOfUnloadingPage           => arbitrary[Boolean].map(JsBoolean)
       case PlaceOfUnloadingUnLocodeYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case PlaceOfUnloadingUnLocodePage      => arbitrary[UnLocode].map(Json.toJson(_))
+      case AddExtraInformationYesNoPage      => arbitrary[Boolean].map(JsBoolean)
     }
   }
 

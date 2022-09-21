@@ -20,6 +20,7 @@ import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.loadingAndUnloading.loading._
+import pages.routeDetails.loadingAndUnloading.unloading._
 
 class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
@@ -73,6 +74,66 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
       }
     }
 
-    "unloading answers" - {}
+    "unloading answers" - {
+
+      "when not adding a place of unloading" in {
+        val userAnswers = emptyUserAnswers.setValue(AddPlaceOfUnloadingPage, false)
+
+        val section = LoadingAndUnloadingAnswersViewModel.apply(userAnswers).sections.last
+        section.rows.size mustBe 1
+        section.sectionTitle.value mustBe "Unloading"
+      }
+
+      "when adding a place of unloading" ignore {
+        "when adding a UN/LOCODE" - {
+          "and not adding country and location" - {
+            "must render 4 rows" in {
+              val initialAnswers = emptyUserAnswers
+                .setValue(AddPlaceOfUnloadingPage, true)
+                .setValue(PlaceOfUnloadingUnLocodeYesNoPage, true)
+                .setValue(AddExtraInformationYesNoPage, false)
+
+              forAll(arbitraryUnloadingAnswers(initialAnswers)) {
+                userAnswers =>
+                  val section = LoadingAndUnloadingAnswersViewModel.apply(userAnswers).sections.last
+                  section.rows.size mustBe 4
+                  section.sectionTitle.value mustBe "Unloading"
+              }
+            }
+          }
+
+          "and adding country and location" - {
+            "must render 6 rows" in {
+              val initialAnswers = emptyUserAnswers
+                .setValue(AddPlaceOfUnloadingPage, true)
+                .setValue(PlaceOfUnloadingUnLocodeYesNoPage, true)
+                .setValue(AddExtraInformationYesNoPage, true)
+
+              forAll(arbitraryUnloadingAnswers(initialAnswers)) {
+                userAnswers =>
+                  val section = LoadingAndUnloadingAnswersViewModel.apply(userAnswers).sections.last
+                  section.rows.size mustBe 6
+                  section.sectionTitle.value mustBe "Unloading"
+              }
+            }
+          }
+        }
+
+        "when not adding a UN/LOCODE" - {
+          "must render 4 rows" in {
+            val initialAnswers = emptyUserAnswers
+              .setValue(AddPlaceOfUnloadingPage, true)
+              .setValue(PlaceOfUnloadingUnLocodeYesNoPage, false)
+
+            forAll(arbitraryUnloadingAnswers(initialAnswers)) {
+              userAnswers =>
+                val section = LoadingAndUnloadingAnswersViewModel.apply(userAnswers).sections.last
+                section.rows.size mustBe 4
+                section.sectionTitle.value mustBe "Unloading"
+            }
+          }
+        }
+      }
+    }
   }
 }
