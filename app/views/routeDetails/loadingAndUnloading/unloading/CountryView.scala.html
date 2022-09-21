@@ -16,35 +16,42 @@
 
 @import controllers.routeDetails.loadingAndUnloading.unloading.routes
 @import models.LocalReferenceNumber
-@import viewModels.components.InputYesNoViewModel._
-@import views.html.components.{Button, ErrorSummary, InputYesNo}
+@import models.reference.Country
+@import models.Selectable
+@import models.Selectable._
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import viewModels.components.InputSelectViewModel._
+@import views.html.components.{Button, ErrorSummary, InputSelect}
 
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
-    inputYesNo: InputYesNo,
+    inputSelect: InputSelect,
     errorSummary: ErrorSummary,
     button: Button
 )
 
-@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[Country], lrn: LocalReferenceNumber, countries: Seq[Country], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.unloading.addExtraInformationYesNo.title"),
+    title = messages("routeDetails.unloading.country.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.AddExtraInformationYesNoController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.CountryController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
-        @inputYesNo(
+        @inputSelect(
             field = form("value"),
-            yesNoType = OrdinaryYesNo(
-                heading = messages("routeDetails.unloading.addExtraInformationYesNo.heading"),
+            selectType = OrdinarySelect(
+                heading = messages("routeDetails.unloading.country.heading"),
                 caption = Some(messages("routeDetails.unloading.caption"))
-            )
+            ),
+            hint = Some(messages("routeDetails.unloading.country.hintText")),
+            selectItems = countries.toSelectItems(form.value),
+            placeholder = messages("routeDetails.unloading.country.placeholder")
         )
 
         @button(attributes = Map("id" -> "submit"))

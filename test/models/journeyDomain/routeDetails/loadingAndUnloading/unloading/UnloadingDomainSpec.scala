@@ -20,10 +20,13 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
-import models.reference.UnLocode
-import pages.routeDetails.loadingAndUnloading.unloading.PlaceOfUnloadingUnLocodeYesNoPage
+import models.reference.{Country, UnLocode}
+import org.scalacheck.Arbitrary.arbitrary
+import pages.routeDetails.loadingAndUnloading.unloading.{AddExtraInformationYesNoPage, CountryPage, PlaceOfUnloadingUnLocodeYesNoPage}
 
 class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
+
+  private val country = arbitrary[Country].sample.value
 
   "UnloadingDomain" - {
 
@@ -32,9 +35,12 @@ class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Gener
       "when add a place of unloading UN/LOCODE is yes" in {
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(PlaceOfUnloadingUnLocodeYesNoPage)(true)
+          .unsafeSetVal(AddExtraInformationYesNoPage)(true)
+          .unsafeSetVal(CountryPage)(country)
 
         val expectedResult = UnloadingDomain(
-          unLocode = Some(UnLocode("", ""))
+          unLocode = Some(UnLocode("", "")),
+          additionalInformation = Some(AdditionalInformationDomain(country, ""))
         )
 
         val result: EitherType[UnloadingDomain] = UserAnswersReader[UnloadingDomain].run(userAnswers)
@@ -45,9 +51,11 @@ class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Gener
       "when add a place of unloading UN/LOCODE is no" in {
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(PlaceOfUnloadingUnLocodeYesNoPage)(false)
+          .unsafeSetVal(CountryPage)(country)
 
         val expectedResult = UnloadingDomain(
-          unLocode = None
+          unLocode = None,
+          additionalInformation = Some(AdditionalInformationDomain(country, ""))
         )
 
         val result: EitherType[UnloadingDomain] = UserAnswersReader[UnloadingDomain].run(userAnswers)
