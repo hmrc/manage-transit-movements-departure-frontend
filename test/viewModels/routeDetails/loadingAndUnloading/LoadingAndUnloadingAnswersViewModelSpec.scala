@@ -19,13 +19,14 @@ package viewModels.routeDetails.loadingAndUnloading
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.loading._
+import pages.routeDetails.loadingAndUnloading.loading._
 
 class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
   "apply" - {
 
     "loading answers" - {
+
       "when adding a UN/LOCODE" - {
         "and not adding country and location" - {
           "must render 3 rows" in {

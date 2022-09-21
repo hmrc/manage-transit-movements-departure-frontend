@@ -17,15 +17,15 @@
 package utils.cyaHelpers.routeDetails
 
 import base.SpecBase
-import controllers.routeDetails.loading.{routes => loadingRoutes}
-import controllers.routeDetails.unloading.{routes => unloadingRoutes}
+import controllers.routeDetails.loadingAndUnloading.loading.{routes => loadingRoutes}
+import controllers.routeDetails.loadingAndUnloading.unloading.{routes => unloadingRoutes}
 import generators.Generators
 import models.Mode
 import models.reference.{Country, UnLocode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.loading._
-import pages.routeDetails.unloading._
+import pages.routeDetails.loadingAndUnloading.loading._
+import pages.routeDetails.loadingAndUnloading.unloading._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
 
@@ -323,6 +323,92 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                           href = unloadingRoutes.PlaceOfUnloadingUnLocodeYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add extra information for the place of unloading"),
                           attributes = Map("id" -> "add-unloading-un-locode")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "unloadingUnLocode" - {
+      "must return None" - {
+        "when PlaceOfUnloadingUnLocodePage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new LoadingAndUnloadingCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.unloadingUnLocode
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when PlaceOfUnloadingUnLocodePage is defined" in {
+          forAll(arbitrary[Mode], arbitrary[UnLocode]) {
+            (mode, unLocode) =>
+              val answers = emptyUserAnswers.setValue(PlaceOfUnloadingUnLocodePage, unLocode)
+              val helper  = new LoadingAndUnloadingCheckYourAnswersHelper(answers, mode)
+              val result  = helper.unloadingUnLocode
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("What is the UN/LOCODE for the place of unloading?".toText),
+                  value = Value(unLocode.toString.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = unloadingRoutes.PlaceOfUnloadingUnLocodeController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("the UN/LOCODE for the place of unloading"),
+                          attributes = Map("id" -> "unloading-un-locode")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "addUnloadingCountryAndLocation" - {
+      "must return None" - {
+        "when AddExtraInformationYesNoPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new LoadingAndUnloadingCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.addUnloadingCountryAndLocation
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when AddExtraInformationYesNoPage is defined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(AddExtraInformationYesNoPage, true)
+              val helper  = new LoadingAndUnloadingCheckYourAnswersHelper(answers, mode)
+              val result  = helper.addUnloadingCountryAndLocation
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Do you want to add extra information for the place of unloading?".toText),
+                  value = Value("Yes".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = unloadingRoutes.AddExtraInformationYesNoController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("if you want to add extra information for the place of unloading"),
+                          attributes = Map("id" -> "add-unloading-country-and-location")
                         )
                       )
                     )

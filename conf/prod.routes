@@ -23,8 +23,8 @@
 ->         /manage-transit-movements/departure                   app.routeDetails.exit.index.Routes
 ->         /manage-transit-movements/departure                   app.routeDetails.locationOfGoods.Routes
 ->         /manage-transit-movements/departure                   app.routeDetails.loadingAndUnloading.Routes
-->         /manage-transit-movements/departure                   app.routeDetails.loading.Routes
-->         /manage-transit-movements/departure                   app.routeDetails.unloading.Routes
+->         /manage-transit-movements/departure                   app.routeDetails.loadingAndUnloading.loading.Routes
+->         /manage-transit-movements/departure                   app.routeDetails.loadingAndUnloading.unloading.Routes
 
 ->         /                                                     health.Routes
 

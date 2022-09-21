@@ -18,8 +18,8 @@ package utils.cyaHelpers.routeDetails
 
 import models.reference.{Country, UnLocode}
 import models.{Mode, UserAnswers}
-import pages.routeDetails.loading._
-import pages.routeDetails.unloading._
+import pages.routeDetails.loadingAndUnloading.loading._
+import pages.routeDetails.loadingAndUnloading.unloading._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
@@ -73,5 +73,19 @@ class LoadingAndUnloadingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: 
     formatAnswer = formatAsYesOrNo,
     prefix = "routeDetails.unloading.addExtraInformationYesNo",
     id = Some("add-unloading-un-locode")
+  )
+
+  def unloadingUnLocode: Option[SummaryListRow] = getAnswerAndBuildRow[UnLocode](
+    page = PlaceOfUnloadingUnLocodePage,
+    formatAnswer = formatAsText,
+    prefix = "routeDetails.unloading.placeOfUnloadingUnLocode",
+    id = Some("unloading-un-locode")
+  )
+
+  def addUnloadingCountryAndLocation: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+    page = AddExtraInformationYesNoPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "routeDetails.unloading.addExtraInformationYesNo",
+    id = Some("add-unloading-country-and-location")
   )
 }
