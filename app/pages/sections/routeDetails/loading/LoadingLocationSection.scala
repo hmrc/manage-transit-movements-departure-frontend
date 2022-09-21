@@ -23,5 +23,5 @@ case object LoadingLocationSection extends Section[JsObject] {
 
   override def path: JsPath = LoadingSection.path \ toString
 
-  override def toString: String = "location"
+  override def toString: String = "additionalInformation"
 }
