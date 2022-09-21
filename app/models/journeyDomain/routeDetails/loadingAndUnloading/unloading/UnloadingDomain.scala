@@ -20,7 +20,7 @@ import cats.implicits._
 import models.domain.{GettableAsFilterForNextReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
 import models.reference.UnLocode
-import pages.routeDetails.unloading.PlaceOfUnloadingUnLocodeYesNoPage
+import pages.routeDetails.loadingAndUnloading.unloading.PlaceOfUnloadingUnLocodeYesNoPage
 
 case class UnloadingDomain(
   unLocode: Option[UnLocode]

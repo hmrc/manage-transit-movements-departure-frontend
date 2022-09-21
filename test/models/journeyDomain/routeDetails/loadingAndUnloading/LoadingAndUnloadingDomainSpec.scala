@@ -24,7 +24,7 @@ import models.journeyDomain.routeDetails.loadingAndUnloading.unloading.Unloading
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList._
-import pages.routeDetails.unloading.AddPlaceOfUnloadingPage
+import pages.routeDetails.loadingAndUnloading.unloading.AddPlaceOfUnloadingPage
 
 class LoadingAndUnloadingDomainSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 

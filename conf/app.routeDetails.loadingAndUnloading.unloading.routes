@@ -1,0 +1,20 @@
+
+GET        /:lrn/route-details/unloading/add-place-of-unloading                                         controllers.routeDetails.loadingAndUnloading.unloading.AddPlaceOfUnloadingController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/unloading/add-place-of-unloading                                         controllers.routeDetails.loadingAndUnloading.unloading.AddPlaceOfUnloadingController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/unloading/change-add-place-of-unloading                                  controllers.routeDetails.loadingAndUnloading.unloading.AddPlaceOfUnloadingController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/unloading/change-add-place-of-unloading                                  controllers.routeDetails.loadingAndUnloading.unloading.AddPlaceOfUnloadingController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/route-details/unloading/place-of-unloading-add-un-locode                               controllers.routeDetails.loadingAndUnloading.unloading.PlaceOfUnloadingUnLocodeYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/unloading/place-of-unloading-add-un-locode                               controllers.routeDetails.loadingAndUnloading.unloading.PlaceOfUnloadingUnLocodeYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/unloading/change-place-of-unloading-add-un-locode                        controllers.routeDetails.loadingAndUnloading.unloading.PlaceOfUnloadingUnLocodeYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/unloading/change-place-of-unloading-add-un-locode                        controllers.routeDetails.loadingAndUnloading.unloading.PlaceOfUnloadingUnLocodeYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/route-details/unloading/place-of-unloading-add-extra-information                       controllers.routeDetails.loadingAndUnloading.unloading.AddExtraInformationYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/unloading/place-of-unloading-add-extra-information                       controllers.routeDetails.loadingAndUnloading.unloading.AddExtraInformationYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/unloading/place-of-unloading-add-extra-information                       controllers.routeDetails.loadingAndUnloading.unloading.AddExtraInformationYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/unloading/place-of-unloading-add-extra-information                       controllers.routeDetails.loadingAndUnloading.unloading.AddExtraInformationYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/route-details/unloading/place-of-unloading-un-locode                                   controllers.routeDetails.loadingAndUnloading.unloading.PlaceOfUnloadingUnLocodeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/unloading/place-of-unloading-un-locode                                   controllers.routeDetails.loadingAndUnloading.unloading.PlaceOfUnloadingUnLocodeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/unloading/change-place-of-unloading-un-locode                            controllers.routeDetails.loadingAndUnloading.unloading.PlaceOfUnloadingUnLocodeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/unloading/change-place-of-unloading-un-locode                            controllers.routeDetails.loadingAndUnloading.unloading.PlaceOfUnloadingUnLocodeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
