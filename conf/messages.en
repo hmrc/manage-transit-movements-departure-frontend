@@ -830,7 +830,7 @@ routeDetails.locationOfGoods.unLocode.placeholder = Select a UN/LOCODE.
 routeDetails.locationOfGoods.unLocode.change.hidden = What is the UN/LOCODE for the location of goods?
 routeDetails.locationOfGoods.unLocode.checkYourAnswersLabel = UN/LOCODE for the location of goods
 routeDetails.locationOfGoods.unLocode.error.required = Enter the UN/LOCODE for the location of goods
-routeDetails.locationOfGoods.unLocode.error.invalidCharacters = The UN/LOCODE must only include letters a to z numbers 0 to 9
+routeDetails.locationOfGoods.unLocode.error.invalidCharacters = The UN/LOCODE must only include letters a to z and numbers 0 to 9
 routeDetails.locationOfGoods.unLocode.error.maxLength = The UN/LOCODE must be 5 characters long
 routeDetails.locationOfGoods.unLocode.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
 
@@ -915,6 +915,17 @@ routeDetails.unloading.addExtraInformationYesNo.title = Do you want to add extra
 routeDetails.unloading.addExtraInformationYesNo.heading = Do you want to add extra information for the place of unloading?
 routeDetails.unloading.addExtraInformationYesNo.checkYourAnswersLabel = Do you want to add extra information for the place of unloading?
 routeDetails.unloading.addExtraInformationYesNo.error.required = Select yes if you want to add extra information for the place of unloading
+
+routeDetails.unloading.placeOfUnloadingUnLocode.title = What is the UN/LOCODE for the place of unloading?
+routeDetails.unloading.placeOfUnloadingUnLocode.heading = What is the UN/LOCODE for the place of unloading?
+routeDetails.unloading.placeOfUnloadingUnLocode.hintText = Enter the code, like DEBER or ESMAD.
+routeDetails.unloading.placeOfUnloadingUnLocode.label = What is the UN/LOCODE for the place of unloading?
+routeDetails.unloading.placeOfUnloadingUnLocode.placeholder = Select a UN/LOCODE.
+routeDetails.unloading.placeOfUnloadingUnLocode.change.hidden = What is the UN/LOCODE for the place of unloading?
+routeDetails.unloading.placeOfUnloadingUnLocode.checkYourAnswersLabel = What is the UN/LOCODE for the place of unloading?
+routeDetails.unloading.placeOfUnloadingUnLocode.error.required = Enter the UN/LOCODE for the place of unloading
+routeDetails.unloading.placeOfUnloadingUnLocode.error.invalidCharacters = The UN/LOCODE for the place of loading must only include letters a to z and numbers 0 to 9
+
 
 routeDetails.unloading.country.title = Which country is the place of unloading in?
 routeDetails.unloading.country.heading = Which country is the place of unloading in?

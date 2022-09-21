@@ -20,17 +20,10 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
-import models.journeyDomain.routeDetails.loadingAndUnloading.loading.{AdditionalInformationDomain, LoadingDomain}
 import models.reference.{Country, UnLocode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.routeDetails.loading.{
-  PlaceOfLoadingAddExtraInformationYesNoPage,
-  PlaceOfLoadingAddUnLocodeYesNoPage,
-  PlaceOfLoadingCountryPage,
-  PlaceOfLoadingLocationPage,
-  PlaceOfLoadingUnLocodePage
-}
+import pages.routeDetails.loadingAndUnloading.loading._
 
 class LoadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 

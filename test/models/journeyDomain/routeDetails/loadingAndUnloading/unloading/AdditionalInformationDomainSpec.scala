@@ -23,8 +23,8 @@ import models.domain.{EitherType, UserAnswersReader}
 import models.reference.Country
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.routeDetails.loading.PlaceOfLoadingLocationPage
-import pages.routeDetails.unloading.CountryPage
+import pages.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingLocationPage
+import pages.routeDetails.loadingAndUnloading.unloading.CountryPage
 
 class AdditionalInformationDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
   "AdditionalInformation" - {

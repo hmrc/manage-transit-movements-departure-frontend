@@ -20,7 +20,7 @@ import cats.implicits._
 import models.domain._
 import models.journeyDomain.JourneyDomainModel
 import models.reference.Country
-import pages.routeDetails.unloading.CountryPage
+import pages.routeDetails.loadingAndUnloading.unloading.CountryPage
 
 case class AdditionalInformationDomain(
   country: Country,

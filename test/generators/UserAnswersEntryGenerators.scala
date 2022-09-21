@@ -208,7 +208,7 @@ trait UserAnswersEntryGenerators {
   }
 
   private def generateLoadingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.routeDetails.loading._
+    import pages.routeDetails.loadingAndUnloading.loading._
     {
       case PlaceOfLoadingAddUnLocodeYesNoPage         => arbitrary[Boolean].map(JsBoolean)
       case PlaceOfLoadingUnLocodePage                 => arbitrary[UnLocode].map(Json.toJson(_))
@@ -219,7 +219,7 @@ trait UserAnswersEntryGenerators {
   }
 
   private def generateUnloadingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.routeDetails.unloading._
+    import pages.routeDetails.loadingAndUnloading.unloading._
     {
       case AddPlaceOfUnloadingPage           => arbitrary[Boolean].map(JsBoolean)
       case PlaceOfUnloadingUnLocodeYesNoPage => arbitrary[Boolean].map(JsBoolean)

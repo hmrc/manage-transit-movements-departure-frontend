@@ -22,7 +22,7 @@ import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import models.reference.{Country, UnLocode}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.routeDetails.unloading.{AddExtraInformationYesNoPage, CountryPage, PlaceOfUnloadingUnLocodeYesNoPage}
+import pages.routeDetails.loadingAndUnloading.unloading.{AddExtraInformationYesNoPage, CountryPage, PlaceOfUnloadingUnLocodeYesNoPage}
 
 class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
