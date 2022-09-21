@@ -28,5 +28,5 @@ object Constants {
   lazy val accessCodeLength: Int               = 4
   lazy val addiationalIdentifierMaxLength: Int = 4
   lazy val maxAuthorisationNumberLength: Int   = 35
-  lazy val placeOfLoadingMaxLength: Int        = 35
+  lazy val locationMaxLength: Int              = 35
 }

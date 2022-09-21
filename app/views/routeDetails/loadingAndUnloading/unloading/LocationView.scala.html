@@ -16,36 +16,37 @@
 
 @import controllers.routeDetails.loadingAndUnloading.unloading.routes
 @import models.LocalReferenceNumber
-@import viewModels.components.InputYesNoViewModel._
-@import views.html.components.{Button, ErrorSummary, InputYesNo}
+@import viewModels.components.InputTextViewModel._
+@import views.html.components.{Button, ErrorSummary, InputText}
 
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
-    inputYesNo: InputYesNo,
+    inputText: InputText,
     errorSummary: ErrorSummary,
     button: Button
 )
 
-@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[String], lrn: LocalReferenceNumber, location: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.unloading.addExtraInformationYesNo.title"),
+    title = messages("routeDetails.unloading.location.title", location),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.AddExtraInformationYesNoController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.LocationController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
-        @inputYesNo(
+        @inputText(
             field = form("value"),
-            yesNoType = YesNoWithAdditionalHtml(
-                heading = messages("routeDetails.unloading.addExtraInformationYesNo.heading"),
-                caption = Some(messages("routeDetails.unloading.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.unloading.addExtraInformationYesNo.paragraph")}</p>""")
-            )
+            inputTextType = OrdinaryTextInput(
+                heading = messages("routeDetails.unloading.location.heading", location),
+                caption = Some(messages("routeDetails.unloading.caption"))
+            ),
+            hint = Some(messages("routeDetails.unloading.location.hint")),
+            inputClass = InputSize.Width20
         )
 
         @button(attributes = Map("id" -> "submit"))

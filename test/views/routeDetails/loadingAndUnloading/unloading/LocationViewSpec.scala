@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.routeDetails.loading
+package views.routeDetails.loadingAndUnloading.unloading
 
 import forms.Constants.locationMaxLength
 import forms.LocationFormProvider
@@ -23,31 +23,32 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingLocationView
+import views.html.routeDetails.loadingAndUnloading.unloading.LocationView
 import org.scalacheck.{Arbitrary, Gen}
+import views.html.routeDetails.loadingAndUnloading.unloading.LocationView
 
-class PlaceOfLoadingLocationViewSpec extends InputTextViewBehaviours[String] {
+class LocationViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "routeDetails.loading.placeOfLoadingLocation"
+  override val prefix: String = "routeDetails.unloading.location"
 
-  private val countryName = Gen.alphaNumStr.sample.value.take(locationMaxLength)
+  private val location = Gen.alphaNumStr.sample.value.take(locationMaxLength)
 
   override def form: Form[String] = new LocationFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[PlaceOfLoadingLocationView].apply(form, lrn, countryName, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[LocationView].apply(form, lrn, location, NormalMode)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 
-  behave like pageWithTitle(countryName)
+  behave like pageWithTitle(location)
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Place of unloading")
 
-  behave like pageWithHeading(countryName)
+  behave like pageWithHeading(location)
 
-  behave like pageWithHint("Describe the specific location of loading. This can be up to 35 characters long.")
+  behave like pageWithHint("Describe the specific location of unloading. This can be up to 35 characters long.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 

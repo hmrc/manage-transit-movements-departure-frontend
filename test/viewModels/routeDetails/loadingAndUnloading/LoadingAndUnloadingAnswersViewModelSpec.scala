@@ -102,7 +102,7 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
           }
 
           "and adding country and location" - {
-            "must render 6 rows" ignore {
+            "must render 6 rows" in {
               val initialAnswers = emptyUserAnswers
                 .setValue(unloading.AddPlaceOfUnloadingPage, true)
                 .setValue(unloading.PlaceOfUnloadingUnLocodeYesNoPage, true)
@@ -119,7 +119,7 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
         }
 
         "when not adding a UN/LOCODE" - {
-          "must render 4 rows" ignore {
+          "must render 4 rows" in {
             val initialAnswers = emptyUserAnswers
               .setValue(unloading.AddPlaceOfUnloadingPage, true)
               .setValue(unloading.PlaceOfUnloadingUnLocodeYesNoPage, false)

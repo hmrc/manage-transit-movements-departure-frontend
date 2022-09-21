@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-package pages.sections.routeDetails.unloading
+package forms
 
-import pages.sections.Section
-import play.api.libs.json.{JsObject, JsPath}
+import forms.Constants.locationMaxLength
+import forms.mappings.Mappings
+import models.domain.StringFieldRegex.stringFieldRegex
+import play.api.data.Form
 
-case object UnloadingLocationSection extends Section[JsObject] {
+import javax.inject.Inject
 
-  override def path: JsPath = UnloadingSection.path \ toString
+class LocationFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "additionalInformation"
+  def apply(prefix: String, args: String*): Form[String] =
+    Form(
+      "value" -> text(s"$prefix.error.required", args)
+        .verifying(
+          StopOnFirstFail[String](maxLength(locationMaxLength, s"$prefix.error.length"), regexp(stringFieldRegex, s"$prefix.error.invalid"))
+        )
+    )
 }

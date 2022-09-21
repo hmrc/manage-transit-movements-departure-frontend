@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages.routeDetails.loadingAndUnloading.unloading
 
-import forms.Constants.placeOfLoadingMaxLength
-import forms.mappings.Mappings
-import models.domain.StringFieldRegex.stringFieldRegex
-import play.api.data.Form
+import pages.behaviours.PageBehaviours
 
-import javax.inject.Inject
+class LocationPageSpec extends PageBehaviours {
 
-class PlaceOfLoadingLocationFormProvider @Inject() extends Mappings {
+  "LocationPage" - {
 
-  def apply(prefix: String, args: String*): Form[String] =
-    Form(
-      "value" -> text(s"$prefix.error.required", args)
-        .verifying(
-          StopOnFirstFail[String](maxLength(placeOfLoadingMaxLength, s"$prefix.error.length"), regexp(stringFieldRegex, s"$prefix.error.invalid"))
-        )
-    )
+    beRetrievable[String](LocationPage)
+
+    beSettable[String](LocationPage)
+
+    beRemovable[String](LocationPage)
+  }
 }
