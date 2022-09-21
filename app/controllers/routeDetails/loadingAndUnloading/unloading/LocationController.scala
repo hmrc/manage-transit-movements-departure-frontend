@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails.unloading
+package controllers.routeDetails.loadingAndUnloading.unloading
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.LocationFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
-import pages.routeDetails.loading.PlaceOfLoadingCountryPage
-import pages.routeDetails.unloading.LocationPage
+import pages.routeDetails.loadingAndUnloading.unloading.CountryPage
+import pages.routeDetails.loadingAndUnloading.unloading.LocationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.unloading.LocationView
+import views.html.routeDetails.loadingAndUnloading.unloading.LocationView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -45,11 +45,9 @@ class LocationController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  //TODO: change to PlaceOfUnLoadingCountryPage once created
-
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(PlaceOfLoadingCountryPage)) {
+    .andThen(getMandatoryPage(CountryPage)) {
       implicit request =>
         val location = request.arg.description
         val form     = formProvider("routeDetails.unloading.location", location)
@@ -62,7 +60,7 @@ class LocationController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(PlaceOfLoadingCountryPage))
+    .andThen(getMandatoryPage(CountryPage))
     .async {
       implicit request =>
         val location = request.arg.description

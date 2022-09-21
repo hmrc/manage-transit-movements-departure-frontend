@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.routeDetails.unloading
+package views.routeDetails.loadingAndUnloading.unloading
 
 import forms.Constants.locationMaxLength
 import forms.LocationFormProvider
@@ -23,8 +23,9 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.routeDetails.unloading.LocationView
+import views.html.routeDetails.loadingAndUnloading.unloading.LocationView
 import org.scalacheck.{Arbitrary, Gen}
+import views.html.routeDetails.loadingAndUnloading.unloading.LocationView
 
 class LocationViewSpec extends InputTextViewBehaviours[String] {
 
@@ -43,7 +44,7 @@ class LocationViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Place of unloading")
 
   behave like pageWithHeading(location)
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails.unloading
+package controllers.routeDetails.loadingAndUnloading.unloading
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.LocationFormProvider
@@ -25,13 +25,12 @@ import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
-import pages.routeDetails.loading.PlaceOfLoadingCountryPage
-import pages.routeDetails.unloading.LocationPage
+import pages.routeDetails.loadingAndUnloading.unloading.{CountryPage, LocationPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.routeDetails.unloading.LocationView
+import views.html.routeDetails.loadingAndUnloading.unloading.LocationView
 
 import scala.concurrent.Future
 
@@ -53,7 +52,7 @@ class LocationControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
     "must return OK and the correct view for a GET" in {
       //TODO: change to PlaceOfUnLoadingCountryPage once created
-      val userAnswers = emptyUserAnswers.setValue(PlaceOfLoadingCountryPage, country)
+      val userAnswers = emptyUserAnswers.setValue(CountryPage, country)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, locationRoute)
@@ -71,7 +70,7 @@ class LocationControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(PlaceOfLoadingCountryPage, country)
+        .setValue(CountryPage, country)
         .setValue(LocationPage, "test string")
       setExistingUserAnswers(userAnswers)
 
@@ -91,7 +90,7 @@ class LocationControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
     "must redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.setValue(PlaceOfLoadingCountryPage, country)
+      val userAnswers = emptyUserAnswers.setValue(CountryPage, country)
       setExistingUserAnswers(userAnswers)
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
@@ -108,7 +107,7 @@ class LocationControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.setValue(PlaceOfLoadingCountryPage, country)
+      val userAnswers = emptyUserAnswers.setValue(CountryPage, country)
       setExistingUserAnswers(userAnswers)
 
       val invalidAnswer = ""

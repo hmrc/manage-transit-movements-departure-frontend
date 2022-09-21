@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.routeDetails.unloading.routes
+@import controllers.routeDetails.loadingAndUnloading.unloading.routes
 @import models.LocalReferenceNumber
 @import viewModels.components.InputTextViewModel._
 @import views.html.components.{Button, ErrorSummary, InputText}
@@ -43,7 +43,7 @@
             field = form("value"),
             inputTextType = OrdinaryTextInput(
                 heading = messages("routeDetails.unloading.location.heading", location),
-                caption = Some(messages("routeDetails.caption"))
+                caption = Some(messages("routeDetails.unloading.caption"))
             ),
             hint = Some(messages("routeDetails.unloading.location.hint")),
             inputClass = InputSize.Width20

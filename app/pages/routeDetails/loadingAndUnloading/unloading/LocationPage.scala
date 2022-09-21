@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.unloading
+package pages.routeDetails.loadingAndUnloading.unloading
 
-import controllers.routeDetails.unloading.routes
+import controllers.routeDetails.loadingAndUnloading.unloading.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.unloading.UnloadingSection
+import pages.sections.routeDetails.unloading.UnloadingLocationSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case object LocationPage extends QuestionPage[String] {
 
-  override def path: JsPath = UnloadingSection.path \ toString
+  override def path: JsPath = UnloadingLocationSection.path \ toString
 
   override def toString: String = "location"
 
