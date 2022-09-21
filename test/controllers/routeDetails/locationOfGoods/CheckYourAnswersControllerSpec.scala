@@ -25,27 +25,27 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewModels.routeDetails.locationOfGoods.LocationOfGoodsViewModel
-import viewModels.routeDetails.locationOfGoods.LocationOfGoodsViewModel.LocationOfGoodsViewModelProvider
+import viewModels.routeDetails.locationOfGoods.LocationOfGoodsAnswersViewModel
+import viewModels.routeDetails.locationOfGoods.LocationOfGoodsAnswersViewModel.LocationOfGoodsAnswersViewModelProvider
 import viewModels.sections.Section
 import views.html.routeDetails.locationOfGoods.CheckYourAnswersView
 
 class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private lazy val mockViewModelProvider = mock[LocationOfGoodsViewModelProvider]
+  private lazy val mockViewModelProvider = mock[LocationOfGoodsAnswersViewModelProvider]
   private lazy val checkYourAnswersRoute = routes.CheckYourAnswersController.onPageLoad(lrn).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind[LocationOfGoodsViewModelProvider].toInstance(mockViewModelProvider))
+      .overrides(bind[LocationOfGoodsAnswersViewModelProvider].toInstance(mockViewModelProvider))
 
   "CheckYourAnswers Controller" - {
 
     "must return OK and the correct view for a GET" in {
       val sampleSection = arbitrary[Section].sample.value
       when(mockViewModelProvider.apply(any())(any()))
-        .thenReturn(LocationOfGoodsViewModel(sampleSection))
+        .thenReturn(LocationOfGoodsAnswersViewModel(sampleSection))
 
       setExistingUserAnswers(emptyUserAnswers)
 

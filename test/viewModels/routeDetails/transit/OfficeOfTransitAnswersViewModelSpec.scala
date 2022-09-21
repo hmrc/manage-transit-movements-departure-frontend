@@ -24,7 +24,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
 
-class OfficeOfTransitViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class OfficeOfTransitAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
   "apply" - {
 
@@ -39,7 +39,7 @@ class OfficeOfTransitViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
                 .setValue(OfficeOfTransitPage(index), office)
                 .setValue(AddOfficeOfTransitETAYesNoPage(index), false)
 
-              val section = OfficeOfTransitViewModel.apply(answers, index).section
+              val section = OfficeOfTransitAnswersViewModel.apply(answers, index).section
 
               section.sectionTitle mustNot be(defined)
               section.rows.size mustBe 3
@@ -57,7 +57,7 @@ class OfficeOfTransitViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
                 .setValue(AddOfficeOfTransitETAYesNoPage(index), true)
                 .setValue(OfficeOfTransitETAPage(index), dateTime)
 
-              val section = OfficeOfTransitViewModel.apply(answers, index).section
+              val section = OfficeOfTransitAnswersViewModel.apply(answers, index).section
 
               section.sectionTitle mustNot be(defined)
               section.rows.size mustBe 4

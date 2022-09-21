@@ -23,16 +23,16 @@ import viewModels.sections.Section
 
 import javax.inject.Inject
 
-case class OfficeOfExitViewModel(section: Section)
+case class OfficeOfExitAnswersViewModel(section: Section)
 
-object OfficeOfExitViewModel {
+object OfficeOfExitAnswersViewModel {
 
-  def apply(userAnswers: UserAnswers, index: Index)(implicit messages: Messages): OfficeOfExitViewModel =
-    new OfficeOfExitViewModelProvider()(userAnswers, index)
+  def apply(userAnswers: UserAnswers, index: Index)(implicit messages: Messages): OfficeOfExitAnswersViewModel =
+    new OfficeOfExitAnswersViewModelProvider()(userAnswers, index)
 
-  class OfficeOfExitViewModelProvider @Inject() () {
+  class OfficeOfExitAnswersViewModelProvider @Inject() () {
 
-    def apply(userAnswers: UserAnswers, index: Index)(implicit messages: Messages): OfficeOfExitViewModel = {
+    def apply(userAnswers: UserAnswers, index: Index)(implicit messages: Messages): OfficeOfExitAnswersViewModel = {
       val helper = new OfficeOfExitCheckYourAnswersHelper(userAnswers, NormalMode, index)
 
       val rows = Seq(
@@ -40,7 +40,7 @@ object OfficeOfExitViewModel {
         helper.officeOfExit
       ).flatten
 
-      new OfficeOfExitViewModel(Section(rows))
+      new OfficeOfExitAnswersViewModel(Section(rows))
     }
   }
 }

@@ -22,7 +22,7 @@ import models.LocationOfGoodsIdentification._
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.locationOfGoods._
 
-class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
   "apply" - {
     "when 'V' customs office" - {
@@ -34,7 +34,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
 
         forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
           userAnswers =>
-            val section = LocationOfGoodsViewModel.apply(userAnswers).section
+            val section = LocationOfGoodsAnswersViewModel.apply(userAnswers).section
             section.rows.size mustBe 3
             section.sectionTitle mustNot be(defined)
         }
@@ -53,7 +53,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
 
           forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
             userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              val section = LocationOfGoodsAnswersViewModel.apply(userAnswers).section
               section.rows.size mustBe 8
               section.sectionTitle mustNot be(defined)
           }
@@ -69,7 +69,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
 
           forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
             userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              val section = LocationOfGoodsAnswersViewModel.apply(userAnswers).section
               section.rows.size mustBe 5
               section.sectionTitle mustNot be(defined)
           }
@@ -89,7 +89,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
 
           forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
             userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              val section = LocationOfGoodsAnswersViewModel.apply(userAnswers).section
               section.rows.size mustBe 8
               section.sectionTitle mustNot be(defined)
           }
@@ -105,7 +105,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
 
           forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
             userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              val section = LocationOfGoodsAnswersViewModel.apply(userAnswers).section
               section.rows.size mustBe 5
               section.sectionTitle mustNot be(defined)
           }
@@ -124,7 +124,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
 
           forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
             userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              val section = LocationOfGoodsAnswersViewModel.apply(userAnswers).section
               section.rows.size mustBe 6
               section.sectionTitle mustNot be(defined)
           }
@@ -139,7 +139,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
 
           forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
             userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              val section = LocationOfGoodsAnswersViewModel.apply(userAnswers).section
               section.rows.size mustBe 4
               section.sectionTitle mustNot be(defined)
           }
@@ -158,7 +158,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
 
           forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
             userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              val section = LocationOfGoodsAnswersViewModel.apply(userAnswers).section
               section.rows.size mustBe 6
               section.sectionTitle mustNot be(defined)
           }
@@ -173,7 +173,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
 
           forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
             userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              val section = LocationOfGoodsAnswersViewModel.apply(userAnswers).section
               section.rows.size mustBe 4
               section.sectionTitle mustNot be(defined)
           }
@@ -192,7 +192,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
 
           forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
             userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              val section = LocationOfGoodsAnswersViewModel.apply(userAnswers).section
               section.rows.size mustBe 6
               section.sectionTitle mustNot be(defined)
           }
@@ -207,7 +207,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
 
           forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
             userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              val section = LocationOfGoodsAnswersViewModel.apply(userAnswers).section
               section.rows.size mustBe 4
               section.sectionTitle mustNot be(defined)
           }
@@ -226,7 +226,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
 
           forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
             userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              val section = LocationOfGoodsAnswersViewModel.apply(userAnswers).section
               section.rows.size mustBe 6
               section.sectionTitle mustNot be(defined)
           }
@@ -241,7 +241,7 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
 
           forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
             userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+              val section = LocationOfGoodsAnswersViewModel.apply(userAnswers).section
               section.rows.size mustBe 4
               section.sectionTitle mustNot be(defined)
           }

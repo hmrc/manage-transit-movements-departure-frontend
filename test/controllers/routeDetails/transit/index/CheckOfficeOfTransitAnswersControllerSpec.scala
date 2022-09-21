@@ -25,8 +25,8 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewModels.routeDetails.transit.OfficeOfTransitViewModel
-import viewModels.routeDetails.transit.OfficeOfTransitViewModel.OfficeOfTransitViewModelProvider
+import viewModels.routeDetails.transit.OfficeOfTransitAnswersViewModel
+import viewModels.routeDetails.transit.OfficeOfTransitAnswersViewModel.OfficeOfTransitAnswersViewModelProvider
 import viewModels.sections.Section
 import views.html.routeDetails.transit.index.CheckOfficeOfTransitAnswersView
 
@@ -34,12 +34,12 @@ import scala.concurrent.Future
 
 class CheckOfficeOfTransitAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private lazy val mockViewModelProvider = mock[OfficeOfTransitViewModelProvider]
+  private lazy val mockViewModelProvider = mock[OfficeOfTransitAnswersViewModelProvider]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind[OfficeOfTransitViewModelProvider].toInstance(mockViewModelProvider))
+      .overrides(bind[OfficeOfTransitAnswersViewModelProvider].toInstance(mockViewModelProvider))
 
   "Check Office Of Transit Answers Controller" - {
 
@@ -47,7 +47,7 @@ class CheckOfficeOfTransitAnswersControllerSpec extends SpecBase with AppWithDef
       val sampleSection = arbitrary[Section].sample.value
 
       when(mockViewModelProvider.apply(any(), any())(any()))
-        .thenReturn(OfficeOfTransitViewModel(sampleSection))
+        .thenReturn(OfficeOfTransitAnswersViewModel(sampleSection))
 
       setExistingUserAnswers(emptyUserAnswers)
 

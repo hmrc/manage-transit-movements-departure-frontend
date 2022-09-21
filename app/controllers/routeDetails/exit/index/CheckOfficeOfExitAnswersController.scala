@@ -21,7 +21,7 @@ import models.{Index, LocalReferenceNumber}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.routeDetails.exit.OfficeOfExitViewModel.OfficeOfExitViewModelProvider
+import viewModels.routeDetails.exit.OfficeOfExitAnswersViewModel.OfficeOfExitAnswersViewModelProvider
 import views.html.routeDetails.exit.index.CheckOfficeOfExitAnswersView
 
 import javax.inject.Inject
@@ -31,7 +31,7 @@ class CheckOfficeOfExitAnswersController @Inject() (
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: CheckOfficeOfExitAnswersView,
-  viewModelProvider: OfficeOfExitViewModelProvider
+  viewModelProvider: OfficeOfExitAnswersViewModelProvider
 ) extends FrontendBaseController
     with I18nSupport {
 

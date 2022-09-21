@@ -23,16 +23,16 @@ import viewModels.sections.Section
 
 import javax.inject.Inject
 
-case class LocationOfGoodsViewModel(section: Section)
+case class LocationOfGoodsAnswersViewModel(section: Section)
 
-object LocationOfGoodsViewModel {
+object LocationOfGoodsAnswersViewModel {
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): LocationOfGoodsViewModel =
-    new LocationOfGoodsViewModelProvider()(userAnswers)
+  def apply(userAnswers: UserAnswers)(implicit messages: Messages): LocationOfGoodsAnswersViewModel =
+    new LocationOfGoodsAnswersViewModelProvider()(userAnswers)
 
-  class LocationOfGoodsViewModelProvider @Inject() () {
+  class LocationOfGoodsAnswersViewModelProvider @Inject() () {
 
-    def apply(userAnswers: UserAnswers)(implicit messages: Messages): LocationOfGoodsViewModel = {
+    def apply(userAnswers: UserAnswers)(implicit messages: Messages): LocationOfGoodsAnswersViewModel = {
       val helper = new LocationOfGoodsCheckYourAnswersHelper(userAnswers, NormalMode)
 
       val rows = Seq(
@@ -52,7 +52,7 @@ object LocationOfGoodsViewModel {
         helper.contactPhoneNumber
       ).flatten
 
-      new LocationOfGoodsViewModel(Section(rows))
+      new LocationOfGoodsAnswersViewModel(Section(rows))
     }
   }
 }

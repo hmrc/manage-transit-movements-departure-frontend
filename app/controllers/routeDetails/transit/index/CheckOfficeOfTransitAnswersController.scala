@@ -22,7 +22,7 @@ import models.{Index, LocalReferenceNumber}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.routeDetails.transit.OfficeOfTransitViewModel.OfficeOfTransitViewModelProvider
+import viewModels.routeDetails.transit.OfficeOfTransitAnswersViewModel.OfficeOfTransitAnswersViewModelProvider
 import views.html.routeDetails.transit.index.CheckOfficeOfTransitAnswersView
 
 class CheckOfficeOfTransitAnswersController @Inject() (
@@ -30,7 +30,7 @@ class CheckOfficeOfTransitAnswersController @Inject() (
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: CheckOfficeOfTransitAnswersView,
-  viewModelProvider: OfficeOfTransitViewModelProvider
+  viewModelProvider: OfficeOfTransitAnswersViewModelProvider
 ) extends FrontendBaseController
     with I18nSupport {
 

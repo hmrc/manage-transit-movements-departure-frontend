@@ -14,33 +14,26 @@
  * limitations under the License.
  */
 
-package viewModels.routeDetails.exit
+package viewModels.routeDetails
 
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
-import models.reference.Country
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.exit.index.OfficeOfExitCountryPage
+import viewModels.routeDetails.RouteDetailsAnswersViewModel.RouteDetailsAnswersViewModelProvider
 
-class OfficeOfExitViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class RouteDetailsAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+
+  private val viewModelProvider = injector.instanceOf[RouteDetailsAnswersViewModelProvider]
 
   "apply" - {
+    "must return all sections" in {
+      forAll(arbitraryRouteDetailsAnswers(emptyUserAnswers)) {
+        answers =>
+          val sections = viewModelProvider.apply(answers).sections
 
-    "must return row for each answer" - {
-
-      "must return 1 rows" in {
-        forAll(arbitrary[Country]) {
-          country =>
-            val answers = emptyUserAnswers
-              .setValue(OfficeOfExitCountryPage(index), country)
-
-            val section = OfficeOfExitViewModel.apply(answers, index).section
-
-            section.sectionTitle mustNot be(defined)
-            section.rows.size mustBe 1
-        }
-
+          sections.size mustBe 2
+          sections.head.sectionTitle must not be defined
+          sections(1).sectionTitle.get mustBe "Transit route countries"
       }
     }
   }

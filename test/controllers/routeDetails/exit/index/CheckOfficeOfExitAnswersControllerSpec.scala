@@ -25,8 +25,8 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewModels.routeDetails.exit.OfficeOfExitViewModel
-import viewModels.routeDetails.exit.OfficeOfExitViewModel.OfficeOfExitViewModelProvider
+import viewModels.routeDetails.exit.OfficeOfExitAnswersViewModel
+import viewModels.routeDetails.exit.OfficeOfExitAnswersViewModel.OfficeOfExitAnswersViewModelProvider
 import viewModels.sections.Section
 import views.html.routeDetails.exit.index.CheckOfficeOfExitAnswersView
 
@@ -34,13 +34,13 @@ import scala.concurrent.Future
 
 class CheckOfficeOfExitAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private lazy val mockViewModelProvider         = mock[OfficeOfExitViewModelProvider]
+  private lazy val mockViewModelProvider         = mock[OfficeOfExitAnswersViewModelProvider]
   private lazy val checkOfficeOfExitAnswersRoute = routes.CheckOfficeOfExitAnswersController.onPageLoad(lrn, index).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind[OfficeOfExitViewModelProvider].toInstance(mockViewModelProvider))
+      .overrides(bind[OfficeOfExitAnswersViewModelProvider].toInstance(mockViewModelProvider))
 
   "CheckOfficeOfExitAnswers Controller" - {
 
@@ -48,7 +48,7 @@ class CheckOfficeOfExitAnswersControllerSpec extends SpecBase with AppWithDefaul
       val sampleSection = arbitrary[Section].sample.value
 
       when(mockViewModelProvider.apply(any(), any())(any()))
-        .thenReturn(OfficeOfExitViewModel(sampleSection))
+        .thenReturn(OfficeOfExitAnswersViewModel(sampleSection))
 
       setExistingUserAnswers(emptyUserAnswers)
 

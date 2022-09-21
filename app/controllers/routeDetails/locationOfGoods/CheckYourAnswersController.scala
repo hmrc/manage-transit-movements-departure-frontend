@@ -24,7 +24,7 @@ import navigation.routeDetails.RouteDetailsNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.routeDetails.locationOfGoods.LocationOfGoodsViewModel.LocationOfGoodsViewModelProvider
+import viewModels.routeDetails.locationOfGoods.LocationOfGoodsAnswersViewModel.LocationOfGoodsAnswersViewModelProvider
 import views.html.routeDetails.locationOfGoods.CheckYourAnswersView
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -35,7 +35,7 @@ class CheckYourAnswersController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
   navigatorProvider: RouteDetailsNavigatorProvider,
-  viewModelProvider: LocationOfGoodsViewModelProvider
+  viewModelProvider: LocationOfGoodsAnswersViewModelProvider
 ) extends FrontendBaseController
     with I18nSupport {
 
