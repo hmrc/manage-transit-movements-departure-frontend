@@ -1,3 +1,6 @@
+
+->         /                   app.traderDetails.holderOfTransit.contact.Routes
+
 GET        /:lrn/trader-details/holder-of-transit/is-eori-known                               controllers.traderDetails.holderOfTransit.EoriYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/trader-details/holder-of-transit/is-eori-known                               controllers.traderDetails.holderOfTransit.EoriYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/trader-details/holder-of-transit/change-is-eori-known                        controllers.traderDetails.holderOfTransit.EoriYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

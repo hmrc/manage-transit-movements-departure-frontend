@@ -1,3 +1,6 @@
 
+->         /                   app.routeDetails.loadingAndUnloading.loading.Routes
+->         /                   app.routeDetails.loadingAndUnloading.unloading.Routes
+
 GET        /:lrn/route-details/loading-and-unloading/check-answers                          controllers.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersController.onPageLoad(lrn: LocalReferenceNumber)
 POST       /:lrn/route-details/loading-and-unloading/ccheck-answers                         controllers.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersController.onSubmit(lrn: LocalReferenceNumber)

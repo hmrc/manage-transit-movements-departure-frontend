@@ -1,5 +1,10 @@
 # microservice specific routes
 
+->         /                                              app.preTaskList.Routes
+->         /                                              app.traderDetails.Routes
+->         /                                              app.guaranteeDetails.Routes
+->         /                                              app.routeDetails.Routes
+
 ->         /hmrc-frontend                                 hmrcfrontend.Routes
 GET        /assets/*file                                  controllers.Assets.versioned(path="/public", file: Asset)
 
