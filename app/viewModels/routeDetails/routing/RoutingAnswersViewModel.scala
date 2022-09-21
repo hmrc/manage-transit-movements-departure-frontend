@@ -29,9 +29,6 @@ case class RoutingAnswersViewModel(sections: Seq[Section])
 
 object RoutingAnswersViewModel {
 
-  def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): RoutingAnswersViewModel =
-    new RoutingAnswersViewModelProvider().apply(userAnswers, mode)
-
   class RoutingAnswersViewModelProvider @Inject() () {
 
     def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): RoutingAnswersViewModel = {

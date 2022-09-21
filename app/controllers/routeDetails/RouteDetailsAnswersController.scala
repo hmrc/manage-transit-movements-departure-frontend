@@ -21,23 +21,33 @@ import controllers.actions.Actions
 import models.LocalReferenceNumber
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.routeDetails.RouteDetailsAnswersViewModel.RouteDetailsAnswersViewModelProvider
 import views.html.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersView
+
+import scala.concurrent.ExecutionContext
 
 class RouteDetailsAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: LoadingAndUnloadingAnswersView,
-  viewModelProvider: RouteDetailsAnswersViewModelProvider
-) extends FrontendBaseController
+  viewModelProvider: RouteDetailsAnswersViewModelProvider,
+  countriesService: CountriesService
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      val sections = viewModelProvider(request.userAnswers).sections
-      Ok(view(lrn, sections))
+      for {
+        ctcCountries                             <- countriesService.getCountryCodesCTC()
+        customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
+      } yield {
+        val sections = viewModelProvider(request.userAnswers)(ctcCountries.countryCodes, customsSecurityAgreementAreaCountryCodes.countryCodes).sections
+        Ok(view(lrn, sections))
+      }
   }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {

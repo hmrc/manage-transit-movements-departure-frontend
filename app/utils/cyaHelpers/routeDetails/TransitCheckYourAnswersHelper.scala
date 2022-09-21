@@ -18,12 +18,13 @@ package utils.cyaHelpers.routeDetails
 
 import controllers.routeDetails.transit.index.routes
 import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
-import models.reference.Country
+import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode, UserAnswers}
-import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
+import pages.routeDetails.transit.AddOfficeOfTransitYesNoPage
+import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitPage}
 import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import play.api.i18n.Messages
-import play.api.libs.json.Reads
+import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
 import viewModels.ListItem
 
@@ -36,6 +37,21 @@ class TransitCheckYourAnswersHelper(
 )(implicit messages: Messages)
     extends AnswersHelper(userAnswers, mode) {
 
+  def addOfficeOfTransit: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+    page = AddOfficeOfTransitYesNoPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "routeDetails.transit.addOfficeOfTransitYesNo",
+    id = Some("add-office-of-transit")
+  )
+
+  def officeOfTransit(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[OfficeOfTransitDomain, CustomsOffice](
+    page = OfficeOfTransitPage(index),
+    formatAnswer = formatAsText,
+    prefix = "routeDetails.transit.checkYourAnswers.countryOfRouting",
+    id = Some(s"change-office-of-transit-${index.display}"),
+    args = index.display
+  )(OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes), implicitly)
+
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(OfficesOfTransitSection) {
       position =>
@@ -47,7 +63,7 @@ class TransitCheckYourAnswersHelper(
           removeRoute = if (position == 0) None else Some(routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, index))
         )(
           OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes),
-          implicitly[Reads[Country]]
+          implicitly
         )
     }
 }

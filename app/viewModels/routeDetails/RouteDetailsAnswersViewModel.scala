@@ -19,6 +19,7 @@ package viewModels.routeDetails
 import models.{CheckMode, UserAnswers}
 import play.api.i18n.Messages
 import viewModels.routeDetails.routing.RoutingAnswersViewModel.RoutingAnswersViewModelProvider
+import viewModels.routeDetails.transit.TransitAnswersViewModel.TransitAnswersViewModelProvider
 import viewModels.sections.Section
 
 import javax.inject.Inject
@@ -28,13 +29,18 @@ case class RouteDetailsAnswersViewModel(sections: Seq[Section])
 object RouteDetailsAnswersViewModel {
 
   class RouteDetailsAnswersViewModelProvider @Inject() (
-    routingAnswersViewModelProvider: RoutingAnswersViewModelProvider
+    routingAnswersViewModelProvider: RoutingAnswersViewModelProvider,
+    transitAnswersViewModelProvider: TransitAnswersViewModelProvider
   ) {
 
-    def apply(userAnswers: UserAnswers)(implicit messages: Messages): RouteDetailsAnswersViewModel = {
+    def apply(userAnswers: UserAnswers)(
+      ctcCountryCodes: Seq[String],
+      customsSecurityAgreementAreaCountryCodes: Seq[String]
+    )(implicit messages: Messages): RouteDetailsAnswersViewModel = {
       val mode = CheckMode
       new RouteDetailsAnswersViewModel(
-        routingAnswersViewModelProvider.apply(userAnswers, mode).sections
+        routingAnswersViewModelProvider.apply(userAnswers, mode).sections ++
+          transitAnswersViewModelProvider.apply(userAnswers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes).sections
       )
     }
 

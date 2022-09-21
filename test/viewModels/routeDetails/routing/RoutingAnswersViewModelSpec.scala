@@ -24,6 +24,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import pages.routeDetails.routing._
 import pages.routeDetails.routing.index.CountryOfRoutingPage
 import viewModels.Link
+import viewModels.routeDetails.routing.RoutingAnswersViewModel.RoutingAnswersViewModelProvider
 
 class RoutingAnswersViewModelSpec extends SpecBase with Generators {
 
@@ -34,7 +35,9 @@ class RoutingAnswersViewModelSpec extends SpecBase with Generators {
       .setValue(AddCountryOfRoutingYesNoPage, arbitrary[Boolean].sample.value)
       .setValue(CountryOfRoutingPage(index), arbitrary[Country].sample.value)
 
-    val sections = RoutingAnswersViewModel.apply(userAnswers, NormalMode).sections
+    val viewModelProvider = app.injector.instanceOf[RoutingAnswersViewModelProvider]
+
+    val sections = viewModelProvider.apply(userAnswers, NormalMode).sections
 
     sections.size mustBe 2
 

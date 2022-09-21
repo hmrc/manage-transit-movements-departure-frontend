@@ -17,20 +17,114 @@
 package utils.cyaHelpers.routeDetails
 
 import base.SpecBase
-import generators.Generators
+import generators.{Generators, RouteDetailsUserAnswersGenerator}
 import models.SecurityDetailsType.NoSecurityDetails
 import models.reference.{Country, CustomsOffice}
-import models.{Index, NormalMode}
+import models.{Index, Mode, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.{OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails.routing.OfficeOfDestinationPage
+import pages.routeDetails.transit.AddOfficeOfTransitYesNoPage
 import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitPage}
+import uk.gov.hmrc.govukfrontend.views.Aliases._
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import viewModels.ListItem
 
-class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
   "TransitCheckYourAnswersHelper" - {
+
+    "addOfficeOfTransit" - {
+      "must return None" - {
+        "when AddOfficeOfTransitYesNoPage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransitCheckYourAnswersHelper(emptyUserAnswers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+              val result = helper.addOfficeOfTransit
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when AddOfficeOfTransitYesNoPage defined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(AddOfficeOfTransitYesNoPage, true)
+
+              val helper = new TransitCheckYourAnswersHelper(answers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+              val result = helper.addOfficeOfTransit
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Do you want to add an office of transit?".toText),
+                  value = Value("Yes".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = controllers.routeDetails.transit.routes.AddOfficeOfTransitYesNoController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("if you want to add an office of transit"),
+                          attributes = Map("id" -> "add-office-of-transit")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "officeOfTransit" - {
+      "must return None" - {
+        "when OfficeOfTransitPage undefined at index" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransitCheckYourAnswersHelper(emptyUserAnswers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+              val result = helper.officeOfTransit(index)
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when OfficeOfTransitPage defined at index" in {
+          forAll(arbitrary[Mode], arbitrary[CustomsOffice]) {
+            (mode, customsOffice) =>
+              val initialAnswers = emptyUserAnswers.setValue(OfficeOfTransitPage(index), customsOffice)
+
+              forAll(arbitraryOfficeOfTransitAnswers(initialAnswers, index)) {
+                answers =>
+                  val helper = new TransitCheckYourAnswersHelper(answers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+                  val result = helper.officeOfTransit(index)
+
+                  result mustBe Some(
+                    SummaryListRow(
+                      key = Key("Office of transit 1".toText),
+                      value = Value(customsOffice.toString.toText),
+                      actions = Some(
+                        Actions(
+                          items = List(
+                            ActionItem(
+                              content = "Change".toText,
+                              href = controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(answers.lrn, index).url,
+                              visuallyHiddenText = Some("office of transit 1"),
+                              attributes = Map("id" -> "change-office-of-transit-1")
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+              }
+          }
+        }
+      }
+    }
 
     "listItems" - {
       "must return list items" in {

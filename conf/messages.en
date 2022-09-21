@@ -618,7 +618,8 @@ routeDetails.transit.t2DeclarationTypeYesNo.error.required = Select yes if your 
 
 routeDetails.transit.addOfficeOfTransitYesNo.title = Do you want to add an office of transit?
 routeDetails.transit.addOfficeOfTransitYesNo.heading = Do you want to add an office of transit?
-routeDetails.transit.addOfficeOfTransitYesNo.checkYourAnswersLabel = Do you want to add an office of transit
+routeDetails.transit.addOfficeOfTransitYesNo.checkYourAnswersLabel = Do you want to add an office of transit?
+routeDetails.transit.addOfficeOfTransitYesNo.change.hidden = if you want to add an office of transit
 routeDetails.transit.addOfficeOfTransitYesNo.paragraph = This is the first arrival point for goods entering a new customs territory.
 routeDetails.transit.addOfficeOfTransitYesNo.error.required = Select yes if you want to add an office of transit
 
@@ -677,6 +678,11 @@ routeDetails.transit.confirmRemoveOfficeOfTransit.error.required = Select yes if
 
 routeDetails.transit.checkOfficeOfTransitAnswers.title = Check your answers
 routeDetails.transit.checkOfficeOfTransitAnswers.heading = Check your answers
+
+routeDetails.transit.checkYourAnswers.offices.subheading = Offices of transit
+routeDetails.transit.checkYourAnswers.addOrRemove = Add or remove offices of transit
+routeDetails.transit.checkYourAnswers.countryOfRouting.checkYourAnswersLabel = Office of transit {0}
+routeDetails.transit.checkYourAnswers.countryOfRouting.change.hidden = office of transit {0}
 
 # Exit
 

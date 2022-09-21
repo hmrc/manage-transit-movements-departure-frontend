@@ -24,7 +24,6 @@ import pages.routeDetails.routing._
 import pages.routeDetails.routing.index.CountryOfRoutingPage
 import pages.sections.routeDetails.routing.CountriesOfRoutingSection
 import play.api.i18n.Messages
-import play.api.libs.json.Reads
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
 import viewModels.ListItem
@@ -65,7 +64,7 @@ class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
     prefix = "routeDetails.routing.countryOfRouting",
     id = Some(s"change-country-of-routing-${index.display}"),
     args = index.display
-  )(CountryOfRoutingDomain.userAnswersReader(index), implicitly[Reads[Country]])
+  )(CountryOfRoutingDomain.userAnswersReader(index), implicitly)
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(CountriesOfRoutingSection) {
@@ -76,6 +75,6 @@ class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
           formatJourneyDomainModel = _.country.toString,
           formatType = _.toString,
           removeRoute = Some(routes.RemoveCountryOfRoutingYesNoController.onPageLoad(userAnswers.lrn, index))
-        )(CountryOfRoutingDomain.userAnswersReader(index), implicitly[Reads[Country]])
+        )(CountryOfRoutingDomain.userAnswersReader(index), implicitly)
     }
 }

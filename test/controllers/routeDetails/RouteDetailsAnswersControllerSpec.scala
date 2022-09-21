@@ -18,32 +18,41 @@ package controllers.routeDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
+import models.CountryList
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.CountriesService
 import viewModels.routeDetails.RouteDetailsAnswersViewModel
 import viewModels.routeDetails.RouteDetailsAnswersViewModel.RouteDetailsAnswersViewModelProvider
 import viewModels.sections.Section
 import views.html.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersView
 
+import scala.concurrent.Future
+
 class RouteDetailsAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private lazy val mockViewModelProvider = mock[RouteDetailsAnswersViewModelProvider]
+  private lazy val mockViewModelProvider             = mock[RouteDetailsAnswersViewModelProvider]
+  private val mockCountriesService: CountriesService = mock[CountriesService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind[RouteDetailsAnswersViewModelProvider].toInstance(mockViewModelProvider))
+      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "Check Your Answers Controller" - {
 
     "must return OK and the correct view for a GET" in {
       val sampleSections = listWithMaxLength[Section]().sample.value
 
-      when(mockViewModelProvider.apply(any())(any())).thenReturn(RouteDetailsAnswersViewModel(sampleSections))
+      when(mockViewModelProvider.apply(any())(any(), any())(any())).thenReturn(RouteDetailsAnswersViewModel(sampleSections))
+
+      when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(CountryList(Nil)))
+      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
 
       setExistingUserAnswers(emptyUserAnswers)
 
