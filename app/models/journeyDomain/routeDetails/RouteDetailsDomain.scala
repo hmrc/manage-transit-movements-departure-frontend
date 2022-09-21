@@ -40,10 +40,7 @@ case class RouteDetailsDomain(
 ) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    // TODO - update when section CYA built. Also:
-    //  update all navigator spec unit tests when in CheckMode that are currently being ignored
-    //  update RouteDetailsTaskSpec unit test that is currently being ignored
-    None
+    Some(controllers.routeDetails.routes.RouteDetailsAnswersController.onPageLoad(userAnswers.lrn))
 }
 
 object RouteDetailsDomain {

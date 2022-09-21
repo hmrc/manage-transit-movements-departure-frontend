@@ -25,16 +25,16 @@ import viewModels.sections.Section
 
 import javax.inject.Inject
 
-case class CheckRoutingAnswersViewModel(sections: Seq[Section])
+case class RoutingAnswersViewModel(sections: Seq[Section])
 
-object CheckRoutingAnswersViewModel {
+object RoutingAnswersViewModel {
 
-  def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): CheckRoutingAnswersViewModel =
-    new CheckRoutingAnswersViewModelProvider().apply(userAnswers, mode)
+  def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): RoutingAnswersViewModel =
+    new RoutingAnswersViewModelProvider().apply(userAnswers, mode)
 
-  class CheckRoutingAnswersViewModelProvider @Inject() () {
+  class RoutingAnswersViewModelProvider @Inject() () {
 
-    def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): CheckRoutingAnswersViewModel = {
+    def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): RoutingAnswersViewModel = {
 
       val helper = new RoutingCheckYourAnswersHelper(userAnswers, mode)
 
@@ -55,13 +55,13 @@ object CheckRoutingAnswersViewModel {
             (_, index) => helper.countryOfRouting(Index(index))
           },
         addAnotherLink = Link(
-          id = "add-or-remove",
+          id = "add-or-remove-transit-route-countries",
           text = messages("routeDetails.routing.checkYourAnswers.addOrRemove"),
           href = controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(userAnswers.lrn).url
         )
       )
 
-      new CheckRoutingAnswersViewModel(Seq(preQuestionsSection, countriesOfRoutingSection))
+      new RoutingAnswersViewModel(Seq(preQuestionsSection, countriesOfRoutingSection))
     }
   }
 }

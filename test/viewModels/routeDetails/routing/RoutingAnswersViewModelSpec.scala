@@ -25,7 +25,7 @@ import pages.routeDetails.routing._
 import pages.routeDetails.routing.index.CountryOfRoutingPage
 import viewModels.Link
 
-class CheckRoutingAnswersViewModelSpec extends SpecBase with Generators {
+class RoutingAnswersViewModelSpec extends SpecBase with Generators {
 
   "must return sections" in {
     val userAnswers = emptyUserAnswers
@@ -34,7 +34,7 @@ class CheckRoutingAnswersViewModelSpec extends SpecBase with Generators {
       .setValue(AddCountryOfRoutingYesNoPage, arbitrary[Boolean].sample.value)
       .setValue(CountryOfRoutingPage(index), arbitrary[Country].sample.value)
 
-    val sections = CheckRoutingAnswersViewModel.apply(userAnswers, NormalMode).sections
+    val sections = RoutingAnswersViewModel.apply(userAnswers, NormalMode).sections
 
     sections.size mustBe 2
 
@@ -45,7 +45,7 @@ class CheckRoutingAnswersViewModelSpec extends SpecBase with Generators {
     sections(1).sectionTitle.get mustBe "Transit route countries"
     sections(1).rows.size mustBe 1
     sections(1).addAnotherLink.get mustBe Link(
-      "add-or-remove",
+      "add-or-remove-transit-route-countries",
       "Add or remove transit route countries",
       controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(userAnswers.lrn).url
     )

@@ -544,6 +544,9 @@ routeDetails.caption = Route details
 routeDetails.unloading.caption = Route details - Place of unloading
 routeDetails.loading.caption = Route details - Place of loading
 
+routeDetails.checkYourAnswers.title = Check your answers
+routeDetails.checkYourAnswers.heading = Check your answers
+
 # Routing
 
 routeDetails.routing.countryOfDestination.title = What is the country of destination?

@@ -14,43 +14,34 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails.routing
+package controllers.routeDetails
 
 import com.google.inject.Inject
 import controllers.actions.Actions
-import models.{LocalReferenceNumber, NormalMode}
-import navigation.routeDetails.RouteDetailsNavigatorProvider
+import models.LocalReferenceNumber
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.routeDetails.routing.RoutingAnswersViewModel.RoutingAnswersViewModelProvider
-import views.html.routeDetails.routing.CheckYourAnswersView
+import viewModels.routeDetails.RouteDetailsAnswersViewModel.RouteDetailsAnswersViewModelProvider
+import views.html.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersView
 
-import scala.concurrent.ExecutionContext
-
-class CheckYourAnswersController @Inject() (
+class RouteDetailsAnswersController @Inject() (
   override val messagesApi: MessagesApi,
-  navigatorProvider: RouteDetailsNavigatorProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
-  view: CheckYourAnswersView,
-  viewModelProvider: RoutingAnswersViewModelProvider
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+  view: LoadingAndUnloadingAnswersView,
+  viewModelProvider: RouteDetailsAnswersViewModelProvider
+) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val sections = viewModelProvider(request.userAnswers, NormalMode).sections
+      val sections = viewModelProvider(request.userAnswers).sections
       Ok(view(lrn, sections))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      navigatorProvider().map {
-        implicit navigator =>
-          Redirect(navigator.nextPage(request.userAnswers, NormalMode))
-      }
+  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
+    Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
   }
 
 }

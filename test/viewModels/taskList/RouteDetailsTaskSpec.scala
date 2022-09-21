@@ -94,12 +94,13 @@ class RouteDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with G
         controllers.routeDetails.routing.routes.BindingItineraryController.onPageLoad(userAnswers.lrn, NormalMode).url
     }
 
-    "when Completed" ignore {
+    "when Completed" in {
       forAll(arbitraryRouteDetailsAnswers(emptyUserAnswers)) {
         userAnswers =>
           val task = RouteDetailsTask(userAnswers)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
           task.status mustBe Completed
-          task.href.get mustBe ???
+          task.href.get mustBe
+            controllers.routeDetails.routes.RouteDetailsAnswersController.onPageLoad(userAnswers.lrn).url
       }
     }
   }

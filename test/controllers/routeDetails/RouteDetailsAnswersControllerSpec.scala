@@ -14,47 +14,44 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails.routing
+package controllers.routeDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
-import navigation.routeDetails.RouteDetailsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewModels.routeDetails.routing.RoutingAnswersViewModel
-import viewModels.routeDetails.routing.RoutingAnswersViewModel.RoutingAnswersViewModelProvider
+import viewModels.routeDetails.RouteDetailsAnswersViewModel
+import viewModels.routeDetails.RouteDetailsAnswersViewModel.RouteDetailsAnswersViewModelProvider
 import viewModels.sections.Section
-import views.html.routeDetails.routing.CheckYourAnswersView
+import views.html.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersView
 
-class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+class RouteDetailsAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private lazy val mockViewModelProvider = mock[RoutingAnswersViewModelProvider]
+  private lazy val mockViewModelProvider = mock[RouteDetailsAnswersViewModelProvider]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[RouteDetailsNavigatorProvider]).toInstance(fakeRouteDetailsNavigatorProvider))
-      .overrides(bind[RoutingAnswersViewModelProvider].toInstance(mockViewModelProvider))
+      .overrides(bind[RouteDetailsAnswersViewModelProvider].toInstance(mockViewModelProvider))
 
   "Check Your Answers Controller" - {
 
     "must return OK and the correct view for a GET" in {
       val sampleSections = listWithMaxLength[Section]().sample.value
 
-      when(mockViewModelProvider.apply(any(), any())(any()))
-        .thenReturn(RoutingAnswersViewModel(sampleSections))
+      when(mockViewModelProvider.apply(any())(any())).thenReturn(RouteDetailsAnswersViewModel(sampleSections))
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(lrn).url)
+      val request = FakeRequest(GET, routes.RouteDetailsAnswersController.onPageLoad(lrn).url)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[CheckYourAnswersView]
+      val view = injector.instanceOf[LoadingAndUnloadingAnswersView]
 
       status(result) mustEqual OK
 
@@ -65,7 +62,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
     "must redirect to Session Expired for a GET if no existing data is found" in {
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(lrn).url)
+      val request = FakeRequest(GET, routes.RouteDetailsAnswersController.onPageLoad(lrn).url)
 
       val result = route(app, request).value
 
@@ -74,16 +71,17 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
-    "must redirect to the next page" in {
+    "must redirect to task list" in {
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn).url)
+      val request = FakeRequest(POST, routes.RouteDetailsAnswersController.onSubmit(lrn).url)
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual onwardRoute.url
+      redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
+
     }
   }
 }
