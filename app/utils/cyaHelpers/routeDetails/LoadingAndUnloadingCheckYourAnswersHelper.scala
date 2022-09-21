@@ -88,4 +88,11 @@ class LoadingAndUnloadingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: 
     prefix = "routeDetails.unloading.addExtraInformationYesNo",
     id = Some("add-unloading-country-and-location")
   )
+
+  def unloadingCountry: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
+    page = CountryPage,
+    formatAnswer = formatAsText,
+    prefix = "routeDetails.unloading.country",
+    id = Some("unloading-country")
+  )
 }

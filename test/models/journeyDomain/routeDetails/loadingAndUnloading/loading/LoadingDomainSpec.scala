@@ -27,7 +27,7 @@ import pages.routeDetails.loadingAndUnloading.loading._
 
 class LoadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
-  private val unLocode1    = arbitrary[UnLocode].sample.value
+  private val unLocode     = arbitrary[UnLocode].sample.value
   private val country      = arbitrary[Country].sample.value
   private val loadingPlace = Gen.alphaNumStr.sample.value.take(35)
 
@@ -38,13 +38,13 @@ class LoadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
       "when addUnLocode is Yes" in {
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(PlaceOfLoadingAddUnLocodeYesNoPage)(true)
-          .unsafeSetVal(PlaceOfLoadingUnLocodePage)(unLocode1)
+          .unsafeSetVal(PlaceOfLoadingUnLocodePage)(unLocode)
           .unsafeSetVal(PlaceOfLoadingAddExtraInformationYesNoPage)(true)
           .unsafeSetVal(PlaceOfLoadingCountryPage)(country)
           .unsafeSetVal(PlaceOfLoadingLocationPage)(loadingPlace)
 
         val expectedResult = LoadingDomain(
-          unLocode = Some(unLocode1),
+          unLocode = Some(unLocode),
           additionalInformation = Some(AdditionalInformationDomain(country, loadingPlace))
         )
 

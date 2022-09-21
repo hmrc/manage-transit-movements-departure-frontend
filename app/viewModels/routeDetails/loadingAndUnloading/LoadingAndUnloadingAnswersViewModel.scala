@@ -52,7 +52,8 @@ object LoadingAndUnloadingAnswersViewModel {
           helper.addPlaceOfUnloading,
           helper.addUnloadingUnLocode,
           helper.unloadingUnLocode,
-          helper.addUnloadingCountryAndLocation
+          helper.addUnloadingCountryAndLocation,
+          helper.unloadingCountry
         ).flatten
       )
 

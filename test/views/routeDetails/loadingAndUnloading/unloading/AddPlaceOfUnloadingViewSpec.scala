@@ -33,7 +33,7 @@ class AddPlaceOfUnloadingViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Place of unloading")
 
   behave like pageWithHeading()
 

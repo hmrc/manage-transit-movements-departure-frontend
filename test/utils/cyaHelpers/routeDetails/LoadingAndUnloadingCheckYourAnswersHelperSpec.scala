@@ -419,5 +419,48 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
         }
       }
     }
+
+    "unloadingCountry" - {
+      "must return None" - {
+        "when CountryPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new LoadingAndUnloadingCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.unloadingCountry
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when CountryPage is defined" in {
+          forAll(arbitrary[Mode], arbitrary[Country]) {
+            (mode, country) =>
+              val answers = emptyUserAnswers.setValue(CountryPage, country)
+              val helper  = new LoadingAndUnloadingCheckYourAnswersHelper(answers, mode)
+              val result  = helper.unloadingCountry
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Which country is the place of unloading in".toText),
+                  value = Value(country.toString.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = unloadingRoutes.CountryController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("which country the place of unloading is in"),
+                          attributes = Map("id" -> "unloading-country")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
   }
 }
