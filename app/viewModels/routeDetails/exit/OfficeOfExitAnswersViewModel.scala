@@ -16,7 +16,7 @@
 
 package viewModels.routeDetails.exit
 
-import models.{Index, NormalMode, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import play.api.i18n.Messages
 import utils.cyaHelpers.routeDetails.OfficeOfExitCheckYourAnswersHelper
 import viewModels.sections.Section
@@ -27,13 +27,10 @@ case class OfficeOfExitAnswersViewModel(section: Section)
 
 object OfficeOfExitAnswersViewModel {
 
-  def apply(userAnswers: UserAnswers, index: Index)(implicit messages: Messages): OfficeOfExitAnswersViewModel =
-    new OfficeOfExitAnswersViewModelProvider()(userAnswers, index)
-
   class OfficeOfExitAnswersViewModelProvider @Inject() () {
 
-    def apply(userAnswers: UserAnswers, index: Index)(implicit messages: Messages): OfficeOfExitAnswersViewModel = {
-      val helper = new OfficeOfExitCheckYourAnswersHelper(userAnswers, NormalMode, index)
+    def apply(userAnswers: UserAnswers, mode: Mode, index: Index)(implicit messages: Messages): OfficeOfExitAnswersViewModel = {
+      val helper = new OfficeOfExitCheckYourAnswersHelper(userAnswers, mode, index)
 
       val rows = Seq(
         helper.officeOfExitCountry,

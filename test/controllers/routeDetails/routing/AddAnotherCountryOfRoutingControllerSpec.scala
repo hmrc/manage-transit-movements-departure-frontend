@@ -20,6 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.AddAnotherFormProvider
 import generators.Generators
 import models.{Index, NormalMode}
+import navigation.routeDetails.RoutingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -39,13 +40,16 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
   private val formProvider                      = new AddAnotherFormProvider()
   private def form(allowMoreCountries: Boolean) = formProvider("routeDetails.routing.addAnotherCountryOfRouting", allowMoreCountries)
 
-  private lazy val addAnotherCountryOfRoutingRoute = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn).url
+  private val mode = NormalMode
+
+  private lazy val addAnotherCountryOfRoutingRoute = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, mode).url
 
   private val mockViewModelProvider = mock[AddAnotherCountryOfRoutingViewModelProvider]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
+      .overrides(bind(classOf[RoutingNavigatorProvider]).toInstance(fakeRoutingNavigatorProvider))
       .overrides(bind(classOf[AddAnotherCountryOfRoutingViewModelProvider]).toInstance(mockViewModelProvider))
 
   override def beforeEach(): Unit = {
@@ -61,7 +65,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
 
     "redirect to binding itinerary page" - {
       "when 0 countries" in {
-        when(mockViewModelProvider.apply(any())(any()))
+        when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(AddAnotherCountryOfRoutingViewModel(Nil))
 
         setExistingUserAnswers(emptyUserAnswers)
@@ -74,7 +78,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual
-          routes.BindingItineraryController.onPageLoad(lrn, NormalMode).url
+          routes.BindingItineraryController.onPageLoad(lrn, mode).url
       }
     }
 
@@ -83,7 +87,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
 
         val allowMoreCountries = true
 
-        when(mockViewModelProvider.apply(any())(any()))
+        when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
 
         setExistingUserAnswers(emptyUserAnswers)
@@ -97,7 +101,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(allowMoreCountries), lrn, listItems, allowMoreCountries)(request, messages).toString
+          view(form(allowMoreCountries), lrn, mode, listItems, allowMoreCountries)(request, messages).toString
       }
 
       "when max limit reached" in {
@@ -106,7 +110,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
 
         val listItems = maxedOutListItems
 
-        when(mockViewModelProvider.apply(any())(any()))
+        when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
 
         setExistingUserAnswers(emptyUserAnswers)
@@ -120,14 +124,14 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(allowMoreCountries), lrn, listItems, allowMoreCountries)(request, messages).toString
+          view(form(allowMoreCountries), lrn, mode, listItems, allowMoreCountries)(request, messages).toString
       }
     }
 
     "when max limit not reached" - {
       "when yes submitted" - {
         "must redirect to guarantee type page at next index" in {
-          when(mockViewModelProvider.apply(any())(any()))
+          when(mockViewModelProvider.apply(any(), any())(any()))
             .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
 
           setExistingUserAnswers(emptyUserAnswers)
@@ -140,13 +144,13 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.routeDetails.routing.index.routes.CountryOfRoutingController.onPageLoad(lrn, NormalMode, Index(listItems.length)).url
+            controllers.routeDetails.routing.index.routes.CountryOfRoutingController.onPageLoad(lrn, mode, Index(listItems.length)).url
         }
       }
 
       "when no submitted" - {
         "must redirect to check your answers" in {
-          when(mockViewModelProvider.apply(any())(any()))
+          when(mockViewModelProvider.apply(any(), any())(any()))
             .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
 
           setExistingUserAnswers(emptyUserAnswers)
@@ -158,15 +162,14 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
 
           status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual
-            routes.CheckYourAnswersController.onPageLoad(lrn).url
+          redirectLocation(result).value mustEqual onwardRoute.url
         }
       }
     }
 
     "when max limit reached" - {
       "must redirect to check your answers" in {
-        when(mockViewModelProvider.apply(any())(any()))
+        when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(AddAnotherCountryOfRoutingViewModel(maxedOutListItems))
 
         setExistingUserAnswers(emptyUserAnswers)
@@ -178,14 +181,13 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual
-          routes.CheckYourAnswersController.onPageLoad(lrn).url
+        redirectLocation(result).value mustEqual onwardRoute.url
       }
     }
 
     "must return a Bad Request and errors" - {
       "when invalid data is submitted and max limit not reached" in {
-        when(mockViewModelProvider.apply(any())(any()))
+        when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
 
         val allowMoreCountries = true
@@ -204,7 +206,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, lrn, listItems, allowMoreCountries)(request, messages).toString
+          view(boundForm, lrn, mode, listItems, allowMoreCountries)(request, messages).toString
       }
     }
 

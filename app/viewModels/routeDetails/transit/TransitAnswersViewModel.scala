@@ -48,7 +48,7 @@ object TransitAnswersViewModel {
         addAnotherLink = Link(
           id = "add-or-remove-offices-of-transit",
           text = messages("routeDetails.transit.checkYourAnswers.addOrRemove"),
-          href = controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(userAnswers.lrn).url
+          href = controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(userAnswers.lrn, mode).url
         )
       )
 

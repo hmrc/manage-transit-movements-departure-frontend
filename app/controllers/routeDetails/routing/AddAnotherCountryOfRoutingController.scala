@@ -21,7 +21,8 @@ import controllers.actions._
 import controllers.routeDetails.routing.index.{routes => indexRoutes}
 import forms.AddAnotherFormProvider
 import models.requests.DataRequest
-import models.{Index, LocalReferenceNumber, NormalMode}
+import models.{Index, LocalReferenceNumber, Mode}
+import navigation.routeDetails.RoutingNavigatorProvider
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -31,46 +32,53 @@ import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel.AddAn
 import views.html.routeDetails.routing.AddAnotherCountryOfRoutingView
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherCountryOfRoutingController @Inject() (
   override val messagesApi: MessagesApi,
+  navigatorProvider: RoutingNavigatorProvider,
   actions: Actions,
   formProvider: AddAnotherFormProvider,
   val controllerComponents: MessagesControllerComponents,
   config: FrontendAppConfig,
   viewModelProvider: AddAnotherCountryOfRoutingViewModelProvider,
   view: AddAnotherCountryOfRoutingView
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   private def form(allowMoreCountries: Boolean): Form[Boolean] =
     formProvider("routeDetails.routing.addAnotherCountryOfRouting", allowMoreCountries)
 
-  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val (countries, numberOfCountries, allowMoreCountries) = viewData
+      val (countries, numberOfCountries, allowMoreCountries) = viewData(mode)
       numberOfCountries match {
-        case 0 => Redirect(routes.BindingItineraryController.onPageLoad(lrn, NormalMode))
-        case _ => Ok(view(form(allowMoreCountries), lrn, countries, allowMoreCountries))
+        case 0 => Redirect(routes.BindingItineraryController.onPageLoad(lrn, mode))
+        case _ => Ok(view(form(allowMoreCountries), lrn, mode, countries, allowMoreCountries))
       }
   }
 
-  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      lazy val (countries, numberOfCountries, allowMoreCountries) = viewData
+      lazy val (countries, numberOfCountries, allowMoreCountries) = viewData(mode)
       form(allowMoreCountries)
         .bindFromRequest()
         .fold(
-          formWithErrors => BadRequest(view(formWithErrors, lrn, countries, allowMoreCountries)),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countries, allowMoreCountries))),
           {
-            case true  => Redirect(indexRoutes.CountryOfRoutingController.onPageLoad(lrn, NormalMode, Index(numberOfCountries)))
-            case false => Redirect(routes.CheckYourAnswersController.onPageLoad(lrn))
+            case true =>
+              Future.successful(Redirect(indexRoutes.CountryOfRoutingController.onPageLoad(lrn, mode, Index(numberOfCountries))))
+            case false =>
+              navigatorProvider().map {
+                navigator => Redirect(navigator.nextPage(request.userAnswers, mode))
+              }
           }
         )
   }
 
-  private def viewData(implicit request: DataRequest[_]): (Seq[ListItem], Int, Boolean) = {
-    val countries         = viewModelProvider.apply(request.userAnswers).listItems
+  private def viewData(mode: Mode)(implicit request: DataRequest[_]): (Seq[ListItem], Int, Boolean) = {
+    val countries         = viewModelProvider.apply(request.userAnswers, mode).listItems
     val numberOfCountries = countries.length
     (countries, numberOfCountries, numberOfCountries < config.maxCountriesOfRouting)
   }

@@ -44,7 +44,7 @@ class CountryOfRoutingNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(answers.lrn))
+                .mustBe(controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(answers.lrn, mode))
           }
         }
       }

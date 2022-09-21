@@ -44,7 +44,7 @@ class TransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with G
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(answers.lrn))
+                .mustBe(controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(answers.lrn, mode))
           }
         }
       }

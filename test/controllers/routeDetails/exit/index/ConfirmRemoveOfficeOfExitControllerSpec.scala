@@ -19,8 +19,8 @@ package controllers.routeDetails.exit.index
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
-import models.UserAnswers
 import models.reference.CustomsOffice
+import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, reset, verify, when}
@@ -43,7 +43,9 @@ class ConfirmRemoveOfficeOfExitControllerSpec
   private val formProvider                       = new YesNoFormProvider()
   private def form(customsOffice: CustomsOffice) = formProvider("routeDetails.exit.confirmRemoveOfficeOfExit", customsOffice.name)
 
-  private lazy val confirmRemoveOfficeOfExitRoute = routes.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn, index).url
+  private val mode = NormalMode
+
+  private lazy val confirmRemoveOfficeOfExitRoute = routes.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn, index, mode).url
 
   "ConfirmRemoveOfficeOfExit Controller" - {
 
@@ -61,7 +63,7 @@ class ConfirmRemoveOfficeOfExitControllerSpec
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(customsOffice), lrn, index, customsOffice.name)(request, messages).toString
+            view(form(customsOffice), lrn, index, mode, customsOffice.name)(request, messages).toString
       }
     }
 
@@ -82,7 +84,7 @@ class ConfirmRemoveOfficeOfExitControllerSpec
             status(result) mustEqual SEE_OTHER
 
             redirectLocation(result).value mustEqual
-              controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(lrn).url
+              controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(lrn, mode).url
 
             val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
             verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
@@ -107,7 +109,7 @@ class ConfirmRemoveOfficeOfExitControllerSpec
             status(result) mustEqual SEE_OTHER
 
             redirectLocation(result).value mustEqual
-              controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(lrn).url
+              controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(lrn, mode).url
 
             verify(mockSessionRepository, never()).set(any())(any())
         }
@@ -130,7 +132,7 @@ class ConfirmRemoveOfficeOfExitControllerSpec
           val view = injector.instanceOf[ConfirmRemoveOfficeOfExitView]
 
           contentAsString(result) mustEqual
-            view(boundForm, lrn, index, customsOffice.name)(request, messages).toString
+            view(boundForm, lrn, index, mode, customsOffice.name)(request, messages).toString
       }
     }
 

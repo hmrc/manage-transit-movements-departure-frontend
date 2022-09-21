@@ -44,7 +44,7 @@ class RoutingNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with G
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(controllers.routeDetails.routing.routes.CheckYourAnswersController.onPageLoad(answers.lrn))
+                .mustBe(controllers.routeDetails.routing.routes.CheckYourAnswersController.onPageLoad(answers.lrn, mode))
           }
         }
       }

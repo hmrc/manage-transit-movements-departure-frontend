@@ -22,7 +22,7 @@ import models.SecurityDetailsType._
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{Country, CustomsOffice}
-import models.{DateTime, Index, UserAnswers}
+import models.{DateTime, Index, Mode, UserAnswers}
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.routeDetails.routing.OfficeOfDestinationPage
 import pages.routeDetails.transit.index._
@@ -35,9 +35,9 @@ case class OfficeOfTransitDomain(
 )(index: Index)
     extends JourneyDomainModel {
 
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
     Some(
-      controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(userAnswers.lrn, index)
+      controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(userAnswers.lrn, mode, index)
     )
 
   val label: String = country match {

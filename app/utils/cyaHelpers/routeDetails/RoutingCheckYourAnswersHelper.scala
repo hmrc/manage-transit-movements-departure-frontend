@@ -74,7 +74,7 @@ class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
           page = CountryOfRoutingPage(index),
           formatJourneyDomainModel = _.country.toString,
           formatType = _.toString,
-          removeRoute = Some(routes.RemoveCountryOfRoutingYesNoController.onPageLoad(userAnswers.lrn, index))
+          removeRoute = Some(routes.RemoveCountryOfRoutingYesNoController.onPageLoad(userAnswers.lrn, mode, index))
         )(CountryOfRoutingDomain.userAnswersReader(index), implicitly)
     }
 }

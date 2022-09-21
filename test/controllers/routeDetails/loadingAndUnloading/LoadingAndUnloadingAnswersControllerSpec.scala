@@ -18,6 +18,7 @@ package controllers.routeDetails.loadingAndUnloading
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
+import models.NormalMode
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.inject.bind
@@ -33,6 +34,8 @@ class LoadingAndUnloadingAnswersControllerSpec extends SpecBase with AppWithDefa
 
   private lazy val mockViewModelProvider = mock[LoadingAndUnloadingAnswersViewModelProvider]
 
+  private val mode = NormalMode
+
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
@@ -43,11 +46,11 @@ class LoadingAndUnloadingAnswersControllerSpec extends SpecBase with AppWithDefa
     "must return OK and the correct view for a GET" in {
       val sampleSections = listWithMaxLength[Section]().sample.value
 
-      when(mockViewModelProvider.apply(any())(any())).thenReturn(LoadingAndUnloadingAnswersViewModel(sampleSections))
+      when(mockViewModelProvider.apply(any(), any())(any())).thenReturn(LoadingAndUnloadingAnswersViewModel(sampleSections))
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, routes.LoadingAndUnloadingAnswersController.onPageLoad(lrn).url)
+      val request = FakeRequest(GET, routes.LoadingAndUnloadingAnswersController.onPageLoad(lrn, mode).url)
 
       val result = route(app, request).value
 
@@ -56,13 +59,13 @@ class LoadingAndUnloadingAnswersControllerSpec extends SpecBase with AppWithDefa
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(lrn, sampleSections)(request, messages).toString
+        view(lrn, mode, sampleSections)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, routes.LoadingAndUnloadingAnswersController.onPageLoad(lrn).url)
+      val request = FakeRequest(GET, routes.LoadingAndUnloadingAnswersController.onPageLoad(lrn, mode).url)
 
       val result = route(app, request).value
 
@@ -74,7 +77,7 @@ class LoadingAndUnloadingAnswersControllerSpec extends SpecBase with AppWithDefa
     "must redirect to task list" in {
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, routes.LoadingAndUnloadingAnswersController.onSubmit(lrn).url)
+      val request = FakeRequest(POST, routes.LoadingAndUnloadingAnswersController.onSubmit(lrn, mode).url)
 
       val result = route(app, request).value
 

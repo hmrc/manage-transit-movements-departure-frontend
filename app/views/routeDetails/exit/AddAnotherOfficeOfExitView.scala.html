@@ -30,7 +30,7 @@
     button: Button
 )
 
-@(form: Form[_], lrn: LocalReferenceNumber, officesOfExit: Seq[ListItem], allowMoreOfficesOfExit: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], lrn: LocalReferenceNumber, mode: Mode, officesOfExit: Seq[ListItem], allowMoreOfficesOfExit: Boolean)(implicit request: Request[_], messages: Messages)
 
 @singularOrPlural = @{
     if (officesOfExit.length == 1) "singular" else "plural"
@@ -51,7 +51,7 @@
 
     @listWithActions(officesOfExit)
 
-    @formHelper(action = routes.AddAnotherOfficeOfExitController.onSubmit(lrn), 'autoComplete -> "off") {
+    @formHelper(action = routes.AddAnotherOfficeOfExitController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @if(allowMoreOfficesOfExit) {
             @inputYesNo(

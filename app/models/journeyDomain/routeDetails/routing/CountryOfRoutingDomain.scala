@@ -20,7 +20,7 @@ import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.Stage._
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.Country
-import models.{Index, NormalMode, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import pages.routeDetails.routing.index.CountryOfRoutingPage
 import play.api.mvc.Call
 
@@ -29,12 +29,12 @@ case class CountryOfRoutingDomain(
 )(index: Index)
     extends JourneyDomainModel {
 
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] = Some {
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some {
     stage match {
       case AccessingJourney =>
-        controllers.routeDetails.routing.index.routes.CountryOfRoutingController.onPageLoad(userAnswers.lrn, NormalMode, index)
+        controllers.routeDetails.routing.index.routes.CountryOfRoutingController.onPageLoad(userAnswers.lrn, mode, index)
       case CompletingJourney =>
-        controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(userAnswers.lrn)
+        controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(userAnswers.lrn, mode)
     }
   }
 }

@@ -18,15 +18,18 @@ package viewModels.routeDetails.transit
 
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
-import models.DateTime
 import models.reference.{Country, CustomsOffice}
+import models.{DateTime, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
+import viewModels.routeDetails.transit.OfficeOfTransitAnswersViewModel.OfficeOfTransitAnswersViewModelProvider
 
 class OfficeOfTransitAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
   "apply" - {
+
+    val mode = arbitrary[Mode].sample.value
 
     "must return row for each answer" - {
 
@@ -39,7 +42,8 @@ class OfficeOfTransitAnswersViewModelSpec extends SpecBase with ScalaCheckProper
                 .setValue(OfficeOfTransitPage(index), office)
                 .setValue(AddOfficeOfTransitETAYesNoPage(index), false)
 
-              val section = OfficeOfTransitAnswersViewModel.apply(answers, index).section
+              val viewModelProvider = injector.instanceOf[OfficeOfTransitAnswersViewModelProvider]
+              val section           = viewModelProvider.apply(answers, mode, index).section
 
               section.sectionTitle mustNot be(defined)
               section.rows.size mustBe 3
@@ -57,7 +61,8 @@ class OfficeOfTransitAnswersViewModelSpec extends SpecBase with ScalaCheckProper
                 .setValue(AddOfficeOfTransitETAYesNoPage(index), true)
                 .setValue(OfficeOfTransitETAPage(index), dateTime)
 
-              val section = OfficeOfTransitAnswersViewModel.apply(answers, index).section
+              val viewModelProvider = injector.instanceOf[OfficeOfTransitAnswersViewModelProvider]
+              val section           = viewModelProvider.apply(answers, mode, index).section
 
               section.sectionTitle mustNot be(defined)
               section.rows.size mustBe 4

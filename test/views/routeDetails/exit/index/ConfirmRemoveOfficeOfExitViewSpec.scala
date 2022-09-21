@@ -17,6 +17,8 @@
 package views.routeDetails.exit.index
 
 import generators.Generators
+import models.Mode
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -26,8 +28,10 @@ class ConfirmRemoveOfficeOfExitViewSpec extends YesNoViewBehaviours with Generat
 
   private lazy val exitOfficeName = arbitraryCustomsOffice.arbitrary.sample.get.name
 
+  private val mode = arbitrary[Mode].sample.value
+
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[ConfirmRemoveOfficeOfExitView].apply(form, lrn, index, exitOfficeName)(fakeRequest, messages)
+    injector.instanceOf[ConfirmRemoveOfficeOfExitView].apply(form, lrn, index, mode, exitOfficeName)(fakeRequest, messages)
 
   override val prefix: String = "routeDetails.exit.confirmRemoveOfficeOfExit"
 

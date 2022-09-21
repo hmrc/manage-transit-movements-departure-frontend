@@ -16,7 +16,7 @@
 
 package viewModels.routeDetails.locationOfGoods
 
-import models.{NormalMode, UserAnswers}
+import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
 import utils.cyaHelpers.routeDetails.LocationOfGoodsCheckYourAnswersHelper
 import viewModels.sections.Section
@@ -27,13 +27,10 @@ case class LocationOfGoodsAnswersViewModel(section: Section)
 
 object LocationOfGoodsAnswersViewModel {
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): LocationOfGoodsAnswersViewModel =
-    new LocationOfGoodsAnswersViewModelProvider()(userAnswers)
-
   class LocationOfGoodsAnswersViewModelProvider @Inject() () {
 
-    def apply(userAnswers: UserAnswers)(implicit messages: Messages): LocationOfGoodsAnswersViewModel = {
-      val helper = new LocationOfGoodsCheckYourAnswersHelper(userAnswers, NormalMode)
+    def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): LocationOfGoodsAnswersViewModel = {
+      val helper = new LocationOfGoodsCheckYourAnswersHelper(userAnswers, mode)
 
       val rows = Seq(
         helper.locationType,

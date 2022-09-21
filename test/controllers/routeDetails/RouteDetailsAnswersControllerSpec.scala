@@ -29,7 +29,7 @@ import services.CountriesService
 import viewModels.routeDetails.RouteDetailsAnswersViewModel
 import viewModels.routeDetails.RouteDetailsAnswersViewModel.RouteDetailsAnswersViewModelProvider
 import viewModels.sections.Section
-import views.html.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersView
+import views.html.routeDetails.RouteDetailsAnswersView
 
 import scala.concurrent.Future
 
@@ -60,7 +60,7 @@ class RouteDetailsAnswersControllerSpec extends SpecBase with AppWithDefaultMock
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[LoadingAndUnloadingAnswersView]
+      val view = injector.instanceOf[RouteDetailsAnswersView]
 
       status(result) mustEqual OK
 

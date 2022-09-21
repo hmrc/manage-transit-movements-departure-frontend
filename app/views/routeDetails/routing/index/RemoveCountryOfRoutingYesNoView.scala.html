@@ -28,7 +28,7 @@
     button: Button
 )
 
-@(form: Form[Boolean], lrn: LocalReferenceNumber, index: Index, country: Country)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, index: Index, country: Country)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("routeDetails.routing.removeCountryOfRoutingYesNo.title", country.toString),
@@ -36,7 +36,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.RemoveCountryOfRoutingYesNoController.onSubmit(lrn, index), 'autoComplete -> "off") {
+    @formHelper(action = routes.RemoveCountryOfRoutingYesNoController.onSubmit(lrn, mode, index), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 

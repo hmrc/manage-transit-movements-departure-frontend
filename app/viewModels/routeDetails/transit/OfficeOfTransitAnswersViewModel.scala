@@ -16,7 +16,7 @@
 
 package viewModels.routeDetails.transit
 
-import models.{Index, NormalMode, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import play.api.i18n.Messages
 import utils.cyaHelpers.routeDetails.OfficeOfTransitCheckYourAnswersHelper
 import viewModels.sections.Section
@@ -27,13 +27,10 @@ case class OfficeOfTransitAnswersViewModel(section: Section)
 
 object OfficeOfTransitAnswersViewModel {
 
-  def apply(userAnswers: UserAnswers, index: Index)(implicit messages: Messages): OfficeOfTransitAnswersViewModel =
-    new OfficeOfTransitAnswersViewModelProvider()(userAnswers, index)
-
   class OfficeOfTransitAnswersViewModelProvider @Inject() () {
 
-    def apply(userAnswers: UserAnswers, index: Index)(implicit messages: Messages): OfficeOfTransitAnswersViewModel = {
-      val helper = new OfficeOfTransitCheckYourAnswersHelper(userAnswers, NormalMode, index)
+    def apply(userAnswers: UserAnswers, mode: Mode, index: Index)(implicit messages: Messages): OfficeOfTransitAnswersViewModel = {
+      val helper = new OfficeOfTransitCheckYourAnswersHelper(userAnswers, mode, index)
 
       val rows = Seq(
         helper.officeOfTransitCountry,

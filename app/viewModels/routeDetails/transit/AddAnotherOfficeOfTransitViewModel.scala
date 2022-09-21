@@ -16,7 +16,7 @@
 
 package viewModels.routeDetails.transit
 
-import models.{NormalMode, UserAnswers}
+import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
 import services.CountriesService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -30,19 +30,14 @@ case class AddAnotherOfficeOfTransitViewModel(listItems: Seq[ListItem])
 
 object AddAnotherOfficeOfTransitViewModel {
 
-  def apply(countriesService: CountriesService)(
-    userAnswers: UserAnswers
-  )(implicit ec: ExecutionContext, hc: HeaderCarrier, messages: Messages): Future[AddAnotherOfficeOfTransitViewModel] =
-    new AddAnotherOfficeOfTransitViewModelProvider(countriesService)(ec)(userAnswers)
-
   class AddAnotherOfficeOfTransitViewModelProvider @Inject() (countriesService: CountriesService)(implicit ec: ExecutionContext) {
 
-    def apply(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): Future[AddAnotherOfficeOfTransitViewModel] =
+    def apply(userAnswers: UserAnswers, mode: Mode)(implicit hc: HeaderCarrier, messages: Messages): Future[AddAnotherOfficeOfTransitViewModel] =
       for {
         ctcCountries                             <- countriesService.getCountryCodesCTC()
         customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
       } yield {
-        val helper = new TransitCheckYourAnswersHelper(userAnswers, NormalMode)(
+        val helper = new TransitCheckYourAnswersHelper(userAnswers, mode)(
           ctcCountries.countryCodes,
           customsSecurityAgreementAreaCountryCodes.countryCodes
         )

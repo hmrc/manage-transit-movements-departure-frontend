@@ -17,6 +17,8 @@
 package views.routeDetails.loadingAndUnloading
 
 import controllers.routeDetails.loadingAndUnloading.routes
+import models.Mode
+import org.scalacheck.Arbitrary.arbitrary
 import play.twirl.api.HtmlFormat
 import viewModels.sections.Section
 import views.behaviours.CheckYourAnswersViewBehaviours
@@ -28,8 +30,10 @@ class LoadingAndUnloadingAnswersViewSpec extends CheckYourAnswersViewBehaviours 
 
   override def view: HtmlFormat.Appendable = viewWithSections(sections)
 
+  private val mode = arbitrary[Mode].sample.value
+
   override def viewWithSections(sections: Seq[Section]): HtmlFormat.Appendable =
-    injector.instanceOf[LoadingAndUnloadingAnswersView].apply(lrn, sections)(fakeRequest, messages)
+    injector.instanceOf[LoadingAndUnloadingAnswersView].apply(lrn, mode, sections)(fakeRequest, messages)
 
   behave like pageWithTitle()
 
@@ -41,7 +45,7 @@ class LoadingAndUnloadingAnswersViewSpec extends CheckYourAnswersViewBehaviours 
 
   behave like pageWithCheckYourAnswers()
 
-  behave like pageWithFormAction(routes.LoadingAndUnloadingAnswersController.onSubmit(lrn).url)
+  behave like pageWithFormAction(routes.LoadingAndUnloadingAnswersController.onSubmit(lrn, mode).url)
 
   behave like pageWithSubmitButton("Save and continue")
 }

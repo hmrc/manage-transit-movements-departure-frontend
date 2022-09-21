@@ -18,7 +18,7 @@ package viewModels.routeDetails.transit
 
 import base.SpecBase
 import generators.Generators
-import models.NormalMode
+import models.Mode
 import models.reference.CustomsOffice
 import org.scalacheck.Arbitrary.arbitrary
 import pages.routeDetails.transit.AddOfficeOfTransitYesNoPage
@@ -29,13 +29,14 @@ import viewModels.routeDetails.transit.TransitAnswersViewModel.TransitAnswersVie
 class TransitAnswersViewModelSpec extends SpecBase with Generators {
 
   "must return sections" in {
+    val mode = arbitrary[Mode].sample.value
+
     val userAnswers = emptyUserAnswers
       .setValue(AddOfficeOfTransitYesNoPage, arbitrary[Boolean].sample.value)
       .setValue(OfficeOfTransitPage(index), arbitrary[CustomsOffice].sample.value)
 
-    val viewModelProvider = app.injector.instanceOf[TransitAnswersViewModelProvider]
-
-    val sections = viewModelProvider.apply(userAnswers, NormalMode)(Nil, Nil).sections
+    val viewModelProvider = injector.instanceOf[TransitAnswersViewModelProvider]
+    val sections          = viewModelProvider.apply(userAnswers, mode)(Nil, Nil).sections
 
     sections.size mustBe 2
 
@@ -48,7 +49,7 @@ class TransitAnswersViewModelSpec extends SpecBase with Generators {
     sections(1).addAnotherLink.get mustBe Link(
       "add-or-remove-offices-of-transit",
       "Add or remove offices of transit",
-      controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(userAnswers.lrn).url
+      controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(userAnswers.lrn, mode).url
     )
   }
 }

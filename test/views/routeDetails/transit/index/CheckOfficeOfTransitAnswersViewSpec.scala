@@ -17,6 +17,8 @@
 package views.routeDetails.transit.index
 
 import controllers.routeDetails.transit.index.routes
+import models.Mode
+import org.scalacheck.Arbitrary.arbitrary
 import play.twirl.api.HtmlFormat
 import viewModels.sections.Section
 import views.behaviours.CheckYourAnswersViewBehaviours
@@ -28,8 +30,10 @@ class CheckOfficeOfTransitAnswersViewSpec extends CheckYourAnswersViewBehaviours
 
   override def view: HtmlFormat.Appendable = viewWithSections(sections)
 
+  private val mode = arbitrary[Mode].sample.value
+
   override def viewWithSections(sections: Seq[Section]): HtmlFormat.Appendable =
-    injector.instanceOf[CheckOfficeOfTransitAnswersView].apply(lrn, index, sections)(fakeRequest, messages)
+    injector.instanceOf[CheckOfficeOfTransitAnswersView].apply(lrn, mode, index, sections)(fakeRequest, messages)
 
   behave like pageWithTitle()
 
@@ -41,7 +45,7 @@ class CheckOfficeOfTransitAnswersViewSpec extends CheckYourAnswersViewBehaviours
 
   behave like pageWithCheckYourAnswers()
 
-  behave like pageWithFormAction(routes.CheckOfficeOfTransitAnswersController.onSubmit(lrn, index).url)
+  behave like pageWithFormAction(routes.CheckOfficeOfTransitAnswersController.onSubmit(lrn, mode, index).url)
 
   behave like pageWithSubmitButton("Save and continue")
 

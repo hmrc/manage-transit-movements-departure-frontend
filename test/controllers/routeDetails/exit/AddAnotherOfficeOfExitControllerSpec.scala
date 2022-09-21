@@ -39,11 +39,14 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
 
   private val formProvider                          = new AddAnotherFormProvider()
   private def form(allowMoreOfficesOfExit: Boolean) = formProvider("routeDetails.exit.addAnotherOfficeOfExit", allowMoreOfficesOfExit)
-  private lazy val addAnotherOfficeOfExitRoute      = routes.AddAnotherOfficeOfExitController.onPageLoad(lrn).url
-  private val mockViewModelProvider                 = mock[AddAnotherOfficeOfExitViewModelProvider]
-  private val listItem                              = arbitrary[ListItem].sample.value
-  private val listItems                             = Seq.fill(Gen.choose(1, frontendAppConfig.maxOfficesOfExit - 1).sample.value)(listItem)
-  private val maxedOutListItems                     = Seq.fill(frontendAppConfig.maxOfficesOfExit)(listItem)
+
+  private val mode = NormalMode
+
+  private lazy val addAnotherOfficeOfExitRoute = routes.AddAnotherOfficeOfExitController.onPageLoad(lrn, mode).url
+  private val mockViewModelProvider            = mock[AddAnotherOfficeOfExitViewModelProvider]
+  private val listItem                         = arbitrary[ListItem].sample.value
+  private val listItems                        = Seq.fill(Gen.choose(1, frontendAppConfig.maxOfficesOfExit - 1).sample.value)(listItem)
+  private val maxedOutListItems                = Seq.fill(frontendAppConfig.maxOfficesOfExit)(listItem)
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -60,7 +63,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
 
     "redirect to correct start page in this sub-section" - {
       "when 0 offices of exit" in {
-        when(mockViewModelProvider.apply(any())(any()))
+        when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(AddAnotherOfficeOfExitViewModel(Nil))
 
         setExistingUserAnswers(emptyUserAnswers)
@@ -81,7 +84,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
 
         val allowMoreOfficesOfExit = true
 
-        when(mockViewModelProvider.apply(any())(any()))
+        when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(AddAnotherOfficeOfExitViewModel(listItems))
 
         setExistingUserAnswers(emptyUserAnswers)
@@ -95,7 +98,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(allowMoreOfficesOfExit), lrn, listItems, allowMoreOfficesOfExit)(request, messages).toString
+          view(form(allowMoreOfficesOfExit), lrn, mode, listItems, allowMoreOfficesOfExit)(request, messages).toString
       }
 
       "when max limit reached" in {
@@ -104,7 +107,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
 
         val listItems = maxedOutListItems
 
-        when(mockViewModelProvider.apply(any())(any()))
+        when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(AddAnotherOfficeOfExitViewModel(listItems))
 
         setExistingUserAnswers(emptyUserAnswers)
@@ -118,14 +121,14 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(allowMoreOfficesOfExit), lrn, listItems, allowMoreOfficesOfExit)(request, messages).toString
+          view(form(allowMoreOfficesOfExit), lrn, mode, listItems, allowMoreOfficesOfExit)(request, messages).toString
       }
     }
 
     "when max limit not reached" - {
       "when yes submitted" - {
         "must redirect to office of exit country page at next index" in {
-          when(mockViewModelProvider.apply(any())(any()))
+          when(mockViewModelProvider.apply(any(), any())(any()))
             .thenReturn(AddAnotherOfficeOfExitViewModel(listItems))
 
           setExistingUserAnswers(emptyUserAnswers)
@@ -138,13 +141,13 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.routeDetails.exit.index.routes.OfficeOfExitCountryController.onPageLoad(lrn, Index(listItems.length), NormalMode).url
+            controllers.routeDetails.exit.index.routes.OfficeOfExitCountryController.onPageLoad(lrn, Index(listItems.length), mode).url
         }
       }
 
       "when no submitted" - {
         "must redirect to the next page" in {
-          when(mockViewModelProvider.apply(any())(any()))
+          when(mockViewModelProvider.apply(any(), any())(any()))
             .thenReturn(AddAnotherOfficeOfExitViewModel(listItems))
 
           setExistingUserAnswers(emptyUserAnswers)
@@ -163,7 +166,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
 
     "when max limit reached" - {
       "must redirect to the next page" in {
-        when(mockViewModelProvider.apply(any())(any()))
+        when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(AddAnotherOfficeOfExitViewModel(maxedOutListItems))
 
         setExistingUserAnswers(emptyUserAnswers)
@@ -181,7 +184,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
 
     "must return a Bad Request and errors" - {
       "when invalid data is submitted and max limit not reached" in {
-        when(mockViewModelProvider.apply(any())(any()))
+        when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(AddAnotherOfficeOfExitViewModel(listItems))
 
         val allowMoreOfficesOfExit = true
@@ -200,7 +203,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, lrn, listItems, allowMoreOfficesOfExit)(request, messages).toString
+          view(boundForm, lrn, mode, listItems, allowMoreOfficesOfExit)(request, messages).toString
       }
     }
 

@@ -2,5 +2,7 @@
 ->         /                   app.routeDetails.loadingAndUnloading.loading.Routes
 ->         /                   app.routeDetails.loadingAndUnloading.unloading.Routes
 
-GET        /:lrn/route-details/loading-and-unloading/check-answers                          controllers.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersController.onPageLoad(lrn: LocalReferenceNumber)
-POST       /:lrn/route-details/loading-and-unloading/ccheck-answers                         controllers.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersController.onSubmit(lrn: LocalReferenceNumber)
+GET        /:lrn/route-details/loading-and-unloading/check-answers                          controllers.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/loading-and-unloading/ccheck-answers                         controllers.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/loading-and-unloading/change-check-answers                   controllers.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/loading-and-unloading/change-ccheck-answers                  controllers.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

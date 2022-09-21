@@ -54,7 +54,7 @@ object RoutingAnswersViewModel {
         addAnotherLink = Link(
           id = "add-or-remove-transit-route-countries",
           text = messages("routeDetails.routing.checkYourAnswers.addOrRemove"),
-          href = controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(userAnswers.lrn).url
+          href = controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(userAnswers.lrn, mode).url
         )
       )
 

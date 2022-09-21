@@ -44,7 +44,7 @@ class LoadingAndUnloadingNavigatorSpec extends SpecBase with ScalaCheckPropertyC
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(controllers.routeDetails.loadingAndUnloading.routes.LoadingAndUnloadingAnswersController.onPageLoad(answers.lrn))
+                .mustBe(controllers.routeDetails.loadingAndUnloading.routes.LoadingAndUnloadingAnswersController.onPageLoad(answers.lrn, mode))
           }
         }
       }

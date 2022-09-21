@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.routeDetails.exit.index.routes
 import generators.Generators
 import models.reference.{Country, CustomsOffice}
-import models.{Index, NormalMode}
+import models.{Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
@@ -32,8 +32,8 @@ class ExitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChe
 
     "listItems" - {
       "must return list items" in {
-        val country = arbitrary[Country].sample.value
-
+        val mode          = arbitrary[Mode].sample.value
+        val country       = arbitrary[Country].sample.value
         val customsOffice = arbitrary[CustomsOffice].sample.value
 
         val answers = emptyUserAnswers
@@ -41,20 +41,20 @@ class ExitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChe
           .setValue(OfficeOfExitPage(Index(0)), customsOffice)
           .setValue(OfficeOfExitCountryPage(Index(1)), country)
 
-        val helper = new ExitCheckYourAnswersHelper(answers, NormalMode)
+        val helper = new ExitCheckYourAnswersHelper(answers, mode)
         helper.listItems mustBe Seq(
           Right(
             ListItem(
               name = s"$country - $customsOffice",
-              changeUrl = routes.CheckOfficeOfExitAnswersController.onPageLoad(lrn, Index(0)).url,
-              removeUrl = Some(routes.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn, Index(0)).url)
+              changeUrl = routes.CheckOfficeOfExitAnswersController.onPageLoad(lrn, Index(0), mode).url,
+              removeUrl = Some(routes.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn, Index(0), mode).url)
             )
           ),
           Left(
             ListItem(
               name = s"$country",
-              changeUrl = routes.OfficeOfExitController.onPageLoad(lrn, Index(1), NormalMode).url,
-              removeUrl = Some(routes.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn, Index(1)).url)
+              changeUrl = routes.OfficeOfExitController.onPageLoad(lrn, Index(1), mode).url,
+              removeUrl = Some(routes.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn, Index(1), mode).url)
             )
           )
         )

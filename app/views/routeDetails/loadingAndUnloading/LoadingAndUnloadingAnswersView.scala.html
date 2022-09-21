@@ -27,7 +27,7 @@
     formHelper: FormWithCSRF
 )
 
-@(lrn: LocalReferenceNumber, sections: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(lrn: LocalReferenceNumber, mode: Mode, sections: Seq[Section])(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("routeDetails.loadingAndUnloading.checkYourAnswers.title"),
@@ -42,7 +42,7 @@
 
     @answerSections(sections)
 
-    @formHelper(action = routes.LoadingAndUnloadingAnswersController.onSubmit(lrn), 'autoComplete -> "off") {
+    @formHelper(action = routes.LoadingAndUnloadingAnswersController.onSubmit(lrn, mode), 'autoComplete -> "off") {
         @button(attributes = Map("id" -> "submit"))
     }
 }

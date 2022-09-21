@@ -44,7 +44,7 @@ class OfficeOfExitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(controllers.routeDetails.exit.index.routes.CheckOfficeOfExitAnswersController.onPageLoad(lrn, index))
+                .mustBe(controllers.routeDetails.exit.index.routes.CheckOfficeOfExitAnswersController.onPageLoad(lrn, index, mode))
           }
         }
       }

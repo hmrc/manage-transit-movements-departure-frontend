@@ -17,7 +17,7 @@
 package controllers.routeDetails.exit.index
 
 import controllers.actions._
-import models.{Index, LocalReferenceNumber}
+import models.{Index, LocalReferenceNumber, Mode}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -35,13 +35,13 @@ class CheckOfficeOfExitAnswersController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val section = viewModelProvider(request.userAnswers, index).section
-      Ok(view(lrn, index, Seq(section)))
+      val section = viewModelProvider(request.userAnswers, mode, index).section
+      Ok(view(lrn, index, mode, Seq(section)))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions.requireData(lrn) {
-    Redirect(controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(lrn))
+  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+    Redirect(controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(lrn, mode))
   }
 }

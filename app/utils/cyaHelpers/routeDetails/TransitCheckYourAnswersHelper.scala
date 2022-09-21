@@ -60,7 +60,7 @@ class TransitCheckYourAnswersHelper(
           page = OfficeOfTransitCountryPage(index),
           formatJourneyDomainModel = _.label,
           formatType = _.toString,
-          removeRoute = if (position == 0) None else Some(routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, index))
+          removeRoute = if (position == 0) None else Some(routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, mode, index))
         )(
           OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes),
           implicitly

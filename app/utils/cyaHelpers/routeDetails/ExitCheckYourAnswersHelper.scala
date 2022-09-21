@@ -41,7 +41,7 @@ class ExitCheckYourAnswersHelper(
           page = OfficeOfExitCountryPage(index),
           formatJourneyDomainModel = _.label,
           formatType = _.toString,
-          removeRoute = Some(routes.ConfirmRemoveOfficeOfExitController.onPageLoad(userAnswers.lrn, index))
+          removeRoute = Some(routes.ConfirmRemoveOfficeOfExitController.onPageLoad(userAnswers.lrn, index, mode))
         )(
           OfficeOfExitDomain.userAnswersReader(index),
           implicitly[Reads[Country]]

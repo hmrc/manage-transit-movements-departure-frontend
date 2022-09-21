@@ -21,7 +21,7 @@ import controllers.actions._
 import controllers.routeDetails.transit.index.{routes => indexRoutes}
 import forms.AddAnotherFormProvider
 import models.requests.DataRequest
-import models.{Index, LocalReferenceNumber, NormalMode}
+import models.{Index, LocalReferenceNumber, Mode}
 import navigation.routeDetails.RouteDetailsNavigatorProvider
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -52,42 +52,42 @@ class AddAnotherOfficeOfTransitController @Inject() (
   private def form(allowMoreOfficesOfTransit: Boolean): Form[Boolean] =
     formProvider("routeDetails.transit.addAnotherOfficeOfTransit", allowMoreOfficesOfTransit)
 
-  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      viewData flatMap {
+      viewData(mode) flatMap {
         case (officesOfTransit, numberOfOfficesOfTransit, allowMoreOfficesOfTransit) =>
           numberOfOfficesOfTransit match {
             case 0 =>
               navigatorProvider().map {
-                navigator => Redirect(navigator.nextPage(request.userAnswers, NormalMode))
+                navigator => Redirect(navigator.nextPage(request.userAnswers, mode))
               }
-            case _ => Future.successful(Ok(view(form(allowMoreOfficesOfTransit), lrn, officesOfTransit, allowMoreOfficesOfTransit)))
+            case _ => Future.successful(Ok(view(form(allowMoreOfficesOfTransit), lrn, mode, officesOfTransit, allowMoreOfficesOfTransit)))
           }
       }
   }
 
-  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      viewData flatMap {
+      viewData(mode) flatMap {
         case (officesOfTransit, numberOfOfficesOfTransit, allowMoreOfficesOfTransit) =>
           form(allowMoreOfficesOfTransit)
             .bindFromRequest()
             .fold(
-              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, officesOfTransit, allowMoreOfficesOfTransit))),
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, officesOfTransit, allowMoreOfficesOfTransit))),
               {
                 case true =>
-                  Future.successful(Redirect(indexRoutes.OfficeOfTransitCountryController.onPageLoad(lrn, NormalMode, Index(numberOfOfficesOfTransit))))
+                  Future.successful(Redirect(indexRoutes.OfficeOfTransitCountryController.onPageLoad(lrn, mode, Index(numberOfOfficesOfTransit))))
                 case false =>
                   navigatorProvider().map {
-                    navigator => Redirect(navigator.nextPage(request.userAnswers, NormalMode))
+                    navigator => Redirect(navigator.nextPage(request.userAnswers, mode))
                   }
               }
             )
       }
   }
 
-  private def viewData(implicit request: DataRequest[_], ec: ExecutionContext): Future[(Seq[ListItem], Int, Boolean)] =
-    viewModelProvider.apply(request.userAnswers).map {
+  private def viewData(mode: Mode)(implicit request: DataRequest[_], ec: ExecutionContext): Future[(Seq[ListItem], Int, Boolean)] =
+    viewModelProvider.apply(request.userAnswers, mode).map {
       viewModel =>
         val officesOfTransit         = viewModel.listItems
         val numberOfOfficesOfTransit = officesOfTransit.length

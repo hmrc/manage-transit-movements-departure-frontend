@@ -18,7 +18,7 @@ package controllers.routeDetails.routing
 
 import com.google.inject.Inject
 import controllers.actions.Actions
-import models.{LocalReferenceNumber, NormalMode}
+import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.RouteDetailsNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -39,17 +39,17 @@ class CheckYourAnswersController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val sections = viewModelProvider(request.userAnswers, NormalMode).sections
-      Ok(view(lrn, sections))
+      val sections = viewModelProvider(request.userAnswers, mode).sections
+      Ok(view(lrn, mode, sections))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       navigatorProvider().map {
         implicit navigator =>
-          Redirect(navigator.nextPage(request.userAnswers, NormalMode))
+          Redirect(navigator.nextPage(request.userAnswers, mode))
       }
   }
 

@@ -18,7 +18,7 @@ package viewModels.routeDetails.routing
 
 import base.SpecBase
 import generators.Generators
-import models.NormalMode
+import models.Mode
 import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.routeDetails.routing._
@@ -29,6 +29,8 @@ import viewModels.routeDetails.routing.RoutingAnswersViewModel.RoutingAnswersVie
 class RoutingAnswersViewModelSpec extends SpecBase with Generators {
 
   "must return sections" in {
+    val mode = arbitrary[Mode].sample.value
+
     val userAnswers = emptyUserAnswers
       .setValue(OfficeOfDestinationPage, arbitrary[CustomsOffice].sample.value)
       .setValue(BindingItineraryPage, arbitrary[Boolean].sample.value)
@@ -37,7 +39,7 @@ class RoutingAnswersViewModelSpec extends SpecBase with Generators {
 
     val viewModelProvider = app.injector.instanceOf[RoutingAnswersViewModelProvider]
 
-    val sections = viewModelProvider.apply(userAnswers, NormalMode).sections
+    val sections = viewModelProvider.apply(userAnswers, mode).sections
 
     sections.size mustBe 2
 
@@ -50,7 +52,7 @@ class RoutingAnswersViewModelSpec extends SpecBase with Generators {
     sections(1).addAnotherLink.get mustBe Link(
       "add-or-remove-transit-route-countries",
       "Add or remove transit route countries",
-      controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(userAnswers.lrn).url
+      controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(userAnswers.lrn, mode).url
     )
   }
 }

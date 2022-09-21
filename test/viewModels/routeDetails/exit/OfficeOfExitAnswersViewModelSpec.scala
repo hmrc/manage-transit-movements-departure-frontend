@@ -18,10 +18,12 @@ package viewModels.routeDetails.exit
 
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import models.Mode
 import models.reference.Country
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.exit.index.OfficeOfExitCountryPage
+import viewModels.routeDetails.exit.OfficeOfExitAnswersViewModel.OfficeOfExitAnswersViewModelProvider
 
 class OfficeOfExitAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
@@ -30,12 +32,14 @@ class OfficeOfExitAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyC
     "must return row for each answer" - {
 
       "must return 1 rows" in {
-        forAll(arbitrary[Country]) {
-          country =>
+        forAll(arbitrary[Mode], arbitrary[Country]) {
+          (mode, country) =>
             val answers = emptyUserAnswers
               .setValue(OfficeOfExitCountryPage(index), country)
 
-            val section = OfficeOfExitAnswersViewModel.apply(answers, index).section
+            val viewModelProvider = injector.instanceOf[OfficeOfExitAnswersViewModelProvider]
+
+            val section = viewModelProvider.apply(answers, mode, index).section
 
             section.sectionTitle mustNot be(defined)
             section.rows.size mustBe 1

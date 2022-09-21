@@ -24,7 +24,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.routeDetails.RouteDetailsAnswersViewModel.RouteDetailsAnswersViewModelProvider
-import views.html.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersView
+import views.html.routeDetails.RouteDetailsAnswersView
 
 import scala.concurrent.ExecutionContext
 
@@ -32,7 +32,7 @@ class RouteDetailsAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
-  view: LoadingAndUnloadingAnswersView,
+  view: RouteDetailsAnswersView,
   viewModelProvider: RouteDetailsAnswersViewModelProvider,
   countriesService: CountriesService
 )(implicit ec: ExecutionContext)

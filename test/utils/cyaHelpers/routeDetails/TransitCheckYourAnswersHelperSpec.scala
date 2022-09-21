@@ -17,10 +17,11 @@
 package utils.cyaHelpers.routeDetails
 
 import base.SpecBase
+import controllers.routeDetails.transit.index.{routes => indexRoutes}
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
 import models.SecurityDetailsType.NoSecurityDetails
 import models.reference.{Country, CustomsOffice}
-import models.{Index, Mode, NormalMode}
+import models.{Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.{OfficeOfDeparturePage, SecurityDetailsTypePage}
@@ -111,7 +112,7 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                           items = List(
                             ActionItem(
                               content = "Change".toText,
-                              href = controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(answers.lrn, index).url,
+                              href = indexRoutes.CheckOfficeOfTransitAnswersController.onPageLoad(answers.lrn, mode, index).url,
                               visuallyHiddenText = Some("office of transit 1"),
                               attributes = Map("id" -> "change-office-of-transit-1")
                             )
@@ -128,6 +129,8 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
 
     "listItems" - {
       "must return list items" in {
+        val mode = arbitrary[Mode].sample.value
+
         val country1 = arbitrary[Country].sample.value
         val country2 = arbitrary[Country].sample.value
         val country3 = arbitrary[Country].sample.value
@@ -148,27 +151,27 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
           .setValue(AddOfficeOfTransitETAYesNoPage(Index(1)), false)
           .setValue(OfficeOfTransitCountryPage(Index(2)), country3)
 
-        val helper = new TransitCheckYourAnswersHelper(answers, NormalMode)(Seq(country1.code.code), Nil)
+        val helper = new TransitCheckYourAnswersHelper(answers, mode)(Seq(country1.code.code), Nil)
         helper.listItems mustBe Seq(
           Right(
             ListItem(
               name = s"$customsOffice1",
-              changeUrl = controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, Index(0)).url,
+              changeUrl = indexRoutes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, mode, Index(0)).url,
               removeUrl = None
             )
           ),
           Right(
             ListItem(
               name = s"$country2 - $customsOffice2",
-              changeUrl = controllers.routeDetails.transit.index.routes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, Index(1)).url,
-              removeUrl = Some(controllers.routeDetails.transit.index.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, Index(1)).url)
+              changeUrl = indexRoutes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, mode, Index(1)).url,
+              removeUrl = Some(indexRoutes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, mode, Index(1)).url)
             )
           ),
           Left(
             ListItem(
               name = s"$country3",
-              changeUrl = controllers.routeDetails.transit.index.routes.OfficeOfTransitController.onPageLoad(lrn, NormalMode, Index(2)).url,
-              removeUrl = Some(controllers.routeDetails.transit.index.routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, Index(2)).url)
+              changeUrl = indexRoutes.OfficeOfTransitController.onPageLoad(lrn, mode, Index(2)).url,
+              removeUrl = Some(indexRoutes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, mode, Index(2)).url)
             )
           )
         )

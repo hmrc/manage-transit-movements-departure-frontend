@@ -18,11 +18,11 @@ package models.journeyDomain.guaranteeDetails
 
 import cats.implicits._
 import models.DeclarationType.Option4
-import models.domain._
 import models.GuaranteeType._
+import models.domain._
 import models.journeyDomain.Stage.{AccessingJourney, CompletingJourney}
 import models.journeyDomain.{JourneyDomainModel, Stage}
-import models.{CheckMode, GuaranteeType, Index, UserAnswers}
+import models.{CheckMode, GuaranteeType, Index, Mode, UserAnswers}
 import pages.guaranteeDetails.guarantee._
 import pages.preTaskList.DeclarationTypePage
 import play.api.mvc.Call
@@ -32,7 +32,7 @@ sealed trait GuaranteeDomain extends JourneyDomainModel {
 
   val `type`: GuaranteeType
 
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
     Some(controllers.guaranteeDetails.guarantee.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, index))
 }
 
@@ -83,7 +83,7 @@ object GuaranteeDomain {
   )(override val index: Index)
       extends GuaranteeDomain {
 
-    override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] = Some {
+    override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some {
       stage match {
         case AccessingJourney =>
           controllers.guaranteeDetails.guarantee.routes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, CheckMode, index)
