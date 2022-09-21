@@ -38,6 +38,8 @@ case class LoadingAndUnloadingDomain(
 
 object LoadingAndUnloadingDomain {
 
+  // When pre-lodge is in, add a loadingReader to handle nav logic if additional declaration type is A or D
+
   implicit val unloadingReader: UserAnswersReader[Option[UnloadingDomain]] =
     SecurityDetailsTypePage.reader.flatMap {
       case ExitSummaryDeclarationSecurityDetails =>

@@ -70,7 +70,7 @@ class RouteDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with G
 
   "id" - {
     "must be route-details" in {
-      val task = RouteDetailsTask(emptyUserAnswers)
+      val task = RouteDetailsTask(emptyUserAnswers)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
       task.id mustBe "route-details"
     }
   }
@@ -78,7 +78,7 @@ class RouteDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with G
   "apply" - {
     "when NotStarted" in {
       val userAnswers = emptyUserAnswers
-      val task        = RouteDetailsTask(userAnswers)
+      val task        = RouteDetailsTask(userAnswers)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
       task.status mustBe NotStarted
       task.href.get mustBe
         controllers.routeDetails.routing.routes.CountryOfDestinationController.onPageLoad(userAnswers.lrn, NormalMode).url
@@ -88,7 +88,7 @@ class RouteDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with G
       val userAnswers = emptyUserAnswers
         .setValue(CountryOfDestinationPage, arbitrary[Country].sample.value)
         .setValue(OfficeOfDestinationPage, arbitrary[CustomsOffice].sample.value)
-      val task = RouteDetailsTask(userAnswers)
+      val task = RouteDetailsTask(userAnswers)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
       task.status mustBe InProgress
       task.href.get mustBe
         controllers.routeDetails.routing.routes.BindingItineraryController.onPageLoad(userAnswers.lrn, NormalMode).url
@@ -97,7 +97,7 @@ class RouteDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with G
     "when Completed" ignore {
       forAll(arbitraryRouteDetailsAnswers(emptyUserAnswers)) {
         userAnswers =>
-          val task = RouteDetailsTask(userAnswers)
+          val task = RouteDetailsTask(userAnswers)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
           task.status mustBe Completed
           task.href.get mustBe ???
       }
