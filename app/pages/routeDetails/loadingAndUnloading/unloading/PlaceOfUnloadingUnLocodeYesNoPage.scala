@@ -23,6 +23,8 @@ import pages.sections.routeDetails.unloading.UnloadingSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
+import scala.util.Try
+
 case object PlaceOfUnloadingUnLocodeYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = UnloadingSection.path \ toString
@@ -31,4 +33,13 @@ case object PlaceOfUnloadingUnLocodeYesNoPage extends QuestionPage[Boolean] {
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.PlaceOfUnloadingUnLocodeYesNoController.onPageLoad(userAnswers.lrn, mode))
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(false) =>
+        userAnswers
+          .remove(PlaceOfUnloadingUnLocodePage)
+          .flatMap(_.remove(AddExtraInformationYesNoPage))
+      case _ => super.cleanup(value, userAnswers)
+    }
 }

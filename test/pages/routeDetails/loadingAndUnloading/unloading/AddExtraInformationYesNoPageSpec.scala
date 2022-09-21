@@ -17,6 +17,8 @@
 package pages.routeDetails.loadingAndUnloading.unloading
 
 import pages.behaviours.PageBehaviours
+import pages.sections.routeDetails.unloading.UnloadingLocationSection
+import play.api.libs.json.Json
 
 class AddExtraInformationYesNoPageSpec extends PageBehaviours {
 
@@ -27,5 +29,27 @@ class AddExtraInformationYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](AddExtraInformationYesNoPage)
 
     beRemovable[Boolean](AddExtraInformationYesNoPage)
+
+    "cleanup" - {
+      "when NO selected" - {
+        "must clean up unloading location section" in {
+          val preChange = emptyUserAnswers.setValue(UnloadingLocationSection, Json.obj("foo" -> "bar"))
+
+          val postChange = preChange.setValue(AddExtraInformationYesNoPage, false)
+
+          postChange.get(UnloadingLocationSection) mustNot be(defined)
+        }
+      }
+
+      "when YES selected" - {
+        "must do nothing" in {
+          val preChange = emptyUserAnswers.setValue(UnloadingLocationSection, Json.obj("foo" -> "bar"))
+
+          val postChange = preChange.setValue(AddExtraInformationYesNoPage, true)
+
+          postChange.get(UnloadingLocationSection) must be(defined)
+        }
+      }
+    }
   }
 }
