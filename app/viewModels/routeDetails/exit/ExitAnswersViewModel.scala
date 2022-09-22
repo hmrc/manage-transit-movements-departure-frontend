@@ -36,7 +36,7 @@ object ExitAnswersViewModel {
       val helper = new ExitCheckYourAnswersHelper(userAnswers, mode)
 
       val officesOfExitSection = Section(
-        sectionTitle = messages("routeDetails.exit.checkYourAnswers.offices.subheading"),
+        sectionTitle = messages("routeDetails.checkYourAnswers.exit.subheading"),
         rows = userAnswers
           .get(OfficesOfExitSection)
           .mapWithIndex {
@@ -44,7 +44,7 @@ object ExitAnswersViewModel {
           },
         addAnotherLink = Link(
           id = "add-or-remove-offices-of-exit",
-          text = messages("routeDetails.exit.checkYourAnswers.addOrRemove"),
+          text = messages("routeDetails.checkYourAnswers.exit.addOrRemove"),
           href = controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(userAnswers.lrn, mode).url
         )
       )

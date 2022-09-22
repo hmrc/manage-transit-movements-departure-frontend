@@ -45,7 +45,7 @@ object RoutingAnswersViewModel {
       )
 
       val countriesOfRoutingSection = Section(
-        sectionTitle = messages("routeDetails.routing.checkYourAnswers.countries.subheading"),
+        sectionTitle = messages("routeDetails.checkYourAnswers.routing.subheading"),
         rows = userAnswers
           .get(CountriesOfRoutingSection)
           .mapWithIndex {
@@ -53,7 +53,7 @@ object RoutingAnswersViewModel {
           },
         addAnotherLink = Link(
           id = "add-or-remove-transit-route-countries",
-          text = messages("routeDetails.routing.checkYourAnswers.addOrRemove"),
+          text = messages("routeDetails.checkYourAnswers.routing.addOrRemove"),
           href = controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(userAnswers.lrn, mode).url
         )
       )

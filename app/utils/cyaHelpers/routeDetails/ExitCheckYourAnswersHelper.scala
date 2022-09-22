@@ -37,7 +37,7 @@ class ExitCheckYourAnswersHelper(
   def officeOfExit(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[OfficeOfExitDomain, CustomsOffice](
     page = OfficeOfExitPage(index),
     formatAnswer = formatAsText,
-    prefix = "routeDetails.exit.checkYourAnswers.officeOfExit",
+    prefix = "routeDetails.checkYourAnswers.exit.officeOfExit",
     id = Some(s"change-office-of-exit-${index.display}"),
     args = index.display
   )(OfficeOfExitDomain.userAnswersReader(index), implicitly)

@@ -39,7 +39,7 @@ object TransitAnswersViewModel {
       val helper = new TransitCheckYourAnswersHelper(userAnswers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
 
       val officesOfTransitSection = Section(
-        sectionTitle = messages("routeDetails.transit.checkYourAnswers.offices.subheading"),
+        sectionTitle = messages("routeDetails.checkYourAnswers.transit.subheading"),
         rows = userAnswers
           .get(OfficesOfTransitSection)
           .mapWithIndex {
@@ -47,7 +47,7 @@ object TransitAnswersViewModel {
           },
         addAnotherLink = Link(
           id = "add-or-remove-offices-of-transit",
-          text = messages("routeDetails.transit.checkYourAnswers.addOrRemove"),
+          text = messages("routeDetails.checkYourAnswers.transit.addOrRemove"),
           href = controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(userAnswers.lrn, mode).url
         )
       )

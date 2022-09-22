@@ -61,7 +61,7 @@ class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
   def countryOfRouting(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[CountryOfRoutingDomain, Country](
     page = CountryOfRoutingPage(index),
     formatAnswer = formatAsText,
-    prefix = "routeDetails.routing.countryOfRouting",
+    prefix = "routeDetails.checkYourAnswers.routing.countryOfRouting",
     id = Some(s"change-country-of-routing-${index.display}"),
     args = index.display
   )(CountryOfRoutingDomain.userAnswersReader(index), implicitly)
