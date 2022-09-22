@@ -50,7 +50,7 @@ class PlaceOfLoadingCountryViewSpec extends InputSelectViewBehaviours[Country] w
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Place of loading")
 
   behave like pageWithHeading()
 
