@@ -6,4 +6,4 @@
 ->         /                   app.routeDetails.loadingAndUnloading.Routes
 
 GET        /:lrn/route-details/check-answers                          controllers.routeDetails.RouteDetailsAnswersController.onPageLoad(lrn: LocalReferenceNumber)
-POST       /:lrn/route-details/ccheck-answers                         controllers.routeDetails.RouteDetailsAnswersController.onSubmit(lrn: LocalReferenceNumber)
+POST       /:lrn/route-details/check-answers                          controllers.routeDetails.RouteDetailsAnswersController.onSubmit(lrn: LocalReferenceNumber)
