@@ -18,23 +18,68 @@ package viewModels.routeDetails
 
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import models.CheckMode
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.Mockito.{reset, verify, when}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import viewModels.routeDetails.RouteDetailsAnswersViewModel.RouteDetailsAnswersViewModelProvider
+import viewModels.routeDetails.exit.ExitAnswersViewModel
+import viewModels.routeDetails.exit.ExitAnswersViewModel.ExitAnswersViewModelProvider
+import viewModels.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersViewModel
+import viewModels.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersViewModel.LoadingAndUnloadingAnswersViewModelProvider
+import viewModels.routeDetails.locationOfGoods.LocationOfGoodsAnswersViewModel
+import viewModels.routeDetails.locationOfGoods.LocationOfGoodsAnswersViewModel.LocationOfGoodsAnswersViewModelProvider
+import viewModels.routeDetails.routing.RoutingAnswersViewModel
+import viewModels.routeDetails.routing.RoutingAnswersViewModel.RoutingAnswersViewModelProvider
+import viewModels.routeDetails.transit.TransitAnswersViewModel
+import viewModels.routeDetails.transit.TransitAnswersViewModel.TransitAnswersViewModelProvider
+import viewModels.sections.Section
 
 class RouteDetailsAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
-  private val viewModelProvider = injector.instanceOf[RouteDetailsAnswersViewModelProvider]
-
   "apply" - {
-    "must return all sections" ignore {
+    "must pass CheckMode to view models" in {
+      def dummySection  = arbitrary[Section].sample.value
+      def dummySections = listWithMaxLength[Section]().sample.value
+
+      val mockRoutingAnswersViewModelProvider             = mock[RoutingAnswersViewModelProvider]
+      val mockTransitAnswersViewModelProvider             = mock[TransitAnswersViewModelProvider]
+      val mockExitAnswersViewModelProvider                = mock[ExitAnswersViewModelProvider]
+      val mockLocationOfGoodsAnswersViewModelProvider     = mock[LocationOfGoodsAnswersViewModelProvider]
+      val mockLoadingAndUnloadingAnswersViewModelProvider = mock[LoadingAndUnloadingAnswersViewModelProvider]
+
+      val viewModelProvider = new RouteDetailsAnswersViewModelProvider(
+        mockRoutingAnswersViewModelProvider,
+        mockTransitAnswersViewModelProvider,
+        mockExitAnswersViewModelProvider,
+        mockLocationOfGoodsAnswersViewModelProvider,
+        mockLoadingAndUnloadingAnswersViewModelProvider
+      )
+
       forAll(arbitraryRouteDetailsAnswers(emptyUserAnswers)) {
         answers =>
-          val sections = viewModelProvider.apply(answers)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes).sections
+          reset(
+            mockRoutingAnswersViewModelProvider,
+            mockTransitAnswersViewModelProvider,
+            mockExitAnswersViewModelProvider,
+            mockLocationOfGoodsAnswersViewModelProvider,
+            mockLoadingAndUnloadingAnswersViewModelProvider
+          )
 
-          sections.size mustBe 4
-          sections.head.sectionTitle must not be defined
-          sections(1).sectionTitle.get mustBe "Transit route countries"
-          sections(2).sectionTitle.get mustBe "Offices of transit"
+          when(mockRoutingAnswersViewModelProvider.apply(any(), any())(any())).thenReturn(RoutingAnswersViewModel(dummySections))
+          when(mockTransitAnswersViewModelProvider.apply(any(), any())(any(), any())(any())).thenReturn(TransitAnswersViewModel(dummySections))
+          when(mockExitAnswersViewModelProvider.apply(any(), any())(any())).thenReturn(ExitAnswersViewModel(dummySections))
+          when(mockLocationOfGoodsAnswersViewModelProvider.apply(any(), any())(any())).thenReturn(LocationOfGoodsAnswersViewModel(dummySection))
+          when(mockLoadingAndUnloadingAnswersViewModelProvider.apply(any(), any())(any())).thenReturn(LoadingAndUnloadingAnswersViewModel(dummySections))
+
+          viewModelProvider.apply(answers)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+
+          verify(mockRoutingAnswersViewModelProvider).apply(eqTo(answers), eqTo(CheckMode))(any())
+          verify(mockTransitAnswersViewModelProvider).apply(eqTo(answers), eqTo(CheckMode))(any(), any())(any())
+          verify(mockExitAnswersViewModelProvider).apply(eqTo(answers), eqTo(CheckMode))(any())
+          verify(mockLocationOfGoodsAnswersViewModelProvider).apply(eqTo(answers), eqTo(CheckMode))(any())
+          verify(mockLoadingAndUnloadingAnswersViewModelProvider).apply(eqTo(answers), eqTo(CheckMode))(any())
       }
     }
   }
