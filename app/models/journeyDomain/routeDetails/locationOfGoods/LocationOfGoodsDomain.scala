@@ -32,15 +32,15 @@ sealed trait LocationOfGoodsDomain extends JourneyDomainModel {
   val qualifierOfIdentification: LocationOfGoodsIdentification
 
   override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    None // TODO - update to CYA once built
+    Some(controllers.routeDetails.locationOfGoods.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
 }
 
 object LocationOfGoodsDomain {
 
   implicit val userAnswersReader: UserAnswersReader[LocationOfGoodsDomain] =
-    LocationOfGoodsTypePage.reader.flatMap {
+    LocationTypePage.reader.flatMap {
       typeOfLocation =>
-        LocationOfGoodsIdentificationPage.reader.flatMap {
+        IdentificationPage.reader.flatMap {
           case CustomsOfficeIdentifier => LocationOfGoodsV.userAnswersReader(typeOfLocation)
           case EoriNumber              => LocationOfGoodsX.userAnswersReader(typeOfLocation)
           case AuthorisationNumber     => LocationOfGoodsY.userAnswersReader(typeOfLocation)
@@ -64,7 +64,7 @@ object LocationOfGoodsDomain {
     def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
       (
         UserAnswersReader(typeOfLocation),
-        LocationOfGoodsCustomsOfficeIdentifierPage.reader
+        CustomsOfficeIdentifierPage.reader
       ).mapN {
         (typeOfLocation, customsOffice) =>
           LocationOfGoodsV(typeOfLocation, customsOffice)
@@ -86,8 +86,8 @@ object LocationOfGoodsDomain {
     def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
       (
         UserAnswersReader(typeOfLocation),
-        LocationOfGoodsEoriPage.reader,
-        LocationOfGoodsAddIdentifierPage.filterOptionalDependent(identity)(AdditionalIdentifierPage.reader),
+        EoriPage.reader,
+        AddIdentifierYesNoPage.filterOptionalDependent(identity)(AdditionalIdentifierPage.reader),
         AddContactYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
       ).mapN {
         (typeOfLocation, identificationNumber, additionalIdentifier, additionalContact) =>
@@ -110,8 +110,8 @@ object LocationOfGoodsDomain {
     def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
       (
         UserAnswersReader(typeOfLocation),
-        LocationOfGoodsAuthorisationNumberPage.reader,
-        LocationOfGoodsAddIdentifierPage.filterOptionalDependent(identity)(AdditionalIdentifierPage.reader),
+        AuthorisationNumberPage.reader,
+        AddIdentifierYesNoPage.filterOptionalDependent(identity)(AdditionalIdentifierPage.reader),
         AddContactYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
       ).mapN {
         (typeOfLocation, authorisationNumber, additionalIdentifier, additionalContact) =>
@@ -133,7 +133,7 @@ object LocationOfGoodsDomain {
     def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
       (
         UserAnswersReader(typeOfLocation),
-        LocationOfGoodsCoordinatesPage.reader,
+        CoordinatesPage.reader,
         AddContactYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
       ).mapN {
         (typeOfLocation, coordinates, additionalContact) =>
@@ -155,7 +155,7 @@ object LocationOfGoodsDomain {
     def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
       (
         UserAnswersReader(typeOfLocation),
-        LocationOfGoodsAddressPage.reader,
+        AddressPage.reader,
         AddContactYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
       ).mapN {
         (typeOfLocation, address, additionalContact) =>
@@ -177,7 +177,7 @@ object LocationOfGoodsDomain {
     def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
       (
         UserAnswersReader(typeOfLocation),
-        LocationOfGoodsUnLocodePage.reader,
+        UnLocodePage.reader,
         AddContactYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
       ).mapN {
         (typeOfLocation, unLocode, additionalContact) =>
@@ -199,7 +199,7 @@ object LocationOfGoodsDomain {
     def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
       (
         UserAnswersReader(typeOfLocation),
-        LocationOfGoodsPostalCodePage.reader,
+        PostalCodePage.reader,
         AddContactYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
       ).mapN {
         (typeOfLocation, postalCodeAddress, additionalContact) =>

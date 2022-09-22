@@ -20,10 +20,13 @@ import models.UserAnswers
 
 class TaskListViewModel {
 
-  def apply(userAnswers: UserAnswers): Seq[Task] =
+  def apply(userAnswers: UserAnswers)(
+    ctcCountryCodes: Seq[String],
+    customsSecurityAgreementAreaCountryCodes: Seq[String]
+  ): Seq[Task] =
     Seq(
       TraderDetailsTask(userAnswers),
-      RouteDetailsTask(userAnswers),
+      RouteDetailsTask(userAnswers)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes),
       GuaranteeDetailsTask(userAnswers)
     )
 }

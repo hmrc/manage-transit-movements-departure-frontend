@@ -55,3 +55,7 @@ class FakeOfficeOfExitNavigator(desiredRoute: Call, index: Index) extends Office
 class FakeLocationOfGoodsNavigator(desiredRoute: Call) extends LocationOfGoodsNavigator(Nil, Nil) {
   override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
 }
+
+class FakeLoadingAndUnloadingNavigator(desiredRoute: Call) extends LoadingAndUnloadingNavigator(Nil, Nil) {
+  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+}

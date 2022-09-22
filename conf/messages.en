@@ -541,6 +541,8 @@ guaranteeDetails.checkYourAnswers.heading = Check your answers
 # Route details
 
 routeDetails.caption = Route details
+routeDetails.unloading.caption = Route details - Place of unloading
+routeDetails.loading.caption = Route details - Place of loading
 
 # Routing
 
@@ -710,6 +712,8 @@ routeDetails.exit.addAnotherOfficeOfExit.label = Do you want to add another offi
 routeDetails.exit.addAnotherOfficeOfExit.hint = You can add up to 9 offices.
 routeDetails.exit.addAnotherOfficeOfExit.maxLimit.label = You cannot add any more offices of exit. To add another office, you need to remove one first.
 
+# Location of goods
+
 routeDetails.locationOfGoods.addLocationOfGoods.title = Do you want to add a location of goods?
 routeDetails.locationOfGoods.addLocationOfGoods.heading = Do you want to add a location of goods?
 routeDetails.locationOfGoods.addLocationOfGoods.paragraph1 = This is where Customs will carry out any physical checks.
@@ -717,124 +721,254 @@ routeDetails.locationOfGoods.addLocationOfGoods.paragraph2 = For goods not prese
 routeDetails.locationOfGoods.addLocationOfGoods.checkYourAnswersLabel = Do you want to add a location of goods?
 routeDetails.locationOfGoods.addLocationOfGoods.error.required = Select yes if you want to add a location of goods
 
-routeDetails.locationOfGoods.locationOfGoodsType.title = Which type of location is it?
-routeDetails.locationOfGoods.locationOfGoodsType.heading = Which type of location is it?
-routeDetails.locationOfGoods.locationOfGoodsType.checkYourAnswersLabel = Which type of location is it?
-routeDetails.locationOfGoods.locationOfGoodsType.error.required = Select which type of location it is
-routeDetails.locationOfGoods.locationOfGoodsType.AuthorisedPlace = Authorised place - the authorised consignor’s approved premises
-routeDetails.locationOfGoods.locationOfGoodsType.DesignatedLocation = Designated location - any other premises the consignor is authorised to use as an office of departure
-routeDetails.locationOfGoods.locationOfGoodsType.ApprovedPlace = Approved place - a designated location approved and controlled by the office of departure or destination
-routeDetails.locationOfGoods.locationOfGoodsType.Other = Other
+routeDetails.locationOfGoods.locationType.title = Which type of location is it?
+routeDetails.locationOfGoods.locationType.heading = Which type of location is it?
+routeDetails.locationOfGoods.locationType.checkYourAnswersLabel = Location type
+routeDetails.locationOfGoods.locationType.change.hidden = location type
+routeDetails.locationOfGoods.locationType.error.required = Select which type of location it is
+routeDetails.locationOfGoods.locationType.authorisedPlace = Authorised place - the authorised consignor’s own premises
+routeDetails.locationOfGoods.locationType.designatedLocation = Designated location - any other premises the consignor is authorised to use as an office of departure
+routeDetails.locationOfGoods.locationType.approvedPlace = Approved place - a designated location approved and controlled by the office of departure or destination
+routeDetails.locationOfGoods.locationType.other = Other
 
-routeDetails.locationOfGoods.locationOfGoodsIdentification.title = How do you want to identify the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsIdentification.heading = How do you want to identify the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsIdentification.hint = This needs to be precise enough for Customs to locate the goods and carry out their checks.
-routeDetails.locationOfGoods.locationOfGoodsIdentification.customsOfficeIdentifier = Customs office identifier
-routeDetails.locationOfGoods.locationOfGoodsIdentification.eoriNumber = EORI number
-routeDetails.locationOfGoods.locationOfGoodsIdentification.authorisationNumber = Authorisation number
-routeDetails.locationOfGoods.locationOfGoodsIdentification.coordinates = Coordinates
-routeDetails.locationOfGoods.locationOfGoodsIdentification.unlocode = UN/LOCODE
-routeDetails.locationOfGoods.locationOfGoodsIdentification.address = Address
-routeDetails.locationOfGoods.locationOfGoodsIdentification.postalCode = Postal code
-routeDetails.locationOfGoods.locationOfGoodsIdentification.checkYourAnswersLabel = identifier type for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsIdentification.error.required = Select how you want to identify the location of goods
+routeDetails.locationOfGoods.identification.title = How do you want to identify the location of goods?
+routeDetails.locationOfGoods.identification.heading = How do you want to identify the location of goods?
+routeDetails.locationOfGoods.identification.hint = This needs to be precise enough for Customs to locate the goods and carry out their checks.
+routeDetails.locationOfGoods.identification.customsOfficeIdentifier = Customs office identifier
+routeDetails.locationOfGoods.identification.eoriNumber = EORI number
+routeDetails.locationOfGoods.identification.authorisationNumber = Authorisation number
+routeDetails.locationOfGoods.identification.coordinates = Coordinates
+routeDetails.locationOfGoods.identification.unlocode = UN/LOCODE
+routeDetails.locationOfGoods.identification.address = Address
+routeDetails.locationOfGoods.identification.postalCode = Postal code
+routeDetails.locationOfGoods.identification.checkYourAnswersLabel = Identifier type for the location of goods
+routeDetails.locationOfGoods.identification.change.hidden = identifier type for the location of goods
+routeDetails.locationOfGoods.identification.error.required = Select how you want to identify the location of goods
 
-routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.title = What is the customs office identifier for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.heading = What is the customs office identifier for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.hintText = Enter the office location or code, like Dover or GB000060.
-routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.placeholder = Select a customsOffice
-routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.change.hidden = What is the customs office identifier for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.checkYourAnswersLabel = What is the customs office identifier for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsCustomsOfficeIdentifier.error.required = Enter the customs office identifier for the location of goods
+routeDetails.locationOfGoods.customsOfficeIdentifier.title = What is the customs office identifier for the location of goods?
+routeDetails.locationOfGoods.customsOfficeIdentifier.heading = What is the customs office identifier for the location of goods?
+routeDetails.locationOfGoods.customsOfficeIdentifier.hintText = Enter the office location or code, like Dover or GB000060.
+routeDetails.locationOfGoods.customsOfficeIdentifier.placeholder = Select a customsOffice
+routeDetails.locationOfGoods.customsOfficeIdentifier.change.hidden = the customs office identifier for the location of goods
+routeDetails.locationOfGoods.customsOfficeIdentifier.checkYourAnswersLabel = What is the customs office identifier for the location of goods?
+routeDetails.locationOfGoods.customsOfficeIdentifier.error.required = Enter the customs office identifier for the location of goods
 
-routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.title = What is the authorisation number for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.heading = What is the authorisation number for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.checkYourAnswersLabel = What is the authorisation number for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.error.required = Enter the authorisation number for the location of goods.
-routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.error.maxLength = The authorisation number must be 35 characters or less.
-routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.error.invalidCharacters = The authorisation number must only include letters a to z and numbers 0 to 9.
-routeDetails.locationOfGoods.locationOfGoodsAuthorisationNumber.hintText = This can be up to 35 characters long and include both letters and numbers.
+routeDetails.locationOfGoods.authorisationNumber.title = What is the authorisation number for the location of goods?
+routeDetails.locationOfGoods.authorisationNumber.heading = What is the authorisation number for the location of goods?
+routeDetails.locationOfGoods.authorisationNumber.checkYourAnswersLabel = What is the authorisation number for the location of goods?
+routeDetails.locationOfGoods.authorisationNumber.change.hidden = the authorisation number for the location of goods
+routeDetails.locationOfGoods.authorisationNumber.error.required = Enter the authorisation number for the location of goods.
+routeDetails.locationOfGoods.authorisationNumber.error.maxLength = The authorisation number must be 35 characters or less.
+routeDetails.locationOfGoods.authorisationNumber.error.invalidCharacters = The authorisation number must only include letters a to z and numbers 0 to 9.
+routeDetails.locationOfGoods.authorisationNumber.hintText = This can be up to 35 characters long and include both letters and numbers.
 
-routeDetails.locationOfGoods.locationOfGoodsCoordinates.title = What are the coordinates for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsCoordinates.heading = What are the coordinates for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsCoordinates.latitude = Latitude
-routeDetails.locationOfGoods.locationOfGoodsCoordinates.longitude = Longitude
-routeDetails.locationOfGoods.locationOfGoodsCoordinates.hintText = These numbers can be positive or negative and need between 5 and 7 decimal places. For example, 50.96622 or 1.86201.
-routeDetails.locationOfGoods.locationOfGoodsCoordinates.checkYourAnswersLabel = What are the coordinates for the location of goods //TODO: check CYA ticket
-routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.invalid = The {0} coordinates must only include numbers 0 to 9, a decimal place and a minus sign
-routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.latitude.maximum = The latitude coordinates must be between -90 and 90
-routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.longitude.maximum = The longitude coordinates must be between -180 and 180
-routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.required = Enter the {0} coordinates for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsCoordinates.error.format = The {0} coordinates must include between 5 and 7 decimal places
+routeDetails.locationOfGoods.coordinates.title = What are the coordinates for the location of goods?
+routeDetails.locationOfGoods.coordinates.heading = What are the coordinates for the location of goods?
+routeDetails.locationOfGoods.coordinates.latitude = Latitude
+routeDetails.locationOfGoods.coordinates.longitude = Longitude
+routeDetails.locationOfGoods.coordinates.hintText = These numbers can be positive or negative and need between 5 and 7 decimal places. For example, 50.96622 or 1.86201.
+routeDetails.locationOfGoods.coordinates.checkYourAnswersLabel = Coordinates
+routeDetails.locationOfGoods.coordinates.change.hidden = coordinates
+routeDetails.locationOfGoods.coordinates.error.invalid = The {0} coordinates must only include numbers 0 to 9, a decimal place and a minus sign
+routeDetails.locationOfGoods.coordinates.error.latitude.maximum = The latitude coordinates must be between -90 and 90
+routeDetails.locationOfGoods.coordinates.error.longitude.maximum = The longitude coordinates must be between -180 and 180
+routeDetails.locationOfGoods.coordinates.error.required = Enter the {0} coordinates for the location of goods
+routeDetails.locationOfGoods.coordinates.error.format = The {0} coordinates must include between 5 and 7 decimal places
 
-routeDetails.locationOfGoods.locationOfGoodsEori.title = What is the EORI number for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsEori.heading = What is the EORI number for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsEori.checkYourAnswersLabel = What is the EORI number for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsEori.error.required = Enter the EORI number for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsEori.error.length = The EORI number must be between 14 and 17 characters long
-routeDetails.locationOfGoods.locationOfGoodsEori.error.invalidCharacters = The EORI number must only include letters a to z and numbers 0 to 9
-routeDetails.locationOfGoods.locationOfGoodsEori.error.invalidFormat = The EORI number must start with GB or XI, followed by between 12 and 15 numbers
-routeDetails.locationOfGoods.locationOfGoodsEori.hintText = This will start GB or XI, followed by 12 to 15 numbers. For example, GB123456789000.
+routeDetails.locationOfGoods.eori.title = What is the EORI number for the location of goods?
+routeDetails.locationOfGoods.eori.heading = What is the EORI number for the location of goods?
+routeDetails.locationOfGoods.eori.checkYourAnswersLabel = What is the EORI number for the location of goods?
+routeDetails.locationOfGoods.eori.change.hidden = the EORI number for the location of goods
+routeDetails.locationOfGoods.eori.error.required = Enter the EORI number for the location of goods
+routeDetails.locationOfGoods.eori.error.minLength = The EORI number must be between 14 and 17 characters long
+routeDetails.locationOfGoods.eori.error.maxLength = The EORI number must be between 14 and 17 characters long
+routeDetails.locationOfGoods.eori.error.invalidCharacters = The EORI number must only include letters a to z and numbers 0 to 9
+routeDetails.locationOfGoods.eori.error.invalidFormat = The EORI number must start with GB or XI, followed by between 12 and 15 numbers
+routeDetails.locationOfGoods.eori.hintText = This will start GB or XI, followed by 12 to 15 numbers. For example, GB123456789000.
 
+routeDetails.locationOfGoods.postalCode.title = What is the address for the location of goods?
+routeDetails.locationOfGoods.postalCode.heading = What is the address for the location of goods?
+routeDetails.locationOfGoods.postalCode.streetNumber = Street number
+routeDetails.locationOfGoods.postalCode.postalCode = Postal code
+routeDetails.locationOfGoods.postalCode.country = Country
+routeDetails.locationOfGoods.postalCode.checkYourAnswersLabel = What is the address for the location of goods?
+routeDetails.locationOfGoods.postalCode.change.hidden = the address for the location of goods
+routeDetails.locationOfGoods.postalCode.error.streetNumber.required = Enter the street number for the location of goods
+routeDetails.locationOfGoods.postalCode.error.streetNumber.invalidCharacters = The street number must only include numbers 0 to 9 and letters a to z
+routeDetails.locationOfGoods.postalCode.error.streetNumber.length = The street number must be 6 characters or less
+routeDetails.locationOfGoods.postalCode.error.postalCode.required = Enter the postal code for the location of goods
+routeDetails.locationOfGoods.postalCode.error.postalCode.invalidCharacters = The postcode of address must only include letters a to z, numbers 0 to 9 and spaces
+routeDetails.locationOfGoods.postalCode.error.postalCode.length = The postal code must be 9 characters or less
+routeDetails.locationOfGoods.postalCode.error.country.required = Enter the country for the location of goods
 
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.title = What is the address for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.heading = What is the address for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.streetNumber = Street number
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.postalCode = Postal code
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.country = Country
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.checkYourAnswersLabel = What is the address for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.error.streetNumber.required = Enter the street number for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.error.streetNumber.invalidCharacters = The street number must only include numbers 0 to 9 and letters a to z
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.error.streetNumber.length = The street number must be 6 characters or less
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.error.postalCode.required = Enter the postal code for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.error.postalCode.invalidCharacters = The postcode of address must only include letters a to z, numbers 0 to 9 and spaces
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.error.postalCode.length = The postal code must be 9 characters or less
-routeDetails.locationOfGoods.locationOfGoodsPostalCode.error.country.required = Enter the country for the location of goods
-
-routeDetails.locationOfGoods.locationOfGoodsAddress.title = What is the address for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsAddress.heading = What is the address for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsAddress.addressLine1 = Street name and number
-routeDetails.locationOfGoods.locationOfGoodsAddress.addressLine2 = Town or city
-routeDetails.locationOfGoods.locationOfGoodsAddress.postalCode = Postal code
-routeDetails.locationOfGoods.locationOfGoodsAddress.country = Country
-routeDetails.locationOfGoods.locationOfGoodsAddress.checkYourAnswersLabel = What is the address for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsAddress.error.addressLine1.required = Enter the street name and number for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsAddress.error.addressLine1.invalidCharacters = The street name and number must only include letters a to z, numbers 0 to 9 and spaces
-routeDetails.locationOfGoods.locationOfGoodsAddress.error.addressLine1.length = The street name and number must be 35 characters or less
-routeDetails.locationOfGoods.locationOfGoodsAddress.error.addressLine2.required = Enter the town or city for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsAddress.error.addressLine2.invalidCharacters = The town or city must only include letters a to z and spaces
-routeDetails.locationOfGoods.locationOfGoodsAddress.error.addressLine2.length = The town or city must be 35 characters or less
-routeDetails.locationOfGoods.locationOfGoodsAddress.error.postcode.required = Enter the postal code for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsAddress.error.postcode.invalidCharacters = The postcode of address must only include letters a to z, numbers 0 to 9 and spaces
-routeDetails.locationOfGoods.locationOfGoodsAddress.error.postcode.length = The postal code must be 9 characters or less
-routeDetails.locationOfGoods.locationOfGoodsAddress.error.country.required = Enter the country for the location of goods
+routeDetails.locationOfGoods.address.title = What is the address for the location of goods?
+routeDetails.locationOfGoods.address.heading = What is the address for the location of goods?
+routeDetails.locationOfGoods.address.addressLine1 = Street name and number
+routeDetails.locationOfGoods.address.addressLine2 = Town or city
+routeDetails.locationOfGoods.address.postalCode = Postal code
+routeDetails.locationOfGoods.address.country = Country
+routeDetails.locationOfGoods.address.checkYourAnswersLabel = What is the address for the location of goods?
+routeDetails.locationOfGoods.address.change.hidden = the address for the location of goods
+routeDetails.locationOfGoods.address.error.addressLine1.required = Enter the street name and number for the location of goods
+routeDetails.locationOfGoods.address.error.addressLine1.invalidCharacters = The street name and number must only include letters a to z, numbers 0 to 9 and spaces
+routeDetails.locationOfGoods.address.error.addressLine1.length = The street name and number must be 35 characters or less
+routeDetails.locationOfGoods.address.error.addressLine2.required = Enter the town or city for the location of goods
+routeDetails.locationOfGoods.address.error.addressLine2.invalidCharacters = The town or city must only include letters a to z and spaces
+routeDetails.locationOfGoods.address.error.addressLine2.length = The town or city must be 35 characters or less
+routeDetails.locationOfGoods.address.error.postcode.required = Enter the postal code for the location of goods
+routeDetails.locationOfGoods.address.error.postcode.invalidCharacters = The postcode of address must only include letters a to z, numbers 0 to 9 and spaces
+routeDetails.locationOfGoods.address.error.postcode.length = The postal code must be 9 characters or less
+routeDetails.locationOfGoods.address.error.country.required = Enter the country for the location of goods
 
 routeDetails.locationOfGoods.additionalIdentifier.title = What is the additional identifier for the location of goods?
 routeDetails.locationOfGoods.additionalIdentifier.heading = What is the additional identifier for the location of goods?
 routeDetails.locationOfGoods.additionalIdentifier.hint = This can be up to 4 characters long, for example 0000 or X9X9.
 routeDetails.locationOfGoods.additionalIdentifier.checkYourAnswersLabel = Additional identifier
+routeDetails.locationOfGoods.additionalIdentifier.change.hidden = additional identifier
 routeDetails.locationOfGoods.additionalIdentifier.error.required = Enter the additional identifier for the location of goods
 routeDetails.locationOfGoods.additionalIdentifier.error.length = The additional identifier must be no more than 4 characters long
 routeDetails.locationOfGoods.additionalIdentifier.error.invalid = The additional identifier must only include the letters a to z and numbers 0 to 9
 
+routeDetails.locationOfGoods.addIdentifierYesNo.title = Do you want to add another identifier for the location of goods?
+routeDetails.locationOfGoods.addIdentifierYesNo.heading = Do you want to add another identifier for the location of goods?
+routeDetails.locationOfGoods.addIdentifierYesNo.checkYourAnswersLabel = Do you want to add another identifier for the location of goods?
+routeDetails.locationOfGoods.addIdentifierYesNo.change.hidden = if you want to add another identifier for the location of goods
+routeDetails.locationOfGoods.addIdentifierYesNo.error.required = Select yes if you want to add another identifier for the location of goods
 
-routeDetails.locationOfGoods.locationOfGoodsAddIdentifier.title = Do you want to add another identifier for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsAddIdentifier.heading = Do you want to add another identifier for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsAddIdentifier.checkYourAnswersLabel = Do you want to add another identifier for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsAddIdentifier.error.required = Select yes if you want to add another identifier for the location of goods
-
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.title = What is the UN/LOCODE for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.heading = What is the UN/LOCODE for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.hintText = Enter the location or code, like Berlin or DEBER.
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.placeholder = Select a UN/LOCODE.
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.change.hidden = What is the UN/LOCODE for the location of goods?
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.checkYourAnswersLabel = UN/LOCODE for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.error.required = Enter the UN/LOCODE for the location of goods
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.error.invalidCharacters = The UN/LOCODE must only include letters a to z numbers 0 to 9
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.error.maxLength = The UN/LOCODE must be 5 characters long
-routeDetails.locationOfGoods.locationOfGoodsUnLocode.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
+routeDetails.locationOfGoods.unLocode.title = What is the UN/LOCODE for the location of goods?
+routeDetails.locationOfGoods.unLocode.heading = What is the UN/LOCODE for the location of goods?
+routeDetails.locationOfGoods.unLocode.hintText = Enter the location or code, like Berlin or DEBER.
+routeDetails.locationOfGoods.unLocode.placeholder = Select a UN/LOCODE.
+routeDetails.locationOfGoods.unLocode.change.hidden = the UN/LOCODE for the location of goods
+routeDetails.locationOfGoods.unLocode.checkYourAnswersLabel = UN/LOCODE for the location of goods
+routeDetails.locationOfGoods.unLocode.error.required = Enter the UN/LOCODE for the location of goods
+routeDetails.locationOfGoods.unLocode.error.invalidCharacters = The UN/LOCODE must only include letters a to z and numbers 0 to 9
+routeDetails.locationOfGoods.unLocode.error.maxLength = The UN/LOCODE must be 5 characters long
+routeDetails.locationOfGoods.unLocode.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
 
 routeDetails.locationOfGoods.addContactLocationOfGoods.title = Do you want to add a contact for the location of goods?
 routeDetails.locationOfGoods.addContactLocationOfGoods.heading = Do you want to add a contact for the location of goods?
 routeDetails.locationOfGoods.addContactLocationOfGoods.checkYourAnswersLabel = Do you want to add a contact for the location of goods?
+routeDetails.locationOfGoods.addContactLocationOfGoods.change.hidden = if you want to add a contact for the location of goods
 routeDetails.locationOfGoods.addContactLocationOfGoods.error.required = Select yes if you want to add a contact for the location of goods.
+
+routeDetails.locationOfGoods.contact.name.title = Who is the contact for the location of goods?
+routeDetails.locationOfGoods.contact.name.heading = Who is the contact for the location of goods?
+routeDetails.locationOfGoods.contact.name.checkYourAnswersLabel = Who is the contact for the location of goods?
+routeDetails.locationOfGoods.contact.name.change.hidden = the contact for the location of goods
+routeDetails.locationOfGoods.contact.name.error.required = Enter the contact for the location of goods
+routeDetails.locationOfGoods.contact.name.error.invalid = The contact must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+routeDetails.locationOfGoods.contact.name.error.length = The contact must be 70 characters or less
+
+routeDetails.locationOfGoods.contact.telephoneNumber.title = What is the contact for the location of goods’ telephone number?
+routeDetails.locationOfGoods.contact.telephoneNumber.heading = What is {0}’s telephone number?
+routeDetails.locationOfGoods.contact.telephoneNumber.hintText = This has to include the country code, like +44 808 157 0192.
+routeDetails.locationOfGoods.contact.telephoneNumber.checkYourAnswersLabel = What is the contact for the location of goods’ telephone number?
+routeDetails.locationOfGoods.contact.telephoneNumber.change.hidden = the contact for the location of goods’ telephone number
+routeDetails.locationOfGoods.contact.telephoneNumber.error.required = Enter {0}’s telephone number.
+routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidCharacter = {0}’s telephone number must only include numbers 0 to 9 and a plus sign
+routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidFormat = {0}’s telephone number must start with a plus sign
+routeDetails.locationOfGoods.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less.
+routeDetails.locationOfGoods.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more.
+
+routeDetails.locationOfGoods.checkYourAnswers.title = Check your answers
+routeDetails.locationOfGoods.checkYourAnswers.heading = Check your answers
+routeDetails.locationOfGoods.checkYourAnswers.subHeading = Location of goods
+
+# Loading and unloading
+
+routeDetails.loadingAndUnloading.checkYourAnswers.title = Check your answers
+routeDetails.loadingAndUnloading.checkYourAnswers.heading = Check your answers
+routeDetails.loadingAndUnloading.checkYourAnswers.loading = Loading
+routeDetails.loadingAndUnloading.checkYourAnswers.unloading = Unloading
+
+# Loading
+
+routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.title = Do you want to add a UN/LOCODE for the place of loading?
+routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.heading = Do you want to add a UN/LOCODE for the place of loading?
+routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.checkYourAnswersLabel = Do you want to add a UN/LOCODE for the place of loading?
+routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.change.hidden = if you want to add a UN/LOCODE for the place of loading
+routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.error.required = Select yes if you want to add a UN/LOCODE for the place of loading
+routeDetails.loading.placeOfLoadingAddUnLocodeYesNo.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
+
+routeDetails.loading.placeOfLoadingUnLocode.title = What is the UN/LOCODE for the place of loading?
+routeDetails.loading.placeOfLoadingUnLocode.heading = What is the UN/LOCODE for the place of loading?
+routeDetails.loading.placeOfLoadingUnLocode.hintText = Enter the code, like GB BRS or GB MNC.
+routeDetails.loading.placeOfLoadingUnLocode.placeholder = Select a UN/LOCODE.
+routeDetails.loading.placeOfLoadingUnLocode.change.hidden = the UN/LOCODE for the place of loading
+routeDetails.loading.placeOfLoadingUnLocode.checkYourAnswersLabel = What is the UN/LOCODE for the place of loading?
+routeDetails.loading.placeOfLoadingUnLocode.error.required = Enter the UN/LOCODE for the place of loading
+routeDetails.loading.placeOfLoadingUnLocode.error.invalidCharacters = The UN/LOCODE for the place of loading must only include letters a to z and spaces
+routeDetails.loading.placeOfLoadingUnLocode.error.maxLength = The UN/LOCODE for the place of loading must be 5 characters long
+
+routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.title = Do you want to add extra information for the place of loading?
+routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.heading = Do you want to add extra information for the place of loading?
+routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.paragraph = This includes the country and location of loading.
+routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.checkYourAnswersLabel = Do you want to add extra information for the place of loading?
+routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.change.hidden = if you want to add extra information for the place of loading
+routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.error.required = Select yes if you want to add extra information for the place of loading
+
+routeDetails.loading.placeOfLoadingLocation.title = Where in {0} is the place of loading?
+routeDetails.loading.placeOfLoadingLocation.heading = Where in {0} is the place of loading?
+routeDetails.loading.placeOfLoadingLocation.checkYourAnswersLabel = Place of loading location
+routeDetails.loading.placeOfLoadingLocation.change.hidden = place of loading location
+routeDetails.loading.placeOfLoadingLocation.hint = Describe the specific location of loading. This can be up to 35 characters long.
+routeDetails.loading.placeOfLoadingLocation.error.required = Enter the place of loading in {0}
+routeDetails.loading.placeOfLoadingLocation.error.length = The place of loading must be 35 characters or less
+routeDetails.loading.placeOfLoadingLocation.error.invalid = The place of loading must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
+routeDetails.loading.placeOfLoadingCountry.title = In which country is the place of loading?
+routeDetails.loading.placeOfLoadingCountry.heading = In which country is the place of loading?
+routeDetails.loading.placeOfLoadingCountry.hintText = Enter the country, like Italy or Spain.
+routeDetails.loading.placeOfLoadingCountry.placeholder = Select a country
+routeDetails.loading.placeOfLoadingCountry.change.hidden = which country the place of loading is in
+routeDetails.loading.placeOfLoadingCountry.checkYourAnswersLabel = In which country is the place of loading?
+routeDetails.loading.placeOfLoadingCountry.error.required = Enter which country the place of loading is in
+
+# Unloading
+
+routeDetails.unloading.addPlaceOfUnloading.title = Do you want to add a place of unloading?
+routeDetails.unloading.addPlaceOfUnloading.heading = Do you want to add a place of unloading?
+routeDetails.unloading.addPlaceOfUnloading.checkYourAnswersLabel = Do you want to add a place of unloading?
+routeDetails.unloading.addPlaceOfUnloading.change.hidden = if you want to add a place of unloading
+routeDetails.unloading.addPlaceOfUnloading.error.required = Select yes if you want to add a place of unloading
+
+routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.title = Do you want to add a UN/LOCODE for the place of unloading?
+routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.heading = Do you want to add a UN/LOCODE for the place of unloading?
+routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.checkYourAnswersLabel = Do you want to add a UN/LOCODE for the place of unloading?
+routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.error.required = Select yes if you want to add a UN/LOCODE for the place of unloading
+routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
+
+routeDetails.unloading.placeOfUnloadingUnLocode.title = What is the UN/LOCODE for the place of unloading?
+routeDetails.unloading.placeOfUnloadingUnLocode.heading = What is the UN/LOCODE for the place of unloading?
+routeDetails.unloading.placeOfUnloadingUnLocode.hintText = Enter the code, like DEBER or ESMAD.
+routeDetails.unloading.placeOfUnloadingUnLocode.label = What is the UN/LOCODE for the place of unloading?
+routeDetails.unloading.placeOfUnloadingUnLocode.placeholder = Select a UN/LOCODE.
+routeDetails.unloading.placeOfUnloadingUnLocode.change.hidden = the UN/LOCODE for the place of unloading
+routeDetails.unloading.placeOfUnloadingUnLocode.checkYourAnswersLabel = What is the UN/LOCODE for the place of unloading?
+routeDetails.unloading.placeOfUnloadingUnLocode.error.required = Enter the UN/LOCODE for the place of unloading
+routeDetails.unloading.placeOfUnloadingUnLocode.error.invalidCharacters = The UN/LOCODE for the place of loading must only include letters a to z and numbers 0 to 9
+
+routeDetails.unloading.addExtraInformationYesNo.title = Do you want to add extra information for the place of unloading?
+routeDetails.unloading.addExtraInformationYesNo.heading = Do you want to add extra information for the place of unloading?
+routeDetails.unloading.addExtraInformationYesNo.checkYourAnswersLabel = Do you want to add extra information for the place of unloading?
+routeDetails.unloading.addExtraInformationYesNo.change.hidden = if you want to add extra information for the place of unloading
+routeDetails.unloading.addExtraInformationYesNo.error.required = Select yes if you want to add extra information for the place of unloading
+routeDetails.unloading.addExtraInformationYesNo.paragraph = This includes the country and location of unloading.
+
+routeDetails.unloading.country.title = Which country is the place of unloading in?
+routeDetails.unloading.country.heading = Which country is the place of unloading in?
+routeDetails.unloading.country.hintText = Enter the country, like Italy or Spain.
+routeDetails.unloading.country.placeholder = Select a country
+routeDetails.unloading.country.change.hidden = which country the place of unloading is in
+routeDetails.unloading.country.checkYourAnswersLabel = Which country is the place of unloading in
+routeDetails.unloading.country.error.required = Enter which country the place of unloading is in
+
+routeDetails.unloading.location.title = Where in {0} is the place of unloading?
+routeDetails.unloading.location.heading = Where in {0} is the place of unloading?
+routeDetails.unloading.location.checkYourAnswersLabel = Place of unloading location
+routeDetails.unloading.location.change.hidden = place of unloading location
+routeDetails.unloading.location.hint = Describe the specific location of unloading. This can be up to 35 characters long.
+routeDetails.unloading.location.error.required = Enter the place of unloading in {0}
+routeDetails.unloading.location.error.length = The place of unloading must be 35 characters or less
+routeDetails.unloading.location.error.invalid = The place of unloading must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces

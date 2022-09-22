@@ -21,239 +21,214 @@ import generators.{Generators, RouteDetailsUserAnswersGenerator}
 import models.DeclarationType.Option4
 import models.SecurityDetailsType._
 import models.domain.{EitherType, UserAnswersReader}
-import models.journeyDomain.routeDetails.exit.{ExitDomain, OfficeOfExitDomain}
-import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain.LocationOfGoodsV
-import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
+import models.journeyDomain.routeDetails.exit.ExitDomain
+import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
 import models.journeyDomain.routeDetails.transit.TransitDomain
-import models.reference.{Country, CustomsOffice}
-import models.{DeclarationType, LocationOfGoodsIdentification, LocationType}
+import models.reference.{Country, CountryCode, CustomsOffice}
+import models.{DeclarationType, Index}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList._
-import pages.routeDetails.exit.index._
-import pages.routeDetails.locationOfGoods._
+import pages.routeDetails.locationOfGoods.AddLocationOfGoodsPage
 import pages.routeDetails.routing._
 import pages.routeDetails.routing.index._
-import pages.routeDetails.transit._
 
-class RouteDetailsDomainSpec extends SpecBase with Generators with RouteDetailsUserAnswersGenerator {
+class RouteDetailsDomainSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
   "RouteDetailsDomain" - {
 
-    "can be parsed from UserAnswers" - {
+    "transitReader" - {
+      "can be parsed from UserAnswers" - {
+        "when TIR declaration type" in {
+          val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
 
-      "when TIR declaration type" in {
-        val country       = arbitrary[Country].sample.value
-        val customsOffice = arbitrary[CustomsOffice].sample.value
-
-        val userAnswers = emptyUserAnswers
-          .setValue(OfficeOfDeparturePage, customsOffice)
-          .setValue(DeclarationTypePage, Option4)
-          .setValue(SecurityDetailsTypePage, NoSecurityDetails)
-          .setValue(CountryOfDestinationPage, country)
-          .setValue(OfficeOfDestinationPage, customsOffice)
-          .setValue(BindingItineraryPage, false)
-          .setValue(AddCountryOfRoutingYesNoPage, false)
-          .setValue(AddLocationOfGoodsPage, false)
-
-        val expectedResult = RouteDetailsDomain(
-          routing = RoutingDomain(
-            countryOfDestination = country,
-            officeOfDestination = customsOffice,
-            bindingItinerary = false,
-            countriesOfRouting = Nil
-          ),
-          transit = None,
-          exit = None,
-          locationOfGoods = None
-        )
-
-        val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
-          RouteDetailsDomain.userAnswersReader(Nil, Seq(customsOffice.countryCode))
-        ).run(userAnswers)
-
-        result.value mustBe expectedResult
-      }
-
-      "when security is in set {0, 1}" in {
-        val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
-        val securityType    = Gen.oneOf(NoSecurityDetails, EntrySummaryDeclarationSecurityDetails).sample.value
-        val country         = arbitrary[Country].sample.value
-        val customsOffice   = arbitrary[CustomsOffice].sample.value
-
-        val userAnswers = emptyUserAnswers
-          .setValue(OfficeOfDeparturePage, customsOffice)
-          .setValue(DeclarationTypePage, declarationType)
-          .setValue(SecurityDetailsTypePage, securityType)
-          .setValue(CountryOfDestinationPage, country)
-          .setValue(OfficeOfDestinationPage, customsOffice)
-          .setValue(BindingItineraryPage, true)
-          .setValue(CountryOfRoutingPage(index), country)
-          .setValue(AddOfficeOfTransitYesNoPage, false)
-          .setValue(AddLocationOfGoodsPage, false)
-
-        val expectedResult = RouteDetailsDomain(
-          routing = RoutingDomain(
-            countryOfDestination = country,
-            officeOfDestination = customsOffice,
-            bindingItinerary = true,
-            countriesOfRouting = Seq(
-              CountryOfRoutingDomain(country)(index)
-            )
-          ),
-          transit = Some(
-            TransitDomain(
-              isT2DeclarationType = None,
-              officesOfTransit = Nil
-            )
-          ),
-          exit = None,
-          locationOfGoods = None
-        )
-
-        val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
-          RouteDetailsDomain.userAnswersReader(Seq(customsOffice.countryCode), Seq(customsOffice.countryCode))
-        ).run(userAnswers)
-
-        result.value mustBe expectedResult
-      }
-
-      "when at least one country of routing is in set CL147" in {
-        val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
-        val securityType    = Gen.oneOf(ExitSummaryDeclarationSecurityDetails, EntryAndExitSummaryDeclarationSecurityDetails).sample.value
-        val country         = arbitrary[Country].sample.value
-        val customsOffice   = arbitrary[CustomsOffice].sample.value
-
-        val userAnswers = emptyUserAnswers
-          .setValue(OfficeOfDeparturePage, customsOffice)
-          .setValue(DeclarationTypePage, declarationType)
-          .setValue(SecurityDetailsTypePage, securityType)
-          .setValue(CountryOfDestinationPage, country)
-          .setValue(OfficeOfDestinationPage, customsOffice)
-          .setValue(BindingItineraryPage, true)
-          .setValue(CountryOfRoutingPage(index), country)
-          .setValue(AddOfficeOfTransitYesNoPage, false)
-          .setValue(AddLocationOfGoodsPage, false)
-
-        val expectedResult = RouteDetailsDomain(
-          routing = RoutingDomain(
-            countryOfDestination = country,
-            officeOfDestination = customsOffice,
-            bindingItinerary = true,
-            countriesOfRouting = Seq(
-              CountryOfRoutingDomain(country)(index)
-            )
-          ),
-          transit = Some(
-            TransitDomain(
-              isT2DeclarationType = None,
-              officesOfTransit = Nil
-            )
-          ),
-          exit = None,
-          locationOfGoods = None
-        )
-
-        val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
-          RouteDetailsDomain.userAnswersReader(Seq(customsOffice.countryCode), Seq(country.code.code, customsOffice.countryCode))
-        ).run(userAnswers)
-
-        result.value mustBe expectedResult
-      }
-
-      "when no countries of routing are in set CL147" in {
-        val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
-        val securityType    = Gen.oneOf(ExitSummaryDeclarationSecurityDetails, EntryAndExitSummaryDeclarationSecurityDetails).sample.value
-        val country         = arbitrary[Country].sample.value
-        val customsOffice   = arbitrary[CustomsOffice].sample.value
-
-        val userAnswers = emptyUserAnswers
-          .setValue(OfficeOfDeparturePage, customsOffice)
-          .setValue(DeclarationTypePage, declarationType)
-          .setValue(SecurityDetailsTypePage, securityType)
-          .setValue(CountryOfDestinationPage, country)
-          .setValue(OfficeOfDestinationPage, customsOffice)
-          .setValue(BindingItineraryPage, true)
-          .setValue(CountryOfRoutingPage(index), country)
-          .setValue(AddOfficeOfTransitYesNoPage, false)
-          .setValue(OfficeOfExitCountryPage(index), country)
-          .setValue(OfficeOfExitPage(index), customsOffice)
-          .setValue(AddLocationOfGoodsPage, false)
-
-        val expectedResult = RouteDetailsDomain(
-          routing = RoutingDomain(
-            countryOfDestination = country,
-            officeOfDestination = customsOffice,
-            bindingItinerary = true,
-            countriesOfRouting = Seq(
-              CountryOfRoutingDomain(country)(index)
-            )
-          ),
-          transit = Some(
-            TransitDomain(
-              isT2DeclarationType = None,
-              officesOfTransit = Nil
-            )
-          ),
-          exit = Some(
-            ExitDomain(
-              Seq(
-                OfficeOfExitDomain(country, customsOffice)(index)
-              )
-            )
-          ),
-          locationOfGoods = None
-        )
-
-        val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
-          RouteDetailsDomain.userAnswersReader(Seq(customsOffice.countryCode), Seq(customsOffice.countryCode))
-        ).run(userAnswers)
-
-        result.value mustBe expectedResult
-      }
-
-      "when pre-lodging (D)" ignore {}
-
-      "when not pre-lodging" - {
-        "and office of departure is not in set CL147" in {
-          val country        = arbitrary[Country].sample.value
-          val customsOffice  = arbitrary[CustomsOffice].sample.value
-          val typeOfLocation = arbitrary[LocationType].sample.value
-
-          val userAnswers = emptyUserAnswers
-            .setValue(OfficeOfDeparturePage, customsOffice)
-            .setValue(DeclarationTypePage, Option4)
-            .setValue(SecurityDetailsTypePage, NoSecurityDetails)
-            .setValue(CountryOfDestinationPage, country)
-            .setValue(OfficeOfDestinationPage, customsOffice)
-            .setValue(BindingItineraryPage, false)
-            .setValue(AddCountryOfRoutingYesNoPage, false)
-            .setValue(LocationOfGoodsTypePage, typeOfLocation)
-            .setValue(LocationOfGoodsIdentificationPage, LocationOfGoodsIdentification.CustomsOfficeIdentifier)
-            .setValue(LocationOfGoodsCustomsOfficeIdentifierPage, customsOffice)
-
-          val expectedResult = RouteDetailsDomain(
-            routing = RoutingDomain(
-              countryOfDestination = country,
-              officeOfDestination = customsOffice,
-              bindingItinerary = false,
-              countriesOfRouting = Nil
-            ),
-            transit = None,
-            exit = None,
-            locationOfGoods = Some(
-              LocationOfGoodsV(
-                typeOfLocation = typeOfLocation,
-                customsOffice = customsOffice
-              )
-            )
-          )
-
-          val result: EitherType[RouteDetailsDomain] = UserAnswersReader[RouteDetailsDomain](
-            RouteDetailsDomain.userAnswersReader(Nil, Nil)
+          val result: EitherType[Option[TransitDomain]] = UserAnswersReader[Option[TransitDomain]](
+            RouteDetailsDomain.transitReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
           ).run(userAnswers)
 
-          result.value mustBe expectedResult
+          result.value must not be defined
+        }
+
+        "when not a TIR declaration type" in {
+          val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+          val initialAnswers  = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
+
+          forAll(arbitraryTransitAnswers(initialAnswers)) {
+            answers =>
+              val result: EitherType[Option[TransitDomain]] = UserAnswersReader[Option[TransitDomain]](
+                RouteDetailsDomain.transitReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+              ).run(answers)
+
+              result.value mustBe defined
+          }
+        }
+      }
+    }
+
+    "exitReader" - {
+      "can be parsed from UserAnswers" - {
+        "when TIR declaration type" in {
+          val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
+
+          val result: EitherType[Option[ExitDomain]] = UserAnswersReader[Option[ExitDomain]](
+            RouteDetailsDomain.exitReader(customsSecurityAgreementAreaCountryCodes)(None)
+          ).run(userAnswers)
+
+          result.value must not be defined
+        }
+
+        "when not a TIR declaration type" - {
+          val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+
+          "and security is in set {0,1}" in {
+            val security = Gen.oneOf(NoSecurityDetails, EntrySummaryDeclarationSecurityDetails).sample.value
+
+            val userAnswers = emptyUserAnswers
+              .setValue(DeclarationTypePage, declarationType)
+              .setValue(SecurityDetailsTypePage, security)
+
+            val result: EitherType[Option[ExitDomain]] = UserAnswersReader[Option[ExitDomain]](
+              RouteDetailsDomain.exitReader(customsSecurityAgreementAreaCountryCodes)(None)
+            ).run(userAnswers)
+
+            result.value must not be defined
+          }
+
+          "and security is not in set {0,1}" - {
+            val security = Gen.oneOf(ExitSummaryDeclarationSecurityDetails, EntryAndExitSummaryDeclarationSecurityDetails).sample.value
+
+            val countryInCL147 = arbitrary[Country]
+              .map(_.copy(code = CountryCode(customsSecurityAgreementAreaCountryCodes.head)))
+              .sample
+              .value
+
+            val countryNotInCL147 = arbitrary[Country]
+              .retryUntil {
+                x =>
+                  !customsSecurityAgreementAreaCountryCodes.contains(x.code.code)
+              }
+              .sample
+              .value
+
+            "at least one of the countries of routing is not in set CL147 and office of transit is populated" - {
+              "and office of transit answers have been provided" in {
+                val answers = emptyUserAnswers
+                  .setValue(DeclarationTypePage, declarationType)
+                  .setValue(SecurityDetailsTypePage, security)
+                  .setValue(BindingItineraryPage, true)
+                  .setValue(CountryOfRoutingPage(Index(0)), countryNotInCL147)
+                  .setValue(CountryOfRoutingPage(Index(1)), countryInCL147)
+
+                forAll(arbitrary[Option[TransitDomain]](arbitraryPopulatedTransitDomain)) {
+                  transit =>
+                    val result: EitherType[Option[ExitDomain]] = UserAnswersReader[Option[ExitDomain]](
+                      RouteDetailsDomain.exitReader(customsSecurityAgreementAreaCountryCodes)(transit)
+                    ).run(answers)
+
+                    result.value must not be defined
+                }
+              }
+
+              "and office of transit answers have not been provided" in {
+                val initialAnswers = emptyUserAnswers
+                  .setValue(DeclarationTypePage, declarationType)
+                  .setValue(SecurityDetailsTypePage, security)
+                  .setValue(BindingItineraryPage, true)
+                  .setValue(CountryOfRoutingPage(Index(0)), countryNotInCL147)
+                  .setValue(CountryOfRoutingPage(Index(1)), countryInCL147)
+
+                forAll(
+                  arbitraryOfficeOfExitAnswers(initialAnswers, index),
+                  arbitrary[Option[TransitDomain]](arbitraryEmptyTransitDomain)
+                ) {
+                  (answers, transit) =>
+                    val result: EitherType[Option[ExitDomain]] = UserAnswersReader[Option[ExitDomain]](
+                      RouteDetailsDomain.exitReader(customsSecurityAgreementAreaCountryCodes)(transit)
+                    ).run(answers)
+
+                    result.value mustBe defined
+                }
+              }
+            }
+
+            "and all of the countries of routing are in set CL147" in {
+              val initialAnswers = emptyUserAnswers
+                .setValue(DeclarationTypePage, declarationType)
+                .setValue(SecurityDetailsTypePage, security)
+                .setValue(BindingItineraryPage, true)
+                .setValue(CountryOfRoutingPage(index), countryInCL147)
+
+              forAll(arbitraryOfficeOfExitAnswers(initialAnswers, index)) {
+                answers =>
+                  val result: EitherType[Option[ExitDomain]] = UserAnswersReader[Option[ExitDomain]](
+                    RouteDetailsDomain.exitReader(customsSecurityAgreementAreaCountryCodes)(None)
+                  ).run(answers)
+
+                  result.value mustBe defined
+              }
+            }
+          }
+        }
+      }
+    }
+
+    "locationOfGoodsReader" - {
+      "can be parsed from UserAnswers" - {
+        "when office of departure is in set CL147" - {
+          val customsOfficeInCL147 = arbitrary[CustomsOffice]
+            .map(_.copy(id = customsSecurityAgreementAreaCountryCodes.head))
+            .sample
+            .value
+
+          "and not adding a location of goods type" in {
+            val userAnswers = emptyUserAnswers
+              .setValue(OfficeOfDeparturePage, customsOfficeInCL147)
+              .setValue(AddLocationOfGoodsPage, false)
+
+            val result: EitherType[Option[LocationOfGoodsDomain]] = UserAnswersReader[Option[LocationOfGoodsDomain]](
+              RouteDetailsDomain.locationOfGoodsReader(customsSecurityAgreementAreaCountryCodes)
+            ).run(userAnswers)
+
+            result.value must not be defined
+          }
+
+          "and adding a location of goods type" in {
+            val initialAnswers = emptyUserAnswers
+              .setValue(OfficeOfDeparturePage, customsOfficeInCL147)
+              .setValue(AddLocationOfGoodsPage, true)
+
+            forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
+              answers =>
+                val result: EitherType[Option[LocationOfGoodsDomain]] = UserAnswersReader[Option[LocationOfGoodsDomain]](
+                  RouteDetailsDomain.locationOfGoodsReader(customsSecurityAgreementAreaCountryCodes)
+                ).run(answers)
+
+                result.value mustBe defined
+            }
+          }
+        }
+
+        "when office of departure is not in set CL147" in {
+          val customsOfficeNotInCL147 = arbitrary[CustomsOffice]
+            .retryUntil {
+              x =>
+                !customsSecurityAgreementAreaCountryCodes.contains(x.countryCode)
+            }
+            .sample
+            .value
+
+          val initialAnswers = emptyUserAnswers
+            .setValue(OfficeOfDeparturePage, customsOfficeNotInCL147)
+
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
+            answers =>
+              val result: EitherType[Option[LocationOfGoodsDomain]] = UserAnswersReader[Option[LocationOfGoodsDomain]](
+                RouteDetailsDomain.locationOfGoodsReader(customsSecurityAgreementAreaCountryCodes)
+              ).run(answers)
+
+              result.value mustBe defined
+          }
         }
       }
     }

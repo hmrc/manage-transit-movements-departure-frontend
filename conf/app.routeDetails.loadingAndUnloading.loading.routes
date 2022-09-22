@@ -1,0 +1,25 @@
+
+GET        /:lrn/route-details/loading/place-of-loading-add-un-locode                        controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingAddUnLocodeYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/loading/place-of-loading-add-un-locode                        controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingAddUnLocodeYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/loading/change-place-of-loading-add-un-locode                 controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingAddUnLocodeYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/loading/change-place-of-loading-add-un-locode                 controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingAddUnLocodeYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/route-details/loading/place-of-loading-un-locode                            controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingUnLocodeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/loading/place-of-loading-un-locode                            controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingUnLocodeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/loading/change-place-of-loading-un-locode                     controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingUnLocodeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/loading/change-place-of-loading-un-locode                     controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingUnLocodeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/route-details/loading/place-of-loading-add-extra-information                controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingAddExtraInformationYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/loading/place-of-loading-add-extra-information                controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingAddExtraInformationYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/loading/change-place-of-loading-add-extra-information         controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingAddExtraInformationYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/loading/change-place-of-loading-add-extra-information         controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingAddExtraInformationYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/route-details/loading/place-of-loading-country                              controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingCountryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/loading/place-of-loading-country                              controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingCountryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/loading/change-place-of-loading-country                       controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingCountryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/loading/change-place-of-loading-country                       controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingCountryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/route-details/loading/place-of-loading-location                             controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingLocationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/loading/place-of-loading-location                             controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingLocationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/loading/change-place-of-loading-location                      controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingLocationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/loading/change-place-of-loading-location                      controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingLocationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

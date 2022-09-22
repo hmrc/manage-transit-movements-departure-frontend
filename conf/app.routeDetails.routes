@@ -1,0 +1,6 @@
+
+->         /                   app.routeDetails.routing.Routes
+->         /                   app.routeDetails.transit.Routes
+->         /                   app.routeDetails.exit.Routes
+->         /                   app.routeDetails.locationOfGoods.Routes
+->         /                   app.routeDetails.loadingAndUnloading.Routes

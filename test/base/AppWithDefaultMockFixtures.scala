@@ -114,6 +114,13 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
         Future.successful(new FakeLocationOfGoodsNavigator(onwardRoute))
     }
 
+  protected val fakeLoadingNavigatorProvider: LoadingAndUnloadingNavigatorProvider =
+    new LoadingAndUnloadingNavigatorProvider {
+
+      override def apply()(implicit hc: HeaderCarrier): Future[LoadingAndUnloadingNavigator] =
+        Future.successful(new FakeLoadingAndUnloadingNavigator(onwardRoute))
+    }
+
   def guiceApplicationBuilder(): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .overrides(

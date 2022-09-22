@@ -1,4 +1,7 @@
 
+->         /                   app.traderDetails.consignment.consignor.Routes
+->         /                   app.traderDetails.consignment.consignee.Routes
+
 GET        /:lrn/trader-details/consignment/reduced-data-set                         controllers.traderDetails.consignment.ApprovedOperatorController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/trader-details/consignment/reduced-data-set                         controllers.traderDetails.consignment.ApprovedOperatorController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/trader-details/consignment/change-reduced-data-set                  controllers.traderDetails.consignment.ApprovedOperatorController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

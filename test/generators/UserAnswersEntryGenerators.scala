@@ -17,11 +17,12 @@
 package generators
 
 import models._
-import models.reference.{Country, CustomsOffice}
+import models.reference._
 import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import play.api.libs.json.{JsBoolean, JsString, JsValue, Json}
+import pages.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingUnLocodePage
+import play.api.libs.json._
 import queries.Gettable
 
 trait UserAnswersEntryGenerators {
@@ -131,7 +132,9 @@ trait UserAnswersEntryGenerators {
     generateRoutingAnswer orElse
       generateTransitAnswer orElse
       generateExitAnswer orElse
-      generateLocationOfGoodsAnswer
+      generateLocationOfGoodsAnswer orElse
+      generateLoadingAnswer orElse
+      generateUnloadingAnswer
 
   private def generateRoutingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.routeDetails.routing._
@@ -169,13 +172,62 @@ trait UserAnswersEntryGenerators {
   private def generateLocationOfGoodsAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.routeDetails.locationOfGoods._
     {
-      case AddLocationOfGoodsPage                     => arbitrary[Boolean].map(JsBoolean)
-      case LocationOfGoodsTypePage                    => arbitrary[LocationType].map(Json.toJson(_))
-      case LocationOfGoodsIdentificationPage          => arbitrary[LocationOfGoodsIdentification].map(Json.toJson(_))
-      case LocationOfGoodsCustomsOfficeIdentifierPage => arbitrary[CustomsOffice].map(Json.toJson(_))
-      case LocationOfGoodsEoriPage                    => Gen.alphaNumStr.map(JsString)
-      case LocationOfGoodsAuthorisationNumberPage     => Gen.alphaNumStr.map(JsString)
-      case LocationOfGoodsAddressPage                 => arbitrary[Address].map(Json.toJson(_))
+      val pf: PartialFunction[Gettable[_], Gen[JsValue]] = {
+        case AddLocationOfGoodsPage => arbitrary[Boolean].map(JsBoolean)
+        case LocationTypePage       => arbitrary[LocationType].map(Json.toJson(_))
+        case IdentificationPage     => arbitrary[LocationOfGoodsIdentification].map(Json.toJson(_))
+        case AddContactYesNoPage    => arbitrary[Boolean].map(JsBoolean)
+      }
+
+      pf orElse
+        generateLocationOfGoodsIdentifierAnswer orElse
+        generateLocationOfGoodsContactAnswer
+    }
+  }
+
+  private def generateLocationOfGoodsIdentifierAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.routeDetails.locationOfGoods._
+    {
+      case CustomsOfficeIdentifierPage => arbitrary[CustomsOffice].map(Json.toJson(_))
+      case EoriPage                    => Gen.alphaNumStr.map(JsString)
+      case AuthorisationNumberPage     => Gen.alphaNumStr.map(JsString)
+      case AddIdentifierYesNoPage      => arbitrary[Boolean].map(JsBoolean)
+      case AdditionalIdentifierPage    => Gen.alphaNumStr.map(JsString)
+      case CoordinatesPage             => arbitrary[Coordinates].map(Json.toJson(_))
+      case UnLocodePage                => arbitrary[UnLocode].map(Json.toJson(_))
+      case AddressPage                 => arbitrary[Address].map(Json.toJson(_))
+      case PostalCodePage              => arbitrary[PostalCodeAddress].map(Json.toJson(_))
+    }
+  }
+
+  private def generateLocationOfGoodsContactAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.routeDetails.locationOfGoods.contact._
+    {
+      case NamePage            => Gen.alphaNumStr.map(JsString)
+      case TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
+    }
+  }
+
+  private def generateLoadingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.routeDetails.loadingAndUnloading.loading._
+    {
+      case PlaceOfLoadingAddUnLocodeYesNoPage         => arbitrary[Boolean].map(JsBoolean)
+      case PlaceOfLoadingUnLocodePage                 => arbitrary[UnLocode].map(Json.toJson(_))
+      case PlaceOfLoadingAddExtraInformationYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case PlaceOfLoadingCountryPage                  => arbitrary[Country].map(Json.toJson(_))
+      case PlaceOfLoadingLocationPage                 => Gen.alphaNumStr.map(JsString)
+    }
+  }
+
+  private def generateUnloadingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.routeDetails.loadingAndUnloading.unloading._
+    {
+      case AddPlaceOfUnloadingPage           => arbitrary[Boolean].map(JsBoolean)
+      case PlaceOfUnloadingUnLocodeYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case PlaceOfUnloadingUnLocodePage      => arbitrary[UnLocode].map(Json.toJson(_))
+      case AddExtraInformationYesNoPage      => arbitrary[Boolean].map(JsBoolean)
+      case CountryPage                       => arbitrary[Country].map(Json.toJson(_))
+      case LocationPage                      => Gen.alphaNumStr.map(JsString)
     }
   }
 

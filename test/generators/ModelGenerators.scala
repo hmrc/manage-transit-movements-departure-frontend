@@ -28,7 +28,7 @@ import wolfendale.scalacheck.regexp.RegexpGen
 trait ModelGenerators {
   self: Generators =>
 
-  implicit lazy val arbitraryLocationOfGoodsType: Arbitrary[models.LocationType] =
+  implicit lazy val arbitraryLocationType: Arbitrary[models.LocationType] =
     Arbitrary {
       Gen.oneOf(models.LocationType.values)
     }

@@ -32,7 +32,7 @@ class CheckOfficeOfExitAnswersController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: CheckOfficeOfExitAnswersView,
   viewModelProvider: OfficeOfExitViewModelProvider
-)() extends FrontendBaseController
+) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions.requireData(lrn) {

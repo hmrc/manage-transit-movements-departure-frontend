@@ -19,16 +19,24 @@ package pages.routeDetails.locationOfGoods
 import controllers.routeDetails.locationOfGoods.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.LocationOfGoodsSection
+import pages.sections.routeDetails.locationOfGoods.{LocationOfGoodsContactSection, LocationOfGoodsIdentifierSection}
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
+import scala.util.Try
+
 case object AddContactYesNoPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = LocationOfGoodsSection.path \ toString
+  override def path: JsPath = LocationOfGoodsIdentifierSection.path \ toString
 
   override def toString: String = "addContact"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.AddContactYesNoController.onPageLoad(userAnswers.lrn, mode))
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(false) => userAnswers.remove(LocationOfGoodsContactSection)
+      case _           => super.cleanup(value, userAnswers)
+    }
 }

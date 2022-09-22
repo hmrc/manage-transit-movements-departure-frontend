@@ -31,7 +31,7 @@ class CheckOfficeOfTransitAnswersController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: CheckOfficeOfTransitAnswersView,
   viewModelProvider: OfficeOfTransitViewModelProvider
-)() extends FrontendBaseController
+) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions.requireData(lrn) {

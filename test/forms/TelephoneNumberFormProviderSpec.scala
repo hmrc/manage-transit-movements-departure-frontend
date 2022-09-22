@@ -31,6 +31,8 @@ class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
   private val invalidFormatKey    = s"$prefix.error.invalidFormat"
   private val invalidCharacterKey = s"$prefix.error.invalidCharacter"
 
+  val form = new TelephoneNumberFormProvider()(prefix)
+
   ".value" - {
 
     val fieldName = "value"

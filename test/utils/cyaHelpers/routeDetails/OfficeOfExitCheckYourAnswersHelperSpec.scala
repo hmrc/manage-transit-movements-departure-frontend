@@ -23,7 +23,7 @@ import models.Mode
 import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.exit.index.OfficeOfExitCountryPage
+import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
 
@@ -45,8 +45,8 @@ class OfficeOfExitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPro
 
       "must return Some(Row)" - {
         "when OfficeOfExitCountryPage defined" in {
-          forAll(arbitrary[Mode], arbitrary[Country], arbitrary[CustomsOffice]) {
-            (mode, country, office) =>
+          forAll(arbitrary[Mode], arbitrary[Country]) {
+            (mode, country) =>
               val answers = emptyUserAnswers
                 .setValue(OfficeOfExitCountryPage(index), country)
               val helper = new OfficeOfExitCheckYourAnswersHelper(answers, mode, index)
@@ -64,6 +64,49 @@ class OfficeOfExitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPro
                           href = routes.OfficeOfExitCountryController.onPageLoad(answers.lrn, index, mode).url,
                           visuallyHiddenText = Some("office of exit’s country"),
                           attributes = Map("id" -> "office-of-exit-country")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "officeOfExit" - {
+      "must return None" - {
+        "when OfficeOfExitPage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new OfficeOfExitCheckYourAnswersHelper(emptyUserAnswers, mode, index)
+              val result = helper.officeOfExit
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when OfficeOfExitPage defined" in {
+          forAll(arbitrary[Mode], arbitrary[CustomsOffice]) {
+            (mode, customsOffice) =>
+              val answers = emptyUserAnswers.setValue(OfficeOfExitPage(index), customsOffice)
+              val helper  = new OfficeOfExitCheckYourAnswersHelper(answers, mode, index)
+              val result  = helper.officeOfExit
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Office location".toText),
+                  value = Value(customsOffice.toString.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = routes.OfficeOfExitController.onPageLoad(answers.lrn, index, mode).url,
+                          visuallyHiddenText = Some("office of exit’s location"),
+                          attributes = Map("id" -> "office-of-exit")
                         )
                       )
                     )

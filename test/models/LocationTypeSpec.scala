@@ -26,15 +26,15 @@ import play.api.libs.json.{JsError, JsString, Json}
 
 class LocationTypeSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
 
-  "LocationOfGoodsType" - {
+  "LocationType" - {
 
     "must deserialise valid values" in {
 
       val gen = Gen.oneOf(LocationType.values)
 
       forAll(gen) {
-        locationOfGoodsType =>
-          JsString(locationOfGoodsType.toString).validate[LocationType].asOpt.value mustEqual locationOfGoodsType
+        locationType =>
+          JsString(locationType.toString).validate[LocationType].asOpt.value mustEqual locationType
       }
     }
 
@@ -53,8 +53,8 @@ class LocationTypeSpec extends AnyFreeSpec with Matchers with ScalaCheckProperty
       val gen = Gen.oneOf(LocationType.values)
 
       forAll(gen) {
-        locationOfGoodsType =>
-          Json.toJson(locationOfGoodsType) mustEqual JsString(locationOfGoodsType.toString)
+        locationType =>
+          Json.toJson(locationType) mustEqual JsString(locationType.toString)
       }
     }
   }

@@ -40,7 +40,7 @@ class AdditionalIdentifierViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Guarantee details")
+  behave like pageWithSectionCaption("Route details")
 
   behave like pageWithHeading()
 

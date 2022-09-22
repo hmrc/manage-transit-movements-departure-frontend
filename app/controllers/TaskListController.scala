@@ -22,9 +22,12 @@ import models.LocalReferenceNumber
 import models.journeyDomain.PreTaskListDomain
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.TaskListViewModel
 import views.html.TaskListView
+
+import scala.concurrent.ExecutionContext
 
 class TaskListController @Inject() (
   override val messagesApi: MessagesApi,
@@ -32,16 +35,27 @@ class TaskListController @Inject() (
   checkDependentTaskCompleted: CheckDependentTaskCompletedActionProvider,
   val controllerComponents: MessagesControllerComponents,
   view: TaskListView,
-  viewModel: TaskListViewModel
-) extends FrontendBaseController
+  viewModel: TaskListViewModel,
+  countriesService: CountriesService
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkDependentTaskCompleted[PreTaskListDomain]) {
+    .andThen(checkDependentTaskCompleted[PreTaskListDomain])
+    .async {
       implicit request =>
-        val tasks = viewModel(request.userAnswers)
-        Ok(view(lrn, tasks))
+        for {
+          ctcCountries                             <- countriesService.getCountryCodesCTC()
+          customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
+        } yield {
+          val tasks = viewModel(request.userAnswers)(
+            ctcCountries.countryCodes,
+            customsSecurityAgreementAreaCountryCodes.countryCodes
+          )
+          Ok(view(lrn, tasks))
+        }
     }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions
