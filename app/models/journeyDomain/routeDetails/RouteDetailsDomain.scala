@@ -19,7 +19,7 @@ package models.journeyDomain.routeDetails
 import cats.implicits._
 import models.DeclarationType.Option4
 import models.SecurityDetailsType._
-import models.UserAnswers
+import models.{Mode, UserAnswers}
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.routeDetails.exit.ExitDomain
 import models.journeyDomain.routeDetails.loadingAndUnloading.LoadingAndUnloadingDomain
@@ -39,11 +39,8 @@ case class RouteDetailsDomain(
   loadingAndUnloading: LoadingAndUnloadingDomain
 ) extends JourneyDomainModel {
 
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    // TODO - update when section CYA built. Also:
-    //  update all navigator spec unit tests when in CheckMode that are currently being ignored
-    //  update RouteDetailsTaskSpec unit test that is currently being ignored
-    None
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
+    Some(controllers.routeDetails.routes.RouteDetailsAnswersController.onPageLoad(userAnswers.lrn))
 }
 
 object RouteDetailsDomain {

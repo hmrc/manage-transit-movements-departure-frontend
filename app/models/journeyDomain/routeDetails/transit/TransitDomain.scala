@@ -20,7 +20,7 @@ import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, JsA
 import models.journeyDomain.routeDetails.routing.CountryOfRoutingDomain
 import models.journeyDomain.routeDetails.transit.TransitDomain.OfficesOfTransit
 import models.journeyDomain.{JourneyDomainModel, Stage}
-import models.{DeclarationType, Index, RichJsArray, UserAnswers}
+import models.{DeclarationType, Index, Mode, RichJsArray, UserAnswers}
 import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage}
 import pages.routeDetails.routing.OfficeOfDestinationPage
 import pages.routeDetails.transit.{AddOfficeOfTransitYesNoPage, T2DeclarationTypeYesNoPage}
@@ -32,8 +32,8 @@ case class TransitDomain(
   officesOfTransit: OfficesOfTransit
 ) extends JourneyDomainModel {
 
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    Some(controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(userAnswers.lrn))
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
+    Some(controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(userAnswers.lrn, mode))
 }
 
 object TransitDomain {

@@ -16,31 +16,31 @@
 
 package viewModels.routeDetails.exit
 
-import models.{Index, NormalMode, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import play.api.i18n.Messages
 import utils.cyaHelpers.routeDetails.OfficeOfExitCheckYourAnswersHelper
 import viewModels.sections.Section
 
 import javax.inject.Inject
 
-case class OfficeOfExitViewModel(section: Section)
+case class OfficeOfExitAnswersViewModel(section: Section)
 
-object OfficeOfExitViewModel {
+object OfficeOfExitAnswersViewModel {
 
-  def apply(userAnswers: UserAnswers, index: Index)(implicit messages: Messages): OfficeOfExitViewModel =
-    new OfficeOfExitViewModelProvider()(userAnswers, index)
+  class OfficeOfExitAnswersViewModelProvider @Inject() () {
 
-  class OfficeOfExitViewModelProvider @Inject() () {
+    def apply(userAnswers: UserAnswers, mode: Mode, index: Index)(implicit messages: Messages): OfficeOfExitAnswersViewModel = {
+      val helper = new OfficeOfExitCheckYourAnswersHelper(userAnswers, mode, index)
 
-    def apply(userAnswers: UserAnswers, index: Index)(implicit messages: Messages): OfficeOfExitViewModel = {
-      val helper = new OfficeOfExitCheckYourAnswersHelper(userAnswers, NormalMode, index)
+      val section = Section(
+        sectionTitle = messages("routeDetails.exit.checkOfficeOfExitAnswers.subHeading"),
+        rows = Seq(
+          helper.officeOfExitCountry,
+          helper.officeOfExit
+        ).flatten
+      )
 
-      val rows = Seq(
-        helper.officeOfExitCountry,
-        helper.officeOfExit
-      ).flatten
-
-      new OfficeOfExitViewModel(Section(rows))
+      new OfficeOfExitAnswersViewModel(section)
     }
   }
 }

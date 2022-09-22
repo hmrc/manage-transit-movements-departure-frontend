@@ -18,7 +18,7 @@ package models.journeyDomain.routeDetails.exit
 
 import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
-import models.{Index, RichJsArray, UserAnswers}
+import models.{Index, Mode, RichJsArray, UserAnswers}
 import pages.sections.routeDetails.exit.OfficesOfExitSection
 import play.api.mvc.Call
 
@@ -26,8 +26,8 @@ case class ExitDomain(
   officesOfExit: Seq[OfficeOfExitDomain]
 ) extends JourneyDomainModel {
 
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    Some(controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(userAnswers.lrn))
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
+    Some(controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(userAnswers.lrn, mode))
 }
 
 object ExitDomain {

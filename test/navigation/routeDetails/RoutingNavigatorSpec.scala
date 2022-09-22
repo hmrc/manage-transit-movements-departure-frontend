@@ -44,7 +44,7 @@ class RoutingNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with G
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(controllers.routeDetails.routing.routes.CheckYourAnswersController.onPageLoad(answers.lrn))
+                .mustBe(controllers.routeDetails.routing.routes.CheckYourAnswersController.onPageLoad(answers.lrn, mode))
           }
         }
       }
@@ -55,12 +55,12 @@ class RoutingNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with G
       val mode = CheckMode
 
       "when answers complete" - {
-        "must redirect to route details check your answers" ignore {
+        "must redirect to route details check your answers" in {
           forAll(arbitraryRouteDetailsAnswers(emptyUserAnswers)) {
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(???)
+                .mustBe(controllers.routeDetails.routes.RouteDetailsAnswersController.onPageLoad(answers.lrn))
           }
         }
       }

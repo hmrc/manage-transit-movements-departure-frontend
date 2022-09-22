@@ -17,16 +17,15 @@
 package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
-
-import javax.inject.Inject
-import models.{LocalReferenceNumber, NormalMode}
+import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.RouteDetailsNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.routeDetails.locationOfGoods.LocationOfGoodsViewModel.LocationOfGoodsViewModelProvider
+import viewModels.routeDetails.locationOfGoods.LocationOfGoodsAnswersViewModel.LocationOfGoodsAnswersViewModelProvider
 import views.html.routeDetails.locationOfGoods.CheckYourAnswersView
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class CheckYourAnswersController @Inject() (
@@ -35,20 +34,20 @@ class CheckYourAnswersController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
   navigatorProvider: RouteDetailsNavigatorProvider,
-  viewModelProvider: LocationOfGoodsViewModelProvider
+  viewModelProvider: LocationOfGoodsAnswersViewModelProvider
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val section = viewModelProvider(request.userAnswers).section
-      Ok(view(lrn, Seq(section)))
+      val section = viewModelProvider(request.userAnswers, mode).section
+      Ok(view(lrn, mode, Seq(section)))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       navigatorProvider().map {
-        implicit navigator => Redirect(navigator.nextPage(request.userAnswers, NormalMode))
+        implicit navigator => Redirect(navigator.nextPage(request.userAnswers, mode))
       }
   }
 }

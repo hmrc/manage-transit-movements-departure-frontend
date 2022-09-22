@@ -21,7 +21,7 @@ import controllers.routeDetails.exit.index.routes
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{Country, CustomsOffice}
-import models.{Index, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
 import play.api.mvc.Call
 
@@ -31,8 +31,8 @@ case class OfficeOfExitDomain(
 )(index: Index)
     extends JourneyDomainModel {
 
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    Some(routes.CheckOfficeOfExitAnswersController.onPageLoad(userAnswers.lrn, index))
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
+    Some(routes.CheckOfficeOfExitAnswersController.onPageLoad(userAnswers.lrn, index, mode))
 
   val label: String = s"$country - $customsOffice"
 }

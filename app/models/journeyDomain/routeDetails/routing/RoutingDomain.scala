@@ -17,10 +17,10 @@
 package models.journeyDomain.routeDetails.routing
 
 import cats.implicits._
-import models.UserAnswers
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{Country, CustomsOffice}
+import models.{Mode, UserAnswers}
 import pages.routeDetails.routing._
 import play.api.mvc.Call
 
@@ -31,8 +31,8 @@ case class RoutingDomain(
   countriesOfRouting: Seq[CountryOfRoutingDomain]
 ) extends JourneyDomainModel {
 
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    Some(controllers.routeDetails.routing.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
+    Some(controllers.routeDetails.routing.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, mode))
 }
 
 object RoutingDomain {

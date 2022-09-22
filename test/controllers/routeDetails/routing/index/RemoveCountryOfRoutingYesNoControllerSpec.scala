@@ -20,8 +20,8 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.routeDetails.routing.{routes => routingRoutes}
 import forms.YesNoFormProvider
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
-import models.UserAnswers
 import models.reference.Country
+import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, reset, verify, when}
@@ -44,7 +44,9 @@ class RemoveCountryOfRoutingYesNoControllerSpec
   private val formProvider           = new YesNoFormProvider()
   private def form(country: Country) = formProvider("routeDetails.routing.removeCountryOfRoutingYesNo", country.toString)
 
-  private lazy val removeCountryOfROutingYesNoRoute = routes.RemoveCountryOfRoutingYesNoController.onPageLoad(lrn, index).url
+  private val mode = NormalMode
+
+  private lazy val removeCountryOfROutingYesNoRoute = routes.RemoveCountryOfRoutingYesNoController.onPageLoad(lrn, mode, index).url
 
   "RemoveCountryOfRoutingYesNoController" - {
 
@@ -62,7 +64,7 @@ class RemoveCountryOfRoutingYesNoControllerSpec
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(country), lrn, index, country)(request, messages).toString
+            view(form(country), lrn, mode, index, country)(request, messages).toString
       }
     }
 
@@ -83,7 +85,7 @@ class RemoveCountryOfRoutingYesNoControllerSpec
             status(result) mustEqual SEE_OTHER
 
             redirectLocation(result).value mustEqual
-              routingRoutes.AddAnotherCountryOfRoutingController.onPageLoad(lrn).url
+              routingRoutes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, mode).url
 
             val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
             verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
@@ -108,7 +110,7 @@ class RemoveCountryOfRoutingYesNoControllerSpec
             status(result) mustEqual SEE_OTHER
 
             redirectLocation(result).value mustEqual
-              routingRoutes.AddAnotherCountryOfRoutingController.onPageLoad(lrn).url
+              routingRoutes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, mode).url
 
             verify(mockSessionRepository, never()).set(any())(any())
         }
@@ -133,7 +135,7 @@ class RemoveCountryOfRoutingYesNoControllerSpec
           val view = injector.instanceOf[RemoveCountryOfRoutingYesNoView]
 
           contentAsString(result) mustEqual
-            view(boundForm, lrn, index, country)(request, messages).toString
+            view(boundForm, lrn, mode, index, country)(request, messages).toString
       }
     }
 

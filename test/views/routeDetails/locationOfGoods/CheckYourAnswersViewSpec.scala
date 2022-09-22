@@ -16,6 +16,8 @@
 
 package views.routeDetails.locationOfGoods
 
+import models.Mode
+import org.scalacheck.Arbitrary.arbitrary
 import play.twirl.api.HtmlFormat
 import viewModels.sections.Section
 import views.behaviours.CheckYourAnswersViewBehaviours
@@ -25,8 +27,10 @@ class CheckYourAnswersViewSpec extends CheckYourAnswersViewBehaviours {
 
   override def view: HtmlFormat.Appendable = viewWithSections(sections)
 
+  private val mode = arbitrary[Mode].sample.value
+
   override def viewWithSections(sections: Seq[Section]): HtmlFormat.Appendable =
-    injector.instanceOf[CheckYourAnswersView].apply(lrn, sections)(fakeRequest, messages)
+    injector.instanceOf[CheckYourAnswersView].apply(lrn, mode, sections)(fakeRequest, messages)
 
   override val prefix: String = "routeDetails.locationOfGoods.checkYourAnswers"
 
@@ -38,7 +42,7 @@ class CheckYourAnswersViewSpec extends CheckYourAnswersViewBehaviours {
 
   behave like pageWithCheckYourAnswers()
 
-  behave like pageWithFormAction(controllers.routeDetails.locationOfGoods.routes.CheckYourAnswersController.onSubmit(lrn).url)
+  behave like pageWithFormAction(controllers.routeDetails.locationOfGoods.routes.CheckYourAnswersController.onSubmit(lrn, mode).url)
 
   behave like pageWithHeading()
 }

@@ -22,7 +22,7 @@ import models.DeclarationType.Option4
 import models.ProcedureType.Normal
 import models.domain._
 import models.reference.CustomsOffice
-import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType, UserAnswers}
+import models.{DeclarationType, LocalReferenceNumber, Mode, ProcedureType, SecurityDetailsType, UserAnswers}
 import pages.preTaskList._
 import play.api.mvc.Call
 
@@ -36,7 +36,7 @@ case class PreTaskListDomain(
   detailsConfirmed: Boolean
 ) extends JourneyDomainModel {
 
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
     Some(controllers.preTaskList.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
 }
 

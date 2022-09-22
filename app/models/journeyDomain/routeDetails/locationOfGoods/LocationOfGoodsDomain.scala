@@ -21,7 +21,7 @@ import models.LocationOfGoodsIdentification._
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{CustomsOffice, UnLocode}
-import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, PostalCodeAddress, UserAnswers}
+import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress, UserAnswers}
 import pages.routeDetails.locationOfGoods.{AddContactYesNoPage, _}
 import play.api.mvc.Call
 
@@ -31,8 +31,8 @@ sealed trait LocationOfGoodsDomain extends JourneyDomainModel {
 
   val qualifierOfIdentification: LocationOfGoodsIdentification
 
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    Some(controllers.routeDetails.locationOfGoods.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
+    Some(controllers.routeDetails.locationOfGoods.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, mode))
 }
 
 object LocationOfGoodsDomain {

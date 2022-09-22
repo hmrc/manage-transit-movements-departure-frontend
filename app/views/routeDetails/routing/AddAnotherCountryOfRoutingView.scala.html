@@ -30,7 +30,7 @@
     button: Button
 )
 
-@(form: Form[_], lrn: LocalReferenceNumber, countries: Seq[ListItem], allowMoreCountries: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], lrn: LocalReferenceNumber, mode: Mode, countries: Seq[ListItem], allowMoreCountries: Boolean)(implicit request: Request[_], messages: Messages)
 
 @singularOrPlural = @{
     if (countries.length == 1) "singular" else "plural"
@@ -51,7 +51,7 @@
 
     @listWithActions(countries)
 
-    @formHelper(action = routes.AddAnotherCountryOfRoutingController.onSubmit(lrn), 'autoComplete -> "off") {
+    @formHelper(action = routes.AddAnotherCountryOfRoutingController.onSubmit(lrn, mode), 'autoComplete -> "off") {
 
         @if(allowMoreCountries) {
             @inputYesNo(

@@ -21,7 +21,7 @@ import controllers.guaranteeDetails.{routes => gdRoutes}
 import models.DeclarationType.Option4
 import models.domain.{UserAnswersReader, _}
 import models.journeyDomain.{JourneyDomainModel, Stage}
-import models.{Index, RichJsArray, UserAnswers}
+import models.{Index, Mode, RichJsArray, UserAnswers}
 import pages.preTaskList.DeclarationTypePage
 import pages.sections.guaranteeDetails.GuaranteeDetailsSection
 import play.api.mvc.Call
@@ -30,7 +30,7 @@ case class GuaranteeDetailsDomain(
   guarantees: Seq[GuaranteeDomain]
 ) extends JourneyDomainModel {
 
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
     userAnswers.get(DeclarationTypePage) map {
       case Option4 => gdRoutes.GuaranteeAddedTIRController.onPageLoad(userAnswers.lrn)
       case _       => gdRoutes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn)

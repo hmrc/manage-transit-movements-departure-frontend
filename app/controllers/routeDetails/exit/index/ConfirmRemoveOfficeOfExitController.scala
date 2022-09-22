@@ -22,7 +22,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.reference.CustomsOffice
 import models.requests.SpecificDataRequestProvider1
-import models.{Index, LocalReferenceNumber}
+import models.{Index, LocalReferenceNumber, Mode}
 import pages.routeDetails.exit.index.OfficeOfExitPage
 import pages.sections.routeDetails.exit.OfficeOfExitSection
 import play.api.data.Form
@@ -52,14 +52,14 @@ class ConfirmRemoveOfficeOfExitController @Inject() (
   private def form(implicit request: Request): Form[Boolean] =
     formProvider("routeDetails.exit.confirmRemoveOfficeOfExit", request.arg.name)
 
-  def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions
+  def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
     .andThen(getMandatoryPage(OfficeOfExitPage(index))) {
       implicit request =>
-        Ok(view(form, lrn, index, request.arg.name))
+        Ok(view(form, lrn, index, mode, request.arg.name))
     }
 
-  def onSubmit(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions
+  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
     .andThen(getMandatoryPage(OfficeOfExitPage(index)))
     .async {
@@ -67,15 +67,15 @@ class ConfirmRemoveOfficeOfExitController @Inject() (
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index, request.arg.name))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index, mode, request.arg.name))),
             {
               case true =>
                 OfficeOfExitSection(index)
                   .removeFromUserAnswers()
                   .writeToSession()
-                  .navigateTo(exitRoutes.AddAnotherOfficeOfExitController.onPageLoad(lrn))
+                  .navigateTo(exitRoutes.AddAnotherOfficeOfExitController.onPageLoad(lrn, mode))
               case false =>
-                Future.successful(Redirect(exitRoutes.AddAnotherOfficeOfExitController.onPageLoad(lrn)))
+                Future.successful(Redirect(exitRoutes.AddAnotherOfficeOfExitController.onPageLoad(lrn, mode)))
             }
           )
     }

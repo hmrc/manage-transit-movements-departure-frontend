@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package views.routeDetails.loadingAndUnloading
+package views.routeDetails
 
-import controllers.routeDetails.loadingAndUnloading.routes
+import controllers.routeDetails.routes
 import play.twirl.api.HtmlFormat
 import viewModels.sections.Section
 import views.behaviours.CheckYourAnswersViewBehaviours
-import views.html.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersView
+import views.html.routeDetails.RouteDetailsAnswersView
 
-class CheckOfficeOfExitAnswersViewSpec extends CheckYourAnswersViewBehaviours {
+class RouteDetailsAnswersViewSpec extends CheckYourAnswersViewBehaviours {
 
-  override val prefix: String = "routeDetails.loadingAndUnloading.checkYourAnswers"
+  override val prefix: String = "routeDetails.checkYourAnswers"
 
   override def view: HtmlFormat.Appendable = viewWithSections(sections)
 
   override def viewWithSections(sections: Seq[Section]): HtmlFormat.Appendable =
-    injector.instanceOf[LoadingAndUnloadingAnswersView].apply(lrn, sections)(fakeRequest, messages)
+    injector.instanceOf[RouteDetailsAnswersView].apply(lrn, sections)(fakeRequest, messages)
 
   behave like pageWithTitle()
 
@@ -41,7 +41,7 @@ class CheckOfficeOfExitAnswersViewSpec extends CheckYourAnswersViewBehaviours {
 
   behave like pageWithCheckYourAnswers()
 
-  behave like pageWithFormAction(routes.LoadingAndUnloadingAnswersController.onSubmit(lrn).url)
+  behave like pageWithFormAction(routes.RouteDetailsAnswersController.onSubmit(lrn).url)
 
   behave like pageWithSubmitButton("Save and continue")
 }

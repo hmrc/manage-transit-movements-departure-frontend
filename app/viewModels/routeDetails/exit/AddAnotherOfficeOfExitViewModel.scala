@@ -16,7 +16,7 @@
 
 package viewModels.routeDetails.exit
 
-import models.{NormalMode, UserAnswers}
+import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
 import utils.cyaHelpers.routeDetails.ExitCheckYourAnswersHelper
 import viewModels.ListItem
@@ -27,13 +27,10 @@ case class AddAnotherOfficeOfExitViewModel(listItems: Seq[ListItem])
 
 object AddAnotherOfficeOfExitViewModel {
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): AddAnotherOfficeOfExitViewModel =
-    new AddAnotherOfficeOfExitViewModelProvider()(userAnswers)
-
   class AddAnotherOfficeOfExitViewModelProvider @Inject() () {
 
-    def apply(userAnswers: UserAnswers)(implicit messages: Messages): AddAnotherOfficeOfExitViewModel = {
-      val helper = new ExitCheckYourAnswersHelper(userAnswers, NormalMode)
+    def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): AddAnotherOfficeOfExitViewModel = {
+      val helper = new ExitCheckYourAnswersHelper(userAnswers, mode)
 
       val listItems = helper.listItems.collect {
         case Left(value)  => value

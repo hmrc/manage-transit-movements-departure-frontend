@@ -124,7 +124,7 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
             ).map(Left(_))
         }
       case Right(journeyDomainModel) =>
-        journeyDomainModel.routeIfCompleted(userAnswers, AccessingJourney).map {
+        journeyDomainModel.routeIfCompleted(userAnswers, mode, AccessingJourney).map {
           changeRoute =>
             Right(
               ListItem(

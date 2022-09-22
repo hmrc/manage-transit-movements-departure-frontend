@@ -22,7 +22,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.reference.CustomsOffice
 import models.requests.SpecificDataRequestProvider1
-import models.{Index, LocalReferenceNumber}
+import models.{Index, LocalReferenceNumber, Mode}
 import pages.routeDetails.transit.index.OfficeOfTransitPage
 import pages.sections.routeDetails.transit.OfficeOfTransitSection
 import play.api.data.Form
@@ -52,14 +52,14 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
   private def form(implicit request: Request): Form[Boolean] =
     formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit", request.arg.name)
 
-  def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
     .requireData(lrn)
     .andThen(getMandatoryPage(OfficeOfTransitPage(index))) {
       implicit request =>
-        Ok(view(form, lrn, index, request.arg.name))
+        Ok(view(form, lrn, mode, index, request.arg.name))
     }
 
-  def onSubmit(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
     .requireData(lrn)
     .andThen(getMandatoryPage(OfficeOfTransitPage(index)))
     .async {
@@ -67,15 +67,15 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index, request.arg.name))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index, request.arg.name))),
             {
               case true =>
                 OfficeOfTransitSection(index)
                   .removeFromUserAnswers()
                   .writeToSession()
-                  .navigateTo(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn))
+                  .navigateTo(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn, mode))
               case false =>
-                Future.successful(Redirect(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn)))
+                Future.successful(Redirect(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn, mode)))
             }
           )
     }

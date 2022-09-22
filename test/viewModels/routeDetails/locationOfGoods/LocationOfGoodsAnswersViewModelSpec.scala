@@ -19,10 +19,13 @@ package viewModels.routeDetails.locationOfGoods
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
 import models.LocationOfGoodsIdentification._
+import models.Mode
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.locationOfGoods._
+import viewModels.routeDetails.locationOfGoods.LocationOfGoodsAnswersViewModel.LocationOfGoodsAnswersViewModelProvider
 
-class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
   "apply" - {
     "when 'V' customs office" - {
@@ -32,11 +35,12 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
         val initialAnswers = emptyUserAnswers
           .setValue(IdentificationPage, qualifier)
 
-        forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
-          userAnswers =>
-            val section = LocationOfGoodsViewModel.apply(userAnswers).section
+        forAll(arbitraryLocationOfGoodsAnswers(initialAnswers), arbitrary[Mode]) {
+          (userAnswers, mode) =>
+            val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
+            val section           = viewModelProvider.apply(userAnswers, mode).section
             section.rows.size mustBe 3
-            section.sectionTitle mustNot be(defined)
+            section.sectionTitle.get mustBe "Location of goods"
         }
       }
     }
@@ -51,11 +55,12 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
             .setValue(AddIdentifierYesNoPage, true)
             .setValue(AddContactYesNoPage, true)
 
-          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
-            userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
+              val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 8
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -67,11 +72,12 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
             .setValue(AddIdentifierYesNoPage, false)
             .setValue(AddContactYesNoPage, false)
 
-          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
-            userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
+              val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 5
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -87,11 +93,12 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
             .setValue(AddIdentifierYesNoPage, true)
             .setValue(AddContactYesNoPage, true)
 
-          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
-            userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
+              val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 8
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -103,11 +110,12 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
             .setValue(AddIdentifierYesNoPage, false)
             .setValue(AddContactYesNoPage, false)
 
-          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
-            userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
+              val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 5
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -122,11 +130,12 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
             .setValue(IdentificationPage, qualifier)
             .setValue(AddContactYesNoPage, true)
 
-          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
-            userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
+              val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 6
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -137,11 +146,12 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
             .setValue(IdentificationPage, qualifier)
             .setValue(AddContactYesNoPage, false)
 
-          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
-            userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
+              val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 4
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -156,11 +166,12 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
             .setValue(IdentificationPage, qualifier)
             .setValue(AddContactYesNoPage, true)
 
-          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
-            userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
+              val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 6
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -171,11 +182,12 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
             .setValue(IdentificationPage, qualifier)
             .setValue(AddContactYesNoPage, false)
 
-          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
-            userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
+              val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 4
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -190,11 +202,12 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
             .setValue(IdentificationPage, qualifier)
             .setValue(AddContactYesNoPage, true)
 
-          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
-            userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
+              val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 6
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -205,11 +218,12 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
             .setValue(IdentificationPage, qualifier)
             .setValue(AddContactYesNoPage, false)
 
-          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
-            userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
+              val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 4
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -224,11 +238,12 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
             .setValue(IdentificationPage, qualifier)
             .setValue(AddContactYesNoPage, true)
 
-          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
-            userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
+              val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 6
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -239,11 +254,12 @@ class LocationOfGoodsViewModelSpec extends SpecBase with ScalaCheckPropertyCheck
             .setValue(IdentificationPage, qualifier)
             .setValue(AddContactYesNoPage, false)
 
-          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers)) {
-            userAnswers =>
-              val section = LocationOfGoodsViewModel.apply(userAnswers).section
+          forAll(arbitraryLocationOfGoodsAnswers(initialAnswers), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
+              val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 4
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }

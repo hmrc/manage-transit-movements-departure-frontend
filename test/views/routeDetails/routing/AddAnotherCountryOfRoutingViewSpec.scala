@@ -17,6 +17,8 @@
 package views.routeDetails.routing
 
 import forms.AddAnotherFormProvider
+import models.Mode
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.ListWithActionsViewBehaviours
@@ -30,15 +32,17 @@ class AddAnotherCountryOfRoutingViewSpec extends ListWithActionsViewBehaviours {
 
   override def form: Form[Boolean] = formProvider(prefix, allowMore = true)
 
+  private val mode = arbitrary[Mode].sample.value
+
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherCountryOfRoutingView]
-      .apply(form, lrn, listItems, allowMoreCountries = true)(fakeRequest, messages)
+      .apply(form, lrn, mode, listItems, allowMoreCountries = true)(fakeRequest, messages)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherCountryOfRoutingView]
-      .apply(formProvider(prefix, allowMore = false), lrn, maxedOutListItems, allowMoreCountries = false)(fakeRequest, messages)
+      .apply(formProvider(prefix, allowMore = false), lrn, mode, maxedOutListItems, allowMoreCountries = false)(fakeRequest, messages)
 
   override val prefix: String = "routeDetails.routing.addAnotherCountryOfRouting"
 

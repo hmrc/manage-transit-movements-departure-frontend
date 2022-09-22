@@ -17,15 +17,10 @@
 package viewModels.traderDetails
 
 import base.SpecBase
-import generators.{Generators, PreTaskListUserAnswersGenerator, TraderDetailsUserAnswersGenerator}
+import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class TraderDetailsViewModelSpec
-    extends SpecBase
-    with ScalaCheckPropertyChecks
-    with Generators
-    with TraderDetailsUserAnswersGenerator
-    with PreTaskListUserAnswersGenerator {
+class TraderDetailsViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
 
   private val viewModel = injector.instanceOf[TraderDetailsViewModel]
 

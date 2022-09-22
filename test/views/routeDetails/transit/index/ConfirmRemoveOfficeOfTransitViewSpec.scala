@@ -17,6 +17,8 @@
 package views.routeDetails.transit.index
 
 import generators.Generators
+import models.Mode
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -26,8 +28,10 @@ class ConfirmRemoveOfficeOfTransitViewSpec extends YesNoViewBehaviours with Gene
 
   private lazy val transitOfficeName = arbitraryCustomsOffice.arbitrary.sample.get.name
 
+  private val mode = arbitrary[Mode].sample.value
+
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[ConfirmRemoveOfficeOfTransitView].apply(form, lrn, index, transitOfficeName)(fakeRequest, messages)
+    injector.instanceOf[ConfirmRemoveOfficeOfTransitView].apply(form, lrn, mode, index, transitOfficeName)(fakeRequest, messages)
 
   override val prefix: String = "routeDetails.transit.confirmRemoveOfficeOfTransit"
 

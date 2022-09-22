@@ -18,11 +18,12 @@ package viewModels.routeDetails.routing
 
 import base.SpecBase
 import generators.Generators
-import models.Index
 import models.reference.Country
+import models.{Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.routeDetails.routing.index.CountryOfRoutingPage
+import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel.AddAnotherCountryOfRoutingViewModelProvider
 
 class AddAnotherCountryOfRoutingViewModelSpec extends SpecBase with Generators {
 
@@ -30,13 +31,15 @@ class AddAnotherCountryOfRoutingViewModelSpec extends SpecBase with Generators {
 
     val numberOfCountries = Gen.choose(1, frontendAppConfig.maxCountriesOfRouting).sample.value
     def country           = arbitrary[Country].sample.value
+    val mode              = arbitrary[Mode].sample.value
 
     val userAnswers = (0 until numberOfCountries).foldLeft(emptyUserAnswers) {
       (acc, i) =>
         acc.setValue(CountryOfRoutingPage(Index(i)), country)
     }
 
-    val result = AddAnotherCountryOfRoutingViewModel(userAnswers)
+    val viewModelProvider = injector.instanceOf[AddAnotherCountryOfRoutingViewModelProvider]
+    val result            = viewModelProvider.apply(userAnswers, mode)
     result.listItems.length mustBe numberOfCountries
   }
 

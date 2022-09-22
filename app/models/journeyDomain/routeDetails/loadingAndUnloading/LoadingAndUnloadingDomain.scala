@@ -18,11 +18,11 @@ package models.journeyDomain.routeDetails.loadingAndUnloading
 
 import cats.implicits._
 import models.SecurityDetailsType._
-import models.UserAnswers
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.routeDetails.loadingAndUnloading.loading.LoadingDomain
 import models.journeyDomain.routeDetails.loadingAndUnloading.unloading.UnloadingDomain
 import models.journeyDomain.{JourneyDomainModel, Stage}
+import models.{Mode, UserAnswers}
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.routeDetails.loadingAndUnloading.unloading.AddPlaceOfUnloadingPage
 import play.api.mvc.Call
@@ -32,8 +32,8 @@ case class LoadingAndUnloadingDomain(
   unloading: Option[UnloadingDomain]
 ) extends JourneyDomainModel {
 
-  override def routeIfCompleted(userAnswers: UserAnswers, stage: Stage): Option[Call] =
-    Some(controllers.routeDetails.loadingAndUnloading.routes.LoadingAndUnloadingAnswersController.onPageLoad(userAnswers.lrn))
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
+    Some(controllers.routeDetails.loadingAndUnloading.routes.LoadingAndUnloadingAnswersController.onPageLoad(userAnswers.lrn, mode))
 }
 
 object LoadingAndUnloadingDomain {

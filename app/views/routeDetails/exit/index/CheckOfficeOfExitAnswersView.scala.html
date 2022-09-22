@@ -27,7 +27,7 @@
     formHelper: FormWithCSRF
 )
 
-@(lrn: LocalReferenceNumber, index: Index, sections: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(lrn: LocalReferenceNumber, index: Index, mode: Mode, sections: Seq[Section])(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("routeDetails.exit.checkOfficeOfExitAnswers.title"),
@@ -40,11 +40,9 @@
         caption = Some(messages("routeDetails.caption"))
     )
 
-    <h2 class="govuk-heading-m">@messages("routeDetails.exit.checkOfficeOfExitAnswers.subHeading")</h2>
-
     @answerSections(sections)
 
-    @formHelper(action = routes.CheckOfficeOfExitAnswersController.onSubmit(lrn, index), 'autoComplete -> "off") {
+    @formHelper(action = routes.CheckOfficeOfExitAnswersController.onSubmit(lrn, index, mode), 'autoComplete -> "off") {
         @button(attributes = Map("id" -> "submit"))
     }
 }

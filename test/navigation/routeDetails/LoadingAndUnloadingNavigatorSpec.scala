@@ -44,7 +44,7 @@ class LoadingAndUnloadingNavigatorSpec extends SpecBase with ScalaCheckPropertyC
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(controllers.routeDetails.loadingAndUnloading.routes.LoadingAndUnloadingAnswersController.onPageLoad(answers.lrn))
+                .mustBe(controllers.routeDetails.loadingAndUnloading.routes.LoadingAndUnloadingAnswersController.onPageLoad(answers.lrn, mode))
           }
         }
       }
@@ -55,12 +55,12 @@ class LoadingAndUnloadingNavigatorSpec extends SpecBase with ScalaCheckPropertyC
       val mode = CheckMode
 
       "when answers complete" - {
-        "must redirect to route details check your answers" ignore {
+        "must redirect to route details check your answers" in {
           forAll(arbitraryRouteDetailsAnswers(emptyUserAnswers)) {
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(???)
+                .mustBe(controllers.routeDetails.routes.RouteDetailsAnswersController.onPageLoad(answers.lrn))
           }
         }
       }

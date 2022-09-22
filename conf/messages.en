@@ -544,6 +544,24 @@ routeDetails.caption = Route details
 routeDetails.unloading.caption = Route details - Place of unloading
 routeDetails.loading.caption = Route details - Place of loading
 
+routeDetails.checkYourAnswers.title = Check your answers
+routeDetails.checkYourAnswers.heading = Check your answers
+
+routeDetails.checkYourAnswers.routing.subheading = Transit route countries
+routeDetails.checkYourAnswers.routing.addOrRemove = Add or remove transit route countries
+routeDetails.checkYourAnswers.routing.countryOfRouting.checkYourAnswersLabel = Country of routing {0}
+routeDetails.checkYourAnswers.routing.countryOfRouting.change.hidden = country of routing {0}
+
+routeDetails.checkYourAnswers.transit.subheading = Offices of transit
+routeDetails.checkYourAnswers.transit.addOrRemove = Add or remove offices of transit
+routeDetails.checkYourAnswers.transit.officeOfTransit.checkYourAnswersLabel = Office of transit {0}
+routeDetails.checkYourAnswers.transit.officeOfTransit.change.hidden = office of transit {0}
+
+routeDetails.checkYourAnswers.exit.subheading = Offices of exit
+routeDetails.checkYourAnswers.exit.addOrRemove = Add or remove offices of exit
+routeDetails.checkYourAnswers.exit.officeOfExit.checkYourAnswersLabel = Office of exit {0}
+routeDetails.checkYourAnswers.exit.officeOfExit.change.hidden = office of exit {0}
+
 # Routing
 
 routeDetails.routing.countryOfDestination.title = What is the country of destination?
@@ -585,8 +603,6 @@ routeDetails.routing.countryOfRouting.heading = Which country do you want to add
 routeDetails.routing.countryOfRouting.error.required = Enter which country you want to add to the transit route
 routeDetails.routing.countryOfRouting.hint = Enter the country, like France or Portugal.
 routeDetails.routing.countryOfRouting.placeholder = Select a country
-routeDetails.routing.countryOfRouting.checkYourAnswersLabel = Country of routing {0}
-routeDetails.routing.countryOfRouting.change.hidden = country of routing {0}
 
 routeDetails.routing.removeCountryOfRoutingYesNo.title = Are you sure you want to remove {0} from the transit route?
 routeDetails.routing.removeCountryOfRoutingYesNo.heading = Are you sure you want to remove {0} from the transit route?
@@ -602,8 +618,6 @@ routeDetails.routing.addAnotherCountryOfRouting.maxLimit.label = You cannot add 
 
 routeDetails.routing.checkYourAnswers.title = Check your answers
 routeDetails.routing.checkYourAnswers.heading = Check your answers
-routeDetails.routing.checkYourAnswers.countries.subheading = Transit route countries
-routeDetails.routing.checkYourAnswers.addOrRemove = Add or remove transit route countries
 
 # Transit
 
@@ -615,7 +629,8 @@ routeDetails.transit.t2DeclarationTypeYesNo.error.required = Select yes if your 
 
 routeDetails.transit.addOfficeOfTransitYesNo.title = Do you want to add an office of transit?
 routeDetails.transit.addOfficeOfTransitYesNo.heading = Do you want to add an office of transit?
-routeDetails.transit.addOfficeOfTransitYesNo.checkYourAnswersLabel = Do you want to add an office of transit
+routeDetails.transit.addOfficeOfTransitYesNo.checkYourAnswersLabel = Do you want to add an office of transit?
+routeDetails.transit.addOfficeOfTransitYesNo.change.hidden = if you want to add an office of transit
 routeDetails.transit.addOfficeOfTransitYesNo.paragraph = This is the first arrival point for goods entering a new customs territory.
 routeDetails.transit.addOfficeOfTransitYesNo.error.required = Select yes if you want to add an office of transit
 

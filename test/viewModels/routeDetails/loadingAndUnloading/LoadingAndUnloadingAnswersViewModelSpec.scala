@@ -18,8 +18,11 @@ package viewModels.routeDetails.loadingAndUnloading
 
 import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import models.Mode
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.loadingAndUnloading._
+import viewModels.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersViewModel.LoadingAndUnloadingAnswersViewModelProvider
 
 class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
@@ -34,9 +37,10 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
               .setValue(loading.PlaceOfLoadingAddUnLocodeYesNoPage, true)
               .setValue(loading.PlaceOfLoadingAddExtraInformationYesNoPage, false)
 
-            forAll(arbitraryLoadingAnswers(initialAnswers)) {
-              userAnswers =>
-                val section = LoadingAndUnloadingAnswersViewModel.apply(userAnswers).sections.head
+            forAll(arbitraryLoadingAnswers(initialAnswers), arbitrary[Mode]) {
+              (userAnswers, mode) =>
+                val viewModelProvider = injector.instanceOf[LoadingAndUnloadingAnswersViewModelProvider]
+                val section           = viewModelProvider.apply(userAnswers, mode).sections.head
                 section.rows.size mustBe 3
                 section.sectionTitle.value mustBe "Loading"
             }
@@ -49,9 +53,10 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
               .setValue(loading.PlaceOfLoadingAddUnLocodeYesNoPage, true)
               .setValue(loading.PlaceOfLoadingAddExtraInformationYesNoPage, true)
 
-            forAll(arbitraryLoadingAnswers(initialAnswers)) {
-              userAnswers =>
-                val section = LoadingAndUnloadingAnswersViewModel.apply(userAnswers).sections.head
+            forAll(arbitraryLoadingAnswers(initialAnswers), arbitrary[Mode]) {
+              (userAnswers, mode) =>
+                val viewModelProvider = injector.instanceOf[LoadingAndUnloadingAnswersViewModelProvider]
+                val section           = viewModelProvider.apply(userAnswers, mode).sections.head
                 section.rows.size mustBe 5
                 section.sectionTitle.value mustBe "Loading"
             }
@@ -63,9 +68,10 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
         "must render 3 rows" in {
           val initialAnswers = emptyUserAnswers.setValue(loading.PlaceOfLoadingAddUnLocodeYesNoPage, false)
 
-          forAll(arbitraryLoadingAnswers(initialAnswers)) {
-            userAnswers =>
-              val section = LoadingAndUnloadingAnswersViewModel.apply(userAnswers).sections.head
+          forAll(arbitraryLoadingAnswers(initialAnswers), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val viewModelProvider = injector.instanceOf[LoadingAndUnloadingAnswersViewModelProvider]
+              val section           = viewModelProvider.apply(userAnswers, mode).sections.head
               section.rows.size mustBe 3
               section.sectionTitle.value mustBe "Loading"
           }
@@ -77,10 +83,13 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
 
       "when not adding a place of unloading" in {
         val userAnswers = emptyUserAnswers.setValue(unloading.AddPlaceOfUnloadingPage, false)
-
-        val section = LoadingAndUnloadingAnswersViewModel.apply(userAnswers).sections.last
-        section.rows.size mustBe 1
-        section.sectionTitle.value mustBe "Unloading"
+        forAll(arbitrary[Mode]) {
+          mode =>
+            val viewModelProvider = injector.instanceOf[LoadingAndUnloadingAnswersViewModelProvider]
+            val section           = viewModelProvider.apply(userAnswers, mode).sections.last
+            section.rows.size mustBe 1
+            section.sectionTitle.value mustBe "Unloading"
+        }
       }
 
       "when adding a place of unloading" - {
@@ -92,9 +101,10 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
                 .setValue(unloading.PlaceOfUnloadingUnLocodeYesNoPage, true)
                 .setValue(unloading.AddExtraInformationYesNoPage, false)
 
-              forAll(arbitraryUnloadingAnswers(initialAnswers)) {
-                userAnswers =>
-                  val section = LoadingAndUnloadingAnswersViewModel.apply(userAnswers).sections.last
+              forAll(arbitraryUnloadingAnswers(initialAnswers), arbitrary[Mode]) {
+                (userAnswers, mode) =>
+                  val viewModelProvider = injector.instanceOf[LoadingAndUnloadingAnswersViewModelProvider]
+                  val section           = viewModelProvider.apply(userAnswers, mode).sections.last
                   section.rows.size mustBe 4
                   section.sectionTitle.value mustBe "Unloading"
               }
@@ -108,9 +118,10 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
                 .setValue(unloading.PlaceOfUnloadingUnLocodeYesNoPage, true)
                 .setValue(unloading.AddExtraInformationYesNoPage, true)
 
-              forAll(arbitraryUnloadingAnswers(initialAnswers)) {
-                userAnswers =>
-                  val section = LoadingAndUnloadingAnswersViewModel.apply(userAnswers).sections.last
+              forAll(arbitraryUnloadingAnswers(initialAnswers), arbitrary[Mode]) {
+                (userAnswers, mode) =>
+                  val viewModelProvider = injector.instanceOf[LoadingAndUnloadingAnswersViewModelProvider]
+                  val section           = viewModelProvider.apply(userAnswers, mode).sections.last
                   section.rows.size mustBe 6
                   section.sectionTitle.value mustBe "Unloading"
               }
@@ -124,9 +135,10 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
               .setValue(unloading.AddPlaceOfUnloadingPage, true)
               .setValue(unloading.PlaceOfUnloadingUnLocodeYesNoPage, false)
 
-            forAll(arbitraryUnloadingAnswers(initialAnswers)) {
-              userAnswers =>
-                val section = LoadingAndUnloadingAnswersViewModel.apply(userAnswers).sections.last
+            forAll(arbitraryUnloadingAnswers(initialAnswers), arbitrary[Mode]) {
+              (userAnswers, mode) =>
+                val viewModelProvider = injector.instanceOf[LoadingAndUnloadingAnswersViewModelProvider]
+                val section           = viewModelProvider.apply(userAnswers, mode).sections.last
                 section.rows.size mustBe 4
                 section.sectionTitle.value mustBe "Unloading"
             }

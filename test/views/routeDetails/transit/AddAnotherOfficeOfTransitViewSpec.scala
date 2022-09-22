@@ -17,6 +17,8 @@
 package views.routeDetails.transit
 
 import forms.AddAnotherFormProvider
+import models.Mode
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.ListWithActionsViewBehaviours
@@ -30,15 +32,17 @@ class AddAnotherOfficeOfTransitViewSpec extends ListWithActionsViewBehaviours {
 
   override def form: Form[Boolean] = formProvider(prefix, allowMore = true)
 
+  private val mode = arbitrary[Mode].sample.value
+
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherOfficeOfTransitView]
-      .apply(form, lrn, listItems, allowMoreOfficesOfTransit = true)(fakeRequest, messages)
+      .apply(form, lrn, mode, listItems, allowMoreOfficesOfTransit = true)(fakeRequest, messages)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherOfficeOfTransitView]
-      .apply(formProvider(prefix, allowMore = false), lrn, maxedOutListItems, allowMoreOfficesOfTransit = false)(fakeRequest, messages)
+      .apply(formProvider(prefix, allowMore = false), lrn, mode, maxedOutListItems, allowMoreOfficesOfTransit = false)(fakeRequest, messages)
 
   override val prefix: String = "routeDetails.transit.addAnotherOfficeOfTransit"
 

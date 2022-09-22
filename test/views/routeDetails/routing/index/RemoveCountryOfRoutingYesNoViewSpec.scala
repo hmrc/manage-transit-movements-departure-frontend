@@ -17,6 +17,7 @@
 package views.routeDetails.routing.index
 
 import generators.Generators
+import models.Mode
 import models.reference.Country
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
@@ -28,8 +29,10 @@ class RemoveCountryOfRoutingYesNoViewSpec extends YesNoViewBehaviours with Gener
 
   private val country: Country = arbitrary[Country].sample.value
 
+  private val mode = arbitrary[Mode].sample.value
+
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[RemoveCountryOfRoutingYesNoView].apply(form, lrn, index, country)(fakeRequest, messages)
+    injector.instanceOf[RemoveCountryOfRoutingYesNoView].apply(form, lrn, mode, index, country)(fakeRequest, messages)
 
   override val prefix: String = "routeDetails.routing.removeCountryOfRoutingYesNo"
 

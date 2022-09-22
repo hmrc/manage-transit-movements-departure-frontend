@@ -44,7 +44,7 @@ class OfficeOfExitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(controllers.routeDetails.exit.index.routes.CheckOfficeOfExitAnswersController.onPageLoad(lrn, index))
+                .mustBe(controllers.routeDetails.exit.index.routes.CheckOfficeOfExitAnswersController.onPageLoad(lrn, index, mode))
           }
         }
       }
@@ -55,12 +55,12 @@ class OfficeOfExitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
       val mode = CheckMode
 
       "when answers complete" - {
-        "must redirect to route details check your answers" ignore {
+        "must redirect to route details check your answers" in {
           forAll(arbitraryRouteDetailsAnswers(emptyUserAnswers)) {
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(???)
+                .mustBe(controllers.routeDetails.routes.RouteDetailsAnswersController.onPageLoad(answers.lrn))
           }
         }
       }

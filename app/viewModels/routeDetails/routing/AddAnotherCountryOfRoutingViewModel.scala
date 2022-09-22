@@ -16,7 +16,7 @@
 
 package viewModels.routeDetails.routing
 
-import models.{NormalMode, UserAnswers}
+import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
 import utils.cyaHelpers.routeDetails.RoutingCheckYourAnswersHelper
 import viewModels.ListItem
@@ -27,13 +27,10 @@ case class AddAnotherCountryOfRoutingViewModel(listItems: Seq[ListItem])
 
 object AddAnotherCountryOfRoutingViewModel {
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): AddAnotherCountryOfRoutingViewModel =
-    new AddAnotherCountryOfRoutingViewModelProvider()(userAnswers)
-
   class AddAnotherCountryOfRoutingViewModelProvider @Inject() () {
 
-    def apply(userAnswers: UserAnswers)(implicit messages: Messages): AddAnotherCountryOfRoutingViewModel = {
-      val helper = new RoutingCheckYourAnswersHelper(userAnswers, NormalMode)
+    def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): AddAnotherCountryOfRoutingViewModel = {
+      val helper = new RoutingCheckYourAnswersHelper(userAnswers, mode)
 
       val listItems = helper.listItems.collect {
         case Right(value) => value

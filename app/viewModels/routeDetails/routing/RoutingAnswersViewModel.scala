@@ -25,16 +25,13 @@ import viewModels.sections.Section
 
 import javax.inject.Inject
 
-case class CheckRoutingAnswersViewModel(sections: Seq[Section])
+case class RoutingAnswersViewModel(sections: Seq[Section])
 
-object CheckRoutingAnswersViewModel {
+object RoutingAnswersViewModel {
 
-  def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): CheckRoutingAnswersViewModel =
-    new CheckRoutingAnswersViewModelProvider().apply(userAnswers, mode)
+  class RoutingAnswersViewModelProvider @Inject() () {
 
-  class CheckRoutingAnswersViewModelProvider @Inject() () {
-
-    def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): CheckRoutingAnswersViewModel = {
+    def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): RoutingAnswersViewModel = {
 
       val helper = new RoutingCheckYourAnswersHelper(userAnswers, mode)
 
@@ -48,20 +45,20 @@ object CheckRoutingAnswersViewModel {
       )
 
       val countriesOfRoutingSection = Section(
-        sectionTitle = messages("routeDetails.routing.checkYourAnswers.countries.subheading"),
+        sectionTitle = messages("routeDetails.checkYourAnswers.routing.subheading"),
         rows = userAnswers
           .get(CountriesOfRoutingSection)
           .mapWithIndex {
             (_, index) => helper.countryOfRouting(Index(index))
           },
         addAnotherLink = Link(
-          id = "add-or-remove",
-          text = messages("routeDetails.routing.checkYourAnswers.addOrRemove"),
-          href = controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(userAnswers.lrn).url
+          id = "add-or-remove-transit-route-countries",
+          text = messages("routeDetails.checkYourAnswers.routing.addOrRemove"),
+          href = controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(userAnswers.lrn, mode).url
         )
       )
 
-      new CheckRoutingAnswersViewModel(Seq(preQuestionsSection, countriesOfRoutingSection))
+      new RoutingAnswersViewModel(Seq(preQuestionsSection, countriesOfRoutingSection))
     }
   }
 }

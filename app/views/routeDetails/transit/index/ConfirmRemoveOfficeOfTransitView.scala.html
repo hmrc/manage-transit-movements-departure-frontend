@@ -27,7 +27,7 @@
     button: Button
 )
 
-@(form: Form[Boolean], lrn: LocalReferenceNumber, index: Index, transitOfficeName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, index: Index, transitOfficeName: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("routeDetails.transit.confirmRemoveOfficeOfTransit.title", transitOfficeName),
@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.ConfirmRemoveOfficeOfTransitController.onSubmit(lrn,index), 'autoComplete -> "off") {
+    @formHelper(action = routes.ConfirmRemoveOfficeOfTransitController.onSubmit(lrn, mode, index), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
