@@ -32,12 +32,15 @@ object OfficeOfExitAnswersViewModel {
     def apply(userAnswers: UserAnswers, mode: Mode, index: Index)(implicit messages: Messages): OfficeOfExitAnswersViewModel = {
       val helper = new OfficeOfExitCheckYourAnswersHelper(userAnswers, mode, index)
 
-      val rows = Seq(
-        helper.officeOfExitCountry,
-        helper.officeOfExit
-      ).flatten
+      val section = Section(
+        sectionTitle = messages("routeDetails.exit.checkOfficeOfExitAnswers.subHeading"),
+        rows = Seq(
+          helper.officeOfExitCountry,
+          helper.officeOfExit
+        ).flatten
+      )
 
-      new OfficeOfExitAnswersViewModel(Section(rows))
+      new OfficeOfExitAnswersViewModel(section)
     }
   }
 }

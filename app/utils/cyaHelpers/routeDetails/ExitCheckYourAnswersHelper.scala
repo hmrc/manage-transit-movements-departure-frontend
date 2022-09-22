@@ -18,12 +18,13 @@ package utils.cyaHelpers.routeDetails
 
 import controllers.routeDetails.exit.index.routes
 import models.journeyDomain.routeDetails.exit.OfficeOfExitDomain
-import models.reference.Country
+import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode, UserAnswers}
-import pages.routeDetails.exit.index.OfficeOfExitCountryPage
+import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
 import pages.sections.routeDetails.exit.OfficesOfExitSection
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
+import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
 import viewModels.ListItem
 
@@ -32,6 +33,14 @@ class ExitCheckYourAnswersHelper(
   mode: Mode
 )(implicit messages: Messages)
     extends AnswersHelper(userAnswers, mode) {
+
+  def officeOfExit(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[OfficeOfExitDomain, CustomsOffice](
+    page = OfficeOfExitPage(index),
+    formatAnswer = formatAsText,
+    prefix = "routeDetails.exit.checkYourAnswers.officeOfExit",
+    id = Some(s"change-office-of-exit-${index.display}"),
+    args = index.display
+  )(OfficeOfExitDomain.userAnswersReader(index), implicitly)
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(OfficesOfExitSection) {

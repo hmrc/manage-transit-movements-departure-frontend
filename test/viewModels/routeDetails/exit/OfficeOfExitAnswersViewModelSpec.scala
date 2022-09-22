@@ -41,7 +41,7 @@ class OfficeOfExitAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyC
 
             val section = viewModelProvider.apply(answers, mode, index).section
 
-            section.sectionTitle mustNot be(defined)
+            section.sectionTitle.get mustBe "Office of exit"
             section.rows.size mustBe 1
         }
 

@@ -43,8 +43,6 @@ class CheckOfficeOfExitAnswersViewSpec extends CheckYourAnswersViewBehaviours {
 
   behave like pageWithHeading()
 
-  behave like pageWithContent("h2", "Office of exit")
-
   behave like pageWithCheckYourAnswers()
 
   behave like pageWithFormAction(routes.CheckOfficeOfExitAnswersController.onSubmit(lrn, index, mode).url)

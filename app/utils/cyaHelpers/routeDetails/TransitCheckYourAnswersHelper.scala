@@ -47,7 +47,7 @@ class TransitCheckYourAnswersHelper(
   def officeOfTransit(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[OfficeOfTransitDomain, CustomsOffice](
     page = OfficeOfTransitPage(index),
     formatAnswer = formatAsText,
-    prefix = "routeDetails.transit.checkYourAnswers.countryOfRouting",
+    prefix = "routeDetails.transit.checkYourAnswers.officeOfTransit",
     id = Some(s"change-office-of-transit-${index.display}"),
     args = index.display
   )(OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes), implicitly)

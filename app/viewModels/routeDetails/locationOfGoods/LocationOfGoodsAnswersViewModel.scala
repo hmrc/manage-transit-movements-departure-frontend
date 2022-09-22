@@ -32,24 +32,27 @@ object LocationOfGoodsAnswersViewModel {
     def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): LocationOfGoodsAnswersViewModel = {
       val helper = new LocationOfGoodsCheckYourAnswersHelper(userAnswers, mode)
 
-      val rows = Seq(
-        helper.locationType,
-        helper.locationOfGoodsIdentification,
-        helper.customsOfficeIdentifier,
-        helper.eori,
-        helper.authorisationNumber,
-        helper.additionalIdentifierYesNo,
-        helper.additionalIdentifier,
-        helper.coordinates,
-        helper.unLocode,
-        helper.address,
-        helper.postalCode,
-        helper.contactYesNo,
-        helper.contactName,
-        helper.contactPhoneNumber
-      ).flatten
+      val section = Section(
+        sectionTitle = messages("routeDetails.locationOfGoods.checkYourAnswers.subHeading"),
+        rows = Seq(
+          helper.locationType,
+          helper.locationOfGoodsIdentification,
+          helper.customsOfficeIdentifier,
+          helper.eori,
+          helper.authorisationNumber,
+          helper.additionalIdentifierYesNo,
+          helper.additionalIdentifier,
+          helper.coordinates,
+          helper.unLocode,
+          helper.address,
+          helper.postalCode,
+          helper.contactYesNo,
+          helper.contactName,
+          helper.contactPhoneNumber
+        ).flatten
+      )
 
-      new LocationOfGoodsAnswersViewModel(Section(rows))
+      new LocationOfGoodsAnswersViewModel(section)
     }
   }
 }

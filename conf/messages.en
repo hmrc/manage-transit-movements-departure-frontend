@@ -681,8 +681,8 @@ routeDetails.transit.checkOfficeOfTransitAnswers.heading = Check your answers
 
 routeDetails.transit.checkYourAnswers.offices.subheading = Offices of transit
 routeDetails.transit.checkYourAnswers.addOrRemove = Add or remove offices of transit
-routeDetails.transit.checkYourAnswers.countryOfRouting.checkYourAnswersLabel = Office of transit {0}
-routeDetails.transit.checkYourAnswers.countryOfRouting.change.hidden = office of transit {0}
+routeDetails.transit.checkYourAnswers.officeOfTransit.checkYourAnswersLabel = Office of transit {0}
+routeDetails.transit.checkYourAnswers.officeOfTransit.change.hidden = office of transit {0}
 
 # Exit
 
@@ -720,6 +720,11 @@ routeDetails.exit.addAnotherOfficeOfExit.error.required =  Select yes if you nee
 routeDetails.exit.addAnotherOfficeOfExit.label = Do you want to add another office of exit?
 routeDetails.exit.addAnotherOfficeOfExit.hint = You can add up to 9 offices.
 routeDetails.exit.addAnotherOfficeOfExit.maxLimit.label = You cannot add any more offices of exit. To add another office, you need to remove one first.
+
+routeDetails.exit.checkYourAnswers.offices.subheading = Offices of exit
+routeDetails.exit.checkYourAnswers.addOrRemove = Add or remove offices of exit
+routeDetails.exit.checkYourAnswers.officeOfExit.checkYourAnswersLabel = Office of exit {0}
+routeDetails.exit.checkYourAnswers.officeOfExit.change.hidden = office of exit {0}
 
 # Location of goods
 

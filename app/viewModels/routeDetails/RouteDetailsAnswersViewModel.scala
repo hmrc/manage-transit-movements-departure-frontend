@@ -18,6 +18,9 @@ package viewModels.routeDetails
 
 import models.{CheckMode, UserAnswers}
 import play.api.i18n.Messages
+import viewModels.routeDetails.exit.ExitAnswersViewModel.ExitAnswersViewModelProvider
+import viewModels.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersViewModel.LoadingAndUnloadingAnswersViewModelProvider
+import viewModels.routeDetails.locationOfGoods.LocationOfGoodsAnswersViewModel.LocationOfGoodsAnswersViewModelProvider
 import viewModels.routeDetails.routing.RoutingAnswersViewModel.RoutingAnswersViewModelProvider
 import viewModels.routeDetails.transit.TransitAnswersViewModel.TransitAnswersViewModelProvider
 import viewModels.sections.Section
@@ -30,7 +33,10 @@ object RouteDetailsAnswersViewModel {
 
   class RouteDetailsAnswersViewModelProvider @Inject() (
     routingAnswersViewModelProvider: RoutingAnswersViewModelProvider,
-    transitAnswersViewModelProvider: TransitAnswersViewModelProvider
+    transitAnswersViewModelProvider: TransitAnswersViewModelProvider,
+    exitAnswersViewModelProvider: ExitAnswersViewModelProvider,
+    locationOfGoodsAnswersViewModelProvider: LocationOfGoodsAnswersViewModelProvider,
+    loadingAndUnloadingAnswersViewModelProvider: LoadingAndUnloadingAnswersViewModelProvider
   ) {
 
     def apply(userAnswers: UserAnswers)(
@@ -40,7 +46,10 @@ object RouteDetailsAnswersViewModel {
       val mode = CheckMode
       new RouteDetailsAnswersViewModel(
         routingAnswersViewModelProvider.apply(userAnswers, mode).sections ++
-          transitAnswersViewModelProvider.apply(userAnswers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes).sections
+          transitAnswersViewModelProvider.apply(userAnswers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes).sections ++
+          exitAnswersViewModelProvider.apply(userAnswers, mode).sections ++
+          locationOfGoodsAnswersViewModelProvider.apply(userAnswers, mode).section.toSeq ++
+          loadingAndUnloadingAnswersViewModelProvider.apply(userAnswers, mode).sections
       )
     }
 

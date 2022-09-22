@@ -24,4 +24,9 @@ package object viewModels {
     def toSection: Section = Section(Seq(row).flatten)
   }
 
+  implicit class RichSection(section: Section) {
+
+    def toSeq: Seq[Section] = Seq(section)
+  }
+
 }

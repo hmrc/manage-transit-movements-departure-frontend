@@ -40,7 +40,7 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
             val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
             val section           = viewModelProvider.apply(userAnswers, mode).section
             section.rows.size mustBe 3
-            section.sectionTitle mustNot be(defined)
+            section.sectionTitle.get mustBe "Location of goods"
         }
       }
     }
@@ -60,7 +60,7 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
               val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
               val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 8
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -77,7 +77,7 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
               val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
               val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 5
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -98,7 +98,7 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
               val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
               val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 8
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -115,7 +115,7 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
               val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
               val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 5
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -135,7 +135,7 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
               val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
               val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 6
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -151,7 +151,7 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
               val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
               val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 4
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -171,7 +171,7 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
               val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
               val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 6
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -187,7 +187,7 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
               val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
               val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 4
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -207,7 +207,7 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
               val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
               val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 6
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -223,7 +223,7 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
               val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
               val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 4
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -243,7 +243,7 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
               val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
               val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 6
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
@@ -259,7 +259,7 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
               val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
               val section           = viewModelProvider.apply(userAnswers, mode).section
               section.rows.size mustBe 4
-              section.sectionTitle mustNot be(defined)
+              section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
