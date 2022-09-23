@@ -37,10 +37,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach {
   private val country1: Country = Country(CountryCode("GB"), "United Kingdom")
   private val country2: Country = Country(CountryCode("FR"), "France")
   private val country3: Country = Country(CountryCode("ES"), "Spain")
-  private val country4: Country = Country(CountryCode("IT"), "Italy")
-  private val country5: Country = Country(CountryCode("DE"), "Germany")
   private val countries         = Seq(country1, country2, country3)
-  private val excludedCountries = Seq(country4.code, country5.code)
 
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)
@@ -58,14 +55,11 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach {
         when(mockRefDataConnector.getCountries(any())(any(), any()))
           .thenReturn(Future.successful(countries))
 
-        service.getDestinationCountries(userAnswers, excludedCountries).futureValue mustBe
+        service.getDestinationCountries(userAnswers).futureValue mustBe
           CountryList(Seq(country2, country3, country1))
 
         val expectedQueryParameters = Seq(
-          "customsOfficeRole" -> "ANY",
-          "exclude"           -> "IT",
-          "exclude"           -> "DE",
-          "membership"        -> "eu"
+          "membership" -> "eu"
         )
 
         verify(mockRefDataConnector).getCountries(eqTo(expectedQueryParameters))(any(), any())
@@ -79,33 +73,11 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach {
         when(mockRefDataConnector.getCountries(any())(any(), any()))
           .thenReturn(Future.successful(countries))
 
-        service.getDestinationCountries(userAnswers, excludedCountries).futureValue mustBe
+        service.getDestinationCountries(userAnswers).futureValue mustBe
           CountryList(Seq(country2, country3, country1))
 
         val expectedQueryParameters = Seq(
-          "customsOfficeRole" -> "ANY",
-          "exclude"           -> "IT",
-          "exclude"           -> "DE",
-          "membership"        -> "ctc"
-        )
-
-        verify(mockRefDataConnector).getCountries(eqTo(expectedQueryParameters))(any(), any())
-      }
-    }
-
-    "getCountriesWithCustomsOffices" - {
-      "must return a list of sorted countries with customs offices" in {
-
-        when(mockRefDataConnector.getCountries(any())(any(), any()))
-          .thenReturn(Future.successful(countries))
-
-        service.getCountriesWithCustomsOffices(excludedCountries).futureValue mustBe
-          CountryList(Seq(country2, country3, country1))
-
-        val expectedQueryParameters = Seq(
-          "customsOfficeRole" -> "ANY",
-          "exclude"           -> "IT",
-          "exclude"           -> "DE"
+          "membership" -> "ctc"
         )
 
         verify(mockRefDataConnector).getCountries(eqTo(expectedQueryParameters))(any(), any())
@@ -131,12 +103,10 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach {
         when(mockRefDataConnector.getCountries(any())(any(), any()))
           .thenReturn(Future.successful(countries))
 
-        service.getTransitCountries(excludedCountries).futureValue mustBe
+        service.getTransitCountries().futureValue mustBe
           CountryList(Seq(country2, country3, country1))
 
         val expectedQueryParameters = Seq(
-          "exclude"    -> "IT",
-          "exclude"    -> "DE",
           "membership" -> "ctc"
         )
 

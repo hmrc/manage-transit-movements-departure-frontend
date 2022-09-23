@@ -29,17 +29,10 @@ class CustomsOfficesService @Inject() (
   referenceDataConnector: ReferenceDataConnector
 )(implicit ec: ExecutionContext) {
 
-  def getCustomsOffices(roles: Seq[String] = Nil)(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
-    referenceDataConnector
-      .getCustomsOffices(roles)
-      .map(sort)
-
   def getCustomsOfficesOfDeparture(implicit hc: HeaderCarrier): Future[CustomsOfficeList] = {
 
-    def getCustomsOffices(countryCode: String): Future[CustomsOfficeList] = {
-      val departureOfficeRoles: Seq[String] = Seq("DEP")
-      getCustomsOfficesForCountry(CountryCode(countryCode), departureOfficeRoles)
-    }
+    def getCustomsOffices(countryCode: String): Future[CustomsOfficeList] =
+      referenceDataConnector.getCustomsOfficesOfDepartureForCountry(countryCode)
 
     for {
       gbOffices <- getCustomsOffices(GB)
@@ -47,15 +40,6 @@ class CustomsOfficesService @Inject() (
       offices = sort(gbOffices.getAll ++ niOffices.getAll)
     } yield offices
   }
-
-  @deprecated("TODO: Should be deprecated for P5")
-  def getCustomsOfficesForCountry(
-    countryCode: CountryCode,
-    roles: Seq[String]
-  )(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
-    referenceDataConnector
-      .getCustomsOfficesForCountry(countryCode, roles)
-      .map(sort)
 
   def getCustomsOfficesOfTransitForCountry(
     countryCode: CountryCode

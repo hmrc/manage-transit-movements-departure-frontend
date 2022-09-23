@@ -17,6 +17,9 @@
 package models
 
 import models.reference.CustomsOffice
+import play.api.Logging
+import play.api.http.Status.{NOT_FOUND, OK}
+import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 case class CustomsOfficeList(customsOffices: Seq[CustomsOffice]) {
 
@@ -38,9 +41,24 @@ case class CustomsOfficeList(customsOffices: Seq[CustomsOffice]) {
 
 }
 
-object CustomsOfficeList {
+object CustomsOfficeList extends Logging {
 
   def apply(customsOffices: Seq[CustomsOffice]): CustomsOfficeList =
     new CustomsOfficeList(customsOffices)
+
+  implicit val responseHandlerCustomsOfficeList: HttpReads[CustomsOfficeList] =
+    (_: String, _: String, response: HttpResponse) =>
+      response.status match {
+        case OK =>
+          CustomsOfficeList(
+            response.json
+              .as[Seq[CustomsOffice]]
+          )
+        case NOT_FOUND =>
+          CustomsOfficeList(Nil)
+        case other =>
+          logger.info(s"[ReferenceDataConnector][getCustomsOfficesForCountry] Invalid downstream status $other")
+          throw new IllegalStateException(s"Invalid Downstream Status $other")
+      }
 
 }
