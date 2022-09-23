@@ -47,9 +47,9 @@ class LoadingAndUnloadingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: 
   )
 
   def loadingCountry: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
-    page = loading.PlaceOfLoadingCountryPage,
+    page = loading.CountryPage,
     formatAnswer = formatAsText,
-    prefix = "routeDetails.loading.placeOfLoadingCountry",
+    prefix = "routeDetails.loading.country",
     id = Some("loading-country")
   )
 

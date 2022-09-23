@@ -23,28 +23,28 @@ import models.{CountryList, NormalMode}
 import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingCountryPage
+import pages.routeDetails.loadingAndUnloading.loading.CountryPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CountriesService
-import views.html.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingCountryView
+import views.html.routeDetails.loadingAndUnloading.loading.CountryView
 
 import scala.concurrent.Future
 
-class PlaceOfLoadingCountryControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+class CountryControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val country1    = arbitraryCountry.arbitrary.sample.get
   private val country2    = arbitraryCountry.arbitrary.sample.get
   private val countryList = CountryList(Seq(country1, country2))
 
   private val formProvider = new CountryFormProvider()
-  private val form         = formProvider("routeDetails.loading.placeOfLoadingCountry", countryList)
+  private val form         = formProvider("routeDetails.loading.country", countryList)
   private val mode         = NormalMode
 
   private val mockCountriesService: CountriesService = mock[CountriesService]
-  private lazy val placeOfLoadingCountryRoute        = routes.PlaceOfLoadingCountryController.onPageLoad(lrn, mode).url
+  private lazy val countryRoute                      = routes.CountryController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -52,18 +52,18 @@ class PlaceOfLoadingCountryControllerSpec extends SpecBase with AppWithDefaultMo
       .overrides(bind(classOf[LoadingAndUnloadingNavigatorProvider]).toInstance(fakeLoadingNavigatorProvider))
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
-  "PlaceOfLoadingCountry Controller" - {
+  "Country Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, placeOfLoadingCountryRoute)
+      val request = FakeRequest(GET, countryRoute)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[PlaceOfLoadingCountryView]
+      val view = injector.instanceOf[CountryView]
 
       status(result) mustEqual OK
 
@@ -74,16 +74,16 @@ class PlaceOfLoadingCountryControllerSpec extends SpecBase with AppWithDefaultMo
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
-      val userAnswers = emptyUserAnswers.setValue(PlaceOfLoadingCountryPage, country1)
+      val userAnswers = emptyUserAnswers.setValue(CountryPage, country1)
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, placeOfLoadingCountryRoute)
+      val request = FakeRequest(GET, countryRoute)
 
       val result = route(app, request).value
 
       val filledForm = form.bind(Map("value" -> country1.code.code))
 
-      val view = injector.instanceOf[PlaceOfLoadingCountryView]
+      val view = injector.instanceOf[CountryView]
 
       status(result) mustEqual OK
 
@@ -98,7 +98,7 @@ class PlaceOfLoadingCountryControllerSpec extends SpecBase with AppWithDefaultMo
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, placeOfLoadingCountryRoute)
+      val request = FakeRequest(POST, countryRoute)
         .withFormUrlEncodedBody(("value", country1.code.code))
 
       val result = route(app, request).value
@@ -113,12 +113,12 @@ class PlaceOfLoadingCountryControllerSpec extends SpecBase with AppWithDefaultMo
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, placeOfLoadingCountryRoute).withFormUrlEncodedBody(("value", "invalid value"))
+      val request   = FakeRequest(POST, countryRoute).withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[PlaceOfLoadingCountryView]
+      val view = injector.instanceOf[CountryView]
 
       status(result) mustEqual BAD_REQUEST
 
@@ -130,7 +130,7 @@ class PlaceOfLoadingCountryControllerSpec extends SpecBase with AppWithDefaultMo
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, placeOfLoadingCountryRoute)
+      val request = FakeRequest(GET, countryRoute)
 
       val result = route(app, request).value
 
@@ -142,7 +142,7 @@ class PlaceOfLoadingCountryControllerSpec extends SpecBase with AppWithDefaultMo
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, placeOfLoadingCountryRoute)
+      val request = FakeRequest(POST, countryRoute)
         .withFormUrlEncodedBody(("value", country1.code.code))
 
       val result = route(app, request).value

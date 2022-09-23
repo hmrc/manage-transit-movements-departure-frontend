@@ -36,12 +36,12 @@ class AddExtraInformationYesNoPageSpec extends PageBehaviours {
           forAll(arbitrary[Country], arbitrary[String]) {
             (country, str) =>
               val preChange = emptyUserAnswers
-                .setValue(PlaceOfLoadingCountryPage, country)
+                .setValue(CountryPage, country)
                 .setValue(PlaceOfLoadingLocationPage, str)
 
               val postChange = preChange.setValue(AddExtraInformationYesNoPage, false)
 
-              postChange.get(PlaceOfLoadingCountryPage) mustNot be(defined)
+              postChange.get(CountryPage) mustNot be(defined)
               postChange.get(PlaceOfLoadingLocationPage) mustNot be(defined)
           }
         }
@@ -52,12 +52,12 @@ class AddExtraInformationYesNoPageSpec extends PageBehaviours {
           forAll(arbitrary[Country], arbitrary[String]) {
             (country, str) =>
               val preChange = emptyUserAnswers
-                .setValue(PlaceOfLoadingCountryPage, country)
+                .setValue(CountryPage, country)
                 .setValue(PlaceOfLoadingLocationPage, str)
 
               val postChange = preChange.setValue(AddExtraInformationYesNoPage, true)
 
-              postChange.get(PlaceOfLoadingCountryPage) must be(defined)
+              postChange.get(CountryPage) must be(defined)
               postChange.get(PlaceOfLoadingLocationPage) must be(defined)
           }
         }

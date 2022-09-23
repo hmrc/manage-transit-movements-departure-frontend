@@ -163,7 +163,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
 
     "loadingCountry" - {
       "must return None" - {
-        "when PlaceOfLoadingCountryPage is undefined" in {
+        "when CountryPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new LoadingAndUnloadingCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -174,10 +174,10 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
       }
 
       "must return Some(Row)" - {
-        "when PlaceOfLoadingCountryPage is defined" in {
+        "when CountryPage is defined" in {
           forAll(arbitrary[Mode], arbitrary[Country]) {
             (mode, country) =>
-              val answers = emptyUserAnswers.setValue(loading.PlaceOfLoadingCountryPage, country)
+              val answers = emptyUserAnswers.setValue(loading.CountryPage, country)
               val helper  = new LoadingAndUnloadingCheckYourAnswersHelper(answers, mode)
               val result  = helper.loadingCountry
 
@@ -190,7 +190,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = loadingRoutes.PlaceOfLoadingCountryController.onPageLoad(answers.lrn, mode).url,
+                          href = loadingRoutes.CountryController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("which country the place of loading is in"),
                           attributes = Map("id" -> "loading-country")
                         )

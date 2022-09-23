@@ -932,13 +932,13 @@ routeDetails.loading.placeOfLoadingLocation.error.required = Enter the place of 
 routeDetails.loading.placeOfLoadingLocation.error.length = The place of loading must be 35 characters or less
 routeDetails.loading.placeOfLoadingLocation.error.invalid = The place of loading must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 
-routeDetails.loading.placeOfLoadingCountry.title = In which country is the place of loading?
-routeDetails.loading.placeOfLoadingCountry.heading = In which country is the place of loading?
-routeDetails.loading.placeOfLoadingCountry.hintText = Enter the country, like Italy or Spain.
-routeDetails.loading.placeOfLoadingCountry.placeholder = Select a country
-routeDetails.loading.placeOfLoadingCountry.change.hidden = which country the place of loading is in
-routeDetails.loading.placeOfLoadingCountry.checkYourAnswersLabel = In which country is the place of loading?
-routeDetails.loading.placeOfLoadingCountry.error.required = Enter which country the place of loading is in
+routeDetails.loading.country.title = In which country is the place of loading?
+routeDetails.loading.country.heading = In which country is the place of loading?
+routeDetails.loading.country.hintText = Enter the country, like Italy or Spain.
+routeDetails.loading.country.placeholder = Select a country
+routeDetails.loading.country.change.hidden = which country the place of loading is in
+routeDetails.loading.country.checkYourAnswersLabel = In which country is the place of loading?
+routeDetails.loading.country.error.required = Enter which country the place of loading is in
 
 # Unloading
 

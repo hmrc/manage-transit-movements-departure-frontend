@@ -16,17 +16,20 @@
 
 package pages.routeDetails.loadingAndUnloading.loading
 
+import controllers.routeDetails.loadingAndUnloading.loading.routes
 import models.reference.Country
-import pages.behaviours.PageBehaviours
+import models.{Mode, UserAnswers}
+import pages.QuestionPage
+import pages.sections.routeDetails.loading.LoadingLocationSection
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
-class PlaceOfLoadingCountryPageSpec extends PageBehaviours {
+case object CountryPage extends QuestionPage[Country] {
 
-  "PlaceOfLoadingCountryPage" - {
+  override def path: JsPath = LoadingLocationSection.path \ toString
 
-    beRetrievable[Country](PlaceOfLoadingCountryPage)
+  override def toString: String = "country"
 
-    beSettable[Country](PlaceOfLoadingCountryPage)
-
-    beRemovable[Country](PlaceOfLoadingCountryPage)
-  }
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.CountryController.onPageLoad(userAnswers.lrn, mode))
 }

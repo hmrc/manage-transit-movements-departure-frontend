@@ -25,7 +25,7 @@ import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
-import pages.routeDetails.loadingAndUnloading.loading.{PlaceOfLoadingCountryPage, PlaceOfLoadingLocationPage}
+import pages.routeDetails.loadingAndUnloading.loading.{CountryPage, PlaceOfLoadingLocationPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -51,7 +51,7 @@ class PlaceOfLoadingLocationControllerSpec extends SpecBase with AppWithDefaultM
   "PlaceOfLoadingLocation Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val userAnswers = emptyUserAnswers.setValue(PlaceOfLoadingCountryPage, country)
+      val userAnswers = emptyUserAnswers.setValue(CountryPage, country)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, placeOfLoadingLocationRoute)
@@ -69,7 +69,7 @@ class PlaceOfLoadingLocationControllerSpec extends SpecBase with AppWithDefaultM
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(PlaceOfLoadingCountryPage, country) //todo change PlaceOfLoadingCountryPage once created
+        .setValue(CountryPage, country) //todo change CountryPage once created
         .setValue(PlaceOfLoadingLocationPage, "Test")
       setExistingUserAnswers(userAnswers)
 
@@ -89,7 +89,7 @@ class PlaceOfLoadingLocationControllerSpec extends SpecBase with AppWithDefaultM
 
     "must redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.setValue(PlaceOfLoadingCountryPage, country)
+      val userAnswers = emptyUserAnswers.setValue(CountryPage, country)
       setExistingUserAnswers(userAnswers)
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
@@ -106,7 +106,7 @@ class PlaceOfLoadingLocationControllerSpec extends SpecBase with AppWithDefaultM
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.setValue(PlaceOfLoadingCountryPage, country)
+      val userAnswers = emptyUserAnswers.setValue(CountryPage, country)
       setExistingUserAnswers(userAnswers)
 
       val invalidAnswer = ">"

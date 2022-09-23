@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.LocationFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
-import pages.routeDetails.loadingAndUnloading.loading.{PlaceOfLoadingCountryPage, PlaceOfLoadingLocationPage}
+import pages.routeDetails.loadingAndUnloading.loading.{CountryPage, PlaceOfLoadingLocationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -46,7 +46,7 @@ class PlaceOfLoadingLocationController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(PlaceOfLoadingCountryPage)) {
+    .andThen(getMandatoryPage(CountryPage)) {
       implicit request =>
         val countryName = request.arg.description
         val form        = formProvider("routeDetails.loading.placeOfLoadingLocation", countryName)
@@ -59,7 +59,7 @@ class PlaceOfLoadingLocationController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(PlaceOfLoadingCountryPage))
+    .andThen(getMandatoryPage(CountryPage))
     .async {
       implicit request =>
         val countryName = request.arg.description
