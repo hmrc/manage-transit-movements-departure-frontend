@@ -308,6 +308,18 @@ traderDetails.consignment.approvedOperator.paragraph = You must be an approved a
 traderDetails.consignment.approvedOperator.label = Do you want to use a reduced data set?
 traderDetails.consignment.approvedOperator.change.hidden = if you want to use a reduced data set
 
+traderDetails.consignment.moreThanOneConsignee.title = Is there more than one consignee?
+traderDetails.consignment.moreThanOneConsignee.heading = Is there more than one consignee?
+traderDetails.consignment.moreThanOneConsignee.checkYourAnswersLabel = Is there more than one consignee?
+traderDetails.consignment.moreThanOneConsignee.error.required = Select yes if there is more than one consignee
+traderDetails.consignment.moreThanOneConsignee.change.hidden = if there is more than one consignee
+
+traderDetails.consignment.checkYourAnswers.heading = Check your answers
+traderDetails.consignment.checkYourAnswers.title = Check your answers
+traderDetails.consignment.checkYourAnswers.consignor = Consignor
+traderDetails.consignment.checkYourAnswers.consignorContact = Consignor contact
+traderDetails.consignment.checkYourAnswers.consignee = Consignee
+
 # Consignor
 
 traderDetails.consignment.consignor.eoriYesNo.title = Do you know the consignor’s EORI number?
@@ -380,12 +392,6 @@ traderDetails.consignment.consignor.contact.telephoneNumber.change.hidden = cons
 
 # Consignee
 
-traderDetails.consignment.moreThanOneConsignee.title = Is there more than one consignee?
-traderDetails.consignment.moreThanOneConsignee.heading = Is there more than one consignee?
-traderDetails.consignment.moreThanOneConsignee.checkYourAnswersLabel = Is there more than one consignee?
-traderDetails.consignment.moreThanOneConsignee.error.required = Select yes if there is more than one consignee
-traderDetails.consignment.moreThanOneConsignee.change.hidden = if there is more than one consignee
-
 traderDetails.consignment.consignee.eoriYesNo.title = Do you know the consignee’s EORI number?
 traderDetails.consignment.consignee.eoriYesNo.heading = Do you know the consignee’s EORI number?
 traderDetails.consignment.consignee.eoriYesNo.checkYourAnswersLabel = Do you know the consignee’s EORI number?
@@ -429,12 +435,6 @@ traderDetails.consignment.consignee.address.error.postalCode.length = The postal
 traderDetails.consignment.consignee.address.error.country.required = Enter the country for {0}’s address
 traderDetails.consignment.consignee.address.error.length = {0} of {1}’s address must be {2} characters or less
 traderDetails.consignment.consignee.address.placeholder = Select a country
-
-traderDetails.consignment.checkYourAnswers.heading = Check your answers
-traderDetails.consignment.checkYourAnswers.title = Check your answers
-traderDetails.consignment.checkYourAnswers.consignor = Consignor
-traderDetails.consignment.checkYourAnswers.consignorContact = Consignor contact
-traderDetails.consignment.checkYourAnswers.consignee = Consignee
 
 # Guarantee details
 
