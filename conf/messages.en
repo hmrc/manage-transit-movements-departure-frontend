@@ -948,11 +948,11 @@ routeDetails.unloading.addPlaceOfUnloading.checkYourAnswersLabel = Do you want t
 routeDetails.unloading.addPlaceOfUnloading.change.hidden = if you want to add a place of unloading
 routeDetails.unloading.addPlaceOfUnloading.error.required = Select yes if you want to add a place of unloading
 
-routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.title = Do you want to add a UN/LOCODE for the place of unloading?
-routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.heading = Do you want to add a UN/LOCODE for the place of unloading?
-routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.checkYourAnswersLabel = Do you want to add a UN/LOCODE for the place of unloading?
-routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.error.required = Select yes if you want to add a UN/LOCODE for the place of unloading
-routeDetails.unloading.placeOfUnloadingUnLocodeYesNo.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
+routeDetails.unloading.addUnLocodeYesNo.title = Do you want to add a UN/LOCODE for the place of unloading?
+routeDetails.unloading.addUnLocodeYesNo.heading = Do you want to add a UN/LOCODE for the place of unloading?
+routeDetails.unloading.addUnLocodeYesNo.checkYourAnswersLabel = Do you want to add a UN/LOCODE for the place of unloading?
+routeDetails.unloading.addUnLocodeYesNo.error.required = Select yes if you want to add a UN/LOCODE for the place of unloading
+routeDetails.unloading.addUnLocodeYesNo.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
 
 routeDetails.unloading.placeOfUnloadingUnLocode.title = What is the UN/LOCODE for the place of unloading?
 routeDetails.unloading.placeOfUnloadingUnLocode.heading = What is the UN/LOCODE for the place of unloading?

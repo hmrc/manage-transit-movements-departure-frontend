@@ -27,7 +27,7 @@ import pages.routeDetails.loadingAndUnloading.unloading.{
   CountryPage,
   LocationPage,
   PlaceOfUnloadingUnLocodePage,
-  PlaceOfUnloadingUnLocodeYesNoPage
+  UnLocodeYesNoPage
 }
 
 class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
@@ -41,7 +41,7 @@ class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Gener
 
       "when add a place of unloading UN/LOCODE is yes and additional information is yes" in {
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(PlaceOfUnloadingUnLocodeYesNoPage)(true)
+          .unsafeSetVal(UnLocodeYesNoPage)(true)
           .unsafeSetVal(PlaceOfUnloadingUnLocodePage)(unlocode)
           .unsafeSetVal(AddExtraInformationYesNoPage)(true)
           .unsafeSetVal(CountryPage)(country)
@@ -59,7 +59,7 @@ class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Gener
 
       "when add a place of unloading UN/LOCODE is yes and additional information is no" in {
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(PlaceOfUnloadingUnLocodeYesNoPage)(true)
+          .unsafeSetVal(UnLocodeYesNoPage)(true)
           .unsafeSetVal(PlaceOfUnloadingUnLocodePage)(unlocode)
           .unsafeSetVal(AddExtraInformationYesNoPage)(false)
 
@@ -75,7 +75,7 @@ class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Gener
 
       "when add a place of unloading UN/LOCODE is no" in {
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(PlaceOfUnloadingUnLocodeYesNoPage)(false)
+          .unsafeSetVal(UnLocodeYesNoPage)(false)
           .unsafeSetVal(CountryPage)(country)
           .unsafeSetVal(LocationPage)(country.description)
 

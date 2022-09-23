@@ -32,10 +32,10 @@ object UnloadingDomain {
   implicit val userAnswersReader: UserAnswersReader[UnloadingDomain] = {
 
     implicit val unLocodeReads: UserAnswersReader[Option[UnLocode]] =
-      PlaceOfUnloadingUnLocodeYesNoPage.filterOptionalDependent(identity)(PlaceOfUnloadingUnLocodePage.reader)
+      UnLocodeYesNoPage.filterOptionalDependent(identity)(PlaceOfUnloadingUnLocodePage.reader)
 
     implicit val additionalInformationReads: UserAnswersReader[Option[AdditionalInformationDomain]] =
-      PlaceOfUnloadingUnLocodeYesNoPage.reader.flatMap {
+      UnLocodeYesNoPage.reader.flatMap {
         case true  => AddExtraInformationYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalInformationDomain])
         case false => UserAnswersReader[AdditionalInformationDomain].map(Some(_))
       }

@@ -20,15 +20,15 @@ import models.reference.UnLocode
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
-class PlaceOfUnloadingUnLocodeYesNoPageSpec extends PageBehaviours {
+class UnLocodeYesNoPageSpec extends PageBehaviours {
 
-  "PlaceOfUnloadingUnLocodeYesNoPage" - {
+  "AddUnLocodeYesNoPage" - {
 
-    beRetrievable[Boolean](PlaceOfUnloadingUnLocodeYesNoPage)
+    beRetrievable[Boolean](UnLocodeYesNoPage)
 
-    beSettable[Boolean](PlaceOfUnloadingUnLocodeYesNoPage)
+    beSettable[Boolean](UnLocodeYesNoPage)
 
-    beRemovable[Boolean](PlaceOfUnloadingUnLocodeYesNoPage)
+    beRemovable[Boolean](UnLocodeYesNoPage)
 
     "cleanup" - {
       "when NO selected" - {
@@ -39,7 +39,7 @@ class PlaceOfUnloadingUnLocodeYesNoPageSpec extends PageBehaviours {
                 .setValue(PlaceOfUnloadingUnLocodePage, unLocode)
                 .setValue(AddExtraInformationYesNoPage, bool)
 
-              val postChange = preChange.setValue(PlaceOfUnloadingUnLocodeYesNoPage, false)
+              val postChange = preChange.setValue(UnLocodeYesNoPage, false)
 
               postChange.get(PlaceOfUnloadingUnLocodePage) mustNot be(defined)
               postChange.get(AddExtraInformationYesNoPage) mustNot be(defined)
@@ -55,7 +55,7 @@ class PlaceOfUnloadingUnLocodeYesNoPageSpec extends PageBehaviours {
                 .setValue(PlaceOfUnloadingUnLocodePage, unLocode)
                 .setValue(AddExtraInformationYesNoPage, bool)
 
-              val postChange = preChange.setValue(PlaceOfUnloadingUnLocodeYesNoPage, true)
+              val postChange = preChange.setValue(UnLocodeYesNoPage, true)
 
               postChange.get(PlaceOfUnloadingUnLocodePage) must be(defined)
               postChange.get(AddExtraInformationYesNoPage) must be(defined)

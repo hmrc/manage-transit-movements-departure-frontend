@@ -21,33 +21,33 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
-import pages.routeDetails.loadingAndUnloading.unloading.PlaceOfUnloadingUnLocodeYesNoPage
+import pages.routeDetails.loadingAndUnloading.unloading.UnLocodeYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.loadingAndUnloading.unloading.PlaceOfUnloadingUnLocodeYesNoView
+import views.html.routeDetails.loadingAndUnloading.unloading.AddUnLocodeYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PlaceOfUnloadingUnLocodeYesNoController @Inject() (
+class AddUnLocodeYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LoadingAndUnloadingNavigatorProvider,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PlaceOfUnloadingUnLocodeYesNoView
+  view: AddUnLocodeYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.unloading.placeOfUnloadingUnLocodeYesNo")
+  private val form = formProvider("routeDetails.unloading.addUnLocodeYesNo")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(PlaceOfUnloadingUnLocodeYesNoPage) match {
+      val preparedForm = request.userAnswers.get(UnLocodeYesNoPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -64,7 +64,7 @@ class PlaceOfUnloadingUnLocodeYesNoController @Inject() (
           value =>
             navigatorProvider().flatMap {
               implicit navigator =>
-                PlaceOfUnloadingUnLocodeYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                UnLocodeYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
             }
         )
   }

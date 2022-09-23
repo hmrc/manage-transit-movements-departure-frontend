@@ -25,14 +25,14 @@ import play.api.mvc.Call
 
 import scala.util.Try
 
-case object PlaceOfUnloadingUnLocodeYesNoPage extends QuestionPage[Boolean] {
+case object UnLocodeYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = UnloadingSection.path \ toString
 
-  override def toString: String = "placeOfUnloadingUnLocodeYesNo"
+  override def toString: String = "addUnLocodeYesNo"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.PlaceOfUnloadingUnLocodeYesNoController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.AddUnLocodeYesNoController.onPageLoad(userAnswers.lrn, mode))
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {

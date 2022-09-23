@@ -68,7 +68,7 @@ class LoadingAndUnloadingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: 
   )
 
   def addUnloadingUnLocode: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
-    page = unloading.PlaceOfUnloadingUnLocodeYesNoPage,
+    page = unloading.UnLocodeYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "routeDetails.unloading.addExtraInformationYesNo",
     id = Some("add-unloading-un-locode")

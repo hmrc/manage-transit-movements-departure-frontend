@@ -221,12 +221,12 @@ trait UserAnswersEntryGenerators {
   private def generateUnloadingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.routeDetails.loadingAndUnloading.unloading._
     {
-      case AddPlaceOfUnloadingPage           => arbitrary[Boolean].map(JsBoolean)
-      case PlaceOfUnloadingUnLocodeYesNoPage => arbitrary[Boolean].map(JsBoolean)
-      case PlaceOfUnloadingUnLocodePage      => arbitrary[UnLocode].map(Json.toJson(_))
-      case AddExtraInformationYesNoPage      => arbitrary[Boolean].map(JsBoolean)
-      case CountryPage                       => arbitrary[Country].map(Json.toJson(_))
-      case LocationPage                      => Gen.alphaNumStr.map(JsString)
+      case AddPlaceOfUnloadingPage      => arbitrary[Boolean].map(JsBoolean)
+      case UnLocodeYesNoPage            => arbitrary[Boolean].map(JsBoolean)
+      case PlaceOfUnloadingUnLocodePage => arbitrary[UnLocode].map(Json.toJson(_))
+      case AddExtraInformationYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case CountryPage                  => arbitrary[Country].map(Json.toJson(_))
+      case LocationPage                 => Gen.alphaNumStr.map(JsString)
     }
   }
 
