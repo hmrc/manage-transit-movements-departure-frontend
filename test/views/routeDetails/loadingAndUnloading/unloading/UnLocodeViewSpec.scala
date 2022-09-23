@@ -24,9 +24,9 @@ import models.reference.UnLocode
 import models.UnLocodeList
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.html.routeDetails.loadingAndUnloading.unloading.PlaceOfUnloadingUnLocodeView
+import views.html.routeDetails.loadingAndUnloading.unloading.UnLocodeView
 
-class PlaceOfUnloadingUnLocodeViewSpec extends InputSelectViewBehaviours[UnLocode] with Generators {
+class UnLocodeViewSpec extends InputSelectViewBehaviours[UnLocode] with Generators {
 
   private lazy val unLocode1 = arbitraryUnLocode.arbitrary.sample.get
   private lazy val unLocode2 = arbitraryUnLocode.arbitrary.sample.get
@@ -42,9 +42,9 @@ class PlaceOfUnloadingUnLocodeViewSpec extends InputSelectViewBehaviours[UnLocod
   override def form: Form[UnLocode] = new UnLocodeFormProvider()(prefix, UnLocodeList(values))
 
   override def applyView(form: Form[UnLocode]): HtmlFormat.Appendable =
-    injector.instanceOf[PlaceOfUnloadingUnLocodeView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[UnLocodeView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.unloading.placeOfUnloadingUnLocode"
+  override val prefix: String = "routeDetails.unloading.unLocode"
 
   behave like pageWithTitle()
 

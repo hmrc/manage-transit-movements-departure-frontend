@@ -24,12 +24,12 @@ import pages.sections.routeDetails.unloading.UnloadingSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object PlaceOfUnloadingUnLocodePage extends QuestionPage[UnLocode] {
+case object UnLocodePage extends QuestionPage[UnLocode] {
 
   override def path: JsPath = UnloadingSection.path \ toString
 
-  override def toString: String = "placeOfUnloadingUnLocode"
+  override def toString: String = "unLocode"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.PlaceOfUnloadingUnLocodeController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.UnLocodeController.onPageLoad(userAnswers.lrn, mode))
 }
