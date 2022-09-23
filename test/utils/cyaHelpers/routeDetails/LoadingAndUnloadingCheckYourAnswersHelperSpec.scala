@@ -206,7 +206,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
 
     "loadingLocation" - {
       "must return None" - {
-        "when PlaceOfLoadingLocationPage is undefined" in {
+        "when LocationPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new LoadingAndUnloadingCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -217,10 +217,10 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
       }
 
       "must return Some(Row)" - {
-        "when PlaceOfLoadingLocationPage is defined" in {
+        "when LocationPage is defined" in {
           forAll(arbitrary[Mode], arbitrary[String]) {
             (mode, location) =>
-              val answers = emptyUserAnswers.setValue(loading.PlaceOfLoadingLocationPage, location)
+              val answers = emptyUserAnswers.setValue(loading.LocationPage, location)
               val helper  = new LoadingAndUnloadingCheckYourAnswersHelper(answers, mode)
               val result  = helper.loadingLocation
 
@@ -233,7 +233,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = loadingRoutes.PlaceOfLoadingLocationController.onPageLoad(answers.lrn, mode).url,
+                          href = loadingRoutes.LocationController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("place of loading location"),
                           attributes = Map("id" -> "loading-location")
                         )

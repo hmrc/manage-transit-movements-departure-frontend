@@ -21,17 +21,17 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.LocationFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
-import pages.routeDetails.loadingAndUnloading.loading.{CountryPage, PlaceOfLoadingLocationPage}
+import pages.routeDetails.loadingAndUnloading.loading.{CountryPage, LocationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingLocationView
+import views.html.routeDetails.loadingAndUnloading.loading.LocationView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PlaceOfLoadingLocationController @Inject() (
+class LocationController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LoadingAndUnloadingNavigatorProvider,
@@ -39,7 +39,7 @@ class PlaceOfLoadingLocationController @Inject() (
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   getMandatoryPage: SpecificDataRequiredActionProvider,
-  view: PlaceOfLoadingLocationView
+  view: LocationView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -49,8 +49,8 @@ class PlaceOfLoadingLocationController @Inject() (
     .andThen(getMandatoryPage(CountryPage)) {
       implicit request =>
         val countryName = request.arg.description
-        val form        = formProvider("routeDetails.loading.placeOfLoadingLocation", countryName)
-        val preparedForm = request.userAnswers.get(PlaceOfLoadingLocationPage) match {
+        val form        = formProvider("routeDetails.loading.location", countryName)
+        val preparedForm = request.userAnswers.get(LocationPage) match {
           case None        => form
           case Some(value) => form.fill(value)
         }
@@ -63,7 +63,7 @@ class PlaceOfLoadingLocationController @Inject() (
     .async {
       implicit request =>
         val countryName = request.arg.description
-        val form        = formProvider("routeDetails.loading.placeOfLoadingLocation", countryName)
+        val form        = formProvider("routeDetails.loading.location", countryName)
         form
           .bindFromRequest()
           .fold(
@@ -71,7 +71,7 @@ class PlaceOfLoadingLocationController @Inject() (
             value =>
               navigatorProvider().flatMap {
                 implicit navigator =>
-                  PlaceOfLoadingLocationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                  LocationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
               }
           )
     }

@@ -23,19 +23,19 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingLocationView
+import views.html.routeDetails.loadingAndUnloading.loading.LocationView
 import org.scalacheck.{Arbitrary, Gen}
 
-class PlaceOfLoadingLocationViewSpec extends InputTextViewBehaviours[String] {
+class LocationViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "routeDetails.loading.placeOfLoadingLocation"
+  override val prefix: String = "routeDetails.loading.location"
 
   private val countryName = Gen.alphaNumStr.sample.value.take(locationMaxLength)
 
   override def form: Form[String] = new LocationFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[PlaceOfLoadingLocationView].apply(form, lrn, countryName, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[LocationView].apply(form, lrn, countryName, NormalMode)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 

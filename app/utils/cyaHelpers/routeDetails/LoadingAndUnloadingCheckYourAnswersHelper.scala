@@ -54,9 +54,9 @@ class LoadingAndUnloadingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: 
   )
 
   def loadingLocation: Option[SummaryListRow] = getAnswerAndBuildRow[String](
-    page = loading.PlaceOfLoadingLocationPage,
+    page = loading.LocationPage,
     formatAnswer = formatAsText,
-    prefix = "routeDetails.loading.placeOfLoadingLocation",
+    prefix = "routeDetails.loading.location",
     id = Some("loading-location")
   )
 

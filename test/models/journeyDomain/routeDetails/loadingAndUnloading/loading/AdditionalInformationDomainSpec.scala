@@ -23,7 +23,7 @@ import models.domain.{EitherType, UserAnswersReader}
 import models.reference.Country
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.routeDetails.loadingAndUnloading.loading.{CountryPage, PlaceOfLoadingLocationPage}
+import pages.routeDetails.loadingAndUnloading.loading.{CountryPage, LocationPage}
 
 class AdditionalInformationDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
   "AdditionalInformation" - {
@@ -36,7 +36,7 @@ class AdditionalInformationDomainSpec extends SpecBase with UserAnswersSpecHelpe
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(CountryPage)(country1)
-          .unsafeSetVal(PlaceOfLoadingLocationPage)(loadingPlace1)
+          .unsafeSetVal(LocationPage)(loadingPlace1)
 
         val expectedResult = AdditionalInformationDomain(
           country = country1,
@@ -56,7 +56,7 @@ class AdditionalInformationDomainSpec extends SpecBase with UserAnswersSpecHelpe
         val placeOfLoading = Gen.alphaNumStr.sample.value
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(PlaceOfLoadingLocationPage)(placeOfLoading)
+          .unsafeSetVal(LocationPage)(placeOfLoading)
 
         val result: EitherType[AdditionalInformationDomain] = UserAnswersReader[AdditionalInformationDomain].run(userAnswers)
 
@@ -71,7 +71,7 @@ class AdditionalInformationDomainSpec extends SpecBase with UserAnswersSpecHelpe
 
         val result: EitherType[AdditionalInformationDomain] = UserAnswersReader[AdditionalInformationDomain].run(userAnswers)
 
-        result.left.value.page mustBe PlaceOfLoadingLocationPage
+        result.left.value.page mustBe LocationPage
       }
     }
   }

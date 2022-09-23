@@ -41,7 +41,7 @@ class LoadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
           .unsafeSetVal(PlaceOfLoadingUnLocodePage)(unLocode)
           .unsafeSetVal(AddExtraInformationYesNoPage)(true)
           .unsafeSetVal(CountryPage)(country)
-          .unsafeSetVal(PlaceOfLoadingLocationPage)(loadingPlace)
+          .unsafeSetVal(LocationPage)(loadingPlace)
 
         val expectedResult = LoadingDomain(
           unLocode = Some(unLocode),
@@ -57,7 +57,7 @@ class LoadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(AddUnLocodeYesNoPage)(false)
           .unsafeSetVal(CountryPage)(country)
-          .unsafeSetVal(PlaceOfLoadingLocationPage)(loadingPlace)
+          .unsafeSetVal(LocationPage)(loadingPlace)
 
         val expectedResult = LoadingDomain(
           unLocode = None,
