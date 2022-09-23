@@ -38,7 +38,7 @@ case object AddUnLocodeYesNoPage extends QuestionPage[Boolean] {
     value match {
       case Some(false) =>
         userAnswers
-          .remove(PlaceOfLoadingUnLocodePage)
+          .remove(UnLocodePage)
           .flatMap(_.remove(AddExtraInformationYesNoPage))
       case _ => super.cleanup(value, userAnswers)
     }

@@ -19,14 +19,14 @@ package pages.routeDetails.loadingAndUnloading.loading
 import models.reference.UnLocode
 import pages.behaviours.PageBehaviours
 
-class PlaceOfLoadingUnLocodePageSpec extends PageBehaviours {
+class UnLocodePageSpec extends PageBehaviours {
 
-  "PlaceOfLoadingUnLocodePage" - {
+  "UnLocodePage" - {
 
-    beRetrievable[UnLocode](PlaceOfLoadingUnLocodePage)
+    beRetrievable[UnLocode](UnLocodePage)
 
-    beSettable[UnLocode](PlaceOfLoadingUnLocodePage)
+    beSettable[UnLocode](UnLocodePage)
 
-    beRemovable[UnLocode](PlaceOfLoadingUnLocodePage)
+    beRemovable[UnLocode](UnLocodePage)
   }
 }

@@ -21,7 +21,6 @@ import models.reference._
 import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingUnLocodePage
 import play.api.libs.json._
 import queries.Gettable
 
@@ -212,7 +211,7 @@ trait UserAnswersEntryGenerators {
     import pages.routeDetails.loadingAndUnloading.loading._
     {
       case AddUnLocodeYesNoPage         => arbitrary[Boolean].map(JsBoolean)
-      case PlaceOfLoadingUnLocodePage   => arbitrary[UnLocode].map(Json.toJson(_))
+      case UnLocodePage                 => arbitrary[UnLocode].map(Json.toJson(_))
       case AddExtraInformationYesNoPage => arbitrary[Boolean].map(JsBoolean)
       case CountryPage                  => arbitrary[Country].map(Json.toJson(_))
       case LocationPage                 => Gen.alphaNumStr.map(JsString)

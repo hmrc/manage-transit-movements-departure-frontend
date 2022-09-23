@@ -906,15 +906,15 @@ routeDetails.loading.addUnLocodeYesNo.change.hidden = if you want to add a UN/LO
 routeDetails.loading.addUnLocodeYesNo.error.required = Select yes if you want to add a UN/LOCODE for the place of loading
 routeDetails.loading.addUnLocodeYesNo.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
 
-routeDetails.loading.placeOfLoadingUnLocode.title = What is the UN/LOCODE for the place of loading?
-routeDetails.loading.placeOfLoadingUnLocode.heading = What is the UN/LOCODE for the place of loading?
-routeDetails.loading.placeOfLoadingUnLocode.hintText = Enter the code, like GB BRS or GB MNC.
-routeDetails.loading.placeOfLoadingUnLocode.placeholder = Select a UN/LOCODE.
-routeDetails.loading.placeOfLoadingUnLocode.change.hidden = the UN/LOCODE for the place of loading
-routeDetails.loading.placeOfLoadingUnLocode.checkYourAnswersLabel = What is the UN/LOCODE for the place of loading?
-routeDetails.loading.placeOfLoadingUnLocode.error.required = Enter the UN/LOCODE for the place of loading
-routeDetails.loading.placeOfLoadingUnLocode.error.invalidCharacters = The UN/LOCODE for the place of loading must only include letters a to z and spaces
-routeDetails.loading.placeOfLoadingUnLocode.error.maxLength = The UN/LOCODE for the place of loading must be 5 characters long
+routeDetails.loading.unLocode.title = What is the UN/LOCODE for the place of loading?
+routeDetails.loading.unLocode.heading = What is the UN/LOCODE for the place of loading?
+routeDetails.loading.unLocode.hintText = Enter the code, like GB BRS or GB MNC.
+routeDetails.loading.unLocode.placeholder = Select a UN/LOCODE.
+routeDetails.loading.unLocode.change.hidden = the UN/LOCODE for the place of loading
+routeDetails.loading.unLocode.checkYourAnswersLabel = What is the UN/LOCODE for the place of loading?
+routeDetails.loading.unLocode.error.required = Enter the UN/LOCODE for the place of loading
+routeDetails.loading.unLocode.error.invalidCharacters = The UN/LOCODE for the place of loading must only include letters a to z and spaces
+routeDetails.loading.unLocode.error.maxLength = The UN/LOCODE for the place of loading must be 5 characters long
 
 routeDetails.loading.addExtraInformationYesNo.title = Do you want to add extra information for the place of loading?
 routeDetails.loading.addExtraInformationYesNo.heading = Do you want to add extra information for the place of loading?

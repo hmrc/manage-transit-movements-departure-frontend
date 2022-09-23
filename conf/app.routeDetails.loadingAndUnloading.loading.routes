@@ -4,10 +4,10 @@ POST       /:lrn/route-details/loading/place-of-loading-add-un-locode           
 GET        /:lrn/route-details/loading/change-place-of-loading-add-un-locode                 controllers.routeDetails.loadingAndUnloading.loading.AddUnLocodeYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/route-details/loading/change-place-of-loading-add-un-locode                 controllers.routeDetails.loadingAndUnloading.loading.AddUnLocodeYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/route-details/loading/place-of-loading-un-locode                            controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingUnLocodeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/route-details/loading/place-of-loading-un-locode                            controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingUnLocodeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/route-details/loading/change-place-of-loading-un-locode                     controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingUnLocodeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/route-details/loading/change-place-of-loading-un-locode                     controllers.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingUnLocodeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/route-details/loading/place-of-loading-un-locode                            controllers.routeDetails.loadingAndUnloading.loading.UnLocodeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/loading/place-of-loading-un-locode                            controllers.routeDetails.loadingAndUnloading.loading.UnLocodeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/loading/change-place-of-loading-un-locode                     controllers.routeDetails.loadingAndUnloading.loading.UnLocodeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/loading/change-place-of-loading-un-locode                     controllers.routeDetails.loadingAndUnloading.loading.UnLocodeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/route-details/loading/place-of-loading-add-extra-information                controllers.routeDetails.loadingAndUnloading.loading.AddExtraInformationYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/route-details/loading/place-of-loading-add-extra-information                controllers.routeDetails.loadingAndUnloading.loading.AddExtraInformationYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)

@@ -21,18 +21,18 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.UnLocodeFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
-import pages.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingUnLocodePage
+import pages.routeDetails.loadingAndUnloading.loading.UnLocodePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.UnLocodesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingUnLocodeView
+import views.html.routeDetails.loadingAndUnloading.loading.UnLocodeView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PlaceOfLoadingUnLocodeController @Inject() (
+class UnLocodeController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   actions: Actions,
@@ -40,7 +40,7 @@ class PlaceOfLoadingUnLocodeController @Inject() (
   service: UnLocodesService,
   navigatorProvider: LoadingAndUnloadingNavigatorProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PlaceOfLoadingUnLocodeView
+  view: UnLocodeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -49,8 +49,8 @@ class PlaceOfLoadingUnLocodeController @Inject() (
     implicit request =>
       service.getUnLocodes.map {
         unLocodeList =>
-          val form = formProvider("routeDetails.loading.placeOfLoadingUnLocode", unLocodeList)
-          val preparedForm = request.userAnswers.get(PlaceOfLoadingUnLocodePage) match {
+          val form = formProvider("routeDetails.loading.unLocode", unLocodeList)
+          val preparedForm = request.userAnswers.get(UnLocodePage) match {
             case None        => form
             case Some(value) => form.fill(value)
           }
@@ -63,7 +63,7 @@ class PlaceOfLoadingUnLocodeController @Inject() (
     implicit request =>
       service.getUnLocodes.flatMap {
         unLocodeList =>
-          val form = formProvider("routeDetails.loading.placeOfLoadingUnLocode", unLocodeList)
+          val form = formProvider("routeDetails.loading.unLocode", unLocodeList)
           form
             .bindFromRequest()
             .fold(
@@ -71,7 +71,7 @@ class PlaceOfLoadingUnLocodeController @Inject() (
               value =>
                 navigatorProvider().flatMap {
                   implicit navigator =>
-                    PlaceOfLoadingUnLocodePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                    UnLocodePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
                 }
             )
       }
