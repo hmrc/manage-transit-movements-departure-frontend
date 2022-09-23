@@ -23,37 +23,37 @@ import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingAddUnLocodeYesNoPage
+import pages.routeDetails.loadingAndUnloading.loading.AddUnLocodeYesNoPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingAddUnLocodeYesNoView
+import views.html.routeDetails.loadingAndUnloading.loading.AddUnLocodeYesNoView
 
 import scala.concurrent.Future
 
-class PlaceOfLoadingAddUnLocodeYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
+class AddUnLocodeYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
-  private val formProvider                             = new YesNoFormProvider()
-  private val form                                     = formProvider("routeDetails.loading.placeOfLoadingAddUnLocodeYesNo")
-  private val mode                                     = NormalMode
-  private lazy val placeOfLoadingAddUnLocodeYesNoRoute = routes.PlaceOfLoadingAddUnLocodeYesNoController.onPageLoad(lrn, mode).url
+  private val formProvider               = new YesNoFormProvider()
+  private val form                       = formProvider("routeDetails.loading.addUnLocodeYesNo")
+  private val mode                       = NormalMode
+  private lazy val addUnLocodeYesNoRoute = routes.AddUnLocodeYesNoController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[LoadingAndUnloadingNavigatorProvider]).toInstance(fakeLoadingNavigatorProvider))
 
-  "PlaceOfLoadingAddUnLocodeYesNo Controller" - {
+  "AddUnLocodeYesNo Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, placeOfLoadingAddUnLocodeYesNoRoute)
+      val request = FakeRequest(GET, addUnLocodeYesNoRoute)
       val result  = route(app, request).value
 
-      val view = injector.instanceOf[PlaceOfLoadingAddUnLocodeYesNoView]
+      val view = injector.instanceOf[AddUnLocodeYesNoView]
 
       status(result) mustEqual OK
 
@@ -63,16 +63,16 @@ class PlaceOfLoadingAddUnLocodeYesNoControllerSpec extends SpecBase with AppWith
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(PlaceOfLoadingAddUnLocodeYesNoPage, true)
+      val userAnswers = emptyUserAnswers.setValue(AddUnLocodeYesNoPage, true)
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, placeOfLoadingAddUnLocodeYesNoRoute)
+      val request = FakeRequest(GET, addUnLocodeYesNoRoute)
 
       val result = route(app, request).value
 
       val filledForm = form.bind(Map("value" -> "true"))
 
-      val view = injector.instanceOf[PlaceOfLoadingAddUnLocodeYesNoView]
+      val view = injector.instanceOf[AddUnLocodeYesNoView]
 
       status(result) mustEqual OK
 
@@ -86,7 +86,7 @@ class PlaceOfLoadingAddUnLocodeYesNoControllerSpec extends SpecBase with AppWith
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, placeOfLoadingAddUnLocodeYesNoRoute)
+      val request = FakeRequest(POST, addUnLocodeYesNoRoute)
         .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
@@ -101,14 +101,14 @@ class PlaceOfLoadingAddUnLocodeYesNoControllerSpec extends SpecBase with AppWith
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, placeOfLoadingAddUnLocodeYesNoRoute).withFormUrlEncodedBody(("value", ""))
+      val request   = FakeRequest(POST, addUnLocodeYesNoRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[PlaceOfLoadingAddUnLocodeYesNoView]
+      val view = injector.instanceOf[AddUnLocodeYesNoView]
 
       contentAsString(result) mustEqual
         view(boundForm, lrn, mode)(request, messages).toString
@@ -118,7 +118,7 @@ class PlaceOfLoadingAddUnLocodeYesNoControllerSpec extends SpecBase with AppWith
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, placeOfLoadingAddUnLocodeYesNoRoute)
+      val request = FakeRequest(GET, addUnLocodeYesNoRoute)
 
       val result = route(app, request).value
 
@@ -131,7 +131,7 @@ class PlaceOfLoadingAddUnLocodeYesNoControllerSpec extends SpecBase with AppWith
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, placeOfLoadingAddUnLocodeYesNoRoute)
+      val request = FakeRequest(POST, addUnLocodeYesNoRoute)
         .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value

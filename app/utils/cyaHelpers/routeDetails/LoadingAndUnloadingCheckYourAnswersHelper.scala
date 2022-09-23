@@ -26,9 +26,9 @@ import utils.cyaHelpers.AnswersHelper
 class LoadingAndUnloadingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
   def addLoadingUnLocode: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
-    page = loading.PlaceOfLoadingAddUnLocodeYesNoPage,
+    page = loading.AddUnLocodeYesNoPage,
     formatAnswer = formatAsYesOrNo,
-    prefix = "routeDetails.loading.placeOfLoadingAddUnLocodeYesNo",
+    prefix = "routeDetails.loading.addUnLocodeYesNo",
     id = Some("add-loading-un-locode")
   )
 

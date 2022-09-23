@@ -37,7 +37,7 @@ class LoadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
 
       "when addUnLocode is Yes" in {
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(PlaceOfLoadingAddUnLocodeYesNoPage)(true)
+          .unsafeSetVal(AddUnLocodeYesNoPage)(true)
           .unsafeSetVal(PlaceOfLoadingUnLocodePage)(unLocode)
           .unsafeSetVal(AddExtraInformationYesNoPage)(true)
           .unsafeSetVal(PlaceOfLoadingCountryPage)(country)
@@ -55,7 +55,7 @@ class LoadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
 
       "when addUnLocode is No" in {
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(PlaceOfLoadingAddUnLocodeYesNoPage)(false)
+          .unsafeSetVal(AddUnLocodeYesNoPage)(false)
           .unsafeSetVal(PlaceOfLoadingCountryPage)(country)
           .unsafeSetVal(PlaceOfLoadingLocationPage)(loadingPlace)
 
@@ -74,7 +74,7 @@ class LoadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generat
       "when  add UnLocode is Yes but UnLocode has no value" in {
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(PlaceOfLoadingAddUnLocodeYesNoPage)(true)
+          .unsafeSetVal(AddUnLocodeYesNoPage)(true)
 
         val result: EitherType[LoadingDomain] = UserAnswersReader[LoadingDomain].run(userAnswers)
 

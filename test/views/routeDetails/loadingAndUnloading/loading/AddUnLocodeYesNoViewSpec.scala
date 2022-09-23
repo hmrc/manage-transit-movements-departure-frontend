@@ -20,14 +20,14 @@ import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingAddUnLocodeYesNoView
+import views.html.routeDetails.loadingAndUnloading.loading.AddUnLocodeYesNoView
 
-class PlaceOfLoadingAddUnLocodeYesNoViewSpec extends YesNoViewBehaviours {
+class AddUnLocodeYesNoViewSpec extends YesNoViewBehaviours {
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[PlaceOfLoadingAddUnLocodeYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[AddUnLocodeYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.loading.placeOfLoadingAddUnLocodeYesNo"
+  override val prefix: String = "routeDetails.loading.addUnLocodeYesNo"
 
   behave like pageWithTitle()
 
