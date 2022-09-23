@@ -172,13 +172,10 @@ traderDetails.holderOfTransit.eoriYesNo.change.hidden = if you know the transit 
 traderDetails.holderOfTransit.eori.title = What is the transit holder’s EORI number?
 traderDetails.holderOfTransit.eori.heading = What is the transit holder’s EORI number?
 traderDetails.holderOfTransit.eori.checkYourAnswersLabel = Transit holder’s EORI number
-traderDetails.holderOfTransit.eori.hint = This will start GB or XI followed by 12 or 15 numbers, for example GB123456789000.
+traderDetails.holderOfTransit.eori.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.\n Or you can enter a Trader Identification Number (TIN) instead.
 traderDetails.holderOfTransit.eori.error.required = Enter the transit holder’s EORI number
 traderDetails.holderOfTransit.eori.error.maxLength = The transit holder’s EORI number must be 17 characters or less
-traderDetails.holderOfTransit.eori.error.minLength = The transit holder’s EORI number must be 14 characters or more
 traderDetails.holderOfTransit.eori.error.invalidCharacters = The transit holder’s EORI number must only include letters a to z and numbers 0 to 9
-traderDetails.holderOfTransit.eori.error.invalidFormat = The transit holder’s EORI number must start with 2 letters, such as GB or XI, followed by up to 15 numbers
-traderDetails.holderOfTransit.eori.error.prefix = The transit holder’s EORI number must start with 2 letters, such as GB or XI
 traderDetails.holderOfTransit.eori.change.hidden = transit holder’s EORI number
 
 traderDetails.holderOfTransit.tirIdentificationYesNo.title = Is the TIR holder’s identification number known?

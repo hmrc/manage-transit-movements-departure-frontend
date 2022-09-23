@@ -28,14 +28,9 @@ class EoriNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavio
 
   private val requiredKey          = s"$prefix.error.required"
   private val maxLengthKey         = s"$prefix.error.maxLength"
-  private val minLengthKey         = s"$prefix.error.minLength"
   private val invalidCharactersKey = s"$prefix.error.invalidCharacters"
-  private val invalidFormatKey     = s"$prefix.error.invalidFormat"
 
   private val form = new EoriNumberFormProvider()(prefix)
-
-  private val validPrefixes = Seq("GB", "gb", "Gb", "gB", "XI", "xi", "Xi", "xI")
-  private val prefixGen     = Gen.oneOf(validPrefixes)
 
   ".value" - {
 
@@ -61,43 +56,12 @@ class EoriNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavio
       invalidKey = invalidCharactersKey
     )
 
-    "must not bind strings with correct prefix and suffix but over max length" in {
+    "must not bind strings over max length" in {
       val expectedError = FormError(fieldName, maxLengthKey, Seq(maxEoriNumberLength))
 
       val gen = for {
-        prefix <- prefixGen
-        suffix <- stringsLongerThan(maxEoriNumberLength - prefix.length, Gen.numChar)
-      } yield prefix + suffix
-
-      forAll(gen) {
-        invalidString =>
-          val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
-          result.errors must contain(expectedError)
-      }
-    }
-
-    "must not bind strings with correct prefix and suffix but under min length" in {
-      val expectedError = FormError(fieldName, minLengthKey, Seq(minEoriNumberLength))
-
-      val gen = for {
-        prefix <- prefixGen
-        suffix <- stringsWithMaxLength(minEoriNumberLength - prefix.length - 1, Gen.numChar)
-      } yield prefix + suffix
-
-      forAll(gen) {
-        invalidString =>
-          val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
-          result.errors must contain(expectedError)
-      }
-    }
-
-    "must not bind strings with correct prefix but invalid suffix" in {
-      val expectedError = FormError(fieldName, invalidFormatKey, Seq(eoriNumberRegex.regex))
-
-      val gen = for {
-        prefix <- prefixGen
-        suffix <- stringsLongerThan(maxEoriNumberLength - prefix.length, Gen.alphaNumChar)
-      } yield prefix + suffix
+        eori <- stringsLongerThan(maxEoriNumberLength, Gen.alphaNumChar)
+      } yield eori
 
       forAll(gen) {
         invalidString =>
