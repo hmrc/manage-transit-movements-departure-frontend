@@ -21,33 +21,33 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
-import pages.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingAddExtraInformationYesNoPage
+import pages.routeDetails.loadingAndUnloading.loading.AddExtraInformationYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingAddExtraInformationYesNoView
+import views.html.routeDetails.loadingAndUnloading.loading.AddExtraInformationYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PlaceOfLoadingAddExtraInformationYesNoController @Inject() (
+class AddExtraInformationYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LoadingAndUnloadingNavigatorProvider,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PlaceOfLoadingAddExtraInformationYesNoView
+  view: AddExtraInformationYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.loading.placeOfLoadingAddExtraInformationYesNo")
+  private val form = formProvider("routeDetails.loading.addExtraInformationYesNo")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(PlaceOfLoadingAddExtraInformationYesNoPage) match {
+      val preparedForm = request.userAnswers.get(AddExtraInformationYesNoPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -64,7 +64,7 @@ class PlaceOfLoadingAddExtraInformationYesNoController @Inject() (
           value =>
             navigatorProvider().flatMap {
               implicit navigator =>
-                PlaceOfLoadingAddExtraInformationYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                AddExtraInformationYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
             }
         )
   }

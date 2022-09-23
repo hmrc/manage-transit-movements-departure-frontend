@@ -37,12 +37,12 @@ class PlaceOfLoadingAddUnLocodeYesNoPageSpec extends PageBehaviours {
             (unLocode, bool) =>
               val preChange = emptyUserAnswers
                 .setValue(PlaceOfLoadingUnLocodePage, unLocode)
-                .setValue(PlaceOfLoadingAddExtraInformationYesNoPage, bool)
+                .setValue(AddExtraInformationYesNoPage, bool)
 
               val postChange = preChange.setValue(PlaceOfLoadingAddUnLocodeYesNoPage, false)
 
               postChange.get(PlaceOfLoadingUnLocodePage) mustNot be(defined)
-              postChange.get(PlaceOfLoadingAddExtraInformationYesNoPage) mustNot be(defined)
+              postChange.get(AddExtraInformationYesNoPage) mustNot be(defined)
           }
         }
       }
@@ -53,12 +53,12 @@ class PlaceOfLoadingAddUnLocodeYesNoPageSpec extends PageBehaviours {
             (unLocode, bool) =>
               val preChange = emptyUserAnswers
                 .setValue(PlaceOfLoadingUnLocodePage, unLocode)
-                .setValue(PlaceOfLoadingAddExtraInformationYesNoPage, bool)
+                .setValue(AddExtraInformationYesNoPage, bool)
 
               val postChange = preChange.setValue(PlaceOfLoadingAddUnLocodeYesNoPage, true)
 
               postChange.get(PlaceOfLoadingUnLocodePage) must be(defined)
-              postChange.get(PlaceOfLoadingAddExtraInformationYesNoPage) must be(defined)
+              postChange.get(AddExtraInformationYesNoPage) must be(defined)
           }
         }
       }

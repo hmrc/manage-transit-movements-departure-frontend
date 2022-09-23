@@ -25,14 +25,14 @@ import play.api.mvc.Call
 
 import scala.util.Try
 
-case object PlaceOfLoadingAddExtraInformationYesNoPage extends QuestionPage[Boolean] {
+case object AddExtraInformationYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = LoadingSection.path \ toString
 
   override def toString: String = "addLocationYesNo"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.PlaceOfLoadingAddExtraInformationYesNoController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.AddExtraInformationYesNoController.onPageLoad(userAnswers.lrn, mode))
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {

@@ -40,9 +40,9 @@ class LoadingAndUnloadingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: 
   )
 
   def addLoadingCountryAndLocation: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
-    page = loading.PlaceOfLoadingAddExtraInformationYesNoPage,
+    page = loading.AddExtraInformationYesNoPage,
     formatAnswer = formatAsYesOrNo,
-    prefix = "routeDetails.loading.placeOfLoadingAddExtraInformationYesNo",
+    prefix = "routeDetails.loading.addExtraInformationYesNo",
     id = Some("add-loading-country-and-location")
   )
 

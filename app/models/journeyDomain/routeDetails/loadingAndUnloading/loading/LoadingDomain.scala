@@ -20,11 +20,7 @@ import cats.implicits._
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
 import models.reference.UnLocode
-import pages.routeDetails.loadingAndUnloading.loading.{
-  PlaceOfLoadingAddExtraInformationYesNoPage,
-  PlaceOfLoadingAddUnLocodeYesNoPage,
-  PlaceOfLoadingUnLocodePage
-}
+import pages.routeDetails.loadingAndUnloading.loading.{AddExtraInformationYesNoPage, PlaceOfLoadingAddUnLocodeYesNoPage, PlaceOfLoadingUnLocodePage}
 
 case class LoadingDomain(
   unLocode: Option[UnLocode],
@@ -40,7 +36,7 @@ object LoadingDomain {
 
     implicit val additionalInformationReads: UserAnswersReader[Option[AdditionalInformationDomain]] =
       PlaceOfLoadingAddUnLocodeYesNoPage.reader.flatMap {
-        case true  => PlaceOfLoadingAddExtraInformationYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalInformationDomain])
+        case true  => AddExtraInformationYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalInformationDomain])
         case false => UserAnswersReader[AdditionalInformationDomain].map(Some(_))
       }
 

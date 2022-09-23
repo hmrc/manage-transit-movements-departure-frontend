@@ -20,15 +20,15 @@ import models.reference.Country
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
-class PlaceOfLoadingAddExtraInformationYesNoPageSpec extends PageBehaviours {
+class AddExtraInformationYesNoPageSpec extends PageBehaviours {
 
-  "PlaceOfLoadingAddExtraInformationYesNoPage" - {
+  "AddExtraInformationYesNoPage" - {
 
-    beRetrievable[Boolean](PlaceOfLoadingAddExtraInformationYesNoPage)
+    beRetrievable[Boolean](AddExtraInformationYesNoPage)
 
-    beSettable[Boolean](PlaceOfLoadingAddExtraInformationYesNoPage)
+    beSettable[Boolean](AddExtraInformationYesNoPage)
 
-    beRemovable[Boolean](PlaceOfLoadingAddExtraInformationYesNoPage)
+    beRemovable[Boolean](AddExtraInformationYesNoPage)
 
     "cleanup" - {
       "when NO selected" - {
@@ -39,7 +39,7 @@ class PlaceOfLoadingAddExtraInformationYesNoPageSpec extends PageBehaviours {
                 .setValue(PlaceOfLoadingCountryPage, country)
                 .setValue(PlaceOfLoadingLocationPage, str)
 
-              val postChange = preChange.setValue(PlaceOfLoadingAddExtraInformationYesNoPage, false)
+              val postChange = preChange.setValue(AddExtraInformationYesNoPage, false)
 
               postChange.get(PlaceOfLoadingCountryPage) mustNot be(defined)
               postChange.get(PlaceOfLoadingLocationPage) mustNot be(defined)
@@ -55,7 +55,7 @@ class PlaceOfLoadingAddExtraInformationYesNoPageSpec extends PageBehaviours {
                 .setValue(PlaceOfLoadingCountryPage, country)
                 .setValue(PlaceOfLoadingLocationPage, str)
 
-              val postChange = preChange.setValue(PlaceOfLoadingAddExtraInformationYesNoPage, true)
+              val postChange = preChange.setValue(AddExtraInformationYesNoPage, true)
 
               postChange.get(PlaceOfLoadingCountryPage) must be(defined)
               postChange.get(PlaceOfLoadingLocationPage) must be(defined)

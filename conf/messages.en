@@ -916,12 +916,12 @@ routeDetails.loading.placeOfLoadingUnLocode.error.required = Enter the UN/LOCODE
 routeDetails.loading.placeOfLoadingUnLocode.error.invalidCharacters = The UN/LOCODE for the place of loading must only include letters a to z and spaces
 routeDetails.loading.placeOfLoadingUnLocode.error.maxLength = The UN/LOCODE for the place of loading must be 5 characters long
 
-routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.title = Do you want to add extra information for the place of loading?
-routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.heading = Do you want to add extra information for the place of loading?
-routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.paragraph = This includes the country and location of loading.
-routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.checkYourAnswersLabel = Do you want to add extra information for the place of loading?
-routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.change.hidden = if you want to add extra information for the place of loading
-routeDetails.loading.placeOfLoadingAddExtraInformationYesNo.error.required = Select yes if you want to add extra information for the place of loading
+routeDetails.loading.addExtraInformationYesNo.title = Do you want to add extra information for the place of loading?
+routeDetails.loading.addExtraInformationYesNo.heading = Do you want to add extra information for the place of loading?
+routeDetails.loading.addExtraInformationYesNo.paragraph = This includes the country and location of loading.
+routeDetails.loading.addExtraInformationYesNo.checkYourAnswersLabel = Do you want to add extra information for the place of loading?
+routeDetails.loading.addExtraInformationYesNo.change.hidden = if you want to add extra information for the place of loading
+routeDetails.loading.addExtraInformationYesNo.error.required = Select yes if you want to add extra information for the place of loading
 
 routeDetails.loading.placeOfLoadingLocation.title = Where in {0} is the place of loading?
 routeDetails.loading.placeOfLoadingLocation.heading = Where in {0} is the place of loading?

@@ -120,7 +120,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
 
     "addLoadingCountryAndLocation" - {
       "must return None" - {
-        "when PlaceOfLoadingAddExtraInformationYesNoPage is undefined" in {
+        "when AddExtraInformationYesNoPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new LoadingAndUnloadingCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -131,10 +131,10 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
       }
 
       "must return Some(Row)" - {
-        "when PlaceOfLoadingAddExtraInformationYesNoPage is defined" in {
+        "when AddExtraInformationYesNoPage is defined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val answers = emptyUserAnswers.setValue(loading.PlaceOfLoadingAddExtraInformationYesNoPage, true)
+              val answers = emptyUserAnswers.setValue(loading.AddExtraInformationYesNoPage, true)
               val helper  = new LoadingAndUnloadingCheckYourAnswersHelper(answers, mode)
               val result  = helper.addLoadingCountryAndLocation
 
@@ -147,7 +147,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = loadingRoutes.PlaceOfLoadingAddExtraInformationYesNoController.onPageLoad(answers.lrn, mode).url,
+                          href = loadingRoutes.AddExtraInformationYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add extra information for the place of loading"),
                           attributes = Map("id" -> "add-loading-country-and-location")
                         )

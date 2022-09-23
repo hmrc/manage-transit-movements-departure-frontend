@@ -35,7 +35,7 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
           "must render 3 rows" in {
             val initialAnswers = emptyUserAnswers
               .setValue(loading.PlaceOfLoadingAddUnLocodeYesNoPage, true)
-              .setValue(loading.PlaceOfLoadingAddExtraInformationYesNoPage, false)
+              .setValue(loading.AddExtraInformationYesNoPage, false)
 
             forAll(arbitraryLoadingAnswers(initialAnswers), arbitrary[Mode]) {
               (userAnswers, mode) =>
@@ -51,7 +51,7 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
           "must render 5 rows" in {
             val initialAnswers = emptyUserAnswers
               .setValue(loading.PlaceOfLoadingAddUnLocodeYesNoPage, true)
-              .setValue(loading.PlaceOfLoadingAddExtraInformationYesNoPage, true)
+              .setValue(loading.AddExtraInformationYesNoPage, true)
 
             forAll(arbitraryLoadingAnswers(initialAnswers), arbitrary[Mode]) {
               (userAnswers, mode) =>

@@ -23,37 +23,37 @@ import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingAddExtraInformationYesNoPage
+import pages.routeDetails.loadingAndUnloading.loading.AddExtraInformationYesNoPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingAddExtraInformationYesNoView
+import views.html.routeDetails.loadingAndUnloading.loading.AddExtraInformationYesNoView
 
 import scala.concurrent.Future
 
-class PlaceOfLoadingAddExtraInformationYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
+class AddExtraInformationYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
-  private val formProvider                                     = new YesNoFormProvider()
-  private val form                                             = formProvider("routeDetails.loading.placeOfLoadingAddExtraInformationYesNo")
-  private val mode                                             = NormalMode
-  private lazy val placeOfLoadingAddExtraInformationYesNoRoute = routes.PlaceOfLoadingAddExtraInformationYesNoController.onPageLoad(lrn, mode).url
+  private val formProvider                       = new YesNoFormProvider()
+  private val form                               = formProvider("routeDetails.loading.addExtraInformationYesNo")
+  private val mode                               = NormalMode
+  private lazy val addExtraInformationYesNoRoute = routes.AddExtraInformationYesNoController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[LoadingAndUnloadingNavigatorProvider]).toInstance(fakeLoadingNavigatorProvider))
 
-  "PlaceOfLoadingAddExtraInformationYesNo Controller" - {
+  "AddExtraInformationYesNo Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, placeOfLoadingAddExtraInformationYesNoRoute)
+      val request = FakeRequest(GET, addExtraInformationYesNoRoute)
       val result  = route(app, request).value
 
-      val view = injector.instanceOf[PlaceOfLoadingAddExtraInformationYesNoView]
+      val view = injector.instanceOf[AddExtraInformationYesNoView]
 
       status(result) mustEqual OK
 
@@ -63,16 +63,16 @@ class PlaceOfLoadingAddExtraInformationYesNoControllerSpec extends SpecBase with
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(PlaceOfLoadingAddExtraInformationYesNoPage, true)
+      val userAnswers = emptyUserAnswers.setValue(AddExtraInformationYesNoPage, true)
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, placeOfLoadingAddExtraInformationYesNoRoute)
+      val request = FakeRequest(GET, addExtraInformationYesNoRoute)
 
       val result = route(app, request).value
 
       val filledForm = form.bind(Map("value" -> "true"))
 
-      val view = injector.instanceOf[PlaceOfLoadingAddExtraInformationYesNoView]
+      val view = injector.instanceOf[AddExtraInformationYesNoView]
 
       status(result) mustEqual OK
 
@@ -86,7 +86,7 @@ class PlaceOfLoadingAddExtraInformationYesNoControllerSpec extends SpecBase with
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, placeOfLoadingAddExtraInformationYesNoRoute)
+      val request = FakeRequest(POST, addExtraInformationYesNoRoute)
         .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
@@ -100,14 +100,14 @@ class PlaceOfLoadingAddExtraInformationYesNoControllerSpec extends SpecBase with
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, placeOfLoadingAddExtraInformationYesNoRoute).withFormUrlEncodedBody(("value", ""))
+      val request   = FakeRequest(POST, addExtraInformationYesNoRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[PlaceOfLoadingAddExtraInformationYesNoView]
+      val view = injector.instanceOf[AddExtraInformationYesNoView]
 
       contentAsString(result) mustEqual
         view(boundForm, lrn, mode)(request, messages).toString
@@ -117,7 +117,7 @@ class PlaceOfLoadingAddExtraInformationYesNoControllerSpec extends SpecBase with
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, placeOfLoadingAddExtraInformationYesNoRoute)
+      val request = FakeRequest(GET, addExtraInformationYesNoRoute)
 
       val result = route(app, request).value
 
@@ -130,7 +130,7 @@ class PlaceOfLoadingAddExtraInformationYesNoControllerSpec extends SpecBase with
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, placeOfLoadingAddExtraInformationYesNoRoute)
+      val request = FakeRequest(POST, addExtraInformationYesNoRoute)
         .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
