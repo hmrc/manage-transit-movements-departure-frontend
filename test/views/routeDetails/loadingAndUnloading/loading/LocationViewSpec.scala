@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.routeDetails.loading
+package views.routeDetails.loadingAndUnloading.loading
 
 import forms.Constants.locationMaxLength
 import forms.LocationFormProvider

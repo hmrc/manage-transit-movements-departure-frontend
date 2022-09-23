@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.routeDetails.unloading
+package views.routeDetails.loadingAndUnloading.unloading
 
 import models.NormalMode
 import play.api.data.Form
