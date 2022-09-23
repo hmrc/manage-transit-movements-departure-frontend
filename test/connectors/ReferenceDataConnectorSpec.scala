@@ -44,25 +44,6 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
   private lazy val connector: ReferenceDataConnector = app.injector.instanceOf[ReferenceDataConnector]
 
-  private val customsOfficeResponseJson: String =
-    """
-      |[
-      | {
-      |   "id" : "GB1",
-      |   "name" : "testName1",
-      |   "roles" : ["role1", "role2"],
-      |   "countryId" : "GB",
-      |   "phoneNumber" : "testPhoneNumber"
-      | },
-      | {
-      |   "id" : "GB2",
-      |   "name" : "testName2",
-      |   "countryId" : "GB",
-      |   "roles" : ["role1", "role2"]
-      | }
-      |]
-      |""".stripMargin
-
   private val customsOfficeDestinationResponseJson: String =
     """
       |[
@@ -91,107 +72,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       |]
       |""".stripMargin
 
-  private val customsOfficeJson: String =
-    """
-      |  {
-      |    "id": "GB1",
-      |    "name": "Data1",
-      |    "roles" : ["role1", "role2"],
-      |    "countryId" : "GB",
-      |    "phoneNumber" : "testPhoneNumber"
-      |  }
-      |""".stripMargin
-
   "Reference Data" - {
-
-    "getCustomsOffices" - {
-      "must return a successful future response with a sequence of CustomsOffices" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/customs-offices"))
-            .willReturn(okJson(customsOfficeResponseJson))
-        )
-
-        val expectedResult = Seq(
-          CustomsOffice("GB1", "testName1", Some("testPhoneNumber")),
-          CustomsOffice("GB2", "testName2", None)
-        )
-
-        connector.getCustomsOffices().futureValue mustBe expectedResult
-      }
-
-      "must return a successful future response with roles with a sequence of CustomsOffices" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/customs-offices?role=NPM"))
-            .willReturn(okJson(customsOfficeResponseJson))
-        )
-
-        val expectedResult = Seq(
-          CustomsOffice("GB1", "testName1", Some("testPhoneNumber")),
-          CustomsOffice("GB2", "testName2", None)
-        )
-
-        connector.getCustomsOffices(Seq("NPM")).futureValue mustBe expectedResult
-      }
-
-      "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$baseUrl/customs-offices", connector.getCustomsOffices())
-      }
-    }
-
-    "getCustomsOfficesOfTheCountry" - {
-      "must return a successful future response with a sequence of CustomsOffices" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/customs-offices/GB"))
-            .willReturn(okJson(customsOfficeResponseJson))
-        )
-
-        val expectedResult =
-          CustomsOfficeList(
-            Seq(
-              CustomsOffice("GB1", "testName1", Some("testPhoneNumber")),
-              CustomsOffice("GB2", "testName2", None)
-            )
-          )
-
-        connector.getCustomsOfficesForCountry(CountryCode("GB")).futureValue mustBe expectedResult
-      }
-
-      "must return a successful future response when roles are defined with a sequence of CustomsOffices" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/customs-offices/GB?role=TRA"))
-            .willReturn(okJson(customsOfficeResponseJson))
-        )
-
-        val expectedResult =
-          CustomsOfficeList(
-            Seq(
-              CustomsOffice("GB1", "testName1", Some("testPhoneNumber")),
-              CustomsOffice("GB2", "testName2", None)
-            )
-          )
-
-        connector.getCustomsOfficesForCountry(CountryCode("GB"), Seq("TRA")).futureValue mustBe expectedResult
-      }
-
-      "must return a successful future response when CustomsOffice is not found" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/customs-offices/AR?role=TRA")).willReturn(
-            aResponse()
-              .withStatus(NOT_FOUND)
-              .withHeader(CONTENT_TYPE, JSON)
-          )
-        )
-
-        val expectedResult =
-          CustomsOfficeList(Nil)
-
-        connector.getCustomsOfficesForCountry(CountryCode("AR"), Seq("TRA")).futureValue mustBe expectedResult
-      }
-
-      "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$baseUrl/customs-offices/GB", connector.getCustomsOfficesForCountry(CountryCode("GB")))
-      }
-    }
 
     "getCustomsOfficesOfTransitForCountry" - {
       "must return a successful future response with a sequence of CustomsOffices" in {
@@ -293,25 +174,6 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
       "must return an exception when an error response is returned" in {
         checkErrorResponse(s"/$baseUrl/countries?customsOfficeRole=ANY", connector.getCountries(Nil))
-      }
-    }
-
-    "getCustomsOffice" - {
-
-      "must return a Customs Office when successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/customs-office/GB1"))
-            .willReturn(okJson(customsOfficeJson))
-        )
-
-        val expectedResult: CustomsOffice = CustomsOffice("GB1", "Data1", Some("testPhoneNumber"))
-
-        connector.getCustomsOffice("GB1").futureValue mustEqual expectedResult
-      }
-
-      "must return an exception when an error response is returned" in {
-
-        checkErrorResponse(s"/$baseUrl/customs-office/GB1", connector.getCustomsOffice("GB1"))
       }
     }
 

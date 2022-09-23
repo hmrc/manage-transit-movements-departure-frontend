@@ -66,7 +66,7 @@ class CountryOfDestinationControllerSpec extends SpecBase with AppWithDefaultMoc
 
     "must return OK and the correct view for a GET" in {
 
-      when(mockCountriesService.getDestinationCountries(any(), any())(any()))
+      when(mockCountriesService.getDestinationCountries(any())(any()))
         .thenReturn(Future.successful(countryList))
 
       setExistingUserAnswers(emptyUserAnswers)
@@ -85,7 +85,7 @@ class CountryOfDestinationControllerSpec extends SpecBase with AppWithDefaultMoc
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      when(mockCountriesService.getDestinationCountries(any(), any())(any()))
+      when(mockCountriesService.getDestinationCountries(any())(any()))
         .thenReturn(Future.successful(countryList))
 
       val userAnswers = emptyUserAnswers.setValue(CountryOfDestinationPage, country1)
@@ -109,7 +109,7 @@ class CountryOfDestinationControllerSpec extends SpecBase with AppWithDefaultMoc
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      when(mockCountriesService.getDestinationCountries(any(), any())(any()))
+      when(mockCountriesService.getDestinationCountries(any())(any()))
         .thenReturn(Future.successful(countryList))
       when(mockCustomsOfficesService.getCustomsOfficesOfDestinationForCountry(any())(any()))
         .thenReturn(Future.successful(arbitrary[CustomsOfficeList].sample.value))
@@ -128,7 +128,7 @@ class CountryOfDestinationControllerSpec extends SpecBase with AppWithDefaultMoc
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      when(mockCountriesService.getDestinationCountries(any(), any())(any()))
+      when(mockCountriesService.getDestinationCountries(any())(any()))
         .thenReturn(Future.successful(countryList))
 
       setExistingUserAnswers(emptyUserAnswers)
@@ -150,7 +150,7 @@ class CountryOfDestinationControllerSpec extends SpecBase with AppWithDefaultMoc
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      when(mockCountriesService.getDestinationCountries(any(), any())(any()))
+      when(mockCountriesService.getDestinationCountries(any())(any()))
         .thenReturn(Future.successful(countryList))
       when(mockCustomsOfficesService.getCustomsOfficesOfDestinationForCountry(any())(any()))
         .thenReturn(Future.successful(CustomsOfficeList(Nil)))
