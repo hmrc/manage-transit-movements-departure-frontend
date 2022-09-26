@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package utils.cyaHelpers.routeDetails
+package utils.cyaHelpers.routeDetails.transit
 
 import models.reference.{Country, CustomsOffice}
 import models.{DateTime, Index, Mode, UserAnswers}

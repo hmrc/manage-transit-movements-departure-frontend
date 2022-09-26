@@ -27,6 +27,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.loadingAndUnloading._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
+import utils.cyaHelpers.routeDetails.loadingAndUnloading.LoadingAndUnloadingCheckYourAnswersHelper
 
 class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 

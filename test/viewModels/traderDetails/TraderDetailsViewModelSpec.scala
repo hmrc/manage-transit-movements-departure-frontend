@@ -19,16 +19,16 @@ package viewModels.traderDetails
 import base.SpecBase
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import viewModels.traderDetails.TraderDetailsViewModel.TraderDetailsViewModelProvider
 
 class TraderDetailsViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
-
-  private val viewModel = injector.instanceOf[TraderDetailsViewModel]
 
   "apply" - {
     "must return all sections" in {
       forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers)) {
         answers =>
-          val sections = viewModel.apply(answers)
+          val viewModelProvider = injector.instanceOf[TraderDetailsViewModelProvider]
+          val sections          = viewModelProvider.apply(answers).sections
 
           sections.size mustBe 6
           sections.head.sectionTitle.get mustBe "Transit holder"

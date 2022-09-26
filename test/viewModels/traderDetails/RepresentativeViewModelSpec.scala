@@ -18,17 +18,21 @@ package viewModels.traderDetails
 
 import base.SpecBase
 import generators.Generators
+import models.Mode
 import models.traderDetails.representative.RepresentativeCapacity.Direct
+import org.scalacheck.Arbitrary.arbitrary
 import pages.traderDetails.ActingAsRepresentativePage
 import pages.traderDetails.representative._
-import viewModels.traderDetails.RepresentativeViewModel.RepresentativeSectionViewModel
+import viewModels.traderDetails.RepresentativeViewModel.RepresentativeViewModelProvider
 
 class RepresentativeViewModelSpec extends SpecBase with Generators {
 
   "apply" - {
     "when user answers empty" - {
       "must return empty rows" in {
-        val sections = new RepresentativeSectionViewModel().apply(emptyUserAnswers)
+        val mode              = arbitrary[Mode].sample.value
+        val viewModelProvider = injector.instanceOf[RepresentativeViewModelProvider]
+        val sections          = viewModelProvider.apply(emptyUserAnswers, mode).sections
 
         sections.size mustBe 1
 
@@ -46,7 +50,9 @@ class RepresentativeViewModelSpec extends SpecBase with Generators {
           .setValue(CapacityPage, Direct)
           .setValue(TelephoneNumberPage, "phone")
 
-        val sections = new RepresentativeSectionViewModel().apply(answers)
+        val mode              = arbitrary[Mode].sample.value
+        val viewModelProvider = injector.instanceOf[RepresentativeViewModelProvider]
+        val sections          = viewModelProvider.apply(answers, mode).sections
 
         sections.size mustBe 1
 

@@ -19,7 +19,7 @@ package viewModels.routeDetails.exit
 import models.{Index, Mode, RichOptionalJsArray, UserAnswers}
 import pages.sections.routeDetails.exit.OfficesOfExitSection
 import play.api.i18n.Messages
-import utils.cyaHelpers.routeDetails.ExitCheckYourAnswersHelper
+import utils.cyaHelpers.routeDetails.exit.ExitCheckYourAnswersHelper
 import viewModels.Link
 import viewModels.sections.Section
 

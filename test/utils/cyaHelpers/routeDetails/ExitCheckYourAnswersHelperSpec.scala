@@ -24,6 +24,7 @@ import models.{Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
+import utils.cyaHelpers.routeDetails.exit.ExitCheckYourAnswersHelper
 import viewModels.ListItem
 
 class ExitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {

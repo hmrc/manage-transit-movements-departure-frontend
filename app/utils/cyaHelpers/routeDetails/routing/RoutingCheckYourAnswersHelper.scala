@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package utils.cyaHelpers.routeDetails
+package utils.cyaHelpers.routeDetails.routing
 
 import controllers.routeDetails.routing.index.routes
 import models.journeyDomain.routeDetails.routing.CountryOfRoutingDomain

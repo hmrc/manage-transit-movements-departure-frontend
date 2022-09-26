@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package utils.cyaHelpers.routeDetails
+package utils.cyaHelpers.routeDetails.locationOfGoods
 
 import models.reference.{CustomsOffice, UnLocode}
 import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress, UserAnswers}

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package utils.cyaHelpers.routeDetails
+package utils.cyaHelpers.routeDetails.loadingAndUnloading
 
 import models.reference.{Country, UnLocode}
 import models.{Mode, UserAnswers}
