@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.loadingAndUnloading.unloading
+package pages.routeDetails.loadingAndUnloading
 
 import pages.behaviours.PageBehaviours
 import pages.sections.routeDetails.unloading.UnloadingSection

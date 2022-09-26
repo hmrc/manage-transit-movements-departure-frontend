@@ -35,7 +35,7 @@ import scala.concurrent.Future
 class AddExtraInformationYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
   private val formProvider                       = new YesNoFormProvider()
-  private val form                               = formProvider("routeDetails.unloading.addExtraInformationYesNo")
+  private val form                               = formProvider("routeDetails.loadingAndUnloading.unloading.addExtraInformationYesNo")
   private val mode                               = NormalMode
   private lazy val addExtraInformationYesNoRoute = routes.AddExtraInformationYesNoController.onPageLoad(lrn, mode).url
 

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package pages.routeDetails.loadingAndUnloading.unloading
+package pages.routeDetails.loadingAndUnloading
 
-import controllers.routeDetails.loadingAndUnloading.unloading.routes
+import controllers.routeDetails.loadingAndUnloading.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.routeDetails.RouteDetailsSection

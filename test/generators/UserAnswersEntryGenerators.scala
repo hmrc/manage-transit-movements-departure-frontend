@@ -21,6 +21,7 @@ import models.reference._
 import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
+import pages.routeDetails.loadingAndUnloading.AddPlaceOfUnloadingPage
 import play.api.libs.json._
 import queries.Gettable
 
@@ -132,8 +133,7 @@ trait UserAnswersEntryGenerators {
       generateTransitAnswer orElse
       generateExitAnswer orElse
       generateLocationOfGoodsAnswer orElse
-      generateLoadingAnswer orElse
-      generateUnloadingAnswer
+      generateLoadingAndUnloadingAnswer
 
   private def generateRoutingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.routeDetails.routing._
@@ -204,6 +204,19 @@ trait UserAnswersEntryGenerators {
     {
       case NamePage            => Gen.alphaNumStr.map(JsString)
       case TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
+    }
+  }
+
+  private def generateLoadingAndUnloadingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.routeDetails.loadingAndUnloading._
+    {
+      val pf: PartialFunction[Gettable[_], Gen[JsValue]] = {
+        case AddPlaceOfUnloadingPage => arbitrary[Boolean].map(JsBoolean)
+      }
+
+      generateLoadingAnswer orElse
+        pf orElse
+        generateUnloadingAnswer
     }
   }
 

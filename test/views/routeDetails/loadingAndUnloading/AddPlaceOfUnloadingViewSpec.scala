@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package views.routeDetails.loadingAndUnloading.unloading
+package views.routeDetails.loadingAndUnloading
 
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.routeDetails.loadingAndUnloading.unloading.AddPlaceOfUnloadingView
+import views.html.routeDetails.loadingAndUnloading.AddPlaceOfUnloadingView
 
 class AddPlaceOfUnloadingViewSpec extends YesNoViewBehaviours {
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector.instanceOf[AddPlaceOfUnloadingView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.unloading.addPlaceOfUnloading"
+  override val prefix: String = "routeDetails.loadingAndUnloading.addPlaceOfUnloading"
 
   behave like pageWithTitle()
 

@@ -44,7 +44,7 @@ class UnLocodeViewSpec extends InputSelectViewBehaviours[UnLocode] with Generato
   override def applyView(form: Form[UnLocode]): HtmlFormat.Appendable =
     injector.instanceOf[UnLocodeView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.loading.unLocode"
+  override val prefix: String = "routeDetails.loadingAndUnloading.loading.unLocode"
 
   behave like pageWithTitle()
 

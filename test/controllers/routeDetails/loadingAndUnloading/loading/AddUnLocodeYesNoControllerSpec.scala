@@ -35,7 +35,7 @@ import scala.concurrent.Future
 class AddUnLocodeYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
   private val formProvider               = new YesNoFormProvider()
-  private val form                       = formProvider("routeDetails.loading.addUnLocodeYesNo")
+  private val form                       = formProvider("routeDetails.loadingAndUnloading.loading.addUnLocodeYesNo")
   private val mode                       = NormalMode
   private lazy val addUnLocodeYesNoRoute = routes.AddUnLocodeYesNoController.onPageLoad(lrn, mode).url
 

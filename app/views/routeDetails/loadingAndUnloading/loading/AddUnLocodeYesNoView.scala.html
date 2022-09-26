@@ -30,7 +30,7 @@
 @(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.loading.addUnLocodeYesNo.title"),
+    title = messages("routeDetails.loadingAndUnloading.loading.addUnLocodeYesNo.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -42,9 +42,9 @@
         @inputYesNo(
             field = form("value"),
             yesNoType = YesNoWithAdditionalHtml(
-                heading = messages("routeDetails.loading.addUnLocodeYesNo.heading"),
-                caption = Some(messages("routeDetails.loading.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.loading.addUnLocodeYesNo.paragraph")}</p>"""))
+                heading = messages("routeDetails.loadingAndUnloading.loading.addUnLocodeYesNo.heading"),
+                caption = Some(messages("routeDetails.loadingAndUnloading.loading.caption")),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.loadingAndUnloading.loading.addUnLocodeYesNo.paragraph")}</p>"""))
             )
 
         @button(attributes = Map("id" -> "submit"))

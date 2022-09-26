@@ -27,7 +27,7 @@ class AddUnLocodeYesNoViewSpec extends YesNoViewBehaviours {
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector.instanceOf[AddUnLocodeYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.unloading.addUnLocodeYesNo"
+  override val prefix: String = "routeDetails.loadingAndUnloading.unloading.addUnLocodeYesNo"
 
   behave like pageWithTitle()
 

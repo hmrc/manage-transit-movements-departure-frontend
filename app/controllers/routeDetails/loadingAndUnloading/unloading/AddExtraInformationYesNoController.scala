@@ -43,7 +43,7 @@ class AddExtraInformationYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.unloading.addExtraInformationYesNo")
+  private val form = formProvider("routeDetails.loadingAndUnloading.unloading.addExtraInformationYesNo")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

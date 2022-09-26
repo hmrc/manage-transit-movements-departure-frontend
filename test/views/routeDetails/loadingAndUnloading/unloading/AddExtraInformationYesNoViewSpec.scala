@@ -27,7 +27,7 @@ class AddExtraInformationYesNoViewSpec extends YesNoViewBehaviours {
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector.instanceOf[AddExtraInformationYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.unloading.addExtraInformationYesNo"
+  override val prefix: String = "routeDetails.loadingAndUnloading.unloading.addExtraInformationYesNo"
 
   behave like pageWithTitle()
 

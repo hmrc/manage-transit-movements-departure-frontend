@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.routeDetails.loadingAndUnloading.unloading.routes
+@import controllers.routeDetails.loadingAndUnloading.routes
 @import models.LocalReferenceNumber
 @import viewModels.components.InputYesNoViewModel._
 @import views.html.components.{Button, ErrorSummary, InputYesNo}
@@ -30,7 +30,7 @@
 @(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.unloading.addPlaceOfUnloading.title"),
+    title = messages("routeDetails.loadingAndUnloading.addPlaceOfUnloading.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -42,8 +42,8 @@
         @inputYesNo(
             field = form("value"),
             yesNoType = OrdinaryYesNo(
-                heading = messages("routeDetails.unloading.addPlaceOfUnloading.heading"),
-                caption = Some(messages("routeDetails.unloading.caption"))
+                heading = messages("routeDetails.loadingAndUnloading.addPlaceOfUnloading.heading"),
+                caption = Some(messages("routeDetails.loadingAndUnloading.unloading.caption"))
             )
         )
 

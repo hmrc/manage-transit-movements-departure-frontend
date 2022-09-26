@@ -40,7 +40,7 @@ class CountryControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
   private val countryList = CountryList(Seq(country1, country2))
 
   private val formProvider = new CountryFormProvider()
-  private val form         = formProvider("routeDetails.loading.country", countryList)
+  private val form         = formProvider("routeDetails.loadingAndUnloading.loading.country", countryList)
   private val mode         = NormalMode
 
   private val mockCountriesService: CountriesService = mock[CountriesService]

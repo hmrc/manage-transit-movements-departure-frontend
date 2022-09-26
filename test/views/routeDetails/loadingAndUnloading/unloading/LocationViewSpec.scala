@@ -27,7 +27,7 @@ import views.html.routeDetails.loadingAndUnloading.unloading.LocationView
 
 class LocationViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "routeDetails.unloading.location"
+  override val prefix: String = "routeDetails.loadingAndUnloading.unloading.location"
 
   private val location = nonEmptyString.sample.value
 

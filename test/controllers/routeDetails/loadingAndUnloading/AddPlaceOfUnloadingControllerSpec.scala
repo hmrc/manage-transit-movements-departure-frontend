@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails.loadingAndUnloading.unloading
+package controllers.routeDetails.loadingAndUnloading
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
@@ -23,19 +23,19 @@ import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.routeDetails.loadingAndUnloading.unloading.AddPlaceOfUnloadingPage
+import pages.routeDetails.loadingAndUnloading.AddPlaceOfUnloadingPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.routeDetails.loadingAndUnloading.unloading.AddPlaceOfUnloadingView
+import views.html.routeDetails.loadingAndUnloading.AddPlaceOfUnloadingView
 
 import scala.concurrent.Future
 
 class AddPlaceOfUnloadingControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
   private val formProvider                  = new YesNoFormProvider()
-  private val form                          = formProvider("routeDetails.unloading.addPlaceOfUnloading")
+  private val form                          = formProvider("routeDetails.loadingAndUnloading.addPlaceOfUnloading")
   private val mode                          = NormalMode
   private lazy val addPlaceOfUnloadingRoute = routes.AddPlaceOfUnloadingController.onPageLoad(lrn, mode).url
 

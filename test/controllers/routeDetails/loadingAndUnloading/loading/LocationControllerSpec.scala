@@ -39,7 +39,7 @@ class LocationControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
   private val country            = arbitrary[Country].sample.value
   private val countryName        = country.description
   private val formProvider       = new LocationFormProvider()
-  private val form               = formProvider("routeDetails.loading.location", countryName)
+  private val form               = formProvider("routeDetails.loadingAndUnloading.loading.location", countryName)
   private val mode               = NormalMode
   private lazy val locationRoute = routes.LocationController.onPageLoad(lrn, mode).url
 
