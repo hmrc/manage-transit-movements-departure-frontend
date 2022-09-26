@@ -686,6 +686,9 @@ routeDetails.transit.addAnotherOfficeOfTransit.maxLimit.label = You cannot add a
 routeDetails.transit.confirmRemoveOfficeOfTransit.title = Are you sure you want to remove {0} as an office of transit?
 routeDetails.transit.confirmRemoveOfficeOfTransit.heading = Are you sure you want to remove {0} as an office of transit?
 routeDetails.transit.confirmRemoveOfficeOfTransit.error.required = Select yes if you want to remove {0} as an office of transit
+routeDetails.transit.confirmRemoveOfficeOfTransit.default.title = Are you sure you want to remove this office of transit?
+routeDetails.transit.confirmRemoveOfficeOfTransit.default.heading = Are you sure you want to remove this office of transit?
+routeDetails.transit.confirmRemoveOfficeOfTransit.default.error.required = Select yes if you want to remove this office of transit
 
 routeDetails.transit.checkOfficeOfTransitAnswers.title = Check your answers
 routeDetails.transit.checkOfficeOfTransitAnswers.heading = Check your answers

@@ -21,11 +21,10 @@ import controllers.routeDetails.transit.{routes => transitRoutes}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.reference.CustomsOffice
-import models.requests.SpecificDataRequestProvider1
+import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode}
 import pages.routeDetails.transit.index.OfficeOfTransitPage
 import pages.sections.routeDetails.transit.OfficeOfTransitSection
-import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -41,42 +40,51 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ConfirmRemoveOfficeOfTransitView,
-  getMandatoryPage: SpecificDataRequiredActionProvider
+  view: ConfirmRemoveOfficeOfTransitView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private type Request = SpecificDataRequestProvider1[CustomsOffice]#SpecificDataRequest[_]
+  private case class DynamicHeading(prefix: String, args: String*)
 
-  private def form(implicit request: Request): Form[Boolean] =
-    formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit", request.arg.name)
-
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
-    .requireData(lrn)
-    .andThen(getMandatoryPage(OfficeOfTransitPage(index))) {
-      implicit request =>
-        Ok(view(form, lrn, mode, index, request.arg.name))
+  private def dynamicHeading(index: Index)(implicit request: DataRequest[_]): Option[DynamicHeading] =
+    request.userAnswers.get(OfficeOfTransitSection(index)) map {
+      _ =>
+        val prefix = "routeDetails.transit.confirmRemoveOfficeOfTransit"
+        request.userAnswers.get(OfficeOfTransitPage(index)) match {
+          case Some(CustomsOffice(_, name, _)) => DynamicHeading(prefix, name)
+          case None                            => DynamicHeading(s"$prefix.default")
+        }
     }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
-    .requireData(lrn)
-    .andThen(getMandatoryPage(OfficeOfTransitPage(index)))
-    .async {
-      implicit request =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index, request.arg.name))),
-            {
-              case true =>
-                OfficeOfTransitSection(index)
-                  .removeFromUserAnswers()
-                  .writeToSession()
-                  .navigateTo(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn, mode))
-              case false =>
-                Future.successful(Redirect(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn, mode)))
-            }
-          )
-    }
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn) {
+    implicit request =>
+      dynamicHeading(index) match {
+        case Some(DynamicHeading(prefix, args @ _*)) =>
+          Ok(view(formProvider(prefix, args: _*), lrn, mode, index, prefix, args: _*))
+        case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+      }
+  }
+
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
+    implicit request =>
+      dynamicHeading(index) match {
+        case Some(DynamicHeading(prefix, args @ _*)) =>
+          formProvider(prefix, args: _*)
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index, prefix, args: _*))),
+              {
+                case true =>
+                  OfficeOfTransitSection(index)
+                    .removeFromUserAnswers()
+                    .writeToSession()
+                    .navigateTo(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn, mode))
+                case false =>
+                  Future.successful(Redirect(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn, mode)))
+              }
+            )
+        case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+      }
+  }
 }
