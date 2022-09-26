@@ -16,6 +16,7 @@
 
 package views.routeDetails.transit.index
 
+import forms.YesNoFormProvider
 import generators.Generators
 import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
@@ -31,7 +32,7 @@ class ConfirmRemoveOfficeOfTransitViewSpec extends YesNoViewBehaviours with Gene
   private val mode = arbitrary[Mode].sample.value
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[ConfirmRemoveOfficeOfTransitView].apply(form, lrn, mode, index, transitOfficeName)(fakeRequest, messages)
+    injector.instanceOf[ConfirmRemoveOfficeOfTransitView].apply(form, lrn, mode, index, prefix, transitOfficeName)(fakeRequest, messages)
 
   override val prefix: String = "routeDetails.transit.confirmRemoveOfficeOfTransit"
 
@@ -46,4 +47,16 @@ class ConfirmRemoveOfficeOfTransitViewSpec extends YesNoViewBehaviours with Gene
   behave like pageWithRadioItems(args = Seq(transitOfficeName))
 
   behave like pageWithSubmitButton("Save and continue")
+
+  "when no office name is present in user answers" - {
+
+    val defaultPrefix = s"$prefix.default"
+    val form          = new YesNoFormProvider()(defaultPrefix)
+    val view          = injector.instanceOf[ConfirmRemoveOfficeOfTransitView].apply(form, lrn, mode, index, defaultPrefix)(fakeRequest, messages)
+    val doc           = parseView(view)
+
+    behave like pageWithTitle(doc, defaultPrefix)
+
+    behave like pageWithHeading(doc, defaultPrefix)
+  }
 }
