@@ -50,7 +50,7 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
   private type Request = SpecificDataRequestProvider1[CustomsOffice]#SpecificDataRequest[_]
 
   private def form(implicit request: Request): Form[Boolean] =
-    formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit", request.arg.name)
+    formProvider("routeDetails.transit.index.confirmRemoveOfficeOfTransit", request.arg.name)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
     .requireData(lrn)

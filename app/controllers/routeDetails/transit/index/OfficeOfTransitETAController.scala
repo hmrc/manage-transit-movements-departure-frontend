@@ -52,7 +52,7 @@ class OfficeOfTransitETAController @Inject() (
   private val pastDate   = localDate.minusDays(appConfig.daysBefore)
   private val futureDate = localDate.plusDays(appConfig.daysAfter)
 
-  private val form = formProvider("routeDetails.transit.officeOfTransitETA", pastDate, futureDate)
+  private val form = formProvider("routeDetails.transit.index.officeOfTransitETA", pastDate, futureDate)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
     .requireData(lrn)

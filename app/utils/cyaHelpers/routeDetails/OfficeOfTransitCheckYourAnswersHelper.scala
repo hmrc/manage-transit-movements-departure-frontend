@@ -29,28 +29,28 @@ class OfficeOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
   def officeOfTransitCountry: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
     page = OfficeOfTransitCountryPage(index),
     formatAnswer = formatAsText,
-    prefix = "routeDetails.transit.officeOfTransitCountry",
+    prefix = "routeDetails.transit.index.officeOfTransitCountry",
     id = Some("office-of-transit-country")
   )
 
   def officeOfTransit: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
     page = OfficeOfTransitPage(index),
     formatAnswer = formatAsText,
-    prefix = "routeDetails.transit.officeOfTransit",
+    prefix = "routeDetails.transit.index.officeOfTransit",
     id = Some("office-of-transit")
   )
 
   def addOfficeOfTransitETA: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = AddOfficeOfTransitETAYesNoPage(index),
     formatAnswer = formatAsYesOrNo,
-    prefix = "routeDetails.transit.addOfficeOfTransitETAYesNo",
+    prefix = "routeDetails.transit.index.addOfficeOfTransitETAYesNo",
     id = Some("office-of-transit-add-eta")
   )
 
   def officeOfTransitETA: Option[SummaryListRow] = getAnswerAndBuildRow[DateTime](
     page = OfficeOfTransitETAPage(index),
     formatAnswer = formatAsDateTime,
-    prefix = "routeDetails.transit.officeOfTransitETA",
+    prefix = "routeDetails.transit.index.officeOfTransitETA",
     id = Some("office-of-transit-eta")
   )
 

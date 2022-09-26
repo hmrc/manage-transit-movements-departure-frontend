@@ -33,7 +33,7 @@ object OfficeOfExitAnswersViewModel {
       val helper = new OfficeOfExitCheckYourAnswersHelper(userAnswers, mode, index)
 
       val section = Section(
-        sectionTitle = messages("routeDetails.exit.checkOfficeOfExitAnswers.subHeading"),
+        sectionTitle = messages("routeDetails.exit.index.checkOfficeOfExitAnswers.subHeading"),
         rows = Seq(
           helper.officeOfExitCountry,
           helper.officeOfExit

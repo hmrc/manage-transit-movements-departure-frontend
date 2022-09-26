@@ -41,7 +41,7 @@ class ConfirmRemoveOfficeOfTransitControllerSpec
     with ScalaCheckPropertyChecks {
 
   private val formProvider                       = new YesNoFormProvider()
-  private def form(customsOffice: CustomsOffice) = formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit", customsOffice.name)
+  private def form(customsOffice: CustomsOffice) = formProvider("routeDetails.transit.index.confirmRemoveOfficeOfTransit", customsOffice.name)
 
   private val mode = NormalMode
 

@@ -50,7 +50,7 @@ class AddOfficeOfTransitETAYesNoController @Inject() (
       .andThen(getMandatoryPage(OfficeOfTransitPage(index))) {
         implicit request =>
           val officeOfTransit = request.arg
-          val form            = formProvider("routeDetails.transit.addOfficeOfTransitETAYesNo")
+          val form            = formProvider("routeDetails.transit.index.addOfficeOfTransitETAYesNo")
           val preparedForm = request.userAnswers.get(AddOfficeOfTransitETAYesNoPage(index)) match {
             case None        => form
             case Some(value) => form.fill(value)
@@ -65,7 +65,7 @@ class AddOfficeOfTransitETAYesNoController @Inject() (
       .async {
         implicit request =>
           val officeOfTransit = request.arg
-          val form            = formProvider("routeDetails.transit.addOfficeOfTransitETAYesNo")
+          val form            = formProvider("routeDetails.transit.index.addOfficeOfTransitETAYesNo")
           form
             .bindFromRequest()
             .fold(

@@ -26,7 +26,7 @@ import views.html.guaranteeDetails.guarantee.LiabilityAmountView
 
 class LiabilityAmountViewSpec extends CurrencyInputViewBehaviours {
 
-  override val prefix: String = "guaranteeDetails.liabilityAmount"
+  override val prefix: String = "guaranteeDetails.guarantee.liabilityAmount"
 
   override def form: Form[BigDecimal] = new MoneyFormProvider()(prefix)
 

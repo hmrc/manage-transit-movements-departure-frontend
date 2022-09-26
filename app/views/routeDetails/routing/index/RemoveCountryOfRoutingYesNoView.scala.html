@@ -31,7 +31,7 @@
 @(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, index: Index, country: Country)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.routing.removeCountryOfRoutingYesNo.title", country.toString),
+    title = messages("routeDetails.routing.index.removeCountryOfRoutingYesNo.title", country.toString),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -43,7 +43,7 @@
         @inputYesNo(
             field = form("value"),
             yesNoType = OrdinaryYesNo(
-                heading = messages("routeDetails.routing.removeCountryOfRoutingYesNo.heading", country.toString),
+                heading = messages("routeDetails.routing.index.removeCountryOfRoutingYesNo.heading", country.toString),
                 caption = Some(messages("routeDetails.caption"))
             )
         )

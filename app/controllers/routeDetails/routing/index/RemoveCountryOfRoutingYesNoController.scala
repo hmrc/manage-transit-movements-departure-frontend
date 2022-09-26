@@ -50,7 +50,7 @@ class RemoveCountryOfRoutingYesNoController @Inject() (
   private type Request = SpecificDataRequestProvider1[Country]#SpecificDataRequest[_]
 
   private def form(implicit request: Request): Form[Boolean] =
-    formProvider("routeDetails.routing.removeCountryOfRoutingYesNo", request.arg.toString)
+    formProvider("routeDetails.routing.index.removeCountryOfRoutingYesNo", request.arg.toString)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
     .requireData(lrn)

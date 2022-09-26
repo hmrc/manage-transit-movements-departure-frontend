@@ -27,7 +27,7 @@ class OtherReferenceYesNoViewSpec extends YesNoViewBehaviours {
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector.instanceOf[OtherReferenceYesNoView].apply(form, lrn, NormalMode, index)(fakeRequest, messages)
 
-  override val prefix: String = "guaranteeDetails.otherReferenceYesNo"
+  override val prefix: String = "guaranteeDetails.guarantee.otherReferenceYesNo"
 
   behave like pageWithTitle()
 

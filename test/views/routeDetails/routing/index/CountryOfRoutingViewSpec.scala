@@ -43,7 +43,7 @@ class CountryOfRoutingViewSpec extends InputSelectViewBehaviours[Country] with G
   override def applyView(form: Form[Country]): HtmlFormat.Appendable =
     injector.instanceOf[CountryOfRoutingView].apply(form, lrn, values, NormalMode, index)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.routing.countryOfRouting"
+  override val prefix: String = "routeDetails.routing.index.countryOfRouting"
 
   behave like pageWithTitle()
 

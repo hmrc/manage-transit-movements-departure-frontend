@@ -54,9 +54,9 @@ class OtherReferenceController @Inject() (
   private def getValidPrefixOrRedirect(implicit request: Request): Either[(LocalReferenceNumber, Mode, Index) => Result, String] =
     request.arg match {
       case CashDepositGuarantee =>
-        Right("guaranteeDetails.otherReference.option3")
+        Right("guaranteeDetails.guarantee.otherReference.option3")
       case GuaranteeNotRequiredExemptPublicBody =>
-        Right("guaranteeDetails.otherReference.option8")
+        Right("guaranteeDetails.guarantee.otherReference.option8")
       case _ =>
         Left(
           (lrn, mode, index) => Redirect(routes.GuaranteeTypeController.onPageLoad(lrn, mode, index))

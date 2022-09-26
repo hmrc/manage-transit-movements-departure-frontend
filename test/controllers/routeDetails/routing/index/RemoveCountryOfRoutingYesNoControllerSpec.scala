@@ -42,7 +42,7 @@ class RemoveCountryOfRoutingYesNoControllerSpec
     with RouteDetailsUserAnswersGenerator {
 
   private val formProvider           = new YesNoFormProvider()
-  private def form(country: Country) = formProvider("routeDetails.routing.removeCountryOfRoutingYesNo", country.toString)
+  private def form(country: Country) = formProvider("routeDetails.routing.index.removeCountryOfRoutingYesNo", country.toString)
 
   private val mode = NormalMode
 

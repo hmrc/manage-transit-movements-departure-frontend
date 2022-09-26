@@ -30,7 +30,7 @@ class AddOfficeOfTransitETAYesNoViewSpec extends YesNoViewBehaviours with Genera
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector.instanceOf[AddOfficeOfTransitETAYesNoView].apply(form, lrn, NormalMode, officeOfTransit, index)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.transit.addOfficeOfTransitETAYesNo"
+  override val prefix: String = "routeDetails.transit.index.addOfficeOfTransitETAYesNo"
 
   behave like pageWithTitle(officeOfTransit)
 

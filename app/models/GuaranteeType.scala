@@ -23,7 +23,7 @@ sealed trait GuaranteeType
 
 object GuaranteeType extends RadioModelU[GuaranteeType] {
 
-  override val messageKeyPrefix = "guaranteeDetails.guaranteeType"
+  override val messageKeyPrefix = "guaranteeDetails.guarantee.guaranteeType"
 
   case object GuaranteeWaiver extends WithName("0") with GuaranteeType
 

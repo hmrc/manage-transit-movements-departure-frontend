@@ -43,7 +43,7 @@ class AccessCodeController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("guaranteeDetails.accessCode")
+  private val form = formProvider("guaranteeDetails.guarantee.accessCode")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
