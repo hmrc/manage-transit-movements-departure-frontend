@@ -155,7 +155,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                         ActionItem(
                           content = "Change".toText,
                           href = consignorRoutes.EoriController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("consignor’s EORI number"),
+                          visuallyHiddenText = Some("consignor’s EORI number or TIN"),
                           attributes = Map("id" -> "consignor-eori-number")
                         )
                       )
@@ -507,7 +507,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                         ActionItem(
                           content = "Change".toText,
                           href = consigneeRoutes.EoriNumberController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("consignee’s EORI number"),
+                          visuallyHiddenText = Some("consignee’s EORI number or TIN"),
                           attributes = Map("id" -> "consignee-eori-number")
                         )
                       )

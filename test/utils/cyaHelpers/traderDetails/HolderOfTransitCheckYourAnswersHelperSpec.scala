@@ -189,7 +189,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Transit holder’s EORI number".toText),
+                  key = Key("Transit holder’s EORI number or TIN".toText),
                   value = Value(eori.toText),
                   actions = Some(
                     Actions(
@@ -197,7 +197,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = hotRoutes.EoriController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("transit holder’s EORI number"),
+                          visuallyHiddenText = Some("transit holder’s EORI number or TIN"),
                           attributes = Map("id" -> "transit-holder-eori-number")
                         )
                       )
