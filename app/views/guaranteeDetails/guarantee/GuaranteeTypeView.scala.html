@@ -30,7 +30,7 @@
 @(form: Form[GuaranteeType], lrn: LocalReferenceNumber, radios: (String, Option[GuaranteeType]) => Seq[RadioItem], mode: Mode, index: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("guaranteeDetails.guaranteeType.title"),
+    title = messages("guaranteeDetails.guarantee.guaranteeType.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -41,7 +41,7 @@
 
         @inputRadio(
             field = form("value"),
-            legend = messages("guaranteeDetails.guaranteeType.heading"),
+            legend = messages("guaranteeDetails.guarantee.guaranteeType.heading"),
             radioItems = fieldId => radios(fieldId, form.value),
             caption = Some(messages("guaranteeDetails.caption"))
         )

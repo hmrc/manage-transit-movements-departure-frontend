@@ -27,7 +27,7 @@ import views.html.guaranteeDetails.guarantee.ReferenceNumberView
 
 class ReferenceNumberViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "guaranteeDetails.referenceNumber"
+  override val prefix: String = "guaranteeDetails.guarantee.referenceNumber"
 
   override def form: Form[String] = new GuaranteeReferenceNumberFormProvider()(prefix)
 

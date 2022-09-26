@@ -34,8 +34,8 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
         "and not adding country and location" - {
           "must render 3 rows" in {
             val initialAnswers = emptyUserAnswers
-              .setValue(loading.PlaceOfLoadingAddUnLocodeYesNoPage, true)
-              .setValue(loading.PlaceOfLoadingAddExtraInformationYesNoPage, false)
+              .setValue(loading.AddUnLocodeYesNoPage, true)
+              .setValue(loading.AddExtraInformationYesNoPage, false)
 
             forAll(arbitraryLoadingAnswers(initialAnswers), arbitrary[Mode]) {
               (userAnswers, mode) =>
@@ -50,8 +50,8 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
         "and adding country and location" - {
           "must render 5 rows" in {
             val initialAnswers = emptyUserAnswers
-              .setValue(loading.PlaceOfLoadingAddUnLocodeYesNoPage, true)
-              .setValue(loading.PlaceOfLoadingAddExtraInformationYesNoPage, true)
+              .setValue(loading.AddUnLocodeYesNoPage, true)
+              .setValue(loading.AddExtraInformationYesNoPage, true)
 
             forAll(arbitraryLoadingAnswers(initialAnswers), arbitrary[Mode]) {
               (userAnswers, mode) =>
@@ -66,7 +66,7 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
 
       "when not adding a UN/LOCODE" - {
         "must render 3 rows" in {
-          val initialAnswers = emptyUserAnswers.setValue(loading.PlaceOfLoadingAddUnLocodeYesNoPage, false)
+          val initialAnswers = emptyUserAnswers.setValue(loading.AddUnLocodeYesNoPage, false)
 
           forAll(arbitraryLoadingAnswers(initialAnswers), arbitrary[Mode]) {
             (userAnswers, mode) =>
@@ -98,7 +98,7 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
             "must render 4 rows" in {
               val initialAnswers = emptyUserAnswers
                 .setValue(unloading.AddPlaceOfUnloadingPage, true)
-                .setValue(unloading.PlaceOfUnloadingUnLocodeYesNoPage, true)
+                .setValue(unloading.UnLocodeYesNoPage, true)
                 .setValue(unloading.AddExtraInformationYesNoPage, false)
 
               forAll(arbitraryUnloadingAnswers(initialAnswers), arbitrary[Mode]) {
@@ -115,7 +115,7 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
             "must render 6 rows" in {
               val initialAnswers = emptyUserAnswers
                 .setValue(unloading.AddPlaceOfUnloadingPage, true)
-                .setValue(unloading.PlaceOfUnloadingUnLocodeYesNoPage, true)
+                .setValue(unloading.UnLocodeYesNoPage, true)
                 .setValue(unloading.AddExtraInformationYesNoPage, true)
 
               forAll(arbitraryUnloadingAnswers(initialAnswers), arbitrary[Mode]) {
@@ -133,7 +133,7 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
           "must render 4 rows" in {
             val initialAnswers = emptyUserAnswers
               .setValue(unloading.AddPlaceOfUnloadingPage, true)
-              .setValue(unloading.PlaceOfUnloadingUnLocodeYesNoPage, false)
+              .setValue(unloading.UnLocodeYesNoPage, false)
 
             forAll(arbitraryUnloadingAnswers(initialAnswers), arbitrary[Mode]) {
               (userAnswers, mode) =>

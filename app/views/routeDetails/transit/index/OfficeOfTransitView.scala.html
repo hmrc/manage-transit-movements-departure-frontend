@@ -34,7 +34,7 @@
 @(form: Form[CustomsOffice], lrn: LocalReferenceNumber, customsOffices: Seq[CustomsOffice], countryName: String, mode: Mode, index: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.transit.officeOfTransit.title", countryName),
+    title = messages("routeDetails.transit.index.officeOfTransit.title", countryName),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -46,12 +46,12 @@
         @inputSelect(
             field = form("value"),
             selectType = OrdinarySelect(
-                heading = messages("routeDetails.transit.officeOfTransit.heading", countryName),
+                heading = messages("routeDetails.transit.index.officeOfTransit.heading", countryName),
                 caption = Some(messages("routeDetails.caption"))
             ),
-            hint = Some(messages("routeDetails.transit.officeOfTransit.hint")),
+            hint = Some(messages("routeDetails.transit.index.officeOfTransit.hint")),
             selectItems = customsOffices.toSelectItems(form.value),
-            placeholder = messages("routeDetails.transit.officeOfTransit.placeholder")
+            placeholder = messages("routeDetails.transit.index.officeOfTransit.placeholder")
         )
 
         @button(attributes = Map("id" -> "submit"))

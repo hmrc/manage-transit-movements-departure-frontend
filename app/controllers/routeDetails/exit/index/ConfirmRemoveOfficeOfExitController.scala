@@ -50,7 +50,7 @@ class ConfirmRemoveOfficeOfExitController @Inject() (
   private type Request = SpecificDataRequestProvider1[CustomsOffice]#SpecificDataRequest[_]
 
   private def form(implicit request: Request): Form[Boolean] =
-    formProvider("routeDetails.exit.confirmRemoveOfficeOfExit", request.arg.name)
+    formProvider("routeDetails.exit.index.confirmRemoveOfficeOfExit", request.arg.name)
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)

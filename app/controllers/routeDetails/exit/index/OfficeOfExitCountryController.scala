@@ -53,7 +53,7 @@ class OfficeOfExitCountryController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val prefix: String = "routeDetails.exit.officeOfExitCountry"
+  private val prefix: String = "routeDetails.exit.index.officeOfExitCountry"
 
   private type Request = SpecificDataRequestProvider1[Country]#SpecificDataRequest[_]
 

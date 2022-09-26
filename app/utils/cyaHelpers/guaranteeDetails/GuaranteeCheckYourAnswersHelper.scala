@@ -29,21 +29,21 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
   def guaranteeType: Option[SummaryListRow] = getAnswerAndBuildRowWithDynamicLink[GuaranteeType](
     page = GuaranteeTypePage(index),
     formatAnswer = formatEnumAsText(GuaranteeType.messageKeyPrefix),
-    prefix = "guaranteeDetails.guaranteeType",
+    prefix = "guaranteeDetails.guarantee.guaranteeType",
     id = Some("type")
   )(_ == TIRGuarantee)
 
   def guaranteeReferenceNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = ReferenceNumberPage(index),
     formatAnswer = formatAsText,
-    prefix = "guaranteeDetails.referenceNumber",
+    prefix = "guaranteeDetails.guarantee.referenceNumber",
     id = Some("reference-number")
   )
 
   def otherReferenceYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = OtherReferenceYesNoPage(index),
     formatAnswer = formatAsYesOrNo,
-    prefix = "guaranteeDetails.otherReferenceYesNo",
+    prefix = "guaranteeDetails.guarantee.otherReferenceYesNo",
     id = Some("add-other-reference")
   )
 
@@ -57,7 +57,7 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
         getAnswerAndBuildRow[String](
           page = OtherReferencePage(index),
           formatAnswer = formatAsText,
-          prefix = s"guaranteeDetails.otherReference.$key",
+          prefix = s"guaranteeDetails.guarantee.otherReference.$key",
           id = Some("other-reference")
         )
     }
@@ -65,14 +65,14 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
   def accessCode: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = AccessCodePage(index),
     formatAnswer = formatAsPassword,
-    prefix = "guaranteeDetails.accessCode",
+    prefix = "guaranteeDetails.guarantee.accessCode",
     id = Some("access-code")
   )
 
   def liabilityAmount: Option[SummaryListRow] = getAnswerAndBuildRow[BigDecimal](
     page = LiabilityAmountPage(index),
     formatAnswer = formatAsCurrency,
-    prefix = "guaranteeDetails.liabilityAmount",
+    prefix = "guaranteeDetails.guarantee.liabilityAmount",
     id = Some("liability-amount")
   )
 }

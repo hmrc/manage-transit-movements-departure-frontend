@@ -49,7 +49,7 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
   private val dateAfter  = localDateTime.toLocalDate.plusDays(1)
 
   private val formProvider = new DateTimeFormProvider()
-  private val form         = formProvider("routeDetails.transit.officeOfTransitETA", dateBefore, dateAfter)
+  private val form         = formProvider("routeDetails.transit.index.officeOfTransitETA", dateBefore, dateAfter)
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

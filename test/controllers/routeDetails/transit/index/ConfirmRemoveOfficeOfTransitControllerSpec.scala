@@ -41,7 +41,7 @@ class ConfirmRemoveOfficeOfTransitControllerSpec
     with RouteDetailsUserAnswersGenerator
     with ScalaCheckPropertyChecks {
 
-  private val prefix        = "routeDetails.transit.confirmRemoveOfficeOfTransit"
+  private val prefix        = "routeDetails.transit.index.confirmRemoveOfficeOfTransit"
   private val defaultPrefix = s"$prefix.default"
 
   private val formProvider                       = new YesNoFormProvider()

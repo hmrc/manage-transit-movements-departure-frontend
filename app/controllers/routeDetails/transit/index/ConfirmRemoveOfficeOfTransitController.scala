@@ -50,7 +50,7 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
   private def dynamicHeading(index: Index)(implicit request: DataRequest[_]): Option[DynamicHeading] =
     request.userAnswers.get(OfficeOfTransitSection(index)) map {
       _ =>
-        val prefix = "routeDetails.transit.confirmRemoveOfficeOfTransit"
+        val prefix = "routeDetails.transit.index.confirmRemoveOfficeOfTransit"
         request.userAnswers.get(OfficeOfTransitPage(index)) match {
           case Some(CustomsOffice(_, name, _)) => DynamicHeading(prefix, name)
           case None                            => DynamicHeading(s"$prefix.default")

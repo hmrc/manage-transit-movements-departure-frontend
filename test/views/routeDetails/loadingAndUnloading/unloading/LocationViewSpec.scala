@@ -16,22 +16,20 @@
 
 package views.routeDetails.loadingAndUnloading.unloading
 
-import forms.Constants.locationMaxLength
 import forms.LocationFormProvider
 import models.NormalMode
+import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.routeDetails.loadingAndUnloading.unloading.LocationView
-import org.scalacheck.{Arbitrary, Gen}
 import views.html.routeDetails.loadingAndUnloading.unloading.LocationView
 
 class LocationViewSpec extends InputTextViewBehaviours[String] {
 
   override val prefix: String = "routeDetails.unloading.location"
 
-  private val location = Gen.alphaNumStr.sample.value.take(locationMaxLength)
+  private val location = nonEmptyString.sample.value
 
   override def form: Form[String] = new LocationFormProvider()(prefix)
 

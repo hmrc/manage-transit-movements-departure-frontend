@@ -39,7 +39,7 @@ class RemoveGuaranteeYesNoControllerSpec
     with GuaranteeDetailsUserAnswersGenerator {
 
   private val formProvider                   = new YesNoFormProvider()
-  private val form                           = formProvider("guaranteeDetails.removeGuaranteeYesNo")
+  private val form                           = formProvider("guaranteeDetails.guarantee.removeGuaranteeYesNo")
   private lazy val removeGuaranteeYesNoRoute = routes.RemoveGuaranteeYesNoController.onPageLoad(lrn, index).url
 
   "RemoveGuaranteeYesNoController" - {

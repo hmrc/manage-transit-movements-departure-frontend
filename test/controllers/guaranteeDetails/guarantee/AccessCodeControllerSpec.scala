@@ -34,7 +34,7 @@ import scala.concurrent.Future
 class AccessCodeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private val formProvider         = new AccessCodeFormProvider()
-  private val form                 = formProvider("guaranteeDetails.accessCode")
+  private val form                 = formProvider("guaranteeDetails.guarantee.accessCode")
   private val mode                 = NormalMode
   private lazy val accessCodeRoute = routes.AccessCodeController.onPageLoad(lrn, mode, index).url
   private val validAccessCode      = "1234"

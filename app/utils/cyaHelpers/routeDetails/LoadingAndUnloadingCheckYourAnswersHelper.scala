@@ -26,37 +26,37 @@ import utils.cyaHelpers.AnswersHelper
 class LoadingAndUnloadingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
   def addLoadingUnLocode: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
-    page = loading.PlaceOfLoadingAddUnLocodeYesNoPage,
+    page = loading.AddUnLocodeYesNoPage,
     formatAnswer = formatAsYesOrNo,
-    prefix = "routeDetails.loading.placeOfLoadingAddUnLocodeYesNo",
+    prefix = "routeDetails.loading.addUnLocodeYesNo",
     id = Some("add-loading-un-locode")
   )
 
   def loadingUnLocode: Option[SummaryListRow] = getAnswerAndBuildRow[UnLocode](
-    page = loading.PlaceOfLoadingUnLocodePage,
+    page = loading.UnLocodePage,
     formatAnswer = formatAsText,
-    prefix = "routeDetails.loading.placeOfLoadingUnLocode",
+    prefix = "routeDetails.loading.unLocode",
     id = Some("loading-un-locode")
   )
 
   def addLoadingCountryAndLocation: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
-    page = loading.PlaceOfLoadingAddExtraInformationYesNoPage,
+    page = loading.AddExtraInformationYesNoPage,
     formatAnswer = formatAsYesOrNo,
-    prefix = "routeDetails.loading.placeOfLoadingAddExtraInformationYesNo",
+    prefix = "routeDetails.loading.addExtraInformationYesNo",
     id = Some("add-loading-country-and-location")
   )
 
   def loadingCountry: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
-    page = loading.PlaceOfLoadingCountryPage,
+    page = loading.CountryPage,
     formatAnswer = formatAsText,
-    prefix = "routeDetails.loading.placeOfLoadingCountry",
+    prefix = "routeDetails.loading.country",
     id = Some("loading-country")
   )
 
   def loadingLocation: Option[SummaryListRow] = getAnswerAndBuildRow[String](
-    page = loading.PlaceOfLoadingLocationPage,
+    page = loading.LocationPage,
     formatAnswer = formatAsText,
-    prefix = "routeDetails.loading.placeOfLoadingLocation",
+    prefix = "routeDetails.loading.location",
     id = Some("loading-location")
   )
 
@@ -68,16 +68,16 @@ class LoadingAndUnloadingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: 
   )
 
   def addUnloadingUnLocode: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
-    page = unloading.PlaceOfUnloadingUnLocodeYesNoPage,
+    page = unloading.UnLocodeYesNoPage,
     formatAnswer = formatAsYesOrNo,
-    prefix = "routeDetails.unloading.placeOfUnloadingUnLocodeYesNo",
+    prefix = "routeDetails.unloading.addUnLocodeYesNo",
     id = Some("add-unloading-un-locode")
   )
 
   def unloadingUnLocode: Option[SummaryListRow] = getAnswerAndBuildRow[UnLocode](
-    page = unloading.PlaceOfUnloadingUnLocodePage,
+    page = unloading.UnLocodePage,
     formatAnswer = formatAsText,
-    prefix = "routeDetails.unloading.placeOfUnloadingUnLocode",
+    prefix = "routeDetails.unloading.unLocode",
     id = Some("unloading-un-locode")
   )
 

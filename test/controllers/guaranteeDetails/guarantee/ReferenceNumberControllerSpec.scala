@@ -34,7 +34,7 @@ import scala.concurrent.Future
 class ReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private val formProvider              = new GuaranteeReferenceNumberFormProvider()
-  private val form                      = formProvider("guaranteeDetails.referenceNumber")
+  private val form                      = formProvider("guaranteeDetails.guarantee.referenceNumber")
   private val mode                      = NormalMode
   private lazy val referenceNumberRoute = routes.ReferenceNumberController.onPageLoad(lrn, mode, index).url
   private val validRefNumber            = "01GB0123456789012A123456"

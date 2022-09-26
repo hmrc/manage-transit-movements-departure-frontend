@@ -50,7 +50,7 @@ class OfficeOfTransitCountryController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val prefix: String = "routeDetails.transit.officeOfTransitCountry"
+  private val prefix: String = "routeDetails.transit.index.officeOfTransitCountry"
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>

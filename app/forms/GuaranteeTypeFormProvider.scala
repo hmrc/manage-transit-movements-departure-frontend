@@ -26,6 +26,6 @@ class GuaranteeTypeFormProvider @Inject() extends Mappings {
 
   def apply(): Form[GuaranteeType] =
     Form(
-      "value" -> enumerable[GuaranteeType]("guaranteeDetails.guaranteeType.error.required")
+      "value" -> enumerable[GuaranteeType]("guaranteeDetails.guarantee.guaranteeType.error.required")
     )
 }

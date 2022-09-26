@@ -21,7 +21,6 @@ import models.reference._
 import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.routeDetails.loadingAndUnloading.loading.PlaceOfLoadingUnLocodePage
 import play.api.libs.json._
 import queries.Gettable
 
@@ -211,23 +210,23 @@ trait UserAnswersEntryGenerators {
   private def generateLoadingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.routeDetails.loadingAndUnloading.loading._
     {
-      case PlaceOfLoadingAddUnLocodeYesNoPage         => arbitrary[Boolean].map(JsBoolean)
-      case PlaceOfLoadingUnLocodePage                 => arbitrary[UnLocode].map(Json.toJson(_))
-      case PlaceOfLoadingAddExtraInformationYesNoPage => arbitrary[Boolean].map(JsBoolean)
-      case PlaceOfLoadingCountryPage                  => arbitrary[Country].map(Json.toJson(_))
-      case PlaceOfLoadingLocationPage                 => Gen.alphaNumStr.map(JsString)
+      case AddUnLocodeYesNoPage         => arbitrary[Boolean].map(JsBoolean)
+      case UnLocodePage                 => arbitrary[UnLocode].map(Json.toJson(_))
+      case AddExtraInformationYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case CountryPage                  => arbitrary[Country].map(Json.toJson(_))
+      case LocationPage                 => Gen.alphaNumStr.map(JsString)
     }
   }
 
   private def generateUnloadingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.routeDetails.loadingAndUnloading.unloading._
     {
-      case AddPlaceOfUnloadingPage           => arbitrary[Boolean].map(JsBoolean)
-      case PlaceOfUnloadingUnLocodeYesNoPage => arbitrary[Boolean].map(JsBoolean)
-      case PlaceOfUnloadingUnLocodePage      => arbitrary[UnLocode].map(Json.toJson(_))
-      case AddExtraInformationYesNoPage      => arbitrary[Boolean].map(JsBoolean)
-      case CountryPage                       => arbitrary[Country].map(Json.toJson(_))
-      case LocationPage                      => Gen.alphaNumStr.map(JsString)
+      case AddPlaceOfUnloadingPage      => arbitrary[Boolean].map(JsBoolean)
+      case UnLocodeYesNoPage            => arbitrary[Boolean].map(JsBoolean)
+      case UnLocodePage                 => arbitrary[UnLocode].map(Json.toJson(_))
+      case AddExtraInformationYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case CountryPage                  => arbitrary[Country].map(Json.toJson(_))
+      case LocationPage                 => Gen.alphaNumStr.map(JsString)
     }
   }
 

@@ -26,7 +26,7 @@ import views.html.routeDetails.transit.index.CheckOfficeOfTransitAnswersView
 
 class CheckOfficeOfTransitAnswersViewSpec extends CheckYourAnswersViewBehaviours {
 
-  override val prefix: String = "routeDetails.transit.checkOfficeOfTransitAnswers"
+  override val prefix: String = "routeDetails.transit.index.checkOfficeOfTransitAnswers"
 
   override def view: HtmlFormat.Appendable = viewWithSections(sections)
 

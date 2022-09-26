@@ -26,7 +26,7 @@ import views.html.routeDetails.exit.index.CheckOfficeOfExitAnswersView
 
 class CheckOfficeOfExitAnswersViewSpec extends CheckYourAnswersViewBehaviours {
 
-  override val prefix: String = "routeDetails.exit.checkOfficeOfExitAnswers"
+  override val prefix: String = "routeDetails.exit.index.checkOfficeOfExitAnswers"
 
   override def view: HtmlFormat.Appendable = viewWithSections(sections)
 
