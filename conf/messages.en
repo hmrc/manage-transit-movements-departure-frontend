@@ -735,6 +735,9 @@ routeDetails.exit.index.officeOfExit.error.required = Enter where the office of 
 routeDetails.exit.index.confirmRemoveOfficeOfExit.title = Are you sure you want to remove {0} as an office of exit?
 routeDetails.exit.index.confirmRemoveOfficeOfExit.heading = Are you sure you want to remove {0} as an office of exit?
 routeDetails.exit.index.confirmRemoveOfficeOfExit.error.required = Select yes if you want to remove {0} as an office of exit
+routeDetails.exit.index.confirmRemoveOfficeOfExit.default.title = Are you sure you want to remove this office of exit?
+routeDetails.exit.index.confirmRemoveOfficeOfExit.default.heading = Are you sure you want to remove this office of exit?
+routeDetails.exit.index.confirmRemoveOfficeOfExit.default.error.required = Select yes if you want to remove this office of exit
 
 routeDetails.exit.index.checkOfficeOfExitAnswers.title = Check your answers
 routeDetails.exit.index.checkOfficeOfExitAnswers.heading = Check your answers
