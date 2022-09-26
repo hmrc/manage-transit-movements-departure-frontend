@@ -694,6 +694,9 @@ routeDetails.transit.index.officeOfTransitETA.time.error.required = The estimate
 routeDetails.transit.index.confirmRemoveOfficeOfTransit.title = Are you sure you want to remove {0} as an office of transit?
 routeDetails.transit.index.confirmRemoveOfficeOfTransit.heading = Are you sure you want to remove {0} as an office of transit?
 routeDetails.transit.index.confirmRemoveOfficeOfTransit.error.required = Select yes if you want to remove {0} as an office of transit
+routeDetails.transit.index.confirmRemoveOfficeOfTransit.default.title = Are you sure you want to remove this office of transit?
+routeDetails.transit.index.confirmRemoveOfficeOfTransit.default.heading = Are you sure you want to remove this office of transit?
+routeDetails.transit.index.confirmRemoveOfficeOfTransit.default.error.required = Select yes if you want to remove this office of transit
 
 routeDetails.transit.index.checkOfficeOfTransitAnswers.title = Check your answers
 routeDetails.transit.index.checkOfficeOfTransitAnswers.heading = Check your answers
@@ -906,15 +909,15 @@ routeDetails.locationOfGoods.contact.telephoneNumber.error.minLength = {0}’s t
 
 routeDetails.loadingAndUnloading.checkYourAnswers.title = Check your answers
 routeDetails.loadingAndUnloading.checkYourAnswers.heading = Check your answers
-routeDetails.loadingAndUnloading.checkYourAnswers.loading = Loading
-routeDetails.loadingAndUnloading.checkYourAnswers.unloading = Unloading
+routeDetails.loadingAndUnloading.checkYourAnswers.loading = Place of loading
+routeDetails.loadingAndUnloading.checkYourAnswers.unloading = Place of unloading
 
 ## Loading
 
 routeDetails.loading.addUnLocodeYesNo.title = Do you want to add a UN/LOCODE for the place of loading?
 routeDetails.loading.addUnLocodeYesNo.heading = Do you want to add a UN/LOCODE for the place of loading?
 routeDetails.loading.addUnLocodeYesNo.checkYourAnswersLabel = Do you want to add a UN/LOCODE for the place of loading?
-routeDetails.loading.addUnLocodeYesNo.change.hidden = if you want to add a UN/LOCODE for the place of loading
+routeDetails.loading.addUnLocodeYesNo.change.hidden = if you want a UN/LOCODE for the place of loading
 routeDetails.loading.addUnLocodeYesNo.error.required = Select yes if you want to add a UN/LOCODE for the place of loading
 routeDetails.loading.addUnLocodeYesNo.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
 
@@ -922,8 +925,8 @@ routeDetails.loading.unLocode.title = What is the UN/LOCODE for the place of loa
 routeDetails.loading.unLocode.heading = What is the UN/LOCODE for the place of loading?
 routeDetails.loading.unLocode.hintText = Enter the code, like GB BRS or GB MNC.
 routeDetails.loading.unLocode.placeholder = Select a UN/LOCODE.
-routeDetails.loading.unLocode.change.hidden = the UN/LOCODE for the place of loading
-routeDetails.loading.unLocode.checkYourAnswersLabel = What is the UN/LOCODE for the place of loading?
+routeDetails.loading.unLocode.change.hidden = UN/LOCODE for the place of loading
+routeDetails.loading.unLocode.checkYourAnswersLabel = UN/LOCODE
 routeDetails.loading.unLocode.error.required = Enter the UN/LOCODE for the place of loading
 routeDetails.loading.unLocode.error.invalidCharacters = The UN/LOCODE for the place of loading must only include letters a to z and spaces
 routeDetails.loading.unLocode.error.maxLength = The UN/LOCODE for the place of loading must be 5 characters long
@@ -935,22 +938,22 @@ routeDetails.loading.addExtraInformationYesNo.checkYourAnswersLabel = Do you wan
 routeDetails.loading.addExtraInformationYesNo.change.hidden = if you want to add extra information for the place of loading
 routeDetails.loading.addExtraInformationYesNo.error.required = Select yes if you want to add extra information for the place of loading
 
-routeDetails.loading.location.title = Where in {0} is the place of loading?
-routeDetails.loading.location.heading = Where in {0} is the place of loading?
-routeDetails.loading.location.checkYourAnswersLabel = Place of loading location
-routeDetails.loading.location.change.hidden = place of loading location
-routeDetails.loading.location.hint = Describe the specific location of loading. This can be up to 35 characters long.
-routeDetails.loading.location.error.required = Enter the place of loading in {0}
-routeDetails.loading.location.error.length = The place of loading must be 35 characters or less
-routeDetails.loading.location.error.invalid = The place of loading must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-
 routeDetails.loading.country.title = In which country is the place of loading?
 routeDetails.loading.country.heading = In which country is the place of loading?
 routeDetails.loading.country.hintText = Enter the country, like Italy or Spain.
 routeDetails.loading.country.placeholder = Select a country
-routeDetails.loading.country.change.hidden = which country the place of loading is in
-routeDetails.loading.country.checkYourAnswersLabel = In which country is the place of loading?
+routeDetails.loading.country.change.hidden = country for the place of loading
+routeDetails.loading.country.checkYourAnswersLabel = Country
 routeDetails.loading.country.error.required = Enter which country the place of loading is in
+
+routeDetails.loading.location.title = Where in {0} is the place of loading?
+routeDetails.loading.location.heading = Where in {0} is the place of loading?
+routeDetails.loading.location.checkYourAnswersLabel = Location
+routeDetails.loading.location.change.hidden = location for the place of loading
+routeDetails.loading.location.hint = Describe the specific location of loading. This can be up to 35 characters long.
+routeDetails.loading.location.error.required = Enter the place of loading in {0}
+routeDetails.loading.location.error.length = The place of loading must be 35 characters or less
+routeDetails.loading.location.error.invalid = The place of loading must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 
 ## Unloading
 
@@ -963,6 +966,7 @@ routeDetails.unloading.addPlaceOfUnloading.error.required = Select yes if you wa
 routeDetails.unloading.addUnLocodeYesNo.title = Do you want to add a UN/LOCODE for the place of unloading?
 routeDetails.unloading.addUnLocodeYesNo.heading = Do you want to add a UN/LOCODE for the place of unloading?
 routeDetails.unloading.addUnLocodeYesNo.checkYourAnswersLabel = Do you want to add a UN/LOCODE for the place of unloading?
+routeDetails.unloading.addUnLocodeYesNo.change.hidden = if you want to add a UN/LOCODE for the place of unloading
 routeDetails.unloading.addUnLocodeYesNo.error.required = Select yes if you want to add a UN/LOCODE for the place of unloading
 routeDetails.unloading.addUnLocodeYesNo.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
 
@@ -971,8 +975,8 @@ routeDetails.unloading.unLocode.heading = What is the UN/LOCODE for the place of
 routeDetails.unloading.unLocode.hintText = Enter the code, like DEBER or ESMAD.
 routeDetails.unloading.unLocode.label = What is the UN/LOCODE for the place of unloading?
 routeDetails.unloading.unLocode.placeholder = Select a UN/LOCODE.
-routeDetails.unloading.unLocode.change.hidden = the UN/LOCODE for the place of unloading
-routeDetails.unloading.unLocode.checkYourAnswersLabel = What is the UN/LOCODE for the place of unloading?
+routeDetails.unloading.unLocode.change.hidden = UN/LOCODE for the place of unloading
+routeDetails.unloading.unLocode.checkYourAnswersLabel = UN/LOCODE
 routeDetails.unloading.unLocode.error.required = Enter the UN/LOCODE for the place of unloading
 routeDetails.unloading.unLocode.error.invalidCharacters = The UN/LOCODE for the place of loading must only include letters a to z and numbers 0 to 9
 
@@ -987,14 +991,14 @@ routeDetails.unloading.country.title = Which country is the place of unloading i
 routeDetails.unloading.country.heading = Which country is the place of unloading in?
 routeDetails.unloading.country.hintText = Enter the country, like Italy or Spain.
 routeDetails.unloading.country.placeholder = Select a country
-routeDetails.unloading.country.change.hidden = which country the place of unloading is in
-routeDetails.unloading.country.checkYourAnswersLabel = Which country is the place of unloading in
+routeDetails.unloading.country.change.hidden = country for the place of unloading
+routeDetails.unloading.country.checkYourAnswersLabel = Country
 routeDetails.unloading.country.error.required = Enter which country the place of unloading is in
 
 routeDetails.unloading.location.title = Where in {0} is the place of unloading?
 routeDetails.unloading.location.heading = Where in {0} is the place of unloading?
-routeDetails.unloading.location.checkYourAnswersLabel = Place of unloading location
-routeDetails.unloading.location.change.hidden = place of unloading location
+routeDetails.unloading.location.checkYourAnswersLabel = Location
+routeDetails.unloading.location.change.hidden = location for the place of unloading
 routeDetails.unloading.location.hint = Describe the specific location of unloading. This can be up to 35 characters long.
 routeDetails.unloading.location.error.required = Enter the place of unloading in {0}
 routeDetails.unloading.location.error.length = The place of unloading must be 35 characters or less

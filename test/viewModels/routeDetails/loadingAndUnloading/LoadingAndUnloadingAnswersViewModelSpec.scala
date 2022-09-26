@@ -42,7 +42,7 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
                 val viewModelProvider = injector.instanceOf[LoadingAndUnloadingAnswersViewModelProvider]
                 val section           = viewModelProvider.apply(userAnswers, mode).sections.head
                 section.rows.size mustBe 3
-                section.sectionTitle.value mustBe "Loading"
+                section.sectionTitle.value mustBe "Place of loading"
             }
           }
         }
@@ -58,7 +58,7 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
                 val viewModelProvider = injector.instanceOf[LoadingAndUnloadingAnswersViewModelProvider]
                 val section           = viewModelProvider.apply(userAnswers, mode).sections.head
                 section.rows.size mustBe 5
-                section.sectionTitle.value mustBe "Loading"
+                section.sectionTitle.value mustBe "Place of loading"
             }
           }
         }
@@ -73,7 +73,7 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
               val viewModelProvider = injector.instanceOf[LoadingAndUnloadingAnswersViewModelProvider]
               val section           = viewModelProvider.apply(userAnswers, mode).sections.head
               section.rows.size mustBe 3
-              section.sectionTitle.value mustBe "Loading"
+              section.sectionTitle.value mustBe "Place of loading"
           }
         }
       }
@@ -88,7 +88,7 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
             val viewModelProvider = injector.instanceOf[LoadingAndUnloadingAnswersViewModelProvider]
             val section           = viewModelProvider.apply(userAnswers, mode).sections.last
             section.rows.size mustBe 1
-            section.sectionTitle.value mustBe "Unloading"
+            section.sectionTitle.value mustBe "Place of unloading"
         }
       }
 
@@ -106,7 +106,7 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
                   val viewModelProvider = injector.instanceOf[LoadingAndUnloadingAnswersViewModelProvider]
                   val section           = viewModelProvider.apply(userAnswers, mode).sections.last
                   section.rows.size mustBe 4
-                  section.sectionTitle.value mustBe "Unloading"
+                  section.sectionTitle.value mustBe "Place of unloading"
               }
             }
           }
@@ -123,7 +123,7 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
                   val viewModelProvider = injector.instanceOf[LoadingAndUnloadingAnswersViewModelProvider]
                   val section           = viewModelProvider.apply(userAnswers, mode).sections.last
                   section.rows.size mustBe 6
-                  section.sectionTitle.value mustBe "Unloading"
+                  section.sectionTitle.value mustBe "Place of unloading"
               }
             }
           }
@@ -140,7 +140,7 @@ class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPr
                 val viewModelProvider = injector.instanceOf[LoadingAndUnloadingAnswersViewModelProvider]
                 val section           = viewModelProvider.apply(userAnswers, mode).sections.last
                 section.rows.size mustBe 4
-                section.sectionTitle.value mustBe "Unloading"
+                section.sectionTitle.value mustBe "Place of unloading"
             }
           }
         }

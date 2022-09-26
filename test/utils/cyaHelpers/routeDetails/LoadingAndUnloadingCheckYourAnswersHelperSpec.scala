@@ -62,7 +62,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                         ActionItem(
                           content = "Change".toText,
                           href = loadingRoutes.AddUnLocodeYesNoController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("if you want to add a UN/LOCODE for the place of loading"),
+                          visuallyHiddenText = Some("if you want a UN/LOCODE for the place of loading"),
                           attributes = Map("id" -> "add-loading-un-locode")
                         )
                       )
@@ -97,7 +97,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("What is the UN/LOCODE for the place of loading?".toText),
+                  key = Key("UN/LOCODE".toText),
                   value = Value(unLocode.toString.toText),
                   actions = Some(
                     Actions(
@@ -105,7 +105,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                         ActionItem(
                           content = "Change".toText,
                           href = loadingRoutes.UnLocodeController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("the UN/LOCODE for the place of loading"),
+                          visuallyHiddenText = Some("UN/LOCODE for the place of loading"),
                           attributes = Map("id" -> "loading-un-locode")
                         )
                       )
@@ -183,7 +183,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("In which country is the place of loading?".toText),
+                  key = Key("Country".toText),
                   value = Value(country.toString.toText),
                   actions = Some(
                     Actions(
@@ -191,7 +191,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                         ActionItem(
                           content = "Change".toText,
                           href = loadingRoutes.CountryController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("which country the place of loading is in"),
+                          visuallyHiddenText = Some("country for the place of loading"),
                           attributes = Map("id" -> "loading-country")
                         )
                       )
@@ -226,7 +226,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Place of loading location".toText),
+                  key = Key("Location".toText),
                   value = Value(location.toText),
                   actions = Some(
                     Actions(
@@ -234,7 +234,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                         ActionItem(
                           content = "Change".toText,
                           href = loadingRoutes.LocationController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("place of loading location"),
+                          visuallyHiddenText = Some("location for the place of loading"),
                           attributes = Map("id" -> "loading-location")
                         )
                       )
@@ -312,7 +312,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Do you want to add extra information for the place of unloading?".toText),
+                  key = Key("Do you want to add a UN/LOCODE for the place of unloading?".toText),
                   value = Value("Yes".toText),
                   actions = Some(
                     Actions(
@@ -320,7 +320,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                         ActionItem(
                           content = "Change".toText,
                           href = unloadingRoutes.AddUnLocodeYesNoController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("if you want to add extra information for the place of unloading"),
+                          visuallyHiddenText = Some("if you want to add a UN/LOCODE for the place of unloading"),
                           attributes = Map("id" -> "add-unloading-un-locode")
                         )
                       )
@@ -355,7 +355,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("What is the UN/LOCODE for the place of unloading?".toText),
+                  key = Key("UN/LOCODE".toText),
                   value = Value(unLocode.toString.toText),
                   actions = Some(
                     Actions(
@@ -363,7 +363,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                         ActionItem(
                           content = "Change".toText,
                           href = unloadingRoutes.UnLocodeController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("the UN/LOCODE for the place of unloading"),
+                          visuallyHiddenText = Some("UN/LOCODE for the place of unloading"),
                           attributes = Map("id" -> "unloading-un-locode")
                         )
                       )
@@ -441,7 +441,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Which country is the place of unloading in".toText),
+                  key = Key("Country".toText),
                   value = Value(country.toString.toText),
                   actions = Some(
                     Actions(
@@ -449,7 +449,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                         ActionItem(
                           content = "Change".toText,
                           href = unloadingRoutes.CountryController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("which country the place of unloading is in"),
+                          visuallyHiddenText = Some("country for the place of unloading"),
                           attributes = Map("id" -> "unloading-country")
                         )
                       )
@@ -484,7 +484,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Place of unloading location".toText),
+                  key = Key("Location".toText),
                   value = Value(location.toText),
                   actions = Some(
                     Actions(
@@ -492,7 +492,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                         ActionItem(
                           content = "Change".toText,
                           href = unloadingRoutes.LocationController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("place of unloading location"),
+                          visuallyHiddenText = Some("location for the place of unloading"),
                           attributes = Map("id" -> "unloading-location")
                         )
                       )

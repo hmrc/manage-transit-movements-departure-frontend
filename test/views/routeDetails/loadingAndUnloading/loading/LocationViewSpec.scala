@@ -16,7 +16,6 @@
 
 package views.routeDetails.loadingAndUnloading.loading
 
-import forms.Constants.locationMaxLength
 import forms.LocationFormProvider
 import models.NormalMode
 import play.api.data.Form
@@ -30,7 +29,7 @@ class LocationViewSpec extends InputTextViewBehaviours[String] {
 
   override val prefix: String = "routeDetails.loading.location"
 
-  private val countryName = Gen.alphaNumStr.sample.value.take(locationMaxLength)
+  private val countryName = nonEmptyString.sample.value
 
   override def form: Form[String] = new LocationFormProvider()(prefix)
 
