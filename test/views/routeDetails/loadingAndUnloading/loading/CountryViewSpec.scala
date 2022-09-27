@@ -44,7 +44,7 @@ class CountryViewSpec extends InputSelectViewBehaviours[Country] with Generators
   override def applyView(form: Form[Country]): HtmlFormat.Appendable =
     injector.instanceOf[CountryView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.loading.country"
+  override val prefix: String = "routeDetails.loadingAndUnloading.loading.country"
 
   behave like pageWithTitle()
 

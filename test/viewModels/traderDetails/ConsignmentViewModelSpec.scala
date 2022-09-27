@@ -18,18 +18,21 @@ package viewModels.traderDetails
 
 import base.SpecBase
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
-import models.Address
 import models.reference.{Country, CountryCode}
+import models.{Address, Mode}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.traderDetails.consignment._
-import viewModels.traderDetails.TraderDetailsConsignmentViewModel.TraderDetailsConsignmentSectionViewModel
+import viewModels.traderDetails.ConsignmentViewModel.ConsignmentViewModelProvider
 
-class TraderDetailsConsignmentViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
+class ConsignmentViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
 
   "apply" - {
     "when user answers empty" - {
       "must return empty rows" in {
-        val sections = new TraderDetailsConsignmentSectionViewModel().apply(emptyUserAnswers)
+        val mode              = arbitrary[Mode].sample.value
+        val viewModelProvider = injector.instanceOf[ConsignmentViewModelProvider]
+        val sections          = viewModelProvider.apply(emptyUserAnswers, mode).sections
 
         sections.size mustBe 3
 
@@ -60,7 +63,10 @@ class TraderDetailsConsignmentViewModelSpec extends SpecBase with ScalaCheckProp
           .setValue(consignee.EoriNumberPage, "eori2")
           .setValue(consignee.NamePage, "name2")
           .setValue(consignee.AddressPage, Address("line12", "line22", "postal code2", Country(CountryCode("code"), "description")))
-        val sections = new TraderDetailsConsignmentSectionViewModel().apply(answers)
+
+        val mode              = arbitrary[Mode].sample.value
+        val viewModelProvider = injector.instanceOf[ConsignmentViewModelProvider]
+        val sections          = viewModelProvider.apply(answers, mode).sections
 
         sections.size mustBe 3
 

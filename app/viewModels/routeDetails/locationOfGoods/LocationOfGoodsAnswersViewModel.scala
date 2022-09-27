@@ -18,7 +18,7 @@ package viewModels.routeDetails.locationOfGoods
 
 import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
-import utils.cyaHelpers.routeDetails.LocationOfGoodsCheckYourAnswersHelper
+import utils.cyaHelpers.routeDetails.locationOfGoods.LocationOfGoodsCheckYourAnswersHelper
 import viewModels.sections.Section
 
 import javax.inject.Inject

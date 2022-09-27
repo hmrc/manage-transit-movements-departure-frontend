@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails.loadingAndUnloading.unloading
+package controllers.routeDetails.loadingAndUnloading
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
-import pages.routeDetails.loadingAndUnloading.unloading.AddPlaceOfUnloadingPage
+import pages.routeDetails.loadingAndUnloading.AddPlaceOfUnloadingPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.routeDetails.loadingAndUnloading.unloading.AddPlaceOfUnloadingView
+import views.html.routeDetails.loadingAndUnloading.AddPlaceOfUnloadingView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,7 +43,7 @@ class AddPlaceOfUnloadingController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.unloading.addPlaceOfUnloading")
+  private val form = formProvider("routeDetails.loadingAndUnloading.addPlaceOfUnloading")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

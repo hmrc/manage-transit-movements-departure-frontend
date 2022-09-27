@@ -19,6 +19,7 @@ package utils.cyaHelpers.routeDetails
 import base.SpecBase
 import controllers.routeDetails.loadingAndUnloading.loading.{routes => loadingRoutes}
 import controllers.routeDetails.loadingAndUnloading.unloading.{routes => unloadingRoutes}
+import controllers.routeDetails.loadingAndUnloading.{routes => loadingAndUnloadingRoutes}
 import generators.Generators
 import models.Mode
 import models.reference.{Country, UnLocode}
@@ -27,6 +28,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.loadingAndUnloading._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
+import utils.cyaHelpers.routeDetails.loadingAndUnloading.LoadingAndUnloadingCheckYourAnswersHelper
 
 class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -263,7 +265,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
         "when AddPlaceOfUnloadingPage is defined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val answers = emptyUserAnswers.setValue(unloading.AddPlaceOfUnloadingPage, true)
+              val answers = emptyUserAnswers.setValue(AddPlaceOfUnloadingPage, true)
               val helper  = new LoadingAndUnloadingCheckYourAnswersHelper(answers, mode)
               val result  = helper.addPlaceOfUnloading
 
@@ -276,7 +278,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = unloadingRoutes.AddPlaceOfUnloadingController.onPageLoad(answers.lrn, mode).url,
+                          href = loadingAndUnloadingRoutes.AddPlaceOfUnloadingController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add a place of unloading"),
                           attributes = Map("id" -> "add-place-of-unloading")
                         )

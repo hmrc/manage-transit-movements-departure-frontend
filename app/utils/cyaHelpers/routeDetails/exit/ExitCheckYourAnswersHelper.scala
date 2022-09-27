@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package utils.cyaHelpers.routeDetails
+package utils.cyaHelpers.routeDetails.exit
 
 import controllers.routeDetails.exit.index.routes
 import models.journeyDomain.routeDetails.exit.OfficeOfExitDomain

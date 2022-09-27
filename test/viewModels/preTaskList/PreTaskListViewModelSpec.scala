@@ -17,11 +17,13 @@
 package viewModels.preTaskList
 
 import base.SpecBase
+import generators.Generators
 import models.reference.CustomsOffice
 import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}
 import pages.preTaskList._
+import viewModels.preTaskList.PreTaskListViewModel.PreTaskListViewModelProvider
 
-class PreTaskListViewModelSpec extends SpecBase {
+class PreTaskListViewModelSpec extends SpecBase with Generators {
 
   "apply" - {
     "when user answers empty" - {
@@ -29,7 +31,8 @@ class PreTaskListViewModelSpec extends SpecBase {
         val answers = emptyUserAnswers
           .copy(lrn = LocalReferenceNumber("1234567890").get)
 
-        val section = new PreTaskListViewModel().apply(answers)
+        val viewModelProvider = injector.instanceOf[PreTaskListViewModelProvider]
+        val section           = viewModelProvider.apply(answers).section
 
         section.sectionTitle mustNot be(defined)
         section.rows.length mustBe 1
@@ -47,7 +50,8 @@ class PreTaskListViewModelSpec extends SpecBase {
           .setValue(TIRCarnetReferencePage, "tir carnet reference")
           .setValue(SecurityDetailsTypePage, SecurityDetailsType.EntrySummaryDeclarationSecurityDetails)
 
-        val section = new PreTaskListViewModel().apply(answers)
+        val viewModelProvider = injector.instanceOf[PreTaskListViewModelProvider]
+        val section           = viewModelProvider.apply(answers).section
 
         section.sectionTitle mustNot be(defined)
         section.rows.length mustBe 6

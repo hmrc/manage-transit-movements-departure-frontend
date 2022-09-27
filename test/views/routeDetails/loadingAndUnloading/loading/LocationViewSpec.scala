@@ -27,7 +27,7 @@ import org.scalacheck.{Arbitrary, Gen}
 
 class LocationViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "routeDetails.loading.location"
+  override val prefix: String = "routeDetails.loadingAndUnloading.loading.location"
 
   private val countryName = nonEmptyString.sample.value
 

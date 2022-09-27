@@ -40,7 +40,7 @@ class UnLocodeControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
   private val unLocodeList = UnLocodeList(Seq(unLocode1, unLocode2))
 
   private val formProvider = new UnLocodeFormProvider()
-  private val form         = formProvider("routeDetails.unloading.unLocode", unLocodeList)
+  private val form         = formProvider("routeDetails.loadingAndUnloading.unloading.unLocode", unLocodeList)
   private val mode         = NormalMode
 
   private val mockUnLocodesService: UnLocodesService = mock[UnLocodesService]

@@ -49,7 +49,7 @@ class UnLocodeController @Inject() (
     implicit request =>
       service.getUnLocodes.map {
         unLocodeList =>
-          val form = formProvider("routeDetails.loading.unLocode", unLocodeList)
+          val form = formProvider("routeDetails.loadingAndUnloading.loading.unLocode", unLocodeList)
           val preparedForm = request.userAnswers.get(UnLocodePage) match {
             case None        => form
             case Some(value) => form.fill(value)
@@ -63,7 +63,7 @@ class UnLocodeController @Inject() (
     implicit request =>
       service.getUnLocodes.flatMap {
         unLocodeList =>
-          val form = formProvider("routeDetails.loading.unLocode", unLocodeList)
+          val form = formProvider("routeDetails.loadingAndUnloading.loading.unLocode", unLocodeList)
           form
             .bindFromRequest()
             .fold(

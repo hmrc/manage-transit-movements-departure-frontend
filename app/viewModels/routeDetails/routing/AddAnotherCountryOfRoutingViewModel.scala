@@ -18,7 +18,7 @@ package viewModels.routeDetails.routing
 
 import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
-import utils.cyaHelpers.routeDetails.RoutingCheckYourAnswersHelper
+import utils.cyaHelpers.routeDetails.routing.RoutingCheckYourAnswersHelper
 import viewModels.ListItem
 
 import javax.inject.Inject

@@ -18,7 +18,7 @@ package viewModels.routeDetails.exit
 
 import models.{Index, Mode, UserAnswers}
 import play.api.i18n.Messages
-import utils.cyaHelpers.routeDetails.OfficeOfExitCheckYourAnswersHelper
+import utils.cyaHelpers.routeDetails.exit.OfficeOfExitCheckYourAnswersHelper
 import viewModels.sections.Section
 
 import javax.inject.Inject

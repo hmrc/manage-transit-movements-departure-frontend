@@ -19,7 +19,7 @@ package viewModels.routeDetails.transit
 import models.{Index, Mode, RichOptionalJsArray, UserAnswers}
 import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import play.api.i18n.Messages
-import utils.cyaHelpers.routeDetails.TransitCheckYourAnswersHelper
+import utils.cyaHelpers.routeDetails.transit.TransitCheckYourAnswersHelper
 import viewModels.sections.Section
 import viewModels.{Link, RichSummaryListRowOption}
 

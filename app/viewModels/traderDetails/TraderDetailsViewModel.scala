@@ -16,23 +16,32 @@
 
 package viewModels.traderDetails
 
-import models.UserAnswers
+import models.{CheckMode, UserAnswers}
 import play.api.i18n.Messages
 import viewModels.sections.Section
-import viewModels.traderDetails.HolderOfTransitViewModel.HolderOfTransitSectionViewModel
-import viewModels.traderDetails.RepresentativeViewModel.RepresentativeSectionViewModel
-import viewModels.traderDetails.TraderDetailsConsignmentViewModel.TraderDetailsConsignmentSectionViewModel
+import viewModels.traderDetails.ConsignmentViewModel.ConsignmentViewModelProvider
+import viewModels.traderDetails.HolderOfTransitViewModel.HolderOfTransitViewModelProvider
+import viewModels.traderDetails.RepresentativeViewModel.RepresentativeViewModelProvider
+
 import javax.inject.Inject
 
-class TraderDetailsViewModel @Inject() (
-  holderOfTransitViewModel: HolderOfTransitSectionViewModel,
-  representativeViewModel: RepresentativeSectionViewModel,
-  consignmentViewModel: TraderDetailsConsignmentSectionViewModel
-) {
+case class TraderDetailsViewModel(sections: Seq[Section])
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): Seq[Section] =
-    holderOfTransitViewModel(userAnswers) ++
-      representativeViewModel(userAnswers) ++
-      consignmentViewModel(userAnswers)
+object TraderDetailsViewModel {
 
+  class TraderDetailsViewModelProvider @Inject() (
+    holderOfTransitViewModelProvider: HolderOfTransitViewModelProvider,
+    representativeViewModelProvider: RepresentativeViewModelProvider,
+    consignmentViewModelProvider: ConsignmentViewModelProvider
+  ) {
+
+    def apply(userAnswers: UserAnswers)(implicit messages: Messages): TraderDetailsViewModel = {
+      val mode = CheckMode
+      new TraderDetailsViewModel(
+        holderOfTransitViewModelProvider.apply(userAnswers, mode).sections ++
+          representativeViewModelProvider.apply(userAnswers, mode).sections ++
+          consignmentViewModelProvider.apply(userAnswers, mode).sections
+      )
+    }
+  }
 }

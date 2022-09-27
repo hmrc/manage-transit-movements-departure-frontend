@@ -19,7 +19,7 @@ package viewModels.routeDetails.routing
 import models.{Index, Mode, RichOptionalJsArray, UserAnswers}
 import pages.sections.routeDetails.routing.CountriesOfRoutingSection
 import play.api.i18n.Messages
-import utils.cyaHelpers.routeDetails.RoutingCheckYourAnswersHelper
+import utils.cyaHelpers.routeDetails.routing.RoutingCheckYourAnswersHelper
 import viewModels.Link
 import viewModels.sections.Section
 

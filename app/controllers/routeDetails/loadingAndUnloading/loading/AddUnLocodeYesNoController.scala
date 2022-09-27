@@ -43,7 +43,7 @@ class AddUnLocodeYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("routeDetails.loading.addUnLocodeYesNo")
+  private val form = formProvider("routeDetails.loadingAndUnloading.loading.addUnLocodeYesNo")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

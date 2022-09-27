@@ -18,7 +18,7 @@ package viewModels.routeDetails.loadingAndUnloading
 
 import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
-import utils.cyaHelpers.routeDetails.LoadingAndUnloadingCheckYourAnswersHelper
+import utils.cyaHelpers.routeDetails.loadingAndUnloading.LoadingAndUnloadingCheckYourAnswersHelper
 import viewModels.sections.Section
 
 import javax.inject.Inject

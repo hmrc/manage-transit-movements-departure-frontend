@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package utils.cyaHelpers.routeDetails
+package utils.cyaHelpers.routeDetails.exit
 
 import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode, UserAnswers}

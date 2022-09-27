@@ -28,6 +28,7 @@ import pages.routeDetails.locationOfGoods.contact.{NamePage, TelephoneNumberPage
 import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
+import utils.cyaHelpers.routeDetails.locationOfGoods.LocationOfGoodsCheckYourAnswersHelper
 
 class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 

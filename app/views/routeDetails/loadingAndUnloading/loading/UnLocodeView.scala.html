@@ -34,7 +34,7 @@
 @(form: Form[UnLocode], lrn: LocalReferenceNumber, unLocodeList: Seq[UnLocode], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.loading.unLocode.title"),
+    title = messages("routeDetails.loadingAndUnloading.loading.unLocode.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -46,12 +46,12 @@
         @inputSelect(
             field = form("value"),
             selectType = OrdinarySelect(
-                heading = messages("routeDetails.loading.unLocode.heading"),
+                heading = messages("routeDetails.loadingAndUnloading.loading.unLocode.heading"),
                 caption = Some(messages("routeDetails.caption"))
             ),
-            hint = Some(messages("routeDetails.loading.unLocode.hintText")),
+            hint = Some(messages("routeDetails.loadingAndUnloading.loading.unLocode.hintText")),
             selectItems = unLocodeList.toSelectItems(form.value),
-            placeholder = messages("routeDetails.loading.unLocode.placeholder")
+            placeholder = messages("routeDetails.loadingAndUnloading.loading.unLocode.placeholder")
         )
 
         @button(attributes = Map("id" -> "submit"))
