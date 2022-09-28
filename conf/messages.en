@@ -553,7 +553,7 @@ routeDetails.routing.caption = Route details - Transit route
 routeDetails.transit.caption = Route details - Office of transit
 routeDetails.exit.caption = Route details - Office of exit
 routeDetails.locationOfGoods.caption = Route details - Location of goods
-routeDetails.loadingAndUnloading.caption = Route details - Place of loading and unloading
+routeDetails.loadingAndUnloading.caption = Route details - Places of loading and unloading
 routeDetails.loadingAndUnloading.unloading.caption = Route details - Place of unloading
 routeDetails.loadingAndUnloading.loading.caption = Route details - Place of loading
 

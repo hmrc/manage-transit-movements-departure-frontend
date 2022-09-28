@@ -39,7 +39,7 @@ class LoadingAndUnloadingAnswersViewSpec extends CheckYourAnswersViewBehaviours 
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Route details - Place of loading and unloading")
+  behave like pageWithSectionCaption("Route details - Places of loading and unloading")
 
   behave like pageWithHeading()
 
