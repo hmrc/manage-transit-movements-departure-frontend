@@ -46,7 +46,7 @@
 
     @heading(
         heading = messages(s"routeDetails.exit.addAnotherOfficeOfExit.$singularOrPlural.heading", officesOfExit.length),
-        caption = Some(messages("routeDetails.caption"))
+        caption = Some(messages("routeDetails.exit.caption"))
     )
 
     @listWithActions(officesOfExit)
@@ -60,7 +60,7 @@
                     legend = messages("routeDetails.exit.addAnotherOfficeOfExit.label")
                 ),
                 hint = Some(Text(messages("routeDetails.exit.addAnotherOfficeOfExit.hint")))
-             )
+            )
         } else {
             <p class="govuk-body" data-testId="maxLimit">@messages("routeDetails.exit.addAnotherOfficeOfExit.maxLimit.label")</p>
         }

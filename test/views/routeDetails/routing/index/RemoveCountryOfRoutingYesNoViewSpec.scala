@@ -40,7 +40,7 @@ class RemoveCountryOfRoutingYesNoViewSpec extends YesNoViewBehaviours with Gener
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Transit route")
 
   behave like pageWithHeading(country.toString)
 

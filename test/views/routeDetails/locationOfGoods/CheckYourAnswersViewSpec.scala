@@ -38,7 +38,7 @@ class CheckYourAnswersViewSpec extends CheckYourAnswersViewBehaviours {
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Location of goods")
 
   behave like pageWithCheckYourAnswers()
 

@@ -50,7 +50,7 @@ class UnLocodeViewSpec extends InputSelectViewBehaviours[UnLocode] with Generato
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Place of loading")
 
   behave like pageWithHeading()
 

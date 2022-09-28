@@ -40,7 +40,7 @@ class TelephoneNumberViewSpec extends TelephoneNumberViewBehaviours {
 
   behave like pageWithHeading(name)
 
-  behave like pageWithSectionCaption("Trader details")
+  behave like pageWithSectionCaption("Trader details - Transit holder")
 
   behave like pageWithHint("Must include the country code, like +44 808 157 0192.")
 

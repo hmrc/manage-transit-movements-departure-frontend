@@ -40,7 +40,7 @@ class TelephoneNumberViewSpec extends TelephoneNumberViewBehaviours {
 
   behave like pageWithHeading(name)
 
-  behave like pageWithSectionCaption("Trader details")
+  behave like pageWithSectionCaption("Trader details - Consignor")
 
   behave like pageWithTelephoneNumberInput()
 

@@ -22,8 +22,7 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
 
-class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages)
-    extends AnswersHelper(userAnswers, mode) {
+class ConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
   def approvedOperator: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = ApprovedOperatorPage,

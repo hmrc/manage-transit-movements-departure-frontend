@@ -21,7 +21,6 @@ import models.NormalMode
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import viewModels.InputSize
 import views.behaviours.TelephoneNumberViewBehaviours
 import views.html.routeDetails.locationOfGoods.contact.TelephoneNumberView
 
@@ -44,7 +43,7 @@ class TelephoneNumberViewSpec extends TelephoneNumberViewBehaviours {
 
   behave like pageWithHeading(name)
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Location of goods")
 
   behave like pageWithHint("This has to include the country code, like +44 808 157 0192.")
 

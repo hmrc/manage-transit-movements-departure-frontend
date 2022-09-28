@@ -50,6 +50,8 @@ class OfficeOfDestinationViewSpec extends InputSelectViewBehaviours[CustomsOffic
 
   behave like pageWithBackLink
 
+  behave like pageWithSectionCaption("Route details - Transit route")
+
   behave like pageWithHeading()
 
   behave like pageWithSelect

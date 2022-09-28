@@ -44,8 +44,9 @@
             yesNoType = YesNoWithAdditionalHtml(
                 heading = messages("routeDetails.transit.t2DeclarationTypeYesNo.heading"),
                 caption = Some(messages("routeDetails.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.transit.t2DeclarationTypeYesNo.paragraph")}</p>"""))
-                )
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.transit.t2DeclarationTypeYesNo.paragraph")}</p>""")
+            )
+        )
 
         @button(attributes = Map("id" -> "submit"))
     }

@@ -16,7 +16,7 @@
 
 package views.routeDetails.transit.index
 
-import forms.{CustomsOfficeForCountryFormProvider, CustomsOfficeFormProvider}
+import forms.CustomsOfficeForCountryFormProvider
 import generators.Generators
 import models.reference.CustomsOffice
 import models.{CustomsOfficeList, NormalMode}
@@ -50,7 +50,7 @@ class OfficeOfTransitViewSpec extends InputSelectViewBehaviours[CustomsOffice] w
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Office of transit")
 
   behave like pageWithHeading(countryName)
 
