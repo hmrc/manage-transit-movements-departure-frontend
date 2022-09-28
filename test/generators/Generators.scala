@@ -125,24 +125,24 @@ trait Generators extends ModelGenerators with ViewModelGenerators with DomainMod
   def stringsThatMatchRegex(regex: Regex): Gen[String] =
     RegexpGen.from(regex.regex).suchThat(_.nonEmpty)
 
-  def stringsWithLengthInRange(minLength: Int, maxLength: Int, charGen: Gen[Char] = arbitrary[Char]): Gen[String] =
+  def stringsWithLengthInRange(minLength: Int, maxLength: Int, charGen: Gen[Char] = Gen.alphaNumChar): Gen[String] =
     for {
       length <- choose(minLength, maxLength)
       chars  <- listOfN(length, charGen)
     } yield chars.mkString
 
-  def stringsWithMaxLength(maxLength: Int, charGen: Gen[Char] = arbitrary[Char]): Gen[String] =
+  def stringsWithMaxLength(maxLength: Int, charGen: Gen[Char] = Gen.alphaNumChar): Gen[String] =
     for {
       length <- choose(1, maxLength)
       chars  <- listOfN(length, charGen)
     } yield chars.mkString
 
-  def stringsWithLength(length: Int, charGen: Gen[Char] = arbitrary[Char]): Gen[String] =
+  def stringsWithLength(length: Int, charGen: Gen[Char] = Gen.alphaNumChar): Gen[String] =
     for {
       chars <- listOfN(length, charGen)
     } yield chars.mkString
 
-  def stringsLongerThan(minLength: Int, charGen: Gen[Char] = arbitrary[Char]): Gen[String] = for {
+  def stringsLongerThan(minLength: Int, charGen: Gen[Char] = Gen.alphaNumChar): Gen[String] = for {
     maxLength <- (minLength * 2).max(100)
     length    <- Gen.chooseNum(minLength + 1, maxLength)
     chars     <- listOfN(length, charGen)
