@@ -19,6 +19,7 @@ package controllers.routeDetails.exit.index
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
 import models.NormalMode
+import navigation.routeDetails.ExitNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
@@ -31,8 +32,6 @@ import viewModels.routeDetails.exit.OfficeOfExitAnswersViewModel.OfficeOfExitAns
 import viewModels.sections.Section
 import views.html.routeDetails.exit.index.CheckOfficeOfExitAnswersView
 
-import scala.concurrent.Future
-
 class CheckOfficeOfExitAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private lazy val mockViewModelProvider = mock[OfficeOfExitAnswersViewModelProvider]
@@ -44,6 +43,7 @@ class CheckOfficeOfExitAnswersControllerSpec extends SpecBase with AppWithDefaul
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
+      .overrides(bind(classOf[ExitNavigatorProvider]).toInstance(fakeExitNavigatorProvider))
       .overrides(bind[OfficeOfExitAnswersViewModelProvider].toInstance(mockViewModelProvider))
 
   "CheckOfficeOfExitAnswers Controller" - {
@@ -79,10 +79,8 @@ class CheckOfficeOfExitAnswersControllerSpec extends SpecBase with AppWithDefaul
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
-    "must redirect to add another" in {
+    "must redirect to next page" in {
       setExistingUserAnswers(emptyUserAnswers)
-
-      when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(POST, routes.CheckOfficeOfExitAnswersController.onSubmit(lrn, index, mode).url)
 
@@ -90,8 +88,7 @@ class CheckOfficeOfExitAnswersControllerSpec extends SpecBase with AppWithDefaul
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual
-        controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(lrn, mode).url
+      redirectLocation(result).value mustEqual onwardRoute.url
     }
   }
 }
