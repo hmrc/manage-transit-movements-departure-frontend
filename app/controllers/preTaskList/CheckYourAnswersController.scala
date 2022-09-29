@@ -28,7 +28,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.preTaskList.PreTaskListViewModel
+import viewModels.preTaskList.PreTaskListViewModel.PreTaskListViewModelProvider
 import views.html.preTaskList.CheckYourAnswersView
 
 import scala.concurrent.ExecutionContext
@@ -40,7 +40,7 @@ class CheckYourAnswersController @Inject() (
   checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
-  viewModel: PreTaskListViewModel
+  viewModelProvider: PreTaskListViewModelProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -55,7 +55,7 @@ class CheckYourAnswersController @Inject() (
             logger.warn(s"[preTaskList.CheckYourAnswersController][$lrn] Shouldn't be here yet. Redirecting to ${page.path}")
             Redirect(page.route(request.userAnswers, NormalMode).getOrElse(controllers.routes.SessionExpiredController.onPageLoad()))
           case _ =>
-            val section = viewModel(request.userAnswers)
+            val section = viewModelProvider.apply(request.userAnswers).section
             Ok(view(lrn, Seq(section)))
         }
     }

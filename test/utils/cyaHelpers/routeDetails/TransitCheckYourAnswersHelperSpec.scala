@@ -26,15 +26,60 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.{OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails.routing.OfficeOfDestinationPage
-import pages.routeDetails.transit.AddOfficeOfTransitYesNoPage
+import pages.routeDetails.transit._
 import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitPage}
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+import utils.cyaHelpers.routeDetails.transit.TransitCheckYourAnswersHelper
 import viewModels.ListItem
 
 class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
   "TransitCheckYourAnswersHelper" - {
+
+    "includesT2Declarations" - {
+      "must return None" - {
+        "when T2DeclarationTypeYesNoPage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransitCheckYourAnswersHelper(emptyUserAnswers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+              val result = helper.includesT2Declarations
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when T2DeclarationTypeYesNoPage defined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(T2DeclarationTypeYesNoPage, true)
+
+              val helper = new TransitCheckYourAnswersHelper(answers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+              val result = helper.includesT2Declarations
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Does the transit include any T2 declarations?".toText),
+                  value = Value("Yes".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = controllers.routeDetails.transit.routes.T2DeclarationTypeYesNoController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("if the transit includes any T2 declarations"),
+                          attributes = Map("id" -> "includes-t2-declarations")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
 
     "addOfficeOfTransit" - {
       "must return None" - {

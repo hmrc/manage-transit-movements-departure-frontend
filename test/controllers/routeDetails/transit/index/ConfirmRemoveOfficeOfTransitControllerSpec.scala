@@ -19,13 +19,14 @@ package controllers.routeDetails.transit.index
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
-import models.reference.CustomsOffice
-import models.{NormalMode, UserAnswers}
+import models.reference.{Country, CustomsOffice}
+import models.{Index, NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, reset, verify, when}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.transit.index.OfficeOfTransitPage
+import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitPage}
 import pages.sections.routeDetails.transit.OfficeOfTransitSection
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -40,30 +41,53 @@ class ConfirmRemoveOfficeOfTransitControllerSpec
     with RouteDetailsUserAnswersGenerator
     with ScalaCheckPropertyChecks {
 
+  private val prefix        = "routeDetails.transit.index.confirmRemoveOfficeOfTransit"
+  private val defaultPrefix = s"$prefix.default"
+
   private val formProvider                       = new YesNoFormProvider()
-  private def form(customsOffice: CustomsOffice) = formProvider("routeDetails.transit.confirmRemoveOfficeOfTransit", customsOffice.name)
+  private def form(customsOffice: CustomsOffice) = formProvider(prefix, customsOffice.name)
+  private val defaultForm                        = formProvider(defaultPrefix)
 
   private val mode = NormalMode
 
-  private lazy val confirmRemoveOfficeOfTransitRoute = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, mode, index).url
+  private def confirmRemoveOfficeOfTransitRoute(index: Index) = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, mode, index).url
 
   "ConfirmRemoveOfficeOfTransit Controller" - {
 
-    "must return OK and the correct view for a GET" in {
-      forAll(arbitraryOfficeOfTransitAnswers(emptyUserAnswers, index)) {
-        answers =>
-          setExistingUserAnswers(answers)
-          val customsOffice = answers.getValue(OfficeOfTransitPage(index))
+    "must return OK and the correct view for a GET" - {
+      "when office of transit name has been answered" in {
+        forAll(arbitraryOfficeOfTransitAnswers(emptyUserAnswers, index)) {
+          answers =>
+            setExistingUserAnswers(answers)
+            val customsOffice = answers.getValue(OfficeOfTransitPage(index))
 
-          val request = FakeRequest(GET, confirmRemoveOfficeOfTransitRoute)
-          val result  = route(app, request).value
+            val request = FakeRequest(GET, confirmRemoveOfficeOfTransitRoute(index))
+            val result  = route(app, request).value
 
-          val view = injector.instanceOf[ConfirmRemoveOfficeOfTransitView]
+            val view = injector.instanceOf[ConfirmRemoveOfficeOfTransitView]
 
-          status(result) mustEqual OK
+            status(result) mustEqual OK
 
-          contentAsString(result) mustEqual
-            view(form(customsOffice), lrn, mode, index, customsOffice.name)(request, messages).toString
+            contentAsString(result) mustEqual
+              view(form(customsOffice), lrn, mode, index, prefix, customsOffice.name)(request, messages).toString
+        }
+      }
+
+      "when office of transit name has not been answered" in {
+        forAll(arbitrary[Country]) {
+          country =>
+            setExistingUserAnswers(emptyUserAnswers.setValue(OfficeOfTransitCountryPage(index), country))
+
+            val request = FakeRequest(GET, confirmRemoveOfficeOfTransitRoute(index))
+            val result  = route(app, request).value
+
+            val view = injector.instanceOf[ConfirmRemoveOfficeOfTransitView]
+
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              view(defaultForm, lrn, mode, index, defaultPrefix)(request, messages).toString
+        }
       }
     }
 
@@ -76,7 +100,7 @@ class ConfirmRemoveOfficeOfTransitControllerSpec
 
             setExistingUserAnswers(answers)
 
-            val request = FakeRequest(POST, confirmRemoveOfficeOfTransitRoute)
+            val request = FakeRequest(POST, confirmRemoveOfficeOfTransitRoute(index))
               .withFormUrlEncodedBody(("value", "true"))
 
             val result = route(app, request).value
@@ -101,7 +125,7 @@ class ConfirmRemoveOfficeOfTransitControllerSpec
 
             setExistingUserAnswers(answers)
 
-            val request = FakeRequest(POST, confirmRemoveOfficeOfTransitRoute)
+            val request = FakeRequest(POST, confirmRemoveOfficeOfTransitRoute(index))
               .withFormUrlEncodedBody(("value", "false"))
 
             val result = route(app, request).value
@@ -116,32 +140,59 @@ class ConfirmRemoveOfficeOfTransitControllerSpec
       }
     }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
-      forAll(arbitraryOfficeOfTransitAnswers(emptyUserAnswers, index)) {
-        answers =>
-          setExistingUserAnswers(answers)
-          val customsOffice = answers.getValue(OfficeOfTransitPage(index))
+    "must return a Bad Request and errors when invalid data is submitted" - {
+      "when office of transit name has been answered" in {
+        forAll(arbitraryOfficeOfTransitAnswers(emptyUserAnswers, index)) {
+          answers =>
+            setExistingUserAnswers(answers)
+            val customsOffice = answers.getValue(OfficeOfTransitPage(index))
 
-          setExistingUserAnswers(answers)
+            val request   = FakeRequest(POST, confirmRemoveOfficeOfTransitRoute(index)).withFormUrlEncodedBody(("value", ""))
+            val boundForm = form(customsOffice).bind(Map("value" -> ""))
 
-          val request   = FakeRequest(POST, confirmRemoveOfficeOfTransitRoute).withFormUrlEncodedBody(("value", ""))
-          val boundForm = form(customsOffice).bind(Map("value" -> ""))
+            val result = route(app, request).value
 
-          val result = route(app, request).value
+            status(result) mustEqual BAD_REQUEST
 
-          status(result) mustEqual BAD_REQUEST
+            val view = injector.instanceOf[ConfirmRemoveOfficeOfTransitView]
 
-          val view = injector.instanceOf[ConfirmRemoveOfficeOfTransitView]
+            val content = contentAsString(result)
 
-          contentAsString(result) mustEqual
-            view(boundForm, lrn, mode, index, customsOffice.name)(request, messages).toString
+            content mustEqual
+              view(boundForm, lrn, mode, index, prefix, customsOffice.name)(request, messages).toString
+
+            content must include(s"Select yes if you want to remove ${customsOffice.name} as an office of transit")
+        }
+      }
+
+      "when office of transit name has not been answered" in {
+        forAll(arbitrary[Country]) {
+          country =>
+            setExistingUserAnswers(emptyUserAnswers.setValue(OfficeOfTransitCountryPage(index), country))
+
+            val request   = FakeRequest(POST, confirmRemoveOfficeOfTransitRoute(index)).withFormUrlEncodedBody(("value", ""))
+            val boundForm = defaultForm.bind(Map("value" -> ""))
+
+            val result = route(app, request).value
+
+            status(result) mustEqual BAD_REQUEST
+
+            val view = injector.instanceOf[ConfirmRemoveOfficeOfTransitView]
+
+            val content = contentAsString(result)
+
+            content mustEqual
+              view(boundForm, lrn, mode, index, defaultPrefix)(request, messages).toString
+
+            content must include("Select yes if you want to remove this office of transit")
+        }
       }
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, confirmRemoveOfficeOfTransitRoute)
+      val request = FakeRequest(GET, confirmRemoveOfficeOfTransitRoute(index))
 
       val result = route(app, request).value
 
@@ -150,10 +201,25 @@ class ConfirmRemoveOfficeOfTransitControllerSpec
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
+    "must redirect to Session Expired for a GET if no existing data is found at given index" in {
+      forAll(arbitraryOfficeOfTransitAnswers(emptyUserAnswers, Index(0))) {
+        answers =>
+          setExistingUserAnswers(answers)
+
+          val request = FakeRequest(GET, confirmRemoveOfficeOfTransitRoute(Index(1)))
+
+          val result = route(app, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
+    }
+
     "must redirect to Session Expired for a POST if no existing data is found" in {
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, confirmRemoveOfficeOfTransitRoute)
+      val request = FakeRequest(POST, confirmRemoveOfficeOfTransitRoute(index))
         .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
@@ -161,6 +227,22 @@ class ConfirmRemoveOfficeOfTransitControllerSpec
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+    }
+
+    "must redirect to Session Expired for a POST if no existing data is found at given index" in {
+      forAll(arbitraryOfficeOfTransitAnswers(emptyUserAnswers, Index(0))) {
+        answers =>
+          setExistingUserAnswers(answers)
+
+          val request = FakeRequest(POST, confirmRemoveOfficeOfTransitRoute(Index(1)))
+            .withFormUrlEncodedBody(("value", "true"))
+
+          val result = route(app, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
     }
   }
 }

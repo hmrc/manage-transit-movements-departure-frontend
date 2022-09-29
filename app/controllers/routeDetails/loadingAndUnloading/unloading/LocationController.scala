@@ -50,7 +50,7 @@ class LocationController @Inject() (
     .andThen(getMandatoryPage(CountryPage)) {
       implicit request =>
         val location = request.arg.description
-        val form     = formProvider("routeDetails.unloading.location", location)
+        val form     = formProvider("routeDetails.loadingAndUnloading.unloading.location", location)
         val preparedForm = request.userAnswers.get(LocationPage) match {
           case None        => form
           case Some(value) => form.fill(value)
@@ -64,7 +64,7 @@ class LocationController @Inject() (
     .async {
       implicit request =>
         val location = request.arg.description
-        val form     = formProvider("routeDetails.unloading.location", location)
+        val form     = formProvider("routeDetails.loadingAndUnloading.unloading.location", location)
         form
           .bindFromRequest()
           .fold(

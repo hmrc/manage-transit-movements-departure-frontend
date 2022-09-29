@@ -20,7 +20,7 @@ import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
 import services.CountriesService
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.cyaHelpers.routeDetails.TransitCheckYourAnswersHelper
+import utils.cyaHelpers.routeDetails.transit.TransitCheckYourAnswersHelper
 import viewModels.ListItem
 
 import javax.inject.Inject

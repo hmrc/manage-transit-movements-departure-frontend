@@ -35,7 +35,7 @@ import scala.concurrent.Future
 class OtherReferenceYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
   private val formProvider                  = new YesNoFormProvider()
-  private val form                          = formProvider("guaranteeDetails.otherReferenceYesNo")
+  private val form                          = formProvider("guaranteeDetails.guarantee.otherReferenceYesNo")
   private val mode                          = NormalMode
   private lazy val otherReferenceYesNoRoute = routes.OtherReferenceYesNoController.onPageLoad(lrn, mode, index).url
 

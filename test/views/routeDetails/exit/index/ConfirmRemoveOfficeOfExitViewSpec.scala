@@ -16,6 +16,7 @@
 
 package views.routeDetails.exit.index
 
+import forms.YesNoFormProvider
 import generators.Generators
 import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
@@ -31,9 +32,9 @@ class ConfirmRemoveOfficeOfExitViewSpec extends YesNoViewBehaviours with Generat
   private val mode = arbitrary[Mode].sample.value
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[ConfirmRemoveOfficeOfExitView].apply(form, lrn, index, mode, exitOfficeName)(fakeRequest, messages)
+    injector.instanceOf[ConfirmRemoveOfficeOfExitView].apply(form, lrn, index, mode, prefix, exitOfficeName)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.exit.confirmRemoveOfficeOfExit"
+  override val prefix: String = "routeDetails.exit.index.confirmRemoveOfficeOfExit"
 
   behave like pageWithTitle(exitOfficeName)
 
@@ -46,4 +47,16 @@ class ConfirmRemoveOfficeOfExitViewSpec extends YesNoViewBehaviours with Generat
   behave like pageWithRadioItems(args = Seq(exitOfficeName))
 
   behave like pageWithSubmitButton("Save and continue")
+
+  "when no office name is present in user answers" - {
+
+    val defaultPrefix = s"$prefix.default"
+    val form          = new YesNoFormProvider()(defaultPrefix)
+    val view          = injector.instanceOf[ConfirmRemoveOfficeOfExitView].apply(form, lrn, index, mode, defaultPrefix)(fakeRequest, messages)
+    val doc           = parseView(view)
+
+    behave like pageWithTitle(doc, defaultPrefix)
+
+    behave like pageWithHeading(doc, defaultPrefix)
+  }
 }

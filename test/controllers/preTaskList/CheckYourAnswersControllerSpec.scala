@@ -30,6 +30,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewModels.preTaskList.PreTaskListViewModel
+import viewModels.preTaskList.PreTaskListViewModel.PreTaskListViewModelProvider
 import viewModels.sections.Section
 import views.html.preTaskList.CheckYourAnswersView
 
@@ -42,12 +43,12 @@ class CheckYourAnswersControllerSpec
     with Generators
     with PreTaskListUserAnswersGenerator {
 
-  private lazy val mockViewModel = mock[PreTaskListViewModel]
+  private lazy val mockViewModelProvider = mock[PreTaskListViewModelProvider]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind[PreTaskListViewModel].toInstance(mockViewModel))
+      .overrides(bind[PreTaskListViewModelProvider].toInstance(mockViewModelProvider))
 
   "Check Your Answers Controller" - {
 
@@ -57,7 +58,8 @@ class CheckYourAnswersControllerSpec
           val userAnswers = answers.removeValue(DetailsConfirmedPage)
           setExistingUserAnswers(userAnswers)
 
-          when(mockViewModel.apply(any())(any())).thenReturn(section)
+          when(mockViewModelProvider.apply(any())(any()))
+            .thenReturn(PreTaskListViewModel(section))
 
           val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url)
 

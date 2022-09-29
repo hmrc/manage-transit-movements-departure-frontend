@@ -19,13 +19,14 @@ package controllers.routeDetails.exit.index
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
-import models.reference.CustomsOffice
-import models.{NormalMode, UserAnswers}
+import models.reference.{Country, CustomsOffice}
+import models.{Index, NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, reset, verify, when}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.exit.index.OfficeOfExitPage
+import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
 import pages.sections.routeDetails.exit.OfficeOfExitSection
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -40,30 +41,53 @@ class ConfirmRemoveOfficeOfExitControllerSpec
     with RouteDetailsUserAnswersGenerator
     with ScalaCheckPropertyChecks {
 
+  private val prefix        = "routeDetails.exit.index.confirmRemoveOfficeOfExit"
+  private val defaultPrefix = s"$prefix.default"
+
   private val formProvider                       = new YesNoFormProvider()
-  private def form(customsOffice: CustomsOffice) = formProvider("routeDetails.exit.confirmRemoveOfficeOfExit", customsOffice.name)
+  private def form(customsOffice: CustomsOffice) = formProvider(prefix, customsOffice.name)
+  private val defaultForm                        = formProvider(defaultPrefix)
 
   private val mode = NormalMode
 
-  private lazy val confirmRemoveOfficeOfExitRoute = routes.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn, index, mode).url
+  private def confirmRemoveOfficeOfExitRoute(index: Index) = routes.ConfirmRemoveOfficeOfExitController.onPageLoad(lrn, index, mode).url
 
   "ConfirmRemoveOfficeOfExit Controller" - {
 
-    "must return OK and the correct view for a GET" in {
-      forAll(arbitraryOfficeOfExitAnswers(emptyUserAnswers, index)) {
-        answers =>
-          setExistingUserAnswers(answers)
-          val customsOffice = answers.getValue(OfficeOfExitPage(index))
+    "must return OK and the correct view for a GET" - {
+      "when office of exit name has been answered" in {
+        forAll(arbitraryOfficeOfExitAnswers(emptyUserAnswers, index)) {
+          answers =>
+            setExistingUserAnswers(answers)
+            val customsOffice = answers.getValue(OfficeOfExitPage(index))
 
-          val request = FakeRequest(GET, confirmRemoveOfficeOfExitRoute)
-          val result  = route(app, request).value
+            val request = FakeRequest(GET, confirmRemoveOfficeOfExitRoute(index))
+            val result  = route(app, request).value
 
-          val view = injector.instanceOf[ConfirmRemoveOfficeOfExitView]
+            val view = injector.instanceOf[ConfirmRemoveOfficeOfExitView]
 
-          status(result) mustEqual OK
+            status(result) mustEqual OK
 
-          contentAsString(result) mustEqual
-            view(form(customsOffice), lrn, index, mode, customsOffice.name)(request, messages).toString
+            contentAsString(result) mustEqual
+              view(form(customsOffice), lrn, index, mode, prefix, customsOffice.name)(request, messages).toString
+        }
+      }
+
+      "when office of exit name has not been answered" in {
+        forAll(arbitrary[Country]) {
+          country =>
+            setExistingUserAnswers(emptyUserAnswers.setValue(OfficeOfExitCountryPage(index), country))
+
+            val request = FakeRequest(GET, confirmRemoveOfficeOfExitRoute(index))
+            val result  = route(app, request).value
+
+            val view = injector.instanceOf[ConfirmRemoveOfficeOfExitView]
+
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              view(defaultForm, lrn, index, mode, defaultPrefix)(request, messages).toString
+        }
       }
     }
 
@@ -76,7 +100,7 @@ class ConfirmRemoveOfficeOfExitControllerSpec
 
             setExistingUserAnswers(answers)
 
-            val request = FakeRequest(POST, confirmRemoveOfficeOfExitRoute)
+            val request = FakeRequest(POST, confirmRemoveOfficeOfExitRoute(index))
               .withFormUrlEncodedBody(("value", "true"))
 
             val result = route(app, request).value
@@ -101,7 +125,7 @@ class ConfirmRemoveOfficeOfExitControllerSpec
 
             setExistingUserAnswers(answers)
 
-            val request = FakeRequest(POST, confirmRemoveOfficeOfExitRoute)
+            val request = FakeRequest(POST, confirmRemoveOfficeOfExitRoute(index))
               .withFormUrlEncodedBody(("value", "false"))
 
             val result = route(app, request).value
@@ -116,30 +140,59 @@ class ConfirmRemoveOfficeOfExitControllerSpec
       }
     }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
-      forAll(arbitraryOfficeOfExitAnswers(emptyUserAnswers, index)) {
-        answers =>
-          setExistingUserAnswers(answers)
-          val customsOffice = answers.getValue(OfficeOfExitPage(index))
+    "must return a Bad Request and errors when invalid data is submitted" - {
+      "when office of exit name has been answered" in {
+        forAll(arbitraryOfficeOfExitAnswers(emptyUserAnswers, index)) {
+          answers =>
+            setExistingUserAnswers(answers)
+            val customsOffice = answers.getValue(OfficeOfExitPage(index))
 
-          val request   = FakeRequest(POST, confirmRemoveOfficeOfExitRoute).withFormUrlEncodedBody(("value", ""))
-          val boundForm = form(customsOffice).bind(Map("value" -> ""))
+            val request   = FakeRequest(POST, confirmRemoveOfficeOfExitRoute(index)).withFormUrlEncodedBody(("value", ""))
+            val boundForm = form(customsOffice).bind(Map("value" -> ""))
 
-          val result = route(app, request).value
+            val result = route(app, request).value
 
-          status(result) mustEqual BAD_REQUEST
+            status(result) mustEqual BAD_REQUEST
 
-          val view = injector.instanceOf[ConfirmRemoveOfficeOfExitView]
+            val view = injector.instanceOf[ConfirmRemoveOfficeOfExitView]
 
-          contentAsString(result) mustEqual
-            view(boundForm, lrn, index, mode, customsOffice.name)(request, messages).toString
+            val content = contentAsString(result)
+
+            content mustEqual
+              view(boundForm, lrn, index, mode, prefix, customsOffice.name)(request, messages).toString
+
+            content must include(s"Select yes if you want to remove ${customsOffice.name} as an office of exit")
+        }
+      }
+
+      "when office of exit name has not been answered" in {
+        forAll(arbitrary[Country]) {
+          country =>
+            setExistingUserAnswers(emptyUserAnswers.setValue(OfficeOfExitCountryPage(index), country))
+
+            val request   = FakeRequest(POST, confirmRemoveOfficeOfExitRoute(index)).withFormUrlEncodedBody(("value", ""))
+            val boundForm = defaultForm.bind(Map("value" -> ""))
+
+            val result = route(app, request).value
+
+            status(result) mustEqual BAD_REQUEST
+
+            val view = injector.instanceOf[ConfirmRemoveOfficeOfExitView]
+
+            val content = contentAsString(result)
+
+            content mustEqual
+              view(boundForm, lrn, index, mode, defaultPrefix)(request, messages).toString
+
+            content must include("Select yes if you want to remove this office of exit")
+        }
       }
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, confirmRemoveOfficeOfExitRoute)
+      val request = FakeRequest(GET, confirmRemoveOfficeOfExitRoute(index))
 
       val result = route(app, request).value
 
@@ -148,10 +201,25 @@ class ConfirmRemoveOfficeOfExitControllerSpec
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
+    "must redirect to Session Expired for a GET if no existing data is found at given index" in {
+      forAll(arbitraryOfficeOfExitAnswers(emptyUserAnswers, Index(0))) {
+        answers =>
+          setExistingUserAnswers(answers)
+
+          val request = FakeRequest(GET, confirmRemoveOfficeOfExitRoute(Index(1)))
+
+          val result = route(app, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
+    }
+
     "must redirect to Session Expired for a POST if no existing data is found" in {
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, confirmRemoveOfficeOfExitRoute)
+      val request = FakeRequest(POST, confirmRemoveOfficeOfExitRoute(index))
         .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
@@ -159,6 +227,22 @@ class ConfirmRemoveOfficeOfExitControllerSpec
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+    }
+
+    "must redirect to Session Expired for a POST if no existing data is found at given index" in {
+      forAll(arbitraryOfficeOfExitAnswers(emptyUserAnswers, Index(0))) {
+        answers =>
+          setExistingUserAnswers(answers)
+
+          val request = FakeRequest(POST, confirmRemoveOfficeOfExitRoute(Index(1)))
+            .withFormUrlEncodedBody(("value", "true"))
+
+          val result = route(app, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
     }
   }
 }

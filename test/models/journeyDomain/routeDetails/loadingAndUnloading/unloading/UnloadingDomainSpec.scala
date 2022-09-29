@@ -22,13 +22,7 @@ import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import models.reference.{Country, UnLocode}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.routeDetails.loadingAndUnloading.unloading.{
-  AddExtraInformationYesNoPage,
-  CountryPage,
-  LocationPage,
-  PlaceOfUnloadingUnLocodePage,
-  PlaceOfUnloadingUnLocodeYesNoPage
-}
+import pages.routeDetails.loadingAndUnloading.unloading.{AddExtraInformationYesNoPage, CountryPage, LocationPage, UnLocodePage, UnLocodeYesNoPage}
 
 class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
@@ -41,8 +35,8 @@ class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Gener
 
       "when add a place of unloading UN/LOCODE is yes and additional information is yes" in {
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(PlaceOfUnloadingUnLocodeYesNoPage)(true)
-          .unsafeSetVal(PlaceOfUnloadingUnLocodePage)(unlocode)
+          .unsafeSetVal(UnLocodeYesNoPage)(true)
+          .unsafeSetVal(UnLocodePage)(unlocode)
           .unsafeSetVal(AddExtraInformationYesNoPage)(true)
           .unsafeSetVal(CountryPage)(country)
           .unsafeSetVal(LocationPage)(country.description)
@@ -59,8 +53,8 @@ class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Gener
 
       "when add a place of unloading UN/LOCODE is yes and additional information is no" in {
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(PlaceOfUnloadingUnLocodeYesNoPage)(true)
-          .unsafeSetVal(PlaceOfUnloadingUnLocodePage)(unlocode)
+          .unsafeSetVal(UnLocodeYesNoPage)(true)
+          .unsafeSetVal(UnLocodePage)(unlocode)
           .unsafeSetVal(AddExtraInformationYesNoPage)(false)
 
         val expectedResult = UnloadingDomain(
@@ -75,7 +69,7 @@ class UnloadingDomainSpec extends SpecBase with UserAnswersSpecHelper with Gener
 
       "when add a place of unloading UN/LOCODE is no" in {
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(PlaceOfUnloadingUnLocodeYesNoPage)(false)
+          .unsafeSetVal(UnLocodeYesNoPage)(false)
           .unsafeSetVal(CountryPage)(country)
           .unsafeSetVal(LocationPage)(country.description)
 

@@ -20,7 +20,7 @@ import cats.implicits._
 import models.domain._
 import models.journeyDomain.JourneyDomainModel
 import models.reference.Country
-import pages.routeDetails.loadingAndUnloading.loading.{PlaceOfLoadingCountryPage, PlaceOfLoadingLocationPage}
+import pages.routeDetails.loadingAndUnloading.loading.{CountryPage, LocationPage}
 
 case class AdditionalInformationDomain(
   country: Country,
@@ -31,8 +31,8 @@ object AdditionalInformationDomain {
 
   implicit val userAnswersReader: UserAnswersReader[AdditionalInformationDomain] =
     (
-      PlaceOfLoadingCountryPage.reader,
-      PlaceOfLoadingLocationPage.reader
+      CountryPage.reader,
+      LocationPage.reader
     ).tupled.map((AdditionalInformationDomain.apply _).tupled)
 
 }

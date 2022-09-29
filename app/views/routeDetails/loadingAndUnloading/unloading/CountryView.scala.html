@@ -34,7 +34,7 @@
 @(form: Form[Country], lrn: LocalReferenceNumber, countries: Seq[Country], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.unloading.country.title"),
+    title = messages("routeDetails.loadingAndUnloading.unloading.country.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -46,12 +46,12 @@
         @inputSelect(
             field = form("value"),
             selectType = OrdinarySelect(
-                heading = messages("routeDetails.unloading.country.heading"),
-                caption = Some(messages("routeDetails.unloading.caption"))
+                heading = messages("routeDetails.loadingAndUnloading.unloading.country.heading"),
+                caption = Some(messages("routeDetails.loadingAndUnloading.unloading.caption"))
             ),
-            hint = Some(messages("routeDetails.unloading.country.hintText")),
+            hint = Some(messages("routeDetails.loadingAndUnloading.unloading.country.hintText")),
             selectItems = countries.toSelectItems(form.value),
-            placeholder = messages("routeDetails.unloading.country.placeholder")
+            placeholder = messages("routeDetails.loadingAndUnloading.unloading.country.placeholder")
         )
 
         @button(attributes = Map("id" -> "submit"))

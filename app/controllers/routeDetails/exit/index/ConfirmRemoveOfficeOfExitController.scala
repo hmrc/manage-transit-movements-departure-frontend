@@ -21,11 +21,10 @@ import controllers.routeDetails.exit.{routes => exitRoutes}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.reference.CustomsOffice
-import models.requests.SpecificDataRequestProvider1
+import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode}
 import pages.routeDetails.exit.index.OfficeOfExitPage
 import pages.sections.routeDetails.exit.OfficeOfExitSection
-import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -41,42 +40,51 @@ class ConfirmRemoveOfficeOfExitController @Inject() (
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ConfirmRemoveOfficeOfExitView,
-  getMandatoryPage: SpecificDataRequiredActionProvider
+  view: ConfirmRemoveOfficeOfExitView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private type Request = SpecificDataRequestProvider1[CustomsOffice]#SpecificDataRequest[_]
+  private case class DynamicHeading(prefix: String, args: String*)
 
-  private def form(implicit request: Request): Form[Boolean] =
-    formProvider("routeDetails.exit.confirmRemoveOfficeOfExit", request.arg.name)
-
-  def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions
-    .requireData(lrn)
-    .andThen(getMandatoryPage(OfficeOfExitPage(index))) {
-      implicit request =>
-        Ok(view(form, lrn, index, mode, request.arg.name))
+  private def dynamicHeading(index: Index)(implicit request: DataRequest[_]): Option[DynamicHeading] =
+    request.userAnswers.get(OfficeOfExitSection(index)) map {
+      _ =>
+        val prefix = "routeDetails.exit.index.confirmRemoveOfficeOfExit"
+        request.userAnswers.get(OfficeOfExitPage(index)) match {
+          case Some(CustomsOffice(_, name, _)) => DynamicHeading(prefix, name)
+          case None                            => DynamicHeading(s"$prefix.default")
+        }
     }
 
-  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions
-    .requireData(lrn)
-    .andThen(getMandatoryPage(OfficeOfExitPage(index)))
-    .async {
-      implicit request =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index, mode, request.arg.name))),
-            {
-              case true =>
-                OfficeOfExitSection(index)
-                  .removeFromUserAnswers()
-                  .writeToSession()
-                  .navigateTo(exitRoutes.AddAnotherOfficeOfExitController.onPageLoad(lrn, mode))
-              case false =>
-                Future.successful(Redirect(exitRoutes.AddAnotherOfficeOfExitController.onPageLoad(lrn, mode)))
-            }
-          )
-    }
+  def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+    implicit request =>
+      dynamicHeading(index) match {
+        case Some(DynamicHeading(prefix, args @ _*)) =>
+          Ok(view(formProvider(prefix, args: _*), lrn, index, mode, prefix, args: _*))
+        case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+      }
+  }
+
+  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
+    implicit request =>
+      dynamicHeading(index) match {
+        case Some(DynamicHeading(prefix, args @ _*)) =>
+          formProvider(prefix, args: _*)
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index, mode, prefix, args: _*))),
+              {
+                case true =>
+                  OfficeOfExitSection(index)
+                    .removeFromUserAnswers()
+                    .writeToSession()
+                    .navigateTo(exitRoutes.AddAnotherOfficeOfExitController.onPageLoad(lrn, mode))
+                case false =>
+                  Future.successful(Redirect(exitRoutes.AddAnotherOfficeOfExitController.onPageLoad(lrn, mode)))
+              }
+            )
+        case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+      }
+  }
 }

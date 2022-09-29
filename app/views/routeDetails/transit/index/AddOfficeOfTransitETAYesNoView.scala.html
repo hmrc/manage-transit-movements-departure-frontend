@@ -31,7 +31,7 @@
 @(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, officeOfTransit: CustomsOffice, index: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.transit.addOfficeOfTransitETAYesNo.title", officeOfTransit.toString),
+    title = messages("routeDetails.transit.index.addOfficeOfTransitETAYesNo.title", officeOfTransit.toString),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -43,7 +43,7 @@
         @inputYesNo(
             field = form("value"),
             yesNoType = OrdinaryYesNo(
-                heading = messages("routeDetails.transit.addOfficeOfTransitETAYesNo.heading", officeOfTransit.toString),
+                heading = messages("routeDetails.transit.index.addOfficeOfTransitETAYesNo.heading", officeOfTransit.toString),
                 caption = Some(messages("routeDetails.caption")),
             )
         )

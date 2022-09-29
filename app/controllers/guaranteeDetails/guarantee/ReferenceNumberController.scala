@@ -43,7 +43,7 @@ class ReferenceNumberController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("guaranteeDetails.referenceNumber")
+  private val form = formProvider("guaranteeDetails.guarantee.referenceNumber")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

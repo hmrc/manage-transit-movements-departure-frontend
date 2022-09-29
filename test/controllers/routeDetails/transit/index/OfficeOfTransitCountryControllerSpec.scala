@@ -43,7 +43,7 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
   private val countryList = CountryList(Seq(country1, country2))
 
   private val formProvider = new CountryFormProvider()
-  private val form         = formProvider("routeDetails.transit.officeOfTransitCountry", countryList)
+  private val form         = formProvider("routeDetails.transit.index.officeOfTransitCountry", countryList)
   private val mode         = NormalMode
 
   private val mockCountriesService: CountriesService           = mock[CountriesService]

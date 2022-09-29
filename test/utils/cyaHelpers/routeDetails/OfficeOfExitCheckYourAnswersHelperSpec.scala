@@ -26,6 +26,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
+import utils.cyaHelpers.routeDetails.exit.OfficeOfExitCheckYourAnswersHelper
 
 class OfficeOfExitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 

@@ -16,44 +16,44 @@
 
 package viewModels.traderDetails
 
-import models.UserAnswers
+import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
 import utils.cyaHelpers.traderDetails.HolderOfTransitCheckYourAnswersHelper
 import viewModels.sections.Section
-import viewModels.{SectionViewModel, SubSectionViewModel}
 
-sealed trait HolderOfTransitViewModel {
-  self: SectionViewModel =>
+import javax.inject.Inject
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): Seq[Section] = {
-    val helper = new HolderOfTransitCheckYourAnswersHelper(userAnswers, mode)
-
-    val holderOfTransitSection = Section(
-      sectionTitle = messages("traderDetails.holderOfTransit.checkYourAnswers.transitHolder"),
-      rows = Seq(
-        helper.eoriYesNo,
-        helper.eori,
-        helper.tirIdentificationYesNo,
-        helper.tirIdentification,
-        helper.name,
-        helper.address
-      ).flatten
-    )
-
-    val additionalContactSection = Section(
-      sectionTitle = messages("traderDetails.holderOfTransit.checkYourAnswers.additionalContact"),
-      rows = Seq(
-        helper.addContact,
-        helper.contactName,
-        helper.contactTelephoneNumber
-      ).flatten
-    )
-
-    Seq(holderOfTransitSection, additionalContactSection)
-  }
-}
+case class HolderOfTransitViewModel(sections: Seq[Section])
 
 object HolderOfTransitViewModel {
-  class HolderOfTransitSectionViewModel extends SectionViewModel with HolderOfTransitViewModel
-  class HolderOfTransitSubSectionViewModel extends SubSectionViewModel with HolderOfTransitViewModel
+
+  class HolderOfTransitViewModelProvider @Inject() () {
+
+    def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): HolderOfTransitViewModel = {
+      val helper = new HolderOfTransitCheckYourAnswersHelper(userAnswers, mode)
+
+      val holderOfTransitSection = Section(
+        sectionTitle = messages("traderDetails.holderOfTransit.checkYourAnswers.transitHolder"),
+        rows = Seq(
+          helper.eoriYesNo,
+          helper.eori,
+          helper.tirIdentificationYesNo,
+          helper.tirIdentification,
+          helper.name,
+          helper.address
+        ).flatten
+      )
+
+      val additionalContactSection = Section(
+        sectionTitle = messages("traderDetails.holderOfTransit.checkYourAnswers.additionalContact"),
+        rows = Seq(
+          helper.addContact,
+          helper.contactName,
+          helper.contactTelephoneNumber
+        ).flatten
+      )
+
+      new HolderOfTransitViewModel(Seq(holderOfTransitSection, additionalContactSection))
+    }
+  }
 }

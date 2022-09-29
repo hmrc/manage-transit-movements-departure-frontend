@@ -21,20 +21,27 @@ import play.api.i18n.Messages
 import utils.cyaHelpers.PreTaskListCheckYourAnswersHelper
 import viewModels.sections.Section
 
-class PreTaskListViewModel {
+import javax.inject.Inject
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): Section = {
-    val helper = new PreTaskListCheckYourAnswersHelper(userAnswers, CheckMode)
+case class PreTaskListViewModel(section: Section)
 
-    val rows = Seq(
-      Some(helper.localReferenceNumber),
-      helper.officeOfDeparture,
-      helper.procedureType,
-      helper.declarationType,
-      helper.tirCarnet,
-      helper.securityType
-    ).flatten
+object PreTaskListViewModel {
 
-    Section(rows)
+  class PreTaskListViewModelProvider @Inject() () {
+
+    def apply(userAnswers: UserAnswers)(implicit messages: Messages): PreTaskListViewModel = {
+      val helper = new PreTaskListCheckYourAnswersHelper(userAnswers, CheckMode)
+
+      val rows = Seq(
+        Some(helper.localReferenceNumber),
+        helper.officeOfDeparture,
+        helper.procedureType,
+        helper.declarationType,
+        helper.tirCarnet,
+        helper.securityType
+      ).flatten
+
+      new PreTaskListViewModel(Section(rows))
+    }
   }
 }

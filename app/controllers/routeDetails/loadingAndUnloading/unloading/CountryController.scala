@@ -49,7 +49,7 @@ class CountryController @Inject() (
     implicit request =>
       service.getCountries.map {
         countryList =>
-          val form = formProvider("routeDetails.unloading.country", countryList)
+          val form = formProvider("routeDetails.loadingAndUnloading.unloading.country", countryList)
           val preparedForm = request.userAnswers.get(CountryPage) match {
             case None        => form
             case Some(value) => form.fill(value)
@@ -63,7 +63,7 @@ class CountryController @Inject() (
     implicit request =>
       service.getCountries.flatMap {
         countryList =>
-          val form = formProvider("routeDetails.unloading.country", countryList)
+          val form = formProvider("routeDetails.loadingAndUnloading.unloading.country", countryList)
           form
             .bindFromRequest()
             .fold(

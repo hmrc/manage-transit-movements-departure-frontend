@@ -27,10 +27,10 @@
     button: Button
 )
 
-@(form: Form[Boolean], lrn: LocalReferenceNumber, index: Index, mode: Mode, exitOfficeName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], lrn: LocalReferenceNumber, index: Index, mode: Mode, prefix: String, args: String*)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.exit.confirmRemoveOfficeOfExit.title", exitOfficeName),
+    title = messages(s"$prefix.title", args: _*),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -42,7 +42,7 @@
         @inputYesNo(
             field = form("value"),
             yesNoType = OrdinaryYesNo(
-                heading = messages("routeDetails.exit.confirmRemoveOfficeOfExit.heading", exitOfficeName),
+                heading = messages(s"$prefix.heading", args: _*),
                 caption = Some(messages("routeDetails.caption"))
             )
         )

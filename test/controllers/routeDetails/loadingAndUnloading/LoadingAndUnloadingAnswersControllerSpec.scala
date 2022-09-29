@@ -19,6 +19,7 @@ package controllers.routeDetails.loadingAndUnloading
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
 import models.NormalMode
+import navigation.routeDetails.RouteDetailsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.inject.bind
@@ -39,6 +40,7 @@ class LoadingAndUnloadingAnswersControllerSpec extends SpecBase with AppWithDefa
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
+      .overrides(bind(classOf[RouteDetailsNavigatorProvider]).toInstance(fakeRouteDetailsNavigatorProvider))
       .overrides(bind[LoadingAndUnloadingAnswersViewModelProvider].toInstance(mockViewModelProvider))
 
   "Check Your Answers Controller" - {
@@ -83,8 +85,7 @@ class LoadingAndUnloadingAnswersControllerSpec extends SpecBase with AppWithDefa
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
-
+      redirectLocation(result).value mustEqual onwardRoute.url
     }
   }
 }

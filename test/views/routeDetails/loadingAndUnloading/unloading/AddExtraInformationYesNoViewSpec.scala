@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.routeDetails.unloading
+package views.routeDetails.loadingAndUnloading.unloading
 
 import models.NormalMode
 import play.api.data.Form
@@ -27,7 +27,7 @@ class AddExtraInformationYesNoViewSpec extends YesNoViewBehaviours {
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector.instanceOf[AddExtraInformationYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.unloading.addExtraInformationYesNo"
+  override val prefix: String = "routeDetails.loadingAndUnloading.unloading.addExtraInformationYesNo"
 
   behave like pageWithTitle()
 

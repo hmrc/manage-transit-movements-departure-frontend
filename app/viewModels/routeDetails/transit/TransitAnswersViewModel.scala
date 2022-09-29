@@ -19,9 +19,9 @@ package viewModels.routeDetails.transit
 import models.{Index, Mode, RichOptionalJsArray, UserAnswers}
 import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import play.api.i18n.Messages
-import utils.cyaHelpers.routeDetails.TransitCheckYourAnswersHelper
+import utils.cyaHelpers.routeDetails.transit.TransitCheckYourAnswersHelper
+import viewModels.Link
 import viewModels.sections.Section
-import viewModels.{Link, RichSummaryListRowOption}
 
 import javax.inject.Inject
 
@@ -38,6 +38,13 @@ object TransitAnswersViewModel {
 
       val helper = new TransitCheckYourAnswersHelper(userAnswers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
 
+      val preSection = Section(
+        rows = Seq(
+          helper.includesT2Declarations,
+          helper.addOfficeOfTransit
+        ).flatten
+      )
+
       val officesOfTransitSection = Section(
         sectionTitle = messages("routeDetails.checkYourAnswers.transit.subheading"),
         rows = userAnswers
@@ -52,7 +59,7 @@ object TransitAnswersViewModel {
         )
       )
 
-      new TransitAnswersViewModel(Seq(helper.addOfficeOfTransit.toSection, officesOfTransitSection))
+      new TransitAnswersViewModel(Seq(preSection, officesOfTransitSection))
     }
   }
 }

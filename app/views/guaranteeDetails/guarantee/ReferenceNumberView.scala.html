@@ -30,7 +30,7 @@
 @(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, index: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("guaranteeDetails.referenceNumber.title"),
+    title = messages("guaranteeDetails.guarantee.referenceNumber.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -42,11 +42,11 @@
         @inputText(
             field = form("value"),
             inputTextType = TextInputWithHiddenLabel(
-                heading = messages("guaranteeDetails.referenceNumber.heading"),
+                heading = messages("guaranteeDetails.guarantee.referenceNumber.heading"),
                 caption = Some(messages("guaranteeDetails.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("guaranteeDetails.referenceNumber.paragraph")}</p>""")
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("guaranteeDetails.guarantee.referenceNumber.paragraph")}</p>""")
             ),
-            hint = Some(messages("guaranteeDetails.referenceNumber.hint")),
+            hint = Some(messages("guaranteeDetails.guarantee.referenceNumber.hint")),
             inputClass = InputSize.Width20
         )
 

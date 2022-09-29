@@ -34,7 +34,7 @@ class RemoveCountryOfRoutingYesNoViewSpec extends YesNoViewBehaviours with Gener
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector.instanceOf[RemoveCountryOfRoutingYesNoView].apply(form, lrn, mode, index, country)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.routing.removeCountryOfRoutingYesNo"
+  override val prefix: String = "routeDetails.routing.index.removeCountryOfRoutingYesNo"
 
   behave like pageWithTitle(country.toString)
 

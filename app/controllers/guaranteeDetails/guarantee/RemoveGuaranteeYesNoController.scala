@@ -42,7 +42,7 @@ class RemoveGuaranteeYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("guaranteeDetails.removeGuaranteeYesNo")
+  private val form = formProvider("guaranteeDetails.guarantee.removeGuaranteeYesNo")
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

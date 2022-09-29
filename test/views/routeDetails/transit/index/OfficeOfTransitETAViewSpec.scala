@@ -42,7 +42,7 @@ class OfficeOfTransitETAViewSpec extends DateTimeInputViewBehaviours with Genera
       .instanceOf[OfficeOfTransitETAView]
       .apply(form, lrn, transitCountry.description, transitCustomsOffice.name, NormalMode, index)(fakeRequest, messages)
 
-  override val prefix: String = "routeDetails.transit.officeOfTransitETA"
+  override val prefix: String = "routeDetails.transit.index.officeOfTransitETA"
 
   behave like pageWithTitle(transitCustomsOffice.name, transitCountry.description)
 

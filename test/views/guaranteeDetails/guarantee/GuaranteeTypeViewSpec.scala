@@ -31,7 +31,7 @@ class GuaranteeTypeViewSpec extends RadioViewBehaviours[GuaranteeType] {
   override def applyView(form: Form[GuaranteeType]): HtmlFormat.Appendable =
     injector.instanceOf[GuaranteeTypeView].apply(form, lrn, GuaranteeType.radioItems, NormalMode, index)(fakeRequest, messages)
 
-  override val prefix: String = "guaranteeDetails.guaranteeType"
+  override val prefix: String = "guaranteeDetails.guarantee.guaranteeType"
 
   override def radioItems(fieldId: String, checkedValue: Option[GuaranteeType] = None): Seq[RadioItem] =
     GuaranteeType.radioItems(fieldId, checkedValue)

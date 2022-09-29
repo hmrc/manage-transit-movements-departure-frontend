@@ -41,7 +41,7 @@ class OfficeOfExitControllerSpec extends SpecBase with AppWithDefaultMockFixture
   private val country           = arbitraryCountry.arbitrary.sample.get
 
   private val formProvider = new CustomsOfficeForCountryFormProvider()
-  private val form         = formProvider("routeDetails.exit.officeOfExit", customsOfficeList, country.description)
+  private val form         = formProvider("routeDetails.exit.index.officeOfExit", customsOfficeList, country.description)
   private val mode         = NormalMode
 
   private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]

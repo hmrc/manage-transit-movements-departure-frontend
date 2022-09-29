@@ -18,7 +18,7 @@ package viewModels.routeDetails.transit
 
 import models.{Index, Mode, UserAnswers}
 import play.api.i18n.Messages
-import utils.cyaHelpers.routeDetails.OfficeOfTransitCheckYourAnswersHelper
+import utils.cyaHelpers.routeDetails.transit.OfficeOfTransitCheckYourAnswersHelper
 import viewModels.sections.Section
 
 import javax.inject.Inject

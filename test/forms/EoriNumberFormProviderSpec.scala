@@ -19,6 +19,7 @@ package forms
 import forms.Constants._
 import forms.behaviours.{FieldBehaviours, StringFieldBehaviours}
 import models.domain.StringFieldRegex._
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
 
@@ -52,7 +53,7 @@ class EoriNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavio
       form = form,
       fieldName = fieldName,
       regex = alphaNumericRegex.regex,
-      gen = stringsWithLength(maxEoriNumberLength),
+      gen = stringsWithLength(maxEoriNumberLength, arbitrary[Char]),
       invalidKey = invalidCharactersKey
     )
 

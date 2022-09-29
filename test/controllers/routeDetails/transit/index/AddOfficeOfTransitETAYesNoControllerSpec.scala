@@ -37,7 +37,7 @@ class AddOfficeOfTransitETAYesNoControllerSpec extends SpecBase with AppWithDefa
 
   private val formProvider                         = new YesNoFormProvider()
   private val officeOfTransit                      = arbitraryCustomsOffice.arbitrary.sample.get
-  private val form                                 = formProvider("routeDetails.transit.addOfficeOfTransitETAYesNo")
+  private val form                                 = formProvider("routeDetails.transit.index.addOfficeOfTransitETAYesNo")
   private val mode                                 = NormalMode
   private lazy val addOfficeOfTransitETAYesNoRoute = routes.AddOfficeOfTransitETAYesNoController.onPageLoad(lrn, mode, index).url
 

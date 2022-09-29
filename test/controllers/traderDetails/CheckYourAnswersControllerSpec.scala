@@ -26,25 +26,27 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewModels.sections.Section
 import viewModels.traderDetails.TraderDetailsViewModel
+import viewModels.traderDetails.TraderDetailsViewModel.TraderDetailsViewModelProvider
 import views.html.traderDetails.CheckYourAnswersView
 
 import scala.concurrent.Future
 
 class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private lazy val mockViewModel = mock[TraderDetailsViewModel]
+  private lazy val mockViewModelProvider = mock[TraderDetailsViewModelProvider]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind[TraderDetailsViewModel].toInstance(mockViewModel))
+      .overrides(bind[TraderDetailsViewModelProvider].toInstance(mockViewModelProvider))
 
   "Check Your Answers Controller" - {
 
     "must return OK and the correct view for a GET" in {
       val sampleSections = listWithMaxLength[Section]().sample.value
 
-      when(mockViewModel.apply(any())(any())).thenReturn(sampleSections)
+      when(mockViewModelProvider.apply(any())(any()))
+        .thenReturn(TraderDetailsViewModel(sampleSections))
 
       setExistingUserAnswers(emptyUserAnswers)
 

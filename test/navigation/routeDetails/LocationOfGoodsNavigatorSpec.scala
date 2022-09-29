@@ -44,7 +44,7 @@ class LocationOfGoodsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
             answers =>
               navigator
                 .nextPage(answers, mode)
-                .mustBe(controllers.routeDetails.loadingAndUnloading.loading.routes.PlaceOfLoadingAddUnLocodeYesNoController.onPageLoad(answers.lrn, mode))
+                .mustBe(controllers.routeDetails.loadingAndUnloading.loading.routes.AddUnLocodeYesNoController.onPageLoad(answers.lrn, mode))
           }
         }
       }

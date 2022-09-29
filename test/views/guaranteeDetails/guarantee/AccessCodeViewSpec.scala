@@ -27,7 +27,7 @@ import views.html.guaranteeDetails.guarantee.AccessCodeView
 
 class AccessCodeViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "guaranteeDetails.accessCode"
+  override val prefix: String = "guaranteeDetails.guarantee.accessCode"
 
   override def form: Form[String] = new AccessCodeFormProvider()(prefix)
 
