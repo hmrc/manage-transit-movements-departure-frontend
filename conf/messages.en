@@ -163,23 +163,22 @@ traderDetails.checkYourAnswers.title = Check your answers
 
 # Trader details - Holder of transit
 
-traderDetails.holderOfTransit.eoriYesNo.title = Do you know the transit holder’s EORI number?
-traderDetails.holderOfTransit.eoriYesNo.heading = Do you know the transit holder’s EORI number?
-traderDetails.holderOfTransit.eoriYesNo.checkYourAnswersLabel = Do you know the transit holder’s EORI number?
-traderDetails.holderOfTransit.eoriYesNo.error.required = Select yes if you know the transit holder’s EORI number
-traderDetails.holderOfTransit.eoriYesNo.change.hidden = if you know the transit holder’s EORI number
+traderDetails.transitHolder.caption = Trader details - Transit holder
 
-traderDetails.holderOfTransit.eori.title = What is the transit holder’s EORI number?
-traderDetails.holderOfTransit.eori.heading = What is the transit holder’s EORI number?
-traderDetails.holderOfTransit.eori.checkYourAnswersLabel = Transit holder’s EORI number
-traderDetails.holderOfTransit.eori.hint = This will start GB or XI followed by 12 or 15 numbers, for example GB123456789000.
-traderDetails.holderOfTransit.eori.error.required = Enter the transit holder’s EORI number
-traderDetails.holderOfTransit.eori.error.maxLength = The transit holder’s EORI number must be 17 characters or less
-traderDetails.holderOfTransit.eori.error.minLength = The transit holder’s EORI number must be 14 characters or more
-traderDetails.holderOfTransit.eori.error.invalidCharacters = The transit holder’s EORI number must only include letters a to z and numbers 0 to 9
-traderDetails.holderOfTransit.eori.error.invalidFormat = The transit holder’s EORI number must start with 2 letters, such as GB or XI, followed by up to 15 numbers
-traderDetails.holderOfTransit.eori.error.prefix = The transit holder’s EORI number must start with 2 letters, such as GB or XI
-traderDetails.holderOfTransit.eori.change.hidden = transit holder’s EORI number
+traderDetails.holderOfTransit.eoriYesNo.title = Do you know the transit holder’s EORI number or TIN?
+traderDetails.holderOfTransit.eoriYesNo.heading = Do you know the transit holder’s EORI number or TIN?
+traderDetails.holderOfTransit.eoriYesNo.checkYourAnswersLabel = Do you know the transit holder’s EORI number or TIN?
+traderDetails.holderOfTransit.eoriYesNo.error.required = Select yes if you know the transit holder’s EORI number or TIN
+traderDetails.holderOfTransit.eoriYesNo.change.hidden = if you know the transit holder’s EORI number or TIN
+
+traderDetails.holderOfTransit.eori.title = What is the transit holder’s EORI number or TIN?
+traderDetails.holderOfTransit.eori.heading = What is the transit holder’s EORI number or TIN?
+traderDetails.holderOfTransit.eori.checkYourAnswersLabel = Transit holder’s EORI number or TIN
+traderDetails.holderOfTransit.eori.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
+traderDetails.holderOfTransit.eori.error.required = Enter the transit holder’s EORI number or TIN
+traderDetails.holderOfTransit.eori.error.maxLength = The transit holder's EORI number or TIN must be 17 characters or less
+traderDetails.holderOfTransit.eori.error.invalidCharacters = The transit holder’s EORI number or TIN must only include letters a to z and numbers 0 to 9
+traderDetails.holderOfTransit.eori.change.hidden = transit holder’s EORI number or TIN
 
 traderDetails.holderOfTransit.tirIdentificationYesNo.title = Is the TIR holder’s identification number known?
 traderDetails.holderOfTransit.tirIdentificationYesNo.heading = Is the TIR holder’s identification number known?
@@ -256,17 +255,16 @@ traderDetails.holderOfTransit.contact.telephoneNumber.change.hidden = contact’
 
 # Trader details - Representative
 
-traderDetails.representative.eori.title = What is your EORI number?
-traderDetails.representative.eori.heading = What is your EORI number?
-traderDetails.representative.eori.checkYourAnswersLabel = Representative EORI number
-traderDetails.representative.eori.error.required = Enter your EORI number
-traderDetails.representative.eori.hint = This will start GB or XI followed by 12 or 15 numbers, for example GB123456789000.
-traderDetails.representative.eori.error.invalidCharacters = Your EORI number must only include letters a to z and numbers 0 to 9
-traderDetails.representative.eori.error.invalidFormat = Your EORI number must start with 2 letters, such as GB or XI, followed by up to 15 numbers
-traderDetails.representative.eori.error.maxLength = Your EORI number must be 17 characters or less
-traderDetails.representative.eori.error.minLength = Your EORI number must be 14 characters or more
-traderDetails.representative.eori.error.prefix = Your EORI number must start with 2 letters, such as GB or XI
-traderDetails.representative.eori.change.hidden = representative’s EORI number
+traderDetails.representative.caption = Trader details – Representative
+
+traderDetails.representative.eori.title = What is the representative’s EORI number or TIN?
+traderDetails.representative.eori.heading = What is the representative’s EORI number or TIN?
+traderDetails.representative.eori.checkYourAnswersLabel = Representative’s EORI number or TIN
+traderDetails.representative.eori.error.required = Enter the representative’s EORI number or TIN
+traderDetails.representative.eori.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
+traderDetails.representative.eori.error.invalidCharacters = The EORI number or TIN must only include letters a to z and numbers 0 to 9
+traderDetails.representative.eori.error.maxLength = The EORI number or TIN must be 17 characters or less
+traderDetails.representative.eori.change.hidden = representative’s EORI number or TIN
 
 traderDetails.representative.name.title = What is your name?
 traderDetails.representative.name.heading = What is your name?
@@ -324,23 +322,22 @@ traderDetails.consignment.checkYourAnswers.consignee = Consignee
 
 # Trader details - Consignment - Consignor
 
-traderDetails.consignment.consignor.eoriYesNo.title = Do you know the consignor’s EORI number?
-traderDetails.consignment.consignor.eoriYesNo.heading = Do you know the consignor’s EORI number?
-traderDetails.consignment.consignor.eoriYesNo.checkYourAnswersLabel = Do you know the consignor’s EORI number?
-traderDetails.consignment.consignor.eoriYesNo.error.required = Select yes if you know the consignor’s EORI number
-traderDetails.consignment.consignor.eoriYesNo.change.hidden = if you know the consignor’s EORI number
+traderDetails.consignment.consignor.caption = Trader details - Consignor
 
-traderDetails.consignment.consignor.eori.title = What is the consignor’s EORI number?
-traderDetails.consignment.consignor.eori.heading = What is the consignor’s EORI number?
-traderDetails.consignment.consignor.eori.checkYourAnswersLabel = Consignor’s EORI number
-traderDetails.consignment.consignor.eori.hint = This will start with 2 letters such as GB or XI followed by 12 to 15 numbers, for example GB123456789000.
-traderDetails.consignment.consignor.eori.error.required = Enter the consignor’s EORI number
-traderDetails.consignment.consignor.eori.error.maxLength = The consignor’s EORI number must be 17 characters or less
-traderDetails.consignment.consignor.eori.error.minLength = The consignor’s EORI number must be 14 characters or more
-traderDetails.consignment.consignor.eori.error.invalidCharacters = The consignor’s EORI number must only include letters a to z and numbers 0 to 9
-traderDetails.consignment.consignor.eori.error.invalidFormat = The consignor’s EORI number must start with 2 letters, such as GB or XI, followed by up to 15 numbers
-traderDetails.consignment.consignor.eori.error.prefix = The consignor’s EORI number must start with 2 letters, such as GB or XI
-traderDetails.consignment.consignor.eori.change.hidden = consignor’s EORI number
+traderDetails.consignment.consignor.eoriYesNo.title = Do you know the consignor’s EORI number or TIN?
+traderDetails.consignment.consignor.eoriYesNo.heading = Do you know the consignor’s EORI number or TIN?
+traderDetails.consignment.consignor.eoriYesNo.checkYourAnswersLabel = Do you know the consignor’s EORI number or TIN?
+traderDetails.consignment.consignor.eoriYesNo.error.required = Select yes if you know the consignor’s EORI number or TIN
+traderDetails.consignment.consignor.eoriYesNo.change.hidden = if you know the consignor’s EORI number or TIN
+
+traderDetails.consignment.consignor.eori.title = What is the consignor’s EORI number or TIN?
+traderDetails.consignment.consignor.eori.heading = What is the consignor’s EORI number or TIN?
+traderDetails.consignment.consignor.eori.checkYourAnswersLabel = Consignor’s EORI number or TIN
+traderDetails.consignment.consignor.eori.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
+traderDetails.consignment.consignor.eori.error.required = Enter the consignor’s EORI number or TIN
+traderDetails.consignment.consignor.eori.error.maxLength = The consignor’s EORI number or TIN must be 17 characters or less
+traderDetails.consignment.consignor.eori.error.invalidCharacters = The consignor’s EORI number or TIN must only include letters a to z and numbers 0 to 9
+traderDetails.consignment.consignor.eori.change.hidden = consignor’s EORI number or TIN
 
 traderDetails.consignment.consignor.name.title = What is the consignor’s name?
 traderDetails.consignment.consignor.name.heading = What is the consignor’s name?
@@ -394,23 +391,22 @@ traderDetails.consignment.consignor.contact.telephoneNumber.change.hidden = cons
 
 # Trader details - Consignment - Consignee
 
-traderDetails.consignment.consignee.eoriYesNo.title = Do you know the consignee’s EORI number?
-traderDetails.consignment.consignee.eoriYesNo.heading = Do you know the consignee’s EORI number?
-traderDetails.consignment.consignee.eoriYesNo.checkYourAnswersLabel = Do you know the consignee’s EORI number?
-traderDetails.consignment.consignee.eoriYesNo.error.required = Select yes if you know the consignee’s EORI number
-traderDetails.consignment.consignee.eoriYesNo.change.hidden = if you know the consignee’s EORI number
+traderDetails.consignment.consignee.caption = Trader details - Consignee
 
-traderDetails.consignment.consignee.eoriNumber.title = What is the consignee’s EORI number?
-traderDetails.consignment.consignee.eoriNumber.heading = What is the consignee’s EORI number?
-traderDetails.consignment.consignee.eoriNumber.checkYourAnswersLabel = Consignee’s EORI number
-traderDetails.consignment.consignee.eoriNumber.error.required = Enter the consignee’s EORI number
-traderDetails.consignment.consignee.eoriNumber.hint = This will start with 2 letters such as GB or XI followed by 12 or 15 numbers, for example GB123456789000.
-traderDetails.consignment.consignee.eoriNumber.error.maxLength = The consignee’s EORI number must be 17 characters or less
-traderDetails.consignment.consignee.eoriNumber.error.minLength = The consignee’s EORI number must be 14 characters or more
-traderDetails.consignment.consignee.eoriNumber.error.invalidCharacters = The consignee’s EORI number must only include letters a to z and numbers 0 to 9
-traderDetails.consignment.consignee.eoriNumber.error.invalidFormat = The consignee’s EORI number must start with 2 letters, such as GB or XI, followed by up to 15 numbers
-traderDetails.consignment.consignee.eoriNumber.error.prefix = The consignee’s EORI number must start with 2 letters, such as GB or XI
-traderDetails.consignment.consignee.eoriNumber.change.hidden = consignee’s EORI number
+traderDetails.consignment.consignee.eoriYesNo.title = Do you know the consignee’s EORI number or TIN?
+traderDetails.consignment.consignee.eoriYesNo.heading = Do you know the consignee’s EORI number or TIN?
+traderDetails.consignment.consignee.eoriYesNo.checkYourAnswersLabel = Do you know the consignee’s EORI number or TIN?
+traderDetails.consignment.consignee.eoriYesNo.error.required = Select yes if you know the consignee’s EORI number or TIN
+traderDetails.consignment.consignee.eoriYesNo.change.hidden = if you know the consignee’s EORI number or TIN
+
+traderDetails.consignment.consignee.eoriNumber.title = What is the consignee’s EORI number or TIN?
+traderDetails.consignment.consignee.eoriNumber.heading = What is the consignee’s EORI number or TIN?
+traderDetails.consignment.consignee.eoriNumber.checkYourAnswersLabel = Consignee’s EORI number or TIN
+traderDetails.consignment.consignee.eoriNumber.error.required = Enter the consignee’s EORI number or TIN
+traderDetails.consignment.consignee.eoriNumber.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
+traderDetails.consignment.consignee.eoriNumber.error.maxLength = The consignee’s EORI number or TIN must be 17 characters or less
+traderDetails.consignment.consignee.eoriNumber.error.invalidCharacters = The consignee’s EORI number or TIN must only include letters a to z and numbers 0 to 9
+traderDetails.consignment.consignee.eoriNumber.change.hidden = consignee’s EORI number or TIN
 
 traderDetails.consignment.consignee.name.title = What is the consignee’s name?
 traderDetails.consignment.consignee.name.heading = What is the consignee’s name?
@@ -545,6 +541,7 @@ guaranteeDetails.guarantee.removeGuaranteeYesNo.error.required = Select yes if y
 # Route details
 
 routeDetails.caption = Route details
+routeDetails.locationOfGoods.caption = Route details - Location of goods
 routeDetails.loadingAndUnloading.unloading.caption = Route details - Place of unloading
 routeDetails.loadingAndUnloading.loading.caption = Route details - Place of loading
 
@@ -767,7 +764,7 @@ routeDetails.locationOfGoods.identification.title = How do you want to identify 
 routeDetails.locationOfGoods.identification.heading = How do you want to identify the location of goods?
 routeDetails.locationOfGoods.identification.hint = This needs to be precise enough for Customs to locate the goods and carry out their checks.
 routeDetails.locationOfGoods.identification.customsOfficeIdentifier = Customs office identifier
-routeDetails.locationOfGoods.identification.eoriNumber = EORI number
+routeDetails.locationOfGoods.identification.eoriNumber = EORI number or TIN
 routeDetails.locationOfGoods.identification.authorisationNumber = Authorisation number
 routeDetails.locationOfGoods.identification.coordinates = Coordinates
 routeDetails.locationOfGoods.identification.unlocode = UN/LOCODE
@@ -807,16 +804,14 @@ routeDetails.locationOfGoods.coordinates.error.longitude.maximum = The longitude
 routeDetails.locationOfGoods.coordinates.error.required = Enter the {0} coordinates for the location of goods
 routeDetails.locationOfGoods.coordinates.error.format = The {0} coordinates must include between 5 and 7 decimal places
 
-routeDetails.locationOfGoods.eori.title = What is the EORI number for the location of goods?
-routeDetails.locationOfGoods.eori.heading = What is the EORI number for the location of goods?
-routeDetails.locationOfGoods.eori.checkYourAnswersLabel = What is the EORI number for the location of goods?
-routeDetails.locationOfGoods.eori.change.hidden = the EORI number for the location of goods
-routeDetails.locationOfGoods.eori.error.required = Enter the EORI number for the location of goods
-routeDetails.locationOfGoods.eori.error.minLength = The EORI number must be between 14 and 17 characters long
-routeDetails.locationOfGoods.eori.error.maxLength = The EORI number must be between 14 and 17 characters long
-routeDetails.locationOfGoods.eori.error.invalidCharacters = The EORI number must only include letters a to z and numbers 0 to 9
-routeDetails.locationOfGoods.eori.error.invalidFormat = The EORI number must start with GB or XI, followed by between 12 and 15 numbers
-routeDetails.locationOfGoods.eori.hintText = This will start GB or XI, followed by 12 to 15 numbers. For example, GB123456789000.
+routeDetails.locationOfGoods.eori.title = What is the EORI number or TIN for the location of goods?
+routeDetails.locationOfGoods.eori.heading = What is the EORI number or TIN for the location of goods?
+routeDetails.locationOfGoods.eori.checkYourAnswersLabel = EORI number or TIN for the location of goods
+routeDetails.locationOfGoods.eori.change.hidden =  EORI number or TIN for the location of goods
+routeDetails.locationOfGoods.eori.error.required = Enter the EORI number or TIN for the location of goods
+routeDetails.locationOfGoods.eori.error.maxLength = The EORI number or TIN must be 17 characters or less
+routeDetails.locationOfGoods.eori.error.invalidCharacters = The EORI number or TIN must only include letters a to z and numbers 0 to 9
+routeDetails.locationOfGoods.eori.hintText = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
 
 routeDetails.locationOfGoods.postalCode.title = What is the address for the location of goods?
 routeDetails.locationOfGoods.postalCode.heading = What is the address for the location of goods?

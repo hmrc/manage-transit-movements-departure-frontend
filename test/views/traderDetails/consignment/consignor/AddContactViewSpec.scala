@@ -33,7 +33,7 @@ class AddContactViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Trader details")
+  behave like pageWithSectionCaption("Trader details - Consignor")
 
   behave like pageWithHeading()
 

@@ -1,7 +1,7 @@
-GET        /:lrn/trader-details/representative/eori                                            controllers.traderDetails.representative.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/trader-details/representative/eori                                            controllers.traderDetails.representative.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/trader-details/representative/change-eori                                     controllers.traderDetails.representative.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/trader-details/representative/change-eori                                     controllers.traderDetails.representative.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/trader-details/representative/eori-tin                                        controllers.traderDetails.representative.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/representative/eori-tin                                        controllers.traderDetails.representative.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/representative/change-eori-tin                                 controllers.traderDetails.representative.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/representative/change-eori-tin                                 controllers.traderDetails.representative.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/trader-details/representative/name                                            controllers.traderDetails.representative.NameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/trader-details/representative/name                                            controllers.traderDetails.representative.NameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)

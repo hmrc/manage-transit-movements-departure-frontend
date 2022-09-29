@@ -40,7 +40,7 @@ class AddressViewSpec extends AddressViewBehaviours with Generators {
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Location of goods")
 
   behave like pageWithHeading()
 

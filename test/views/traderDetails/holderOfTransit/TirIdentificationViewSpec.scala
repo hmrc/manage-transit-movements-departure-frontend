@@ -40,7 +40,7 @@ class TirIdentificationViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Trader details")
+  behave like pageWithSectionCaption("Trader details - Transit holder")
 
   behave like pageWithHeading()
 

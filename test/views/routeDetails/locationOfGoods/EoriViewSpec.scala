@@ -40,11 +40,13 @@ class EoriViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Location of goods")
 
   behave like pageWithHeading()
 
-  behave like pageWithHint("This will start GB or XI, followed by 12 to 15 numbers. For example, GB123456789000.")
+  behave like pageWithHint(
+    "This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000."
+  )
 
   behave like pageWithInputText(Some(InputSize.Width20))
 

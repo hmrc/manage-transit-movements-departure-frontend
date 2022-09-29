@@ -1,15 +1,15 @@
 
 ->         /                   app.traderDetails.consignment.consignor.contact.Routes
 
-GET        /:lrn/trader-details/consignment/consignor/is-eori-known                 controllers.traderDetails.consignment.consignor.EoriYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/trader-details/consignment/consignor/is-eori-known                 controllers.traderDetails.consignment.consignor.EoriYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/trader-details/consignment/consignor/change-is-eori-known          controllers.traderDetails.consignment.consignor.EoriYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/trader-details/consignment/consignor/change-is-eori-known          controllers.traderDetails.consignment.consignor.EoriYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/trader-details/consignor/add-eori-tin                              controllers.traderDetails.consignment.consignor.EoriYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/consignor/add-eori-tin                              controllers.traderDetails.consignment.consignor.EoriYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/consignor/change-add-eori-tin                       controllers.traderDetails.consignment.consignor.EoriYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/consignor/change-add-eori-tin                       controllers.traderDetails.consignment.consignor.EoriYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/trader-details/consignment/consignor/eori                          controllers.traderDetails.consignment.consignor.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/trader-details/consignment/consignor/eori                          controllers.traderDetails.consignment.consignor.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/trader-details/consignment/consignor/change-eori                   controllers.traderDetails.consignment.consignor.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/trader-details/consignment/consignor/change-eori                   controllers.traderDetails.consignment.consignor.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/trader-details/consignor/eori-tin                                  controllers.traderDetails.consignment.consignor.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/consignor/eori-tin                                  controllers.traderDetails.consignment.consignor.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/consignor/change-eori-tin                           controllers.traderDetails.consignment.consignor.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/consignor/change-eori-tin                           controllers.traderDetails.consignment.consignor.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/trader-details/consignment/consignor/name                          controllers.traderDetails.consignment.consignor.NameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/trader-details/consignment/consignor/name                          controllers.traderDetails.consignment.consignor.NameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
