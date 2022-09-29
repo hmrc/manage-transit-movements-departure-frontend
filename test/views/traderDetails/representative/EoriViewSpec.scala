@@ -40,13 +40,12 @@ class EoriViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Trader details")
+  behave like pageWithSectionCaption("Trader details – Representative")
 
   behave like pageWithHeading()
 
   behave like pageWithHint(
-    "This can be up to 17 characters long and include both letters and numbers. " +
-      "For example, GB123456789000. Or you can enter a Trader Identification Number (TIN) instead."
+    "This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000."
   )
 
   behave like pageWithInputText(Some(InputSize.Width20))
