@@ -542,8 +542,6 @@ guaranteeDetails.guarantee.removeGuaranteeYesNo.error.required = Select yes if y
 
 routeDetails.caption = Route details
 routeDetails.locationOfGoods.caption = Route details - Location of goods
-routeDetails.unloading.caption = Route details - Place of unloading
-routeDetails.loading.caption = Route details - Place of loading
 routeDetails.loadingAndUnloading.unloading.caption = Route details - Place of unloading
 routeDetails.loadingAndUnloading.loading.caption = Route details - Place of loading
 
