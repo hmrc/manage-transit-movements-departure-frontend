@@ -40,7 +40,7 @@ class EoriViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Trader details – Representative")
+  behave like pageWithSectionCaption("Trader details - Representative")
 
   behave like pageWithHeading()
 
