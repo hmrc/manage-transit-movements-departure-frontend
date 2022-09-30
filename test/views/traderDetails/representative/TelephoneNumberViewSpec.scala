@@ -36,7 +36,7 @@ class TelephoneNumberViewSpec extends TelephoneNumberViewBehaviours {
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Trader details - Representative")
+  behave like pageWithSectionCaption("Trader details – Representative")
 
   behave like pageWithHeading()
 

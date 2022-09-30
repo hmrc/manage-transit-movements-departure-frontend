@@ -1,15 +1,15 @@
 
 ->         /                   app.traderDetails.holderOfTransit.contact.Routes
 
-GET        /:lrn/trader-details/holder-of-transit/is-eori-known                               controllers.traderDetails.holderOfTransit.EoriYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/trader-details/holder-of-transit/is-eori-known                               controllers.traderDetails.holderOfTransit.EoriYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/trader-details/holder-of-transit/change-is-eori-known                        controllers.traderDetails.holderOfTransit.EoriYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/trader-details/holder-of-transit/change-is-eori-known                        controllers.traderDetails.holderOfTransit.EoriYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/trader-details/transit-holder/add-eori-tin                                   controllers.traderDetails.holderOfTransit.EoriYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/transit-holder/add-eori-tin                                   controllers.traderDetails.holderOfTransit.EoriYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/transit-holder/change-add-eori-tin                            controllers.traderDetails.holderOfTransit.EoriYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/transit-holder/change-add-eori-tin                            controllers.traderDetails.holderOfTransit.EoriYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/trader-details/holder-of-transit/eori                                        controllers.traderDetails.holderOfTransit.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/trader-details/holder-of-transit/eori                                        controllers.traderDetails.holderOfTransit.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/trader-details/holder-of-transit/change-eori                                 controllers.traderDetails.holderOfTransit.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/trader-details/holder-of-transit/change-eori                                 controllers.traderDetails.holderOfTransit.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/trader-details/transit-holder/eori-tin                                       controllers.traderDetails.holderOfTransit.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/transit-holder/eori-tin                                       controllers.traderDetails.holderOfTransit.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/transit-holder/change-eori-tin                                controllers.traderDetails.holderOfTransit.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/transit-holder/change-eori-tin                                controllers.traderDetails.holderOfTransit.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/trader-details/holder-of-transit/is-tir-id-known                             controllers.traderDetails.holderOfTransit.TirIdentificationYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/trader-details/holder-of-transit/is-tir-id-known                             controllers.traderDetails.holderOfTransit.TirIdentificationYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)

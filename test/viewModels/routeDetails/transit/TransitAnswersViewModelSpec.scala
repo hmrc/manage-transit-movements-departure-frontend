@@ -21,8 +21,8 @@ import generators.Generators
 import models.Mode
 import models.reference.CustomsOffice
 import org.scalacheck.Arbitrary.arbitrary
-import pages.routeDetails.transit.AddOfficeOfTransitYesNoPage
 import pages.routeDetails.transit.index.OfficeOfTransitPage
+import pages.routeDetails.transit._
 import viewModels.Link
 import viewModels.routeDetails.transit.TransitAnswersViewModel.TransitAnswersViewModelProvider
 
@@ -32,6 +32,7 @@ class TransitAnswersViewModelSpec extends SpecBase with Generators {
     val mode = arbitrary[Mode].sample.value
 
     val userAnswers = emptyUserAnswers
+      .setValue(T2DeclarationTypeYesNoPage, arbitrary[Boolean].sample.value)
       .setValue(AddOfficeOfTransitYesNoPage, arbitrary[Boolean].sample.value)
       .setValue(OfficeOfTransitPage(index), arbitrary[CustomsOffice].sample.value)
 
@@ -41,7 +42,7 @@ class TransitAnswersViewModelSpec extends SpecBase with Generators {
     sections.size mustBe 2
 
     sections.head.sectionTitle mustNot be(defined)
-    sections.head.rows.size mustBe 1
+    sections.head.rows.size mustBe 2
     sections.head.addAnotherLink mustNot be(defined)
 
     sections(1).sectionTitle.get mustBe "Offices of transit"

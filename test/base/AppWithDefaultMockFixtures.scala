@@ -100,6 +100,13 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
         Future.successful(new FakeOfficeOfTransitNavigator(onwardRoute, index))
     }
 
+  val fakeExitNavigatorProvider: ExitNavigatorProvider =
+    new ExitNavigatorProvider {
+
+      override def apply()(implicit hc: HeaderCarrier): Future[ExitNavigator] =
+        Future.successful(new FakeExitNavigator(onwardRoute))
+    }
+
   protected val fakeOfficeOfExitNavigatorProvider: OfficeOfExitNavigatorProvider =
     new OfficeOfExitNavigatorProvider {
 

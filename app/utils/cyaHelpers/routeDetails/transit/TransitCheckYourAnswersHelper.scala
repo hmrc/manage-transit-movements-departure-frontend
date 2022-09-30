@@ -20,7 +20,7 @@ import controllers.routeDetails.transit.index.routes
 import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
 import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode, UserAnswers}
-import pages.routeDetails.transit.AddOfficeOfTransitYesNoPage
+import pages.routeDetails.transit._
 import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitPage}
 import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import play.api.i18n.Messages
@@ -36,6 +36,13 @@ class TransitCheckYourAnswersHelper(
   customsSecurityAgreementAreaCountryCodes: Seq[String]
 )(implicit messages: Messages)
     extends AnswersHelper(userAnswers, mode) {
+
+  def includesT2Declarations: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+    page = T2DeclarationTypeYesNoPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "routeDetails.transit.t2DeclarationTypeYesNo",
+    id = Some("includes-t2-declarations")
+  )
 
   def addOfficeOfTransit: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = AddOfficeOfTransitYesNoPage,

@@ -19,10 +19,10 @@ POST       /:lrn/route-details/location-of-goods/location-of-goods-customs-offic
 GET        /:lrn/route-details/location-of-goods/change-location-of-goods-customs-office-identifier         controllers.routeDetails.locationOfGoods.CustomsOfficeIdentifierController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/route-details/location-of-goods/change-location-of-goods-customs-office-identifier         controllers.routeDetails.locationOfGoods.CustomsOfficeIdentifierController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/route-details/location-of-goods/location-of-goods-eori                                     controllers.routeDetails.locationOfGoods.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/route-details/location-of-goods/location-of-goods-eori                                     controllers.routeDetails.locationOfGoods.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/route-details/location-of-goods/change-location-of-goods-eori                              controllers.routeDetails.locationOfGoods.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/route-details/location-of-goods/change-location-of-goods-eori                              controllers.routeDetails.locationOfGoods.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/route-details/location-of-goods/eori-tin                                                   controllers.routeDetails.locationOfGoods.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/location-of-goods/eori-tin                                                   controllers.routeDetails.locationOfGoods.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/location-of-goods/change-eori-tin                                            controllers.routeDetails.locationOfGoods.EoriController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/location-of-goods/change-eori-tin                                            controllers.routeDetails.locationOfGoods.EoriController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/route-details/location-of-goods/location-of-goods-authorisation-number                     controllers.routeDetails.locationOfGoods.AuthorisationNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/route-details/location-of-goods/location-of-goods-authorisation-number                     controllers.routeDetails.locationOfGoods.AuthorisationNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
