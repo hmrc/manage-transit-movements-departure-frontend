@@ -19,19 +19,24 @@ package controllers.routeDetails.transit.index
 import com.google.inject.Inject
 import controllers.actions.Actions
 import models.{Index, LocalReferenceNumber, Mode}
+import navigation.routeDetails.TransitNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.routeDetails.transit.OfficeOfTransitAnswersViewModel.OfficeOfTransitAnswersViewModelProvider
 import views.html.routeDetails.transit.index.CheckOfficeOfTransitAnswersView
 
+import scala.concurrent.ExecutionContext
+
 class CheckOfficeOfTransitAnswersController @Inject() (
   override val messagesApi: MessagesApi,
+  navigatorProvider: TransitNavigatorProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: CheckOfficeOfTransitAnswersView,
   viewModelProvider: OfficeOfTransitAnswersViewModelProvider
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn) {
@@ -40,7 +45,10 @@ class CheckOfficeOfTransitAnswersController @Inject() (
       Ok(view(lrn, mode, index, Seq(section)))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn) {
-    Redirect(controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(lrn, mode))
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
+    implicit request =>
+      navigatorProvider().map {
+        navigator => Redirect(navigator.nextPage(request.userAnswers, mode))
+      }
   }
 }

@@ -18,6 +18,7 @@ package controllers.routeDetails.exit.index
 
 import controllers.actions._
 import models.{Index, LocalReferenceNumber, Mode}
+import navigation.routeDetails.ExitNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -25,14 +26,17 @@ import viewModels.routeDetails.exit.OfficeOfExitAnswersViewModel.OfficeOfExitAns
 import views.html.routeDetails.exit.index.CheckOfficeOfExitAnswersView
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class CheckOfficeOfExitAnswersController @Inject() (
   override val messagesApi: MessagesApi,
+  navigatorProvider: ExitNavigatorProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: CheckOfficeOfExitAnswersView,
   viewModelProvider: OfficeOfExitAnswersViewModelProvider
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
@@ -41,7 +45,10 @@ class CheckOfficeOfExitAnswersController @Inject() (
       Ok(view(lrn, index, mode, Seq(section)))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
-    Redirect(controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(lrn, mode))
+  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
+    implicit request =>
+      navigatorProvider().map {
+        navigator => Redirect(navigator.nextPage(request.userAnswers, mode))
+      }
   }
 }

@@ -48,6 +48,10 @@ class FakeOfficeOfTransitNavigator(desiredRoute: Call, index: Index) extends Off
   override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
 }
 
+class FakeExitNavigator(desiredRoute: Call) extends ExitNavigator(Nil, Nil) {
+  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+}
+
 class FakeOfficeOfExitNavigator(desiredRoute: Call, index: Index) extends OfficeOfExitNavigator(index, Nil, Nil) {
   override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
 }

@@ -19,6 +19,7 @@ package controllers.routeDetails.transit.index
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
 import models.NormalMode
+import navigation.routeDetails.TransitNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
@@ -31,8 +32,6 @@ import viewModels.routeDetails.transit.OfficeOfTransitAnswersViewModel.OfficeOfT
 import viewModels.sections.Section
 import views.html.routeDetails.transit.index.CheckOfficeOfTransitAnswersView
 
-import scala.concurrent.Future
-
 class CheckOfficeOfTransitAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private lazy val mockViewModelProvider = mock[OfficeOfTransitAnswersViewModelProvider]
@@ -42,6 +41,7 @@ class CheckOfficeOfTransitAnswersControllerSpec extends SpecBase with AppWithDef
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
+      .overrides(bind(classOf[TransitNavigatorProvider]).toInstance(fakeTransitNavigatorProvider))
       .overrides(bind[OfficeOfTransitAnswersViewModelProvider].toInstance(mockViewModelProvider))
 
   "Check Office Of Transit Answers Controller" - {
@@ -78,10 +78,8 @@ class CheckOfficeOfTransitAnswersControllerSpec extends SpecBase with AppWithDef
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
-    "must redirect to add another" in {
+    "must redirect to next page" in {
       setExistingUserAnswers(emptyUserAnswers)
-
-      when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(POST, routes.CheckOfficeOfTransitAnswersController.onSubmit(lrn, mode, index).url)
 
@@ -89,8 +87,7 @@ class CheckOfficeOfTransitAnswersControllerSpec extends SpecBase with AppWithDef
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual
-        controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(lrn, mode).url
+      redirectLocation(result).value mustEqual onwardRoute.url
     }
   }
 }
