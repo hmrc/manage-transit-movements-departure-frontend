@@ -185,7 +185,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("EORI number or TIN for the location of goods".toText),
+                  key = Key("EORI number or Trader Identification Number (TIN) for the location of goods".toText),
                   value = Value(eori.toText),
                   actions = Some(
                     Actions(
@@ -193,7 +193,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = routes.EoriController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("EORI number or TIN for the location of goods"),
+                          visuallyHiddenText = Some("EORI number or Trader Identification Number (TIN) for the location of goods"),
                           attributes = Map("id" -> "location-of-goods-eori")
                         )
                       )
