@@ -103,7 +103,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Do you know the consignor’s EORI number or TIN?".toText),
+                  key = Key("Do you know the consignor’s EORI number or Trader Identification Number (TIN)?".toText),
                   value = Value("Yes".toText),
                   actions = Some(
                     Actions(
@@ -111,7 +111,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                         ActionItem(
                           content = "Change".toText,
                           href = consignorRoutes.EoriYesNoController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("if you know the consignor’s EORI number or TIN"),
+                          visuallyHiddenText = Some("if you know the consignor’s EORI number or Trader Identification Number (TIN)"),
                           attributes = Map("id" -> "has-consignor-eori")
                         )
                       )
@@ -147,7 +147,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Consignor’s EORI number or TIN".toText),
+                  key = Key("Consignor’s EORI number or Trader Identification Number (TIN)".toText),
                   value = Value(eori.toText),
                   actions = Some(
                     Actions(
@@ -155,7 +155,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                         ActionItem(
                           content = "Change".toText,
                           href = consignorRoutes.EoriController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("consignor’s EORI number or TIN"),
+                          visuallyHiddenText = Some("consignor’s EORI number or Trader Identification Number (TIN)"),
                           attributes = Map("id" -> "consignor-eori-number")
                         )
                       )
@@ -455,7 +455,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Do you know the consignee’s EORI number or TIN?".toText),
+                  key = Key("Do you know the consignee’s EORI number or Trader Identification Number (TIN)?".toText),
                   value = Value("Yes".toText),
                   actions = Some(
                     Actions(
@@ -463,7 +463,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                         ActionItem(
                           content = "Change".toText,
                           href = consigneeRoutes.EoriYesNoController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("if you know the consignee’s EORI number or TIN"),
+                          visuallyHiddenText = Some("if you know the consignee’s EORI number or Trader Identification Number (TIN)"),
                           attributes = Map("id" -> "has-consignee-eori")
                         )
                       )
@@ -499,7 +499,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Consignee’s EORI number or TIN".toText),
+                  key = Key("Consignee’s EORI number or Trader Identification Number (TIN)".toText),
                   value = Value(eori.toText),
                   actions = Some(
                     Actions(
@@ -507,7 +507,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                         ActionItem(
                           content = "Change".toText,
                           href = consigneeRoutes.EoriNumberController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("consignee’s EORI number or TIN"),
+                          visuallyHiddenText = Some("consignee’s EORI number or Trader Identification Number (TIN)"),
                           attributes = Map("id" -> "consignee-eori-number")
                         )
                       )
