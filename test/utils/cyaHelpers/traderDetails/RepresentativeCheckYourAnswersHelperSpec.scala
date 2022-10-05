@@ -101,7 +101,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Representative’s EORI number or TIN".toText),
+                  key = Key("Representative’s EORI number or Trader Identification Number (TIN)".toText),
                   value = Value(eori.toText),
                   actions = Some(
                     Actions(
@@ -109,7 +109,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                         ActionItem(
                           content = "Change".toText,
                           href = routes.EoriController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("representative’s EORI number or TIN"),
+                          visuallyHiddenText = Some("representative’s EORI number or Trader Identification Number (TIN)"),
                           attributes = Map("id" -> "representative-eori-number")
                         )
                       )

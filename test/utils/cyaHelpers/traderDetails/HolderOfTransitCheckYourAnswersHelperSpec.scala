@@ -145,7 +145,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Do you know the transit holder’s EORI number or TIN?".toText),
+                  key = Key("Do you know the transit holder’s EORI number or Trader Identification Number (TIN)?".toText),
                   value = Value("Yes".toText),
                   actions = Some(
                     Actions(
@@ -153,7 +153,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = hotRoutes.EoriYesNoController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("if you know the transit holder’s EORI number or TIN"),
+                          visuallyHiddenText = Some("if you know the transit holder’s EORI number or Trader Identification Number (TIN)"),
                           attributes = Map("id" -> "has-transit-holder-eori")
                         )
                       )
@@ -189,7 +189,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Transit holder’s EORI number or TIN".toText),
+                  key = Key("Transit holder’s EORI number or Trader Identification Number (TIN)".toText),
                   value = Value(eori.toText),
                   actions = Some(
                     Actions(
@@ -197,7 +197,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                         ActionItem(
                           content = "Change".toText,
                           href = hotRoutes.EoriController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("transit holder’s EORI number or TIN"),
+                          visuallyHiddenText = Some("transit holder’s EORI number or Trader Identification Number (TIN)"),
                           attributes = Map("id" -> "transit-holder-eori-number")
                         )
                       )
