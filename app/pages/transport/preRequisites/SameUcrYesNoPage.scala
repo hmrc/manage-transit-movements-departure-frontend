@@ -19,8 +19,7 @@ package pages.transport.preRequisites
 import controllers.transport.preRequisites.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.TransportSection
-import pages.sections.transport.preRequisite.PreRequisiteSection
+import pages.sections.transport.{PreRequisiteSection, TransportSection}
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
