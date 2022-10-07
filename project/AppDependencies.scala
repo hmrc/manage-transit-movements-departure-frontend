@@ -9,7 +9,7 @@ object AppDependencies {
     "uk.gov.hmrc"                %% "play-conditional-form-mapping"   % "1.11.0-play-28",
     "uk.gov.hmrc"                %% "bootstrap-frontend-play-28"      % "7.3.0",
     "uk.gov.hmrc"                %% "play-allowlist-filter"           % "1.1.0",
-    "uk.gov.hmrc"                %% "play-frontend-hmrc"              % "3.31.0-play-28",
+    "uk.gov.hmrc"                %% "play-frontend-hmrc"              % "3.32.0-play-28",
     "org.typelevel"              %% "cats-core"                       % "2.8.0",
     "com.chuusai"                %% "shapeless"                       % "2.3.10"
   )
