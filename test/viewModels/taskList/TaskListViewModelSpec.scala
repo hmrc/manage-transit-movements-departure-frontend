@@ -26,11 +26,12 @@ class TaskListViewModelSpec extends SpecBase {
 
       val tasks = new TaskListViewModel().apply(answers)(Nil, Nil)
 
-      tasks.size mustBe 3
+      tasks.size mustBe 4
 
       tasks.head.name mustBe "Add trader details"
       tasks(1).name mustBe "Add route details"
-      tasks(2).name mustBe "Add guarantee details"
+      tasks(2).name mustBe "Add transport details"
+      tasks(3).name mustBe "Add guarantee details"
     }
   }
 }

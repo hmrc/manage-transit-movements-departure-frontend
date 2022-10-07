@@ -147,6 +147,10 @@ task.guaranteeDetails = Guarantee details
 task.guaranteeDetails.add = Add guarantee details
 task.guaranteeDetails.edit = Edit guarantee details
 
+task.transportDetails = Transport details
+task.transportDetails.add = Add transport details
+task.transportDetails.edit = Edit transport details
+
 # Trader details
 
 traderDetails.caption = Trader details

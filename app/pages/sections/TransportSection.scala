@@ -16,12 +16,11 @@
 
 package pages.sections
 
-import play.api.libs.json.JsPath
-import pages.QuestionPage
+import play.api.libs.json.{JsObject, JsPath}
 
-case object TransportSection extends QuestionPage[Nothing] {
+case object TransportSection extends Section[JsObject] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "sameUcrYesNo"
+  override def toString: String = "transportDetails"
 }
