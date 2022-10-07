@@ -19,9 +19,9 @@ package pages.sections.transport
 import pages.sections.Section
 import play.api.libs.json.{JsObject, JsPath}
 
-case object PreRequisiteSection extends Section[JsObject] {
+case object PreRequisitesSection extends Section[JsObject] {
 
   override def path: JsPath = TransportSection.path \ toString
 
-  override def toString: String = "preRequisite"
+  override def toString: String = "preRequisites"
 }

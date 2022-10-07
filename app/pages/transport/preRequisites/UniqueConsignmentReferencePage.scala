@@ -25,7 +25,7 @@ import play.api.mvc.Call
 
 case object UniqueConsignmentReferencePage extends QuestionPage[String] {
 
-  override def path: JsPath = PreRequisiteSection.path \ toString
+  override def path: JsPath = PreRequisitesSection.path \ toString
 
   override def toString: String = "uniqueConsignmentReference"
 
