@@ -21,8 +21,10 @@ import controllers.actions._
 import navigation._
 import navigation.annotations._
 import navigation.annotations.traderDetails._
+import navigation.annotations.transport.PreRequisites
 import navigation.routeDetails._
 import navigation.traderDetails._
+import navigation.transport.PreRequisitesNavigator
 
 import java.time.Clock
 
@@ -45,6 +47,8 @@ class Module extends AbstractModule {
     bind(classOf[OfficeOfExitNavigatorProvider]).to(classOf[OfficeOfExitNavigatorProviderImpl])
     bind(classOf[LocationOfGoodsNavigatorProvider]).to(classOf[LocationOfGoodsNavigatorProviderImpl])
     bind(classOf[LoadingAndUnloadingNavigatorProvider]).to(classOf[LoadingAndUnloadingNavigatorProviderImpl])
+
+    bind(classOf[Navigator]).annotatedWith(classOf[PreRequisites]).to(classOf[PreRequisitesNavigator])
 
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])

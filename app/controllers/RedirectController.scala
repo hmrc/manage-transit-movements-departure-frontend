@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package controllers
 
-import base.SpecBase
+import controllers.actions.IdentifierAction
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-class TaskListViewModelSpec extends SpecBase {
+import javax.inject.Inject
 
-  "apply" - {
-    "must create tasks" in {
-      val answers = emptyUserAnswers
+class RedirectController @Inject() (
+  identify: IdentifierAction,
+  cc: MessagesControllerComponents
+) extends FrontendController(cc)
+    with I18nSupport {
 
-      val tasks = new TaskListViewModel().apply(answers)(Nil, Nil)
-
-      tasks.size mustBe 4
-
-      tasks.head.name mustBe "Add trader details"
-      tasks(1).name mustBe "Add route details"
-      tasks(2).name mustBe "Add transport details"
-      tasks(3).name mustBe "Add guarantee details"
-    }
+  def onPageLoad(): Action[AnyContent] = (Action andThen identify) {
+    Redirect(controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad())
   }
 }

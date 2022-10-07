@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package pages.transport.preRequisites
 
-import base.SpecBase
+import controllers.transport.preRequisites.routes
+import models.{Mode, UserAnswers}
+import pages.QuestionPage
+import pages.sections.TransportSection
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
-class TaskListViewModelSpec extends SpecBase {
+case object SameUcrYesNoPage extends QuestionPage[Boolean] {
 
-  "apply" - {
-    "must create tasks" in {
-      val answers = emptyUserAnswers
+  override def path: JsPath = TransportSection.path \ toString
 
-      val tasks = new TaskListViewModel().apply(answers)(Nil, Nil)
+  override def toString: String = "sameUcrYesNo"
 
-      tasks.size mustBe 4
-
-      tasks.head.name mustBe "Add trader details"
-      tasks(1).name mustBe "Add route details"
-      tasks(2).name mustBe "Add transport details"
-      tasks(3).name mustBe "Add guarantee details"
-    }
-  }
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.SameUcrYesNoController.onPageLoad(userAnswers.lrn, mode))
 }

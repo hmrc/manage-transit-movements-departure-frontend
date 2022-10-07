@@ -4,6 +4,9 @@
 ->         /                                              app.traderDetails.Routes
 ->         /                                              app.guaranteeDetails.Routes
 ->         /                                              app.routeDetails.Routes
+->         /                                              app.transport.Routes
+
+GET        /                                              controllers.RedirectController.onPageLoad()
 
 ->         /hmrc-frontend                                 hmrcfrontend.Routes
 GET        /assets/*file                                  controllers.Assets.versioned(path="/public", file: Asset)

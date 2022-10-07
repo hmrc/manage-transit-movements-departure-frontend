@@ -14,24 +14,19 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package models.journeyDomain.transport
 
-import base.SpecBase
+import models.domain.UserAnswersReader
+import models.journeyDomain.JourneyDomainModel
 
-class TaskListViewModelSpec extends SpecBase {
+case class TransportDomain(
+  preRequisites: PreRequisitesDomain
+) extends JourneyDomainModel
 
-  "apply" - {
-    "must create tasks" in {
-      val answers = emptyUserAnswers
+object TransportDomain {
 
-      val tasks = new TaskListViewModel().apply(answers)(Nil, Nil)
-
-      tasks.size mustBe 4
-
-      tasks.head.name mustBe "Add trader details"
-      tasks(1).name mustBe "Add route details"
-      tasks(2).name mustBe "Add transport details"
-      tasks(3).name mustBe "Add guarantee details"
-    }
-  }
+  implicit val userAnswersReader: UserAnswersReader[TransportDomain] =
+    for {
+      preRequisites <- UserAnswersReader[PreRequisitesDomain]
+    } yield TransportDomain(preRequisites)
 }

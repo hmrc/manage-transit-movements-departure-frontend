@@ -14,24 +14,9 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package models.journeyDomain.transport
 
 import base.SpecBase
+import generators.Generators
 
-class TaskListViewModelSpec extends SpecBase {
-
-  "apply" - {
-    "must create tasks" in {
-      val answers = emptyUserAnswers
-
-      val tasks = new TaskListViewModel().apply(answers)(Nil, Nil)
-
-      tasks.size mustBe 4
-
-      tasks.head.name mustBe "Add trader details"
-      tasks(1).name mustBe "Add route details"
-      tasks(2).name mustBe "Add transport details"
-      tasks(3).name mustBe "Add guarantee details"
-    }
-  }
-}
+class TransportDomainSpec extends SpecBase with Generators {}

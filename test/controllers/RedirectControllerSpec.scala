@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package controllers
 
-import base.SpecBase
+import base.{AppWithDefaultMockFixtures, SpecBase}
+import play.api.test.FakeRequest
+import play.api.test.Helpers._
 
-class TaskListViewModelSpec extends SpecBase {
+class RedirectControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  "apply" - {
-    "must create tasks" in {
-      val answers = emptyUserAnswers
+  "return OK and the correct view for a GET" in {
+    val request = FakeRequest(GET, routes.RedirectController.onPageLoad().url)
 
-      val tasks = new TaskListViewModel().apply(answers)(Nil, Nil)
+    val result = route(app, request).value
 
-      tasks.size mustBe 4
+    status(result) mustEqual SEE_OTHER
 
-      tasks.head.name mustBe "Add trader details"
-      tasks(1).name mustBe "Add route details"
-      tasks(2).name mustBe "Add transport details"
-      tasks(3).name mustBe "Add guarantee details"
-    }
+    redirectLocation(result).value mustEqual
+      controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad().url
   }
 }
