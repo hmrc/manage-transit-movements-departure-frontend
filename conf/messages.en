@@ -1016,3 +1016,12 @@ transport.preRequisites.sameUcrYesNo.heading = Do you want to use the same Uniqu
 transport.preRequisites.sameUcrYesNo.checkYourAnswersLabel = Same UCR for all items
 transport.preRequisites.sameUcrYesNo.change.hidden = if you want to use the same UCR for all items
 transport.preRequisites.sameUcrYesNo.error.required = Select yes if you want to use the same UCR for all items
+
+transport.preRequisites.countryOfDispatch.title = What is the country of dispatch?
+transport.preRequisites.countryOfDispatch.heading = What is the country of dispatch?
+transport.preRequisites.countryOfDispatch.hintText = Enter the country, like France or Portugal.
+transport.preRequisites.countryOfDispatch.placeholder = Select a country
+transport.preRequisites.countryOfDispatch.change.hidden = What is the country of dispatch?
+transport.preRequisites.countryOfDispatch.checkYourAnswersLabel = What is the country of dispatch?
+transport.preRequisites.countryOfDispatch.error.required = Enter the country of dispatch
+transport.preRequisites.countryOfDispatch.paragraph = This is the country where the CTC transit begins.

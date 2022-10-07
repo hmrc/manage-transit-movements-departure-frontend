@@ -18,7 +18,10 @@ package models.journeyDomain.transport
 
 import base.SpecBase
 import generators.Generators
+import models.DeclarationType
 import models.domain.{EitherType, UserAnswersReader}
+import org.scalacheck.Arbitrary.arbitrary
+import pages.preTaskList.DeclarationTypePage
 import pages.transport.preRequisites._
 
 class PreRequisitesDomainSpec extends SpecBase with Generators {
@@ -27,11 +30,15 @@ class PreRequisitesDomainSpec extends SpecBase with Generators {
 
     "can be parsed from user answers" - {
       "when using same UCR for all items" in {
+        val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+
         val userAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, declarationType)
           .setValue(SameUcrYesNoPage, true)
 
         val expectedResult = PreRequisitesDomain(
-          ucr = Some("")
+          ucr = Some(""),
+          countryOfDispatch = None
         )
 
         val result: EitherType[PreRequisitesDomain] = UserAnswersReader[PreRequisitesDomain].run(userAnswers)

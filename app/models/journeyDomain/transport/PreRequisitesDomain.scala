@@ -16,20 +16,35 @@
 
 package models.journeyDomain.transport
 
+import cats.implicits._
+import models.DeclarationType.Option4
 import models.domain.{UserAnswersReader, _}
 import models.journeyDomain.JourneyDomainModel
+import models.reference.Country
+import pages.preTaskList.DeclarationTypePage
 import pages.transport.preRequisites._
 
+// TODO: Add ConsigmentReference to the domain
 case class PreRequisitesDomain(
-  ucr: Option[String]
+  ucr: Option[String],
+  countryOfDispatch: Option[Country]
 ) extends JourneyDomainModel
 
 object PreRequisitesDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[PreRequisitesDomain] =
-    SameUcrYesNoPage
-      .filterOptionalDependent(identity)(UserAnswersReader(""))
-      .map(
-        x => PreRequisitesDomain(x)
-      )
+  implicit val countryOfDispatchReader: UserAnswersReader[Option[Country]] =
+    DeclarationTypePage.reader.flatMap {
+      case Option4 =>
+        CountryOfDispatchPage.reader.map(Some(_))
+      case _ =>
+        none[Country].pure[UserAnswersReader]
+    }
+
+  implicit val userAnswersReader: UserAnswersReader[PreRequisitesDomain] = (SameUcrYesNoPage
+                                                                              .filterOptionalDependent(identity)(UserAnswersReader("")),
+                                                                            UserAnswersReader[Option[Country]]
+  ).tupled.map(
+    (PreRequisitesDomain.apply _).tupled
+  )
+
 }
