@@ -28,7 +28,7 @@ object PreRequisitesDomain {
 
   implicit val userAnswersReader: UserAnswersReader[PreRequisitesDomain] =
     SameUcrYesNoPage
-      .filterOptionalDependent(identity)(UserAnswersReader(""))
+      .filterOptionalDependent(identity)(UniqueConsignmentReferencePage.reader)
       .map(
         x => PreRequisitesDomain(x)
       )
