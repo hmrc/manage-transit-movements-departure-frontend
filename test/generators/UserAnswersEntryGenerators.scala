@@ -21,7 +21,6 @@ import models.reference._
 import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.routeDetails.loadingAndUnloading.AddPlaceOfUnloadingPage
 import play.api.libs.json._
 import queries.Gettable
 
@@ -32,7 +31,8 @@ trait UserAnswersEntryGenerators {
     generatePreTaskListAnswer orElse
       generateTraderDetailsAnswer orElse
       generateGuaranteeDetailsAnswer orElse
-      generateRouteDetailsAnswer
+      generateRouteDetailsAnswer orElse
+      generateTransportAnswer
 
   private def generatePreTaskListAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.preTaskList._
@@ -232,6 +232,7 @@ trait UserAnswersEntryGenerators {
   }
 
   private def generateUnloadingAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.routeDetails.loadingAndUnloading.AddPlaceOfUnloadingPage
     import pages.routeDetails.loadingAndUnloading.unloading._
     {
       case AddPlaceOfUnloadingPage      => arbitrary[Boolean].map(JsBoolean)
@@ -240,6 +241,16 @@ trait UserAnswersEntryGenerators {
       case AddExtraInformationYesNoPage => arbitrary[Boolean].map(JsBoolean)
       case CountryPage                  => arbitrary[Country].map(Json.toJson(_))
       case LocationPage                 => Gen.alphaNumStr.map(JsString)
+    }
+  }
+
+  private def generateTransportAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
+    generatePreRequisitesAnswer
+
+  private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.preRequisites.SameUcrYesNoPage
+    {
+      case SameUcrYesNoPage => arbitrary[Boolean].map(JsBoolean)
     }
   }
 
