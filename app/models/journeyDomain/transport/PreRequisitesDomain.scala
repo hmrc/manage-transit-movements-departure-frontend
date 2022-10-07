@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-package navigation.annotations;
+package models.journeyDomain.transport
 
-import com.google.inject.BindingAnnotation;
+import models.domain.{UserAnswersReader, _}
+import models.journeyDomain.JourneyDomainModel
+import pages.transport.preRequisites._
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+case class PreRequisitesDomain(
+  ucr: Option[String]
+) extends JourneyDomainModel
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
-@BindingAnnotation
-public @interface OfficeOfExit {
+object PreRequisitesDomain {
+
+  implicit val userAnswersReader: UserAnswersReader[PreRequisitesDomain] =
+    SameUcrYesNoPage
+      .filterOptionalDependent(identity)(UserAnswersReader(""))
+      .map(
+        x => PreRequisitesDomain(x)
+      )
 }

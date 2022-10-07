@@ -17,17 +17,21 @@
 package viewModels.taskList
 
 import models.UserAnswers
+import models.journeyDomain.transport.TransportDomain
+import pages.sections.TransportSection
+import play.api.libs.json.JsObject
 
-class TaskListViewModel {
+case class TransportTask(status: TaskStatus, href: Option[String]) extends Task {
+  override val id: String         = "transport-details"
+  override val messageKey: String = "transportDetails"
+}
 
-  def apply(userAnswers: UserAnswers)(
-    ctcCountryCodes: Seq[String],
-    customsSecurityAgreementAreaCountryCodes: Seq[String]
-  ): Seq[Task] =
-    Seq(
-      TraderDetailsTask(userAnswers),
-      RouteDetailsTask(userAnswers)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes),
-      TransportTask(userAnswers),
-      GuaranteeDetailsTask(userAnswers)
-    )
+object TransportTask {
+
+  def apply(userAnswers: UserAnswers): TransportTask = {
+    val (status, href) = new TaskProvider(userAnswers).noDependencyOnOtherTask // TODO - dependent on route details?
+      .readUserAnswers[TransportDomain, JsObject](TransportSection)
+
+    new TransportTask(status, href)
+  }
 }
