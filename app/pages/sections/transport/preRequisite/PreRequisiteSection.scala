@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package pages.sections
+package pages.sections.transport.preRequisite
 
+import pages.sections.Section
+import pages.sections.transport.TransportSection
 import play.api.libs.json.{JsObject, JsPath}
 
 case object PreRequisiteSection extends Section[JsObject] {
