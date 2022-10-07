@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package pages.transport.preRequisites
 
-import base.SpecBase
+import pages.behaviours.PageBehaviours
 
-class TaskListViewModelSpec extends SpecBase {
+class SameUcrYesNoPageSpec extends PageBehaviours {
 
-  "apply" - {
-    "must create tasks" in {
-      val answers = emptyUserAnswers
+  "SameUcrYesNoPage" - {
 
-      val tasks = new TaskListViewModel().apply(answers)(Nil, Nil)
+    beRetrievable[Boolean](SameUcrYesNoPage)
 
-      tasks.size mustBe 4
+    beSettable[Boolean](SameUcrYesNoPage)
 
-      tasks.head.name mustBe "Add trader details"
-      tasks(1).name mustBe "Add route details"
-      tasks(2).name mustBe "Add transport details"
-      tasks(3).name mustBe "Add guarantee details"
-    }
+    beRemovable[Boolean](SameUcrYesNoPage)
   }
 }

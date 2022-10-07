@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package generators
 
-import base.SpecBase
+import models.UserAnswers
+import models.journeyDomain.transport.{PreRequisitesDomain, TransportDomain}
+import org.scalacheck.Gen
 
-class TaskListViewModelSpec extends SpecBase {
+trait TransportUserAnswersGenerator extends UserAnswersGenerator {
+  self: Generators =>
 
-  "apply" - {
-    "must create tasks" in {
-      val answers = emptyUserAnswers
+  def arbitraryTransportAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[TransportDomain](userAnswers)
 
-      val tasks = new TaskListViewModel().apply(answers)(Nil, Nil)
-
-      tasks.size mustBe 4
-
-      tasks.head.name mustBe "Add trader details"
-      tasks(1).name mustBe "Add route details"
-      tasks(2).name mustBe "Add transport details"
-      tasks(3).name mustBe "Add guarantee details"
-    }
-  }
+  def arbitraryPreRequisitesAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[PreRequisitesDomain](userAnswers)
 }
