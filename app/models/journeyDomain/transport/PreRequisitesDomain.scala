@@ -20,7 +20,7 @@ import cats.implicits._
 import models.DeclarationType.Option4
 import models.domain.{UserAnswersReader, _}
 import models.journeyDomain.JourneyDomainModel
-import models.reference.{Country, CountryCode}
+import models.reference.Country
 import pages.preTaskList.DeclarationTypePage
 import pages.transport.preRequisites._
 
@@ -38,6 +38,6 @@ object PreRequisitesDomain {
   implicit val userAnswersReader: UserAnswersReader[PreRequisitesDomain] = (
     SameUcrYesNoPage.filterOptionalDependent(identity)(UniqueConsignmentReferencePage.reader),
     countryOfDispatchReader,
-    TransportedToSameCountryYesNoPage.filterOptionalDependent(identity)(UserAnswersReader(Country(CountryCode("GB"), "United Kingdom")))
+    TransportedToSameCountryYesNoPage.filterOptionalDependent(identity)(ItemsDestinationCountryPage.reader)
   ).tupled.map((PreRequisitesDomain.apply _).tupled)
 }

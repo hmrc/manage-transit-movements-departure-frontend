@@ -21,7 +21,6 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
 import navigation.annotations.transport.PreRequisites
 import pages.transport.preRequisites.ItemsDestinationCountryPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -35,14 +34,14 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ItemsDestinationCountryController @Inject() (
-                                                    override val messagesApi: MessagesApi,
-                                                    implicit val sessionRepository: SessionRepository,
-                                                    @PreRequisites implicit val navigator: Navigator,
-                                                    actions: Actions,
-                                                    formProvider: CountryFormProvider,
-                                                    service: CountriesService,
-                                                    val controllerComponents: MessagesControllerComponents,
-                                                    view: ItemsDestinationCountryView
+  override val messagesApi: MessagesApi,
+  implicit val sessionRepository: SessionRepository,
+  @PreRequisites implicit val navigator: Navigator,
+  actions: Actions,
+  formProvider: CountryFormProvider,
+  service: CountriesService,
+  val controllerComponents: MessagesControllerComponents,
+  view: ItemsDestinationCountryView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {

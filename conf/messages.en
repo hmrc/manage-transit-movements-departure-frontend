@@ -1017,11 +1017,6 @@ transport.preRequisites.sameUcrYesNo.checkYourAnswersLabel = Same UCR for all it
 transport.preRequisites.sameUcrYesNo.change.hidden = if you want to use the same UCR for all items
 transport.preRequisites.sameUcrYesNo.error.required = Select yes if you want to use the same UCR for all items
 
-transport.preRequisites.transportedToSameCountryYesNo.title = Are all the items being transported to the same country?
-transport.preRequisites.transportedToSameCountryYesNo.heading = Are all the items being transported to the same country?
-transport.preRequisites.transportedToSameCountryYesNo.checkYourAnswersLabel = Are all the items being transported to the same country?
-transport.preRequisites.transportedToSameCountryYesNo.error.required = Select yes if all the items are being transported to the same country
-
 transport.preRequisites.uniqueConsignmentReference.title = What is the Unique Consignment Reference (UCR)?
 transport.preRequisites.uniqueConsignmentReference.heading = What is the Unique Consignment Reference (UCR)?
 transport.preRequisites.uniqueConsignmentReference.checkYourAnswersLabel = What is the Unique Consignment Reference (UCR)
@@ -1038,6 +1033,11 @@ transport.preRequisites.countryOfDispatch.change.hidden = What is the country of
 transport.preRequisites.countryOfDispatch.checkYourAnswersLabel = What is the country of dispatch?
 transport.preRequisites.countryOfDispatch.error.required = Enter the country of dispatch
 transport.preRequisites.countryOfDispatch.paragraph = This is the country where the CTC transit begins.
+
+transport.preRequisites.transportedToSameCountryYesNo.title = Are all the items being transported to the same country?
+transport.preRequisites.transportedToSameCountryYesNo.heading = Are all the items being transported to the same country?
+transport.preRequisites.transportedToSameCountryYesNo.checkYourAnswersLabel = Are all the items being transported to the same country?
+transport.preRequisites.transportedToSameCountryYesNo.error.required = Select yes if all the items are being transported to the same country
 
 transport.preRequisites.itemsDestinationCountry.title = What country are the items being transported to?
 transport.preRequisites.itemsDestinationCountry.heading = What country are the items being transported to?
