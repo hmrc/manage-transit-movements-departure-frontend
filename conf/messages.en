@@ -1039,6 +1039,18 @@ transport.preRequisites.countryOfDispatch.checkYourAnswersLabel = What is the co
 transport.preRequisites.countryOfDispatch.error.required = Enter the country of dispatch
 transport.preRequisites.countryOfDispatch.paragraph = This is the country where the CTC transit begins.
 
+transport.preRequisites.transportedToSameCountryYesNo.title = Are all the items being transported to the same country?
+transport.preRequisites.transportedToSameCountryYesNo.heading = Are all the items being transported to the same country?
+transport.preRequisites.transportedToSameCountryYesNo.checkYourAnswersLabel = Are all the items being transported to the same country?
+transport.preRequisites.transportedToSameCountryYesNo.error.required = Select yes if all the items are being transported to the same country
+
+transport.preRequisites.itemsDestinationCountry.title = What country are the items being transported to?
+transport.preRequisites.itemsDestinationCountry.heading = What country are the items being transported to?
+transport.preRequisites.itemsDestinationCountry.hintText = Enter the country, like France or Portugal.
+transport.preRequisites.itemsDestinationCountry.placeholder = Select a country
+transport.preRequisites.itemsDestinationCountry.checkYourAnswersLabel = What country are the items being transported to
+transport.preRequisites.itemsDestinationCountry.error.required = Enter the country the items are being transported to
+
 transport.preRequisites.containerIndicator.title = Are you using any containers?
 transport.preRequisites.containerIndicator.heading = Are you using any containers?
 transport.preRequisites.containerIndicator.checkYourAnswersLabel = Are you using any containers?
