@@ -1017,6 +1017,11 @@ transport.preRequisites.sameUcrYesNo.checkYourAnswersLabel = Same UCR for all it
 transport.preRequisites.sameUcrYesNo.change.hidden = if you want to use the same UCR for all items
 transport.preRequisites.sameUcrYesNo.error.required = Select yes if you want to use the same UCR for all items
 
+transport.preRequisites.transportedToSameCountryYesNo.title = Are all the items being transported to the same country?
+transport.preRequisites.transportedToSameCountryYesNo.heading = Are all the items being transported to the same country?
+transport.preRequisites.transportedToSameCountryYesNo.checkYourAnswersLabel = Are all the items being transported to the same country?
+transport.preRequisites.transportedToSameCountryYesNo.error.required = Select yes if all the items are being transported to the same country
+
 transport.preRequisites.uniqueConsignmentReference.title = What is the Unique Consignment Reference (UCR)?
 transport.preRequisites.uniqueConsignmentReference.heading = What is the Unique Consignment Reference (UCR)?
 transport.preRequisites.uniqueConsignmentReference.checkYourAnswersLabel = What is the Unique Consignment Reference (UCR)
@@ -1045,3 +1050,9 @@ transport.preRequisites.itemsDestinationCountry.hintText = Enter the country, li
 transport.preRequisites.itemsDestinationCountry.placeholder = Select a country
 transport.preRequisites.itemsDestinationCountry.checkYourAnswersLabel = What country are the items being transported to
 transport.preRequisites.itemsDestinationCountry.error.required = Enter the country the items are being transported to
+
+transport.preRequisites.containerIndicator.title = Are you using any containers?
+transport.preRequisites.containerIndicator.heading = Are you using any containers?
+transport.preRequisites.containerIndicator.checkYourAnswersLabel = Are you using any containers?
+transport.preRequisites.containerIndicator.error.required = Select yes if you’re using any containers
+transport.preRequisites.containerIndicator.paragraph = This can be any container used to transport goods in CTC transit. For example, a swap body, articulated lorry or shipping container.
