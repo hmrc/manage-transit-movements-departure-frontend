@@ -16,20 +16,26 @@
 
 package models.journeyDomain.transport
 
+import cats.implicits._
+import models.DeclarationType.Option4
 import models.domain.{UserAnswersReader, _}
 import models.journeyDomain.JourneyDomainModel
+import models.reference.Country
+import pages.preTaskList.DeclarationTypePage
 import pages.transport.preRequisites._
 
 case class PreRequisitesDomain(
-  ucr: Option[String]
+  ucr: Option[String],
+  countryOfDispatch: Option[Country]
 ) extends JourneyDomainModel
 
 object PreRequisitesDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[PreRequisitesDomain] =
-    SameUcrYesNoPage
-      .filterOptionalDependent(identity)(UniqueConsignmentReferencePage.reader)
-      .map(
-        x => PreRequisitesDomain(x)
-      )
+  implicit val countryOfDispatchReader: UserAnswersReader[Option[Country]] =
+    DeclarationTypePage.filterOptionalDependent(_ == Option4)(CountryOfDispatchPage.reader)
+
+  implicit val userAnswersReader: UserAnswersReader[PreRequisitesDomain] = (
+    SameUcrYesNoPage.filterOptionalDependent(identity)(UniqueConsignmentReferencePage.reader),
+    countryOfDispatchReader
+  ).tupled.map((PreRequisitesDomain.apply _).tupled)
 }
