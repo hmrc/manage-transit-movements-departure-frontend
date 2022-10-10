@@ -25,16 +25,16 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
 
-  private val navigator = new TraderDetailsNavigator
-
   "Trader Details Navigator" - {
 
     "when answers complete" - {
       "must redirect to check your answers" in {
         forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers), arbitrary[Mode]) {
           (answers, mode) =>
+            val navigator = new TraderDetailsNavigator(mode)
+
             navigator
-              .nextPage(answers, mode)
+              .nextPage(answers)
               .mustBe(routes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }

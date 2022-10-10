@@ -20,7 +20,7 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.MoneyFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.{GuaranteeNavigator, GuaranteeNavigatorProvider}
+import navigation.{GuaranteeNavigatorProvider, UserAnswersNavigator}
 import pages.guaranteeDetails.guarantee.LiabilityAmountPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -62,8 +62,8 @@ class LiabilityAmountController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index))),
           value => {
-            implicit val navigator: GuaranteeNavigator = navigatorProvider(index)
-            LiabilityAmountPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index)
+            LiabilityAmountPage(index).writeToUserAnswers(value).writeToSession().navigate()
           }
         )
   }

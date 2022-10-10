@@ -25,16 +25,16 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with PreTaskListUserAnswersGenerator {
 
-  private val navigator = new PreTaskListNavigator
-
   "Pre Task List Navigator" - {
 
     "when answers complete" - {
       "must redirect to check your answers" in {
         forAll(arbitraryPreTaskListAnswers(emptyUserAnswers), arbitrary[Mode]) {
           (answers, mode) =>
+            val navigator = new PreTaskListNavigator(mode)
+
             navigator
-              .nextPage(answers, mode)
+              .nextPage(answers)
               .mustBe(routes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }

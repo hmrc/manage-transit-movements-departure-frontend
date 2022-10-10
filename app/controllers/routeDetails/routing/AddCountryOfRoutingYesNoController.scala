@@ -62,9 +62,9 @@ class AddCountryOfRoutingYesNoController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value =>
-            navigatorProvider().flatMap {
+            navigatorProvider(mode).flatMap {
               implicit navigator =>
-                AddCountryOfRoutingYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                AddCountryOfRoutingYesNoPage.writeToUserAnswers(value).writeToSession().navigate()
             }
         )
   }

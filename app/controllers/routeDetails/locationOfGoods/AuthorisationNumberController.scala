@@ -61,9 +61,9 @@ class AuthorisationNumberController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value =>
-            navigatorProvider().flatMap {
+            navigatorProvider(mode).flatMap {
               implicit navigator =>
-                AuthorisationNumberPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                AuthorisationNumberPage.writeToUserAnswers(value).writeToSession().navigate()
             }
         )
   }

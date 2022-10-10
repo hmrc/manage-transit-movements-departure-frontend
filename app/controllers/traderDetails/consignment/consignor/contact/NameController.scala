@@ -20,8 +20,8 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.NameFormProvider
 import models.{LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.traderDetails.TraderDetails
+import navigation.UserAnswersNavigator
+import navigation.traderDetails.TraderDetailsNavigatorProvider
 import pages.traderDetails.consignment.consignor.contact.NamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class NameController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @TraderDetails implicit val navigator: Navigator,
+  navigatorProvider: TraderDetailsNavigatorProvider,
   formProvider: NameFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
@@ -61,7 +61,10 @@ class NameController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => NamePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+          value => {
+            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+            NamePage.writeToUserAnswers(value).writeToSession().navigate()
+          }
         )
   }
 }

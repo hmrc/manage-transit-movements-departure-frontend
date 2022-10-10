@@ -20,16 +20,14 @@ import base.SpecBase
 import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
 import controllers.guaranteeDetails.{routes => guaranteeDetailsRoutes}
 import generators.{Generators, GuaranteeDetailsUserAnswersGenerator}
-import models._
 import models.GuaranteeType._
+import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import pages.preTaskList.DeclarationTypePage
 
 class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with GuaranteeDetailsUserAnswersGenerator {
-
-  private val navigator = new GuaranteeNavigator(index)
 
   "Guarantee Details Navigator" - {
 
@@ -44,8 +42,10 @@ class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with
 
           forAll(arbitraryGuaranteeAnswers(initialAnswers, index), arbitrary[Mode]) {
             (answers, mode) =>
+              val navigator = new GuaranteeNavigator(mode, index)
+
               navigator
-                .nextPage(answers, mode)
+                .nextPage(answers)
                 .mustBe(guaranteeRoutes.CheckYourAnswersController.onPageLoad(answers.lrn, index))
           }
         }
@@ -61,8 +61,10 @@ class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with
 
           forAll(arbitraryGuaranteeAnswers(initialAnswers, index), arbitrary[Mode]) {
             (answers, mode) =>
+              val navigator = new GuaranteeNavigator(mode, index)
+
               navigator
-                .nextPage(answers, mode)
+                .nextPage(answers)
                 .mustBe(guaranteeDetailsRoutes.AddAnotherGuaranteeController.onPageLoad(answers.lrn))
           }
         }

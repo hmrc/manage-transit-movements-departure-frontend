@@ -23,17 +23,19 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class PreRequisitesNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TransportUserAnswersGenerator {
 
-  private val navigator = new PreRequisitesNavigator
-
   "Pre Requisites Navigator" - {
 
     "when in NormalMode" - {
+
+      val mode      = NormalMode
+      val navigator = new PreRequisitesNavigator(mode)
+
       "when answers complete" - {
         "must redirect to pre-requisites check your answers" ignore {
           forAll(arbitraryPreRequisitesAnswers(emptyUserAnswers)) {
             answers =>
               navigator
-                .nextPage(answers, NormalMode)
+                .nextPage(answers)
                 .mustBe(???)
           }
         }
@@ -41,12 +43,16 @@ class PreRequisitesNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
     }
 
     "when in CheckMode" - {
+
+      val mode      = CheckMode
+      val navigator = new PreRequisitesNavigator(mode)
+
       "when answers complete" - {
         "must redirect to transport check your answers" ignore {
           forAll(arbitraryTransportAnswers(emptyUserAnswers)) {
             answers =>
               navigator
-                .nextPage(answers, NormalMode)
+                .nextPage(answers)
                 .mustBe(???)
           }
         }

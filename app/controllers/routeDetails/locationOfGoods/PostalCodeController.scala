@@ -75,9 +75,9 @@ class PostalCodeController @Inject() (
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countryList.countries))),
                 value =>
-                  navigatorProvider().flatMap {
+                  navigatorProvider(mode).flatMap {
                     implicit navigator =>
-                      PostalCodePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                      PostalCodePage.writeToUserAnswers(value).writeToSession().navigate()
                   }
               )
 

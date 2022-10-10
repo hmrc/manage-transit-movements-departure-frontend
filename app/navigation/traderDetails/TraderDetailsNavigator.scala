@@ -16,10 +16,28 @@
 
 package navigation.traderDetails
 
+import models.Mode
+import models.domain.UserAnswersReader
 import models.journeyDomain.traderDetails.TraderDetailsDomain
-import navigation.UserAnswersSectionNavigator
+import navigation.{PreTaskListNavigator, UserAnswersNavigator}
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class TraderDetailsNavigator @Inject() () extends UserAnswersSectionNavigator[TraderDetailsDomain]
+class TraderDetailsNavigatorProviderImpl @Inject() () extends TraderDetailsNavigatorProvider {
+
+  override def apply(mode: Mode): UserAnswersNavigator =
+    new PreTaskListNavigator(mode)
+}
+
+trait TraderDetailsNavigatorProvider {
+  def apply(mode: Mode): UserAnswersNavigator
+}
+
+class TraderDetailsNavigator(override val mode: Mode) extends UserAnswersNavigator {
+
+  override type T = TraderDetailsDomain
+
+  implicit override val reader: UserAnswersReader[TraderDetailsDomain] =
+    TraderDetailsDomain.userAnswersParser
+}

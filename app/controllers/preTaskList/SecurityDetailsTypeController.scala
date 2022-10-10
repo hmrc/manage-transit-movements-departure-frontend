@@ -21,8 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.preTaskList.SecurityDetailsFormProvider
 import models.journeyDomain.PreTaskListDomain
 import models.{LocalReferenceNumber, Mode, SecurityDetailsType}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
 import pages.preTaskList.SecurityDetailsTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class SecurityDetailsTypeController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @PreTaskListDetails implicit val navigator: Navigator,
+  navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
   checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   formProvider: SecurityDetailsFormProvider,
@@ -69,7 +68,10 @@ class SecurityDetailsTypeController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, SecurityDetailsType.radioItems, lrn, mode))),
-            value => SecurityDetailsTypePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+            value => {
+              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+              SecurityDetailsTypePage.writeToUserAnswers(value).writeToSession().navigate()
+            }
           )
     }
 }
