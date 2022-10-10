@@ -41,10 +41,12 @@ class PreRequisitesDomainSpec extends SpecBase with Generators {
           .setValue(DeclarationTypePage, arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value)
           .setValue(SameUcrYesNoPage, true)
           .setValue(UniqueConsignmentReferencePage, ucr)
+          .setValue(TransportedToSameCountryYesNoPage, false)
 
         val expectedResult = PreRequisitesDomain(
           ucr = Some(ucr),
-          countryOfDispatch = None
+          countryOfDispatch = None,
+          itemsDestinationCountry = None
         )
 
         val result: EitherType[PreRequisitesDomain] = UserAnswersReader[PreRequisitesDomain].run(userAnswers)
@@ -57,10 +59,12 @@ class PreRequisitesDomainSpec extends SpecBase with Generators {
           .setValue(DeclarationTypePage, Option4)
           .setValue(SameUcrYesNoPage, false)
           .setValue(CountryOfDispatchPage, country)
+          .setValue(TransportedToSameCountryYesNoPage, false)
 
         val expectedResult = PreRequisitesDomain(
           ucr = None,
-          countryOfDispatch = Some(country)
+          countryOfDispatch = Some(country),
+          itemsDestinationCountry = None
         )
 
         val result: EitherType[PreRequisitesDomain] = UserAnswersReader[PreRequisitesDomain].run(userAnswers)
@@ -81,7 +85,8 @@ class PreRequisitesDomainSpec extends SpecBase with Generators {
           val mandatoryPages: Seq[QuestionPage[_]] = Seq(
             SameUcrYesNoPage,
             UniqueConsignmentReferencePage,
-            CountryOfDispatchPage
+            CountryOfDispatchPage,
+            TransportedToSameCountryYesNoPage
           )
 
           val userAnswers = emptyUserAnswers
@@ -89,6 +94,7 @@ class PreRequisitesDomainSpec extends SpecBase with Generators {
             .setValue(SameUcrYesNoPage, true)
             .setValue(UniqueConsignmentReferencePage, ucr)
             .setValue(CountryOfDispatchPage, country)
+            .setValue(TransportedToSameCountryYesNoPage, false)
 
           mandatoryPages.map {
             mandatoryPage =>
@@ -103,13 +109,15 @@ class PreRequisitesDomainSpec extends SpecBase with Generators {
         "when non-TIR" in {
           val mandatoryPages: Seq[QuestionPage[_]] = Seq(
             SameUcrYesNoPage,
-            UniqueConsignmentReferencePage
+            UniqueConsignmentReferencePage,
+            TransportedToSameCountryYesNoPage
           )
 
           val userAnswers = emptyUserAnswers
             .setValue(DeclarationTypePage, arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value)
             .setValue(SameUcrYesNoPage, true)
             .setValue(UniqueConsignmentReferencePage, ucr)
+            .setValue(TransportedToSameCountryYesNoPage, false)
 
           mandatoryPages.map {
             mandatoryPage =>
