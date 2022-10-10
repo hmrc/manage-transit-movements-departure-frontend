@@ -27,8 +27,9 @@ class PreRequisitesNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
     "when in NormalMode" - {
 
-      val mode      = NormalMode
-      val navigator = new PreRequisitesNavigator(mode)
+      val mode              = NormalMode
+      val navigatorProvider = new PreRequisitesNavigatorProviderImpl()
+      val navigator         = navigatorProvider.apply(mode)
 
       "when answers complete" - {
         "must redirect to pre-requisites check your answers" ignore {
@@ -44,8 +45,9 @@ class PreRequisitesNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
     "when in CheckMode" - {
 
-      val mode      = CheckMode
-      val navigator = new PreRequisitesNavigator(mode)
+      val mode              = CheckMode
+      val navigatorProvider = new PreRequisitesNavigatorProviderImpl()
+      val navigator         = navigatorProvider.apply(mode)
 
       "when answers complete" - {
         "must redirect to transport check your answers" ignore {

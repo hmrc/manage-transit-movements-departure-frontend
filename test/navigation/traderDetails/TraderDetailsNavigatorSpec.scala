@@ -31,7 +31,8 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       "must redirect to check your answers" in {
         forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers), arbitrary[Mode]) {
           (answers, mode) =>
-            val navigator = new TraderDetailsNavigator(mode)
+            val navigatorProvider = new TraderDetailsNavigatorProviderImpl()
+            val navigator         = navigatorProvider.apply(mode)
 
             navigator
               .nextPage(answers)

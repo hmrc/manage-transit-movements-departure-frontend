@@ -31,7 +31,8 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
       "must redirect to check your answers" in {
         forAll(arbitraryPreTaskListAnswers(emptyUserAnswers), arbitrary[Mode]) {
           (answers, mode) =>
-            val navigator = new PreTaskListNavigator(mode)
+            val navigatorProvider = new PreTaskListNavigatorProviderImpl()
+            val navigator         = navigatorProvider.apply(mode)
 
             navigator
               .nextPage(answers)

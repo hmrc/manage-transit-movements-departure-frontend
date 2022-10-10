@@ -19,7 +19,7 @@ package navigation.traderDetails
 import models.Mode
 import models.domain.UserAnswersReader
 import models.journeyDomain.traderDetails.TraderDetailsDomain
-import navigation.{PreTaskListNavigator, UserAnswersNavigator}
+import navigation.UserAnswersNavigator
 
 import javax.inject.{Inject, Singleton}
 
@@ -27,7 +27,7 @@ import javax.inject.{Inject, Singleton}
 class TraderDetailsNavigatorProviderImpl @Inject() () extends TraderDetailsNavigatorProvider {
 
   override def apply(mode: Mode): UserAnswersNavigator =
-    new PreTaskListNavigator(mode)
+    new TraderDetailsNavigator(mode)
 }
 
 trait TraderDetailsNavigatorProvider {

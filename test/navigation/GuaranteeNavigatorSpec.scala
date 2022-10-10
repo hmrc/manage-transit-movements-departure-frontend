@@ -42,7 +42,8 @@ class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with
 
           forAll(arbitraryGuaranteeAnswers(initialAnswers, index), arbitrary[Mode]) {
             (answers, mode) =>
-              val navigator = new GuaranteeNavigator(mode, index)
+              val navigatorProvider = new GuaranteeNavigatorProviderImpl()
+              val navigator         = navigatorProvider.apply(mode, index)
 
               navigator
                 .nextPage(answers)
@@ -61,7 +62,8 @@ class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with
 
           forAll(arbitraryGuaranteeAnswers(initialAnswers, index), arbitrary[Mode]) {
             (answers, mode) =>
-              val navigator = new GuaranteeNavigator(mode, index)
+              val navigatorProvider = new GuaranteeNavigatorProviderImpl()
+              val navigator         = navigatorProvider.apply(mode, index)
 
               navigator
                 .nextPage(answers)
