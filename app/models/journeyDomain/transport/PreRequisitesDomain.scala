@@ -27,7 +27,8 @@ import pages.transport.preRequisites._
 case class PreRequisitesDomain(
   ucr: Option[String],
   countryOfDispatch: Option[Country],
-  itemsDestinationCountry: Option[Country]
+  itemsDestinationCountry: Option[Country],
+  containerIndicator: Boolean
 ) extends JourneyDomainModel
 
 object PreRequisitesDomain {
@@ -38,6 +39,7 @@ object PreRequisitesDomain {
   implicit val userAnswersReader: UserAnswersReader[PreRequisitesDomain] = (
     SameUcrYesNoPage.filterOptionalDependent(identity)(UniqueConsignmentReferencePage.reader),
     countryOfDispatchReader,
-    TransportedToSameCountryYesNoPage.filterOptionalDependent(identity)(ItemsDestinationCountryPage.reader)
+    TransportedToSameCountryYesNoPage.filterOptionalDependent(identity)(ItemsDestinationCountryPage.reader),
+    ContainerIndicatorPage.reader
   ).tupled.map((PreRequisitesDomain.apply _).tupled)
 }

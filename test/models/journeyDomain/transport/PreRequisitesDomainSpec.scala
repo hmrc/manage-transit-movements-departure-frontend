@@ -44,11 +44,13 @@ class PreRequisitesDomainSpec extends SpecBase with Generators {
           .setValue(UniqueConsignmentReferencePage, ucr)
           .setValue(TransportedToSameCountryYesNoPage, true)
           .setValue(ItemsDestinationCountryPage, itemsDestinationCountry)
+          .setValue(ContainerIndicatorPage, true)
 
         val expectedResult = PreRequisitesDomain(
           ucr = Some(ucr),
           countryOfDispatch = None,
-          itemsDestinationCountry = Some(itemsDestinationCountry)
+          itemsDestinationCountry = Some(itemsDestinationCountry),
+          containerIndicator = true
         )
 
         val result: EitherType[PreRequisitesDomain] = UserAnswersReader[PreRequisitesDomain].run(userAnswers)
@@ -63,11 +65,13 @@ class PreRequisitesDomainSpec extends SpecBase with Generators {
           .setValue(CountryOfDispatchPage, country)
           .setValue(TransportedToSameCountryYesNoPage, true)
           .setValue(ItemsDestinationCountryPage, itemsDestinationCountry)
+          .setValue(ContainerIndicatorPage, true)
 
         val expectedResult = PreRequisitesDomain(
           ucr = None,
           countryOfDispatch = Some(country),
-          itemsDestinationCountry = Some(itemsDestinationCountry)
+          itemsDestinationCountry = Some(itemsDestinationCountry),
+          containerIndicator = true
         )
 
         val result: EitherType[PreRequisitesDomain] = UserAnswersReader[PreRequisitesDomain].run(userAnswers)
@@ -90,7 +94,8 @@ class PreRequisitesDomainSpec extends SpecBase with Generators {
             UniqueConsignmentReferencePage,
             CountryOfDispatchPage,
             TransportedToSameCountryYesNoPage,
-            ItemsDestinationCountryPage
+            ItemsDestinationCountryPage,
+            ContainerIndicatorPage
           )
 
           val userAnswers = emptyUserAnswers
@@ -100,6 +105,7 @@ class PreRequisitesDomainSpec extends SpecBase with Generators {
             .setValue(CountryOfDispatchPage, country)
             .setValue(TransportedToSameCountryYesNoPage, true)
             .setValue(ItemsDestinationCountryPage, itemsDestinationCountry)
+            .setValue(ContainerIndicatorPage, true)
 
           mandatoryPages.map {
             mandatoryPage =>
@@ -116,7 +122,8 @@ class PreRequisitesDomainSpec extends SpecBase with Generators {
             SameUcrYesNoPage,
             UniqueConsignmentReferencePage,
             TransportedToSameCountryYesNoPage,
-            ItemsDestinationCountryPage
+            ItemsDestinationCountryPage,
+            ContainerIndicatorPage
           )
 
           val userAnswers = emptyUserAnswers
@@ -125,6 +132,7 @@ class PreRequisitesDomainSpec extends SpecBase with Generators {
             .setValue(UniqueConsignmentReferencePage, ucr)
             .setValue(TransportedToSameCountryYesNoPage, true)
             .setValue(ItemsDestinationCountryPage, itemsDestinationCountry)
+            .setValue(ContainerIndicatorPage, true)
 
           mandatoryPages.map {
             mandatoryPage =>
