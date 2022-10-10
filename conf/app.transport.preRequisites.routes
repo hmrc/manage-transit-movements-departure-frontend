@@ -24,8 +24,3 @@ GET        /:lrn/transport-details/containers                          controlle
 POST       /:lrn/transport-details/containers                          controllers.transport.preRequisites.ContainerIndicatorController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/transport-details/change-containers                   controllers.transport.preRequisites.ContainerIndicatorController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/transport-details/change-containers                   controllers.transport.preRequisites.ContainerIndicatorController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-
-GET        /:lrn/transport/preRequisites/container-indicator                        controllers.transport.preRequisites.ContainerIndicatorController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/transport/preRequisites/container-indicator                        controllers.transport.preRequisites.ContainerIndicatorController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/transport/preRequisites/change-container-indicator                 controllers.transport.preRequisites.ContainerIndicatorController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/transport/preRequisites/change-container-indicator                 controllers.transport.preRequisites.ContainerIndicatorController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

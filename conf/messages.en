@@ -1022,8 +1022,6 @@ transport.preRequisites.transportedToSameCountryYesNo.heading = Are all the item
 transport.preRequisites.transportedToSameCountryYesNo.checkYourAnswersLabel = Are all the items being transported to the same country?
 transport.preRequisites.transportedToSameCountryYesNo.error.required = Select yes if all the items are being transported to the same country
 
-
-
 transport.preRequisites.uniqueConsignmentReference.title = What is the Unique Consignment Reference (UCR)?
 transport.preRequisites.uniqueConsignmentReference.heading = What is the Unique Consignment Reference (UCR)?
 transport.preRequisites.uniqueConsignmentReference.checkYourAnswersLabel = What is the Unique Consignment Reference (UCR)
@@ -1041,7 +1039,8 @@ transport.preRequisites.countryOfDispatch.checkYourAnswersLabel = What is the co
 transport.preRequisites.countryOfDispatch.error.required = Enter the country of dispatch
 transport.preRequisites.countryOfDispatch.paragraph = This is the country where the CTC transit begins.
 
-transport.preRequisites.containerIndicator.title = Container Indicator
-transport.preRequisites.containerIndicator.heading = Container Indicator
-transport.preRequisites.containerIndicator.checkYourAnswersLabel = Container Indicator
-transport.preRequisites.containerIndicator.error.required = Select yes if Container Indicator
+transport.preRequisites.containerIndicator.title = Are you using any containers?
+transport.preRequisites.containerIndicator.heading = Are you using any containers?
+transport.preRequisites.containerIndicator.checkYourAnswersLabel = Are you using any containers?
+transport.preRequisites.containerIndicator.error.required = Select yes if you’re using any containers
+transport.preRequisites.containerIndicator.paragraph = This can be any container used to transport goods in CTC transit. For example, a swap body, articulated lorry or shipping container.
