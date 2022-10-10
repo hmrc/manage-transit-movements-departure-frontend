@@ -21,7 +21,7 @@ import controllers.actions._
 import navigation._
 import navigation.routeDetails._
 import navigation.traderDetails._
-import navigation.transport.{PreRequisitesNavigatorProvider, PreRequisitesNavigatorProviderImpl}
+import navigation.transport._
 
 import java.time.Clock
 
