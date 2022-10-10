@@ -5,7 +5,7 @@ import views.behaviours.InputSelectViewBehaviours
 import models.NormalMode
 import models.reference.$referenceClass$
 import models.$referenceListClass$
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.html.$package$.$className$View
