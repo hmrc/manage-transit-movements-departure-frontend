@@ -98,7 +98,7 @@ class PreRequisitesDomainSpec extends SpecBase with Generators {
             .setValue(SameUcrYesNoPage, true)
             .setValue(UniqueConsignmentReferencePage, ucr)
             .setValue(CountryOfDispatchPage, country)
-            .setValue(TransportedToSameCountryYesNoPage, false)
+            .setValue(TransportedToSameCountryYesNoPage, true)
             .setValue(ItemsDestinationCountryPage, itemsDestinationCountry)
 
           mandatoryPages.map {
