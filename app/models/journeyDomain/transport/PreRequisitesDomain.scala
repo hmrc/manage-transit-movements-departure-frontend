@@ -24,7 +24,6 @@ import models.reference.Country
 import pages.preTaskList.DeclarationTypePage
 import pages.transport.preRequisites._
 
-// TODO: Add ConsigmentReference to the domain
 case class PreRequisitesDomain(
   ucr: Option[String],
   countryOfDispatch: Option[Country]
@@ -33,18 +32,10 @@ case class PreRequisitesDomain(
 object PreRequisitesDomain {
 
   implicit val countryOfDispatchReader: UserAnswersReader[Option[Country]] =
-    DeclarationTypePage.reader.flatMap {
-      case Option4 =>
-        CountryOfDispatchPage.reader.map(Some(_))
-      case _ =>
-        none[Country].pure[UserAnswersReader]
-    }
+    DeclarationTypePage.filterOptionalDependent(_ == Option4)(CountryOfDispatchPage.reader)
 
-  implicit val userAnswersReader: UserAnswersReader[PreRequisitesDomain] = (SameUcrYesNoPage
-                                                                              .filterOptionalDependent(identity)(UserAnswersReader("")),
-                                                                            UserAnswersReader[Option[Country]]
-  ).tupled.map(
-    (PreRequisitesDomain.apply _).tupled
-  )
-
+  implicit val userAnswersReader: UserAnswersReader[PreRequisitesDomain] = (
+    SameUcrYesNoPage.filterOptionalDependent(identity)(UniqueConsignmentReferencePage.reader),
+    countryOfDispatchReader
+  ).tupled.map((PreRequisitesDomain.apply _).tupled)
 }

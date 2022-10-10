@@ -14,14 +14,25 @@
  * limitations under the License.
  */
 
-package pages.sections.transport
+package forms
 
-import pages.sections.Section
-import play.api.libs.json.{JsObject, JsPath}
+import forms.Constants.maxUCRLength
+import forms.mappings.Mappings
+import models.domain.StringFieldRegex.alphaNumericRegex
+import play.api.data.Form
 
-case object PreRequisitesSection extends Section[JsObject] {
+import javax.inject.Inject
 
-  override def path: JsPath = TransportSection.path \ toString
+class UCRFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "preRequisites"
+  def apply(prefix: String): Form[String] =
+    Form(
+      "value" -> textWithSpacesRemoved(s"$prefix.error.required")
+        .verifying(
+          forms.StopOnFirstFail[String](
+            regexp(alphaNumericRegex, s"$prefix.error.invalid"),
+            maxLength(maxUCRLength, s"$prefix.error.length")
+          )
+        )
+    )
 }

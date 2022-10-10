@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package pages.sections.transport
+package pages.transport.preRequisites
 
-import pages.sections.Section
-import play.api.libs.json.{JsObject, JsPath}
+import pages.behaviours.PageBehaviours
 
-case object PreRequisitesSection extends Section[JsObject] {
+class UniqueConsignmentReferencePageSpec extends PageBehaviours {
 
-  override def path: JsPath = TransportSection.path \ toString
+  "UniqueConsignmentReferencePage" - {
 
-  override def toString: String = "preRequisites"
+    beRetrievable[String](UniqueConsignmentReferencePage)
+
+    beSettable[String](UniqueConsignmentReferencePage)
+
+    beRemovable[String](UniqueConsignmentReferencePage)
+  }
 }

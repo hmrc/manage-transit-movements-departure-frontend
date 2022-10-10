@@ -1017,6 +1017,14 @@ transport.preRequisites.sameUcrYesNo.checkYourAnswersLabel = Same UCR for all it
 transport.preRequisites.sameUcrYesNo.change.hidden = if you want to use the same UCR for all items
 transport.preRequisites.sameUcrYesNo.error.required = Select yes if you want to use the same UCR for all items
 
+transport.preRequisites.uniqueConsignmentReference.title = What is the Unique Consignment Reference (UCR)?
+transport.preRequisites.uniqueConsignmentReference.heading = What is the Unique Consignment Reference (UCR)?
+transport.preRequisites.uniqueConsignmentReference.checkYourAnswersLabel = What is the Unique Consignment Reference (UCR)
+transport.preRequisites.uniqueConsignmentReference.hint = This can be up to 35 characters long and include both letters and numbers.
+transport.preRequisites.uniqueConsignmentReference.error.required = Enter the Unique Consignment Reference
+transport.preRequisites.uniqueConsignmentReference.error.length = The Unique Consignment Reference must be 35 characters or less
+transport.preRequisites.uniqueConsignmentReference.error.invalid = The Unique Consignment Reference must only include letters a to z and numbers 0 to 9
+
 transport.preRequisites.countryOfDispatch.title = What is the country of dispatch?
 transport.preRequisites.countryOfDispatch.heading = What is the country of dispatch?
 transport.preRequisites.countryOfDispatch.hintText = Enter the country, like France or Portugal.
