@@ -1,5 +1,10 @@
 
-GET        /:lrn/transport-details/apply-ucr-to-all-items                        controllers.transport.preRequisites.SameUcrYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/transport-details/apply-ucr-to-all-items                        controllers.transport.preRequisites.SameUcrYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/transport-details/change-apply-ucr-to-all-items                 controllers.transport.preRequisites.SameUcrYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/transport-details/change-apply-ucr-to-all-items                 controllers.transport.preRequisites.SameUcrYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/transport-details/apply-ucr-to-all-items                   controllers.transport.preRequisites.SameUcrYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport-details/apply-ucr-to-all-items                   controllers.transport.preRequisites.SameUcrYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport-details/change-apply-ucr-to-all-items            controllers.transport.preRequisites.SameUcrYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport-details/change-apply-ucr-to-all-items            controllers.transport.preRequisites.SameUcrYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/transport-details/ucr                                      controllers.transport.preRequisites.UniqueConsignmentReferenceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport-details/ucr                                      controllers.transport.preRequisites.UniqueConsignmentReferenceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport-details/ucr                                      controllers.transport.preRequisites.UniqueConsignmentReferenceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport-details/ucr                                      controllers.transport.preRequisites.UniqueConsignmentReferenceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

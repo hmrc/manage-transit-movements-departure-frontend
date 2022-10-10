@@ -19,9 +19,13 @@ package models.journeyDomain.transport
 import base.SpecBase
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
+import org.scalacheck.Gen
+import pages.QuestionPage
 import pages.transport.preRequisites._
 
 class PreRequisitesDomainSpec extends SpecBase with Generators {
+
+  private val UCR = Gen.alphaNumStr.sample.value
 
   "PreRequisitesDomain" - {
 
@@ -29,9 +33,10 @@ class PreRequisitesDomainSpec extends SpecBase with Generators {
       "when using same UCR for all items" in {
         val userAnswers = emptyUserAnswers
           .setValue(SameUcrYesNoPage, true)
+          .setValue(UniqueConsignmentReferencePage, UCR)
 
         val expectedResult = PreRequisitesDomain(
-          ucr = Some("")
+          ucr = Some(UCR)
         )
 
         val result: EitherType[PreRequisitesDomain] = UserAnswersReader[PreRequisitesDomain].run(userAnswers)
@@ -42,9 +47,24 @@ class PreRequisitesDomainSpec extends SpecBase with Generators {
 
     "can not be parsed from user answers" - {
       "when answers are empty" in {
-        val result: EitherType[PreRequisitesDomain] = UserAnswersReader[PreRequisitesDomain].run(emptyUserAnswers)
 
-        result.left.value.page mustBe SameUcrYesNoPage
+        val mandatoryPages: Seq[QuestionPage[_]] = Seq(
+          SameUcrYesNoPage,
+          UniqueConsignmentReferencePage
+        )
+
+        val userAnswers = emptyUserAnswers
+          .setValue(SameUcrYesNoPage, true)
+          .setValue(UniqueConsignmentReferencePage, UCR)
+
+        mandatoryPages.map {
+          mandatoryPage =>
+            val updatedAnswers = userAnswers.removeValue(mandatoryPage)
+
+            val result: EitherType[PreRequisitesDomain] = UserAnswersReader[PreRequisitesDomain](PreRequisitesDomain.userAnswersReader).run(updatedAnswers)
+
+            result.left.value.page mustBe mandatoryPage
+        }
       }
     }
   }

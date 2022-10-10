@@ -18,7 +18,7 @@ package viewModels.taskList
 
 import models.UserAnswers
 import models.journeyDomain.transport.TransportDomain
-import pages.sections.TransportSection
+import pages.sections.transport.TransportSection
 import play.api.libs.json.JsObject
 
 case class TransportTask(status: TaskStatus, href: Option[String]) extends Task {

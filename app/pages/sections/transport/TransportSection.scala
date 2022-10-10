@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package pages.transport.preRequisites
+package pages.sections.transport
 
-import controllers.transport.preRequisites.routes
-import models.{Mode, UserAnswers}
-import pages.QuestionPage
-import pages.sections.transport.PreRequisitesSection
-import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import pages.sections.Section
+import play.api.libs.json.{JsObject, JsPath}
 
-case object SameUcrYesNoPage extends QuestionPage[Boolean] {
+case object TransportSection extends Section[JsObject] {
 
-  override def path: JsPath = PreRequisitesSection.path \ toString
+  override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "sameUcrYesNo"
-
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.SameUcrYesNoController.onPageLoad(userAnswers.lrn, mode))
+  override def toString: String = "transportDetails"
 }
