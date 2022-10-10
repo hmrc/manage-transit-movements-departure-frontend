@@ -1040,3 +1040,8 @@ transport.preRequisites.countryOfDispatch.change.hidden = What is the country of
 transport.preRequisites.countryOfDispatch.checkYourAnswersLabel = What is the country of dispatch?
 transport.preRequisites.countryOfDispatch.error.required = Enter the country of dispatch
 transport.preRequisites.countryOfDispatch.paragraph = This is the country where the CTC transit begins.
+
+transport.preRequisites.containerIndicator.title = Container Indicator
+transport.preRequisites.containerIndicator.heading = Container Indicator
+transport.preRequisites.containerIndicator.checkYourAnswersLabel = Container Indicator
+transport.preRequisites.containerIndicator.error.required = Select yes if Container Indicator
