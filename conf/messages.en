@@ -1022,8 +1022,6 @@ transport.preRequisites.transportedToSameCountryYesNo.heading = Are all the item
 transport.preRequisites.transportedToSameCountryYesNo.checkYourAnswersLabel = Are all the items being transported to the same country?
 transport.preRequisites.transportedToSameCountryYesNo.error.required = Select yes if all the items are being transported to the same country
 
-
-
 transport.preRequisites.uniqueConsignmentReference.title = What is the Unique Consignment Reference (UCR)?
 transport.preRequisites.uniqueConsignmentReference.heading = What is the Unique Consignment Reference (UCR)?
 transport.preRequisites.uniqueConsignmentReference.checkYourAnswersLabel = What is the Unique Consignment Reference (UCR)
@@ -1040,3 +1038,10 @@ transport.preRequisites.countryOfDispatch.change.hidden = What is the country of
 transport.preRequisites.countryOfDispatch.checkYourAnswersLabel = What is the country of dispatch?
 transport.preRequisites.countryOfDispatch.error.required = Enter the country of dispatch
 transport.preRequisites.countryOfDispatch.paragraph = This is the country where the CTC transit begins.
+
+transport.preRequisites.itemsDestinationCountry.title = What country are the items being transported to?
+transport.preRequisites.itemsDestinationCountry.heading = What country are the items being transported to?
+transport.preRequisites.itemsDestinationCountry.hintText = Enter the country, like France or Portugal.
+transport.preRequisites.itemsDestinationCountry.placeholder = Select a country
+transport.preRequisites.itemsDestinationCountry.checkYourAnswersLabel = What country are the items being transported to
+transport.preRequisites.itemsDestinationCountry.error.required = Enter the country the items are being transported to
