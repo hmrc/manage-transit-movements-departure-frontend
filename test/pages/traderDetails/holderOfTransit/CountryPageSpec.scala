@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package forms
+package pages.traderDetails.holderOfTransit
 
-import forms.mappings.Mappings
-import models.CountryList
 import models.reference.Country
-import play.api.data.Form
+import pages.behaviours.PageBehaviours
 
-import javax.inject.Inject
+class CountryPageSpec extends PageBehaviours {
 
-class CountryFormProvider @Inject() extends Mappings {
+  "CountryPage" - {
 
-  def apply(prefix: String, countryList: CountryList, args: Any*): Form[Country] =
-    Form(
-      "value" -> country(countryList, s"$prefix.error.required", args)
-    )
+    beRetrievable[Country](CountryPage)
+
+    beSettable[Country](CountryPage)
+
+    beRemovable[Country](CountryPage)
+  }
 }
