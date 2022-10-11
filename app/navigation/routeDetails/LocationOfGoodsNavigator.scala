@@ -16,8 +16,9 @@
 
 package navigation.routeDetails
 
-import models.journeyDomain.routeDetails.RouteDetailsDomain
+import models.domain.UserAnswersReader
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
+import models.{CheckMode, Mode, NormalMode}
 import navigation.UserAnswersNavigator
 import services.CountriesService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -31,25 +32,24 @@ class LocationOfGoodsNavigatorProviderImpl @Inject() (
 )(implicit ec: ExecutionContext)
     extends LocationOfGoodsNavigatorProvider {
 
-  def apply()(implicit hc: HeaderCarrier): Future[LocationOfGoodsNavigator] =
-    for {
-      ctcCountries                             <- countriesService.getCountryCodesCTC()
-      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
-    } yield new LocationOfGoodsNavigator(
-      ctcCountries.countryCodes,
-      customsSecurityAgreementAreaCountryCodes.countryCodes
-    )
+  def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator] =
+    mode match {
+      case NormalMode =>
+        Future.successful(new LocationOfGoodsNavigator(mode))
+      case CheckMode =>
+        RouteDetailsNavigatorProvider(countriesService, mode)
+    }
 }
 
 trait LocationOfGoodsNavigatorProvider {
 
-  def apply()(implicit hc: HeaderCarrier): Future[LocationOfGoodsNavigator]
+  def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator]
 }
 
-class LocationOfGoodsNavigator(
-  ctcCountryCodes: Seq[String],
-  customsSecurityAgreementAreaCountryCodes: Seq[String]
-) extends UserAnswersNavigator[LocationOfGoodsDomain, RouteDetailsDomain]()(
-      LocationOfGoodsDomain.userAnswersReader,
-      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-    )
+class LocationOfGoodsNavigator(override val mode: Mode) extends UserAnswersNavigator {
+
+  override type T = LocationOfGoodsDomain
+
+  implicit override val reader: UserAnswersReader[LocationOfGoodsDomain] =
+    LocationOfGoodsDomain.userAnswersReader
+}

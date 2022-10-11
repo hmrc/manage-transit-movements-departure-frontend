@@ -64,9 +64,9 @@ class CoordinatesController @Inject() (
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
             value =>
-              navigatorProvider().flatMap {
+              navigatorProvider(mode).flatMap {
                 implicit navigator =>
-                  CoordinatesPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                  CoordinatesPage.writeToUserAnswers(value).writeToSession().navigate()
               }
           )
     }

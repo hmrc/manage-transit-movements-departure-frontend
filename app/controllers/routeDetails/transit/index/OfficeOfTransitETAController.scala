@@ -82,9 +82,9 @@ class OfficeOfTransitETAController @Inject() (
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, country.description, customsOffice.name, mode, index))),
                 value =>
-                  navigatorProvider(index).flatMap {
+                  navigatorProvider(mode, index).flatMap {
                     implicit navigator =>
-                      OfficeOfTransitETAPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                      OfficeOfTransitETAPage(index).writeToUserAnswers(value).writeToSession().navigate()
                   }
               )
         }

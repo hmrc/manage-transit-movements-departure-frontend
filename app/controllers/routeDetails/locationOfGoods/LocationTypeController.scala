@@ -66,9 +66,9 @@ class LocationTypeController @Inject() (
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, LocationType.radioItems, mode))),
             value =>
-              navigatorProvider().flatMap {
+              navigatorProvider(mode).flatMap {
                 implicit navigator =>
-                  LocationTypePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                  LocationTypePage.writeToUserAnswers(value).writeToSession().navigate()
               }
           )
     }

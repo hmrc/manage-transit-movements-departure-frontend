@@ -2,10 +2,8 @@ package controllers.$package$
 
 import base.{SpecBase, AppWithDefaultMockFixtures}
 import forms.$package$.$formProvider$
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import models.$package$.$className$
-import navigation.Navigator
-import navigation.annotations.$navRoute$
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.$package$.$className$Page
@@ -27,7 +25,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[$navRoute$]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[$navRoute$NavigatorProvider]).toInstance(fake$navRoute$NavigatorProvider))
 
   "$className$ Controller" - {
 

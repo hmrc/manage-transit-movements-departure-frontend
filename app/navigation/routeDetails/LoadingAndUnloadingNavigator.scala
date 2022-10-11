@@ -16,8 +16,9 @@
 
 package navigation.routeDetails
 
-import models.journeyDomain.routeDetails.RouteDetailsDomain
+import models.domain.UserAnswersReader
 import models.journeyDomain.routeDetails.loadingAndUnloading.LoadingAndUnloadingDomain
+import models.{CheckMode, Mode, NormalMode}
 import navigation.UserAnswersNavigator
 import services.CountriesService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -31,25 +32,24 @@ class LoadingAndUnloadingNavigatorProviderImpl @Inject() (
 )(implicit ec: ExecutionContext)
     extends LoadingAndUnloadingNavigatorProvider {
 
-  def apply()(implicit hc: HeaderCarrier): Future[LoadingAndUnloadingNavigator] =
-    for {
-      ctcCountries                             <- countriesService.getCountryCodesCTC()
-      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
-    } yield new LoadingAndUnloadingNavigator(
-      ctcCountries.countryCodes,
-      customsSecurityAgreementAreaCountryCodes.countryCodes
-    )
+  def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator] =
+    mode match {
+      case NormalMode =>
+        Future.successful(new LoadingAndUnloadingNavigator(mode))
+      case CheckMode =>
+        RouteDetailsNavigatorProvider(countriesService, mode)
+    }
 }
 
 trait LoadingAndUnloadingNavigatorProvider {
 
-  def apply()(implicit hc: HeaderCarrier): Future[LoadingAndUnloadingNavigator]
+  def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator]
 }
 
-class LoadingAndUnloadingNavigator(
-  ctcCountryCodes: Seq[String],
-  customsSecurityAgreementAreaCountryCodes: Seq[String]
-) extends UserAnswersNavigator[LoadingAndUnloadingDomain, RouteDetailsDomain]()(
-      LoadingAndUnloadingDomain.userAnswersReader,
-      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-    )
+class LoadingAndUnloadingNavigator(override val mode: Mode) extends UserAnswersNavigator {
+
+  override type T = LoadingAndUnloadingDomain
+
+  implicit override val reader: UserAnswersReader[LoadingAndUnloadingDomain] =
+    LoadingAndUnloadingDomain.userAnswersReader
+}

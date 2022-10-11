@@ -20,8 +20,7 @@ import base.SpecBase
 import generators.{Generators, RouteDetailsUserAnswersGenerator}
 import models._
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{verify, when}
-import org.scalacheck.Arbitrary.arbitrary
+import org.mockito.Mockito.when
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import services.CountriesService
 
@@ -30,20 +29,21 @@ import scala.concurrent.Future
 
 class OfficeOfExitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 
-  private val navigator = new OfficeOfExitNavigator(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-
   "Office of Exit Navigator" - {
 
     "when in NormalMode" - {
 
-      val mode = NormalMode
+      val mode                 = NormalMode
+      val mockCountriesService = mock[CountriesService]
+      val navigatorProvider    = new OfficeOfExitNavigatorProviderImpl(mockCountriesService)
+      val navigator            = navigatorProvider.apply(mode, index).futureValue
 
       "when answers complete" - {
         "must redirect to check your answers for office of exit" in {
           forAll(arbitraryOfficeOfExitAnswers(emptyUserAnswers, index)) {
             answers =>
               navigator
-                .nextPage(answers, mode)
+                .nextPage(answers)
                 .mustBe(controllers.routeDetails.exit.index.routes.CheckOfficeOfExitAnswersController.onPageLoad(lrn, index, mode))
           }
         }
@@ -52,39 +52,25 @@ class OfficeOfExitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
     "when in CheckMode" - {
 
-      val mode = CheckMode
+      val mode                 = CheckMode
+      val mockCountriesService = mock[CountriesService]
+      when(mockCountriesService.getCountryCodesCTC()(any()))
+        .thenReturn(Future.successful(CountryList(ctcCountries)))
+      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any()))
+        .thenReturn(Future.successful(CountryList(customsSecurityAgreementAreaCountries)))
+      val navigatorProvider = new OfficeOfExitNavigatorProviderImpl(mockCountriesService)
+      val navigator         = navigatorProvider.apply(mode, index).futureValue
 
       "when answers complete" - {
         "must redirect to route details check your answers" in {
           forAll(arbitraryRouteDetailsAnswers(emptyUserAnswers)) {
             answers =>
               navigator
-                .nextPage(answers, mode)
+                .nextPage(answers)
                 .mustBe(controllers.routeDetails.routes.RouteDetailsAnswersController.onPageLoad(answers.lrn))
           }
         }
       }
-    }
-  }
-
-  "Office of Exit Navigator Provider" - {
-
-    "must retrieve reference data lists" in {
-      val mockService = mock[CountriesService]
-
-      val ctcCountries                          = arbitrary[CountryList].sample.value
-      val customsSecurityAgreementAreaCountries = arbitrary[CountryList].sample.value
-
-      when(mockService.getCountryCodesCTC()(any()))
-        .thenReturn(Future.successful(ctcCountries))
-      when(mockService.getCustomsSecurityAgreementAreaCountries()(any()))
-        .thenReturn(Future.successful(customsSecurityAgreementAreaCountries))
-
-      val provider = new OfficeOfExitNavigatorProviderImpl(mockService)
-      provider.apply(index).futureValue
-
-      verify(mockService).getCountryCodesCTC()(any())
-      verify(mockService).getCustomsSecurityAgreementAreaCountries()(any())
     }
   }
 }

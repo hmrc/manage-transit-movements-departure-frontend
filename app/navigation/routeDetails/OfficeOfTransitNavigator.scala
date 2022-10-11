@@ -17,7 +17,7 @@
 package navigation.routeDetails
 
 import models._
-import models.journeyDomain.routeDetails.RouteDetailsDomain
+import models.domain.UserAnswersReader
 import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
 import navigation.UserAnswersNavigator
 import services.CountriesService
@@ -32,27 +32,32 @@ class OfficeOfTransitNavigatorProviderImpl @Inject() (
 )(implicit ec: ExecutionContext)
     extends OfficeOfTransitNavigatorProvider {
 
-  def apply(index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfTransitNavigator] =
+  def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator] =
     for {
-      ctcCountries                             <- countriesService.getCountryCodesCTC()
-      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
-    } yield new OfficeOfTransitNavigator(
-      index,
-      ctcCountries.countryCodes,
-      customsSecurityAgreementAreaCountryCodes.countryCodes
-    )
+      ctcCountryCodes                          <- countriesService.getCountryCodesCTC().map(_.countryCodes)
+      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries().map(_.countryCodes)
+    } yield mode match {
+      case NormalMode =>
+        new OfficeOfTransitNavigator(mode, index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+      case CheckMode =>
+        new RouteDetailsNavigator(mode, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+    }
 }
 
 trait OfficeOfTransitNavigatorProvider {
 
-  def apply(index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfTransitNavigator]
+  def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator]
 }
 
 class OfficeOfTransitNavigator(
+  override val mode: Mode,
   index: Index,
   ctcCountryCodes: Seq[String],
   customsSecurityAgreementAreaCountryCodes: Seq[String]
-) extends UserAnswersNavigator[OfficeOfTransitDomain, RouteDetailsDomain]()(
-      OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes),
-      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-    )
+) extends UserAnswersNavigator {
+
+  override type T = OfficeOfTransitDomain
+
+  implicit override val reader: UserAnswersReader[OfficeOfTransitDomain] =
+    OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+}

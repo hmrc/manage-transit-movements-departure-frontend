@@ -16,8 +16,9 @@
 
 package navigation.routeDetails
 
-import models.journeyDomain.routeDetails.RouteDetailsDomain
+import models.domain.UserAnswersReader
 import models.journeyDomain.routeDetails.routing.RoutingDomain
+import models.{CheckMode, Mode, NormalMode}
 import navigation.UserAnswersNavigator
 import services.CountriesService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -31,25 +32,24 @@ class RoutingNavigatorProviderImpl @Inject() (
 )(implicit ec: ExecutionContext)
     extends RoutingNavigatorProvider {
 
-  def apply()(implicit hc: HeaderCarrier): Future[RoutingNavigator] =
-    for {
-      ctcCountries                             <- countriesService.getCountryCodesCTC()
-      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
-    } yield new RoutingNavigator(
-      ctcCountries.countryCodes,
-      customsSecurityAgreementAreaCountryCodes.countryCodes
-    )
+  def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator] =
+    mode match {
+      case NormalMode =>
+        Future.successful(new RoutingNavigator(mode))
+      case CheckMode =>
+        RouteDetailsNavigatorProvider(countriesService, mode)
+    }
 }
 
 trait RoutingNavigatorProvider {
 
-  def apply()(implicit hc: HeaderCarrier): Future[RoutingNavigator]
+  def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator]
 }
 
-class RoutingNavigator(
-  ctcCountryCodes: Seq[String],
-  customsSecurityAgreementAreaCountryCodes: Seq[String]
-) extends UserAnswersNavigator[RoutingDomain, RouteDetailsDomain]()(
-      RoutingDomain.userAnswersReader,
-      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-    )
+class RoutingNavigator(override val mode: Mode) extends UserAnswersNavigator {
+
+  override type T = RoutingDomain
+
+  implicit override val reader: UserAnswersReader[RoutingDomain] =
+    RoutingDomain.userAnswersReader
+}

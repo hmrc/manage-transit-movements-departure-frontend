@@ -57,8 +57,8 @@ class AddAnotherOfficeOfExitController @Inject() (
       lazy val (officesOfExit, numberOfOfficesOfExit, allowMoreOfficesOfExit) = viewData(mode)
       numberOfOfficesOfExit match {
         case 0 =>
-          navigatorProvider().map {
-            navigator => Redirect(navigator.nextPage(request.userAnswers, mode))
+          navigatorProvider(mode).map {
+            navigator => Redirect(navigator.nextPage(request.userAnswers))
           }
         case _ => Future.successful(Ok(view(form(allowMoreOfficesOfExit), lrn, mode, officesOfExit, allowMoreOfficesOfExit)))
       }
@@ -77,8 +77,8 @@ class AddAnotherOfficeOfExitController @Inject() (
                 Redirect(indexRoutes.OfficeOfExitCountryController.onPageLoad(lrn, Index(numberOfOfficesOfExit), mode))
               )
             case false =>
-              navigatorProvider().map {
-                navigator => Redirect(navigator.nextPage(request.userAnswers, mode))
+              navigatorProvider(mode).map {
+                navigator => Redirect(navigator.nextPage(request.userAnswers))
               }
           }
         )

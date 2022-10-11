@@ -20,8 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.traderDetails.representative.RepresentativeCapacityFormProvider
 import models.NormalMode
 import models.traderDetails.representative.RepresentativeCapacity
-import navigation.Navigator
-import navigation.annotations.traderDetails.TraderDetails
+import navigation.traderDetails.TraderDetailsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.traderDetails.representative.CapacityPage
@@ -44,7 +43,7 @@ class CapacityControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[TraderDetailsNavigatorProvider]).toInstance(fakeTraderDetailsNavigatorProvider))
 
   "RepresentativeCapacity Controller" - {
 

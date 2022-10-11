@@ -18,48 +18,62 @@ package navigation
 
 import models.{Index, Mode, UserAnswers}
 import navigation.routeDetails._
+import navigation.traderDetails.TraderDetailsNavigator
+import navigation.transport.PreRequisitesNavigator
 import play.api.mvc.Call
 
 class FakeNavigator(desiredRoute: Call) extends Navigator {
-  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
-class FakeGuaranteeNavigator(desiredRoute: Call, index: Index) extends GuaranteeNavigator(index) {
-  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+class FakePreTaskListNavigator(desiredRoute: Call, mode: Mode) extends PreTaskListNavigator(mode) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
-class FakeRouteDetailsNavigator(desiredRoute: Call) extends RouteDetailsNavigator(Nil, Nil) {
-  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+class FakeGuaranteeNavigator(desiredRoute: Call, mode: Mode, index: Index) extends GuaranteeNavigator(mode, index) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
-class FakeRoutingNavigator(desiredRoute: Call) extends RoutingNavigator(Nil, Nil) {
-  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+class FakeTraderDetailsNavigator(desiredRoute: Call, mode: Mode) extends TraderDetailsNavigator(mode) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
-class FakeCountryOfRoutingNavigator(desiredRoute: Call, index: Index) extends CountryOfRoutingNavigator(index, Nil, Nil) {
-  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+class FakeRouteDetailsNavigator(desiredRoute: Call, mode: Mode) extends RouteDetailsNavigator(mode, Nil, Nil) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
-class FakeTransitNavigator(desiredRoute: Call) extends TransitNavigator(Nil, Nil) {
-  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+class FakeRoutingNavigator(desiredRoute: Call, mode: Mode) extends RoutingNavigator(mode) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
-class FakeOfficeOfTransitNavigator(desiredRoute: Call, index: Index) extends OfficeOfTransitNavigator(index, Nil, Nil) {
-  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+class FakeCountryOfRoutingNavigator(desiredRoute: Call, mode: Mode, index: Index) extends CountryOfRoutingNavigator(mode, index) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
-class FakeExitNavigator(desiredRoute: Call) extends ExitNavigator(Nil, Nil) {
-  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+class FakeTransitNavigator(desiredRoute: Call, mode: Mode) extends TransitNavigator(mode, Nil, Nil) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
-class FakeOfficeOfExitNavigator(desiredRoute: Call, index: Index) extends OfficeOfExitNavigator(index, Nil, Nil) {
-  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+class FakeOfficeOfTransitNavigator(desiredRoute: Call, mode: Mode, index: Index) extends OfficeOfTransitNavigator(mode, index, Nil, Nil) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
-class FakeLocationOfGoodsNavigator(desiredRoute: Call) extends LocationOfGoodsNavigator(Nil, Nil) {
-  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+class FakeExitNavigator(desiredRoute: Call, mode: Mode) extends ExitNavigator(mode) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
-class FakeLoadingAndUnloadingNavigator(desiredRoute: Call) extends LoadingAndUnloadingNavigator(Nil, Nil) {
-  override def nextPage(userAnswers: UserAnswers, mode: Mode): Call = desiredRoute
+class FakeOfficeOfExitNavigator(desiredRoute: Call, mode: Mode, index: Index) extends OfficeOfExitNavigator(mode, index) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
+}
+
+class FakeLocationOfGoodsNavigator(desiredRoute: Call, mode: Mode) extends LocationOfGoodsNavigator(mode) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
+}
+
+class FakeLoadingAndUnloadingNavigator(desiredRoute: Call, mode: Mode) extends LoadingAndUnloadingNavigator(mode) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
+}
+
+class FakePreRequisitesNavigator(desiredRoute: Call, mode: Mode) extends PreRequisitesNavigator(mode) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }

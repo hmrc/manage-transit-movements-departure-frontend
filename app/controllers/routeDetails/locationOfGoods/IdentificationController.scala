@@ -62,9 +62,9 @@ class IdentificationController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, LocationOfGoodsIdentification.radioItems, mode))),
           value =>
-            navigatorProvider().flatMap {
+            navigatorProvider(mode).flatMap {
               implicit navigator =>
-                IdentificationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                IdentificationPage.writeToUserAnswers(value).writeToSession().navigate()
             }
         )
   }

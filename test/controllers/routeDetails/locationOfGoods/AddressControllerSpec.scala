@@ -19,7 +19,7 @@ package controllers.routeDetails.locationOfGoods
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.locationOfGoods.AddressFormProvider
 import generators.Generators
-import models.{Address, CountryList, NormalMode, UserAnswers}
+import models.{Address, CountryList, NormalMode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
@@ -81,7 +81,7 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
 
       when(mockCountriesService.getTransitCountries()(any())).thenReturn(Future.successful(countryList))
 
-      val userAnswers = UserAnswers(lrn, eoriNumber)
+      val userAnswers = emptyUserAnswers
         .setValue(AddressPage, testAddress)
 
       setExistingUserAnswers(userAnswers)

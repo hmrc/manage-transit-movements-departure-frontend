@@ -20,8 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.preTaskList.SecurityDetailsFormProvider
 import models.SecurityDetailsType.NoSecurityDetails
 import models.{NormalMode, SecurityDetailsType}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.PreTaskListNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.preTaskList.SecurityDetailsTypePage
@@ -43,7 +42,7 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
 
   "SecurityDetailsType Controller" - {
 

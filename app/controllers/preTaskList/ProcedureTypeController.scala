@@ -21,8 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.preTaskList.ProcedureTypeFormProvider
 import models.journeyDomain.PreTaskListDomain
 import models.{LocalReferenceNumber, Mode, ProcedureType}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
 import pages.preTaskList.ProcedureTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ProcedureTypeController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @PreTaskListDetails implicit val navigator: Navigator,
+  navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
   checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   formProvider: ProcedureTypeFormProvider,
@@ -69,7 +68,10 @@ class ProcedureTypeController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, ProcedureType.radioItems, lrn, mode))),
-            value => ProcedureTypePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+            value => {
+              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+              ProcedureTypePage.writeToUserAnswers(value).writeToSession().navigate()
+            }
           )
     }
 }
