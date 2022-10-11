@@ -19,7 +19,9 @@ package controllers.routeDetails.locationOfGoods
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.locationOfGoods.AuthorisationNumberFormProvider
+import models.requests.DataRequest
 import models.{LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import pages.routeDetails.locationOfGoods.AuthorisationNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -37,6 +39,7 @@ class AuthorisationNumberController @Inject() (
   navigatorProvider: LocationOfGoodsNavigatorProvider,
   formProvider: AuthorisationNumberFormProvider,
   actions: Actions,
+  chooseNavigator: NavigatorActionProvider,
   val controllerComponents: MessagesControllerComponents,
   view: AuthorisationNumberView
 )(implicit ec: ExecutionContext)
@@ -54,17 +57,18 @@ class AuthorisationNumberController @Inject() (
       Ok(view(preparedForm, lrn, mode))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value =>
-            navigatorProvider(mode).flatMap {
-              implicit navigator =>
-                AuthorisationNumberPage.writeToUserAnswers(value).writeToSession().navigate()
-            }
-        )
-  }
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(chooseNavigator(navigatorProvider(mode)(_)))
+    .async {
+      request =>
+        implicit val r: DataRequest[AnyContent] = request._1
+        implicit val n: UserAnswersNavigator    = request._2
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
+            value => AuthorisationNumberPage.writeToUserAnswers(value).writeToSession().navigate()
+          )
+    }
 }

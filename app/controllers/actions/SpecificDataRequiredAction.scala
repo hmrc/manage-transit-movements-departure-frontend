@@ -29,7 +29,7 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 // scalastyle:off no.whitespace.after.left.bracket
-class SpecificDataRequiredActionImpl @Inject() (implicit val ec: ExecutionContext) extends SpecificDataRequiredActionProvider {
+class SpecificDataRequiredActionProviderImpl @Inject() (implicit val ec: ExecutionContext) extends SpecificDataRequiredActionProvider {
 
   override def getFirst[T1](
     pages: Gettable[T1]*
