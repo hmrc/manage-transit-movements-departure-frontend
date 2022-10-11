@@ -49,7 +49,7 @@ class CountryFormProviderSpec extends StringFieldBehaviours with Generators {
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey, arg)
+      requiredError = FormError(fieldName, requiredKey, Seq(arg))
     )
 
     "not bind if country does not exist in the countryList" in {
