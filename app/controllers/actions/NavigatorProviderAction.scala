@@ -16,8 +16,7 @@
 
 package controllers.actions
 
-import controllers.actions.NavigatorAction.DataRequestWithNavigator
-import models.requests.DataRequest
+import models.requests.{DataRequest, NavigationRequest}
 import navigation.UserAnswersNavigator
 import play.api.mvc.ActionTransformer
 import uk.gov.hmrc.http.HeaderCarrier
@@ -29,26 +28,24 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class NavigatorActionProviderImpl @Inject() (implicit val executionContext: ExecutionContext) extends NavigatorActionProvider {
 
-  override def apply[A](navigator: HeaderCarrier => Future[UserAnswersNavigator]): ActionTransformer[DataRequest, DataRequestWithNavigator] =
+  override def apply[A](navigator: HeaderCarrier => Future[UserAnswersNavigator]): ActionTransformer[DataRequest, NavigationRequest] =
     new NavigatorAction(navigator)
 }
 
 trait NavigatorActionProvider {
 
-  def apply[A](navigator: HeaderCarrier => Future[UserAnswersNavigator]): ActionTransformer[DataRequest, DataRequestWithNavigator]
+  def apply[A](navigator: HeaderCarrier => Future[UserAnswersNavigator]): ActionTransformer[DataRequest, NavigationRequest]
 }
 
 class NavigatorAction(
   navigator: HeaderCarrier => Future[UserAnswersNavigator]
 )(implicit val executionContext: ExecutionContext)
-    extends ActionTransformer[DataRequest, DataRequestWithNavigator] {
+    extends ActionTransformer[DataRequest, NavigationRequest] {
 
-  override protected def transform[A](request: DataRequest[A]): Future[(DataRequest[A], UserAnswersNavigator)] = {
+  override protected def transform[A](request: DataRequest[A]): Future[NavigationRequest[A]] = {
     val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-    navigator(hc).map((request, _))
+    navigator(hc).map(
+      x => NavigationRequest(request = request, eoriNumber = request.eoriNumber, userAnswers = request.userAnswers, navigator = x)
+    )
   }
-}
-
-object NavigatorAction {
-  type DataRequestWithNavigator[A] = (DataRequest[A], UserAnswersNavigator)
 }

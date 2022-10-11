@@ -61,9 +61,7 @@ class AuthorisationNumberController @Inject() (
     .requireData(lrn)
     .andThen(chooseNavigator(navigatorProvider(mode)(_)))
     .async {
-      request =>
-        implicit val r: DataRequest[AnyContent] = request._1
-        implicit val n: UserAnswersNavigator    = request._2
+      implicit request =>
         form
           .bindFromRequest()
           .fold(

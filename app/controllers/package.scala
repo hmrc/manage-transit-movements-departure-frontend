@@ -17,12 +17,12 @@
 import cats.data.ReaderT
 import models.UserAnswers
 import models.journeyDomain.WriterError
-import models.requests.MandatoryDataRequest
+import models.requests.{MandatoryDataRequest, NavigationRequest}
 import navigation.Navigator
 import pages.QuestionPage
 import play.api.libs.json.Format
 import play.api.mvc.Results.Redirect
-import play.api.mvc.{Call, Result}
+import play.api.mvc.{AnyContent, Call, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -81,10 +81,15 @@ package object controllers {
 
   implicit class NavigatorOps[A](write: Future[Write[A]]) {
 
-    def navigate()(implicit navigator: Navigator, executionContext: ExecutionContext): Future[Result] =
+    def navigate()(implicit request: NavigationRequest[_], executionContext: ExecutionContext): Future[Result] =
       navigate {
-        case (_, userAnswers) => navigator.nextPage(userAnswers)
+        case (_, userAnswers) => request.navigator.nextPage(request.userAnswers)
       }
+
+//    def navigate()(implicit navigator: Navigator, executionContext: ExecutionContext): Future[Result] =
+//      navigate {
+//        case (_, userAnswers) => navigator.nextPage(userAnswers)
+//      }
 
     def navigateTo(call: Call)(implicit executionContext: ExecutionContext): Future[Result] =
       navigate {

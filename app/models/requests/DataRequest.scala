@@ -17,6 +17,7 @@
 package models.requests
 
 import models.{EoriNumber, UserAnswers}
+import navigation.UserAnswersNavigator
 import play.api.mvc.{Request, WrappedRequest}
 
 case class OptionalDataRequest[A](
@@ -35,6 +36,14 @@ case class DataRequest[A](
   request: Request[A],
   eoriNumber: EoriNumber,
   userAnswers: UserAnswers
+) extends WrappedRequest[A](request)
+    with MandatoryDataRequest[A]
+
+case class NavigationRequest[A](
+  request: Request[A],
+  eoriNumber: EoriNumber,
+  userAnswers: UserAnswers,
+  navigator: UserAnswersNavigator
 ) extends WrappedRequest[A](request)
     with MandatoryDataRequest[A]
 
