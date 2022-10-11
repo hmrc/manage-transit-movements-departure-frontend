@@ -16,31 +16,28 @@
 
 package navigation.transport
 
+import models.Mode
 import models.domain.UserAnswersReader
-import models.journeyDomain.transport.PreRequisitesDomain
-import models.{CheckMode, Mode, NormalMode}
+import models.journeyDomain.transport.TransportDomain
 import navigation.UserAnswersNavigator
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class PreRequisitesNavigatorProviderImpl @Inject() () extends PreRequisitesNavigatorProvider {
+class TransportNavigatorProviderImpl @Inject() () extends TransportNavigatorProvider {
 
   override def apply(mode: Mode): UserAnswersNavigator =
-    mode match {
-      case NormalMode => new PreRequisitesNavigator(mode)
-      case CheckMode  => new TransportNavigator(mode)
-    }
+    new TransportNavigator(mode)
 }
 
-trait PreRequisitesNavigatorProvider {
+trait TransportNavigatorProvider {
   def apply(mode: Mode): UserAnswersNavigator
 }
 
-class PreRequisitesNavigator(override val mode: Mode) extends UserAnswersNavigator {
+class TransportNavigator(override val mode: Mode) extends UserAnswersNavigator {
 
-  override type T = PreRequisitesDomain
+  override type T = TransportDomain
 
-  implicit override val reader: UserAnswersReader[PreRequisitesDomain] =
-    PreRequisitesDomain.userAnswersReader
+  implicit override val reader: UserAnswersReader[TransportDomain] =
+    TransportDomain.userAnswersReader
 }

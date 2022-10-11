@@ -20,8 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.CountryFormProvider
 import generators.Generators
 import models.{CountryList, NormalMode}
-import navigation.Navigator
-import navigation.annotations.transport.PreRequisites
+import navigation.transport.PreRequisitesNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.transport.preRequisites.ItemsDestinationCountryPage
@@ -50,7 +49,7 @@ class ItemsDestinationCountryControllerSpec extends SpecBase with AppWithDefault
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreRequisites]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[PreRequisitesNavigatorProvider]).toInstance(fakePreRequisitesNavigatorProvider))
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "ItemsDestinationCountry Controller" - {

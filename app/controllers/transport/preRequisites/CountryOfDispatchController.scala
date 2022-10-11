@@ -20,8 +20,8 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
 import models.{LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.transport.PreRequisites
+import navigation.UserAnswersNavigator
+import navigation.transport.PreRequisitesNavigatorProvider
 import pages.transport.preRequisites.CountryOfDispatchPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CountryOfDispatchController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @PreRequisites implicit val navigator: Navigator,
+  navigatorProvider: PreRequisitesNavigatorProvider,
   actions: Actions,
   formProvider: CountryFormProvider,
   service: CountriesService,
@@ -69,7 +69,10 @@ class CountryOfDispatchController @Inject() (
             .bindFromRequest()
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode))),
-              value => CountryOfDispatchPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+              value => {
+                implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                CountryOfDispatchPage.writeToUserAnswers(value).writeToSession().navigate()
+              }
             )
       }
   }
