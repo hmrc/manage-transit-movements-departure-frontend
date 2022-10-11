@@ -19,7 +19,7 @@ package controllers.traderDetails.holderOfTransit.contact
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.TelephoneNumberFormProvider
 import generators.Generators
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.traderDetails.TraderDetailsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -67,7 +67,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-      val userAnswers = UserAnswers(lrn, eoriNumber)
+      val userAnswers = emptyUserAnswers
         .setValue(NamePage, holderName)
         .setValue(TelephoneNumberPage, validAnswer)
 

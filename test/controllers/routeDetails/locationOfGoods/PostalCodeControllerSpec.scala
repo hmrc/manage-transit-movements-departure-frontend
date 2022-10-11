@@ -19,7 +19,7 @@ package controllers.routeDetails.locationOfGoods
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.locationOfGoods.PostalCodeFormProvider
 import generators.Generators
-import models.{CountryList, NormalMode, PostalCodeAddress, UserAnswers}
+import models.{CountryList, NormalMode, PostalCodeAddress}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
@@ -81,7 +81,7 @@ class PostalCodeControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
 
       when(mockCountriesService.getAddressPostcodeBasedCountries()(any())).thenReturn(Future.successful(countryList))
 
-      val userAnswers = UserAnswers(lrn, eoriNumber)
+      val userAnswers = emptyUserAnswers
         .setValue(PostalCodePage, testAddress)
 
       setExistingUserAnswers(userAnswers)

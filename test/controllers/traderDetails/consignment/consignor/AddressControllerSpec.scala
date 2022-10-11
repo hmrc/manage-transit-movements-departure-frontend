@@ -19,7 +19,7 @@ package controllers.traderDetails.consignment.consignor
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.AddressFormProvider
 import generators.Generators
-import models.{Address, CountryList, NormalMode, UserAnswers}
+import models.{Address, CountryList, NormalMode}
 import navigation.traderDetails.TraderDetailsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
@@ -86,7 +86,7 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
 
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
 
-      val userAnswers = UserAnswers(lrn, eoriNumber)
+      val userAnswers = emptyUserAnswers
         .setValue(NamePage, addressHolderName)
         .setValue(AddressPage, testAddress)
 
