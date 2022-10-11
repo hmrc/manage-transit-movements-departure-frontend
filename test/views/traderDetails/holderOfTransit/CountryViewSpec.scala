@@ -22,31 +22,39 @@ import views.behaviours.InputSelectViewBehaviours
 import models.NormalMode
 import models.reference.Country
 import models.CountryList
-import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.html.traderDetails.holderOfTransit.CountryView
 
 class CountryViewSpec extends InputSelectViewBehaviours[Country] with Generators {
 
+  private lazy val country1 = arbitraryCountry.arbitrary.sample.get
+  private lazy val country2 = arbitraryCountry.arbitrary.sample.get
+  private lazy val country3 = arbitraryCountry.arbitrary.sample.get
+  private lazy val name     = Gen.alphaNumStr.sample.value
 
+  override def values: Seq[Country] =
+    Seq(
+      country1,
+      country2,
+      country3
+    )
 
   override def form: Form[Country] = new CountryFormProvider()(prefix, CountryList(values))
 
   override def applyView(form: Form[Country]): HtmlFormat.Appendable =
-    injector.instanceOf[CountryView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
-
-  implicit override val arbitraryT: Arbitrary[Country] = arbitraryCountry
+    injector.instanceOf[CountryView].apply(form, lrn, values, NormalMode, name)(fakeRequest, messages)
 
   override val prefix: String = "traderDetails.holderOfTransit.country"
 
-  behave like pageWithTitle()
+  behave like pageWithTitle(name)
 
   behave like pageWithBackLink
 
   behave like pageWithSectionCaption("Trader details - Transit holder")
 
-  behave like pageWithHeading()
+  behave like pageWithHeading(name)
 
   behave like pageWithSelect
 

@@ -23,7 +23,8 @@ import generators.Generators
 import navigation.traderDetails.TraderDetailsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.traderDetails.holderOfTransit.CountryPage
+import org.scalacheck.Gen
+import pages.traderDetails.holderOfTransit.{CountryPage, NamePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -38,9 +39,10 @@ class CountryControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
   private val country1    = arbitraryCountry.arbitrary.sample.get
   private val country2    = arbitraryCountry.arbitrary.sample.get
   private val countryList = CountryList(Seq(country1, country2))
+  private val name        = Gen.alphaNumStr.sample.value
 
   private val formProvider = new CountryFormProvider()
-  private val form         = formProvider("traderDetails.holderOfTransit.country", countryList)
+  private val form         = formProvider("traderDetails.holderOfTransit.country", countryList, name)
   private val mode         = NormalMode
 
   private val mockCountriesService: CountriesService = mock[CountriesService]
@@ -57,7 +59,8 @@ class CountryControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
     "must return OK and the correct view for a GET" in {
 
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
-      setExistingUserAnswers(emptyUserAnswers)
+
+      setExistingUserAnswers(emptyUserAnswers.setValue(NamePage, name))
 
       val request = FakeRequest(GET, countryRoute)
 
@@ -68,13 +71,15 @@ class CountryControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, countryList.countries, mode)(request, messages).toString
+        view(form, lrn, countryList.countries, mode, name)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
-      val userAnswers = emptyUserAnswers.setValue(CountryPage, country1)
+      val userAnswers = emptyUserAnswers
+        .setValue(CountryPage, country1)
+        .setValue(NamePage, name)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, countryRoute)
@@ -88,7 +93,7 @@ class CountryControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, countryList.countries, mode)(request, messages).toString
+        view(filledForm, lrn, countryList.countries, mode, name)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -96,7 +101,7 @@ class CountryControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      setExistingUserAnswers(emptyUserAnswers)
+      setExistingUserAnswers(emptyUserAnswers.setValue(NamePage, name))
 
       val request = FakeRequest(POST, countryRoute)
         .withFormUrlEncodedBody(("value", country1.code.code))
@@ -111,7 +116,7 @@ class CountryControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
-      setExistingUserAnswers(emptyUserAnswers)
+      setExistingUserAnswers(emptyUserAnswers.setValue(NamePage, name))
 
       val request   = FakeRequest(POST, countryRoute).withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))
@@ -123,7 +128,7 @@ class CountryControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, countryList.countries, mode)(request, messages).toString
+        view(boundForm, lrn, countryList.countries, mode, name)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

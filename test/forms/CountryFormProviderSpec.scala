@@ -32,8 +32,9 @@ class CountryFormProviderSpec extends StringFieldBehaviours with Generators {
   private val country1    = arbitrary[Country].sample.value
   private val country2    = arbitrary[Country].sample.value
   private val countryList = CountryList(Seq(country1, country2))
+  private val arg         = Gen.alphaNumStr.sample.value
 
-  private val form = new CountryFormProvider()(prefix, countryList)
+  private val form = new CountryFormProvider()(prefix, countryList, arg)
 
   ".value" - {
 
@@ -48,7 +49,7 @@ class CountryFormProviderSpec extends StringFieldBehaviours with Generators {
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, arg)
     )
 
     "not bind if country does not exist in the countryList" in {
