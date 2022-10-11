@@ -34,7 +34,7 @@
 @(form: Form[Country], lrn: LocalReferenceNumber, countryList: Seq[Country], mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("traderDetails.holderOfTransit.country.title", name),
+    title = messages("traderDetails.holderOfTransit.country.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {

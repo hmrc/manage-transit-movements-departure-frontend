@@ -48,7 +48,7 @@ class CountryViewSpec extends InputSelectViewBehaviours[Country] with Generators
 
   override val prefix: String = "traderDetails.holderOfTransit.country"
 
-  behave like pageWithTitle(name)
+  behave like pageWithTitle()
 
   behave like pageWithBackLink
 

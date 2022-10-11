@@ -208,7 +208,7 @@ traderDetails.holderOfTransit.name.error.length = The transit holder’s name mu
 traderDetails.holderOfTransit.name.error.invalid = The transit holder’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 traderDetails.holderOfTransit.name.change.hidden = transit holder’s name
 
-traderDetails.holderOfTransit.country.title = Which country is {0} based in??
+traderDetails.holderOfTransit.country.title = Which country is the transit holder based in?
 traderDetails.holderOfTransit.country.heading = Which country is {0} based in?
 traderDetails.holderOfTransit.country.hintText = Enter the country, like Italy or Spain.
 traderDetails.holderOfTransit.country.placeholder = Select a country
