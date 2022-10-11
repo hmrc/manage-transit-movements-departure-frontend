@@ -20,8 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.preTaskList.TIRCarnetReferenceFormProvider
 import generators.Generators
 import models.{DeclarationType, NormalMode, ProcedureType}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.PreTaskListNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
@@ -46,7 +45,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
 
   private val baseAnswers = emptyUserAnswers
     .setValue(ProcedureTypePage, ProcedureType.Normal)

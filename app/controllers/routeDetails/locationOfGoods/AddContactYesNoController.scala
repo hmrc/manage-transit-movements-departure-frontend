@@ -62,9 +62,9 @@ class AddContactYesNoController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value =>
-            navigatorProvider().flatMap {
+            navigatorProvider(mode).flatMap {
               implicit navigator =>
-                AddContactYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                AddContactYesNoPage.writeToUserAnswers(value).writeToSession().navigate()
             }
         )
   }

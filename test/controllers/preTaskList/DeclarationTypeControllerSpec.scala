@@ -20,8 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.preTaskList.DeclarationTypeFormProvider
 import models.{DeclarationType, NormalMode}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.PreTaskListNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.preTaskList.DeclarationTypePage
@@ -44,7 +43,7 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
 
   "DeclarationType Controller" - {
 

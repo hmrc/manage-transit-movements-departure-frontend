@@ -75,9 +75,9 @@ class CountryOfDestinationController @Inject() (
               value =>
                 customsOfficesService.getCustomsOfficesOfDestinationForCountry(value.code).flatMap {
                   case x if x.customsOffices.nonEmpty =>
-                    navigatorProvider().flatMap {
+                    navigatorProvider(mode).flatMap {
                       implicit navigator =>
-                        CountryOfDestinationPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                        CountryOfDestinationPage.writeToUserAnswers(value).writeToSession().navigate()
                     }
                   case _ =>
                     val formWithErrors = form.withError(FormError("value", s"$prefix.error.noOffices"))

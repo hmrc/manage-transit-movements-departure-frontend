@@ -20,8 +20,8 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.traderDetails.TraderDetails
+import navigation.UserAnswersNavigator
+import navigation.traderDetails.TraderDetailsNavigatorProvider
 import pages.traderDetails.consignment.MoreThanOneConsigneePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class MoreThanOneConsigneeController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @TraderDetails implicit val navigator: Navigator,
+  navigatorProvider: TraderDetailsNavigatorProvider,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -62,7 +62,10 @@ class MoreThanOneConsigneeController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => MoreThanOneConsigneePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+          value => {
+            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+            MoreThanOneConsigneePage.writeToUserAnswers(value).writeToSession().navigate()
+          }
         )
   }
 }

@@ -19,9 +19,8 @@ package controllers.traderDetails.holderOfTransit
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.AddressFormProvider
 import generators.Generators
-import models.{Address, CountryList, NormalMode, UserAnswers}
-import navigation.Navigator
-import navigation.annotations.traderDetails.TraderDetails
+import models.{Address, CountryList, NormalMode}
+import navigation.traderDetails.TraderDetailsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -59,7 +58,7 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[TraderDetailsNavigatorProvider]).toInstance(fakeTraderDetailsNavigatorProvider))
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "Address Controller" - {
@@ -87,7 +86,7 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
 
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
 
-      val userAnswers = UserAnswers(lrn, eoriNumber)
+      val userAnswers = emptyUserAnswers
         .setValue(NamePage, addressHolderName)
         .setValue(AddressPage, testAddress)
 

@@ -5,8 +5,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.$formProvider$
 import models.requests.SpecificDataRequestProvider1
 import models.{Address, CountryList, LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.$navRoute$
+import navigation.UserAnswersNavigator
 import $addressHolderNameImport$
 import pages.$package$.$className$Page
 import play.api.data.Form
@@ -23,7 +22,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class $className;format="cap"$Controller @Inject()(
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @$navRoute$ implicit val navigator: Navigator,
+  navigatorProvider: $navRoute$NavigatorProvider,
   actions: Actions,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: $formProvider$,
@@ -68,7 +67,10 @@ class $className;format="cap"$Controller @Inject()(
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countryList.countries, name))),
-                value => $className$Page.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                value => {
+                  implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                  $className$Page.writeToUserAnswers(value).writeToSession().navigate()
+                }
               )
             }
     }

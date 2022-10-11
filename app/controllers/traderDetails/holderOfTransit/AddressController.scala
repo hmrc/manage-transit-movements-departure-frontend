@@ -21,8 +21,8 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.AddressFormProvider
 import models.requests.SpecificDataRequestProvider1
 import models.{Address, CountryList, LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.traderDetails.TraderDetails
+import navigation.UserAnswersNavigator
+import navigation.traderDetails.TraderDetailsNavigatorProvider
 import pages.traderDetails.holderOfTransit.{AddressPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -38,7 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddressController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @TraderDetails implicit val navigator: Navigator,
+  navigatorProvider: TraderDetailsNavigatorProvider,
   actions: Actions,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: AddressFormProvider,
@@ -83,7 +83,10 @@ class AddressController @Inject() (
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countryList.countries, name))),
-                value => AddressPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                value => {
+                  implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                  AddressPage.writeToUserAnswers(value).writeToSession().navigate()
+                }
               )
         }
     }

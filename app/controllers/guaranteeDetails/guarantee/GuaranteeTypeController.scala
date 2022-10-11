@@ -20,7 +20,7 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.GuaranteeTypeFormProvider
 import models.{GuaranteeType, Index, LocalReferenceNumber, Mode}
-import navigation.{GuaranteeNavigator, GuaranteeNavigatorProvider}
+import navigation.{GuaranteeNavigatorProvider, UserAnswersNavigator}
 import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -62,8 +62,8 @@ class GuaranteeTypeController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, GuaranteeType.radioItems, mode, index))),
           value => {
-            implicit val navigator: GuaranteeNavigator = navigatorProvider(index)
-            GuaranteeTypePage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index)
+            GuaranteeTypePage(index).writeToUserAnswers(value).writeToSession().navigate()
           }
         )
   }

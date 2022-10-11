@@ -75,9 +75,9 @@ class AddressController @Inject() (
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countryList.countries))),
                 value =>
-                  navigatorProvider().flatMap {
+                  navigatorProvider(mode).flatMap {
                     implicit navigator =>
-                      AddressPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                      AddressPage.writeToUserAnswers(value).writeToSession().navigate()
                   }
               )
 

@@ -58,8 +58,8 @@ class AddAnotherOfficeOfTransitController @Inject() (
         case (officesOfTransit, numberOfOfficesOfTransit, allowMoreOfficesOfTransit) =>
           numberOfOfficesOfTransit match {
             case 0 =>
-              navigatorProvider().map {
-                navigator => Redirect(navigator.nextPage(request.userAnswers, mode))
+              navigatorProvider(mode).map {
+                navigator => Redirect(navigator.nextPage(request.userAnswers))
               }
             case _ => Future.successful(Ok(view(form(allowMoreOfficesOfTransit), lrn, mode, officesOfTransit, allowMoreOfficesOfTransit)))
           }
@@ -78,8 +78,8 @@ class AddAnotherOfficeOfTransitController @Inject() (
                 case true =>
                   Future.successful(Redirect(indexRoutes.OfficeOfTransitCountryController.onPageLoad(lrn, mode, Index(numberOfOfficesOfTransit))))
                 case false =>
-                  navigatorProvider().map {
-                    navigator => Redirect(navigator.nextPage(request.userAnswers, mode))
+                  navigatorProvider(mode).map {
+                    navigator => Redirect(navigator.nextPage(request.userAnswers))
                   }
               }
             )

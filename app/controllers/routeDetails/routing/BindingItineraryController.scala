@@ -62,9 +62,9 @@ class BindingItineraryController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value =>
-            navigatorProvider().flatMap {
+            navigatorProvider(mode).flatMap {
               implicit navigator =>
-                BindingItineraryPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                BindingItineraryPage.writeToUserAnswers(value).writeToSession().navigate()
             }
         )
   }

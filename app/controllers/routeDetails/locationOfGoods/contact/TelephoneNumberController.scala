@@ -69,9 +69,9 @@ class TelephoneNumberController @Inject() (
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, contactName, mode))),
             value =>
-              navigatorProvider().flatMap {
+              navigatorProvider(mode).flatMap {
                 implicit navigator =>
-                  TelephoneNumberPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                  TelephoneNumberPage.writeToUserAnswers(value).writeToSession().navigate()
               }
           )
     }

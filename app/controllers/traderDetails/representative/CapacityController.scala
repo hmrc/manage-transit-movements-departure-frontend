@@ -21,8 +21,8 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.traderDetails.representative.RepresentativeCapacityFormProvider
 import models.traderDetails.representative.RepresentativeCapacity
 import models.{LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.traderDetails.TraderDetails
+import navigation.UserAnswersNavigator
+import navigation.traderDetails.TraderDetailsNavigatorProvider
 import pages.traderDetails.representative.CapacityPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CapacityController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @TraderDetails implicit val navigator: Navigator,
+  navigatorProvider: TraderDetailsNavigatorProvider,
   actions: Actions,
   formProvider: RepresentativeCapacityFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -63,7 +63,10 @@ class CapacityController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, RepresentativeCapacity.radioItems, mode))),
-          value => CapacityPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+          value => {
+            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+            CapacityPage.writeToUserAnswers(value).writeToSession().navigate()
+          }
         )
   }
 }

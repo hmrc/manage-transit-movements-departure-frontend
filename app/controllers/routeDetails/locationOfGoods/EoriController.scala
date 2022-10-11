@@ -61,9 +61,9 @@ class EoriController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value =>
-            navigatorProvider().flatMap {
+            navigatorProvider(mode).flatMap {
               implicit navigator =>
-                EoriPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                EoriPage.writeToUserAnswers(value).writeToSession().navigate()
             }
         )
   }

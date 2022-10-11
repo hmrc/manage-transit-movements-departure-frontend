@@ -62,9 +62,9 @@ class AddPlaceOfUnloadingController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value =>
-            navigatorProvider().flatMap {
+            navigatorProvider(mode).flatMap {
               implicit navigator =>
-                AddPlaceOfUnloadingPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                AddPlaceOfUnloadingPage.writeToUserAnswers(value).writeToSession().navigate()
             }
         )
   }

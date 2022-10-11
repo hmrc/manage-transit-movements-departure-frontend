@@ -79,9 +79,9 @@ class OfficeOfExitController @Inject() (
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, country.description, index, mode))),
                 value =>
-                  navigatorProvider(index).flatMap {
+                  navigatorProvider(mode, index).flatMap {
                     implicit navigator =>
-                      exit.index.OfficeOfExitPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                      exit.index.OfficeOfExitPage(index).writeToUserAnswers(value).writeToSession().navigate()
                   }
               )
         }
