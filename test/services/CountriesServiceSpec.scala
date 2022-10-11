@@ -174,6 +174,19 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach {
       }
     }
 
+    "getCountriesWithoutZip" - {
+      "must return a list of countries without ZIP codes" in {
+
+        when(mockRefDataConnector.getCountriesWithoutZip()(any(), any()))
+          .thenReturn(Future.successful(countries.map(_.code)))
+
+        service.getCountriesWithoutZip().futureValue mustBe
+          Seq(country1.code, country2.code, country3.code)
+
+        verify(mockRefDataConnector).getCountriesWithoutZip()(any(), any())
+      }
+    }
+
     "getAddressPostcodeBasedCountries" - {
       "must return a list of sorted address postcode based countries" in {
 

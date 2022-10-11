@@ -37,8 +37,7 @@ case class TraderDetailsDomain(
 
 object TraderDetailsDomain {
 
-  implicit val userAnswersParser: UserAnswersReader[TraderDetailsDomain] = {
-
+  implicit def userAnswersReader(countriesWithoutZip: Seq[String]): UserAnswersReader[TraderDetailsDomain] =
     for {
       holderOfTransit <- UserAnswersReader[HolderOfTransitDomain]
       representative  <- ActingAsRepresentativePage.filterOptionalDependent(identity)(UserAnswersReader[RepresentativeDomain])
@@ -48,5 +47,4 @@ object TraderDetailsDomain {
       representative,
       consignment
     )
-  }
 }

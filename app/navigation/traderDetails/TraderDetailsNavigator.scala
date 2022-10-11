@@ -20,24 +20,36 @@ import models.Mode
 import models.domain.UserAnswersReader
 import models.journeyDomain.traderDetails.TraderDetailsDomain
 import navigation.UserAnswersNavigator
+import services.CountriesService
+import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class TraderDetailsNavigatorProviderImpl @Inject() () extends TraderDetailsNavigatorProvider {
+class TraderDetailsNavigatorProviderImpl @Inject() (
+  countriesService: CountriesService
+)(implicit ec: ExecutionContext)
+    extends TraderDetailsNavigatorProvider {
 
-  override def apply(mode: Mode): UserAnswersNavigator =
-    new TraderDetailsNavigator(mode)
+  override def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator] =
+    countriesService.getCountriesWithoutZip().map {
+      countriesWithoutZip =>
+        new TraderDetailsNavigator(mode, countriesWithoutZip.map(_.code))
+    }
 }
 
 trait TraderDetailsNavigatorProvider {
-  def apply(mode: Mode): UserAnswersNavigator
+  def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator]
 }
 
-class TraderDetailsNavigator(override val mode: Mode) extends UserAnswersNavigator {
+class TraderDetailsNavigator(
+  override val mode: Mode,
+  countriesWithoutZip: Seq[String]
+) extends UserAnswersNavigator {
 
   override type T = TraderDetailsDomain
 
   implicit override val reader: UserAnswersReader[TraderDetailsDomain] =
-    TraderDetailsDomain.userAnswersParser
+    TraderDetailsDomain.userAnswersReader(countriesWithoutZip)
 }

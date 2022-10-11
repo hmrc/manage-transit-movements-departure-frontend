@@ -20,7 +20,6 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EoriNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
-import navigation.UserAnswersNavigator
 import navigation.traderDetails.TraderDetailsNavigatorProvider
 import pages.traderDetails.consignment.consignee.EoriNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -61,10 +60,11 @@ class EoriNumberController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            EoriNumberPage.writeToUserAnswers(value).writeToSession().navigate()
-          }
+          value =>
+            navigatorProvider(mode).flatMap {
+              implicit navigator =>
+                EoriNumberPage.writeToUserAnswers(value).writeToSession().navigate()
+            }
         )
   }
 }

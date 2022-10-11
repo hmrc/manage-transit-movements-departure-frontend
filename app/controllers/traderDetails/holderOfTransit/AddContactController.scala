@@ -20,7 +20,6 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
-import navigation.UserAnswersNavigator
 import navigation.traderDetails.TraderDetailsNavigatorProvider
 import pages.traderDetails.holderOfTransit.AddContactPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -62,10 +61,11 @@ class AddContactController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            AddContactPage.writeToUserAnswers(value).writeToSession().navigate()
-          }
+          value =>
+            navigatorProvider(mode).flatMap {
+              implicit navigator =>
+                AddContactPage.writeToUserAnswers(value).writeToSession().navigate()
+            }
         )
   }
 }

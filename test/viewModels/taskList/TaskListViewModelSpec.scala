@@ -24,7 +24,7 @@ class TaskListViewModelSpec extends SpecBase {
     "must create tasks" in {
       val answers = emptyUserAnswers
 
-      val tasks = new TaskListViewModel().apply(answers)(Nil, Nil)
+      val tasks = new TaskListViewModel().apply(answers)(Nil, Nil, Nil)
 
       tasks.size mustBe 4
 

@@ -20,7 +20,6 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.traderDetails.TirIdNumberFormProvider
 import models.{LocalReferenceNumber, Mode}
-import navigation.UserAnswersNavigator
 import navigation.traderDetails.TraderDetailsNavigatorProvider
 import pages.traderDetails.holderOfTransit.TirIdentificationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -61,10 +60,11 @@ class TirIdentificationController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            TirIdentificationPage.writeToUserAnswers(value).writeToSession().navigate()
-          }
+          value =>
+            navigatorProvider(mode).flatMap {
+              implicit navigator =>
+                TirIdentificationPage.writeToUserAnswers(value).writeToSession().navigate()
+            }
         )
   }
 }

@@ -34,12 +34,12 @@ object AddAnotherOfficeOfTransitViewModel {
 
     def apply(userAnswers: UserAnswers, mode: Mode)(implicit hc: HeaderCarrier, messages: Messages): Future[AddAnotherOfficeOfTransitViewModel] =
       for {
-        ctcCountries                             <- countriesService.getCountryCodesCTC()
-        customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
+        ctcCountries                          <- countriesService.getCountryCodesCTC()
+        customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
       } yield {
         val helper = new TransitCheckYourAnswersHelper(userAnswers, mode)(
           ctcCountries.countryCodes,
-          customsSecurityAgreementAreaCountryCodes.countryCodes
+          customsSecurityAgreementAreaCountries.countryCodes
         )
 
         val listItems = helper.listItems.collect {

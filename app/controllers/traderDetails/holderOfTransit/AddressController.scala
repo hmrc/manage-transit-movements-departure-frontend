@@ -21,7 +21,6 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.AddressFormProvider
 import models.requests.SpecificDataRequestProvider1
 import models.{Address, CountryList, LocalReferenceNumber, Mode}
-import navigation.UserAnswersNavigator
 import navigation.traderDetails.TraderDetailsNavigatorProvider
 import pages.traderDetails.holderOfTransit.{AddressPage, NamePage}
 import play.api.data.Form
@@ -83,10 +82,11 @@ class AddressController @Inject() (
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countryList.countries, name))),
-                value => {
-                  implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-                  AddressPage.writeToUserAnswers(value).writeToSession().navigate()
-                }
+                value =>
+                  navigatorProvider(mode).flatMap {
+                    implicit navigator =>
+                      AddressPage.writeToUserAnswers(value).writeToSession().navigate()
+                  }
               )
         }
     }

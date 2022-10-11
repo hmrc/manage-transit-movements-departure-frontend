@@ -20,7 +20,6 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
 import models.{LocalReferenceNumber, Mode}
-import navigation.UserAnswersNavigator
 import navigation.traderDetails.TraderDetailsNavigatorProvider
 import pages.traderDetails.holderOfTransit.{CountryPage, NamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -77,10 +76,11 @@ class CountryController @Inject() (
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode, name))),
-                value => {
-                  implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-                  CountryPage.writeToUserAnswers(value).writeToSession().navigate()
-                }
+                value =>
+                  navigatorProvider(mode).flatMap {
+                    implicit navigator =>
+                      CountryPage.writeToUserAnswers(value).writeToSession().navigate()
+                  }
               )
         }
     }

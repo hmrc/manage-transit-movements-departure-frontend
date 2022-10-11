@@ -28,9 +28,12 @@ case class TraderDetailsTask(status: TaskStatus, href: Option[String]) extends T
 
 object TraderDetailsTask {
 
-  def apply(userAnswers: UserAnswers): TraderDetailsTask = {
+  def apply(userAnswers: UserAnswers)(countriesWithoutZip: Seq[String]): TraderDetailsTask = {
     val (status, href) = new TaskProvider(userAnswers).noDependencyOnOtherTask
-      .readUserAnswers[TraderDetailsDomain, JsObject](TraderDetailsSection)
+      .readUserAnswers[TraderDetailsDomain, JsObject](TraderDetailsSection)(
+        implicitly,
+        TraderDetailsDomain.userAnswersReader(countriesWithoutZip)
+      )
 
     new TraderDetailsTask(status, href)
   }

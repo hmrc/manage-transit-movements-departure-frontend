@@ -21,7 +21,6 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.TelephoneNumberFormProvider
 import models.requests.SpecificDataRequestProvider1
 import models.{LocalReferenceNumber, Mode}
-import navigation.UserAnswersNavigator
 import navigation.traderDetails.TraderDetailsNavigatorProvider
 import pages.traderDetails.holderOfTransit.contact.{NamePage, TelephoneNumberPage}
 import play.api.data.Form
@@ -74,10 +73,11 @@ class TelephoneNumberController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, contactName))),
-            value => {
-              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              TelephoneNumberPage.writeToUserAnswers(value).writeToSession().navigate()
-            }
+            value =>
+              navigatorProvider(mode).flatMap {
+                implicit navigator =>
+                  TelephoneNumberPage.writeToUserAnswers(value).writeToSession().navigate()
+              }
           )
     }
 }

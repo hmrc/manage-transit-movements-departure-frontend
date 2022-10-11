@@ -34,7 +34,7 @@ class FakeGuaranteeNavigator(desiredRoute: Call, mode: Mode, index: Index) exten
   override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
-class FakeTraderDetailsNavigator(desiredRoute: Call, mode: Mode) extends TraderDetailsNavigator(mode) {
+class FakeTraderDetailsNavigator(desiredRoute: Call, mode: Mode) extends TraderDetailsNavigator(mode, Nil) {
   override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 

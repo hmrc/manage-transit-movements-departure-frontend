@@ -47,10 +47,11 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
     "must return OK and the correct view for a GET" in {
       val sampleTasks = listWithMaxLength[Task]()(arbitraryTask).sample.value
 
-      when(mockViewModel.apply(any())(any(), any())).thenReturn(sampleTasks)
+      when(mockViewModel.apply(any())(any(), any(), any())).thenReturn(sampleTasks)
 
       when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(CountryList(Nil)))
       when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
+      when(mockCountriesService.getCountriesWithoutZip()(any())).thenReturn(Future.successful(Nil))
 
       val userAnswers = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
       setExistingUserAnswers(userAnswers)

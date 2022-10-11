@@ -20,8 +20,14 @@ import base.SpecBase
 import controllers.traderDetails.routes
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models.Mode
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import services.CountriesService
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
 
@@ -31,8 +37,10 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       "must redirect to check your answers" in {
         forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers), arbitrary[Mode]) {
           (answers, mode) =>
-            val navigatorProvider = new TraderDetailsNavigatorProviderImpl()
-            val navigator         = navigatorProvider.apply(mode)
+            val mockCountriesService = mock[CountriesService]
+            when(mockCountriesService.getCountriesWithoutZip()(any())).thenReturn(Future.successful(countryCodesWithoutZip))
+            val navigatorProvider = new TraderDetailsNavigatorProviderImpl(mockCountriesService)
+            val navigator         = navigatorProvider.apply(mode).futureValue
 
             navigator
               .nextPage(answers)

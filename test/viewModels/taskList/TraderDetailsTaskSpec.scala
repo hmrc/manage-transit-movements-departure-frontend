@@ -73,7 +73,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
   "id" - {
     "must be trader-details" in {
-      val task = TraderDetailsTask(emptyUserAnswers)
+      val task = TraderDetailsTask(emptyUserAnswers)(countriesWithoutZip)
       task.id mustBe "trader-details"
     }
   }
@@ -82,7 +82,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
     "when NotStarted" - {
       "and TIR declaration type" in {
         val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
-        val task        = TraderDetailsTask(userAnswers)
+        val task        = TraderDetailsTask(userAnswers)(countriesWithoutZip)
         task.status mustBe NotStarted
         task.href.get mustBe holderOfTransitRoutes.TirIdentificationYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
       }
@@ -91,7 +91,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
         forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)) {
           declarationType =>
             val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
-            val task        = TraderDetailsTask(userAnswers)
+            val task        = TraderDetailsTask(userAnswers)(countriesWithoutZip)
             task.status mustBe NotStarted
             task.href.get mustBe holderOfTransitRoutes.EoriYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
         }
@@ -105,7 +105,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
           .setValue(DeclarationTypePage, Option4)
           .setValue(hot.TirIdentificationYesNoPage, true)
 
-        val task = TraderDetailsTask(userAnswers)
+        val task = TraderDetailsTask(userAnswers)(countriesWithoutZip)
         task.status mustBe InProgress
         task.href.get mustBe holderOfTransitRoutes.TirIdentificationController.onPageLoad(userAnswers.lrn, NormalMode).url
       }
@@ -117,7 +117,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
               .setValue(DeclarationTypePage, declarationType)
               .setValue(hot.EoriYesNoPage, true)
 
-            val task = TraderDetailsTask(userAnswers)
+            val task = TraderDetailsTask(userAnswers)(countriesWithoutZip)
             task.status mustBe InProgress
             task.href.get mustBe holderOfTransitRoutes.EoriController.onPageLoad(userAnswers.lrn, NormalMode).url
         }
@@ -128,7 +128,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
       "when valid journey is completed" in {
         forAll(arbitraryTraderDetailsAnswers(emptyUserAnswers)) {
           userAnswers =>
-            val task = TraderDetailsTask(userAnswers)
+            val task = TraderDetailsTask(userAnswers)(countriesWithoutZip)
             task.status mustBe Completed
             task.href.get mustBe traderDetailsRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url
         }

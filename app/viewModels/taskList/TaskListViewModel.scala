@@ -22,10 +22,11 @@ class TaskListViewModel {
 
   def apply(userAnswers: UserAnswers)(
     ctcCountryCodes: Seq[String],
-    customsSecurityAgreementAreaCountryCodes: Seq[String]
+    customsSecurityAgreementAreaCountryCodes: Seq[String],
+    countriesWithoutZip: Seq[String]
   ): Seq[Task] =
     Seq(
-      TraderDetailsTask(userAnswers),
+      TraderDetailsTask(userAnswers)(countriesWithoutZip),
       RouteDetailsTask(userAnswers)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes),
       TransportTask(userAnswers),
       GuaranteeDetailsTask(userAnswers)

@@ -18,7 +18,7 @@ package models.journeyDomain.traderDetails
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
-import generators.Generators
+import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.traderDetails.consignment.ConsignmentDomain
@@ -30,7 +30,7 @@ import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 import pages.traderDetails.consignment._
 import pages.traderDetails.{ActingAsRepresentativePage, holderOfTransit => hot}
 
-class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
+class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators with TraderDetailsUserAnswersGenerator {
 
   "TraderDetailsDomain" - {
 
@@ -68,7 +68,9 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
           )
         )
 
-        val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain].run(userAnswers)
+        val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain](
+          TraderDetailsDomain.userAnswersReader(countriesWithoutZip)
+        ).run(userAnswers)
 
         result.value mustBe expectedResult
       }
@@ -86,7 +88,9 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
           .unsafeSetVal(hot.AddressPage)(holderOfTransitAddress)
           .unsafeSetVal(hot.AddContactPage)(false)
 
-        val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain].run(userAnswers)
+        val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain](
+          TraderDetailsDomain.userAnswersReader(countriesWithoutZip)
+        ).run(userAnswers)
 
         result.left.value.page mustBe ActingAsRepresentativePage
       }
@@ -103,7 +107,9 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
             .unsafeSetVal(hot.AddContactPage)(false)
             .unsafeSetVal(ActingAsRepresentativePage)(false)
 
-          val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain].run(userAnswers)
+          val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain](
+            TraderDetailsDomain.userAnswersReader(countriesWithoutZip)
+          ).run(userAnswers)
 
           result.left.value.page mustBe consignor.EoriYesNoPage
         }
@@ -121,7 +127,9 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
             .unsafeSetVal(hot.AddContactPage)(false)
             .unsafeSetVal(ActingAsRepresentativePage)(false)
 
-          val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain].run(userAnswers)
+          val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain](
+            TraderDetailsDomain.userAnswersReader(countriesWithoutZip)
+          ).run(userAnswers)
 
           result.left.value.page mustBe ApprovedOperatorPage
         }
@@ -140,7 +148,9 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
                 .unsafeSetVal(ActingAsRepresentativePage)(false)
                 .unsafeSetVal(ApprovedOperatorPage)(true)
 
-              val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain].run(userAnswers)
+              val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain](
+                TraderDetailsDomain.userAnswersReader(countriesWithoutZip)
+              ).run(userAnswers)
 
               result.left.value.page mustBe MoreThanOneConsigneePage
             }
@@ -159,7 +169,9 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
                 .unsafeSetVal(ActingAsRepresentativePage)(false)
                 .unsafeSetVal(ApprovedOperatorPage)(false)
 
-              val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain].run(userAnswers)
+              val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain](
+                TraderDetailsDomain.userAnswersReader(countriesWithoutZip)
+              ).run(userAnswers)
 
               result.left.value.page mustBe consignor.EoriYesNoPage
             }
@@ -179,7 +191,9 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
               .unsafeSetVal(ActingAsRepresentativePage)(false)
               .unsafeSetVal(ApprovedOperatorPage)(arbitrary[Boolean].sample.value)
 
-            val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain].run(userAnswers)
+            val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain](
+              TraderDetailsDomain.userAnswersReader(countriesWithoutZip)
+            ).run(userAnswers)
 
             result.left.value.page mustBe consignor.EoriYesNoPage
           }

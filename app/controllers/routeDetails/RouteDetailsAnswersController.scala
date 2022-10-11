@@ -42,10 +42,10 @@ class RouteDetailsAnswersController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       for {
-        ctcCountries                             <- countriesService.getCountryCodesCTC()
-        customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
+        ctcCountries                          <- countriesService.getCountryCodesCTC()
+        customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
       } yield {
-        val sections = viewModelProvider(request.userAnswers)(ctcCountries.countryCodes, customsSecurityAgreementAreaCountryCodes.countryCodes).sections
+        val sections = viewModelProvider(request.userAnswers)(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes).sections
         Ok(view(lrn, sections))
       }
   }

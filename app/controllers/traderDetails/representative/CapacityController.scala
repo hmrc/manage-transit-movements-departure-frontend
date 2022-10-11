@@ -21,7 +21,6 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.traderDetails.representative.RepresentativeCapacityFormProvider
 import models.traderDetails.representative.RepresentativeCapacity
 import models.{LocalReferenceNumber, Mode}
-import navigation.UserAnswersNavigator
 import navigation.traderDetails.TraderDetailsNavigatorProvider
 import pages.traderDetails.representative.CapacityPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -63,10 +62,11 @@ class CapacityController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, RepresentativeCapacity.radioItems, mode))),
-          value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            CapacityPage.writeToUserAnswers(value).writeToSession().navigate()
-          }
+          value =>
+            navigatorProvider(mode).flatMap {
+              implicit navigator =>
+                CapacityPage.writeToUserAnswers(value).writeToSession().navigate()
+            }
         )
   }
 }

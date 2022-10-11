@@ -47,12 +47,14 @@ class TaskListController @Inject() (
     .async {
       implicit request =>
         for {
-          ctcCountries                             <- countriesService.getCountryCodesCTC()
-          customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
+          ctcCountries                          <- countriesService.getCountryCodesCTC()
+          customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+          countriesWithoutZip                   <- countriesService.getCountriesWithoutZip()
         } yield {
           val tasks = viewModel(request.userAnswers)(
             ctcCountries.countryCodes,
-            customsSecurityAgreementAreaCountryCodes.countryCodes
+            customsSecurityAgreementAreaCountries.countryCodes,
+            countriesWithoutZip.map(_.code)
           )
           Ok(view(lrn, tasks))
         }

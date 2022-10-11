@@ -26,7 +26,9 @@ trait TraderDetailsUserAnswersGenerator extends UserAnswersGenerator {
   self: Generators =>
 
   def arbitraryTraderDetailsAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
-    buildUserAnswers[TraderDetailsDomain](userAnswers)
+    buildUserAnswers[TraderDetailsDomain](userAnswers)(
+      TraderDetailsDomain.userAnswersReader(countriesWithoutZip)
+    )
 
   def arbitraryHolderOfTransitAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[HolderOfTransitDomain](userAnswers)

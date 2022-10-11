@@ -71,7 +71,11 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
     (mode: Mode, index: Index) => new FakeGuaranteeNavigator(onwardRoute, mode, index)
 
   protected val fakeTraderDetailsNavigatorProvider: TraderDetailsNavigatorProvider =
-    (mode: Mode) => new FakeTraderDetailsNavigator(onwardRoute, mode)
+    new TraderDetailsNavigatorProvider {
+
+      override def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator] =
+        Future.successful(new FakeTraderDetailsNavigator(onwardRoute, mode))
+    }
 
   protected val fakeRouteDetailsNavigatorProvider: RouteDetailsNavigatorProvider =
     new RouteDetailsNavigatorProvider {

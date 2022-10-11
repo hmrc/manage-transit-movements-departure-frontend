@@ -79,7 +79,8 @@ class CheckDependentTaskCompletedActionSpec extends SpecBase with GuiceOneAppPer
 
     "return to task list if any other dependent section is incomplete" in {
 
-      val result = harness[TraderDetailsDomain](emptyUserAnswers)
+      implicit val userAnswersReader: UserAnswersReader[TraderDetailsDomain] = TraderDetailsDomain.userAnswersReader(Nil)
+      val result                                                             = harness[TraderDetailsDomain](emptyUserAnswers)
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(controllers.routes.TaskListController.onPageLoad(emptyUserAnswers.lrn).url)
     }
