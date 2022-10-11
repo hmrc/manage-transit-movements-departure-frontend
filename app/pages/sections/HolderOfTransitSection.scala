@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package forms
+package pages.sections
 
-import forms.mappings.Mappings
-import models.CountryList
-import models.reference.Country
-import play.api.data.Form
+import play.api.libs.json.JsPath
+import pages.QuestionPage
 
-import javax.inject.Inject
+case object HolderOfTransitSection extends QuestionPage[Nothing] {
 
-class CountryFormProvider @Inject() extends Mappings {
+  override def path: JsPath = JsPath \ toString
 
-  def apply(prefix: String, countryList: CountryList, args: Any*): Form[Country] =
-    Form(
-      "value" -> country(countryList, s"$prefix.error.required", args)
-    )
+  override def toString: String = "country"
 }
