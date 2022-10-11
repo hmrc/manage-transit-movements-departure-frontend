@@ -50,7 +50,7 @@ class $className$Controller @Inject()(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, $referenceListClass;format="decap"$.$referenceClassPlural;format="decap"$, mode))),
             value => {
               implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              $className$Page.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+              $className$Page.writeToUserAnswers(value).writeToSession().navigate()
             }
         )
       }
