@@ -17,9 +17,11 @@
 package base
 
 import controllers.actions._
-import models.{Index, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import navigation._
 import navigation.routeDetails._
+import navigation.traderDetails.TraderDetailsNavigatorProvider
+import navigation.transport.PreRequisitesNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
 import org.mockito.Mockito.when
@@ -62,71 +64,80 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
 
   protected val fakeNavigator: Navigator = new FakeNavigator(onwardRoute)
 
+  protected val fakePreTaskListNavigatorProvider: PreTaskListNavigatorProvider =
+    (mode: Mode) => new FakePreTaskListNavigator(onwardRoute, mode)
+
   protected val fakeGuaranteeNavigatorProvider: GuaranteeNavigatorProvider =
-    (index: Index) => new FakeGuaranteeNavigator(onwardRoute, index)
+    (mode: Mode, index: Index) => new FakeGuaranteeNavigator(onwardRoute, mode, index)
+
+  protected val fakeTraderDetailsNavigatorProvider: TraderDetailsNavigatorProvider =
+    (mode: Mode) => new FakeTraderDetailsNavigator(onwardRoute, mode)
 
   protected val fakeRouteDetailsNavigatorProvider: RouteDetailsNavigatorProvider =
     new RouteDetailsNavigatorProvider {
 
-      override def apply()(implicit hc: HeaderCarrier): Future[RouteDetailsNavigator] =
-        Future.successful(new FakeRouteDetailsNavigator(onwardRoute))
+      override def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[RouteDetailsNavigator] =
+        Future.successful(new FakeRouteDetailsNavigator(onwardRoute, mode))
     }
 
   val fakeRoutingNavigatorProvider: RoutingNavigatorProvider =
     new RoutingNavigatorProvider {
 
-      override def apply()(implicit hc: HeaderCarrier): Future[RoutingNavigator] =
-        Future.successful(new FakeRoutingNavigator(onwardRoute))
+      override def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[RoutingNavigator] =
+        Future.successful(new FakeRoutingNavigator(onwardRoute, mode))
     }
 
   protected val fakeCountryOfRoutingNavigatorProvider: CountryOfRoutingNavigatorProvider =
     new CountryOfRoutingNavigatorProvider {
 
-      override def apply(index: Index)(implicit hc: HeaderCarrier): Future[CountryOfRoutingNavigator] =
-        Future.successful(new FakeCountryOfRoutingNavigator(onwardRoute, index))
+      override def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[CountryOfRoutingNavigator] =
+        Future.successful(new FakeCountryOfRoutingNavigator(onwardRoute, mode, index))
     }
 
   val fakeTransitNavigatorProvider: TransitNavigatorProvider =
     new TransitNavigatorProvider {
 
-      override def apply()(implicit hc: HeaderCarrier): Future[TransitNavigator] =
-        Future.successful(new FakeTransitNavigator(onwardRoute))
+      override def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[TransitNavigator] =
+        Future.successful(new FakeTransitNavigator(onwardRoute, mode))
     }
 
   protected val fakeOfficeOfTransitNavigatorProvider: OfficeOfTransitNavigatorProvider =
     new OfficeOfTransitNavigatorProvider {
 
-      override def apply(index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfTransitNavigator] =
-        Future.successful(new FakeOfficeOfTransitNavigator(onwardRoute, index))
+      override def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfTransitNavigator] =
+        Future.successful(new FakeOfficeOfTransitNavigator(onwardRoute, mode, index))
     }
 
   val fakeExitNavigatorProvider: ExitNavigatorProvider =
     new ExitNavigatorProvider {
 
-      override def apply()(implicit hc: HeaderCarrier): Future[ExitNavigator] =
-        Future.successful(new FakeExitNavigator(onwardRoute))
+      override def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[ExitNavigator] =
+        Future.successful(new FakeExitNavigator(onwardRoute, mode))
     }
 
   protected val fakeOfficeOfExitNavigatorProvider: OfficeOfExitNavigatorProvider =
     new OfficeOfExitNavigatorProvider {
 
-      override def apply(index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfExitNavigator] =
-        Future.successful(new FakeOfficeOfExitNavigator(onwardRoute, index))
+      override def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfExitNavigator] =
+        Future.successful(new FakeOfficeOfExitNavigator(onwardRoute, mode, index))
     }
 
   protected val fakeLocationOfGoodsNavigatorProvider: LocationOfGoodsNavigatorProvider =
     new LocationOfGoodsNavigatorProvider {
 
-      override def apply()(implicit hc: HeaderCarrier): Future[LocationOfGoodsNavigator] =
-        Future.successful(new FakeLocationOfGoodsNavigator(onwardRoute))
+      override def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[LocationOfGoodsNavigator] =
+        Future.successful(new FakeLocationOfGoodsNavigator(onwardRoute, mode))
     }
 
   protected val fakeLoadingNavigatorProvider: LoadingAndUnloadingNavigatorProvider =
     new LoadingAndUnloadingNavigatorProvider {
 
-      override def apply()(implicit hc: HeaderCarrier): Future[LoadingAndUnloadingNavigator] =
-        Future.successful(new FakeLoadingAndUnloadingNavigator(onwardRoute))
+      override def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[LoadingAndUnloadingNavigator] =
+        Future.successful(new FakeLoadingAndUnloadingNavigator(onwardRoute, mode))
     }
+
+  protected val fakePreRequisitesNavigatorProvider: PreRequisitesNavigatorProvider =
+    (mode: Mode) => new FakePreRequisitesNavigator(onwardRoute, mode)
 
   def guiceApplicationBuilder(): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()

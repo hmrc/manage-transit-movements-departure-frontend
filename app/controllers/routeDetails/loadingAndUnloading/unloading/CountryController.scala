@@ -69,9 +69,9 @@ class CountryController @Inject() (
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode))),
               value =>
-                navigatorProvider().flatMap {
+                navigatorProvider(mode).flatMap {
                   implicit navigator =>
-                    CountryPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                    CountryPage.writeToUserAnswers(value).writeToSession().navigate()
                 }
             )
       }

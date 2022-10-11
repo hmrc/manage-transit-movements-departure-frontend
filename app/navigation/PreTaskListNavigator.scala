@@ -16,9 +16,27 @@
 
 package navigation
 
+import models.Mode
+import models.domain.UserAnswersReader
 import models.journeyDomain.PreTaskListDomain
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class PreTaskListNavigator @Inject() () extends UserAnswersSectionNavigator[PreTaskListDomain]
+class PreTaskListNavigatorProviderImpl @Inject() () extends PreTaskListNavigatorProvider {
+
+  override def apply(mode: Mode): UserAnswersNavigator =
+    new PreTaskListNavigator(mode)
+}
+
+trait PreTaskListNavigatorProvider {
+  def apply(mode: Mode): UserAnswersNavigator
+}
+
+class PreTaskListNavigator(override val mode: Mode) extends UserAnswersNavigator {
+
+  override type T = PreTaskListDomain
+
+  implicit override val reader: UserAnswersReader[PreTaskListDomain] =
+    PreTaskListDomain.reader
+}

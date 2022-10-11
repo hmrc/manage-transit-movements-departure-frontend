@@ -19,8 +19,7 @@ package controllers.preTaskList
 import controllers.actions._
 import forms.preTaskList.LocalReferenceNumberFormProvider
 import models.NormalMode
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.PreTaskListNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -34,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class LocalReferenceNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @PreTaskListDetails navigator: Navigator,
+  navigatorProvider: PreTaskListNavigatorProvider,
   identify: IdentifierAction,
   userAnswersService: UserAnswersService,
   formProvider: LocalReferenceNumberFormProvider,
@@ -61,7 +60,7 @@ class LocalReferenceNumberController @Inject() (
             for {
               userAnswers <- userAnswersService.getOrCreateUserAnswers(request.eoriNumber, value)
               _           <- sessionRepository.set(userAnswers)
-            } yield Redirect(navigator.nextPage(userAnswers, NormalMode))
+            } yield Redirect(navigatorProvider(NormalMode).nextPage(userAnswers))
         )
   }
 }

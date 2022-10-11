@@ -17,7 +17,7 @@
 package navigation.routeDetails
 
 import models._
-import models.journeyDomain.routeDetails.RouteDetailsDomain
+import models.domain.UserAnswersReader
 import models.journeyDomain.routeDetails.exit.OfficeOfExitDomain
 import navigation.UserAnswersNavigator
 import services.CountriesService
@@ -32,27 +32,27 @@ class OfficeOfExitNavigatorProviderImpl @Inject() (
 )(implicit ec: ExecutionContext)
     extends OfficeOfExitNavigatorProvider {
 
-  def apply(index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfExitNavigator] =
-    for {
-      ctcCountries                             <- countriesService.getCountryCodesCTC()
-      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
-    } yield new OfficeOfExitNavigator(
-      index,
-      ctcCountries.countryCodes,
-      customsSecurityAgreementAreaCountryCodes.countryCodes
-    )
+  def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator] =
+    mode match {
+      case NormalMode =>
+        Future.successful(new OfficeOfExitNavigator(mode, index))
+      case CheckMode =>
+        RouteDetailsNavigatorProvider(countriesService, mode)
+    }
 }
 
 trait OfficeOfExitNavigatorProvider {
 
-  def apply(index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfExitNavigator]
+  def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator]
 }
 
 class OfficeOfExitNavigator(
-  index: Index,
-  ctcCountryCodes: Seq[String],
-  customsSecurityAgreementAreaCountryCodes: Seq[String]
-) extends UserAnswersNavigator[OfficeOfExitDomain, RouteDetailsDomain]()(
-      OfficeOfExitDomain.userAnswersReader(index),
-      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-    )
+  override val mode: Mode,
+  index: Index
+) extends UserAnswersNavigator {
+
+  override type T = OfficeOfExitDomain
+
+  implicit override val reader: UserAnswersReader[OfficeOfExitDomain] =
+    OfficeOfExitDomain.userAnswersReader(index)
+}

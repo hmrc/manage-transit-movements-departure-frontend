@@ -47,8 +47,8 @@ class CheckOfficeOfTransitAnswersController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      navigatorProvider().map {
-        navigator => Redirect(navigator.nextPage(request.userAnswers, mode))
+      navigatorProvider(mode).map {
+        navigator => Redirect(navigator.nextPage(request.userAnswers))
       }
   }
 }

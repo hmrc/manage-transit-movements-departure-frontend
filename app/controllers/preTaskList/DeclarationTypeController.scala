@@ -22,8 +22,7 @@ import forms.preTaskList.DeclarationTypeFormProvider
 import models.journeyDomain.PreTaskListDomain
 import models.requests.DataRequest
 import models.{DeclarationType, LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
 import pages.preTaskList.DeclarationTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -37,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class DeclarationTypeController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @PreTaskListDetails implicit val navigator: Navigator,
+  navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
   checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   formProvider: DeclarationTypeFormProvider,
@@ -70,7 +69,10 @@ class DeclarationTypeController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))),
-            value => DeclarationTypePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+            value => {
+              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+              DeclarationTypePage.writeToUserAnswers(value).writeToSession().navigate()
+            }
           )
     }
 }

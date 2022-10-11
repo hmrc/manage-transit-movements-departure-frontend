@@ -19,9 +19,8 @@ package controllers.traderDetails.holderOfTransit.contact
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.TelephoneNumberFormProvider
 import generators.Generators
-import models.{NormalMode, UserAnswers}
-import navigation.Navigator
-import navigation.annotations.traderDetails.TraderDetails
+import models.NormalMode
+import navigation.traderDetails.TraderDetailsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.traderDetails.holderOfTransit.contact.{NamePage, TelephoneNumberPage}
@@ -46,7 +45,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[TraderDetailsNavigatorProvider]).toInstance(fakeTraderDetailsNavigatorProvider))
 
   "traderDetails.holderOfTransit.contactTelephoneNumber Controller" - {
 
@@ -68,7 +67,7 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-      val userAnswers = UserAnswers(lrn, eoriNumber)
+      val userAnswers = emptyUserAnswers
         .setValue(NamePage, holderName)
         .setValue(TelephoneNumberPage, validAnswer)
 

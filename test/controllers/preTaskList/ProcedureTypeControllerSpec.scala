@@ -19,8 +19,7 @@ package controllers.preTaskList
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.preTaskList.ProcedureTypeFormProvider
 import models.{NormalMode, ProcedureType}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.PreTaskListNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.preTaskList.ProcedureTypePage
@@ -46,7 +45,7 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
+      .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
 
   "ProcedureType Controller" - {
 

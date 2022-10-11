@@ -4,8 +4,7 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.$formProvider$
 import models.{Mode, LocalReferenceNumber}
-import navigation.Navigator
-import navigation.annotations.$navRoute$
+import navigation.UserAnswersNavigator
 import pages.$package$.$className$Page
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -18,14 +17,14 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class $className$Controller @Inject()(
-   override val messagesApi: MessagesApi,
-   implicit val sessionRepository: SessionRepository,
-   @$navRoute$ implicit val navigator: Navigator,
-   actions: Actions,
-   formProvider: $formProvider$,
-   service: $serviceName$,
-   val controllerComponents: MessagesControllerComponents,
-   view: $className$View
+  override val messagesApi: MessagesApi,
+  implicit val sessionRepository: SessionRepository,
+  navigatorProvider: $navRoute$NavigatorProvider,
+  actions: Actions,
+  formProvider: $formProvider$,
+  service: $serviceName$,
+  val controllerComponents: MessagesControllerComponents,
+  view: $className$View
 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
@@ -49,7 +48,10 @@ class $className$Controller @Inject()(
           val form = formProvider("$package$.$className;format="decap"$", $referenceListClass;format="decap"$)
           form.bindFromRequest().fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, $referenceListClass;format="decap"$.$referenceClassPlural;format="decap"$, mode))),
-            value => $className$Page.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+            value => {
+              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+              $className$Page.writeToUserAnswers(value).writeToSession().navigate()
+            }
         )
       }
   }

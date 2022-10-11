@@ -16,8 +16,10 @@
 
 package navigation.routeDetails
 
+import models.Mode
+import models.domain.UserAnswersReader
 import models.journeyDomain.routeDetails.RouteDetailsDomain
-import navigation.UserAnswersSectionNavigator
+import navigation.UserAnswersNavigator
 import services.CountriesService
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -30,24 +32,39 @@ class RouteDetailsNavigatorProviderImpl @Inject() (
 )(implicit ec: ExecutionContext)
     extends RouteDetailsNavigatorProvider {
 
-  def apply()(implicit hc: HeaderCarrier): Future[RouteDetailsNavigator] =
-    for {
-      ctcCountries                             <- countriesService.getCountryCodesCTC()
-      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
-    } yield new RouteDetailsNavigator(
-      ctcCountries.countryCodes,
-      customsSecurityAgreementAreaCountryCodes.countryCodes
-    )
+  def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator] =
+    RouteDetailsNavigatorProvider(countriesService, mode)
 }
 
 trait RouteDetailsNavigatorProvider {
 
-  def apply()(implicit hc: HeaderCarrier): Future[RouteDetailsNavigator]
+  def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator]
+}
+
+object RouteDetailsNavigatorProvider {
+
+  def apply(
+    countriesService: CountriesService,
+    mode: Mode
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[UserAnswersNavigator] =
+    for {
+      ctcCountries                          <- countriesService.getCountryCodesCTC()
+      customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+    } yield new RouteDetailsNavigator(
+      mode,
+      ctcCountries.countryCodes,
+      customsSecurityAgreementAreaCountries.countryCodes
+    )
 }
 
 class RouteDetailsNavigator(
+  override val mode: Mode,
   ctcCountryCodes: Seq[String],
   customsSecurityAgreementAreaCountryCodes: Seq[String]
-) extends UserAnswersSectionNavigator[RouteDetailsDomain]()(
-      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-    )
+) extends UserAnswersNavigator {
+
+  override type T = RouteDetailsDomain
+
+  implicit override val reader: UserAnswersReader[RouteDetailsDomain] =
+    RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+}

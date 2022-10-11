@@ -71,9 +71,9 @@ class AddOfficeOfTransitETAYesNoController @Inject() (
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, officeOfTransit, index))),
               value =>
-                navigatorProvider(index).flatMap {
+                navigatorProvider(mode, index).flatMap {
                   implicit navigator =>
-                    AddOfficeOfTransitETAYesNoPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                    AddOfficeOfTransitETAYesNoPage(index).writeToUserAnswers(value).writeToSession().navigate()
                 }
             )
       }
