@@ -33,7 +33,7 @@ class DynamicAddressFormProviderSpec extends StringFieldBehaviours with SpecBase
 
   "when postal code is required" - {
 
-    val form = new DynamicAddressFormProvider().apply(prefix, name, isPostalCodeRequired = true)
+    val form = DynamicAddressFormProvider(prefix, name, isPostalCodeRequired = true)
 
     ".numberAndStreet" - {
 
@@ -138,7 +138,7 @@ class DynamicAddressFormProviderSpec extends StringFieldBehaviours with SpecBase
 
   "when postal code is not required" - {
 
-    val form = new DynamicAddressFormProvider().apply(prefix, name, isPostalCodeRequired = false)
+    val form = DynamicAddressFormProvider(prefix, name, isPostalCodeRequired = false)
 
     ".numberAndStreet" - {
 

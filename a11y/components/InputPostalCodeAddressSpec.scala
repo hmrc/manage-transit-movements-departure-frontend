@@ -17,12 +17,11 @@
 package components
 
 import a11ySpecBase.A11ySpecBase
-import forms.AddressFormProvider
 import forms.locationOfGoods.PostalCodeFormProvider
 import models.CountryList
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import views.html.components.{InputAddress, InputPostalCodeAddress}
+import views.html.components.InputPostalCodeAddress
 import views.html.templates.MainTemplate
 
 class InputPostalCodeAddressSpec extends A11ySpecBase {
