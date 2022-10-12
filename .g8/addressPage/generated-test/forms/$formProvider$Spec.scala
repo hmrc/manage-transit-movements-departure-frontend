@@ -88,32 +88,32 @@ class $formProvider$Spec extends StringFieldBehaviours with SpecBase {
 
     val postcodeInvalidKey = s"\$prefix.error.postalCode.invalid"
 
-    val fieldName = PostalCode.field
+    val fieldName = PostCode.field
 
     behave like fieldThatBindsValidData(
       form = form,
       fieldName = fieldName,
-      validDataGenerator = stringsWithMaxLength(PostalCode.length)
+      validDataGenerator = stringsWithMaxLength(PostCode.length)
     )
 
     behave like fieldWithMaxLength(
       form = form,
       fieldName = fieldName,
-      maxLength = PostalCode.length,
-      lengthError = FormError(fieldName, lengthKey, Seq(PostalCode.arg, name, PostalCode.length))
+      maxLength = PostCode.length,
+      lengthError = FormError(fieldName, lengthKey, Seq(PostCode.arg, name, PostCode.length))
     )
 
     behave like mandatoryField(
       form = form,
       fieldName = fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(PostalCode.arg, name))
+      requiredError = FormError(fieldName, requiredKey, Seq(PostCode.arg, name))
     )
 
     behave like fieldWithInvalidCharacters(
       form = form,
       fieldName = fieldName,
       error = FormError(fieldName, postcodeInvalidKey, Seq(name)),
-      length = PostalCode.length
+      length = PostCode.length
     )
   }
 

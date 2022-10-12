@@ -50,13 +50,13 @@ class AddressFormProvider @Inject() extends Mappings {
               )
             )
         },
-        PostalCode.field -> {
+        PostCode.field -> {
           val args = Seq(name)
           trimmedText(s"$prefix.error.postalCode.required", args)
             .verifying(
               StopOnFirstFail[String](
-                maxLength(PostalCode.length, s"$prefix.error.postalCode.length", args :+ PostalCode.length),
-                regexp(PostalCode.regex, s"$prefix.error.postalCode.invalid", args)
+                maxLength(PostCode.length, s"$prefix.error.postalCode.length", args :+ PostCode.length),
+                regexp(PostCode.regex, s"$prefix.error.postalCode.invalid", args)
               )
             )
         },

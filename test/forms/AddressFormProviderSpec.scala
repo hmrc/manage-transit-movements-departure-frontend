@@ -106,21 +106,21 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
     val postalCodeRequiredKey = s"$prefix.error.postalCode.required"
     val lengthKey             = s"$prefix.error.postalCode.length"
 
-    val fieldName = PostalCode.field
+    val fieldName = PostCode.field
 
-    val invalidPostalOverLength = stringsLongerThan(PostalCode.length + 1)
+    val invalidPostalOverLength = stringsLongerThan(PostCode.length + 1)
 
     behave like fieldThatBindsValidData(
       form = form,
       fieldName = fieldName,
-      validDataGenerator = stringsWithMaxLength(PostalCode.length)
+      validDataGenerator = stringsWithMaxLength(PostCode.length)
     )
 
     behave like fieldWithMaxLength(
       form = form,
       fieldName = fieldName,
-      maxLength = PostalCode.length,
-      lengthError = FormError(fieldName, lengthKey, Seq(name, PostalCode.length)),
+      maxLength = PostCode.length,
+      lengthError = FormError(fieldName, lengthKey, Seq(name, PostCode.length)),
       gen = invalidPostalOverLength
     )
 
@@ -134,7 +134,7 @@ class AddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
       form = form,
       fieldName = fieldName,
       error = FormError(fieldName, postcodeInvalidKey, Seq(name)),
-      length = PostalCode.length
+      length = PostCode.length
     )
   }
 

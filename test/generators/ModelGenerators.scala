@@ -16,7 +16,7 @@
 
 package generators
 
-import models.AddressLine.{AddressLine1, AddressLine2, PostalCode, StreetNumber}
+import models.AddressLine.{AddressLine1, AddressLine2, PostCode, StreetNumber}
 import models.GuaranteeType._
 import models._
 import models.domain.StringFieldRegex.{coordinatesLatitudeMaxRegex, coordinatesLongitudeMaxRegex}
@@ -207,7 +207,7 @@ trait ModelGenerators {
       for {
         addressLine1 <- stringsWithMaxLength(AddressLine1.length, Gen.alphaNumChar)
         addressLine2 <- stringsWithMaxLength(AddressLine2.length, Gen.alphaNumChar)
-        postalCode   <- stringsWithMaxLength(PostalCode.length, Gen.alphaNumChar)
+        postalCode   <- stringsWithMaxLength(PostCode.length, Gen.alphaNumChar)
         country      <- arbitrary[Country]
       } yield Address(addressLine1, addressLine2, postalCode, country)
     }
@@ -216,7 +216,7 @@ trait ModelGenerators {
     Arbitrary {
       for {
         streetNumber <- stringsWithMaxLength(StreetNumber.length, Gen.alphaNumChar)
-        postalCode   <- stringsWithMaxLength(PostalCode.length, Gen.alphaNumChar)
+        postalCode   <- stringsWithMaxLength(PostCode.length, Gen.alphaNumChar)
         country      <- arbitrary[Country]
       } yield PostalCodeAddress(streetNumber, postalCode, country)
     }

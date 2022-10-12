@@ -34,13 +34,13 @@ class $formProvider$ @Inject() extends Mappings {
               )
             )
         },
-        PostalCode.field -> {
-          lazy val args = Seq(PostalCode.arg, name)
+        PostCode.field -> {
+          lazy val args = Seq(PostCode.arg, name)
           trimmedText(s"\$prefix.error.required", args)
             .verifying(
               StopOnFirstFail[String](
-                maxLength(PostalCode.length, s"\$prefix.error.length", args :+ PostalCode.length),
-                regexp(PostalCode.regex, s"\$prefix.error.postalCode.invalid", Seq(name))
+                maxLength(PostCode.length, s"\$prefix.error.length", args :+ PostCode.length),
+                regexp(PostCode.regex, s"\$prefix.error.postalCode.invalid", Seq(name))
               )
             )
         },
