@@ -17,17 +17,19 @@
 package controllers
 
 import com.google.inject.Inject
+import connectors.DeclarationRequest
 import controllers.actions.{Actions, CheckDependentTaskCompletedActionProvider}
 import models.LocalReferenceNumber
 import models.journeyDomain.PreTaskListDomain
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.CountriesService
+import services.{ApiService, CountriesService}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.TaskListViewModel
 import views.html.TaskListView
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class TaskListController @Inject() (
   override val messagesApi: MessagesApi,
@@ -36,7 +38,8 @@ class TaskListController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: TaskListView,
   viewModel: TaskListViewModel,
-  countriesService: CountriesService
+  countriesService: CountriesService,
+  apiService: ApiService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -58,10 +61,19 @@ class TaskListController @Inject() (
         }
     }
 
-  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions
+  def onSubmit(lrn: LocalReferenceNumber)
+              (implicit hc: HeaderCarrier): Action[AnyContent] = actions
     .requireData(lrn)
     .andThen(checkDependentTaskCompleted[PreTaskListDomain]) {
       _ => ???
+
+        // TODO - populate from cache
+        val request = DeclarationRequest("SOME-EORI")
+
+        apiService.submitDeclaration(request).flatMap {
+          case Right(r) => Future.successful(Ok(r))
+          case Left(r) => Future.successful(new Status(r.status))
+        }
     }
 
 }
