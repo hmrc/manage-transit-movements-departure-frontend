@@ -221,6 +221,15 @@ trait ModelGenerators {
       } yield DynamicAddress(numberAndStreet, city, postalCode)
     }
 
+  lazy val arbitraryDynamicAddressWithRequiredPostalCode: Arbitrary[DynamicAddress] =
+    Arbitrary {
+      for {
+        numberAndStreet <- stringsWithMaxLength(NumberAndStreet.length, Gen.alphaNumChar)
+        city            <- stringsWithMaxLength(City.length, Gen.alphaNumChar)
+        postalCode      <- stringsWithMaxLength(PostalCode.length, Gen.alphaNumChar)
+      } yield DynamicAddress(numberAndStreet, city, Some(postalCode))
+    }
+
   implicit lazy val arbitraryPostalCodeAddress: Arbitrary[PostalCodeAddress] =
     Arbitrary {
       for {
