@@ -75,6 +75,9 @@ class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector
       .getCountries(queryParameters)
       .map(sort)
 
+  def doesCountryRequireZip(country: Country)(implicit hc: HeaderCarrier): Future[Boolean] =
+    getCountriesWithoutZip().map(!_.contains(country.code))
+
   private def sort(countries: Seq[Country]): CountryList =
     CountryList(countries.sortBy(_.description.toLowerCase))
 }

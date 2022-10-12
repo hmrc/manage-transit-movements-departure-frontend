@@ -29,8 +29,6 @@ class AddressViewSpec extends DynamicAddressViewBehaviours with Generators {
 
   private val addressHolderName = Gen.alphaNumStr.sample.value
 
-  private val isPostalCodeRequired = true // TODO - test when false
-
   override def form: Form[DynamicAddress] = DynamicAddressFormProvider(prefix, addressHolderName, isPostalCodeRequired)
 
   override def applyView(form: Form[DynamicAddress]): HtmlFormat.Appendable =
