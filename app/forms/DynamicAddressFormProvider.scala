@@ -63,7 +63,7 @@ class DynamicAddressFormProvider @Inject() extends Mappings {
               .transform[Option[String]](Some(_), _.getOrElse(""))
           } else {
             optional(
-              text()
+              trimmedText()
                 .verifying(
                   StopOnFirstFail[String](
                     maxLength(PostalCode.length, s"$prefix.error.postalCode.length", args :+ PostalCode.length),

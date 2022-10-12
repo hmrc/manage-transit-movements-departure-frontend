@@ -37,9 +37,9 @@
 
 @html = {
     @inputText(
-        field = form("streetAndNumber"),
+        field = form("numberAndStreet"),
         inputTextType = MultiTextInput(
-            label = messages(s"$messageKeyPrefix.addressLine1")
+            label = messages(s"$messageKeyPrefix.numberAndStreet")
         ),
         autocomplete = Some("address-line1"),
         inputClass = Some("govuk-!-width-two-thirds")
@@ -48,7 +48,7 @@
     @inputText(
         field = form("city"),
         inputTextType = MultiTextInput(
-            label = messages(s"$messageKeyPrefix.addressLine2")
+            label = messages(s"$messageKeyPrefix.city")
         ),
         autocomplete = Some("address-line2"),
         inputClass = Some("govuk-!-width-two-thirds")

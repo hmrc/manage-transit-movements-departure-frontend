@@ -18,9 +18,9 @@ package controllers.traderDetails.holderOfTransit
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.AddressFormProvider
+import forms.DynamicAddressFormProvider
 import models.requests.SpecificDataRequestProvider1
-import models.{Address, CountryList, LocalReferenceNumber, Mode}
+import models.{CountryList, DynamicAddress, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.traderDetails.TraderDetailsNavigatorProvider
 import pages.traderDetails.holderOfTransit.{AddressPage, NamePage}
@@ -41,7 +41,7 @@ class AddressController @Inject() (
   navigatorProvider: TraderDetailsNavigatorProvider,
   actions: Actions,
   getMandatoryPage: SpecificDataRequiredActionProvider,
-  formProvider: AddressFormProvider,
+  formProvider: DynamicAddressFormProvider,
   countriesService: CountriesService,
   val controllerComponents: MessagesControllerComponents,
   view: AddressView
@@ -53,8 +53,10 @@ class AddressController @Inject() (
 
   private def name(implicit request: Request): String = request.arg
 
-  private def form(countryList: CountryList)(implicit request: Request): Form[Address] =
-    formProvider("traderDetails.holderOfTransit.address", name, countryList)
+  val isPostalCodeRequired = false
+
+  private def form(countryList: CountryList)(implicit request: Request): Form[DynamicAddress] =
+    formProvider("traderDetails.holderOfTransit.address", name, isPostalCodeRequired)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
@@ -68,7 +70,7 @@ class AddressController @Inject() (
               case Some(value) => form(countryList).fill(value)
             }
 
-            Ok(view(preparedForm, lrn, mode, countryList.countries, name))
+            Ok(view(preparedForm, lrn, mode, name, isPostalCodeRequired))
         }
     }
 
@@ -82,7 +84,7 @@ class AddressController @Inject() (
             form(countryList)
               .bindFromRequest()
               .fold(
-                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countryList.countries, name))),
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, name, isPostalCodeRequired))),
                 value => {
                   implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
                   AddressPage.writeToUserAnswers(value).writeToSession().navigate()

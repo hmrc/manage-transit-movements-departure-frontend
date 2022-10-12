@@ -22,7 +22,7 @@ import generators.Generators
 import models.DeclarationType.Option4
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain.{HolderOfTransitEori, HolderOfTransitTIR}
-import models.{Address, DeclarationType, EoriNumber}
+import models.{DeclarationType, DynamicAddress, EoriNumber}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
@@ -33,7 +33,7 @@ import pages.traderDetails.holderOfTransit._
 class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
   private val name         = Gen.alphaNumStr.sample.value
-  private val address      = arbitrary[Address].sample.value
+  private val address      = arbitrary[DynamicAddress].sample.value
   private val contactName  = Gen.alphaNumStr.sample.value
   private val contactPhone = Gen.alphaNumStr.sample.value
 

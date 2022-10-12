@@ -17,7 +17,7 @@
 package utils.cyaHelpers
 
 import models.reference.CountryCode
-import models.{Address, CountryList, DateTime, PostalCodeAddress}
+import models.{Address, CountryList, DateTime, DynamicAddress, PostalCodeAddress}
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -42,6 +42,9 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
 
   protected def formatAsAddress(address: Address): Content =
     HtmlContent(Seq(address.line1, address.line2, address.postalCode, address.country.description).mkString("<br>"))
+
+  protected def formatAsDynamicAddress(address: DynamicAddress): Content =
+    HtmlContent(Seq(Some(address.numberAndStreet), Some(address.city), address.postalCode).flatten.mkString("<br>"))
 
   protected def formatAsPostalCodeAddress(address: PostalCodeAddress): Content =
     HtmlContent(Seq(address.streetNumber, address.postalCode, address.country.description).mkString("<br>"))

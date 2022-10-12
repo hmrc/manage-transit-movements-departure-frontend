@@ -20,13 +20,13 @@ import cats.implicits._
 import models.DeclarationType.Option4
 import models.domain._
 import models.journeyDomain.JourneyDomainModel
-import models.{Address, EoriNumber}
+import models.{DynamicAddress, EoriNumber}
 import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.holderOfTransit._
 
 sealed trait HolderOfTransitDomain extends JourneyDomainModel {
   val name: String
-  val address: Address
+  val address: DynamicAddress
   val additionalContact: Option[AdditionalContactDomain]
 }
 
@@ -41,7 +41,7 @@ object HolderOfTransitDomain {
   case class HolderOfTransitEori(
     eori: Option[EoriNumber],
     name: String,
-    address: Address,
+    address: DynamicAddress,
     additionalContact: Option[AdditionalContactDomain]
   ) extends HolderOfTransitDomain
 
@@ -60,7 +60,7 @@ object HolderOfTransitDomain {
   case class HolderOfTransitTIR(
     tir: Option[String],
     name: String,
-    address: Address,
+    address: DynamicAddress,
     additionalContact: Option[AdditionalContactDomain]
   ) extends HolderOfTransitDomain
 

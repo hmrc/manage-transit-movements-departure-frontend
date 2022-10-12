@@ -16,7 +16,7 @@
 
 package models
 
-import models.domain.StringFieldRegex.{alphaNumericRegex, postalCodeRegex, stringFieldRegex}
+import models.domain.StringFieldRegex.{postalCodeRegex, stringFieldRegex}
 import play.api.i18n.Messages
 
 import scala.util.matching.Regex
@@ -59,18 +59,18 @@ object AddressLine {
   case object NumberAndStreet extends AddressLine {
     override val field: String = "numberAndStreet"
     val length: Int            = 70
-    val regex: Regex           = alphaNumericRegex
+    val regex: Regex           = stringFieldRegex
   }
 
   case object City extends AddressLine {
     override val field: String = "city"
     val length: Int            = 35
-    val regex: Regex           = alphaNumericRegex
+    val regex: Regex           = stringFieldRegex
   }
 
   case object PostalCode extends AddressLine {
     override val field: String = "postalCode"
     val length: Int            = 17
-    val regex: Regex           = alphaNumericRegex
+    val regex: Regex           = postalCodeRegex
   }
 }

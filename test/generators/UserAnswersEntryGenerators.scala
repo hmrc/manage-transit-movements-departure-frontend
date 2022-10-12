@@ -65,7 +65,7 @@ trait UserAnswersEntryGenerators {
       case TirIdentificationYesNoPage  => arbitrary[Boolean].map(JsBoolean)
       case TirIdentificationPage       => Gen.alphaNumStr.map(JsString)
       case NamePage                    => Gen.alphaNumStr.map(JsString)
-      case AddressPage                 => arbitrary[Address].map(Json.toJson(_))
+      case AddressPage                 => arbitrary[DynamicAddress].map(Json.toJson(_))
       case AddContactPage              => arbitrary[Boolean].map(JsBoolean)
       case contact.NamePage            => Gen.alphaNumStr.map(JsString)
       case contact.TelephoneNumberPage => Gen.alphaNumStr.map(JsString)

@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.traderDetails.holderOfTransit.contact.{routes => contactRoutes}
 import controllers.traderDetails.holderOfTransit.{routes => hotRoutes}
 import generators.Generators
-import models.{Address, Mode}
+import models.{DynamicAddress, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -268,7 +268,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
       "must return Some(Row)" - {
         s"when $AddressPage is defined" in {
-          forAll(arbitrary[Address], arbitrary[Mode]) {
+          forAll(arbitrary[DynamicAddress], arbitrary[Mode]) {
             (address, mode) =>
               val answers = emptyUserAnswers.setValue(AddressPage, address)
 
@@ -278,7 +278,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
               result mustBe Some(
                 SummaryListRow(
                   key = Key("Transit holder’s address".toText),
-                  value = Value(HtmlContent(Seq(address.line1, address.line2, address.postalCode, address.country).mkString("<br>"))),
+                  value = Value(HtmlContent(Seq(Some(address.numberAndStreet), Some(address.city), address.postalCode).flatten.mkString("<br>"))),
                   actions = Some(
                     Actions(
                       items = List(

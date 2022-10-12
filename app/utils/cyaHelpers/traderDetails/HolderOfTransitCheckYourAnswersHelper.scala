@@ -16,7 +16,7 @@
 
 package utils.cyaHelpers.traderDetails
 
-import models.{Address, Mode, UserAnswers}
+import models.{DynamicAddress, Mode, UserAnswers}
 import pages.traderDetails.holderOfTransit._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
@@ -59,9 +59,9 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     id = Some("transit-holder-name")
   )
 
-  def address: Option[SummaryListRow] = getAnswerAndBuildRow[Address](
+  def address: Option[SummaryListRow] = getAnswerAndBuildRow[DynamicAddress](
     page = AddressPage,
-    formatAnswer = formatAsAddress,
+    formatAnswer = formatAsDynamicAddress,
     prefix = "traderDetails.holderOfTransit.address",
     id = Some("transit-holder-address")
   )
