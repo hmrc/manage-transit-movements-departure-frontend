@@ -25,9 +25,9 @@ import play.api.libs.json.{Json, OFormat}
 
 case class DepartureDomain(
   preTaskList: PreTaskListDomain,
-  traderDetails: TraderDetailsDomain,
-  routeDetails: RouteDetailsDomain,
-  guarantee: GuaranteeDetailsDomain
+  // traderDetails: TraderDetailsDomain,
+  routeDetails: RouteDetailsDomain
+  // guarantee: GuaranteeDetailsDomain
   //  transport: TransportDomain,
 )
 
@@ -35,12 +35,12 @@ object DepartureDomain {
 
   def userAnswersReader(ctcCountryCode: Seq[String], customsSecurityAgreement: Seq[String]): UserAnswersReader[DepartureDomain] =
     for {
-      preTaskListDomain   <- UserAnswersReader[PreTaskListDomain]
-      routeDetailsDomain  <- RouteDetailsDomain.userAnswersReader(ctcCountryCode, customsSecurityAgreement) // TODO do we have to do this here??
-      traderDetailsDomain <- UserAnswersReader[TraderDetailsDomain]
-      guaranteeDomain     <- UserAnswersReader[GuaranteeDetailsDomain]
+      preTaskListDomain  <- UserAnswersReader[PreTaskListDomain]
+      routeDetailsDomain <- RouteDetailsDomain.userAnswersReader(ctcCountryCode, customsSecurityAgreement) // TODO do we have to do this here??
+      //traderDetailsDomain <- UserAnswersReader[TraderDetailsDomain]
+      //guaranteeDomain     <- UserAnswersReader[GuaranteeDetailsDomain]
       //      transportDomain    <- UserAnswersReader[TransportDomain]
-    } yield DepartureDomain(preTaskListDomain, traderDetailsDomain, routeDetailsDomain, guaranteeDomain)
+    } yield DepartureDomain(preTaskListDomain, routeDetailsDomain)
 //    } yield DepartureDomain(preTaskListDomain, routeDetailsDomain, transportDomain, guaranteeDomain)
 
 //  implicit val format: OFormat[DepartureDomain] = Json.format[DepartureDomain]
