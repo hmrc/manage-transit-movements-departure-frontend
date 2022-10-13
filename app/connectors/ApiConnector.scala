@@ -36,24 +36,27 @@ class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConf
 
     val declarationUrl = s"${appConfig.apiUrl}/movements/departures"
 
+    // TODO reduced data set indicator is asked but never stored
+    // TODO bindingItinerary is asked but never stored
+
     val validJson: String =
-      """
+      s"""
         |{
         |  "n1:CC015C": {
         |    "preparationDateAndTime": "2022-01-22T07:43:36",
         |    "TransitOperation": {
-        |      "LRN": "qvRcL",
-        |      "declarationType": "Pbg",
-        |      "additionalDeclarationType": "O",
-        |      "security": "8",
+        |      "LRN": "${request.preTaskList.localReferenceNumber.value}",
+        |      "declarationType": "${request.preTaskList.declarationType.toString}",
+        |      "additionalDeclarationType": "A",
+        |      "security": "${request.preTaskList.securityDetailsType.securityContentType}",
         |      "reducedDatasetIndicator": "1",
         |      "bindingItinerary": "0"
         |    },
         |    "CustomsOfficeOfDeparture": {
-        |      "referenceNumber": "ZQZ20442"
+        |      "referenceNumber": "${request.preTaskList.officeOfDeparture.id}"
         |    },
         |    "CustomsOfficeOfDestinationDeclared": {
-        |      "referenceNumber": "ZQZ20442"
+        |      "referenceNumber": "${request.routeDetails.routing.officeOfDestination.id}"
         |    },
         |    "messageType": "CC015C",
         |    "@PhaseID": "NCTS5.0",
