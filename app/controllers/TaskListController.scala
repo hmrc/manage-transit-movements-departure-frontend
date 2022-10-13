@@ -83,7 +83,8 @@ class TaskListController @Inject() (
         submit.flatMap {
           case Right(value) =>
             value.status match {
-              case status if is2xx(status) => ???
+              case status if is2xx(status) =>
+                Future.successful(Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad()))
               case status if is4xx(status) => ???
               case _                       => ???
             }
