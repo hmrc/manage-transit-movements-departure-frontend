@@ -214,7 +214,8 @@ traderDetails.holderOfTransit.country.title = Which country is the transit holde
 traderDetails.holderOfTransit.country.heading = Which country is {0} based in?
 traderDetails.holderOfTransit.country.hintText = Enter the country, like Italy or Spain.
 traderDetails.holderOfTransit.country.placeholder = Select a country
-traderDetails.holderOfTransit.country.checkYourAnswersLabel = Which country is {0} based in
+traderDetails.holderOfTransit.country.checkYourAnswersLabel = Transit holder’s country
+traderDetails.holderOfTransit.country.change.hidden = transit holder’s country
 traderDetails.holderOfTransit.country.error.required = Enter which country {0} is based in
 
 traderDetails.holderOfTransit.address.title = What is the transit holder’s address?

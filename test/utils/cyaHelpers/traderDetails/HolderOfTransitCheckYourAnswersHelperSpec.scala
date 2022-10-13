@@ -20,6 +20,7 @@ import base.SpecBase
 import controllers.traderDetails.holderOfTransit.contact.{routes => contactRoutes}
 import controllers.traderDetails.holderOfTransit.{routes => hotRoutes}
 import generators.Generators
+import models.reference.Country
 import models.{DynamicAddress, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -243,6 +244,50 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           href = hotRoutes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("transit holder’s name"),
                           attributes = Map("id" -> "transit-holder-name")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "country" - {
+      "must return None" - {
+        s"when $CountryPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new HolderOfTransitCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.country
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        s"when $CountryPage is defined" in {
+          forAll(arbitrary[Country], arbitrary[Mode]) {
+            (country, mode) =>
+              val answers = emptyUserAnswers.setValue(CountryPage, country)
+
+              val helper = new HolderOfTransitCheckYourAnswersHelper(answers, mode)
+              val result = helper.country
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Transit holder’s country".toText),
+                  value = Value(country.description.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = hotRoutes.CountryController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("transit holder’s country"),
+                          attributes = Map("id" -> "transit-holder-country")
                         )
                       )
                     )

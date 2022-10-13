@@ -16,7 +16,7 @@
 
 package utils.cyaHelpers
 
-import models.reference.CountryCode
+import models.reference.{Country, CountryCode}
 import models.{Address, CountryList, DateTime, DynamicAddress, PostalCodeAddress}
 import play.api.i18n.Messages
 import play.api.mvc.Call
@@ -78,8 +78,10 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
   protected def formatEnumAsString[T](messageKeyPrefix: String)(answer: T): String =
     messages(s"$messageKeyPrefix.$answer")
 
-  protected def formatAsCountry(countryList: CountryList)(answer: CountryCode): Content =
+  protected def formatAsCountryList(countryList: CountryList)(answer: CountryCode): Content =
     s"${countryList.getCountry(answer).map(_.description).getOrElse(answer.code)}".toText
+
+  protected def formatAsCountry(country: Country): Content = country.description.toText
 
   protected def buildRow(
     prefix: String,

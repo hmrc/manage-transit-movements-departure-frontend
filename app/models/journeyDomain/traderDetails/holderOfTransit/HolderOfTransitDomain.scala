@@ -20,12 +20,14 @@ import cats.implicits._
 import models.DeclarationType.Option4
 import models.domain._
 import models.journeyDomain.JourneyDomainModel
+import models.reference.Country
 import models.{DynamicAddress, EoriNumber}
 import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.holderOfTransit._
 
 sealed trait HolderOfTransitDomain extends JourneyDomainModel {
   val name: String
+  val country: Country
   val address: DynamicAddress
   val additionalContact: Option[AdditionalContactDomain]
 }
@@ -41,6 +43,7 @@ object HolderOfTransitDomain {
   case class HolderOfTransitEori(
     eori: Option[EoriNumber],
     name: String,
+    country: Country,
     address: DynamicAddress,
     additionalContact: Option[AdditionalContactDomain]
   ) extends HolderOfTransitDomain
@@ -51,6 +54,7 @@ object HolderOfTransitDomain {
       (
         EoriYesNoPage.filterOptionalDependent(identity)(EoriPage.reader.map(EoriNumber(_))),
         NamePage.reader,
+        CountryPage.reader,
         AddressPage.reader,
         AddContactPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
       ).tupled.map((HolderOfTransitEori.apply _).tupled)
@@ -60,6 +64,7 @@ object HolderOfTransitDomain {
   case class HolderOfTransitTIR(
     tir: Option[String],
     name: String,
+    country: Country,
     address: DynamicAddress,
     additionalContact: Option[AdditionalContactDomain]
   ) extends HolderOfTransitDomain
@@ -70,6 +75,7 @@ object HolderOfTransitDomain {
       (
         TirIdentificationYesNoPage.filterOptionalDependent(identity)(TirIdentificationPage.reader),
         NamePage.reader,
+        CountryPage.reader,
         AddressPage.reader,
         AddContactPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
       ).tupled.map((HolderOfTransitTIR.apply _).tupled)

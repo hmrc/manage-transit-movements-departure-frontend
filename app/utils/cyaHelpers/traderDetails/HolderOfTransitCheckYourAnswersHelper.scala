@@ -16,6 +16,7 @@
 
 package utils.cyaHelpers.traderDetails
 
+import models.reference.Country
 import models.{DynamicAddress, Mode, UserAnswers}
 import pages.traderDetails.holderOfTransit._
 import play.api.i18n.Messages
@@ -57,6 +58,13 @@ class HolderOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     formatAnswer = formatAsText,
     prefix = "traderDetails.holderOfTransit.name",
     id = Some("transit-holder-name")
+  )
+
+  def country: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
+    page = CountryPage,
+    formatAnswer = formatAsCountry,
+    prefix = "traderDetails.holderOfTransit.country",
+    id = Some("transit-holder-country")
   )
 
   def address: Option[SummaryListRow] = getAnswerAndBuildRow[DynamicAddress](

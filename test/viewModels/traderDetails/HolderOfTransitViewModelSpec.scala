@@ -18,6 +18,7 @@ package viewModels.traderDetails
 
 import base.SpecBase
 import generators.Generators
+import models.reference.{Country, CountryCode}
 import models.{DynamicAddress, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.traderDetails.holderOfTransit._
@@ -44,12 +45,14 @@ class HolderOfTransitViewModelSpec extends SpecBase with Generators {
 
     "when user answers populated" - {
       "must return row for each answer" in {
+
         val answers = emptyUserAnswers
           .setValue(EoriYesNoPage, true)
           .setValue(EoriPage, "eori")
           .setValue(TirIdentificationYesNoPage, true)
           .setValue(TirIdentificationPage, "tir id")
           .setValue(NamePage, "name")
+          .setValue(CountryPage, Country(CountryCode("GB"), "Great Britain"))
           .setValue(AddressPage, DynamicAddress("line1", "line2", Some("postal code")))
           .setValue(AddContactPage, true)
           .setValue(contact.NamePage, "contact name")
@@ -62,13 +65,14 @@ class HolderOfTransitViewModelSpec extends SpecBase with Generators {
         sections.size mustBe 2
 
         sections.head.sectionTitle.get mustBe "Transit holder"
-        sections.head.rows.size mustBe 6
+        sections.head.rows.size mustBe 7
         sections.head.rows.head.value.content.asHtml.toString() mustBe "Yes"
         sections.head.rows(1).value.content.asHtml.toString() mustBe "eori"
         sections.head.rows(2).value.content.asHtml.toString() mustBe "Yes"
         sections.head.rows(3).value.content.asHtml.toString() mustBe "tir id"
         sections.head.rows(4).value.content.asHtml.toString() mustBe "name"
-        sections.head.rows(5).value.content.asHtml.toString() mustBe "line1<br>line2<br>postal code"
+        sections.head.rows(5).value.content.asHtml.toString() mustBe "Great Britain"
+        sections.head.rows(6).value.content.asHtml.toString() mustBe "line1<br>line2<br>postal code"
 
         sections(1).sectionTitle.get mustBe "Additional contact"
         sections(1).rows.size mustBe 3
