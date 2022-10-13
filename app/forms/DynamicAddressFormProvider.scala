@@ -31,45 +31,36 @@ class DynamicAddressFormProvider @Inject() extends Mappings {
     Form(
       mapping(
         NumberAndStreet.field -> {
-          val args = Seq(NumberAndStreet.arg, name)
-          trimmedText(s"$prefix.error.required", args)
+          trimmedText(s"$prefix.error.required", Seq(NumberAndStreet.arg, name))
             .verifying(
               StopOnFirstFail[String](
-                maxLength(NumberAndStreet.length, s"$prefix.error.length", Seq(NumberAndStreet.arg.capitalize, name, NumberAndStreet.length)),
-                regexp(NumberAndStreet.regex, s"$prefix.error.invalid", Seq(NumberAndStreet.arg.capitalize, name))
+                maxLength(NumberAndStreet.length, s"$prefix.error.length", Seq(NumberAndStreet.arg, name, NumberAndStreet.length)),
+                regexp(NumberAndStreet.regex, s"$prefix.error.invalid", Seq(NumberAndStreet.arg, name))
               )
             )
         },
         City.field -> {
-          val args = Seq(City.arg, name)
-          trimmedText(s"$prefix.error.required", args)
+          trimmedText(s"$prefix.error.required", Seq(City.arg, name))
             .verifying(
               StopOnFirstFail[String](
-                maxLength(City.length, s"$prefix.error.length", Seq(City.arg.capitalize, name, City.length)),
-                regexp(City.regex, s"$prefix.error.invalid", Seq(City.arg.capitalize, name))
+                maxLength(City.length, s"$prefix.error.length", Seq(City.arg, name, City.length)),
+                regexp(City.regex, s"$prefix.error.invalid", Seq(City.arg, name))
               )
             )
         },
         PostalCode.field -> {
-          val args = Seq(name)
+          val constraint = StopOnFirstFail[String](
+            maxLength(PostalCode.length, s"$prefix.error.length", Seq(PostalCode.arg, name, PostalCode.length)),
+            regexp(PostalCode.regex, s"$prefix.error.postalCode.invalid", Seq(name))
+          )
           if (isPostalCodeRequired) {
-            trimmedText(s"$prefix.error.postalCode.required", args)
-              .verifying(
-                StopOnFirstFail[String](
-                  maxLength(PostalCode.length, s"$prefix.error.postalCode.length", args :+ PostalCode.length),
-                  regexp(PostalCode.regex, s"$prefix.error.postalCode.invalid", args)
-                )
-              )
+            trimmedText(s"$prefix.error.required", Seq(PostalCode.arg, name))
+              .verifying(constraint)
               .transform[Option[String]](Some(_), _.getOrElse(""))
           } else {
             optional(
               trimmedText()
-                .verifying(
-                  StopOnFirstFail[String](
-                    maxLength(PostalCode.length, s"$prefix.error.postalCode.length", args :+ PostalCode.length),
-                    regexp(PostalCode.regex, s"$prefix.error.postalCode.invalid", args)
-                  )
-                )
+                .verifying(constraint)
             )
           }
         }
