@@ -17,54 +17,105 @@
 package connectors
 
 import config.FrontendAppConfig
+import models.journeyDomain.DepartureDomain
 import play.api.Logging
-import play.api.http.{HeaderNames, Status}
-import play.api.libs.json.{Json, Writes}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpErrorFunctions, HttpReads, HttpResponse}
+import play.api.http.HeaderNames
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpErrorFunctions, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-// TODO - what does the request look like? Simplest possible
-case class DeclarationRequest(eori: String)
-
-object DeclarationRequest {
-  implicit val declarationRequestFormat = Json.format[DeclarationRequest]
-}
-
-// TODO -
-case class DeclarationResponse(status: Int)
-
-object DeclarationResponse {
-  implicit val declarationResponseFormat = Json.format[DeclarationResponse]
-}
-
 class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConfig)(implicit ec: ExecutionContext) extends HttpErrorFunctions with Logging {
 
   private val requestHeaders = Seq(
-    HeaderNames.ACCEPT -> "application/vnd.hmrc.2.0+json"
+    HeaderNames.ACCEPT       -> "application/vnd.hmrc.2.0+json",
+    HeaderNames.CONTENT_TYPE -> "application/json"
   )
 
-  def submitDeclaration(request: DeclarationRequest)(implicit hc: HeaderCarrier): Future[Either[HttpResponse, DeclarationResponse]] = {
+  def submitDeclaration(request: DepartureDomain)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
 
-    val declarationUrl = s"${appConfig.apiUrl}/customs/transits/movements/departures"
+    val declarationUrl = s"${appConfig.apiUrl}/movements/departures"
 
-    implicit val declarationReads: HttpReads[Either[HttpResponse, DeclarationResponse]] =
-      HttpReads[HttpResponse].map {
-        response =>
-          response.status match {
-            case Status.ACCEPTED    => Right(DeclarationResponse(Status.ACCEPTED)) // TODO - what might we want to return if success?
-            case Status.OK          => Right(DeclarationResponse(Status.ACCEPTED))
-            case Status.BAD_REQUEST => Left(response) // TODO - Could do something differently here?
-            case _                  => Left(response)
-          }
-      }
+    val validJson: String =
+      """
+        |{
+        |  "n1:CC015C": {
+        |    "preparationDateAndTime": "2022-01-22T07:43:36",
+        |    "TransitOperation": {
+        |      "LRN": "qvRcL",
+        |      "declarationType": "Pbg",
+        |      "additionalDeclarationType": "O",
+        |      "security": "8",
+        |      "reducedDatasetIndicator": "1",
+        |      "bindingItinerary": "0"
+        |    },
+        |    "CustomsOfficeOfDeparture": {
+        |      "referenceNumber": "ZQZ20442"
+        |    },
+        |    "CustomsOfficeOfDestinationDeclared": {
+        |      "referenceNumber": "ZQZ20442"
+        |    },
+        |    "messageType": "CC015C",
+        |    "@PhaseID": "NCTS5.0",
+        |    "messageRecipient": "FdOcminxBxSLGm1rRUn0q96S1",
+        |    "HolderOfTheTransitProcedure": {
+        |      "identificationNumber": "SFzsisksA"
+        |    },
+        |    "Consignment": {
+        |      "grossMass": 6430669292.48125,
+        |      "HouseConsignment": [
+        |        {
+        |          "sequenceNumber": "48711",
+        |          "grossMass": 6430669292.48125,
+        |          "AdditionalSupplyChainActor": [],
+        |          "DepartureTransportMeans": [],
+        |          "PreviousDocument": [],
+        |          "SupportingDocument": [],
+        |          "TransportDocument": [],
+        |          "AdditionalReference": [],
+        |          "AdditionalInformation": [],
+        |          "ConsignmentItem": [
+        |            {
+        |              "goodsItemNumber": "18914",
+        |              "declarationGoodsItemNumber": 1458,
+        |              "AdditionalSupplyChainActor": [],
+        |              "Commodity": {
+        |                "descriptionOfGoods": "ZMyM5HTSTnLqT5FT9aHXwScqXKC1VitlWeO5gs91cVXBXOB8xBdXG5aGhG9VFjjDGiraIETFfbQWeA7VUokO7ngDOrKZ23ccKKMA6C3GpXciUTt9nS2pzCFFFeg4BXdkIe",
+        |                "DangerousGoods": []
+        |              },
+        |              "Packaging": [
+        |                {
+        |                  "sequenceNumber": "48711",
+        |                  "typeOfPackages": "Oi"
+        |                }
+        |              ],
+        |              "PreviousDocument": [],
+        |              "SupportingDocument": [],
+        |              "TransportDocument": [],
+        |              "AdditionalReference": [],
+        |              "AdditionalInformation": []
+        |            }
+        |          ]
+        |        }
+        |      ]
+        |    },
+        |    "messageIdentification": "6Onxa3En",
+        |    "Guarantee": [
+        |      {
+        |        "sequenceNumber": "48711",
+        |        "guaranteeType": "1",
+        |        "otherGuaranteeReference": "1qJMA6MbhnnrOJJjHBHX",
+        |        "GuaranteeReference": []
+        |      }
+        |    ]
+        |  }
+        |}
+        |
+        |""".stripMargin
 
-    httpClient.PUT[DeclarationRequest, Either[HttpResponse, DeclarationResponse]](
-      url = declarationUrl,
-      headers = requestHeaders,
-      body = request
-    )
+//    httpClient.POST[DepartureDomain, HttpResponse](declarationUrl, request, requestHeaders)
+//    httpClient.POST[String, HttpResponse](declarationUrl, validJson, requestHeaders)
+    httpClient.POSTString(declarationUrl, validJson, requestHeaders)
   }
 
 }

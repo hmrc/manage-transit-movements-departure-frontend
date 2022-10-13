@@ -16,15 +16,15 @@
 
 package controllers
 
+import cats.implicits._
 import com.google.inject.Inject
-import connectors.DeclarationRequest
 import controllers.actions.{Actions, CheckDependentTaskCompletedActionProvider}
-import models.LocalReferenceNumber
-import models.journeyDomain.PreTaskListDomain
+import models.journeyDomain.{DepartureDomain, PreTaskListDomain}
+import models.{domain, LocalReferenceNumber}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{ApiService, CountriesService}
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.TaskListViewModel
 import views.html.TaskListView
@@ -61,18 +61,33 @@ class TaskListController @Inject() (
         }
     }
 
-  def onSubmit(lrn: LocalReferenceNumber)
-              (implicit hc: HeaderCarrier): Action[AnyContent] = actions
+  def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkDependentTaskCompleted[PreTaskListDomain]) {
-      _ => ???
+    .andThen(checkDependentTaskCompleted[PreTaskListDomain])
+    .async {
+      implicit request =>
+        // Either[ReaderError, A], TODO move to service layer
 
-        // TODO - populate from cache
-        val request = DeclarationRequest("SOME-EORI")
+        val getData: Future[domain.EitherType[DepartureDomain]] = for {
+          ctcCountries                          <- countriesService.getCountryCodesCTC()
+          customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+        } yield DepartureDomain
+          .userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes)
+          .run(request.userAnswers)
 
-        apiService.submitDeclaration(request).flatMap {
-          case Right(r) => Future.successful(Ok(r))
-          case Left(r) => Future.successful(new Status(r.status))
+        // TODO another service layer
+        val submit = getData.flatMap(
+          _.traverse(apiService.submitDeclaration(_))
+        )
+
+        submit.flatMap {
+          case Right(value) =>
+            value.status match {
+              case status if is2xx(status) => ???
+              case status if is4xx(status) => ???
+              case _                       => ???
+            }
+          case Left(_) => ???
         }
     }
 

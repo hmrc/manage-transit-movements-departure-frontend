@@ -24,6 +24,7 @@ import models.domain._
 import models.reference.CustomsOffice
 import models.{DeclarationType, LocalReferenceNumber, Mode, ProcedureType, SecurityDetailsType, UserAnswers}
 import pages.preTaskList._
+import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.Call
 
 case class PreTaskListDomain(
@@ -73,5 +74,7 @@ object PreTaskListDomain {
       SecurityDetailsTypePage.reader,
       DetailsConfirmedPage.mandatoryReader(identity)
     ).tupled.map((PreTaskListDomain.apply _).tupled)
+
+  implicit val format: OFormat[PreTaskListDomain] = Json.format[PreTaskListDomain]
 
 }
