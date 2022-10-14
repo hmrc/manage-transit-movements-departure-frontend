@@ -17,8 +17,8 @@
 package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import generators.{Generators, PreTaskListUserAnswersGenerator}
-import models.CountryList
+import generators.{Generators, PreTaskListUserAnswersGenerator, RouteDetailsUserAnswersGenerator}
+import models.{CountryList, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.inject.bind
@@ -32,7 +32,12 @@ import views.html.TaskListView
 
 import scala.concurrent.Future
 
-class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators with PreTaskListUserAnswersGenerator {
+class TaskListControllerSpec
+    extends SpecBase
+    with AppWithDefaultMockFixtures
+    with Generators
+    with PreTaskListUserAnswersGenerator
+    with RouteDetailsUserAnswersGenerator {
 
   private lazy val mockViewModel                     = mock[TaskListViewModel]
   private val mockCountriesService: CountriesService = mock[CountriesService]
@@ -95,18 +100,20 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
-    "must redirect to confirmation page" in {
+    "must redirect to confirmation page when submission success" in {
+
       val sampleTasks = listWithMaxLength[Task]()(arbitraryTask).sample.value
 
       when(mockViewModel.apply(any())(any(), any())).thenReturn(sampleTasks)
-
       when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(CountryList(Nil)))
       when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
       when(response.status).thenReturn(OK)
       when(mockApiService.submitDeclaration(any())(any())).thenReturn(Future.successful(response))
 
-      val userAnswers = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
-      setExistingUserAnswers(userAnswers)
+      val preTask: UserAnswers         = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
+      val departureDomain: UserAnswers = arbitraryRouteDetailsAnswers(preTask).sample.value
+
+      setExistingUserAnswers(departureDomain)
 
       val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
 
@@ -115,6 +122,53 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.DeclarationSubmittedController.onPageLoad().url
+
+    }
+
+    "must return a bad request for a 400" in {
+
+      val sampleTasks = listWithMaxLength[Task]()(arbitraryTask).sample.value
+
+      when(mockViewModel.apply(any())(any(), any())).thenReturn(sampleTasks)
+      when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(CountryList(Nil)))
+      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
+      when(response.status).thenReturn(BAD_REQUEST)
+      when(mockApiService.submitDeclaration(any())(any())).thenReturn(Future.successful(response))
+
+      val preTask: UserAnswers         = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
+      val departureDomain: UserAnswers = arbitraryRouteDetailsAnswers(preTask).sample.value
+
+      setExistingUserAnswers(departureDomain)
+
+      val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual BAD_REQUEST
+
+    }
+
+    "must return a internal server error for a 500" in {
+
+      val sampleTasks = listWithMaxLength[Task]()(arbitraryTask).sample.value
+
+      when(mockViewModel.apply(any())(any(), any())).thenReturn(sampleTasks)
+      when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(CountryList(Nil)))
+      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
+      when(response.status).thenReturn(INTERNAL_SERVER_ERROR)
+      when(mockApiService.submitDeclaration(any())(any())).thenReturn(Future.successful(response))
+
+      val preTask: UserAnswers         = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
+      val departureDomain: UserAnswers = arbitraryRouteDetailsAnswers(preTask).sample.value
+
+      setExistingUserAnswers(departureDomain)
+
+      val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
     }
   }
 }

@@ -119,6 +119,7 @@ class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConf
 
     // TODO - do via domain models with reads and writes?
     // httpClient.POST[DepartureDomain, HttpResponse](declarationUrl, request, requestHeaders)
+
     httpClient.POSTString(declarationUrl, payload(request), requestHeaders)
 
   }

@@ -66,7 +66,7 @@ class TaskListController @Inject() (
     .andThen(checkDependentTaskCompleted[PreTaskListDomain])
     .async {
       implicit request =>
-        // Either[ReaderError, A], TODO move to service layer
+        // Either[ReaderError, A], TODO - move to service layer
 
         val getData: Future[domain.EitherType[DepartureDomain]] = for {
           ctcCountries                          <- countriesService.getCountryCodesCTC()
@@ -75,7 +75,7 @@ class TaskListController @Inject() (
           .userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes)
           .run(request.userAnswers)
 
-        // TODO another service layer
+        // TODO - another service layer
         val submit = getData.flatMap(
           _.traverse(apiService.submitDeclaration(_))
         )
@@ -86,14 +86,14 @@ class TaskListController @Inject() (
               case status if is2xx(status) =>
                 Future.successful(Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad()))
               case status if is4xx(status) =>
-                // TODO - log and audit fail
+                // TODO - log and audit fail. How to handle this?
                 Future.successful(BadRequest)
               case _ =>
-                // TODO - log and audit fail
+                // TODO - log and audit fail. How to handle this?
                 Future.successful(InternalServerError("Something went wrong"))
             }
-          case Left(_) =>
-            // TODO - log and audit fail
+          case Left(e) =>
+            // TODO - log and audit fail. How to handle this?
             Future.successful(InternalServerError("Something went wrong"))
         }
     }

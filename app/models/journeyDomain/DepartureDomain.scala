@@ -23,12 +23,13 @@ import models.journeyDomain.traderDetails.TraderDetailsDomain
 import models.journeyDomain.transport.TransportDomain
 import play.api.libs.json.{Json, OFormat}
 
+// TODO - Need to implement this domain model for the remaining sections
 case class DepartureDomain(
   preTaskList: PreTaskListDomain,
   // traderDetails: TraderDetailsDomain,
   routeDetails: RouteDetailsDomain
   // guarantee: GuaranteeDetailsDomain
-  //  transport: TransportDomain,
+  // transport: TransportDomain,
 )
 
 object DepartureDomain {
@@ -36,10 +37,10 @@ object DepartureDomain {
   def userAnswersReader(ctcCountryCode: Seq[String], customsSecurityAgreement: Seq[String]): UserAnswersReader[DepartureDomain] =
     for {
       preTaskListDomain  <- UserAnswersReader[PreTaskListDomain]
-      routeDetailsDomain <- RouteDetailsDomain.userAnswersReader(ctcCountryCode, customsSecurityAgreement) // TODO do we have to do this here??
-      //traderDetailsDomain <- UserAnswersReader[TraderDetailsDomain]
-      //guaranteeDomain     <- UserAnswersReader[GuaranteeDetailsDomain]
-      //      transportDomain    <- UserAnswersReader[TransportDomain]
+      routeDetailsDomain <- RouteDetailsDomain.userAnswersReader(ctcCountryCode, customsSecurityAgreement)
+      // traderDetailsDomain <- UserAnswersReader[TraderDetailsDomain]
+      // guaranteeDomain     <- UserAnswersReader[GuaranteeDetailsDomain]
+      // transportDomain    <- UserAnswersReader[TransportDomain]
     } yield DepartureDomain(preTaskListDomain, routeDetailsDomain)
 //    } yield DepartureDomain(preTaskListDomain, routeDetailsDomain, transportDomain, guaranteeDomain)
 
