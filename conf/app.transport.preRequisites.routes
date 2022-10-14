@@ -19,10 +19,10 @@ POST       /:lrn/transport-details/items-same-destination-country           cont
 GET        /:lrn/transport-details/change-items-same-destination-country    controllers.transport.preRequisites.TransportedToSameCountryYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/transport-details/change-items-same-destination-country    controllers.transport.preRequisites.TransportedToSameCountryYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/transport/items-destination-country                        controllers.transport.preRequisites.ItemsDestinationCountryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/transport/items-destination-country                        controllers.transport.preRequisites.ItemsDestinationCountryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/transport/change-items-destination-country                 controllers.transport.preRequisites.ItemsDestinationCountryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/transport/change-items-destination-country                 controllers.transport.preRequisites.ItemsDestinationCountryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/transport-details/items-destination-country                        controllers.transport.preRequisites.ItemsDestinationCountryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport-details/items-destination-country                        controllers.transport.preRequisites.ItemsDestinationCountryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport-details/change-items-destination-country                 controllers.transport.preRequisites.ItemsDestinationCountryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport-details/change-items-destination-country                 controllers.transport.preRequisites.ItemsDestinationCountryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/transport-details/containers                          controllers.transport.preRequisites.ContainerIndicatorController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/transport-details/containers                          controllers.transport.preRequisites.ContainerIndicatorController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
