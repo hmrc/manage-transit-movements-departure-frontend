@@ -63,4 +63,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val maxOfficesOfExit: Int      = configuration.get[Int]("limits.maxOfficesOfExit")
 
   lazy val apiUrl = configuration.get[Service]("microservice.services.common-transit-convention-traders").baseUrl
+
+  lazy val declarationEnabled: Boolean = configuration.get[Boolean]("declaration.enabled")
 }

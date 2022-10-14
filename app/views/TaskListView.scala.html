@@ -40,13 +40,17 @@
 
     @taskList("taskList.departureDetails", tasks)
 
-    @formHelper(action = routes.TaskListController.onSubmit(lrn), 'autoComplete -> "off") {
+     @if(config.declarationEnabled) {
+         @* TODO - @if(tasks.forall(_.isCompleted)) { *@
+            @formHelper(action = routes.TaskListController.onSubmit(lrn), 'autoComplete -> "off") {
 
-        <h2 class="govuk-heading-m">@messages("taskList.sendDeclaration")</h2>
+                 <h2 class="govuk-heading-m">@messages("taskList.sendDeclaration")</h2>
 
-        <p class="govuk-body">@messages("taskList.detailsCorrect")</p>
+                 <p class="govuk-body">@messages("taskList.detailsCorrect")</p>
 
-        @button(messageKey = "site.send", attributes = Map("id" -> "submit"))
+                @button(messageKey = "site.send", attributes = Map("id" -> "submit"))
+            }
+        @* } *@
     }
 
     <p class="govuk-body">
