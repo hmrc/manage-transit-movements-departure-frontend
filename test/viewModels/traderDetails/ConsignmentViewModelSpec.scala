@@ -23,6 +23,7 @@ import models.{Address, DynamicAddress, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.traderDetails.consignment._
+import pages.traderDetails.consignment.consignee.{AddressPage, CountryPage}
 import pages.traderDetails.consignment.consignor.CountryPage
 import viewModels.traderDetails.ConsignmentViewModel.ConsignmentViewModelProvider
 
@@ -64,7 +65,8 @@ class ConsignmentViewModelSpec extends SpecBase with ScalaCheckPropertyChecks wi
           .setValue(consignee.EoriYesNoPage, true)
           .setValue(consignee.EoriNumberPage, "eori2")
           .setValue(consignee.NamePage, "name2")
-          .setValue(consignee.AddressPage, Address("line12", "line22", "postal code2", Country(CountryCode("code"), "description")))
+          .setValue(CountryPage, Country(CountryCode("GB"), "Great Britain"))
+          .setValue(AddressPage, DynamicAddress("line11", "line12", Some("postal code2")))
 
         val mode              = arbitrary[Mode].sample.value
         val viewModelProvider = injector.instanceOf[ConsignmentViewModelProvider]
@@ -88,12 +90,13 @@ class ConsignmentViewModelSpec extends SpecBase with ScalaCheckPropertyChecks wi
         sections(1).rows(2).value.content.asHtml.toString() mustBe "phone number"
 
         sections(2).sectionTitle.get mustBe "Consignee"
-        sections(2).rows.size mustBe 5
+        sections(2).rows.size mustBe 6
         sections(2).rows.head.value.content.asHtml.toString() mustBe "No"
         sections(2).rows(1).value.content.asHtml.toString() mustBe "Yes"
         sections(2).rows(2).value.content.asHtml.toString() mustBe "eori2"
         sections(2).rows(3).value.content.asHtml.toString() mustBe "name2"
-        sections(2).rows(4).value.content.asHtml.toString() mustBe "line12<br>line22<br>postal code2<br>description"
+        sections(2).rows(4).value.content.asHtml.toString() mustBe "Great Britain"
+        sections(2).rows(5).value.content.asHtml.toString() mustBe "line11<br>line12<br>postal code2"
       }
     }
   }
