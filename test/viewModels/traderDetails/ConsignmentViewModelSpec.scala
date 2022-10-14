@@ -19,12 +19,10 @@ package viewModels.traderDetails
 import base.SpecBase
 import generators.{Generators, TraderDetailsUserAnswersGenerator}
 import models.reference.{Country, CountryCode}
-import models.{Address, DynamicAddress, Mode}
+import models.{DynamicAddress, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.traderDetails.consignment._
-import pages.traderDetails.consignment.consignee.{AddressPage, CountryPage}
-import pages.traderDetails.consignment.consignor.CountryPage
 import viewModels.traderDetails.ConsignmentViewModel.ConsignmentViewModelProvider
 
 class ConsignmentViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
@@ -56,7 +54,7 @@ class ConsignmentViewModelSpec extends SpecBase with ScalaCheckPropertyChecks wi
           .setValue(consignor.EoriYesNoPage, true)
           .setValue(consignor.EoriPage, "eori")
           .setValue(consignor.NamePage, "name")
-          .setValue(CountryPage, Country(CountryCode("GB"), "Great Britain"))
+          .setValue(consignor.CountryPage, Country(CountryCode("GB"), "Great Britain"))
           .setValue(consignor.AddressPage, DynamicAddress("line1", "line2", Some("postal code")))
           .setValue(consignor.AddContactPage, true)
           .setValue(consignor.contact.NamePage, "contact name")
@@ -65,8 +63,8 @@ class ConsignmentViewModelSpec extends SpecBase with ScalaCheckPropertyChecks wi
           .setValue(consignee.EoriYesNoPage, true)
           .setValue(consignee.EoriNumberPage, "eori2")
           .setValue(consignee.NamePage, "name2")
-          .setValue(CountryPage, Country(CountryCode("GB"), "Great Britain"))
-          .setValue(AddressPage, DynamicAddress("line11", "line12", Some("postal code2")))
+          .setValue(consignee.CountryPage, Country(CountryCode("GB"), "Great Britain"))
+          .setValue(consignee.AddressPage, DynamicAddress("line11", "line12", Some("postal code2")))
 
         val mode              = arbitrary[Mode].sample.value
         val viewModelProvider = injector.instanceOf[ConsignmentViewModelProvider]

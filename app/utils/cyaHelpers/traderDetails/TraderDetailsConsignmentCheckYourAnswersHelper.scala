@@ -17,7 +17,7 @@
 package utils.cyaHelpers.traderDetails
 
 import models.reference.Country
-import models.{Address, DynamicAddress, Mode, UserAnswers}
+import models.{DynamicAddress, Mode, UserAnswers}
 import pages.traderDetails.consignment._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
