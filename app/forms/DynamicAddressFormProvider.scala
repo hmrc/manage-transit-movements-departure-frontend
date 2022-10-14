@@ -31,7 +31,6 @@ class DynamicAddressFormProvider @Inject() extends Mappings {
     Form(
       mapping(
         NumberAndStreet.field -> {
-          val sequencee = Seq(NumberAndStreet.arg) ++ args ++ Seq(NumberAndStreet.length)
           trimmedText(s"$prefix.error.required", NumberAndStreet.arg +: args)
             .verifying(
               StopOnFirstFail[String](
@@ -72,5 +71,5 @@ class DynamicAddressFormProvider @Inject() extends Mappings {
 object DynamicAddressFormProvider {
 
   def apply(prefix: String, isPostalCodeRequired: Boolean, args: Any*)(implicit messages: Messages): Form[DynamicAddress] =
-    new DynamicAddressFormProvider()(prefix, isPostalCodeRequired, args)
+    new DynamicAddressFormProvider()(prefix, isPostalCodeRequired, args: _*)
 }
