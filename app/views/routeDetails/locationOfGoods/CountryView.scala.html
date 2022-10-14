@@ -46,7 +46,8 @@
         @inputSelect(
             field = form("value"),
             selectType = OrdinarySelect(
-                heading = messages("routeDetails.locationOfGoods.country.heading")
+                heading = messages("routeDetails.locationOfGoods.country.heading"),
+                caption = Some(messages("routeDetails.locationOfGoods.caption"))
             ),
             hint = Some(messages("routeDetails.locationOfGoods.country.hintText")),
             selectItems = countryList.toSelectItems(form.value),

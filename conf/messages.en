@@ -1033,12 +1033,13 @@ transport.preRequisites.sameUcrYesNo.checkYourAnswersLabel = Same UCR for all it
 transport.preRequisites.sameUcrYesNo.change.hidden = if you want to use the same UCR for all items
 transport.preRequisites.sameUcrYesNo.error.required = Select yes if you want to use the same UCR for all items
 
-
-routeDetails.locationOfGoods.country.title = In which country is the location of goods
-routeDetails.locationOfGoods.country.heading = In which country is the location of goods
-routeDetails.locationOfGoods.country.hintText = In which country is the location of goods hint
-routeDetails.locationOfGoods.country.label = In which country is the location of goods label
+routeDetails.locationOfGoods.country.title = In which country is the location of goods?
+routeDetails.locationOfGoods.country.heading = In which country is the location of goods?
+routeDetails.locationOfGoods.country.hintText = Enter the country, like Italy or Spain.
 routeDetails.locationOfGoods.country.placeholder = Select a country
-routeDetails.locationOfGoods.country.change.hidden = In which country is the location of goods
-routeDetails.locationOfGoods.country.checkYourAnswersLabel = In which country is the location of goods
-routeDetails.locationOfGoods.country.error.required = Select the country
+routeDetails.locationOfGoods.country.change.hidden = location of goods country
+routeDetails.locationOfGoods.country.checkYourAnswersLabel = Location of goods country
+routeDetails.locationOfGoods.country.error.required = Enter which country the location of goods is in
+
+
+traderDetails.holderOfTransit.country.checkYourAnswersLabel = Transit holder’s country

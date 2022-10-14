@@ -50,13 +50,13 @@ class CountryViewSpec extends InputSelectViewBehaviours[Country] with Generators
 
   behave like pageWithBackLink
 
+  behave like pageWithSectionCaption("Route details - Location of goods")
+
   behave like pageWithHeading()
 
   behave like pageWithSelect
 
-  behave like pageWithHint("In which country is the location of goods hint")
-
-  behave like pageWithContent("label", "In which country is the location of goods")
+  behave like pageWithHint("Enter the country, like Italy or Spain.")
 
   behave like pageWithSubmitButton("Save and continue")
 }
