@@ -16,18 +16,32 @@
 
 package pages.traderDetails.consignment.consignor
 
-import models.{DynamicAddress, Mode, UserAnswers}
+import controllers.traderDetails.consignment.consignor.routes
+import models.reference.Country
+import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.traderDetails.TraderDetailsConsignorSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object AddressPage extends QuestionPage[DynamicAddress] {
+import scala.util.Try
+
+case object CountryPage extends QuestionPage[Country] {
 
   override def path: JsPath = TraderDetailsConsignorSection.path \ toString
 
-  override def toString: String = "address"
+  override def toString: String = "country"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(controllers.traderDetails.consignment.consignor.routes.AddressController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.CountryController.onPageLoad(userAnswers.lrn, mode))
+
+  override def cleanup(
+    updatedValue: Option[Country],
+    previousValue: Option[Country],
+    userAnswers: UserAnswers
+  ): Try[UserAnswers] =
+    (previousValue, updatedValue) match {
+      case (Some(x), Some(y)) if x != y => userAnswers.remove(AddressPage)
+      case _                            => super.cleanup(updatedValue, previousValue, userAnswers)
+    }
 }
