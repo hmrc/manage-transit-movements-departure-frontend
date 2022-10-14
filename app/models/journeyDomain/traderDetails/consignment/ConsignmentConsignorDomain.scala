@@ -19,13 +19,13 @@ package models.journeyDomain.traderDetails.consignment
 import cats.implicits._
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
-import models.{Address, EoriNumber}
+import models.{DynamicAddress, EoriNumber}
 import pages.traderDetails.consignment.consignor._
 
 case class ConsignmentConsignorDomain(
   eori: Option[EoriNumber],
   name: String,
-  address: Address,
+  address: DynamicAddress,
   contact: Option[ConsignmentConsignorContactDomain]
 ) extends JourneyDomainModel
 

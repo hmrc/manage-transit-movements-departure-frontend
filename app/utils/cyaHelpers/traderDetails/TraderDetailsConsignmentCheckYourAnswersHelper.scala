@@ -16,7 +16,7 @@
 
 package utils.cyaHelpers.traderDetails
 
-import models.{Address, Mode, UserAnswers}
+import models.{Address, DynamicAddress, Mode, UserAnswers}
 import pages.traderDetails.consignment._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
@@ -53,9 +53,9 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     id = Some("consignor-name")
   )
 
-  def consignorAddress: Option[SummaryListRow] = getAnswerAndBuildRow[Address](
+  def consignorAddress: Option[SummaryListRow] = getAnswerAndBuildRow[DynamicAddress](
     page = consignor.AddressPage,
-    formatAnswer = formatAsAddress,
+    formatAnswer = formatAsDynamicAddress,
     prefix = "traderDetails.consignment.consignor.address",
     id = Some("consignor-address")
   )

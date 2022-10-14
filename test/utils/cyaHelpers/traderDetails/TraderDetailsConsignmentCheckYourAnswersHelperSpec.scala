@@ -22,7 +22,7 @@ import controllers.traderDetails.consignment.consignor.contact.{routes => contac
 import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
 import controllers.traderDetails.consignment.{routes => consignmentRoutes}
 import generators.Generators
-import models.{Address, Mode}
+import models.{Address, DynamicAddress, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -226,7 +226,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
 
       "must return Some(Row)" - {
         s"when ${consignor.AddressPage} is defined" in {
-          forAll(arbitrary[Address], arbitrary[Mode]) {
+          forAll(arbitrary[DynamicAddress], arbitrary[Mode]) {
             (address, mode) =>
               val answers = emptyUserAnswers.setValue(consignor.AddressPage, address)
 
@@ -236,7 +236,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
               result mustBe Some(
                 SummaryListRow(
                   key = Key("Consignor’s address".toText),
-                  value = Value(HtmlContent(Seq(address.line1, address.line2, address.postalCode, address.country).mkString("<br>"))),
+                  value = Value(HtmlContent(Seq(Some(address.numberAndStreet), Some(address.city), address.postalCode).flatten.mkString("<br>"))),
                   actions = Some(
                     Actions(
                       items = List(

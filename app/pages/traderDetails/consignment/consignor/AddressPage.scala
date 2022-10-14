@@ -16,13 +16,13 @@
 
 package pages.traderDetails.consignment.consignor
 
-import models.{Address, Mode, UserAnswers}
+import models.{DynamicAddress, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.traderDetails.TraderDetailsConsignorSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object AddressPage extends QuestionPage[Address] {
+case object AddressPage extends QuestionPage[DynamicAddress] {
 
   override def path: JsPath = TraderDetailsConsignorSection.path \ toString
 

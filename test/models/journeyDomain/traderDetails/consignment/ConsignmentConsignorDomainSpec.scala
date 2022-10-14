@@ -20,7 +20,7 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
-import models.{Address, EoriNumber}
+import models.{DynamicAddress, EoriNumber}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.traderDetails.consignment._
@@ -31,7 +31,7 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
 
     val eori         = arbitrary[EoriNumber].sample.value
     val name         = Gen.alphaNumStr.sample.value
-    val address      = arbitrary[Address].sample.value
+    val address      = arbitrary[DynamicAddress].sample.value
     val contactName  = Gen.alphaNumStr.sample.value
     val contactPhone = Gen.alphaNumStr.sample.value
 

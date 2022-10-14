@@ -21,7 +21,7 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models.domain.{EitherType, UserAnswersReader}
-import models.{Address, DeclarationType, SecurityDetailsType}
+import models.{DeclarationType, DynamicAddress, SecurityDetailsType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
@@ -32,7 +32,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
   "ConsignmentDomain" - {
 
     val name                      = Gen.alphaNumStr.sample.value
-    val address                   = arbitrary[Address].sample.value
+    val address                   = arbitrary[DynamicAddress].sample.value
     val nonOption4DeclarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
     val securityDetailsType       = arbitrary[SecurityDetailsType].sample.value
 
