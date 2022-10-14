@@ -22,11 +22,13 @@ import controllers.traderDetails.consignment.consignor.contact.{routes => contac
 import controllers.traderDetails.consignment.consignor.{routes => consignorRoutes}
 import controllers.traderDetails.consignment.{routes => consignmentRoutes}
 import generators.Generators
+import models.reference.Country
 import models.{Address, DynamicAddress, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.traderDetails.consignment._
+import pages.traderDetails.consignment.consignor.CountryPage
 import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
@@ -201,6 +203,50 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
                           href = consignorRoutes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignor’s name"),
                           attributes = Map("id" -> "consignor-name")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "country" - {
+      "must return None" - {
+        s"when $CountryPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.consignorCountry
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        s"when $CountryPage is defined" in {
+          forAll(arbitrary[Country], arbitrary[Mode]) {
+            (country, mode) =>
+              val answers = emptyUserAnswers.setValue(CountryPage, country)
+
+              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val result = helper.consignorCountry
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Consignor’s country".toText),
+                  value = Value(country.description.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = consignorRoutes.CountryController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("consignor’s country"),
+                          attributes = Map("id" -> "consignor-country")
                         )
                       )
                     )

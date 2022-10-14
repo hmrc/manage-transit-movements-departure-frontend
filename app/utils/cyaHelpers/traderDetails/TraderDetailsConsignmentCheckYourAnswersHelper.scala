@@ -16,6 +16,7 @@
 
 package utils.cyaHelpers.traderDetails
 
+import models.reference.Country
 import models.{Address, DynamicAddress, Mode, UserAnswers}
 import pages.traderDetails.consignment._
 import play.api.i18n.Messages
@@ -51,6 +52,13 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     formatAnswer = formatAsText,
     prefix = "traderDetails.consignment.consignor.name",
     id = Some("consignor-name")
+  )
+
+  def consignorCountry: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
+    page = consignor.CountryPage,
+    formatAnswer = formatAsCountry,
+    prefix = "traderDetails.consignment.consignor.country",
+    id = Some("consignor-country")
   )
 
   def consignorAddress: Option[SummaryListRow] = getAnswerAndBuildRow[DynamicAddress](

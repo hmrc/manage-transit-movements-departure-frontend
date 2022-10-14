@@ -23,6 +23,7 @@ import models.{Address, DynamicAddress, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.traderDetails.consignment._
+import pages.traderDetails.consignment.consignor.CountryPage
 import viewModels.traderDetails.ConsignmentViewModel.ConsignmentViewModelProvider
 
 class ConsignmentViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
@@ -54,6 +55,7 @@ class ConsignmentViewModelSpec extends SpecBase with ScalaCheckPropertyChecks wi
           .setValue(consignor.EoriYesNoPage, true)
           .setValue(consignor.EoriPage, "eori")
           .setValue(consignor.NamePage, "name")
+          .setValue(CountryPage, Country(CountryCode("GB"), "Great Britain"))
           .setValue(consignor.AddressPage, DynamicAddress("line1", "line2", Some("postal code")))
           .setValue(consignor.AddContactPage, true)
           .setValue(consignor.contact.NamePage, "contact name")
@@ -71,12 +73,13 @@ class ConsignmentViewModelSpec extends SpecBase with ScalaCheckPropertyChecks wi
         sections.size mustBe 3
 
         sections.head.sectionTitle.get mustBe "Consignor"
-        sections.head.rows.size mustBe 5
+        sections.head.rows.size mustBe 6
         sections.head.rows.head.value.content.asHtml.toString() mustBe "No"
         sections.head.rows(1).value.content.asHtml.toString() mustBe "Yes"
         sections.head.rows(2).value.content.asHtml.toString() mustBe "eori"
         sections.head.rows(3).value.content.asHtml.toString() mustBe "name"
-        sections.head.rows(4).value.content.asHtml.toString() mustBe "line1<br>line2<br>postal code"
+        sections.head.rows(4).value.content.asHtml.toString() mustBe "Great Britain"
+        sections.head.rows(5).value.content.asHtml.toString() mustBe "line1<br>line2<br>postal code"
 
         sections(1).sectionTitle.get mustBe "Consignor contact"
         sections(1).rows.size mustBe 3

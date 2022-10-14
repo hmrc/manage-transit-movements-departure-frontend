@@ -362,7 +362,7 @@ traderDetails.consignment.consignor.country.title = Which country is the consign
 traderDetails.consignment.consignor.country.heading = Which country is {0} based in?
 traderDetails.consignment.consignor.country.hintText = Enter the country, like Italy or Spain.
 traderDetails.consignment.consignor.country.placeholder = Select a country
-traderDetails.consignment.consignor.country.change.hidden = which country the consignor is based in
+traderDetails.consignment.consignor.country.change.hidden = consignor’s country
 traderDetails.consignment.consignor.country.checkYourAnswersLabel = Consignor’s country
 traderDetails.consignment.consignor.country.error.required = Enter which country {0} is based in
 
