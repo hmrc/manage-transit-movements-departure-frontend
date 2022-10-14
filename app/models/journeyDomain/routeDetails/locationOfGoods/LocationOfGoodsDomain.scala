@@ -21,8 +21,8 @@ import models.LocationOfGoodsIdentification._
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{CustomsOffice, UnLocode}
-import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress, UserAnswers}
-import pages.routeDetails.locationOfGoods.{AddContactYesNoPage, _}
+import models.{Coordinates, DynamicAddress, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress, UserAnswers}
+import pages.routeDetails.locationOfGoods._
 import play.api.mvc.Call
 
 sealed trait LocationOfGoodsDomain extends JourneyDomainModel {
@@ -143,7 +143,7 @@ object LocationOfGoodsDomain {
 
   case class LocationOfGoodsZ(
     typeOfLocation: LocationType,
-    address: Address,
+    address: DynamicAddress,
     additionalContact: Option[AdditionalContactDomain]
   ) extends LocationOfGoodsDomain {
 

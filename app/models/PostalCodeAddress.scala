@@ -23,7 +23,10 @@ case class PostalCodeAddress(
   streetNumber: String,
   postalCode: String,
   country: Country
-)
+) {
+
+  override def toString: String = Seq(streetNumber, postalCode, country.description).mkString("<br>")
+}
 
 object PostalCodeAddress {
   implicit val format: OFormat[PostalCodeAddress] = Json.format[PostalCodeAddress]

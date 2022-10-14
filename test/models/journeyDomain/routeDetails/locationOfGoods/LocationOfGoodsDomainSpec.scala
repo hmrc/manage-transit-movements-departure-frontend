@@ -22,7 +22,7 @@ import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain._
 import models.reference.{CustomsOffice, UnLocode}
-import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, PostalCodeAddress}
+import models.{Coordinates, DynamicAddress, LocationOfGoodsIdentification, LocationType, PostalCodeAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
@@ -183,7 +183,7 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
 
         "is Z (Address)" in {
           val qualifierOfIdentification = LocationOfGoodsIdentification.AddressIdentifier
-          val address                   = arbitrary[Address].sample.value
+          val address                   = arbitrary[DynamicAddress].sample.value
 
           val userAnswers = emptyUserAnswers
             .setValue(LocationTypePage, typeOfLocation)

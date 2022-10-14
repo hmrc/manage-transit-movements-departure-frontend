@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.routeDetails.locationOfGoods.{contact, routes}
 import generators.Generators
 import models.reference.{CustomsOffice, UnLocode}
-import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress}
+import models.{Coordinates, DynamicAddress, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.locationOfGoods._
@@ -349,7 +349,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
       "must return Some(Row)" - {
         "when addressPage is defined" in {
-          forAll(arbitrary[Mode], arbitrary[Address]) {
+          forAll(arbitrary[Mode], arbitrary[DynamicAddress]) {
             (mode, address) =>
               val answers = emptyUserAnswers.setValue(AddressPage, address)
               val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
@@ -358,7 +358,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
               result mustBe Some(
                 SummaryListRow(
                   key = Key("What is the address for the location of goods?".toText),
-                  value = Value(HtmlContent(Seq(address.line1, address.line2, address.postalCode, address.country).mkString("<br>"))),
+                  value = Value(HtmlContent(address.toString)),
                   actions = Some(
                     Actions(
                       items = List(
@@ -401,7 +401,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
               result mustBe Some(
                 SummaryListRow(
                   key = Key("What is the address for the location of goods?".toText),
-                  value = Value(HtmlContent(Seq(postalCode.streetNumber, postalCode.postalCode, postalCode.country).mkString("<br>"))),
+                  value = Value(HtmlContent(postalCode.toString)),
                   actions = Some(
                     Actions(
                       items = List(

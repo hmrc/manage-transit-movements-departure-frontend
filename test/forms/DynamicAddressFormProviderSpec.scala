@@ -25,7 +25,8 @@ import play.api.data.FormError
 class DynamicAddressFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
   private val prefix = Gen.alphaNumStr.sample.value
-  private val name   = Gen.alphaNumStr.sample.value
+  private val arg1   = Gen.alphaNumStr.sample.value
+  private val arg2   = Gen.alphaNumStr.sample.value
 
   private val requiredKey = s"$prefix.error.required"
   private val lengthKey   = s"$prefix.error.length"
@@ -33,7 +34,7 @@ class DynamicAddressFormProviderSpec extends StringFieldBehaviours with SpecBase
 
   "when postal code is required" - {
 
-    val form = DynamicAddressFormProvider(prefix, name, isPostalCodeRequired = true)
+    val form = DynamicAddressFormProvider(prefix, isPostalCodeRequired = true, arg1, arg2)
 
     ".numberAndStreet" - {
 
@@ -49,19 +50,19 @@ class DynamicAddressFormProviderSpec extends StringFieldBehaviours with SpecBase
         form = form,
         fieldName = fieldName,
         maxLength = NumberAndStreet.length,
-        lengthError = FormError(fieldName, lengthKey, Seq(NumberAndStreet.arg, name, NumberAndStreet.length))
+        lengthError = FormError(fieldName, lengthKey, Seq(NumberAndStreet.arg, arg1, arg2, NumberAndStreet.length))
       )
 
       behave like mandatoryTrimmedField(
         form = form,
         fieldName = fieldName,
-        requiredError = FormError(fieldName, requiredKey, Seq(NumberAndStreet.arg, name))
+        requiredError = FormError(fieldName, requiredKey, Seq(NumberAndStreet.arg, arg1, arg2))
       )
 
       behave like fieldWithInvalidCharacters(
         form = form,
         fieldName = fieldName,
-        error = FormError(fieldName, invalidKey, Seq(NumberAndStreet.arg, name)),
+        error = FormError(fieldName, invalidKey, Seq(NumberAndStreet.arg, arg1, arg2)),
         length = NumberAndStreet.length
       )
     }
@@ -80,19 +81,19 @@ class DynamicAddressFormProviderSpec extends StringFieldBehaviours with SpecBase
         form = form,
         fieldName = fieldName,
         maxLength = City.length,
-        lengthError = FormError(fieldName, lengthKey, Seq(City.arg, name, City.length))
+        lengthError = FormError(fieldName, lengthKey, Seq(City.arg, arg1, arg2, City.length))
       )
 
       behave like mandatoryTrimmedField(
         form = form,
         fieldName = fieldName,
-        requiredError = FormError(fieldName, requiredKey, Seq(City.arg, name))
+        requiredError = FormError(fieldName, requiredKey, Seq(City.arg, arg1, arg2))
       )
 
       behave like fieldWithInvalidCharacters(
         form = form,
         fieldName = fieldName,
-        error = FormError(fieldName, invalidKey, Seq(City.arg, name)),
+        error = FormError(fieldName, invalidKey, Seq(City.arg, arg1, arg2)),
         length = City.length
       )
     }
@@ -115,20 +116,20 @@ class DynamicAddressFormProviderSpec extends StringFieldBehaviours with SpecBase
         form = form,
         fieldName = fieldName,
         maxLength = PostalCode.length,
-        lengthError = FormError(fieldName, lengthKey, Seq(PostalCode.arg, name, PostalCode.length)),
+        lengthError = FormError(fieldName, lengthKey, Seq(PostalCode.arg, arg1, arg2, PostalCode.length)),
         gen = invalidPostalOverLength
       )
 
       behave like mandatoryTrimmedField(
         form = form,
         fieldName = fieldName,
-        requiredError = FormError(fieldName, requiredKey, Seq(PostalCode.arg, name))
+        requiredError = FormError(fieldName, requiredKey, Seq(PostalCode.arg, arg1, arg2))
       )
 
       behave like fieldWithInvalidCharacters(
         form = form,
         fieldName = fieldName,
-        error = FormError(fieldName, postcodeInvalidKey, Seq(name)),
+        error = FormError(fieldName, postcodeInvalidKey, Seq(arg1, arg2)),
         length = PostalCode.length
       )
     }
@@ -136,7 +137,7 @@ class DynamicAddressFormProviderSpec extends StringFieldBehaviours with SpecBase
 
   "when postal code is not required" - {
 
-    val form = DynamicAddressFormProvider(prefix, name, isPostalCodeRequired = false)
+    val form = DynamicAddressFormProvider(prefix, isPostalCodeRequired = false, arg1, arg2)
 
     ".numberAndStreet" - {
 
@@ -152,19 +153,19 @@ class DynamicAddressFormProviderSpec extends StringFieldBehaviours with SpecBase
         form = form,
         fieldName = fieldName,
         maxLength = NumberAndStreet.length,
-        lengthError = FormError(fieldName, lengthKey, Seq(NumberAndStreet.arg, name, NumberAndStreet.length))
+        lengthError = FormError(fieldName, lengthKey, Seq(NumberAndStreet.arg, arg1, arg2, NumberAndStreet.length))
       )
 
       behave like mandatoryTrimmedField(
         form = form,
         fieldName = fieldName,
-        requiredError = FormError(fieldName, requiredKey, Seq(NumberAndStreet.arg, name))
+        requiredError = FormError(fieldName, requiredKey, Seq(NumberAndStreet.arg, arg1, arg2))
       )
 
       behave like fieldWithInvalidCharacters(
         form = form,
         fieldName = fieldName,
-        error = FormError(fieldName, invalidKey, Seq(NumberAndStreet.arg, name)),
+        error = FormError(fieldName, invalidKey, Seq(NumberAndStreet.arg, arg1, arg2)),
         length = NumberAndStreet.length
       )
     }
@@ -183,19 +184,19 @@ class DynamicAddressFormProviderSpec extends StringFieldBehaviours with SpecBase
         form = form,
         fieldName = fieldName,
         maxLength = City.length,
-        lengthError = FormError(fieldName, lengthKey, Seq(City.arg, name, City.length))
+        lengthError = FormError(fieldName, lengthKey, Seq(City.arg, arg1, arg2, City.length))
       )
 
       behave like mandatoryTrimmedField(
         form = form,
         fieldName = fieldName,
-        requiredError = FormError(fieldName, requiredKey, Seq(City.arg, name))
+        requiredError = FormError(fieldName, requiredKey, Seq(City.arg, arg1, arg2))
       )
 
       behave like fieldWithInvalidCharacters(
         form = form,
         fieldName = fieldName,
-        error = FormError(fieldName, invalidKey, Seq(City.arg, name)),
+        error = FormError(fieldName, invalidKey, Seq(City.arg, arg1, arg2)),
         length = City.length
       )
     }
@@ -218,7 +219,7 @@ class DynamicAddressFormProviderSpec extends StringFieldBehaviours with SpecBase
         form = form,
         fieldName = fieldName,
         maxLength = PostalCode.length,
-        lengthError = FormError(fieldName, lengthKey, Seq(PostalCode.arg, name, PostalCode.length)),
+        lengthError = FormError(fieldName, lengthKey, Seq(PostalCode.arg, arg1, arg2, PostalCode.length)),
         gen = invalidPostalOverLength
       )
 
@@ -230,7 +231,7 @@ class DynamicAddressFormProviderSpec extends StringFieldBehaviours with SpecBase
       behave like fieldWithInvalidCharacters(
         form = form,
         fieldName = fieldName,
-        error = FormError(fieldName, postcodeInvalidKey, Seq(name)),
+        error = FormError(fieldName, postcodeInvalidKey, Seq(arg1, arg2)),
         length = PostalCode.length
       )
     }

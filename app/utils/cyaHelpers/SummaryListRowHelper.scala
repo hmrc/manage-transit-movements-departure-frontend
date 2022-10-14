@@ -40,14 +40,11 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
     answer.concat.format(formatter).toText
   }
 
-  protected def formatAsAddress(address: Address): Content =
-    HtmlContent(Seq(address.line1, address.line2, address.postalCode, address.country.description).mkString("<br>"))
-
   protected def formatAsDynamicAddress(address: DynamicAddress): Content =
-    HtmlContent(Seq(Some(address.numberAndStreet), Some(address.city), address.postalCode).flatten.mkString("<br>"))
+    HtmlContent(address.toString)
 
   protected def formatAsPostalCodeAddress(address: PostalCodeAddress): Content =
-    HtmlContent(Seq(address.streetNumber, address.postalCode, address.country.description).mkString("<br>"))
+    HtmlContent(address.toString)
 
   protected def formatAsText[T](answer: T): Content = s"$answer".toText
 

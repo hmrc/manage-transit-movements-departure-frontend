@@ -57,7 +57,7 @@ class AddressController @Inject() (
   private def country(implicit request: Request): Country = request.arg._2
 
   private def form(isPostalCodeRequired: Boolean)(implicit request: Request): Form[DynamicAddress] =
-    formProvider("traderDetails.holderOfTransit.address", name, isPostalCodeRequired)
+    formProvider("traderDetails.holderOfTransit.address", isPostalCodeRequired, name)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
