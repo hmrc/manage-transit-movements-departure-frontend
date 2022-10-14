@@ -610,6 +610,50 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
       }
     }
 
+    "consigneeCountry" - {
+      "must return None" - {
+        s"when ${consignee.CountryPage} is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.consigneeCountry
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        s"when ${consignee.CountryPage} is defined" in {
+          forAll(arbitrary[Country], arbitrary[Mode]) {
+            (country, mode) =>
+              val answers = emptyUserAnswers.setValue(consignee.CountryPage, country)
+
+              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val result = helper.consigneeCountry
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Consignee’s country".toText),
+                  value = Value(country.description.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = consigneeRoutes.CountryController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("consignee’s country"),
+                          attributes = Map("id" -> "consignee-country")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
     "consigneeAddress" - {
       "must return None" - {
         s"when ${consignee.AddressPage} is undefined" in {
@@ -624,7 +668,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
 
       "must return Some(Row)" - {
         s"when ${consignee.AddressPage} is defined" in {
-          forAll(arbitrary[Address], arbitrary[Mode]) {
+          forAll(arbitrary[DynamicAddress], arbitrary[Mode]) {
             (address, mode) =>
               val answers = emptyUserAnswers.setValue(consignee.AddressPage, address)
 
@@ -634,7 +678,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
               result mustBe Some(
                 SummaryListRow(
                   key = Key("Consignee’s address".toText),
-                  value = Value(HtmlContent(Seq(address.line1, address.line2, address.postalCode, address.country).mkString("<br>"))),
+                  value = Value(HtmlContent(Seq(Some(address.numberAndStreet), Some(address.city), address.postalCode).flatten.mkString("<br>"))),
                   actions = Some(
                     Actions(
                       items = List(

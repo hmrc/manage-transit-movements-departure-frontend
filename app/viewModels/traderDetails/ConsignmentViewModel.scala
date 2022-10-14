@@ -60,6 +60,7 @@ object ConsignmentViewModel {
           helper.consigneeEoriYesNo,
           helper.consigneeEori,
           helper.consigneeName,
+          helper.consigneeCountry,
           helper.consigneeAddress
         ).flatten
       )

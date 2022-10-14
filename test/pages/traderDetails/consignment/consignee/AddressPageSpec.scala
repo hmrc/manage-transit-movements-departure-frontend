@@ -17,16 +17,16 @@
 package pages.traderDetails.consignment.consignee
 
 import pages.behaviours.PageBehaviours
-import models.Address
+import models.{Address, DynamicAddress}
 
 class AddressPageSpec extends PageBehaviours {
 
   "AddressPage" - {
 
-    beRetrievable[Address](AddressPage)
+    beRetrievable[DynamicAddress](AddressPage)
 
-    beSettable[Address](AddressPage)
+    beSettable[DynamicAddress](AddressPage)
 
-    beRemovable[Address](AddressPage)
+    beRemovable[DynamicAddress](AddressPage)
   }
 }

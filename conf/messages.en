@@ -432,23 +432,27 @@ traderDetails.consignment.consignee.name.error.length = The consignee’s name m
 traderDetails.consignment.consignee.name.error.invalid = The consignee’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 traderDetails.consignment.consignee.name.change.hidden = consignee’s name
 
+traderDetails.consignment.consignee.country.title = Which country is the consignee based in?
+traderDetails.consignment.consignee.country.heading = Which country is {0} based in?
+traderDetails.consignment.consignee.country.hintText = Enter the country, like Italy or Spain.
+traderDetails.consignment.consignee.country.placeholder = Select a country
+traderDetails.consignment.consignee.country.change.hidden = consignee’s country
+traderDetails.consignment.consignee.country.checkYourAnswersLabel = Consignee’s country
+traderDetails.consignment.consignee.country.error.required = Enter which country {0} is based in
+
 traderDetails.consignment.consignee.address.title = What is the consignee’s address?
 traderDetails.consignment.consignee.address.heading = What is {0}’s address?
-traderDetails.consignment.consignee.address.addressLine1 = Address line 1
-traderDetails.consignment.consignee.address.addressLine2 = Address line 2
+traderDetails.consignment.consignee.address.numberAndStreet = Number and street name
+traderDetails.consignment.consignee.address.city = Town or city
 traderDetails.consignment.consignee.address.postalCode = Postal code
-traderDetails.consignment.consignee.address.country = Country
+traderDetails.consignment.consignee.address.postalCode.optional = Postal code (optional)
 traderDetails.consignment.consignee.address.checkYourAnswersLabel = Consignee’s address
 traderDetails.consignment.consignee.address.change.hidden = consignee’s address
-traderDetails.consignment.consignee.address.error.postalCode.invalid = The postal code of {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
-traderDetails.consignment.consignee.address.error.postalCode.invalidFormat = Enter the postal code of {0}’s address in the right format, like AB1 1AB
-traderDetails.consignment.consignee.address.error.invalid = {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-traderDetails.consignment.consignee.address.error.required = Enter {0} of {1}’s address
-traderDetails.consignment.consignee.address.error.postalCode.required = Enter the postal code of {0}’s address
-traderDetails.consignment.consignee.address.error.postalCode.length = The postal code of {0}’s address must be {1} characters or less
-traderDetails.consignment.consignee.address.error.country.required = Enter the country for {0}’s address
-traderDetails.consignment.consignee.address.error.length = {0} of {1}’s address must be {2} characters or less
-traderDetails.consignment.consignee.address.placeholder = Select a country
+traderDetails.consignment.consignee.address.error.postalCode.invalid = The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
+traderDetails.consignment.consignee.address.error.invalid = The {0} for {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+traderDetails.consignment.consignee.address.error.required = Enter the {0} for {1}’s address
+traderDetails.consignment.consignee.address.error.length = The {0} for {1}’s address must be {2} characters or less
+
 
 # Guarantee details
 
@@ -1028,6 +1032,4 @@ transport.preRequisites.sameUcrYesNo.heading = Do you want to use the same Uniqu
 transport.preRequisites.sameUcrYesNo.checkYourAnswersLabel = Same UCR for all items
 transport.preRequisites.sameUcrYesNo.change.hidden = if you want to use the same UCR for all items
 transport.preRequisites.sameUcrYesNo.error.required = Select yes if you want to use the same UCR for all items
-
-
 

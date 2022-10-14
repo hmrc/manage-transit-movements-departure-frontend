@@ -16,18 +16,17 @@
 
 package pages.traderDetails.consignment.consignee
 
-import models.{DynamicAddress, Mode, UserAnswers}
-import pages.QuestionPage
-import pages.sections.traderDetails.TraderDetailsConsigneeSection
-import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import models.reference.Country
+import pages.behaviours.PageBehaviours
 
-case object AddressPage extends QuestionPage[DynamicAddress] {
+class CountryPageSpec extends PageBehaviours {
 
-  override def path: JsPath = TraderDetailsConsigneeSection.path \ toString
+  "CountryPage" - {
 
-  override def toString: String = "address"
+    beRetrievable[Country](CountryPage)
 
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(controllers.traderDetails.consignment.consignee.routes.AddressController.onPageLoad(userAnswers.lrn, mode))
+    beSettable[Country](CountryPage)
+
+    beRemovable[Country](CountryPage)
+  }
 }

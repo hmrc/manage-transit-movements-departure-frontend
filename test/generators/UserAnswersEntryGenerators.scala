@@ -114,7 +114,8 @@ trait UserAnswersEntryGenerators {
       case EoriYesNoPage  => arbitrary[Boolean].map(JsBoolean)
       case EoriNumberPage => Gen.alphaNumStr.map(JsString)
       case NamePage       => Gen.alphaNumStr.map(JsString)
-      case AddressPage    => arbitrary[Address].map(Json.toJson(_))
+      case CountryPage    => arbitrary[Country].map(Json.toJson(_))
+      case AddressPage    => arbitrary[DynamicAddress].map(Json.toJson(_))
     }
   }
 
