@@ -17,11 +17,7 @@
 package models.journeyDomain
 
 import models.domain.UserAnswersReader
-import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
 import models.journeyDomain.routeDetails.RouteDetailsDomain
-import models.journeyDomain.traderDetails.TraderDetailsDomain
-import models.journeyDomain.transport.TransportDomain
-import play.api.libs.json.{Json, OFormat}
 
 // TODO - Need to implement this domain model for the remaining sections
 case class DepartureDomain(

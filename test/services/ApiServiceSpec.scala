@@ -23,7 +23,7 @@ import models.journeyDomain.routeDetails.loadingAndUnloading.LoadingAndUnloading
 import models.journeyDomain.routeDetails.routing.RoutingDomain
 import models.journeyDomain.{DepartureDomain, PreTaskListDomain}
 import models.reference.{Country, CountryCode, CustomsOffice}
-import models.{CustomsOfficeList, DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}
+import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach

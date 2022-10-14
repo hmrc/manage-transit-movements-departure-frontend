@@ -17,7 +17,7 @@
 package models.journeyDomain.routeDetails.transit
 
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
+import models.journeyDomain.routeDetails.routing.CountryOfRoutingDomain
 import models.journeyDomain.routeDetails.transit.TransitDomain.OfficesOfTransit
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{DeclarationType, Index, Mode, RichJsArray, UserAnswers}
@@ -25,7 +25,6 @@ import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage}
 import pages.routeDetails.routing.OfficeOfDestinationPage
 import pages.routeDetails.transit.{AddOfficeOfTransitYesNoPage, T2DeclarationTypeYesNoPage}
 import pages.sections.routeDetails.transit.OfficesOfTransitSection
-import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.Call
 
 case class TransitDomain(

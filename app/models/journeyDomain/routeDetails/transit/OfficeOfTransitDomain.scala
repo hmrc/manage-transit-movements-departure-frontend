@@ -26,7 +26,6 @@ import models.{DateTime, Index, Mode, UserAnswers}
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.routeDetails.routing.OfficeOfDestinationPage
 import pages.routeDetails.transit.index._
-import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.Call
 
 case class OfficeOfTransitDomain(

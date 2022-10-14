@@ -18,11 +18,10 @@ package models.journeyDomain.routeDetails.routing
 
 import cats.implicits._
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.{JourneyDomainModel, PreTaskListDomain, Stage}
+import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{Country, CustomsOffice}
 import models.{Mode, UserAnswers}
 import pages.routeDetails.routing._
-import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.Call
 
 case class RoutingDomain(
