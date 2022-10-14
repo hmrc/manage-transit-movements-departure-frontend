@@ -21,6 +21,7 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models.domain.{EitherType, UserAnswersReader}
+import models.reference.Country
 import models.{DeclarationType, DynamicAddress, SecurityDetailsType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -35,6 +36,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
     val address                   = arbitrary[DynamicAddress].sample.value
     val nonOption4DeclarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
     val securityDetailsType       = arbitrary[SecurityDetailsType].sample.value
+    val country                   = arbitrary[Country].sample.value
 
     "can be parsed from UserAnswers" - {
 
@@ -64,6 +66,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(ApprovedOperatorPage)(true)
           .unsafeSetVal(consignor.EoriYesNoPage)(false)
           .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.CountryPage)(country)
           .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(false)
           .unsafeSetVal(MoreThanOneConsigneePage)(true)
@@ -71,6 +74,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
         val consignorDomain = ConsignmentConsignorDomain(
           eori = None,
           name = name,
+          country = country,
           address = address,
           contact = None
         )
@@ -110,6 +114,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(ApprovedOperatorPage)(false)
           .unsafeSetVal(consignor.EoriYesNoPage)(false)
           .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.CountryPage)(country)
           .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(false)
           .unsafeSetVal(MoreThanOneConsigneePage)(true)
@@ -117,6 +122,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
         val consignorDomain = ConsignmentConsignorDomain(
           eori = None,
           name = name,
+          country = country,
           address = address,
           contact = None
         )
@@ -137,6 +143,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(consignor.EoriYesNoPage)(false)
           .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.CountryPage)(country)
           .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(false)
           .unsafeSetVal(MoreThanOneConsigneePage)(true)
@@ -144,6 +151,7 @@ class ConsignmentDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
         val consignorDomain = ConsignmentConsignorDomain(
           eori = None,
           name = name,
+          country = country,
           address = address,
           contact = None
         )

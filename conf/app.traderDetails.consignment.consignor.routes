@@ -16,15 +16,15 @@ POST       /:lrn/trader-details/consignment/consignor/name                      
 GET        /:lrn/trader-details/consignment/consignor/change-name                   controllers.traderDetails.consignment.consignor.NameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/trader-details/consignment/consignor/change-name                   controllers.traderDetails.consignment.consignor.NameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/trader-details/consignor/country                                    controllers.traderDetails.consignment.consignor.CountryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/trader-details/consignor/country                                    controllers.traderDetails.consignment.consignor.CountryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/trader-details/consignor/change-country                             controllers.traderDetails.consignment.consignor.CountryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/trader-details/consignor/change-country                             controllers.traderDetails.consignment.consignor.CountryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/trader-details/consignor/country                                   controllers.traderDetails.consignment.consignor.CountryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/consignor/country                                   controllers.traderDetails.consignment.consignor.CountryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/consignor/change-country                            controllers.traderDetails.consignment.consignor.CountryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/consignor/change-country                            controllers.traderDetails.consignment.consignor.CountryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/trader-details/consignment/consignor/address                       controllers.traderDetails.consignment.consignor.AddressController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/trader-details/consignment/consignor/address                       controllers.traderDetails.consignment.consignor.AddressController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/trader-details/consignment/consignor/change-address                controllers.traderDetails.consignment.consignor.AddressController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/trader-details/consignment/consignor/change-address                controllers.traderDetails.consignment.consignor.AddressController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/trader-details/consignor/address                                   controllers.traderDetails.consignment.consignor.AddressController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/consignor/address                                   controllers.traderDetails.consignment.consignor.AddressController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/consignor/change-address                            controllers.traderDetails.consignment.consignor.AddressController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/consignor/change-address                            controllers.traderDetails.consignment.consignor.AddressController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/trader-details/consignment/consignor/add-contact                   controllers.traderDetails.consignment.consignor.AddContactController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/trader-details/consignment/consignor/add-contact                   controllers.traderDetails.consignment.consignor.AddContactController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)

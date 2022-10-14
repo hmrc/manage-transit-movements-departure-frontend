@@ -20,6 +20,7 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
+import models.reference.Country
 import models.{DynamicAddress, EoriNumber}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -30,6 +31,7 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
   "ConsignmentConsignorDomain" - {
 
     val eori         = arbitrary[EoriNumber].sample.value
+    val country      = arbitrary[Country].sample.value
     val name         = Gen.alphaNumStr.sample.value
     val address      = arbitrary[DynamicAddress].sample.value
     val contactName  = Gen.alphaNumStr.sample.value
@@ -43,6 +45,7 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
           .unsafeSetVal(consignor.EoriYesNoPage)(true)
           .unsafeSetVal(consignor.EoriPage)(eori.value)
           .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.CountryPage)(country)
           .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(true)
           .unsafeSetVal(consignor.contact.NamePage)(contactName)
@@ -51,6 +54,7 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
         val expectedResult = ConsignmentConsignorDomain(
           eori = Some(eori),
           name = name,
+          country = country,
           address = address,
           contact = Some(
             ConsignmentConsignorContactDomain(
@@ -69,6 +73,7 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(consignor.EoriYesNoPage)(false)
           .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.CountryPage)(country)
           .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(true)
           .unsafeSetVal(consignor.contact.NamePage)(contactName)
@@ -77,6 +82,7 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
         val expectedResult = ConsignmentConsignorDomain(
           eori = None,
           name = name,
+          country = country,
           address = address,
           contact = Some(
             ConsignmentConsignorContactDomain(
@@ -96,12 +102,14 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
           .unsafeSetVal(consignor.EoriYesNoPage)(true)
           .unsafeSetVal(consignor.EoriPage)(eori.value)
           .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.CountryPage)(country)
           .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(false)
 
         val expectedResult = ConsignmentConsignorDomain(
           eori = Some(eori),
           name = name,
+          country = country,
           address = address,
           contact = None
         )
@@ -145,6 +153,7 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(consignor.EoriYesNoPage)(false)
           .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.CountryPage)(country)
 
         val result: EitherType[ConsignmentConsignorDomain] = UserAnswersReader[ConsignmentConsignorDomain].run(userAnswers)
         result.left.value.page mustBe consignor.AddressPage
@@ -155,6 +164,7 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(consignor.EoriYesNoPage)(false)
           .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.CountryPage)(country)
           .unsafeSetVal(consignor.AddressPage)(address)
 
         val result: EitherType[ConsignmentConsignorDomain] = UserAnswersReader[ConsignmentConsignorDomain].run(userAnswers)
@@ -166,6 +176,7 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(consignor.EoriYesNoPage)(false)
           .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.CountryPage)(country)
           .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(true)
 
@@ -178,12 +189,26 @@ class ConsignmentConsignorDomainSpec extends SpecBase with UserAnswersSpecHelper
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(consignor.EoriYesNoPage)(false)
           .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.CountryPage)(country)
           .unsafeSetVal(consignor.AddressPage)(address)
           .unsafeSetVal(consignor.AddContactPage)(true)
           .unsafeSetVal(consignor.contact.NamePage)(contactName)
 
         val result: EitherType[ConsignmentConsignorDomain] = UserAnswersReader[ConsignmentConsignorDomain].run(userAnswers)
         result.left.value.page mustBe consignor.contact.TelephoneNumberPage
+      }
+
+      "when country page page is missing" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(consignor.EoriYesNoPage)(false)
+          .unsafeSetVal(consignor.NamePage)(name)
+          .unsafeSetVal(consignor.AddressPage)(address)
+          .unsafeSetVal(consignor.AddContactPage)(true)
+          .unsafeSetVal(consignor.contact.NamePage)(contactName)
+
+        val result: EitherType[ConsignmentConsignorDomain] = UserAnswersReader[ConsignmentConsignorDomain].run(userAnswers)
+        result.left.value.page mustBe consignor.CountryPage
       }
     }
   }
