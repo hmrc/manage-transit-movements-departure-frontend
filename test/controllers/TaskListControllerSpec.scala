@@ -25,7 +25,8 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.CountriesService
+import services.{ApiService, CountriesService}
+import uk.gov.hmrc.http.HttpResponse
 import viewModels.taskList.{Task, TaskListViewModel}
 import views.html.TaskListView
 
@@ -35,12 +36,15 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
   private lazy val mockViewModel                     = mock[TaskListViewModel]
   private val mockCountriesService: CountriesService = mock[CountriesService]
+  private val mockApiService: ApiService             = mock[ApiService]
+  private val response: HttpResponse                 = mock[HttpResponse]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind[TaskListViewModel].toInstance(mockViewModel))
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
+      .overrides(bind(classOf[ApiService]).toInstance(mockApiService))
 
   "Task List Controller" - {
 
@@ -91,8 +95,18 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
-    "must redirect to ???" ignore {
-      setExistingUserAnswers(emptyUserAnswers)
+    "must redirect to confirmation page" in {
+      val sampleTasks = listWithMaxLength[Task]()(arbitraryTask).sample.value
+
+      when(mockViewModel.apply(any())(any(), any())).thenReturn(sampleTasks)
+
+      when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(CountryList(Nil)))
+      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
+      when(response.status).thenReturn(OK)
+      when(mockApiService.submitDeclaration(any())(any())).thenReturn(Future.successful(response))
+
+      val userAnswers = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
+      setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
 
@@ -100,7 +114,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual ???
+      redirectLocation(result).value mustEqual controllers.routes.DeclarationSubmittedController.onPageLoad().url
     }
   }
 }

@@ -85,10 +85,16 @@ class TaskListController @Inject() (
             value.status match {
               case status if is2xx(status) =>
                 Future.successful(Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad()))
-              case status if is4xx(status) => ???
-              case _                       => ???
+              case status if is4xx(status) =>
+                // TODO - log and audit fail
+                Future.successful(BadRequest)
+              case _ =>
+                // TODO - log and audit fail
+                Future.successful(InternalServerError("Something went wrong"))
             }
-          case Left(_) => ???
+          case Left(_) =>
+            // TODO - log and audit fail
+            Future.successful(InternalServerError("Something went wrong"))
         }
     }
 
