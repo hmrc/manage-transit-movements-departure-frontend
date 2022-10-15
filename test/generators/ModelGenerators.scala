@@ -202,16 +202,6 @@ trait ModelGenerators {
       } yield CustomsOfficeList(customsOffices)
     }
 
-  implicit lazy val arbitraryAddress: Arbitrary[Address] =
-    Arbitrary {
-      for {
-        addressLine1 <- stringsWithMaxLength(AddressLine1.length, Gen.alphaNumChar)
-        addressLine2 <- stringsWithMaxLength(AddressLine2.length, Gen.alphaNumChar)
-        postalCode   <- stringsWithMaxLength(PostCode.length, Gen.alphaNumChar)
-        country      <- arbitrary[Country]
-      } yield Address(addressLine1, addressLine2, postalCode, country)
-    }
-
   implicit lazy val arbitraryDynamicAddress: Arbitrary[DynamicAddress] =
     Arbitrary {
       for {
@@ -234,7 +224,7 @@ trait ModelGenerators {
     Arbitrary {
       for {
         streetNumber <- stringsWithMaxLength(StreetNumber.length, Gen.alphaNumChar)
-        postalCode   <- stringsWithMaxLength(PostCode.length, Gen.alphaNumChar)
+        postalCode   <- stringsWithMaxLength(PostalCode.length, Gen.alphaNumChar)
         country      <- arbitrary[Country]
       } yield PostalCodeAddress(streetNumber, postalCode, country)
     }

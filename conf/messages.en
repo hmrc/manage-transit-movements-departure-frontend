@@ -840,13 +840,10 @@ routeDetails.locationOfGoods.postalCode.postalCode = Postal code
 routeDetails.locationOfGoods.postalCode.country = Country
 routeDetails.locationOfGoods.postalCode.checkYourAnswersLabel = What is the address for the location of goods?
 routeDetails.locationOfGoods.postalCode.change.hidden = the address for the location of goods
-routeDetails.locationOfGoods.postalCode.error.streetNumber.required = Enter the street number for the location of goods
-routeDetails.locationOfGoods.postalCode.error.streetNumber.invalidCharacters = The street number must only include numbers 0 to 9 and letters a to z
-routeDetails.locationOfGoods.postalCode.error.streetNumber.length = The street number must be 6 characters or less
-routeDetails.locationOfGoods.postalCode.error.postalCode.required = Enter the postal code for the location of goods
-routeDetails.locationOfGoods.postalCode.error.postalCode.invalidCharacters = The postcode of address must only include letters a to z, numbers 0 to 9 and spaces
-routeDetails.locationOfGoods.postalCode.error.postalCode.length = The postal code must be 9 characters or less
-routeDetails.locationOfGoods.postalCode.error.country.required = Enter the country for the location of goods
+routeDetails.locationOfGoods.postalCode.error.streetNumber.invalid = The street number must only include numbers 0 to 9 and letters a to z
+routeDetails.locationOfGoods.postalCode.error.postalCode.invalid = The postcode of address must only include letters a to z, numbers 0 to 9 and spaces
+routeDetails.locationOfGoods.postalCode.error.length = The {0} must be {1} characters or less
+routeDetails.locationOfGoods.postalCode.error.required = Enter the {0} for the location of goods
 
 routeDetails.locationOfGoods.country.title = In which country is the location of goods?
 routeDetails.locationOfGoods.country.heading = In which country is the location of goods?

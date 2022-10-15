@@ -29,7 +29,10 @@ class LocationFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text(s"$prefix.error.required", args)
         .verifying(
-          StopOnFirstFail[String](maxLength(locationMaxLength, s"$prefix.error.length"), regexp(stringFieldRegex, s"$prefix.error.invalid"))
+          StopOnFirstFail[String](
+            maxLength(locationMaxLength, s"$prefix.error.length"),
+            regexp(stringFieldRegex, s"$prefix.error.invalid")
+          )
         )
     )
 }

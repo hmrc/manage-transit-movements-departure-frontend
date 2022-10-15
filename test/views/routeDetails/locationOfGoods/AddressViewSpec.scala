@@ -17,13 +17,11 @@
 package views.routeDetails.locationOfGoods
 
 import forms.DynamicAddressFormProvider
-import forms.locationOfGoods.AddressFormProvider
 import generators.Generators
-import models.{Address, CountryList, DynamicAddress, NormalMode}
-import org.scalacheck.Arbitrary.arbitrary
+import models.{DynamicAddress, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.{AddressViewBehaviours, DynamicAddressViewBehaviours}
+import views.behaviours.DynamicAddressViewBehaviours
 import views.html.routeDetails.locationOfGoods.AddressView
 
 class AddressViewSpec extends DynamicAddressViewBehaviours with Generators {

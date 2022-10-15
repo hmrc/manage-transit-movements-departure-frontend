@@ -2,7 +2,7 @@ package forms
 
 import forms.mappings.Mappings
 import models.AddressLine._
-import models.{Address, CountryList}
+import models.{CountryList, DynamicAddress}
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import play.api.i18n.Messages
