@@ -21,7 +21,7 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain._
-import models.reference.{CustomsOffice, UnLocode}
+import models.reference.{Country, CustomsOffice, UnLocode}
 import models.{Coordinates, DynamicAddress, LocationOfGoodsIdentification, LocationType, PostalCodeAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -183,16 +183,19 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
 
         "is Z (Address)" in {
           val qualifierOfIdentification = LocationOfGoodsIdentification.AddressIdentifier
+          val country                   = arbitrary[Country].sample.value
           val address                   = arbitrary[DynamicAddress].sample.value
 
           val userAnswers = emptyUserAnswers
             .setValue(LocationTypePage, typeOfLocation)
             .setValue(IdentificationPage, qualifierOfIdentification)
+            .setValue(CountryPage, country)
             .setValue(AddressPage, address)
             .setValue(AddContactYesNoPage, false)
 
           val expectedResult = LocationOfGoodsZ(
             typeOfLocation = typeOfLocation,
+            country = country,
             address = address,
             additionalContact = None
           )
@@ -357,6 +360,18 @@ class LocationOfGoodsDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
 
         result.left.value.page mustBe contact.TelephoneNumberPage
+      }
+
+      "when type is Z (address) and country page is missing" in {
+        val qualifierOfIdentification = LocationOfGoodsIdentification.AddressIdentifier
+
+        val userAnswers = emptyUserAnswers
+          .setValue(LocationTypePage, typeOfLocation)
+          .setValue(IdentificationPage, qualifierOfIdentification)
+
+        val result: EitherType[LocationOfGoodsDomain] = UserAnswersReader[LocationOfGoodsDomain].run(userAnswers)
+
+        result.left.value.page mustBe CountryPage
       }
     }
   }
