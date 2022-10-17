@@ -79,7 +79,7 @@ class LocationOfGoodsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     page = CountryPage,
     formatAnswer = formatAsCountry,
     prefix = "routeDetails.locationOfGoods.country",
-    id = Some("transit-holder-country")
+    id = Some("location-of-goods-country")
   )
 
   def address: Option[SummaryListRow] = getAnswerAndBuildRow[DynamicAddress](

@@ -396,12 +396,12 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
             (mode, country) =>
               val answers = emptyUserAnswers.setValue(CountryPage, country)
               val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-              val result  = helper.address
+              val result  = helper.country
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("What is the country for the location of goods?".toText),
-                  value = Value(HtmlContent(country.toString)),
+                  key = Key("Location of goods country".toText),
+                  value = Value(country.description.toText),
                   actions = Some(
                     Actions(
                       items = List(
