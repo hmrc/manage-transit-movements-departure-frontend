@@ -16,11 +16,12 @@
 
 package controllers
 
+import cats.data.EitherT
 import cats.implicits._
 import com.google.inject.Inject
 import controllers.actions.{Actions, CheckDependentTaskCompletedActionProvider}
+import models.LocalReferenceNumber
 import models.journeyDomain.{DepartureDomain, PreTaskListDomain}
-import models.{domain, LocalReferenceNumber}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{ApiService, CountriesService}
@@ -29,7 +30,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.TaskListViewModel
 import views.html.TaskListView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class TaskListController @Inject() (
   override val messagesApi: MessagesApi,
@@ -65,37 +66,39 @@ class TaskListController @Inject() (
     .requireData(lrn)
     .andThen(checkDependentTaskCompleted[PreTaskListDomain])
     .async {
+
       implicit request =>
-        // Either[ReaderError, A], TODO - move to service layer
+        // TODO - move to service layer
+        (for {
+          ctcCountries                          <- EitherT.right(countriesService.getCountryCodesCTC())
+          customsSecurityAgreementAreaCountries <- EitherT.right(countriesService.getCustomsSecurityAgreementAreaCountries())
+          data = DepartureDomain
+            .userAnswersReader(
+              ctcCountries.countryCodes,
+              customsSecurityAgreementAreaCountries.countryCodes
+            )
+            .run(request.userAnswers)
+          response <- EitherT(data.traverse(apiService.submitDeclaration(_)))
+        } yield response.status match {
 
-        val getData: Future[domain.EitherType[DepartureDomain]] = for {
-          ctcCountries                          <- countriesService.getCountryCodesCTC()
-          customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
-        } yield DepartureDomain
-          .userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes)
-          .run(request.userAnswers)
+          case status if is2xx(status) =>
+            Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad())
+          case status if is4xx(status) =>
+            // TODO - log and audit fail. How to handle this?
+            BadRequest
+          case _ =>
+            // TODO - log and audit fail. How to handle this?
+            InternalServerError("Something went wrong")
 
-        // TODO - another service layer
-        val submit = getData.flatMap(
-          _.traverse(apiService.submitDeclaration(_))
-        )
+        }).value.map {
 
-        submit.flatMap {
           case Right(value) =>
-            value.status match {
-              case status if is2xx(status) =>
-                Future.successful(Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad()))
-              case status if is4xx(status) =>
-                // TODO - log and audit fail. How to handle this?
-                Future.successful(BadRequest)
-              case _ =>
-                // TODO - log and audit fail. How to handle this?
-                Future.successful(InternalServerError("Something went wrong"))
-            }
+            value
           case Left(e) =>
             // TODO - log and audit fail. How to handle this?
-            Future.successful(InternalServerError("Something went wrong"))
-        }
-    }
+            InternalServerError(s"Something went wrong: ${e.message}")
 
+        }
+
+    }
 }
