@@ -1,13 +1,13 @@
 package pages.$package$
 
 import controllers.$package$.routes
-import models.{Address, Mode, UserAnswers}
+import models.{DynamicAddress, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.$pageSection$
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object $className$Page extends QuestionPage[Address] {
+case object $className$Page extends QuestionPage[DynamicAddress] {
   
   override def path: JsPath = $pageSection$.path \ toString
   
