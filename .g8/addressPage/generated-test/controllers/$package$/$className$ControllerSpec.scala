@@ -132,7 +132,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       "when postcode is optional" in {
 
-        val isPostalCodeRequired = true
+        val isPostalCodeRequired = false
         val testAddress          = arbitrary[DynamicAddress](arbitraryDynamicAddressWithRequiredPostalCode).sample.value
 
         when(mockCountriesService.doesCountryRequireZip(any())(any())).thenReturn(Future.successful(isPostalCodeRequired))
@@ -152,7 +152,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
           Map(
             "numberAndStreet" -> testAddress.numberAndStreet,
             "city"            -> testAddress.city,
-            "postalCode"      -> testAddress.postalCode.get
+            "postalCode"      -> testAddress.postalCode.getOrElse("")
           )
         )
 
@@ -167,7 +167,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
     "must redirect to the next page when valid data is submitted" in {
 
-      when(mockCountriesService.doesCountryRequireZip(any())(any())).thenReturn(Future.successful(true))
+      when(mockCountriesService.doesCountryRequireZip(any())(any())).thenReturn(Future.successful(false))
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       val userAnswers = emptyUserAnswers
