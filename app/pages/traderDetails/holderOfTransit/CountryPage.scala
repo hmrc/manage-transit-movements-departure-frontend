@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-package forms
+package pages.traderDetails.holderOfTransit
 
-import forms.mappings.Mappings
-import models.CountryList
+import controllers.traderDetails.holderOfTransit.routes
 import models.reference.Country
-import play.api.data.Form
+import models.{Mode, UserAnswers}
+import pages.QuestionPage
+import pages.sections.traderDetails.HolderOfTransitSection
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
-import javax.inject.Inject
+case object CountryPage extends QuestionPage[Country] {
 
-class CountryFormProvider @Inject() extends Mappings {
+  override def path: JsPath = HolderOfTransitSection.path \ toString
 
-  def apply(prefix: String, countryList: CountryList, args: Any*): Form[Country] =
-    Form(
-      "value" -> country(countryList, s"$prefix.error.required", args)
-    )
+  override def toString: String = "country"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.CountryController.onPageLoad(userAnswers.lrn, mode))
 }

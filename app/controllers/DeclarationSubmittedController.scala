@@ -14,19 +14,25 @@
  * limitations under the License.
  */
 
-package forms
+package controllers
 
-import forms.mappings.Mappings
-import models.CountryList
-import models.reference.Country
-import play.api.data.Form
+import controllers.actions.IdentifierAction
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import views.html.DeclarationSubmittedView
 
 import javax.inject.Inject
 
-class CountryFormProvider @Inject() extends Mappings {
+class DeclarationSubmittedController @Inject() (
+  identify: IdentifierAction,
+  cc: MessagesControllerComponents,
+  view: DeclarationSubmittedView
+) extends FrontendController(cc)
+    with I18nSupport {
 
-  def apply(prefix: String, countryList: CountryList, args: Any*): Form[Country] =
-    Form(
-      "value" -> country(countryList, s"$prefix.error.required", args)
-    )
+  def onPageLoad(): Action[AnyContent] = (Action andThen identify) {
+    implicit request =>
+      Ok(view())
+  }
 }

@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package forms
+package services
 
-import forms.mappings.Mappings
-import models.CountryList
-import models.reference.Country
-import play.api.data.Form
+import connectors.ApiConnector
+import models.journeyDomain.DepartureDomain
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import javax.inject.Inject
+import scala.concurrent.Future
 
-class CountryFormProvider @Inject() extends Mappings {
+class ApiService @Inject() (apiConnector: ApiConnector) {
 
-  def apply(prefix: String, countryList: CountryList, args: Any*): Form[Country] =
-    Form(
-      "value" -> country(countryList, s"$prefix.error.required", args)
-    )
+  def submitDeclaration(request: DepartureDomain)(implicit hc: HeaderCarrier): Future[HttpResponse] =
+    apiConnector.submitDeclaration(request)
 }

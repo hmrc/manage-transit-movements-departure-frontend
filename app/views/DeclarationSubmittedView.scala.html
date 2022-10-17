@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,29 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package forms
+@import views.html.components.Heading
+@import config.FrontendAppConfig
 
-import forms.mappings.Mappings
-import models.CountryList
-import models.reference.Country
-import play.api.data.Form
+@this(
+    mainTemplate: MainTemplate,
+    heading: Heading,
+    config: FrontendAppConfig,
+    govukPanel: GovukPanel,
+)
 
-import javax.inject.Inject
+@()(implicit request: Request[_], messages: Messages)
 
-class CountryFormProvider @Inject() extends Mappings {
-
-  def apply(prefix: String, countryList: CountryList, args: Any*): Form[Country] =
-    Form(
-      "value" -> country(countryList, s"$prefix.error.required", args)
+@mainTemplate(
+    title = messages("declarationSubmitted.title"),
+    showBackLink = true
+) {
+    @govukPanel(Panel(
+        title = Text(messages("declarationSubmitted.heading"))
+        )
     )
+
+    <p class="govuk-body">@messages("declarationSubmitted.paragraph1")</p>
+
 }
