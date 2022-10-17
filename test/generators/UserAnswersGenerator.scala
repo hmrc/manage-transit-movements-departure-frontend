@@ -17,7 +17,8 @@
 package generators
 
 import models.domain.UserAnswersReader
-import models.journeyDomain.{PreTaskListDomain, ReaderError}
+import models.journeyDomain.{DepartureDomain, PreTaskListDomain, ReaderError}
+import models.reference.Country
 import models.{EoriNumber, LocalReferenceNumber, RichJsObject, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
@@ -25,6 +26,16 @@ import org.scalatest.TryValues
 
 trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
   self: Generators =>
+
+  val ctcCountries: Seq[Country]                            = listWithMaxLength[Country]().sample.get
+  val ctcCountryCodes: Seq[String]                          = ctcCountries.map(_.code.code)
+  val customsSecurityAgreementAreaCountries: Seq[Country]   = listWithMaxLength[Country]().sample.get
+  val customsSecurityAgreementAreaCountryCodes: Seq[String] = customsSecurityAgreementAreaCountries.map(_.code.code)
+
+  def arbitraryDepartureAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[DepartureDomain](userAnswers)(
+      DepartureDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+    )
 
   implicit lazy val arbitraryUserAnswers: Arbitrary[UserAnswers] =
     Arbitrary {

@@ -14,25 +14,17 @@
  * limitations under the License.
  */
 
-package forms
+package services
 
-import forms.Constants.locationMaxLength
-import forms.mappings.Mappings
-import models.domain.StringFieldRegex.stringFieldRegex
-import play.api.data.Form
+import connectors.ApiConnector
+import models.journeyDomain.DepartureDomain
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import javax.inject.Inject
+import scala.concurrent.Future
 
-class LocationFormProvider @Inject() extends Mappings {
+class ApiService @Inject() (apiConnector: ApiConnector) {
 
-  def apply(prefix: String, args: String*): Form[String] =
-    Form(
-      "value" -> text(s"$prefix.error.required", args)
-        .verifying(
-          StopOnFirstFail[String](
-            maxLength(locationMaxLength, s"$prefix.error.length"),
-            regexp(stringFieldRegex, s"$prefix.error.invalid")
-          )
-        )
-    )
+  def submitDeclaration(request: DepartureDomain)(implicit hc: HeaderCarrier): Future[HttpResponse] =
+    apiConnector.submitDeclaration(request)
 }

@@ -16,8 +16,8 @@
 
 package pages.traderDetails.consignment.consignee
 
+import models.DynamicAddress
 import pages.behaviours.PageBehaviours
-import models.{Address, DynamicAddress}
 
 class AddressPageSpec extends PageBehaviours {
 

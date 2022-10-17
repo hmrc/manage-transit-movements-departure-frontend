@@ -20,9 +20,9 @@ import cats.implicits._
 import models.LocationOfGoodsIdentification._
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
-import models.reference.{CustomsOffice, UnLocode}
-import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress, UserAnswers}
-import pages.routeDetails.locationOfGoods.{AddContactYesNoPage, _}
+import models.reference.{Country, CustomsOffice, UnLocode}
+import models.{Coordinates, DynamicAddress, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress, UserAnswers}
+import pages.routeDetails.locationOfGoods._
 import play.api.mvc.Call
 
 sealed trait LocationOfGoodsDomain extends JourneyDomainModel {
@@ -65,10 +65,7 @@ object LocationOfGoodsDomain {
       (
         UserAnswersReader(typeOfLocation),
         CustomsOfficeIdentifierPage.reader
-      ).mapN {
-        (typeOfLocation, customsOffice) =>
-          LocationOfGoodsV(typeOfLocation, customsOffice)
-      }
+      ).tupled.map((LocationOfGoodsV.apply _).tupled)
   }
 
   case class LocationOfGoodsX(
@@ -89,10 +86,7 @@ object LocationOfGoodsDomain {
         EoriPage.reader,
         AddIdentifierYesNoPage.filterOptionalDependent(identity)(AdditionalIdentifierPage.reader),
         AddContactYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
-      ).mapN {
-        (typeOfLocation, identificationNumber, additionalIdentifier, additionalContact) =>
-          LocationOfGoodsX(typeOfLocation, identificationNumber, additionalIdentifier, additionalContact)
-      }
+      ).tupled.map((LocationOfGoodsX.apply _).tupled)
   }
 
   case class LocationOfGoodsY(
@@ -113,10 +107,7 @@ object LocationOfGoodsDomain {
         AuthorisationNumberPage.reader,
         AddIdentifierYesNoPage.filterOptionalDependent(identity)(AdditionalIdentifierPage.reader),
         AddContactYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
-      ).mapN {
-        (typeOfLocation, authorisationNumber, additionalIdentifier, additionalContact) =>
-          LocationOfGoodsY(typeOfLocation, authorisationNumber, additionalIdentifier, additionalContact)
-      }
+      ).tupled.map((LocationOfGoodsY.apply _).tupled)
   }
 
   case class LocationOfGoodsW(
@@ -135,15 +126,13 @@ object LocationOfGoodsDomain {
         UserAnswersReader(typeOfLocation),
         CoordinatesPage.reader,
         AddContactYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
-      ).mapN {
-        (typeOfLocation, coordinates, additionalContact) =>
-          LocationOfGoodsW(typeOfLocation, coordinates, additionalContact)
-      }
+      ).tupled.map((LocationOfGoodsW.apply _).tupled)
   }
 
   case class LocationOfGoodsZ(
     typeOfLocation: LocationType,
-    address: Address,
+    country: Country,
+    address: DynamicAddress,
     additionalContact: Option[AdditionalContactDomain]
   ) extends LocationOfGoodsDomain {
 
@@ -155,12 +144,10 @@ object LocationOfGoodsDomain {
     def userAnswersReader(typeOfLocation: LocationType): UserAnswersReader[LocationOfGoodsDomain] =
       (
         UserAnswersReader(typeOfLocation),
+        CountryPage.reader,
         AddressPage.reader,
         AddContactYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
-      ).mapN {
-        (typeOfLocation, address, additionalContact) =>
-          LocationOfGoodsZ(typeOfLocation, address, additionalContact)
-      }
+      ).tupled.map((LocationOfGoodsZ.apply _).tupled)
   }
 
   case class LocationOfGoodsU(
@@ -179,10 +166,7 @@ object LocationOfGoodsDomain {
         UserAnswersReader(typeOfLocation),
         UnLocodePage.reader,
         AddContactYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
-      ).mapN {
-        (typeOfLocation, unLocode, additionalContact) =>
-          LocationOfGoodsU(typeOfLocation, unLocode, additionalContact)
-      }
+      ).tupled.map((LocationOfGoodsU.apply _).tupled)
   }
 
   case class LocationOfGoodsT(
@@ -201,10 +185,7 @@ object LocationOfGoodsDomain {
         UserAnswersReader(typeOfLocation),
         PostalCodePage.reader,
         AddContactYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AdditionalContactDomain])
-      ).mapN {
-        (typeOfLocation, postalCodeAddress, additionalContact) =>
-          LocationOfGoodsT(typeOfLocation, postalCodeAddress, additionalContact)
-      }
+      ).tupled.map((LocationOfGoodsT.apply _).tupled)
   }
 
 }

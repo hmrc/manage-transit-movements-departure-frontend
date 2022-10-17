@@ -37,7 +37,7 @@ class InputDynamicAddressSpec extends A11ySpecBase {
     "pass accessibility checks" when {
       "postal code is required" in {
         val isPostalCodeRequired = true
-        val form                 = DynamicAddressFormProvider(prefix, name, isPostalCodeRequired)
+        val form                 = DynamicAddressFormProvider(prefix, isPostalCodeRequired, name)
 
         val content = template.apply(title) {
           component.apply(form, prefix, caption, isPostalCodeRequired, headingArgs)
@@ -48,7 +48,7 @@ class InputDynamicAddressSpec extends A11ySpecBase {
 
       "postal code is not required" in {
         val isPostalCodeRequired = false
-        val form                 = DynamicAddressFormProvider(prefix, name, isPostalCodeRequired)
+        val form                 = DynamicAddressFormProvider(prefix, isPostalCodeRequired, name)
 
         val content = template.apply(title) {
           component.apply(form, prefix, caption, isPostalCodeRequired, headingArgs)

@@ -23,7 +23,7 @@ import controllers.traderDetails.consignment.consignor.{routes => consignorRoute
 import controllers.traderDetails.consignment.{routes => consignmentRoutes}
 import generators.Generators
 import models.reference.Country
-import models.{Address, DynamicAddress, Mode}
+import models.{DynamicAddress, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

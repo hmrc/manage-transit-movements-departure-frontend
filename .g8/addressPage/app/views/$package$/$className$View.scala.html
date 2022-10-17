@@ -16,8 +16,7 @@
 
 @import controllers.$package$.routes
 @import models.LocalReferenceNumber
-@import models.reference.Country
-@import views.html.components.{Button, ErrorSummary, InputAddress}
+@import views.html.components.{Button, ErrorSummary, InputDynamicAddress}
 
 @this(
     mainTemplate: MainTemplate,
@@ -28,11 +27,11 @@
 )
 
 @(
-    form: Form[Address],
+    form: Form[DynamicAddress],
     lrn: LocalReferenceNumber,
     mode: Mode,
-    countries: Seq[Country],
-    name: String
+    name: String,
+    isPostalCodeRequired: Boolean
 )(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
@@ -49,7 +48,7 @@
             form = form,
             messageKeyPrefix = "$package$.$className;format="decap"$",
             caption = None,
-            countries = countries,
+            isPostalCodeRequired = isPostalCodeRequired,
             headingArgs = name
         )
 

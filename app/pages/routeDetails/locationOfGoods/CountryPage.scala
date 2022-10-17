@@ -17,18 +17,31 @@
 package pages.routeDetails.locationOfGoods
 
 import controllers.routeDetails.locationOfGoods.routes
-import models.{DynamicAddress, Mode, UserAnswers}
+import models.reference.Country
+import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.routeDetails.locationOfGoods.LocationOfGoodsIdentifierSection
+import pages.sections.routeDetails.locationOfGoods.LocationOfGoodsSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object AddressPage extends QuestionPage[DynamicAddress] {
+import scala.util.Try
 
-  override def path: JsPath = LocationOfGoodsIdentifierSection.path \ toString
+case object CountryPage extends QuestionPage[Country] {
 
-  override def toString: String = "address"
+  override def path: JsPath = LocationOfGoodsSection.path \ toString
+
+  override def toString: String = "country"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.AddressController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.CountryController.onPageLoad(userAnswers.lrn, mode))
+
+  override def cleanup(
+    updatedValue: Option[Country],
+    previousValue: Option[Country],
+    userAnswers: UserAnswers
+  ): Try[UserAnswers] =
+    (previousValue, updatedValue) match {
+      case (Some(x), Some(y)) if x != y => userAnswers.remove(AddressPage)
+      case _                            => super.cleanup(updatedValue, previousValue, userAnswers)
+    }
 }

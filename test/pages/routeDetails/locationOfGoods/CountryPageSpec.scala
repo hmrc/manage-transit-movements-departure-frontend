@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.traderDetails.consignment.consignee
+package pages.routeDetails.locationOfGoods
 
 import models.DynamicAddress
 import models.reference.Country

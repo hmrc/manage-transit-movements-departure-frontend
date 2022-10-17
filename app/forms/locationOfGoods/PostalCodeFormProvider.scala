@@ -32,27 +32,25 @@ class PostalCodeFormProvider @Inject() extends Mappings {
     Form(
       mapping(
         StreetNumber.field -> {
-          val args = Seq(StreetNumber.arg)
-          trimmedText(s"$prefix.error.streetNumber.required", args)
+          trimmedText(s"$prefix.error.required", Seq(StreetNumber.arg))
             .verifying(
               StopOnFirstFail[String](
-                maxLength(StreetNumber.length, s"$prefix.error.streetNumber.length", Seq(StreetNumber.arg.capitalize, StreetNumber.length)),
-                regexp(StreetNumber.regex, s"$prefix.error.streetNumber.invalidCharacters", Seq(StreetNumber.arg.capitalize))
+                maxLength(StreetNumber.length, s"$prefix.error.length", Seq(StreetNumber.arg, StreetNumber.length)),
+                regexp(StreetNumber.regex, s"$prefix.error.streetNumber.invalid")
               )
             )
         },
-        PostCode.field -> {
-          val args = Seq()
-          trimmedText(s"$prefix.error.postalCode.required", args)
+        PostalCode.field -> {
+          trimmedText(s"$prefix.error.required", Seq(PostalCode.arg))
             .verifying(
               StopOnFirstFail[String](
-                maxLength(PostCode.length, s"$prefix.error.postalCode.length", args :+ PostCode.length),
-                regexp(PostCode.regex, s"$prefix.error.postalCode.invalidCharacters", args)
+                maxLength(PostalCode.length, s"$prefix.error.length", Seq(PostalCode.arg, PostalCode.length)),
+                regexp(PostalCode.regex, s"$prefix.error.postalCode.invalid")
               )
             )
         },
         Country.field -> {
-          country(countryList, s"$prefix.error.country.required", Seq())
+          country(countryList, s"$prefix.error.required", Seq(Country.arg))
         }
       )(PostalCodeAddress.apply)(PostalCodeAddress.unapply)
     )

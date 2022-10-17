@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package forms
+package controllers
 
-import forms.Constants.locationMaxLength
-import forms.mappings.Mappings
-import models.domain.StringFieldRegex.stringFieldRegex
-import play.api.data.Form
+import controllers.actions.IdentifierAction
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import views.html.DeclarationSubmittedView
 
 import javax.inject.Inject
 
-class LocationFormProvider @Inject() extends Mappings {
+class DeclarationSubmittedController @Inject() (
+  identify: IdentifierAction,
+  cc: MessagesControllerComponents,
+  view: DeclarationSubmittedView
+) extends FrontendController(cc)
+    with I18nSupport {
 
-  def apply(prefix: String, args: String*): Form[String] =
-    Form(
-      "value" -> text(s"$prefix.error.required", args)
-        .verifying(
-          StopOnFirstFail[String](
-            maxLength(locationMaxLength, s"$prefix.error.length"),
-            regexp(stringFieldRegex, s"$prefix.error.invalid")
-          )
-        )
-    )
+  def onPageLoad(): Action[AnyContent] = (Action andThen identify) {
+    implicit request =>
+      Ok(view())
+  }
 }

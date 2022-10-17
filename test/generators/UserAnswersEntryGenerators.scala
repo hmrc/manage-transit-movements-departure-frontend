@@ -197,7 +197,8 @@ trait UserAnswersEntryGenerators {
       case AdditionalIdentifierPage    => Gen.alphaNumStr.map(JsString)
       case CoordinatesPage             => arbitrary[Coordinates].map(Json.toJson(_))
       case UnLocodePage                => arbitrary[UnLocode].map(Json.toJson(_))
-      case AddressPage                 => arbitrary[Address].map(Json.toJson(_))
+      case CountryPage                 => arbitrary[Country].map(Json.toJson(_))
+      case AddressPage                 => arbitrary[DynamicAddress].map(Json.toJson(_))
       case PostalCodePage              => arbitrary[PostalCodeAddress].map(Json.toJson(_))
     }
   }
