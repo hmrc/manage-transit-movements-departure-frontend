@@ -23,12 +23,12 @@ import pages.sections.transport.PreRequisitesSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object SameUcrYesNoPage extends QuestionPage[Boolean] {
+case object UniqueConsignmentReferencePage extends QuestionPage[String] {
 
   override def path: JsPath = PreRequisitesSection.path \ toString
 
-  override def toString: String = "sameUcrYesNo"
+  override def toString: String = "uniqueConsignmentReference"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.SameUcrYesNoController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.UniqueConsignmentReferenceController.onPageLoad(userAnswers.lrn, mode))
 }

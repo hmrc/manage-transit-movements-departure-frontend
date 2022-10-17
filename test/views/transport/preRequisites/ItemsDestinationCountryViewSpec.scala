@@ -14,41 +14,41 @@
  * limitations under the License.
  */
 
-package views.routeDetails.routing
+package views.transport.preRequisites
 
 import forms.CountryFormProvider
+import generators.Generators
+import views.behaviours.InputSelectViewBehaviours
+import models.NormalMode
 import models.reference.Country
-import models.{CountryList, NormalMode}
+import models.CountryList
 import org.scalacheck.Arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.InputSelectViewBehaviours
-import views.html.routeDetails.routing.CountryOfDestinationView
+import views.html.transport.preRequisites.ItemsDestinationCountryView
 
-class CountryOfDestinationViewSpec extends InputSelectViewBehaviours[Country] {
+class ItemsDestinationCountryViewSpec extends InputSelectViewBehaviours[Country] with Generators {
 
   override def form: Form[Country] = new CountryFormProvider()(prefix, CountryList(values))
 
   override def applyView(form: Form[Country]): HtmlFormat.Appendable =
-    injector.instanceOf[CountryOfDestinationView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[ItemsDestinationCountryView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[Country] = arbitraryCountry
 
-  override val prefix: String = "routeDetails.routing.countryOfDestination"
+  override val prefix: String = "transport.preRequisites.itemsDestinationCountry"
 
   behave like pageWithTitle()
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Transport details")
 
   behave like pageWithHeading()
 
   behave like pageWithSelect
 
   behave like pageWithHint("Enter the country, like France or Portugal.")
-
-  behave like pageWithContent("p", "This is the country where the CTC transit ends.")
 
   behave like pageWithSubmitButton("Save and continue")
 }

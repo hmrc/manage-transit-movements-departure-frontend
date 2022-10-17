@@ -17,32 +17,22 @@
 package views.routeDetails.locationOfGoods
 
 import forms.CustomsOfficeFormProvider
-import generators.Generators
-import views.behaviours.InputSelectViewBehaviours
-import models.NormalMode
 import models.reference.CustomsOffice
-import models.CustomsOfficeList
+import models.{CustomsOfficeList, NormalMode}
+import org.scalacheck.Arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
+import views.behaviours.InputSelectViewBehaviours
 import views.html.routeDetails.locationOfGoods.CustomsOfficeIdentifierView
 
-class CustomsOfficeIdentifierViewSpec extends InputSelectViewBehaviours[CustomsOffice] with Generators {
-
-  private lazy val customsOffice1 = arbitraryCustomsOffice.arbitrary.sample.get
-  private lazy val customsOffice2 = arbitraryCustomsOffice.arbitrary.sample.get
-  private lazy val customsOffice3 = arbitraryCustomsOffice.arbitrary.sample.get
-
-  override def values: Seq[CustomsOffice] =
-    Seq(
-      customsOffice1,
-      customsOffice2,
-      customsOffice3
-    )
+class CustomsOfficeIdentifierViewSpec extends InputSelectViewBehaviours[CustomsOffice] {
 
   override def form: Form[CustomsOffice] = new CustomsOfficeFormProvider()(prefix, CustomsOfficeList(values))
 
   override def applyView(form: Form[CustomsOffice]): HtmlFormat.Appendable =
     injector.instanceOf[CustomsOfficeIdentifierView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
+
+  implicit override val arbitraryT: Arbitrary[CustomsOffice] = arbitraryCustomsOffice
 
   override val prefix: String = "routeDetails.locationOfGoods.customsOfficeIdentifier"
 

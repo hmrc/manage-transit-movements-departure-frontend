@@ -16,19 +16,17 @@
 
 package pages.transport.preRequisites
 
-import controllers.transport.preRequisites.routes
-import models.{Mode, UserAnswers}
-import pages.QuestionPage
-import pages.sections.transport.PreRequisitesSection
-import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import models.reference.Country
+import pages.behaviours.PageBehaviours
 
-case object SameUcrYesNoPage extends QuestionPage[Boolean] {
+class CountryOfDispatchPageSpec extends PageBehaviours {
 
-  override def path: JsPath = PreRequisitesSection.path \ toString
+  "CountryOfDispatchPage" - {
 
-  override def toString: String = "sameUcrYesNo"
+    beRetrievable[Country](CountryOfDispatchPage)
 
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.SameUcrYesNoController.onPageLoad(userAnswers.lrn, mode))
+    beSettable[Country](CountryOfDispatchPage)
+
+    beRemovable[Country](CountryOfDispatchPage)
+  }
 }
