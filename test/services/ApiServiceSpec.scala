@@ -76,7 +76,7 @@ class ApiServiceSpec extends SpecBase with BeforeAndAfterEach with UserAnswersSp
       consignor = None,
       consignee = None
     ),
-    true
+    reducedDataSet = true
   )
 
   val routingDomain: RoutingDomain = RoutingDomain(

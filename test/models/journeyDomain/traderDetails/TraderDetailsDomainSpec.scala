@@ -66,7 +66,7 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
             consignor = None,
             consignee = None
           ),
-          true
+          reducedDataSet = true
         )
 
         val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain].run(userAnswers)

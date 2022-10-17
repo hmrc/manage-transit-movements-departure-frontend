@@ -37,7 +37,11 @@ import play.api.libs.json.Json
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{BadRequestException, HttpResponse, UpstreamErrorResponse}
 
-class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler with UserAnswersSpecHelper with Generators {
+class ApiConnectorSpec extends SpecBase
+  with AppWithDefaultMockFixtures
+  with WireMockServerHandler
+  with UserAnswersSpecHelper
+  with Generators {
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -78,7 +82,7 @@ class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with Wir
   val holderOfTransitName    = Gen.alphaNumStr.sample.value
   val holderOfTransitAddress = arbitrary[Address].sample.value
 
-  val traderDetailsDomain = TraderDetailsDomain(
+  val traderDetailsDomain: TraderDetailsDomain = TraderDetailsDomain(
     holderOfTransit = HolderOfTransitEori(
       eori = None,
       name = holderOfTransitName,
@@ -90,7 +94,7 @@ class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with Wir
       consignor = None,
       consignee = None
     ),
-    true
+    reducedDataSet = true
   )
 
   val routingDomain: RoutingDomain = RoutingDomain(
