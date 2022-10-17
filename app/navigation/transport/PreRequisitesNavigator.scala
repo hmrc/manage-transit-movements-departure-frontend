@@ -16,9 +16,9 @@
 
 package navigation.transport
 
-import models.Mode
 import models.domain.UserAnswersReader
 import models.journeyDomain.transport.PreRequisitesDomain
+import models.{CheckMode, Mode, NormalMode}
 import navigation.UserAnswersNavigator
 
 import javax.inject.{Inject, Singleton}
@@ -27,7 +27,10 @@ import javax.inject.{Inject, Singleton}
 class PreRequisitesNavigatorProviderImpl @Inject() () extends PreRequisitesNavigatorProvider {
 
   override def apply(mode: Mode): UserAnswersNavigator =
-    new PreRequisitesNavigator(mode)
+    mode match {
+      case NormalMode => new PreRequisitesNavigator(mode)
+      case CheckMode  => new TransportNavigator(mode)
+    }
 }
 
 trait PreRequisitesNavigatorProvider {

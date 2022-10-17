@@ -17,7 +17,7 @@
 package generators
 
 import models.domain.UserAnswersReader
-import models.journeyDomain.{DepartureDomain, PreTaskListDomain, ReaderError}
+import models.journeyDomain.{DepartureDomain, ReaderError}
 import models.reference.Country
 import models.{EoriNumber, LocalReferenceNumber, RichJsObject, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
@@ -43,7 +43,7 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
         lrn        <- arbitrary[LocalReferenceNumber]
         eoriNumber <- arbitrary[EoriNumber]
         initialAnswers = UserAnswers(lrn, eoriNumber)
-        answers <- buildUserAnswers[PreTaskListDomain](initialAnswers) // TODO - eventually change to DepartureDomain
+        answers <- arbitraryDepartureAnswers(initialAnswers)
       } yield answers
     }
 

@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package pages.sections
+package pages.transport.preRequisites
 
-import play.api.libs.json.{JsObject, JsPath}
+import pages.behaviours.PageBehaviours
 
-case object TransportSection extends Section[JsObject] {
+class TransportedToSameCountryYesNoPageSpec extends PageBehaviours {
 
-  override def path: JsPath = JsPath \ toString
+  "TransportedToSameCountryYesNoPage" - {
 
-  override def toString: String = "transportDetails"
+    beRetrievable[Boolean](TransportedToSameCountryYesNoPage)
+
+    beSettable[Boolean](TransportedToSameCountryYesNoPage)
+
+    beRemovable[Boolean](TransportedToSameCountryYesNoPage)
+  }
 }
