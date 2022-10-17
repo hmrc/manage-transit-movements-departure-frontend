@@ -1024,3 +1024,6 @@ transport.preRequisites.sameUcrYesNo.checkYourAnswersLabel = Same UCR for all it
 transport.preRequisites.sameUcrYesNo.change.hidden = if you want to use the same UCR for all items
 transport.preRequisites.sameUcrYesNo.error.required = Select yes if you want to use the same UCR for all items
 
+declarationSubmitted.title = Declaration Submitted
+declarationSubmitted.heading = Declaration Submitted
+declarationSubmitted.paragraph1 = You have submitted your declaration.
