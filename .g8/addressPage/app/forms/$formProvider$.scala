@@ -2,51 +2,58 @@ package forms
 
 import forms.mappings.Mappings
 import models.AddressLine._
-import models.{CountryList, DynamicAddress}
+import models.DynamicAddress
 import play.api.data.Form
-import play.api.data.Forms.mapping
+import play.api.data.Forms.{mapping, optional}
 import play.api.i18n.Messages
 
 import javax.inject.Inject
 
 class $formProvider$ @Inject() extends Mappings {
 
-  def apply(prefix: String, name: String, countryList: CountryList)(implicit messages: Messages): Form[Address] =
+  def apply(prefix: String, isPostalCodeRequired: Boolean, args: Any*)(implicit messages: Messages): Form[DynamicAddress] =
     Form(
       mapping(
-        AddressLine1.field -> {
-          lazy val args = Seq(AddressLine1.arg, name)
-          trimmedText(s"\$prefix.error.required", args)
+        NumberAndStreet.field -> {
+          trimmedText(s"\$prefix.error.required", NumberAndStreet.arg +: args)
             .verifying(
               StopOnFirstFail[String](
-                maxLength(AddressLine1.length, s"\$prefix.error.length", args :+ AddressLine1.length),
-                regexp(AddressLine1.regex, s"\$prefix.error.invalid", args)
+                maxLength(NumberAndStreet.length, s"\$prefix.error.length", Seq(NumberAndStreet.arg) ++ args ++ Seq(NumberAndStreet.length)),
+                regexp(NumberAndStreet.regex, s"\$prefix.error.invalid", NumberAndStreet.arg +: args)
               )
             )
         },
-        AddressLine2.field -> {
-          lazy val args = Seq(AddressLine2.arg, name)
-          trimmedText(s"\$prefix.error.required", args)
+        City.field -> {
+          trimmedText(s"\$prefix.error.required", City.arg +: args)
             .verifying(
               StopOnFirstFail[String](
-                maxLength(AddressLine2.length, s"\$prefix.error.length", args :+ AddressLine2.length),
-                regexp(AddressLine2.regex, s"\$prefix.error.invalid", args)
+                maxLength(City.length, s"\$prefix.error.length", Seq(City.arg) ++ args ++ Seq(City.length)),
+                regexp(City.regex, s"\$prefix.error.invalid", City.arg +: args)
               )
             )
         },
-        PostCode.field -> {
-          lazy val args = Seq(PostCode.arg, name)
-          trimmedText(s"\$prefix.error.required", args)
-            .verifying(
-              StopOnFirstFail[String](
-                maxLength(PostCode.length, s"\$prefix.error.length", args :+ PostCode.length),
-                regexp(PostCode.regex, s"\$prefix.error.postalCode.invalid", Seq(name))
-              )
+        PostalCode.field -> {
+          val constraint = StopOnFirstFail[String](
+            maxLength(PostalCode.length, s"\$prefix.error.length", Seq(PostalCode.arg) ++ args ++ Seq(PostalCode.length)),
+            regexp(PostalCode.regex, s"\$prefix.error.postalCode.invalid", args)
+          )
+          if (isPostalCodeRequired) {
+            trimmedText(s"\$prefix.error.required", PostalCode.arg +: args)
+              .verifying(constraint)
+              .transform[Option[String]](Some(_), _.getOrElse(""))
+          } else {
+            optional(
+              trimmedText()
+                .verifying(constraint)
             )
-        },
-        Country.field -> {
-          country(countryList, s"\$prefix.error.required", Seq(Country.arg, name))
+          }
         }
-      )(Address.apply)(Address.unapply)
+      )(DynamicAddress.apply)(DynamicAddress.unapply)
     )
+}
+
+object $formProvider$ {
+
+  def apply(prefix: String, isPostalCodeRequired: Boolean, args: Any*)(implicit messages: Messages): Form[DynamicAddress] =
+    new $formProvider$()(prefix, isPostalCodeRequired, args: _*)
 }
