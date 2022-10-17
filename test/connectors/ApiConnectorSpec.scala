@@ -37,11 +37,7 @@ import play.api.libs.json.Json
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{BadRequestException, HttpResponse, UpstreamErrorResponse}
 
-class ApiConnectorSpec extends SpecBase
-  with AppWithDefaultMockFixtures
-  with WireMockServerHandler
-  with UserAnswersSpecHelper
-  with Generators {
+class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler with UserAnswersSpecHelper with Generators {
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
