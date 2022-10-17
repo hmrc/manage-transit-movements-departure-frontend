@@ -18,19 +18,26 @@ package connectors
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock._
+import commonTestUtils.UserAnswersSpecHelper
+import generators.Generators
 import helper.WireMockServerHandler
 import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.journeyDomain.routeDetails.loadingAndUnloading.LoadingAndUnloadingDomain
 import models.journeyDomain.routeDetails.routing.RoutingDomain
+import models.journeyDomain.traderDetails.TraderDetailsDomain
+import models.journeyDomain.traderDetails.consignment.ConsignmentDomain
+import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain.HolderOfTransitEori
 import models.journeyDomain.{DepartureDomain, PreTaskListDomain}
 import models.reference.{Country, CountryCode, CustomsOffice}
-import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}
+import models.{Address, DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{BadRequestException, HttpResponse, UpstreamErrorResponse}
 
-class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler {
+class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler with UserAnswersSpecHelper with Generators {
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -68,6 +75,24 @@ class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with Wir
                                                                true
   )
 
+  val holderOfTransitName    = Gen.alphaNumStr.sample.value
+  val holderOfTransitAddress = arbitrary[Address].sample.value
+
+  val traderDetailsDomain = TraderDetailsDomain(
+    holderOfTransit = HolderOfTransitEori(
+      eori = None,
+      name = holderOfTransitName,
+      address = holderOfTransitAddress,
+      additionalContact = None
+    ),
+    representative = None,
+    consignment = ConsignmentDomain(
+      consignor = None,
+      consignee = None
+    ),
+    true
+  )
+
   val routingDomain: RoutingDomain = RoutingDomain(
     Country(CountryCode("GB"), "My country"),
     customsOffice,
@@ -83,7 +108,7 @@ class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with Wir
     LoadingAndUnloadingDomain(None, None)
   )
 
-  val request = DepartureDomain(preTaskListDomain, routeDetailsDomain)
+  val request = DepartureDomain(preTaskListDomain, traderDetailsDomain, routeDetailsDomain)
 
   "ApiConnector" - {
 

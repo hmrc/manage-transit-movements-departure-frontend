@@ -65,7 +65,8 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
           consignment = ConsignmentDomain(
             consignor = None,
             consignee = None
-          )
+          ),
+          true
         )
 
         val result: EitherType[TraderDetailsDomain] = UserAnswersReader[TraderDetailsDomain].run(userAnswers)

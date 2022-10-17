@@ -23,12 +23,14 @@ import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{Mode, UserAnswers}
 import pages.traderDetails.ActingAsRepresentativePage
+import pages.traderDetails.consignment.ApprovedOperatorPage
 import play.api.mvc.Call
 
 case class TraderDetailsDomain(
   holderOfTransit: HolderOfTransitDomain,
   representative: Option[RepresentativeDomain],
-  consignment: ConsignmentDomain
+  consignment: ConsignmentDomain,
+  reducedDataSet: Boolean
 ) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
@@ -43,10 +45,12 @@ object TraderDetailsDomain {
       holderOfTransit <- UserAnswersReader[HolderOfTransitDomain]
       representative  <- ActingAsRepresentativePage.filterOptionalDependent(identity)(UserAnswersReader[RepresentativeDomain])
       consignment     <- UserAnswersReader[ConsignmentDomain]
+      reducedDataSet  <- ApprovedOperatorPage.reader
     } yield TraderDetailsDomain(
       holderOfTransit,
       representative,
-      consignment
+      consignment,
+      reducedDataSet
     )
   }
 }

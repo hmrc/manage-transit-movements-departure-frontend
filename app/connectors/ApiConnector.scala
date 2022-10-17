@@ -34,9 +34,6 @@ class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConf
   )
 
   // TODO - replace payload with data from user answers
-
-  // TODO - reduced data set indicator is asked but never stored
-  // TODO - bindingItinerary is asked but never stored
   def payload(request: DepartureDomain): String =
     s"""
        |{
@@ -47,8 +44,8 @@ class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConf
        |      "declarationType": "${request.preTaskList.declarationType.toString}",
        |      "additionalDeclarationType": "A",
        |      "security": "${request.preTaskList.securityDetailsType.securityContentType}",
-       |      "reducedDatasetIndicator": "1",
-       |      "bindingItinerary": "0"
+       |      "reducedDatasetIndicator": "${if (request.traderDetails.reducedDataSet) "1" else "0"}",
+       |      "bindingItinerary": "${if (request.routeDetails.routing.bindingItinerary) "1" else "0"}"
        |    },
        |    "CustomsOfficeOfDeparture": {
        |      "referenceNumber": "${request.preTaskList.officeOfDeparture.id}"

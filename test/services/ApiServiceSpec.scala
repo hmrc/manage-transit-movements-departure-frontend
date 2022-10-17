@@ -17,22 +17,29 @@
 package services
 
 import base.SpecBase
+import commonTestUtils.UserAnswersSpecHelper
 import connectors.ApiConnector
+import generators.Generators
 import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.journeyDomain.routeDetails.loadingAndUnloading.LoadingAndUnloadingDomain
 import models.journeyDomain.routeDetails.routing.RoutingDomain
+import models.journeyDomain.traderDetails.TraderDetailsDomain
+import models.journeyDomain.traderDetails.consignment.ConsignmentDomain
+import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain.HolderOfTransitEori
 import models.journeyDomain.{DepartureDomain, PreTaskListDomain}
 import models.reference.{Country, CountryCode, CustomsOffice}
-import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}
+import models.{Address, DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, when}
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
 import org.scalatest.BeforeAndAfterEach
 import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, OK}
 import uk.gov.hmrc.http.HttpResponse
 
 import scala.concurrent.Future
 
-class ApiServiceSpec extends SpecBase with BeforeAndAfterEach {
+class ApiServiceSpec extends SpecBase with BeforeAndAfterEach with UserAnswersSpecHelper with Generators {
 
   val mockApiConnector: ApiConnector = mock[ApiConnector]
   val service: ApiService            = new ApiService(mockApiConnector)
@@ -54,6 +61,24 @@ class ApiServiceSpec extends SpecBase with BeforeAndAfterEach {
                                                                true
   )
 
+  val holderOfTransitName    = Gen.alphaNumStr.sample.value
+  val holderOfTransitAddress = arbitrary[Address].sample.value
+
+  val traderDetailsDomain = TraderDetailsDomain(
+    holderOfTransit = HolderOfTransitEori(
+      eori = None,
+      name = holderOfTransitName,
+      address = holderOfTransitAddress,
+      additionalContact = None
+    ),
+    representative = None,
+    consignment = ConsignmentDomain(
+      consignor = None,
+      consignee = None
+    ),
+    true
+  )
+
   val routingDomain: RoutingDomain = RoutingDomain(
     Country(CountryCode("GB"), "My country"),
     customsOffice,
@@ -69,7 +94,7 @@ class ApiServiceSpec extends SpecBase with BeforeAndAfterEach {
     LoadingAndUnloadingDomain(None, None)
   )
 
-  val request = DepartureDomain(preTaskListDomain, routeDetailsDomain)
+  val request = DepartureDomain(preTaskListDomain, traderDetailsDomain, routeDetailsDomain)
 
   "ApiService" - {
 

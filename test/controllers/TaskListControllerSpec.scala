@@ -17,10 +17,10 @@
 package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import generators.{Generators, PreTaskListUserAnswersGenerator, RouteDetailsUserAnswersGenerator}
+import generators.{Generators, PreTaskListUserAnswersGenerator, RouteDetailsUserAnswersGenerator, TraderDetailsUserAnswersGenerator}
 import models.{CountryList, UserAnswers}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{reset, when}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -37,12 +37,18 @@ class TaskListControllerSpec
     with AppWithDefaultMockFixtures
     with Generators
     with PreTaskListUserAnswersGenerator
-    with RouteDetailsUserAnswersGenerator {
+    with RouteDetailsUserAnswersGenerator
+    with TraderDetailsUserAnswersGenerator {
 
   private lazy val mockViewModel                     = mock[TaskListViewModel]
   private val mockCountriesService: CountriesService = mock[CountriesService]
   private val mockApiService: ApiService             = mock[ApiService]
   private val response: HttpResponse                 = mock[HttpResponse]
+
+  override def beforeEach(): Unit = {
+    reset(mockCountriesService, mockViewModel, mockApiService, response)
+    super.beforeEach()
+  }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -111,7 +117,8 @@ class TaskListControllerSpec
       when(mockApiService.submitDeclaration(any())(any())).thenReturn(Future.successful(response))
 
       val preTask: UserAnswers         = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
-      val departureDomain: UserAnswers = arbitraryRouteDetailsAnswers(preTask).sample.value
+      val traderDetails: UserAnswers   = arbitraryTraderDetailsAnswers(preTask).sample.value
+      val departureDomain: UserAnswers = arbitraryRouteDetailsAnswers(traderDetails).sample.value
 
       setExistingUserAnswers(departureDomain)
 
@@ -136,7 +143,8 @@ class TaskListControllerSpec
       when(mockApiService.submitDeclaration(any())(any())).thenReturn(Future.successful(response))
 
       val preTask: UserAnswers         = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
-      val departureDomain: UserAnswers = arbitraryRouteDetailsAnswers(preTask).sample.value
+      val traderDetails: UserAnswers   = arbitraryTraderDetailsAnswers(preTask).sample.value
+      val departureDomain: UserAnswers = arbitraryRouteDetailsAnswers(traderDetails).sample.value
 
       setExistingUserAnswers(departureDomain)
 
@@ -159,7 +167,8 @@ class TaskListControllerSpec
       when(mockApiService.submitDeclaration(any())(any())).thenReturn(Future.successful(response))
 
       val preTask: UserAnswers         = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
-      val departureDomain: UserAnswers = arbitraryRouteDetailsAnswers(preTask).sample.value
+      val traderDetails: UserAnswers   = arbitraryTraderDetailsAnswers(preTask).sample.value
+      val departureDomain: UserAnswers = arbitraryRouteDetailsAnswers(traderDetails).sample.value
 
       setExistingUserAnswers(departureDomain)
 
