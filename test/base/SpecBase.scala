@@ -30,7 +30,9 @@ import play.api.inject.Injector
 import play.api.libs.json.{Format, Json, Reads}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+
+import scala.concurrent.Future
 
 trait SpecBase
     extends AnyFreeSpec
@@ -80,4 +82,6 @@ trait SpecBase
     def removeValue(page: QuestionPage[_]): UserAnswers =
       userAnswers.remove(page).success.value
   }
+
+  def response(status: Int): Future[HttpResponse] = Future.successful(HttpResponse(status, ""))
 }
