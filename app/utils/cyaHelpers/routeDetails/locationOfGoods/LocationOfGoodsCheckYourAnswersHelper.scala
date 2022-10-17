@@ -16,7 +16,7 @@
 
 package utils.cyaHelpers.routeDetails.locationOfGoods
 
-import models.reference.{CustomsOffice, UnLocode}
+import models.reference.{Country, CustomsOffice, UnLocode}
 import models.{Coordinates, DynamicAddress, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress, UserAnswers}
 import pages.routeDetails.locationOfGoods._
 import pages.routeDetails.locationOfGoods.contact.{NamePage, TelephoneNumberPage}
@@ -73,6 +73,13 @@ class LocationOfGoodsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     formatAnswer = formatAsText,
     prefix = "routeDetails.locationOfGoods.unLocode",
     id = Some("location-of-goods-un-locode")
+  )
+
+  def country: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
+    page = CountryPage,
+    formatAnswer = formatAsCountry,
+    prefix = "routeDetails.locationOfGoods.country",
+    id = Some("transit-holder-country")
   )
 
   def address: Option[SummaryListRow] = getAnswerAndBuildRow[DynamicAddress](

@@ -19,7 +19,7 @@ package utils.cyaHelpers.routeDetails
 import base.SpecBase
 import controllers.routeDetails.locationOfGoods.{contact, routes}
 import generators.Generators
-import models.reference.{CustomsOffice, UnLocode}
+import models.reference.{Country, CustomsOffice, UnLocode}
 import models.{Coordinates, DynamicAddress, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -367,6 +367,49 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           href = routes.AddressController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the address for the location of goods"),
                           attributes = Map("id" -> "location-of-goods-address")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "country" - {
+      "must return None" - {
+        "when countryPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.country
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when countryPage is defined" in {
+          forAll(arbitrary[Mode], arbitrary[Country]) {
+            (mode, country) =>
+              val answers = emptyUserAnswers.setValue(CountryPage, country)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.address
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("What is the country for the location of goods?".toText),
+                  value = Value(HtmlContent(country.toString)),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = routes.CountryController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("location of goods country"),
+                          attributes = Map("id" -> "location-of-goods-country")
                         )
                       )
                     )
