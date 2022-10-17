@@ -860,7 +860,8 @@ routeDetails.locationOfGoods.address.postalCode = Postal code
 routeDetails.locationOfGoods.address.postalCode.optional = Postal code (optional)
 routeDetails.locationOfGoods.address.checkYourAnswersLabel = What is the address for the location of goods?
 routeDetails.locationOfGoods.address.change.hidden = the address for the location of goods
-routeDetails.locationOfGoods.address.error.postcode.invalid = The postal code must only include letters a to z, numbers 0 to 9 and spaces
+routeDetails.locationOfGoods.address.error.postalCode.invalid = The postal code must only include letters a to z, numbers 0 to 9 and spaces
+routeDetails.locationOfGoods.address.error.invalid = The {0} must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 routeDetails.locationOfGoods.address.error.required = Enter the {0} for the location of goods
 routeDetails.locationOfGoods.address.error.length = The {0} must be {1} characters or less
 
