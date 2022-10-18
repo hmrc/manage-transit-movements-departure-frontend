@@ -31,19 +31,16 @@ class PostalCodeFormProviderSpec extends StringFieldBehaviours with SpecBase {
   private val country   = Country(CountryCode("GB"), "United Kingdom")
   private val countries = CountryList(Seq(country))
 
-  private val lengthStreetNumberKey   = s"$prefix.error.streetNumber.length"
-  private val requiredStreetNumberKey = s"$prefix.error.streetNumber.required"
-  private val invalidStreetNumberKey  = s"$prefix.error.streetNumber.invalidCharacters"
-
-  private val lengthPostalCodeKey   = s"$prefix.error.postalCode.length"
-  private val requiredPostalCodeKey = s"$prefix.error.postalCode.required"
-  private val invalidPostalCodeKey  = s"$prefix.error.postalCode.invalidCharacters"
+  private val requiredKey = s"$prefix.error.required"
+  private val lengthKey   = s"$prefix.error.length"
 
   private val form = new PostalCodeFormProvider()(prefix, countries)
 
   ".streetNumber" - {
 
     val fieldName = StreetNumber.field
+
+    val invalidKey = s"$prefix.error.streetNumber.invalid"
 
     behave like fieldThatBindsValidData(
       form = form,
@@ -55,19 +52,19 @@ class PostalCodeFormProviderSpec extends StringFieldBehaviours with SpecBase {
       form = form,
       fieldName = fieldName,
       maxLength = StreetNumber.length,
-      lengthError = FormError(fieldName, lengthStreetNumberKey, Seq(StreetNumber.arg.capitalize, StreetNumber.length))
+      lengthError = FormError(fieldName, lengthKey, Seq(StreetNumber.arg, StreetNumber.length))
     )
 
     behave like mandatoryTrimmedField(
       form = form,
       fieldName = fieldName,
-      requiredError = FormError(fieldName, requiredStreetNumberKey, Seq(StreetNumber.arg))
+      requiredError = FormError(fieldName, requiredKey, Seq(StreetNumber.arg))
     )
 
     behave like fieldWithInvalidCharacters(
       form = form,
       fieldName = fieldName,
-      error = FormError(fieldName, invalidStreetNumberKey, Seq(StreetNumber.arg.capitalize)),
+      error = FormError(fieldName, invalidKey, Seq(StreetNumber.regex.regex)),
       length = StreetNumber.length
     )
   }
@@ -75,6 +72,8 @@ class PostalCodeFormProviderSpec extends StringFieldBehaviours with SpecBase {
   ".postalCode" - {
 
     val fieldName = PostalCode.field
+
+    val invalidKey = s"$prefix.error.postalCode.invalid"
 
     val invalidPostalOverLength: Gen[String] = stringsLongerThan(PostalCode.length + 1)
 
@@ -88,20 +87,20 @@ class PostalCodeFormProviderSpec extends StringFieldBehaviours with SpecBase {
       form = form,
       fieldName = fieldName,
       maxLength = PostalCode.length,
-      lengthError = FormError(fieldName, lengthPostalCodeKey, Seq(PostalCode.length)),
+      lengthError = FormError(fieldName, lengthKey, Seq(PostalCode.arg, PostalCode.length)),
       gen = invalidPostalOverLength
     )
 
     behave like mandatoryField(
       form = form,
       fieldName = fieldName,
-      requiredError = FormError(fieldName, requiredPostalCodeKey, Seq())
+      requiredError = FormError(fieldName, requiredKey, Seq(PostalCode.arg))
     )
 
     behave like fieldWithInvalidCharacters(
       form = form,
       fieldName = fieldName,
-      error = FormError(fieldName, invalidPostalCodeKey, Seq()),
+      error = FormError(fieldName, invalidKey, Seq(PostalCode.regex.regex)),
       length = PostalCode.length
     )
   }
@@ -112,8 +111,6 @@ class PostalCodeFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
     val fieldName = Country.field
 
-    val countryRequiredKey = s"$prefix.error.country.required"
-
     behave like fieldThatBindsValidData(
       form = form,
       fieldName = fieldName,
@@ -123,12 +120,12 @@ class PostalCodeFormProviderSpec extends StringFieldBehaviours with SpecBase {
     behave like mandatoryField(
       form = form,
       fieldName = fieldName,
-      requiredError = FormError(fieldName, countryRequiredKey, Seq())
+      requiredError = FormError(fieldName, requiredKey, Seq(Country.arg))
     )
 
     "not bind if country code does not exist in the country list" in {
       val result        = form.bind(Map(fieldName -> "foobar")).apply(fieldName)
-      val expectedError = FormError(fieldName, countryRequiredKey, Seq())
+      val expectedError = FormError(fieldName, requiredKey, Seq(Country.arg))
       result.errors must contain(expectedError)
     }
 

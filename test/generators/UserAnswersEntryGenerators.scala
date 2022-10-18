@@ -66,7 +66,8 @@ trait UserAnswersEntryGenerators {
       case TirIdentificationYesNoPage  => arbitrary[Boolean].map(JsBoolean)
       case TirIdentificationPage       => Gen.alphaNumStr.map(JsString)
       case NamePage                    => Gen.alphaNumStr.map(JsString)
-      case AddressPage                 => arbitrary[Address].map(Json.toJson(_))
+      case CountryPage                 => arbitrary[Country].map(Json.toJson(_))
+      case AddressPage                 => arbitrary[DynamicAddress].map(Json.toJson(_))
       case AddContactPage              => arbitrary[Boolean].map(JsBoolean)
       case contact.NamePage            => Gen.alphaNumStr.map(JsString)
       case contact.TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
@@ -100,7 +101,8 @@ trait UserAnswersEntryGenerators {
       case EoriYesNoPage               => arbitrary[Boolean].map(JsBoolean)
       case EoriPage                    => Gen.alphaNumStr.map(JsString)
       case NamePage                    => Gen.alphaNumStr.map(JsString)
-      case AddressPage                 => arbitrary[Address].map(Json.toJson(_))
+      case CountryPage                 => arbitrary[Country].map(Json.toJson(_))
+      case AddressPage                 => arbitrary[DynamicAddress].map(Json.toJson(_))
       case AddContactPage              => arbitrary[Boolean].map(JsBoolean)
       case contact.NamePage            => Gen.alphaNumStr.map(JsString)
       case contact.TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
@@ -113,7 +115,8 @@ trait UserAnswersEntryGenerators {
       case EoriYesNoPage  => arbitrary[Boolean].map(JsBoolean)
       case EoriNumberPage => Gen.alphaNumStr.map(JsString)
       case NamePage       => Gen.alphaNumStr.map(JsString)
-      case AddressPage    => arbitrary[Address].map(Json.toJson(_))
+      case CountryPage    => arbitrary[Country].map(Json.toJson(_))
+      case AddressPage    => arbitrary[DynamicAddress].map(Json.toJson(_))
     }
   }
 
@@ -195,7 +198,8 @@ trait UserAnswersEntryGenerators {
       case AdditionalIdentifierPage    => Gen.alphaNumStr.map(JsString)
       case CoordinatesPage             => arbitrary[Coordinates].map(Json.toJson(_))
       case UnLocodePage                => arbitrary[UnLocode].map(Json.toJson(_))
-      case AddressPage                 => arbitrary[Address].map(Json.toJson(_))
+      case CountryPage                 => arbitrary[Country].map(Json.toJson(_))
+      case AddressPage                 => arbitrary[DynamicAddress].map(Json.toJson(_))
       case PostalCodePage              => arbitrary[PostalCodeAddress].map(Json.toJson(_))
     }
   }

@@ -16,23 +16,20 @@
 
 package views.routeDetails.locationOfGoods
 
-import forms.locationOfGoods.AddressFormProvider
+import forms.DynamicAddressFormProvider
 import generators.Generators
-import models.{Address, CountryList, NormalMode}
-import org.scalacheck.Arbitrary.arbitrary
+import models.{DynamicAddress, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.AddressViewBehaviours
+import views.behaviours.DynamicAddressViewBehaviours
 import views.html.routeDetails.locationOfGoods.AddressView
 
-class AddressViewSpec extends AddressViewBehaviours with Generators {
+class AddressViewSpec extends DynamicAddressViewBehaviours with Generators {
 
-  private val countryList = arbitrary[CountryList].sample.value
+  override def form: Form[DynamicAddress] = new DynamicAddressFormProvider()(prefix, isPostalCodeRequired)
 
-  override def form: Form[Address] = new AddressFormProvider()(prefix, countryList)
-
-  override def applyView(form: Form[Address]): HtmlFormat.Appendable =
-    injector.instanceOf[AddressView].apply(form, lrn, NormalMode, countryList.countries)(fakeRequest, messages)
+  override def applyView(form: Form[DynamicAddress]): HtmlFormat.Appendable =
+    injector.instanceOf[AddressView].apply(form, lrn, NormalMode, isPostalCodeRequired)(fakeRequest, messages)
 
   override val prefix: String = "routeDetails.locationOfGoods.address"
 

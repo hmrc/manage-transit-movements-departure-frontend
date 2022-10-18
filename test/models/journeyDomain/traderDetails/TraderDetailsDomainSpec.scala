@@ -23,7 +23,8 @@ import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.traderDetails.consignment.ConsignmentDomain
 import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain.HolderOfTransitEori
-import models.{Address, DeclarationType, SecurityDetailsType}
+import models.reference.Country
+import models.{DeclarationType, DynamicAddress, SecurityDetailsType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
@@ -36,7 +37,8 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
 
     val nonOption4DeclarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
     val holderOfTransitName       = Gen.alphaNumStr.sample.value
-    val holderOfTransitAddress    = arbitrary[Address].sample.value
+    val holderOfTransitCountry    = arbitrary[Country].sample.value
+    val holderOfTransitAddress    = arbitrary[DynamicAddress].sample.value
     val someSecurityType          = arbitrary[SecurityDetailsType](arbitrarySomeSecurityDetailsType).sample.value
 
     "can be parsed from UserAnswers" - {
@@ -48,6 +50,7 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(hot.EoriYesNoPage)(false)
           .unsafeSetVal(hot.NamePage)(holderOfTransitName)
+          .unsafeSetVal(hot.CountryPage)(holderOfTransitCountry)
           .unsafeSetVal(hot.AddressPage)(holderOfTransitAddress)
           .unsafeSetVal(hot.AddContactPage)(false)
           .unsafeSetVal(ActingAsRepresentativePage)(false)
@@ -58,6 +61,7 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
           holderOfTransit = HolderOfTransitEori(
             eori = None,
             name = holderOfTransitName,
+            country = holderOfTransitCountry,
             address = holderOfTransitAddress,
             additionalContact = None
           ),
@@ -83,6 +87,7 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(hot.TirIdentificationYesNoPage)(false)
           .unsafeSetVal(hot.NamePage)(holderOfTransitName)
+          .unsafeSetVal(hot.CountryPage)(holderOfTransitCountry)
           .unsafeSetVal(hot.AddressPage)(holderOfTransitAddress)
           .unsafeSetVal(hot.AddContactPage)(false)
 
@@ -99,6 +104,7 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
             .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
             .unsafeSetVal(hot.TirIdentificationYesNoPage)(false)
             .unsafeSetVal(hot.NamePage)(holderOfTransitName)
+            .unsafeSetVal(hot.CountryPage)(holderOfTransitCountry)
             .unsafeSetVal(hot.AddressPage)(holderOfTransitAddress)
             .unsafeSetVal(hot.AddContactPage)(false)
             .unsafeSetVal(ActingAsRepresentativePage)(false)
@@ -117,6 +123,7 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
             .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
             .unsafeSetVal(hot.EoriYesNoPage)(false)
             .unsafeSetVal(hot.NamePage)(holderOfTransitName)
+            .unsafeSetVal(hot.CountryPage)(holderOfTransitCountry)
             .unsafeSetVal(hot.AddressPage)(holderOfTransitAddress)
             .unsafeSetVal(hot.AddContactPage)(false)
             .unsafeSetVal(ActingAsRepresentativePage)(false)
@@ -135,6 +142,7 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
                 .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
                 .unsafeSetVal(hot.EoriYesNoPage)(false)
                 .unsafeSetVal(hot.NamePage)(holderOfTransitName)
+                .unsafeSetVal(hot.CountryPage)(holderOfTransitCountry)
                 .unsafeSetVal(hot.AddressPage)(holderOfTransitAddress)
                 .unsafeSetVal(hot.AddContactPage)(false)
                 .unsafeSetVal(ActingAsRepresentativePage)(false)
@@ -154,6 +162,7 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
                 .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
                 .unsafeSetVal(hot.EoriYesNoPage)(false)
                 .unsafeSetVal(hot.NamePage)(holderOfTransitName)
+                .unsafeSetVal(hot.CountryPage)(holderOfTransitCountry)
                 .unsafeSetVal(hot.AddressPage)(holderOfTransitAddress)
                 .unsafeSetVal(hot.AddContactPage)(false)
                 .unsafeSetVal(ActingAsRepresentativePage)(false)
@@ -174,6 +183,7 @@ class TraderDetailsDomainSpec extends SpecBase with UserAnswersSpecHelper with G
               .unsafeSetVal(SecurityDetailsTypePage)(someSecurityType)
               .unsafeSetVal(hot.EoriYesNoPage)(false)
               .unsafeSetVal(hot.NamePage)(holderOfTransitName)
+              .unsafeSetVal(hot.CountryPage)(holderOfTransitCountry)
               .unsafeSetVal(hot.AddressPage)(holderOfTransitAddress)
               .unsafeSetVal(hot.AddContactPage)(false)
               .unsafeSetVal(ActingAsRepresentativePage)(false)

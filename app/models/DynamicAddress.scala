@@ -16,16 +16,17 @@
 
 package models
 
-import models.reference.Country
 import play.api.libs.json.{Json, OFormat}
 
-case class Address(
-  line1: String,
-  line2: String,
-  postalCode: String,
-  country: Country
-)
+case class DynamicAddress(
+  numberAndStreet: String,
+  city: String,
+  postalCode: Option[String]
+) {
 
-object Address {
-  implicit val format: OFormat[Address] = Json.format[Address]
+  override def toString: String = Seq(Some(numberAndStreet), Some(city), postalCode).flatten.mkString("<br>")
+}
+
+object DynamicAddress {
+  implicit val format: OFormat[DynamicAddress] = Json.format[DynamicAddress]
 }

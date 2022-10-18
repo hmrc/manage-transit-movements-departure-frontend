@@ -16,8 +16,8 @@
 
 package utils.cyaHelpers.routeDetails.locationOfGoods
 
-import models.reference.{CustomsOffice, UnLocode}
-import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress, UserAnswers}
+import models.reference.{Country, CustomsOffice, UnLocode}
+import models.{Coordinates, DynamicAddress, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress, UserAnswers}
 import pages.routeDetails.locationOfGoods._
 import pages.routeDetails.locationOfGoods.contact.{NamePage, TelephoneNumberPage}
 import play.api.i18n.Messages
@@ -75,9 +75,16 @@ class LocationOfGoodsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     id = Some("location-of-goods-un-locode")
   )
 
-  def address: Option[SummaryListRow] = getAnswerAndBuildRow[Address](
+  def country: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
+    page = CountryPage,
+    formatAnswer = formatAsCountry,
+    prefix = "routeDetails.locationOfGoods.country",
+    id = Some("location-of-goods-country")
+  )
+
+  def address: Option[SummaryListRow] = getAnswerAndBuildRow[DynamicAddress](
     page = AddressPage,
-    formatAnswer = formatAsAddress,
+    formatAnswer = formatAsDynamicAddress,
     prefix = "routeDetails.locationOfGoods.address",
     id = Some("location-of-goods-address")
   )

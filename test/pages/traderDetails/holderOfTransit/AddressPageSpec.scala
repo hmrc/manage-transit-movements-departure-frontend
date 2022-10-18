@@ -16,17 +16,17 @@
 
 package pages.traderDetails.holderOfTransit
 
+import models.DynamicAddress
 import pages.behaviours.PageBehaviours
-import models.Address
 
 class AddressPageSpec extends PageBehaviours {
 
   "traderDetails.holderOfTransit.AddressPage" - {
 
-    beRetrievable[Address](AddressPage)
+    beRetrievable[DynamicAddress](AddressPage)
 
-    beSettable[Address](AddressPage)
+    beSettable[DynamicAddress](AddressPage)
 
-    beRemovable[Address](AddressPage)
+    beRemovable[DynamicAddress](AddressPage)
   }
 }

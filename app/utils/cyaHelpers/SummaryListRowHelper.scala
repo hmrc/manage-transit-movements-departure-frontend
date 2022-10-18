@@ -16,8 +16,8 @@
 
 package utils.cyaHelpers
 
-import models.reference.CountryCode
-import models.{Address, CountryList, DateTime, PostalCodeAddress}
+import models.reference.{Country, CountryCode}
+import models.{CountryList, DateTime, DynamicAddress, PostalCodeAddress}
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -40,11 +40,11 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
     answer.concat.format(formatter).toText
   }
 
-  protected def formatAsAddress(address: Address): Content =
-    HtmlContent(Seq(address.line1, address.line2, address.postalCode, address.country.description).mkString("<br>"))
+  protected def formatAsDynamicAddress(address: DynamicAddress): Content =
+    HtmlContent(address.toString)
 
   protected def formatAsPostalCodeAddress(address: PostalCodeAddress): Content =
-    HtmlContent(Seq(address.streetNumber, address.postalCode, address.country.description).mkString("<br>"))
+    HtmlContent(address.toString)
 
   protected def formatAsText[T](answer: T): Content = s"$answer".toText
 
@@ -75,8 +75,10 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
   protected def formatEnumAsString[T](messageKeyPrefix: String)(answer: T): String =
     messages(s"$messageKeyPrefix.$answer")
 
-  protected def formatAsCountry(countryList: CountryList)(answer: CountryCode): Content =
+  protected def formatAsCountryList(countryList: CountryList)(answer: CountryCode): Content =
     s"${countryList.getCountry(answer).map(_.description).getOrElse(answer.code)}".toText
+
+  protected def formatAsCountry(country: Country): Content = country.description.toText
 
   protected def buildRow(
     prefix: String,
