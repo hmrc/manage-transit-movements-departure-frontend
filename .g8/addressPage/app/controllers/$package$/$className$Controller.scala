@@ -3,12 +3,11 @@ package controllers.$package$
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.$formProvider$
+import models.reference.Country
 import models.requests.SpecificDataRequestProvider1
-import models.{Address, CountryList, LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.$navRoute$
-import $addressHolderNameImport$
-import pages.$package$.$className$Page
+import models.{DynamicAddress, LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
+import pages.$package$._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -23,7 +22,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class $className;format="cap"$Controller @Inject()(
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @$navRoute$ implicit val navigator: Navigator,
+  navigatorProvider: $navRoute$NavigatorProvider,
   actions: Actions,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: $formProvider$,
@@ -34,41 +33,48 @@ class $className;format="cap"$Controller @Inject()(
     extends FrontendBaseController
     with I18nSupport {
 
-  private type Request = SpecificDataRequestProvider1[String]#SpecificDataRequest[_]
+  private type Request = SpecificDataRequestProvider2[String, Country]#SpecificDataRequest[_]
 
   private def name(implicit request: Request): String = request.arg
 
-  private def form(countryList: CountryList)(implicit request: Request): Form[Address] =
-    formProvider("$package$.$className;format="decap"$", name, countryList)
+  private def country(implicit request: Request): Country = request.arg._2
+
+  private def form(isPostalCodeRequired: Boolean)(implicit request: Request): Form[DynamicAddress] =
+    formProvider("$package$.$className;format="decap"$", isPostalCodeRequired, name)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage($addressHolderNamePage$))
+    .andThen(getMandatoryPage.getFirst(NamePage))
+    .andThen(getMandatoryPage.getSecond(CountryPage))
     .async {
       implicit request =>
-        countriesService.getCountries().map {
-          countryList =>
+        countriesService.doesCountryRequireZip(country).map {
+          isPostalCodeRequired =>
             val preparedForm = request.userAnswers.get($className$Page) match {
-              case None        => form(countryList)
-              case Some(value) => form(countryList).fill(value)
+              case None        => form(isPostalCodeRequired)
+              case Some(value) => form(isPostalCodeRequired).fill(value)
             }
 
-            Ok(view(preparedForm, lrn, mode, countryList.countries, name))
+            Ok(view(preparedForm, lrn, mode, name, isPostalCodeRequired))
           }
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(NamePage))
+    .andThen(getMandatoryPage.getFirst(NamePage))
+    .andThen(getMandatoryPage.getSecond(CountryPage))
     .async {
       implicit request =>
-        countriesService.getCountries().flatMap {
-          countryList =>
-            form(countryList)
+        countriesService.doesCountryRequireZip(country).flatMap {
+          isPostalCodeRequired =>
+            form(isPostalCodeRequired)
               .bindFromRequest()
               .fold(
-                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countryList.countries, name))),
-                value => $className$Page.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, name, isPostalCodeRequired))),
+                value => {
+                  implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                  $className$Page.writeToUserAnswers(value).writeToSession().navigate()
+                }
               )
             }
     }

@@ -22,8 +22,7 @@ import forms.CustomsOfficeFormProvider
 import models.journeyDomain.PreTaskListDomain
 import models.reference.CustomsOffice
 import models.{CustomsOfficeList, LocalReferenceNumber, Mode}
-import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
+import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
 import pages.preTaskList.OfficeOfDeparturePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -39,7 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class OfficeOfDepartureController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  @PreTaskListDetails implicit val navigator: Navigator,
+  navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
   checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
   formProvider: CustomsOfficeFormProvider,
@@ -82,7 +81,10 @@ class OfficeOfDepartureController @Inject() (
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
-                value => OfficeOfDeparturePage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                value => {
+                  implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                  OfficeOfDeparturePage.writeToUserAnswers(value).writeToSession().navigate()
+                }
               )
         }
     }

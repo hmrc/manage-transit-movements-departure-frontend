@@ -47,8 +47,8 @@ class CheckYourAnswersController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      navigatorProvider().map {
-        navigator => Redirect(navigator.nextPage(request.userAnswers, mode))
+      navigatorProvider(mode).map {
+        navigator => Redirect(navigator.nextPage(request.userAnswers))
       }
   }
 

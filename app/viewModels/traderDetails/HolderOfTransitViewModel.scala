@@ -40,6 +40,7 @@ object HolderOfTransitViewModel {
           helper.tirIdentificationYesNo,
           helper.tirIdentification,
           helper.name,
+          helper.country,
           helper.address
         ).flatten
       )

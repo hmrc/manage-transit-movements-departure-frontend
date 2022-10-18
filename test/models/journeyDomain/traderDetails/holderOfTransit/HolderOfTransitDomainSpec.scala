@@ -22,7 +22,8 @@ import generators.Generators
 import models.DeclarationType.Option4
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain.{HolderOfTransitEori, HolderOfTransitTIR}
-import models.{Address, DeclarationType, EoriNumber}
+import models.reference.Country
+import models.{DeclarationType, DynamicAddress, EoriNumber}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
@@ -33,7 +34,8 @@ import pages.traderDetails.holderOfTransit._
 class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
   private val name         = Gen.alphaNumStr.sample.value
-  private val address      = arbitrary[Address].sample.value
+  private val country      = arbitrary[Country].sample.value
+  private val address      = arbitrary[DynamicAddress].sample.value
   private val contactName  = Gen.alphaNumStr.sample.value
   private val contactPhone = Gen.alphaNumStr.sample.value
 
@@ -47,6 +49,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
           .unsafeSetVal(DeclarationTypePage)(Option4)
           .unsafeSetVal(TirIdentificationYesNoPage)(false)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(CountryPage)(country)
           .unsafeSetVal(AddressPage)(address)
           .unsafeSetVal(AddContactPage)(false)
 
@@ -63,6 +66,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
               .unsafeSetVal(DeclarationTypePage)(declarationType)
               .unsafeSetVal(EoriYesNoPage)(false)
               .unsafeSetVal(NamePage)(name)
+              .unsafeSetVal(CountryPage)(country)
               .unsafeSetVal(AddressPage)(address)
               .unsafeSetVal(AddContactPage)(false)
 
@@ -98,12 +102,13 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriYesNoPage)(false)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(CountryPage)(country)
           .unsafeSetVal(AddressPage)(address)
           .unsafeSetVal(AddContactPage)(false)
 
         val result: EitherType[HolderOfTransitEori] = UserAnswersReader[HolderOfTransitEori].run(userAnswers)
 
-        val expectedResult = HolderOfTransitEori(None, name, address, None)
+        val expectedResult = HolderOfTransitEori(None, name, country, address, None)
 
         result.value mustBe expectedResult
 
@@ -115,6 +120,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
           .unsafeSetVal(EoriYesNoPage)(true)
           .unsafeSetVal(EoriPage)(eori.value)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(CountryPage)(country)
           .unsafeSetVal(AddressPage)(address)
           .unsafeSetVal(AddContactPage)(true)
           .unsafeSetVal(contact.NamePage)(contactName)
@@ -125,6 +131,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val expectedResult = HolderOfTransitEori(
           Some(eori),
           name,
+          country,
           address,
           Some(AdditionalContactDomain(contactName, contactPhone))
         )
@@ -140,6 +147,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
           EoriYesNoPage,
           NamePage,
+          CountryPage,
           AddressPage,
           AddContactPage
         )
@@ -147,6 +155,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriYesNoPage)(false)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(CountryPage)(country)
           .unsafeSetVal(AddressPage)(address)
           .unsafeSetVal(AddContactPage)(false)
 
@@ -165,6 +174,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriYesNoPage)(true)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(CountryPage)(country)
           .unsafeSetVal(AddressPage)(address)
           .unsafeSetVal(AddContactPage)(false)
 
@@ -178,6 +188,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriYesNoPage)(false)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(CountryPage)(country)
           .unsafeSetVal(AddressPage)(address)
           .unsafeSetVal(AddContactPage)(true)
 
@@ -199,12 +210,13 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(TirIdentificationYesNoPage)(false)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(CountryPage)(country)
           .unsafeSetVal(AddressPage)(address)
           .unsafeSetVal(AddContactPage)(false)
 
         val result: EitherType[HolderOfTransitTIR] = UserAnswersReader[HolderOfTransitTIR].run(userAnswers)
 
-        val expectedResult = HolderOfTransitTIR(None, name, address, None)
+        val expectedResult = HolderOfTransitTIR(None, name, country, address, None)
 
         result.value mustBe expectedResult
 
@@ -216,6 +228,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
           .unsafeSetVal(TirIdentificationYesNoPage)(true)
           .unsafeSetVal(TirIdentificationPage)(tirId)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(CountryPage)(country)
           .unsafeSetVal(AddressPage)(address)
           .unsafeSetVal(AddContactPage)(true)
           .unsafeSetVal(contact.NamePage)(contactName)
@@ -226,6 +239,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val expectedResult = HolderOfTransitTIR(
           Some(tirId),
           name,
+          country,
           address,
           Some(AdditionalContactDomain(contactName, contactPhone))
         )
@@ -242,6 +256,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
           TirIdentificationYesNoPage,
           NamePage,
+          CountryPage,
           AddressPage,
           AddContactPage
         )
@@ -249,6 +264,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(TirIdentificationYesNoPage)(false)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(CountryPage)(country)
           .unsafeSetVal(AddressPage)(address)
           .unsafeSetVal(AddContactPage)(false)
 
@@ -267,6 +283,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(TirIdentificationYesNoPage)(true)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(CountryPage)(country)
           .unsafeSetVal(AddressPage)(address)
           .unsafeSetVal(AddContactPage)(false)
 
@@ -280,6 +297,7 @@ class HolderOfTransitDomainSpec extends SpecBase with UserAnswersSpecHelper with
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(TirIdentificationYesNoPage)(false)
           .unsafeSetVal(NamePage)(name)
+          .unsafeSetVal(CountryPage)(country)
           .unsafeSetVal(AddressPage)(address)
           .unsafeSetVal(AddContactPage)(true)
 

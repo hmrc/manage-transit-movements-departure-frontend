@@ -24,15 +24,11 @@ import models.journeyDomain.routeDetails.loadingAndUnloading.unloading.Unloading
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
 import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
 import models.journeyDomain.routeDetails.transit.{OfficeOfTransitDomain, TransitDomain}
-import models.reference.CountryCode
 import models.{Index, UserAnswers}
 import org.scalacheck.Gen
 
 trait RouteDetailsUserAnswersGenerator extends UserAnswersGenerator {
   self: Generators =>
-
-  val ctcCountryCodes: Seq[String]                          = listWithMaxLength[CountryCode]().sample.get.map(_.code)
-  val customsSecurityAgreementAreaCountryCodes: Seq[String] = listWithMaxLength[CountryCode]().sample.get.map(_.code)
 
   def arbitraryRouteDetailsAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[RouteDetailsDomain](userAnswers)(

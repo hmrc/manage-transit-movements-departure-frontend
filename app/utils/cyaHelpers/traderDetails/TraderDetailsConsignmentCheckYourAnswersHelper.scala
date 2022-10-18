@@ -16,7 +16,8 @@
 
 package utils.cyaHelpers.traderDetails
 
-import models.{Address, Mode, UserAnswers}
+import models.reference.Country
+import models.{DynamicAddress, Mode, UserAnswers}
 import pages.traderDetails.consignment._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
@@ -53,9 +54,16 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     id = Some("consignor-name")
   )
 
-  def consignorAddress: Option[SummaryListRow] = getAnswerAndBuildRow[Address](
+  def consignorCountry: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
+    page = consignor.CountryPage,
+    formatAnswer = formatAsCountry,
+    prefix = "traderDetails.consignment.consignor.country",
+    id = Some("consignor-country")
+  )
+
+  def consignorAddress: Option[SummaryListRow] = getAnswerAndBuildRow[DynamicAddress](
     page = consignor.AddressPage,
-    formatAnswer = formatAsAddress,
+    formatAnswer = formatAsDynamicAddress,
     prefix = "traderDetails.consignment.consignor.address",
     id = Some("consignor-address")
   )
@@ -109,9 +117,16 @@ class TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, m
     id = Some("consignee-name")
   )
 
-  def consigneeAddress: Option[SummaryListRow] = getAnswerAndBuildRow[Address](
+  def consigneeCountry: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
+    page = consignee.CountryPage,
+    formatAnswer = formatAsCountry,
+    prefix = "traderDetails.consignment.consignee.country",
+    id = Some("consignee-country")
+  )
+
+  def consigneeAddress: Option[SummaryListRow] = getAnswerAndBuildRow[DynamicAddress](
     page = consignee.AddressPage,
-    formatAnswer = formatAsAddress,
+    formatAnswer = formatAsDynamicAddress,
     prefix = "traderDetails.consignment.consignee.address",
     id = Some("consignee-address")
   )

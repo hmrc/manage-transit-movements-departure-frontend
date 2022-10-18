@@ -20,7 +20,8 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
-import models.{Address, EoriNumber}
+import models.reference.Country
+import models.{DynamicAddress, EoriNumber}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.traderDetails.consignment.consignee
@@ -31,7 +32,8 @@ class ConsignmentConsigneeDomainSpec extends SpecBase with UserAnswersSpecHelper
 
     val consigneeEori    = arbitrary[EoriNumber].sample.value
     val consigneeName    = Gen.alphaNumStr.sample.value
-    val consigneeAddress = arbitrary[Address].sample.value
+    val consigneeCountry = arbitrary[Country].sample.value
+    val consigneeAddress = arbitrary[DynamicAddress].sample.value
 
     "can be parsed from UserAnswers" - {
 
@@ -40,11 +42,13 @@ class ConsignmentConsigneeDomainSpec extends SpecBase with UserAnswersSpecHelper
           .unsafeSetVal(consignee.EoriYesNoPage)(true)
           .unsafeSetVal(consignee.EoriNumberPage)(consigneeEori.value)
           .unsafeSetVal(consignee.NamePage)(consigneeName)
+          .unsafeSetVal(consignee.CountryPage)(consigneeCountry)
           .unsafeSetVal(consignee.AddressPage)(consigneeAddress)
 
         val expectedResult = ConsignmentConsigneeDomain(
           eori = Some(consigneeEori),
           name = consigneeName,
+          country = consigneeCountry,
           address = consigneeAddress
         )
         val result: EitherType[ConsignmentConsigneeDomain] = UserAnswersReader[ConsignmentConsigneeDomain].run(userAnswers)
@@ -56,11 +60,13 @@ class ConsignmentConsigneeDomainSpec extends SpecBase with UserAnswersSpecHelper
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(consignee.EoriYesNoPage)(false)
           .unsafeSetVal(consignee.NamePage)(consigneeName)
+          .unsafeSetVal(consignee.CountryPage)(consigneeCountry)
           .unsafeSetVal(consignee.AddressPage)(consigneeAddress)
 
         val expectedResult = ConsignmentConsigneeDomain(
           eori = None,
           name = consigneeName,
+          country = consigneeCountry,
           address = consigneeAddress
         )
         val result: EitherType[ConsignmentConsigneeDomain] = UserAnswersReader[ConsignmentConsigneeDomain].run(userAnswers)
@@ -100,11 +106,23 @@ class ConsignmentConsigneeDomainSpec extends SpecBase with UserAnswersSpecHelper
         result.left.value.page mustBe consignee.NamePage
       }
 
+      "when CountryPage is missing" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(consignee.EoriYesNoPage)(false)
+          .unsafeSetVal(consignee.NamePage)(consigneeName)
+
+        val result: EitherType[ConsignmentConsigneeDomain] = UserAnswersReader[ConsignmentConsigneeDomain].run(userAnswers)
+
+        result.left.value.page mustBe consignee.CountryPage
+      }
+
       "when AddressPage is missing" in {
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(consignee.EoriYesNoPage)(false)
           .unsafeSetVal(consignee.NamePage)(consigneeName)
+          .unsafeSetVal(consignee.CountryPage)(consigneeCountry)
 
         val result: EitherType[ConsignmentConsigneeDomain] = UserAnswersReader[ConsignmentConsigneeDomain].run(userAnswers)
 

@@ -79,9 +79,9 @@ class CustomsOfficeIdentifierController @Inject() (
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
                 value =>
-                  navigatorProvider().flatMap {
+                  navigatorProvider(mode).flatMap {
                     implicit navigator =>
-                      CustomsOfficeIdentifierPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                      CustomsOfficeIdentifierPage.writeToUserAnswers(value).writeToSession().navigate()
                   }
               )
         }

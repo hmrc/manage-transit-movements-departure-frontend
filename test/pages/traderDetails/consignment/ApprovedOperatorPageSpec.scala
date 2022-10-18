@@ -16,7 +16,7 @@
 
 package pages.traderDetails.consignment
 
-import models.Address
+import models.DynamicAddress
 import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
@@ -34,7 +34,7 @@ class ApprovedOperatorPageSpec extends PageBehaviours {
     beRemovable[Boolean](ApprovedOperatorPage)
 
     "cleanup" - {
-      val testAddress = arbitrary[Address].sample.value
+      val testAddress = arbitrary[DynamicAddress].sample.value
 
       "when Yes selected and we have No Security Details" - {
         "must clean up Consignor pages" in {

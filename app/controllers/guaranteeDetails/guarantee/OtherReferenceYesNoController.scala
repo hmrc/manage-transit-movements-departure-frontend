@@ -20,7 +20,7 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.{GuaranteeNavigator, GuaranteeNavigatorProvider}
+import navigation.{GuaranteeNavigatorProvider, UserAnswersNavigator}
 import pages.guaranteeDetails.guarantee.OtherReferenceYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -62,8 +62,8 @@ class OtherReferenceYesNoController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index))),
           value => {
-            implicit val navigator: GuaranteeNavigator = navigatorProvider(index)
-            OtherReferenceYesNoPage(index).writeToUserAnswers(value).writeToSession().navigateWith(mode)
+            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index)
+            OtherReferenceYesNoPage(index).writeToUserAnswers(value).writeToSession().navigate()
           }
         )
   }

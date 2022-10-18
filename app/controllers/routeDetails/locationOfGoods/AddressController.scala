@@ -18,10 +18,13 @@ package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.locationOfGoods.AddressFormProvider
-import models.{LocalReferenceNumber, Mode}
+import forms.DynamicAddressFormProvider
+import models.reference.Country
+import models.requests.SpecificDataRequestProvider1
+import models.{DynamicAddress, LocalReferenceNumber, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
-import pages.routeDetails.locationOfGoods.AddressPage
+import pages.routeDetails.locationOfGoods.{AddressPage, CountryPage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -37,7 +40,8 @@ class AddressController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LocationOfGoodsNavigatorProvider,
   actions: Actions,
-  formProvider: AddressFormProvider,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
+  formProvider: DynamicAddressFormProvider,
   countriesService: CountriesService,
   val controllerComponents: MessagesControllerComponents,
   view: AddressView
@@ -47,37 +51,43 @@ class AddressController @Inject() (
 
   private val prefix: String = "routeDetails.locationOfGoods.address"
 
+  private type Request = SpecificDataRequestProvider1[Country]#SpecificDataRequest[_]
+  private def country(implicit request: Request): Country = request.arg
+
+  private def form(isPostalCodeRequired: Boolean)(implicit request: Request): Form[DynamicAddress] =
+    formProvider(prefix, isPostalCodeRequired)
+
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
+    .andThen(getMandatoryPage(CountryPage))
     .async {
       implicit request =>
-        countriesService.getTransitCountries.map {
-          countryList =>
-            val form = formProvider(prefix, countryList)
+        countriesService.doesCountryRequireZip(country).map {
+          isPostalCodeRequired =>
             val preparedForm = request.userAnswers.get(AddressPage) match {
-              case None        => form
-              case Some(value) => form.fill(value)
+              case None        => form(isPostalCodeRequired)
+              case Some(value) => form(isPostalCodeRequired).fill(value)
             }
 
-            Ok(view(preparedForm, lrn, mode, countryList.countries))
+            Ok(view(preparedForm, lrn, mode, isPostalCodeRequired))
         }
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
+    .andThen(getMandatoryPage(CountryPage))
     .async {
       implicit request =>
-        countriesService.getTransitCountries().flatMap {
-          countryList =>
-            val form = formProvider(prefix, countryList)
-            form
+        countriesService.doesCountryRequireZip(country).flatMap {
+          isPostalCodeRequired =>
+            form(isPostalCodeRequired)
               .bindFromRequest()
               .fold(
-                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countryList.countries))),
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, isPostalCodeRequired))),
                 value =>
-                  navigatorProvider().flatMap {
+                  navigatorProvider(mode).flatMap {
                     implicit navigator =>
-                      AddressPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                      AddressPage.writeToUserAnswers(value).writeToSession().navigate()
                   }
               )
 

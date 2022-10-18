@@ -15,9 +15,9 @@
  */
 
 import cats.data.ReaderT
+import models.UserAnswers
 import models.journeyDomain.WriterError
 import models.requests.MandatoryDataRequest
-import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.QuestionPage
 import play.api.libs.json.Format
@@ -81,9 +81,9 @@ package object controllers {
 
   implicit class NavigatorOps[A](write: Future[Write[A]]) {
 
-    def navigateWith(mode: Mode)(implicit navigator: Navigator, executionContext: ExecutionContext): Future[Result] =
+    def navigate()(implicit navigator: Navigator, executionContext: ExecutionContext): Future[Result] =
       navigate {
-        case (_, userAnswers) => navigator.nextPage(userAnswers, mode)
+        case (_, userAnswers) => navigator.nextPage(userAnswers)
       }
 
     def navigateTo(call: Call)(implicit executionContext: ExecutionContext): Future[Result] =

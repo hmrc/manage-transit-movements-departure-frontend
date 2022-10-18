@@ -72,6 +72,14 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       |]
       |""".stripMargin
 
+  private val countriesWithoutZipResponseJson: String =
+    """
+      |[
+      | "AE",
+      | "AG"
+      |]
+      |""".stripMargin
+
   "Reference Data" - {
 
     "getCustomsOfficesOfTransitForCountry" - {
@@ -234,6 +242,26 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
       "must return an exception when an error response is returned" in {
         checkErrorResponse(s"/$baseUrl/country-address-postcode-based", connector.getAddressPostcodeBasedCountries())
+      }
+    }
+
+    "getCountriesWithoutZip" - {
+      "must return Seq of Country when successful" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$baseUrl/country-without-zip"))
+            .willReturn(okJson(countriesWithoutZipResponseJson))
+        )
+
+        val expectedResult: Seq[CountryCode] = Seq(
+          CountryCode("AE"),
+          CountryCode("AG")
+        )
+
+        connector.getCountriesWithoutZip().futureValue mustEqual expectedResult
+      }
+
+      "must return an exception when an error response is returned" in {
+        checkErrorResponse(s"/$baseUrl/country-without-zip", connector.getCountriesWithoutZip())
       }
     }
   }

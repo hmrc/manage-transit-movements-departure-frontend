@@ -17,6 +17,7 @@
 package navigation
 
 import models._
+import models.domain.UserAnswersReader
 import models.journeyDomain.guaranteeDetails.GuaranteeDomain
 
 import javax.inject.{Inject, Singleton}
@@ -24,15 +25,22 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class GuaranteeNavigatorProviderImpl @Inject() () extends GuaranteeNavigatorProvider {
 
-  def apply(index: Index): GuaranteeNavigator =
-    new GuaranteeNavigator(index)
+  def apply(mode: Mode, index: Index): UserAnswersNavigator =
+    new GuaranteeNavigator(mode, index)
 }
 
 trait GuaranteeNavigatorProvider {
 
-  def apply(index: Index): GuaranteeNavigator
+  def apply(mode: Mode, index: Index): UserAnswersNavigator
 }
 
 class GuaranteeNavigator(
+  override val mode: Mode,
   index: Index
-) extends UserAnswersSectionNavigator[GuaranteeDomain]()(GuaranteeDomain.userAnswersReader(index))
+) extends UserAnswersNavigator {
+
+  override type T = GuaranteeDomain
+
+  implicit override val reader: UserAnswersReader[GuaranteeDomain] =
+    GuaranteeDomain.userAnswersReader(index)
+}

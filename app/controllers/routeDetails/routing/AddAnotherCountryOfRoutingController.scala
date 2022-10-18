@@ -70,8 +70,8 @@ class AddAnotherCountryOfRoutingController @Inject() (
             case true =>
               Future.successful(Redirect(indexRoutes.CountryOfRoutingController.onPageLoad(lrn, mode, Index(numberOfCountries))))
             case false =>
-              navigatorProvider().map {
-                navigator => Redirect(navigator.nextPage(request.userAnswers, mode))
+              navigatorProvider(mode).map {
+                navigator => Redirect(navigator.nextPage(request.userAnswers))
               }
           }
         )

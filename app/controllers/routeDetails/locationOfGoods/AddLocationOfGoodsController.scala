@@ -62,9 +62,9 @@ class AddLocationOfGoodsController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value =>
-            navigatorProvider().flatMap {
+            navigatorProvider(mode).flatMap {
               implicit navigator =>
-                AddLocationOfGoodsPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                AddLocationOfGoodsPage.writeToUserAnswers(value).writeToSession().navigate()
             }
         )
   }

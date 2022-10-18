@@ -62,9 +62,9 @@ class AddUnLocodeYesNoController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value =>
-            navigatorProvider().flatMap {
+            navigatorProvider(mode).flatMap {
               implicit navigator =>
-                AddUnLocodeYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                AddUnLocodeYesNoPage.writeToUserAnswers(value).writeToSession().navigate()
             }
         )
   }

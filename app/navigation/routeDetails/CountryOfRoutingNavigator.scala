@@ -17,7 +17,7 @@
 package navigation.routeDetails
 
 import models._
-import models.journeyDomain.routeDetails.RouteDetailsDomain
+import models.domain.UserAnswersReader
 import models.journeyDomain.routeDetails.routing.CountryOfRoutingDomain
 import navigation.UserAnswersNavigator
 import services.CountriesService
@@ -32,27 +32,27 @@ class CountryOfRoutingNavigatorProviderImpl @Inject() (
 )(implicit ec: ExecutionContext)
     extends CountryOfRoutingNavigatorProvider {
 
-  def apply(index: Index)(implicit hc: HeaderCarrier): Future[CountryOfRoutingNavigator] =
-    for {
-      ctcCountries                             <- countriesService.getCountryCodesCTC()
-      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
-    } yield new CountryOfRoutingNavigator(
-      index,
-      ctcCountries.countryCodes,
-      customsSecurityAgreementAreaCountryCodes.countryCodes
-    )
+  def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator] =
+    mode match {
+      case NormalMode =>
+        Future.successful(new CountryOfRoutingNavigator(mode, index))
+      case CheckMode =>
+        RouteDetailsNavigatorProvider(countriesService, mode)
+    }
 }
 
 trait CountryOfRoutingNavigatorProvider {
 
-  def apply(index: Index)(implicit hc: HeaderCarrier): Future[CountryOfRoutingNavigator]
+  def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator]
 }
 
 class CountryOfRoutingNavigator(
-  index: Index,
-  ctcCountryCodes: Seq[String],
-  customsSecurityAgreementAreaCountryCodes: Seq[String]
-) extends UserAnswersNavigator[CountryOfRoutingDomain, RouteDetailsDomain]()(
-      CountryOfRoutingDomain.userAnswersReader(index),
-      RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-    )
+  override val mode: Mode,
+  index: Index
+) extends UserAnswersNavigator {
+
+  override type T = CountryOfRoutingDomain
+
+  implicit override val reader: UserAnswersReader[CountryOfRoutingDomain] =
+    CountryOfRoutingDomain.userAnswersReader(index)
+}

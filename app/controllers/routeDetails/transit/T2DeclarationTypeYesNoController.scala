@@ -62,9 +62,9 @@ class T2DeclarationTypeYesNoController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value =>
-            navigatorProvider().flatMap {
+            navigatorProvider(mode).flatMap {
               implicit navigator =>
-                T2DeclarationTypeYesNoPage.writeToUserAnswers(value).writeToSession().navigateWith(mode)
+                T2DeclarationTypeYesNoPage.writeToUserAnswers(value).writeToSession().navigate()
             }
         )
   }
