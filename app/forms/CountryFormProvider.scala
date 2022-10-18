@@ -25,8 +25,8 @@ import javax.inject.Inject
 
 class CountryFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String, countryList: CountryList): Form[Country] =
+  def apply(prefix: String, countryList: CountryList, args: Any*): Form[Country] =
     Form(
-      "value" -> country(countryList, s"$prefix.error.required")
+      "value" -> country(countryList, s"$prefix.error.required", args)
     )
 }

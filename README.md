@@ -23,7 +23,7 @@ sbt run
 
 If you hit an entry point before running the journey tests, it gets the compile out of the way and can help keep the first tests from failing.  
 
-e.g.: http://localhost:10120/manage-transit-movements/departure/local-reference-number
+e.g.: http://localhost:10120/manage-transit-movements/departures
 
 ### Running Scaffold
 
@@ -46,9 +46,7 @@ Then you create the address page referencing the Name Page
 -> package: foo.bar                       # use same package as created for Address name page above
 -> title[My New Address]: Consignee Address                    
 -> className[MyNewAddress]: ConsigneeAddress
--> formProvider [AddressFormProvider]
--> addressHolderNamePage: ConsigneeNamePage
--> addressHolderNameImport[pages.foo.bar.NamePage]
+-> formProvider [DynamicAddressFormProvider]
 -> navRoute [PreTaskListDetails]:         # use same package as created for Address name page above
 -> pageSection [PreTaskListSection]:      # use same package as created for Address name page above
 </pre>

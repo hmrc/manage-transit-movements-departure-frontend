@@ -19,8 +19,8 @@ package utils.cyaHelpers.routeDetails
 import base.SpecBase
 import controllers.routeDetails.locationOfGoods.{contact, routes}
 import generators.Generators
-import models.reference.{CustomsOffice, UnLocode}
-import models.{Address, Coordinates, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress}
+import models.reference.{Country, CustomsOffice, UnLocode}
+import models.{Coordinates, DynamicAddress, LocationOfGoodsIdentification, LocationType, Mode, PostalCodeAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.locationOfGoods._
@@ -349,7 +349,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
       "must return Some(Row)" - {
         "when addressPage is defined" in {
-          forAll(arbitrary[Mode], arbitrary[Address]) {
+          forAll(arbitrary[Mode], arbitrary[DynamicAddress]) {
             (mode, address) =>
               val answers = emptyUserAnswers.setValue(AddressPage, address)
               val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
@@ -358,7 +358,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
               result mustBe Some(
                 SummaryListRow(
                   key = Key("What is the address for the location of goods?".toText),
-                  value = Value(HtmlContent(Seq(address.line1, address.line2, address.postalCode, address.country).mkString("<br>"))),
+                  value = Value(HtmlContent(address.toString)),
                   actions = Some(
                     Actions(
                       items = List(
@@ -367,6 +367,49 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           href = routes.AddressController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the address for the location of goods"),
                           attributes = Map("id" -> "location-of-goods-address")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "country" - {
+      "must return None" - {
+        "when countryPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.country
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when countryPage is defined" in {
+          forAll(arbitrary[Mode], arbitrary[Country]) {
+            (mode, country) =>
+              val answers = emptyUserAnswers.setValue(CountryPage, country)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.country
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Location of goods country".toText),
+                  value = Value(country.description.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = routes.CountryController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("location of goods country"),
+                          attributes = Map("id" -> "location-of-goods-country")
                         )
                       )
                     )
@@ -401,7 +444,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
               result mustBe Some(
                 SummaryListRow(
                   key = Key("What is the address for the location of goods?".toText),
-                  value = Value(HtmlContent(Seq(postalCode.streetNumber, postalCode.postalCode, postalCode.country).mkString("<br>"))),
+                  value = Value(HtmlContent(postalCode.toString)),
                   actions = Some(
                     Actions(
                       items = List(

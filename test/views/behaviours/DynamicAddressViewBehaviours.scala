@@ -16,11 +16,13 @@
 
 package views.behaviours
 
-import models.Address
+import models.DynamicAddress
+import org.scalacheck.Arbitrary
 
-trait AddressViewBehaviours extends QuestionViewBehaviours[Address] {
+trait DynamicAddressViewBehaviours extends QuestionViewBehaviours[DynamicAddress] {
 
-  val fields = Seq("addressLine1", "addressLine2", "postalCode", "country")
+  val fields                        = Seq("numberAndStreet", "city", "postalCode")
+  val isPostalCodeRequired: Boolean = Arbitrary.arbitrary[Boolean].sample.value
 
   def pageWithAddressInput(): Unit =
     "page with an address input" - {
@@ -35,7 +37,12 @@ trait AddressViewBehaviours extends QuestionViewBehaviours[Address] {
           s"must contain a label for the field '$field'" in {
             val labels = doc.getElementsByAttributeValue("for", field)
             labels.size mustBe 1
-            assertElementContainsText(labels.first(), messages(s"$prefix.$field"))
+
+            (field, isPostalCodeRequired) match {
+              case ("postalCode", false) =>
+                assertElementContainsText(labels.first(), messages(s"$prefix.$field.optional"))
+              case _ => assertElementContainsText(labels.first(), messages(s"$prefix.$field"))
+            }
           }
         }
 

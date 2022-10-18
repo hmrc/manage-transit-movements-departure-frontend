@@ -17,7 +17,7 @@
 package services
 
 import connectors.ReferenceDataConnector
-import models.reference.Country
+import models.reference.{Country, CountryCode}
 import models.{CountryList, DeclarationType, UserAnswers}
 import pages.preTaskList.DeclarationTypePage
 import uk.gov.hmrc.http.HeaderCarrier
@@ -66,10 +66,17 @@ class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector
       .getCountryCodesCTC()
       .map(sort)
 
+  def getCountriesWithoutZip()(implicit hc: HeaderCarrier): Future[Seq[CountryCode]] =
+    referenceDataConnector
+      .getCountriesWithoutZip()
+
   private def getCountries(queryParameters: Seq[(String, String)])(implicit hc: HeaderCarrier): Future[CountryList] =
     referenceDataConnector
       .getCountries(queryParameters)
       .map(sort)
+
+  def doesCountryRequireZip(country: Country)(implicit hc: HeaderCarrier): Future[Boolean] =
+    getCountriesWithoutZip().map(!_.contains(country.code))
 
   private def sort(countries: Seq[Country]): CountryList =
     CountryList(countries.sortBy(_.description.toLowerCase))

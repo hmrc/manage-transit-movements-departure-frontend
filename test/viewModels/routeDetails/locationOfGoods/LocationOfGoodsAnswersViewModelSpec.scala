@@ -197,7 +197,7 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
       val qualifier = AddressIdentifier
 
       "when a contact has been provided" - {
-        "must return 6 rows" in {
+        "must return 7 rows" in {
           val initialAnswers = emptyUserAnswers
             .setValue(IdentificationPage, qualifier)
             .setValue(AddContactYesNoPage, true)
@@ -206,14 +206,14 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
             (userAnswers, mode) =>
               val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
               val section           = viewModelProvider.apply(userAnswers, mode).section
-              section.rows.size mustBe 6
+              section.rows.size mustBe 7
               section.sectionTitle.get mustBe "Location of goods"
           }
         }
       }
 
       "when a contact has not been provided" - {
-        "must return 4 rows" in {
+        "must return 5 rows" in {
           val initialAnswers = emptyUserAnswers
             .setValue(IdentificationPage, qualifier)
             .setValue(AddContactYesNoPage, false)
@@ -222,7 +222,7 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
             (userAnswers, mode) =>
               val viewModelProvider = injector.instanceOf[LocationOfGoodsAnswersViewModelProvider]
               val section           = viewModelProvider.apply(userAnswers, mode).section
-              section.rows.size mustBe 4
+              section.rows.size mustBe 5
               section.sectionTitle.get mustBe "Location of goods"
           }
         }

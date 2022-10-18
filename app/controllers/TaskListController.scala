@@ -16,13 +16,16 @@
 
 package controllers
 
+import cats.data.EitherT
+import cats.implicits._
 import com.google.inject.Inject
 import controllers.actions.{Actions, CheckDependentTaskCompletedActionProvider}
 import models.LocalReferenceNumber
-import models.journeyDomain.PreTaskListDomain
+import models.journeyDomain.{DepartureDomain, PreTaskListDomain}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.CountriesService
+import services.{ApiService, CountriesService}
+import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.TaskListViewModel
 import views.html.TaskListView
@@ -36,7 +39,8 @@ class TaskListController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: TaskListView,
   viewModel: TaskListViewModel,
-  countriesService: CountriesService
+  countriesService: CountriesService,
+  apiService: ApiService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -60,8 +64,41 @@ class TaskListController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkDependentTaskCompleted[PreTaskListDomain]) {
-      _ => ???
-    }
+    .andThen(checkDependentTaskCompleted[PreTaskListDomain])
+    .async {
 
+      implicit request =>
+        // TODO - move to service layer
+        (for {
+          ctcCountries                          <- EitherT.right(countriesService.getCountryCodesCTC())
+          customsSecurityAgreementAreaCountries <- EitherT.right(countriesService.getCustomsSecurityAgreementAreaCountries())
+          data = DepartureDomain
+            .userAnswersReader(
+              ctcCountries.countryCodes,
+              customsSecurityAgreementAreaCountries.countryCodes
+            )
+            .run(request.userAnswers)
+          response <- EitherT(data.traverse(apiService.submitDeclaration(_)))
+        } yield response.status match {
+
+          case status if is2xx(status) =>
+            Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad())
+          case status if is4xx(status) =>
+            // TODO - log and audit fail. How to handle this?
+            BadRequest
+          case _ =>
+            // TODO - log and audit fail. How to handle this?
+            InternalServerError("Something went wrong")
+
+        }).value.map {
+
+          case Right(value) =>
+            value
+          case Left(e) =>
+            // TODO - log and audit fail. How to handle this?
+            InternalServerError(s"Something went wrong: ${e.message}")
+
+        }
+
+    }
 }

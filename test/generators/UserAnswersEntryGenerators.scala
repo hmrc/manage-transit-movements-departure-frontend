@@ -21,6 +21,7 @@ import models.reference._
 import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
+import pages.transport.preRequisites.{CountryOfDispatchPage, ItemsDestinationCountryPage, TransportedToSameCountryYesNoPage, UniqueConsignmentReferencePage}
 import play.api.libs.json._
 import queries.Gettable
 
@@ -65,7 +66,8 @@ trait UserAnswersEntryGenerators {
       case TirIdentificationYesNoPage  => arbitrary[Boolean].map(JsBoolean)
       case TirIdentificationPage       => Gen.alphaNumStr.map(JsString)
       case NamePage                    => Gen.alphaNumStr.map(JsString)
-      case AddressPage                 => arbitrary[Address].map(Json.toJson(_))
+      case CountryPage                 => arbitrary[Country].map(Json.toJson(_))
+      case AddressPage                 => arbitrary[DynamicAddress].map(Json.toJson(_))
       case AddContactPage              => arbitrary[Boolean].map(JsBoolean)
       case contact.NamePage            => Gen.alphaNumStr.map(JsString)
       case contact.TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
@@ -99,7 +101,8 @@ trait UserAnswersEntryGenerators {
       case EoriYesNoPage               => arbitrary[Boolean].map(JsBoolean)
       case EoriPage                    => Gen.alphaNumStr.map(JsString)
       case NamePage                    => Gen.alphaNumStr.map(JsString)
-      case AddressPage                 => arbitrary[Address].map(Json.toJson(_))
+      case CountryPage                 => arbitrary[Country].map(Json.toJson(_))
+      case AddressPage                 => arbitrary[DynamicAddress].map(Json.toJson(_))
       case AddContactPage              => arbitrary[Boolean].map(JsBoolean)
       case contact.NamePage            => Gen.alphaNumStr.map(JsString)
       case contact.TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
@@ -112,7 +115,8 @@ trait UserAnswersEntryGenerators {
       case EoriYesNoPage  => arbitrary[Boolean].map(JsBoolean)
       case EoriNumberPage => Gen.alphaNumStr.map(JsString)
       case NamePage       => Gen.alphaNumStr.map(JsString)
-      case AddressPage    => arbitrary[Address].map(Json.toJson(_))
+      case CountryPage    => arbitrary[Country].map(Json.toJson(_))
+      case AddressPage    => arbitrary[DynamicAddress].map(Json.toJson(_))
     }
   }
 
@@ -194,7 +198,8 @@ trait UserAnswersEntryGenerators {
       case AdditionalIdentifierPage    => Gen.alphaNumStr.map(JsString)
       case CoordinatesPage             => arbitrary[Coordinates].map(Json.toJson(_))
       case UnLocodePage                => arbitrary[UnLocode].map(Json.toJson(_))
-      case AddressPage                 => arbitrary[Address].map(Json.toJson(_))
+      case CountryPage                 => arbitrary[Country].map(Json.toJson(_))
+      case AddressPage                 => arbitrary[DynamicAddress].map(Json.toJson(_))
       case PostalCodePage              => arbitrary[PostalCodeAddress].map(Json.toJson(_))
     }
   }
@@ -250,7 +255,11 @@ trait UserAnswersEntryGenerators {
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.preRequisites.SameUcrYesNoPage
     {
-      case SameUcrYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case SameUcrYesNoPage                  => arbitrary[Boolean].map(JsBoolean)
+      case UniqueConsignmentReferencePage    => Gen.alphaNumStr.map(JsString)
+      case CountryOfDispatchPage             => arbitrary[Country].map(Json.toJson(_))
+      case TransportedToSameCountryYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case ItemsDestinationCountryPage       => arbitrary[Country].map(Json.toJson(_))
     }
   }
 

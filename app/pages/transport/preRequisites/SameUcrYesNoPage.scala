@@ -19,13 +19,13 @@ package pages.transport.preRequisites
 import controllers.transport.preRequisites.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.TransportSection
+import pages.sections.transport.PreRequisitesSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case object SameUcrYesNoPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = TransportSection.path \ toString
+  override def path: JsPath = PreRequisitesSection.path \ toString
 
   override def toString: String = "sameUcrYesNo"
 

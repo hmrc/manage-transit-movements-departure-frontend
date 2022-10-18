@@ -17,31 +17,22 @@
 package views.routeDetails.routing.index
 
 import forms.CountryFormProvider
-import generators.Generators
 import models.reference.Country
 import models.{CountryList, NormalMode}
+import org.scalacheck.Arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.InputSelectViewBehaviours
 import views.html.routeDetails.routing.index.CountryOfRoutingView
 
-class CountryOfRoutingViewSpec extends InputSelectViewBehaviours[Country] with Generators {
-
-  private lazy val country1 = arbitraryCountry.arbitrary.sample.get
-  private lazy val country2 = arbitraryCountry.arbitrary.sample.get
-  private lazy val country3 = arbitraryCountry.arbitrary.sample.get
-
-  override def values: Seq[Country] =
-    Seq(
-      country1,
-      country2,
-      country3
-    )
+class CountryOfRoutingViewSpec extends InputSelectViewBehaviours[Country] {
 
   override def form: Form[Country] = new CountryFormProvider()(prefix, CountryList(values))
 
   override def applyView(form: Form[Country]): HtmlFormat.Appendable =
     injector.instanceOf[CountryOfRoutingView].apply(form, lrn, values, NormalMode, index)(fakeRequest, messages)
+
+  implicit override val arbitraryT: Arbitrary[Country] = arbitraryCountry
 
   override val prefix: String = "routeDetails.routing.index.countryOfRouting"
 

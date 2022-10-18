@@ -17,15 +17,16 @@
 package controllers.traderDetails.holderOfTransit
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.AddressFormProvider
+import forms.DynamicAddressFormProvider
 import generators.Generators
-import models.{Address, CountryList, NormalMode}
+import models.reference.Country
+import models.{DynamicAddress, NormalMode}
 import navigation.traderDetails.TraderDetailsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.traderDetails.holderOfTransit.{AddressPage, NamePage}
+import pages.traderDetails.holderOfTransit.{AddressPage, CountryPage, NamePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -39,11 +40,11 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
 
   private val addressHolderName = Gen.alphaNumStr.sample.value
 
-  private val testAddress = arbitrary[Address].sample.value
-  private val countryList = CountryList(Seq(testAddress.country))
+  private val testAddress = arbitrary[DynamicAddress].sample.value
+  private val country     = arbitrary[Country].sample.value
 
-  private val formProvider = new AddressFormProvider()
-  private val form         = formProvider("traderDetails.holderOfTransit.address", addressHolderName, countryList)
+  private val formProvider                        = new DynamicAddressFormProvider()
+  private def form(isPostalCodeRequired: Boolean) = formProvider("traderDetails.holderOfTransit.address", isPostalCodeRequired, addressHolderName)
 
   private val mode              = NormalMode
   private lazy val addressRoute = routes.AddressController.onPageLoad(lrn, mode).url
@@ -63,71 +64,144 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
 
   "Address Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET" - {
 
-      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
+      "when postcode is required" in {
 
-      val userAnswers = emptyUserAnswers.setValue(NamePage, addressHolderName)
-      setExistingUserAnswers(userAnswers)
+        val isPostalCodeRequired = true
 
-      val request = FakeRequest(GET, addressRoute)
-      val result  = route(app, request).value
+        when(mockCountriesService.doesCountryRequireZip(any())(any())).thenReturn(Future.successful(isPostalCodeRequired))
 
-      val view = injector.instanceOf[AddressView]
+        val userAnswers = emptyUserAnswers
+          .setValue(NamePage, addressHolderName)
+          .setValue(CountryPage, country)
+        setExistingUserAnswers(userAnswers)
 
-      status(result) mustEqual OK
+        val request = FakeRequest(GET, addressRoute)
+        val result  = route(app, request).value
 
-      contentAsString(result) mustEqual
-        view(form, lrn, mode, countryList.countries, addressHolderName)(request, messages).toString
+        val view = injector.instanceOf[AddressView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form(isPostalCodeRequired), lrn, mode, addressHolderName, isPostalCodeRequired)(request, messages).toString
+
+      }
+
+      "when postcode is optional" in {
+
+        val isPostalCodeRequired = false
+
+        when(mockCountriesService.doesCountryRequireZip(any())(any())).thenReturn(Future.successful(isPostalCodeRequired))
+
+        val userAnswers = emptyUserAnswers
+          .setValue(NamePage, addressHolderName)
+          .setValue(CountryPage, country)
+        setExistingUserAnswers(userAnswers)
+
+        val request = FakeRequest(GET, addressRoute)
+        val result  = route(app, request).value
+
+        val view = injector.instanceOf[AddressView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form(isPostalCodeRequired), lrn, mode, addressHolderName, isPostalCodeRequired)(request, messages).toString
+
+      }
 
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must populate the view correctly on a GET when the question has previously been answered" - {
 
-      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
+      "when postcode is required" in {
 
-      val userAnswers = emptyUserAnswers
-        .setValue(NamePage, addressHolderName)
-        .setValue(AddressPage, testAddress)
+        val isPostalCodeRequired = true
+        val testAddress          = arbitrary[DynamicAddress](arbitraryDynamicAddressWithRequiredPostalCode).sample.value
 
-      setExistingUserAnswers(userAnswers)
+        when(mockCountriesService.doesCountryRequireZip(any())(any())).thenReturn(Future.successful(isPostalCodeRequired))
 
-      val request = FakeRequest(GET, addressRoute)
+        val userAnswers = emptyUserAnswers
+          .setValue(NamePage, addressHolderName)
+          .setValue(CountryPage, country)
+          .setValue(AddressPage, testAddress)
 
-      val result = route(app, request).value
+        setExistingUserAnswers(userAnswers)
 
-      val filledForm = form.bind(
-        Map(
-          "addressLine1" -> testAddress.line1,
-          "addressLine2" -> testAddress.line2,
-          "postalCode"   -> testAddress.postalCode,
-          "country"      -> testAddress.country.code.code
+        val request = FakeRequest(GET, addressRoute)
+
+        val result = route(app, request).value
+
+        val filledForm = form(isPostalCodeRequired).bind(
+          Map(
+            "numberAndStreet" -> testAddress.numberAndStreet,
+            "city"            -> testAddress.city,
+            "postalCode"      -> testAddress.postalCode.get
+          )
         )
-      )
 
-      val view = injector.instanceOf[AddressView]
+        val view = injector.instanceOf[AddressView]
 
-      status(result) mustEqual OK
+        status(result) mustEqual OK
 
-      contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, countryList.countries, addressHolderName)(request, messages).toString
+        contentAsString(result) mustEqual
+          view(filledForm, lrn, mode, addressHolderName, isPostalCodeRequired)(request, messages).toString
+
+      }
+
+      "when postcode is optional" in {
+
+        val isPostalCodeRequired = false
+
+        when(mockCountriesService.doesCountryRequireZip(any())(any())).thenReturn(Future.successful(isPostalCodeRequired))
+
+        val userAnswers = emptyUserAnswers
+          .setValue(NamePage, addressHolderName)
+          .setValue(CountryPage, country)
+          .setValue(AddressPage, testAddress)
+
+        setExistingUserAnswers(userAnswers)
+
+        val request = FakeRequest(GET, addressRoute)
+
+        val result = route(app, request).value
+
+        val filledForm = form(isPostalCodeRequired).bind(
+          Map(
+            "numberAndStreet" -> testAddress.numberAndStreet,
+            "city"            -> testAddress.city,
+            "postalCode"      -> testAddress.postalCode.getOrElse("")
+          )
+        )
+
+        val view = injector.instanceOf[AddressView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(filledForm, lrn, mode, addressHolderName, isPostalCodeRequired)(request, messages).toString
+
+      }
 
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
-      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
+      when(mockCountriesService.doesCountryRequireZip(any())(any())).thenReturn(Future.successful(false))
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      val userAnswers = emptyUserAnswers.setValue(NamePage, addressHolderName)
+      val userAnswers = emptyUserAnswers
+        .setValue(NamePage, addressHolderName)
+        .setValue(CountryPage, country)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(POST, addressRoute)
         .withFormUrlEncodedBody(
-          ("addressLine1", testAddress.line1),
-          ("addressLine2", testAddress.line2),
-          ("postalCode", testAddress.postalCode),
-          ("country", testAddress.country.code.code)
+          ("numberAndStreet", testAddress.numberAndStreet),
+          ("city", testAddress.city),
+          ("postalCode", testAddress.postalCode.getOrElse(""))
         )
 
       val result = route(app, request).value
@@ -138,24 +212,57 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
 
     }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+    "must return a Bad Request and errors when invalid data is submitted" - {
 
-      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
+      "when postcode is required" in {
 
-      val userAnswers = emptyUserAnswers.setValue(NamePage, addressHolderName)
-      setExistingUserAnswers(userAnswers)
+        val isPostalCodeRequired = true
 
-      val request   = FakeRequest(POST, addressRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm = form.bind(Map("value" -> ""))
+        when(mockCountriesService.doesCountryRequireZip(any())(any())).thenReturn(Future.successful(isPostalCodeRequired))
 
-      val result = route(app, request).value
+        val userAnswers = emptyUserAnswers
+          .setValue(NamePage, addressHolderName)
+          .setValue(CountryPage, country)
+        setExistingUserAnswers(userAnswers)
 
-      status(result) mustEqual BAD_REQUEST
+        val request   = FakeRequest(POST, addressRoute).withFormUrlEncodedBody(("value", ""))
+        val boundForm = form(isPostalCodeRequired).bind(Map("value" -> ""))
 
-      val view = injector.instanceOf[AddressView]
+        val result = route(app, request).value
 
-      contentAsString(result) mustEqual
-        view(boundForm, lrn, mode, countryList.countries, addressHolderName)(request, messages).toString
+        status(result) mustEqual BAD_REQUEST
+
+        val view = injector.instanceOf[AddressView]
+
+        contentAsString(result) mustEqual
+          view(boundForm, lrn, mode, addressHolderName, isPostalCodeRequired)(request, messages).toString
+
+      }
+
+      "when postcode is optional" in {
+
+        val isPostalCodeRequired = false
+
+        when(mockCountriesService.doesCountryRequireZip(any())(any())).thenReturn(Future.successful(isPostalCodeRequired))
+
+        val userAnswers = emptyUserAnswers
+          .setValue(NamePage, addressHolderName)
+          .setValue(CountryPage, country)
+        setExistingUserAnswers(userAnswers)
+
+        val request   = FakeRequest(POST, addressRoute).withFormUrlEncodedBody(("value", ""))
+        val boundForm = form(isPostalCodeRequired).bind(Map("value" -> ""))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual BAD_REQUEST
+
+        val view = injector.instanceOf[AddressView]
+
+        contentAsString(result) mustEqual
+          view(boundForm, lrn, mode, addressHolderName, isPostalCodeRequired)(request, messages).toString
+
+      }
 
     }
 
@@ -179,10 +286,9 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
 
       val request = FakeRequest(POST, addressRoute)
         .withFormUrlEncodedBody(
-          ("addressLine1", testAddress.line1),
-          ("addressLine2", testAddress.line2),
-          ("postalCode", testAddress.postalCode),
-          ("country", testAddress.country.code.code)
+          ("numberAndStreet", testAddress.numberAndStreet),
+          ("city", testAddress.city),
+          ("postalCode", testAddress.postalCode.getOrElse(""))
         )
 
       val result = route(app, request).value
@@ -192,5 +298,6 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
     }
+
   }
 }

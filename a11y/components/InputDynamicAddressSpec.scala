@@ -17,33 +17,45 @@
 package components
 
 import a11ySpecBase.A11ySpecBase
-import forms.AddressFormProvider
-import models.CountryList
-import org.scalacheck.Arbitrary.arbitrary
+import forms.DynamicAddressFormProvider
 import org.scalacheck.Gen
-import views.html.components.InputAddress
+import views.html.components.InputDynamicAddress
 import views.html.templates.MainTemplate
 
-class InputAddressSpec extends A11ySpecBase {
+class InputDynamicAddressSpec extends A11ySpecBase {
 
-  "the 'input address' component" must {
+  "the 'input dynamic address' component" must {
     val template  = app.injector.instanceOf[MainTemplate]
-    val component = app.injector.instanceOf[InputAddress]
+    val component = app.injector.instanceOf[InputDynamicAddress]
 
     val prefix      = Gen.alphaNumStr.sample.value
     val name        = Gen.alphaNumStr.sample.value
-    val countries   = arbitrary[CountryList].sample.value
     val title       = nonEmptyString.sample.value
     val caption     = Gen.option(nonEmptyString).sample.value
     val headingArgs = listWithMaxLength[Any]().sample.value
-    val form        = new AddressFormProvider()(prefix, name, countries)
 
-    val content = template.apply(title) {
-      component.apply(form, prefix, caption, countries.countries, name, headingArgs)
-    }
+    "pass accessibility checks" when {
+      "postal code is required" in {
+        val isPostalCodeRequired = true
+        val form                 = DynamicAddressFormProvider(prefix, isPostalCodeRequired, name)
 
-    "pass accessibility checks" in {
-      content.toString() must passAccessibilityChecks
+        val content = template.apply(title) {
+          component.apply(form, prefix, caption, isPostalCodeRequired, headingArgs)
+        }
+
+        content.toString() must passAccessibilityChecks
+      }
+
+      "postal code is not required" in {
+        val isPostalCodeRequired = false
+        val form                 = DynamicAddressFormProvider(prefix, isPostalCodeRequired, name)
+
+        val content = template.apply(title) {
+          component.apply(form, prefix, caption, isPostalCodeRequired, headingArgs)
+        }
+
+        content.toString() must passAccessibilityChecks
+      }
     }
   }
 }

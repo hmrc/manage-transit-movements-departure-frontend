@@ -2,12 +2,12 @@ package views.$package$
 
 import forms.$formProvider$
 import models.NormalMode
+import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
 import views.html.$package$.$className$View
-import org.scalacheck.{Arbitrary, Gen}
 
 class $className$ViewSpec extends InputTextViewBehaviours[String] {
 
