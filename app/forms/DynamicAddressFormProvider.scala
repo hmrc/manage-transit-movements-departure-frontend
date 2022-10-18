@@ -27,34 +27,34 @@ import javax.inject.Inject
 
 class DynamicAddressFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String, name: String, isPostalCodeRequired: Boolean)(implicit messages: Messages): Form[DynamicAddress] =
+  def apply(prefix: String, isPostalCodeRequired: Boolean, args: Any*)(implicit messages: Messages): Form[DynamicAddress] =
     Form(
       mapping(
         NumberAndStreet.field -> {
-          trimmedText(s"$prefix.error.required", Seq(NumberAndStreet.arg, name))
+          trimmedText(s"$prefix.error.required", NumberAndStreet.arg +: args)
             .verifying(
               StopOnFirstFail[String](
-                maxLength(NumberAndStreet.length, s"$prefix.error.length", Seq(NumberAndStreet.arg, name, NumberAndStreet.length)),
-                regexp(NumberAndStreet.regex, s"$prefix.error.invalid", Seq(NumberAndStreet.arg, name))
+                maxLength(NumberAndStreet.length, s"$prefix.error.length", Seq(NumberAndStreet.arg) ++ args ++ Seq(NumberAndStreet.length)),
+                regexp(NumberAndStreet.regex, s"$prefix.error.invalid", NumberAndStreet.arg +: args)
               )
             )
         },
         City.field -> {
-          trimmedText(s"$prefix.error.required", Seq(City.arg, name))
+          trimmedText(s"$prefix.error.required", City.arg +: args)
             .verifying(
               StopOnFirstFail[String](
-                maxLength(City.length, s"$prefix.error.length", Seq(City.arg, name, City.length)),
-                regexp(City.regex, s"$prefix.error.invalid", Seq(City.arg, name))
+                maxLength(City.length, s"$prefix.error.length", Seq(City.arg) ++ args ++ Seq(City.length)),
+                regexp(City.regex, s"$prefix.error.invalid", City.arg +: args)
               )
             )
         },
         PostalCode.field -> {
           val constraint = StopOnFirstFail[String](
-            maxLength(PostalCode.length, s"$prefix.error.length", Seq(PostalCode.arg, name, PostalCode.length)),
-            regexp(PostalCode.regex, s"$prefix.error.postalCode.invalid", Seq(name))
+            maxLength(PostalCode.length, s"$prefix.error.length", Seq(PostalCode.arg) ++ args ++ Seq(PostalCode.length)),
+            regexp(PostalCode.regex, s"$prefix.error.postalCode.invalid", args)
           )
           if (isPostalCodeRequired) {
-            trimmedText(s"$prefix.error.required", Seq(PostalCode.arg, name))
+            trimmedText(s"$prefix.error.required", PostalCode.arg +: args)
               .verifying(constraint)
               .transform[Option[String]](Some(_), _.getOrElse(""))
           } else {
@@ -70,6 +70,6 @@ class DynamicAddressFormProvider @Inject() extends Mappings {
 
 object DynamicAddressFormProvider {
 
-  def apply(prefix: String, name: String, isPostalCodeRequired: Boolean)(implicit messages: Messages): Form[DynamicAddress] =
-    new DynamicAddressFormProvider()(prefix, name, isPostalCodeRequired)
+  def apply(prefix: String, isPostalCodeRequired: Boolean, args: Any*)(implicit messages: Messages): Form[DynamicAddress] =
+    new DynamicAddressFormProvider()(prefix, isPostalCodeRequired, args: _*)
 }

@@ -16,7 +16,7 @@
 
 package pages.traderDetails.consignment
 
-import models.{Address, EoriNumber}
+import models.{DynamicAddress, EoriNumber}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.behaviours.PageBehaviours
@@ -35,7 +35,7 @@ class MoreThanOneConsigneePageSpec extends PageBehaviours {
     "cleanup" - {
       val consigneeEori    = arbitrary[EoriNumber].sample.value
       val consigneeName    = Gen.alphaNumStr.sample.value
-      val consigneeAddress = arbitrary[Address].sample.value
+      val consigneeAddress = arbitrary[DynamicAddress].sample.value
 
       "when Yes selected" - {
         "must clean up Consignee pages" in {

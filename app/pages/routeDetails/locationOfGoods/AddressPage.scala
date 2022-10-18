@@ -17,13 +17,13 @@
 package pages.routeDetails.locationOfGoods
 
 import controllers.routeDetails.locationOfGoods.routes
-import models.{Address, Mode, UserAnswers}
+import models.{DynamicAddress, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.routeDetails.locationOfGoods.LocationOfGoodsIdentifierSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object AddressPage extends QuestionPage[Address] {
+case object AddressPage extends QuestionPage[DynamicAddress] {
 
   override def path: JsPath = LocationOfGoodsIdentifierSection.path \ toString
 

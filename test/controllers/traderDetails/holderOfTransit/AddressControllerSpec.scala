@@ -44,7 +44,7 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
   private val country     = arbitrary[Country].sample.value
 
   private val formProvider                        = new DynamicAddressFormProvider()
-  private def form(isPostalCodeRequired: Boolean) = formProvider("traderDetails.holderOfTransit.address", addressHolderName, isPostalCodeRequired)
+  private def form(isPostalCodeRequired: Boolean) = formProvider("traderDetails.holderOfTransit.address", isPostalCodeRequired, addressHolderName)
 
   private val mode              = NormalMode
   private lazy val addressRoute = routes.AddressController.onPageLoad(lrn, mode).url
@@ -189,7 +189,7 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
 
     "must redirect to the next page when valid data is submitted" in {
 
-      when(mockCountriesService.doesCountryRequireZip(any())(any())).thenReturn(Future.successful(true))
+      when(mockCountriesService.doesCountryRequireZip(any())(any())).thenReturn(Future.successful(false))
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       val userAnswers = emptyUserAnswers
