@@ -23,7 +23,7 @@ sbt run
 
 If you hit an entry point before running the journey tests, it gets the compile out of the way and can help keep the first tests from failing.  
 
-e.g.: http://localhost:10120/manage-transit-movements/departure/local-reference-number
+e.g.: http://localhost:10120/manage-transit-movements/departures
 
 ### Running Scaffold
 
