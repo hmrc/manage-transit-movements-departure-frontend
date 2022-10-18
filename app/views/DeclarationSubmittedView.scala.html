@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +12,29 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package pages.sections
+@import views.html.components.Heading
+@import config.FrontendAppConfig
 
-import play.api.libs.json.{JsObject, JsPath}
+@this(
+    mainTemplate: MainTemplate,
+    heading: Heading,
+    config: FrontendAppConfig,
+    govukPanel: GovukPanel,
+)
 
-case object TransportSection extends Section[JsObject] {
+@()(implicit request: Request[_], messages: Messages)
 
-  override def path: JsPath = JsPath \ toString
+@mainTemplate(
+    title = messages("declarationSubmitted.title"),
+    showBackLink = true
+) {
+    @govukPanel(Panel(
+        title = Text(messages("declarationSubmitted.heading"))
+        )
+    )
 
-  override def toString: String = "transportDetails"
+    <p class="govuk-body">@messages("declarationSubmitted.paragraph1")</p>
+
 }

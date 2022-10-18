@@ -17,31 +17,22 @@
 package views.routeDetails.locationOfGoods
 
 import forms.UnLocodeFormProvider
-import generators.Generators
 import models.reference.UnLocode
 import models.{NormalMode, UnLocodeList}
+import org.scalacheck.Arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.InputSelectViewBehaviours
 import views.html.routeDetails.locationOfGoods.UnLocodeView
 
-class UnLocodeViewSpec extends InputSelectViewBehaviours[UnLocode] with Generators {
-
-  private lazy val unLocode1 = arbitraryUnLocode.arbitrary.sample.get
-  private lazy val unLocode2 = arbitraryUnLocode.arbitrary.sample.get
-  private lazy val unLocode3 = arbitraryUnLocode.arbitrary.sample.get
-
-  override def values: Seq[UnLocode] =
-    Seq(
-      unLocode1,
-      unLocode2,
-      unLocode3
-    )
+class UnLocodeViewSpec extends InputSelectViewBehaviours[UnLocode] {
 
   override def form: Form[UnLocode] = new UnLocodeFormProvider()(prefix, UnLocodeList(values))
 
   override def applyView(form: Form[UnLocode]): HtmlFormat.Appendable =
     injector.instanceOf[UnLocodeView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
+
+  implicit override val arbitraryT: Arbitrary[UnLocode] = arbitraryUnLocode
 
   override val prefix: String = "routeDetails.locationOfGoods.unLocode"
 

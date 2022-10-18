@@ -21,6 +21,7 @@ import models.reference._
 import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
+import pages.transport.preRequisites.{CountryOfDispatchPage, ItemsDestinationCountryPage, TransportedToSameCountryYesNoPage, UniqueConsignmentReferencePage}
 import play.api.libs.json._
 import queries.Gettable
 
@@ -251,7 +252,11 @@ trait UserAnswersEntryGenerators {
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.preRequisites.SameUcrYesNoPage
     {
-      case SameUcrYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case SameUcrYesNoPage                  => arbitrary[Boolean].map(JsBoolean)
+      case UniqueConsignmentReferencePage    => Gen.alphaNumStr.map(JsString)
+      case CountryOfDispatchPage             => arbitrary[Country].map(Json.toJson(_))
+      case TransportedToSameCountryYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case ItemsDestinationCountryPage       => arbitrary[Country].map(Json.toJson(_))
     }
   }
 

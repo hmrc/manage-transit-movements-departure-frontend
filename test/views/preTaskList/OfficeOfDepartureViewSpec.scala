@@ -17,28 +17,24 @@
 package views.preTaskList
 
 import forms.CustomsOfficeFormProvider
-import generators.Generators
-import models.reference.{CountryCode, CustomsOffice}
+import models.reference.CustomsOffice
 import models.{CustomsOfficeList, NormalMode}
+import org.scalacheck.Arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.InputSelectViewBehaviours
 import views.html.preTaskList.OfficeOfDepartureView
 
-class OfficeOfDepartureViewSpec extends InputSelectViewBehaviours[CustomsOffice] with Generators {
+class OfficeOfDepartureViewSpec extends InputSelectViewBehaviours[CustomsOffice] {
 
   override def form: Form[CustomsOffice] = new CustomsOfficeFormProvider()(prefix, CustomsOfficeList(Nil))
 
   override def applyView(form: Form[CustomsOffice]): HtmlFormat.Appendable =
     injector.instanceOf[OfficeOfDepartureView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "officeOfDeparture"
+  implicit override val arbitraryT: Arbitrary[CustomsOffice] = arbitraryCustomsOffice
 
-  override def values: Seq[CustomsOffice] = Seq(
-    CustomsOffice("GB1", "name1", None),
-    CustomsOffice("GB2", "name2", None),
-    CustomsOffice("XI3", "name3", None)
-  )
+  override val prefix: String = "officeOfDeparture"
 
   behave like pageWithTitle()
 
