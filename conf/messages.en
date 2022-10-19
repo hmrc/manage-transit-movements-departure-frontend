@@ -758,7 +758,6 @@ routeDetails.exit.index.confirmRemoveOfficeOfExit.default.error.required = Selec
 
 routeDetails.exit.index.checkOfficeOfExitAnswers.title = Check your answers
 routeDetails.exit.index.checkOfficeOfExitAnswers.heading = Check your answers
-routeDetails.exit.index.checkOfficeOfExitAnswers.subHeading = Office of exit
 
 # Route details - Location of goods
 
@@ -864,20 +863,6 @@ routeDetails.locationOfGoods.address.error.postalCode.invalid = The postal code 
 routeDetails.locationOfGoods.address.error.invalid = The {0} must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 routeDetails.locationOfGoods.address.error.required = Enter the {0} for the location of goods
 routeDetails.locationOfGoods.address.error.length = The {0} must be {1} characters or less
-
-traderDetails.holderOfTransit.address.title = What is the transit holder’s address?
-traderDetails.holderOfTransit.address.heading = What is {0}’s address?
-traderDetails.holderOfTransit.address.numberAndStreet = Number and street name
-traderDetails.holderOfTransit.address.city = Town or city
-traderDetails.holderOfTransit.address.postalCode = Postal code
-traderDetails.holderOfTransit.address.postalCode.optional = Postal code (optional)
-traderDetails.holderOfTransit.address.checkYourAnswersLabel = Transit holder’s address
-traderDetails.holderOfTransit.address.change.hidden = transit holder’s address
-traderDetails.holderOfTransit.address.error.postalCode.invalid = The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
-traderDetails.holderOfTransit.address.error.invalid = The {0} for {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-traderDetails.holderOfTransit.address.error.required = Enter the {0} for {1}’s address
-traderDetails.holderOfTransit.address.error.length = The {0} for {1}’s address must be {2} characters or less
-traderDetails.holderOfTransit.address.placeholder = Select a country
 
 routeDetails.locationOfGoods.additionalIdentifier.title = What is the additional identifier for the location of goods?
 routeDetails.locationOfGoods.additionalIdentifier.heading = What is the additional identifier for the location of goods?
