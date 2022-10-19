@@ -25,9 +25,9 @@ import play.api.data.{Field, FormError}
 class AuthorisationNumberFormProviderSpec extends StringFieldBehaviours {
 
   private val prefix               = Gen.alphaNumStr.sample.value
-  private val invalidCharactersKey = s"$prefix.error.invalidCharacters"
+  private val invalidCharactersKey = s"$prefix.error.invalid"
   private val requiredKey          = s"$prefix.error.required"
-  private val maxLengthKey         = s"$prefix.error.maxLength"
+  private val maxLengthKey         = s"$prefix.error.length"
   private val maxLength            = 35
 
   val form = new AuthorisationNumberFormProvider()(prefix)

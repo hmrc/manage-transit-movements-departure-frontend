@@ -30,8 +30,8 @@ class AuthorisationNumberFormProvider @Inject() extends Mappings {
       "value" -> text(s"$prefix.error.required")
         .verifying(
           forms.StopOnFirstFail[String](
-            regexp(alphaNumericRegex, s"$prefix.error.invalidCharacters"),
-            maxLength(maxAuthorisationNumberLength, s"$prefix.error.maxLength")
+            regexp(alphaNumericRegex, s"$prefix.error.invalid"),
+            maxLength(maxAuthorisationNumberLength, s"$prefix.error.length")
           )
         )
     )
