@@ -19,7 +19,10 @@ package viewModels.sections
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewModels.Link
 
-case class Section(sectionTitle: Option[String], rows: Seq[SummaryListRow], addAnotherLink: Option[Link])
+case class Section(sectionTitle: Option[String], rows: Seq[SummaryListRow], addAnotherLink: Option[Link]) {
+
+  def removeTitle(): Section = this.copy(sectionTitle = None)
+}
 
 object Section {
   def apply(sectionTitle: String, rows: Seq[SummaryListRow]): Section = new Section(Some(sectionTitle), rows, None)

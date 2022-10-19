@@ -33,7 +33,7 @@ class AddOfficeOfTransitYesNoViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Office of transit")
 
   behave like pageWithHeading()
 

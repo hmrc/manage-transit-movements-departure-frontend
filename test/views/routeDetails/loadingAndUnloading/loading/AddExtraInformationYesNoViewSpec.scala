@@ -33,7 +33,7 @@ class AddExtraInformationYesNoViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Place of loading")
 
   behave like pageWithHeading()
 

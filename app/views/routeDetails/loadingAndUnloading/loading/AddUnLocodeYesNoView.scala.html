@@ -44,8 +44,9 @@
             yesNoType = YesNoWithAdditionalHtml(
                 heading = messages("routeDetails.loadingAndUnloading.loading.addUnLocodeYesNo.heading"),
                 caption = Some(messages("routeDetails.loadingAndUnloading.loading.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.loadingAndUnloading.loading.addUnLocodeYesNo.paragraph")}</p>"""))
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.loadingAndUnloading.loading.addUnLocodeYesNo.paragraph")}</p>""")
             )
+        )
 
         @button(attributes = Map("id" -> "submit"))
     }

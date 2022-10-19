@@ -19,6 +19,7 @@ package controllers.routeDetails.locationOfGoods
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
 import models.NormalMode
+import navigation.routeDetails.RouteDetailsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
@@ -42,6 +43,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
+      .overrides(bind(classOf[RouteDetailsNavigatorProvider]).toInstance(fakeRouteDetailsNavigatorProvider))
       .overrides(bind[LocationOfGoodsAnswersViewModelProvider].toInstance(mockViewModelProvider))
 
   "CheckYourAnswers Controller" - {
@@ -61,7 +63,31 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(lrn, mode, Seq(sampleSection))(request, messages).toString
+        view(lrn, mode, Seq(sampleSection.copy(sectionTitle = None)))(request, messages).toString
+    }
+
+    "must redirect to Session Expired for a GET if no existing data is found" in {
+      setNoExistingUserAnswers()
+
+      val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(lrn, mode).url)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+    }
+
+    "must redirect to the next page" in {
+      setExistingUserAnswers(emptyUserAnswers)
+
+      val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn, mode).url)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
     }
   }
 }

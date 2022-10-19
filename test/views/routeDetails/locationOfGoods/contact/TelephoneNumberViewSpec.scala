@@ -21,7 +21,6 @@ import models.NormalMode
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import viewModels.InputSize
 import views.behaviours.TelephoneNumberViewBehaviours
 import views.html.routeDetails.locationOfGoods.contact.TelephoneNumberView
 

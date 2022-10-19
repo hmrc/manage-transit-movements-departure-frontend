@@ -18,19 +18,19 @@
 @import views.html.components.{Heading, InputDate, InputTime}
 
 @this(
-        heading: Heading,
-        govukDateInput: GovukDateInput,
-        govukRadios: GovukRadios
+    heading: Heading,
+    govukDateInput: GovukDateInput,
+    govukRadios: GovukRadios
 )
 
 @(
-        caption: Option[String] = None,
-        legend: String,
-        form: Form[DateTime],
-        dateLabel: String,
-        dateHint: Option[String] = None,
-        timeLabel: String,
-        timeHint: Option[String] = None
+    caption: Option[String] = None,
+    legend: String,
+    form: Form[DateTime],
+    dateLabel: String,
+    dateHint: Option[String] = None,
+    timeLabel: String,
+    timeHint: Option[String] = None
 )(implicit messages: Messages)
 
 @heading(legend, caption)

@@ -40,7 +40,7 @@ class CheckYourAnswersController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val section = viewModelProvider(request.userAnswers, mode).section
+      val section = viewModelProvider(request.userAnswers, mode).section.removeTitle()
       Ok(view(lrn, mode, Seq(section)))
   }
 

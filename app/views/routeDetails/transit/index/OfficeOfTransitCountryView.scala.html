@@ -47,7 +47,7 @@
             field = form("value"),
             selectType = OrdinarySelect(
                 heading = messages("routeDetails.transit.index.officeOfTransitCountry.heading"),
-                caption = Some(messages("routeDetails.caption"))
+                caption = Some(messages("routeDetails.transit.caption"))
             ),
             hint = Some(messages("routeDetails.transit.index.officeOfTransitCountry.hint")),
             selectItems = countries.toSelectItems(form.value),

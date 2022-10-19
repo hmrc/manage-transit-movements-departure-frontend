@@ -33,7 +33,7 @@ class ActingAsRepresentativeViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithBackLink
 
-  behave like pageWithSectionCaption("Trader details")
+  behave like pageWithSectionCaption("Trader details - Representative")
 
   behave like pageWithHeading()
 

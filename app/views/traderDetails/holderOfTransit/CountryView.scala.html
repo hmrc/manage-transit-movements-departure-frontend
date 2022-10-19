@@ -47,7 +47,7 @@
             field = form("value"),
             selectType = OrdinarySelect(
                 heading = messages("traderDetails.holderOfTransit.country.heading", name),
-                caption = Some(messages("traderDetails.transitHolder.caption"))
+                caption = Some(messages("traderDetails.holderOfTransit.caption"))
             ),
             hint = Some(messages("traderDetails.holderOfTransit.country.hintText")),
             selectItems = countryList.toSelectItems(form.value),
