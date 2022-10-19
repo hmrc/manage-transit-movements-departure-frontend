@@ -30,8 +30,8 @@ class TIRCarnetReferenceFormProvider @Inject() extends Mappings {
       "value" -> trimmedText("tirCarnetReference.error.required")
         .verifying(
           forms.StopOnFirstFail[String](
-            maxLength(tirCarnetReferenceMaxLength, "tirCarnetReference.error.maxLength"),
-            regexp(alphaNumericRegex, "tirCarnetReference.error.invalidCharacters")
+            maxLength(tirCarnetReferenceMaxLength, "tirCarnetReference.error.length"),
+            regexp(alphaNumericRegex, "tirCarnetReference.error.invalid")
           )
         )
     )

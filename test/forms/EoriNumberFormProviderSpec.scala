@@ -28,8 +28,8 @@ class EoriNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavio
   private val prefix = Gen.alphaNumStr.sample.value
 
   private val requiredKey          = s"$prefix.error.required"
-  private val maxLengthKey         = s"$prefix.error.maxLength"
-  private val invalidCharactersKey = s"$prefix.error.invalidCharacters"
+  private val maxLengthKey         = s"$prefix.error.length"
+  private val invalidCharactersKey = s"$prefix.error.invalid"
 
   private val form = new EoriNumberFormProvider()(prefix)
 

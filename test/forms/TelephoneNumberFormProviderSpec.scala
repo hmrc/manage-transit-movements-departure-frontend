@@ -29,7 +29,7 @@ class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
   private val maxLengthKey        = s"$prefix.error.maxLength"
   private val minLengthKey        = s"$prefix.error.minLength"
   private val invalidFormatKey    = s"$prefix.error.invalidFormat"
-  private val invalidCharacterKey = s"$prefix.error.invalidCharacter"
+  private val invalidCharacterKey = s"$prefix.error.invalidCharacters"
 
   val form = new TelephoneNumberFormProvider()(prefix)
 
