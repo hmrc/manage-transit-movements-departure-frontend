@@ -25,7 +25,7 @@ echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.title = $title$" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.heading = $title$" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.hintText = $title$ hint" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.hint = $title$ hint" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.label = $title$ label" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.placeholder = Select a $referenceClass;format="decap"$" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.change.hidden = $title$" >> ../conf/messages.en
