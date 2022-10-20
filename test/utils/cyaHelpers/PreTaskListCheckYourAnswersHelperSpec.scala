@@ -43,7 +43,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
             val result = helper.localReferenceNumber
 
             result mustBe SummaryListRow(
-              key = Key("Local reference number (LRN)".toText),
+              key = Key("Local Reference Number (LRN)".toText),
               value = Value(s"$lrn".toText),
               actions = Some(
                 Actions(

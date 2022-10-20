@@ -19,7 +19,6 @@ package views.traderDetails.holderOfTransit
 import forms.DynamicAddressFormProvider
 import generators.Generators
 import models.{DynamicAddress, NormalMode}
-import org.scalacheck.Gen
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.DynamicAddressViewBehaviours
@@ -27,12 +26,12 @@ import views.html.traderDetails.holderOfTransit.AddressView
 
 class AddressViewSpec extends DynamicAddressViewBehaviours with Generators {
 
-  private val addressHolderName = Gen.alphaNumStr.sample.value
+  private val name = nonEmptyString.sample.value
 
-  override def form: Form[DynamicAddress] = DynamicAddressFormProvider(prefix, isPostalCodeRequired, addressHolderName)
+  override def form: Form[DynamicAddress] = DynamicAddressFormProvider(prefix, isPostalCodeRequired, name)
 
   override def applyView(form: Form[DynamicAddress]): HtmlFormat.Appendable =
-    injector.instanceOf[AddressView].apply(form, lrn, NormalMode, addressHolderName, isPostalCodeRequired)(fakeRequest, messages)
+    injector.instanceOf[AddressView].apply(form, lrn, NormalMode, name, isPostalCodeRequired)(fakeRequest, messages)
 
   override val prefix: String = "traderDetails.holderOfTransit.address"
 
@@ -42,7 +41,7 @@ class AddressViewSpec extends DynamicAddressViewBehaviours with Generators {
 
   behave like pageWithSectionCaption("Trader details - Transit holder")
 
-  behave like pageWithHeading(addressHolderName)
+  behave like pageWithHeading(name)
 
   behave like pageWithAddressInput()
 
