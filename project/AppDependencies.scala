@@ -1,13 +1,15 @@
-import sbt._
 import play.core.PlayVersion.current
+import sbt._
 
 object AppDependencies {
+
+  private val bootstrapVersion = "7.8.0"
 
   val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
     "uk.gov.hmrc"                %% "logback-json-logger"             % "5.2.0",
     "uk.gov.hmrc"                %% "play-conditional-form-mapping"   % "1.12.0-play-28",
-    "uk.gov.hmrc"                %% "bootstrap-frontend-play-28"      % "7.8.0",
+    "uk.gov.hmrc"                %% "bootstrap-frontend-play-28"      % bootstrapVersion,
     "uk.gov.hmrc"                %% "play-allowlist-filter"           % "1.1.0",
     "uk.gov.hmrc"                %% "play-frontend-hmrc"              % "3.32.0-play-28",
     "org.typelevel"              %% "cats-core"                       % "2.8.0",
@@ -16,7 +18,7 @@ object AppDependencies {
 
   val test: Seq[ModuleID] = Seq(
     "org.scalatest"              %% "scalatest"                % "3.2.14",
-    "org.scalatestplus.play"     %% "scalatestplus-play"       % "5.1.0",
+    "uk.gov.hmrc"                %% "bootstrap-test-play-28"   % bootstrapVersion,
     "com.typesafe.play"          %% "play-test"                % current,
     "org.mockito"                 % "mockito-core"             % "4.8.0",
     "org.scalatestplus"          %% "mockito-4-6"              % "3.2.14.0",
