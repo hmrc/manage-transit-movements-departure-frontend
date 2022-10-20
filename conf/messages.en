@@ -685,6 +685,7 @@ routeDetails.transit.index.officeOfTransit.error.required = Enter where the offi
 
 routeDetails.transit.index.addOfficeOfTransitETAYesNo.title = Do you want to add a time of arrival in {0}?
 routeDetails.transit.index.addOfficeOfTransitETAYesNo.heading = Do you want to add a time of arrival in {0}?
+routeDetails.transit.index.addOfficeOfTransitETAYesNo.paragraph = This information is only for reference. If the transit arrives earlier or later than expected, no further action will be required.
 routeDetails.transit.index.addOfficeOfTransitETAYesNo.checkYourAnswersLabel = Do you want to add a time of arrival?
 routeDetails.transit.index.addOfficeOfTransitETAYesNo.change.hidden = do you want to add a time of arrival
 routeDetails.transit.index.addOfficeOfTransitETAYesNo.error.required = Select yes if you want to add a time of arrival for the office of transit
