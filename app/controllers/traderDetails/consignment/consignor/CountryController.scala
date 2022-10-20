@@ -53,7 +53,7 @@ class CountryController @Inject() (
     .async {
       implicit request =>
         val name = request.arg
-        service.getCountries.map {
+        service.getCountries().map {
           countryList =>
             val form = formProvider("traderDetails.consignment.consignor.country", countryList, name)
             val preparedForm = request.userAnswers.get(CountryPage) match {
@@ -71,7 +71,7 @@ class CountryController @Inject() (
     .async {
       implicit request =>
         val name = request.arg
-        service.getCountries.flatMap {
+        service.getCountries().flatMap {
           countryList =>
             val form = formProvider("traderDetails.consignment.consignor.country", countryList, name)
             form

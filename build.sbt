@@ -24,7 +24,7 @@ lazy val root = (project in file("."))
   .settings(SbtDistributablesPlugin.publishingSettings: _*)
   .settings(inConfig(Test)(testSettings): _*)
   .settings(majorVersion := 0)
-  .settings(scalaVersion := "2.12.15")
+  .settings(scalaVersion := "2.13.8")
   .settings(headerSettings(A11yTest): _*)
   .settings(automateHeaderSettings(A11yTest))
   .settings(
@@ -55,8 +55,7 @@ lazy val root = (project in file("."))
       "-feature",
       "-language:implicitConversions",
       "-language:postfixOps",
-      "-language:higherKinds",
-      "-Ypartial-unification"
+      "-language:higherKinds"
     ),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,

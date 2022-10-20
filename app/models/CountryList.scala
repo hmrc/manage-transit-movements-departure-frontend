@@ -41,7 +41,7 @@ object CountryList {
         CountryList(
           values.flatMap {
             value => (value \ key).validate[Country].asOpt
-          }
+          }.toSeq
         )
       )
     case _ => JsError("CountryList::customReads: Failed to read country list from cache")
