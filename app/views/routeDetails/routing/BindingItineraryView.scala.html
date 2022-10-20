@@ -29,11 +29,6 @@
 
 @(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@html = {
-    <p class="govuk-body">@messages("routeDetails.routing.bindingItinerary.paragraph1")</p>
-    <p class="govuk-body">@messages("routeDetails.routing.bindingItinerary.paragraph2")</p>
-}
-
 @mainTemplate(
     title = messages("routeDetails.routing.bindingItinerary.title"),
     showBackLink = true,
@@ -49,7 +44,7 @@
             yesNoType = YesNoWithAdditionalHtml(
                 heading = messages("routeDetails.routing.bindingItinerary.heading"),
                 caption = Some(messages("routeDetails.routing.caption")),
-                additionalHtml = html
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.routing.bindingItinerary.paragraph")}</p>""")
             )
         )
 

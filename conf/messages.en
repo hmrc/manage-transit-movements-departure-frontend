@@ -604,10 +604,9 @@ routeDetails.routing.officeOfDestination.change.hidden = office of destination
 routeDetails.routing.officeOfDestination.checkYourAnswersLabel = Office of destination
 routeDetails.routing.officeOfDestination.error.required = Enter the office of destination
 
-routeDetails.routing.bindingItinerary.title = Do you want the transit to follow a binding itinerary?
-routeDetails.routing.bindingItinerary.heading = Do you want the transit to follow a binding itinerary?
-routeDetails.routing.bindingItinerary.paragraph1 = This means transporting goods to the office of departure by an economically justifiable itinerary.
-routeDetails.routing.bindingItinerary.paragraph2 = This diverts the route around countries that represent a higher risk to the goods in transit.
+routeDetails.routing.bindingItinerary.title = Are you using a binding itinerary?
+routeDetails.routing.bindingItinerary.heading = Are you using a binding itinerary?
+routeDetails.routing.bindingItinerary.paragraph = This diverts the route around countries that represent a higher risk to the goods in transit.
 routeDetails.routing.bindingItinerary.checkYourAnswersLabel = Do you want the transit to follow a binding itinerary?
 routeDetails.routing.bindingItinerary.error.required = Select yes if you want the transit to follow a binding itinerary
 routeDetails.routing.bindingItinerary.change.hidden = if you want the transit to follow a binding itinerary
