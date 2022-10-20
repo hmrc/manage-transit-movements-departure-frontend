@@ -11,12 +11,12 @@ import views.html.$package$.$className$View
 
 class $className$ViewSpec extends DynamicAddressViewBehaviours with Generators {
 
-  private val addressHolderName = Gen.alphaNumStr.sample.value
+  private val name = nonEmptyString.sample.value
 
-  override def form: Form[DynamicAddress] = new $formProvider$()(prefix, isPostalCodeRequired, addressHolderName)
+  override def form: Form[DynamicAddress] = new $formProvider$()(prefix, isPostalCodeRequired, name)
 
   override def applyView(form: Form[DynamicAddress]): HtmlFormat.Appendable =
-    injector.instanceOf[$className$View].apply(form, lrn, NormalMode, addressHolderName, isPostalCodeRequired)(fakeRequest, messages)
+    injector.instanceOf[$className$View].apply(form, lrn, NormalMode, name, isPostalCodeRequired)(fakeRequest, messages)
 
   override val prefix: String = "$package$.$className;format="decap"$"
 
@@ -24,7 +24,7 @@ class $className$ViewSpec extends DynamicAddressViewBehaviours with Generators {
 
   behave like pageWithBackLink
 
-  behave like pageWithHeading(addressHolderName)
+  behave like pageWithHeading(name)
 
   behave like pageWithAddressInput()
 
