@@ -1,10 +1,10 @@
 
 ->         /                   app.routeDetails.routing.index.Routes
 
-GET        /:lrn/route-details/routing/country-of-destination                           controllers.routeDetails.routing.CountryOfDestinationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/route-details/routing/country-of-destination                           controllers.routeDetails.routing.CountryOfDestinationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/route-details/routing/change-country-of-destination                    controllers.routeDetails.routing.CountryOfDestinationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/route-details/routing/change-country-of-destination                    controllers.routeDetails.routing.CountryOfDestinationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/route-details/transit-route/country-of-destination                     controllers.routeDetails.routing.CountryOfDestinationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route-details/transit-route/country-of-destination                     controllers.routeDetails.routing.CountryOfDestinationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route-details/transit-route/change-country-of-destination              controllers.routeDetails.routing.CountryOfDestinationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route-details/transit-route/change-country-of-destination              controllers.routeDetails.routing.CountryOfDestinationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/route-details/routing/office-of-destination                            controllers.routeDetails.routing.OfficeOfDestinationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/route-details/routing/office-of-destination                            controllers.routeDetails.routing.OfficeOfDestinationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)

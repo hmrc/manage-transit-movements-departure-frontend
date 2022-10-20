@@ -586,8 +586,8 @@ routeDetails.checkYourAnswers.exit.officeOfExit.change.hidden = office of exit {
 
 routeDetails.routing.countryOfDestination.title = What is the country of destination?
 routeDetails.routing.countryOfDestination.heading = What is the country of destination?
-routeDetails.routing.countryOfDestination.hint = Enter the country, like France or Portugal.
-routeDetails.routing.countryOfDestination.paragraph = This is the country where the CTC transit ends.
+routeDetails.routing.countryOfDestination.hint = Enter the country, like Italy or Spain.
+routeDetails.routing.countryOfDestination.paragraph = This is the final CTC country of the transit route. It may not be where the transit movement ends.
 routeDetails.routing.countryOfDestination.placeholder = Select a country
 routeDetails.routing.countryOfDestination.change.hidden = country of destination
 routeDetails.routing.countryOfDestination.checkYourAnswersLabel = Country of destination
