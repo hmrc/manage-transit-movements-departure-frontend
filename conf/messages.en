@@ -269,13 +269,13 @@ traderDetails.holderOfTransit.contact.telephoneNumber.change.hidden = contact’
 
 # Trader details - Representative
 
-traderDetails.representative.eori.title = What is the representative’s EORI number or Trader Identification Number (TIN)?
-traderDetails.representative.eori.heading = What is the representative’s EORI number or Trader Identification Number (TIN)?
+traderDetails.representative.eori.title = What is your EORI number or Trader Identification Number (TIN)?
+traderDetails.representative.eori.heading = What is your EORI number or Trader Identification Number (TIN)?
 traderDetails.representative.eori.checkYourAnswersLabel = Representative’s EORI number or Trader Identification Number (TIN)
-traderDetails.representative.eori.error.required = Enter the representative’s EORI number or Trader Identification Number (TIN)
+traderDetails.representative.eori.error.required = Enter your EORI number or Trader Identification Number (TIN)
 traderDetails.representative.eori.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
-traderDetails.representative.eori.error.invalid = The EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
-traderDetails.representative.eori.error.length = The EORI number or Trader Identification Number (TIN) must be 17 characters or less
+traderDetails.representative.eori.error.invalid = Your EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
+traderDetails.representative.eori.error.length = Your EORI number or Trader Identification Number (TIN) must be 17 characters or less
 traderDetails.representative.eori.change.hidden = representative’s EORI number or Trader Identification Number (TIN)
 
 traderDetails.representative.name.title = What is your name?
