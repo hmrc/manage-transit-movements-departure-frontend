@@ -52,7 +52,7 @@ class CountryOfDestinationControllerSpec extends SpecBase with AppWithDefaultMoc
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    reset(mockCountriesService, mockCustomsOfficesService)
+    reset(mockCountriesService); reset(mockCustomsOfficesService)
   }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =

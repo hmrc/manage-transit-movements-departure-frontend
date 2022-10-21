@@ -42,7 +42,7 @@
 
     @answerSections(sections)
 
-    @formHelper(action = routes.CheckOfficeOfTransitAnswersController.onSubmit(lrn, mode, index), 'autoComplete -> "off") {
+    @formHelper(action = routes.CheckOfficeOfTransitAnswersController.onSubmit(lrn, mode, index), Symbol("autoComplete") -> "off") {
         @button(attributes = Map("id" -> "submit"))
     }
 }

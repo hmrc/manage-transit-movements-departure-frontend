@@ -49,9 +49,9 @@ private[mappings] class LocalTimeFormatter(
     )
 
     for {
-      hour     <- int.bind(s"${key}Hour".replaceAll("\\s", ""), data).right
-      minute   <- int.bind(s"${key}Minute".replaceAll("\\s", ""), data).right
-      dateTime <- toTime(key, hour, minute).right
+      hour     <- int.bind(s"${key}Hour".replaceAll("\\s", ""), data)
+      minute   <- int.bind(s"${key}Minute".replaceAll("\\s", ""), data)
+      dateTime <- toTime(key, hour, minute)
     } yield dateTime
   }
 

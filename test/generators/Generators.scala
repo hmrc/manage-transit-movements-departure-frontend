@@ -77,7 +77,7 @@ trait Generators extends ModelGenerators with ViewModelGenerators with DomainMod
     arbitrary[BigDecimal]
       .retryUntil(_.abs < Int.MaxValue)
       .retryUntil(!_.isValidInt)
-      .map(_.formatted("%f"))
+      .map("%f".format(_))
 
   def decimalsPositive: Gen[String] =
     arbitrary[BigDecimal]
@@ -88,7 +88,7 @@ trait Generators extends ModelGenerators with ViewModelGenerators with DomainMod
         x => x.abs <= Int.MaxValue
       )
       .retryUntil(!_.isValidInt)
-      .map(_.formatted("%f"))
+      .map("%f".format(_))
 
   def intsBelowValue(value: Int): Gen[Int] =
     arbitrary[Int] retryUntil (_ < value)
@@ -182,7 +182,7 @@ trait Generators extends ModelGenerators with ViewModelGenerators with DomainMod
   }
 
   def nonEmptyListOf[A](maxLength: Int)(implicit a: Arbitrary[A]): Gen[NonEmptyList[A]] =
-    listWithMaxLength[A](maxLength).map(NonEmptyList.fromListUnsafe _)
+    listWithMaxLength[A](maxLength).map(NonEmptyList.fromListUnsafe)
 
   def listWithMaxLength[A](maxLength: Int = maxListLength)(implicit a: Arbitrary[A]): Gen[List[A]] =
     for {

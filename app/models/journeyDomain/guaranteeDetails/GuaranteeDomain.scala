@@ -38,42 +38,28 @@ sealed trait GuaranteeDomain extends JourneyDomainModel {
 
 object GuaranteeDomain {
 
-  private val `0,1,2,4,9` = Seq(
-    GuaranteeWaiver,
-    ComprehensiveGuarantee,
-    IndividualGuarantee,
-    FlatRateVoucher,
-    IndividualGuaranteeMultiple
-  )
-  private val `3` = Seq(CashDepositGuarantee)
-  private val `5` = Seq(GuaranteeWaiverSecured)
-  private val `8` = Seq(GuaranteeNotRequiredExemptPublicBody)
-
-  private val `A,R` = Seq(
-    GuaranteeWaiverByAgreement,
-    GuaranteeNotRequired
-  )
-  private val `B` = TIRGuarantee
-
   // scalastyle:off cyclomatic.complexity
   implicit def userAnswersReader(index: Index): UserAnswersReader[GuaranteeDomain] =
     DeclarationTypePage.reader.flatMap {
       case Option4 =>
-        GuaranteeTypePage(index).mandatoryReader(_ == `B`).map(GuaranteeOfTypesABR(_)(index))
+        GuaranteeTypePage(index).mandatoryReader(_ == TIRGuarantee).map(GuaranteeOfTypesABR(_)(index))
       case _ =>
         GuaranteeTypePage(index).reader.flatMap {
-          case guaranteeType if `A,R`.contains(guaranteeType) =>
-            GuaranteeOfTypesABR.userAnswersReader(index, guaranteeType)
-          case guaranteeType if `0,1,2,4,9`.contains(guaranteeType) =>
-            GuaranteeOfTypes01249.userAnswersReader(index, guaranteeType)
-          case guaranteeType if `5`.contains(guaranteeType) =>
-            GuaranteeOfType5.userAnswersReader(index, guaranteeType)
-          case guaranteeType if `8`.contains(guaranteeType) =>
-            GuaranteeOfType8.userAnswersReader(index, guaranteeType)
-          case guaranteeType if `3`.contains(guaranteeType) =>
-            GuaranteeOfType3.userAnswersReader(index, guaranteeType)
-          case `B` =>
-            UserAnswersReader.fail[GuaranteeDomain](GuaranteeTypePage(index))
+          guaranteeType =>
+            guaranteeType match {
+              case GuaranteeWaiverByAgreement | GuaranteeNotRequired =>
+                GuaranteeOfTypesABR.userAnswersReader(index, guaranteeType)
+              case GuaranteeWaiver | ComprehensiveGuarantee | IndividualGuarantee | FlatRateVoucher | IndividualGuaranteeMultiple =>
+                GuaranteeOfTypes01249.userAnswersReader(index, guaranteeType)
+              case GuaranteeWaiverSecured =>
+                GuaranteeOfType5.userAnswersReader(index, guaranteeType)
+              case GuaranteeNotRequiredExemptPublicBody =>
+                GuaranteeOfType8.userAnswersReader(index, guaranteeType)
+              case CashDepositGuarantee =>
+                GuaranteeOfType3.userAnswersReader(index, guaranteeType)
+              case TIRGuarantee =>
+                UserAnswersReader.fail[GuaranteeDomain](GuaranteeTypePage(index))
+            }
         }
     }
   // scalastyle:on cyclomatic.complexity

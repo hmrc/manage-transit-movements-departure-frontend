@@ -31,7 +31,7 @@ class GuaranteeAddedTIRViewSpec extends ViewBehaviours {
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Guarantee details")
 

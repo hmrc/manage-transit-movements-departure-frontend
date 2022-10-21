@@ -22,11 +22,11 @@ class $className$ViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithHeading()
 
-  behave like pageWithoutHint
+  behave like pageWithoutHint()
 
   behave like pageWithInputText(Some(InputSize.Width20))
 

@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.OfficeOfTransitETAController.onSubmit(lrn, mode, index), 'autoComplete -> "off") {
+    @formHelper(action = routes.OfficeOfTransitETAController.onSubmit(lrn, mode, index), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form)
 

@@ -42,7 +42,7 @@
 
     @answerSections(sections)
 
-    @formHelper(action = routes.CheckYourAnswersController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.CheckYourAnswersController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
         @button(attributes = Map("id" -> "submit"))
     }
 }

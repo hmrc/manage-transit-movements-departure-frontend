@@ -40,7 +40,7 @@ class LocationViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithTitle(location)
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Route details - Place of unloading")
 

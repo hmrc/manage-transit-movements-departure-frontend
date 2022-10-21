@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.ConfirmRemoveOfficeOfExitController.onSubmit(lrn, index, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.ConfirmRemoveOfficeOfExitController.onSubmit(lrn, index, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

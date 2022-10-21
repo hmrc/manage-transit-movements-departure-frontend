@@ -40,7 +40,7 @@ class LocalReferenceNumberViewSpec extends InputTextViewBehaviours[LocalReferenc
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithHeading()
 

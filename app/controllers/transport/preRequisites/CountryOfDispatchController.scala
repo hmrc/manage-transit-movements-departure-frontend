@@ -48,7 +48,7 @@ class CountryOfDispatchController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      service.getCountries.map {
+      service.getCountries().map {
         countryList =>
           val form = formProvider("transport.preRequisites.countryOfDispatch", countryList)
           val preparedForm = request.userAnswers.get(CountryOfDispatchPage) match {
@@ -62,7 +62,7 @@ class CountryOfDispatchController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      service.getCountries.flatMap {
+      service.getCountries().flatMap {
         countryList =>
           val form = formProvider("transport.preRequisites.countryOfDispatch", countryList)
           form

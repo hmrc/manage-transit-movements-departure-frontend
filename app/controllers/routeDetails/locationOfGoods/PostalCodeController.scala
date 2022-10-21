@@ -51,7 +51,7 @@ class PostalCodeController @Inject() (
     .requireData(lrn)
     .async {
       implicit request =>
-        countriesService.getAddressPostcodeBasedCountries.map {
+        countriesService.getAddressPostcodeBasedCountries().map {
           countryList =>
             val form = formProvider(prefix, countryList)
             val preparedForm = request.userAnswers.get(PostalCodePage) match {
@@ -67,7 +67,7 @@ class PostalCodeController @Inject() (
     .requireData(lrn)
     .async {
       implicit request =>
-        countriesService.getAddressPostcodeBasedCountries.flatMap {
+        countriesService.getAddressPostcodeBasedCountries().flatMap {
           countryList =>
             val form = formProvider(prefix, countryList)
             form

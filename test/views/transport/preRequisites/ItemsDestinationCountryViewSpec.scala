@@ -40,13 +40,13 @@ class ItemsDestinationCountryViewSpec extends InputSelectViewBehaviours[Country]
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Transport details")
 
   behave like pageWithHeading()
 
-  behave like pageWithSelect
+  behave like pageWithSelect()
 
   behave like pageWithHint("Enter the country, like France or Portugal.")
 

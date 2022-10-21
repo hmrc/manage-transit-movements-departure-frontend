@@ -51,7 +51,7 @@
 
     @listWithActions(countries)
 
-    @formHelper(action = routes.AddAnotherCountryOfRoutingController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.AddAnotherCountryOfRoutingController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @if(allowMoreCountries) {
             @inputYesNo(
