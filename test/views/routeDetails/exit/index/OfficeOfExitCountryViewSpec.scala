@@ -38,13 +38,13 @@ class OfficeOfExitCountryViewSpec extends InputSelectViewBehaviours[Country] {
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Route details - Office of exit")
 
   behave like pageWithHeading()
 
-  behave like pageWithSelect
+  behave like pageWithSelect()
 
   behave like pageWithContent("p", "This is the exit point for goods leaving a customs territory.")
 

@@ -18,7 +18,6 @@ package views.traderDetails.consignment.consignor.contact
 
 import forms.TelephoneNumberFormProvider
 import models.NormalMode
-import org.scalacheck.Gen
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.TelephoneNumberViewBehaviours
@@ -26,7 +25,8 @@ import views.html.traderDetails.consignment.consignor.contact.TelephoneNumberVie
 
 class TelephoneNumberViewSpec extends TelephoneNumberViewBehaviours {
 
-  private val name: String    = Gen.alphaNumStr.sample.value
+  private val name: String = nonEmptyString.sample.value
+
   override val prefix: String = "traderDetails.consignment.consignor.contact.telephoneNumber"
 
   override def form: Form[String] = new TelephoneNumberFormProvider()(prefix, name)
@@ -36,7 +36,7 @@ class TelephoneNumberViewSpec extends TelephoneNumberViewBehaviours {
 
   behave like pageWithTitle(name)
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithHeading(name)
 

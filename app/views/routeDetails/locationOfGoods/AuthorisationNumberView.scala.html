@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.AuthorisationNumberController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.AuthorisationNumberController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

@@ -51,7 +51,7 @@
 
     @listWithActions(officesOfExit)
 
-    @formHelper(action = routes.AddAnotherOfficeOfExitController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.AddAnotherOfficeOfExitController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @if(allowMoreOfficesOfExit) {
             @inputYesNo(

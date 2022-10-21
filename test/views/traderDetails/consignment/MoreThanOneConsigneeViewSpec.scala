@@ -31,9 +31,9 @@ class MoreThanOneConsigneeViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithTitle()
 
-  behave like pageWithSectionCaption("Trader details")
+  behave like pageWithSectionCaption("Trader details - Consignee")
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithHeading()
 

@@ -38,13 +38,13 @@ class CustomsOfficeIdentifierViewSpec extends InputSelectViewBehaviours[CustomsO
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Route details - Location of goods")
 
   behave like pageWithHeading()
 
-  behave like pageWithSelect
+  behave like pageWithSelect()
 
   behave like pageWithHint("Enter the office location or code, like Dover or GB000060.")
 

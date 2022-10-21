@@ -40,13 +40,13 @@ class OfficeOfTransitViewSpec extends InputSelectViewBehaviours[CustomsOffice] {
 
   behave like pageWithTitle(countryName)
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Route details - Office of transit")
 
   behave like pageWithHeading(countryName)
 
-  behave like pageWithSelect
+  behave like pageWithSelect()
 
   behave like pageWithHint("Enter the office location or code, like Calais or FR620001.")
 

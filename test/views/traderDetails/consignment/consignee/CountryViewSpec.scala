@@ -19,7 +19,7 @@ package views.traderDetails.consignment.consignee
 import forms.CountryFormProvider
 import models.reference.Country
 import models.{CountryList, NormalMode}
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.InputSelectViewBehaviours
@@ -27,7 +27,7 @@ import views.html.traderDetails.consignment.consignee.CountryView
 
 class CountryViewSpec extends InputSelectViewBehaviours[Country] {
 
-  private lazy val name = Gen.alphaNumStr.sample.value
+  private val name = nonEmptyString.sample.value
 
   override def form: Form[Country] = new CountryFormProvider()(prefix, CountryList(values))
 
@@ -40,13 +40,13 @@ class CountryViewSpec extends InputSelectViewBehaviours[Country] {
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Trader details - Consignee")
 
   behave like pageWithHeading(name)
 
-  behave like pageWithSelect
+  behave like pageWithSelect()
 
   behave like pageWithHint("Enter the country, like Italy or Spain.")
 

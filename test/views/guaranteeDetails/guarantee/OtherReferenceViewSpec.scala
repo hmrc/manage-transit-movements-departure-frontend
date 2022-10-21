@@ -44,7 +44,7 @@ class OtherReferenceViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Guarantee details")
 

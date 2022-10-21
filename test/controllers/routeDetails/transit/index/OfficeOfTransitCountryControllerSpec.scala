@@ -53,7 +53,7 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    reset(mockCountriesService, mockCustomsOfficesService)
+    reset(mockCountriesService); reset(mockCustomsOfficesService)
   }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =

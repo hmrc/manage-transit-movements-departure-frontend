@@ -23,11 +23,11 @@ class $className$ViewSpec extends InputSelectViewBehaviours[$referenceClass$] {
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithHeading()
 
-  behave like pageWithSelect
+  behave like pageWithSelect()
 
   behave like pageWithHint("$title$ hint")
 

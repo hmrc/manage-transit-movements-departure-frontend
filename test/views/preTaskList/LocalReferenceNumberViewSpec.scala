@@ -40,9 +40,13 @@ class LocalReferenceNumberViewSpec extends InputTextViewBehaviours[LocalReferenc
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithHeading()
+
+  behave like pageWithContent("p", "This is the declarant’s unique reference number for this declaration.")
+
+  behave like pageWithHint("It can be up to 22 characters long and include letters, numbers, hyphens and underscores.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 

@@ -51,7 +51,7 @@
 
     @listWithActions(officesOfTransit)
 
-    @formHelper(action = routes.AddAnotherOfficeOfTransitController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.AddAnotherOfficeOfTransitController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @if(allowMoreOfficesOfTransit) {
             @inputYesNo(

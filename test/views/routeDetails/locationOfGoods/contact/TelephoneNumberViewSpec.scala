@@ -28,7 +28,7 @@ class TelephoneNumberViewSpec extends TelephoneNumberViewBehaviours {
 
   override val prefix: String = "routeDetails.locationOfGoods.contact.telephoneNumber"
 
-  private val name: String = Gen.alphaNumStr.sample.value
+  private val name: String = nonEmptyString.sample.value
 
   override def form: Form[String] = new TelephoneNumberFormProvider()(prefix)
 
@@ -39,7 +39,7 @@ class TelephoneNumberViewSpec extends TelephoneNumberViewBehaviours {
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithHeading(name)
 

@@ -46,7 +46,7 @@ class AddAnotherOfficeOfTransitViewSpec extends ListWithActionsViewBehaviours {
 
   override val prefix: String = "routeDetails.transit.addAnotherOfficeOfTransit"
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Route details - Office of transit")
 
