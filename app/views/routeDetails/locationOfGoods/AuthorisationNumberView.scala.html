@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.AuthorisationNumberController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.AuthorisationNumberController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
@@ -45,7 +45,7 @@
                 heading = messages("routeDetails.locationOfGoods.authorisationNumber.heading"),
                 caption = Some(messages("routeDetails.locationOfGoods.caption"))
             ),
-            hint = Some(messages("routeDetails.locationOfGoods.authorisationNumber.hintText")),
+            hint = Some(messages("routeDetails.locationOfGoods.authorisationNumber.hint")),
             inputClass = InputSize.Width20
         )
 

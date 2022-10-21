@@ -52,7 +52,7 @@ class CountryOfRoutingController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      service.getCountries.map {
+      service.getCountries().map {
         countryList =>
           val preparedForm = request.userAnswers.get(CountryOfRoutingPage(index)) match {
             case None        => form(countryList)
@@ -65,7 +65,7 @@ class CountryOfRoutingController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      service.getCountries.flatMap {
+      service.getCountries().flatMap {
         countryList =>
           form(countryList)
             .bindFromRequest()

@@ -40,14 +40,14 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.AddressController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.AddressController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
         @inputAddress(
             form = form,
             messageKeyPrefix = "traderDetails.holderOfTransit.address",
-            caption = Some(messages("traderDetails.transitHolder.caption")),
+            caption = Some(messages("traderDetails.holderOfTransit.caption")),
             isPostalCodeRequired = isPostalCodeRequired,
             headingArgs = name
         )

@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.ApprovedOperatorController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.ApprovedOperatorController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
@@ -43,10 +43,10 @@
             field = form("value"),
             yesNoType = YesNoWithAdditionalHtml(
                 heading = messages("traderDetails.consignment.approvedOperator.heading"),
-                caption = Some(messages("traderDetails.consignment.consignor.caption")),
+                caption = Some(messages("traderDetails.caption")),
                 additionalHtml = Html(s"""<p class="govuk-body">${messages("traderDetails.consignment.approvedOperator.paragraph")}</p>""")
             ),
-            hint = Some(HtmlContent(messages("traderDetails.consignment.approvedOperator.hintText")))
+            hint = Some(HtmlContent(messages("traderDetails.consignment.approvedOperator.hint")))
         )
 
         @button(attributes = Map("id" -> "submit"))

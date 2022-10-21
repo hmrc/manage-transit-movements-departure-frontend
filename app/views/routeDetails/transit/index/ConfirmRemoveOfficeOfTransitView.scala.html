@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.ConfirmRemoveOfficeOfTransitController.onSubmit(lrn, mode, index), 'autoComplete -> "off") {
+    @formHelper(action = routes.ConfirmRemoveOfficeOfTransitController.onSubmit(lrn, mode, index), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
@@ -43,7 +43,7 @@
             field = form("value"),
             yesNoType = OrdinaryYesNo(
                 heading = messages(s"$prefix.heading", args: _*),
-                caption = Some(messages("routeDetails.caption"))
+                caption = Some(messages("routeDetails.transit.caption"))
             )
         )
 

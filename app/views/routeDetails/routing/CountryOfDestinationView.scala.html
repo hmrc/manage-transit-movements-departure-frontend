@@ -39,7 +39,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.CountryOfDestinationController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.CountryOfDestinationController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
@@ -47,10 +47,10 @@
             field = form("value"),
             selectType = SelectWithAdditionalHtml(
                 heading = messages("routeDetails.routing.countryOfDestination.heading"),
-                caption = Some(messages("routeDetails.caption")),
+                caption = Some(messages("routeDetails.routing.caption")),
                 additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.routing.countryOfDestination.paragraph")}</p>""")
             ),
-            hint = Some(messages("routeDetails.routing.countryOfDestination.hintText")),
+            hint = Some(messages("routeDetails.routing.countryOfDestination.hint")),
             selectItems = countries.toSelectItems(form.value),
             placeholder = messages("routeDetails.routing.countryOfDestination.placeholder")
         )

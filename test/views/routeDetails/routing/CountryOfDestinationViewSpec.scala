@@ -38,17 +38,17 @@ class CountryOfDestinationViewSpec extends InputSelectViewBehaviours[Country] {
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Transit route")
 
   behave like pageWithHeading()
 
-  behave like pageWithSelect
+  behave like pageWithSelect()
 
-  behave like pageWithHint("Enter the country, like France or Portugal.")
+  behave like pageWithHint("Enter the country, like Italy or Spain.")
 
-  behave like pageWithContent("p", "This is the country where the CTC transit ends.")
+  behave like pageWithContent("p", "This is the final CTC country of the transit route. It may not be where the transit movement ends.")
 
   behave like pageWithSubmitButton("Save and continue")
 }

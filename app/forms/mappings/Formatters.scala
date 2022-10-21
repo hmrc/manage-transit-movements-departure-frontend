@@ -91,7 +91,6 @@ trait Formatters {
       override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Boolean] =
         baseFormatter
           .bind(key, data)
-          .right
           .flatMap {
             case "true"  => Right(true)
             case "false" => Right(false)
@@ -111,9 +110,7 @@ trait Formatters {
       override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] =
         baseFormatter
           .bind(key, data)
-          .right
           .map(_.replace(",", ""))
-          .right
           .flatMap {
             case s if s.matches(decimalRegexp) =>
               Left(Seq(FormError(key, wholeNumberKey, args)))
@@ -136,7 +133,7 @@ trait Formatters {
       private val baseFormatter = stringFormatter(requiredKey)
 
       override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], A] =
-        baseFormatter.bind(key, data).right.flatMap {
+        baseFormatter.bind(key, data).flatMap {
           str =>
             ev.withName(str).map(Right.apply).getOrElse(Left(Seq(FormError(key, invalidKey))))
         }
@@ -156,7 +153,6 @@ trait Formatters {
       override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalReferenceNumber] =
         spacelessStringFormatter(requiredKey)
           .bind(key, data)
-          .right
           .flatMap {
             str =>
               if (str.length <= LocalReferenceNumber.maxLength) {
@@ -235,10 +231,8 @@ trait Formatters {
       override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], BigDecimal] =
         baseFormatter
           .bind(key, data)
-          .right
           .map(_.replace(",", ""))
           .map(_.replace(" ", ""))
-          .right
           .flatMap {
             case s if !s.matches(invalidCharactersRegex) => Left(Seq(FormError(key, invalidCharactersKey)))
             case s if !s.matches(invalidFormatRegex)     => Left(Seq(FormError(key, invalidFormatKey)))

@@ -39,7 +39,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.OfficeOfDepartureController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.OfficeOfDepartureController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
@@ -49,7 +49,7 @@
                 heading = messages("officeOfDeparture.heading"),
                 additionalHtml = Html(s"""<p class="govuk-body">${messages("officeOfDeparture.paragraph")}</p>""")
             ),
-            hint = Some(messages("officeOfDeparture.hintText")),
+            hint = Some(messages("officeOfDeparture.hint")),
             selectItems = customsOffices.toSelectItems(form.value),
             placeholder = messages("officeOfDeparture.placeholder")
         )

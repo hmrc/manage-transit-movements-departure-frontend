@@ -30,7 +30,7 @@ class TelephoneNumberFormProvider @Inject() extends Mappings {
       "value" -> text(s"$prefix.error.required", args)
         .verifying(
           StopOnFirstFail[String](
-            regexp(telephoneNumberCharacterRegex, s"$prefix.error.invalidCharacter", args = args),
+            regexp(telephoneNumberCharacterRegex, s"$prefix.error.invalidCharacters", args = args),
             regexp(telephoneNumberFormatRegex, s"$prefix.error.invalidFormat", args = args),
             minLength(minTelephoneNumberLength, s"$prefix.error.minLength", args = args :+ minTelephoneNumberLength, trim = true),
             maxLength(maxTelephoneNumberLength, s"$prefix.error.maxLength", args = args :+ maxTelephoneNumberLength, trim = true)

@@ -37,12 +37,12 @@
 
     @heading(
         heading = messages("routeDetails.loadingAndUnloading.checkYourAnswers.heading"),
-        caption = Some(messages("routeDetails.caption"))
+        caption = Some(messages("routeDetails.loadingAndUnloading.caption"))
     )
 
     @answerSections(sections)
 
-    @formHelper(action = routes.LoadingAndUnloadingAnswersController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.LoadingAndUnloadingAnswersController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
         @button(attributes = Map("id" -> "submit"))
     }
 }

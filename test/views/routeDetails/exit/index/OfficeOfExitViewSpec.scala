@@ -40,13 +40,13 @@ class OfficeOfExitViewSpec extends InputSelectViewBehaviours[CustomsOffice] {
 
   behave like pageWithTitle(countryName)
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Office of exit")
 
   behave like pageWithHeading(countryName)
 
-  behave like pageWithSelect
+  behave like pageWithSelect()
 
   behave like pageWithHint("Enter the office location or code, like Dover or GB000060.")
 

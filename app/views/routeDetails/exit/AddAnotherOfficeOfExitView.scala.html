@@ -46,12 +46,12 @@
 
     @heading(
         heading = messages(s"routeDetails.exit.addAnotherOfficeOfExit.$singularOrPlural.heading", officesOfExit.length),
-        caption = Some(messages("routeDetails.caption"))
+        caption = Some(messages("routeDetails.exit.caption"))
     )
 
     @listWithActions(officesOfExit)
 
-    @formHelper(action = routes.AddAnotherOfficeOfExitController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.AddAnotherOfficeOfExitController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @if(allowMoreOfficesOfExit) {
             @inputYesNo(
@@ -60,7 +60,7 @@
                     legend = messages("routeDetails.exit.addAnotherOfficeOfExit.label")
                 ),
                 hint = Some(Text(messages("routeDetails.exit.addAnotherOfficeOfExit.hint")))
-             )
+            )
         } else {
             <p class="govuk-body" data-testId="maxLimit">@messages("routeDetails.exit.addAnotherOfficeOfExit.maxLimit.label")</p>
         }

@@ -23,7 +23,7 @@ import org.scalatest.Assertion
 import play.twirl.api.HtmlFormat
 import views.base.ViewSpecAssertions
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 trait ViewBehaviours extends SpecBase with ViewSpecAssertions {
 
@@ -134,8 +134,7 @@ trait ViewBehaviours extends SpecBase with ViewSpecAssertions {
   def pageWithSectionCaption(expectedText: String): Unit =
     "must render section caption" in {
       val caption = getElementByClass(doc, "govuk-caption-xl")
-      assertElementIncludesText(caption, "This section is")
-      assertElementIncludesText(caption, expectedText)
+      assertElementContainsText(caption, s"This section is $expectedText")
     }
 
   def pageWithHint(expectedText: String): Unit =

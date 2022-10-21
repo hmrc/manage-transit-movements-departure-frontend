@@ -35,12 +35,12 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.OfficeOfTransitETAController.onSubmit(lrn, mode, index), 'autoComplete -> "off") {
+    @formHelper(action = routes.OfficeOfTransitETAController.onSubmit(lrn, mode, index), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form)
 
         @inputDateTime(
-            caption = Some(messages("routeDetails.caption")),
+            caption = Some(messages("routeDetails.transit.caption")),
             legend = messages("routeDetails.transit.index.officeOfTransitETA.heading", customsOffice, countryName),
             form = form,
             dateLabel = messages("routeDetails.transit.index.officeOfTransitETA.date.title"),

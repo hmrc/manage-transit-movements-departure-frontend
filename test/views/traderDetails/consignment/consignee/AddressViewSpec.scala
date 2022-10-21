@@ -19,7 +19,6 @@ package views.traderDetails.consignment.consignee
 import forms.DynamicAddressFormProvider
 import generators.Generators
 import models.{DynamicAddress, NormalMode}
-import org.scalacheck.Gen
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.DynamicAddressViewBehaviours
@@ -27,22 +26,22 @@ import views.html.traderDetails.consignment.consignee.AddressView
 
 class AddressViewSpec extends DynamicAddressViewBehaviours with Generators {
 
-  private val addressHolderName = Gen.alphaNumStr.sample.value
+  private val name = nonEmptyString.sample.value
 
-  override def form: Form[DynamicAddress] = new DynamicAddressFormProvider()(prefix, isPostalCodeRequired, addressHolderName)
+  override def form: Form[DynamicAddress] = new DynamicAddressFormProvider()(prefix, isPostalCodeRequired, name)
 
   override def applyView(form: Form[DynamicAddress]): HtmlFormat.Appendable =
-    injector.instanceOf[AddressView].apply(form, lrn, NormalMode, addressHolderName, isPostalCodeRequired)(fakeRequest, messages)
+    injector.instanceOf[AddressView].apply(form, lrn, NormalMode, name, isPostalCodeRequired)(fakeRequest, messages)
 
   override val prefix: String = "traderDetails.consignment.consignee.address"
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Trader details - Consignee")
 
-  behave like pageWithHeading(addressHolderName)
+  behave like pageWithHeading(name)
 
   behave like pageWithAddressInput()
 

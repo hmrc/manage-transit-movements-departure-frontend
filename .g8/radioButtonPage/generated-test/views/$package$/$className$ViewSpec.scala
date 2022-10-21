@@ -25,7 +25,7 @@ class $className$ViewSpec extends RadioViewBehaviours[$className$] {
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithHeading()
 

@@ -46,12 +46,12 @@
 
     @heading(
         heading = messages(s"routeDetails.transit.addAnotherOfficeOfTransit.$singularOrPlural.heading", officesOfTransit.length),
-        caption = Some(messages("routeDetails.caption"))
+        caption = Some(messages("routeDetails.transit.caption"))
     )
 
     @listWithActions(officesOfTransit)
 
-    @formHelper(action = routes.AddAnotherOfficeOfTransitController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.AddAnotherOfficeOfTransitController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @if(allowMoreOfficesOfTransit) {
             @inputYesNo(

@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.TIRCarnetReferenceController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.TIRCarnetReferenceController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

@@ -39,7 +39,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.OfficeOfExitController.onSubmit(lrn, index, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.OfficeOfExitController.onSubmit(lrn, index, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
@@ -47,9 +47,9 @@
             field = form("value"),
             selectType = OrdinarySelect(
                 heading = messages("routeDetails.exit.index.officeOfExit.heading", countryName),
-                caption = Some(messages("routeDetails.caption"))
+                caption = Some(messages("routeDetails.exit.caption"))
             ),
-            hint = Some(messages("routeDetails.exit.index.officeOfExit.hintText")),
+            hint = Some(messages("routeDetails.exit.index.officeOfExit.hint")),
             selectItems = customsOffices.toSelectItems(form.value),
             placeholder = messages("routeDetails.exit.index.officeOfExit.placeholder")
         )

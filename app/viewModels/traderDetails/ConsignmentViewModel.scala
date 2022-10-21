@@ -18,7 +18,7 @@ package viewModels.traderDetails
 
 import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
-import utils.cyaHelpers.traderDetails.TraderDetailsConsignmentCheckYourAnswersHelper
+import utils.cyaHelpers.traderDetails.ConsignmentCheckYourAnswersHelper
 import viewModels.sections.Section
 
 import javax.inject.Inject
@@ -30,7 +30,7 @@ object ConsignmentViewModel {
   class ConsignmentViewModelProvider @Inject() () {
 
     def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): ConsignmentViewModel = {
-      val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(userAnswers, mode)
+      val helper = new ConsignmentCheckYourAnswersHelper(userAnswers, mode)
 
       val consignorSection = Section(
         sectionTitle = messages("traderDetails.consignment.checkYourAnswers.consignor"),

@@ -38,13 +38,13 @@ class UnLocodeViewSpec extends InputSelectViewBehaviours[UnLocode] {
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Route details - Place of unloading")
 
   behave like pageWithHeading()
 
-  behave like pageWithSelect
+  behave like pageWithSelect()
 
   behave like pageWithHint("Enter the code, like DEBER or ESMAD.")
 

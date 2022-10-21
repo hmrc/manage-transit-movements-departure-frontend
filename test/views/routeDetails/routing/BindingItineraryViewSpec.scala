@@ -31,13 +31,11 @@ class BindingItineraryViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Transit route")
 
   behave like pageWithHeading()
-
-  behave like pageWithContent("p", "This means transporting goods to the office of departure by an economically justifiable itinerary.")
 
   behave like pageWithContent("p", "This diverts the route around countries that represent a higher risk to the goods in transit.")
 

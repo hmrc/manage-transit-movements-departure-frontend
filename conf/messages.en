@@ -60,21 +60,23 @@ technicalDifficulties.contact.link = contact the New Computerised Transit System
 
 # Pre- task list
 
-localReferenceNumber.title = What is the local reference number (LRN)?
-localReferenceNumber.heading = What is the local reference number (LRN)?
-localReferenceNumber.error.required = Enter the local reference number
-localReferenceNumber.error.length = The local reference number must be 22 characters or less
-localReferenceNumber.error.invalidCharacters = The local reference number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
-localReferenceNumber.error.invalidFormat = The local reference number must not start with a hyphen or an underscore
-localReferenceNumber.checkYourAnswersLabel = Local reference number (LRN)
+localReferenceNumber.title = What is the Local Reference Number (LRN)?
+localReferenceNumber.heading = What is the Local Reference Number (LRN)?
+localReferenceNumber.paragraph = This is the declarant’s unique reference number for this declaration.
+localReferenceNumber.hint = It can be up to 22 characters long and include letters, numbers, hyphens and underscores.
+localReferenceNumber.error.required = Enter the Local Reference Number
+localReferenceNumber.error.length = The Local Reference Number must be 22 characters or less
+localReferenceNumber.error.invalidCharacters = The Local Reference Number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
+localReferenceNumber.error.invalidFormat = The Local Reference Number must not start with a hyphen or an underscore
+localReferenceNumber.checkYourAnswersLabel = Local Reference Number (LRN)
 localReferenceNumber.change.hidden = local reference number
 
 officeOfDeparture.title = Where is the office of departure?
 officeOfDeparture.heading = Where is the office of departure?
 officeOfDeparture.checkYourAnswersLabel = Office of departure
 officeOfDeparture.error.required = Enter the office of departure
-officeOfDeparture.hintText = Give the office location or code. Like, Dover or GB000060.
-officeOfDeparture.paragraph = This is the customs office where the transit movement starts.
+officeOfDeparture.hint = Enter the office location or code, like Dover or GB000060.
+officeOfDeparture.paragraph = This is the customs office where the transit movement starts. Or if you’re using a simplified procedure, this will be your supervising office.
 officeOfDeparture.change.hidden = office of departure
 officeOfDeparture.placeholder = Select a customs office
 
@@ -88,11 +90,11 @@ procedureType.change.hidden = type of procedure
 
 declarationType.title = What declaration do you want to create?
 declarationType.heading = What declaration do you want to create?
-declarationType.T1 = T1 (goods originating outside the European Union, such as Great Britain)
-declarationType.T2 = T2 (goods originating inside the European Union, such as Northern Ireland)
-declarationType.T2F = T2F (goods moving to, from or between the European Union special territories)
-declarationType.TIR = TIR (goods moving under the cover of TIR Carnet)
-declarationType.T = T (mixed consignments, for goods originating inside and outside the European Union)
+declarationType.T1 = T1 - goods that are not in free circulation within the EU
+declarationType.T2 = T2 - goods that are in free circulation within the EU
+declarationType.T2F = T2F - goods moving to, from or between the European Union special territories
+declarationType.TIR = TIR - goods moving under the cover of TIR carnet
+declarationType.T = T - mixed consignments, for goods originating inside and outside the European Union
 declarationType.paragraph = For mixed consignments, you will need to create separate T1 and T2 declarations.
 declarationType.checkYourAnswersLabel = Type of declaration
 declarationType.error.required = Select the type of declaration you want to create
@@ -102,15 +104,15 @@ tirCarnetReference.title = What is the TIR carnet reference?
 tirCarnetReference.heading = What is the TIR carnet reference?
 tirCarnetReference.checkYourAnswersLabel = TIR carnet reference
 tirCarnetReference.error.required = Enter the TIR carnet reference
-tirCarnetReference.error.maxLength = The TIR carnet reference must be 12 characters or less
-tirCarnetReference.error.invalidCharacters = The TIR carnet reference must only include letters a to z and numbers 0 to 9
+tirCarnetReference.error.length = The TIR carnet reference must be 12 characters or less
+tirCarnetReference.error.invalid = The TIR carnet reference must only include letters a to z and numbers 0 to 9
 tirCarnetReference.change.hidden = TIR carnet reference
 
 securityDetailsType.title = What type of safety and security details do you need to add?
 securityDetailsType.heading = What type of safety and security details do you need to add?
 securityDetailsType.noSecurity = No security
-securityDetailsType.entrySummaryDeclaration = Entry summary declaration (ENS)
-securityDetailsType.exitSummaryDeclaration = Exit summary declaration (EXS)
+securityDetailsType.entrySummaryDeclaration = Entry summary declaration (ENS) - for importing goods from a non-EU country into Great Britain or Northern Ireland. Or from Great Britain into Northern Ireland
+securityDetailsType.exitSummaryDeclaration = Exit summary declaration (EXS) - for exporting goods from Great Britain to any country. Or from Northern Ireland to a non-EU country
 securityDetailsType.entryAndExitSummaryDeclaration = Both entry and exit summary declarations (ENS and EXS)
 securityDetailsType.checkYourAnswersLabel = Safety and security details added
 securityDetailsType.error.required = Select which type of safety and security details you need to add
@@ -155,6 +157,10 @@ task.transportDetails.edit = Edit transport details
 # Trader details
 
 traderDetails.caption = Trader details
+traderDetails.holderOfTransit.caption = Trader details - Transit holder
+traderDetails.representative.caption = Trader details - Representative
+traderDetails.consignment.consignor.caption = Trader details - Consignor
+traderDetails.consignment.consignee.caption = Trader details - Consignee
 
 traderDetails.actingRepresentative.title = Are you acting as a representative?
 traderDetails.actingRepresentative.heading = Are you acting as a representative?
@@ -168,8 +174,6 @@ traderDetails.checkYourAnswers.title = Check your answers
 
 # Trader details - Holder of transit
 
-traderDetails.transitHolder.caption = Trader details - Transit holder
-
 traderDetails.holderOfTransit.eoriYesNo.title = Do you know the transit holder’s EORI number or Trader Identification Number (TIN)?
 traderDetails.holderOfTransit.eoriYesNo.heading = Do you know the transit holder’s EORI number or Trader Identification Number (TIN)?
 traderDetails.holderOfTransit.eoriYesNo.checkYourAnswersLabel = Do you know the transit holder’s EORI number or Trader Identification Number (TIN)?
@@ -181,8 +185,8 @@ traderDetails.holderOfTransit.eori.heading = What is the transit holder’s EORI
 traderDetails.holderOfTransit.eori.checkYourAnswersLabel = Transit holder’s EORI number or Trader Identification Number (TIN)
 traderDetails.holderOfTransit.eori.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
 traderDetails.holderOfTransit.eori.error.required = Enter the transit holder’s EORI number or Trader Identification Number (TIN)
-traderDetails.holderOfTransit.eori.error.maxLength = The transit holder's EORI number or Trader Identification Number (TIN) must be 17 characters or less
-traderDetails.holderOfTransit.eori.error.invalidCharacters = The transit holder’s EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
+traderDetails.holderOfTransit.eori.error.length = The transit holder's EORI number or Trader Identification Number (TIN) must be 17 characters or less
+traderDetails.holderOfTransit.eori.error.invalid = The transit holder’s EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
 traderDetails.holderOfTransit.eori.change.hidden = transit holder’s EORI number or Trader Identification Number (TIN)
 
 traderDetails.holderOfTransit.tirIdentificationYesNo.title = Is the TIR holder’s identification number known?
@@ -211,7 +215,7 @@ traderDetails.holderOfTransit.name.change.hidden = transit holder’s name
 
 traderDetails.holderOfTransit.country.title = Which country is the transit holder based in?
 traderDetails.holderOfTransit.country.heading = Which country is {0} based in?
-traderDetails.holderOfTransit.country.hintText = Enter the country, like Italy or Spain.
+traderDetails.holderOfTransit.country.hint = Enter the country, like Italy or Spain.
 traderDetails.holderOfTransit.country.placeholder = Select a country
 traderDetails.holderOfTransit.country.checkYourAnswersLabel = Transit holder’s country
 traderDetails.holderOfTransit.country.change.hidden = transit holder’s country
@@ -259,21 +263,19 @@ traderDetails.holderOfTransit.contact.telephoneNumber.hint = Must include the co
 traderDetails.holderOfTransit.contact.telephoneNumber.error.required = Enter {0}’s phone number
 traderDetails.holderOfTransit.contact.telephoneNumber.error.maxLength = {0}’s phone number must be {1} characters or less
 traderDetails.holderOfTransit.contact.telephoneNumber.error.minLength = {0}’s phone number must be {1} characters or more
-traderDetails.holderOfTransit.contact.telephoneNumber.error.invalidCharacter = {0}’s phone number must only include numbers 0 to 9 and a plus sign
+traderDetails.holderOfTransit.contact.telephoneNumber.error.invalidCharacters = {0}’s phone number must only include numbers 0 to 9 and a plus sign
 traderDetails.holderOfTransit.contact.telephoneNumber.error.invalidFormat = Enter {0}’s phone number in the right format
 traderDetails.holderOfTransit.contact.telephoneNumber.change.hidden = contact’s phone number
 
 # Trader details - Representative
 
-traderDetails.representative.caption = Trader details – Representative
-
-traderDetails.representative.eori.title = What is the representative’s EORI number or Trader Identification Number (TIN)?
-traderDetails.representative.eori.heading = What is the representative’s EORI number or Trader Identification Number (TIN)?
+traderDetails.representative.eori.title = What is your EORI number or Trader Identification Number (TIN)?
+traderDetails.representative.eori.heading = What is your EORI number or Trader Identification Number (TIN)?
 traderDetails.representative.eori.checkYourAnswersLabel = Representative’s EORI number or Trader Identification Number (TIN)
-traderDetails.representative.eori.error.required = Enter the representative’s EORI number or Trader Identification Number (TIN)
+traderDetails.representative.eori.error.required = Enter your EORI number or Trader Identification Number (TIN)
 traderDetails.representative.eori.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
-traderDetails.representative.eori.error.invalidCharacters = The EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
-traderDetails.representative.eori.error.maxLength = The EORI number or Trader Identification Number (TIN) must be 17 characters or less
+traderDetails.representative.eori.error.invalid = Your EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
+traderDetails.representative.eori.error.length = Your EORI number or Trader Identification Number (TIN) must be 17 characters or less
 traderDetails.representative.eori.change.hidden = representative’s EORI number or Trader Identification Number (TIN)
 
 traderDetails.representative.name.title = What is your name?
@@ -299,7 +301,7 @@ traderDetails.representative.telephoneNumber.error.required = Enter your phone n
 traderDetails.representative.telephoneNumber.hint = Must include the country code, like +44 808 157 0192.
 traderDetails.representative.telephoneNumber.error.maxLength = Your phone number must be {0} characters or less
 traderDetails.representative.telephoneNumber.error.minLength = Your phone number must be {0} characters or more
-traderDetails.representative.telephoneNumber.error.invalidCharacter = Your phone number must only include numbers 0 to 9 and a plus sign
+traderDetails.representative.telephoneNumber.error.invalidCharacters = Your phone number must only include numbers 0 to 9 and a plus sign
 traderDetails.representative.telephoneNumber.error.invalidFormat = Enter your phone number in the right format
 traderDetails.representative.telephoneNumber.change.hidden = representative’s phone number
 
@@ -313,7 +315,7 @@ traderDetails.consignment.approvedOperator.title = Do you want to use a reduced 
 traderDetails.consignment.approvedOperator.heading = Do you want to use a reduced data set?
 traderDetails.consignment.approvedOperator.checkYourAnswersLabel = Do you want to use a reduced data set?
 traderDetails.consignment.approvedOperator.error.required = Select yes if you want to use a reduced data set
-traderDetails.consignment.approvedOperator.hintText = This simplifies the declaration process, enabling you to complete submissions with less data.
+traderDetails.consignment.approvedOperator.hint = This simplifies the declaration process, enabling you to complete submissions with less data.
 traderDetails.consignment.approvedOperator.paragraph = You must be an approved airline, shipping or rail freight operator to use a reduced data set.
 traderDetails.consignment.approvedOperator.label = Do you want to use a reduced data set?
 traderDetails.consignment.approvedOperator.change.hidden = if you want to use a reduced data set
@@ -332,8 +334,6 @@ traderDetails.consignment.checkYourAnswers.consignee = Consignee
 
 # Trader details - Consignment - Consignor
 
-traderDetails.consignment.consignor.caption = Trader details - Consignor
-
 traderDetails.consignment.consignor.eoriYesNo.title = Do you know the consignor’s EORI number or Trader Identification Number (TIN)?
 traderDetails.consignment.consignor.eoriYesNo.heading = Do you know the consignor’s EORI number or Trader Identification Number (TIN)?
 traderDetails.consignment.consignor.eoriYesNo.checkYourAnswersLabel = Do you know the consignor’s EORI number or Trader Identification Number (TIN)?
@@ -345,8 +345,8 @@ traderDetails.consignment.consignor.eori.heading = What is the consignor’s EOR
 traderDetails.consignment.consignor.eori.checkYourAnswersLabel = Consignor’s EORI number or Trader Identification Number (TIN)
 traderDetails.consignment.consignor.eori.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
 traderDetails.consignment.consignor.eori.error.required = Enter the consignor’s EORI number or Trader Identification Number (TIN)
-traderDetails.consignment.consignor.eori.error.maxLength = The consignor’s EORI number or Trader Identification Number (TIN) must be 17 characters or less
-traderDetails.consignment.consignor.eori.error.invalidCharacters = The consignor’s EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
+traderDetails.consignment.consignor.eori.error.length = The consignor’s EORI number or Trader Identification Number (TIN) must be 17 characters or less
+traderDetails.consignment.consignor.eori.error.invalid = The consignor’s EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
 traderDetails.consignment.consignor.eori.change.hidden = consignor’s EORI number or Trader Identification Number (TIN)
 
 traderDetails.consignment.consignor.name.title = What is the consignor’s name?
@@ -359,7 +359,7 @@ traderDetails.consignment.consignor.name.change.hidden = consignor’s name
 
 traderDetails.consignment.consignor.country.title = Which country is the consignor based in?
 traderDetails.consignment.consignor.country.heading = Which country is {0} based in?
-traderDetails.consignment.consignor.country.hintText = Enter the country, like Italy or Spain.
+traderDetails.consignment.consignor.country.hint = Enter the country, like Italy or Spain.
 traderDetails.consignment.consignor.country.placeholder = Select a country
 traderDetails.consignment.consignor.country.change.hidden = consignor’s country
 traderDetails.consignment.consignor.country.checkYourAnswersLabel = Consignor’s country
@@ -400,13 +400,11 @@ traderDetails.consignment.consignor.contact.telephoneNumber.hint = Must include 
 traderDetails.consignment.consignor.contact.telephoneNumber.error.required = Enter {0}’s phone number
 traderDetails.consignment.consignor.contact.telephoneNumber.error.maxLength = {0}’s phone number must be {1} characters or less
 traderDetails.consignment.consignor.contact.telephoneNumber.error.minLength = {0}’s phone number must be {1} characters or more
-traderDetails.consignment.consignor.contact.telephoneNumber.error.invalidCharacter = {0}’s phone number must only include numbers 0 to 9 and a plus sign
+traderDetails.consignment.consignor.contact.telephoneNumber.error.invalidCharacters = {0}’s phone number must only include numbers 0 to 9 and a plus sign
 traderDetails.consignment.consignor.contact.telephoneNumber.error.invalidFormat = Enter {0}’s phone number in the right format
 traderDetails.consignment.consignor.contact.telephoneNumber.change.hidden = consignor contact’s phone number
 
 # Trader details - Consignment - Consignee
-
-traderDetails.consignment.consignee.caption = Trader details - Consignee
 
 traderDetails.consignment.consignee.eoriYesNo.title = Do you know the consignee’s EORI number or Trader Identification Number (TIN)?
 traderDetails.consignment.consignee.eoriYesNo.heading = Do you know the consignee’s EORI number or Trader Identification Number (TIN)?
@@ -419,8 +417,8 @@ traderDetails.consignment.consignee.eoriNumber.heading = What is the consignee�
 traderDetails.consignment.consignee.eoriNumber.checkYourAnswersLabel = Consignee’s EORI number or Trader Identification Number (TIN)
 traderDetails.consignment.consignee.eoriNumber.error.required = Enter the consignee’s EORI number or Trader Identification Number (TIN)
 traderDetails.consignment.consignee.eoriNumber.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
-traderDetails.consignment.consignee.eoriNumber.error.maxLength = The consignee’s EORI number or Trader Identification Number (TIN) must be 17 characters or less
-traderDetails.consignment.consignee.eoriNumber.error.invalidCharacters = The consignee’s EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
+traderDetails.consignment.consignee.eoriNumber.error.length = The consignee’s EORI number or Trader Identification Number (TIN) must be 17 characters or less
+traderDetails.consignment.consignee.eoriNumber.error.invalid = The consignee’s EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
 traderDetails.consignment.consignee.eoriNumber.change.hidden = consignee’s EORI number or Trader Identification Number (TIN)
 
 traderDetails.consignment.consignee.name.title = What is the consignee’s name?
@@ -433,7 +431,7 @@ traderDetails.consignment.consignee.name.change.hidden = consignee’s name
 
 traderDetails.consignment.consignee.country.title = Which country is the consignee based in?
 traderDetails.consignment.consignee.country.heading = Which country is {0} based in?
-traderDetails.consignment.consignee.country.hintText = Enter the country, like Italy or Spain.
+traderDetails.consignment.consignee.country.hint = Enter the country, like Italy or Spain.
 traderDetails.consignment.consignee.country.placeholder = Select a country
 traderDetails.consignment.consignee.country.change.hidden = consignee’s country
 traderDetails.consignment.consignee.country.checkYourAnswersLabel = Consignee’s country
@@ -468,8 +466,8 @@ guaranteeDetails.addAnotherGuarantee.singular.title = You have added {0} guarant
 guaranteeDetails.addAnotherGuarantee.singular.heading = You have added {0} guarantee
 guaranteeDetails.addAnotherGuarantee.plural.title = You have added {0} guarantees
 guaranteeDetails.addAnotherGuarantee.plural.heading = You have added {0} guarantees
-guaranteeDetails.addAnotherGuarantee.error.required = Select yes if you need to add another guarantee
-guaranteeDetails.addAnotherGuarantee.label = Do you need to add another guarantee?
+guaranteeDetails.addAnotherGuarantee.error.required = Select yes if you want to add another guarantee
+guaranteeDetails.addAnotherGuarantee.label = Do you want to add another guarantee?
 guaranteeDetails.addAnotherGuarantee.maxLimit.label = You cannot add any more guarantees. To add another guarantee, you need to remove one first.
 
 guaranteeDetails.addGuaranteeYesNo.title = Do you want to add a guarantee?
@@ -560,7 +558,11 @@ guaranteeDetails.guarantee.removeGuaranteeYesNo.error.required = Select yes if y
 # Route details
 
 routeDetails.caption = Route details
+routeDetails.routing.caption = Route details - Transit route
+routeDetails.transit.caption = Route details - Office of transit
+routeDetails.exit.caption = Route details - Office of exit
 routeDetails.locationOfGoods.caption = Route details - Location of goods
+routeDetails.loadingAndUnloading.caption = Route details - Places of loading and unloading
 routeDetails.loadingAndUnloading.unloading.caption = Route details - Place of unloading
 routeDetails.loadingAndUnloading.loading.caption = Route details - Place of loading
 
@@ -586,8 +588,8 @@ routeDetails.checkYourAnswers.exit.officeOfExit.change.hidden = office of exit {
 
 routeDetails.routing.countryOfDestination.title = What is the country of destination?
 routeDetails.routing.countryOfDestination.heading = What is the country of destination?
-routeDetails.routing.countryOfDestination.hintText = Enter the country, like France or Portugal.
-routeDetails.routing.countryOfDestination.paragraph = This is the country where the CTC transit ends.
+routeDetails.routing.countryOfDestination.hint = Enter the country, like Italy or Spain.
+routeDetails.routing.countryOfDestination.paragraph = This is the final CTC country of the transit route. It may not be where the transit movement ends.
 routeDetails.routing.countryOfDestination.placeholder = Select a country
 routeDetails.routing.countryOfDestination.change.hidden = country of destination
 routeDetails.routing.countryOfDestination.checkYourAnswersLabel = Country of destination
@@ -596,7 +598,7 @@ routeDetails.routing.countryOfDestination.error.noOffices = You cannot use this 
 
 routeDetails.routing.officeOfDestination.title = Where is the office of destination?
 routeDetails.routing.officeOfDestination.heading = Where is the office of destination?
-routeDetails.routing.officeOfDestination.hintText = Enter the office location or code, like Dover or GB000060.
+routeDetails.routing.officeOfDestination.hint = Enter the office location or code, like Dover or GB000060.
 routeDetails.routing.officeOfDestination.paragraph = This is the customs office where the CTC transit ends.
 routeDetails.routing.officeOfDestination.placeholder = Select a customs office
 routeDetails.routing.officeOfDestination.placeholder = Select a customs office
@@ -604,12 +606,11 @@ routeDetails.routing.officeOfDestination.change.hidden = office of destination
 routeDetails.routing.officeOfDestination.checkYourAnswersLabel = Office of destination
 routeDetails.routing.officeOfDestination.error.required = Enter the office of destination
 
-routeDetails.routing.bindingItinerary.title = Do you want the transit to follow a binding itinerary?
-routeDetails.routing.bindingItinerary.heading = Do you want the transit to follow a binding itinerary?
-routeDetails.routing.bindingItinerary.paragraph1 = This means transporting goods to the office of departure by an economically justifiable itinerary.
-routeDetails.routing.bindingItinerary.paragraph2 = This diverts the route around countries that represent a higher risk to the goods in transit.
+routeDetails.routing.bindingItinerary.title = Are you using a binding itinerary?
+routeDetails.routing.bindingItinerary.heading = Are you using a binding itinerary?
+routeDetails.routing.bindingItinerary.paragraph = This diverts the route around countries that represent a higher risk to the goods in transit.
 routeDetails.routing.bindingItinerary.checkYourAnswersLabel = Do you want the transit to follow a binding itinerary?
-routeDetails.routing.bindingItinerary.error.required = Select yes if you want the transit to follow a binding itinerary
+routeDetails.routing.bindingItinerary.error.required = Select yes if you are using a binding itinerary
 routeDetails.routing.bindingItinerary.change.hidden = if you want the transit to follow a binding itinerary
 
 routeDetails.routing.addCountryOfRoutingYesNo.title = Do you want to add a country to the transit route?
@@ -622,7 +623,7 @@ routeDetails.routing.addAnotherCountryOfRouting.singular.title = You have added 
 routeDetails.routing.addAnotherCountryOfRouting.singular.heading = You have added {0} country to the transit route
 routeDetails.routing.addAnotherCountryOfRouting.plural.title = You have added {0} countries to the transit route
 routeDetails.routing.addAnotherCountryOfRouting.plural.heading = You have added {0} countries to the transit route
-routeDetails.routing.addAnotherCountryOfRouting.error.required = Select yes if you need to add another country to the transit route
+routeDetails.routing.addAnotherCountryOfRouting.error.required = Select yes if you want to add another country to the transit route
 routeDetails.routing.addAnotherCountryOfRouting.label = Do you want to add another country to the transit route?
 routeDetails.routing.addAnotherCountryOfRouting.maxLimit.label = You cannot add any more countries to the transit route. To add another country, you need to remove one first.
 
@@ -661,7 +662,7 @@ routeDetails.transit.addAnotherOfficeOfTransit.singular.title = You have added {
 routeDetails.transit.addAnotherOfficeOfTransit.singular.heading = You have added {0} office of transit
 routeDetails.transit.addAnotherOfficeOfTransit.plural.title = You have added {0} offices of transit
 routeDetails.transit.addAnotherOfficeOfTransit.plural.heading = You have added {0} offices of transit
-routeDetails.transit.addAnotherOfficeOfTransit.error.required = Select yes if you need to add another office of transit
+routeDetails.transit.addAnotherOfficeOfTransit.error.required = Select yes if you want to add another office of transit
 routeDetails.transit.addAnotherOfficeOfTransit.label = Do you want to add another office of transit?
 routeDetails.transit.addAnotherOfficeOfTransit.maxLimit.label = You cannot add any more offices of transit. To add another office, you need to remove one first.
 
@@ -686,6 +687,7 @@ routeDetails.transit.index.officeOfTransit.error.required = Enter where the offi
 
 routeDetails.transit.index.addOfficeOfTransitETAYesNo.title = Do you want to add a time of arrival in {0}?
 routeDetails.transit.index.addOfficeOfTransitETAYesNo.heading = Do you want to add a time of arrival in {0}?
+routeDetails.transit.index.addOfficeOfTransitETAYesNo.paragraph = This information is only for reference. If the transit arrives earlier or later than expected, no further action will be required.
 routeDetails.transit.index.addOfficeOfTransitETAYesNo.checkYourAnswersLabel = Do you want to add a time of arrival?
 routeDetails.transit.index.addOfficeOfTransitETAYesNo.change.hidden = do you want to add a time of arrival
 routeDetails.transit.index.addOfficeOfTransitETAYesNo.error.required = Select yes if you want to add a time of arrival for the office of transit
@@ -697,7 +699,7 @@ routeDetails.transit.index.officeOfTransitETA.change.hidden = the estimated date
 routeDetails.transit.index.officeOfTransitETA.date.title = Date
 routeDetails.transit.index.officeOfTransitETA.date.hint = For example, 14 1 2020
 routeDetails.transit.index.officeOfTransitETA.time.title = Time
-routeDetails.transit.index.officeOfTransitETA.time.hint = Use the 24-hour format. For example. 14 30
+routeDetails.transit.index.officeOfTransitETA.time.hint = Use the 24-hour format. For example, 14 30
 routeDetails.transit.index.officeOfTransitETA.date.error.invalid = Enter a real date that you expect the transit to arrive
 routeDetails.transit.index.officeOfTransitETA.date.error.required.all = Enter the estimated date of arrival at the office of transit
 routeDetails.transit.index.officeOfTransitETA.date.error.required.multiple = The estimated date of arrival at the office of transit must include {0} and {1}
@@ -724,7 +726,7 @@ routeDetails.exit.addAnotherOfficeOfExit.singular.title = You have added {0} off
 routeDetails.exit.addAnotherOfficeOfExit.singular.heading = You have added {0} office of exit
 routeDetails.exit.addAnotherOfficeOfExit.plural.title = You have added {0} offices of exit
 routeDetails.exit.addAnotherOfficeOfExit.plural.heading = You have added {0} offices of exit
-routeDetails.exit.addAnotherOfficeOfExit.error.required =  Select yes if you need to add another office of exit
+routeDetails.exit.addAnotherOfficeOfExit.error.required =  Select yes if you want to add another office of exit
 routeDetails.exit.addAnotherOfficeOfExit.label = Do you want to add another office of exit?
 routeDetails.exit.addAnotherOfficeOfExit.hint = You can add up to 9 offices.
 routeDetails.exit.addAnotherOfficeOfExit.maxLimit.label = You cannot add any more offices of exit. To add another office, you need to remove one first.
@@ -734,7 +736,7 @@ routeDetails.exit.addAnotherOfficeOfExit.maxLimit.label = You cannot add any mor
 routeDetails.exit.index.officeOfExitCountry.title = Which country is the office of exit in?
 routeDetails.exit.index.officeOfExitCountry.heading = Which country is the office of exit in?
 routeDetails.exit.index.officeOfExitCountry.paragraph = This is the exit point for goods leaving a customs territory.
-routeDetails.exit.index.officeOfExitCountry.hintText = Enter the country, like France or Portugal.
+routeDetails.exit.index.officeOfExitCountry.hint = Enter the country, like France or Portugal.
 routeDetails.exit.index.officeOfExitCountry.placeholder = Select a country
 routeDetails.exit.index.officeOfExitCountry.change.hidden = office of exit’s country
 routeDetails.exit.index.officeOfExitCountry.checkYourAnswersLabel = Country
@@ -743,7 +745,7 @@ routeDetails.exit.index.officeOfExitCountry.error.noOffices = You cannot use thi
 
 routeDetails.exit.index.officeOfExit.title = Where in {0} is the office of exit?
 routeDetails.exit.index.officeOfExit.heading = Where in {0} is the office of exit?
-routeDetails.exit.index.officeOfExit.hintText = Enter the office location or code, like Dover or GB000060.
+routeDetails.exit.index.officeOfExit.hint = Enter the office location or code, like Dover or GB000060.
 routeDetails.exit.index.officeOfExit.placeholder = Select a customs office
 routeDetails.exit.index.officeOfExit.change.hidden = office of exit’s location
 routeDetails.exit.index.officeOfExit.checkYourAnswersLabel = Office location
@@ -758,7 +760,6 @@ routeDetails.exit.index.confirmRemoveOfficeOfExit.default.error.required = Selec
 
 routeDetails.exit.index.checkOfficeOfExitAnswers.title = Check your answers
 routeDetails.exit.index.checkOfficeOfExitAnswers.heading = Check your answers
-routeDetails.exit.index.checkOfficeOfExitAnswers.subHeading = Office of exit
 
 # Route details - Location of goods
 
@@ -795,7 +796,7 @@ routeDetails.locationOfGoods.identification.error.required = Select how you want
 
 routeDetails.locationOfGoods.customsOfficeIdentifier.title = What is the customs office identifier for the location of goods?
 routeDetails.locationOfGoods.customsOfficeIdentifier.heading = What is the customs office identifier for the location of goods?
-routeDetails.locationOfGoods.customsOfficeIdentifier.hintText = Enter the office location or code, like Dover or GB000060.
+routeDetails.locationOfGoods.customsOfficeIdentifier.hint = Enter the office location or code, like Dover or GB000060.
 routeDetails.locationOfGoods.customsOfficeIdentifier.placeholder = Select a customsOffice
 routeDetails.locationOfGoods.customsOfficeIdentifier.change.hidden = the customs office identifier for the location of goods
 routeDetails.locationOfGoods.customsOfficeIdentifier.checkYourAnswersLabel = What is the customs office identifier for the location of goods?
@@ -806,15 +807,15 @@ routeDetails.locationOfGoods.authorisationNumber.heading = What is the authorisa
 routeDetails.locationOfGoods.authorisationNumber.checkYourAnswersLabel = What is the authorisation number for the location of goods?
 routeDetails.locationOfGoods.authorisationNumber.change.hidden = the authorisation number for the location of goods
 routeDetails.locationOfGoods.authorisationNumber.error.required = Enter the authorisation number for the location of goods.
-routeDetails.locationOfGoods.authorisationNumber.error.maxLength = The authorisation number must be 35 characters or less.
-routeDetails.locationOfGoods.authorisationNumber.error.invalidCharacters = The authorisation number must only include letters a to z and numbers 0 to 9.
-routeDetails.locationOfGoods.authorisationNumber.hintText = This can be up to 35 characters long and include both letters and numbers.
+routeDetails.locationOfGoods.authorisationNumber.error.length = The authorisation number must be 35 characters or less.
+routeDetails.locationOfGoods.authorisationNumber.error.invalid = The authorisation number must only include letters a to z and numbers 0 to 9.
+routeDetails.locationOfGoods.authorisationNumber.hint = This can be up to 35 characters long and include both letters and numbers.
 
 routeDetails.locationOfGoods.coordinates.title = What are the coordinates for the location of goods?
 routeDetails.locationOfGoods.coordinates.heading = What are the coordinates for the location of goods?
 routeDetails.locationOfGoods.coordinates.latitude = Latitude
 routeDetails.locationOfGoods.coordinates.longitude = Longitude
-routeDetails.locationOfGoods.coordinates.hintText = These numbers can be positive or negative and need between 5 and 7 decimal places. For example, 50.96622 or 1.86201.
+routeDetails.locationOfGoods.coordinates.hint = These numbers can be positive or negative and need between 5 and 7 decimal places. For example, 50.96622 or 1.86201.
 routeDetails.locationOfGoods.coordinates.checkYourAnswersLabel = Coordinates
 routeDetails.locationOfGoods.coordinates.change.hidden = coordinates
 routeDetails.locationOfGoods.coordinates.error.invalid = The {0} coordinates must only include numbers 0 to 9, a decimal place and a minus sign
@@ -828,9 +829,9 @@ routeDetails.locationOfGoods.eori.heading = What is the EORI number or Trader Id
 routeDetails.locationOfGoods.eori.checkYourAnswersLabel = EORI number or Trader Identification Number (TIN) for the location of goods
 routeDetails.locationOfGoods.eori.change.hidden =  EORI number or Trader Identification Number (TIN) for the location of goods
 routeDetails.locationOfGoods.eori.error.required = Enter the EORI number or Trader Identification Number (TIN) for the location of goods
-routeDetails.locationOfGoods.eori.error.maxLength = The EORI number or Trader Identification Number (TIN) must be 17 characters or less
-routeDetails.locationOfGoods.eori.error.invalidCharacters = The EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
-routeDetails.locationOfGoods.eori.hintText = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
+routeDetails.locationOfGoods.eori.error.length = The EORI number or Trader Identification Number (TIN) must be 17 characters or less
+routeDetails.locationOfGoods.eori.error.invalid = The EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
+routeDetails.locationOfGoods.eori.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
 
 routeDetails.locationOfGoods.postalCode.title = What is the address for the location of goods?
 routeDetails.locationOfGoods.postalCode.heading = What is the address for the location of goods?
@@ -846,7 +847,7 @@ routeDetails.locationOfGoods.postalCode.error.required = Enter the {0} for the l
 
 routeDetails.locationOfGoods.country.title = In which country is the location of goods?
 routeDetails.locationOfGoods.country.heading = In which country is the location of goods?
-routeDetails.locationOfGoods.country.hintText = Enter the country, like Italy or Spain.
+routeDetails.locationOfGoods.country.hint = Enter the country, like Italy or Spain.
 routeDetails.locationOfGoods.country.placeholder = Select a country
 routeDetails.locationOfGoods.country.change.hidden = location of goods country
 routeDetails.locationOfGoods.country.checkYourAnswersLabel = Location of goods country
@@ -865,20 +866,6 @@ routeDetails.locationOfGoods.address.error.invalid = The {0} must only include l
 routeDetails.locationOfGoods.address.error.required = Enter the {0} for the location of goods
 routeDetails.locationOfGoods.address.error.length = The {0} must be {1} characters or less
 
-traderDetails.holderOfTransit.address.title = What is the transit holder’s address?
-traderDetails.holderOfTransit.address.heading = What is {0}’s address?
-traderDetails.holderOfTransit.address.numberAndStreet = Number and street name
-traderDetails.holderOfTransit.address.city = Town or city
-traderDetails.holderOfTransit.address.postalCode = Postal code
-traderDetails.holderOfTransit.address.postalCode.optional = Postal code (optional)
-traderDetails.holderOfTransit.address.checkYourAnswersLabel = Transit holder’s address
-traderDetails.holderOfTransit.address.change.hidden = transit holder’s address
-traderDetails.holderOfTransit.address.error.postalCode.invalid = The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
-traderDetails.holderOfTransit.address.error.invalid = The {0} for {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-traderDetails.holderOfTransit.address.error.required = Enter the {0} for {1}’s address
-traderDetails.holderOfTransit.address.error.length = The {0} for {1}’s address must be {2} characters or less
-traderDetails.holderOfTransit.address.placeholder = Select a country
-
 routeDetails.locationOfGoods.additionalIdentifier.title = What is the additional identifier for the location of goods?
 routeDetails.locationOfGoods.additionalIdentifier.heading = What is the additional identifier for the location of goods?
 routeDetails.locationOfGoods.additionalIdentifier.hint = This can be up to 4 characters long, for example 0000 or X9X9.
@@ -896,13 +883,11 @@ routeDetails.locationOfGoods.addIdentifierYesNo.error.required = Select yes if y
 
 routeDetails.locationOfGoods.unLocode.title = What is the UN/LOCODE for the location of goods?
 routeDetails.locationOfGoods.unLocode.heading = What is the UN/LOCODE for the location of goods?
-routeDetails.locationOfGoods.unLocode.hintText = Enter the location or code, like Berlin or DEBER.
+routeDetails.locationOfGoods.unLocode.hint = Enter the location or code, like Berlin or DEBER.
 routeDetails.locationOfGoods.unLocode.placeholder = Select a UN/LOCODE.
 routeDetails.locationOfGoods.unLocode.change.hidden = the UN/LOCODE for the location of goods
 routeDetails.locationOfGoods.unLocode.checkYourAnswersLabel = UN/LOCODE for the location of goods
 routeDetails.locationOfGoods.unLocode.error.required = Enter the UN/LOCODE for the location of goods
-routeDetails.locationOfGoods.unLocode.error.invalidCharacters = The UN/LOCODE must only include letters a to z and numbers 0 to 9
-routeDetails.locationOfGoods.unLocode.error.maxLength = The UN/LOCODE must be 5 characters long
 routeDetails.locationOfGoods.unLocode.paragraph = This is a 5-character code used to identify a transit-related location, like a port or clearance depot.
 
 routeDetails.locationOfGoods.addContactLocationOfGoods.title = Do you want to add a contact for the location of goods?
@@ -927,7 +912,7 @@ routeDetails.locationOfGoods.contact.name.error.length = The contact must be 70 
 
 routeDetails.locationOfGoods.contact.telephoneNumber.title = What is the contact for the location of goods’ telephone number?
 routeDetails.locationOfGoods.contact.telephoneNumber.heading = What is {0}’s telephone number?
-routeDetails.locationOfGoods.contact.telephoneNumber.hintText = This has to include the country code, like +44 808 157 0192.
+routeDetails.locationOfGoods.contact.telephoneNumber.hint = This has to include the country code, like +44 808 157 0192.
 routeDetails.locationOfGoods.contact.telephoneNumber.checkYourAnswersLabel = What is the contact for the location of goods’ telephone number?
 routeDetails.locationOfGoods.contact.telephoneNumber.change.hidden = the contact for the location of goods’ telephone number
 routeDetails.locationOfGoods.contact.telephoneNumber.error.required = Enter {0}’s telephone number.
@@ -960,13 +945,11 @@ routeDetails.loadingAndUnloading.loading.addUnLocodeYesNo.paragraph = This is a 
 
 routeDetails.loadingAndUnloading.loading.unLocode.title = What is the UN/LOCODE for the place of loading?
 routeDetails.loadingAndUnloading.loading.unLocode.heading = What is the UN/LOCODE for the place of loading?
-routeDetails.loadingAndUnloading.loading.unLocode.hintText = Enter the code, like GB BRS or GB MNC.
+routeDetails.loadingAndUnloading.loading.unLocode.hint = Enter the code, like GB BRS or GB MNC.
 routeDetails.loadingAndUnloading.loading.unLocode.placeholder = Select a UN/LOCODE.
 routeDetails.loadingAndUnloading.loading.unLocode.change.hidden = UN/LOCODE for the place of loading
 routeDetails.loadingAndUnloading.loading.unLocode.checkYourAnswersLabel = UN/LOCODE
 routeDetails.loadingAndUnloading.loading.unLocode.error.required = Enter the UN/LOCODE for the place of loading
-routeDetails.loadingAndUnloading.loading.unLocode.error.invalidCharacters = The UN/LOCODE for the place of loading must only include letters a to z and spaces
-routeDetails.loadingAndUnloading.loading.unLocode.error.maxLength = The UN/LOCODE for the place of loading must be 5 characters long
 
 routeDetails.loadingAndUnloading.loading.addExtraInformationYesNo.title = Do you want to add extra information for the place of loading?
 routeDetails.loadingAndUnloading.loading.addExtraInformationYesNo.heading = Do you want to add extra information for the place of loading?
@@ -977,7 +960,7 @@ routeDetails.loadingAndUnloading.loading.addExtraInformationYesNo.error.required
 
 routeDetails.loadingAndUnloading.loading.country.title = In which country is the place of loading?
 routeDetails.loadingAndUnloading.loading.country.heading = In which country is the place of loading?
-routeDetails.loadingAndUnloading.loading.country.hintText = Enter the country, like Italy or Spain.
+routeDetails.loadingAndUnloading.loading.country.hint = Enter the country, like Italy or Spain.
 routeDetails.loadingAndUnloading.loading.country.placeholder = Select a country
 routeDetails.loadingAndUnloading.loading.country.change.hidden = country for the place of loading
 routeDetails.loadingAndUnloading.loading.country.checkYourAnswersLabel = Country
@@ -987,7 +970,7 @@ routeDetails.loadingAndUnloading.loading.location.title = Where in {0} is the pl
 routeDetails.loadingAndUnloading.loading.location.heading = Where in {0} is the place of loading?
 routeDetails.loadingAndUnloading.loading.location.checkYourAnswersLabel = Location
 routeDetails.loadingAndUnloading.loading.location.change.hidden = location for the place of loading
-routeDetails.loadingAndUnloading.loading.location.hint = Describe the specific location of loading. This can be up to 35 characters long.
+routeDetails.loadingAndUnloading.loading.location.hint = Enter the specific location, such as the warehouse, shed or wharf, where the goods are being loaded. This can be up to 35 characters long.
 routeDetails.loadingAndUnloading.loading.location.error.required = Enter the place of loading in {0}
 routeDetails.loadingAndUnloading.loading.location.error.length = The place of loading must be 35 characters or less
 routeDetails.loadingAndUnloading.loading.location.error.invalid = The place of loading must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
@@ -1003,13 +986,12 @@ routeDetails.loadingAndUnloading.unloading.addUnLocodeYesNo.paragraph = This is 
 
 routeDetails.loadingAndUnloading.unloading.unLocode.title = What is the UN/LOCODE for the place of unloading?
 routeDetails.loadingAndUnloading.unloading.unLocode.heading = What is the UN/LOCODE for the place of unloading?
-routeDetails.loadingAndUnloading.unloading.unLocode.hintText = Enter the code, like DEBER or ESMAD.
+routeDetails.loadingAndUnloading.unloading.unLocode.hint = Enter the code, like DEBER or ESMAD.
 routeDetails.loadingAndUnloading.unloading.unLocode.label = What is the UN/LOCODE for the place of unloading?
 routeDetails.loadingAndUnloading.unloading.unLocode.placeholder = Select a UN/LOCODE.
 routeDetails.loadingAndUnloading.unloading.unLocode.change.hidden = UN/LOCODE for the place of unloading
 routeDetails.loadingAndUnloading.unloading.unLocode.checkYourAnswersLabel = UN/LOCODE
 routeDetails.loadingAndUnloading.unloading.unLocode.error.required = Enter the UN/LOCODE for the place of unloading
-routeDetails.loadingAndUnloading.unloading.unLocode.error.invalidCharacters = The UN/LOCODE for the place of loading must only include letters a to z and numbers 0 to 9
 
 routeDetails.loadingAndUnloading.unloading.addExtraInformationYesNo.title = Do you want to add extra information for the place of unloading?
 routeDetails.loadingAndUnloading.unloading.addExtraInformationYesNo.heading = Do you want to add extra information for the place of unloading?
@@ -1020,7 +1002,7 @@ routeDetails.loadingAndUnloading.unloading.addExtraInformationYesNo.paragraph = 
 
 routeDetails.loadingAndUnloading.unloading.country.title = Which country is the place of unloading in?
 routeDetails.loadingAndUnloading.unloading.country.heading = Which country is the place of unloading in?
-routeDetails.loadingAndUnloading.unloading.country.hintText = Enter the country, like Italy or Spain.
+routeDetails.loadingAndUnloading.unloading.country.hint = Enter the country, like Italy or Spain.
 routeDetails.loadingAndUnloading.unloading.country.placeholder = Select a country
 routeDetails.loadingAndUnloading.unloading.country.change.hidden = country for the place of unloading
 routeDetails.loadingAndUnloading.unloading.country.checkYourAnswersLabel = Country
@@ -1030,7 +1012,7 @@ routeDetails.loadingAndUnloading.unloading.location.title = Where in {0} is the 
 routeDetails.loadingAndUnloading.unloading.location.heading = Where in {0} is the place of unloading?
 routeDetails.loadingAndUnloading.unloading.location.checkYourAnswersLabel = Location
 routeDetails.loadingAndUnloading.unloading.location.change.hidden = location for the place of unloading
-routeDetails.loadingAndUnloading.unloading.location.hint = Describe the specific location of unloading. This can be up to 35 characters long.
+routeDetails.loadingAndUnloading.unloading.location.hint = Enter the specific location, such as the warehouse, shed or wharf, where the goods are being unloaded. This can be up to 35 characters long.
 routeDetails.loadingAndUnloading.unloading.location.error.required = Enter the place of unloading in {0}
 routeDetails.loadingAndUnloading.unloading.location.error.length = The place of unloading must be 35 characters or less
 routeDetails.loadingAndUnloading.unloading.location.error.invalid = The place of unloading must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
@@ -1060,7 +1042,7 @@ transport.preRequisites.uniqueConsignmentReference.error.invalid = The Unique Co
 
 transport.preRequisites.countryOfDispatch.title = What is the country of dispatch?
 transport.preRequisites.countryOfDispatch.heading = What is the country of dispatch?
-transport.preRequisites.countryOfDispatch.hintText = Enter the country, like France or Portugal.
+transport.preRequisites.countryOfDispatch.hint = Enter the country, like France or Portugal.
 transport.preRequisites.countryOfDispatch.placeholder = Select a country
 transport.preRequisites.countryOfDispatch.change.hidden = What is the country of dispatch?
 transport.preRequisites.countryOfDispatch.checkYourAnswersLabel = What is the country of dispatch?
@@ -1074,7 +1056,7 @@ transport.preRequisites.transportedToSameCountryYesNo.error.required = Select ye
 
 transport.preRequisites.itemsDestinationCountry.title = What country are the items being transported to?
 transport.preRequisites.itemsDestinationCountry.heading = What country are the items being transported to?
-transport.preRequisites.itemsDestinationCountry.hintText = Enter the country, like France or Portugal.
+transport.preRequisites.itemsDestinationCountry.hint = Enter the country, like France or Portugal.
 transport.preRequisites.itemsDestinationCountry.placeholder = Select a country
 transport.preRequisites.itemsDestinationCountry.checkYourAnswersLabel = What country are the items being transported to
 transport.preRequisites.itemsDestinationCountry.error.required = Enter the country the items are being transported to

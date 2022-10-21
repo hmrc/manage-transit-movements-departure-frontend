@@ -47,7 +47,7 @@ class UnLocodeController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      service.getUnLocodes.map {
+      service.getUnLocodes().map {
         unLocodeList =>
           val form = formProvider("routeDetails.loadingAndUnloading.loading.unLocode", unLocodeList)
           val preparedForm = request.userAnswers.get(UnLocodePage) match {
@@ -61,7 +61,7 @@ class UnLocodeController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      service.getUnLocodes.flatMap {
+      service.getUnLocodes().flatMap {
         unLocodeList =>
           val form = formProvider("routeDetails.loadingAndUnloading.loading.unLocode", unLocodeList)
           form

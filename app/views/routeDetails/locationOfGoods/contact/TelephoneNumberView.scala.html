@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.TelephoneNumberController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.TelephoneNumberController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
@@ -45,7 +45,7 @@
                 heading = messages("routeDetails.locationOfGoods.contact.telephoneNumber.heading", name),
                 caption = Some(messages("routeDetails.locationOfGoods.caption"))
             ),
-            hint = Some(messages("routeDetails.locationOfGoods.contact.telephoneNumber.hintText")),
+            hint = Some(messages("routeDetails.locationOfGoods.contact.telephoneNumber.hint")),
             inputType = "tel",
             autocomplete = Some("tel"),
             inputClass = InputSize.Width20

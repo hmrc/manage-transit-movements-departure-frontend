@@ -34,11 +34,16 @@ class AddOfficeOfTransitETAYesNoViewSpec extends YesNoViewBehaviours with Genera
 
   behave like pageWithTitle(officeOfTransit)
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Office of transit")
 
   behave like pageWithHeading(officeOfTransit)
+
+  behave like pageWithContent(
+    "p",
+    "This information is only for reference. If the transit arrives earlier or later than expected, no further action will be required."
+  )
 
   behave like pageWithRadioItems(args = Seq(officeOfTransit))
 

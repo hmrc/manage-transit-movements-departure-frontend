@@ -46,12 +46,12 @@
 
     @heading(
         heading = messages(s"routeDetails.routing.addAnotherCountryOfRouting.$singularOrPlural.heading", countries.length),
-        caption = Some(messages("routeDetails.caption"))
+        caption = Some(messages("routeDetails.routing.caption"))
     )
 
     @listWithActions(countries)
 
-    @formHelper(action = routes.AddAnotherCountryOfRoutingController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.AddAnotherCountryOfRoutingController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @if(allowMoreCountries) {
             @inputYesNo(

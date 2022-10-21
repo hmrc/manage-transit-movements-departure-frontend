@@ -34,15 +34,17 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = routes.LocalReferenceNumberController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = routes.LocalReferenceNumberController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
         @inputText(
             field = form("value"),
-            inputTextType = OrdinaryTextInput(
-                heading = messages("localReferenceNumber.heading")
+            inputTextType = TextInputWithHiddenLabel(
+                heading = messages("localReferenceNumber.heading"),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("localReferenceNumber.paragraph")}</p>""")
             ),
+            hint = Some(messages("localReferenceNumber.hint")),
             inputClass = InputSize.Width20
         )
 

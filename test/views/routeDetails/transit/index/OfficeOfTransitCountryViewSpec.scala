@@ -38,13 +38,13 @@ class OfficeOfTransitCountryViewSpec extends InputSelectViewBehaviours[Country] 
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Office of transit")
 
   behave like pageWithHeading()
 
-  behave like pageWithSelect
+  behave like pageWithSelect()
 
   behave like pageWithHint("Enter the country, like France or Portugal.")
 

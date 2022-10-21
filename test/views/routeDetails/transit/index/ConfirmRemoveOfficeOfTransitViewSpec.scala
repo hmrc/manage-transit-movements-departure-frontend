@@ -38,9 +38,9 @@ class ConfirmRemoveOfficeOfTransitViewSpec extends YesNoViewBehaviours with Gene
 
   behave like pageWithTitle(transitOfficeName)
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Office of transit")
 
   behave like pageWithHeading(transitOfficeName)
 

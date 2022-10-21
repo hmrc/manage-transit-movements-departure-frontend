@@ -42,7 +42,7 @@ class AddAnotherGuaranteeViewSpec extends ListWithActionsViewBehaviours {
 
   override val prefix: String = "guaranteeDetails.addAnotherGuarantee"
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Guarantee details")
 

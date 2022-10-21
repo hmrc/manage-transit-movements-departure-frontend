@@ -23,7 +23,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import play.twirl.api.HtmlFormat
 import viewModels.ListItem
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 trait ListWithActionsViewBehaviours extends YesNoViewBehaviours with Generators {
 

@@ -51,7 +51,7 @@
 
     @listWithActions(guarantees)
 
-    @formHelper(action = routes.AddAnotherGuaranteeController.onSubmit(lrn), 'autoComplete -> "off") {
+    @formHelper(action = routes.AddAnotherGuaranteeController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
 
         @if(allowMoreGuarantees) {
             @inputYesNo(

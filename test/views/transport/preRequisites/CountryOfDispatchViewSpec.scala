@@ -38,7 +38,7 @@ class CountryOfDispatchViewSpec extends InputSelectViewBehaviours[Country] {
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Transport details")
 
@@ -48,7 +48,7 @@ class CountryOfDispatchViewSpec extends InputSelectViewBehaviours[Country] {
 
   behave like pageWithHint("Enter the country, like France or Portugal.")
 
-  behave like pageWithSelect
+  behave like pageWithSelect()
 
   behave like pageWithSubmitButton("Save and continue")
 }

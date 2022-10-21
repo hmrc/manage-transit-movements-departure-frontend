@@ -45,7 +45,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       .overrides(bind(classOf[ApiService]).toInstance(mockApiService))
 
   override def beforeEach(): Unit = {
-    reset(mockViewModel, mockCountriesService, mockApiService)
+    reset(mockViewModel); reset(mockCountriesService); reset(mockApiService)
     super.beforeEach()
   }
 

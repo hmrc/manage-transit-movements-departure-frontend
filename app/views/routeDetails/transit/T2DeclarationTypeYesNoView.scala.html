@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.T2DeclarationTypeYesNoController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.T2DeclarationTypeYesNoController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
@@ -44,8 +44,9 @@
             yesNoType = YesNoWithAdditionalHtml(
                 heading = messages("routeDetails.transit.t2DeclarationTypeYesNo.heading"),
                 caption = Some(messages("routeDetails.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.transit.t2DeclarationTypeYesNo.paragraph")}</p>"""))
-                )
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.transit.t2DeclarationTypeYesNo.paragraph")}</p>""")
+            )
+        )
 
         @button(attributes = Map("id" -> "submit"))
     }

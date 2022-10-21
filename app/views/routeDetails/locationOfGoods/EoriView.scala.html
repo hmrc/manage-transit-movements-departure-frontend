@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.EoriController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.EoriController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
@@ -45,7 +45,7 @@
                 heading = messages("routeDetails.locationOfGoods.eori.heading"),
                 caption = Some(messages("routeDetails.locationOfGoods.caption"))
             ),
-            hint= Some(messages("routeDetails.locationOfGoods.eori.hintText")),
+            hint= Some(messages("routeDetails.locationOfGoods.eori.hint")),
             inputClass = InputSize.Width20
         )
 

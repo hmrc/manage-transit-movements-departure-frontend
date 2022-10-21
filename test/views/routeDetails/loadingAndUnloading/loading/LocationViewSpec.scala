@@ -40,13 +40,15 @@ class LocationViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithTitle(countryName)
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Route details - Place of loading")
 
   behave like pageWithHeading(countryName)
 
-  behave like pageWithHint("Describe the specific location of loading. This can be up to 35 characters long.")
+  behave like pageWithHint(
+    "Enter the specific location, such as the warehouse, shed or wharf, where the goods are being loaded. This can be up to 35 characters long."
+  )
 
   behave like pageWithInputText(Some(InputSize.Width20))
 

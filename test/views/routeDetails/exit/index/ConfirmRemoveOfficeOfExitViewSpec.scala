@@ -38,9 +38,9 @@ class ConfirmRemoveOfficeOfExitViewSpec extends YesNoViewBehaviours with Generat
 
   behave like pageWithTitle(exitOfficeName)
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Office of exit")
 
   behave like pageWithHeading(exitOfficeName)
 

@@ -39,7 +39,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.CountryController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.CountryController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
@@ -49,7 +49,7 @@
                 heading = messages("routeDetails.loadingAndUnloading.unloading.country.heading"),
                 caption = Some(messages("routeDetails.loadingAndUnloading.unloading.caption"))
             ),
-            hint = Some(messages("routeDetails.loadingAndUnloading.unloading.country.hintText")),
+            hint = Some(messages("routeDetails.loadingAndUnloading.unloading.country.hint")),
             selectItems = countries.toSelectItems(form.value),
             placeholder = messages("routeDetails.loadingAndUnloading.unloading.country.placeholder")
         )

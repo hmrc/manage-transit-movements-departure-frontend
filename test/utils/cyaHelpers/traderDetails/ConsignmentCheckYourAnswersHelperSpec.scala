@@ -34,16 +34,16 @@ import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
 
-class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class ConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
-  "TraderDetailsConsignmentCheckYourAnswersHelper" - {
+  "ConsignmentCheckYourAnswersHelper" - {
 
     "approvedOperator" - {
       "must return None" - {
         s"when $ApprovedOperatorPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.approvedOperator
               result mustBe None
           }
@@ -56,7 +56,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
             mode =>
               val answers = emptyUserAnswers.setValue(ApprovedOperatorPage, true)
 
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(answers, mode)
               val result = helper.approvedOperator
 
               result mustBe Some(
@@ -87,7 +87,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
         s"when ${consignor.EoriYesNoPage} is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.consignorEoriYesNo
               result mustBe None
           }
@@ -100,7 +100,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
             mode =>
               val answers = emptyUserAnswers.setValue(consignor.EoriYesNoPage, true)
 
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(answers, mode)
               val result = helper.consignorEoriYesNo
 
               result mustBe Some(
@@ -131,7 +131,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
         s"when ${consignor.EoriPage} is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.consignorEori
               result mustBe None
           }
@@ -144,7 +144,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
             (eori, mode) =>
               val answers = emptyUserAnswers.setValue(consignor.EoriPage, eori)
 
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(answers, mode)
               val result = helper.consignorEori
 
               result mustBe Some(
@@ -175,7 +175,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
         s"when ${consignor.NamePage} is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.consignorName
               result mustBe None
           }
@@ -188,7 +188,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
             (name, mode) =>
               val answers = emptyUserAnswers.setValue(consignor.NamePage, name)
 
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(answers, mode)
               val result = helper.consignorName
 
               result mustBe Some(
@@ -219,7 +219,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
         s"when $CountryPage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.consignorCountry
               result mustBe None
           }
@@ -232,7 +232,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
             (country, mode) =>
               val answers = emptyUserAnswers.setValue(CountryPage, country)
 
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(answers, mode)
               val result = helper.consignorCountry
 
               result mustBe Some(
@@ -263,7 +263,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
         s"when ${consignor.AddressPage} is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.consignorAddress
               result mustBe None
           }
@@ -276,7 +276,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
             (address, mode) =>
               val answers = emptyUserAnswers.setValue(consignor.AddressPage, address)
 
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(answers, mode)
               val result = helper.consignorAddress
 
               result mustBe Some(
@@ -307,7 +307,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
         s"when ${consignor.AddContactPage} is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.addConsignorContact
               result mustBe None
           }
@@ -320,7 +320,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
             mode =>
               val answers = emptyUserAnswers.setValue(consignor.AddContactPage, true)
 
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(answers, mode)
               val result = helper.addConsignorContact
 
               result mustBe Some(
@@ -351,7 +351,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
         s"when ${consignor.contact.NamePage} is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.consignorContactName
               result mustBe None
           }
@@ -364,7 +364,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
             (contactName, mode) =>
               val answers = emptyUserAnswers.setValue(consignor.contact.NamePage, contactName)
 
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(answers, mode)
               val result = helper.consignorContactName
 
               result mustBe Some(
@@ -395,7 +395,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
         s"when ${consignor.contact.TelephoneNumberPage} is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.consignorContactTelephoneNumber
               result mustBe None
           }
@@ -408,7 +408,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
             (contactTelephoneNumber, mode) =>
               val answers = emptyUserAnswers.setValue(consignor.contact.TelephoneNumberPage, contactTelephoneNumber)
 
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(answers, mode)
               val result = helper.consignorContactTelephoneNumber
 
               result mustBe Some(
@@ -439,7 +439,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
         s"when $MoreThanOneConsigneePage is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.moreThanOneConsignee
               result mustBe None
           }
@@ -452,7 +452,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
             mode =>
               val answers = emptyUserAnswers.setValue(MoreThanOneConsigneePage, true)
 
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(answers, mode)
               val result = helper.moreThanOneConsignee
 
               result mustBe Some(
@@ -483,7 +483,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
         s"when ${consignee.EoriYesNoPage} is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.consigneeEoriYesNo
               result mustBe None
           }
@@ -496,7 +496,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
             mode =>
               val answers = emptyUserAnswers.setValue(consignee.EoriYesNoPage, true)
 
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(answers, mode)
               val result = helper.consigneeEoriYesNo
 
               result mustBe Some(
@@ -527,7 +527,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
         s"when ${consignee.EoriNumberPage} is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.consigneeEori
               result mustBe None
           }
@@ -540,7 +540,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
             (eori, mode) =>
               val answers = emptyUserAnswers.setValue(consignee.EoriNumberPage, eori)
 
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(answers, mode)
               val result = helper.consigneeEori
 
               result mustBe Some(
@@ -571,7 +571,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
         s"when ${consignee.NamePage} is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.consigneeName
               result mustBe None
           }
@@ -584,7 +584,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
             (name, mode) =>
               val answers = emptyUserAnswers.setValue(consignee.NamePage, name)
 
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(answers, mode)
               val result = helper.consigneeName
 
               result mustBe Some(
@@ -615,7 +615,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
         s"when ${consignee.CountryPage} is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.consigneeCountry
               result mustBe None
           }
@@ -628,7 +628,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
             (country, mode) =>
               val answers = emptyUserAnswers.setValue(consignee.CountryPage, country)
 
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(answers, mode)
               val result = helper.consigneeCountry
 
               result mustBe Some(
@@ -659,7 +659,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
         s"when ${consignee.AddressPage} is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.consigneeAddress
               result mustBe None
           }
@@ -672,7 +672,7 @@ class TraderDetailsConsignmentCheckYourAnswersHelperSpec extends SpecBase with S
             (address, mode) =>
               val answers = emptyUserAnswers.setValue(consignee.AddressPage, address)
 
-              val helper = new TraderDetailsConsignmentCheckYourAnswersHelper(answers, mode)
+              val helper = new ConsignmentCheckYourAnswersHelper(answers, mode)
               val result = helper.consigneeAddress
 
               result mustBe Some(

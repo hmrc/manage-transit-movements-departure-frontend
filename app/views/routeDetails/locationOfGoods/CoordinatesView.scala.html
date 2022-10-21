@@ -38,7 +38,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.CoordinatesController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.CoordinatesController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

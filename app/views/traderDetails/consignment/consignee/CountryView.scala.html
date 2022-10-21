@@ -39,7 +39,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.CountryController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.CountryController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
@@ -47,9 +47,9 @@
             field = form("value"),
             selectType = OrdinarySelect(
                 heading = messages("traderDetails.consignment.consignee.country.heading", name),
-                caption = Some(messages("traderDetails.transitHolder.caption"))
+                caption = Some(messages("traderDetails.consignment.consignee.caption"))
             ),
-            hint = Some(messages("traderDetails.consignment.consignee.country.hintText")),
+            hint = Some(messages("traderDetails.consignment.consignee.country.hint")),
             selectItems = countryList.toSelectItems(form.value),
             placeholder = messages("traderDetails.consignment.consignee.country.placeholder")
         )

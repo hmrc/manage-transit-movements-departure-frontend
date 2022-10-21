@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.GuaranteeAddedTIRController.onSubmit(lrn), 'autoComplete -> "off") {
+    @formHelper(action = routes.GuaranteeAddedTIRController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
 
         @heading(
             heading = messages("guaranteeDetails.guaranteeAddedTIR.heading"),

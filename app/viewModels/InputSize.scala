@@ -16,8 +16,6 @@
 
 package viewModels
 
-import scala.language.implicitConversions
-
 sealed abstract class InputSize(val className: String) {
 
   override val toString: String = className

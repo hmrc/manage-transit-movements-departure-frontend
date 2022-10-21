@@ -39,7 +39,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.CountryOfDispatchController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.CountryOfDispatchController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
@@ -50,7 +50,7 @@
                 caption = Some(messages("transport.caption")),
                 additionalHtml = Html(s"""<p class="govuk-body">${messages("transport.preRequisites.countryOfDispatch.paragraph")}</p>""")
             ),
-            hint = Some(messages("transport.preRequisites.countryOfDispatch.hintText")),
+            hint = Some(messages("transport.preRequisites.countryOfDispatch.hint")),
             selectItems = countries.toSelectItems(form.value),
             placeholder = messages("transport.preRequisites.countryOfDispatch.placeholder")
         )

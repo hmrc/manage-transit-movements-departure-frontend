@@ -46,9 +46,9 @@ class AddAnotherCountryOfRoutingViewSpec extends ListWithActionsViewBehaviours {
 
   override val prefix: String = "routeDetails.routing.addAnotherCountryOfRouting"
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Transit route")
 
   behave like pageWithMoreItemsAllowed()
 

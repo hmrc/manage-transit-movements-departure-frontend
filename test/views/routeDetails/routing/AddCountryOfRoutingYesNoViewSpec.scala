@@ -31,9 +31,9 @@ class AddCountryOfRoutingYesNoViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Route details")
+  behave like pageWithSectionCaption("Route details - Transit route")
 
   behave like pageWithHeading()
 

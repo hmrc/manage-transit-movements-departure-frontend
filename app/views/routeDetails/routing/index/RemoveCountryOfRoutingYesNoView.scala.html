@@ -36,7 +36,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.RemoveCountryOfRoutingYesNoController.onSubmit(lrn, mode, index), 'autoComplete -> "off") {
+    @formHelper(action = routes.RemoveCountryOfRoutingYesNoController.onSubmit(lrn, mode, index), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
@@ -44,7 +44,7 @@
             field = form("value"),
             yesNoType = OrdinaryYesNo(
                 heading = messages("routeDetails.routing.index.removeCountryOfRoutingYesNo.heading", country.toString),
-                caption = Some(messages("routeDetails.caption"))
+                caption = Some(messages("routeDetails.routing.caption"))
             )
         )
 

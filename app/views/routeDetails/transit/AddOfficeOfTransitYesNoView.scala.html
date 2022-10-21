@@ -35,16 +35,17 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.AddOfficeOfTransitYesNoController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.AddOfficeOfTransitYesNoController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
         @inputYesNo(
             field = form("value"),
             yesNoType = YesNoWithAdditionalHtml(
-            heading = messages("routeDetails.transit.addOfficeOfTransitYesNo.heading"),
-            caption = Some(messages("routeDetails.caption")),
-            additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.transit.addOfficeOfTransitYesNo.paragraph")}</p>"""))
+                heading = messages("routeDetails.transit.addOfficeOfTransitYesNo.heading"),
+                caption = Some(messages("routeDetails.transit.caption")),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.transit.addOfficeOfTransitYesNo.paragraph")}</p>""")
+            )
         )
 
         @button(attributes = Map("id" -> "submit"))

@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.NameController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.NameController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
@@ -43,7 +43,7 @@
             field = form("value"),
             inputTextType = OrdinaryTextInput(
                 heading = messages("traderDetails.holderOfTransit.name.heading"),
-                caption = Some(messages("traderDetails.transitHolder.caption")),
+                caption = Some(messages("traderDetails.holderOfTransit.caption")),
             ),
             inputClass = InputSize.Width20
         )

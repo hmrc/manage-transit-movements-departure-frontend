@@ -47,7 +47,7 @@ class CountryController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      service.getCountries.map {
+      service.getCountries().map {
         countryList =>
           val form = formProvider("routeDetails.locationOfGoods.country", countryList)
           val preparedForm = request.userAnswers.get(CountryPage) match {
@@ -61,7 +61,7 @@ class CountryController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      service.getCountries.flatMap {
+      service.getCountries().flatMap {
         countryList =>
           val form = formProvider("routeDetails.locationOfGoods.country", countryList)
           form

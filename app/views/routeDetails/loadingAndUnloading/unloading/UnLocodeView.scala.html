@@ -39,7 +39,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.UnLocodeController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.UnLocodeController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
@@ -49,7 +49,7 @@
                 heading = messages("routeDetails.loadingAndUnloading.unloading.unLocode.heading"),
                 caption = Some(messages("routeDetails.loadingAndUnloading.unloading.caption"))
             ),
-            hint = Some(messages("routeDetails.loadingAndUnloading.unloading.unLocode.hintText")),
+            hint = Some(messages("routeDetails.loadingAndUnloading.unloading.unLocode.hint")),
             selectItems = unLocodes.toSelectItems(form.value),
             placeholder = messages("routeDetails.loadingAndUnloading.unloading.unLocode.placeholder")
         )
