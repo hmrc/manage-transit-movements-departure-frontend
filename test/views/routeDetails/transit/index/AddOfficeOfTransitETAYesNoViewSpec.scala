@@ -40,6 +40,11 @@ class AddOfficeOfTransitETAYesNoViewSpec extends YesNoViewBehaviours with Genera
 
   behave like pageWithHeading(officeOfTransit)
 
+  behave like pageWithContent(
+    "p",
+    "This information is only for reference. If the transit arrives earlier or later than expected, no further action will be required."
+  )
+
   behave like pageWithRadioItems(args = Seq(officeOfTransit))
 
   behave like pageWithSubmitButton("Save and continue")
