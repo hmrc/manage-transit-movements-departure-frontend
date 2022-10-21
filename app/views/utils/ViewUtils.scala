@@ -26,7 +26,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Content
 import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 import uk.gov.hmrc.hmrcfrontend.views.implicits.RichErrorSummarySupport
 
-import java.time.{LocalDate, LocalDateTime}
+import java.time.LocalDate
 
 object ViewUtils {
 

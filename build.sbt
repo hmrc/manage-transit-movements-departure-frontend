@@ -6,8 +6,6 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName: String = "manage-transit-movements-departure-frontend"
 
-val silencerVersion = "1.7.9"
-
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 lazy val root = (project in file("."))
@@ -55,7 +53,9 @@ lazy val root = (project in file("."))
       "-feature",
       "-language:implicitConversions",
       "-language:postfixOps",
-      "-language:higherKinds"
+      "-language:higherKinds",
+      "-Wconf:src=routes/.*:s",
+      "-Wconf:cat=unused-imports&src=html/.*:s"
     ),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
@@ -72,21 +72,6 @@ lazy val root = (project in file("."))
     ThisBuild / useSuperShell := false,
     uglify / includeFilter := GlobFilter("application.js"),
     ThisBuild / scalafmtOnCompile := true
-  )
-  .settings(
-    // ***************
-    // Use the silencer plugin to suppress warnings
-    scalacOptions ++= Seq(
-      "-feature",
-      "-P:silencer:pathFilters=routes;views"
-    ),
-    libraryDependencies ++= Seq(
-      compilerPlugin(
-        "com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full
-      ),
-      "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
-    )
-    // ***************
   )
 
 lazy val testSettings: Seq[Def.Setting[_]] = Seq(
