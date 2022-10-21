@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.RemoveGuaranteeYesNoController.onSubmit(lrn, index), 'autoComplete -> "off") {
+    @formHelper(action = routes.RemoveGuaranteeYesNoController.onSubmit(lrn, index), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

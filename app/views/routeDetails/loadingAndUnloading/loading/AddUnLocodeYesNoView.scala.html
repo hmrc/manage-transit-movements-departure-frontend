@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.AddUnLocodeYesNoController.onSubmit(lrn, mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.AddUnLocodeYesNoController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

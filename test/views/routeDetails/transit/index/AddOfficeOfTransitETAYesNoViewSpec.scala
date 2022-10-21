@@ -34,7 +34,7 @@ class AddOfficeOfTransitETAYesNoViewSpec extends YesNoViewBehaviours with Genera
 
   behave like pageWithTitle(officeOfTransit)
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Route details - Office of transit")
 

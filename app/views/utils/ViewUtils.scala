@@ -90,22 +90,19 @@ object ViewUtils {
 
   implicit class ErrorSummaryImplicits(errorSummary: ErrorSummary)(implicit messages: Messages) extends RichErrorSummarySupport {
 
+    private def withErrorMapping[T](form: Form[T], fieldName: String, args: Seq[String]): ErrorSummary = {
+      val arg = form.errors.flatMap(_.args).find(args.contains).getOrElse(args.head)
+      errorSummary.withFormErrorsAsText(form, mapping = Map(fieldName -> s"${fieldName}_$arg"))
+    }
+
     def withDateErrorMapping(form: Form[LocalDate], fieldName: String): ErrorSummary = {
       val args = Seq("day", "month", "year")
-      val arg = form.errors.flatMap(_.args).filter(args.contains) match {
-        case Nil       => args.head
-        case head :: _ => head.toString
-      }
-      errorSummary.withFormErrorsAsText(form, mapping = Map(fieldName -> s"${fieldName}_$arg"))
+      withErrorMapping(form, fieldName, args)
     }
 
     def withDateTimeErrorMapping(form: Form[DateTime], fieldName: String): ErrorSummary = {
       val args = Seq("day", "month", "year", "hour", "minute")
-      val arg = form.errors.flatMap(_.args).filter(args.contains) match {
-        case Nil       => args.head
-        case head :: _ => head.toString
-      }
-      errorSummary.withFormErrorsAsText(form, mapping = Map(fieldName -> s"${fieldName}_$arg"))
+      withErrorMapping(form, fieldName, args)
     }
   }
 
@@ -115,7 +112,7 @@ object ViewUtils {
 
     def withHeadingAndCaption(heading: Content, caption: Content): Fieldset =
       withHeadingLegend(fieldset, heading, Some(caption))(
-        (ip, ul) => ip.copy(legend = Some(ul))
+        (fs, l) => fs.copy(legend = Some(l))
       )
   }
 

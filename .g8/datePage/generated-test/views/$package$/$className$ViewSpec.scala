@@ -20,7 +20,7 @@ class $className$ViewSpec extends DateInputViewBehaviours {
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink
+  behave like pageWithBackLink()
 
   behave like pageWithHeading()
 

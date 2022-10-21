@@ -19,7 +19,7 @@ package views.behaviours
 import generators.Generators
 import viewModels.taskList.Task
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 trait TaskListViewBehaviours extends ViewBehaviours with Generators {
 
