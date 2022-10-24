@@ -16,11 +16,12 @@
 
 package models.journeyDomain.routeDetails
 
+import cats.data.Kleisli
 import cats.implicits._
 import models.DeclarationType.Option4
 import models.SecurityDetailsType._
 import models.{Mode, UserAnswers}
-import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
+import models.domain.{EitherType, GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.routeDetails.exit.ExitDomain
 import models.journeyDomain.routeDetails.loadingAndUnloading.LoadingAndUnloadingDomain
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
@@ -29,6 +30,7 @@ import models.journeyDomain.routeDetails.transit.TransitDomain
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails.locationOfGoods.AddLocationOfGoodsPage
+import pages.routeDetails.routing.CountriesOfRoutingInSecurityAgreement
 import play.api.mvc.Call
 
 case class RouteDetailsDomain(
@@ -90,13 +92,10 @@ object RouteDetailsDomain {
             none[ExitDomain].pure[UserAnswersReader]
           case _ =>
             for {
-              countriesOfRouting <- UserAnswersReader[Seq[CountryOfRoutingDomain]]
-              countriesOfRoutingNotInCL147 = countriesOfRouting
-                .map(_.country.code.code)
-                .filter(!customsSecurityAgreementAreaCountryCodes.contains(_))
-              reader <- (countriesOfRoutingNotInCL147, transit) match {
-                case (_ :: _, Some(TransitDomain(_, _ :: _))) => none[ExitDomain].pure[UserAnswersReader]
-                case _                                        => UserAnswersReader[ExitDomain].map(Some(_))
+              x <- CountriesOfRoutingInSecurityAgreement.reader
+              reader <- (x, transit) match {
+                case (false, Some(TransitDomain(_, _ :: _))) => none[ExitDomain].pure[UserAnswersReader]
+                case _                                       => UserAnswersReader[ExitDomain].map(Some(_))
               }
             } yield reader
         }

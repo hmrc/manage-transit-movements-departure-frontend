@@ -117,8 +117,7 @@ class RouteDetailsDomainSpec extends SpecBase with ScalaCheckPropertyChecks with
                   .setValue(DeclarationTypePage, declarationType)
                   .setValue(SecurityDetailsTypePage, security)
                   .setValue(BindingItineraryPage, true)
-                  .setValue(CountryOfRoutingPage(Index(0)), countryNotInCL147)
-                  .setValue(CountryOfRoutingPage(Index(1)), countryInCL147)
+                  .setValue(CountriesOfRoutingInSecurityAgreement, false)
 
                 forAll(arbitrary[Option[TransitDomain]](arbitraryPopulatedTransitDomain)) {
                   transit =>
@@ -135,8 +134,7 @@ class RouteDetailsDomainSpec extends SpecBase with ScalaCheckPropertyChecks with
                   .setValue(DeclarationTypePage, declarationType)
                   .setValue(SecurityDetailsTypePage, security)
                   .setValue(BindingItineraryPage, true)
-                  .setValue(CountryOfRoutingPage(Index(0)), countryNotInCL147)
-                  .setValue(CountryOfRoutingPage(Index(1)), countryInCL147)
+                  .setValue(CountriesOfRoutingInSecurityAgreement, false)
 
                 forAll(
                   arbitraryOfficeOfExitAnswers(initialAnswers, index),
@@ -157,7 +155,7 @@ class RouteDetailsDomainSpec extends SpecBase with ScalaCheckPropertyChecks with
                 .setValue(DeclarationTypePage, declarationType)
                 .setValue(SecurityDetailsTypePage, security)
                 .setValue(BindingItineraryPage, true)
-                .setValue(CountryOfRoutingPage(index), countryInCL147)
+                .setValue(CountriesOfRoutingInSecurityAgreement, true)
 
               forAll(arbitraryOfficeOfExitAnswers(initialAnswers, index)) {
                 answers =>

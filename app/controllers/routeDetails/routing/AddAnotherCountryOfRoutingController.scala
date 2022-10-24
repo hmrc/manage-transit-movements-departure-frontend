@@ -16,16 +16,23 @@
 
 package controllers.routeDetails.routing
 
+import cats.data.EitherT
 import config.FrontendAppConfig
 import controllers.actions._
 import controllers.routeDetails.routing.index.{routes => indexRoutes}
 import forms.AddAnotherFormProvider
+import models.domain.{EitherType, UserAnswersReader}
+import models.journeyDomain.ReaderError
+import models.journeyDomain.routeDetails.routing.CountryOfRoutingDomain
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.routeDetails.RoutingNavigatorProvider
+import pages.routeDetails.routing.CountriesOfRoutingInSecurityAgreement
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import repositories.SessionRepository
+import services.{CountriesService, SecurityAgreementService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.ListItem
 import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel.AddAnotherCountryOfRoutingViewModelProvider
@@ -40,6 +47,8 @@ class AddAnotherCountryOfRoutingController @Inject() (
   actions: Actions,
   formProvider: AddAnotherFormProvider,
   val controllerComponents: MessagesControllerComponents,
+  securityAgreementService: SecurityAgreementService,
+  sessionRepository: SessionRepository,
   config: FrontendAppConfig,
   viewModelProvider: AddAnotherCountryOfRoutingViewModelProvider,
   view: AddAnotherCountryOfRoutingView
@@ -70,8 +79,15 @@ class AddAnotherCountryOfRoutingController @Inject() (
             case true =>
               Future.successful(Redirect(indexRoutes.CountryOfRoutingController.onPageLoad(lrn, mode, Index(numberOfCountries))))
             case false =>
-              navigatorProvider(mode).map {
-                navigator => Redirect(navigator.nextPage(request.userAnswers))
+              UserAnswersReader[Seq[CountryOfRoutingDomain]].run(request.userAnswers) match {
+                case Left(value) => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
+                case Right(value) =>
+                  for {
+                    securityAgreement <- securityAgreementService.areAllCountriesInSecurityAgreement(value.map(_.country))
+                    updatedAnswers    <- Future.fromTry(request.userAnswers.set(CountriesOfRoutingInSecurityAgreement, securityAgreement))
+                    _                 <- sessionRepository.set(updatedAnswers)
+                    navigator         <- navigatorProvider(mode)
+                  } yield Redirect(navigator.nextPage(updatedAnswers))
               }
           }
         )
