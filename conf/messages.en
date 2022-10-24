@@ -609,7 +609,7 @@ routeDetails.routing.officeOfDestination.error.required = Enter the office of de
 routeDetails.routing.bindingItinerary.title = Are you using a binding itinerary?
 routeDetails.routing.bindingItinerary.heading = Are you using a binding itinerary?
 routeDetails.routing.bindingItinerary.paragraph = This diverts the route around countries that represent a higher risk to the goods in transit.
-routeDetails.routing.bindingItinerary.checkYourAnswersLabel = Do you want the transit to follow a binding itinerary?
+routeDetails.routing.bindingItinerary.checkYourAnswersLabel = Are you using a binding itinerary?
 routeDetails.routing.bindingItinerary.error.required = Select yes if you are using a binding itinerary
 routeDetails.routing.bindingItinerary.change.hidden = if you want the transit to follow a binding itinerary
 

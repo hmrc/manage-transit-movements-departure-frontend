@@ -147,7 +147,7 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Do you want the transit to follow a binding itinerary?".toText),
+                  key = Key("Are you using a binding itinerary?".toText),
                   value = Value("Yes".toText),
                   actions = Some(
                     Actions(
