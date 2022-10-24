@@ -611,7 +611,7 @@ routeDetails.routing.bindingItinerary.heading = Are you using a binding itinerar
 routeDetails.routing.bindingItinerary.paragraph = This diverts the route around countries that represent a higher risk to the goods in transit.
 routeDetails.routing.bindingItinerary.checkYourAnswersLabel = Are you using a binding itinerary?
 routeDetails.routing.bindingItinerary.error.required = Select yes if you are using a binding itinerary
-routeDetails.routing.bindingItinerary.change.hidden = if you want the transit to follow a binding itinerary
+routeDetails.routing.bindingItinerary.change.hidden = if you are using a binding itinerary
 
 routeDetails.routing.addCountryOfRoutingYesNo.title = Do you want to add a country to the transit route?
 routeDetails.routing.addCountryOfRoutingYesNo.heading = Do you want to add a country to the transit route?
