@@ -176,6 +176,7 @@ traderDetails.checkYourAnswers.title = Check your answers
 
 traderDetails.holderOfTransit.eoriYesNo.title = Do you know the transit holder’s EORI number or Trader Identification Number (TIN)?
 traderDetails.holderOfTransit.eoriYesNo.heading = Do you know the transit holder’s EORI number or Trader Identification Number (TIN)?
+traderDetails.holderOfTransit.eoriYesNo.paragraph = The transit holder is the person responsible for the transit procedure. They can submit the declaration themselves or a third party can do it on their behalf.
 traderDetails.holderOfTransit.eoriYesNo.checkYourAnswersLabel = Do you know the transit holder’s EORI number or Trader Identification Number (TIN)?
 traderDetails.holderOfTransit.eoriYesNo.error.required = Select yes if you know the transit holder’s EORI number or Trader Identification Number (TIN)
 traderDetails.holderOfTransit.eoriYesNo.change.hidden = if you know the transit holder’s EORI number or Trader Identification Number (TIN)
