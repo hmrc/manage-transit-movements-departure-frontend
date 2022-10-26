@@ -37,6 +37,11 @@ class EoriYesNoViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithHeading()
 
+  behave like pageWithContent(
+    "p",
+    "The transit holder is the person responsible for the transit procedure. They can submit the declaration themselves or a third party can do it on their behalf."
+  )
+
   behave like pageWithRadioItems()
 
   behave like pageWithSubmitButton("Save and continue")
