@@ -26,7 +26,7 @@ import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
 import models.journeyDomain.routeDetails.routing.RoutingDomain
 import models.journeyDomain.routeDetails.transit.TransitDomain
 import models.journeyDomain.{JourneyDomainModel, Stage}
-import models.{Mode, UserAnswers}
+import models.{DeclarationType, Mode, SecurityDetailsType, UserAnswers}
 import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails.locationOfGoods.AddLocationOfGoodsPage
 import pages.routeDetails.routing.CountriesOfRoutingInSecurityAgreement
@@ -85,18 +85,24 @@ object RouteDetailsDomain {
       securityDetails           <- SecurityDetailsTypePage.reader
       isInSecurityAgreementArea <- CountriesOfRoutingInSecurityAgreement.optionalReader
       result <- {
-        (declarationType, securityDetails, isInSecurityAgreementArea, transit) match {
-          case (Option4, _, _, _) =>
-            none[ExitDomain].pure[UserAnswersReader]
-          case (_, NoSecurityDetails | EntrySummaryDeclarationSecurityDetails, _, _) =>
-            none[ExitDomain].pure[UserAnswersReader]
-          case (_, _, Some(false), Some(TransitDomain(_, _ :: _))) =>
-            none[ExitDomain].pure[UserAnswersReader]
-          case _ =>
-            UserAnswersReader[ExitDomain].map(Some(_))
+        exitRequired(declarationType, securityDetails, isInSecurityAgreementArea, transit) match {
+          case true => UserAnswersReader[ExitDomain].map(Some(_))
+          case _    => none[ExitDomain].pure[UserAnswersReader]
         }
       }
     } yield result
+
+  private def exitRequired(declarationType: DeclarationType,
+                           securityDetails: SecurityDetailsType,
+                           isInSecurityAgreementArea: Option[Boolean],
+                           transit: Option[TransitDomain]
+  ): Boolean =
+    (declarationType, securityDetails, isInSecurityAgreementArea, transit) match {
+      case (Option4, _, _, _)                                                    => false
+      case (_, NoSecurityDetails | EntrySummaryDeclarationSecurityDetails, _, _) => false
+      case (_, _, Some(false), Some(TransitDomain(_, _ :: _)))                   => false
+      case _                                                                     => true
+    }
 
   implicit def locationOfGoodsReader(customsSecurityAgreementAreaCountryCodes: Seq[String]): UserAnswersReader[Option[LocationOfGoodsDomain]] =
     // additional declaration type is currently always normal (A) as we aren't doing pre-lodge (D) yet
