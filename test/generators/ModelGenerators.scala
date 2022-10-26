@@ -28,6 +28,11 @@ import wolfendale.scalacheck.regexp.RegexpGen
 trait ModelGenerators {
   self: Generators =>
 
+  implicit lazy val arbitraryInlandMode: Arbitrary[models.transportDetails.transportMeans.departure.InlandMode] =
+    Arbitrary {
+      Gen.oneOf(models.transportDetails.transportMeans.departure.InlandMode.values)
+    }
+
   implicit lazy val arbitraryLocationType: Arbitrary[models.LocationType] =
     Arbitrary {
       Gen.oneOf(models.LocationType.values)

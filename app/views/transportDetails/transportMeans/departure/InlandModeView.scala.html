@@ -14,10 +14,10 @@
  * limitations under the License.
  *@
 
-@import controllers.routeDetails.locationOfGoods.routes
+@import controllers.transportDetails.transportMeans.departure.routes
 @import models.LocalReferenceNumber
-@import models.LocationOfGoodsIdentification
-@import views.html.components.{Button, ErrorSummary, InputRadio}
+@import models.transportDetails.transportMeans.departure.InlandMode
+@import views.html.components.{Button, ErrorSummary, InputRadio, Heading}
 @import viewModels.components.InputRadioViewModel
 @import viewModels.components.InputRadioViewModel._
 
@@ -29,24 +29,26 @@
     button: Button
 )
 
-@(form: Form[LocationOfGoodsIdentification], lrn: LocalReferenceNumber, radios: (String, Option[LocationOfGoodsIdentification]) => Seq[RadioItem], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[InlandMode], lrn: LocalReferenceNumber, radios: (String, Option[InlandMode]) => Seq[RadioItem], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("routeDetails.locationOfGoods.identification.title"),
+    title = messages("transportDetails.transportMeans.departure.inlandMode.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.IdentificationController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.InlandModeController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
         @inputRadio(
             field = form("value"),
-            radioType = RadioWithLegend(messages("routeDetails.locationOfGoods.identification.heading")),
-            radioItems = fieldId => radios(fieldId, form.value),
-            caption = Some(messages("routeDetails.locationOfGoods.caption")),
-            hint = Some(messages("routeDetails.locationOfGoods.identification.hint"))
+            radioType = RadioWithAdditionalHtml(
+                heading = messages("transportDetails.transportMeans.departure.inlandMode.heading"),
+                caption = Some(messages("transportDetails.inlandMode.caption")),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("transportDetails.inlandMode.paragraph")}</p>""")
+            ),
+            radioItems = fieldId => radios(fieldId, form.value)
         )
 
         @button(attributes = Map("id" -> "submit"))

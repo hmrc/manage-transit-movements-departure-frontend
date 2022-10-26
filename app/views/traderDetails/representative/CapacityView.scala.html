@@ -18,6 +18,8 @@
 @import models.LocalReferenceNumber
 @import models.traderDetails.representative.RepresentativeCapacity
 @import views.html.components.{Button, ErrorSummary, InputRadio}
+@import viewModels.components.InputRadioViewModel
+@import viewModels.components.InputRadioViewModel._
 
 @this(
     mainTemplate: MainTemplate,
@@ -41,7 +43,7 @@
 
         @inputRadio(
             field = form("value"),
-            legend = messages("traderDetails.representative.capacity.heading"),
+            radioType = RadioWithLegend(messages("traderDetails.representative.capacity.heading")),
             caption = Some(messages("traderDetails.representative.caption")),
             radioItems = fieldId => radios(fieldId, form.value)
         )
