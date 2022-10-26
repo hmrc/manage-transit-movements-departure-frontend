@@ -19,21 +19,31 @@ package controllers.routeDetails.routing
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.AddAnotherFormProvider
 import generators.Generators
-import models.{Index, NormalMode}
+import models.SecurityDetailsType.NoSecurityDetails
+import models.reference.{Country, CountryCode}
+import models.{CountryList, Index, NormalMode, SecurityDetailsType}
 import navigation.routeDetails.RoutingNavigatorProvider
+import net.bytebuddy.asm.MemberSubstitution.Replacement.Binding
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.preTaskList.SecurityDetailsTypePage
+import pages.routeDetails.routing.BindingItineraryPage
+import pages.routeDetails.routing.index.CountryOfRoutingPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
+import services.{CountriesService, SecurityAgreementService}
 import viewModels.ListItem
 import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel
 import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel.AddAnotherCountryOfRoutingViewModelProvider
 import views.html.routeDetails.routing.AddAnotherCountryOfRoutingView
+
+import scala.concurrent.Future
 
 class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
@@ -44,17 +54,23 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
 
   private lazy val addAnotherCountryOfRoutingRoute = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, mode).url
 
-  private val mockViewModelProvider = mock[AddAnotherCountryOfRoutingViewModelProvider]
+  private val mockViewModelProvider        = mock[AddAnotherCountryOfRoutingViewModelProvider]
+  private val mockSecurityAgreementService = mock[SecurityAgreementService]
+  private val mockCountriesService         = mock[CountriesService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[RoutingNavigatorProvider]).toInstance(fakeRoutingNavigatorProvider))
       .overrides(bind(classOf[AddAnotherCountryOfRoutingViewModelProvider]).toInstance(mockViewModelProvider))
+      .overrides(bind(classOf[SecurityAgreementService]).toInstance(mockSecurityAgreementService))
+      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   override def beforeEach(): Unit = {
     super.beforeEach()
     reset(mockViewModelProvider)
+    reset(mockSecurityAgreementService)
+    reset(mockCountriesService)
   }
 
   private val listItem          = arbitrary[ListItem].sample.value
@@ -153,7 +169,18 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
           when(mockViewModelProvider.apply(any(), any())(any()))
             .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
 
-          setExistingUserAnswers(emptyUserAnswers)
+          when(mockSecurityAgreementService.areAllCountriesInSecurityAgreement(any())(any(), any()))
+            .thenReturn(Future.successful(true))
+
+          when(mockSessionRepository.set(any())(any()))
+            .thenReturn(Future.successful(true))
+
+          val ua = emptyUserAnswers
+            .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+            .setValue(BindingItineraryPage, true)
+            .setValue(CountryOfRoutingPage(Index(0)), Country(CountryCode("GB"), "description"))
+
+          setExistingUserAnswers(ua)
 
           val request = FakeRequest(POST, addAnotherCountryOfRoutingRoute)
             .withFormUrlEncodedBody(("value", "false"))
@@ -172,7 +199,18 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
         when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(AddAnotherCountryOfRoutingViewModel(maxedOutListItems))
 
-        setExistingUserAnswers(emptyUserAnswers)
+        when(mockSecurityAgreementService.areAllCountriesInSecurityAgreement(any())(any(), any()))
+          .thenReturn(Future.successful(true))
+
+        when(mockSessionRepository.set(any())(any()))
+          .thenReturn(Future.successful(true))
+
+        val ua = emptyUserAnswers
+          .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+          .setValue(BindingItineraryPage, true)
+          .setValue(CountryOfRoutingPage(Index(0)), Country(CountryCode("GB"), "description"))
+
+        setExistingUserAnswers(ua)
 
         val request = FakeRequest(POST, addAnotherCountryOfRoutingRoute)
           .withFormUrlEncodedBody(("value", ""))
@@ -190,9 +228,20 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
         when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
 
-        val allowMoreCountries = true
+        when(mockSecurityAgreementService.areAllCountriesInSecurityAgreement(any())(any(), any()))
+          .thenReturn(Future.successful(true))
 
-        setExistingUserAnswers(emptyUserAnswers)
+        when(mockSessionRepository.set(any())(any()))
+          .thenReturn(Future.successful(true))
+
+        val ua = emptyUserAnswers
+          .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+          .setValue(BindingItineraryPage, true)
+          .setValue(CountryOfRoutingPage(Index(0)), Country(CountryCode("GB"), "description"))
+
+        setExistingUserAnswers(ua)
+
+        val allowMoreCountries = true
 
         val request = FakeRequest(POST, addAnotherCountryOfRoutingRoute)
           .withFormUrlEncodedBody(("value", ""))

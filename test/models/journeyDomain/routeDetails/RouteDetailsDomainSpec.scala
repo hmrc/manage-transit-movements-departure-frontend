@@ -25,7 +25,7 @@ import models.journeyDomain.routeDetails.exit.ExitDomain
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
 import models.journeyDomain.routeDetails.transit.TransitDomain
 import models.reference.{Country, CountryCode, CustomsOffice}
-import models.{DeclarationType, Index}
+import models.{DeclarationType, Index, SecurityDetailsType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -69,10 +69,15 @@ class RouteDetailsDomainSpec extends SpecBase with ScalaCheckPropertyChecks with
     "exitReader" - {
       "can be parsed from UserAnswers" - {
         "when TIR declaration type" in {
-          val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
+
+          val security = Gen.oneOf(SecurityDetailsType.securityValues).sample.value
+
+          val userAnswers = emptyUserAnswers
+            .setValue(DeclarationTypePage, Option4)
+            .setValue(SecurityDetailsTypePage, security)
 
           val result: EitherType[Option[ExitDomain]] = UserAnswersReader[Option[ExitDomain]](
-            RouteDetailsDomain.exitReader(customsSecurityAgreementAreaCountryCodes)(None)
+            RouteDetailsDomain.exitReader(None)
           ).run(userAnswers)
 
           result.value must not be defined
@@ -89,7 +94,7 @@ class RouteDetailsDomainSpec extends SpecBase with ScalaCheckPropertyChecks with
               .setValue(SecurityDetailsTypePage, security)
 
             val result: EitherType[Option[ExitDomain]] = UserAnswersReader[Option[ExitDomain]](
-              RouteDetailsDomain.exitReader(customsSecurityAgreementAreaCountryCodes)(None)
+              RouteDetailsDomain.exitReader(None)
             ).run(userAnswers)
 
             result.value must not be defined
@@ -98,32 +103,18 @@ class RouteDetailsDomainSpec extends SpecBase with ScalaCheckPropertyChecks with
           "and security is not in set {0,1}" - {
             val security = Gen.oneOf(ExitSummaryDeclarationSecurityDetails, EntryAndExitSummaryDeclarationSecurityDetails).sample.value
 
-            val countryInCL147 = arbitrary[Country]
-              .map(_.copy(code = CountryCode(customsSecurityAgreementAreaCountryCodes.head)))
-              .sample
-              .value
-
-            val countryNotInCL147 = arbitrary[Country]
-              .retryUntil {
-                x =>
-                  !customsSecurityAgreementAreaCountryCodes.contains(x.code.code)
-              }
-              .sample
-              .value
-
             "at least one of the countries of routing is not in set CL147 and office of transit is populated" - {
               "and office of transit answers have been provided" in {
                 val answers = emptyUserAnswers
                   .setValue(DeclarationTypePage, declarationType)
                   .setValue(SecurityDetailsTypePage, security)
                   .setValue(BindingItineraryPage, true)
-                  .setValue(CountryOfRoutingPage(Index(0)), countryNotInCL147)
-                  .setValue(CountryOfRoutingPage(Index(1)), countryInCL147)
+                  .setValue(CountriesOfRoutingInSecurityAgreement, false)
 
                 forAll(arbitrary[Option[TransitDomain]](arbitraryPopulatedTransitDomain)) {
                   transit =>
                     val result: EitherType[Option[ExitDomain]] = UserAnswersReader[Option[ExitDomain]](
-                      RouteDetailsDomain.exitReader(customsSecurityAgreementAreaCountryCodes)(transit)
+                      RouteDetailsDomain.exitReader(transit)
                     ).run(answers)
 
                     result.value must not be defined
@@ -135,8 +126,7 @@ class RouteDetailsDomainSpec extends SpecBase with ScalaCheckPropertyChecks with
                   .setValue(DeclarationTypePage, declarationType)
                   .setValue(SecurityDetailsTypePage, security)
                   .setValue(BindingItineraryPage, true)
-                  .setValue(CountryOfRoutingPage(Index(0)), countryNotInCL147)
-                  .setValue(CountryOfRoutingPage(Index(1)), countryInCL147)
+                  .setValue(CountriesOfRoutingInSecurityAgreement, false)
 
                 forAll(
                   arbitraryOfficeOfExitAnswers(initialAnswers, index),
@@ -144,7 +134,7 @@ class RouteDetailsDomainSpec extends SpecBase with ScalaCheckPropertyChecks with
                 ) {
                   (answers, transit) =>
                     val result: EitherType[Option[ExitDomain]] = UserAnswersReader[Option[ExitDomain]](
-                      RouteDetailsDomain.exitReader(customsSecurityAgreementAreaCountryCodes)(transit)
+                      RouteDetailsDomain.exitReader(transit)
                     ).run(answers)
 
                     result.value mustBe defined
@@ -157,12 +147,12 @@ class RouteDetailsDomainSpec extends SpecBase with ScalaCheckPropertyChecks with
                 .setValue(DeclarationTypePage, declarationType)
                 .setValue(SecurityDetailsTypePage, security)
                 .setValue(BindingItineraryPage, true)
-                .setValue(CountryOfRoutingPage(index), countryInCL147)
+                .setValue(CountriesOfRoutingInSecurityAgreement, true)
 
               forAll(arbitraryOfficeOfExitAnswers(initialAnswers, index)) {
                 answers =>
                   val result: EitherType[Option[ExitDomain]] = UserAnswersReader[Option[ExitDomain]](
-                    RouteDetailsDomain.exitReader(customsSecurityAgreementAreaCountryCodes)(None)
+                    RouteDetailsDomain.exitReader(None)
                   ).run(answers)
 
                   result.value mustBe defined
