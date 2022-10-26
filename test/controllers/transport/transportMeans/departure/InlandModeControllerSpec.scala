@@ -17,9 +17,8 @@
 package controllers.transport.transportMeans.departure
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.transportDetails.transportMeans.departure.InlandModeFormProvider
-import models.NormalMode
-import models.transportDetails.transportMeans.departure.InlandMode
+import forms.transport.transportMeans.departure.InlandModeFormProvider
+import models.{InlandMode, NormalMode}
 import navigation.transport.TransportMeansNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -28,7 +27,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.transportDetails.transportMeans.departure.InlandModeView
+import views.html.transport.transportMeans.departure.InlandModeView
 
 import scala.concurrent.Future
 

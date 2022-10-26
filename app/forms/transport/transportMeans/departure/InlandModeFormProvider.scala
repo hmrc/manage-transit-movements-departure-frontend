@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package forms.transportDetails.transportMeans.departure
+package forms.transport.transportMeans.departure
 
 import javax.inject.Inject
 
 import forms.mappings.Mappings
+import models.InlandMode
 import play.api.data.Form
-import models.transportDetails.transportMeans.departure.InlandMode
 
 class InlandModeFormProvider @Inject() extends Mappings {
 
   def apply(): Form[InlandMode] =
     Form(
-      "value" -> enumerable[InlandMode]("transportDetails.transportMeans.departure.inlandMode.error.required")
+      "value" -> enumerable[InlandMode]("transport.transportMeans.departure.inlandMode.error.required")
     )
 }

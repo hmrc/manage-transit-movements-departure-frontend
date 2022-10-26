@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package views.transportDetails.transportMeans.departure
+package views.transport.transportMeans.departure
 
-import forms.transportDetails.transportMeans.departure.InlandModeFormProvider
-import models.NormalMode
-import models.transportDetails.transportMeans.departure.InlandMode
+import forms.transport.transportMeans.departure.InlandModeFormProvider
+import models.{InlandMode, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import views.behaviours.RadioViewBehaviours
-import views.html.transportDetails.transportMeans.departure.InlandModeView
+import views.html.transport.transportMeans.departure.InlandModeView
 
 class InlandModeViewSpec extends RadioViewBehaviours[InlandMode] {
 
@@ -32,7 +31,7 @@ class InlandModeViewSpec extends RadioViewBehaviours[InlandMode] {
   override def applyView(form: Form[InlandMode]): HtmlFormat.Appendable =
     injector.instanceOf[InlandModeView].apply(form, lrn, InlandMode.radioItems, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "transportDetails.transportMeans.departure.inlandMode"
+  override val prefix: String = "transport.transportMeans.departure.inlandMode"
 
   override def radioItems(fieldId: String, checkedValue: Option[InlandMode] = None): Seq[RadioItem] =
     InlandMode.radioItems(fieldId, checkedValue)

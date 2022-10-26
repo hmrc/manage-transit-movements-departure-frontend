@@ -16,7 +16,7 @@
 
 package pages.transport.transportMeans.departure
 
-import models.transportDetails.transportMeans.departure.InlandMode
+import models.InlandMode
 import pages.behaviours.PageBehaviours
 
 class InlandModePageSpec extends PageBehaviours {

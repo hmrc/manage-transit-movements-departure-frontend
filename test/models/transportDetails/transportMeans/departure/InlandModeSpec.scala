@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package models.transportDetails.transportMeans.departure
+package models
 
+import models.InlandMode
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package models.transportDetails.transportMeans.departure
-
-import models.{RadioModel, WithName}
+package models
 
 sealed trait InlandMode
 
@@ -31,7 +29,7 @@ object InlandMode extends RadioModel[InlandMode] {
   case object Waterway extends WithName("waterway") with InlandMode
   case object Unknown extends WithName("unknown") with InlandMode
 
-  override val messageKeyPrefix: String = "transportDetails.transportMeans.departure.inlandMode"
+  override val messageKeyPrefix: String = "transport.transportMeans.departure.inlandMode"
 
   val values: Seq[InlandMode] = Seq(
     Maritime,

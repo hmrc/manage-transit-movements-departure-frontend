@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package forms.transportDetails.transportMeans.departure
+package forms.transport.transportMeans.departure
 
 import forms.behaviours.OptionFieldBehaviours
-import models.transportDetails.transportMeans.departure.InlandMode
+import models.InlandMode
 import play.api.data.FormError
 
 class InlandModeFormProviderSpec extends OptionFieldBehaviours {
@@ -27,7 +27,7 @@ class InlandModeFormProviderSpec extends OptionFieldBehaviours {
   ".value" - {
 
     val fieldName   = "value"
-    val requiredKey = "transportDetails.transportMeans.departure.inlandMode.error.required"
+    val requiredKey = "transport.transportMeans.departure.inlandMode.error.required"
 
     behave like optionsField[InlandMode](
       form,

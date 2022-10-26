@@ -18,9 +18,9 @@ package models.journeyDomain.transport
 
 import base.SpecBase
 import generators.Generators
+import models.InlandMode
 import models.domain.{EitherType, UserAnswersReader}
-import models.transportDetails.transportMeans.departure.InlandMode
-import models.transportDetails.transportMeans.departure.InlandMode._
+import InlandMode._
 import org.scalacheck.Gen
 import pages.QuestionPage
 import pages.transport.transportMeans.departure.InlandModePage

@@ -22,6 +22,7 @@ import models.{Mode, UserAnswers}
 import models.domain.{UserAnswersReader, _}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.Country
+import navigation.UserAnswersNavigator
 import pages.preTaskList.DeclarationTypePage
 import pages.transport.preRequisites._
 import play.api.mvc.Call
@@ -33,7 +34,8 @@ case class PreRequisitesDomain(
   containerIndicator: Boolean
 ) extends JourneyDomainModel {
 
-  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = None
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
+    Some(UserAnswersNavigator.nextPage[TransportDomain](userAnswers, mode))
 }
 
 object PreRequisitesDomain {
