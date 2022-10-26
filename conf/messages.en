@@ -1058,7 +1058,7 @@ transport.preRequisites.itemsDestinationCountry.title = What country are the ite
 transport.preRequisites.itemsDestinationCountry.heading = What country are the items being transported to?
 transport.preRequisites.itemsDestinationCountry.hint = Enter the country, like France or Portugal.
 transport.preRequisites.itemsDestinationCountry.placeholder = Select a country
-transport.preRequisites.itemsDestinationCountry.checkYourAnswersLabel = What country are the items being transported to
+transport.preRequisites.itemsDestinationCountry.checkYourAnswersLabel = What country are the items being transported to?
 transport.preRequisites.itemsDestinationCountry.error.required = Enter the country the items are being transported to
 
 transport.preRequisites.containerIndicator.title = Are you using any containers?
@@ -1075,8 +1075,8 @@ declarationSubmitted.paragraph1 = You have submitted your declaration.
 
 transport.inlandMode.caption = Transport details - Inland mode of transport
 
-transport.transportMeans.departure.inlandMode.title = Which inland mode of transport are you using
-transport.transportMeans.departure.inlandMode.heading = Which inland mode of transport are you using
+transport.transportMeans.departure.inlandMode.title = Which inland mode of transport are you using?
+transport.transportMeans.departure.inlandMode.heading = Which inland mode of transport are you using?
 transport.transportMeans.departure.inlandMode.paragraph = This is the type of transport used from the UK office of departure to a UK port or airport.
 transport.transportMeans.departure.inlandMode.maritime = Maritime
 transport.transportMeans.departure.inlandMode.rail = Rail
@@ -1086,5 +1086,5 @@ transport.transportMeans.departure.inlandMode.mail = Mail (active mode of transp
 transport.transportMeans.departure.inlandMode.fixed = Fixed transport installations - pipelines or electric power lines used for the continuous transport of goods
 transport.transportMeans.departure.inlandMode.waterway = Inland waterway
 transport.transportMeans.departure.inlandMode.unknown = Unknown (own propulsion)
-transport.transportMeans.departure.inlandMode.checkYourAnswersLabel = Which inland mode of transport are you using
+transport.transportMeans.departure.inlandMode.checkYourAnswersLabel = Which inland mode of transport are you using?
 transport.transportMeans.departure.inlandMode.error.required = Select which inland mode of transport you’re using

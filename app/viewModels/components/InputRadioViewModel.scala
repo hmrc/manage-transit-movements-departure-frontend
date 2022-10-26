@@ -33,8 +33,4 @@ object InputRadioViewModel {
     additionalHtml: Html
   ) extends InputRadioViewModel
       with AdditionalHtmlViewModel
-
-  case class RadioWithLegend(
-    legend: String
-  ) extends InputRadioViewModel
 }
