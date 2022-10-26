@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.transportDetails.transportMeans.departure
+package controllers.transport.transportMeans.departure
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
@@ -23,7 +23,7 @@ import models.transportDetails.transportMeans.departure.InlandMode
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansNavigatorProvider
-import pages.transportDetails.transportMeans.departure.InlandModePage
+import pages.transport.transportMeans.departure.InlandModePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

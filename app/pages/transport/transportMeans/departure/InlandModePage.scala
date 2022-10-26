@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package pages.transportDetails.transportMeans.departure
+package pages.transport.transportMeans.departure
 
-import controllers.transportDetails.transportMeans.departure.routes
+import controllers.transport.transportMeans.departure.routes
 import models.transportDetails.transportMeans.departure.InlandMode
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.TransportSection
+import pages.sections.transport.TransportMeansSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case object InlandModePage extends QuestionPage[InlandMode] {
 
-  override def path: JsPath = TransportSection.path \ toString
+  override def path: JsPath = TransportMeansSection.path \ toString
 
   override def toString: String = "inlandMode"
 

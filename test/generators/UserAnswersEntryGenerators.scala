@@ -19,9 +19,17 @@ package generators
 import models._
 import models.reference._
 import models.traderDetails.representative.RepresentativeCapacity
+import models.transportDetails.transportMeans.departure.InlandMode
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.transport.preRequisites.{CountryOfDispatchPage, ItemsDestinationCountryPage, TransportedToSameCountryYesNoPage, UniqueConsignmentReferencePage}
+import pages.transport.preRequisites.{
+  ContainerIndicatorPage,
+  CountryOfDispatchPage,
+  ItemsDestinationCountryPage,
+  TransportedToSameCountryYesNoPage,
+  UniqueConsignmentReferencePage
+}
+import pages.transport.transportMeans.departure.InlandModePage
 import play.api.libs.json._
 import queries.Gettable
 
@@ -250,7 +258,8 @@ trait UserAnswersEntryGenerators {
   }
 
   private def generateTransportAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
-    generatePreRequisitesAnswer
+    generatePreRequisitesAnswer orElse
+      generateTransportMeansAnswer
 
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.preRequisites.SameUcrYesNoPage
@@ -260,7 +269,12 @@ trait UserAnswersEntryGenerators {
       case CountryOfDispatchPage             => arbitrary[Country].map(Json.toJson(_))
       case TransportedToSameCountryYesNoPage => arbitrary[Boolean].map(JsBoolean)
       case ItemsDestinationCountryPage       => arbitrary[Country].map(Json.toJson(_))
+      case ContainerIndicatorPage            => arbitrary[Boolean].map(JsBoolean)
     }
+  }
+
+  private def generateTransportMeansAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    case InlandModePage => arbitrary[InlandMode].map(Json.toJson(_))
   }
 
 }

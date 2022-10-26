@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.transportDetails.transportMeans.departure
+package pages.transport.transportMeans.departure
 
 import models.transportDetails.transportMeans.departure.InlandMode
 import pages.behaviours.PageBehaviours

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.transportDetails.transportMeans.departure
+package controllers.transport.transportMeans.departure
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.transportDetails.transportMeans.departure.InlandModeFormProvider
@@ -23,7 +23,7 @@ import models.transportDetails.transportMeans.departure.InlandMode
 import navigation.transport.TransportMeansNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.transportDetails.transportMeans.departure.InlandModePage
+import pages.transport.transportMeans.departure.InlandModePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest

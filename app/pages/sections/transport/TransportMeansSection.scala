@@ -19,7 +19,7 @@ package pages.sections.transport
 import pages.sections.Section
 import play.api.libs.json.{JsObject, JsPath}
 
-case object TransportMeanSection extends Section[JsObject] {
+case object TransportMeansSection extends Section[JsObject] {
 
   override def path: JsPath = TransportSection.path \ toString
 

@@ -42,7 +42,7 @@
 
         @inputRadio(
             field = form("value"),
-            radioType = RadioWithLegend(messages("declarationType.heading")),
+            radioType = Radio(heading = messages("declarationType.heading")),
             radioItems = fieldId => radios(fieldId, form.value)
         )
 
