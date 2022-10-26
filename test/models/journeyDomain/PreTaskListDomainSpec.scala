@@ -30,6 +30,7 @@ import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 import pages.QuestionPage
 import pages.preTaskList._
+import play.api.libs.json.Json
 
 class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
@@ -42,6 +43,48 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
     val securityDetails           = arbitrary[SecurityDetailsType].sample.value
     val nonOption4DeclarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
     val detailsConfirmed          = true
+
+    "can be written as json" in {
+
+      val preTaskSection = PreTaskListDomain(
+        localReferenceNumber = emptyUserAnswers.lrn,
+        officeOfDeparture = xiCustomsOffice,
+        procedureType = Normal,
+        declarationType = Option4,
+        tirCarnetReference = Some(carnetRef),
+        securityDetailsType = securityDetails,
+        detailsConfirmed = detailsConfirmed
+      )
+
+      // Cache example (user answers)
+      //
+      //      "preTaskList" : {
+      //        "officeOfDeparture" : {
+      //        "id" : "GB000218",
+      //        "name" : "Border Force, Port of Tyne"
+      //        },
+      //        "procedureType" : "normal",
+      //        "declarationType" : "T",
+      //        "securityDetailsType" : "entryAndExitSummaryDeclaration",
+      //        "detailsConfirmed" : true
+      //      }
+
+      // API Example (transformed)
+      val expected = Json.parse(s"""
+                                   |{
+                                   |  "TransitOperation": {
+                                   |    "declarationType": "$Option4",
+                                   |    "security": "$securityDetails",
+                                   |    "LRN": "${emptyUserAnswers.lrn}"
+                                   |  },
+                                   |  "CustomsOfficeOfDeparture": {
+                                   |    "referenceNumber": "XI1"
+                                   |  }
+                                   |}"""".stripMargin)
+
+      Json.toJson(preTaskSection) mustBe expected
+
+    }
 
     "can be parsed from UserAnswers" - {
 

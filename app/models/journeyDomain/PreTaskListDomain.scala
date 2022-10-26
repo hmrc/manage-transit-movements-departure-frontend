@@ -24,7 +24,6 @@ import models.domain._
 import models.reference.CustomsOffice
 import models.{DeclarationType, LocalReferenceNumber, Mode, ProcedureType, SecurityDetailsType, UserAnswers}
 import pages.preTaskList._
-import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.Call
 
 case class PreTaskListDomain(
@@ -75,6 +74,30 @@ object PreTaskListDomain {
       DetailsConfirmedPage.mandatoryReader(identity)
     ).tupled.map((PreTaskListDomain.apply _).tupled)
 
-  implicit val format: OFormat[PreTaskListDomain] = Json.format[PreTaskListDomain]
+  // We comment out  the generic json formatter
+  // implicit val format: OFormat[PreTaskListDomain] = Json.format[PreTaskListDomain]
+
+  // We import the libraries required for Json Writes
+  import play.api.libs.json._
+  import play.api.libs.functional.syntax._
+
+  val ignore = OWrites[Any](
+    _ => Json.obj()
+  )
+
+  // We write a custom Writes method to restructure our Json
+  implicit val preTaskWrites: Writes[PreTaskListDomain] = (
+    (JsPath \ "TransitOperation" \ "LRN").write[LocalReferenceNumber] and
+      (JsPath \ "CustomsOfficeOfDeparture" \ "referenceNumber")
+        .write[String]
+        .contramap(
+          (x: CustomsOffice) => x.id
+        ) and
+      ignore and
+      (JsPath \ "TransitOperation" \ "declarationType").write[DeclarationType] and
+      ignore and
+      (JsPath \ "TransitOperation" \ "security").write[SecurityDetailsType] and
+      ignore
+  )(unlift(PreTaskListDomain.unapply))
 
 }
