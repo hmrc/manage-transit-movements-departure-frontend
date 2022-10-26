@@ -23,7 +23,6 @@
 
 @(
     field: Field,
-    caption: Option[String] = None,
     radioType: InputRadioViewModel,
     hint: Option[String] = None,
     radioItems: String => Seq[RadioItem],
@@ -51,9 +50,6 @@
         @hmrcHeading(heading, caption, Some(x.headingClasses))
         @additionalHtml
         @govukRadios(radios.withLegend(heading, false))
-    }
-    case RadioWithLegend(legend) => {
-        @govukRadios(radios.withLegend(legend))
     }
 }
 
