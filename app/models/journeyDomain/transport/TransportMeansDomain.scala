@@ -16,17 +16,23 @@
 
 package models.journeyDomain.transport
 
+import cats.implicits._
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
+import models.reference.Nationality
 import models.transport.transportMeans.departure.InlandMode
-import pages.transport.transportMeans.departure.InlandModePage
+import pages.transport.transportMeans.departure.{InlandModePage, VehicleCountryPage}
 
 case class TransportMeansDomain(
-  inlandMode: InlandMode
+  inlandMode: InlandMode,
+  vehicleCountry: Nationality
 ) extends JourneyDomainModel
 
 object TransportMeansDomain {
 
   implicit val userAnswersReader: UserAnswersReader[TransportMeansDomain] =
-    InlandModePage.reader.map(TransportMeansDomain.apply)
+    (
+      InlandModePage.reader,
+      VehicleCountryPage.reader
+    ).tupled.map((TransportMeansDomain.apply _).tupled)
 }

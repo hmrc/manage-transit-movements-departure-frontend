@@ -19,35 +19,27 @@ package models.journeyDomain.transport
 import base.SpecBase
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
+import models.reference.Nationality
 import models.transport.transportMeans.departure.InlandMode
-import InlandMode._
-import org.scalacheck.Gen
+import org.scalacheck.Arbitrary.arbitrary
 import pages.QuestionPage
-import pages.transport.transportMeans.departure.InlandModePage
+import pages.transport.transportMeans.departure.{InlandModePage, VehicleCountryPage}
 
 class TransportMeansDomainSpec extends SpecBase with Generators {
 
-  val inlandModeList: Seq[InlandMode] = Seq(
-    Maritime,
-    Rail,
-    Road,
-    Air,
-    Mail,
-    Fixed,
-    Waterway,
-    Unknown
-  )
-
-  val inlandMode: InlandMode = Gen.oneOf(inlandModeList).sample.value
-
   "TransportMeansDomain" - {
+
+    val inlandMode: InlandMode   = arbitrary[InlandMode].sample.value
+    val nationality: Nationality = arbitrary[Nationality].sample.value
 
     "can be parsed from user answers" in {
       val userAnswers = emptyUserAnswers
         .setValue(InlandModePage, inlandMode)
+        .setValue(VehicleCountryPage, nationality)
 
       val expectedResult = TransportMeansDomain(
-        inlandMode = inlandMode
+        inlandMode = inlandMode,
+        nationality
       )
 
       val result: EitherType[TransportMeansDomain] = UserAnswersReader[TransportMeansDomain].run(userAnswers)
@@ -65,12 +57,18 @@ class TransportMeansDomainSpec extends SpecBase with Generators {
 
       "when mandatory page is missing" in {
         val mandatoryPages: Seq[QuestionPage[_]] = Seq(
-          InlandModePage
+          InlandModePage,
+          VehicleCountryPage
         )
+
+        val userAnswers = emptyUserAnswers
+          .setValue(InlandModePage, inlandMode)
+          .setValue(VehicleCountryPage, nationality)
 
         mandatoryPages.map {
           mandatoryPage =>
-            val result: EitherType[TransportMeansDomain] = UserAnswersReader[TransportMeansDomain].run(emptyUserAnswers)
+            val updatedAnswers                           = userAnswers.removeValue(mandatoryPage)
+            val result: EitherType[TransportMeansDomain] = UserAnswersReader[TransportMeansDomain].run(updatedAnswers)
 
             result.left.value.page mustBe mandatoryPage
         }
