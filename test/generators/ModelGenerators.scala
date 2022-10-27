@@ -36,7 +36,12 @@ trait ModelGenerators {
 
   implicit lazy val arbitraryInlandMode: Arbitrary[InlandMode] =
     Arbitrary {
-      Gen.oneOf(models.transport.transportMeans.departure.InlandMode.values)
+      Gen.oneOf(InlandMode.values)
+    }
+
+  lazy val arbitraryNonMailOrUnknownInlandMode: Arbitrary[InlandMode] =
+    Arbitrary {
+      Gen.oneOf(InlandMode.values.filterNot(_ == InlandMode.Mail).filterNot(_ == InlandMode.Unknown))
     }
 
   implicit lazy val arbitraryLocationType: Arbitrary[LocationType] =
