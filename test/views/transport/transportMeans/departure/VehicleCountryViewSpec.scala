@@ -16,28 +16,26 @@
 
 package views.transport.transportMeans.departure
 
-import forms.transport.transportMeans.departure.InlandModeFormProvider
+import forms.NationalityFormProvider
+import views.behaviours.InputSelectViewBehaviours
 import models.NormalMode
-import models.transport.transportMeans.departure.InlandMode
+import models.reference.Nationality
+import models.NationalityList
+import org.scalacheck.Arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
-import views.behaviours.RadioViewBehaviours
-import views.html.transport.transportMeans.departure.InlandModeView
+import views.html.transport.transportMeans.departure.VehicleCountryView
 
-class InlandModeViewSpec extends RadioViewBehaviours[InlandMode] {
+class VehicleCountryViewSpec extends InputSelectViewBehaviours[Nationality] {
 
-  override def form: Form[InlandMode] = new InlandModeFormProvider()()
+  override def form: Form[Nationality] = new NationalityFormProvider()(prefix, NationalityList(values))
 
-  override def applyView(form: Form[InlandMode]): HtmlFormat.Appendable =
-    injector.instanceOf[InlandModeView].apply(form, lrn, InlandMode.radioItems, NormalMode)(fakeRequest, messages)
+  override def applyView(form: Form[Nationality]): HtmlFormat.Appendable =
+    injector.instanceOf[VehicleCountryView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "transport.transportMeans.departure.inlandMode"
+  implicit override val arbitraryT: Arbitrary[Nationality] = arbitraryNationality
 
-  override def radioItems(fieldId: String, checkedValue: Option[InlandMode] = None): Seq[RadioItem] =
-    InlandMode.radioItems(fieldId, checkedValue)
-
-  override def values: Seq[InlandMode] = InlandMode.values
+  override val prefix: String = "transport.transportMeans.departure.vehicleCountry"
 
   behave like pageWithTitle()
 
@@ -47,7 +45,9 @@ class InlandModeViewSpec extends RadioViewBehaviours[InlandMode] {
 
   behave like pageWithHeading()
 
-  behave like pageWithRadioItems()
+  behave like pageWithSelect()
+
+  behave like pageWithHint("Enter the country or code, like AT or Austria.")
 
   behave like pageWithSubmitButton("Save and continue")
 }

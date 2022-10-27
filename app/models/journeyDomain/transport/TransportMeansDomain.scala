@@ -16,22 +16,68 @@
 
 package models.journeyDomain.transport
 
-import cats.implicits.catsSyntaxTuple2Semigroupal
+import cats.implicits._
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
+import models.reference.Nationality
 import models.transport.transportMeans.departure.{Identification, InlandMode}
-import pages.transport.transportMeans.departure.{IdentificationPage, InlandModePage, MeansIdentificationNumberPage}
+import pages.transport.transportMeans.departure.{IdentificationPage, InlandModePage, MeansIdentificationNumberPage, VehicleCountryPage}
 
-case class TransportMeansDomain(
-  inlandMode: InlandMode,
-  MeansIdentificationNumber: String
-) extends JourneyDomainModel
+sealed trait TransportMeansDomain extends JourneyDomainModel {
+  val inlandMode: InlandMode
+}
+
+sealed trait TransportMeansDomainWithIdentification extends TransportMeansDomain {
+  val identification: Identification
+  val identificationNumber: String
+  val nationality: Nationality
+}
 
 object TransportMeansDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[TransportMeansDomain] = (
-    InlandModePage.reader,
-    MeansIdentificationNumberPage.reader
-  ).tupled.map((TransportMeansDomain.apply _).tupled)
+  implicit val userAnswersReader: UserAnswersReader[TransportMeansDomain] =
+    InlandModePage.reader.flatMap {
+      case InlandMode.Mail    => UserAnswersReader.apply(TransportMeansDomainWithMailInlandMode)
+      case InlandMode.Unknown => UserAnswersReader[TransportMeansDomainWithUnknownInlandMode].widen[TransportMeansDomain]
+      case _                  => UserAnswersReader[TransportMeansDomainWithAnyOtherInlandMode].widen[TransportMeansDomain]
+    }
+}
 
+case object TransportMeansDomainWithMailInlandMode extends TransportMeansDomain {
+  override val inlandMode: InlandMode = InlandMode.Mail
+}
+
+case class TransportMeansDomainWithUnknownInlandMode(
+  identificationNumber: String,
+  nationality: Nationality
+) extends TransportMeansDomainWithIdentification {
+  override val inlandMode: InlandMode         = InlandMode.Unknown
+  override val identification: Identification = Identification.Unknown
+}
+
+object TransportMeansDomainWithUnknownInlandMode {
+
+  implicit val userAnswersReader: UserAnswersReader[TransportMeansDomainWithUnknownInlandMode] =
+    (
+      MeansIdentificationNumberPage.reader,
+      VehicleCountryPage.reader
+    ).tupled.map((TransportMeansDomainWithUnknownInlandMode.apply _).tupled)
+}
+
+case class TransportMeansDomainWithAnyOtherInlandMode(
+  inlandMode: InlandMode,
+  identification: Identification,
+  identificationNumber: String,
+  nationality: Nationality
+) extends TransportMeansDomainWithIdentification
+
+object TransportMeansDomainWithAnyOtherInlandMode {
+
+  implicit val userAnswersReader: UserAnswersReader[TransportMeansDomainWithAnyOtherInlandMode] =
+    (
+      InlandModePage.reader,
+      IdentificationPage.reader,
+      MeansIdentificationNumberPage.reader,
+      VehicleCountryPage.reader
+    ).tupled.map((TransportMeansDomainWithAnyOtherInlandMode.apply _).tupled)
 }

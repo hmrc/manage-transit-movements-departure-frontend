@@ -36,12 +36,17 @@ trait ModelGenerators {
 
   implicit lazy val arbitraryInlandMode: Arbitrary[InlandMode] =
     Arbitrary {
-      Gen.oneOf(models.transport.transportMeans.departure.InlandMode.values)
+      Gen.oneOf(InlandMode.values)
     }
 
-  implicit lazy val arbitraryLocationType: Arbitrary[models.LocationType] =
+  lazy val arbitraryNonMailOrUnknownInlandMode: Arbitrary[InlandMode] =
     Arbitrary {
-      Gen.oneOf(models.LocationType.values)
+      Gen.oneOf(InlandMode.values.filterNot(_ == InlandMode.Mail).filterNot(_ == InlandMode.Unknown))
+    }
+
+  implicit lazy val arbitraryLocationType: Arbitrary[LocationType] =
+    Arbitrary {
+      Gen.oneOf(LocationType.values)
     }
 
   implicit lazy val arbitraryLocationOfGoodsIdentification: Arbitrary[LocationOfGoodsIdentification] =
@@ -270,6 +275,14 @@ trait ModelGenerators {
         unLocodeExtendedCode <- nonEmptyString
         name                 <- nonEmptyString
       } yield UnLocode(unLocodeExtendedCode, name)
+    }
+
+  implicit lazy val arbitraryNationality: Arbitrary[Nationality] =
+    Arbitrary {
+      for {
+        code <- nonEmptyString
+        desc <- nonEmptyString
+      } yield Nationality(code, desc)
     }
 
 }

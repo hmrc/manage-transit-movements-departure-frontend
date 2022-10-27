@@ -1075,6 +1075,7 @@ declarationSubmitted.heading = Declaration Submitted
 declarationSubmitted.paragraph1 = You have submitted your declaration.
 
 transport.inlandMode.caption = Transport details - Inland mode of transport
+transport.departureMeansOfTransport.caption = Transport details - Departure means of transport
 
 transport.transportMeans.departure.inlandMode.title = Which inland mode of transport are you using?
 transport.transportMeans.departure.inlandMode.heading = Which inland mode of transport are you using?
@@ -1089,8 +1090,6 @@ transport.transportMeans.departure.inlandMode.waterway = Inland waterway
 transport.transportMeans.departure.inlandMode.unknown = Unknown (own propulsion)
 transport.transportMeans.departure.inlandMode.checkYourAnswersLabel = Which inland mode of transport are you using?
 transport.transportMeans.departure.inlandMode.error.required = Select which inland mode of transport you’re using
-
-transport.transportMeans.departure.caption = Transport details - Departure means of transport
 
 transport.transportMeans.departure.identification.title = Which identification do you want to use for this vehicle?
 transport.transportMeans.departure.identification.heading = Which identification do you want to use for this vehicle?
@@ -1115,3 +1114,11 @@ transport.transportMeans.departure.meansIdentificationNumber.checkYourAnswersLab
 transport.transportMeans.departure.meansIdentificationNumber.error.required = Enter the {0}
 transport.transportMeans.departure.meansIdentificationNumber.error.invalid = The {0} must only include letters a to z and numbers 0 to 9
 transport.transportMeans.departure.meansIdentificationNumber.error.length = The {0} must be 35 characters or less
+
+transport.transportMeans.departure.vehicleCountry.title = What country is this vehicle registered to?
+transport.transportMeans.departure.vehicleCountry.heading = What country is this vehicle registered to?
+transport.transportMeans.departure.vehicleCountry.hint = Enter the country or code, like AT or Austria.
+transport.transportMeans.departure.vehicleCountry.placeholder = Select a nationality
+transport.transportMeans.departure.vehicleCountry.change.hidden = the country the vehicle is registered to
+transport.transportMeans.departure.vehicleCountry.checkYourAnswersLabel = What country is this vehicle registered to?
+transport.transportMeans.departure.vehicleCountry.error.required = Select the country the vehicle is registered to
