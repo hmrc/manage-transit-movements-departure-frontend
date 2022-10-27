@@ -31,18 +31,7 @@ class TransportMeansDomainSpec extends SpecBase with Generators {
 
   "TransportMeansDomain" - {
 
-    val inlandModeList: Seq[InlandMode] = Seq(
-      Maritime,
-      Rail,
-      Road,
-      Air,
-      Mail,
-      Fixed,
-      Waterway,
-      Unknown
-    )
-
-    val inlandMode: InlandMode   = Gen.oneOf(inlandModeList).sample.value
+    val inlandMode: InlandMode   = arbitrary[InlandMode].sample.value
     val nationality: Nationality = arbitrary[Nationality].sample.value
 
     "can be parsed from user answers" in {

@@ -47,7 +47,7 @@
             field = form("value"),
             selectType = OrdinarySelect(
                 heading = messages("transport.transportMeans.departure.vehicleCountry.heading"),
-                caption = Some(messages("transport.inlandMode.caption")),
+                caption = Some(messages("transport.inlandMode.caption"))
             ),
             hint = Some(messages("transport.transportMeans.departure.vehicleCountry.hint")),
             selectItems = nationalityList.toSelectItems(form.value),
