@@ -1075,7 +1075,6 @@ declarationSubmitted.heading = Declaration Submitted
 declarationSubmitted.paragraph1 = You have submitted your declaration.
 
 transport.inlandMode.caption = Transport details - Inland mode of transport
-transport.departureMeansOfTransport.caption = Transport details - Departure means of transport
 
 transport.transportMeans.departure.inlandMode.title = Which inland mode of transport are you using?
 transport.transportMeans.departure.inlandMode.heading = Which inland mode of transport are you using?
@@ -1106,3 +1105,9 @@ transport.transportMeans.departure.identification.europeanVesselIdNumber = Europ
 transport.transportMeans.departure.identification.unknown = Unknown - this can only be used during the transitional period
 transport.transportMeans.departure.identification.checkYourAnswersLabel = Which identification do you want to use for this vehicle?
 transport.transportMeans.departure.identification.error.required = Select which identification you want to use for this vehicle
+
+transport.transportMeans.departure.meansIdentificationNumber.title = What is the departure means identification number
+transport.transportMeans.departure.meansIdentificationNumber.heading = What is the departure means identification number
+transport.transportMeans.departure.meansIdentificationNumber.checkYourAnswersLabel = What is the departure means identification number
+transport.transportMeans.departure.meansIdentificationNumber.error.required = Enter What is the departure means identification number
+transport.transportMeans.departure.meansIdentificationNumber.error.length = What is the departure means identification number must be 100 characters or less
