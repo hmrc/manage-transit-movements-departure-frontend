@@ -19,19 +19,20 @@ package forms
 import forms.Constants.identificationNumberLength
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.alphaNumericRegex
+import models.transport.transportMeans.departure.Identification
 
 import javax.inject.Inject
 import play.api.data.Form
 
 class MeansIdentificationNumberProvider @Inject() extends Mappings {
 
-  def apply(prefix: String, args: String*): Form[String] =
+  def apply(prefix: String, args: Identification*): Form[String] =
     Form(
-      "value" -> text(s"$prefix.error.required", args)
+      "value" -> text(s"$prefix.error.required", args.toString)
         .verifying(
           StopOnFirstFail[String](
-            maxLength(identificationNumberLength, s"$prefix.error.length", args = args),
-            regexp(alphaNumericRegex, s"$prefix.error.invalid", args = args)
+            maxLength(identificationNumberLength, s"$prefix.error.length", args.toString),
+            regexp(alphaNumericRegex, s"$prefix.error.invalid", args.toString)
           )
         )
     )

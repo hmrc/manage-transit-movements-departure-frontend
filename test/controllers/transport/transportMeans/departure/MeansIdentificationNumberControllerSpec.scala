@@ -74,7 +74,7 @@ class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefau
       val userAnswers = emptyUserAnswers
         .setValue(InlandModePage, Road)
         .setValue(IdentificationPage, identification)
-        .setValue(MeansIdentificationNumberPage, "test")
+        .setValue(MeansIdentificationNumberPage, "test string")
 
       setExistingUserAnswers(userAnswers)
 

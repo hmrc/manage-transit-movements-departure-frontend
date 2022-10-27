@@ -49,7 +49,7 @@ class MeansIdentificationNumberController @Inject() (
     .requireData(lrn)
     .andThen(getMandatoryPage(IdentificationPage)) {
       implicit request =>
-        val identificationType = request.arg.toString
+        val identificationType = request.arg
         val form               = formProvider("transport.transportMeans.departure.meansIdentificationNumber", identificationType)
         val preparedForm = request.userAnswers.get(MeansIdentificationNumberPage) match {
           case None        => form
@@ -63,7 +63,7 @@ class MeansIdentificationNumberController @Inject() (
     .andThen(getMandatoryPage(IdentificationPage))
     .async {
       implicit request =>
-        val identificationType = request.arg.toString
+        val identificationType = request.arg
         val form               = formProvider("transport.transportMeans.departure.meansIdentificationNumber", identificationType)
         form
           .bindFromRequest()

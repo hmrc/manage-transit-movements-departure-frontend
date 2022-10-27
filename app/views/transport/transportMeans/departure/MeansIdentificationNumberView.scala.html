@@ -18,6 +18,7 @@
 @import models.LocalReferenceNumber
 @import viewModels.components.InputTextViewModel._
 @import views.html.components.{Button, ErrorSummary, InputText}
+@import models.transport.transportMeans.departure.Identification
 
 @this(
     mainTemplate: MainTemplate,
@@ -27,10 +28,11 @@
     button: Button
 )
 
-@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, arg: String)(implicit request: Request[_], messages: Messages)
+
+@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, arg: Identification)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("transport.transportMeans.departure.meansIdentificationNumber.title", arg),
+    title = messages("transport.transportMeans.departure.meansIdentificationNumber.title", arg.toString),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -42,7 +44,7 @@
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages("transport.transportMeans.departure.meansIdentificationNumber.heading", arg),
+                heading = messages("transport.transportMeans.departure.meansIdentificationNumber.heading", arg.toString),
                 caption = Some(messages("transport.transportMeans.departure.caption"))
             ),
             inputClass = InputSize.Width20,
