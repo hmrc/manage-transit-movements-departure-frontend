@@ -22,7 +22,7 @@ import forms.MeansIdentificationNumberProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansNavigatorProvider
-import pages.transport.transportMeans.departure.{InlandModePage, MeansIdentificationNumberPage}
+import pages.transport.transportMeans.departure.{IdentificationPage, MeansIdentificationNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -47,9 +47,9 @@ class MeansIdentificationNumberController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(InlandModePage)) { // TODO: Get identification of mode page
+    .andThen(getMandatoryPage(IdentificationPage)) {
       implicit request =>
-        val identificationType = request.arg.toString // TODO: Get identification arg [Might have to reshape data with toString]
+        val identificationType = request.arg.toString
         val form               = formProvider("transport.transportMeans.departure.meansIdentificationNumber", identificationType)
         val preparedForm = request.userAnswers.get(MeansIdentificationNumberPage) match {
           case None        => form
@@ -60,10 +60,10 @@ class MeansIdentificationNumberController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(InlandModePage)) // TODO: Get identification of mode page
+    .andThen(getMandatoryPage(IdentificationPage))
     .async {
       implicit request =>
-        val identificationType = request.arg.toString // TODO: Get identification arg
+        val identificationType = request.arg.toString
         val form               = formProvider("transport.transportMeans.departure.meansIdentificationNumber", identificationType)
         form
           .bindFromRequest()

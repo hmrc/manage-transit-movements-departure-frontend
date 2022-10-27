@@ -18,15 +18,15 @@ package controllers.transport.transportMeans.departure
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.MeansIdentificationNumberProvider
-import models.InlandMode.Road
-import models.reference.Country
-import models.{InlandMode, NormalMode, WithName}
+import models.NormalMode
+import models.transport.transportMeans.departure.Identification
+import models.transport.transportMeans.departure.Identification._
+import models.transport.transportMeans.departure.InlandMode.Road
 import navigation.transport.TransportMeansNavigatorProvider
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
-import org.scalacheck.Arbitrary.arbitrary
-import pages.traderDetails.holderOfTransit.CountryPage
-import pages.transport.transportMeans.departure.{InlandModePage, MeansIdentificationNumberPage}
+import org.mockito.Mockito.when
+import org.scalacheck.Gen
+import pages.transport.transportMeans.departure.{IdentificationPage, InlandModePage, MeansIdentificationNumberPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -39,10 +39,9 @@ class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefau
 
   private val formProvider = new MeansIdentificationNumberProvider()
 
-  val inlandMode: InlandMode = Road
-  // TODO: Add  arbitrary identificationType
-  private val identificationType                  = "IATA flight number" //TODO: Change to identification.toString
-  private val form                                = formProvider("transport.transportMeans.departure.meansIdentificationNumber", identificationType)
+  val identification: Identification              = RegNumberRoadVehicle
+  private val identificationName                  = identification.toString
+  private val form                                = formProvider("transport.transportMeans.departure.meansIdentificationNumber", identificationName)
   private val mode                                = NormalMode
   private lazy val meansIdentificationNumberRoute = routes.MeansIdentificationNumberController.onPageLoad(lrn, mode).url
 
@@ -55,7 +54,7 @@ class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefau
 
     "must return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.setValue(InlandModePage, inlandMode) //TODO: Change to identification mean type
+      val userAnswers = emptyUserAnswers.setValue(IdentificationPage, identification)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, meansIdentificationNumberRoute)
@@ -67,14 +66,16 @@ class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefau
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode, inlandMode.toString)(request, messages).toString // TODO: Change to correct arg
+        view(form, lrn, mode, identificationName)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(InlandModePage, inlandMode) //TODO: Change to identification mean type
-        .setValue(MeansIdentificationNumberPage, "test string") //TODO: Add previous page
+        .setValue(InlandModePage, Road)
+        .setValue(IdentificationPage, identification)
+        .setValue(MeansIdentificationNumberPage, "test")
+
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, meansIdentificationNumberRoute)
@@ -88,15 +89,14 @@ class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefau
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, inlandMode.toString)(request, messages).toString // TODO: Change to correct arg
+        view(filledForm, lrn, mode, identificationName)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.setValue(InlandModePage, inlandMode) //TODO: Change to identification mean type
-      setExistingUserAnswers(userAnswers)
-
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(POST, meansIdentificationNumberRoute)
         .withFormUrlEncodedBody(("value", "test string"))
@@ -110,8 +110,10 @@ class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefau
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.setValue(InlandModePage, inlandMode) //TODO: Change to identification mean type
-      setExistingUserAnswers(userAnswers)
+      setExistingUserAnswers(
+        emptyUserAnswers
+          .setValue(IdentificationPage, identification)
+      )
 
       val invalidAnswer = ""
 
@@ -125,7 +127,7 @@ class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefau
       val view = injector.instanceOf[MeansIdentificationNumberView]
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, inlandMode.toString)(request, messages).toString() // TODO: Change to correct arg
+        view(filledForm, lrn, mode, identificationName)(request, messages).toString() // TODO: Change to correct arg
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

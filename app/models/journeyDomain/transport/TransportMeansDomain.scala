@@ -17,12 +17,10 @@
 package models.journeyDomain.transport
 
 import cats.implicits.catsSyntaxTuple2Semigroupal
-import models.InlandMode
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
-import pages.transport.transportMeans.departure.{InlandModePage, MeansIdentificationNumberPage}
-import models.transport.transportMeans.departure.InlandMode
-import pages.transport.transportMeans.departure.InlandModePage
+import models.transport.transportMeans.departure.{Identification, InlandMode}
+import pages.transport.transportMeans.departure.{IdentificationPage, InlandModePage, MeansIdentificationNumberPage}
 
 case class TransportMeansDomain(
   inlandMode: InlandMode,
