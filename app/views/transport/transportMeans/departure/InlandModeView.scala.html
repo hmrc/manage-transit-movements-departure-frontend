@@ -14,41 +14,43 @@
  * limitations under the License.
  *@
 
-@import controllers.preTaskList.routes
-@import views.html.components.{Button, ErrorSummary, InputRadio}
-@import models.{LocalReferenceNumber, SecurityDetailsType}
+@import controllers.transport.transportMeans.departure.routes
+@import models.LocalReferenceNumber
+@import models.InlandMode
+@import views.html.components.{Button, ErrorSummary, InputRadio, Heading}
 @import viewModels.components.InputRadioViewModel
 @import viewModels.components.InputRadioViewModel._
 
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
-    button: Button,
     inputRadio: InputRadio,
-    errorSummary: ErrorSummary
+    errorSummary: ErrorSummary,
+    button: Button
 )
 
-@(form: Form[SecurityDetailsType], radios: (String, Option[SecurityDetailsType]) => Seq[RadioItem], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[InlandMode], lrn: LocalReferenceNumber, radios: (String, Option[InlandMode]) => Seq[RadioItem], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("securityDetailsType.title"),
+    title = messages("transport.transportMeans.departure.inlandMode.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.SecurityDetailsTypeController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.InlandModeController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
         @inputRadio(
             field = form("value"),
-            radioType = Radio(heading = messages("securityDetailsType.heading")),
+            radioType = RadioWithAdditionalHtml(
+                heading = messages("transport.transportMeans.departure.inlandMode.heading"),
+                caption = Some(messages("transport.inlandMode.caption")),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("transport.transportMeans.departure.inlandMode.paragraph")}</p>""")
+            ),
             radioItems = fieldId => radios(fieldId, form.value)
         )
 
-        @button(
-            messageKey = "site.continue",
-            attributes = Map("id" -> "submit")
-        )
+        @button(attributes = Map("id" -> "submit"))
     }
 }

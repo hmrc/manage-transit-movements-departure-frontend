@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport
+package pages.transport.transportMeans.departure
 
-import models.domain.UserAnswersReader
-import models.journeyDomain.JourneyDomainModel
+import models.InlandMode
+import pages.behaviours.PageBehaviours
 
-case class TransportDomain(
-  preRequisites: PreRequisitesDomain,
-  transportMeans: TransportMeansDomain
-) extends JourneyDomainModel
+class InlandModePageSpec extends PageBehaviours {
 
-object TransportDomain {
+  "InlandModePage" - {
 
-  implicit val userAnswersReader: UserAnswersReader[TransportDomain] =
-    for {
-      preRequisites  <- UserAnswersReader[PreRequisitesDomain]
-      transportMeans <- UserAnswersReader[TransportMeansDomain]
-    } yield TransportDomain(preRequisites, transportMeans)
+    beRetrievable[InlandMode](InlandModePage)
+
+    beSettable[InlandMode](InlandModePage)
+
+    beRemovable[InlandMode](InlandModePage)
+  }
 }

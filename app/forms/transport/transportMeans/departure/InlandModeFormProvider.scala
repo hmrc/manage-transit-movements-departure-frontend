@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport
+package forms.transport.transportMeans.departure
 
-import models.domain.UserAnswersReader
-import models.journeyDomain.JourneyDomainModel
+import javax.inject.Inject
 
-case class TransportDomain(
-  preRequisites: PreRequisitesDomain,
-  transportMeans: TransportMeansDomain
-) extends JourneyDomainModel
+import forms.mappings.Mappings
+import models.InlandMode
+import play.api.data.Form
 
-object TransportDomain {
+class InlandModeFormProvider @Inject() extends Mappings {
 
-  implicit val userAnswersReader: UserAnswersReader[TransportDomain] =
-    for {
-      preRequisites  <- UserAnswersReader[PreRequisitesDomain]
-      transportMeans <- UserAnswersReader[TransportMeansDomain]
-    } yield TransportDomain(preRequisites, transportMeans)
+  def apply(): Form[InlandMode] =
+    Form(
+      "value" -> enumerable[InlandMode]("transport.transportMeans.departure.inlandMode.error.required")
+    )
 }

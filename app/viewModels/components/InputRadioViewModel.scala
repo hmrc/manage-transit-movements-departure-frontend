@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport
+package viewModels.components
 
-import models.domain.UserAnswersReader
-import models.journeyDomain.JourneyDomainModel
+import play.twirl.api.Html
 
-case class TransportDomain(
-  preRequisites: PreRequisitesDomain,
-  transportMeans: TransportMeansDomain
-) extends JourneyDomainModel
+sealed trait InputRadioViewModel
 
-object TransportDomain {
+object InputRadioViewModel {
 
-  implicit val userAnswersReader: UserAnswersReader[TransportDomain] =
-    for {
-      preRequisites  <- UserAnswersReader[PreRequisitesDomain]
-      transportMeans <- UserAnswersReader[TransportMeansDomain]
-    } yield TransportDomain(preRequisites, transportMeans)
+  case class Radio(
+    heading: String,
+    caption: Option[String] = None
+  ) extends InputRadioViewModel
+
+  case class RadioWithAdditionalHtml(
+    heading: String,
+    caption: Option[String] = None,
+    additionalHtml: Html
+  ) extends InputRadioViewModel
+      with AdditionalHtmlViewModel
 }

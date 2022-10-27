@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport
+package pages.sections.transport
 
-import models.domain.UserAnswersReader
-import models.journeyDomain.JourneyDomainModel
+import pages.sections.Section
+import play.api.libs.json.{JsObject, JsPath}
 
-case class TransportDomain(
-  preRequisites: PreRequisitesDomain,
-  transportMeans: TransportMeansDomain
-) extends JourneyDomainModel
+case object TransportMeansSection extends Section[JsObject] {
 
-object TransportDomain {
+  override def path: JsPath = TransportSection.path \ toString
 
-  implicit val userAnswersReader: UserAnswersReader[TransportDomain] =
-    for {
-      preRequisites  <- UserAnswersReader[PreRequisitesDomain]
-      transportMeans <- UserAnswersReader[TransportMeansDomain]
-    } yield TransportDomain(preRequisites, transportMeans)
+  override def toString: String = "transportMeans"
 }

@@ -16,19 +16,17 @@
 
 package models.journeyDomain.transport
 
-import models.domain.UserAnswersReader
+import models.InlandMode
+import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
+import pages.transport.transportMeans.departure.InlandModePage
 
-case class TransportDomain(
-  preRequisites: PreRequisitesDomain,
-  transportMeans: TransportMeansDomain
+case class TransportMeansDomain(
+  inlandMode: InlandMode
 ) extends JourneyDomainModel
 
-object TransportDomain {
+object TransportMeansDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[TransportDomain] =
-    for {
-      preRequisites  <- UserAnswersReader[PreRequisitesDomain]
-      transportMeans <- UserAnswersReader[TransportMeansDomain]
-    } yield TransportDomain(preRequisites, transportMeans)
+  implicit val userAnswersReader: UserAnswersReader[TransportMeansDomain] =
+    InlandModePage.reader.map(TransportMeansDomain.apply)
 }

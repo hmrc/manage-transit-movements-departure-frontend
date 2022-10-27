@@ -1,0 +1,5 @@
+
+GET        /:lrn/transport-details/inland-mode-of-transport                        controllers.transport.transportMeans.departure.InlandModeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport-details/inland-mode-of-transport                        controllers.transport.transportMeans.departure.InlandModeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport-details/change-inland-mode-of-transport                 controllers.transport.transportMeans.departure.InlandModeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport-details/change-inland-mode-of-transport                 controllers.transport.transportMeans.departure.InlandModeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

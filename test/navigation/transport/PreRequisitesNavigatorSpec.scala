@@ -17,6 +17,7 @@
 package navigation.transport
 
 import base.SpecBase
+import controllers.transport.transportMeans.departure.routes
 import generators.{Generators, TransportUserAnswersGenerator}
 import models._
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -32,12 +33,12 @@ class PreRequisitesNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       val navigator         = navigatorProvider.apply(mode)
 
       "when answers complete" - {
-        "must redirect to pre-requisites check your answers" ignore {
+        "must redirect to transportMeans InlandModePage" in {
           forAll(arbitraryPreRequisitesAnswers(emptyUserAnswers)) {
             answers =>
               navigator
                 .nextPage(answers)
-                .mustBe(???)
+                .mustBe(routes.InlandModeController.onPageLoad(answers.lrn, mode))
           }
         }
       }
