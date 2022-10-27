@@ -17,7 +17,7 @@
 package forms.transport.transportMeans.departure
 
 import forms.behaviours.OptionFieldBehaviours
-import models.InlandMode
+import models.transport.transportMeans.departure.InlandMode
 import play.api.data.FormError
 
 class InlandModeFormProviderSpec extends OptionFieldBehaviours {

@@ -19,7 +19,8 @@ package controllers.transport.transportMeans.departure
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.transport.transportMeans.departure.InlandModeFormProvider
-import models.{InlandMode, LocalReferenceNumber, Mode}
+import models.transport.transportMeans.departure.InlandMode
+import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansNavigatorProvider
 import pages.transport.transportMeans.departure.InlandModePage

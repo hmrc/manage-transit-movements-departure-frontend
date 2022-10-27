@@ -21,6 +21,7 @@ import models.GuaranteeType._
 import models._
 import models.domain.StringFieldRegex.{coordinatesLatitudeMaxRegex, coordinatesLongitudeMaxRegex}
 import models.reference._
+import models.transport.transportMeans.departure.InlandMode
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import wolfendale.scalacheck.regexp.RegexpGen
@@ -35,7 +36,7 @@ trait ModelGenerators {
 
   implicit lazy val arbitraryInlandMode: Arbitrary[InlandMode] =
     Arbitrary {
-      Gen.oneOf(models.InlandMode.values)
+      Gen.oneOf(models.transport.transportMeans.departure.InlandMode.values)
     }
 
   implicit lazy val arbitraryLocationType: Arbitrary[models.LocationType] =

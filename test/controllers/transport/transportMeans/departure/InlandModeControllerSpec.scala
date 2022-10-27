@@ -18,7 +18,8 @@ package controllers.transport.transportMeans.departure
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.transport.transportMeans.departure.InlandModeFormProvider
-import models.{InlandMode, NormalMode}
+import models.NormalMode
+import models.transport.transportMeans.departure.InlandMode
 import navigation.transport.TransportMeansNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when

@@ -16,9 +16,9 @@
 
 package models.journeyDomain.transport
 
-import models.InlandMode
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
+import models.transport.transportMeans.departure.InlandMode
 import pages.transport.transportMeans.departure.InlandModePage
 
 case class TransportMeansDomain(

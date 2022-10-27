@@ -17,7 +17,8 @@
 package views.transport.transportMeans.departure
 
 import forms.transport.transportMeans.departure.InlandModeFormProvider
-import models.{InlandMode, NormalMode}
+import models.NormalMode
+import models.transport.transportMeans.departure.InlandMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem

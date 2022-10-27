@@ -54,7 +54,7 @@ class IdentificationController @Inject() (
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, lrn, Identification.radioItems, mode))
+      Ok(view(preparedForm, lrn, Identification.radioItemsU(request.userAnswers), mode))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
@@ -62,7 +62,7 @@ class IdentificationController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, Identification.radioItems, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, Identification.radioItemsU(request.userAnswers), mode))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
             IdentificationPage.writeToUserAnswers(value).writeToSession().navigate()

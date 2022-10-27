@@ -16,23 +16,58 @@
 
 package models.transport.transportMeans.departure
 
-import models.{RadioModel, WithName}
+import models.{RadioModelU, UserAnswers, WithName}
+import pages.transport.transportMeans.departure.InlandModePage
 
-sealed trait Identification
+sealed trait Identification {
+  val identificationType: Int
+}
 
-object Identification extends RadioModel[Identification] {
+object Identification extends RadioModelU[Identification] {
 
-  case object SeaGoingVehicle extends WithName("seaGoingVehicle") with Identification
-  case object IataFlightNumber extends WithName("iataFlightNumber") with Identification
-  case object InlandWaterwaysVehicle extends WithName("inlandWaterwaysVehicle") with Identification
-  case object ImoShipIdNumber extends WithName("imoShipIdNumber") with Identification
-  case object WagonNumber extends WithName("wagonNumber") with Identification
-  case object TrainNumber extends WithName("trainNumber") with Identification
-  case object RegNumberRoadVehicle extends WithName("regNumberRoadVehicle") with Identification
-  case object RegNumberRoadTrailer extends WithName("regNumberRoadTrailer") with Identification
-  case object RegNumberAircraft extends WithName("regNumberAircraft") with Identification
-  case object EuropeanVesselIdNumber extends WithName("europeanVesselIdNumber") with Identification
-  case object Unknown extends WithName("unknown") with Identification
+  case object SeaGoingVehicle extends WithName("seaGoingVehicle") with Identification {
+    override val identificationType: Int = 11
+  }
+
+  case object IataFlightNumber extends WithName("iataFlightNumber") with Identification {
+    override val identificationType: Int = 40
+  }
+
+  case object InlandWaterwaysVehicle extends WithName("inlandWaterwaysVehicle") with Identification {
+    override val identificationType: Int = 81
+  }
+
+  case object ImoShipIdNumber extends WithName("imoShipIdNumber") with Identification {
+    override val identificationType: Int = 10
+  }
+
+  case object WagonNumber extends WithName("wagonNumber") with Identification {
+    override val identificationType: Int = 20
+  }
+
+  case object TrainNumber extends WithName("trainNumber") with Identification {
+    override val identificationType: Int = 21
+  }
+
+  case object RegNumberRoadVehicle extends WithName("regNumberRoadVehicle") with Identification {
+    override val identificationType: Int = 30
+  }
+
+  case object RegNumberRoadTrailer extends WithName("regNumberRoadTrailer") with Identification {
+    override val identificationType: Int = 31
+  }
+
+  case object RegNumberAircraft extends WithName("regNumberAircraft") with Identification {
+    override val identificationType: Int = 41
+  }
+
+  case object EuropeanVesselIdNumber extends WithName("europeanVesselIdNumber") with Identification {
+    override val identificationType: Int = 80
+  }
+
+  case object Unknown extends WithName("unknown") with Identification {
+    override val identificationType: Int = 99
+  }
 
   override val messageKeyPrefix: String = "transport.transportMeans.departure.identification"
 
@@ -49,4 +84,10 @@ object Identification extends RadioModel[Identification] {
     EuropeanVesselIdNumber,
     Unknown
   )
+
+  override def valuesU(userAnswers: UserAnswers): Seq[Identification] =
+    userAnswers.get(InlandModePage).map(_.inlandModeType).getOrElse(None) match {
+      case inlandModeType if inlandModeType != 7 => values.filter(_.identificationType.toString.startsWith(inlandModeType.toString))
+      case _                                     => values
+    }
 }

@@ -17,7 +17,8 @@
 package pages.transport.transportMeans.departure
 
 import controllers.transport.transportMeans.departure.routes
-import models.{InlandMode, Mode, UserAnswers}
+import models.transport.transportMeans.departure.InlandMode
+import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.transport.TransportMeansSection
 import play.api.libs.json.JsPath

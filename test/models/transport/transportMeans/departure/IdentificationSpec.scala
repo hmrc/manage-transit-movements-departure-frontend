@@ -16,15 +16,17 @@
 
 package models.transport.transportMeans.departure
 
+import base.SpecBase
+import generators.Generators
+import models.transport.transportMeans.departure.Identification._
+import models.transport.transportMeans.departure.InlandMode._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
-import org.scalatest.OptionValues
+import pages.transport.transportMeans.departure.InlandModePage
 import play.api.libs.json.{JsError, JsString, Json}
 
-class IdentificationSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
+class IdentificationSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "Identification" - {
 
@@ -55,6 +57,110 @@ class IdentificationSpec extends AnyFreeSpec with Matchers with ScalaCheckProper
       forAll(gen) {
         identification =>
           Json.toJson(identification) mustEqual JsString(identification.toString)
+      }
+    }
+
+    "Radio options" - {
+
+      "Must return the correct number of radios" - {
+        "When InlandMode is 'Maritime'" in {
+          val answers = emptyUserAnswers
+            .setValue(InlandModePage, Maritime)
+
+          val radios = Identification.valuesU(answers)
+          val expected = Seq(
+            SeaGoingVehicle,
+            ImoShipIdNumber
+          )
+
+          radios mustBe expected
+        }
+
+        "When InlandMode is 'Rail'" in {
+          val answers = emptyUserAnswers
+            .setValue(InlandModePage, Rail)
+
+          val radios = Identification.valuesU(answers)
+          val expected = Seq(
+            WagonNumber,
+            TrainNumber
+          )
+
+          radios mustBe expected
+        }
+
+        "When InlandMode is 'Road'" in {
+          val answers = emptyUserAnswers
+            .setValue(InlandModePage, Road)
+
+          val radios = Identification.valuesU(answers)
+          val expected = Seq(
+            RegNumberRoadVehicle,
+            RegNumberRoadTrailer
+          )
+
+          radios mustBe expected
+        }
+
+        "When InlandMode is 'Air'" in {
+          val answers = emptyUserAnswers
+            .setValue(InlandModePage, Air)
+
+          val radios = Identification.valuesU(answers)
+          val expected = Seq(
+            IataFlightNumber,
+            RegNumberAircraft
+          )
+
+          radios mustBe expected
+        }
+
+        "When InlandMode is 'Fixed'" in {
+          val answers = emptyUserAnswers
+            .setValue(InlandModePage, Fixed)
+
+          val radios = Identification.valuesU(answers)
+          val expected = Seq(
+            SeaGoingVehicle,
+            IataFlightNumber,
+            InlandWaterwaysVehicle,
+            ImoShipIdNumber,
+            WagonNumber,
+            TrainNumber,
+            RegNumberRoadVehicle,
+            RegNumberRoadTrailer,
+            RegNumberAircraft,
+            EuropeanVesselIdNumber,
+            Identification.Unknown
+          )
+
+          radios mustBe expected
+        }
+
+        "When InlandMode is 'Waterway'" in {
+          val answers = emptyUserAnswers
+            .setValue(InlandModePage, Waterway)
+
+          val radios = Identification.valuesU(answers)
+          val expected = Seq(
+            InlandWaterwaysVehicle,
+            EuropeanVesselIdNumber
+          )
+
+          radios mustBe expected
+        }
+
+        "When InlandMode is 'Unknown'" in {
+          val answers = emptyUserAnswers
+            .setValue(InlandModePage, InlandMode.Unknown)
+
+          val radios = Identification.valuesU(answers)
+          val expected = Seq(
+            Identification.Unknown
+          )
+
+          radios mustBe expected
+        }
       }
     }
   }

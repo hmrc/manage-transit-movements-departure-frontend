@@ -19,6 +19,7 @@ package generators
 import models._
 import models.reference._
 import models.traderDetails.representative.RepresentativeCapacity
+import models.transport.transportMeans.departure.InlandMode
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import play.api.libs.json._
