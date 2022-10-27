@@ -24,15 +24,14 @@ import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.routeDetails.exit.ExitDomain
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
 import models.journeyDomain.routeDetails.transit.TransitDomain
-import models.reference.{Country, CountryCode, CustomsOffice}
-import models.{DeclarationType, Index, SecurityDetailsType}
+import models.reference.CustomsOffice
+import models.{DeclarationType, SecurityDetailsType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList._
 import pages.routeDetails.locationOfGoods.AddLocationOfGoodsPage
 import pages.routeDetails.routing._
-import pages.routeDetails.routing.index._
 
 class RouteDetailsDomainSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
 

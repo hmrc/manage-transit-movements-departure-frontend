@@ -17,22 +17,22 @@
 package forms.transport.transportMeans.departure
 
 import forms.behaviours.OptionFieldBehaviours
-import models.transport.transportMeans.departure.InlandMode
+import models.transport.transportMeans.departure.Identification
 import play.api.data.FormError
 
-class InlandModeFormProviderSpec extends OptionFieldBehaviours {
+class IdentificationFormProviderSpec extends OptionFieldBehaviours {
 
-  val form = new InlandModeFormProvider()()
+  val form = new IdentificationFormProvider()()
 
   ".value" - {
 
     val fieldName   = "value"
-    val requiredKey = "transport.transportMeans.departure.inlandMode.error.required"
+    val requiredKey = "transport.transportMeans.departure.identification.error.required"
 
-    behave like optionsField[InlandMode](
+    behave like optionsField[Identification](
       form,
       fieldName,
-      validValues = InlandMode.values,
+      validValues = Identification.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 

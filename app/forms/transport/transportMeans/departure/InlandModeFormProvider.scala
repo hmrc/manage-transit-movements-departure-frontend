@@ -19,7 +19,7 @@ package forms.transport.transportMeans.departure
 import javax.inject.Inject
 
 import forms.mappings.Mappings
-import models.InlandMode
+import models.transport.transportMeans.departure.InlandMode
 import play.api.data.Form
 
 class InlandModeFormProvider @Inject() extends Mappings {

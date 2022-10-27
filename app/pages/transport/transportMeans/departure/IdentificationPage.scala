@@ -17,19 +17,19 @@
 package pages.transport.transportMeans.departure
 
 import controllers.transport.transportMeans.departure.routes
-import models.transport.transportMeans.departure.InlandMode
+import models.transport.transportMeans.departure.Identification
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.transport.TransportMeansSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object InlandModePage extends QuestionPage[InlandMode] {
+case object IdentificationPage extends QuestionPage[Identification] {
 
   override def path: JsPath = TransportMeansSection.path \ toString
 
-  override def toString: String = "inlandMode"
+  override def toString: String = "identification"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.InlandModeController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.IdentificationController.onPageLoad(userAnswers.lrn, mode))
 }

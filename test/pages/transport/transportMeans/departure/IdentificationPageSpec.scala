@@ -16,20 +16,17 @@
 
 package pages.transport.transportMeans.departure
 
-import controllers.transport.transportMeans.departure.routes
-import models.transport.transportMeans.departure.InlandMode
-import models.{Mode, UserAnswers}
-import pages.QuestionPage
-import pages.sections.transport.TransportMeansSection
-import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import models.transport.transportMeans.departure.Identification
+import pages.behaviours.PageBehaviours
 
-case object InlandModePage extends QuestionPage[InlandMode] {
+class IdentificationPageSpec extends PageBehaviours {
 
-  override def path: JsPath = TransportMeansSection.path \ toString
+  "IdentificationPage" - {
 
-  override def toString: String = "inlandMode"
+    beRetrievable[Identification](IdentificationPage)
 
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.InlandModeController.onPageLoad(userAnswers.lrn, mode))
+    beSettable[Identification](IdentificationPage)
+
+    beRemovable[Identification](IdentificationPage)
+  }
 }

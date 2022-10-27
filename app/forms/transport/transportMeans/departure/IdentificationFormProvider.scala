@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package pages.transport.transportMeans.departure
+package forms.transport.transportMeans.departure
 
-import models.transport.transportMeans.departure.InlandMode
-import pages.behaviours.PageBehaviours
+import javax.inject.Inject
 
-class InlandModePageSpec extends PageBehaviours {
+import forms.mappings.Mappings
+import play.api.data.Form
+import models.transport.transportMeans.departure.Identification
 
-  "InlandModePage" - {
+class IdentificationFormProvider @Inject() extends Mappings {
 
-    beRetrievable[InlandMode](InlandModePage)
-
-    beSettable[InlandMode](InlandModePage)
-
-    beRemovable[InlandMode](InlandModePage)
-  }
+  def apply(): Form[Identification] =
+    Form(
+      "value" -> enumerable[Identification]("transport.transportMeans.departure.identification.error.required")
+    )
 }

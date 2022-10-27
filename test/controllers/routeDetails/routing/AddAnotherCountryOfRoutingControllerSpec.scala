@@ -21,9 +21,8 @@ import forms.AddAnotherFormProvider
 import generators.Generators
 import models.SecurityDetailsType.NoSecurityDetails
 import models.reference.{Country, CountryCode}
-import models.{CountryList, Index, NormalMode, SecurityDetailsType}
+import models.{Index, NormalMode}
 import navigation.routeDetails.RoutingNavigatorProvider
-import net.bytebuddy.asm.MemberSubstitution.Replacement.Binding
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -36,7 +35,6 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.SessionRepository
 import services.{CountriesService, SecurityAgreementService}
 import viewModels.ListItem
 import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel

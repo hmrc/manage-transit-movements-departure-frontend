@@ -17,78 +17,78 @@
 package controllers.transport.transportMeans.departure
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.transport.transportMeans.departure.InlandModeFormProvider
+import forms.transport.transportMeans.departure.IdentificationFormProvider
 import models.NormalMode
-import models.transport.transportMeans.departure.InlandMode
+import models.transport.transportMeans.departure.Identification
 import navigation.transport.TransportMeansNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.transport.transportMeans.departure.InlandModePage
+import pages.transport.transportMeans.departure.IdentificationPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.transport.transportMeans.departure.InlandModeView
+import views.html.transport.transportMeans.departure.IdentificationView
 
 import scala.concurrent.Future
 
-class InlandModeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class IdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider         = new InlandModeFormProvider()
-  private val form                 = formProvider()
-  private val mode                 = NormalMode
-  private lazy val inlandModeRoute = routes.InlandModeController.onPageLoad(lrn, mode).url
+  private val formProvider             = new IdentificationFormProvider()
+  private val form                     = formProvider()
+  private val mode                     = NormalMode
+  private lazy val identificationRoute = routes.IdentificationController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[TransportMeansNavigatorProvider]).toInstance(fakeTransportMeansNavigatorProvider))
 
-  "InlandMode Controller" - {
+  "Identification Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, inlandModeRoute)
+      val request = FakeRequest(GET, identificationRoute)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[InlandModeView]
+      val view = injector.instanceOf[IdentificationView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, InlandMode.radioItems, mode)(request, messages).toString
+        view(form, lrn, Identification.radioItemsU(emptyUserAnswers), mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(InlandModePage, InlandMode.values.head)
+      val userAnswers = emptyUserAnswers.setValue(IdentificationPage, Identification.values.head)
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, inlandModeRoute)
+      val request = FakeRequest(GET, identificationRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> InlandMode.values.head.toString))
+      val filledForm = form.bind(Map("value" -> Identification.values.head.toString))
 
-      val view = injector.instanceOf[InlandModeView]
+      val view = injector.instanceOf[IdentificationView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, InlandMode.radioItems, mode)(request, messages).toString
+        view(filledForm, lrn, Identification.radioItemsU(userAnswers), mode)(request, messages).toString
     }
 
-    "must redirect to the next page when valid data is submitted" ignore {
+    "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, inlandModeRoute)
-        .withFormUrlEncodedBody(("value", InlandMode.values.head.toString))
+      val request = FakeRequest(POST, identificationRoute)
+        .withFormUrlEncodedBody(("value", Identification.values.head.toString))
 
       val result = route(app, request).value
 
@@ -101,24 +101,24 @@ class InlandModeControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, inlandModeRoute).withFormUrlEncodedBody(("value", "invalid value"))
+      val request   = FakeRequest(POST, identificationRoute).withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[InlandModeView]
+      val view = injector.instanceOf[IdentificationView]
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, InlandMode.radioItems, mode)(request, messages).toString
+        view(boundForm, lrn, Identification.radioItemsU(emptyUserAnswers), mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, inlandModeRoute)
+      val request = FakeRequest(GET, identificationRoute)
 
       val result = route(app, request).value
 
@@ -130,8 +130,8 @@ class InlandModeControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, inlandModeRoute)
-        .withFormUrlEncodedBody(("value", InlandMode.values.head.toString))
+      val request = FakeRequest(POST, identificationRoute)
+        .withFormUrlEncodedBody(("value", Identification.values.head.toString))
 
       val result = route(app, request).value
 
