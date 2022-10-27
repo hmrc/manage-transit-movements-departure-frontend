@@ -27,10 +27,10 @@
     button: Button
 )
 
-@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, arg: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("transport.transportMeans.departure.meansIdentificationNumber.title"),
+    title = messages("transport.transportMeans.departure.meansIdentificationNumber.title", arg),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -42,7 +42,8 @@
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages("transport.transportMeans.departure.meansIdentificationNumber.heading")
+                heading = messages("transport.transportMeans.departure.meansIdentificationNumber.heading", arg),
+                caption = messages("transport.transportMeans.departure.caption")
             ),
             inputClass = InputSize.Width20
         )

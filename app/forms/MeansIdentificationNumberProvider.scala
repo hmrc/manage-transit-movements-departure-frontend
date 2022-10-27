@@ -9,13 +9,13 @@ import play.api.data.Form
 
 class MeansIdentificationNumberProvider @Inject() extends Mappings {
 
-  def apply(prefix: String): Form[String] =
+  def apply(prefix: String, arg: String): Form[String] =
     Form(
-      "value" -> textWithSpacesRemoved(s"$prefix.error.required")
+      "value" -> text(s"$prefix.error.required", arg)
         .verifying(
           forms.StopOnFirstFail[String](
-            regexp(alphaNumericRegex, s"$prefix.error.invalid"),
-            maxLength(identificationNumberLength, s"$prefix.error.length")
+            regexp(alphaNumericRegex, s"$prefix.error.invalid", arg),
+            maxLength(identificationNumberLength, s"$prefix.error.length", arg)
           )
         )
     )
