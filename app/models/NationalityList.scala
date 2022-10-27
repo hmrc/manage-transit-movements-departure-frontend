@@ -14,25 +14,27 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport
+package models
 
-import cats.implicits._
-import models.InlandMode
-import models.domain.{GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.JourneyDomainModel
 import models.reference.Nationality
-import pages.transport.transportMeans.departure.{InlandModePage, VehicleCountryPage}
 
-case class TransportMeansDomain(
-  inlandMode: InlandMode,
-  vehicleCountry: Nationality
-) extends JourneyDomainModel
+case class NationalityList(nationalities: Seq[Nationality]) {
 
-object TransportMeansDomain {
+  def getAll: Seq[Nationality] =
+    nationalities
 
-  implicit val userAnswersReader: UserAnswersReader[TransportMeansDomain] =
-    (
-      InlandModePage.reader,
-      VehicleCountryPage.reader
-    ).tupled.map((TransportMeansDomain.apply _).tupled)
+  def getNationality(code: String): Option[Nationality] =
+    nationalities.find(_.code == code)
+
+  override def equals(obj: Any): Boolean = obj match {
+    case x: NationalityList => x.getAll == getAll
+    case _                  => false
+  }
+
+}
+
+object NationalityList {
+
+  def apply(nationalities: Seq[Nationality]): NationalityList =
+    new NationalityList(nationalities)
 }
