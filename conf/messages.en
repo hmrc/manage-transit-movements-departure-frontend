@@ -1090,6 +1090,8 @@ transport.transportMeans.departure.inlandMode.unknown = Unknown (own propulsion)
 transport.transportMeans.departure.inlandMode.checkYourAnswersLabel = Which inland mode of transport are you using?
 transport.transportMeans.departure.inlandMode.error.required = Select which inland mode of transport you’re using
 
+transport.inlandMode.caption = Transport details - Departure means of transport
+
 transport.transportMeans.departure.meansIdentificationNumber.title = What is the {0}
 transport.transportMeans.departure.meansIdentificationNumber.heading = What is the {0}
 transport.transportMeans.departure.meansIdentificationNumber.hint = This can be up to 35 characters long and include both letters and numbers.
