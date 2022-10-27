@@ -16,17 +16,24 @@
 
 package models.journeyDomain.transport
 
+import cats.implicits.catsSyntaxTuple2Semigroupal
+import models.InlandMode
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
+import pages.transport.transportMeans.departure.{InlandModePage, MeansIdentificationNumberPage}
 import models.transport.transportMeans.departure.InlandMode
 import pages.transport.transportMeans.departure.InlandModePage
 
 case class TransportMeansDomain(
-  inlandMode: InlandMode
+  inlandMode: InlandMode,
+  MeansIdentificationNumber: String
 ) extends JourneyDomainModel
 
 object TransportMeansDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[TransportMeansDomain] =
-    InlandModePage.reader.map(TransportMeansDomain.apply)
+  implicit val userAnswersReader: UserAnswersReader[TransportMeansDomain] = (
+    InlandModePage.reader,
+    MeansIdentificationNumberPage.reader
+  ).tupled.map((TransportMeansDomain.apply _).tupled)
+
 }

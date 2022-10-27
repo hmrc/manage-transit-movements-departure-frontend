@@ -23,7 +23,7 @@ import models.transport.transportMeans.departure.InlandMode
 import InlandMode._
 import org.scalacheck.Gen
 import pages.QuestionPage
-import pages.transport.transportMeans.departure.InlandModePage
+import pages.transport.transportMeans.departure.{InlandModePage, MeansIdentificationNumberPage}
 
 class TransportMeansDomainSpec extends SpecBase with Generators {
 
@@ -45,9 +45,11 @@ class TransportMeansDomainSpec extends SpecBase with Generators {
     "can be parsed from user answers" in {
       val userAnswers = emptyUserAnswers
         .setValue(InlandModePage, inlandMode)
+        .setValue(MeansIdentificationNumberPage, "test")
 
       val expectedResult = TransportMeansDomain(
-        inlandMode = inlandMode
+        inlandMode = inlandMode,
+        MeansIdentificationNumber = "test"
       )
 
       val result: EitherType[TransportMeansDomain] = UserAnswersReader[TransportMeansDomain].run(userAnswers)
@@ -65,12 +67,18 @@ class TransportMeansDomainSpec extends SpecBase with Generators {
 
       "when mandatory page is missing" in {
         val mandatoryPages: Seq[QuestionPage[_]] = Seq(
-          InlandModePage
+          InlandModePage,
+          MeansIdentificationNumberPage
         )
+
+        val userAnswers = emptyUserAnswers
+          .setValue(InlandModePage, inlandMode)
+          .setValue(MeansIdentificationNumberPage, "test")
 
         mandatoryPages.map {
           mandatoryPage =>
-            val result: EitherType[TransportMeansDomain] = UserAnswersReader[TransportMeansDomain].run(emptyUserAnswers)
+            val updatedAnswers                           = userAnswers.removeValue(mandatoryPage)
+            val result: EitherType[TransportMeansDomain] = UserAnswersReader[TransportMeansDomain].run(updatedAnswers)
 
             result.left.value.page mustBe mandatoryPage
         }

@@ -43,9 +43,10 @@
             field = form("value"),
             inputTextType = OrdinaryTextInput(
                 heading = messages("transport.transportMeans.departure.meansIdentificationNumber.heading", arg),
-                caption = messages("transport.transportMeans.departure.caption")
+                caption = Some(messages("transport.transportMeans.departure.caption"))
             ),
-            inputClass = InputSize.Width20
+            inputClass = InputSize.Width20,
+            hint = Some(messages("transport.transportMeans.departure.meansIdentificationNumber.hint"))
         )
 
         @button(attributes = Map("id" -> "submit"))
