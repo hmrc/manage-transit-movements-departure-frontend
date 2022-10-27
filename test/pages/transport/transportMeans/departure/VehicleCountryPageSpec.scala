@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport
+package pages.transport.transportMeans.departure
 
-import cats.implicits._
-import models.InlandMode
-import models.domain.{GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.JourneyDomainModel
 import models.reference.Nationality
-import pages.transport.transportMeans.departure.{InlandModePage, VehicleCountryPage}
+import pages.behaviours.PageBehaviours
 
-case class TransportMeansDomain(
-  inlandMode: InlandMode,
-  vehicleCountry: Nationality
-) extends JourneyDomainModel
+class VehicleCountryPageSpec extends PageBehaviours {
 
-object TransportMeansDomain {
+  "VehicleCountryPage" - {
 
-  implicit val userAnswersReader: UserAnswersReader[TransportMeansDomain] =
-    (
-      InlandModePage.reader,
-      VehicleCountryPage.reader
-    ).tupled.map((TransportMeansDomain.apply _).tupled)
+    beRetrievable[Nationality](VehicleCountryPage)
+
+    beSettable[Nationality](VehicleCountryPage)
+
+    beRemovable[Nationality](VehicleCountryPage)
+  }
 }

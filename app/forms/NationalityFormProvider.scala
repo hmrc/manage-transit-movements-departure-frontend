@@ -14,25 +14,18 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport
+package forms
 
-import cats.implicits._
-import models.InlandMode
-import models.domain.{GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.JourneyDomainModel
+import javax.inject.Inject
+import forms.mappings.Mappings
+import play.api.data.Form
 import models.reference.Nationality
-import pages.transport.transportMeans.departure.{InlandModePage, VehicleCountryPage}
+import models.NationalityList
 
-case class TransportMeansDomain(
-  inlandMode: InlandMode,
-  vehicleCountry: Nationality
-) extends JourneyDomainModel
+class NationalityFormProvider @Inject() extends Mappings {
 
-object TransportMeansDomain {
-
-  implicit val userAnswersReader: UserAnswersReader[TransportMeansDomain] =
-    (
-      InlandModePage.reader,
-      VehicleCountryPage.reader
-    ).tupled.map((TransportMeansDomain.apply _).tupled)
+  def apply(prefix: String, nationalityList: NationalityList): Form[Nationality] =
+    Form(
+      "value" -> nationality(nationalityList, s"$prefix.error.required")
+    )
 }

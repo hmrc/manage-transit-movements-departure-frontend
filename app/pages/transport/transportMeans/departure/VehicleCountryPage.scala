@@ -14,25 +14,22 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport
+package pages.transport.transportMeans.departure
 
-import cats.implicits._
-import models.InlandMode
-import models.domain.{GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.JourneyDomainModel
+import controllers.transport.transportMeans.departure.routes
 import models.reference.Nationality
-import pages.transport.transportMeans.departure.{InlandModePage, VehicleCountryPage}
+import models.{Mode, UserAnswers}
+import pages.QuestionPage
+import pages.sections.transport.TransportMeansSection
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
-case class TransportMeansDomain(
-  inlandMode: InlandMode,
-  vehicleCountry: Nationality
-) extends JourneyDomainModel
+case object VehicleCountryPage extends QuestionPage[Nationality] {
 
-object TransportMeansDomain {
+  override def path: JsPath = TransportMeansSection.path \ toString
 
-  implicit val userAnswersReader: UserAnswersReader[TransportMeansDomain] =
-    (
-      InlandModePage.reader,
-      VehicleCountryPage.reader
-    ).tupled.map((TransportMeansDomain.apply _).tupled)
+  override def toString: String = "vehicleCountry"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.VehicleCountryController.onPageLoad(userAnswers.lrn, mode))
 }

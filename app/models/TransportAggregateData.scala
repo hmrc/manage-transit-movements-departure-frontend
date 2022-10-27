@@ -14,25 +14,14 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport
+package models
 
-import cats.implicits._
-import models.InlandMode
-import models.domain.{GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.JourneyDomainModel
 import models.reference.Nationality
-import pages.transport.transportMeans.departure.{InlandModePage, VehicleCountryPage}
+import play.api.libs.json.{Format, Json}
 
-case class TransportMeansDomain(
-  inlandMode: InlandMode,
-  vehicleCountry: Nationality
-) extends JourneyDomainModel
+case class TransportAggregateData(nationalities: List[Nationality])
 
-object TransportMeansDomain {
+object TransportAggregateData {
 
-  implicit val userAnswersReader: UserAnswersReader[TransportMeansDomain] =
-    (
-      InlandModePage.reader,
-      VehicleCountryPage.reader
-    ).tupled.map((TransportMeansDomain.apply _).tupled)
+  implicit val format: Format[TransportAggregateData] = Json.format[TransportAggregateData]
 }
