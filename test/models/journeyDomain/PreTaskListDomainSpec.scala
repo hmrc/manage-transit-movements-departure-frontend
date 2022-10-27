@@ -75,7 +75,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
                                    |  "TransitOperation": {
                                    |    "declarationType": "$Option4",
                                    |    "security": "$securityDetails",
-                                   |    "LRN": "${emptyUserAnswers.lrn}"
+                                   |    "LRN": "${emptyUserAnswers.lrn}",
+                                   |    "TIRCarnet": "$carnetRef"
                                    |  },
                                    |  "CustomsOfficeOfDeparture": {
                                    |    "referenceNumber": "XI1"

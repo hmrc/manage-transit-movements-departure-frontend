@@ -39,6 +39,4 @@ object DepartureDomain {
       // transportDomain    <- UserAnswersReader[TransportDomain]
     } yield DepartureDomain(preTaskListDomain, routeDetailsDomain)
 //    } yield DepartureDomain(preTaskListDomain, routeDetailsDomain, transportDomain, guaranteeDomain)
-
-//  implicit val format: OFormat[DepartureDomain] = Json.format[DepartureDomain]
 }

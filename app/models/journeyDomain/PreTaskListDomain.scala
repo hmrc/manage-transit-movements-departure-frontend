@@ -74,10 +74,6 @@ object PreTaskListDomain {
       DetailsConfirmedPage.mandatoryReader(identity)
     ).tupled.map((PreTaskListDomain.apply _).tupled)
 
-  // We comment out  the generic json formatter
-  // implicit val format: OFormat[PreTaskListDomain] = Json.format[PreTaskListDomain]
-
-  // We import the libraries required for Json Writes
   import play.api.libs.json._
   import play.api.libs.functional.syntax._
 
@@ -85,7 +81,7 @@ object PreTaskListDomain {
     _ => Json.obj()
   )
 
-  // We write a custom Writes method to restructure our Json
+  // New writes for transformation
   implicit val preTaskWrites: Writes[PreTaskListDomain] = (
     (JsPath \ "TransitOperation" \ "LRN").write[LocalReferenceNumber] and
       (JsPath \ "CustomsOfficeOfDeparture" \ "referenceNumber")
@@ -95,9 +91,42 @@ object PreTaskListDomain {
         ) and
       ignore and
       (JsPath \ "TransitOperation" \ "declarationType").write[DeclarationType] and
-      ignore and
+      (JsPath \ "TransitOperation" \ "TIRCarnet").writeNullable[String] and
       (JsPath \ "TransitOperation" \ "security").write[SecurityDetailsType] and
       ignore
   )(unlift(PreTaskListDomain.unapply))
+
+  // There is more than one way to skin a cat...
+
+//  implicit val preTaskWrites2: Writes[PreTaskListDomain] = (
+//    (__ \ "TransitOperation" \ "LRN").write[LocalReferenceNumber] and
+//      (__ \ "CustomsOfficeOfDeparture" \ "referenceNumber").write[String] and
+//      (__ \ "TransitOperation" \ "declarationType").write[DeclarationType] and
+//      (__ \ "TransitOperation" \ "security").write[SecurityDetailsType]
+//    ).apply {
+//    x: PreTaskListDomain =>
+//      (
+//        x.localReferenceNumber,
+//        x.officeOfDeparture.id,
+//        x.declarationType,
+//        x.securityDetailsType
+//      )
+//  }
+
+//  implicit val preTaskWrites3: Writes[PreTaskListDomain] = Writes {
+//    x: PreTaskListDomain =>
+//      Json.parse(s"""
+//                    |{
+//                    |  "TransitOperation": {
+//                    |    "LRN": ${Json.toJson(x.localReferenceNumber)},
+//                    |    "declarationType": ${Json.toJson(x.declarationType)},
+//                    |    "security": ${Json.toJson(x.securityDetailsType)}
+//                    |  },
+//                    |  "CustomsOfficeOfDeparture": {
+//                    |    "referenceNumber": ${JsString(x.officeOfDeparture.id)}
+//                    |  }
+//                    |}
+//                    |""".stripMargin)
+//  }
 
 }
