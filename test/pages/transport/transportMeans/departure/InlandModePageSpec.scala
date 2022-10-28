@@ -16,7 +16,9 @@
 
 package pages.transport.transportMeans.departure
 
-import models.transport.transportMeans.departure.InlandMode
+import models.reference.Nationality
+import models.transport.transportMeans.departure.{Identification, InlandMode}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class InlandModePageSpec extends PageBehaviours {
@@ -28,5 +30,29 @@ class InlandModePageSpec extends PageBehaviours {
     beSettable[InlandMode](InlandModePage)
 
     beRemovable[InlandMode](InlandModePage)
+
+    "cleanup" - {
+      "when answer changes" - {
+        "must remove identification, identification number and vehicle country" in {
+          forAll(arbitrary[InlandMode]) {
+            inlandMode =>
+              val userAnswers = emptyUserAnswers
+                .setValue(InlandModePage, inlandMode)
+                .setValue(IdentificationPage, arbitrary[Identification].sample.value)
+                .setValue(MeansIdentificationNumberPage, arbitrary[String].sample.value)
+                .setValue(VehicleCountryPage, arbitrary[Nationality].sample.value)
+
+              forAll(arbitrary[InlandMode].retryUntil(_ != inlandMode)) {
+                differentInlandMode =>
+                  val result = userAnswers.setValue(InlandModePage, differentInlandMode)
+
+                  result.get(IdentificationPage) must not be defined
+                  result.get(MeansIdentificationNumberPage) must not be defined
+                  result.get(VehicleCountryPage) must not be defined
+              }
+          }
+        }
+      }
+    }
   }
 }

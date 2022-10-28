@@ -18,7 +18,6 @@ package forms
 
 import forms.Constants.identificationNumberLength
 import forms.behaviours.StringFieldBehaviours
-import models.domain.StringFieldRegex.alphaNumericRegex
 import org.scalacheck.Gen
 import play.api.data.FormError
 

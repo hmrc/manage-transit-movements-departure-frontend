@@ -24,6 +24,8 @@ import pages.sections.transport.TransportMeansSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
+import scala.util.Try
+
 case object InlandModePage extends QuestionPage[InlandMode] {
 
   override def path: JsPath = TransportMeansSection.path \ toString
@@ -32,4 +34,14 @@ case object InlandModePage extends QuestionPage[InlandMode] {
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.InlandModeController.onPageLoad(userAnswers.lrn, mode))
+
+  override def cleanup(updatedValue: Option[InlandMode], previousValue: Option[InlandMode], userAnswers: UserAnswers): Try[UserAnswers] =
+    (updatedValue, previousValue) match {
+      case (Some(x), Some(y)) if x == y => super.cleanup(updatedValue, previousValue, userAnswers)
+      case _ =>
+        userAnswers
+          .remove(IdentificationPage)
+          .flatMap(_.remove(MeansIdentificationNumberPage))
+          .flatMap(_.remove(VehicleCountryPage))
+    }
 }

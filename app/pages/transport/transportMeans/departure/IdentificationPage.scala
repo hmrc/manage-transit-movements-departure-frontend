@@ -24,6 +24,8 @@ import pages.sections.transport.TransportMeansSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
+import scala.util.Try
+
 case object IdentificationPage extends QuestionPage[Identification] {
 
   override def path: JsPath = TransportMeansSection.path \ toString
@@ -32,4 +34,13 @@ case object IdentificationPage extends QuestionPage[Identification] {
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.IdentificationController.onPageLoad(userAnswers.lrn, mode))
+
+  override def cleanup(updatedValue: Option[Identification], previousValue: Option[Identification], userAnswers: UserAnswers): Try[UserAnswers] =
+    (updatedValue, previousValue) match {
+      case (Some(x), Some(y)) if x == y => super.cleanup(updatedValue, previousValue, userAnswers)
+      case _ =>
+        userAnswers
+          .remove(MeansIdentificationNumberPage)
+          .flatMap(_.remove(VehicleCountryPage))
+    }
 }
