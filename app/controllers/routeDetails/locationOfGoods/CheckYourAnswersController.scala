@@ -26,7 +26,7 @@ import viewModels.routeDetails.locationOfGoods.LocationOfGoodsAnswersViewModel.L
 import views.html.routeDetails.locationOfGoods.CheckYourAnswersView
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
@@ -35,7 +35,8 @@ class CheckYourAnswersController @Inject() (
   view: CheckYourAnswersView,
   navigatorProvider: RouteDetailsNavigatorProvider,
   viewModelProvider: LocationOfGoodsAnswersViewModelProvider
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
