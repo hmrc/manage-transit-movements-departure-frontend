@@ -21,7 +21,7 @@ import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
 import models.reference.Nationality
 import models.transport.transportMeans.departure.{Identification, InlandMode}
-import pages.transport.transportMeans.departure.{IdentificationPage, InlandModePage, VehicleCountryPage}
+import pages.transport.transportMeans.departure.{IdentificationPage, InlandModePage, MeansIdentificationNumberPage, VehicleCountryPage}
 
 sealed trait TransportMeansDomain extends JourneyDomainModel {
   val inlandMode: InlandMode
@@ -29,6 +29,8 @@ sealed trait TransportMeansDomain extends JourneyDomainModel {
 
 sealed trait TransportMeansDomainWithIdentification extends TransportMeansDomain {
   val identification: Identification
+  val identificationNumber: String
+  val nationality: Nationality
 }
 
 object TransportMeansDomain {
@@ -46,6 +48,7 @@ case object TransportMeansDomainWithMailInlandMode extends TransportMeansDomain 
 }
 
 case class TransportMeansDomainWithUnknownInlandMode(
+  identificationNumber: String,
   nationality: Nationality
 ) extends TransportMeansDomainWithIdentification {
   override val inlandMode: InlandMode         = InlandMode.Unknown
@@ -55,14 +58,16 @@ case class TransportMeansDomainWithUnknownInlandMode(
 object TransportMeansDomainWithUnknownInlandMode {
 
   implicit val userAnswersReader: UserAnswersReader[TransportMeansDomainWithUnknownInlandMode] =
-    VehicleCountryPage.reader.map(
-      x => TransportMeansDomainWithUnknownInlandMode(x)
-    )
+    (
+      MeansIdentificationNumberPage.reader,
+      VehicleCountryPage.reader
+    ).tupled.map((TransportMeansDomainWithUnknownInlandMode.apply _).tupled)
 }
 
 case class TransportMeansDomainWithAnyOtherInlandMode(
-  override val inlandMode: InlandMode,
-  override val identification: Identification,
+  inlandMode: InlandMode,
+  identification: Identification,
+  identificationNumber: String,
   nationality: Nationality
 ) extends TransportMeansDomainWithIdentification
 
@@ -72,6 +77,7 @@ object TransportMeansDomainWithAnyOtherInlandMode {
     (
       InlandModePage.reader,
       IdentificationPage.reader,
+      MeansIdentificationNumberPage.reader,
       VehicleCountryPage.reader
     ).tupled.map((TransportMeansDomainWithAnyOtherInlandMode.apply _).tupled)
 }

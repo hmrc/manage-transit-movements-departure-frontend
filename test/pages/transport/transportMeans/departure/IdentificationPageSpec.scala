@@ -16,7 +16,9 @@
 
 package pages.transport.transportMeans.departure
 
+import models.reference.Nationality
 import models.transport.transportMeans.departure.Identification
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class IdentificationPageSpec extends PageBehaviours {
@@ -28,5 +30,27 @@ class IdentificationPageSpec extends PageBehaviours {
     beSettable[Identification](IdentificationPage)
 
     beRemovable[Identification](IdentificationPage)
+
+    "cleanup" - {
+      "when answer changes" - {
+        "must remove identification, identification number and vehicle country" in {
+          forAll(arbitrary[Identification]) {
+            identification =>
+              val userAnswers = emptyUserAnswers
+                .setValue(IdentificationPage, identification)
+                .setValue(MeansIdentificationNumberPage, arbitrary[String].sample.value)
+                .setValue(VehicleCountryPage, arbitrary[Nationality].sample.value)
+
+              forAll(arbitrary[Identification].retryUntil(_ != identification)) {
+                differentIdentification =>
+                  val result = userAnswers.setValue(IdentificationPage, differentIdentification)
+
+                  result.get(MeansIdentificationNumberPage) must not be defined
+                  result.get(VehicleCountryPage) must not be defined
+              }
+          }
+        }
+      }
+    }
   }
 }

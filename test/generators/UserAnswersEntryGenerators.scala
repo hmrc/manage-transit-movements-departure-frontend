@@ -19,7 +19,7 @@ package generators
 import models._
 import models.reference._
 import models.traderDetails.representative.RepresentativeCapacity
-import models.transport.transportMeans.departure.InlandMode
+import models.transport.transportMeans.departure.{Identification, InlandMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import play.api.libs.json._
@@ -268,8 +268,10 @@ trait UserAnswersEntryGenerators {
   private def generateTransportMeansAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.transportMeans.departure._
     {
-      case InlandModePage => arbitrary[InlandMode].map(Json.toJson(_))
-
+      case InlandModePage                => arbitrary[InlandMode].map(Json.toJson(_))
+      case IdentificationPage            => arbitrary[Identification].map(Json.toJson(_))
+      case MeansIdentificationNumberPage => Gen.alphaNumStr.map(JsString)
+      case VehicleCountryPage            => arbitrary[Nationality].map(Json.toJson(_))
     }
   }
 }

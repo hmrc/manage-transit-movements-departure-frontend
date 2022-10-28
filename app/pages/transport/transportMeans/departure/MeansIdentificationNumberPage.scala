@@ -17,31 +17,18 @@
 package pages.transport.transportMeans.departure
 
 import controllers.transport.transportMeans.departure.routes
-import models.transport.transportMeans.departure.InlandMode
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.transport.TransportMeansSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-import scala.util.Try
-
-case object InlandModePage extends QuestionPage[InlandMode] {
+case object MeansIdentificationNumberPage extends QuestionPage[String] {
 
   override def path: JsPath = TransportMeansSection.path \ toString
 
-  override def toString: String = "inlandMode"
+  override def toString: String = "meansIdentificationNumber"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.InlandModeController.onPageLoad(userAnswers.lrn, mode))
-
-  override def cleanup(updatedValue: Option[InlandMode], previousValue: Option[InlandMode], userAnswers: UserAnswers): Try[UserAnswers] =
-    (updatedValue, previousValue) match {
-      case (Some(x), Some(y)) if x == y => super.cleanup(updatedValue, previousValue, userAnswers)
-      case _ =>
-        userAnswers
-          .remove(IdentificationPage)
-          .flatMap(_.remove(MeansIdentificationNumberPage))
-          .flatMap(_.remove(VehicleCountryPage))
-    }
+    Some(routes.MeansIdentificationNumberController.onPageLoad(userAnswers.lrn, mode))
 }

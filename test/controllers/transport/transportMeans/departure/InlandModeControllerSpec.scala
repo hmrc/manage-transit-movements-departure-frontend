@@ -81,7 +81,7 @@ class InlandModeControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
         view(filledForm, lrn, InlandMode.radioItems, mode)(request, messages).toString
     }
 
-    "must redirect to the next page when valid data is submitted" ignore {
+    "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
