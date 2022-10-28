@@ -47,10 +47,11 @@ class MeansIdentificationNumberController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
+    //TODO: This will break for unknown inland mode type as it skips identification page
     .andThen(getMandatoryPage(IdentificationPage)) {
       implicit request =>
         val identificationType = request.arg
-        val form               = formProvider("transport.transportMeans.departure.meansIdentificationNumber", identificationType)
+        val form               = formProvider("transport.transportMeans.departure.meansIdentificationNumber", identificationType.arg)
         val preparedForm = request.userAnswers.get(MeansIdentificationNumberPage) match {
           case None        => form
           case Some(value) => form.fill(value)
@@ -64,7 +65,7 @@ class MeansIdentificationNumberController @Inject() (
     .async {
       implicit request =>
         val identificationType = request.arg
-        val form               = formProvider("transport.transportMeans.departure.meansIdentificationNumber", identificationType)
+        val form               = formProvider("transport.transportMeans.departure.meansIdentificationNumber", identificationType.arg)
         form
           .bindFromRequest()
           .fold(

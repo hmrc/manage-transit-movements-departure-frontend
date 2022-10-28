@@ -18,8 +18,10 @@ package models.transport.transportMeans.departure
 
 import models.{RadioModelU, UserAnswers, WithName}
 import pages.transport.transportMeans.departure.InlandModePage
+import play.api.i18n.Messages
 
 sealed trait Identification {
+  def arg(implicit messages: Messages): String = messages(s"${Identification.messageKeyPrefix}.$this.arg")
   val identificationType: Int
 }
 
@@ -86,8 +88,8 @@ object Identification extends RadioModelU[Identification] {
   )
 
   override def valuesU(userAnswers: UserAnswers): Seq[Identification] =
-    userAnswers.get(InlandModePage).map(_.inlandModeType).getOrElse(None) match {
-      case inlandModeType if inlandModeType != 7 => values.filter(_.identificationType.toString.startsWith(inlandModeType.toString))
-      case _                                     => values
+    userAnswers.get(InlandModePage).map(_.inlandModeType) match {
+      case Some(inlandModeType) if inlandModeType != 7 => values.filter(_.identificationType.toString.startsWith(inlandModeType.toString))
+      case _                                           => values
     }
 }

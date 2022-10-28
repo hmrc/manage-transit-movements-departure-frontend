@@ -18,15 +18,15 @@ package controllers.transport.transportMeans.departure
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.MeansIdentificationNumberProvider
+import generators.Generators
 import models.NormalMode
 import models.transport.transportMeans.departure.Identification
 import models.transport.transportMeans.departure.Identification._
-import models.transport.transportMeans.departure.InlandMode.Road
 import navigation.transport.TransportMeansNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalacheck.Gen
-import pages.transport.transportMeans.departure.{IdentificationPage, InlandModePage, MeansIdentificationNumberPage}
+import org.scalacheck.Arbitrary.arbitrary
+import pages.transport.transportMeans.departure.{IdentificationPage, MeansIdentificationNumberPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -35,15 +35,17 @@ import views.html.transport.transportMeans.departure.MeansIdentificationNumberVi
 
 import scala.concurrent.Future
 
-class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val formProvider = new MeansIdentificationNumberProvider()
 
-  val identification: Identification              = RegNumberRoadVehicle
-  private val identificationName                  = identification.toString
+  private val identification: Identification      = arbitrary[Identification].sample.value
+  private val identificationName                  = identification.arg
   private val form                                = formProvider("transport.transportMeans.departure.meansIdentificationNumber", identificationName)
   private val mode                                = NormalMode
   private lazy val meansIdentificationNumberRoute = routes.MeansIdentificationNumberController.onPageLoad(lrn, mode).url
+
+  private val validAnswer = "teststring"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -66,15 +68,14 @@ class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefau
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode, identificationName)(request, messages).toString
+        view(form, lrn, mode, identification)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(InlandModePage, Road)
         .setValue(IdentificationPage, identification)
-        .setValue(MeansIdentificationNumberPage, "test string")
+        .setValue(MeansIdentificationNumberPage, validAnswer)
 
       setExistingUserAnswers(userAnswers)
 
@@ -82,24 +83,27 @@ class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefau
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> "test string"))
+      val filledForm = form.bind(Map("value" -> validAnswer))
 
       val view = injector.instanceOf[MeansIdentificationNumberView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, identificationName)(request, messages).toString
+        view(filledForm, lrn, mode, identification)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      setExistingUserAnswers(emptyUserAnswers)
+      setExistingUserAnswers(
+        emptyUserAnswers
+          .setValue(IdentificationPage, identification)
+      )
 
       val request = FakeRequest(POST, meansIdentificationNumberRoute)
-        .withFormUrlEncodedBody(("value", "test string"))
+        .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
 
@@ -127,7 +131,7 @@ class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefau
       val view = injector.instanceOf[MeansIdentificationNumberView]
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, identificationName)(request, messages).toString() // TODO: Change to correct arg
+        view(filledForm, lrn, mode, identification)(request, messages).toString()
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
@@ -148,7 +152,7 @@ class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefau
       setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, meansIdentificationNumberRoute)
-        .withFormUrlEncodedBody(("value", "test string"))
+        .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
 

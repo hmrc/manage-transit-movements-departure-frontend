@@ -18,6 +18,8 @@ package views.transport.transportMeans.departure
 
 import forms.MeansIdentificationNumberProvider
 import models.NormalMode
+import models.transport.transportMeans.departure.Identification
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -29,7 +31,7 @@ class MeansIdentificationNumberViewSpec extends InputTextViewBehaviours[String] 
 
   override val prefix: String = "transport.transportMeans.departure.meansIdentificationNumber"
 
-  private val identificationType = nonEmptyString.sample.value
+  private val identificationType = arbitrary[Identification].sample.value
 
   override def form: Form[String] = new MeansIdentificationNumberProvider()(prefix)
 
@@ -38,13 +40,13 @@ class MeansIdentificationNumberViewSpec extends InputTextViewBehaviours[String] 
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 
-  behave like pageWithTitle(identificationType)
+  behave like pageWithTitle(identificationType.arg)
 
   behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Transport details - Departure means of transport")
 
-  behave like pageWithHeading(identificationType)
+  behave like pageWithHeading(identificationType.arg)
 
   behave like pageWithHint(
     "This can be up to 35 characters long and include both letters and numbers."

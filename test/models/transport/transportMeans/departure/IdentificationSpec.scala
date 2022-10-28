@@ -19,7 +19,6 @@ package models.transport.transportMeans.departure
 import base.SpecBase
 import generators.Generators
 import models.transport.transportMeans.departure.Identification._
-import models.transport.transportMeans.departure.InlandMode._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -60,12 +59,60 @@ class IdentificationSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
       }
     }
 
+    "must have an associated arg value" - {
+
+      "when sea going vehicle" in {
+        val result = SeaGoingVehicle.arg
+        result mustBe "name of the sea-going vehicle"
+      }
+      "when IATA flight number" in {
+        val result = IataFlightNumber.arg
+        result mustBe "IATA flight number"
+      }
+      "when inland waterways vehicle" in {
+        val result = InlandWaterwaysVehicle.arg
+        result mustBe "name of the inland waterways vehicle"
+      }
+      "when IMO ship identification number" in {
+        val result = ImoShipIdNumber.arg
+        result mustBe "IMO ship identification number"
+      }
+      "when wagon number" in {
+        val result = WagonNumber.arg
+        result mustBe "wagon number"
+      }
+      "when train number" in {
+        val result = TrainNumber.arg
+        result mustBe "train number"
+      }
+      "when reg number of road vehicle" in {
+        val result = RegNumberRoadVehicle.arg
+        result mustBe "registration number of the road vehicle"
+      }
+      "when reg number of road trailer" in {
+        val result = RegNumberRoadTrailer.arg
+        result mustBe "registration number of the road trailer"
+      }
+      "when reg number of aircraft" in {
+        val result = RegNumberAircraft.arg
+        result mustBe "registration number of the aircraft"
+      }
+      "when european vessel identification number" in {
+        val result = EuropeanVesselIdNumber.arg
+        result mustBe "European vessel identification number (ENI code)"
+      }
+      "when unknown" in {
+        val result = Unknown.arg
+        result mustBe "ask gavin what this should be"
+      }
+    }
+
     "Radio options" - {
 
       "Must return the correct number of radios" - {
         "When InlandMode is 'Maritime'" in {
           val answers = emptyUserAnswers
-            .setValue(InlandModePage, Maritime)
+            .setValue(InlandModePage, InlandMode.Maritime)
 
           val radios = Identification.valuesU(answers)
           val expected = Seq(
@@ -78,7 +125,7 @@ class IdentificationSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
 
         "When InlandMode is 'Rail'" in {
           val answers = emptyUserAnswers
-            .setValue(InlandModePage, Rail)
+            .setValue(InlandModePage, InlandMode.Rail)
 
           val radios = Identification.valuesU(answers)
           val expected = Seq(
@@ -91,7 +138,7 @@ class IdentificationSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
 
         "When InlandMode is 'Road'" in {
           val answers = emptyUserAnswers
-            .setValue(InlandModePage, Road)
+            .setValue(InlandModePage, InlandMode.Road)
 
           val radios = Identification.valuesU(answers)
           val expected = Seq(
@@ -104,7 +151,7 @@ class IdentificationSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
 
         "When InlandMode is 'Air'" in {
           val answers = emptyUserAnswers
-            .setValue(InlandModePage, Air)
+            .setValue(InlandModePage, InlandMode.Air)
 
           val radios = Identification.valuesU(answers)
           val expected = Seq(
@@ -117,7 +164,7 @@ class IdentificationSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
 
         "When InlandMode is 'Fixed'" in {
           val answers = emptyUserAnswers
-            .setValue(InlandModePage, Fixed)
+            .setValue(InlandModePage, InlandMode.Fixed)
 
           val radios = Identification.valuesU(answers)
           val expected = Seq(
@@ -139,7 +186,7 @@ class IdentificationSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
 
         "When InlandMode is 'Waterway'" in {
           val answers = emptyUserAnswers
-            .setValue(InlandModePage, Waterway)
+            .setValue(InlandModePage, InlandMode.Waterway)
 
           val radios = Identification.valuesU(answers)
           val expected = Seq(
