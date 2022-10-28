@@ -19,10 +19,12 @@ package controllers.transport.transportMeans.departure
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.MeansIdentificationNumberProvider
+import models.requests.SpecificDataRequestProvider1
+import models.transport.transportMeans.departure.{Identification, InlandMode}
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansNavigatorProvider
-import pages.transport.transportMeans.departure.{IdentificationPage, MeansIdentificationNumberPage}
+import pages.transport.transportMeans.departure.{IdentificationPage, InlandModePage, MeansIdentificationNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -45,35 +47,47 @@ class MeansIdentificationNumberController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  private type Request = SpecificDataRequestProvider1[InlandMode]#SpecificDataRequest[_]
+
+  private def identificationType(implicit request: Request): Option[Identification] = request.arg match {
+    case InlandMode.Unknown => Some(Identification.Unknown)
+    case _                  => request.userAnswers.get(IdentificationPage)
+  }
+
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    //TODO: This will break for unknown inland mode type as it skips identification page
-    .andThen(getMandatoryPage(IdentificationPage)) {
+    .andThen(getMandatoryPage(InlandModePage)) {
       implicit request =>
-        val identificationType = request.arg
-        val form               = formProvider("transport.transportMeans.departure.meansIdentificationNumber", identificationType.arg)
-        val preparedForm = request.userAnswers.get(MeansIdentificationNumberPage) match {
-          case None        => form
-          case Some(value) => form.fill(value)
+        identificationType match {
+          case Some(value) =>
+            val form = formProvider("transport.transportMeans.departure.meansIdentificationNumber", value.arg)
+            val preparedForm = request.userAnswers.get(MeansIdentificationNumberPage) match {
+              case None        => form
+              case Some(value) => form.fill(value)
+            }
+            Ok(view(preparedForm, lrn, mode, value))
+          case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
         }
-        Ok(view(preparedForm, lrn, mode, identificationType))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(IdentificationPage))
+    .andThen(getMandatoryPage(InlandModePage))
     .async {
       implicit request =>
-        val identificationType = request.arg
-        val form               = formProvider("transport.transportMeans.departure.meansIdentificationNumber", identificationType.arg)
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, identificationType))),
-            value => {
-              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              MeansIdentificationNumberPage.writeToUserAnswers(value).writeToSession().navigate()
-            }
-          )
+        identificationType match {
+          case Some(value) =>
+            val form = formProvider("transport.transportMeans.departure.meansIdentificationNumber", value.arg)
+            form
+              .bindFromRequest()
+              .fold(
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, value))),
+                value => {
+                  implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                  MeansIdentificationNumberPage.writeToUserAnswers(value).writeToSession().navigate()
+                }
+              )
+          case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+        }
     }
 }

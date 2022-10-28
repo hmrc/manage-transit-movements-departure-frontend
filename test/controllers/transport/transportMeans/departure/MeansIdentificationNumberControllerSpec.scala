@@ -20,13 +20,13 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.MeansIdentificationNumberProvider
 import generators.Generators
 import models.NormalMode
-import models.transport.transportMeans.departure.Identification
+import models.transport.transportMeans.departure.{Identification, InlandMode}
 import models.transport.transportMeans.departure.Identification._
 import navigation.transport.TransportMeansNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
-import pages.transport.transportMeans.departure.{IdentificationPage, MeansIdentificationNumberPage}
+import pages.transport.transportMeans.departure.{IdentificationPage, InlandModePage, MeansIdentificationNumberPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -39,9 +39,11 @@ class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefau
 
   private val formProvider = new MeansIdentificationNumberProvider()
 
-  private val identification: Identification      = arbitrary[Identification].sample.value
-  private val identificationName                  = identification.arg
-  private val form                                = formProvider("transport.transportMeans.departure.meansIdentificationNumber", identificationName)
+  private val identification: Identification = arbitrary[Identification].sample.value
+  private val inlandMode: InlandMode         = arbitrary[InlandMode].retryUntil(_ != InlandMode.Unknown).sample.value
+
+  private def form(identification: Identification) = formProvider("transport.transportMeans.departure.meansIdentificationNumber", identification.arg)
+
   private val mode                                = NormalMode
   private lazy val meansIdentificationNumberRoute = routes.MeansIdentificationNumberController.onPageLoad(lrn, mode).url
 
@@ -54,43 +56,94 @@ class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefau
 
   "MeansIdentificationNumber Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET" - {
 
-      val userAnswers = emptyUserAnswers.setValue(IdentificationPage, identification)
-      setExistingUserAnswers(userAnswers)
+      "when inland mode is not unknown" in {
 
-      val request = FakeRequest(GET, meansIdentificationNumberRoute)
+        val userAnswers = emptyUserAnswers
+          .setValue(InlandModePage, inlandMode)
+          .setValue(IdentificationPage, identification)
 
-      val result = route(app, request).value
+        setExistingUserAnswers(userAnswers)
 
-      val view = injector.instanceOf[MeansIdentificationNumberView]
+        val request = FakeRequest(GET, meansIdentificationNumberRoute)
 
-      status(result) mustEqual OK
+        val result = route(app, request).value
 
-      contentAsString(result) mustEqual
-        view(form, lrn, mode, identification)(request, messages).toString
+        val view = injector.instanceOf[MeansIdentificationNumberView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form(identification), lrn, mode, identification)(request, messages).toString
+      }
+
+      "when inland mode is unknown" in {
+
+        val userAnswers = emptyUserAnswers
+          .setValue(InlandModePage, InlandMode.Unknown)
+
+        setExistingUserAnswers(userAnswers)
+
+        val request = FakeRequest(GET, meansIdentificationNumberRoute)
+
+        val result = route(app, request).value
+
+        val view = injector.instanceOf[MeansIdentificationNumberView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form(Identification.Unknown), lrn, mode, Identification.Unknown)(request, messages).toString
+      }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must populate the view correctly on a GET when the question has previously been answered" - {
 
-      val userAnswers = emptyUserAnswers
-        .setValue(IdentificationPage, identification)
-        .setValue(MeansIdentificationNumberPage, validAnswer)
+      "when inland mode is not unknown" in {
 
-      setExistingUserAnswers(userAnswers)
+        val userAnswers = emptyUserAnswers
+          .setValue(InlandModePage, inlandMode)
+          .setValue(IdentificationPage, identification)
+          .setValue(MeansIdentificationNumberPage, validAnswer)
 
-      val request = FakeRequest(GET, meansIdentificationNumberRoute)
+        setExistingUserAnswers(userAnswers)
 
-      val result = route(app, request).value
+        val request = FakeRequest(GET, meansIdentificationNumberRoute)
 
-      val filledForm = form.bind(Map("value" -> validAnswer))
+        val result = route(app, request).value
 
-      val view = injector.instanceOf[MeansIdentificationNumberView]
+        val filledForm = form(identification).bind(Map("value" -> validAnswer))
 
-      status(result) mustEqual OK
+        val view = injector.instanceOf[MeansIdentificationNumberView]
 
-      contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, identification)(request, messages).toString
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(filledForm, lrn, mode, identification)(request, messages).toString
+      }
+
+      "when inland mode is unknown" in {
+
+        val userAnswers = emptyUserAnswers
+          .setValue(InlandModePage, InlandMode.Unknown)
+          .setValue(MeansIdentificationNumberPage, validAnswer)
+
+        setExistingUserAnswers(userAnswers)
+
+        val request = FakeRequest(GET, meansIdentificationNumberRoute)
+
+        val result = route(app, request).value
+
+        val filledForm = form(Identification.Unknown).bind(Map("value" -> validAnswer))
+
+        val view = injector.instanceOf[MeansIdentificationNumberView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(filledForm, lrn, mode, Identification.Unknown)(request, messages).toString
+      }
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -99,6 +152,7 @@ class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefau
 
       setExistingUserAnswers(
         emptyUserAnswers
+          .setValue(InlandModePage, inlandMode)
           .setValue(IdentificationPage, identification)
       )
 
@@ -112,53 +166,117 @@ class MeansIdentificationNumberControllerSpec extends SpecBase with AppWithDefau
       redirectLocation(result).value mustEqual onwardRoute.url
     }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+    "must return a Bad Request and errors when invalid data is submitted" - {
 
-      setExistingUserAnswers(
-        emptyUserAnswers
+      "when identification is not unknown" in {
+
+        val userAnswers = emptyUserAnswers
+          .setValue(InlandModePage, inlandMode)
           .setValue(IdentificationPage, identification)
-      )
 
-      val invalidAnswer = ""
+        setExistingUserAnswers(userAnswers)
 
-      val request    = FakeRequest(POST, meansIdentificationNumberRoute).withFormUrlEncodedBody(("value", ""))
-      val filledForm = form.bind(Map("value" -> invalidAnswer))
+        val invalidAnswer = ""
 
-      val result = route(app, request).value
+        val request    = FakeRequest(POST, meansIdentificationNumberRoute).withFormUrlEncodedBody(("value", ""))
+        val filledForm = form(identification).bind(Map("value" -> invalidAnswer))
 
-      status(result) mustEqual BAD_REQUEST
+        val result = route(app, request).value
 
-      val view = injector.instanceOf[MeansIdentificationNumberView]
+        status(result) mustEqual BAD_REQUEST
 
-      contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, identification)(request, messages).toString()
+        val view = injector.instanceOf[MeansIdentificationNumberView]
+
+        contentAsString(result) mustEqual
+          view(filledForm, lrn, mode, identification)(request, messages).toString()
+      }
+
+      "when identification is unknown" in {
+
+        val userAnswers = emptyUserAnswers
+          .setValue(InlandModePage, InlandMode.Unknown)
+
+        setExistingUserAnswers(userAnswers)
+
+        val invalidAnswer = ""
+
+        val request    = FakeRequest(POST, meansIdentificationNumberRoute).withFormUrlEncodedBody(("value", invalidAnswer))
+        val filledForm = form(Identification.Unknown).bind(Map("value" -> invalidAnswer))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual BAD_REQUEST
+
+        val view = injector.instanceOf[MeansIdentificationNumberView]
+
+        contentAsString(result) mustEqual
+          view(filledForm, lrn, mode, Identification.Unknown)(request, messages).toString()
+      }
     }
 
-    "must redirect to Session Expired for a GET if no existing data is found" in {
+    "must redirect to Session Expired for a GET" - {
 
-      setNoExistingUserAnswers()
+      "when no existing data is found" in {
 
-      val request = FakeRequest(GET, meansIdentificationNumberRoute)
+        setNoExistingUserAnswers()
 
-      val result = route(app, request).value
+        val request = FakeRequest(GET, meansIdentificationNumberRoute)
 
-      status(result) mustEqual SEE_OTHER
+        val result = route(app, request).value
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
+
+      "when inland mode is not unknown but identification type is missing" in {
+
+        val userAnswers = emptyUserAnswers
+          .setValue(InlandModePage, inlandMode)
+        setExistingUserAnswers(userAnswers)
+
+        val request = FakeRequest(GET, meansIdentificationNumberRoute)
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
+
     }
 
-    "must redirect to Session Expired for a POST if no existing data is found" in {
+    "must redirect to Session Expired for a POST" - {
 
-      setNoExistingUserAnswers()
+      "when no existing data is found" in {
 
-      val request = FakeRequest(POST, meansIdentificationNumberRoute)
-        .withFormUrlEncodedBody(("value", validAnswer))
+        setNoExistingUserAnswers()
 
-      val result = route(app, request).value
+        val request = FakeRequest(POST, meansIdentificationNumberRoute)
+          .withFormUrlEncodedBody(("value", validAnswer))
 
-      status(result) mustEqual SEE_OTHER
+        val result = route(app, request).value
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
+
+      "when inland mode is not unknown but identification type is missing" in {
+
+        val userAnswers = emptyUserAnswers
+          .setValue(InlandModePage, inlandMode)
+        setExistingUserAnswers(userAnswers)
+
+        val request = FakeRequest(POST, meansIdentificationNumberRoute)
+          .withFormUrlEncodedBody(("value", validAnswer))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
     }
   }
 }
