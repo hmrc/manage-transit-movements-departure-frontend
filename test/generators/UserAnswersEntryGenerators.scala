@@ -19,9 +19,9 @@ package generators
 import models._
 import models.reference._
 import models.traderDetails.representative.RepresentativeCapacity
+import models.transport.transportMeans.departure.{Identification, InlandMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.transport.preRequisites.{CountryOfDispatchPage, ItemsDestinationCountryPage, TransportedToSameCountryYesNoPage, UniqueConsignmentReferencePage}
 import play.api.libs.json._
 import queries.Gettable
 
@@ -250,17 +250,28 @@ trait UserAnswersEntryGenerators {
   }
 
   private def generateTransportAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
-    generatePreRequisitesAnswer
+    generatePreRequisitesAnswer orElse
+      generateTransportMeansAnswer
 
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.transport.preRequisites.SameUcrYesNoPage
+    import pages.transport.preRequisites._
     {
       case SameUcrYesNoPage                  => arbitrary[Boolean].map(JsBoolean)
       case UniqueConsignmentReferencePage    => Gen.alphaNumStr.map(JsString)
       case CountryOfDispatchPage             => arbitrary[Country].map(Json.toJson(_))
       case TransportedToSameCountryYesNoPage => arbitrary[Boolean].map(JsBoolean)
       case ItemsDestinationCountryPage       => arbitrary[Country].map(Json.toJson(_))
+      case ContainerIndicatorPage            => arbitrary[Boolean].map(JsBoolean)
     }
   }
 
+  private def generateTransportMeansAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.transportMeans.departure._
+    {
+      case InlandModePage                => arbitrary[InlandMode].map(Json.toJson(_))
+      case IdentificationPage            => arbitrary[Identification].map(Json.toJson(_))
+      case MeansIdentificationNumberPage => Gen.alphaNumStr.map(JsString)
+      case VehicleCountryPage            => arbitrary[Nationality].map(Json.toJson(_))
+    }
+  }
 }

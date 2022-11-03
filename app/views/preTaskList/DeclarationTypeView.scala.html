@@ -17,6 +17,8 @@
 @import controllers.preTaskList.routes
 @import views.html.components.{Button, ErrorSummary, InputRadio}
 @import models.{LocalReferenceNumber, DeclarationType}
+@import viewModels.components.InputRadioViewModel
+@import viewModels.components.InputRadioViewModel._
 
 @this(
     mainTemplate: MainTemplate,
@@ -40,7 +42,7 @@
 
         @inputRadio(
             field = form("value"),
-            legend = messages("declarationType.heading"),
+            radioType = Radio(heading = messages("declarationType.heading")),
             radioItems = fieldId => radios(fieldId, form.value)
         )
 

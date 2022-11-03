@@ -17,7 +17,7 @@
 package generators
 
 import models.UserAnswers
-import models.journeyDomain.transport.{PreRequisitesDomain, TransportDomain}
+import models.journeyDomain.transport.{PreRequisitesDomain, TransportDomain, TransportMeansDomain}
 import org.scalacheck.Gen
 
 trait TransportUserAnswersGenerator extends UserAnswersGenerator {
@@ -28,4 +28,7 @@ trait TransportUserAnswersGenerator extends UserAnswersGenerator {
 
   def arbitraryPreRequisitesAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[PreRequisitesDomain](userAnswers)
+
+  def arbitraryTransportMeansAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[TransportMeansDomain](userAnswers)
 }
