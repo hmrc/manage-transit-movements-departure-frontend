@@ -1059,7 +1059,7 @@ transport.preRequisites.itemsDestinationCountry.title = What country are the ite
 transport.preRequisites.itemsDestinationCountry.heading = What country are the items being transported to?
 transport.preRequisites.itemsDestinationCountry.hint = Enter the country, like France or Portugal.
 transport.preRequisites.itemsDestinationCountry.placeholder = Select a country
-transport.preRequisites.itemsDestinationCountry.checkYourAnswersLabel = What country are the items being transported to
+transport.preRequisites.itemsDestinationCountry.checkYourAnswersLabel = What country are the items being transported to?
 transport.preRequisites.itemsDestinationCountry.error.required = Enter the country the items are being transported to
 
 transport.preRequisites.containerIndicator.title = Are you using any containers?
@@ -1073,3 +1073,64 @@ transport.preRequisites.containerIndicator.paragraph = This can be any container
 declarationSubmitted.title = Declaration Submitted
 declarationSubmitted.heading = Declaration Submitted
 declarationSubmitted.paragraph1 = You have submitted your declaration.
+
+transport.inlandMode.caption = Transport details - Inland mode of transport
+transport.departureMeansOfTransport.caption = Transport details - Departure means of transport
+
+transport.transportMeans.departure.inlandMode.title = Which inland mode of transport are you using?
+transport.transportMeans.departure.inlandMode.heading = Which inland mode of transport are you using?
+transport.transportMeans.departure.inlandMode.paragraph = This is the type of transport used from the UK office of departure to a UK port or airport.
+transport.transportMeans.departure.inlandMode.maritime = Maritime
+transport.transportMeans.departure.inlandMode.rail = Rail
+transport.transportMeans.departure.inlandMode.road = Road
+transport.transportMeans.departure.inlandMode.air = Air
+transport.transportMeans.departure.inlandMode.mail = Mail (active mode of transport unknown)
+transport.transportMeans.departure.inlandMode.fixed = Fixed transport installations - pipelines or electric power lines used for the continuous transport of goods
+transport.transportMeans.departure.inlandMode.waterway = Inland waterway
+transport.transportMeans.departure.inlandMode.unknown = Unknown (own propulsion)
+transport.transportMeans.departure.inlandMode.checkYourAnswersLabel = Which inland mode of transport are you using?
+transport.transportMeans.departure.inlandMode.error.required = Select which inland mode of transport you’re using
+
+transport.transportMeans.departure.identification.title = Which identification do you want to use for this vehicle?
+transport.transportMeans.departure.identification.heading = Which identification do you want to use for this vehicle?
+transport.transportMeans.departure.identification.seaGoingVehicle = Name of a sea-going vehicle
+transport.transportMeans.departure.identification.seaGoingVehicle.arg = name of the sea-going vehicle
+transport.transportMeans.departure.identification.iataFlightNumber = IATA flight number
+transport.transportMeans.departure.identification.iataFlightNumber.arg = IATA flight number
+transport.transportMeans.departure.identification.inlandWaterwaysVehicle = Name of an inland waterways vehicle
+transport.transportMeans.departure.identification.inlandWaterwaysVehicle.arg = name of the inland waterways vehicle
+transport.transportMeans.departure.identification.imoShipIdNumber = IMO ship identification number
+transport.transportMeans.departure.identification.imoShipIdNumber.arg = IMO ship identification number
+transport.transportMeans.departure.identification.wagonNumber = Wagon number
+transport.transportMeans.departure.identification.wagonNumber.arg = wagon number
+transport.transportMeans.departure.identification.trainNumber = Train number
+transport.transportMeans.departure.identification.trainNumber.arg = train number
+transport.transportMeans.departure.identification.regNumberRoadVehicle = Registration number of a road vehicle
+transport.transportMeans.departure.identification.regNumberRoadVehicle.arg = registration number of the road vehicle
+transport.transportMeans.departure.identification.regNumberRoadTrailer = Registration number of a road trailer
+transport.transportMeans.departure.identification.regNumberRoadTrailer.arg = registration number of the road trailer
+transport.transportMeans.departure.identification.regNumberAircraft = Registration number of an aircraft
+transport.transportMeans.departure.identification.regNumberAircraft.arg = registration number of the aircraft
+transport.transportMeans.departure.identification.europeanVesselIdNumber = European vessel identification number (ENI code)
+transport.transportMeans.departure.identification.europeanVesselIdNumber.arg = European vessel identification number (ENI code)
+transport.transportMeans.departure.identification.unknown = Unknown - this can only be used during the transitional period
+# TODO: Ask Gavin for content for unknown identification type
+transport.transportMeans.departure.identification.unknown.arg = ask gavin what this should be
+transport.transportMeans.departure.identification.checkYourAnswersLabel = Which identification do you want to use for this vehicle?
+transport.transportMeans.departure.identification.error.required = Select which identification you want to use for this vehicle
+
+transport.transportMeans.departure.meansIdentificationNumber.title = What is the {0}?
+transport.transportMeans.departure.meansIdentificationNumber.heading = What is the {0}?
+transport.transportMeans.departure.meansIdentificationNumber.hint = This can be up to 35 characters long and include both letters and numbers.
+transport.transportMeans.departure.meansIdentificationNumber.checkYourAnswersLabel = Identification number
+transport.transportMeans.departure.meansIdentificationNumber.error.required = Enter the {0}
+transport.transportMeans.departure.meansIdentificationNumber.error.invalid = The {0} must only include letters a to z and numbers 0 to 9
+transport.transportMeans.departure.meansIdentificationNumber.error.length = The {0} must be 35 characters or less
+
+transport.transportMeans.departure.vehicleCountry.title = What country is this vehicle registered to?
+transport.transportMeans.departure.vehicleCountry.heading = What country is this vehicle registered to?
+transport.transportMeans.departure.vehicleCountry.hint = Enter the country or code, like AT or Austria.
+transport.transportMeans.departure.vehicleCountry.placeholder = Select a nationality
+transport.transportMeans.departure.vehicleCountry.change.hidden = the country the vehicle is registered to
+transport.transportMeans.departure.vehicleCountry.checkYourAnswersLabel = What country is this vehicle registered to?
+transport.transportMeans.departure.vehicleCountry.error.required = Select the country the vehicle is registered to

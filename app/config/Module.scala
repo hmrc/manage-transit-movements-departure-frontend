@@ -46,6 +46,7 @@ class Module extends AbstractModule {
     bind(classOf[LoadingAndUnloadingNavigatorProvider]).to(classOf[LoadingAndUnloadingNavigatorProviderImpl])
 
     bind(classOf[PreRequisitesNavigatorProvider]).to(classOf[PreRequisitesNavigatorProviderImpl])
+    bind(classOf[TransportMeansNavigatorProvider]).to(classOf[TransportMeansNavigatorProviderImpl])
 
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])

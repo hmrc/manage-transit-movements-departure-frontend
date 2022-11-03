@@ -21,6 +21,7 @@ import models.GuaranteeType._
 import models._
 import models.domain.StringFieldRegex.{coordinatesLatitudeMaxRegex, coordinatesLongitudeMaxRegex}
 import models.reference._
+import models.transport.transportMeans.departure.InlandMode
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import wolfendale.scalacheck.regexp.RegexpGen
@@ -28,9 +29,24 @@ import wolfendale.scalacheck.regexp.RegexpGen
 trait ModelGenerators {
   self: Generators =>
 
-  implicit lazy val arbitraryLocationType: Arbitrary[models.LocationType] =
+  implicit lazy val arbitraryIdentification: Arbitrary[models.transport.transportMeans.departure.Identification] =
     Arbitrary {
-      Gen.oneOf(models.LocationType.values)
+      Gen.oneOf(models.transport.transportMeans.departure.Identification.values)
+    }
+
+  implicit lazy val arbitraryInlandMode: Arbitrary[InlandMode] =
+    Arbitrary {
+      Gen.oneOf(InlandMode.values)
+    }
+
+  lazy val arbitraryNonMailOrUnknownInlandMode: Arbitrary[InlandMode] =
+    Arbitrary {
+      Gen.oneOf(InlandMode.values.filterNot(_ == InlandMode.Mail).filterNot(_ == InlandMode.Unknown))
+    }
+
+  implicit lazy val arbitraryLocationType: Arbitrary[LocationType] =
+    Arbitrary {
+      Gen.oneOf(LocationType.values)
     }
 
   implicit lazy val arbitraryLocationOfGoodsIdentification: Arbitrary[LocationOfGoodsIdentification] =
@@ -259,6 +275,14 @@ trait ModelGenerators {
         unLocodeExtendedCode <- nonEmptyString
         name                 <- nonEmptyString
       } yield UnLocode(unLocodeExtendedCode, name)
+    }
+
+  implicit lazy val arbitraryNationality: Arbitrary[Nationality] =
+    Arbitrary {
+      for {
+        code <- nonEmptyString
+        desc <- nonEmptyString
+      } yield Nationality(code, desc)
     }
 
 }
