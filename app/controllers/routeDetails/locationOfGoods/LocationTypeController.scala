@@ -18,7 +18,7 @@ package controllers.routeDetails.locationOfGoods
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.locationOfGoods.LocationTypeFormProvider
+import forms.EnumerableFormProvider
 import models.requests.DataRequest
 import models.{LocalReferenceNumber, LocationType, Mode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
@@ -37,14 +37,14 @@ class LocationTypeController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: LocationOfGoodsNavigatorProvider,
   actions: Actions,
-  formProvider: LocationTypeFormProvider,
+  formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: LocationTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider[LocationType]("routeDetails.locationOfGoods.locationType")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn) {

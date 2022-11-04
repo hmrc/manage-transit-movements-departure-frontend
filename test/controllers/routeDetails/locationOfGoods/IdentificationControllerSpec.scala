@@ -17,7 +17,7 @@
 package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.locationOfGoods.IdentificationFormProvider
+import forms.EnumerableFormProvider
 import models.{LocationOfGoodsIdentification, NormalMode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
@@ -33,8 +33,8 @@ import scala.concurrent.Future
 
 class IdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider             = new IdentificationFormProvider()
-  private val form                     = formProvider()
+  private val formProvider             = new EnumerableFormProvider()
+  private val form                     = formProvider[LocationOfGoodsIdentification]("routeDetails.locationOfGoods.identification")
   private val mode                     = NormalMode
   private lazy val identificationRoute = routes.IdentificationController.onPageLoad(lrn, mode).url
 

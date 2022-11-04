@@ -18,7 +18,7 @@ package controllers.transport.transportMeans.departure
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.transport.transportMeans.departure.InlandModeFormProvider
+import forms.EnumerableFormProvider
 import models.transport.transportMeans.departure.InlandMode
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
@@ -38,14 +38,14 @@ class InlandModeController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: TransportMeansNavigatorProvider,
   actions: Actions,
-  formProvider: InlandModeFormProvider,
+  formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: InlandModeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider[InlandMode]("transport.transportMeans.departure.inlandMode")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

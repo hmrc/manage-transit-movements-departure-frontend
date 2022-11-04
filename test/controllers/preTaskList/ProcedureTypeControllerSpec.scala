@@ -17,7 +17,7 @@
 package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.preTaskList.ProcedureTypeFormProvider
+import forms.EnumerableFormProvider
 import models.{NormalMode, ProcedureType}
 import navigation.PreTaskListNavigatorProvider
 import org.mockito.ArgumentMatchers.any
@@ -38,8 +38,8 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
   private lazy val procedureTypeRoute =
     routes.ProcedureTypeController.onPageLoad(lrn, mode).url
 
-  private val formProvider = new ProcedureTypeFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new EnumerableFormProvider()
+  private val form         = formProvider[ProcedureType]("procedureType")
   private val validAnswer  = ProcedureType.values.head
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =

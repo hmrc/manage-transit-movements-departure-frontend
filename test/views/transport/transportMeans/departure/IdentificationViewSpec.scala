@@ -16,7 +16,7 @@
 
 package views.transport.transportMeans.departure
 
-import forms.transport.transportMeans.departure.IdentificationFormProvider
+import forms.EnumerableFormProvider
 import models.NormalMode
 import models.transport.transportMeans.departure.Identification
 import play.api.data.Form
@@ -27,7 +27,7 @@ import views.html.transport.transportMeans.departure.IdentificationView
 
 class IdentificationViewSpec extends RadioViewBehaviours[Identification] {
 
-  override def form: Form[Identification] = new IdentificationFormProvider()()
+  override def form: Form[Identification] = new EnumerableFormProvider()(prefix)
 
   override def applyView(form: Form[Identification]): HtmlFormat.Appendable =
     injector.instanceOf[IdentificationView].apply(form, lrn, Identification.radioItems, NormalMode)(fakeRequest, messages)
