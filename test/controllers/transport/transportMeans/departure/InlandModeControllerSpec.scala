@@ -17,7 +17,7 @@
 package controllers.transport.transportMeans.departure
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.transport.transportMeans.departure.InlandModeFormProvider
+import forms.EnumerableFormProvider
 import models.NormalMode
 import models.transport.transportMeans.departure.InlandMode
 import navigation.transport.TransportMeansNavigatorProvider
@@ -34,8 +34,8 @@ import scala.concurrent.Future
 
 class InlandModeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider         = new InlandModeFormProvider()
-  private val form                 = formProvider()
+  private val formProvider         = new EnumerableFormProvider()
+  private val form                 = formProvider[InlandMode]("transport.transportMeans.departure.inlandMode")
   private val mode                 = NormalMode
   private lazy val inlandModeRoute = routes.InlandModeController.onPageLoad(lrn, mode).url
 

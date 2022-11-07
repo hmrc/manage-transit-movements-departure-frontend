@@ -16,7 +16,7 @@
 
 package views.traderDetails.representative
 
-import forms.traderDetails.representative.RepresentativeCapacityFormProvider
+import forms.EnumerableFormProvider
 import models.NormalMode
 import models.traderDetails.representative.RepresentativeCapacity
 import play.api.data.Form
@@ -27,7 +27,7 @@ import views.html.traderDetails.representative.CapacityView
 
 class CapacityViewSpec extends RadioViewBehaviours[RepresentativeCapacity] {
 
-  override def form: Form[RepresentativeCapacity] = new RepresentativeCapacityFormProvider()()
+  override def form: Form[RepresentativeCapacity] = new EnumerableFormProvider()(prefix)
 
   override def applyView(form: Form[RepresentativeCapacity]): HtmlFormat.Appendable =
     injector.instanceOf[CapacityView].apply(form, lrn, RepresentativeCapacity.radioItems, NormalMode)(fakeRequest, messages)

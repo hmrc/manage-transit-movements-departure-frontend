@@ -16,7 +16,7 @@
 
 package views.routeDetails.locationOfGoods
 
-import forms.locationOfGoods.IdentificationFormProvider
+import forms.EnumerableFormProvider
 import models.{LocationOfGoodsIdentification, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -26,7 +26,7 @@ import views.html.routeDetails.locationOfGoods.IdentificationView
 
 class IdentificationViewSpec extends RadioViewBehaviours[LocationOfGoodsIdentification] {
 
-  override def form: Form[LocationOfGoodsIdentification] = new IdentificationFormProvider()()
+  override def form: Form[LocationOfGoodsIdentification] = new EnumerableFormProvider()(prefix)
 
   override def applyView(form: Form[LocationOfGoodsIdentification]): HtmlFormat.Appendable =
     injector.instanceOf[IdentificationView].apply(form, lrn, LocationOfGoodsIdentification.radioItems, NormalMode)(fakeRequest, messages)
