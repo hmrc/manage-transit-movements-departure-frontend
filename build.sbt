@@ -3,6 +3,7 @@ import sbt.Def
 import scoverage.ScoverageKeys
 import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
+import java.io.File
 
 lazy val appName: String = "manage-transit-movements-departure-frontend"
 
@@ -10,6 +11,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 lazy val root = (project in file("."))
   .enablePlugins(
+    ScalaxbPlugin,
     PlayScala,
     SbtAutoBuildPlugin,
     SbtDistributablesPlugin
@@ -25,6 +27,10 @@ lazy val root = (project in file("."))
   .settings(scalaVersion := "2.13.8")
   .settings(headerSettings(A11yTest): _*)
   .settings(automateHeaderSettings(A11yTest))
+  .settings(
+    Compile / scalaxb / scalaxbXsdSource := new File("./conf/xsd"),
+    Compile / scalaxb / scalaxbDispatchVersion := "1.1.3",
+    Compile / scalaxb / scalaxbPackageName := "generated")
   .settings(
     name := appName,
     RoutesKeys.routesImport ++= Seq("models._", "models.OptionBinder._"),
