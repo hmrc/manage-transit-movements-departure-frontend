@@ -35,10 +35,11 @@ object Conversions {
     CC004CType(m1, to, cod, holder)
   }
 
+  // We start to run into problems writing json for the generated types
   implicit val XMLGregorianCalendarTypeJsonFormat = Json.format[XMLGregorianCalendar]
   implicit val transitOperationTypeJsonFormat     = Json.format[TransitOperationType06]
 
-  def transitOperationType(preTaskListDomain: PreTaskListDomain): TransitOperationType06 = {
+  def transitOperationType(preTaskListDomain: PreTaskListDomain): TransitOperationType06 =
     // TransitOperationType06 is not the correct node. It should be `TransitOperation`. Does this mean we need a custom writes?
     TransitOperationType06(
       preTaskListDomain.localReferenceNumber.value,
@@ -53,6 +54,5 @@ object Conversions {
       Number1, // This is true? Need to translate booleans to this Flag type
       None // Dates need to be XML Gregorian
     )
-  }
 
 }
