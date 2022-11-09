@@ -24,6 +24,7 @@ import javax.xml.datatype.{DatatypeFactory, XMLGregorianCalendar}
 
 object ApiXmlHelpers {
 
+  // TODO - there is likely a more streamlined way of doing this
   def dateToXMLGregorian(dateTime: DateTime): Option[XMLGregorianCalendar] =
     Some(
       DatatypeFactory
