@@ -17,42 +17,36 @@
 package api
 
 import generated._
+import models.DateTime
 import models.journeyDomain.PreTaskListDomain
-import play.api.libs.json.Json
 
-import javax.xml.datatype.XMLGregorianCalendar
-import scala.xml.NamespaceBinding
+import java.time.LocalDateTime
 
 object Conversions {
 
-  def cc004CType(preTaskListDomain: PreTaskListDomain): CC004CType = {
-    // map these elements from preTaskListDomain
-    val m1: MESSAGESequence                       = ???
-    val to: TransitOperationType01                = ???
-    val cod: CustomsOfficeOfDepartureType03       = ???
-    val holder: HolderOfTheTransitProcedureType20 = ???
+  // TODO - we do not need to rely on the domain models here. We could pass in the cache directly (user answers)?
+  def transitOperation(preTaskListDomain: PreTaskListDomain): TransitOperationType06 = {
 
-    CC004CType(m1, to, cod, holder)
-  }
+    // TODO - Some test data not in the preTaskListDomain model (get from the cache down the line)
+    val reducedDatasetIndicator           = false
+    val bindingItinerary                  = true
+    val localDateTime                     = LocalDateTime.of(2022, 1, 1, 20, 41, 0)
+    val presentationOfTheGoodsDateAndTime = DateTime(localDateTime.toLocalDate, localDateTime.toLocalTime)
+    val limitDate                         = DateTime(localDateTime.toLocalDate, localDateTime.toLocalTime)
 
-  // We start to run into problems writing json for the generated types
-  implicit val XMLGregorianCalendarTypeJsonFormat = Json.format[XMLGregorianCalendar]
-  implicit val transitOperationTypeJsonFormat     = Json.format[TransitOperationType06]
-
-  def transitOperationType(preTaskListDomain: PreTaskListDomain): TransitOperationType06 =
-    // TransitOperationType06 is not the correct node. It should be `TransitOperation`. Does this mean we need a custom writes?
     TransitOperationType06(
       preTaskListDomain.localReferenceNumber.value,
       preTaskListDomain.declarationType.toString,
       "A",
       preTaskListDomain.tirCarnetReference,
-      None, // Dates need to be XML Gregorian
-      preTaskListDomain.securityDetailsType.toString,
-      Number0, // This is false? Need to translate booleans to this Flag type
+      ApiXmlHelpers.dateToXMLGregorian(presentationOfTheGoodsDateAndTime),
+      preTaskListDomain.securityDetailsType.securityContentType.toString,
+      ApiXmlHelpers.boolToFlag(reducedDatasetIndicator),
       None,
       None,
-      Number1, // This is true? Need to translate booleans to this Flag type
-      None // Dates need to be XML Gregorian
+      ApiXmlHelpers.boolToFlag(bindingItinerary),
+      ApiXmlHelpers.dateToXMLGregorian(limitDate)
     )
+  }
 
 }
