@@ -18,6 +18,10 @@ package api
 
 import generated._
 import models.journeyDomain.PreTaskListDomain
+import play.api.libs.json.Json
+
+import javax.xml.datatype.XMLGregorianCalendar
+import scala.xml.NamespaceBinding
 
 object Conversions {
 
@@ -29,6 +33,26 @@ object Conversions {
     val holder: HolderOfTheTransitProcedureType20 = ???
 
     CC004CType(m1, to, cod, holder)
+  }
+
+  implicit val XMLGregorianCalendarTypeJsonFormat = Json.format[XMLGregorianCalendar]
+  implicit val transitOperationTypeJsonFormat     = Json.format[TransitOperationType06]
+
+  def transitOperationType(preTaskListDomain: PreTaskListDomain): TransitOperationType06 = {
+    // TransitOperationType06 is not the correct node. It should be `TransitOperation`. Does this mean we need a custom writes?
+    TransitOperationType06(
+      preTaskListDomain.localReferenceNumber.value,
+      preTaskListDomain.declarationType.toString,
+      "A",
+      preTaskListDomain.tirCarnetReference,
+      None, // Dates need to be XML Gregorian
+      preTaskListDomain.securityDetailsType.toString,
+      Number0, // This is false? Need to translate booleans to this Flag type
+      None,
+      None,
+      Number1, // This is true? Need to translate booleans to this Flag type
+      None // Dates need to be XML Gregorian
+    )
   }
 
 }
