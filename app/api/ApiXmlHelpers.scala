@@ -24,8 +24,21 @@ import javax.xml.datatype.{DatatypeFactory, XMLGregorianCalendar}
 
 object ApiXmlHelpers {
 
-  // TODO - there is likely a more streamlined way of doing this
+  // TODO - Need formatters for these dates to match schema regex
   def dateToXMLGregorian(dateTime: DateTime): Option[XMLGregorianCalendar] =
+    Some(
+      DatatypeFactory
+        .newInstance()
+        .newXMLGregorianCalendar(
+          new GregorianCalendar(
+            dateTime.date.getYear,
+            dateTime.date.getMonthValue,
+            dateTime.date.getDayOfMonth
+          )
+        )
+    )
+
+  def dateTimeToXMLGregorian(dateTime: DateTime): Option[XMLGregorianCalendar] =
     Some(
       DatatypeFactory
         .newInstance()
@@ -35,7 +48,8 @@ object ApiXmlHelpers {
             dateTime.date.getMonthValue,
             dateTime.date.getDayOfMonth,
             dateTime.time.getHour,
-            dateTime.time.getMinute
+            dateTime.time.getMinute,
+            dateTime.time.getSecond
           )
         )
     )

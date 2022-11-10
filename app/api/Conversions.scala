@@ -17,35 +17,34 @@
 package api
 
 import generated._
-import models.DateTime
-import models.journeyDomain.PreTaskListDomain
-
-import java.time.LocalDateTime
+import models.UserAnswers
+import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage, TIRCarnetReferencePage}
+import pages.traderDetails.consignment.ApprovedOperatorPage
 
 object Conversions {
 
-  // TODO - we do not need to rely on the domain models here. We could pass in the cache directly (user answers)?
-  def transitOperation(preTaskListDomain: PreTaskListDomain): TransitOperationType06 = {
+  def transitOperation(userAnswers: UserAnswers): Either[String, TransitOperationType06] = {
+    // TODO - bindingItinerary is asked but never stored
+    val additionalDeclarationType = "A"
+    val bindingItinerary          = true
 
-    // TODO - Some test data not in the preTaskListDomain model (get from the cache down the line)
-    val reducedDatasetIndicator           = false
-    val bindingItinerary                  = true
-    val localDateTime                     = LocalDateTime.of(2022, 1, 1, 20, 41, 0)
-    val presentationOfTheGoodsDateAndTime = DateTime(localDateTime.toLocalDate, localDateTime.toLocalTime)
-    val limitDate                         = DateTime(localDateTime.toLocalDate, localDateTime.toLocalTime)
-
-    TransitOperationType06(
-      preTaskListDomain.localReferenceNumber.value,
-      preTaskListDomain.declarationType.toString,
-      "A",
-      preTaskListDomain.tirCarnetReference,
-      ApiXmlHelpers.dateToXMLGregorian(presentationOfTheGoodsDateAndTime),
-      preTaskListDomain.securityDetailsType.securityContentType.toString,
-      ApiXmlHelpers.boolToFlag(reducedDatasetIndicator),
-      None,
-      None,
+    for {
+      declarationTypePage     <- userAnswers.getAsEither(DeclarationTypePage)
+      tirCarnetReferencePage  <- userAnswers.getOptional(TIRCarnetReferencePage)
+      securityDetailsTypePage <- userAnswers.getAsEither(SecurityDetailsTypePage)
+      reducedDatasetInd       <- userAnswers.getAsEither(ApprovedOperatorPage)
+    } yield TransitOperationType06(
+      userAnswers.lrn.value,
+      declarationTypePage.toString,
+      additionalDeclarationType,
+      tirCarnetReferencePage,
+      None, // TODO - presentationOfTheGoodsDateAndTime
+      securityDetailsTypePage.securityContentType.toString,
+      ApiXmlHelpers.boolToFlag(reducedDatasetInd),
+      None, // TODO - specificCircumstanceIndicator
+      None, // TODO - communicationLanguageAtDeparture
       ApiXmlHelpers.boolToFlag(bindingItinerary),
-      ApiXmlHelpers.dateToXMLGregorian(limitDate)
+      None // TODO - limitDate
     )
   }
 

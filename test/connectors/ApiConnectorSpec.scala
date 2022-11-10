@@ -18,19 +18,26 @@ package connectors
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock._
+import generators.{Generators, PreTaskListUserAnswersGenerator, RouteDetailsUserAnswersGenerator, TraderDetailsUserAnswersGenerator}
 import helper.WireMockServerHandler
-import models.journeyDomain.routeDetails.RouteDetailsDomain
-import models.journeyDomain.routeDetails.loadingAndUnloading.LoadingAndUnloadingDomain
-import models.journeyDomain.routeDetails.routing.RoutingDomain
-import models.journeyDomain.{DepartureDomain, PreTaskListDomain}
-import models.reference.{Country, CountryCode, CustomsOffice}
-import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}
+import models.UserAnswers
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{BadRequestException, HttpResponse, UpstreamErrorResponse}
 
-class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler {
+class ApiConnectorSpec
+    extends SpecBase
+    with AppWithDefaultMockFixtures
+    with WireMockServerHandler
+    with Generators
+    with RouteDetailsUserAnswersGenerator
+    with PreTaskListUserAnswersGenerator
+    with TraderDetailsUserAnswersGenerator {
+
+  val preTask: UserAnswers       = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
+  val traderDetails: UserAnswers = arbitraryTraderDetailsAnswers(preTask).sample.value
+  val uA: UserAnswers            = arbitraryRouteDetailsAnswers(traderDetails).sample.value
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -57,34 +64,6 @@ class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with Wir
 
   val uri = "/movements/departures"
 
-  val customsOffice: CustomsOffice = CustomsOffice("foo", "bar", None)
-
-  val preTaskListDomain: PreTaskListDomain = PreTaskListDomain(LocalReferenceNumber("refno").get,
-                                                               customsOffice,
-                                                               ProcedureType.Normal,
-                                                               DeclarationType.Option1,
-                                                               None,
-                                                               SecurityDetailsType.NoSecurityDetails,
-                                                               true
-  )
-
-  val routingDomain: RoutingDomain = RoutingDomain(
-    Country(CountryCode("GB"), "My country"),
-    customsOffice,
-    false,
-    Seq.empty
-  )
-
-  val routeDetailsDomain: RouteDetailsDomain = RouteDetailsDomain(
-    routingDomain,
-    None,
-    None,
-    None,
-    LoadingAndUnloadingDomain(None, None)
-  )
-
-  val request = DepartureDomain(preTaskListDomain, routeDetailsDomain)
-
   "ApiConnector" - {
 
     "submitDeclaration is called" - {
@@ -93,7 +72,7 @@ class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with Wir
 
         server.stubFor(post(urlEqualTo(uri)).willReturn(okJson(expected)))
 
-        val res: HttpResponse = await(connector.submitDeclaration(request))
+        val res: HttpResponse = await(connector.submitDeclaration(uA))
         res.status mustBe OK
 
       }
@@ -103,7 +82,7 @@ class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with Wir
         server.stubFor(post(urlEqualTo(uri)).willReturn(badRequest()))
 
         intercept[BadRequestException] {
-          await(connector.submitDeclaration(request))
+          await(connector.submitDeclaration(uA))
         }
 
       }
@@ -113,7 +92,7 @@ class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with Wir
         server.stubFor(post(urlEqualTo(uri)).willReturn(serverError()))
 
         intercept[UpstreamErrorResponse] {
-          await(connector.submitDeclaration(request))
+          await(connector.submitDeclaration(uA))
         }
 
       }

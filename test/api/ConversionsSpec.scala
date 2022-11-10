@@ -19,63 +19,54 @@ package api
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generated.TransitOperationType06
-import generators.Generators
-import models.DeclarationType._
-import models.ProcedureType.Normal
-import models.SecurityDetailsType
-import models.journeyDomain.PreTaskListDomain
-import models.reference.CustomsOffice
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
+import generators.{Generators, PreTaskListUserAnswersGenerator, RouteDetailsUserAnswersGenerator, TraderDetailsUserAnswersGenerator}
+import models.UserAnswers
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
+import pages.traderDetails.consignment.ApprovedOperatorPage
 import scalaxb._
 
 import scala.xml.{NodeSeq, XML}
 
-class ConversionsSpec extends SpecBase with UserAnswersSpecHelper with Generators {
+class ConversionsSpec
+    extends SpecBase
+    with UserAnswersSpecHelper
+    with Generators
+    with PreTaskListUserAnswersGenerator
+    with RouteDetailsUserAnswersGenerator
+    with TraderDetailsUserAnswersGenerator {
 
   "transitOperationType" - {
 
-    val xiCustomsOffice  = CustomsOffice("XI1", "Belfast", None)
-    val carnetRef        = Gen.alphaNumStr.sample.value
-    val securityDetails  = arbitrary[SecurityDetailsType].sample.value
-    val detailsConfirmed = true
-
     "can be parsed from PreTaskListDomain" in {
 
-      val preTaskSection = PreTaskListDomain(
-        localReferenceNumber = emptyUserAnswers.lrn,
-        officeOfDeparture = xiCustomsOffice,
-        procedureType = Normal,
-        declarationType = Option4,
-        tirCarnetReference = Some(carnetRef),
-        securityDetailsType = securityDetails,
-        detailsConfirmed = detailsConfirmed
-      )
+      val preTask: UserAnswers       = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
+      val traderDetails: UserAnswers = arbitraryTraderDetailsAnswers(preTask).sample.value
+      val uA: UserAnswers            = arbitraryRouteDetailsAnswers(traderDetails).sample.value
 
-      // API Example (transformed to xml)
       val expected: NodeSeq = XML.loadString(
         """<TransitOperation""" +
           """ xmlns:tns="http://ncts.dgtaxud.ec" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">""" +
-          """<LRN>ABCD1234567890123</LRN>""" +
-          """<declarationType>TIR</declarationType>""" +
+          s"""<LRN>${uA.lrn.value}</LRN>""" +
+          s"""<declarationType>${uA.get(DeclarationTypePage).get}</declarationType>""" +
           """<additionalDeclarationType>A</additionalDeclarationType>""" +
-          s"""<TIRCarnetNumber>$carnetRef</TIRCarnetNumber>""" +
-          """<presentationOfTheGoodsDateAndTime>2022-02-01T20:41:00.000Z</presentationOfTheGoodsDateAndTime>""" +
-          s"""<security>${securityDetails.securityContentType}</security>""" +
-          """<reducedDatasetIndicator>0</reducedDatasetIndicator>""" +
+          s"""<security>${uA.get(SecurityDetailsTypePage).get.securityContentType}</security>""" +
+          s"""<reducedDatasetIndicator>${uA.get(ApprovedOperatorPage).get match {
+            case true => 1
+            case _    => 0
+          }}</reducedDatasetIndicator>""" +
           """<bindingItinerary>1</bindingItinerary>""" +
-          """<limitDate>2022-02-01T20:41:00.000Z</limitDate>""" +
           """</TransitOperation>""".stripMargin
       )
 
-      val converted = toXML[TransitOperationType06](
-        Conversions.transitOperation(preTaskSection),
-        "TransitOperation",
-        generated.defaultScope
-      )
+      val tryConv: Either[String, TransitOperationType06] = Conversions.transitOperation(uA)
 
-      converted shouldBe expected
+      val xml: NodeSeq = tryConv match {
+        case Left(value)  => throw new Error(value)
+        case Right(value) => toXML[TransitOperationType06](value, "TransitOperation", generated.defaultScope)
+      }
+
+      xml shouldBe expected
 
     }
   }
