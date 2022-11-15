@@ -12,7 +12,11 @@ object AppDependencies {
     "uk.gov.hmrc"                %% "play-allowlist-filter"           % "1.1.0",
     "uk.gov.hmrc"                %% "play-frontend-hmrc"              % "3.32.0-play-28",
     "org.typelevel"              %% "cats-core"                       % "2.8.0",
-    "com.chuusai"                %% "shapeless"                       % "2.3.10"
+    "com.chuusai"                %% "shapeless"                       % "2.3.10",
+    "org.scala-lang.modules" %% "scala-xml" % "1.3.0",
+    "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2",
+    "javax.xml.bind" % "jaxb-api" % "2.3.0",
+    "org.dispatchhttp" %% "dispatch-core" % "1.1.3"
   )
 
   val test: Seq[ModuleID] = Seq(

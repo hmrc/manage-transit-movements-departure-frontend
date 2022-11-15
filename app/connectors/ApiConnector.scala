@@ -16,12 +16,15 @@
 
 package connectors
 
+import api.Conversions
 import config.FrontendAppConfig
-import models.journeyDomain.DepartureDomain
+import generated.TransitOperationType06
+import models.UserAnswers
 import play.api.Logging
 import play.api.http.HeaderNames
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpErrorFunctions, HttpResponse}
+import scalaxb.`package`.toXML
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, HttpClient, HttpErrorFunctions, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,98 +33,64 @@ class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConf
 
   private val requestHeaders = Seq(
     HeaderNames.ACCEPT       -> "application/vnd.hmrc.2.0+json",
-    HeaderNames.CONTENT_TYPE -> "application/json"
+    HeaderNames.CONTENT_TYPE -> "application/xml"
   )
 
-  // TODO - replace payload with data from user answers
+  // TODO - build out for remaining sections
+  def createSubmission(userAnswers: UserAnswers): Either[String, String] =
+    for {
+      transitOperation <- Conversions.transitOperation(userAnswers)
+    } yield payloadXml(transitOperation)
 
-  // TODO - reduced data set indicator is asked but never stored
-  // TODO - bindingItinerary is asked but never stored
-  def payload(request: DepartureDomain): String =
-    s"""
-       |{
-       |  "n1:CC015C": {
-       |    "preparationDateAndTime": "2022-01-22T07:43:36",
-       |    "TransitOperation": {
-       |      "LRN": "${request.preTaskList.localReferenceNumber.value}",
-       |      "declarationType": "${request.preTaskList.declarationType.toString}",
-       |      "additionalDeclarationType": "A",
-       |      "security": "${request.preTaskList.securityDetailsType.securityContentType}",
-       |      "reducedDatasetIndicator": "1",
-       |      "bindingItinerary": "0"
-       |    },
-       |    "CustomsOfficeOfDeparture": {
-       |      "referenceNumber": "${request.preTaskList.officeOfDeparture.id}"
-       |    },
-       |    "CustomsOfficeOfDestinationDeclared": {
-       |      "referenceNumber": "${request.routeDetails.routing.officeOfDestination.id}"
-       |    },
-       |    "messageType": "CC015C",
-       |    "@PhaseID": "NCTS5.0",
-       |    "messageRecipient": "FdOcminxBxSLGm1rRUn0q96S1",
-       |    "HolderOfTheTransitProcedure": {
-       |      "identificationNumber": "SFzsisksA"
-       |    },
-       |    "Consignment": {
-       |      "grossMass": 6430669292.48125,
-       |      "HouseConsignment": [
-       |        {
-       |          "sequenceNumber": "48711",
-       |          "grossMass": 6430669292.48125,
-       |          "AdditionalSupplyChainActor": [],
-       |          "DepartureTransportMeans": [],
-       |          "PreviousDocument": [],
-       |          "SupportingDocument": [],
-       |          "TransportDocument": [],
-       |          "AdditionalReference": [],
-       |          "AdditionalInformation": [],
-       |          "ConsignmentItem": [
-       |            {
-       |              "goodsItemNumber": "18914",
-       |              "declarationGoodsItemNumber": 1458,
-       |              "AdditionalSupplyChainActor": [],
-       |              "Commodity": {
-       |                "descriptionOfGoods": "ZMyM5HTSTnLqT5FT9aHXwScqXKC1VitlWeO5gs91cVXBXOB8xBdXG5aGhG9VFjjDGiraIETFfbQWeA7VUokO7ngDOrKZ23ccKKMA6C3GpXciUTt9nS2pzCFFFeg4BXdkIe",
-       |                "DangerousGoods": []
-       |              },
-       |              "Packaging": [
-       |                {
-       |                  "sequenceNumber": "48711",
-       |                  "typeOfPackages": "Oi"
-       |                }
-       |              ],
-       |              "PreviousDocument": [],
-       |              "SupportingDocument": [],
-       |              "TransportDocument": [],
-       |              "AdditionalReference": [],
-       |              "AdditionalInformation": []
-       |            }
-       |          ]
-       |        }
-       |      ]
-       |    },
-       |    "messageIdentification": "6Onxa3En",
-       |    "Guarantee": [
-       |      {
-       |        "sequenceNumber": "48711",
-       |        "guaranteeType": "1",
-       |        "otherGuaranteeReference": "1qJMA6MbhnnrOJJjHBHX",
-       |        "GuaranteeReference": []
-       |      }
-       |    ]
-       |  }
-       |}
-       |
-       |""".stripMargin
+  def payloadXml(transitOperation: TransitOperationType06): String =
+    (<ncts:CC015C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
+      <messageRecipient>3pekcCFaMGmCMz1CPGUlhyml9gJCV6</messageRecipient>
+      <preparationDateAndTime>2022-07-02T03:11:04</preparationDateAndTime>
+      <messageIdentification>wrxe</messageIdentification>
+      <messageType>CC015C</messageType>
+      {toXML[TransitOperationType06](transitOperation, "TransitOperation", generated.defaultScope)}
+      <CustomsOfficeOfDeparture>
+        <referenceNumber>GB000218</referenceNumber>
+      </CustomsOfficeOfDeparture>
+      <CustomsOfficeOfDestinationDeclared>
+        <referenceNumber>GB000218</referenceNumber>
+      </CustomsOfficeOfDestinationDeclared>
+      <HolderOfTheTransitProcedure>
+        <identificationNumber>ezv3Z</identificationNumber>
+      </HolderOfTheTransitProcedure>
+      <Guarantee>
+        <sequenceNumber>66710</sequenceNumber>
+        <guaranteeType>P</guaranteeType>
+        <otherGuaranteeReference>iNkM2E</otherGuaranteeReference>
+      </Guarantee>
+      <Consignment>
+        <grossMass>4380979244.527545</grossMass>
+        <HouseConsignment>
+          <sequenceNumber>66710</sequenceNumber>
+          <grossMass>4380979244.527545</grossMass>
+          <ConsignmentItem>
+            <goodsItemNumber>34564</goodsItemNumber>
+            <declarationGoodsItemNumber>25</declarationGoodsItemNumber>
+            <Commodity>
+              <descriptionOfGoods>fds9YFrlk6DX7pnwQNgJmksfZ4z9uGjDy6Kaucb13r3kEleTuLHD5zKtbAKUU005AaZeVdTgdAnJKzuGliZGRb1E83Y0Z8IuyeFfnXgT7NwX81eGFb3vRXAWUFswwwprqZBcffnBLwLObF45W7evl7C6J4Tihj1d1a2ZKcAU6ttLNy</descriptionOfGoods>
+            </Commodity>
+            <Packaging>
+              <sequenceNumber>66710</sequenceNumber>
+              <typeOfPackages>Nu</typeOfPackages>
+            </Packaging>
+          </ConsignmentItem>
+        </HouseConsignment>
+      </Consignment>
+    </ncts:CC015C>).mkString
 
-  def submitDeclaration(request: DepartureDomain)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+  def submitDeclaration(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
 
     val declarationUrl = s"${appConfig.apiUrl}/movements/departures"
 
-    // TODO - do via domain models with reads and writes?
-    // httpClient.POST[DepartureDomain, HttpResponse](declarationUrl, request, requestHeaders)
-
-    httpClient.POSTString(declarationUrl, payload(request), requestHeaders)
+    createSubmission(userAnswers) match {
+      case Left(msg)    => throw new BadRequestException(msg)
+      case Right(value) => httpClient.POSTString(declarationUrl, value, requestHeaders)
+    }
 
   }
 

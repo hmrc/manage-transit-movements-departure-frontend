@@ -16,12 +16,10 @@
 
 package controllers
 
-import cats.data.EitherT
-import cats.implicits._
 import com.google.inject.Inject
 import controllers.actions.{Actions, CheckDependentTaskCompletedActionProvider}
 import models.LocalReferenceNumber
-import models.journeyDomain.{DepartureDomain, PreTaskListDomain}
+import models.journeyDomain.PreTaskListDomain
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{ApiService, CountriesService}
@@ -66,39 +64,16 @@ class TaskListController @Inject() (
     .requireData(lrn)
     .andThen(checkDependentTaskCompleted[PreTaskListDomain])
     .async {
-
       implicit request =>
-        // TODO - move to service layer
-        (for {
-          ctcCountries                          <- EitherT.right(countriesService.getCountryCodesCTC())
-          customsSecurityAgreementAreaCountries <- EitherT.right(countriesService.getCustomsSecurityAgreementAreaCountries())
-          data = DepartureDomain
-            .userAnswersReader(
-              ctcCountries.countryCodes,
-              customsSecurityAgreementAreaCountries.countryCodes
-            )
-            .run(request.userAnswers)
-          response <- EitherT(data.traverse(apiService.submitDeclaration(_)))
-        } yield response.status match {
-
-          case status if is2xx(status) =>
+        apiService.submitDeclaration(request.userAnswers).map {
+          case response if is2xx(response.status) =>
             Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad())
-          case status if is4xx(status) =>
+          case response if is4xx(response.status) =>
             // TODO - log and audit fail. How to handle this?
             BadRequest
           case _ =>
             // TODO - log and audit fail. How to handle this?
             InternalServerError("Something went wrong")
-
-        }).value.map {
-
-          case Right(value) =>
-            value
-          case Left(e) =>
-            // TODO - log and audit fail. How to handle this?
-            InternalServerError(s"Something went wrong: ${e.message}")
-
         }
-
     }
 }
