@@ -36,28 +36,28 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
   def getCustomsOfficesOfTransitForCountry(
     countryCode: CountryCode
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
-    val serviceUrl = s"${config.referenceDataUrl}/customs-offices-p5/${countryCode.code}?role=TRA"
+    val serviceUrl = s"${config.referenceDataUrl}/customs-offices/${countryCode.code}?role=TRA"
     http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
   }
 
   def getCustomsOfficesOfDestinationForCountry(
     countryCode: CountryCode
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
-    val serviceUrl = s"${config.referenceDataUrl}/customs-offices-p5/${countryCode.code}?role=DES"
+    val serviceUrl = s"${config.referenceDataUrl}/customs-offices/${countryCode.code}?role=DES"
     http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
   }
 
   def getCustomsOfficesOfExitForCountry(
     countryCode: CountryCode
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
-    val serviceUrl = s"${config.referenceDataUrl}/customs-offices-p5/${countryCode.code}?role=EXT"
+    val serviceUrl = s"${config.referenceDataUrl}/customs-offices/${countryCode.code}?role=EXT"
     http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
   }
 
   def getCustomsOfficesOfDepartureForCountry(
     countryCode: String
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
-    val serviceUrl = s"${config.referenceDataUrl}/customs-offices-p5/$countryCode?role=DEP"
+    val serviceUrl = s"${config.referenceDataUrl}/customs-offices/$countryCode?role=DEP"
     http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
   }
 
