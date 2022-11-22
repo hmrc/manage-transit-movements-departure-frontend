@@ -39,8 +39,6 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
     val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy HH:mm")
     answer.concat.format(formatter).toText
   }
-
-
   protected def formatAsDynamicAddress(address: DynamicAddress): Content =
     HtmlContent(address.toString)
 
