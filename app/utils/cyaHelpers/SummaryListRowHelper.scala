@@ -40,6 +40,7 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
     answer.concat.format(formatter).toText
   }
 
+
   protected def formatAsDynamicAddress(address: DynamicAddress): Content =
     HtmlContent(address.toString)
 

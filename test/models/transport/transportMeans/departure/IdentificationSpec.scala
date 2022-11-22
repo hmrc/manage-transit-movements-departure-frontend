@@ -63,7 +63,7 @@ class IdentificationSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
 
       "when sea going vehicle" in {
         val result = SeaGoingVehicle.arg
-        result mustBe "name of the sea-going vehicle"
+        result mustBe "name of the sea-going vessel"
       }
       "when IATA flight number" in {
         val result = IataFlightNumber.arg
