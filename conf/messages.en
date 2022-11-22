@@ -1093,8 +1093,8 @@ transport.transportMeans.departure.inlandMode.error.required = Select which inla
 
 transport.transportMeans.departure.identification.title = Which identification do you want to use for this vehicle?
 transport.transportMeans.departure.identification.heading = Which identification do you want to use for this vehicle?
-transport.transportMeans.departure.identification.seaGoingVehicle = Name of a sea-going vessel
-transport.transportMeans.departure.identification.seaGoingVehicle.arg = name of the sea-going vessel
+transport.transportMeans.departure.identification.seaGoingVessel = Name of a sea-going vessel
+transport.transportMeans.departure.identification.seaGoingVessel.arg = name of the sea-going vessel
 transport.transportMeans.departure.identification.iataFlightNumber = IATA flight number
 transport.transportMeans.departure.identification.iataFlightNumber.arg = IATA flight number
 transport.transportMeans.departure.identification.inlandWaterwaysVehicle = Name of an inland waterways vehicle

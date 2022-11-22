@@ -27,7 +27,7 @@ sealed trait Identification {
 
 object Identification extends RadioModelU[Identification] {
 
-  case object SeaGoingVehicle extends WithName("seaGoingVehicle") with Identification {
+  case object SeaGoingVehicle extends WithName("seaGoingVessel") with Identification {
     override val identificationType: Int = 11
   }
 
