@@ -17,7 +17,7 @@
 package controllers.traderDetails.representative
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.traderDetails.representative.RepresentativeCapacityFormProvider
+import forms.EnumerableFormProvider
 import models.NormalMode
 import models.traderDetails.representative.RepresentativeCapacity
 import navigation.traderDetails.TraderDetailsNavigatorProvider
@@ -36,8 +36,8 @@ class CapacityControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private lazy val representativeCapacityRoute = routes.CapacityController.onPageLoad(lrn, mode).url
 
-  private val formProvider = new RepresentativeCapacityFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new EnumerableFormProvider()
+  private val form         = formProvider[RepresentativeCapacity]("traderDetails.representative.capacity")
   private val mode         = NormalMode
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =

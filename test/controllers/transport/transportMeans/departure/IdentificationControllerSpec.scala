@@ -17,7 +17,7 @@
 package controllers.transport.transportMeans.departure
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.transport.transportMeans.departure.IdentificationFormProvider
+import forms.EnumerableFormProvider
 import models.NormalMode
 import models.transport.transportMeans.departure.Identification
 import navigation.transport.TransportMeansNavigatorProvider
@@ -34,8 +34,8 @@ import scala.concurrent.Future
 
 class IdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider             = new IdentificationFormProvider()
-  private val form                     = formProvider()
+  private val formProvider             = new EnumerableFormProvider()
+  private val form                     = formProvider[Identification]("transport.transportMeans.departure.identification")
   private val mode                     = NormalMode
   private lazy val identificationRoute = routes.IdentificationController.onPageLoad(lrn, mode).url
 

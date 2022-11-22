@@ -16,7 +16,7 @@
 
 package views.guaranteeDetails.guarantee
 
-import forms.GuaranteeTypeFormProvider
+import forms.EnumerableFormProvider
 import models.{GuaranteeType, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -26,7 +26,7 @@ import views.html.guaranteeDetails.guarantee.GuaranteeTypeView
 
 class GuaranteeTypeViewSpec extends RadioViewBehaviours[GuaranteeType] {
 
-  override def form: Form[GuaranteeType] = new GuaranteeTypeFormProvider()()
+  override def form: Form[GuaranteeType] = new EnumerableFormProvider()(prefix)
 
   override def applyView(form: Form[GuaranteeType]): HtmlFormat.Appendable =
     injector.instanceOf[GuaranteeTypeView].apply(form, lrn, GuaranteeType.radioItems, NormalMode, index)(fakeRequest, messages)

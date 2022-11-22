@@ -16,7 +16,7 @@
 
 package views.transport.transportMeans.departure
 
-import forms.transport.transportMeans.departure.InlandModeFormProvider
+import forms.EnumerableFormProvider
 import models.NormalMode
 import models.transport.transportMeans.departure.InlandMode
 import play.api.data.Form
@@ -27,7 +27,7 @@ import views.html.transport.transportMeans.departure.InlandModeView
 
 class InlandModeViewSpec extends RadioViewBehaviours[InlandMode] {
 
-  override def form: Form[InlandMode] = new InlandModeFormProvider()()
+  override def form: Form[InlandMode] = new EnumerableFormProvider()(prefix)
 
   override def applyView(form: Form[InlandMode]): HtmlFormat.Appendable =
     injector.instanceOf[InlandModeView].apply(form, lrn, InlandMode.radioItems, NormalMode)(fakeRequest, messages)

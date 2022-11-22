@@ -16,7 +16,7 @@
 
 package views.preTaskList
 
-import forms.preTaskList.SecurityDetailsFormProvider
+import forms.EnumerableFormProvider
 import models.{NormalMode, SecurityDetailsType}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -26,7 +26,7 @@ import views.html.preTaskList.SecurityDetailsTypeView
 
 class SecurityDetailsTypeViewSpec extends RadioViewBehaviours[SecurityDetailsType] {
 
-  override def form: Form[SecurityDetailsType] = new SecurityDetailsFormProvider()()
+  override def form: Form[SecurityDetailsType] = new EnumerableFormProvider()(prefix)
 
   override def applyView(form: Form[SecurityDetailsType]): HtmlFormat.Appendable =
     injector.instanceOf[SecurityDetailsTypeView].apply(form, radioItems, lrn, NormalMode)(fakeRequest, messages)

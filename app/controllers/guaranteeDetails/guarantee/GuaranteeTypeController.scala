@@ -18,7 +18,7 @@ package controllers.guaranteeDetails.guarantee
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.GuaranteeTypeFormProvider
+import forms.EnumerableFormProvider
 import models.{GuaranteeType, Index, LocalReferenceNumber, Mode}
 import navigation.{GuaranteeNavigatorProvider, UserAnswersNavigator}
 import pages.guaranteeDetails.guarantee.GuaranteeTypePage
@@ -36,14 +36,14 @@ class GuaranteeTypeController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: GuaranteeNavigatorProvider,
   actions: Actions,
-  formProvider: GuaranteeTypeFormProvider,
+  formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: GuaranteeTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider[GuaranteeType]("guaranteeDetails.guarantee.guaranteeType")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package forms.preTaskList
+package forms
 
 import forms.mappings.Mappings
-import models.DeclarationType
+import models.Enumerable
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class DeclarationTypeFormProvider @Inject() extends Mappings {
+class EnumerableFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[DeclarationType] =
+  def apply[T](prefix: String)(implicit et: Enumerable[T]): Form[T] =
     Form(
-      "value" -> enumerable[DeclarationType]("declarationType.error.required")
+      "value" -> enumerable[T](s"$prefix.error.required")
     )
 }

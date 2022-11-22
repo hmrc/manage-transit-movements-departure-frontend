@@ -18,9 +18,9 @@ package controllers.transport.transportMeans.departure
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.transport.transportMeans.departure.IdentificationFormProvider
-import models.{LocalReferenceNumber, Mode}
+import forms.EnumerableFormProvider
 import models.transport.transportMeans.departure.Identification
+import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansNavigatorProvider
 import pages.transport.transportMeans.departure.IdentificationPage
@@ -38,14 +38,14 @@ class IdentificationController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: TransportMeansNavigatorProvider,
   actions: Actions,
-  formProvider: IdentificationFormProvider,
+  formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: IdentificationView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider[Identification]("transport.transportMeans.departure.identification")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
