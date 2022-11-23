@@ -30,21 +30,21 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
     page = GuaranteeTypePage(index),
     formatAnswer = formatEnumAsText(GuaranteeType.messageKeyPrefix),
     prefix = "guaranteeDetails.guarantee.guaranteeType",
-    id = Some("type")
+    id = Some("change-type")
   )(_ == TIRGuarantee)
 
   def guaranteeReferenceNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = ReferenceNumberPage(index),
     formatAnswer = formatAsText,
     prefix = "guaranteeDetails.guarantee.referenceNumber",
-    id = Some("reference-number")
+    id = Some("change-reference-number")
   )
 
   def otherReferenceYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = OtherReferenceYesNoPage(index),
     formatAnswer = formatAsYesOrNo,
     prefix = "guaranteeDetails.guarantee.otherReferenceYesNo",
-    id = Some("add-other-reference")
+    id = Some("change-add-other-reference")
   )
 
   def otherReference: Option[SummaryListRow] =
@@ -58,7 +58,7 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
           page = OtherReferencePage(index),
           formatAnswer = formatAsText,
           prefix = s"guaranteeDetails.guarantee.otherReference.$key",
-          id = Some("other-reference")
+          id = Some("change-other-reference")
         )
     }
 
@@ -66,13 +66,13 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
     page = AccessCodePage(index),
     formatAnswer = formatAsPassword,
     prefix = "guaranteeDetails.guarantee.accessCode",
-    id = Some("access-code")
+    id = Some("change-access-code")
   )
 
   def liabilityAmount: Option[SummaryListRow] = getAnswerAndBuildRow[BigDecimal](
     page = LiabilityAmountPage(index),
     formatAnswer = formatAsCurrency,
     prefix = "guaranteeDetails.guarantee.liabilityAmount",
-    id = Some("liability-amount")
+    id = Some("change-liability-amount")
   )
 }

@@ -70,7 +70,7 @@ class ConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                           content = "Change".toText,
                           href = consignmentRoutes.ApprovedOperatorController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to use a reduced data set"),
-                          attributes = Map("id" -> "has-reduced-data-set")
+                          attributes = Map("id" -> "change-has-reduced-data-set")
                         )
                       )
                     )
@@ -114,7 +114,7 @@ class ConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                           content = "Change".toText,
                           href = consignorRoutes.EoriYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you know the consignor’s EORI number or Trader Identification Number (TIN)"),
-                          attributes = Map("id" -> "has-consignor-eori")
+                          attributes = Map("id" -> "change-has-consignor-eori")
                         )
                       )
                     )
@@ -158,7 +158,7 @@ class ConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                           content = "Change".toText,
                           href = consignorRoutes.EoriController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignor’s EORI number or Trader Identification Number (TIN)"),
-                          attributes = Map("id" -> "consignor-eori-number")
+                          attributes = Map("id" -> "change-consignor-eori-number")
                         )
                       )
                     )
@@ -202,7 +202,7 @@ class ConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                           content = "Change".toText,
                           href = consignorRoutes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignor’s name"),
-                          attributes = Map("id" -> "consignor-name")
+                          attributes = Map("id" -> "change-consignor-name")
                         )
                       )
                     )
@@ -246,7 +246,7 @@ class ConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                           content = "Change".toText,
                           href = consignorRoutes.CountryController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignor’s country"),
-                          attributes = Map("id" -> "consignor-country")
+                          attributes = Map("id" -> "change-consignor-country")
                         )
                       )
                     )
@@ -290,7 +290,7 @@ class ConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                           content = "Change".toText,
                           href = consignorRoutes.AddressController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignor’s address"),
-                          attributes = Map("id" -> "consignor-address")
+                          attributes = Map("id" -> "change-consignor-address")
                         )
                       )
                     )
@@ -334,7 +334,7 @@ class ConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                           content = "Change".toText,
                           href = consignorRoutes.AddContactController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add a contact for the consignor"),
-                          attributes = Map("id" -> "has-consignor-contact")
+                          attributes = Map("id" -> "change-has-consignor-contact")
                         )
                       )
                     )
@@ -378,7 +378,7 @@ class ConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                           content = "Change".toText,
                           href = contactRoutes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignor contact’s name"),
-                          attributes = Map("id" -> "consignor-contact-name")
+                          attributes = Map("id" -> "change-consignor-contact-name")
                         )
                       )
                     )
@@ -422,7 +422,7 @@ class ConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                           content = "Change".toText,
                           href = contactRoutes.TelephoneNumberController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignor contact’s phone number"),
-                          attributes = Map("id" -> "consignor-contact-phone-number")
+                          attributes = Map("id" -> "change-consignor-contact-phone-number")
                         )
                       )
                     )
@@ -466,7 +466,7 @@ class ConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                           content = "Change".toText,
                           href = consignmentRoutes.MoreThanOneConsigneeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if there is more than one consignee"),
-                          attributes = Map("id" -> "has-more-than-one-consignee")
+                          attributes = Map("id" -> "change-has-more-than-one-consignee")
                         )
                       )
                     )
@@ -510,7 +510,7 @@ class ConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                           content = "Change".toText,
                           href = consigneeRoutes.EoriYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you know the consignee’s EORI number or Trader Identification Number (TIN)"),
-                          attributes = Map("id" -> "has-consignee-eori")
+                          attributes = Map("id" -> "change-has-consignee-eori")
                         )
                       )
                     )
@@ -554,7 +554,7 @@ class ConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                           content = "Change".toText,
                           href = consigneeRoutes.EoriNumberController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignee’s EORI number or Trader Identification Number (TIN)"),
-                          attributes = Map("id" -> "consignee-eori-number")
+                          attributes = Map("id" -> "change-consignee-eori-number")
                         )
                       )
                     )
@@ -598,7 +598,7 @@ class ConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                           content = "Change".toText,
                           href = consigneeRoutes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignee’s name"),
-                          attributes = Map("id" -> "consignee-name")
+                          attributes = Map("id" -> "change-consignee-name")
                         )
                       )
                     )
@@ -642,7 +642,7 @@ class ConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                           content = "Change".toText,
                           href = consigneeRoutes.CountryController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignee’s country"),
-                          attributes = Map("id" -> "consignee-country")
+                          attributes = Map("id" -> "change-consignee-country")
                         )
                       )
                     )
@@ -686,7 +686,7 @@ class ConsignmentCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                           content = "Change".toText,
                           href = consigneeRoutes.AddressController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("consignee’s address"),
-                          attributes = Map("id" -> "consignee-address")
+                          attributes = Map("id" -> "change-consignee-address")
                         )
                       )
                     )

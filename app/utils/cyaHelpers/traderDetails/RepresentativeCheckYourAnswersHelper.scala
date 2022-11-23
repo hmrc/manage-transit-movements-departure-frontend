@@ -30,34 +30,34 @@ class RepresentativeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)
     page = ActingAsRepresentativePage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.actingRepresentative",
-    id = Some("has-acting-representative")
+    id = Some("change-has-acting-representative")
   )
 
   def eori: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = EoriPage,
     formatAnswer = formatAsText,
     prefix = "traderDetails.representative.eori",
-    id = Some("representative-eori-number")
+    id = Some("change-representative-eori-number")
   )
 
   def name: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = NamePage,
     formatAnswer = formatAsText,
     prefix = "traderDetails.representative.name",
-    id = Some("representative-name")
+    id = Some("change-representative-name")
   )
 
   def capacity: Option[SummaryListRow] = getAnswerAndBuildRow[RepresentativeCapacity](
     page = CapacityPage,
     formatAnswer = formatEnumAsText(RepresentativeCapacity.messageKeyPrefix),
     prefix = "traderDetails.representative.capacity",
-    id = Some("representative-capacity")
+    id = Some("change-representative-capacity")
   )
 
   def phoneNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = TelephoneNumberPage,
     formatAnswer = formatAsText,
     prefix = "traderDetails.representative.telephoneNumber",
-    id = Some("representative-phone-number")
+    id = Some("change-representative-phone-number")
   )
 }

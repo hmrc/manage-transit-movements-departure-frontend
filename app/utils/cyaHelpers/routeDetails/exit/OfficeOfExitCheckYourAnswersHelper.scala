@@ -30,13 +30,13 @@ class OfficeOfExitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, i
     page = OfficeOfExitCountryPage(index),
     formatAnswer = formatAsText,
     prefix = "routeDetails.exit.index.officeOfExitCountry",
-    id = Some("office-of-exit-country")
+    id = Some("change-office-of-exit-country")
   )
 
   def officeOfExit: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
     page = OfficeOfExitPage(index),
     formatAnswer = formatAsText,
     prefix = "routeDetails.exit.index.officeOfExit",
-    id = Some("office-of-exit")
+    id = Some("change-office-of-exit")
   )
 }

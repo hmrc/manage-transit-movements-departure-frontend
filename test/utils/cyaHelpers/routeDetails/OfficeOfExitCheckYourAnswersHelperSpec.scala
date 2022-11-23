@@ -64,7 +64,7 @@ class OfficeOfExitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPro
                           content = "Change".toText,
                           href = routes.OfficeOfExitCountryController.onPageLoad(answers.lrn, index, mode).url,
                           visuallyHiddenText = Some("office of exit’s country"),
-                          attributes = Map("id" -> "office-of-exit-country")
+                          attributes = Map("id" -> "change-office-of-exit-country")
                         )
                       )
                     )
@@ -107,7 +107,7 @@ class OfficeOfExitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPro
                           content = "Change".toText,
                           href = routes.OfficeOfExitController.onPageLoad(answers.lrn, index, mode).url,
                           visuallyHiddenText = Some("office of exit’s location"),
-                          attributes = Map("id" -> "office-of-exit")
+                          attributes = Map("id" -> "change-office-of-exit")
                         )
                       )
                     )
