@@ -61,9 +61,9 @@ class IdentificationSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
 
     "must have an associated arg value" - {
 
-      "when sea going vehicle" in {
-        val result = SeaGoingVehicle.arg
-        result mustBe "name of the sea-going vehicle"
+      "when sea going vessel" in {
+        val result = SeaGoingVessel.arg
+        result mustBe "name of the sea-going vessel"
       }
       "when IATA flight number" in {
         val result = IataFlightNumber.arg
@@ -116,7 +116,7 @@ class IdentificationSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
 
           val radios = Identification.valuesU(answers)
           val expected = Seq(
-            Identification.SeaGoingVehicle,
+            Identification.SeaGoingVessel,
             Identification.ImoShipIdNumber
           )
 
@@ -168,7 +168,7 @@ class IdentificationSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
 
           val radios = Identification.valuesU(answers)
           val expected = Seq(
-            Identification.SeaGoingVehicle,
+            Identification.SeaGoingVessel,
             Identification.IataFlightNumber,
             Identification.InlandWaterwaysVehicle,
             Identification.ImoShipIdNumber,
