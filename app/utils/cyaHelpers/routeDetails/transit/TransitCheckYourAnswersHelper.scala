@@ -41,14 +41,14 @@ class TransitCheckYourAnswersHelper(
     page = T2DeclarationTypeYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "routeDetails.transit.t2DeclarationTypeYesNo",
-    id = Some("includes-t2-declarations")
+    id = Some("change-includes-t2-declarations")
   )
 
   def addOfficeOfTransit: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = AddOfficeOfTransitYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "routeDetails.transit.addOfficeOfTransitYesNo",
-    id = Some("add-office-of-transit")
+    id = Some("change-add-office-of-transit")
   )
 
   def officeOfTransit(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[OfficeOfTransitDomain, CustomsOffice](
