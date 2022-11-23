@@ -16,7 +16,7 @@ or
 
 ### Running manually or for journey tests
 
-<pre>sm --start CTC_TRADERS_PRELODGE -r
+<pre>sm --start CTC_TRADERS_DEPARTURE_P5_ACCEPTANCE CTC_TRADERS_API -r
 sm --stop MANAGE_TRANSIT_MOVEMENTS_DEPARTURE_FRONTEND
 sbt run
 </pre>
