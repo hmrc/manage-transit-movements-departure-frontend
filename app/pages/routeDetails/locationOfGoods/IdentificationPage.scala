@@ -34,13 +34,9 @@ case object IdentificationPage extends QuestionPage[LocationOfGoodsIdentificatio
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.IdentificationController.onPageLoad(userAnswers.lrn, mode))
 
-  override def cleanup(
-    updatedValue: Option[LocationOfGoodsIdentification],
-    previousValue: Option[LocationOfGoodsIdentification],
-    userAnswers: UserAnswers
-  ): Try[UserAnswers] =
-    (updatedValue, previousValue) match {
-      case (Some(x), Some(y)) if x == y => super.cleanup(updatedValue, previousValue, userAnswers)
-      case _                            => userAnswers.remove(LocationOfGoodsIdentifierSection)
+  override def cleanup(value: Option[LocationOfGoodsIdentification], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(_) => userAnswers.remove(LocationOfGoodsIdentifierSection)
+      case None    => super.cleanup(value, userAnswers)
     }
 }

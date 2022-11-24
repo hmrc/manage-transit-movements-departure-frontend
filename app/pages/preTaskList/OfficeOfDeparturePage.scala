@@ -16,7 +16,7 @@
 
 package pages.preTaskList
 
-import config.Constants.{GB, XI}
+import config.Constants.GB
 import models.DeclarationType.Option4
 import models.reference.CustomsOffice
 import models.{Mode, UserAnswers}
@@ -33,18 +33,10 @@ case object OfficeOfDeparturePage extends QuestionPage[CustomsOffice] {
 
   override def toString: String = "officeOfDeparture"
 
-  override def cleanup(updatedValue: Option[CustomsOffice], previousValue: Option[CustomsOffice], userAnswers: UserAnswers): Try[UserAnswers] =
-    (
-      updatedValue.map(_.countryCode),
-      previousValue.map(_.countryCode),
-      userAnswers.get(DeclarationTypePage)
-    ) match {
-      case (Some(GB), Some(XI), Some(Option4)) =>
-        userAnswers
-          .remove(DeclarationTypePage)
-          .flatMap(_.remove(TIRCarnetReferencePage))
-      case _ =>
-        super.cleanup(updatedValue, previousValue, userAnswers)
+  override def cleanup(value: Option[CustomsOffice], userAnswers: UserAnswers): Try[UserAnswers] =
+    (value.map(_.countryCode), userAnswers.get(DeclarationTypePage)) match {
+      case (Some(GB), Some(Option4)) => userAnswers.remove(DeclarationTypePage).flatMap(_.remove(TIRCarnetReferencePage))
+      case _                         => super.cleanup(value, userAnswers)
     }
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =

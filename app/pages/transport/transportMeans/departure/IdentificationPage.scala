@@ -35,12 +35,8 @@ case object IdentificationPage extends QuestionPage[Identification] {
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.IdentificationController.onPageLoad(userAnswers.lrn, mode))
 
-  override def cleanup(updatedValue: Option[Identification], previousValue: Option[Identification], userAnswers: UserAnswers): Try[UserAnswers] =
-    (updatedValue, previousValue) match {
-      case (Some(x), Some(y)) if x == y => super.cleanup(updatedValue, previousValue, userAnswers)
-      case _ =>
-        userAnswers
-          .remove(MeansIdentificationNumberPage)
-          .flatMap(_.remove(VehicleCountryPage))
-    }
+  override def cleanup(value: Option[Identification], userAnswers: UserAnswers): Try[UserAnswers] = value match {
+    case Some(_) => userAnswers.remove(MeansIdentificationNumberPage).flatMap(_.remove(VehicleCountryPage))
+    case None    => super.cleanup(value, userAnswers)
+  }
 }

@@ -103,9 +103,9 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
       "when country defined at index" in {
 
         val userAnswers = emptyUserAnswers
-          .setValue(OfficeOfTransitETAPage(index), dateTime)
           .setValue(OfficeOfTransitCountryPage(index), transitCountry)
           .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
+          .setValue(OfficeOfTransitETAPage(index), dateTime)
 
         setExistingUserAnswers(userAnswers)
 
@@ -134,9 +134,9 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
       "when only country of destination defined" in {
 
         val userAnswers = emptyUserAnswers
-          .setValue(OfficeOfTransitETAPage(index), dateTime)
           .setValue(CountryOfDestinationPage, transitCountry)
           .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
+          .setValue(OfficeOfTransitETAPage(index), dateTime)
 
         setExistingUserAnswers(userAnswers)
 
