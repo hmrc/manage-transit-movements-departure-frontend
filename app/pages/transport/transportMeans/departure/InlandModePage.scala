@@ -35,13 +35,14 @@ case object InlandModePage extends QuestionPage[InlandMode] {
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.InlandModeController.onPageLoad(userAnswers.lrn, mode))
 
-  override def cleanup(updatedValue: Option[InlandMode], previousValue: Option[InlandMode], userAnswers: UserAnswers): Try[UserAnswers] =
-    (updatedValue, previousValue) match {
-      case (Some(x), Some(y)) if x == y => super.cleanup(updatedValue, previousValue, userAnswers)
-      case _ =>
+  override def cleanup(value: Option[InlandMode], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(_) =>
         userAnswers
           .remove(IdentificationPage)
           .flatMap(_.remove(MeansIdentificationNumberPage))
           .flatMap(_.remove(VehicleCountryPage))
+      case None =>
+        super.cleanup(value, userAnswers)
     }
 }
