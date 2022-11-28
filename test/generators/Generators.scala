@@ -26,7 +26,6 @@ import wolfendale.scalacheck.regexp.RegexpGen
 import java.time._
 import scala.util.matching.Regex
 
-// TODO: Move away from mixing style to using objects
 // scalastyle:off number.of.methods
 trait Generators extends UserAnswersGenerator with ModelGenerators with ViewModelGenerators with DomainModelGenerators {
 
