@@ -18,25 +18,17 @@ package models.journeyDomain.transport
 
 import cats.implicits._
 import models.DeclarationType.Option4
-import models.{Mode, UserAnswers}
 import models.domain.{UserAnswersReader, _}
-import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.Country
-import navigation.UserAnswersNavigator
 import pages.preTaskList.DeclarationTypePage
 import pages.transport.preRequisites._
-import play.api.mvc.Call
 
 case class PreRequisitesDomain(
   ucr: Option[String],
   countryOfDispatch: Option[Country],
   itemsDestinationCountry: Option[Country],
   containerIndicator: Boolean
-) extends JourneyDomainModel {
-
-  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
-    Some(UserAnswersNavigator.nextPage[TransportDomain](userAnswers, mode))
-}
+)
 
 object PreRequisitesDomain {
 

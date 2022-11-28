@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.UCRFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
-import navigation.transport.PreRequisitesNavigatorProvider
+import navigation.transport.TransportNavigatorProvider
 import pages.transport.preRequisites.UniqueConsignmentReferencePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class UniqueConsignmentReferenceController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: PreRequisitesNavigatorProvider,
+  navigatorProvider: TransportNavigatorProvider,
   formProvider: UCRFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
