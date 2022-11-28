@@ -19,7 +19,7 @@ package controllers.transport.preRequisites
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.UCRFormProvider
 import models.NormalMode
-import navigation.transport.PreRequisitesNavigatorProvider
+import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.transport.preRequisites.UniqueConsignmentReferencePage
@@ -41,7 +41,7 @@ class UniqueConsignmentReferenceControllerSpec extends SpecBase with AppWithDefa
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[PreRequisitesNavigatorProvider]).toInstance(fakePreRequisitesNavigatorProvider))
+      .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
 
   "UniqueConsignmentReference Controller" - {
 
