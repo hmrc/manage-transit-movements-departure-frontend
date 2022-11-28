@@ -18,11 +18,11 @@ package navigation.transport
 
 import base.SpecBase
 import controllers.transport.transportMeans.departure.routes
-import generators.{Generators, TransportUserAnswersGenerator}
+import generators.Generators
 import models._
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class PreRequisitesNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TransportUserAnswersGenerator {
+class PreRequisitesNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "Pre Requisites Navigator" - {
 

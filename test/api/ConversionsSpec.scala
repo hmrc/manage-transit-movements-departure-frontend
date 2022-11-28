@@ -19,7 +19,7 @@ package api
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generated.TransitOperationType06
-import generators.{Generators, PreTaskListUserAnswersGenerator, RouteDetailsUserAnswersGenerator, TraderDetailsUserAnswersGenerator}
+import generators.Generators
 import models.UserAnswers
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
@@ -28,13 +28,7 @@ import scalaxb._
 
 import scala.xml.{NodeSeq, XML}
 
-class ConversionsSpec
-    extends SpecBase
-    with UserAnswersSpecHelper
-    with Generators
-    with PreTaskListUserAnswersGenerator
-    with RouteDetailsUserAnswersGenerator
-    with TraderDetailsUserAnswersGenerator {
+class ConversionsSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
   "transitOperationType" - {
 

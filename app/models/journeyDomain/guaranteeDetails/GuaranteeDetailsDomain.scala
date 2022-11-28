@@ -40,10 +40,12 @@ case class GuaranteeDetailsDomain(
 object GuaranteeDetailsDomain {
 
   implicit val userAnswersReader: UserAnswersReader[GuaranteeDetailsDomain] =
-    GuaranteeDetailsSection.reader.flatMap {
-      case x if x.isEmpty =>
-        UserAnswersReader[GuaranteeDomain](GuaranteeDomain.userAnswersReader(Index(0))).map(Seq(_)).map(GuaranteeDetailsDomain(_))
-      case x =>
-        x.traverse[GuaranteeDomain](GuaranteeDomain.userAnswersReader).map(GuaranteeDetailsDomain.apply)
-    }
+    GuaranteeDetailsSection.reader
+      .flatMap {
+        case x if x.isEmpty =>
+          UserAnswersReader[GuaranteeDomain](GuaranteeDomain.userAnswersReader(Index(0))).map(Seq(_))
+        case x =>
+          x.traverse[GuaranteeDomain](GuaranteeDomain.userAnswersReader)
+      }
+      .map(GuaranteeDetailsDomain(_))
 }

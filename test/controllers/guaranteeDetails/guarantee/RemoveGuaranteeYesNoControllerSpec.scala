@@ -18,7 +18,7 @@ package controllers.guaranteeDetails.guarantee
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
-import generators.{Generators, GuaranteeDetailsUserAnswersGenerator}
+import generators.Generators
 import models.UserAnswers
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -31,12 +31,7 @@ import views.html.guaranteeDetails.guarantee.RemoveGuaranteeYesNoView
 
 import scala.concurrent.Future
 
-class RemoveGuaranteeYesNoControllerSpec
-    extends SpecBase
-    with AppWithDefaultMockFixtures
-    with ScalaCheckPropertyChecks
-    with Generators
-    with GuaranteeDetailsUserAnswersGenerator {
+class RemoveGuaranteeYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   private val formProvider                   = new YesNoFormProvider()
   private val form                           = formProvider("guaranteeDetails.guarantee.removeGuaranteeYesNo")

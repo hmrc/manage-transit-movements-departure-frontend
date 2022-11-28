@@ -23,7 +23,6 @@ import models.{Index, Mode, UserAnswers}
 import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
 import pages.sections.routeDetails.exit.OfficesOfExitSection
 import play.api.i18n.Messages
-import play.api.libs.json.Reads
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
 import viewModels.ListItem
@@ -44,16 +43,12 @@ class ExitCheckYourAnswersHelper(
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(OfficesOfExitSection) {
-      position =>
-        val index = Index(position)
+      index =>
         buildListItem[OfficeOfExitDomain, Country](
           page = OfficeOfExitCountryPage(index),
           formatJourneyDomainModel = _.label,
           formatType = _.toString,
           removeRoute = Some(routes.ConfirmRemoveOfficeOfExitController.onPageLoad(userAnswers.lrn, index, mode))
-        )(
-          OfficeOfExitDomain.userAnswersReader(index),
-          implicitly[Reads[Country]]
-        )
+        )(OfficeOfExitDomain.userAnswersReader(index), implicitly)
     }
 }

@@ -34,7 +34,7 @@ class CheckDependentTaskCompletedAction[T: TypeTag](implicit val executionContex
     with Logging {
 
   override protected def filter[A](request: DataRequest[A]): Future[Option[Result]] =
-    UserAnswersReader[T].run(request.userAnswers) match {
+    userAnswersReader.run(request.userAnswers) match {
       case Right(_) =>
         Future.successful(None)
       case Left(_) =>

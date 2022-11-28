@@ -18,7 +18,7 @@ package services
 
 import base.SpecBase
 import connectors.ApiConnector
-import generators.{Generators, PreTaskListUserAnswersGenerator, RouteDetailsUserAnswersGenerator}
+import generators.Generators
 import models.UserAnswers
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, when}
@@ -28,7 +28,7 @@ import uk.gov.hmrc.http.HttpResponse
 
 import scala.concurrent.Future
 
-class ApiServiceSpec extends SpecBase with BeforeAndAfterEach with Generators with RouteDetailsUserAnswersGenerator with PreTaskListUserAnswersGenerator {
+class ApiServiceSpec extends SpecBase with BeforeAndAfterEach with Generators {
 
   val mockApiConnector: ApiConnector = mock[ApiConnector]
   val service: ApiService            = new ApiService(mockApiConnector)

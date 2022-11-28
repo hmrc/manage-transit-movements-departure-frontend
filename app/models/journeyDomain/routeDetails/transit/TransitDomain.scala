@@ -56,7 +56,7 @@ object TransitDomain {
         case x =>
           x.traverse[OfficeOfTransitDomain](
             OfficeOfTransitDomain.userAnswersReader(_, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-          ).map(_.toSeq)
+          )
       }
 
     lazy val addOfficesOfTransitReader: UserAnswersReader[OfficesOfTransit] =

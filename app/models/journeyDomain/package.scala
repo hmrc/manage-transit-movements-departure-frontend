@@ -28,7 +28,7 @@ package object domain {
   type UserAnswersReader[A] = ReaderT[EitherType, UserAnswers, A]
 
   object UserAnswersReader {
-    def apply[A: UserAnswersReader]: UserAnswersReader[A] = implicitly[UserAnswersReader[A]]
+    def apply[A](implicit ev: UserAnswersReader[A]): UserAnswersReader[A] = ev
 
     def apply[A](fn: UserAnswers => EitherType[A]): UserAnswersReader[A] =
       ReaderT[EitherType, UserAnswers, A](fn)
