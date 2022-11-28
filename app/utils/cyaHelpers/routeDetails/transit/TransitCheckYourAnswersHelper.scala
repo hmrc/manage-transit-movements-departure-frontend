@@ -61,13 +61,12 @@ class TransitCheckYourAnswersHelper(
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(OfficesOfTransitSection) {
-      position =>
-        val index = Index(position)
+      index =>
         buildListItem[OfficeOfTransitDomain, Country](
           page = OfficeOfTransitCountryPage(index),
           formatJourneyDomainModel = _.label,
           formatType = _.toString,
-          removeRoute = if (position == 0) None else Some(routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, mode, index))
+          removeRoute = if (index.isFirst) None else Some(routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, mode, index))
         )(
           OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes),
           implicitly

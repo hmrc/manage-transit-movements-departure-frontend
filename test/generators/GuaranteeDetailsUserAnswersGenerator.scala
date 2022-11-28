@@ -20,8 +20,8 @@ import models.journeyDomain.guaranteeDetails.{GuaranteeDetailsDomain, GuaranteeD
 import models.{Index, UserAnswers}
 import org.scalacheck.Gen
 
-trait GuaranteeDetailsUserAnswersGenerator extends UserAnswersGenerator {
-  self: Generators =>
+trait GuaranteeDetailsUserAnswersGenerator {
+  self: UserAnswersGenerator =>
 
   def arbitraryGuaranteeDetailsAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[GuaranteeDetailsDomain](userAnswers)(GuaranteeDetailsDomain.userAnswersReader)

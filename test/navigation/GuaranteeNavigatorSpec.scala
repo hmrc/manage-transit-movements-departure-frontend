@@ -19,7 +19,7 @@ package navigation
 import base.SpecBase
 import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
 import controllers.guaranteeDetails.{routes => guaranteeDetailsRoutes}
-import generators.{Generators, GuaranteeDetailsUserAnswersGenerator}
+import generators.Generators
 import models.GuaranteeType._
 import models._
 import org.scalacheck.Arbitrary.arbitrary
@@ -27,7 +27,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import pages.preTaskList.DeclarationTypePage
 
-class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with GuaranteeDetailsUserAnswersGenerator {
+class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "Guarantee Details Navigator" - {
 

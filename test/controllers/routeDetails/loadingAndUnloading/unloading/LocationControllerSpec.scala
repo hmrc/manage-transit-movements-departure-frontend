@@ -51,7 +51,6 @@ class LocationControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
   "Location Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      //TODO: change to PlaceOfUnLoadingCountryPage once created
       val userAnswers = emptyUserAnswers.setValue(CountryPage, country)
       setExistingUserAnswers(userAnswers)
 

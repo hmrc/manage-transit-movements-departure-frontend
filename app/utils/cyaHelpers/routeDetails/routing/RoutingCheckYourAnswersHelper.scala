@@ -68,8 +68,7 @@ class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(CountriesOfRoutingSection) {
-      position =>
-        val index = Index(position)
+      index =>
         buildListItem[CountryOfRoutingDomain, Country](
           page = CountryOfRoutingPage(index),
           formatJourneyDomainModel = _.country.toString,

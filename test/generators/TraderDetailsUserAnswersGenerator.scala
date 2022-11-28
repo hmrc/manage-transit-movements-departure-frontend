@@ -22,8 +22,8 @@ import models.journeyDomain.traderDetails.consignment.{ConsignmentConsigneeDomai
 import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain
 import org.scalacheck.Gen
 
-trait TraderDetailsUserAnswersGenerator extends UserAnswersGenerator {
-  self: Generators =>
+trait TraderDetailsUserAnswersGenerator {
+  self: UserAnswersGenerator =>
 
   def arbitraryTraderDetailsAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[TraderDetailsDomain](userAnswers)

@@ -44,7 +44,6 @@ object ViewUtils {
         }
     }
 
-  // TODO refactor this maybe? Going to need this for every ViewModel type going forward
   implicit class RadiosImplicits(radios: Radios)(implicit messages: Messages) extends RichRadiosSupport {
 
     def withHeadingAndCaption(heading: String, caption: Option[String]): Radios =

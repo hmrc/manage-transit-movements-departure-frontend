@@ -16,7 +16,7 @@
 
 package viewModels.routeDetails.transit
 
-import models.{Index, Mode, RichOptionalJsArray, UserAnswers}
+import models.{Mode, RichOptionalJsArray, UserAnswers}
 import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import play.api.i18n.Messages
 import utils.cyaHelpers.routeDetails.transit.TransitCheckYourAnswersHelper
@@ -50,7 +50,7 @@ object TransitAnswersViewModel {
         rows = userAnswers
           .get(OfficesOfTransitSection)
           .mapWithIndex {
-            (_, index) => helper.officeOfTransit(Index(index))
+            (_, index) => helper.officeOfTransit(index)
           },
         addAnotherLink = Link(
           id = "add-or-remove-offices-of-transit",

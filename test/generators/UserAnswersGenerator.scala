@@ -22,9 +22,14 @@ import models.reference.Country
 import models.{EoriNumber, LocalReferenceNumber, RichJsObject, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalatest.TryValues
 
-trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
+trait UserAnswersGenerator
+    extends UserAnswersEntryGenerators
+    with PreTaskListUserAnswersGenerator
+    with TraderDetailsUserAnswersGenerator
+    with RouteDetailsUserAnswersGenerator
+    with TransportUserAnswersGenerator
+    with GuaranteeDetailsUserAnswersGenerator {
   self: Generators =>
 
   val ctcCountries: Seq[Country]                            = listWithMaxLength[Country]().sample.get
@@ -52,7 +57,7 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
   )(implicit userAnswersReader: UserAnswersReader[T]): Gen[UserAnswers] = {
 
     def rec(userAnswers: UserAnswers): Gen[UserAnswers] =
-      UserAnswersReader[T].run(userAnswers) match {
+      userAnswersReader.run(userAnswers) match {
         case Left(ReaderError(page, _)) =>
           generateAnswer
             .apply(page)

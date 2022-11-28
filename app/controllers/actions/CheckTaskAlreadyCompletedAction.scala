@@ -31,7 +31,7 @@ class CheckTaskAlreadyCompletedAction[T](implicit val executionContext: Executio
     with Logging {
 
   override protected def filter[A](request: DataRequest[A]): Future[Option[Result]] =
-    UserAnswersReader[T].run(request.userAnswers) match {
+    userAnswersReader.run(request.userAnswers) match {
       case Right(_) =>
         logger.info(s"User is redirected to 'task-list' page when trying to access the URL: ${request.request.path}")
         Future.successful(Some(Redirect(routes.TaskListController.onPageLoad(request.userAnswers.lrn))))

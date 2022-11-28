@@ -50,7 +50,7 @@ private[viewModels] class TaskProvider(userAnswers: UserAnswers) {
       section: Section[U],
       inProgressRoute: Option[Call] = None
     )(implicit rds: Reads[U], userAnswersReader: UserAnswersReader[T]): (TaskStatus, Option[String]) = {
-      lazy val (status, onwardRoute) = UserAnswersReader[T].run(userAnswers) match {
+      lazy val (status, onwardRoute) = userAnswersReader.run(userAnswers) match {
         case Left(ReaderError(page, _)) =>
           val route = page.route(userAnswers, NormalMode).map(_.url)
           userAnswers.get(section) match {

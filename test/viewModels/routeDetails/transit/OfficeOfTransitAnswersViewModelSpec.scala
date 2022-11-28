@@ -17,7 +17,7 @@
 package viewModels.routeDetails.transit
 
 import base.SpecBase
-import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import generators.Generators
 import models.reference.{Country, CustomsOffice}
 import models.{DateTime, Mode}
 import org.scalacheck.Arbitrary.arbitrary
@@ -25,7 +25,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
 import viewModels.routeDetails.transit.OfficeOfTransitAnswersViewModel.OfficeOfTransitAnswersViewModelProvider
 
-class OfficeOfTransitAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class OfficeOfTransitAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "apply" - {
 

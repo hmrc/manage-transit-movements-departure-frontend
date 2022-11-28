@@ -18,7 +18,7 @@ package connectors
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock._
-import generators.{Generators, PreTaskListUserAnswersGenerator, RouteDetailsUserAnswersGenerator, TraderDetailsUserAnswersGenerator}
+import generators.Generators
 import helper.WireMockServerHandler
 import models.UserAnswers
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -26,14 +26,7 @@ import play.api.libs.json.Json
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{BadRequestException, HttpResponse, UpstreamErrorResponse}
 
-class ApiConnectorSpec
-    extends SpecBase
-    with AppWithDefaultMockFixtures
-    with WireMockServerHandler
-    with Generators
-    with RouteDetailsUserAnswersGenerator
-    with PreTaskListUserAnswersGenerator
-    with TraderDetailsUserAnswersGenerator {
+class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler with Generators {
 
   val preTask: UserAnswers       = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
   val traderDetails: UserAnswers = arbitraryTraderDetailsAnswers(preTask).sample.value

@@ -20,8 +20,8 @@ import models.UserAnswers
 import models.journeyDomain.transport.{PreRequisitesDomain, TransportDomain, TransportMeansDomain}
 import org.scalacheck.Gen
 
-trait TransportUserAnswersGenerator extends UserAnswersGenerator {
-  self: Generators =>
+trait TransportUserAnswersGenerator {
+  self: UserAnswersGenerator =>
 
   def arbitraryTransportAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[TransportDomain](userAnswers)

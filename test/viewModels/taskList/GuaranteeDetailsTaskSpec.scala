@@ -19,7 +19,7 @@ package viewModels.taskList
 import base.SpecBase
 import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
 import controllers.guaranteeDetails.{routes => guaranteeDetailsRoutes}
-import generators.{Generators, GuaranteeDetailsUserAnswersGenerator}
+import generators.Generators
 import models.DeclarationType.Option4
 import models.{DeclarationType, GuaranteeType, Index, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
@@ -29,7 +29,7 @@ import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import pages.preTaskList.DeclarationTypePage
 import viewModels.taskList.TaskStatus._
 
-class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with GuaranteeDetailsUserAnswersGenerator {
+class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "name" - {
     "must be Guarantee Details" - {

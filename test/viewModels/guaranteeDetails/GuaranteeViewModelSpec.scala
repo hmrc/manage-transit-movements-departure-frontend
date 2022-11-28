@@ -17,16 +17,16 @@
 package viewModels.guaranteeDetails
 
 import base.SpecBase
-import generators.{Generators, GuaranteeDetailsUserAnswersGenerator}
-import models.{DeclarationType, GuaranteeType}
+import generators.Generators
 import models.DeclarationType.Option4
 import models.GuaranteeType._
+import models.{DeclarationType, GuaranteeType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.guaranteeDetails.guarantee.{GuaranteeTypePage, OtherReferenceYesNoPage}
 import pages.preTaskList._
 
-class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with GuaranteeDetailsUserAnswersGenerator {
+class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "apply" - {
 

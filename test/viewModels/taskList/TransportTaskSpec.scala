@@ -17,14 +17,14 @@
 package viewModels.taskList
 
 import base.SpecBase
-import generators.{Generators, TransportUserAnswersGenerator}
+import generators.Generators
 import models.NormalMode
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.transport.preRequisites._
 import viewModels.taskList.TaskStatus._
 
-class TransportTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TransportUserAnswersGenerator {
+class TransportTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "name" - {
     "must be Transport details" - {
