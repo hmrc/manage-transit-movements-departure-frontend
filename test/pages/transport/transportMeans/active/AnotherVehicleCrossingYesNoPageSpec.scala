@@ -16,16 +16,17 @@
 
 package pages.transport.transportMeans.active
 
+import base.SpecBase
 import pages.behaviours.PageBehaviours
 
-class AnotherVehicleCrossingYesNoPageSpec extends PageBehaviours {
+class AnotherVehicleCrossingYesNoPageSpec extends PageBehaviours with SpecBase {
 
   "AnotherVehicleCrossingYesNoPage" - {
 
-    beRetrievable[Boolean](AnotherVehicleCrossingYesNoPage)
+    beRetrievable[Boolean](AnotherVehicleCrossingYesNoPage(activeIndex))
 
-    beSettable[Boolean](AnotherVehicleCrossingYesNoPage)
+    beSettable[Boolean](AnotherVehicleCrossingYesNoPage(activeIndex))
 
-    beRemovable[Boolean](AnotherVehicleCrossingYesNoPage)
+    beRemovable[Boolean](AnotherVehicleCrossingYesNoPage(activeIndex))
   }
 }
