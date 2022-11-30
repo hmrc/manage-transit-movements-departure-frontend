@@ -25,7 +25,7 @@ import views.html.transport.transportMeans.active.AddNationalityYesNoView
 class AddNationalityYesNoViewSpec extends YesNoViewBehaviours {
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[AddNationalityYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[AddNationalityYesNoView].apply(form, lrn, NormalMode, activeIndex)(fakeRequest, messages)
 
   override val prefix: String = "transport.transportMeans.active.addNationalityYesNo"
 

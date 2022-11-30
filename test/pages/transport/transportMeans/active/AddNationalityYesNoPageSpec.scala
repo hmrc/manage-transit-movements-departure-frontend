@@ -16,16 +16,17 @@
 
 package pages.transport.transportMeans.active
 
+import base.SpecBase
 import pages.behaviours.PageBehaviours
 
-class AddNationalityYesNoPageSpec extends PageBehaviours {
+class AddNationalityYesNoPageSpec extends PageBehaviours with SpecBase {
 
   "AddNationalityYesNoPage" - {
 
-    beRetrievable[Boolean](AddNationalityYesNoPage)
+    beRetrievable[Boolean](AddNationalityYesNoPage(activeIndex))
 
-    beSettable[Boolean](AddNationalityYesNoPage)
+    beSettable[Boolean](AddNationalityYesNoPage(activeIndex))
 
-    beRemovable[Boolean](AddNationalityYesNoPage)
+    beRemovable[Boolean](AddNationalityYesNoPage(activeIndex))
   }
 }
