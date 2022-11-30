@@ -1,0 +1,5 @@
+
+GET        /:lrn/transport-details/border-mode-of-transport/change-vehicle-border                       controllers.transport.transportMeans.active.AnotherVehicleCrossingYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport-details/border-mode-of-transport/change-vehicle-border                       controllers.transport.transportMeans.active.AnotherVehicleCrossingYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport-details/border-mode-of-transport/change-change-vehicle-border                controllers.transport.transportMeans.active.AnotherVehicleCrossingYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport-details/border-mode-of-transport/change-change-vehicle-border                controllers.transport.transportMeans.active.AnotherVehicleCrossingYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

@@ -1076,6 +1076,7 @@ declarationSubmitted.paragraph1 = You have submitted your declaration.
 
 transport.inlandMode.caption = Transport details - Inland mode of transport
 transport.departureMeansOfTransport.caption = Transport details - Departure means of transport
+transport.departureBorderModeOfTransport.caption = Transport details - Border mode of transport
 
 transport.transportMeans.departure.inlandMode.title = Which inland mode of transport are you using?
 transport.transportMeans.departure.inlandMode.heading = Which inland mode of transport are you using?
@@ -1134,3 +1135,10 @@ transport.transportMeans.departure.vehicleCountry.placeholder = Select a nationa
 transport.transportMeans.departure.vehicleCountry.change.hidden = the country the vehicle is registered to
 transport.transportMeans.departure.vehicleCountry.checkYourAnswersLabel = What country is this vehicle registered to?
 transport.transportMeans.departure.vehicleCountry.error.required = Select the country the vehicle is registered to
+
+transport.transportMeans.active.anotherVehicleCrossingYesNo.title = Are you using another vehicle to cross the border?
+transport.transportMeans.active.anotherVehicleCrossingYesNo.heading = Are you using another vehicle to cross the border?
+transport.transportMeans.active.anotherVehicleCrossingYesNo.paragraph = This includes using a different vehicle to carry the inland mode over the border. For example, a truck on a ferry.
+transport.transportMeans.active.anotherVehicleCrossingYesNo.checkYourAnswersLabel = Are you using another vehicle to cross the border?
+transport.transportMeans.active.anotherVehicleCrossingYesNo.error.required = Select yes if the vehicle will change before crossing the border
+
