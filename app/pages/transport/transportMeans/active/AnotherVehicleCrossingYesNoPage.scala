@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package pages.transport.transportMeans.departure
+package pages.transport.transportMeans.active
 
-import controllers.transport.transportMeans.departure.routes
+import controllers.transport.transportMeans.active.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.TransportMeansDepartureSection
+import pages.sections.transport.TransportMeansActiveSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object MeansIdentificationNumberPage extends QuestionPage[String] {
+case object AnotherVehicleCrossingYesNoPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = TransportMeansDepartureSection.path \ toString
+  override def path: JsPath = TransportMeansActiveSection.path \ toString
 
-  override def toString: String = "meansIdentificationNumber"
+  override def toString: String = "anotherVehicleCrossingYesNo"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.MeansIdentificationNumberController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.AnotherVehicleCrossingYesNoController.onPageLoad(userAnswers.lrn, mode))
 }

@@ -20,13 +20,13 @@ import controllers.transport.transportMeans.departure.routes
 import models.reference.Nationality
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.TransportMeansSection
+import pages.sections.transport.TransportMeansDepartureSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case object VehicleCountryPage extends QuestionPage[Nationality] {
 
-  override def path: JsPath = TransportMeansSection.path \ toString
+  override def path: JsPath = TransportMeansDepartureSection.path \ toString
 
   override def toString: String = "vehicleCountry"
 
