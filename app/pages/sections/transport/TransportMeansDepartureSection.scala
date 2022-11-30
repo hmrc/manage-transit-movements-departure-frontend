@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.sections
+package pages.sections.transport
 
-import play.api.libs.json.JsPath
-import pages.QuestionPage
+import pages.sections.Section
+import play.api.libs.json.{JsObject, JsPath}
 
-case object TransportMeansSection extends QuestionPage[Nothing] {
+case object TransportMeansDepartureSection extends Section[JsObject] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = TransportSection.path \ toString
 
-  override def toString: String = "anotherVehicleCrossingYesNo"
+  override def toString: String = "transportMeansDeparture"
 }

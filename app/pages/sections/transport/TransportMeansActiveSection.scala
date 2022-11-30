@@ -19,9 +19,9 @@ package pages.sections.transport
 import pages.sections.Section
 import play.api.libs.json.{JsObject, JsPath}
 
-case object TransportMeansSection extends Section[JsObject] {
+case object TransportMeansActiveSection extends Section[JsObject] {
 
   override def path: JsPath = TransportSection.path \ toString
 
-  override def toString: String = "transportMeans"
+  override def toString: String = "transportMeansActive"
 }
