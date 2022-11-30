@@ -1,0 +1,5 @@
+
+GET        /:lrn/transport-details/border-means-of-transport/identification                        controllers.transport.transportMeans.active.IdentificationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport-details/border-means-of-transport/identification                        controllers.transport.transportMeans.active.IdentificationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport-details/border-means-of-transport/change-identification                 controllers.transport.transportMeans.active.IdentificationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport-details/border-means-of-transport/change-identification                 controllers.transport.transportMeans.active.IdentificationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
