@@ -1142,8 +1142,7 @@ transport.transportMeans.active.anotherVehicleCrossingYesNo.paragraph = This inc
 transport.transportMeans.active.anotherVehicleCrossingYesNo.checkYourAnswersLabel = Are you using another vehicle to cross the border?
 transport.transportMeans.active.anotherVehicleCrossingYesNo.error.required = Select yes if the vehicle will change before crossing the border
 
-
-transport.transportMeans.active.addNationalityYesNo.title = Do you want to add the registered country for this vehicle
-transport.transportMeans.active.addNationalityYesNo.heading = Do you want to add the registered country for this vehicle
+transport.transportMeans.active.addNationalityYesNo.title = Do you want to add the registered country for this vehicle?
+transport.transportMeans.active.addNationalityYesNo.heading = Do you want to add the registered country for this vehicle?
 transport.transportMeans.active.addNationalityYesNo.checkYourAnswersLabel = Do you want to add the registered country for this vehicle
-transport.transportMeans.active.addNationalityYesNo.error.required = Select yes if Do you want to add the registered country for this vehicle
+transport.transportMeans.active.addNationalityYesNo.error.required = Select yes if you want to add the registered country for the vehicle crossing the border
