@@ -33,7 +33,7 @@ class AddNationalityYesNoViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Transport details - Border mode of transport")
+  behave like pageWithSectionCaption("Transport details - Border means of transport")
 
   behave like pageWithHeading()
 

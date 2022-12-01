@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.transport.transportMeans.active.routes
+@import controllers.transport.transportMeans.routes
 @import models.LocalReferenceNumber
 @import viewModels.components.InputYesNoViewModel._
 @import views.html.components.{Button, ErrorSummary, InputYesNo}
@@ -30,7 +30,7 @@
 @(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("transport.transportMeans.active.anotherVehicleCrossingYesNo.title"),
+    title = messages("transport.transportMeans.anotherVehicleCrossingYesNo.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -42,9 +42,9 @@
         @inputYesNo(
             field = form("value"),
             yesNoType = YesNoWithAdditionalHtml(
-                heading = messages("transport.transportMeans.active.anotherVehicleCrossingYesNo.heading"),
-                caption = Some(messages("transport.departureBorderModeOfTransport.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("transport.transportMeans.active.anotherVehicleCrossingYesNo.paragraph")}</p>""")
+                heading = messages("transport.transportMeans.anotherVehicleCrossingYesNo.heading"),
+                caption = Some(messages("transport.activeBorderModeOfTransport.caption")),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("transport.transportMeans.anotherVehicleCrossingYesNo.paragraph")}</p>""")
             )
         )
 

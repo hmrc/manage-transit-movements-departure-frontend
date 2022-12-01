@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package views.transport.transportMeans.active
+package views.transport.transportMeans
 
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.transport.transportMeans.active.AnotherVehicleCrossingYesNoView
+import views.html.transport.transportMeans.AnotherVehicleCrossingYesNoView
 
 class AnotherVehicleCrossingYesNoViewSpec extends YesNoViewBehaviours {
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector.instanceOf[AnotherVehicleCrossingYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
-  override val prefix: String = "transport.transportMeans.active.anotherVehicleCrossingYesNo"
+  override val prefix: String = "transport.transportMeans.anotherVehicleCrossingYesNo"
 
   behave like pageWithTitle()
 
