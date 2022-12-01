@@ -16,12 +16,12 @@
 
 package pages.sections.transport
 
-import models.Index
 import pages.sections.Section
-import play.api.libs.json.{JsObject, JsPath}
+import play.api.libs.json.{JsArray, JsPath}
 
-case class TransportMeansActiveSection(index: Index) extends Section[JsObject] {
+case object TransportMeansActiveListSection extends Section[JsArray] {
 
-  override def path: JsPath = TransportMeansActiveListSection.path \ index.position
+  override def path: JsPath = TransportSection.path \ toString
 
+  override def toString: String = "transportMeansActiveList"
 }
