@@ -1171,3 +1171,12 @@ transport.transportMeans.active.nationality.placeholder = Select a nationality
 transport.transportMeans.active.nationality.change.hidden = country is this vehicle registered to
 transport.transportMeans.active.nationality.checkYourAnswersLabel = What country is this vehicle registered to?
 transport.transportMeans.active.nationality.error.required = Select the country the vehicle is registered to
+
+transport.transportMeans.active.customsOfficeActiveBorder.title = Where is the office of transit?
+transport.transportMeans.active.customsOfficeActiveBorder.heading = Where is the office of transit?
+transport.transportMeans.active.customsOfficeActiveBorder.hint = Enter the office location or code, like Calais or FR620001.
+transport.transportMeans.active.customsOfficeActiveBorder.placeholder = Select a customs office
+transport.transportMeans.active.customsOfficeActiveBorder.paragraph = This is the customs office after crossing the border.
+transport.transportMeans.active.customsOfficeActiveBorder.change.hidden = Where is the office of transit
+transport.transportMeans.active.customsOfficeActiveBorder.checkYourAnswersLabel = Where is the office of transit?
+transport.transportMeans.active.customsOfficeActiveBorder.error.required = Enter the office of transit

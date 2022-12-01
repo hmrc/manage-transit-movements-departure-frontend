@@ -19,9 +19,11 @@ package models
 import models.reference.CustomsOffice
 import play.api.Logging
 import play.api.http.Status.{NOT_FOUND, OK}
+import play.api.libs.json.{JsArray, JsError, JsSuccess, Reads}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
-case class CustomsOfficeList(customsOffices: Seq[CustomsOffice]) {
+case class CustomsOfficeList(customsOffices: Seq[CustomsOffice]) extends Selectable {
 
   def getAll: Seq[CustomsOffice] =
     customsOffices
@@ -38,6 +40,8 @@ case class CustomsOfficeList(customsOffices: Seq[CustomsOffice]) {
     case x: CustomsOfficeList => x.getAll == getAll
     case _                    => false
   }
+
+  override def toSelectItem(selected: Boolean): SelectItem = SelectItem(None, "", selected)
 
 }
 
@@ -60,5 +64,25 @@ object CustomsOfficeList extends Logging {
           logger.info(s"[ReferenceDataConnector][getCustomsOfficesForCountry] Invalid downstream status $other")
           throw new IllegalStateException(s"Invalid Downstream Status $other")
       }
+
+  implicit class OptionalCustomsOfficeList(customsOfficeList: Option[CustomsOfficeList]) {
+
+    def getCustomsOffices: Seq[CustomsOffice] = customsOfficeList.map(_.customsOffices).getOrElse(Nil)
+  }
+
+  private def customsOfficeListReads(key: String): Reads[CustomsOfficeList] = Reads[CustomsOfficeList] {
+    case JsArray(values) =>
+      JsSuccess(
+        CustomsOfficeList(
+          values.flatMap {
+            value => (value \ key).validate[CustomsOffice].asOpt
+          }.toSeq
+        )
+      )
+    case _ => JsError("CustomsOfficeList::customReads: Failed to read customs office list from cache")
+  }
+
+  val officesOfExitReads: Reads[CustomsOfficeList]    = customsOfficeListReads("officeOfExit")
+  val officesOfTransitReads: Reads[CustomsOfficeList] = customsOfficeListReads("officeOfTransit")
 
 }
