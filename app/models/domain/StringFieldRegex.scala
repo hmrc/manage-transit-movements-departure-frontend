@@ -32,7 +32,7 @@ object StringFieldRegex {
   val tirIdNumberCharacterRegex: Regex = "^[a-zA-Z0-9/]+$".r
   val tirIdNumberFormatRegex: Regex    = "^[a-zA-Z]{3}\\/[0-9]{3}\\/[0-9]{0,9}$".r
 
-  val alphaNumericWithSpacesRegex: Regex = "^[a-zA-Z\\s*0-9]*$".r
+  val alphaNumericWithSpacesRegex: Regex = "^[a-zA-Z\\s0-9]*$".r
 
   val coordinatesCharacterRegex: Regex     = "^[0-9.+-]+$".r
   val coordinatesLatitudeMaxRegex: String  = "^[+-]?([0-8]?[0-9]\\.[0-9]{5,7})$"
