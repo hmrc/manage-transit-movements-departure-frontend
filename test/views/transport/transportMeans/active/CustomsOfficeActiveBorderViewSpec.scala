@@ -1,3 +1,19 @@
+/*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package views.transport.transportMeans.active
 
 import forms.CustomsOfficeFormProvider
@@ -15,7 +31,7 @@ class CustomsOfficeActiveBorderViewSpec extends InputSelectViewBehaviours[Custom
   override def form: Form[CustomsOffice] = new CustomsOfficeFormProvider()(prefix, CustomsOfficeList(values))
 
   override def applyView(form: Form[CustomsOffice]): HtmlFormat.Appendable =
-    injector.instanceOf[CustomsOfficeActiveBorderView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[CustomsOfficeActiveBorderView].apply(form, lrn, CustomsOfficeList(values), NormalMode, activeIndex)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[CustomsOffice] = arbitraryCustomsOffice
 
@@ -25,13 +41,15 @@ class CustomsOfficeActiveBorderViewSpec extends InputSelectViewBehaviours[Custom
 
   behave like pageWithBackLink()
 
+  behave like pageWithSectionCaption("Transport details - Border means of transport")
+
+  behave like pageWithContent("p", "This is the customs office after crossing the border.")
+
   behave like pageWithHeading()
 
   behave like pageWithSelect()
 
-  behave like pageWithHint("Where is the office of transit hint")
-
-  behave like pageWithContent("label", "Where is the office of transit label")
+  behave like pageWithHint("Enter the office location or code, like Calais or FR620001.")
 
   behave like pageWithSubmitButton("Save and continue")
 }
