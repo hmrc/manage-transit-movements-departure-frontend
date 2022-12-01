@@ -17,18 +17,18 @@
 package pages.transport.transportMeans.active
 
 import controllers.transport.transportMeans.active.routes
-import models.{Index, Mode, UserAnswers}
+import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.TransportMeansActiveSection
+import pages.sections.transport.TransportSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case class AnotherVehicleCrossingYesNoPage(index: Index) extends QuestionPage[Boolean] {
+case object AnotherVehicleCrossingYesNoPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = TransportMeansActiveSection(index).path \ toString
+  override def path: JsPath = TransportSection.path \ toString
 
   override def toString: String = "anotherVehicleCrossingYesNo"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.AnotherVehicleCrossingYesNoController.onPageLoad(userAnswers.lrn, mode, index))
+    Some(routes.AnotherVehicleCrossingYesNoController.onPageLoad(userAnswers.lrn, mode))
 }

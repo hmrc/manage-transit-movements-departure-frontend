@@ -25,7 +25,7 @@ import views.html.transport.transportMeans.active.AnotherVehicleCrossingYesNoVie
 class AnotherVehicleCrossingYesNoViewSpec extends YesNoViewBehaviours {
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[AnotherVehicleCrossingYesNoView].apply(form, lrn, NormalMode, activeIndex)(fakeRequest, messages)
+    injector.instanceOf[AnotherVehicleCrossingYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
   override val prefix: String = "transport.transportMeans.active.anotherVehicleCrossingYesNo"
 

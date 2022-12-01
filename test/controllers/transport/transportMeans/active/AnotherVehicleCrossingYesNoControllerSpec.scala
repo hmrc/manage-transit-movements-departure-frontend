@@ -37,7 +37,7 @@ class AnotherVehicleCrossingYesNoControllerSpec extends SpecBase with AppWithDef
   private val formProvider                          = new YesNoFormProvider()
   private val form                                  = formProvider("transport.transportMeans.active.anotherVehicleCrossingYesNo")
   private val mode                                  = NormalMode
-  private lazy val anotherVehicleCrossingYesNoRoute = routes.AnotherVehicleCrossingYesNoController.onPageLoad(lrn, mode, activeIndex).url
+  private lazy val anotherVehicleCrossingYesNoRoute = routes.AnotherVehicleCrossingYesNoController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -58,12 +58,12 @@ class AnotherVehicleCrossingYesNoControllerSpec extends SpecBase with AppWithDef
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode, activeIndex)(request, messages).toString
+        view(form, lrn, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(AnotherVehicleCrossingYesNoPage(activeIndex), true)
+      val userAnswers = emptyUserAnswers.setValue(AnotherVehicleCrossingYesNoPage, true)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, anotherVehicleCrossingYesNoRoute)
@@ -77,7 +77,7 @@ class AnotherVehicleCrossingYesNoControllerSpec extends SpecBase with AppWithDef
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, activeIndex)(request, messages).toString
+        view(filledForm, lrn, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -110,7 +110,7 @@ class AnotherVehicleCrossingYesNoControllerSpec extends SpecBase with AppWithDef
       val view = injector.instanceOf[AnotherVehicleCrossingYesNoView]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, mode, activeIndex)(request, messages).toString
+        view(boundForm, lrn, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

@@ -16,10 +16,9 @@
 
 package pages.transport.transportMeans.active
 
-import base.SpecBase
 import pages.behaviours.PageBehaviours
 
-class AddNationalityYesNoPageSpec extends PageBehaviours with SpecBase {
+class AddNationalityYesNoPageSpec extends PageBehaviours {
 
   "AddNationalityYesNoPage" - {
 
