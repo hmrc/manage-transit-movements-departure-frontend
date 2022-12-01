@@ -14,28 +14,29 @@
  * limitations under the License.
  */
 
-package controllers.transport.transportMeans.active
+package controllers.transport.transportMeans
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import controllers.transport.transportMeans.routes
 import forms.YesNoFormProvider
 import models.NormalMode
 import navigation.transport.TransportMeansNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.transport.transportMeans.active.AnotherVehicleCrossingYesNoPage
+import pages.transport.transportMeans.AnotherVehicleCrossingYesNoPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.transport.transportMeans.active.AnotherVehicleCrossingYesNoView
+import views.html.transport.transportMeans.AnotherVehicleCrossingYesNoView
 
 import scala.concurrent.Future
 
 class AnotherVehicleCrossingYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
   private val formProvider                          = new YesNoFormProvider()
-  private val form                                  = formProvider("transport.transportMeans.active.anotherVehicleCrossingYesNo")
+  private val form                                  = formProvider("transport.transportMeans.anotherVehicleCrossingYesNo")
   private val mode                                  = NormalMode
   private lazy val anotherVehicleCrossingYesNoRoute = routes.AnotherVehicleCrossingYesNoController.onPageLoad(lrn, mode).url
 

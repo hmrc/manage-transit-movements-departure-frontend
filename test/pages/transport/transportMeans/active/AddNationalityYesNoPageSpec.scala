@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package pages.sections.transport
+package pages.transport.transportMeans.active
 
-import models.Index
-import pages.sections.Section
-import play.api.libs.json.{JsObject, JsPath}
+import pages.behaviours.PageBehaviours
 
-case class TransportMeansActiveSection(index: Index) extends Section[JsObject] {
+class AddNationalityYesNoPageSpec extends PageBehaviours {
 
-  override def path: JsPath = TransportMeansActiveListSection.path \ index.position
+  "AddNationalityYesNoPage" - {
 
+    beRetrievable[Boolean](AddNationalityYesNoPage(activeIndex))
+
+    beSettable[Boolean](AddNationalityYesNoPage(activeIndex))
+
+    beRemovable[Boolean](AddNationalityYesNoPage(activeIndex))
+  }
 }

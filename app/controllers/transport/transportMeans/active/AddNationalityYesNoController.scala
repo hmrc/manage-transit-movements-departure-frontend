@@ -19,52 +19,52 @@ package controllers.transport.transportMeans.active
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
-import models.{LocalReferenceNumber, Mode}
+import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansNavigatorProvider
-import pages.transport.transportMeans.active.AnotherVehicleCrossingYesNoPage
+import pages.transport.transportMeans.active.AddNationalityYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.transport.transportMeans.active.AnotherVehicleCrossingYesNoView
+import views.html.transport.transportMeans.active.AddNationalityYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AnotherVehicleCrossingYesNoController @Inject() (
+class AddNationalityYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: TransportMeansNavigatorProvider,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: AnotherVehicleCrossingYesNoView
+  view: AddNationalityYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("transport.transportMeans.active.anotherVehicleCrossingYesNo")
+  private val form = formProvider("transport.transportMeans.active.addNationalityYesNo")
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(AnotherVehicleCrossingYesNoPage) match {
+      val preparedForm = request.userAnswers.get(AddNationalityYesNoPage(activeIndex)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, lrn, mode))
+      Ok(view(preparedForm, lrn, mode, activeIndex))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, activeIndex))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            AnotherVehicleCrossingYesNoPage.writeToUserAnswers(value).writeToSession().navigate()
+            AddNationalityYesNoPage(activeIndex).writeToUserAnswers(value).writeToSession().navigate()
           }
         )
   }

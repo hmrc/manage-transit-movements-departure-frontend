@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.transport.transportMeans.active
+package pages.transport.transportMeans
 
 import pages.behaviours.PageBehaviours
 

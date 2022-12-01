@@ -20,22 +20,20 @@ import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.transport.transportMeans.active.AnotherVehicleCrossingYesNoView
+import views.html.transport.transportMeans.active.AddNationalityYesNoView
 
-class AnotherVehicleCrossingYesNoViewSpec extends YesNoViewBehaviours {
+class AddNationalityYesNoViewSpec extends YesNoViewBehaviours {
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[AnotherVehicleCrossingYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[AddNationalityYesNoView].apply(form, lrn, NormalMode, activeIndex)(fakeRequest, messages)
 
-  override val prefix: String = "transport.transportMeans.active.anotherVehicleCrossingYesNo"
+  override val prefix: String = "transport.transportMeans.active.addNationalityYesNo"
 
   behave like pageWithTitle()
 
   behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Transport details - Border mode of transport")
-
-  behave like pageWithContent("p", "This includes using a different vehicle to carry the inland mode over the border. For example, a truck on a ferry.")
+  behave like pageWithSectionCaption("Transport details - Border means of transport")
 
   behave like pageWithHeading()
 
