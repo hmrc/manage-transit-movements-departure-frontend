@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package pages.transport.transportMeans.active
+package pages.transport.transportMeans
 
-import controllers.transport.transportMeans.active.routes
+import controllers.transport.transportMeans.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.transport.TransportSection

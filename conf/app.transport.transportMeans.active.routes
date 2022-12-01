@@ -1,9 +1,4 @@
 
-GET        /:lrn/transport-details/border-mode-of-transport/add                                 controllers.transport.transportMeans.active.AnotherVehicleCrossingYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/transport-details/border-mode-of-transport/add                                 controllers.transport.transportMeans.active.AnotherVehicleCrossingYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/transport-details/border-mode-of-transport/change-add                          controllers.transport.transportMeans.active.AnotherVehicleCrossingYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/transport-details/border-mode-of-transport/change-add                          controllers.transport.transportMeans.active.AnotherVehicleCrossingYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-
 GET        /:lrn/transport-details/border-means-of-transport/:activeIndex/add-country                        controllers.transport.transportMeans.active.AddNationalityYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode, activeIndex: Index)
 POST       /:lrn/transport-details/border-means-of-transport/:activeIndex/add-country                        controllers.transport.transportMeans.active.AddNationalityYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode, activeIndex: Index)
 GET        /:lrn/transport-details/border-means-of-transport/:activeIndex/change-add-country                 controllers.transport.transportMeans.active.AddNationalityYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, activeIndex: Index)

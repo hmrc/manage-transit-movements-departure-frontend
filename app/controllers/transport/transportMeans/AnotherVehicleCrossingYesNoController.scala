@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.transport.transportMeans.active
+package controllers.transport.transportMeans
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
@@ -22,12 +22,12 @@ import forms.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansNavigatorProvider
-import pages.transport.transportMeans.active.AnotherVehicleCrossingYesNoPage
+import pages.transport.transportMeans.AnotherVehicleCrossingYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.transport.transportMeans.active.AnotherVehicleCrossingYesNoView
+import views.html.transport.transportMeans.AnotherVehicleCrossingYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -44,7 +44,7 @@ class AnotherVehicleCrossingYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("transport.transportMeans.active.anotherVehicleCrossingYesNo")
+  private val form = formProvider("transport.transportMeans.anotherVehicleCrossingYesNo")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
