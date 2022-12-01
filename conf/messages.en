@@ -1077,6 +1077,7 @@ declarationSubmitted.paragraph1 = You have submitted your declaration.
 transport.inlandMode.caption = Transport details - Inland mode of transport
 transport.departureMeansOfTransport.caption = Transport details - Departure means of transport
 transport.departureBorderModeOfTransport.caption = Transport details - Border mode of transport
+transport.activeBorderMeansOfTransport.caption = Transport details - Border means of transport
 
 transport.transportMeans.departure.inlandMode.title = Which inland mode of transport are you using?
 transport.transportMeans.departure.inlandMode.heading = Which inland mode of transport are you using?

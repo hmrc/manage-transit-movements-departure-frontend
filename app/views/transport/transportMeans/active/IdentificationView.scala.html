@@ -44,7 +44,7 @@
         @inputRadio(
             field = form("value"),
             radioType = Radio(
-                caption = None,
+                caption = Some(messages("transport.activeBorderMeansOfTransport.caption")),
                 heading = messages("transport.transportMeans.active.identification.heading")
             ),
             radioItems = fieldId => radios(fieldId, form.value)

@@ -43,6 +43,8 @@ class IdentificationViewSpec extends RadioViewBehaviours[Identification] {
 
   behave like pageWithBackLink()
 
+  behave like pageWithSectionCaption("Transport details - Border means of transport")
+
   behave like pageWithHeading()
 
   behave like pageWithRadioItems()
