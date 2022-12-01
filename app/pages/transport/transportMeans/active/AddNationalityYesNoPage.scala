@@ -16,17 +16,19 @@
 
 package pages.transport.transportMeans.active
 
-import models.transport.transportMeans.active.Identification
-import pages.behaviours.PageBehaviours
+import controllers.transport.transportMeans.active.routes
+import models.{Index, Mode, UserAnswers}
+import pages.QuestionPage
+import pages.sections.transport.TransportMeansActiveSection
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
-class IdentificationPageSpec extends PageBehaviours {
+case class AddNationalityYesNoPage(index: Index) extends QuestionPage[Boolean] {
 
-  "IdentificationPage" - {
+  override def path: JsPath = TransportMeansActiveSection(index).path \ toString
 
-    beRetrievable[Identification](IdentificationPage(activeIndex))
+  override def toString: String = "addNationalityYesNo"
 
-    beSettable[Identification](IdentificationPage(activeIndex))
-
-    beRemovable[Identification](IdentificationPage(activeIndex))
-  }
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.AddNationalityYesNoController.onPageLoad(userAnswers.lrn, mode, index))
 }

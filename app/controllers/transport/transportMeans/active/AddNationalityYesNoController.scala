@@ -18,43 +18,42 @@ package controllers.transport.transportMeans.active
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.EnumerableFormProvider
+import forms.YesNoFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
-import models.transport.transportMeans.active.Identification
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansNavigatorProvider
-import pages.transport.transportMeans.active.IdentificationPage
+import pages.transport.transportMeans.active.AddNationalityYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.transport.transportMeans.active.IdentificationView
+import views.html.transport.transportMeans.active.AddNationalityYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class IdentificationController @Inject() (
+class AddNationalityYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: TransportMeansNavigatorProvider,
   actions: Actions,
-  formProvider: EnumerableFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: IdentificationView
+  view: AddNationalityYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider[Identification]("transport.transportMeans.active.identification")
+  private val form = formProvider("transport.transportMeans.active.addNationalityYesNo")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(IdentificationPage(activeIndex)) match {
+      val preparedForm = request.userAnswers.get(AddNationalityYesNoPage(activeIndex)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, lrn, Identification.radioItems, mode, activeIndex))
+      Ok(view(preparedForm, lrn, mode, activeIndex))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn).async {
@@ -62,10 +61,10 @@ class IdentificationController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, Identification.radioItems, mode, activeIndex))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, activeIndex))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            IdentificationPage(activeIndex).writeToUserAnswers(value).writeToSession().navigate()
+            AddNationalityYesNoPage(activeIndex).writeToUserAnswers(value).writeToSession().navigate()
           }
         )
   }

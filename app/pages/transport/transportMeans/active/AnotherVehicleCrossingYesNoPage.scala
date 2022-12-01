@@ -19,13 +19,13 @@ package pages.transport.transportMeans.active
 import controllers.transport.transportMeans.active.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.TransportMeansActiveSection
+import pages.sections.transport.TransportSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case object AnotherVehicleCrossingYesNoPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = TransportMeansActiveSection.path \ toString
+  override def path: JsPath = TransportSection.path \ toString
 
   override def toString: String = "anotherVehicleCrossingYesNo"
 

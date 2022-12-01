@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package pages.sections
+package pages.transport.transportMeans.active
 
-import play.api.libs.json.JsPath
-import pages.QuestionPage
+import pages.behaviours.PageBehaviours
 
-case object TransportMeansActiveSection extends QuestionPage[Nothing] {
+class AddNationalityYesNoPageSpec extends PageBehaviours {
 
-  override def path: JsPath = JsPath \ toString
+  "AddNationalityYesNoPage" - {
 
-  override def toString: String = "identification"
+    beRetrievable[Boolean](AddNationalityYesNoPage(activeIndex))
+
+    beSettable[Boolean](AddNationalityYesNoPage(activeIndex))
+
+    beRemovable[Boolean](AddNationalityYesNoPage(activeIndex))
+  }
 }

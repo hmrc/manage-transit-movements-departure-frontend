@@ -16,38 +16,35 @@
 
 @import controllers.transport.transportMeans.active.routes
 @import models.LocalReferenceNumber
-@import models.transport.transportMeans.active.Identification
-@import views.html.components.{Button, ErrorSummary, InputRadio}
-@import viewModels.components.InputRadioViewModel
-@import viewModels.components.InputRadioViewModel._
+@import viewModels.components.InputYesNoViewModel._
+@import views.html.components.{Button, ErrorSummary, InputYesNo}
 
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
-    inputRadio: InputRadio,
+    inputYesNo: InputYesNo,
     errorSummary: ErrorSummary,
     button: Button
 )
 
-@(form: Form[Identification], lrn: LocalReferenceNumber, radios: (String, Option[Identification]) => Seq[RadioItem], mode: Mode, activeIndex: Index)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("transport.transportMeans.active.identification.title"),
+    title = messages("transport.transportMeans.active.addNationalityYesNo.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.IdentificationController.onSubmit(lrn, mode, activeIndex), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.AddNationalityYesNoController.onSubmit(lrn, mode, activeIndex), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
-        @inputRadio(
+        @inputYesNo(
             field = form("value"),
-            radioType = Radio(
-                caption = Some(messages("transport.activeBorderMeansOfTransport.caption")),
-                heading = messages("transport.transportMeans.active.identification.heading")
-            ),
-            radioItems = fieldId => radios(fieldId, form.value)
+            yesNoType = OrdinaryYesNo(
+                heading = messages("transport.transportMeans.active.addNationalityYesNo.heading"),
+                caption = Some(messages("transport.departureBorderModeOfTransport.caption"))
+            )
         )
 
         @button(attributes = Map("id" -> "submit"))

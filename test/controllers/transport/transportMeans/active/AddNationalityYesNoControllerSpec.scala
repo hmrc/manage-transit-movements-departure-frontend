@@ -17,68 +17,67 @@
 package controllers.transport.transportMeans.active
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.EnumerableFormProvider
+import forms.YesNoFormProvider
 import models.NormalMode
-import models.transport.transportMeans.active.Identification
 import navigation.transport.TransportMeansNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.transport.transportMeans.active.IdentificationPage
+import org.scalatestplus.mockito.MockitoSugar
+import pages.transport.transportMeans.active.AddNationalityYesNoPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.transport.transportMeans.active.IdentificationView
+import views.html.transport.transportMeans.active.AddNationalityYesNoView
 
 import scala.concurrent.Future
 
-class IdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class AddNationalityYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
-  private val formProvider             = new EnumerableFormProvider()
-  private val form                     = formProvider[Identification]("transport.transportMeans.active.identification")
-  private val mode                     = NormalMode
-  private lazy val identificationRoute = routes.IdentificationController.onPageLoad(lrn, mode, activeIndex).url
+  private val formProvider                  = new YesNoFormProvider()
+  private val form                          = formProvider("transport.transportMeans.active.addNationalityYesNo")
+  private val mode                          = NormalMode
+  private lazy val addNationalityYesNoRoute = routes.AddNationalityYesNoController.onPageLoad(lrn, mode, activeIndex).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[TransportMeansNavigatorProvider]).toInstance(fakeTransportMeansNavigatorProvider))
 
-  "Identification Controller" - {
+  "AddNationalityYesNo Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, identificationRoute)
+      val request = FakeRequest(GET, addNationalityYesNoRoute)
+      val result  = route(app, request).value
 
-      val result = route(app, request).value
-
-      val view = injector.instanceOf[IdentificationView]
+      val view = injector.instanceOf[AddNationalityYesNoView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, Identification.radioItems, mode, activeIndex)(request, messages).toString
+        view(form, lrn, mode, activeIndex)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(IdentificationPage(activeIndex), Identification.values.head)
+      val userAnswers = emptyUserAnswers.setValue(AddNationalityYesNoPage(activeIndex), true)
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, identificationRoute)
+      val request = FakeRequest(GET, addNationalityYesNoRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> Identification.values.head.toString))
+      val filledForm = form.bind(Map("value" -> "true"))
 
-      val view = injector.instanceOf[IdentificationView]
+      val view = injector.instanceOf[AddNationalityYesNoView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, Identification.radioItems, mode, activeIndex)(request, messages).toString
+        view(filledForm, lrn, mode, activeIndex)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -87,8 +86,8 @@ class IdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtu
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, identificationRoute)
-        .withFormUrlEncodedBody(("value", Identification.values.head.toString))
+      val request = FakeRequest(POST, addNationalityYesNoRoute)
+        .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
 
@@ -101,28 +100,29 @@ class IdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtu
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, identificationRoute).withFormUrlEncodedBody(("value", "invalid value"))
-      val boundForm = form.bind(Map("value" -> "invalid value"))
+      val request   = FakeRequest(POST, addNationalityYesNoRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[IdentificationView]
-
       status(result) mustEqual BAD_REQUEST
 
+      val view = injector.instanceOf[AddNationalityYesNoView]
+
       contentAsString(result) mustEqual
-        view(boundForm, lrn, Identification.radioItems, mode, activeIndex)(request, messages).toString
+        view(boundForm, lrn, mode, activeIndex)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, identificationRoute)
+      val request = FakeRequest(GET, addNationalityYesNoRoute)
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
+
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
@@ -130,8 +130,8 @@ class IdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtu
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, identificationRoute)
-        .withFormUrlEncodedBody(("value", Identification.values.head.toString))
+      val request = FakeRequest(POST, addNationalityYesNoRoute)
+        .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
 

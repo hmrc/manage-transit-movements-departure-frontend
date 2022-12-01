@@ -1157,3 +1157,8 @@ transport.transportMeans.active.identification.checkYourAnswersLabel = Which ide
 transport.transportMeans.active.identification.error.required = Select which identification you want to use for this vehicle
 transport.transportMeans.active.identification.checkYourAnswersLabel = Which identification do you want to use for the vehicle crossing the border
 transport.transportMeans.active.identification.error.required = Select which identification you want to use for this vehicle
+
+transport.transportMeans.active.addNationalityYesNo.title = Do you want to add the registered country for this vehicle?
+transport.transportMeans.active.addNationalityYesNo.heading = Do you want to add the registered country for this vehicle?
+transport.transportMeans.active.addNationalityYesNo.checkYourAnswersLabel = Do you want to add the registered country for this vehicle
+transport.transportMeans.active.addNationalityYesNo.error.required = Select yes if you want to add the registered country for the vehicle crossing the border
