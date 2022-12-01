@@ -1147,3 +1147,12 @@ transport.transportMeans.active.addNationalityYesNo.title = Do you want to add t
 transport.transportMeans.active.addNationalityYesNo.heading = Do you want to add the registered country for this vehicle?
 transport.transportMeans.active.addNationalityYesNo.checkYourAnswersLabel = Do you want to add the registered country for this vehicle
 transport.transportMeans.active.addNationalityYesNo.error.required = Select yes if you want to add the registered country for the vehicle crossing the border
+
+transport.transportMeans.active.nationality.title = What country is this vehicle registered to?
+transport.transportMeans.active.nationality.heading = What country is this vehicle registered to?
+transport.transportMeans.active.nationality.hint = Enter the country or code, like AT or Austria.
+transport.transportMeans.active.nationality.label = What country is this vehicle registered to?
+transport.transportMeans.active.nationality.placeholder = Select a nationality
+transport.transportMeans.active.nationality.change.hidden = country is this vehicle registered to
+transport.transportMeans.active.nationality.checkYourAnswersLabel = What country is this vehicle registered to?
+transport.transportMeans.active.nationality.error.required = Select the country the vehicle is registered to
