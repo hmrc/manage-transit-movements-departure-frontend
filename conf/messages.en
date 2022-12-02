@@ -1163,6 +1163,21 @@ transport.transportMeans.active.addNationalityYesNo.heading = Do you want to add
 transport.transportMeans.active.addNationalityYesNo.checkYourAnswersLabel = Do you want to add the registered country for this vehicle
 transport.transportMeans.active.addNationalityYesNo.error.required = Select yes if you want to add the registered country for the vehicle crossing the border
 
+transport.transportMeans.active.identificationNumber.title = What is the {0}?
+transport.transportMeans.active.identificationNumber.heading = What is the {0}?
+transport.transportMeans.active.identificationNumber.checkYourAnswersLabel = What is the {0}
+transport.transportMeans.active.identificationNumber.imoShipIdNumber = IMO ship identification number
+transport.transportMeans.active.identificationNumber.seaGoingVessel = name of the sea-going vessel
+transport.transportMeans.active.identificationNumber.trainNumber = train number
+transport.transportMeans.active.identificationNumber.regNumberRoadVehicle = registration number of the road vehicle
+transport.transportMeans.active.identificationNumber.iataFlightNumber = IATA flight number
+transport.transportMeans.active.identificationNumber.regNumberAircraft = registration number of the aircraft
+transport.transportMeans.active.identificationNumber.europeanVesselIdNumber = European vessel identification number (ENI code)
+transport.transportMeans.active.identificationNumber.inlandWaterwaysVehicle = name of the inland waterways vehicle
+transport.transportMeans.active.identificationNumber.error.required = Enter the {0}
+transport.transportMeans.active.identificationNumber.error.length = The {0} must be 35 characters or less
+transport.transportMeans.active.identificationNumber.error.invalid = The {0} must only include letters a to z and numbers 0 to 9
+
 transport.transportMeans.active.nationality.title = What country is this vehicle registered to?
 transport.transportMeans.active.nationality.heading = What country is this vehicle registered to?
 transport.transportMeans.active.nationality.hint = Enter the country or code, like AT or Austria.
