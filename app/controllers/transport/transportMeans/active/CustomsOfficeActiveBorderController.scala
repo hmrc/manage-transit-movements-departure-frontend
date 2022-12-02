@@ -24,7 +24,7 @@ import models.requests.DataRequest
 import models.{CustomsOfficeList, Index, LocalReferenceNumber, Mode, RichOptionalJsArray}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansNavigatorProvider
-import pages.preTaskList.OfficeOfDeparturePage
+import pages.routeDetails.routing.OfficeOfDestinationPage
 import pages.sections.routeDetails.exit.OfficesOfExitSection
 import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import pages.transport.transportMeans.active.CustomsOfficeActiveBorderPage
@@ -78,10 +78,10 @@ class CustomsOfficeActiveBorderController @Inject() (
 
   private def getCustomsOffices(implicit request: DataRequest[_]): CustomsOfficeList = {
 
-    val officesOfExit     = request.userAnswers.get(OfficesOfExitSection).validate(officesOfExitReads).getCustomsOffices
-    val officesOfTransit  = request.userAnswers.get(OfficesOfTransitSection).validate(officesOfTransitReads).getCustomsOffices
-    val officeOfDeparture = request.userAnswers.get(OfficeOfDeparturePage).toList
+    val officesOfExit       = request.userAnswers.get(OfficesOfExitSection).validate(officesOfExitReads).getCustomsOffices
+    val officesOfTransit    = request.userAnswers.get(OfficesOfTransitSection).validate(officesOfTransitReads).getCustomsOffices
+    val officeOfDestination = request.userAnswers.get(OfficeOfDestinationPage).toList
 
-    CustomsOfficeList(officesOfExit ++ officesOfTransit ++ officeOfDeparture)
+    CustomsOfficeList(officesOfExit ++ officesOfTransit ++ officeOfDestination)
   }
 }
