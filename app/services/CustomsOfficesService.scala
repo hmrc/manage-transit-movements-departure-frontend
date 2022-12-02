@@ -18,10 +18,9 @@ package services
 
 import config.Constants._
 import connectors.ReferenceDataConnector
-import models.{CustomsOfficeList, RichOptionalJsArray, UserAnswers}
 import models.CustomsOfficeList.{officesOfExitReads, officesOfTransitReads}
 import models.reference.{CountryCode, CustomsOffice}
-import models.requests.DataRequest
+import models.{CustomsOfficeList, RichOptionalJsArray, UserAnswers}
 import pages.routeDetails.routing.OfficeOfDestinationPage
 import pages.sections.routeDetails.exit.OfficesOfExitSection
 import pages.sections.routeDetails.transit.OfficesOfTransitSection
@@ -81,12 +80,11 @@ class CustomsOfficesService @Inject() (
     CustomsOfficeList(customsOffices.sortBy(_.name.toLowerCase))
 
   def getCustomsOffices(userAnswers: UserAnswers): CustomsOfficeList = {
-
     val officesOfExit       = userAnswers.get(OfficesOfExitSection).validate(officesOfExitReads).getCustomsOffices
     val officesOfTransit    = userAnswers.get(OfficesOfTransitSection).validate(officesOfTransitReads).getCustomsOffices
     val officeOfDestination = userAnswers.get(OfficeOfDestinationPage).toList
 
-    CustomsOfficeList(officesOfExit ++ officesOfTransit ++ officeOfDestination)
+    sort(officesOfExit ++ officesOfTransit ++ officeOfDestination)
   }
 
 }

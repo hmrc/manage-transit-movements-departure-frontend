@@ -16,28 +16,24 @@
 
 package services
 
-import base.{AppWithDefaultMockFixtures, SpecBase}
+import base.SpecBase
 import connectors.ReferenceDataConnector
-import generators.Generators
 import models.reference.{CountryCode, CustomsOffice}
 import models.{CustomsOfficeList, Index}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, when}
-import org.scalacheck.Arbitrary.arbitrary
+import org.scalatest.BeforeAndAfterEach
 import pages.routeDetails.exit.index.OfficeOfExitPage
 import pages.routeDetails.routing.OfficeOfDestinationPage
 import pages.routeDetails.transit.index.OfficeOfTransitPage
-import play.api.inject.bind
-import play.api.inject.guice.GuiceApplicationBuilder
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CustomsOfficesServiceSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
 
-  val mockRefDataConnector: ReferenceDataConnector             = mock[ReferenceDataConnector]
-  val service                                                  = new CustomsOfficesService(mockRefDataConnector)
-  private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
+  val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  val service                                      = new CustomsOfficesService(mockRefDataConnector)
 
   val gbCustomsOffice1: CustomsOffice     = CustomsOffice("GB1", "BOSTON", None)
   val gbCustomsOffice2: CustomsOffice     = CustomsOffice("GB2", "Appledore", None)
@@ -45,17 +41,6 @@ class CustomsOfficesServiceSpec extends SpecBase with AppWithDefaultMockFixtures
   val gbCustomsOffices: CustomsOfficeList = CustomsOfficeList(Seq(gbCustomsOffice1, gbCustomsOffice2))
   val xiCustomsOffices: CustomsOfficeList = CustomsOfficeList(Seq(xiCustomsOffice1))
   val customsOffices: CustomsOfficeList   = CustomsOfficeList(gbCustomsOffices.getAll ++ xiCustomsOffices.getAll)
-
-  private val exitOffice1       = arbitrary[CustomsOffice].sample.value
-  private val exitOffice2       = arbitrary[CustomsOffice].sample.value
-  private val transitOffice1    = arbitrary[CustomsOffice].sample.value
-  private val transitOffice2    = arbitrary[CustomsOffice].sample.value
-  private val destinationOffice = arbitrary[CustomsOffice].sample.value
-
-  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
-    super
-      .guiceApplicationBuilder()
-      .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)
@@ -108,64 +93,57 @@ class CustomsOfficesServiceSpec extends SpecBase with AppWithDefaultMockFixtures
     }
 
     "getCustomsOffices" - {
-      "must return a list of sorted customs offices of destination" in {
 
-        when(mockCustomsOfficesService.getCustomsOffices(any()))
-          .thenReturn(CustomsOfficeList(List(destinationOffice)))
+      val destinationOffice = CustomsOffice("GB1", "Bristol", None)
+      val transitOffice1    = CustomsOffice("GB2", "Brighton", None)
+      val transitOffice2    = CustomsOffice("GB3", "Birmingham", None)
+      val exitOffice1       = CustomsOffice("GB4", "Boston", None)
+      val exitOffice2       = CustomsOffice("GB5", "Barnsley", None)
 
-        val updatedAnswers = emptyUserAnswers
+      "must return the office of destination" in {
+
+        val userAnswers = emptyUserAnswers
           .setValue(OfficeOfDestinationPage, destinationOffice)
 
-        setExistingUserAnswers(updatedAnswers)
+        val result = service.getCustomsOffices(userAnswers)
 
-        mockCustomsOfficesService.getCustomsOffices(any()) mustBe CustomsOfficeList(List(destinationOffice))
-
+        result mustBe CustomsOfficeList(Seq(destinationOffice))
       }
 
       "must return a list of sorted customs offices of transit" in {
 
-        when(mockCustomsOfficesService.getCustomsOffices(any()))
-          .thenReturn(CustomsOfficeList(List(transitOffice1, transitOffice2)))
-
-        val updatedAnswers = emptyUserAnswers
+        val userAnswers = emptyUserAnswers
           .setValue(OfficeOfTransitPage(Index(0)), transitOffice1)
           .setValue(OfficeOfTransitPage(Index(1)), transitOffice2)
 
-        setExistingUserAnswers(updatedAnswers)
+        val result = service.getCustomsOffices(userAnswers)
 
-        mockCustomsOfficesService.getCustomsOffices(any()) mustBe CustomsOfficeList(List(transitOffice1, transitOffice2))
-
+        result mustBe CustomsOfficeList(Seq(transitOffice2, transitOffice1))
       }
 
       "must return a list of sorted customs offices of exit" in {
 
-        when(mockCustomsOfficesService.getCustomsOffices(any()))
-          .thenReturn(CustomsOfficeList(List(exitOffice1, exitOffice2)))
-
-        val updatedAnswers = emptyUserAnswers
+        val userAnswers = emptyUserAnswers
           .setValue(OfficeOfExitPage(Index(0)), exitOffice1)
           .setValue(OfficeOfExitPage(Index(1)), exitOffice2)
 
-        setExistingUserAnswers(updatedAnswers)
+        val result = service.getCustomsOffices(userAnswers)
 
-        mockCustomsOfficesService.getCustomsOffices(any()) mustBe CustomsOfficeList(List(exitOffice1, exitOffice2))
-
+        result mustBe CustomsOfficeList(Seq(exitOffice2, exitOffice1))
       }
 
       "must return a list of sorted customs offices of exit, transit and destination" in {
 
-        when(mockCustomsOfficesService.getCustomsOffices(any()))
-          .thenReturn(CustomsOfficeList(List(destinationOffice, exitOffice1, transitOffice1)))
-
-        val updatedAnswers = emptyUserAnswers
+        val userAnswers = emptyUserAnswers
           .setValue(OfficeOfDestinationPage, destinationOffice)
           .setValue(OfficeOfExitPage(Index(0)), exitOffice1)
+          .setValue(OfficeOfExitPage(Index(1)), exitOffice2)
           .setValue(OfficeOfTransitPage(Index(0)), transitOffice1)
+          .setValue(OfficeOfTransitPage(Index(1)), transitOffice2)
 
-        setExistingUserAnswers(updatedAnswers)
+        val result = service.getCustomsOffices(userAnswers)
 
-        mockCustomsOfficesService.getCustomsOffices(any()) mustBe CustomsOfficeList(List(destinationOffice, exitOffice1, transitOffice1))
-
+        result mustBe CustomsOfficeList(Seq(exitOffice2, transitOffice2, exitOffice1, transitOffice1, destinationOffice))
       }
 
     }
