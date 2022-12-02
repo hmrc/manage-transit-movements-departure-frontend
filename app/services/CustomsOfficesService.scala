@@ -18,7 +18,7 @@ package services
 
 import config.Constants._
 import connectors.ReferenceDataConnector
-import models.{CustomsOfficeList, RichOptionalJsArray}
+import models.{CustomsOfficeList, RichOptionalJsArray, UserAnswers}
 import models.CustomsOfficeList.{officesOfExitReads, officesOfTransitReads}
 import models.reference.{CountryCode, CustomsOffice}
 import models.requests.DataRequest
@@ -80,11 +80,11 @@ class CustomsOfficesService @Inject() (
   private def sort(customsOffices: Seq[CustomsOffice]): CustomsOfficeList =
     CustomsOfficeList(customsOffices.sortBy(_.name.toLowerCase))
 
-  def getCustomsOffices(implicit request: DataRequest[_]): CustomsOfficeList = {
+  def getCustomsOffices(userAnswers: UserAnswers): CustomsOfficeList = {
 
-    val officesOfExit       = request.userAnswers.get(OfficesOfExitSection).validate(officesOfExitReads).getCustomsOffices
-    val officesOfTransit    = request.userAnswers.get(OfficesOfTransitSection).validate(officesOfTransitReads).getCustomsOffices
-    val officeOfDestination = request.userAnswers.get(OfficeOfDestinationPage).toList
+    val officesOfExit       = userAnswers.get(OfficesOfExitSection).validate(officesOfExitReads).getCustomsOffices
+    val officesOfTransit    = userAnswers.get(OfficesOfTransitSection).validate(officesOfTransitReads).getCustomsOffices
+    val officeOfDestination = userAnswers.get(OfficeOfDestinationPage).toList
 
     CustomsOfficeList(officesOfExit ++ officesOfTransit ++ officeOfDestination)
   }

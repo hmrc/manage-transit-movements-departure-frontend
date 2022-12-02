@@ -20,7 +20,6 @@ import models.reference.CustomsOffice
 import play.api.Logging
 import play.api.http.Status.{NOT_FOUND, OK}
 import play.api.libs.json.{JsArray, JsError, JsSuccess, Reads}
-import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 case class CustomsOfficeList(customsOffices: Seq[CustomsOffice]) {
@@ -35,14 +34,6 @@ case class CustomsOfficeList(customsOffices: Seq[CustomsOffice]) {
     customsOffices.filterNot(
       office => customOfficeIds.contains(office.id)
     )
-
-  override def equals(obj: Any): Boolean = obj match {
-    case x: CustomsOfficeList => x.getAll == getAll
-    case _                    => false
-  }
-
-  override def toSelectItem(selected: Boolean): SelectItem = SelectItem(None, "", selected)
-
 }
 
 object CustomsOfficeList extends Logging {

@@ -48,7 +48,7 @@ class CustomsOfficeActiveBorderController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val customsOffices = customsOfficeService.getCustomsOffices
+      val customsOffices = customsOfficeService.getCustomsOffices(request.userAnswers)
       val form           = formProvider("transport.transportMeans.active.customsOfficeActiveBorder", customsOffices)
       val preparedForm = request.userAnswers.get(CustomsOfficeActiveBorderPage(activeIndex)) match {
         case None        => form
@@ -60,7 +60,7 @@ class CustomsOfficeActiveBorderController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      val customsOffices = customsOfficeService.getCustomsOffices
+      val customsOffices = customsOfficeService.getCustomsOffices(request.userAnswers)
       val form           = formProvider("transport.transportMeans.active.customsOfficeActiveBorder", customsOffices)
       form
         .bindFromRequest()
