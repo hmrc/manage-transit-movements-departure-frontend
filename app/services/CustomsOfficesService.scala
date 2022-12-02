@@ -18,8 +18,13 @@ package services
 
 import config.Constants._
 import connectors.ReferenceDataConnector
-import models.CustomsOfficeList
+import models.{CustomsOfficeList, RichOptionalJsArray}
+import models.CustomsOfficeList.{officesOfExitReads, officesOfTransitReads}
 import models.reference.{CountryCode, CustomsOffice}
+import models.requests.DataRequest
+import pages.routeDetails.routing.OfficeOfDestinationPage
+import pages.sections.routeDetails.exit.OfficesOfExitSection
+import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
@@ -74,5 +79,14 @@ class CustomsOfficesService @Inject() (
 
   private def sort(customsOffices: Seq[CustomsOffice]): CustomsOfficeList =
     CustomsOfficeList(customsOffices.sortBy(_.name.toLowerCase))
+
+  def getCustomsOffices(implicit request: DataRequest[_]): CustomsOfficeList = {
+
+    val officesOfExit       = request.userAnswers.get(OfficesOfExitSection).validate(officesOfExitReads).getCustomsOffices
+    val officesOfTransit    = request.userAnswers.get(OfficesOfTransitSection).validate(officesOfTransitReads).getCustomsOffices
+    val officeOfDestination = request.userAnswers.get(OfficeOfDestinationPage).toList
+
+    CustomsOfficeList(officesOfExit ++ officesOfTransit ++ officeOfDestination)
+  }
 
 }
