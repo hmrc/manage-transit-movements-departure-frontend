@@ -23,7 +23,7 @@ import play.api.libs.json.{JsArray, JsError, JsSuccess, Reads}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
-case class CustomsOfficeList(customsOffices: Seq[CustomsOffice]) extends Selectable {
+case class CustomsOfficeList(customsOffices: Seq[CustomsOffice]) {
 
   def getAll: Seq[CustomsOffice] =
     customsOffices
