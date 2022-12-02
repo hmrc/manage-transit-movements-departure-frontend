@@ -19,25 +19,25 @@ package services
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import generators.Generators
-import models.CustomsOfficeList
 import models.reference.{CountryCode, CustomsOffice}
+import models.{CustomsOfficeList, Index}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
+import pages.routeDetails.exit.index.OfficeOfExitPage
 import pages.routeDetails.routing.OfficeOfDestinationPage
+import pages.routeDetails.transit.index.OfficeOfTransitPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import views.html.transport.transportMeans.active.CustomsOfficeActiveBorderView
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CustomsOfficesServiceSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  val service                                      = new CustomsOfficesService(mockRefDataConnector)
+  val mockRefDataConnector: ReferenceDataConnector             = mock[ReferenceDataConnector]
+  val service                                                  = new CustomsOfficesService(mockRefDataConnector)
+  private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
 
   val gbCustomsOffice1: CustomsOffice     = CustomsOffice("GB1", "BOSTON", None)
   val gbCustomsOffice2: CustomsOffice     = CustomsOffice("GB2", "Appledore", None)
@@ -46,12 +46,11 @@ class CustomsOfficesServiceSpec extends SpecBase with AppWithDefaultMockFixtures
   val xiCustomsOffices: CustomsOfficeList = CustomsOfficeList(Seq(xiCustomsOffice1))
   val customsOffices: CustomsOfficeList   = CustomsOfficeList(gbCustomsOffices.getAll ++ xiCustomsOffices.getAll)
 
-  private val exitOffice                                       = arbitrary[CustomsOffice].sample.value
-  private val transitOffice                                    = arbitrary[CustomsOffice].sample.value
-  private val destinationOffice                                = arbitrary[CustomsOffice].sample.value
-  private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
-
-  private val allCustomOfficesList = CustomsOfficeList(List(exitOffice, transitOffice, destinationOffice))
+  private val exitOffice1       = arbitrary[CustomsOffice].sample.value
+  private val exitOffice2       = arbitrary[CustomsOffice].sample.value
+  private val transitOffice1    = arbitrary[CustomsOffice].sample.value
+  private val transitOffice2    = arbitrary[CustomsOffice].sample.value
+  private val destinationOffice = arbitrary[CustomsOffice].sample.value
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -108,105 +107,68 @@ class CustomsOfficesServiceSpec extends SpecBase with AppWithDefaultMockFixtures
       }
     }
 
-    "must return OK and the correct view for a GET" - {
-      "when only destination office defined" in {
+    "getCustomsOffices" - {
+      "must return a list of sorted customs offices of destination" in {
 
-        when(
-          mockCustomsOfficesService.getCustomsOffices(any())
-        ).thenReturn(CustomsOfficeList(List(destinationOffice)))
+        when(mockCustomsOfficesService.getCustomsOffices(any()))
+          .thenReturn(CustomsOfficeList(List(destinationOffice)))
 
         val updatedAnswers = emptyUserAnswers
           .setValue(OfficeOfDestinationPage, destinationOffice)
 
         setExistingUserAnswers(updatedAnswers)
 
-        mockCustomsOfficesService.getCustomsOffices(any()).getAll mustBe List(destinationOffice)
+        mockCustomsOfficesService.getCustomsOffices(any()) mustBe CustomsOfficeList(List(destinationOffice))
 
       }
-      //      "when one office of transit is defined" in {
-      //
-      //        val updatedAnswers = emptyUserAnswers
-      //          .setValue(OfficeOfTransitPage(Index(0)), transitOffice)
-      //          .setValue(OfficeOfDestinationPage, destinationOffice)
-      //
-      //        setExistingUserAnswers(updatedAnswers)
-      //
-      //        val request = FakeRequest(GET, customsOfficeActiveBorderRoute)
-      //
-      //        val result = route(app, request).value
-      //
-      //        val view = injector.instanceOf[CustomsOfficeActiveBorderView]
-      //
-      //        status(result) mustEqual OK
-      //
-      //        contentAsString(result) mustEqual
-      //          view(form, lrn, CustomsOfficeList(List(transitOffice, destinationOffice)), mode, index)(request, messages).toString
-      //      }
-      //      "when one office of exit is defined" in {
-      //
-      //        val updatedAnswers = emptyUserAnswers
-      //          .setValue(OfficeOfExitPage(Index(0)), exitOffice)
-      //          .setValue(OfficeOfDestinationPage, destinationOffice)
-      //
-      //        setExistingUserAnswers(updatedAnswers)
-      //
-      //        val request = FakeRequest(GET, customsOfficeActiveBorderRoute)
-      //
-      //        val result = route(app, request).value
-      //
-      //        val view = injector.instanceOf[CustomsOfficeActiveBorderView]
-      //
-      //        status(result) mustEqual OK
-      //
-      //        contentAsString(result) mustEqual
-      //          view(form, lrn, CustomsOfficeList(List(exitOffice, destinationOffice)), mode, index)(request, messages).toString
-      //      }
-      //      "when one of each office is defined" in {
-      //        val updatedAnswers = emptyUserAnswers
-      //          .setValue(OfficeOfExitPage(Index(0)), exitOffice)
-      //          .setValue(OfficeOfTransitPage(Index(0)), transitOffice)
-      //          .setValue(OfficeOfDestinationPage, destinationOffice)
-      //
-      //        setExistingUserAnswers(updatedAnswers)
-      //
-      //        val request = FakeRequest(GET, customsOfficeActiveBorderRoute)
-      //
-      //        val result = route(app, request).value
-      //
-      //        val view = injector.instanceOf[CustomsOfficeActiveBorderView]
-      //
-      //        status(result) mustEqual OK
-      //
-      //        contentAsString(result) mustEqual
-      //          view(form, lrn, allCustomOfficesList, mode, index)(request, messages).toString
-      //      }
-      //      "when multiple office of transit and exit are defined" in {
-      //
-      //        val exitOffice2 = arbitrary[CustomsOffice].sample.value
-      //        val transitOffice2 = arbitrary[CustomsOffice].sample.value
-      //        val allCustomOfficesList = CustomsOfficeList(List(exitOffice, exitOffice2, transitOffice, transitOffice2, destinationOffice))
-      //
-      //        val updatedAnswers = emptyUserAnswers
-      //          .setValue(OfficeOfExitPage(Index(0)), exitOffice)
-      //          .setValue(OfficeOfExitPage(Index(1)), exitOffice2)
-      //          .setValue(OfficeOfTransitPage(Index(0)), transitOffice)
-      //          .setValue(OfficeOfTransitPage(Index(1)), transitOffice2)
-      //          .setValue(OfficeOfDestinationPage, destinationOffice)
-      //
-      //        setExistingUserAnswers(updatedAnswers)
-      //
-      //        val request = FakeRequest(GET, customsOfficeActiveBorderRoute)
-      //
-      //        val result = route(app, request).value
-      //
-      //        val view = injector.instanceOf[CustomsOfficeActiveBorderView]
-      //
-      //        status(result) mustEqual OK
-      //
-      //        contentAsString(result) mustEqual
-      //          view(form, lrn, allCustomOfficesList, mode, index)(request, messages).toString
-      //      }
-      //    }
+
+      "must return a list of sorted customs offices of transit" in {
+
+        when(mockCustomsOfficesService.getCustomsOffices(any()))
+          .thenReturn(CustomsOfficeList(List(transitOffice1, transitOffice2)))
+
+        val updatedAnswers = emptyUserAnswers
+          .setValue(OfficeOfTransitPage(Index(0)), transitOffice1)
+          .setValue(OfficeOfTransitPage(Index(1)), transitOffice2)
+
+        setExistingUserAnswers(updatedAnswers)
+
+        mockCustomsOfficesService.getCustomsOffices(any()) mustBe CustomsOfficeList(List(transitOffice1, transitOffice2))
+
+      }
+
+      "must return a list of sorted customs offices of exit" in {
+
+        when(mockCustomsOfficesService.getCustomsOffices(any()))
+          .thenReturn(CustomsOfficeList(List(exitOffice1, exitOffice2)))
+
+        val updatedAnswers = emptyUserAnswers
+          .setValue(OfficeOfExitPage(Index(0)), exitOffice1)
+          .setValue(OfficeOfExitPage(Index(1)), exitOffice2)
+
+        setExistingUserAnswers(updatedAnswers)
+
+        mockCustomsOfficesService.getCustomsOffices(any()) mustBe CustomsOfficeList(List(exitOffice1, exitOffice2))
+
+      }
+
+      "must return a list of sorted customs offices of exit, transit and destination" in {
+
+        when(mockCustomsOfficesService.getCustomsOffices(any()))
+          .thenReturn(CustomsOfficeList(List(destinationOffice, exitOffice1, transitOffice1)))
+
+        val updatedAnswers = emptyUserAnswers
+          .setValue(OfficeOfDestinationPage, destinationOffice)
+          .setValue(OfficeOfExitPage(Index(0)), exitOffice1)
+          .setValue(OfficeOfTransitPage(Index(0)), transitOffice1)
+
+        setExistingUserAnswers(updatedAnswers)
+
+        mockCustomsOfficesService.getCustomsOffices(any()) mustBe CustomsOfficeList(List(destinationOffice, exitOffice1, transitOffice1))
+
+      }
+
     }
+
   }
 }
