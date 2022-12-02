@@ -6,8 +6,8 @@ POST       /:lrn/transport-details/change-inland-mode-of-transport              
 
 GET        /:lrn/transport-details/departure-means-of-transport/identification                      controllers.transport.transportMeans.departure.IdentificationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/transport-details/departure-means-of-transport/identification                      controllers.transport.transportMeans.departure.IdentificationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/transport-details/departure-means-of-transport/identification                      controllers.transport.transportMeans.departure.IdentificationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/transport-details/departure-means-of-transport/identification                      controllers.transport.transportMeans.departure.IdentificationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/transport-details/departure-means-of-transport/change-identification               controllers.transport.transportMeans.departure.IdentificationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport-details/departure-means-of-transport/change-identification               controllers.transport.transportMeans.departure.IdentificationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/transport-details/departure-means-of-transport/identification-number               controllers.transport.transportMeans.departure.MeansIdentificationNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/transport-details/departure-means-of-transport/identification-number               controllers.transport.transportMeans.departure.MeansIdentificationNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
