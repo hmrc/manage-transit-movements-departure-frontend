@@ -48,6 +48,8 @@ class IdentificationNumberViewSpec extends InputTextViewBehaviours[String] with 
 
   behave like pageWithBackLink()
 
+  behave like pageWithSectionCaption("Transport details - Border means of transport")
+
   behave like pageWithHeading(messages(dynamicText))
 
   behave like pageWithoutHint()
