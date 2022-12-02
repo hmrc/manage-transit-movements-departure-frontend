@@ -18,11 +18,11 @@ package controllers.transport.transportMeans.active
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.NameFormProvider
+import forms.transport.transportMeans.active.IdentificationNumberFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansNavigatorProvider
-import pages.transport.transportMeans.active.IdentificationNumberPage
+import pages.transport.transportMeans.active.{IdentificationNumberPage, IdentificationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -36,7 +36,8 @@ class IdentificationNumberController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: TransportMeansNavigatorProvider,
-  formProvider: NameFormProvider,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
+  formProvider: IdentificationNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: IdentificationNumberView
@@ -45,27 +46,40 @@ class IdentificationNumberController @Inject() (
     with I18nSupport {
 
   private val prefix = "transport.transportMeans.active.identificationNumber"
-  private val form   = formProvider(prefix)
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(IdentificationNumberPage(activeIndex)) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
-      Ok(view(preparedForm, lrn, mode, activeIndex))
-  }
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] =
+    actions
+      .requireData(lrn)
+      .andThen(getMandatoryPage(IdentificationPage(activeIndex))) {
+        implicit request =>
+          val dynamicTitle = s"$prefix.${request.arg.toString}"
+          val form         = formProvider(prefix, dynamicTitle)
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, activeIndex))),
-          value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            IdentificationNumberPage(activeIndex).writeToUserAnswers(value).writeToSession().navigate()
+          val preparedForm = request.userAnswers.get(IdentificationNumberPage(activeIndex)) match {
+            case None        => form
+            case Some(value) => form.fill(value)
           }
-        )
-  }
+
+          Ok(view(preparedForm, lrn, dynamicTitle, mode, activeIndex))
+      }
+
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] =
+    actions
+      .requireData(lrn)
+      .andThen(getMandatoryPage(IdentificationPage(activeIndex)))
+      .async {
+        implicit request =>
+          val dynamicTitle = s"$prefix.${request.arg.toString}"
+          val form         = formProvider(prefix, dynamicTitle)
+
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, dynamicTitle, mode, activeIndex))),
+              value => {
+                implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                IdentificationNumberPage(activeIndex).writeToUserAnswers(value).writeToSession().navigate()
+              }
+            )
+      }
 }

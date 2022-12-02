@@ -16,8 +16,12 @@
 
 package views.transport.transportMeans.active
 
+import base.SpecBase
 import forms.NameFormProvider
+import generators.Generators
 import models.NormalMode
+import models.transport.transportMeans.active.Identification
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -25,22 +29,26 @@ import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
 import views.html.transport.transportMeans.active.IdentificationNumberView
 
-class IdentificationNumberViewSpec extends InputTextViewBehaviours[String] {
+class IdentificationNumberViewSpec extends InputTextViewBehaviours[String] with Generators with SpecBase {
 
   override val prefix: String = "transport.transportMeans.active.identificationNumber"
+
+  private val identificationType = arbitrary[Identification].sample.value
+
+  private val dynamicText = s"$prefix.${identificationType.toString}"
 
   override def form: Form[String] = new NameFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[IdentificationNumberView].apply(form, lrn, NormalMode, activeIndex)(fakeRequest, messages)
+    injector.instanceOf[IdentificationNumberView].apply(form, lrn, dynamicText, NormalMode, activeIndex)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 
-  behave like pageWithTitle()
+  behave like pageWithTitle(messages(dynamicText))
 
   behave like pageWithBackLink()
 
-  behave like pageWithHeading()
+  behave like pageWithHeading(messages(dynamicText))
 
   behave like pageWithoutHint()
 
