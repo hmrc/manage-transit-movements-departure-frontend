@@ -1177,3 +1177,12 @@ transport.transportMeans.active.identificationNumber.inlandWaterwaysVehicle = na
 transport.transportMeans.active.identificationNumber.error.required = Enter the {0}
 transport.transportMeans.active.identificationNumber.error.length = The {0} must be 35 characters or less
 transport.transportMeans.active.identificationNumber.error.invalid = The {0} must only include letters a to z and numbers 0 to 9
+
+transport.transportMeans.active.nationality.title = What country is this vehicle registered to?
+transport.transportMeans.active.nationality.heading = What country is this vehicle registered to?
+transport.transportMeans.active.nationality.hint = Enter the country or code, like AT or Austria.
+transport.transportMeans.active.nationality.label = What country is this vehicle registered to?
+transport.transportMeans.active.nationality.placeholder = Select a nationality
+transport.transportMeans.active.nationality.change.hidden = country is this vehicle registered to
+transport.transportMeans.active.nationality.checkYourAnswersLabel = What country is this vehicle registered to?
+transport.transportMeans.active.nationality.error.required = Select the country the vehicle is registered to
