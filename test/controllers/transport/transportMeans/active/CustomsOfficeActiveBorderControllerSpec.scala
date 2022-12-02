@@ -17,26 +17,22 @@
 package controllers.transport.transportMeans.active
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.{CustomsOfficeForCountryFormProvider, CustomsOfficeFormProvider}
+import forms.CustomsOfficeFormProvider
 import generators.Generators
-import models.reference.{Country, CustomsOffice}
-import models.{reference, CustomsOfficeList, Index, NormalMode}
-import navigation.routeDetails.OfficeOfTransitNavigatorProvider
+import models.reference.CustomsOffice
+import models.{CustomsOfficeList, Index, NormalMode}
+import navigation.transport.TransportMeansNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
-import pages.preTaskList.OfficeOfDeparturePage
 import pages.routeDetails.exit.index.OfficeOfExitPage
-import pages.routeDetails.routing.{CountryOfDestinationPage, OfficeOfDestinationPage}
-import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitPage}
+import pages.routeDetails.routing.OfficeOfDestinationPage
+import pages.routeDetails.transit.index.OfficeOfTransitPage
+import pages.transport.transportMeans.active.CustomsOfficeActiveBorderPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.CustomsOfficesService
-import views.html.routeDetails.transit.index.OfficeOfTransitView
 import views.html.transport.transportMeans.active.CustomsOfficeActiveBorderView
 
 import scala.concurrent.Future
@@ -58,12 +54,12 @@ class CustomsOfficeActiveBorderControllerSpec extends SpecBase with AppWithDefau
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[OfficeOfTransitNavigatorProvider]).toInstance(fakeOfficeOfTransitNavigatorProvider))
+      .overrides(bind(classOf[TransportMeansNavigatorProvider]).toInstance(fakeTransportMeansNavigatorProvider))
 
   "ActiveBorderOfficeTransit Controller" - {
 
     "must return OK and the correct view for a GET" - {
-      "when only destination office defined at index" in {
+      "when only destination office defined" in {
 
         val updatedAnswers = emptyUserAnswers
           .setValue(OfficeOfDestinationPage, destinationOffice)
@@ -166,141 +162,97 @@ class CustomsOfficeActiveBorderControllerSpec extends SpecBase with AppWithDefau
       }
     }
 
-    //    "must populate the view correctly on a GET when the question has previously been answered" - {
-    //      "when country defined at index" in {
-    //        when(mockCustomsOfficesService.getCustomsOfficesOfTransitForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
-    //
-    //        val userAnswers = emptyUserAnswers
-    //          .setValue(OfficeOfTransitCountryPage(index), country)
-    //          .setValue(OfficeOfTransitPage(index), customsOffice1)
-    //
-    //        setExistingUserAnswers(userAnswers)
-    //
-    //        val request = FakeRequest(GET, officeOfTransitRoute)
-    //
-    //        val result = route(app, request).value
-    //
-    //        val filledForm = form.bind(Map("value" -> customsOffice1.id))
-    //
-    //        val view = injector.instanceOf[OfficeOfTransitView]
-    //
-    //        status(result) mustEqual OK
-    //
-    //        contentAsString(result) mustEqual
-    //          view(filledForm, lrn, customsOfficeList.customsOffices, country.description, mode, index)(request, messages).toString
-    //      }
-    //
-    //      "when only country of destination defined" in {
-    //        when(mockCustomsOfficesService.getCustomsOfficesOfTransitForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
-    //
-    //        val userAnswers = emptyUserAnswers
-    //          .setValue(CountryOfDestinationPage, country)
-    //          .setValue(OfficeOfTransitPage(index), customsOffice1)
-    //
-    //        setExistingUserAnswers(userAnswers)
-    //
-    //        val request = FakeRequest(GET, officeOfTransitRoute)
-    //
-    //        val result = route(app, request).value
-    //
-    //        val filledForm = form.bind(Map("value" -> customsOffice1.id))
-    //
-    //        val view = injector.instanceOf[OfficeOfTransitView]
-    //
-    //        status(result) mustEqual OK
-    //
-    //        contentAsString(result) mustEqual
-    //          view(filledForm, lrn, customsOfficeList.customsOffices, country.description, mode, index)(request, messages).toString
-    //      }
-    //    }
-    //
-    //    "must redirect to the next page when valid data is submitted" in {
-    //
-    //      val updatedAnswers = emptyUserAnswers.setValue(OfficeOfTransitCountryPage(index), country)
-    //
-    //      when(mockCustomsOfficesService.getCustomsOfficesOfTransitForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
-    //      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
-    //
-    //      setExistingUserAnswers(updatedAnswers)
-    //
-    //      val request = FakeRequest(POST, officeOfTransitRoute)
-    //        .withFormUrlEncodedBody(("value", customsOffice1.id))
-    //
-    //      val result = route(app, request).value
-    //
-    //      status(result) mustEqual SEE_OTHER
-    //
-    //      redirectLocation(result).value mustEqual onwardRoute.url
-    //    }
-    //
-    //    "must return a Bad Request and errors when invalid data is submitted" - {
-    //      "when country defined at index" in {
-    //        val destinationCountry = arbitrary[Country].sample.value
-    //
-    //        val updatedAnswers = emptyUserAnswers
-    //          .setValue(CountryOfDestinationPage, destinationCountry)
-    //          .setValue(OfficeOfTransitCountryPage(index), country)
-    //
-    //        when(mockCustomsOfficesService.getCustomsOfficesOfTransitForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
-    //        setExistingUserAnswers(updatedAnswers)
-    //
-    //        val request   = FakeRequest(POST, officeOfTransitRoute).withFormUrlEncodedBody(("value", "invalid value"))
-    //        val boundForm = form.bind(Map("value" -> "invalid value"))
-    //
-    //        val result = route(app, request).value
-    //
-    //        val view = injector.instanceOf[OfficeOfTransitView]
-    //
-    //        status(result) mustEqual BAD_REQUEST
-    //
-    //        contentAsString(result) mustEqual
-    //          view(boundForm, lrn, customsOfficeList.customsOffices, country.description, mode, index)(request, messages).toString
-    //      }
-    //
-    //      "when only country of destination defined" in {
-    //        val updatedAnswers = emptyUserAnswers.setValue(CountryOfDestinationPage, country)
-    //
-    //        when(mockCustomsOfficesService.getCustomsOfficesOfTransitForCountry(any())(any())).thenReturn(Future.successful(customsOfficeList))
-    //        setExistingUserAnswers(updatedAnswers)
-    //
-    //        val request   = FakeRequest(POST, officeOfTransitRoute).withFormUrlEncodedBody(("value", "invalid value"))
-    //        val boundForm = form.bind(Map("value" -> "invalid value"))
-    //
-    //        val result = route(app, request).value
-    //
-    //        val view = injector.instanceOf[OfficeOfTransitView]
-    //
-    //        status(result) mustEqual BAD_REQUEST
-    //
-    //        contentAsString(result) mustEqual
-    //          view(boundForm, lrn, customsOfficeList.customsOffices, country.description, mode, index)(request, messages).toString
-    //      }
-    //    }
-    //
-    //    "must redirect to Session Expired for a GET if no existing data is found" in {
-    //
-    //      setNoExistingUserAnswers()
-    //
-    //      val request = FakeRequest(GET, officeOfTransitRoute)
-    //
-    //      val result = route(app, request).value
-    //
-    //      status(result) mustEqual SEE_OTHER
-    //      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-    //    }
-    //
-    //    "must redirect to Session Expired for a POST if no existing data is found" in {
-    //
-    //      setNoExistingUserAnswers()
-    //
-    //      val request = FakeRequest(POST, officeOfTransitRoute)
-    //        .withFormUrlEncodedBody(("value", customsOffice1.id))
-    //
-    //      val result = route(app, request).value
-    //
-    //      status(result) mustEqual SEE_OTHER
-    //
-    //      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-    //    }
+    "must populate the view correctly on a GET when the question has previously been answered" in {
+
+      val userAnswers = emptyUserAnswers
+        .setValue(OfficeOfDestinationPage, destinationOffice)
+        .setValue(OfficeOfTransitPage(index), transitOffice)
+        .setValue(OfficeOfExitPage(index), exitOffice)
+        .setValue(CustomsOfficeActiveBorderPage(index), destinationOffice)
+
+      setExistingUserAnswers(userAnswers)
+
+      val request = FakeRequest(GET, customsOfficeActiveBorderRoute)
+
+      val result = route(app, request).value
+
+      val filledForm = form.bind(Map("value" -> destinationOffice.id))
+
+      val view = injector.instanceOf[CustomsOfficeActiveBorderView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(filledForm, lrn, allCustomOfficesList, mode, index)(request, messages).toString
+    }
+
+    "must redirect to the next page when valid data is submitted" in {
+
+      val updatedAnswers = emptyUserAnswers
+        .setValue(OfficeOfDestinationPage, destinationOffice)
+        .setValue(OfficeOfTransitPage(index), transitOffice)
+        .setValue(OfficeOfExitPage(index), exitOffice)
+
+      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+
+      setExistingUserAnswers(updatedAnswers)
+
+      val request = FakeRequest(POST, customsOfficeActiveBorderRoute)
+        .withFormUrlEncodedBody(("value", destinationOffice.id))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted" in {
+
+      val updatedAnswers = emptyUserAnswers
+        .setValue(OfficeOfDestinationPage, destinationOffice)
+        .setValue(OfficeOfTransitPage(index), transitOffice)
+        .setValue(OfficeOfExitPage(index), exitOffice)
+
+      setExistingUserAnswers(updatedAnswers)
+
+      val request   = FakeRequest(POST, customsOfficeActiveBorderRoute).withFormUrlEncodedBody(("value", "invalid value"))
+      val boundForm = form.bind(Map("value" -> "invalid value"))
+
+      val result = route(app, request).value
+
+      val view = injector.instanceOf[CustomsOfficeActiveBorderView]
+
+      status(result) mustEqual BAD_REQUEST
+
+      contentAsString(result) mustEqual
+        view(boundForm, lrn, allCustomOfficesList, mode, index)(request, messages).toString
+    }
+  }
+
+  "must redirect to Session Expired for a GET if no existing data is found" in {
+
+    setNoExistingUserAnswers()
+
+    val request = FakeRequest(GET, customsOfficeActiveBorderRoute)
+
+    val result = route(app, request).value
+
+    status(result) mustEqual SEE_OTHER
+    redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+  }
+
+  "must redirect to Session Expired for a POST if no existing data is found" in {
+
+    setNoExistingUserAnswers()
+
+    val request = FakeRequest(POST, customsOfficeActiveBorderRoute)
+      .withFormUrlEncodedBody(("value", destinationOffice.id))
+
+    val result = route(app, request).value
+
+    status(result) mustEqual SEE_OTHER
+
+    redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
   }
 }
