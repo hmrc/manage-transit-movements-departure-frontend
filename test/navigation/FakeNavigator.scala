@@ -19,7 +19,7 @@ package navigation
 import models.{Index, Mode, UserAnswers}
 import navigation.routeDetails._
 import navigation.traderDetails.TraderDetailsNavigator
-import navigation.transport.PreRequisitesNavigator
+import navigation.transport.{TransportMeansNavigator, TransportNavigator}
 import play.api.mvc.Call
 
 class FakeNavigator(desiredRoute: Call) extends Navigator {
@@ -74,6 +74,10 @@ class FakeLoadingAndUnloadingNavigator(desiredRoute: Call, mode: Mode) extends L
   override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
-class FakePreRequisitesNavigator(desiredRoute: Call, mode: Mode) extends PreRequisitesNavigator(mode) {
+class FakeTransportNavigator(desiredRoute: Call, mode: Mode) extends TransportNavigator(mode) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
+}
+
+class FakeTransportMeansNavigator(desiredRoute: Call, mode: Mode) extends TransportMeansNavigator(mode) {
   override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }

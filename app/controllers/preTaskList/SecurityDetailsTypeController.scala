@@ -18,7 +18,7 @@ package controllers.preTaskList
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.preTaskList.SecurityDetailsFormProvider
+import forms.EnumerableFormProvider
 import models.journeyDomain.PreTaskListDomain
 import models.{LocalReferenceNumber, Mode, SecurityDetailsType}
 import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
@@ -38,14 +38,14 @@ class SecurityDetailsTypeController @Inject() (
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
   checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
-  formProvider: SecurityDetailsFormProvider,
+  formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: SecurityDetailsTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider[SecurityDetailsType]("securityDetailsType")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)

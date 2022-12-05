@@ -19,7 +19,7 @@ package viewModels.taskList
 import base.SpecBase
 import controllers.traderDetails.holderOfTransit.{routes => holderOfTransitRoutes}
 import controllers.traderDetails.{routes => traderDetailsRoutes}
-import generators.{Generators, TraderDetailsUserAnswersGenerator}
+import generators.Generators
 import models.DeclarationType.Option4
 import models.{DeclarationType, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
@@ -29,7 +29,7 @@ import pages.preTaskList.DeclarationTypePage
 import pages.traderDetails.{holderOfTransit => hot}
 import viewModels.taskList.TaskStatus._
 
-class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
+class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "name" - {
     "must be Trader Details" - {

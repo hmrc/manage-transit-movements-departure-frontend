@@ -18,7 +18,7 @@ package controllers.preTaskList
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.preTaskList.DeclarationTypeFormProvider
+import forms.EnumerableFormProvider
 import models.journeyDomain.PreTaskListDomain
 import models.requests.DataRequest
 import models.{DeclarationType, LocalReferenceNumber, Mode}
@@ -39,14 +39,14 @@ class DeclarationTypeController @Inject() (
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
   checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
-  formProvider: DeclarationTypeFormProvider,
+  formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: DeclarationTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider[DeclarationType]("declarationType")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)

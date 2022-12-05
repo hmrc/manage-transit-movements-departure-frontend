@@ -28,7 +28,7 @@ package object domain {
   type UserAnswersReader[A] = ReaderT[EitherType, UserAnswers, A]
 
   object UserAnswersReader {
-    def apply[A: UserAnswersReader]: UserAnswersReader[A] = implicitly[UserAnswersReader[A]]
+    def apply[A](implicit ev: UserAnswersReader[A]): UserAnswersReader[A] = ev
 
     def apply[A](fn: UserAnswers => EitherType[A]): UserAnswersReader[A] =
       ReaderT[EitherType, UserAnswers, A](fn)
@@ -53,7 +53,7 @@ package object domain {
       * `next` will not be run
       */
 
-    def filterMandatoryDependent[B](predicate: A => Boolean)(next: UserAnswersReader[B]): UserAnswersReader[B] =
+    def filterMandatoryDependent[B](predicate: A => Boolean)(next: => UserAnswersReader[B]): UserAnswersReader[B] =
       a.reader(s"Reader for ${a.path} failed before reaching predicate")
         .flatMap {
           x =>
@@ -70,7 +70,7 @@ package object domain {
       * will return None. If the result of UserAnswerReader[A] is not defined then the overall reader will fail and
       * `next` will not be run
       */
-    def filterOptionalDependent[B](predicate: A => Boolean)(next: UserAnswersReader[B]): UserAnswersReader[Option[B]] =
+    def filterOptionalDependent[B](predicate: A => Boolean)(next: => UserAnswersReader[B]): UserAnswersReader[Option[B]] =
       a.reader(s"Reader for ${a.path} failed before reaching predicate")
         .flatMap {
           x =>

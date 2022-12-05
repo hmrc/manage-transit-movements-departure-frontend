@@ -31,7 +31,7 @@ object CountriesOfRoutingDomain {
       case x if x.isEmpty =>
         UserAnswersReader[CountryOfRoutingDomain](CountryOfRoutingDomain.userAnswersReader(Index(0))).map(Seq(_))
       case x =>
-        x.traverse[CountryOfRoutingDomain](CountryOfRoutingDomain.userAnswersReader).map(_.toSeq)
+        x.traverse[CountryOfRoutingDomain](CountryOfRoutingDomain.userAnswersReader)
     }
 
     for {

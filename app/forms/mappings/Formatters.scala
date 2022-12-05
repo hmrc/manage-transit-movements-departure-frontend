@@ -16,8 +16,8 @@
 
 package forms.mappings
 
-import models.reference.{Country, CustomsOffice, UnLocode}
-import models.{CountryList, CustomsOfficeList, Enumerable, LocalReferenceNumber, RichString, UnLocodeList}
+import models.reference.{Country, CustomsOffice, Nationality, UnLocode}
+import models.{CountryList, CustomsOfficeList, Enumerable, LocalReferenceNumber, NationalityList, RichString, UnLocodeList}
 import play.api.data.FormError
 import play.api.data.format.Formatter
 
@@ -264,5 +264,27 @@ trait Formatters {
 
     override def unbind(key: String, unLocode: UnLocode): Map[String, String] =
       Map(key -> unLocode.unLocodeExtendedCode)
+  }
+
+  private[mappings] def nationalityFormatter(
+    nationalityList: NationalityList,
+    errorKey: String,
+    args: Seq[Any] = Seq.empty
+  ): Formatter[Nationality] = new Formatter[Nationality] {
+
+    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Nationality] = {
+      lazy val error = Left(Seq(FormError(key, errorKey, args)))
+      data.get(key) match {
+        case None => error
+        case Some(code) =>
+          nationalityList.getNationality(code) match {
+            case Some(nationality: Nationality) => Right(nationality)
+            case None                           => error
+          }
+      }
+    }
+
+    override def unbind(key: String, nationality: Nationality): Map[String, String] =
+      Map(key -> nationality.code)
   }
 }

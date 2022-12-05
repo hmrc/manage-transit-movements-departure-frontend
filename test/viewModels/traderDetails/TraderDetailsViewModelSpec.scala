@@ -17,11 +17,11 @@
 package viewModels.traderDetails
 
 import base.SpecBase
-import generators.{Generators, TraderDetailsUserAnswersGenerator}
+import generators.Generators
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import viewModels.traderDetails.TraderDetailsViewModel.TraderDetailsViewModelProvider
 
-class TraderDetailsViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
+class TraderDetailsViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "apply" - {
     "must return all sections" in {

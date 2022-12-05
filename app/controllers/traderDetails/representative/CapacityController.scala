@@ -18,7 +18,7 @@ package controllers.traderDetails.representative
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.traderDetails.representative.RepresentativeCapacityFormProvider
+import forms.EnumerableFormProvider
 import models.traderDetails.representative.RepresentativeCapacity
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
@@ -38,14 +38,14 @@ class CapacityController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: TraderDetailsNavigatorProvider,
   actions: Actions,
-  formProvider: RepresentativeCapacityFormProvider,
+  formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: CapacityView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider[RepresentativeCapacity]("traderDetails.representative.capacity")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

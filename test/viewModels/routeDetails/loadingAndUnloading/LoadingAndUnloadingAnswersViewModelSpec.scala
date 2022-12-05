@@ -17,7 +17,7 @@
 package viewModels.routeDetails.loadingAndUnloading
 
 import base.SpecBase
-import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import generators.Generators
 import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -25,7 +25,7 @@ import pages.routeDetails.loadingAndUnloading
 import pages.routeDetails.loadingAndUnloading._
 import viewModels.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersViewModel.LoadingAndUnloadingAnswersViewModelProvider
 
-class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class LoadingAndUnloadingAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "apply" - {
 

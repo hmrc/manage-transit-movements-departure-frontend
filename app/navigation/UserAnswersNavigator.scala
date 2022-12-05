@@ -44,7 +44,7 @@ object UserAnswersNavigator extends Logging {
   )(implicit userAnswersReader: UserAnswersReader[T]): Call = {
     lazy val errorCall = controllers.routes.ErrorController.notFound()
 
-    UserAnswersReader[T].run(userAnswers) match {
+    userAnswersReader.run(userAnswers) match {
       case Left(ReaderError(page, _)) =>
         page.route(userAnswers, mode).getOrElse {
           logger.debug(s"Route not defined for page ${page.path}")

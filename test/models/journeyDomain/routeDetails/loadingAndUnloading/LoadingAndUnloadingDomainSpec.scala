@@ -17,7 +17,7 @@
 package models.journeyDomain.routeDetails.loadingAndUnloading
 
 import base.SpecBase
-import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import generators.Generators
 import models.SecurityDetailsType._
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.routeDetails.loadingAndUnloading.unloading.UnloadingDomain
@@ -26,7 +26,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList._
 import pages.routeDetails.loadingAndUnloading.AddPlaceOfUnloadingPage
 
-class LoadingAndUnloadingDomainSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class LoadingAndUnloadingDomainSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "LoadingAndUnloadingDomain" - {
 

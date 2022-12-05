@@ -19,7 +19,6 @@ package models.journeyDomain.transport
 import cats.implicits._
 import models.DeclarationType.Option4
 import models.domain.{UserAnswersReader, _}
-import models.journeyDomain.JourneyDomainModel
 import models.reference.Country
 import pages.preTaskList.DeclarationTypePage
 import pages.transport.preRequisites._
@@ -29,7 +28,7 @@ case class PreRequisitesDomain(
   countryOfDispatch: Option[Country],
   itemsDestinationCountry: Option[Country],
   containerIndicator: Boolean
-) extends JourneyDomainModel
+)
 
 object PreRequisitesDomain {
 

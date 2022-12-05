@@ -36,28 +36,28 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
   def getCustomsOfficesOfTransitForCountry(
     countryCode: CountryCode
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
-    val serviceUrl = s"${config.referenceDataUrl}/customs-office-transit/${countryCode.code}"
+    val serviceUrl = s"${config.referenceDataUrl}/customs-offices/${countryCode.code}?role=TRA"
     http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
   }
 
   def getCustomsOfficesOfDestinationForCountry(
     countryCode: CountryCode
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
-    val serviceUrl = s"${config.referenceDataUrl}/customs-office-destination/${countryCode.code}"
+    val serviceUrl = s"${config.referenceDataUrl}/customs-offices/${countryCode.code}?role=DES"
     http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
   }
 
   def getCustomsOfficesOfExitForCountry(
     countryCode: CountryCode
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
-    val serviceUrl = s"${config.referenceDataUrl}/customs-office-transit-exit/${countryCode.code}"
+    val serviceUrl = s"${config.referenceDataUrl}/customs-offices/${countryCode.code}?role=EXT"
     http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
   }
 
   def getCustomsOfficesOfDepartureForCountry(
     countryCode: String
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
-    val serviceUrl = s"${config.referenceDataUrl}/customs-office-departure/$countryCode"
+    val serviceUrl = s"${config.referenceDataUrl}/customs-offices/$countryCode?role=DEP"
     http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
   }
 
@@ -84,6 +84,11 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
   def getUnLocodes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[UnLocode]] = {
     val serviceUrl = s"${config.referenceDataUrl}/un-locodes"
     http.GET[Seq[UnLocode]](serviceUrl, headers = version2Header)
+  }
+
+  def getTransportData()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[TransportAggregateData] = {
+    val serviceUrl = s"${config.referenceDataUrl}/transport"
+    http.GET[TransportAggregateData](serviceUrl, headers = version2Header)
   }
 
   private def version2Header: Seq[(String, String)] = Seq(

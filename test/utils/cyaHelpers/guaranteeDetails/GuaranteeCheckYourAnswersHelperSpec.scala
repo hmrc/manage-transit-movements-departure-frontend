@@ -95,7 +95,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
                             content = "Change".toText,
                             href = routes.GuaranteeTypeController.onPageLoad(answers.lrn, mode, index).url,
                             visuallyHiddenText = Some("type of guarantee"),
-                            attributes = Map("id" -> "type")
+                            attributes = Map("id" -> "change-type")
                           )
                         )
                       )
@@ -140,7 +140,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
                           content = "Change".toText,
                           href = routes.ReferenceNumberController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("guarantee reference number"),
-                          attributes = Map("id" -> "reference-number")
+                          attributes = Map("id" -> "change-reference-number")
                         )
                       )
                     )
@@ -184,7 +184,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
                           content = "Change".toText,
                           href = routes.OtherReferenceYesNoController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("if you want to add a reference for the guarantee"),
-                          attributes = Map("id" -> "add-other-reference")
+                          attributes = Map("id" -> "change-add-other-reference")
                         )
                       )
                     )
@@ -244,7 +244,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
                             content = "Change".toText,
                             href = routes.OtherReferenceController.onPageLoad(answers.lrn, mode, index).url,
                             visuallyHiddenText = Some("reference for the guarantee"),
-                            attributes = Map("id" -> "other-reference")
+                            attributes = Map("id" -> "change-other-reference")
                           )
                         )
                       )
@@ -275,7 +275,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
                             content = "Change".toText,
                             href = routes.OtherReferenceController.onPageLoad(answers.lrn, mode, index).url,
                             visuallyHiddenText = Some("reference"),
-                            attributes = Map("id" -> "other-reference")
+                            attributes = Map("id" -> "change-other-reference")
                           )
                         )
                       )
@@ -320,7 +320,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
                           content = "Change".toText,
                           href = routes.AccessCodeController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("access code"),
-                          attributes = Map("id" -> "access-code")
+                          attributes = Map("id" -> "change-access-code")
                         )
                       )
                     )
@@ -364,7 +364,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
                           content = "Change".toText,
                           href = routes.LiabilityAmountController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("liability amount"),
-                          attributes = Map("id" -> "liability-amount")
+                          attributes = Map("id" -> "change-liability-amount")
                         )
                       )
                     )

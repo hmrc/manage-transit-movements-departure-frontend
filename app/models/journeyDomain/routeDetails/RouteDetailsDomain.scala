@@ -19,16 +19,17 @@ package models.journeyDomain.routeDetails
 import cats.implicits._
 import models.DeclarationType.Option4
 import models.SecurityDetailsType._
-import models.{Mode, UserAnswers}
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.routeDetails.exit.ExitDomain
 import models.journeyDomain.routeDetails.loadingAndUnloading.LoadingAndUnloadingDomain
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
-import models.journeyDomain.routeDetails.routing.{CountryOfRoutingDomain, RoutingDomain}
+import models.journeyDomain.routeDetails.routing.RoutingDomain
 import models.journeyDomain.routeDetails.transit.TransitDomain
 import models.journeyDomain.{JourneyDomainModel, Stage}
+import models.{DeclarationType, Mode, SecurityDetailsType, UserAnswers}
 import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails.locationOfGoods.AddLocationOfGoodsPage
+import pages.routeDetails.routing.CountriesOfRoutingInSecurityAgreement
 import play.api.mvc.Call
 
 case class RouteDetailsDomain(
@@ -52,7 +53,7 @@ object RouteDetailsDomain {
     for {
       routing             <- UserAnswersReader[RoutingDomain]
       transit             <- UserAnswersReader[Option[TransitDomain]](transitReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
-      exit                <- UserAnswersReader[Option[ExitDomain]](exitReader(customsSecurityAgreementAreaCountryCodes)(transit))
+      exit                <- UserAnswersReader[Option[ExitDomain]](exitReader(transit))
       locationOfGoods     <- UserAnswersReader[Option[LocationOfGoodsDomain]](locationOfGoodsReader(customsSecurityAgreementAreaCountryCodes))
       loadingAndUnloading <- UserAnswersReader[LoadingAndUnloadingDomain]
     } yield RouteDetailsDomain(
@@ -78,28 +79,29 @@ object RouteDetailsDomain {
         UserAnswersReader[TransitDomain].map(Some(_))
     }
 
-  implicit def exitReader(
-    customsSecurityAgreementAreaCountryCodes: Seq[String]
-  )(transit: Option[TransitDomain]): UserAnswersReader[Option[ExitDomain]] =
-    DeclarationTypePage.reader.flatMap {
-      case Option4 =>
-        none[ExitDomain].pure[UserAnswersReader]
-      case _ =>
-        SecurityDetailsTypePage.reader.flatMap {
-          case NoSecurityDetails | EntrySummaryDeclarationSecurityDetails =>
-            none[ExitDomain].pure[UserAnswersReader]
-          case _ =>
-            for {
-              countriesOfRouting <- UserAnswersReader[Seq[CountryOfRoutingDomain]]
-              countriesOfRoutingNotInCL147 = countriesOfRouting
-                .map(_.country.code.code)
-                .filter(!customsSecurityAgreementAreaCountryCodes.contains(_))
-              reader <- (countriesOfRoutingNotInCL147, transit) match {
-                case (_ :: _, Some(TransitDomain(_, _ :: _))) => none[ExitDomain].pure[UserAnswersReader]
-                case _                                        => UserAnswersReader[ExitDomain].map(Some(_))
-              }
-            } yield reader
+  implicit def exitReader(transit: Option[TransitDomain]): UserAnswersReader[Option[ExitDomain]] =
+    for {
+      declarationType           <- DeclarationTypePage.reader
+      securityDetails           <- SecurityDetailsTypePage.reader
+      isInSecurityAgreementArea <- CountriesOfRoutingInSecurityAgreement.optionalReader
+      result <- {
+        exitRequired(declarationType, securityDetails, isInSecurityAgreementArea, transit) match {
+          case true => UserAnswersReader[ExitDomain].map(Some(_))
+          case _    => none[ExitDomain].pure[UserAnswersReader]
         }
+      }
+    } yield result
+
+  private def exitRequired(declarationType: DeclarationType,
+                           securityDetails: SecurityDetailsType,
+                           isInSecurityAgreementArea: Option[Boolean],
+                           transit: Option[TransitDomain]
+  ): Boolean =
+    (declarationType, securityDetails, isInSecurityAgreementArea, transit) match {
+      case (Option4, _, _, _)                                                    => false
+      case (_, NoSecurityDetails | EntrySummaryDeclarationSecurityDetails, _, _) => false
+      case (_, _, Some(false), Some(TransitDomain(_, _ :: _)))                   => false
+      case _                                                                     => true
     }
 
   implicit def locationOfGoodsReader(customsSecurityAgreementAreaCountryCodes: Seq[String]): UserAnswersReader[Option[LocationOfGoodsDomain]] =

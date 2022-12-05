@@ -43,7 +43,7 @@ object ExitDomain {
         case x =>
           x.traverse[OfficeOfExitDomain](
             OfficeOfExitDomain.userAnswersReader
-          ).map(_.toSeq)
+          )
       }
 
     UserAnswersReader[Seq[OfficeOfExitDomain]].map(ExitDomain(_))

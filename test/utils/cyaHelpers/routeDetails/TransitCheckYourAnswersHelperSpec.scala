@@ -18,7 +18,7 @@ package utils.cyaHelpers.routeDetails
 
 import base.SpecBase
 import controllers.routeDetails.transit.index.{routes => indexRoutes}
-import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import generators.Generators
 import models.SecurityDetailsType.NoSecurityDetails
 import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode}
@@ -33,7 +33,7 @@ import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import utils.cyaHelpers.routeDetails.transit.TransitCheckYourAnswersHelper
 import viewModels.ListItem
 
-class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "TransitCheckYourAnswersHelper" - {
 
@@ -69,7 +69,7 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                           content = "Change".toText,
                           href = controllers.routeDetails.transit.routes.T2DeclarationTypeYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if the transit includes any T2 declarations"),
-                          attributes = Map("id" -> "includes-t2-declarations")
+                          attributes = Map("id" -> "change-includes-t2-declarations")
                         )
                       )
                     )
@@ -113,7 +113,7 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                           content = "Change".toText,
                           href = controllers.routeDetails.transit.routes.AddOfficeOfTransitYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add an office of transit"),
-                          attributes = Map("id" -> "add-office-of-transit")
+                          attributes = Map("id" -> "change-add-office-of-transit")
                         )
                       )
                     )

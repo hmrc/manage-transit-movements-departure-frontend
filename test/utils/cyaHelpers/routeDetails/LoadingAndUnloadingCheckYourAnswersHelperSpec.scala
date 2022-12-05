@@ -65,7 +65,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                           content = "Change".toText,
                           href = loadingRoutes.AddUnLocodeYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want a UN/LOCODE for the place of loading"),
-                          attributes = Map("id" -> "add-loading-un-locode")
+                          attributes = Map("id" -> "change-add-loading-un-locode")
                         )
                       )
                     )
@@ -108,7 +108,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                           content = "Change".toText,
                           href = loadingRoutes.UnLocodeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("UN/LOCODE for the place of loading"),
-                          attributes = Map("id" -> "loading-un-locode")
+                          attributes = Map("id" -> "change-loading-un-locode")
                         )
                       )
                     )
@@ -151,7 +151,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                           content = "Change".toText,
                           href = loadingRoutes.AddExtraInformationYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add extra information for the place of loading"),
-                          attributes = Map("id" -> "add-loading-country-and-location")
+                          attributes = Map("id" -> "change-add-loading-country-and-location")
                         )
                       )
                     )
@@ -194,7 +194,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                           content = "Change".toText,
                           href = loadingRoutes.CountryController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("country for the place of loading"),
-                          attributes = Map("id" -> "loading-country")
+                          attributes = Map("id" -> "change-loading-country")
                         )
                       )
                     )
@@ -237,7 +237,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                           content = "Change".toText,
                           href = loadingRoutes.LocationController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("location for the place of loading"),
-                          attributes = Map("id" -> "loading-location")
+                          attributes = Map("id" -> "change-loading-location")
                         )
                       )
                     )
@@ -280,7 +280,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                           content = "Change".toText,
                           href = loadingAndUnloadingRoutes.AddPlaceOfUnloadingController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add a place of unloading"),
-                          attributes = Map("id" -> "add-place-of-unloading")
+                          attributes = Map("id" -> "change-add-place-of-unloading")
                         )
                       )
                     )
@@ -323,7 +323,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                           content = "Change".toText,
                           href = unloadingRoutes.AddUnLocodeYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add a UN/LOCODE for the place of unloading"),
-                          attributes = Map("id" -> "add-unloading-un-locode")
+                          attributes = Map("id" -> "change-add-unloading-un-locode")
                         )
                       )
                     )
@@ -366,7 +366,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                           content = "Change".toText,
                           href = unloadingRoutes.UnLocodeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("UN/LOCODE for the place of unloading"),
-                          attributes = Map("id" -> "unloading-un-locode")
+                          attributes = Map("id" -> "change-unloading-un-locode")
                         )
                       )
                     )
@@ -409,7 +409,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                           content = "Change".toText,
                           href = unloadingRoutes.AddExtraInformationYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add extra information for the place of unloading"),
-                          attributes = Map("id" -> "add-unloading-country-and-location")
+                          attributes = Map("id" -> "change-add-unloading-country-and-location")
                         )
                       )
                     )
@@ -452,7 +452,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                           content = "Change".toText,
                           href = unloadingRoutes.CountryController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("country for the place of unloading"),
-                          attributes = Map("id" -> "unloading-country")
+                          attributes = Map("id" -> "change-unloading-country")
                         )
                       )
                     )
@@ -495,7 +495,7 @@ class LoadingAndUnloadingCheckYourAnswersHelperSpec extends SpecBase with ScalaC
                           content = "Change".toText,
                           href = unloadingRoutes.LocationController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("location for the place of unloading"),
-                          attributes = Map("id" -> "unloading-location")
+                          attributes = Map("id" -> "change-unloading-location")
                         )
                       )
                     )

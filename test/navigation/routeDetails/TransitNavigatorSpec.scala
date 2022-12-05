@@ -17,7 +17,7 @@
 package navigation.routeDetails
 
 import base.SpecBase
-import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import generators.Generators
 import models._
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -27,7 +27,7 @@ import services.CountriesService
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class TransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class TransitNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "Transit Navigator" - {
 

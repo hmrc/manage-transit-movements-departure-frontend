@@ -41,14 +41,14 @@ class TransitCheckYourAnswersHelper(
     page = T2DeclarationTypeYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "routeDetails.transit.t2DeclarationTypeYesNo",
-    id = Some("includes-t2-declarations")
+    id = Some("change-includes-t2-declarations")
   )
 
   def addOfficeOfTransit: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = AddOfficeOfTransitYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "routeDetails.transit.addOfficeOfTransitYesNo",
-    id = Some("add-office-of-transit")
+    id = Some("change-add-office-of-transit")
   )
 
   def officeOfTransit(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[OfficeOfTransitDomain, CustomsOffice](
@@ -61,13 +61,12 @@ class TransitCheckYourAnswersHelper(
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(OfficesOfTransitSection) {
-      position =>
-        val index = Index(position)
+      index =>
         buildListItem[OfficeOfTransitDomain, Country](
           page = OfficeOfTransitCountryPage(index),
           formatJourneyDomainModel = _.label,
           formatType = _.toString,
-          removeRoute = if (position == 0) None else Some(routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, mode, index))
+          removeRoute = if (index.isFirst) None else Some(routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, mode, index))
         )(
           OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes),
           implicitly

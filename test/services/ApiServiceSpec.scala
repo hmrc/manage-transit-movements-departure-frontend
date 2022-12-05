@@ -18,12 +18,8 @@ package services
 
 import base.SpecBase
 import connectors.ApiConnector
-import models.journeyDomain.routeDetails.RouteDetailsDomain
-import models.journeyDomain.routeDetails.loadingAndUnloading.LoadingAndUnloadingDomain
-import models.journeyDomain.routeDetails.routing.RoutingDomain
-import models.journeyDomain.{DepartureDomain, PreTaskListDomain}
-import models.reference.{Country, CountryCode, CustomsOffice}
-import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}
+import generators.Generators
+import models.UserAnswers
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
@@ -32,7 +28,7 @@ import uk.gov.hmrc.http.HttpResponse
 
 import scala.concurrent.Future
 
-class ApiServiceSpec extends SpecBase with BeforeAndAfterEach {
+class ApiServiceSpec extends SpecBase with BeforeAndAfterEach with Generators {
 
   val mockApiConnector: ApiConnector = mock[ApiConnector]
   val service: ApiService            = new ApiService(mockApiConnector)
@@ -43,33 +39,8 @@ class ApiServiceSpec extends SpecBase with BeforeAndAfterEach {
     super.beforeEach()
   }
 
-  val customsOffice: CustomsOffice = CustomsOffice("foo", "bar", None)
-
-  val preTaskListDomain: PreTaskListDomain = PreTaskListDomain(LocalReferenceNumber("refno").get,
-                                                               customsOffice,
-                                                               ProcedureType.Normal,
-                                                               DeclarationType.Option1,
-                                                               None,
-                                                               SecurityDetailsType.NoSecurityDetails,
-                                                               true
-  )
-
-  val routingDomain: RoutingDomain = RoutingDomain(
-    Country(CountryCode("GB"), "My country"),
-    customsOffice,
-    false,
-    Seq.empty
-  )
-
-  val routeDetailsDomain: RouteDetailsDomain = RouteDetailsDomain(
-    routingDomain,
-    None,
-    None,
-    None,
-    LoadingAndUnloadingDomain(None, None)
-  )
-
-  val request = DepartureDomain(preTaskListDomain, routeDetailsDomain)
+  val preTask: UserAnswers = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
+  val uA: UserAnswers      = arbitraryRouteDetailsAnswers(preTask).sample.value
 
   "ApiService" - {
 
@@ -78,31 +49,31 @@ class ApiServiceSpec extends SpecBase with BeforeAndAfterEach {
       "must return a success response with valid request" in {
 
         when(response.status).thenReturn(OK)
-        when(mockApiConnector.submitDeclaration(eqTo(request))(any())).thenReturn(Future.successful(response))
+        when(mockApiConnector.submitDeclaration(eqTo(uA))(any())).thenReturn(Future.successful(response))
 
-        service.submitDeclaration(request).futureValue.status mustBe OK
+        service.submitDeclaration(uA).futureValue.status mustBe OK
 
-        verify(mockApiConnector).submitDeclaration(eqTo(request))(any())
+        verify(mockApiConnector).submitDeclaration(eqTo(uA))(any())
       }
 
       "must return a bad request response with invalid request" in {
 
         when(response.status).thenReturn(BAD_REQUEST)
-        when(mockApiConnector.submitDeclaration(eqTo(request))(any())).thenReturn(Future.successful(response))
+        when(mockApiConnector.submitDeclaration(eqTo(uA))(any())).thenReturn(Future.successful(response))
 
-        service.submitDeclaration(request).futureValue.status mustBe BAD_REQUEST
+        service.submitDeclaration(uA).futureValue.status mustBe BAD_REQUEST
 
-        verify(mockApiConnector).submitDeclaration(eqTo(request))(any())
+        verify(mockApiConnector).submitDeclaration(eqTo(uA))(any())
       }
 
       "must return a server error when something goes wrong" in {
 
         when(response.status).thenReturn(INTERNAL_SERVER_ERROR)
-        when(mockApiConnector.submitDeclaration(eqTo(request))(any())).thenReturn(Future.successful(response))
+        when(mockApiConnector.submitDeclaration(eqTo(uA))(any())).thenReturn(Future.successful(response))
 
-        service.submitDeclaration(request).futureValue.status mustBe INTERNAL_SERVER_ERROR
+        service.submitDeclaration(uA).futureValue.status mustBe INTERNAL_SERVER_ERROR
 
-        verify(mockApiConnector).submitDeclaration(eqTo(request))(any())
+        verify(mockApiConnector).submitDeclaration(eqTo(uA))(any())
       }
 
     }

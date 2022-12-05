@@ -17,7 +17,7 @@
 package viewModels.routeDetails
 
 import base.SpecBase
-import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import generators.Generators
 import models.CheckMode
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, when}
@@ -36,7 +36,7 @@ import viewModels.routeDetails.transit.TransitAnswersViewModel
 import viewModels.routeDetails.transit.TransitAnswersViewModel.TransitAnswersViewModelProvider
 import viewModels.sections.Section
 
-class RouteDetailsAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class RouteDetailsAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "apply" - {
     "must pass CheckMode to view models" in {

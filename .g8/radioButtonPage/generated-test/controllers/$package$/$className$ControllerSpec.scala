@@ -1,7 +1,7 @@
 package controllers.$package$
 
-import base.{SpecBase, AppWithDefaultMockFixtures}
-import forms.$package$.$formProvider$
+import base.{AppWithDefaultMockFixtures, SpecBase}
+import forms.EnumerableFormProvider
 import models.NormalMode
 import models.$package$.$className$
 import org.mockito.ArgumentMatchers.any
@@ -17,8 +17,8 @@ import scala.concurrent.Future
 
 class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider = new $formProvider$()
-  private val form         = formProvider()
+  private val formProvider = new EnumerableFormProvider()
+  private val form         = formProvider[$className$]("$package$.$className;format="decap"$")
   private val mode         = NormalMode
   private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, mode).url
 

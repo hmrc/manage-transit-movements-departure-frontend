@@ -18,12 +18,12 @@ package navigation
 
 import base.SpecBase
 import controllers.preTaskList.routes
-import generators.{Generators, PreTaskListUserAnswersGenerator}
+import generators.Generators
 import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with PreTaskListUserAnswersGenerator {
+class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "Pre Task List Navigator" - {
 

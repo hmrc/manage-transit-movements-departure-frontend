@@ -17,7 +17,7 @@
 package viewModels.routeDetails.exit
 
 import base.SpecBase
-import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import generators.Generators
 import models.Mode
 import models.reference.Country
 import org.scalacheck.Arbitrary.arbitrary
@@ -25,7 +25,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.exit.index.OfficeOfExitCountryPage
 import viewModels.routeDetails.exit.OfficeOfExitAnswersViewModel.OfficeOfExitAnswersViewModelProvider
 
-class OfficeOfExitAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class OfficeOfExitAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "apply" - {
 

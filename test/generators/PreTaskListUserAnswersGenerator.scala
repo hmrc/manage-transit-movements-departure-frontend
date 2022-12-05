@@ -20,8 +20,8 @@ import models.UserAnswers
 import models.journeyDomain.PreTaskListDomain
 import org.scalacheck.Gen
 
-trait PreTaskListUserAnswersGenerator extends UserAnswersGenerator {
-  self: Generators =>
+trait PreTaskListUserAnswersGenerator {
+  self: UserAnswersGenerator =>
 
   def arbitraryPreTaskListAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[PreTaskListDomain](userAnswers)

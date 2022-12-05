@@ -34,28 +34,28 @@ class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
     page = CountryOfDestinationPage,
     formatAnswer = formatAsText,
     prefix = "routeDetails.routing.countryOfDestination",
-    id = Some("country-of-destination")
+    id = Some("change-country-of-destination")
   )
 
   def officeOfDestination: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
     page = OfficeOfDestinationPage,
     formatAnswer = formatAsText,
     prefix = "routeDetails.routing.officeOfDestination",
-    id = Some("office-of-destination")
+    id = Some("change-office-of-destination")
   )
 
   def bindingItinerary: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = BindingItineraryPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "routeDetails.routing.bindingItinerary",
-    id = Some("binding-itinerary")
+    id = Some("change-binding-itinerary")
   )
 
   def addCountryOfRouting: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = AddCountryOfRoutingYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "routeDetails.routing.addCountryOfRoutingYesNo",
-    id = Some("add-country-of-routing")
+    id = Some("change-add-country-of-routing")
   )
 
   def countryOfRouting(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[CountryOfRoutingDomain, Country](
@@ -68,8 +68,7 @@ class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(CountriesOfRoutingSection) {
-      position =>
-        val index = Index(position)
+      index =>
         buildListItem[CountryOfRoutingDomain, Country](
           page = CountryOfRoutingPage(index),
           formatJourneyDomainModel = _.country.toString,

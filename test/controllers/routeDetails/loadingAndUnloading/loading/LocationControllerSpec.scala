@@ -63,14 +63,15 @@ class LocationControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, country.description, mode)(request, messages).toString //todo change when country page merged
+        view(form, lrn, country.description, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(CountryPage, country) //todo change CountryPage once created
+        .setValue(CountryPage, country)
         .setValue(LocationPage, "Test")
+
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, locationRoute)

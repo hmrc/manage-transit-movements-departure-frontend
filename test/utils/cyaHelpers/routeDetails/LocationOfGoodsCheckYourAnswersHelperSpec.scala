@@ -65,7 +65,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.LocationTypeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("location type"),
-                          attributes = Map("id" -> "location-type")
+                          attributes = Map("id" -> "change-location-type")
                         )
                       )
                     )
@@ -108,7 +108,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.IdentificationController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("identifier type for the location of goods"),
-                          attributes = Map("id" -> "location-of-goods-identification")
+                          attributes = Map("id" -> "change-location-of-goods-identification")
                         )
                       )
                     )
@@ -151,7 +151,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.CustomsOfficeIdentifierController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the customs office identifier for the location of goods"),
-                          attributes = Map("id" -> "location-of-goods-customs-office-identifier")
+                          attributes = Map("id" -> "change-location-of-goods-customs-office-identifier")
                         )
                       )
                     )
@@ -194,7 +194,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.EoriController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("EORI number or Trader Identification Number (TIN) for the location of goods"),
-                          attributes = Map("id" -> "location-of-goods-eori")
+                          attributes = Map("id" -> "change-location-of-goods-eori")
                         )
                       )
                     )
@@ -237,7 +237,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.AuthorisationNumberController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the authorisation number for the location of goods"),
-                          attributes = Map("id" -> "location-of-goods-authorisation-number")
+                          attributes = Map("id" -> "change-location-of-goods-authorisation-number")
                         )
                       )
                     )
@@ -280,7 +280,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.CoordinatesController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("coordinates"),
-                          attributes = Map("id" -> "location-of-goods-coordinates")
+                          attributes = Map("id" -> "change-location-of-goods-coordinates")
                         )
                       )
                     )
@@ -323,7 +323,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.UnLocodeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the UN/LOCODE for the location of goods"),
-                          attributes = Map("id" -> "location-of-goods-un-locode")
+                          attributes = Map("id" -> "change-location-of-goods-un-locode")
                         )
                       )
                     )
@@ -366,7 +366,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.AddressController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the address for the location of goods"),
-                          attributes = Map("id" -> "location-of-goods-address")
+                          attributes = Map("id" -> "change-location-of-goods-address")
                         )
                       )
                     )
@@ -409,7 +409,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.CountryController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("location of goods country"),
-                          attributes = Map("id" -> "location-of-goods-country")
+                          attributes = Map("id" -> "change-location-of-goods-country")
                         )
                       )
                     )
@@ -452,7 +452,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.PostalCodeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the address for the location of goods"),
-                          attributes = Map("id" -> "location-of-goods-postal-code")
+                          attributes = Map("id" -> "change-location-of-goods-postal-code")
                         )
                       )
                     )
@@ -495,7 +495,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.AddIdentifierYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add another identifier for the location of goods"),
-                          attributes = Map("id" -> "location-of-goods-add-identifier")
+                          attributes = Map("id" -> "change-location-of-goods-add-identifier")
                         )
                       )
                     )
@@ -538,7 +538,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.AdditionalIdentifierController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("additional identifier"),
-                          attributes = Map("id" -> "location-of-goods-additional-identifier")
+                          attributes = Map("id" -> "change-location-of-goods-additional-identifier")
                         )
                       )
                     )
@@ -581,7 +581,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.AddContactYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add a contact for the location of goods"),
-                          attributes = Map("id" -> "location-of-goods-add-contact")
+                          attributes = Map("id" -> "change-location-of-goods-add-contact")
                         )
                       )
                     )
@@ -624,7 +624,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = contact.routes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the contact for the location of goods"),
-                          attributes = Map("id" -> "location-of-goods-contact")
+                          attributes = Map("id" -> "change-location-of-goods-contact")
                         )
                       )
                     )
@@ -667,7 +667,7 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = contact.routes.TelephoneNumberController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("the contact for the location of goods’ telephone number"),
-                          attributes = Map("id" -> "location-of-goods-contact-telephone-number")
+                          attributes = Map("id" -> "change-location-of-goods-contact-telephone-number")
                         )
                       )
                     )

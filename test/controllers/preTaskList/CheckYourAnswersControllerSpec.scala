@@ -17,7 +17,7 @@
 package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import generators.{Generators, PreTaskListUserAnswersGenerator}
+import generators.Generators
 import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -36,12 +36,7 @@ import views.html.preTaskList.CheckYourAnswersView
 
 import scala.concurrent.Future
 
-class CheckYourAnswersControllerSpec
-    extends SpecBase
-    with AppWithDefaultMockFixtures
-    with ScalaCheckPropertyChecks
-    with Generators
-    with PreTaskListUserAnswersGenerator {
+class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   private lazy val mockViewModelProvider = mock[PreTaskListViewModelProvider]
 

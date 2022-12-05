@@ -19,7 +19,7 @@ package utils.cyaHelpers
 import models.domain.UserAnswersReader
 import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.Stage.AccessingJourney
-import models.{LocalReferenceNumber, Mode, RichOptionalJsArray, UserAnswers}
+import models.{Index, LocalReferenceNumber, Mode, RichOptionalJsArray, UserAnswers}
 import navigation.UserAnswersNavigator
 import pages.QuestionPage
 import pages.sections.Section
@@ -99,7 +99,7 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
 
   protected def buildListItems(
     section: Section[JsArray]
-  )(block: Int => Option[Either[ListItem, ListItem]]): Seq[Either[ListItem, ListItem]] =
+  )(block: Index => Option[Either[ListItem, ListItem]]): Seq[Either[ListItem, ListItem]] =
     userAnswers
       .get(section)
       .mapWithIndex {
@@ -112,7 +112,7 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
     formatType: B => String,
     removeRoute: Option[Call]
   )(implicit userAnswersReader: UserAnswersReader[A], rds: Reads[B]): Option[Either[ListItem, ListItem]] =
-    UserAnswersReader[A].run(userAnswers) match {
+    userAnswersReader.run(userAnswers) match {
       case Left(readerError) =>
         readerError.page.route(userAnswers, mode).flatMap {
           changeRoute =>
@@ -136,7 +136,7 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
         }
     }
 
-  protected def getNameAndBuildListItem[T](
+  private def getNameAndBuildListItem[T](
     page: QuestionPage[T],
     formatName: T => String,
     changeUrl: String,

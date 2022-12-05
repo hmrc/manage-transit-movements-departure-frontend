@@ -176,6 +176,7 @@ traderDetails.checkYourAnswers.title = Check your answers
 
 traderDetails.holderOfTransit.eoriYesNo.title = Do you know the transit holder’s EORI number or Trader Identification Number (TIN)?
 traderDetails.holderOfTransit.eoriYesNo.heading = Do you know the transit holder’s EORI number or Trader Identification Number (TIN)?
+traderDetails.holderOfTransit.eoriYesNo.paragraph = The transit holder is the person responsible for the transit procedure. They can submit the declaration themselves or a third party can do it on their behalf.
 traderDetails.holderOfTransit.eoriYesNo.checkYourAnswersLabel = Do you know the transit holder’s EORI number or Trader Identification Number (TIN)?
 traderDetails.holderOfTransit.eoriYesNo.error.required = Select yes if you know the transit holder’s EORI number or Trader Identification Number (TIN)
 traderDetails.holderOfTransit.eoriYesNo.change.hidden = if you know the transit holder’s EORI number or Trader Identification Number (TIN)
@@ -609,9 +610,9 @@ routeDetails.routing.officeOfDestination.error.required = Enter the office of de
 routeDetails.routing.bindingItinerary.title = Are you using a binding itinerary?
 routeDetails.routing.bindingItinerary.heading = Are you using a binding itinerary?
 routeDetails.routing.bindingItinerary.paragraph = This diverts the route around countries that represent a higher risk to the goods in transit.
-routeDetails.routing.bindingItinerary.checkYourAnswersLabel = Do you want the transit to follow a binding itinerary?
+routeDetails.routing.bindingItinerary.checkYourAnswersLabel = Are you using a binding itinerary?
 routeDetails.routing.bindingItinerary.error.required = Select yes if you are using a binding itinerary
-routeDetails.routing.bindingItinerary.change.hidden = if you want the transit to follow a binding itinerary
+routeDetails.routing.bindingItinerary.change.hidden = if you are using a binding itinerary
 
 routeDetails.routing.addCountryOfRoutingYesNo.title = Do you want to add a country to the transit route?
 routeDetails.routing.addCountryOfRoutingYesNo.heading = Do you want to add a country to the transit route?
@@ -1058,7 +1059,7 @@ transport.preRequisites.itemsDestinationCountry.title = What country are the ite
 transport.preRequisites.itemsDestinationCountry.heading = What country are the items being transported to?
 transport.preRequisites.itemsDestinationCountry.hint = Enter the country, like France or Portugal.
 transport.preRequisites.itemsDestinationCountry.placeholder = Select a country
-transport.preRequisites.itemsDestinationCountry.checkYourAnswersLabel = What country are the items being transported to
+transport.preRequisites.itemsDestinationCountry.checkYourAnswersLabel = What country are the items being transported to?
 transport.preRequisites.itemsDestinationCountry.error.required = Enter the country the items are being transported to
 
 transport.preRequisites.containerIndicator.title = Are you using any containers?
@@ -1072,3 +1073,125 @@ transport.preRequisites.containerIndicator.paragraph = This can be any container
 declarationSubmitted.title = Declaration Submitted
 declarationSubmitted.heading = Declaration Submitted
 declarationSubmitted.paragraph1 = You have submitted your declaration.
+
+transport.inlandMode.caption = Transport details - Inland mode of transport
+transport.departureMeansOfTransport.caption = Transport details - Departure means of transport
+transport.activeBorderModeOfTransport.caption = Transport details - Border mode of transport
+transport.activeBorderMeansOfTransport.caption = Transport details - Border means of transport
+
+transport.transportMeans.departure.inlandMode.title = Which inland mode of transport are you using?
+transport.transportMeans.departure.inlandMode.heading = Which inland mode of transport are you using?
+transport.transportMeans.departure.inlandMode.paragraph = This is the type of transport used from the UK office of departure to a UK port or airport.
+transport.transportMeans.departure.inlandMode.maritime = Maritime
+transport.transportMeans.departure.inlandMode.rail = Rail
+transport.transportMeans.departure.inlandMode.road = Road
+transport.transportMeans.departure.inlandMode.air = Air
+transport.transportMeans.departure.inlandMode.mail = Mail (active mode of transport unknown)
+transport.transportMeans.departure.inlandMode.fixed = Fixed transport installations - pipelines or electric power lines used for the continuous transport of goods
+transport.transportMeans.departure.inlandMode.waterway = Inland waterway
+transport.transportMeans.departure.inlandMode.unknown = Unknown (own propulsion)
+transport.transportMeans.departure.inlandMode.checkYourAnswersLabel = Which inland mode of transport are you using?
+transport.transportMeans.departure.inlandMode.error.required = Select which inland mode of transport you’re using
+
+transport.transportMeans.departure.identification.title = Which identification do you want to use for this vehicle?
+transport.transportMeans.departure.identification.heading = Which identification do you want to use for this vehicle?
+transport.transportMeans.departure.identification.seaGoingVessel = Name of a sea-going vessel
+transport.transportMeans.departure.identification.seaGoingVessel.arg = name of the sea-going vessel
+transport.transportMeans.departure.identification.iataFlightNumber = IATA flight number
+transport.transportMeans.departure.identification.iataFlightNumber.arg = IATA flight number
+transport.transportMeans.departure.identification.inlandWaterwaysVehicle = Name of an inland waterways vehicle
+transport.transportMeans.departure.identification.inlandWaterwaysVehicle.arg = name of the inland waterways vehicle
+transport.transportMeans.departure.identification.imoShipIdNumber = IMO ship identification number
+transport.transportMeans.departure.identification.imoShipIdNumber.arg = IMO ship identification number
+transport.transportMeans.departure.identification.wagonNumber = Wagon number
+transport.transportMeans.departure.identification.wagonNumber.arg = wagon number
+transport.transportMeans.departure.identification.trainNumber = Train number
+transport.transportMeans.departure.identification.trainNumber.arg = train number
+transport.transportMeans.departure.identification.regNumberRoadVehicle = Registration number of a road vehicle
+transport.transportMeans.departure.identification.regNumberRoadVehicle.arg = registration number of the road vehicle
+transport.transportMeans.departure.identification.regNumberRoadTrailer = Registration number of a road trailer
+transport.transportMeans.departure.identification.regNumberRoadTrailer.arg = registration number of the road trailer
+transport.transportMeans.departure.identification.regNumberAircraft = Registration number of an aircraft
+transport.transportMeans.departure.identification.regNumberAircraft.arg = registration number of the aircraft
+transport.transportMeans.departure.identification.europeanVesselIdNumber = European vessel identification number (ENI code)
+transport.transportMeans.departure.identification.europeanVesselIdNumber.arg = European vessel identification number (ENI code)
+transport.transportMeans.departure.identification.unknown = Unknown - this can only be used during the transitional period
+# TODO: Ask Gavin for content for unknown identification type
+transport.transportMeans.departure.identification.unknown.arg = ask gavin what this should be
+transport.transportMeans.departure.identification.checkYourAnswersLabel = Which identification do you want to use for this vehicle?
+transport.transportMeans.departure.identification.error.required = Select which identification you want to use for this vehicle
+
+transport.transportMeans.departure.meansIdentificationNumber.title = What is the {0}?
+transport.transportMeans.departure.meansIdentificationNumber.heading = What is the {0}?
+transport.transportMeans.departure.meansIdentificationNumber.hint = This can be up to 35 characters long and include both letters and numbers.
+transport.transportMeans.departure.meansIdentificationNumber.checkYourAnswersLabel = Identification number
+transport.transportMeans.departure.meansIdentificationNumber.error.required = Enter the {0}
+transport.transportMeans.departure.meansIdentificationNumber.error.invalid = The {0} must only include letters a to z and numbers 0 to 9
+transport.transportMeans.departure.meansIdentificationNumber.error.length = The {0} must be 35 characters or less
+
+transport.transportMeans.departure.vehicleCountry.title = What country is this vehicle registered to?
+transport.transportMeans.departure.vehicleCountry.heading = What country is this vehicle registered to?
+transport.transportMeans.departure.vehicleCountry.hint = Enter the country or code, like AT or Austria.
+transport.transportMeans.departure.vehicleCountry.placeholder = Select a nationality
+transport.transportMeans.departure.vehicleCountry.change.hidden = the country the vehicle is registered to
+transport.transportMeans.departure.vehicleCountry.checkYourAnswersLabel = What country is this vehicle registered to?
+transport.transportMeans.departure.vehicleCountry.error.required = Select the country the vehicle is registered to
+
+transport.transportMeans.anotherVehicleCrossingYesNo.title = Are you using another vehicle to cross the border?
+transport.transportMeans.anotherVehicleCrossingYesNo.heading = Are you using another vehicle to cross the border?
+transport.transportMeans.anotherVehicleCrossingYesNo.paragraph = This includes using a different vehicle to carry the inland mode over the border. For example, a truck on a ferry.
+transport.transportMeans.anotherVehicleCrossingYesNo.checkYourAnswersLabel = Are you using another vehicle to cross the border?
+transport.transportMeans.anotherVehicleCrossingYesNo.error.required = Select yes if the vehicle will change before crossing the border
+
+transport.transportMeans.active.identification.title = Which identification do you want to use for this vehicle?
+transport.transportMeans.active.identification.heading = Which identification do you want to use for this vehicle?
+transport.transportMeans.active.identification.imoShipIdNumber = IMO ship identification number
+transport.transportMeans.active.identification.seaGoingVessel = Name of a sea-going vessel
+transport.transportMeans.active.identification.trainNumber = Train number
+transport.transportMeans.active.identification.regNumberRoadVehicle = Registration number of a road vehicle
+transport.transportMeans.active.identification.iataFlightNumber = IATA flight number
+transport.transportMeans.active.identification.regNumberAircraft = Registration number of an aircraft
+transport.transportMeans.active.identification.europeanVesselIdNumber = European vessel identification number (ENI code)
+transport.transportMeans.active.identification.inlandWaterwaysVehicle = Name of an inland waterways vehicle
+transport.transportMeans.active.identification.checkYourAnswersLabel = Which identification do you want to use for this vehicle?
+transport.transportMeans.active.identification.error.required = Select which identification you want to use for this vehicle
+transport.transportMeans.active.identification.checkYourAnswersLabel = Which identification do you want to use for the vehicle crossing the border
+transport.transportMeans.active.identification.error.required = Select which identification you want to use for this vehicle
+
+transport.transportMeans.active.addNationalityYesNo.title = Do you want to add the registered country for this vehicle?
+transport.transportMeans.active.addNationalityYesNo.heading = Do you want to add the registered country for this vehicle?
+transport.transportMeans.active.addNationalityYesNo.checkYourAnswersLabel = Do you want to add the registered country for this vehicle
+transport.transportMeans.active.addNationalityYesNo.error.required = Select yes if you want to add the registered country for the vehicle crossing the border
+
+transport.transportMeans.active.identificationNumber.title = What is the {0}?
+transport.transportMeans.active.identificationNumber.heading = What is the {0}?
+transport.transportMeans.active.identificationNumber.checkYourAnswersLabel = What is the {0}
+transport.transportMeans.active.identificationNumber.imoShipIdNumber = IMO ship identification number
+transport.transportMeans.active.identificationNumber.seaGoingVessel = name of the sea-going vessel
+transport.transportMeans.active.identificationNumber.trainNumber = train number
+transport.transportMeans.active.identificationNumber.regNumberRoadVehicle = registration number of the road vehicle
+transport.transportMeans.active.identificationNumber.iataFlightNumber = IATA flight number
+transport.transportMeans.active.identificationNumber.regNumberAircraft = registration number of the aircraft
+transport.transportMeans.active.identificationNumber.europeanVesselIdNumber = European vessel identification number (ENI code)
+transport.transportMeans.active.identificationNumber.inlandWaterwaysVehicle = name of the inland waterways vehicle
+transport.transportMeans.active.identificationNumber.error.required = Enter the {0}
+transport.transportMeans.active.identificationNumber.error.length = The {0} must be 35 characters or less
+transport.transportMeans.active.identificationNumber.error.invalid = The {0} must only include letters a to z and numbers 0 to 9
+
+transport.transportMeans.active.nationality.title = What country is this vehicle registered to?
+transport.transportMeans.active.nationality.heading = What country is this vehicle registered to?
+transport.transportMeans.active.nationality.hint = Enter the country or code, like AT or Austria.
+transport.transportMeans.active.nationality.label = What country is this vehicle registered to?
+transport.transportMeans.active.nationality.placeholder = Select a nationality
+transport.transportMeans.active.nationality.change.hidden = country is this vehicle registered to
+transport.transportMeans.active.nationality.checkYourAnswersLabel = What country is this vehicle registered to?
+transport.transportMeans.active.nationality.error.required = Select the country the vehicle is registered to
+
+transport.transportMeans.active.customsOfficeActiveBorder.title = Where is the office of transit?
+transport.transportMeans.active.customsOfficeActiveBorder.heading = Where is the office of transit?
+transport.transportMeans.active.customsOfficeActiveBorder.hint = Enter the office location or code, like Calais or FR620001.
+transport.transportMeans.active.customsOfficeActiveBorder.placeholder = Select a customs office
+transport.transportMeans.active.customsOfficeActiveBorder.paragraph = This is the customs office after crossing the border.
+transport.transportMeans.active.customsOfficeActiveBorder.change.hidden = Where is the office of transit
+transport.transportMeans.active.customsOfficeActiveBorder.checkYourAnswersLabel = Where is the office of transit?
+transport.transportMeans.active.customsOfficeActiveBorder.error.required = Enter the office of transit

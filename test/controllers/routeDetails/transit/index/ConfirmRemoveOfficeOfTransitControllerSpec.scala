@@ -18,7 +18,7 @@ package controllers.routeDetails.transit.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
-import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import generators.Generators
 import models.reference.{Country, CustomsOffice}
 import models.{Index, NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
@@ -34,12 +34,7 @@ import views.html.routeDetails.transit.index.ConfirmRemoveOfficeOfTransitView
 
 import scala.concurrent.Future
 
-class ConfirmRemoveOfficeOfTransitControllerSpec
-    extends SpecBase
-    with AppWithDefaultMockFixtures
-    with Generators
-    with RouteDetailsUserAnswersGenerator
-    with ScalaCheckPropertyChecks {
+class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators with ScalaCheckPropertyChecks {
 
   private val prefix        = "routeDetails.transit.index.confirmRemoveOfficeOfTransit"
   private val defaultPrefix = s"$prefix.default"

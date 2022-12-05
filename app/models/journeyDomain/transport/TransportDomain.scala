@@ -20,13 +20,15 @@ import models.domain.UserAnswersReader
 import models.journeyDomain.JourneyDomainModel
 
 case class TransportDomain(
-  preRequisites: PreRequisitesDomain
+  preRequisites: PreRequisitesDomain,
+  transportMeans: TransportMeansDomain
 ) extends JourneyDomainModel
 
 object TransportDomain {
 
   implicit val userAnswersReader: UserAnswersReader[TransportDomain] =
     for {
-      preRequisites <- UserAnswersReader[PreRequisitesDomain]
-    } yield TransportDomain(preRequisites)
+      preRequisites  <- UserAnswersReader[PreRequisitesDomain]
+      transportMeans <- UserAnswersReader[TransportMeansDomain]
+    } yield TransportDomain(preRequisites, transportMeans)
 }

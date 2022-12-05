@@ -68,7 +68,7 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                           content = "Change".toText,
                           href = routingRoutes.CountryOfDestinationController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("country of destination"),
-                          attributes = Map("id" -> "country-of-destination")
+                          attributes = Map("id" -> "change-country-of-destination")
                         )
                       )
                     )
@@ -112,7 +112,7 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                           content = "Change".toText,
                           href = routingRoutes.OfficeOfDestinationController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("office of destination"),
-                          attributes = Map("id" -> "office-of-destination")
+                          attributes = Map("id" -> "change-office-of-destination")
                         )
                       )
                     )
@@ -147,7 +147,7 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Do you want the transit to follow a binding itinerary?".toText),
+                  key = Key("Are you using a binding itinerary?".toText),
                   value = Value("Yes".toText),
                   actions = Some(
                     Actions(
@@ -155,8 +155,8 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                         ActionItem(
                           content = "Change".toText,
                           href = routingRoutes.BindingItineraryController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("if you want the transit to follow a binding itinerary"),
-                          attributes = Map("id" -> "binding-itinerary")
+                          visuallyHiddenText = Some("if you are using a binding itinerary"),
+                          attributes = Map("id" -> "change-binding-itinerary")
                         )
                       )
                     )
@@ -200,7 +200,7 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                           content = "Change".toText,
                           href = routingRoutes.AddCountryOfRoutingYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add a country to the transit route"),
-                          attributes = Map("id" -> "add-country-of-routing")
+                          attributes = Map("id" -> "change-add-country-of-routing")
                         )
                       )
                     )

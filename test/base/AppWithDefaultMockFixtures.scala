@@ -21,7 +21,7 @@ import models.{Index, Mode, UserAnswers}
 import navigation._
 import navigation.routeDetails._
 import navigation.traderDetails.TraderDetailsNavigatorProvider
-import navigation.transport.PreRequisitesNavigatorProvider
+import navigation.transport.{TransportMeansNavigatorProvider, TransportNavigatorProvider}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.{BeforeAndAfterEach, TestSuite}
@@ -133,8 +133,11 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
         Future.successful(new FakeLoadingAndUnloadingNavigator(onwardRoute, mode))
     }
 
-  protected val fakePreRequisitesNavigatorProvider: PreRequisitesNavigatorProvider =
-    (mode: Mode) => new FakePreRequisitesNavigator(onwardRoute, mode)
+  protected val fakeTransportNavigatorProvider: TransportNavigatorProvider =
+    (mode: Mode) => new FakeTransportNavigator(onwardRoute, mode)
+
+  protected val fakeTransportMeansNavigatorProvider: TransportMeansNavigatorProvider =
+    (mode: Mode) => new FakeTransportMeansNavigator(onwardRoute, mode)
 
   def guiceApplicationBuilder(): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()

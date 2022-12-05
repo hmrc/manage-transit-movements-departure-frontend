@@ -17,7 +17,7 @@
 package viewModels.routeDetails.locationOfGoods
 
 import base.SpecBase
-import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import generators.Generators
 import models.LocationOfGoodsIdentification._
 import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
@@ -25,7 +25,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.locationOfGoods._
 import viewModels.routeDetails.locationOfGoods.LocationOfGoodsAnswersViewModel.LocationOfGoodsAnswersViewModelProvider
 
-class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "apply" - {
     "when 'V' customs office" - {

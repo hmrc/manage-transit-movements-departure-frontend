@@ -17,7 +17,7 @@
 package services
 
 import connectors.ApiConnector
-import models.journeyDomain.DepartureDomain
+import models.UserAnswers
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import javax.inject.Inject
@@ -25,6 +25,6 @@ import scala.concurrent.Future
 
 class ApiService @Inject() (apiConnector: ApiConnector) {
 
-  def submitDeclaration(request: DepartureDomain)(implicit hc: HeaderCarrier): Future[HttpResponse] =
-    apiConnector.submitDeclaration(request)
+  def submitDeclaration(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[HttpResponse] =
+    apiConnector.submitDeclaration(userAnswers)
 }

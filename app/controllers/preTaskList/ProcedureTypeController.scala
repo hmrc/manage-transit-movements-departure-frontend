@@ -18,7 +18,7 @@ package controllers.preTaskList
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.preTaskList.ProcedureTypeFormProvider
+import forms.EnumerableFormProvider
 import models.journeyDomain.PreTaskListDomain
 import models.{LocalReferenceNumber, Mode, ProcedureType}
 import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
@@ -38,14 +38,14 @@ class ProcedureTypeController @Inject() (
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
   checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
-  formProvider: ProcedureTypeFormProvider,
+  formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ProcedureTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider[ProcedureType]("procedureType")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)

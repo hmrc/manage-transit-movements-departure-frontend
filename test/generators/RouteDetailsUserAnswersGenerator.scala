@@ -27,8 +27,8 @@ import models.journeyDomain.routeDetails.transit.{OfficeOfTransitDomain, Transit
 import models.{Index, UserAnswers}
 import org.scalacheck.Gen
 
-trait RouteDetailsUserAnswersGenerator extends UserAnswersGenerator {
-  self: Generators =>
+trait RouteDetailsUserAnswersGenerator {
+  self: UserAnswersGenerator =>
 
   def arbitraryRouteDetailsAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[RouteDetailsDomain](userAnswers)(

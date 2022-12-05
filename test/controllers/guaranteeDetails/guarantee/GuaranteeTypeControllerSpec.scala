@@ -17,7 +17,7 @@
 package controllers.guaranteeDetails.guarantee
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.GuaranteeTypeFormProvider
+import forms.EnumerableFormProvider
 import models.{GuaranteeType, NormalMode}
 import navigation.GuaranteeNavigatorProvider
 import org.mockito.ArgumentMatchers.any
@@ -33,8 +33,8 @@ import scala.concurrent.Future
 
 class GuaranteeTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider            = new GuaranteeTypeFormProvider()
-  private val form                    = formProvider()
+  private val formProvider            = new EnumerableFormProvider()
+  private val form                    = formProvider[GuaranteeType]("guaranteeDetails.guarantee.guaranteeType")
   private val mode                    = NormalMode
   private lazy val guaranteeTypeRoute = routes.GuaranteeTypeController.onPageLoad(lrn, mode, index).url
 
