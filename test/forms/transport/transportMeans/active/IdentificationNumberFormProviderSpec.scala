@@ -19,11 +19,10 @@ package forms.transport.transportMeans.active
 import base.SpecBase
 import forms.Constants.identificationNumberLength
 import forms.behaviours.StringFieldBehaviours
-import models.domain.StringFieldRegex.alphaNumericRegex
 import models.transport.transportMeans.departure.Identification
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import play.api.data.FormError
-import org.scalacheck.Arbitrary.arbitrary
 
 class IdentificationNumberFormProviderSpec extends StringFieldBehaviours with SpecBase {
 

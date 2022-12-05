@@ -21,7 +21,6 @@ import models.GuaranteeType._
 import models._
 import models.domain.StringFieldRegex.{coordinatesLatitudeMaxRegex, coordinatesLongitudeMaxRegex}
 import models.reference._
-import models.transport.transportMeans.active.Identification
 import models.transport.transportMeans.departure.InlandMode
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}

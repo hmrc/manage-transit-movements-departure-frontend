@@ -17,7 +17,7 @@
 package navigation.transport
 
 import models.domain.UserAnswersReader
-import models.journeyDomain.transport.TransportMeansDomain
+import models.journeyDomain.transport.TransportMeansDepartureDomain
 import models.{CheckMode, Mode, NormalMode}
 import navigation.UserAnswersNavigator
 
@@ -39,8 +39,8 @@ trait TransportMeansNavigatorProvider {
 
 class TransportMeansNavigator(override val mode: Mode) extends UserAnswersNavigator {
 
-  override type T = TransportMeansDomain
+  override type T = TransportMeansDepartureDomain
 
-  implicit override val reader: UserAnswersReader[TransportMeansDomain] =
-    TransportMeansDomain.userAnswersReader
+  implicit override val reader: UserAnswersReader[TransportMeansDepartureDomain] =
+    TransportMeansDepartureDomain.userAnswersReader
 }

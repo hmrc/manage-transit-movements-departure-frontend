@@ -265,13 +265,28 @@ trait UserAnswersEntryGenerators {
     }
   }
 
-  private def generateTransportMeansAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+  private def generateTransportMeansAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
+    generateTransportMeansDepartureAnswer orElse
+      generateTransportMeansActiveAnswer
+
+  private def generateTransportMeansDepartureAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.transportMeans.departure._
     {
       case InlandModePage                => arbitrary[InlandMode].map(Json.toJson(_))
       case IdentificationPage            => arbitrary[Identification].map(Json.toJson(_))
       case MeansIdentificationNumberPage => Gen.alphaNumStr.map(JsString)
       case VehicleCountryPage            => arbitrary[Nationality].map(Json.toJson(_))
+    }
+  }
+
+  private def generateTransportMeansActiveAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.transportMeans.active._
+    {
+      case IdentificationPage(_)            => arbitrary[Identification].map(Json.toJson(_))
+      case IdentificationNumberPage(_)      => Gen.alphaNumStr.map(JsString)
+      case AddNationalityYesNoPage(_)       => arbitrary[Boolean].map(JsBoolean)
+      case NationalityPage(_)               => arbitrary[Nationality].map(Json.toJson(_))
+      case CustomsOfficeActiveBorderPage(_) => arbitrary[CustomsOffice].map(Json.toJson(_))
     }
   }
 }
