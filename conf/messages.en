@@ -1196,8 +1196,9 @@ transport.transportMeans.active.customsOfficeActiveBorder.change.hidden = Where 
 transport.transportMeans.active.customsOfficeActiveBorder.checkYourAnswersLabel = Where is the office of transit?
 transport.transportMeans.active.customsOfficeActiveBorder.error.required = Enter the office of transit
 
-transport.transportMeans.active.conveyanceReferenceNumber.title = What is the conveyance reference number
-transport.transportMeans.active.conveyanceReferenceNumber.heading = What is the conveyance reference number
-transport.transportMeans.active.conveyanceReferenceNumber.checkYourAnswersLabel = What is the conveyance reference number
-transport.transportMeans.active.conveyanceReferenceNumber.error.required = Enter What is the conveyance reference number
-transport.transportMeans.active.conveyanceReferenceNumber.error.length = What is the conveyance reference number must be 17 characters or less
+transport.transportMeans.active.conveyanceReferenceNumber.title = What is the conveyance reference number?
+transport.transportMeans.active.conveyanceReferenceNumber.heading = What is the conveyance reference number?
+transport.transportMeans.active.conveyanceReferenceNumber.checkYourAnswersLabel = What is the conveyance reference number?
+transport.transportMeans.active.conveyanceReferenceNumber.error.required = Enter the conveyance reference number
+transport.transportMeans.active.conveyanceReferenceNumber.error.length = The reference number must be 17 characters or less
+transport.transportMeans.active.conveyanceReferenceNumber.error.invalid = The reference number must only include letters a to z and numbers 0 to 9
