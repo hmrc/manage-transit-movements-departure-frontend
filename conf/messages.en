@@ -1196,6 +1196,12 @@ transport.transportMeans.active.customsOfficeActiveBorder.change.hidden = Where 
 transport.transportMeans.active.customsOfficeActiveBorder.checkYourAnswersLabel = Where is the office of transit?
 transport.transportMeans.active.customsOfficeActiveBorder.error.required = Enter the office of transit
 
+transport.transportMeans.active.conveyanceReferenceNumberYesNo.title = Do you want to add a conveyance reference number?
+transport.transportMeans.active.conveyanceReferenceNumberYesNo.heading = Do you want to add a conveyance reference number?
+transport.transportMeans.active.conveyanceReferenceNumberYesNo.hint = This is a unique reference provided by the carrier to identify the means of transport.
+transport.transportMeans.active.conveyanceReferenceNumberYesNo.checkYourAnswersLabel = Do you want to add a conveyance reference number?
+transport.transportMeans.active.conveyanceReferenceNumberYesNo.error.required = Select yes if you want to add a conveyance reference number
+
 transport.transportMeans.active.conveyanceReferenceNumber.title = What is the conveyance reference number?
 transport.transportMeans.active.conveyanceReferenceNumber.heading = What is the conveyance reference number?
 transport.transportMeans.active.conveyanceReferenceNumber.hint = This can be up to 17 characters long and include both letters and numbers.
