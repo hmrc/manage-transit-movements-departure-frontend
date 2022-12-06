@@ -32,7 +32,7 @@ class CacheConnector @Inject() (
 )(implicit ec: ExecutionContext)
     extends Logging {
 
-  private val baseUrl = s"${config.cacheUrl}/${config.appName}"
+  private val baseUrl = s"${config.cacheUrl}"
 
   def get(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
     val url = s"$baseUrl/user-answers/$lrn"

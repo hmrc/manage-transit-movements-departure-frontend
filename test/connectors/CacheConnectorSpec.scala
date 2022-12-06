@@ -52,7 +52,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
 
     "get" - {
 
-      val url = s"/manage-transit-movements-departure-cache/manage-transit-movements-departure-frontend/user-answers/$lrn"
+      val url = s"/manage-transit-movements-departure-cache/user-answers/$lrn"
 
       "must return user answers when status is Ok" in {
         server.stubFor(
@@ -79,7 +79,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
 
     "post" - {
 
-      val url = s"/manage-transit-movements-departure-cache/manage-transit-movements-departure-frontend/user-answers"
+      val url = s"/manage-transit-movements-departure-cache/user-answers"
 
       "must return true when status is Ok" in {
         server.stubFor(
