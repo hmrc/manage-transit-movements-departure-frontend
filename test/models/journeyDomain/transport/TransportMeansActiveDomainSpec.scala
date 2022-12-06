@@ -18,15 +18,19 @@ package models.journeyDomain.transport
 
 import base.SpecBase
 import generators.Generators
+import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models.domain.{EitherType, UserAnswersReader}
+import models.journeyDomain.transport.TransportMeansActiveDomain._
 import models.reference.{CustomsOffice, Nationality}
 import models.transport.transportMeans.active.Identification
+import models.transport.transportMeans.departure.InlandMode.{Air, Maritime}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.transport.transportMeans.active._
-import models.journeyDomain.transport.TransportMeansActiveDomain._
 import pages.QuestionPage
+import pages.preTaskList.SecurityDetailsTypePage
+import pages.transport.transportMeans.active._
+import pages.transport.transportMeans.departure.InlandModePage
 
 class TransportMeansActiveDomainSpec extends SpecBase with Generators with ScalaCheckPropertyChecks {
 
@@ -36,45 +40,83 @@ class TransportMeansActiveDomainSpec extends SpecBase with Generators with Scala
     val identificationNumber: String   = Gen.alphaNumStr.sample.value
     val nationality: Nationality       = arbitrary[Nationality].sample.value
     val customsOffice: CustomsOffice   = arbitrary[CustomsOffice].sample.value
+    val conveyanceNumber: String       = Gen.alphaNumStr.sample.value
 
     "can be parsed from user answers" - {
-      "when the add nationality is answered yes" in {
-        val userAnswers = emptyUserAnswers
-          .setValue(IdentificationPage(index), identification)
-          .setValue(IdentificationNumberPage(index), identificationNumber)
-          .setValue(AddNationalityYesNoPage(index), true)
-          .setValue(NationalityPage(index), nationality)
-          .setValue(CustomsOfficeActiveBorderPage(index), customsOffice)
+      "when the add nationality is answered yes" - {
+        "and security detail type is 0 and inland mode is Maritime and add conveyance number is yes" - {
+          val userAnswers = emptyUserAnswers
+            .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+            .setValue(InlandModePage, Maritime)
+            .setValue(IdentificationPage(index), identification)
+            .setValue(IdentificationNumberPage(index), identificationNumber)
+            .setValue(AddNationalityYesNoPage(index), true)
+            .setValue(NationalityPage(index), nationality)
+            .setValue(CustomsOfficeActiveBorderPage(index), customsOffice)
+            .setValue(ConveyanceReferenceNumberYesNoPage(index), true)
+            .setValue(ConveyanceReferenceNumberPage(index), conveyanceNumber)
 
-        val expectedResult = TransportMeansActiveDomain(
-          identification = identification,
-          identificationNumber = identificationNumber,
-          nationality = Option(nationality),
-          customsOffice = customsOffice
-        )
+          val expectedResult = TransportMeansActiveDomain(
+            identification = identification,
+            identificationNumber = identificationNumber,
+            nationality = Option(nationality),
+            customsOffice = customsOffice,
+            conveyanceReferenceNumber = Some(conveyanceNumber)
+          )
 
-        val result: EitherType[TransportMeansActiveDomain] = UserAnswersReader[TransportMeansActiveDomain](userAnswersReader(index)).run(userAnswers)
+          val result: EitherType[TransportMeansActiveDomain] = UserAnswersReader[TransportMeansActiveDomain](userAnswersReader(index)).run(userAnswers)
 
-        result.value mustBe expectedResult
+          result.value mustBe expectedResult
+        }
+
+        "and security detail type is 1 and inland mode is Air" in {
+          val userAnswers = emptyUserAnswers
+            .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
+            .setValue(InlandModePage, Air)
+            .setValue(IdentificationPage(index), identification)
+            .setValue(IdentificationNumberPage(index), identificationNumber)
+            .setValue(AddNationalityYesNoPage(index), true)
+            .setValue(NationalityPage(index), nationality)
+            .setValue(CustomsOfficeActiveBorderPage(index), customsOffice)
+            .setValue(ConveyanceReferenceNumberPage(index), conveyanceNumber)
+
+          val expectedResult = TransportMeansActiveDomain(
+            identification = identification,
+            identificationNumber = identificationNumber,
+            nationality = Option(nationality),
+            customsOffice = customsOffice,
+            conveyanceReferenceNumber = Some(conveyanceNumber)
+          )
+
+          val result: EitherType[TransportMeansActiveDomain] = UserAnswersReader[TransportMeansActiveDomain](userAnswersReader(index)).run(userAnswers)
+
+          result.value mustBe expectedResult
+        }
       }
 
-      "when the add nationality is answered no" in {
-        val userAnswers = emptyUserAnswers
-          .setValue(IdentificationPage(index), identification)
-          .setValue(IdentificationNumberPage(index), identificationNumber)
-          .setValue(AddNationalityYesNoPage(index), false)
-          .setValue(CustomsOfficeActiveBorderPage(index), customsOffice)
+      "when the add nationality is answered no" - {
+        "and security detail type is 0 and inland mode is Maritime and add conveyance number is no" in {
+          val userAnswers = emptyUserAnswers
+            .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+            .setValue(InlandModePage, Maritime)
+            .setValue(IdentificationPage(index), identification)
+            .setValue(IdentificationNumberPage(index), identificationNumber)
+            .setValue(AddNationalityYesNoPage(index), false)
+            .setValue(CustomsOfficeActiveBorderPage(index), customsOffice)
+            .setValue(ConveyanceReferenceNumberYesNoPage(index), false)
 
-        val expectedResult = TransportMeansActiveDomain(
-          identification = identification,
-          identificationNumber = identificationNumber,
-          nationality = None,
-          customsOffice = customsOffice
-        )
+          val expectedResult = TransportMeansActiveDomain(
+            identification = identification,
+            identificationNumber = identificationNumber,
+            nationality = None,
+            customsOffice = customsOffice,
+            conveyanceReferenceNumber = None
+          )
 
-        val result: EitherType[TransportMeansActiveDomain] = UserAnswersReader[TransportMeansActiveDomain](userAnswersReader(index)).run(userAnswers)
+          val result: EitherType[TransportMeansActiveDomain] = UserAnswersReader[TransportMeansActiveDomain](userAnswersReader(index)).run(userAnswers)
 
-        result.value mustBe expectedResult
+          result.value mustBe expectedResult
+        }
       }
 
     }
@@ -85,14 +127,20 @@ class TransportMeansActiveDomainSpec extends SpecBase with Generators with Scala
           IdentificationPage(index),
           IdentificationNumberPage(index),
           AddNationalityYesNoPage(index),
-          CustomsOfficeActiveBorderPage(index)
+          CustomsOfficeActiveBorderPage(index),
+          ConveyanceReferenceNumberYesNoPage(index),
+          ConveyanceReferenceNumberPage(index)
         )
 
         val userAnswers = emptyUserAnswers
+          .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+          .setValue(InlandModePage, Maritime)
           .setValue(IdentificationPage(index), identification)
           .setValue(IdentificationNumberPage(index), identificationNumber)
           .setValue(AddNationalityYesNoPage(index), false)
           .setValue(CustomsOfficeActiveBorderPage(index), customsOffice)
+          .setValue(ConveyanceReferenceNumberYesNoPage(index), true)
+          .setValue(ConveyanceReferenceNumberPage(index), conveyanceNumber)
 
         mandatoryPages.map {
           mandatoryPage =>
@@ -110,15 +158,21 @@ class TransportMeansActiveDomainSpec extends SpecBase with Generators with Scala
           IdentificationNumberPage(index),
           AddNationalityYesNoPage(index),
           NationalityPage(index),
-          CustomsOfficeActiveBorderPage(index)
+          CustomsOfficeActiveBorderPage(index),
+          ConveyanceReferenceNumberYesNoPage(index),
+          ConveyanceReferenceNumberPage(index)
         )
 
         val userAnswers = emptyUserAnswers
+          .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+          .setValue(InlandModePage, Maritime)
           .setValue(IdentificationPage(index), identification)
           .setValue(IdentificationNumberPage(index), identificationNumber)
           .setValue(AddNationalityYesNoPage(index), true)
           .setValue(NationalityPage(index), nationality)
           .setValue(CustomsOfficeActiveBorderPage(index), customsOffice)
+          .setValue(ConveyanceReferenceNumberYesNoPage(index), true)
+          .setValue(ConveyanceReferenceNumberPage(index), conveyanceNumber)
 
         mandatoryPages.map {
           mandatoryPage =>
