@@ -20,6 +20,7 @@ import cats.implicits._
 import models.Index
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
+import models.journeyDomain.JourneyDomainModel
 import models.reference.{CustomsOffice, Nationality}
 import models.transport.transportMeans.active.Identification
 import models.transport.transportMeans.departure.InlandMode
@@ -34,7 +35,9 @@ case class TransportMeansActiveDomain(
   nationality: Option[Nationality],
   customsOffice: CustomsOffice,
   conveyanceReferenceNumber: Option[String]
-)
+) extends JourneyDomainModel{
+  val label: String = s"$identification - $identificationNumber"
+}
 
 object TransportMeansActiveDomain {
 

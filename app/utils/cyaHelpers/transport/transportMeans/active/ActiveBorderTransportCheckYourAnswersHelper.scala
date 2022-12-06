@@ -16,17 +16,11 @@
 
 package utils.cyaHelpers.transport.transportMeans.active
 
-import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
-import models.journeyDomain.guaranteeDetails.GuaranteeDomain
 import models.journeyDomain.transport.TransportMeansActiveDomain
 import models.transport.transportMeans.active.Identification
-import models.{GuaranteeType, Index, Mode, UserAnswers}
-import pages.guaranteeDetails.guarantee.GuaranteeTypePage
-import pages.sections.TransportSection
-import pages.sections.guaranteeDetails.GuaranteeDetailsSection
+import models.{Mode, UserAnswers}
 import pages.sections.transport.TransportMeansActiveListSection
-import pages.transport.transportMeans.active.{IdentificationNumberPage, IdentificationPage}
-import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
+import pages.transport.transportMeans.active.IdentificationPage
 import play.api.i18n.Messages
 import utils.cyaHelpers.AnswersHelper
 import viewModels.ListItem
@@ -36,11 +30,11 @@ class ActiveBorderTransportCheckYourAnswersHelper(userAnswers: UserAnswers, mode
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(TransportMeansActiveListSection) {
       index =>
-        buildListItem[TransportMeansActiveDomain, String](
-          page = IdentificationNumberPage(index),
-          formatJourneyDomainModel = _.identificationNumber
-          formatType = formatAsText,
-          removeRoute = Some(guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, index))
+        buildListItem[TransportMeansActiveDomain, Identification](
+          page = IdentificationPage(index),
+          formatJourneyDomainModel = _.label,
+          formatType = formatEnumAsString(Identification.messageKeyPrefix),
+          removeRoute = ??? // TODO: Add remove page
         )(TransportMeansActiveDomain.userAnswersReader(index), implicitly)
     }
 
