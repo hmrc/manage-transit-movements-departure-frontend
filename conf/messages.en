@@ -1195,3 +1195,9 @@ transport.transportMeans.active.customsOfficeActiveBorder.paragraph = This is th
 transport.transportMeans.active.customsOfficeActiveBorder.change.hidden = Where is the office of transit
 transport.transportMeans.active.customsOfficeActiveBorder.checkYourAnswersLabel = Where is the office of transit?
 transport.transportMeans.active.customsOfficeActiveBorder.error.required = Enter the office of transit
+
+transport.transportMeans.active.conveyanceReferenceNumber.title = What is the conveyance reference number
+transport.transportMeans.active.conveyanceReferenceNumber.heading = What is the conveyance reference number
+transport.transportMeans.active.conveyanceReferenceNumber.checkYourAnswersLabel = What is the conveyance reference number
+transport.transportMeans.active.conveyanceReferenceNumber.error.required = Enter What is the conveyance reference number
+transport.transportMeans.active.conveyanceReferenceNumber.error.length = What is the conveyance reference number must be 17 characters or less
