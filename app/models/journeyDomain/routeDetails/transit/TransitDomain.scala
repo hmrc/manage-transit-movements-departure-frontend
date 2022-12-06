@@ -48,7 +48,7 @@ object TransitDomain {
   ): UserAnswersReader[TransitDomain] = {
 
     implicit val officesOfTransitReader: UserAnswersReader[OfficesOfTransit] =
-      OfficesOfTransitSection.reader.flatMap {
+      OfficesOfTransitSection.arrayReader.flatMap {
         case x if x.isEmpty =>
           UserAnswersReader[OfficeOfTransitDomain](
             OfficeOfTransitDomain.userAnswersReader(Index(0), ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)

@@ -32,7 +32,7 @@ case class TransportMeansDomain(
 
 object TransportMeansDomain {
 
-  val arrayReader: UserAnswersReader[Seq[TransportMeansActiveDomain]] = TransportMeansActiveListSection.reader.flatMap {
+  val arrayReader: UserAnswersReader[Seq[TransportMeansActiveDomain]] = TransportMeansActiveListSection.arrayReader.flatMap {
     case x if x.isEmpty =>
       UserAnswersReader[TransportMeansActiveDomain](TransportMeansActiveDomain.userAnswersReader(Index(0))).map(Seq(_))
     case x =>
