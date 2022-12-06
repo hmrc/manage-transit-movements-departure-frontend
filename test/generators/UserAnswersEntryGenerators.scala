@@ -282,11 +282,13 @@ trait UserAnswersEntryGenerators {
   private def generateTransportMeansActiveAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.transportMeans.active._
     {
-      case IdentificationPage(_)            => arbitrary[Identification].map(Json.toJson(_))
-      case IdentificationNumberPage(_)      => Gen.alphaNumStr.map(JsString)
-      case AddNationalityYesNoPage(_)       => arbitrary[Boolean].map(JsBoolean)
-      case NationalityPage(_)               => arbitrary[Nationality].map(Json.toJson(_))
-      case CustomsOfficeActiveBorderPage(_) => arbitrary[CustomsOffice].map(Json.toJson(_))
+      case IdentificationPage(_)                 => arbitrary[Identification].map(Json.toJson(_))
+      case IdentificationNumberPage(_)           => Gen.alphaNumStr.map(JsString)
+      case AddNationalityYesNoPage(_)            => arbitrary[Boolean].map(JsBoolean)
+      case NationalityPage(_)                    => arbitrary[Nationality].map(Json.toJson(_))
+      case CustomsOfficeActiveBorderPage(_)      => arbitrary[CustomsOffice].map(Json.toJson(_))
+      case ConveyanceReferenceNumberYesNoPage(_) => arbitrary[Boolean].map(JsBoolean)
+      case ConveyanceReferenceNumberPage(_)      => Gen.alphaNumStr.map(JsString)
     }
   }
 }

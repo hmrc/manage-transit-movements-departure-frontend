@@ -18,27 +18,47 @@ package models.journeyDomain.transport
 
 import cats.implicits._
 import models.Index
+import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.JourneyDomainModel
 import models.reference.{CustomsOffice, Nationality}
 import models.transport.transportMeans.active.Identification
+import models.transport.transportMeans.departure.InlandMode
+import models.transport.transportMeans.departure.InlandMode.Air
+import pages.preTaskList.SecurityDetailsTypePage
 import pages.transport.transportMeans.active._
+import pages.transport.transportMeans.departure.InlandModePage
 
 case class TransportMeansActiveDomain(
   identification: Identification,
   identificationNumber: String,
   nationality: Option[Nationality],
-  customsOffice: CustomsOffice
-) extends JourneyDomainModel
+  customsOffice: CustomsOffice,
+  conveyanceReferenceNumber: Option[String]
+)
 
 object TransportMeansActiveDomain {
+
+  def conveyanceReads(index: Index): UserAnswersReader[Option[String]] = {
+
+    val details = for {
+      securityDetails <- SecurityDetailsTypePage.reader
+      inlandMode      <- InlandModePage.reader
+    } yield (securityDetails, inlandMode)
+
+    details.flatMap {
+      case (NoSecurityDetails, x: InlandMode) if x != Air =>
+        ConveyanceReferenceNumberYesNoPage(index).filterOptionalDependent(identity)(ConveyanceReferenceNumberPage(index).reader)
+      case _ => ConveyanceReferenceNumberPage(index).reader.map(Some(_))
+    }
+  }
 
   def userAnswersReader(index: Index): UserAnswersReader[TransportMeansActiveDomain] =
     (
       IdentificationPage(index).reader,
       IdentificationNumberPage(index).reader,
       AddNationalityYesNoPage(index).filterOptionalDependent(identity)(NationalityPage(index).reader),
-      CustomsOfficeActiveBorderPage(index).reader
+      CustomsOfficeActiveBorderPage(index).reader,
+      conveyanceReads(index)
     ).tupled.map((TransportMeansActiveDomain.apply _).tupled)
 
 }
