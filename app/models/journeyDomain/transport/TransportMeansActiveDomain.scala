@@ -35,7 +35,7 @@ case class TransportMeansActiveDomain(
   nationality: Option[Nationality],
   customsOffice: CustomsOffice,
   conveyanceReferenceNumber: Option[String]
-) extends JourneyDomainModel{
+) extends JourneyDomainModel {
   val label: String = s"$identification - $identificationNumber"
 }
 
@@ -49,7 +49,7 @@ object TransportMeansActiveDomain {
     } yield (securityDetails, inlandMode)
 
     details.flatMap {
-      case (NoSecurityDetails, x: InlandMode) if x != Air =>
+      case (NoSecurityDetails, inlandMode: InlandMode) if inlandMode != Air =>
         ConveyanceReferenceNumberYesNoPage(index).filterOptionalDependent(identity)(ConveyanceReferenceNumberPage(index).reader)
       case _ => ConveyanceReferenceNumberPage(index).reader.map(Some(_))
     }

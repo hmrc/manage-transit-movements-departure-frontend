@@ -17,100 +17,198 @@
 package controllers.transport.transportMeans.active
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.YesNoFormProvider
-import models.NormalMode
-import navigation.transport.TransportMeansNavigatorProvider
+import forms.AddAnotherFormProvider
+import generators.Generators
+import models.{Index, NormalMode}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
-import pages.transport.transportMeans.active.AddAnotherBorderTransportPage
+import org.mockito.Mockito.{reset, when}
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import viewModels.ListItem
+import viewModels.transport.transportMeans.active.AddAnotherBorderTransportViewModel
+import viewModels.transport.transportMeans.active.AddAnotherBorderTransportViewModel.AddAnotherBorderTransportViewModelProvider
 import views.html.transport.transportMeans.active.AddAnotherBorderTransportView
 
-import scala.concurrent.Future
+class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
-class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
+  private val formProvider = new AddAnotherFormProvider()
 
-  private val formProvider                        = new YesNoFormProvider()
-  private val form                                = formProvider("transport.transportMeans.active.addAnotherBorderTransport")
+  private def form(allowMoreActiveBorderTransports: Boolean) =
+    formProvider("transport.transportMeans.active.addAnotherBorderTransport", allowMoreActiveBorderTransports)
   private val mode                                = NormalMode
   private lazy val addAnotherBorderTransportRoute = routes.AddAnotherBorderTransportController.onPageLoad(lrn, mode).url
+
+  private val mockViewModelProvider = mock[AddAnotherBorderTransportViewModelProvider]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[TransportMeansNavigatorProvider]).toInstance(fakeTransportMeansNavigatorProvider))
+      .overrides(bind(classOf[AddAnotherBorderTransportViewModelProvider]).toInstance(mockViewModelProvider))
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(mockViewModelProvider)
+  }
+
+  private val listItem          = arbitrary[ListItem].sample.value
+  private val listItems         = Seq.fill(Gen.choose(1, frontendAppConfig.maxActiveBorderTransports - 1).sample.value)(listItem)
+  private val maxedOutListItems = Seq.fill(frontendAppConfig.maxActiveBorderTransports)(listItem)
 
   "AddAnotherBorderTransport Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "redirect to add another vehicle crossing page" - {
+      "when 0 active border transports" in {
+        when(mockViewModelProvider.apply(any())(any()))
+          .thenReturn(AddAnotherBorderTransportViewModel(Nil))
 
-      setExistingUserAnswers(emptyUserAnswers)
+        setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, addAnotherBorderTransportRoute)
-      val result  = route(app, request).value
+        val request = FakeRequest(GET, addAnotherBorderTransportRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
-      val view = injector.instanceOf[AddAnotherBorderTransportView]
+        val result = route(app, request).value
 
-      status(result) mustEqual OK
+        status(result) mustEqual SEE_OTHER
 
-      contentAsString(result) mustEqual
-        view(form, lrn, mode)(request, messages).toString
+        redirectLocation(result).value mustEqual
+          controllers.transport.transportMeans.routes.AnotherVehicleCrossingYesNoController.onPageLoad(lrn, mode).url
+      }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must return OK and the correct view for a GET" - {
+      "when max limit not reached" in {
 
-      val userAnswers = emptyUserAnswers.setValue(AddAnotherBorderTransportPage, true)
-      setExistingUserAnswers(userAnswers)
+        val allowMoreActiveBorderTransports = true
 
-      val request = FakeRequest(GET, addAnotherBorderTransportRoute)
+        when(mockViewModelProvider.apply(any())(any()))
+          .thenReturn(AddAnotherBorderTransportViewModel(listItems))
 
-      val result = route(app, request).value
+        setExistingUserAnswers(emptyUserAnswers)
 
-      val filledForm = form.bind(Map("value" -> "true"))
+        val request = FakeRequest(GET, addAnotherBorderTransportRoute)
 
-      val view = injector.instanceOf[AddAnotherBorderTransportView]
+        val result = route(app, request).value
 
-      status(result) mustEqual OK
+        val view = injector.instanceOf[AddAnotherBorderTransportView]
 
-      contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form(allowMoreActiveBorderTransports), lrn, mode, listItems, allowMoreActiveBorderTransports)(request, messages).toString
+      }
+
+      "when max limit reached" in {
+
+        val allowMoreActiveBorderTransports = false
+
+        val listItems = maxedOutListItems
+
+        when(mockViewModelProvider.apply(any())(any()))
+          .thenReturn(AddAnotherBorderTransportViewModel(listItems))
+
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(GET, addAnotherBorderTransportRoute)
+
+        val result = route(app, request).value
+
+        val view = injector.instanceOf[AddAnotherBorderTransportView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form(allowMoreActiveBorderTransports), lrn, mode, listItems, allowMoreActiveBorderTransports)(request, messages).toString
+      }
     }
 
-    "must redirect to the next page when valid data is submitted" in {
+    "when max limit not reached" - {
+      "when yes submitted" - {
+        "must redirect to identification type page at next index" in {
+          when(mockViewModelProvider.apply(any())(any()))
+            .thenReturn(AddAnotherBorderTransportViewModel(listItems))
 
-      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+          setExistingUserAnswers(emptyUserAnswers)
 
-      setExistingUserAnswers(emptyUserAnswers)
+          val request = FakeRequest(POST, addAnotherBorderTransportRoute)
+            .withFormUrlEncodedBody(("value", "true"))
 
-      val request = FakeRequest(POST, addAnotherBorderTransportRoute)
-        .withFormUrlEncodedBody(("value", "true"))
+          val result = route(app, request).value
 
-      val result = route(app, request).value
+          status(result) mustEqual SEE_OTHER
 
-      status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual
+            routes.IdentificationController.onPageLoad(lrn, NormalMode, Index(listItems.length)).url
+        }
+      }
 
-      redirectLocation(result).value mustEqual onwardRoute.url
+      // TODO - Redirect to cya page once implemented
+      "when no submitted" - {
+        "must redirect to CYA" ignore {
+          when(mockViewModelProvider.apply(any())(any()))
+            .thenReturn(AddAnotherBorderTransportViewModel(listItems))
+
+          setExistingUserAnswers(emptyUserAnswers)
+
+          val request = FakeRequest(POST, addAnotherBorderTransportRoute)
+            .withFormUrlEncodedBody(("value", "false"))
+
+          val result = route(app, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            ???
+        }
+      }
     }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+    "when max limit reached" - {
+      "must redirect to CYA" ignore {
+        when(mockViewModelProvider.apply(any())(any()))
+          .thenReturn(AddAnotherBorderTransportViewModel(maxedOutListItems))
 
-      setExistingUserAnswers(emptyUserAnswers)
+        setExistingUserAnswers(emptyUserAnswers)
 
-      val request   = FakeRequest(POST, addAnotherBorderTransportRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm = form.bind(Map("value" -> ""))
+        val request = FakeRequest(POST, addAnotherBorderTransportRoute)
+          .withFormUrlEncodedBody(("value", ""))
 
-      val result = route(app, request).value
+        val result = route(app, request).value
 
-      status(result) mustEqual BAD_REQUEST
+        status(result) mustEqual SEE_OTHER
 
-      val view = injector.instanceOf[AddAnotherBorderTransportView]
+        redirectLocation(result).value mustEqual
+          ???
+      }
+    }
 
-      contentAsString(result) mustEqual
-        view(boundForm, lrn, mode)(request, messages).toString
+    "must return a Bad Request and errors" - {
+      "when invalid data is submitted and max limit not reached" in {
+        when(mockViewModelProvider.apply(any())(any()))
+          .thenReturn(AddAnotherBorderTransportViewModel(listItems))
+
+        val allowMoreActiveBorderTransports = true
+
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(POST, addAnotherBorderTransportRoute)
+          .withFormUrlEncodedBody(("value", ""))
+
+        val boundForm = form(allowMoreActiveBorderTransports).bind(Map("value" -> ""))
+
+        val result = route(app, request).value
+
+        val view = injector.instanceOf[AddAnotherBorderTransportView]
+
+        status(result) mustEqual BAD_REQUEST
+
+        contentAsString(result) mustEqual
+          view(boundForm, lrn, mode, listItems, allowMoreActiveBorderTransports)(request, messages).toString
+      }
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

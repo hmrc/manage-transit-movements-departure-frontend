@@ -16,31 +16,31 @@
 
 package viewModels.transport.transportMeans.active
 
-import models.{Mode, NormalMode, UserAnswers}
+import models.{NormalMode, UserAnswers}
 import play.api.i18n.Messages
-import services.CountriesService
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.cyaHelpers.routeDetails.transit.TransitCheckYourAnswersHelper
 import utils.cyaHelpers.transport.transportMeans.active.ActiveBorderTransportCheckYourAnswersHelper
 import viewModels.ListItem
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
 
 case class AddAnotherBorderTransportViewModel(listItems: Seq[ListItem])
 
 object AddAnotherBorderTransportViewModel {
 
-  class AddAnotherBorderTransportViewModelProvider @Inject() (){
+  def apply(userAnswers: UserAnswers)(implicit messages: Messages): AddAnotherBorderTransportViewModel =
+    new AddAnotherBorderTransportViewModelProvider()(userAnswers)
 
-    def apply(userAnswers: UserAnswers)(implicit messages: Messages): AddAnotherBorderTransportViewModel =
-        val helper = new ActiveBorderTransportCheckYourAnswersHelper(userAnswers, NormalMode)
-        val listItems = helper.listItems.collect {
-          case Left(value)  => value
-          case Right(value) => value
-        }
+  class AddAnotherBorderTransportViewModelProvider @Inject() () {
 
-        new AddAnotherBorderTransportViewModel(listItems)
+    def apply(userAnswers: UserAnswers)(implicit messages: Messages): AddAnotherBorderTransportViewModel = {
+      val helper = new ActiveBorderTransportCheckYourAnswersHelper(userAnswers, NormalMode)
+
+      val listItems = helper.listItems.collect {
+        case Left(value)  => value
+        case Right(value) => value
       }
+
+      new AddAnotherBorderTransportViewModel(listItems)
+    }
   }
 }

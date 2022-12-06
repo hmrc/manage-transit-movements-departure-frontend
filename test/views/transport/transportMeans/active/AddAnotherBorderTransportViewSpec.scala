@@ -33,7 +33,9 @@ class AddAnotherBorderTransportViewSpec extends ListWithActionsViewBehaviours {
   private val mode = arbitrary[Mode].sample.value
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[AddAnotherBorderTransportView].apply(form, lrn, mode, allowMoreActiveBorderTransports = true)(fakeRequest, messages)
+    injector
+      .instanceOf[AddAnotherBorderTransportView]
+      .apply(form, lrn, mode, listItems, allowMoreActiveBorderTransports = true)(fakeRequest, messages)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
