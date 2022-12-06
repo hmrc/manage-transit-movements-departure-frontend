@@ -35,7 +35,7 @@ object ExitDomain {
   implicit val userAnswersReader: UserAnswersReader[ExitDomain] = {
 
     implicit val officesOfExitReader: UserAnswersReader[Seq[OfficeOfExitDomain]] =
-      OfficesOfExitSection.reader.flatMap {
+      OfficesOfExitSection.arrayReader.flatMap {
         case x if x.isEmpty =>
           UserAnswersReader[OfficeOfExitDomain](
             OfficeOfExitDomain.userAnswersReader(Index(0))

@@ -27,7 +27,7 @@ import pages.sections.routeDetails.routing.CountriesOfRoutingSection
 object CountriesOfRoutingDomain {
 
   implicit val userAnswersReader: UserAnswersReader[Seq[CountryOfRoutingDomain]] = {
-    val arrayReader: UserAnswersReader[Seq[CountryOfRoutingDomain]] = CountriesOfRoutingSection.reader.flatMap {
+    val arrayReader: UserAnswersReader[Seq[CountryOfRoutingDomain]] = CountriesOfRoutingSection.arrayReader.flatMap {
       case x if x.isEmpty =>
         UserAnswersReader[CountryOfRoutingDomain](CountryOfRoutingDomain.userAnswersReader(Index(0))).map(Seq(_))
       case x =>

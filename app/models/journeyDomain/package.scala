@@ -117,7 +117,7 @@ package object domain {
 
   implicit class JsArrayGettableAsReaderOps(jsArray: Gettable[JsArray]) {
 
-    def reader(implicit reads: Reads[JsArray]): UserAnswersReader[JsArray] = {
+    def arrayReader(implicit reads: Reads[JsArray]): UserAnswersReader[JsArray] = {
       val fn: UserAnswers => EitherType[JsArray] = ua => Right(ua.get(jsArray).getOrElse(JsArray()))
       UserAnswersReader(fn)
     }

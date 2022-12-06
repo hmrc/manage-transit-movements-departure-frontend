@@ -35,7 +35,7 @@ class TransportMeansNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
         "must redirect to transportMeans CYA" ignore {
           forAll(arbitraryPreRequisitesAnswers(emptyUserAnswers)) {
             initialAnswers =>
-              forAll(arbitraryTransportMeansAnswers(initialAnswers)) {
+              forAll(arbitraryTransportMeansDepartureAnswers(initialAnswers)) {
                 answers =>
                   navigator
                     .nextPage(answers)
@@ -55,7 +55,7 @@ class TransportMeansNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
           "must redirect to transport check your answers" ignore {
             forAll(arbitraryTransportAnswers(emptyUserAnswers)) {
               initialAnswers =>
-                forAll(arbitraryTransportMeansAnswers(initialAnswers)) {
+                forAll(arbitraryTransportMeansDepartureAnswers(initialAnswers)) {
                   answers =>
                     navigator
                       .nextPage(answers)
