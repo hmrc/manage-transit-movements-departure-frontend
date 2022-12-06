@@ -1201,3 +1201,11 @@ transport.transportMeans.active.conveyanceReferenceNumberYesNo.heading = Do you 
 transport.transportMeans.active.conveyanceReferenceNumberYesNo.hint = This is a unique reference provided by the carrier to identify the means of transport.
 transport.transportMeans.active.conveyanceReferenceNumberYesNo.checkYourAnswersLabel = Do you want to add a conveyance reference number?
 transport.transportMeans.active.conveyanceReferenceNumberYesNo.error.required = Select yes if you want to add a conveyance reference number
+
+transport.transportMeans.active.conveyanceReferenceNumber.title = What is the conveyance reference number?
+transport.transportMeans.active.conveyanceReferenceNumber.heading = What is the conveyance reference number?
+transport.transportMeans.active.conveyanceReferenceNumber.hint = This can be up to 17 characters long and include both letters and numbers.
+transport.transportMeans.active.conveyanceReferenceNumber.checkYourAnswersLabel = What is the conveyance reference number?
+transport.transportMeans.active.conveyanceReferenceNumber.error.required = Enter the conveyance reference number
+transport.transportMeans.active.conveyanceReferenceNumber.error.length = The reference number must be 17 characters or less
+transport.transportMeans.active.conveyanceReferenceNumber.error.invalid = The reference number must only include letters a to z and numbers 0 to 9
