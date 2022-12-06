@@ -1198,6 +1198,7 @@ transport.transportMeans.active.customsOfficeActiveBorder.error.required = Enter
 
 transport.transportMeans.active.conveyanceReferenceNumber.title = What is the conveyance reference number?
 transport.transportMeans.active.conveyanceReferenceNumber.heading = What is the conveyance reference number?
+transport.transportMeans.active.conveyanceReferenceNumber.hint = This can be up to 17 characters long and include both letters and numbers.
 transport.transportMeans.active.conveyanceReferenceNumber.checkYourAnswersLabel = What is the conveyance reference number?
 transport.transportMeans.active.conveyanceReferenceNumber.error.required = Enter the conveyance reference number
 transport.transportMeans.active.conveyanceReferenceNumber.error.length = The reference number must be 17 characters or less

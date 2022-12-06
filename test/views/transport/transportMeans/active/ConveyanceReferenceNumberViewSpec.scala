@@ -44,7 +44,7 @@ class ConveyanceReferenceNumberViewSpec extends InputTextViewBehaviours[String] 
 
   behave like pageWithSectionCaption("Transport details - Border means of transport")
 
-  behave like pageWithoutHint()
+  behave like pageWithHint("This can be up to 17 characters long and include both letters and numbers.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 
