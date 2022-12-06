@@ -29,7 +29,7 @@ case class TransportMeansActiveDomain(
   identificationNumber: String,
   nationality: Option[Nationality],
   customsOffice: CustomsOffice
-) extends JourneyDomainModel {}
+) extends JourneyDomainModel
 
 object TransportMeansActiveDomain {
 
