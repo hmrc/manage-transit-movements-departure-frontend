@@ -16,41 +16,19 @@
 
 package models.journeyDomain.transport
 
-import models.Index
 import models.domain.UserAnswersReader
-import models.journeyDomain.{JourneyDomainModel, UserAnswersReader}
-import pages.sections.transport.TransportMeansActiveListSection
+import models.journeyDomain.JourneyDomainModel
 
 case class TransportDomain(
   preRequisites: PreRequisitesDomain,
-  transportMeans: TransportMeansDomain,
-  transportMeansActiveBorder: TransportMeansActiveBorderDomain
+  transportMeans: TransportMeansDomain
 ) extends JourneyDomainModel
 
 object TransportDomain {
 
-
-
-  implicit val userAnswersReader: UserAnswersReader[TransportDomain] = {
-
-    val transportMeansActiveBorderDomainReader: UserAnswersReader[Seq[TransportMeansActiveBorderDomain]] =
-      TransportMeansActiveListSection.reader.flatMap {
-        case x if x.isEmpty =>
-          UserAnswersReader[TransportMeansActiveBorderDomain](
-            TransportMeansActiveBorderDomain.userAnswersReader(Index(0))
-          ).map(Seq(_))
-
-        case x =>
-          x.traverse[TransportMeansActiveBorderDomain](
-            TransportMeansActiveBorderDomain.userAnswersReader
-          ).map(_.toSeq)
-      }
-
-    UserAnswersReader[Seq[TransportMeansActiveBorderDomain]](transportMeansActiveBorderDomainReader).map(TransportMeansActiveBorderDomain(_))
-
-    (
+  implicit val userAnswersReader: UserAnswersReader[TransportDomain] =
+    for {
       preRequisites  <- UserAnswersReader[PreRequisitesDomain]
       transportMeans <- UserAnswersReader[TransportMeansDomain]
-      transportMeansActiveBorder <- transportMeansActiveBorderDomainReader
-    ).tupled.map((TransportDomain.apply _).tupled) yield
+    } yield TransportDomain(preRequisites, transportMeans)
 }
