@@ -42,6 +42,8 @@ class ConveyanceReferenceNumberViewSpec extends InputTextViewBehaviours[String] 
 
   behave like pageWithHeading()
 
+  behave like pageWithSectionCaption("Transport details - Border means of transport")
+
   behave like pageWithoutHint()
 
   behave like pageWithInputText(Some(InputSize.Width20))

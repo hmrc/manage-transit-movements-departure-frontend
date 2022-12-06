@@ -42,7 +42,8 @@
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages("transport.transportMeans.active.conveyanceReferenceNumber.heading")
+                heading = messages("transport.transportMeans.active.conveyanceReferenceNumber.heading"),
+                caption = Some(messages("transport.activeBorderMeansOfTransport.caption"))
             ),
             inputClass = InputSize.Width20
         )
