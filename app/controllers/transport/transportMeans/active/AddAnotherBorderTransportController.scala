@@ -51,7 +51,6 @@ class AddAnotherBorderTransportController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  // paragraph = Html(s"""<p class="govuk-body">${messages("transport.transportMeans.active.addAnotherBorderTransport.paragraph")}</p>""")
 
   private def form(allowMoreActiveBorderTransports: Boolean): Form[Boolean] =
     formProvider("transport.transportMeans.active.addAnotherBorderTransport", allowMoreActiveBorderTransports)
