@@ -14,17 +14,24 @@
  * limitations under the License.
  */
 
-package forms
+package forms.transport.transportMeans.active
 
+import forms.Constants.conveyanceNumberLength
+import forms.StopOnFirstFail
 import forms.mappings.Mappings
-import javax.inject.Inject
+import models.domain.StringFieldRegex.alphaNumericRegex
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class ConveyanceReferenceNumberFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String): Form[String] =
     Form(
       "value" -> text(s"$prefix.error.required")
-        .verifying(maxLength(17, s"$prefix.error.length"))
+        .verifying(
+          StopOnFirstFail[String](maxLength(conveyanceNumberLength, s"$prefix.error.length")),
+          regexp(alphaNumericRegex, s"$prefix.error.invalid")
+        )
     )
 }

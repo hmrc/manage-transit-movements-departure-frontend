@@ -16,16 +16,20 @@
 
 package forms
 
+import forms.Constants.conveyanceNumberLength
 import forms.behaviours.StringFieldBehaviours
+import forms.transport.transportMeans.active.ConveyanceReferenceNumberFormProvider
+import models.domain.StringFieldRegex.alphaNumericRegex
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import play.api.data.FormError
 
 class ConveyanceReferenceNumberFormProviderSpec extends StringFieldBehaviours {
 
-  private val prefix = Gen.alphaNumStr.sample.value
-  val requiredKey    = s"$prefix.error.required"
-  val lengthKey      = s"$prefix.error.length"
-  val maxLength      = 17
+  private val prefix      = Gen.alphaNumStr.sample.value
+  private val requiredKey = s"$prefix.error.required"
+  private val lengthKey   = s"$prefix.error.length"
+  private val invalidKey  = s"$prefix.error.invalid"
 
   val form = new ConveyanceReferenceNumberFormProvider()(prefix)
 
@@ -36,20 +40,28 @@ class ConveyanceReferenceNumberFormProviderSpec extends StringFieldBehaviours {
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(conveyanceNumberLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      maxLength = conveyanceNumberLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(conveyanceNumberLength))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
+    )
+
+    behave like fieldThatDoesNotBindInvalidData(
+      form = form,
+      fieldName = fieldName,
+      regex = alphaNumericRegex.regex,
+      gen = stringsWithLength(conveyanceNumberLength, arbitrary[Char]),
+      invalidKey = invalidKey
     )
   }
 }

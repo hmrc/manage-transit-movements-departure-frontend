@@ -16,7 +16,7 @@
 
 package views.transport.transportMeans.active
 
-import forms.ConveyanceReferenceNumberFormProvider
+import forms.transport.transportMeans.active.ConveyanceReferenceNumberFormProvider
 import models.NormalMode
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form

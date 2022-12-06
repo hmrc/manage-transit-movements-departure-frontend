@@ -17,7 +17,7 @@
 package controllers.transport.transportMeans.active
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.ConveyanceReferenceNumberFormProvider
+import forms.transport.transportMeans.active.ConveyanceReferenceNumberFormProvider
 import models.NormalMode
 import navigation.transport.TransportMeansNavigatorProvider
 import org.mockito.ArgumentMatchers.any
@@ -63,14 +63,14 @@ class ConveyanceReferenceNumberControllerSpec extends SpecBase with AppWithDefau
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(ConveyanceReferenceNumberPage, "test string")
+      val userAnswers = emptyUserAnswers.setValue(ConveyanceReferenceNumberPage, "testString")
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, conveyanceReferenceNumberRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> "test string"))
+      val filledForm = form.bind(Map("value" -> "testString"))
 
       val view = injector.instanceOf[ConveyanceReferenceNumberView]
 
@@ -87,7 +87,7 @@ class ConveyanceReferenceNumberControllerSpec extends SpecBase with AppWithDefau
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       val request = FakeRequest(POST, conveyanceReferenceNumberRoute)
-        .withFormUrlEncodedBody(("value", "test string"))
+        .withFormUrlEncodedBody(("value", "testString"))
 
       val result = route(app, request).value
 
