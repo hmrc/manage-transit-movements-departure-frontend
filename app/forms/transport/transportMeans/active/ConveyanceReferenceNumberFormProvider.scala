@@ -16,7 +16,7 @@
 
 package forms.transport.transportMeans.active
 
-import forms.Constants.conveyanceNumberLength
+import forms.Constants.conveyanceRefNumberLength
 import forms.StopOnFirstFail
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.alphaNumericRegex
@@ -30,8 +30,10 @@ class ConveyanceReferenceNumberFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text(s"$prefix.error.required")
         .verifying(
-          StopOnFirstFail[String](maxLength(conveyanceNumberLength, s"$prefix.error.length")),
-          regexp(alphaNumericRegex, s"$prefix.error.invalid")
+          StopOnFirstFail[String](
+            maxLength(conveyanceRefNumberLength, s"$prefix.error.length"),
+            regexp(alphaNumericRegex, s"$prefix.error.invalid")
+          )
         )
     )
 }

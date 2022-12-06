@@ -19,7 +19,7 @@ package controllers.transport.transportMeans.active
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.transport.transportMeans.active.ConveyanceReferenceNumberFormProvider
-import models.{LocalReferenceNumber, Mode}
+import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansNavigatorProvider
 import pages.transport.transportMeans.active.ConveyanceReferenceNumberPage
@@ -46,24 +46,24 @@ class ConveyanceReferenceNumberController @Inject() (
 
   private val form = formProvider("transport.transportMeans.active.conveyanceReferenceNumber")
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(ConveyanceReferenceNumberPage) match {
+      val preparedForm = request.userAnswers.get(ConveyanceReferenceNumberPage(activeIndex)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
-      Ok(view(preparedForm, lrn, mode))
+      Ok(view(preparedForm, lrn, mode, activeIndex))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, activeIndex))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            ConveyanceReferenceNumberPage.writeToUserAnswers(value).writeToSession().navigate()
+            ConveyanceReferenceNumberPage(activeIndex).writeToUserAnswers(value).writeToSession().navigate()
           }
         )
   }

@@ -16,7 +16,7 @@
 
 package forms
 
-import forms.Constants.conveyanceNumberLength
+import forms.Constants.conveyanceRefNumberLength
 import forms.behaviours.StringFieldBehaviours
 import forms.transport.transportMeans.active.ConveyanceReferenceNumberFormProvider
 import models.domain.StringFieldRegex.alphaNumericRegex
@@ -40,14 +40,14 @@ class ConveyanceReferenceNumberFormProviderSpec extends StringFieldBehaviours {
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(conveyanceNumberLength)
+      stringsWithMaxLength(conveyanceRefNumberLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength = conveyanceNumberLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(conveyanceNumberLength))
+      maxLength = conveyanceRefNumberLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(conveyanceRefNumberLength))
     )
 
     behave like mandatoryField(
@@ -60,7 +60,7 @@ class ConveyanceReferenceNumberFormProviderSpec extends StringFieldBehaviours {
       form = form,
       fieldName = fieldName,
       regex = alphaNumericRegex.regex,
-      gen = stringsWithLength(conveyanceNumberLength, arbitrary[Char]),
+      gen = stringsWithLength(conveyanceRefNumberLength, arbitrary[Char]),
       invalidKey = invalidKey
     )
   }

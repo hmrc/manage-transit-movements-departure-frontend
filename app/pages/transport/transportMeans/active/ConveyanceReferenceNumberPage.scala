@@ -17,18 +17,18 @@
 package pages.transport.transportMeans.active
 
 import controllers.transport.transportMeans.active.routes
-import models.{Mode, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.TransportMeansActiveSection
+import pages.sections.transport.TransportMeansActiveSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object ConveyanceReferenceNumberPage extends QuestionPage[String] {
+case class ConveyanceReferenceNumberPage(activeIndex: Index) extends QuestionPage[String] {
 
-  override def path: JsPath = TransportMeansActiveSection.path \ toString
+  override def path: JsPath = TransportMeansActiveSection(activeIndex).path \ toString
 
   override def toString: String = "conveyanceReferenceNumber"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.ConveyanceReferenceNumberController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.ConveyanceReferenceNumberController.onPageLoad(userAnswers.lrn, mode, activeIndex))
 }

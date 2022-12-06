@@ -22,10 +22,10 @@ class ConveyanceReferenceNumberPageSpec extends PageBehaviours {
 
   "ConveyanceReferenceNumberPage" - {
 
-    beRetrievable[String](ConveyanceReferenceNumberPage)
+    beRetrievable[String](ConveyanceReferenceNumberPage(activeIndex))
 
-    beSettable[String](ConveyanceReferenceNumberPage)
+    beSettable[String](ConveyanceReferenceNumberPage(activeIndex))
 
-    beRemovable[String](ConveyanceReferenceNumberPage)
+    beRemovable[String](ConveyanceReferenceNumberPage(activeIndex))
   }
 }

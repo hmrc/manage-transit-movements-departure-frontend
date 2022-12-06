@@ -27,7 +27,7 @@
     button: Button
 )
 
-@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, index: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("transport.transportMeans.active.conveyanceReferenceNumber.title"),
@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.ConveyanceReferenceNumberController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.ConveyanceReferenceNumberController.onSubmit(lrn, mode, index), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
