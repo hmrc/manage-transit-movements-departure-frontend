@@ -18,12 +18,13 @@ package models.journeyDomain.transport
 
 import base.SpecBase
 import generators.Generators
+import models.Index
 import models.SecurityDetailsType._
 import models.domain.{EitherType, UserAnswersReader}
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.SecurityDetailsTypePage
-import pages.transport.transportMeans.AnotherVehicleCrossingYesNoPage
+import pages.transport.transportMeans.{active, AnotherVehicleCrossingYesNoPage}
 
 class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -80,6 +81,22 @@ class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks wi
             result.value mustBe defined
         }
 
+      }
+    }
+
+    "cannot be parsed from user answers" - {
+      "when add another vehicle crossing border is true" - {
+        "and identification type crossing the border is unanswered" in {
+          val userAnswers = emptyUserAnswers
+            .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+            .setValue(AnotherVehicleCrossingYesNoPage, true)
+
+          val result: EitherType[Option[Seq[TransportMeansActiveDomain]]] = UserAnswersReader[Option[Seq[TransportMeansActiveDomain]]](
+            TransportMeansDomain.transportMeansActiveReader
+          ).run(userAnswers)
+
+          result.left.value.page mustBe active.IdentificationPage(Index(0))
+        }
       }
     }
   }

@@ -16,11 +16,11 @@
 
 package models.journeyDomain.transport
 
-import models.{Index, RichJsArray}
 import cats.implicits._
 import models.SecurityDetailsType.NoSecurityDetails
-import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
+import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
+import models.{Index, RichJsArray}
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.sections.transport.TransportMeansActiveListSection
 import pages.transport.transportMeans.AnotherVehicleCrossingYesNoPage
