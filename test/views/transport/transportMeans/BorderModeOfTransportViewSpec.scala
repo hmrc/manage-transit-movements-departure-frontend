@@ -43,6 +43,8 @@ class BorderModeOfTransportViewSpec extends RadioViewBehaviours[BorderModeOfTran
 
   behave like pageWithBackLink()
 
+  behave like pageWithSectionCaption("Transport details - Border mode of transport")
+
   behave like pageWithHeading()
 
   behave like pageWithRadioItems()
