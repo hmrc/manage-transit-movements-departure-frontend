@@ -69,29 +69,29 @@ class TransportMeansActiveDomainSpec extends SpecBase with Generators with Scala
           result.value mustBe expectedResult
         }
 
-        "and security detail type is 1 and inland mode is Air" in {
-          val userAnswers = emptyUserAnswers
-            .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
-            .setValue(InlandModePage, Air)
-            .setValue(IdentificationPage(index), identification)
-            .setValue(IdentificationNumberPage(index), identificationNumber)
-            .setValue(AddNationalityYesNoPage(index), true)
-            .setValue(NationalityPage(index), nationality)
-            .setValue(CustomsOfficeActiveBorderPage(index), customsOffice)
-            .setValue(ConveyanceReferenceNumberPage(index), conveyanceNumber)
-
-          val expectedResult = TransportMeansActiveDomain(
-            identification = identification,
-            identificationNumber = identificationNumber,
-            nationality = Option(nationality),
-            customsOffice = customsOffice,
-            conveyanceReferenceNumber = Some(conveyanceNumber)
-          )
-
-          val result: EitherType[TransportMeansActiveDomain] = UserAnswersReader[TransportMeansActiveDomain](userAnswersReader(index)).run(userAnswers)
-
-          result.value mustBe expectedResult
-        }
+//        "and security detail type is 1 and mode crossing border is Air" ignore  { //TODO update when mode crossing border page is built
+//          val userAnswers = emptyUserAnswers
+//            .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
+//            .setValue(ModeCrossingBorder, Air)
+//            .setValue(IdentificationPage(index), identification)
+//            .setValue(IdentificationNumberPage(index), identificationNumber)
+//            .setValue(AddNationalityYesNoPage(index), true)
+//            .setValue(NationalityPage(index), nationality)
+//            .setValue(CustomsOfficeActiveBorderPage(index), customsOffice)
+//            .setValue(ConveyanceReferenceNumberPage(index), conveyanceNumber)
+//
+//          val expectedResult = TransportMeansActiveDomain(
+//            identification = identification,
+//            identificationNumber = identificationNumber,
+//            nationality = Option(nationality),
+//            customsOffice = customsOffice,
+//            conveyanceReferenceNumber = Some(conveyanceNumber)
+//          )
+//
+//          val result: EitherType[TransportMeansActiveDomain] = UserAnswersReader[TransportMeansActiveDomain](userAnswersReader(index)).run(userAnswers)
+//
+//          result.value mustBe expectedResult
+//        }
       }
 
       "when the add nationality is answered no" - {

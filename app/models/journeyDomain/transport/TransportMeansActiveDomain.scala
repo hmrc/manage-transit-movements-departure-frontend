@@ -18,15 +18,10 @@ package models.journeyDomain.transport
 
 import cats.implicits._
 import models.Index
-import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.reference.{CustomsOffice, Nationality}
 import models.transport.transportMeans.active.Identification
-import models.transport.transportMeans.departure.InlandMode
-import models.transport.transportMeans.departure.InlandMode.Air
-import pages.preTaskList.SecurityDetailsTypePage
 import pages.transport.transportMeans.active._
-import pages.transport.transportMeans.departure.InlandModePage
 
 case class TransportMeansActiveDomain(
   identification: Identification,
@@ -38,19 +33,21 @@ case class TransportMeansActiveDomain(
 
 object TransportMeansActiveDomain {
 
-  def conveyanceReads(index: Index): UserAnswersReader[Option[String]] = {
+//TODO WHEN MODE CROSSING BORDER PAGE IS BUILT USE THIS LOGIC
 
-    val details = for {
-      securityDetails <- SecurityDetailsTypePage.reader
-      inlandMode      <- InlandModePage.reader
-    } yield (securityDetails, inlandMode)
-
-    details.flatMap {
-      case (NoSecurityDetails, x: InlandMode) if x != Air =>
-        ConveyanceReferenceNumberYesNoPage(index).filterOptionalDependent(identity)(ConveyanceReferenceNumberPage(index).reader)
-      case _ => ConveyanceReferenceNumberPage(index).reader.map(Some(_))
-    }
-  }
+//  def conveyanceReads(index: Index): UserAnswersReader[Option[String]] = {
+//
+//    val details = for {
+//      securityDetails <- SecurityDetailsTypePage.reader
+//      modeCrossingBorder      <- ModeCrossingBorderPage.reader
+//    } yield (securityDetails, inlandMode)
+//
+//    details.flatMap {
+//      case (NoSecurityDetails, x: InlandMode) if x != Air =>
+//        ConveyanceReferenceNumberYesNoPage(index).filterOptionalDependent(identity)(ConveyanceReferenceNumberPage(index).reader)
+//      case _ => ConveyanceReferenceNumberPage(index).reader.map(Some(_))
+//    }
+//  }
 
   def userAnswersReader(index: Index): UserAnswersReader[TransportMeansActiveDomain] =
     (
@@ -58,7 +55,8 @@ object TransportMeansActiveDomain {
       IdentificationNumberPage(index).reader,
       AddNationalityYesNoPage(index).filterOptionalDependent(identity)(NationalityPage(index).reader),
       CustomsOfficeActiveBorderPage(index).reader,
-      conveyanceReads(index)
+      //    conveyanceReads(index)
+      ConveyanceReferenceNumberYesNoPage(index).filterOptionalDependent(identity)(ConveyanceReferenceNumberPage(index).reader)
     ).tupled.map((TransportMeansActiveDomain.apply _).tupled)
 
 }
