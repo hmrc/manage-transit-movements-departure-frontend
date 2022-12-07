@@ -29,7 +29,8 @@ import pages.transport.transportMeans.active._
 class AddAnotherBorderTransportViewModelSpec extends SpecBase with Generators {
 
   "must get list items" in {
-    val identificationType = arbitrary[Identification].retryUntil(_ != Identification.IataFlightNumber).sample.value
+    val identificationType =
+      arbitrary[Identification].retryUntil(_ != Identification.IataFlightNumber).sample.value // TODO: Change this to crossing mode page once implemented
     val userAnswers = emptyUserAnswers
       .setValue(SecurityDetailsTypePage, NoSecurityDetails)
       .setValue(IdentificationPage(Index(0)), identificationType)

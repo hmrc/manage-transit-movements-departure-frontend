@@ -48,25 +48,26 @@
 
     @heading(
         heading = messages(s"transport.transportMeans.active.addAnotherBorderTransport.$singularOrPlural.heading", activeBorderTransports.length),
-        caption = Some(messages("routeDetails.transit.caption"))
+        caption = Some(messages("transport.activeBorderMeansOfTransport.caption"))
     )
+
+    @listWithActions(activeBorderTransports)
 
     @formHelper(action = routes.AddAnotherBorderTransportController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @if(allowMoreActiveBorderTransports) {
             @inputYesNo(
                 field = form("value"),
-                yesNoType = YesNoWithLegend(
+                yesNoType = YesNoWithLegendAndAdditionalHtml(
+                    additionalHtml = Html(s"""<p class="govuk-body">${messages("transport.transportMeans.active.addAnotherBorderTransport.paragraph")}</p>"""),
                     legend = messages("transport.transportMeans.active.addAnotherBorderTransport.label")
+
                 )
             )
         } else {
             <p class="govuk-body" data-testId="maxLimit">@messages("transport.transportMeans.active.addAnotherBorderTransport.maxLimit.label")</p>
         }
 
-        @button(
-            messageKey = "site.continue",
-            attributes = Map("id" -> "submit")
-        )
+        @button(attributes = Map("id" -> "submit"))
     }
 }

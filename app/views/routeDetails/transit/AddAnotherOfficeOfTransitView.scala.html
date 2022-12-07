@@ -64,6 +64,9 @@
             <p class="govuk-body" data-testId="maxLimit">@messages("routeDetails.transit.addAnotherOfficeOfTransit.maxLimit.label")</p>
         }
 
-
+        @button(
+            messageKey = "site.continue",
+            attributes = Map("id" -> "submit")
+        )
     }
 }

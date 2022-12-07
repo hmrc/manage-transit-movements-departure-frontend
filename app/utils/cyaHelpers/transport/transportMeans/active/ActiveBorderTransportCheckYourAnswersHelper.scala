@@ -30,11 +30,12 @@ class ActiveBorderTransportCheckYourAnswersHelper(userAnswers: UserAnswers, mode
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(TransportMeansActiveListSection) {
       index =>
+        println(s"\n\n\n FOO $index \n\n\n")
         buildListItem[TransportMeansActiveDomain, Identification](
           page = IdentificationPage(index),
-          formatJourneyDomainModel = _.label,
-          formatType = formatEnumAsString(Identification.messageKeyPrefix),
-          removeRoute = ??? // TODO: Add remove page
+          formatJourneyDomainModel = _.asString,
+          formatType = x => formatEnumAsString(Identification.messageKeyPrefix)(x.toString),
+          removeRoute = Some(controllers.routes.SessionExpiredController.onPageLoad()) // TODO: Add remove page
         )(TransportMeansActiveDomain.userAnswersReader(index), implicitly)
     }
 

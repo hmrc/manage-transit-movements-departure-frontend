@@ -17,10 +17,11 @@
 package models.journeyDomain.transport
 
 import cats.implicits._
-import models.Index
+import models.{Index, Mode, UserAnswers}
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.JourneyDomainModel
+import models.journeyDomain.Stage.{AccessingJourney, CompletingJourney}
+import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{CustomsOffice, Nationality}
 import models.transport.transportMeans.active.Identification
 import models.transport.transportMeans.departure.InlandMode
@@ -28,6 +29,8 @@ import models.transport.transportMeans.departure.InlandMode.Air
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.transport.transportMeans.active._
 import pages.transport.transportMeans.departure.InlandModePage
+import play.api.i18n.Messages
+import play.api.mvc.Call
 
 case class TransportMeansActiveDomain(
   identification: Identification,
@@ -36,10 +39,24 @@ case class TransportMeansActiveDomain(
   customsOffice: CustomsOffice,
   conveyanceReferenceNumber: Option[String]
 ) extends JourneyDomainModel {
-  val label: String = s"$identification - $identificationNumber"
+
+  def asString(implicit messages: Messages): String =
+    TransportMeansActiveDomain.asString(identification, identificationNumber)
+
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some {
+    stage match {
+      case AccessingJourney =>
+        controllers.transport.transportMeans.routes.AnotherVehicleCrossingYesNoController.onPageLoad(userAnswers.lrn, mode)
+      case CompletingJourney =>
+        controllers.transport.transportMeans.active.routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode)
+    }
+  }
 }
 
 object TransportMeansActiveDomain {
+
+  def asString(identification: Identification, identificationNumber: String)(implicit messages: Messages): String =
+    messages(s"transport.transportMeans.active.identification.${identification.toString}").concat(s" - $identificationNumber")
 
   def conveyanceReads(index: Index): UserAnswersReader[Option[String]] = {
 
@@ -63,5 +80,4 @@ object TransportMeansActiveDomain {
       CustomsOfficeActiveBorderPage(index).reader,
       conveyanceReads(index)
     ).tupled.map((TransportMeansActiveDomain.apply _).tupled)
-
 }
