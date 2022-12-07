@@ -18,17 +18,49 @@ package models.transport.transportMeans
 
 import models.{RadioModel, WithName}
 
-sealed trait BorderModeOfTransport
+sealed trait BorderModeOfTransport {
+  val borderModeType: Int
+}
 
 object BorderModeOfTransport extends RadioModel[BorderModeOfTransport] {
 
-  case object Opt1 extends WithName("opt1") with BorderModeOfTransport
-  case object Opt2 extends WithName("opt2") with BorderModeOfTransport
+  case object Maritime extends WithName("maritime") with BorderModeOfTransport {
+    override val borderModeType: Int = 1
+  }
+
+  case object Rail extends WithName("rail") with BorderModeOfTransport {
+    override val borderModeType: Int = 2
+  }
+
+  case object Road extends WithName("road") with BorderModeOfTransport {
+    override val borderModeType: Int = 3
+  }
+
+  case object Air extends WithName("air") with BorderModeOfTransport {
+    override val borderModeType: Int = 4
+  }
+
+  case object Mail extends WithName("mail") with BorderModeOfTransport {
+    override val borderModeType: Int = 5
+  }
+
+  case object Fixed extends WithName("fixed") with BorderModeOfTransport {
+    override val borderModeType: Int = 7
+  }
+
+  case object Waterway extends WithName("waterway") with BorderModeOfTransport {
+    override val borderModeType: Int = 8
+  }
 
   override val messageKeyPrefix: String = "transport.transportMeans.borderModeOfTransport"
 
   val values: Seq[BorderModeOfTransport] = Seq(
-    Opt1,
-    Opt2
+    Maritime,
+    Rail,
+    Road,
+    Air,
+    Mail,
+    Fixed,
+    Waterway
   )
 }
