@@ -1209,3 +1209,10 @@ transport.transportMeans.active.conveyanceReferenceNumber.checkYourAnswersLabel 
 transport.transportMeans.active.conveyanceReferenceNumber.error.required = Enter the conveyance reference number
 transport.transportMeans.active.conveyanceReferenceNumber.error.length = The reference number must be 17 characters or less
 transport.transportMeans.active.conveyanceReferenceNumber.error.invalid = The reference number must only include letters a to z and numbers 0 to 9
+
+transport.transportMeans.borderModeOfTransport.title = Which mode of transport are you using to cross the border
+transport.transportMeans.borderModeOfTransport.heading = Which mode of transport are you using to cross the border
+transport.transportMeans.borderModeOfTransport.opt1 = opt1m
+transport.transportMeans.borderModeOfTransport.opt2 = opt2m
+transport.transportMeans.borderModeOfTransport.checkYourAnswersLabel = Which mode of transport are you using to cross the border
+transport.transportMeans.borderModeOfTransport.error.required = Select  Which mode of transport are you using to cross the border
