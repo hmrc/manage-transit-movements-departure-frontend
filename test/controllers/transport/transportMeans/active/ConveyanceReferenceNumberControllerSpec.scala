@@ -19,7 +19,7 @@ package controllers.transport.transportMeans.active
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.transport.transportMeans.active.ConveyanceReferenceNumberFormProvider
 import models.NormalMode
-import navigation.transport.TransportMeansNavigatorProvider
+import navigation.transport.TransportMeansActiveNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.transport.transportMeans.active.ConveyanceReferenceNumberPage
@@ -41,7 +41,7 @@ class ConveyanceReferenceNumberControllerSpec extends SpecBase with AppWithDefau
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[TransportMeansNavigatorProvider]).toInstance(fakeTransportMeansNavigatorProvider))
+      .overrides(bind(classOf[TransportMeansActiveNavigatorProvider]).toInstance(fakeTransportMeansActiveNavigatorProvider))
 
   "ConveyanceReferenceNumber Controller" - {
 

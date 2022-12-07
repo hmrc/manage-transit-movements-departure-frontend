@@ -19,7 +19,7 @@ package views.utils
 import models.DateTime
 import play.api.data.{Field, Form, FormError}
 import play.api.i18n.Messages
-import play.twirl.api.Html
+import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Content
@@ -58,7 +58,23 @@ object ViewUtils {
         fieldset = Some(Fieldset(legend = Some(Legend(content = Text(legend), classes = legendClass, isPageHeading = false))))
       )
     }
+
+    def withLegendWithHint(legend: String, legendIsVisible: Boolean = true, hintText: String): Radios = {
+      val legendClass = if (legendIsVisible) "govuk-fieldset__legend--m" else "govuk-visually-hidden"
+      radios.copy(
+        fieldset = Some(
+          Fieldset(
+            legend = Some(
+              Legend(content = Text(legend), classes = legendClass, isPageHeading = false)
+            )
+          )
+        ),
+        hint = Some(Hint(content = Text(hintText)))
+      )
+    }
   }
+
+  //            html = Html(s"""<p class="govuk-body">${messages("transport.transportMeans.active.addAnotherBorderTransport.paragraph")}</p>""")
 
   implicit class TextAreaImplicits(textArea: Textarea)(implicit messages: Messages) extends RichTextareaSupport {
 

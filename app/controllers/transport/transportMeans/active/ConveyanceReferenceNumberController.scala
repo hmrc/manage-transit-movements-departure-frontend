@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.transport.transportMeans.active.ConveyanceReferenceNumberFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
-import navigation.transport.TransportMeansNavigatorProvider
+import navigation.transport.{TransportMeansActiveNavigatorProvider, TransportMeansNavigatorProvider}
 import pages.transport.transportMeans.active.ConveyanceReferenceNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ConveyanceReferenceNumberController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: TransportMeansNavigatorProvider,
+  navigatorProvider: TransportMeansActiveNavigatorProvider,
   formProvider: ConveyanceReferenceNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
@@ -62,7 +62,7 @@ class ConveyanceReferenceNumberController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, activeIndex))),
           value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, activeIndex)
             ConveyanceReferenceNumberPage(activeIndex).writeToUserAnswers(value).writeToSession().navigate()
           }
         )

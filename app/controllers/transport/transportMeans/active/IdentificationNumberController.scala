@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.transport.transportMeans.active.IdentificationNumberFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
-import navigation.transport.TransportMeansNavigatorProvider
+import navigation.transport.{TransportMeansActiveNavigatorProvider, TransportMeansNavigatorProvider}
 import pages.transport.transportMeans.active.{IdentificationNumberPage, IdentificationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class IdentificationNumberController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: TransportMeansNavigatorProvider,
+  navigatorProvider: TransportMeansActiveNavigatorProvider,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: IdentificationNumberFormProvider,
   actions: Actions,
@@ -77,7 +77,7 @@ class IdentificationNumberController @Inject() (
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, dynamicTitle, mode, activeIndex))),
               value => {
-                implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, activeIndex)
                 IdentificationNumberPage(activeIndex).writeToUserAnswers(value).writeToSession().navigate()
               }
             )

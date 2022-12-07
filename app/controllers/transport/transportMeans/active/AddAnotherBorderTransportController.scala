@@ -58,7 +58,6 @@ class AddAnotherBorderTransportController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
       val (activeBorderTransports, numberOfActiveBorderTransports, allowMoreActiveBorderTransports) = viewData
-      println(numberOfActiveBorderTransports)
       numberOfActiveBorderTransports match {
         case 0 => Redirect(controllers.transport.transportMeans.routes.AnotherVehicleCrossingYesNoController.onPageLoad(lrn, mode))
         case _ => Ok(view(form(allowMoreActiveBorderTransports), lrn, mode, activeBorderTransports, allowMoreActiveBorderTransports))

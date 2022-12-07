@@ -38,8 +38,8 @@ object InputYesNoViewModel {
     legend: String
   ) extends InputYesNoViewModel
 
-  case class YesNoWithLegendAndAdditionalHtml(
-    additionalHtml: Html,
+  case class YesNoWithLegendAndHint(
+    hintText: String,
     legend: String
   ) extends InputYesNoViewModel
 }

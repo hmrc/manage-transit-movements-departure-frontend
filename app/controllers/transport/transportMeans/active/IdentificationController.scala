@@ -22,7 +22,7 @@ import forms.EnumerableFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import models.transport.transportMeans.active.Identification
 import navigation.UserAnswersNavigator
-import navigation.transport.TransportMeansNavigatorProvider
+import navigation.transport.{TransportMeansActiveNavigatorProvider, TransportMeansNavigatorProvider}
 import pages.transport.transportMeans.active.IdentificationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class IdentificationController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: TransportMeansNavigatorProvider,
+  navigatorProvider: TransportMeansActiveNavigatorProvider,
   actions: Actions,
   formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -64,7 +64,7 @@ class IdentificationController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, Identification.radioItems, mode, activeIndex))),
           value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, activeIndex)
             IdentificationPage(activeIndex).writeToUserAnswers(value).writeToSession().navigate()
           }
         )

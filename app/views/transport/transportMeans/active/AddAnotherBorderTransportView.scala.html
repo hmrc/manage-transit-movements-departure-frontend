@@ -58,8 +58,9 @@
         @if(allowMoreActiveBorderTransports) {
             @inputYesNo(
                 field = form("value"),
-                yesNoType = YesNoWithLegendAndAdditionalHtml(
-                    additionalHtml = Html(s"""<p class="govuk-body">${messages("transport.transportMeans.active.addAnotherBorderTransport.paragraph")}</p>"""),
+//                yesNoType = YesNoWithLegend(messages("transport.transportMeans.active.addAnotherBorderTransport.label"))
+                yesNoType = YesNoWithLegendAndHint(
+                    hintText = messages("transport.transportMeans.active.addAnotherBorderTransport.hint"),
                     legend = messages("transport.transportMeans.active.addAnotherBorderTransport.label")
 
                 )

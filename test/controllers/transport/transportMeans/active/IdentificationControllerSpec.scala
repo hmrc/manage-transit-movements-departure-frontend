@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.EnumerableFormProvider
 import models.NormalMode
 import models.transport.transportMeans.active.Identification
-import navigation.transport.TransportMeansNavigatorProvider
+import navigation.transport.TransportMeansActiveNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.transport.transportMeans.active.IdentificationPage
@@ -42,7 +42,7 @@ class IdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtu
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[TransportMeansNavigatorProvider]).toInstance(fakeTransportMeansNavigatorProvider))
+      .overrides(bind(classOf[TransportMeansActiveNavigatorProvider]).toInstance(fakeTransportMeansActiveNavigatorProvider))
 
   "Identification Controller" - {
 

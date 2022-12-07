@@ -52,6 +52,7 @@
 }
 
 @yesNoType match {
+
     case OrdinaryYesNo(heading, caption) => {
         @govukRadios(radios.withHeadingAndCaption(heading, caption))
     }
@@ -63,9 +64,9 @@
     case YesNoWithLegend(legend) => {
         @govukRadios(radios.withLegend(legend))
     }
-    case YesNoWithLegendAndAdditionalHtml(additionalHtml, legend) => {
-        @hmrcHeading(legend, None, Some("govuk-fieldset__legend--m"))
-        @additionalHtml
-        @govukRadios(radios.withLegend(legend, false))
+
+    case YesNoWithLegendAndHint(hintText, legend) => {
+        @govukRadios(radios.withLegendWithHint(legend, true, hintText))
     }
+
 }
