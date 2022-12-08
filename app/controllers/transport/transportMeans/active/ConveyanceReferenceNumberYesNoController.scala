@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
-import navigation.transport.{TransportMeansActiveNavigatorProvider, TransportMeansNavigatorProvider}
+import navigation.transport.TransportMeansActiveNavigatorProvider
 import pages.transport.transportMeans.active.ConveyanceReferenceNumberYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

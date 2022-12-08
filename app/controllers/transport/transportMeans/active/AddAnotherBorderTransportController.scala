@@ -18,25 +18,20 @@ package controllers.transport.transportMeans.active
 
 import config.FrontendAppConfig
 import controllers.actions._
-import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode, NormalMode}
-import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansNavigatorProvider
-import pages.transport.transportMeans.active.AddAnotherBorderTransportPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.ListItem
-import viewModels.guaranteeDetails.AddAnotherGuaranteeViewModel.AddAnotherGuaranteeViewModelProvider
 import viewModels.transport.transportMeans.active.AddAnotherBorderTransportViewModel.AddAnotherBorderTransportViewModelProvider
 import views.html.transport.transportMeans.active.AddAnotherBorderTransportView
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherBorderTransportController @Inject() (
   override val messagesApi: MessagesApi,
@@ -48,8 +43,7 @@ class AddAnotherBorderTransportController @Inject() (
   viewModelProvider: AddAnotherBorderTransportViewModelProvider,
   val controllerComponents: MessagesControllerComponents,
   view: AddAnotherBorderTransportView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+) extends FrontendBaseController
     with I18nSupport {
 
   private def form(allowMoreActiveBorderTransports: Boolean): Form[Boolean] =

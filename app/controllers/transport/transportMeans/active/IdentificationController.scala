@@ -19,10 +19,10 @@ package controllers.transport.transportMeans.active
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
-import models.{Index, LocalReferenceNumber, Mode}
 import models.transport.transportMeans.active.Identification
+import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
-import navigation.transport.{TransportMeansActiveNavigatorProvider, TransportMeansNavigatorProvider}
+import navigation.transport.TransportMeansActiveNavigatorProvider
 import pages.transport.transportMeans.active.IdentificationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
