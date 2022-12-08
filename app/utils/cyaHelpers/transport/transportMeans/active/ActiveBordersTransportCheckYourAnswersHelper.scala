@@ -25,7 +25,7 @@ import play.api.i18n.Messages
 import utils.cyaHelpers.AnswersHelper
 import viewModels.ListItem
 
-class ActiveBorderTransportCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
+class ActiveBordersTransportCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(TransportMeansActiveListSection) {

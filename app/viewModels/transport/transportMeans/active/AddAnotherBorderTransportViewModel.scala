@@ -18,7 +18,7 @@ package viewModels.transport.transportMeans.active
 
 import models.{NormalMode, UserAnswers}
 import play.api.i18n.Messages
-import utils.cyaHelpers.transport.transportMeans.active.ActiveBorderTransportCheckYourAnswersHelper
+import utils.cyaHelpers.transport.transportMeans.active.ActiveBordersTransportCheckYourAnswersHelper
 import viewModels.ListItem
 
 import javax.inject.Inject
@@ -33,7 +33,7 @@ object AddAnotherBorderTransportViewModel {
   class AddAnotherBorderTransportViewModelProvider @Inject() () {
 
     def apply(userAnswers: UserAnswers)(implicit messages: Messages): AddAnotherBorderTransportViewModel = {
-      val helper = new ActiveBorderTransportCheckYourAnswersHelper(userAnswers, NormalMode)
+      val helper = new ActiveBordersTransportCheckYourAnswersHelper(userAnswers, NormalMode)
 
       val listItems = helper.listItems.collect {
         case Left(value)  => value
