@@ -1218,3 +1218,30 @@ transport.transportMeans.active.addAnotherBorderTransport.error.required =  Sele
 transport.transportMeans.active.addAnotherBorderTransport.label = Do you want to add another border means of transport?
 transport.transportMeans.active.addAnotherBorderTransport.hint = Only include vehicles that cross into another CTC country. As the EU is one CTC country, you don’t need to provide vehicle changes that stay within the EU.
 transport.transportMeans.active.addAnotherBorderTransport.maxLimit.label = You cannot add any more border means of transport. To add another, you need to remove one first.
+
+transport.transportMeans.transportMeansCheckYourAnswers.title = Check your answers
+transport.transportMeans.transportMeansCheckYourAnswers.heading = Check your answers
+
+transport.transportMeans.transportMeansCheckYourAnswers.label.mode = Mode
+
+transport.transportMeans.transportMeansCheckYourAnswers.inlandMode.h2 = Inland mode of transport
+transport.transportMeans.transportMeansCheckYourAnswers.inlandMode.hidden = inland mode of transport
+
+transport.transportMeans.transportMeansCheckYourAnswers.means.h2 = Departure means of transport
+transport.transportMeans.transportMeansCheckYourAnswers.means.identificationType.label = Identification type
+transport.transportMeans.transportMeansCheckYourAnswers.means.identificationType.hidden = identification type for the departure means of transport
+transport.transportMeans.transportMeansCheckYourAnswers.means.identificationNumber.label = Identification number
+transport.transportMeans.transportMeansCheckYourAnswers.means.identificationNumber.hidden = identification number for the departure means of transport
+transport.transportMeans.transportMeansCheckYourAnswers.means.country.label = Registered country
+transport.transportMeans.transportMeansCheckYourAnswers.means.country.label = registered country for the departure means of transport
+
+transport.transportMeans.transportMeansCheckYourAnswers.border.h2 = Border mode of transport
+transport.transportMeans.transportMeansCheckYourAnswers.borderMode.h2 = Border mode of transport
+transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.h2 = Border means of transport {0}
+transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationType.label = Identification type
+transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationType.hidden = identification type for the border means of transport
+transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationNumber.label = Identification number
+transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationNumber.hidden =  identification number for the border means of transport
+transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.country.label = Registered country
+transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.country.hidden = registered country for the border means of transport
+transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.officeOfTransit.label = office of transit for the border means of transport

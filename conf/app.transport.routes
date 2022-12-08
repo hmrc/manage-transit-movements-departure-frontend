@@ -7,3 +7,5 @@ GET        /:lrn/transport-details/border-mode-of-transport/add                 
 POST       /:lrn/transport-details/border-mode-of-transport/add                                 controllers.transport.transportMeans.AnotherVehicleCrossingYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/transport-details/border-mode-of-transport/change-add                          controllers.transport.transportMeans.AnotherVehicleCrossingYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/transport-details/border-mode-of-transport/change-add                          controllers.transport.transportMeans.AnotherVehicleCrossingYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/transport-details/transportMeans/modes-means-of-transport/check-answers        controllers.transport.transportMeans.TransportMeansCheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
