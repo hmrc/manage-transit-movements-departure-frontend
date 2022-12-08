@@ -21,10 +21,12 @@ import generators.Generators
 import models.Index
 import models.SecurityDetailsType._
 import models.domain.{EitherType, UserAnswersReader}
+import models.transport.transportMeans.BorderModeOfTransport
 import org.scalacheck.Gen
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.SecurityDetailsTypePage
-import pages.transport.transportMeans.{active, AnotherVehicleCrossingYesNoPage}
+import pages.transport.transportMeans.{active, AnotherVehicleCrossingYesNoPage, BorderModeOfTransportPage}
 
 class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -86,10 +88,23 @@ class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
     "cannot be parsed from user answers" - {
       "when add another vehicle crossing border is true" - {
+        "and BorderModeOfTransport is unanswered" in {
+          val userAnswers = emptyUserAnswers
+            .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+            .setValue(AnotherVehicleCrossingYesNoPage, true)
+
+          val result: EitherType[Option[Seq[TransportMeansActiveDomain]]] = UserAnswersReader[Option[Seq[TransportMeansActiveDomain]]](
+            TransportMeansDomain.transportMeansActiveReader
+          ).run(userAnswers)
+
+          result.left.value.page mustBe BorderModeOfTransportPage
+        }
+
         "and identification type crossing the border is unanswered" in {
           val userAnswers = emptyUserAnswers
             .setValue(SecurityDetailsTypePage, NoSecurityDetails)
             .setValue(AnotherVehicleCrossingYesNoPage, true)
+            .setValue(BorderModeOfTransportPage, arbitrary[BorderModeOfTransport].sample.value)
 
           val result: EitherType[Option[Seq[TransportMeansActiveDomain]]] = UserAnswersReader[Option[Seq[TransportMeansActiveDomain]]](
             TransportMeansDomain.transportMeansActiveReader

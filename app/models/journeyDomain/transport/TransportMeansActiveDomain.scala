@@ -21,12 +21,12 @@ import models.Index
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.reference.{CustomsOffice, Nationality}
+import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.active.Identification
-import models.transport.transportMeans.departure.InlandMode
-import models.transport.transportMeans.departure.InlandMode.Air
+import models.transport.transportMeans.BorderModeOfTransport.Air
 import pages.preTaskList.SecurityDetailsTypePage
+import pages.transport.transportMeans.BorderModeOfTransportPage
 import pages.transport.transportMeans.active._
-import pages.transport.transportMeans.departure.InlandModePage
 
 case class TransportMeansActiveDomain(
   identification: Identification,
@@ -42,19 +42,24 @@ object TransportMeansActiveDomain {
 
     val details = for {
       securityDetails <- SecurityDetailsTypePage.reader
-      inlandMode      <- InlandModePage.reader
-    } yield (securityDetails, inlandMode)
+      borderMode      <- BorderModeOfTransportPage.reader
+    } yield (securityDetails, borderMode)
 
     details.flatMap {
-      case (NoSecurityDetails, x: InlandMode) if x != Air =>
+      case (NoSecurityDetails, x: BorderModeOfTransport) if x != Air =>
         ConveyanceReferenceNumberYesNoPage(index).filterOptionalDependent(identity)(ConveyanceReferenceNumberPage(index).reader)
       case _ => ConveyanceReferenceNumberPage(index).reader.map(Some(_))
     }
   }
 
+  def identificationReads(index: Index): UserAnswersReader[Identification] =
+    BorderModeOfTransportPage.reader.flatMap {
+      _ => IdentificationPage(index).reader
+    }
+
   def userAnswersReader(index: Index): UserAnswersReader[TransportMeansActiveDomain] =
     (
-      IdentificationPage(index).reader,
+      identificationReads(index),
       IdentificationNumberPage(index).reader,
       AddNationalityYesNoPage(index).filterOptionalDependent(identity)(NationalityPage(index).reader),
       CustomsOfficeActiveBorderPage(index).reader,

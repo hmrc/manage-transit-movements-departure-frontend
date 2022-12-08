@@ -23,7 +23,7 @@ import models.journeyDomain.JourneyDomainModel
 import models.{Index, RichJsArray}
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.sections.transport.TransportMeansActiveListSection
-import pages.transport.transportMeans.AnotherVehicleCrossingYesNoPage
+import pages.transport.transportMeans.{AnotherVehicleCrossingYesNoPage, BorderModeOfTransportPage}
 
 case class TransportMeansDomain(
   transportMeansDeparture: TransportMeansDepartureDomain,
@@ -43,6 +43,9 @@ object TransportMeansDomain {
     SecurityDetailsTypePage.reader.flatMap {
       case NoSecurityDetails =>
         AnotherVehicleCrossingYesNoPage.filterOptionalDependent(identity)(arrayReader)
+//        AnotherVehicleCrossingYesNoPage.reader.flatMap {
+//          case true => BorderModeOfTransportPage.reader
+//        }
       case _ => arrayReader.map(Some(_))
     }
 

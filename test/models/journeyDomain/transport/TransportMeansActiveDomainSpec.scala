@@ -23,14 +23,14 @@ import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.transport.TransportMeansActiveDomain._
 import models.reference.{CustomsOffice, Nationality}
 import models.transport.transportMeans.active.Identification
-import models.transport.transportMeans.departure.InlandMode.{Air, Maritime}
+import models.transport.transportMeans.BorderModeOfTransport.{Air, Maritime}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.QuestionPage
 import pages.preTaskList.SecurityDetailsTypePage
+import pages.transport.transportMeans.BorderModeOfTransportPage
 import pages.transport.transportMeans.active._
-import pages.transport.transportMeans.departure.InlandModePage
 
 class TransportMeansActiveDomainSpec extends SpecBase with Generators with ScalaCheckPropertyChecks {
 
@@ -44,10 +44,10 @@ class TransportMeansActiveDomainSpec extends SpecBase with Generators with Scala
 
     "can be parsed from user answers" - {
       "when the add nationality is answered yes" - {
-        "and security detail type is 0 and inland mode is Maritime and add conveyance number is yes" - {
+        "and security detail type is 0 and inland mode is Maritime and add conveyance number is yes" in {
           val userAnswers = emptyUserAnswers
             .setValue(SecurityDetailsTypePage, NoSecurityDetails)
-            .setValue(InlandModePage, Maritime)
+            .setValue(BorderModeOfTransportPage, Maritime)
             .setValue(IdentificationPage(index), identification)
             .setValue(IdentificationNumberPage(index), identificationNumber)
             .setValue(AddNationalityYesNoPage(index), true)
@@ -72,7 +72,7 @@ class TransportMeansActiveDomainSpec extends SpecBase with Generators with Scala
         "and security detail type is 1 and inland mode is Air" in {
           val userAnswers = emptyUserAnswers
             .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
-            .setValue(InlandModePage, Air)
+            .setValue(BorderModeOfTransportPage, Air)
             .setValue(IdentificationPage(index), identification)
             .setValue(IdentificationNumberPage(index), identificationNumber)
             .setValue(AddNationalityYesNoPage(index), true)
@@ -98,7 +98,7 @@ class TransportMeansActiveDomainSpec extends SpecBase with Generators with Scala
         "and security detail type is 0 and inland mode is Maritime and add conveyance number is no" in {
           val userAnswers = emptyUserAnswers
             .setValue(SecurityDetailsTypePage, NoSecurityDetails)
-            .setValue(InlandModePage, Maritime)
+            .setValue(BorderModeOfTransportPage, Maritime)
             .setValue(IdentificationPage(index), identification)
             .setValue(IdentificationNumberPage(index), identificationNumber)
             .setValue(AddNationalityYesNoPage(index), false)
@@ -134,7 +134,7 @@ class TransportMeansActiveDomainSpec extends SpecBase with Generators with Scala
 
         val userAnswers = emptyUserAnswers
           .setValue(SecurityDetailsTypePage, NoSecurityDetails)
-          .setValue(InlandModePage, Maritime)
+          .setValue(BorderModeOfTransportPage, Maritime)
           .setValue(IdentificationPage(index), identification)
           .setValue(IdentificationNumberPage(index), identificationNumber)
           .setValue(AddNationalityYesNoPage(index), false)
@@ -165,7 +165,7 @@ class TransportMeansActiveDomainSpec extends SpecBase with Generators with Scala
 
         val userAnswers = emptyUserAnswers
           .setValue(SecurityDetailsTypePage, NoSecurityDetails)
-          .setValue(InlandModePage, Maritime)
+          .setValue(BorderModeOfTransportPage, Maritime)
           .setValue(IdentificationPage(index), identification)
           .setValue(IdentificationNumberPage(index), identificationNumber)
           .setValue(AddNationalityYesNoPage(index), true)
