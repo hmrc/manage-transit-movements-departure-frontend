@@ -30,7 +30,6 @@ class ActiveBorderTransportCheckYourAnswersHelper(userAnswers: UserAnswers, mode
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(TransportMeansActiveListSection) {
       index =>
-        println(s"\n\n\n FOO $index \n\n\n")
         buildListItem[TransportMeansActiveDomain, Identification](
           page = IdentificationPage(index),
           formatJourneyDomainModel = _.asString,
