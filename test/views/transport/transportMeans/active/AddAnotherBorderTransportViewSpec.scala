@@ -26,7 +26,9 @@ import views.html.transport.transportMeans.active.AddAnotherBorderTransportView
 
 class AddAnotherBorderTransportViewSpec extends ListWithActionsViewBehaviours {
 
-  override def maxNumber: Int      = frontendAppConfig.maxActiveBorderTransports
+  override def maxNumber: Int = frontendAppConfig.maxActiveBorderTransports
+
+  override def form: Form[Boolean] = formProvider(prefix, allowMore = true)
   private def formProvider         = new AddAnotherFormProvider()
 
   private val mode = arbitrary[Mode].sample.value
@@ -34,7 +36,7 @@ class AddAnotherBorderTransportViewSpec extends ListWithActionsViewBehaviours {
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherBorderTransportView]
-      .apply(formProvider(prefix, allowMore = true), lrn, mode, listItems, allowMoreActiveBorderTransports = true)(fakeRequest, messages)
+      .apply(form, lrn, mode, listItems, allowMoreActiveBorderTransports = true)(fakeRequest, messages)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
