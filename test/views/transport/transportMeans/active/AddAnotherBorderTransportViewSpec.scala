@@ -17,7 +17,7 @@
 package views.transport.transportMeans.active
 
 import forms.AddAnotherFormProvider
-import models.{Mode, NormalMode}
+import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -28,14 +28,13 @@ class AddAnotherBorderTransportViewSpec extends ListWithActionsViewBehaviours {
 
   override def maxNumber: Int      = frontendAppConfig.maxActiveBorderTransports
   private def formProvider         = new AddAnotherFormProvider()
-  override def form: Form[Boolean] = formProvider(prefix, allowMore = true)
 
   private val mode = arbitrary[Mode].sample.value
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherBorderTransportView]
-      .apply(form, lrn, mode, listItems, allowMoreActiveBorderTransports = true)(fakeRequest, messages)
+      .apply(formProvider(prefix, allowMore = true), lrn, mode, listItems, allowMoreActiveBorderTransports = true)(fakeRequest, messages)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
