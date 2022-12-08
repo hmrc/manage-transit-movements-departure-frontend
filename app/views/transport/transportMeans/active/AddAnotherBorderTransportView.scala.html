@@ -17,9 +17,10 @@
 @import controllers.transport.transportMeans.active.routes
 @import models.LocalReferenceNumber
 @import viewModels.components.InputYesNoViewModel._
+@import config.FrontendAppConfig
 @import views.html.components.{Button, ErrorSummary, InputYesNo, ListWithActions}
 @import views.html.components.Heading
-@import viewModels.ListItem
+@import viewModels.transport.transportMeans.active.AddAnotherBorderTransportViewModel
 
 @this(
     mainTemplate: MainTemplate,
@@ -31,15 +32,10 @@
     button: Button
 )
 
-
-@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, activeBorderTransports: Seq[ListItem], allowMoreActiveBorderTransports: Boolean)(implicit request: Request[_], messages: Messages)
-
-@singularOrPlural = @{
-    if (activeBorderTransports.length == 1) "singular" else "plural"
-}
+@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, viewModel: AddAnotherBorderTransportViewModel)(implicit request: Request[_], messages: Messages, config: FrontendAppConfig)
 
 @mainTemplate(
-    title = messages(s"transport.transportMeans.active.addAnotherBorderTransport.$singularOrPlural.title", activeBorderTransports.length),
+    title = viewModel.title,
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -47,26 +43,25 @@
     @errorSummary(form.errors)
 
     @heading(
-        heading = messages(s"transport.transportMeans.active.addAnotherBorderTransport.$singularOrPlural.heading", activeBorderTransports.length),
+        heading = viewModel.heading,
         caption = Some(messages("transport.activeBorderMeansOfTransport.caption"))
     )
 
-    @listWithActions(activeBorderTransports)
+    @listWithActions(viewModel.listItems)
 
-    @formHelper(action = routes.AddAnotherBorderTransportController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = viewModel.onSubmitCall, Symbol("autoComplete") -> "off") {
 
-        @if(allowMoreActiveBorderTransports) {
+        @if(viewModel.allowMoreActiveBorderTransports) {
             @inputYesNo(
                 field = form("value"),
-//                yesNoType = YesNoWithLegend(messages("transport.transportMeans.active.addAnotherBorderTransport.label"))
                 yesNoType = YesNoWithLegendAndHint(
-                    hintText = messages("transport.transportMeans.active.addAnotherBorderTransport.hint"),
-                    legend = messages("transport.transportMeans.active.addAnotherBorderTransport.label")
+                    hintText = viewModel.hint,
+                    legend = viewModel.legend
 
                 )
             )
         } else {
-            <p class="govuk-body" data-testId="maxLimit">@messages("transport.transportMeans.active.addAnotherBorderTransport.maxLimit.label")</p>
+            <p class="govuk-body" data-testId="maxLimit">@viewModel.maxLimitLabel</p>
         }
 
         @button(attributes = Map("id" -> "submit"))

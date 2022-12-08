@@ -24,6 +24,8 @@ import models.reference._
 import models.transport.transportMeans.departure.InlandMode
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
+import play.api.mvc.Call
+import uk.gov.hmrc.http.HttpVerbs._
 import wolfendale.scalacheck.regexp.RegexpGen
 
 trait ModelGenerators {
@@ -281,6 +283,13 @@ trait ModelGenerators {
         name                 <- nonEmptyString
       } yield UnLocode(unLocodeExtendedCode, name)
     }
+
+  implicit lazy val arbitraryCall: Arbitrary[Call] = Arbitrary {
+    for {
+      method <- Gen.oneOf(GET, POST)
+      url    <- nonEmptyString
+    } yield Call(method, url)
+  }
 
   implicit lazy val arbitraryNationality: Arbitrary[Nationality] =
     Arbitrary {

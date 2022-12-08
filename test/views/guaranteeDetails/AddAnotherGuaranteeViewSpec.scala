@@ -46,9 +46,9 @@ class AddAnotherGuaranteeViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Guarantee details")
 
-  behave like pageWithMoreItemsAllowed()
+  behave like pageWithMoreItemsAllowed(listItems.length)()
 
-  behave like pageWithItemsMaxedOut()
+  behave like pageWithItemsMaxedOut(maxedOutListItems.length)
 
   behave like pageWithSubmitButton("Save and continue")
 }

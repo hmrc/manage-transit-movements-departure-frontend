@@ -52,9 +52,9 @@ class AddAnotherOfficeOfExitViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithHint("You can add up to 9 offices.")
 
-  behave like pageWithMoreItemsAllowed()
+  behave like pageWithMoreItemsAllowed(listItems.length)()
 
-  behave like pageWithItemsMaxedOut()
+  behave like pageWithItemsMaxedOut(maxedOutListItems.length)
 
   behave like pageWithSubmitButton("Continue")
 }

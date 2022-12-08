@@ -1216,5 +1216,6 @@ transport.transportMeans.active.addAnotherBorderTransport.plural.title = You hav
 transport.transportMeans.active.addAnotherBorderTransport.plural.heading = You have added {0} border means of transport
 transport.transportMeans.active.addAnotherBorderTransport.error.required =  Select yes if you want to add another border mode of transport
 transport.transportMeans.active.addAnotherBorderTransport.label = Do you want to add another border means of transport?
+transport.transportMeans.active.addAnotherBorderTransport.hidden = Do you want to add another border means of transport?
 transport.transportMeans.active.addAnotherBorderTransport.hint = Only include vehicles that cross into another CTC country. As the EU is one CTC country, you don’t need to provide vehicle changes that stay within the EU.
 transport.transportMeans.active.addAnotherBorderTransport.maxLimit.label = You cannot add any more border means of transport. To add another, you need to remove one first.
