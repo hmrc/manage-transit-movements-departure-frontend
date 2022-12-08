@@ -20,97 +20,135 @@ import cats.implicits._
 import models.Index
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.JourneyDomainModel
 import models.reference.{CustomsOffice, Nationality}
-import models.transport.transportMeans.BorderModeOfTransport
+import models.transport.transportMeans.BorderModeOfTransport._
 import models.transport.transportMeans.active.Identification
-import models.transport.transportMeans.BorderModeOfTransport.Air
+import models.transport.transportMeans.active.Identification.{RegNumberRoadVehicle, TrainNumber}
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.transport.transportMeans.BorderModeOfTransportPage
 import pages.transport.transportMeans.active._
 
-sealed trait TransportMeansActiveDomain extends JourneyDomainModel {
-  val borderMode: BorderModeOfTransport
-  val identification: Identification
-}
+//sealed trait TransportMeansActiveDomain extends JourneyDomainModel {
+//  val borderMode: BorderModeOfTransport
+//  val identification: Identification
+//}
+//
+//object TransportMeansActiveDomain {
+//
+//  implicit val userAnswersReader: UserAnswersReader[TransportMeansActiveDomain] =
+//    BorderModeOfTransportPage.reader.flatMap {
+//      case BorderModeOfTransport.Rail => UserAnswersReader[TransportMeansDomainWithRailBorderMode].widen[TransportMeansActiveDomain]
+//      case BorderModeOfTransport.Road => UserAnswersReader[TransportMeansDomainWithRoadBorderMode].widen[TransportMeansActiveDomain]
+//      case _                          => UserAnswersReader[TransportMeansDomainWithAnyOtherBorderMode]
+//    }
+//}
+//
+//case class TransportMeansDomainWithRailBorderMode(
+//  identificationNumber: String,
+//  nationality: Nationality
+//) extends TransportMeansActiveDomain {
+//  override val borderMode: BorderModeOfTransport = BorderModeOfTransport.Rail
+//  override val identification: Identification    = Identification.TrainNumber
+//}
+//
+//object TransportMeansDomainWithRailBorderMode {
+//
+//  def conveyanceReads(index: Index): UserAnswersReader[Option[String]] = {
+//
+//    val details = for {
+//      securityDetails <- SecurityDetailsTypePage.reader
+//      borderMode      <- BorderModeOfTransportPage.reader
+//    } yield (securityDetails, borderMode)
+//
+//    details.flatMap {
+//      case (NoSecurityDetails, x: BorderModeOfTransport) if x != Air =>
+//        ConveyanceReferenceNumberYesNoPage(index).filterOptionalDependent(identity)(ConveyanceReferenceNumberPage(index).reader)
+//      case _ => ConveyanceReferenceNumberPage(index).reader.map(Some(_))
+//    }
+//  }
+//
+//  implicit def userAnswersReader(index: Index): UserAnswersReader[TransportMeansDomainWithRailBorderMode] =
+//    (
+//      IdentificationNumberPage(index).reader,
+//      AddNationalityYesNoPage(index).filterOptionalDependent(identity)(NationalityPage(index).reader),
+//      CustomsOfficeActiveBorderPage(index).reader,
+//      conveyanceReads(index)
+//    ).tupled.map((TransportMeansDomainWithRailBorderMode.apply _).tupled)
+//}
+//
+//case class TransportMeansDomainWithRoadBorderMode(
+//  identificationNumber: String,
+//  nationality: Nationality
+//) extends TransportMeansActiveDomain {
+//  override val borderMode: BorderModeOfTransport = BorderModeOfTransport.Road
+//  override val identification: Identification    = Identification.RegNumberRoadVehicle
+//}
+//
+//object TransportMeansDomainWithRoadBorderMode {
+//
+//  def conveyanceReads(index: Index): UserAnswersReader[Option[String]] = {
+//
+//    val details = for {
+//      securityDetails <- SecurityDetailsTypePage.reader
+//      borderMode      <- BorderModeOfTransportPage.reader
+//    } yield (securityDetails, borderMode)
+//
+//    details.flatMap {
+//      case (NoSecurityDetails, x: BorderModeOfTransport) if x != Air =>
+//        ConveyanceReferenceNumberYesNoPage(index).filterOptionalDependent(identity)(ConveyanceReferenceNumberPage(index).reader)
+//      case _ => ConveyanceReferenceNumberPage(index).reader.map(Some(_))
+//    }
+//  }
+//
+//  implicit def userAnswersReader(index: Index): UserAnswersReader[TransportMeansDomainWithRoadBorderMode] =
+//    (
+//      IdentificationNumberPage(index).reader,
+//      AddNationalityYesNoPage(index).filterOptionalDependent(identity)(NationalityPage(index).reader),
+//      CustomsOfficeActiveBorderPage(index).reader,
+//      conveyanceReads(index)
+//    ).tupled.map((TransportMeansDomainWithRoadBorderMode.apply _).tupled)
+//}
+//
+//case class TransportMeansDomainWithAnyOtherBorderMode(
+//  identification: Identification,
+//  identificationNumber: String,
+//  nationality: Option[Nationality],
+//  customsOffice: CustomsOffice,
+//  conveyanceReferenceNumber: Option[String]
+//)
+//
+//object TransportMeansDomainWithAnyOtherBorderMode {
+//
+//  def conveyanceReads(index: Index): UserAnswersReader[Option[String]] = {
+//
+//    val details = for {
+//      securityDetails <- SecurityDetailsTypePage.reader
+//      borderMode      <- BorderModeOfTransportPage.reader
+//    } yield (securityDetails, borderMode)
+//
+//    details.flatMap {
+//      case (NoSecurityDetails, x: BorderModeOfTransport) if x != Air =>
+//        ConveyanceReferenceNumberYesNoPage(index).filterOptionalDependent(identity)(ConveyanceReferenceNumberPage(index).reader)
+//      case _ => ConveyanceReferenceNumberPage(index).reader.map(Some(_))
+//    }
+//  }
+//
+//  def identificationReads(index: Index): UserAnswersReader[Identification] =
+//    BorderModeOfTransportPage.reader.flatMap {
+//      _ => IdentificationPage(index).reader
+//    }
+//
+//  def userAnswersReader(index: Index): UserAnswersReader[TransportMeansActiveDomain] =
+//    (
+//      identificationReads(index),
+//      IdentificationNumberPage(index).reader,
+//      AddNationalityYesNoPage(index).filterOptionalDependent(identity)(NationalityPage(index).reader),
+//      CustomsOfficeActiveBorderPage(index).reader,
+//      conveyanceReads(index)
+//    ).tupled.map((TransportMeansDomainWithAnyOtherBorderMode.apply _).tupled)
+//}
 
-object TransportMeansActiveDomain {
-
-  implicit val userAnswersReader: UserAnswersReader[TransportMeansActiveDomain] =
-    BorderModeOfTransportPage.reader.flatMap {
-      case BorderModeOfTransport.Rail => UserAnswersReader[TransportMeansDomainWithRailBorderMode].widen[TransportMeansActiveDomain]
-      case BorderModeOfTransport.Road => UserAnswersReader[TransportMeansDomainWithRoadBorderMode].widen[TransportMeansActiveDomain]
-      case _                          => UserAnswersReader[TransportMeansDomainWithAnyOtherBorderMode]
-    }
-}
-
-case class TransportMeansDomainWithRailBorderMode(
-  identificationNumber: String,
-  nationality: Nationality
-) extends TransportMeansActiveDomain {
-  override val borderMode: BorderModeOfTransport = BorderModeOfTransport.Rail
-  override val identification: Identification    = Identification.TrainNumber
-}
-
-object TransportMeansDomainWithRailBorderMode {
-
-  def conveyanceReads(index: Index): UserAnswersReader[Option[String]] = {
-
-    val details = for {
-      securityDetails <- SecurityDetailsTypePage.reader
-      borderMode      <- BorderModeOfTransportPage.reader
-    } yield (securityDetails, borderMode)
-
-    details.flatMap {
-      case (NoSecurityDetails, x: BorderModeOfTransport) if x != Air =>
-        ConveyanceReferenceNumberYesNoPage(index).filterOptionalDependent(identity)(ConveyanceReferenceNumberPage(index).reader)
-      case _ => ConveyanceReferenceNumberPage(index).reader.map(Some(_))
-    }
-  }
-
-  implicit def userAnswersReader(index: Index): UserAnswersReader[TransportMeansDomainWithRailBorderMode] =
-    (
-      IdentificationNumberPage(index).reader,
-      AddNationalityYesNoPage(index).filterOptionalDependent(identity)(NationalityPage(index).reader),
-      CustomsOfficeActiveBorderPage(index).reader,
-      conveyanceReads(index)
-    ).tupled.map((TransportMeansDomainWithRailBorderMode.apply _).tupled)
-}
-
-case class TransportMeansDomainWithRoadBorderMode(
-  identificationNumber: String,
-  nationality: Nationality
-) extends TransportMeansActiveDomain {
-  override val borderMode: BorderModeOfTransport = BorderModeOfTransport.Road
-  override val identification: Identification    = Identification.RegNumberRoadVehicle
-}
-
-object TransportMeansDomainWithRoadBorderMode {
-
-  def conveyanceReads(index: Index): UserAnswersReader[Option[String]] = {
-
-    val details = for {
-      securityDetails <- SecurityDetailsTypePage.reader
-      borderMode      <- BorderModeOfTransportPage.reader
-    } yield (securityDetails, borderMode)
-
-    details.flatMap {
-      case (NoSecurityDetails, x: BorderModeOfTransport) if x != Air =>
-        ConveyanceReferenceNumberYesNoPage(index).filterOptionalDependent(identity)(ConveyanceReferenceNumberPage(index).reader)
-      case _ => ConveyanceReferenceNumberPage(index).reader.map(Some(_))
-    }
-  }
-
-  implicit def userAnswersReader(index: Index): UserAnswersReader[TransportMeansDomainWithRoadBorderMode] =
-    (
-      IdentificationNumberPage(index).reader,
-      AddNationalityYesNoPage(index).filterOptionalDependent(identity)(NationalityPage(index).reader),
-      CustomsOfficeActiveBorderPage(index).reader,
-      conveyanceReads(index)
-    ).tupled.map((TransportMeansDomainWithRoadBorderMode.apply _).tupled)
-}
-
-case class TransportMeansDomainWithAnyOtherBorderMode(
+case class TransportMeansActiveDomain(
   identification: Identification,
   identificationNumber: String,
   nationality: Option[Nationality],
@@ -118,33 +156,40 @@ case class TransportMeansDomainWithAnyOtherBorderMode(
   conveyanceReferenceNumber: Option[String]
 )
 
-object TransportMeansDomainWithAnyOtherBorderMode {
+object TransportMeansActiveDomain {
 
-  def conveyanceReads(index: Index): UserAnswersReader[Option[String]] = {
-
-    val details = for {
-      securityDetails <- SecurityDetailsTypePage.reader
-      borderMode      <- BorderModeOfTransportPage.reader
-    } yield (securityDetails, borderMode)
-
-    details.flatMap {
-      case (NoSecurityDetails, x: BorderModeOfTransport) if x != Air =>
-        ConveyanceReferenceNumberYesNoPage(index).filterOptionalDependent(identity)(ConveyanceReferenceNumberPage(index).reader)
-      case _ => ConveyanceReferenceNumberPage(index).reader.map(Some(_))
-    }
-  }
-
-  def identificationReads(index: Index): UserAnswersReader[Identification] =
-    BorderModeOfTransportPage.reader.flatMap {
-      _ => IdentificationPage(index).reader
+  def userAnswersReader(index: Index): UserAnswersReader[TransportMeansActiveDomain] = {
+    val identificationReads: UserAnswersReader[Identification] = {
+      if (index.isFirst) {
+        BorderModeOfTransportPage.reader.flatMap {
+          case Rail => UserAnswersReader.apply(TrainNumber)
+          case Road => UserAnswersReader.apply(RegNumberRoadVehicle)
+          case _    => IdentificationPage(index).reader
+        }
+      } else {
+        IdentificationPage(index).reader
+      }
     }
 
-  def userAnswersReader(index: Index): UserAnswersReader[TransportMeansActiveDomain] =
+    val conveyanceReads: UserAnswersReader[Option[String]] =
+      for {
+        securityDetails <- SecurityDetailsTypePage.reader
+        borderMode      <- BorderModeOfTransportPage.reader
+        reader <- (securityDetails, borderMode) match {
+          case (x, Air) if x != NoSecurityDetails =>
+            ConveyanceReferenceNumberPage(index).reader.map(Some(_))
+          case _ =>
+            ConveyanceReferenceNumberYesNoPage(index).filterOptionalDependent(identity)(ConveyanceReferenceNumberPage(index).reader)
+        }
+      } yield reader
+
     (
-      identificationReads(index),
+      identificationReads,
       IdentificationNumberPage(index).reader,
       AddNationalityYesNoPage(index).filterOptionalDependent(identity)(NationalityPage(index).reader),
       CustomsOfficeActiveBorderPage(index).reader,
-      conveyanceReads(index)
-    ).tupled.map((TransportMeansDomainWithAnyOtherBorderMode.apply _).tupled)
+      conveyanceReads
+    ).tupled.map((TransportMeansActiveDomain.apply _).tupled)
+  }
+
 }
