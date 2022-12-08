@@ -18,7 +18,7 @@ package controllers.transport.transportMeans.active
 
 import config.FrontendAppConfig
 import controllers.actions._
-import forms.YesNoFormProvider
+import forms.AddAnotherFormProvider
 import models.{Index, LocalReferenceNumber, Mode, NormalMode}
 import navigation.transport.TransportMeansNavigatorProvider
 import play.api.data.Form
@@ -37,7 +37,7 @@ class AddAnotherBorderTransportController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: TransportMeansNavigatorProvider,
   actions: Actions,
-  formProvider: YesNoFormProvider,
+  formProvider: AddAnotherFormProvider,
   viewModelProvider: AddAnotherBorderTransportViewModelProvider,
   val controllerComponents: MessagesControllerComponents,
   view: AddAnotherBorderTransportView
