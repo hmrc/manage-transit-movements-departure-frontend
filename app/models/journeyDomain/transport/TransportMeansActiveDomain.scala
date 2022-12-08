@@ -46,7 +46,8 @@ case class TransportMeansActiveDomain(
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some {
     stage match {
       case AccessingJourney =>
-        controllers.transport.transportMeans.routes.AnotherVehicleCrossingYesNoController.onPageLoad(userAnswers.lrn, mode)
+        // TODO - Redirect to active border loop CYA page has been implemented so change links on add another border page work
+        controllers.routes.SessionExpiredController.onPageLoad()
       case CompletingJourney =>
         controllers.transport.transportMeans.active.routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode)
     }
