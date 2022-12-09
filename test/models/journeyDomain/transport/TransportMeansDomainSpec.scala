@@ -23,7 +23,6 @@ import models.SecurityDetailsType._
 import models.domain.{EitherType, UserAnswersReader}
 import models.transport.transportMeans.BorderModeOfTransport
 import org.scalacheck.Gen
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.transport.transportMeans.{active, AnotherVehicleCrossingYesNoPage, BorderModeOfTransportPage}
@@ -104,7 +103,7 @@ class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks wi
           val userAnswers = emptyUserAnswers
             .setValue(SecurityDetailsTypePage, NoSecurityDetails)
             .setValue(AnotherVehicleCrossingYesNoPage, true)
-            .setValue(BorderModeOfTransportPage, arbitrary[BorderModeOfTransport].sample.value)
+            .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Waterway)
 
           val result: EitherType[Option[Seq[TransportMeansActiveDomain]]] = UserAnswersReader[Option[Seq[TransportMeansActiveDomain]]](
             TransportMeansDomain.transportMeansActiveReader

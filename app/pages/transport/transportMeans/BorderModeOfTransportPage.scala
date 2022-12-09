@@ -18,11 +18,13 @@ package pages.transport.transportMeans
 
 import controllers.transport.transportMeans.routes
 import models.transport.transportMeans.BorderModeOfTransport
-import models.{Mode, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.TransportSection
+import pages.sections.transport.{TransportMeansActiveSection, TransportSection}
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
+
+import scala.util.Try
 
 case object BorderModeOfTransportPage extends QuestionPage[BorderModeOfTransport] {
 
@@ -32,4 +34,12 @@ case object BorderModeOfTransportPage extends QuestionPage[BorderModeOfTransport
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.BorderModeOfTransportController.onPageLoad(userAnswers.lrn, mode))
+
+  override def cleanup(value: Option[BorderModeOfTransport], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(_) =>
+        userAnswers.remove(TransportMeansActiveSection(Index(0)))
+      case None =>
+        super.cleanup(value, userAnswers)
+    }
 }
