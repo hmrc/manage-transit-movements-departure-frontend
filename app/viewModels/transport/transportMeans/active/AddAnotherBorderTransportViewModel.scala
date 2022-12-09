@@ -17,7 +17,7 @@
 package viewModels.transport.transportMeans.active
 
 import config.FrontendAppConfig
-import models.{Mode, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.Aliases.Content
