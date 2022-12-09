@@ -32,6 +32,14 @@ object TransportMeansAnswersViewModel {
     def apply(userAnswers: UserAnswers, mode: Mode, index: Index)(implicit messages: Messages): TransportMeansAnswersViewModel = {
       val helper = new TransportMeansCheckYourAnswersHelper(userAnswers, mode)
 
+      val inlandModeSection = ???
+
+      val departureMeansSection = ???
+
+      val borderModeSection = ???
+
+      val borderMeansSection = ???
+
       val section = Section(
         sectionTitle = messages("routeDetails.locationOfGoods.checkYourAnswers.subHeading"),
         rows = Seq(

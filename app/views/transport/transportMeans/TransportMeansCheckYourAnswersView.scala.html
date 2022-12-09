@@ -15,14 +15,20 @@
  *@
 
 @import models.LocalReferenceNumber
+@import controllers.transport.routes
 @import views.html.components.Heading
+@import viewModels.sections.Section
+@import views.html.components.{AnswerSections, Button, Heading}
 
 @this(
     mainTemplate: MainTemplate,
-    heading: Heading
+    heading: Heading,
+    answerSections: AnswerSections,
+    button: Button,
+    formHelper: FormWithCSRF
 )
 
-@(lrn: LocalReferenceNumber)(implicit request: Request[_], messages: Messages)
+@(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index,sections: Seq[Section])(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("transport.transportMeans.transportMeansCheckYourAnswers.title"),
@@ -30,5 +36,20 @@
     lrn = Some(lrn)
 ) {
 
-    @heading(messages("transport.transportMeans.transportMeansCheckYourAnswers.heading"))
+    @heading(
+        heading = messages("transport.transportMeans.transportMeansCheckYourAnswers.heading"),
+        caption = Some(messages("transport.activeBorderModeOfTransport.caption"))
+    )
+
+    @answerSections(sections)
+
+    @formHelper(action = routes.TransportMeansCheckYourAnswersController.onSubmit(mrn, mode), Symbol("autoComplete") -> "off") {
+
+        @button(
+            messageKey = "site.continue",
+            preventDoubleClick = true,
+            attributes = Map("id" -> "submit")
+        )
+    }
+
 }
