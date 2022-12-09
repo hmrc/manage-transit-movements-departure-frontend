@@ -17,9 +17,13 @@
 package models.transport.transportMeans.active
 
 import models.{RadioModel, WithName}
+import play.api.i18n.Messages
 
 sealed trait Identification {
   val borderModeType: Int
+
+  def asString(implicit messages: Messages): String =
+    messages(s"${Identification.messageKeyPrefix}.$this")
 }
 
 object Identification extends RadioModel[Identification] {

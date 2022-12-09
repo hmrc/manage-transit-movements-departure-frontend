@@ -19,12 +19,16 @@ package controllers.transport.transportMeans.active
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.transport.transportMeans.active.IdentificationNumberFormProvider
 import generators.Generators
+import models.NormalMode
+import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.active.Identification
-import models.{NormalMode, UserAnswers}
 import navigation.transport.TransportMeansActiveNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.transport.transportMeans.BorderModeOfTransportPage
 import pages.transport.transportMeans.active.{IdentificationNumberPage, IdentificationPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -34,19 +38,17 @@ import views.html.transport.transportMeans.active.IdentificationNumberView
 
 import scala.concurrent.Future
 
-class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
-  private val identificationType = arbitrary[Identification].sample.value
-  private val prefix             = "transport.transportMeans.active.identificationNumber"
-  private val dynamicTitle       = messages(s"$prefix.${identificationType.toString}")
+  private val prefix                                           = "transport.transportMeans.active.identificationNumber"
+  private def dynamicTitle(identificationType: Identification) = messages(s"$prefix.$identificationType")
 
-  private val formProvider                   = new IdentificationNumberFormProvider()
-  private val form                           = formProvider(prefix, dynamicTitle)
-  private val mode                           = NormalMode
-  private lazy val identificationNumberRoute = routes.IdentificationNumberController.onPageLoad(lrn, mode, index).url
+  private val formProvider                             = new IdentificationNumberFormProvider()
+  private def form(identificationType: Identification) = formProvider(prefix, dynamicTitle(identificationType))
+  private val mode                                     = NormalMode
+  private lazy val identificationNumberRoute           = routes.IdentificationNumberController.onPageLoad(lrn, mode, index).url
 
-  private val userAnswers: UserAnswers = emptyUserAnswers
-    .setValue(IdentificationPage(index), identificationType)
+  private val validAnswer = "testString"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -55,7 +57,79 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
   "IdentificationNumber Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET" - {
+
+      "when border mode is Rail" in {
+
+        val identificationType = Identification.TrainNumber
+        val userAnswers        = emptyUserAnswers.setValue(BorderModeOfTransportPage, BorderModeOfTransport.Rail)
+        setExistingUserAnswers(userAnswers)
+
+        val request = FakeRequest(GET, identificationNumberRoute)
+
+        val result = route(app, request).value
+
+        val view = injector.instanceOf[IdentificationNumberView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form(identificationType), lrn, s"$prefix.$identificationType", mode, index)(request, messages).toString
+      }
+
+      "when border mode is Road" in {
+
+        val identificationType = Identification.RegNumberRoadVehicle
+        val userAnswers        = emptyUserAnswers.setValue(BorderModeOfTransportPage, BorderModeOfTransport.Road)
+        setExistingUserAnswers(userAnswers)
+
+        val request = FakeRequest(GET, identificationNumberRoute)
+
+        val result = route(app, request).value
+
+        val view = injector.instanceOf[IdentificationNumberView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form(identificationType), lrn, s"$prefix.$identificationType", mode, index)(request, messages).toString
+      }
+
+      "when border mode is something else" in {
+
+        val borderModeGen = Gen
+          .oneOf(BorderModeOfTransport.values)
+          .filterNot(_ == BorderModeOfTransport.Rail)
+          .filterNot(_ == BorderModeOfTransport.Road)
+
+        forAll(borderModeGen, arbitrary[Identification]) {
+          (borderMode, identificationType) =>
+            val userAnswers = emptyUserAnswers
+              .setValue(BorderModeOfTransportPage, borderMode)
+              .setValue(IdentificationPage(index), identificationType)
+            setExistingUserAnswers(userAnswers)
+
+            val request = FakeRequest(GET, identificationNumberRoute)
+
+            val result = route(app, request).value
+
+            val view = injector.instanceOf[IdentificationNumberView]
+
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              view(form(identificationType), lrn, s"$prefix.$identificationType", mode, index)(request, messages).toString
+        }
+      }
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered" in {
+
+      val identificationType = Identification.ImoShipIdNumber
+      val userAnswers = emptyUserAnswers
+        .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Maritime)
+        .setValue(IdentificationPage(index), identificationType)
+        .setValue(IdentificationNumberPage(index), validAnswer)
 
       setExistingUserAnswers(userAnswers)
 
@@ -63,42 +137,25 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[IdentificationNumberView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, lrn, dynamicTitle, mode, index)(request, messages).toString
-    }
-
-    "must populate the view correctly on a GET when the question has previously been answered" in {
-
-      val updatedUserAnswers = userAnswers.setValue(IdentificationNumberPage(index), "testString")
-
-      setExistingUserAnswers(updatedUserAnswers)
-
-      val request = FakeRequest(GET, identificationNumberRoute)
-
-      val result = route(app, request).value
-
-      val filledForm = form.bind(Map("value" -> "testString"))
+      val filledForm = form(identificationType).bind(Map("value" -> validAnswer))
 
       val view = injector.instanceOf[IdentificationNumberView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, dynamicTitle, mode, index)(request, messages).toString
+        view(filledForm, lrn, s"$prefix.$identificationType", mode, index)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
+      val userAnswers = emptyUserAnswers.setValue(BorderModeOfTransportPage, BorderModeOfTransport.Road)
       setExistingUserAnswers(userAnswers)
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       val request = FakeRequest(POST, identificationNumberRoute)
-        .withFormUrlEncodedBody(("value", "testString"))
+        .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
 
@@ -109,12 +166,14 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
+      val identificationType = Identification.RegNumberRoadVehicle
+      val userAnswers        = emptyUserAnswers.setValue(BorderModeOfTransportPage, BorderModeOfTransport.Road)
       setExistingUserAnswers(userAnswers)
 
       val invalidAnswer = ""
 
       val request    = FakeRequest(POST, identificationNumberRoute).withFormUrlEncodedBody(("value", ""))
-      val filledForm = form.bind(Map("value" -> invalidAnswer))
+      val filledForm = form(identificationType).bind(Map("value" -> invalidAnswer))
 
       val result = route(app, request).value
 
@@ -123,7 +182,7 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
       val view = injector.instanceOf[IdentificationNumberView]
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, dynamicTitle, mode, index)(request, messages).toString
+        view(filledForm, lrn, s"$prefix.$identificationType", mode, index)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
@@ -144,7 +203,7 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
       setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, identificationNumberRoute)
-        .withFormUrlEncodedBody(("value", "testString"))
+        .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
 
