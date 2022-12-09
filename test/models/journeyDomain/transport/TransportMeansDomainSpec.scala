@@ -103,7 +103,7 @@ class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks wi
           val userAnswers = emptyUserAnswers
             .setValue(SecurityDetailsTypePage, NoSecurityDetails)
             .setValue(AnotherVehicleCrossingYesNoPage, true)
-            .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Waterway)
+            .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Fixed)
 
           val result: EitherType[Option[Seq[TransportMeansActiveDomain]]] = UserAnswersReader[Option[Seq[TransportMeansActiveDomain]]](
             TransportMeansDomain.transportMeansActiveReader

@@ -19,7 +19,13 @@ package utils.cyaHelpers.transport.transportMeans.active
 import base.SpecBase
 import generators.Generators
 import models.NormalMode
+import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
+import models.journeyDomain.transport.TransportMeansActiveDomain
+import models.transport.transportMeans.BorderModeOfTransport
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.preTaskList.SecurityDetailsTypePage
+import pages.transport.transportMeans.{AnotherVehicleCrossingYesNoPage, BorderModeOfTransportPage}
+import viewModels.ListItem
 
 class ActiveBorderTransportCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -31,6 +37,55 @@ class ActiveBorderTransportCheckYourAnswersHelperSpec extends SpecBase with Scal
 
         val helper = new ActiveBorderTransportCheckYourAnswersHelper(userAnswers, NormalMode)
         helper.listItems mustBe Nil
+      }
+    }
+
+    "when user answers populated with a complete active border transport" - {
+      "and AnotherVehicleCrossingBorder has been answered" - {
+        "and Identification type is defined" in {
+          val initialAnswers = emptyUserAnswers
+            .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+            .setValue(AnotherVehicleCrossingYesNoPage, true)
+            .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Fixed)
+
+          forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, index)) {
+            userAnswers =>
+              val helper = new ActiveBorderTransportCheckYourAnswersHelper(userAnswers, NormalMode)
+              val active = TransportMeansActiveDomain.userAnswersReader(index).run(userAnswers).value
+              helper.listItems mustBe Seq(
+                Right(
+                  ListItem(
+                    name = s"${messages(s"transport.transportMeans.active.identification.${active.identification}")} - ${active.identificationNumber}",
+                    changeUrl = controllers.routes.SessionExpiredController.onPageLoad().url,
+                    removeUrl = Some(controllers.routes.SessionExpiredController.onPageLoad().url)
+                  )
+                )
+              )
+          }
+        }
+      }
+
+      "and AnotherVehicleCrossingBorder has not been answered" - {
+        "and Identification type is defined" in {
+          val initialAnswers = emptyUserAnswers
+            .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
+            .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Fixed)
+
+          forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, index)) {
+            userAnswers =>
+              val helper = new ActiveBorderTransportCheckYourAnswersHelper(userAnswers, NormalMode)
+              val active = TransportMeansActiveDomain.userAnswersReader(index).run(userAnswers).value
+              helper.listItems mustBe Seq(
+                Right(
+                  ListItem(
+                    name = s"${messages(s"transport.transportMeans.active.identification.${active.identification}")} - ${active.identificationNumber}",
+                    changeUrl = controllers.routes.SessionExpiredController.onPageLoad().url,
+                    removeUrl = None
+                  )
+                )
+              )
+          }
+        }
       }
     }
 
