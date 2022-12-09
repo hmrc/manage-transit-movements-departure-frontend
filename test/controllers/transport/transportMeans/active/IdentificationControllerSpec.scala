@@ -18,21 +18,26 @@ package controllers.transport.transportMeans.active
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.EnumerableFormProvider
-import models.NormalMode
+import generators.Generators
+import models.{Index, NormalMode}
+import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.active.Identification
 import navigation.transport.TransportMeansActiveNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import pages.transport.transportMeans.BorderModeOfTransportPage
 import pages.transport.transportMeans.active.IdentificationPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import views.html.transport.transportMeans.active.IdentificationView
 
 import scala.concurrent.Future
 
-class IdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class IdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val formProvider             = new EnumerableFormProvider()
   private val form                     = formProvider[Identification]("transport.transportMeans.active.identification")
@@ -46,25 +51,205 @@ class IdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtu
 
   "Identification Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET" - {
+      "at index position '0'" - {
+        "when BorderModeOfTransport is 'Maritime'" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+          val radioItems: Seq[RadioItem] = Seq(
+            RadioItem(content = "IMO ship identification number".toText, id = Some("value"), value = Some("imoShipIdNumber"), checked = false),
+            RadioItem(content = "Name of a sea-going vessel".toText, id = Some("value_1"), value = Some("seaGoingVessel"), checked = false)
+          )
 
-      val request = FakeRequest(GET, identificationRoute)
+          val updatedUserAnswers = emptyUserAnswers
+            .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Maritime)
 
-      val result = route(app, request).value
+          setExistingUserAnswers(updatedUserAnswers)
 
-      val view = injector.instanceOf[IdentificationView]
+          val request = FakeRequest(GET, identificationRoute)
 
-      status(result) mustEqual OK
+          val result = route(app, request).value
 
-      contentAsString(result) mustEqual
-        view(form, lrn, Identification.radioItems, mode, activeIndex)(request, messages).toString
+          val view = injector.instanceOf[IdentificationView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(form, lrn, (_, _) => radioItems, mode, activeIndex)(request, messages).toString
+        }
+
+        "when BorderModeOfTransport is 'Air'" in {
+
+          val radioItems: Seq[RadioItem] = Seq(
+            RadioItem(content = "IATA flight number".toText, id = Some("value"), value = Some("iataFlightNumber"), checked = false),
+            RadioItem(content = "Registration number of an aircraft".toText, id = Some("value_1"), value = Some("regNumberAircraft"), checked = false)
+          )
+
+          val updatedUserAnswers = emptyUserAnswers
+            .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Air)
+
+          setExistingUserAnswers(updatedUserAnswers)
+
+          val request = FakeRequest(GET, identificationRoute)
+
+          val result = route(app, request).value
+
+          val view = injector.instanceOf[IdentificationView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(form, lrn, (_, _) => radioItems, mode, activeIndex)(request, messages).toString
+        }
+
+        "when BorderModeOfTransport is 'Mail'" in {
+
+          val radioItems: Seq[RadioItem] = Seq(
+            RadioItem(content = "IMO ship identification number".toText, id = Some("value"), value = Some("imoShipIdNumber"), checked = false),
+            RadioItem(content = "Name of a sea-going vessel".toText, id = Some("value_1"), value = Some("seaGoingVessel"), checked = false),
+            RadioItem(content = "Train number".toText, id = Some("value_2"), value = Some("trainNumber"), checked = false),
+            RadioItem(content = "Registration number of a road vehicle".toText, id = Some("value_3"), value = Some("regNumberRoadVehicle"), checked = false),
+            RadioItem(content = "IATA flight number".toText, id = Some("value_4"), value = Some("iataFlightNumber"), checked = false),
+            RadioItem(content = "Registration number of an aircraft".toText, id = Some("value_5"), value = Some("regNumberAircraft"), checked = false),
+            RadioItem(content = "European vessel identification number (ENI code)".toText,
+                      id = Some("value_6"),
+                      value = Some("europeanVesselIdNumber"),
+                      checked = false
+            ),
+            RadioItem(content = "Name of an inland waterways vehicle".toText, id = Some("value_7"), value = Some("inlandWaterwaysVehicle"), checked = false)
+          )
+
+          val updatedUserAnswers = emptyUserAnswers
+            .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Mail)
+
+          setExistingUserAnswers(updatedUserAnswers)
+
+          val request = FakeRequest(GET, identificationRoute)
+
+          val result = route(app, request).value
+
+          val view = injector.instanceOf[IdentificationView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(form, lrn, (_, _) => radioItems, mode, activeIndex)(request, messages).toString
+        }
+
+        "when BorderModeOfTransport is 'Fixed'" in {
+
+          val radioItems: Seq[RadioItem] = Seq(
+            RadioItem(content = "IMO ship identification number".toText, id = Some("value"), value = Some("imoShipIdNumber"), checked = false),
+            RadioItem(content = "Name of a sea-going vessel".toText, id = Some("value_1"), value = Some("seaGoingVessel"), checked = false),
+            RadioItem(content = "Train number".toText, id = Some("value_2"), value = Some("trainNumber"), checked = false),
+            RadioItem(content = "Registration number of a road vehicle".toText, id = Some("value_3"), value = Some("regNumberRoadVehicle"), checked = false),
+            RadioItem(content = "IATA flight number".toText, id = Some("value_4"), value = Some("iataFlightNumber"), checked = false),
+            RadioItem(content = "Registration number of an aircraft".toText, id = Some("value_5"), value = Some("regNumberAircraft"), checked = false),
+            RadioItem(content = "European vessel identification number (ENI code)".toText,
+                      id = Some("value_6"),
+                      value = Some("europeanVesselIdNumber"),
+                      checked = false
+            ),
+            RadioItem(content = "Name of an inland waterways vehicle".toText, id = Some("value_7"), value = Some("inlandWaterwaysVehicle"), checked = false)
+          )
+
+          val updatedUserAnswers = emptyUserAnswers
+            .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Fixed)
+
+          setExistingUserAnswers(updatedUserAnswers)
+
+          val request = FakeRequest(GET, identificationRoute)
+
+          val result = route(app, request).value
+
+          val view = injector.instanceOf[IdentificationView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(form, lrn, (_, _) => radioItems, mode, activeIndex)(request, messages).toString
+        }
+
+        "when BorderModeOfTransport is 'Waterway'" in {
+
+          val radioItems: Seq[RadioItem] = Seq(
+            RadioItem(content = "European vessel identification number (ENI code)".toText,
+                      id = Some("value"),
+                      value = Some("europeanVesselIdNumber"),
+                      checked = false
+            ),
+            RadioItem(content = "Name of an inland waterways vehicle".toText, id = Some("value_1"), value = Some("inlandWaterwaysVehicle"), checked = false)
+          )
+
+          val updatedUserAnswers = emptyUserAnswers
+            .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Waterway)
+
+          setExistingUserAnswers(updatedUserAnswers)
+
+          val request = FakeRequest(GET, identificationRoute)
+
+          val result = route(app, request).value
+
+          val view = injector.instanceOf[IdentificationView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(form, lrn, (_, _) => radioItems, mode, activeIndex)(request, messages).toString
+        }
+      }
+
+      "at index position '1'" in {
+        val radioItems: Seq[RadioItem] = Seq(
+          RadioItem(content = "IMO ship identification number".toText, id = Some("value"), value = Some("imoShipIdNumber"), checked = false),
+          RadioItem(content = "Name of a sea-going vessel".toText, id = Some("value_1"), value = Some("seaGoingVessel"), checked = false),
+          RadioItem(content = "Train number".toText, id = Some("value_2"), value = Some("trainNumber"), checked = false),
+          RadioItem(content = "Registration number of a road vehicle".toText, id = Some("value_3"), value = Some("regNumberRoadVehicle"), checked = false),
+          RadioItem(content = "IATA flight number".toText, id = Some("value_4"), value = Some("iataFlightNumber"), checked = false),
+          RadioItem(content = "Registration number of an aircraft".toText, id = Some("value_5"), value = Some("regNumberAircraft"), checked = false),
+          RadioItem(content = "European vessel identification number (ENI code)".toText,
+                    id = Some("value_6"),
+                    value = Some("europeanVesselIdNumber"),
+                    checked = false
+          ),
+          RadioItem(content = "Name of an inland waterways vehicle".toText, id = Some("value_7"), value = Some("inlandWaterwaysVehicle"), checked = false)
+        )
+
+        val updatedUserAnswers = emptyUserAnswers
+          .setValue(BorderModeOfTransportPage, arbitraryBorderModeOfTransport.arbitrary.sample.get)
+
+        setExistingUserAnswers(updatedUserAnswers)
+
+        val request = FakeRequest(GET, routes.IdentificationController.onPageLoad(lrn, mode, Index(1)).url)
+
+        val result = route(app, request).value
+
+        val view = injector.instanceOf[IdentificationView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form, lrn, (_, _) => radioItems, mode, Index(1))(request, messages).toString
+      }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(IdentificationPage(activeIndex), Identification.values.head)
+      val radioItems: Seq[RadioItem] = Seq(
+        RadioItem(content = "IMO ship identification number".toText, id = Some("value"), value = Some("imoShipIdNumber"), checked = false),
+        RadioItem(content = "Name of a sea-going vessel".toText, id = Some("value_1"), value = Some("seaGoingVessel"), checked = false),
+        RadioItem(content = "Train number".toText, id = Some("value_2"), value = Some("trainNumber"), checked = true),
+        RadioItem(content = "Registration number of a road vehicle".toText, id = Some("value_3"), value = Some("regNumberRoadVehicle"), checked = false),
+        RadioItem(content = "IATA flight number".toText, id = Some("value_4"), value = Some("iataFlightNumber"), checked = false),
+        RadioItem(content = "Registration number of an aircraft".toText, id = Some("value_5"), value = Some("regNumberAircraft"), checked = false),
+        RadioItem(content = "European vessel identification number (ENI code)".toText,
+                  id = Some("value_6"),
+                  value = Some("europeanVesselIdNumber"),
+                  checked = false
+        ),
+        RadioItem(content = "Name of an inland waterways vehicle".toText, id = Some("value_7"), value = Some("inlandWaterwaysVehicle"), checked = false)
+      )
+
+      val userAnswers = emptyUserAnswers.setValue(IdentificationPage(activeIndex), Identification.TrainNumber)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, identificationRoute)
@@ -78,7 +263,7 @@ class IdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, Identification.radioItems, mode, activeIndex)(request, messages).toString
+        view(filledForm, lrn, (_, _) => radioItems, mode, activeIndex)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -99,6 +284,21 @@ class IdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtu
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
+      val radioItems: Seq[RadioItem] = Seq(
+        RadioItem(content = "IMO ship identification number".toText, id = Some("value"), value = Some("imoShipIdNumber"), checked = false),
+        RadioItem(content = "Name of a sea-going vessel".toText, id = Some("value_1"), value = Some("seaGoingVessel"), checked = false),
+        RadioItem(content = "Train number".toText, id = Some("value_2"), value = Some("trainNumber"), checked = false),
+        RadioItem(content = "Registration number of a road vehicle".toText, id = Some("value_3"), value = Some("regNumberRoadVehicle"), checked = false),
+        RadioItem(content = "IATA flight number".toText, id = Some("value_4"), value = Some("iataFlightNumber"), checked = false),
+        RadioItem(content = "Registration number of an aircraft".toText, id = Some("value_5"), value = Some("regNumberAircraft"), checked = false),
+        RadioItem(content = "European vessel identification number (ENI code)".toText,
+                  id = Some("value_6"),
+                  value = Some("europeanVesselIdNumber"),
+                  checked = false
+        ),
+        RadioItem(content = "Name of an inland waterways vehicle".toText, id = Some("value_7"), value = Some("inlandWaterwaysVehicle"), checked = false)
+      )
+
       setExistingUserAnswers(emptyUserAnswers)
 
       val request   = FakeRequest(POST, identificationRoute).withFormUrlEncodedBody(("value", "invalid value"))
@@ -111,7 +311,7 @@ class IdentificationControllerSpec extends SpecBase with AppWithDefaultMockFixtu
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, Identification.radioItems, mode, activeIndex)(request, messages).toString
+        view(boundForm, lrn, (_, _) => radioItems, mode, activeIndex)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

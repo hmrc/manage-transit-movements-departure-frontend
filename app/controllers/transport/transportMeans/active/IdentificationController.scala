@@ -20,13 +20,15 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
 import models.transport.transportMeans.active.Identification
-import models.{Index, LocalReferenceNumber, Mode}
+import models.{Index, LocalReferenceNumber, Mode, UserAnswers}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansActiveNavigatorProvider
+import pages.transport.transportMeans.BorderModeOfTransportPage
 import pages.transport.transportMeans.active.IdentificationPage
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.transport.transportMeans.active.IdentificationView
 
@@ -54,7 +56,7 @@ class IdentificationController @Inject() (
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, lrn, Identification.radioItems, mode, activeIndex))
+      Ok(view(preparedForm, lrn, radioOptions(request.userAnswers, activeIndex), mode, activeIndex))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn).async {
@@ -62,11 +64,24 @@ class IdentificationController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, Identification.radioItems, mode, activeIndex))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, radioOptions(request.userAnswers, activeIndex), mode, activeIndex))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, activeIndex)
             IdentificationPage(activeIndex).writeToUserAnswers(value).writeToSession().navigate()
           }
         )
   }
+
+  private def radioOptions(ua: UserAnswers, index: Index)(implicit messages: Messages): (String, Option[Identification]) => Seq[RadioItem] =
+    if (index.isFirst) {
+      ua.get(BorderModeOfTransportPage).map(_.borderModeType) match {
+        case Some(borderModeType) if borderModeType != 5 && borderModeType != 7 =>
+          val filteredValues = Identification.values.filter(_.borderModeType.toString.startsWith(borderModeType.toString))
+          Identification.radioItems(filteredValues, _, _)
+        case _ =>
+          Identification.radioItems
+      }
+    } else {
+      Identification.radioItems
+    }
 }

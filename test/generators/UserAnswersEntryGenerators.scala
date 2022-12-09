@@ -19,6 +19,7 @@ package generators
 import models._
 import models.reference._
 import models.traderDetails.representative.RepresentativeCapacity
+import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.departure.{Identification, InlandMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -265,9 +266,13 @@ trait UserAnswersEntryGenerators {
     }
   }
 
-  private def generateTransportMeansAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
+  private def generateTransportMeansAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.transportMeans.BorderModeOfTransportPage
     generateTransportMeansDepartureAnswer orElse
-      generateTransportMeansActiveAnswer
+      generateTransportMeansActiveAnswer orElse {
+        case BorderModeOfTransportPage => arbitrary[BorderModeOfTransport].map(Json.toJson(_))
+      }
+  }
 
   private def generateTransportMeansDepartureAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.transportMeans.departure._

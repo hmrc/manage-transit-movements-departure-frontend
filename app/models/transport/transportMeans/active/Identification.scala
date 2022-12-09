@@ -18,25 +18,43 @@ package models.transport.transportMeans.active
 
 import models.{RadioModel, WithName}
 
-sealed trait Identification
+sealed trait Identification {
+  val borderModeType: Int
+}
 
 object Identification extends RadioModel[Identification] {
 
-  case object ImoShipIdNumber extends WithName("imoShipIdNumber") with Identification
+  case object ImoShipIdNumber extends WithName("imoShipIdNumber") with Identification {
+    override val borderModeType: Int = 10
+  }
 
-  case object SeaGoingVessel extends WithName("seaGoingVessel") with Identification
+  case object SeaGoingVessel extends WithName("seaGoingVessel") with Identification {
+    override val borderModeType: Int = 11
+  }
 
-  case object TrainNumber extends WithName("trainNumber") with Identification
+  case object TrainNumber extends WithName("trainNumber") with Identification {
+    override val borderModeType: Int = 21
+  }
 
-  case object RegNumberRoadVehicle extends WithName("regNumberRoadVehicle") with Identification
+  case object RegNumberRoadVehicle extends WithName("regNumberRoadVehicle") with Identification {
+    override val borderModeType: Int = 30
+  }
 
-  case object IataFlightNumber extends WithName("iataFlightNumber") with Identification
+  case object IataFlightNumber extends WithName("iataFlightNumber") with Identification {
+    override val borderModeType: Int = 40
+  }
 
-  case object RegNumberAircraft extends WithName("regNumberAircraft") with Identification
+  case object RegNumberAircraft extends WithName("regNumberAircraft") with Identification {
+    override val borderModeType: Int = 41
+  }
 
-  case object EuropeanVesselIdNumber extends WithName("europeanVesselIdNumber") with Identification
+  case object EuropeanVesselIdNumber extends WithName("europeanVesselIdNumber") with Identification {
+    override val borderModeType: Int = 80
+  }
 
-  case object InlandWaterwaysVehicle extends WithName("inlandWaterwaysVehicle") with Identification
+  case object InlandWaterwaysVehicle extends WithName("inlandWaterwaysVehicle") with Identification {
+    override val borderModeType: Int = 81
+  }
 
   override val messageKeyPrefix: String = "transport.transportMeans.active.identification"
 

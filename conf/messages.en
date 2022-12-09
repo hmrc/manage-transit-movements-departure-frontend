@@ -1143,6 +1143,18 @@ transport.transportMeans.anotherVehicleCrossingYesNo.paragraph = This includes u
 transport.transportMeans.anotherVehicleCrossingYesNo.checkYourAnswersLabel = Are you using another vehicle to cross the border?
 transport.transportMeans.anotherVehicleCrossingYesNo.error.required = Select yes if the vehicle will change before crossing the border
 
+transport.transportMeans.borderModeOfTransport.title = Which mode of transport are you using to cross the border?
+transport.transportMeans.borderModeOfTransport.heading = Which mode of transport are you using to cross the border?
+transport.transportMeans.borderModeOfTransport.maritime = Maritime
+transport.transportMeans.borderModeOfTransport.rail = Rail
+transport.transportMeans.borderModeOfTransport.road = Road
+transport.transportMeans.borderModeOfTransport.air = Air
+transport.transportMeans.borderModeOfTransport.mail = Mail (active mode of transport unknown)
+transport.transportMeans.borderModeOfTransport.fixed = Fixed transport installations - pipelines or electric power lines used for the continuous transport of goods
+transport.transportMeans.borderModeOfTransport.waterway = Inland waterway
+transport.transportMeans.borderModeOfTransport.checkYourAnswersLabel = Which mode of transport are you using to cross the border?
+transport.transportMeans.borderModeOfTransport.error.required = Select which mode of transport you’re using to cross the border
+
 transport.transportMeans.active.identification.title = Which identification do you want to use for this vehicle?
 transport.transportMeans.active.identification.heading = Which identification do you want to use for this vehicle?
 transport.transportMeans.active.identification.imoShipIdNumber = IMO ship identification number
