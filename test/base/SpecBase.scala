@@ -67,7 +67,7 @@ trait SpecBase
   def messagesApi: MessagesApi    = injector.instanceOf[MessagesApi]
   implicit def messages: Messages = messagesApi.preferred(fakeRequest)
 
-  implicit def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
+  def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
 
   implicit class RichUserAnswers(userAnswers: UserAnswers) {
 

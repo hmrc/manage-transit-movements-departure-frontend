@@ -18,6 +18,7 @@ package views.transport.transportMeans.active
 
 import forms.AddAnotherFormProvider
 import models.Mode
+import config.FrontendAppConfig
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -26,6 +27,8 @@ import views.behaviours.ListWithActionsViewBehaviours
 import views.html.transport.transportMeans.active.AddAnotherBorderTransportView
 
 class AddAnotherBorderTransportViewSpec extends ListWithActionsViewBehaviours {
+
+  implicit override def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
 
   override def maxNumber: Int = frontendAppConfig.maxActiveBorderTransports
 
