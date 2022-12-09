@@ -21,7 +21,6 @@ import models.transport.transportMeans.BorderModeOfTransport
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 import pages.sections.transport.TransportMeansActiveSection
-import pages.transport.transportMeans.active.IdentificationPage
 import play.api.libs.json.Json
 
 class BorderModeOfTransportPageSpec extends PageBehaviours {

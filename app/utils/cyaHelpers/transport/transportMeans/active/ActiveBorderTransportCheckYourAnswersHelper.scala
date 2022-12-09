@@ -16,6 +16,7 @@
 
 package utils.cyaHelpers.transport.transportMeans.active
 
+import controllers.transport.transportMeans.active.routes
 import models.journeyDomain.transport.TransportMeansActiveDomain
 import models.transport.transportMeans.active.Identification
 import models.{Mode, UserAnswers}
@@ -35,7 +36,7 @@ class ActiveBorderTransportCheckYourAnswersHelper(userAnswers: UserAnswers, mode
         val removeRoute: Option[Call] = if (userAnswers.get(AnotherVehicleCrossingYesNoPage).isEmpty && index.isFirst) {
           None
         } else {
-          Some(controllers.routes.SessionExpiredController.onPageLoad()) // TODO: Add remove page
+          Some(routes.ConfirmRemoveBorderTransportController.onPageLoad(lrn, mode, index))
         }
 
         buildListItem[TransportMeansActiveDomain, Identification](
