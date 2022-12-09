@@ -18,9 +18,9 @@ package controllers.transport.transportMeans.active
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.NationalityFormProvider
-import models.{NationalityList, NormalMode}
 import generators.Generators
-import navigation.transport.TransportMeansNavigatorProvider
+import models.{NationalityList, NormalMode}
+import navigation.transport.TransportMeansActiveNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.transport.transportMeans.active.NationalityPage
@@ -49,7 +49,7 @@ class NationalityControllerSpec extends SpecBase with AppWithDefaultMockFixtures
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[TransportMeansNavigatorProvider]).toInstance(fakeTransportMeansNavigatorProvider))
+      .overrides(bind(classOf[TransportMeansActiveNavigatorProvider]).toInstance(fakeTransportMeansActiveNavigatorProvider))
       .overrides(bind(classOf[NationalitiesService]).toInstance(mockNationalitiesService))
 
   "Nationality Controller" - {

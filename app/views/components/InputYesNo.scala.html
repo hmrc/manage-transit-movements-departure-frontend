@@ -52,6 +52,7 @@
 }
 
 @yesNoType match {
+
     case OrdinaryYesNo(heading, caption) => {
         @govukRadios(radios.withHeadingAndCaption(heading, caption))
     }

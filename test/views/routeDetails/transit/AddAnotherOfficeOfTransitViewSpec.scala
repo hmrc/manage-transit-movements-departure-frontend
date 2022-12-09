@@ -50,9 +50,9 @@ class AddAnotherOfficeOfTransitViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Route details - Office of transit")
 
-  behave like pageWithMoreItemsAllowed()
+  behave like pageWithMoreItemsAllowed(listItems.length)()
 
-  behave like pageWithItemsMaxedOut()
+  behave like pageWithItemsMaxedOut(maxedOutListItems.length)
 
   behave like pageWithSubmitButton("Continue")
 }

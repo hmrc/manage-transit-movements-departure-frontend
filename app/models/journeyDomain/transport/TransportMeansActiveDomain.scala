@@ -17,9 +17,11 @@
 package models.journeyDomain.transport
 
 import cats.implicits._
-import models.Index
+import models.{Index, Mode, UserAnswers}
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
+import models.journeyDomain.Stage.{AccessingJourney, CompletingJourney}
+import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{CustomsOffice, Nationality}
 import models.transport.transportMeans.BorderModeOfTransport._
 import models.transport.transportMeans.active.Identification
@@ -27,6 +29,8 @@ import models.transport.transportMeans.active.Identification.{RegNumberRoadVehic
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.transport.transportMeans.BorderModeOfTransportPage
 import pages.transport.transportMeans.active._
+import play.api.i18n.Messages
+import play.api.mvc.Call
 
 case class TransportMeansActiveDomain(
   identification: Identification,
@@ -34,9 +38,26 @@ case class TransportMeansActiveDomain(
   nationality: Option[Nationality],
   customsOffice: CustomsOffice,
   conveyanceReferenceNumber: Option[String]
-)
+) extends JourneyDomainModel {
+
+  def asString(implicit messages: Messages): String =
+    TransportMeansActiveDomain.asString(identification, identificationNumber)
+
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some {
+    stage match {
+      case AccessingJourney =>
+        // TODO - Redirect to active border loop CYA page has been implemented so change links on add another border page work
+        controllers.routes.SessionExpiredController.onPageLoad()
+      case CompletingJourney =>
+        controllers.transport.transportMeans.active.routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode)
+    }
+  }
+}
 
 object TransportMeansActiveDomain {
+
+  def asString(identification: Identification, identificationNumber: String)(implicit messages: Messages): String =
+    messages(s"transport.transportMeans.active.identification.${identification.toString}").concat(s" - $identificationNumber")
 
   def userAnswersReader(index: Index): UserAnswersReader[TransportMeansActiveDomain] = {
     val identificationReads: UserAnswersReader[Identification] = {

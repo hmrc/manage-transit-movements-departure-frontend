@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.NationalityFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
-import navigation.transport.TransportMeansNavigatorProvider
+import navigation.transport.TransportMeansActiveNavigatorProvider
 import pages.transport.transportMeans.active.NationalityPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class NationalityController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: TransportMeansNavigatorProvider,
+  navigatorProvider: TransportMeansActiveNavigatorProvider,
   actions: Actions,
   formProvider: NationalityFormProvider,
   service: NationalitiesService,
@@ -70,7 +70,7 @@ class NationalityController @Inject() (
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, nationalityList.nationalities, mode, index))),
               value => {
-                implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index)
                 NationalityPage(index).writeToUserAnswers(value).writeToSession().navigate()
               }
             )
