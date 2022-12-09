@@ -21,7 +21,7 @@ import generators.Generators
 import models.NormalMode
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class ActiveBorderTransportCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class ActiveBordersTransportCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "ActiveBorderTransportCheckYourAnswersHelperSpec" - {
 
@@ -29,7 +29,7 @@ class ActiveBorderTransportCheckYourAnswersHelperSpec extends SpecBase with Scal
       "must return empty list of list items" in {
         val userAnswers = emptyUserAnswers
 
-        val helper = new ActiveBorderTransportCheckYourAnswersHelper(userAnswers, NormalMode)
+        val helper = new ActiveBordersTransportCheckYourAnswersHelper(userAnswers, NormalMode)
         helper.listItems mustBe Nil
       }
     }

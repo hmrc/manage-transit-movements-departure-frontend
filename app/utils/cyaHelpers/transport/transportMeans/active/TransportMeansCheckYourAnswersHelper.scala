@@ -18,10 +18,8 @@ package utils.cyaHelpers.transport.transportMeans.active
 
 import models.reference.{CustomsOffice, Nationality}
 import models.transport.transportMeans.active.{Identification => ActiveIdentification}
-import models.transport.transportMeans.departure.{Identification, InlandMode, Identification => DepartureIdentification}
+import models.transport.transportMeans.departure.{InlandMode, Identification => DepartureIdentification}
 import models.{Index, Mode, UserAnswers}
-import pages.transport.transportMeans.active._
-import pages.transport.transportMeans.departure._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
@@ -29,78 +27,78 @@ import utils.cyaHelpers.AnswersHelper
 class TransportMeansCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
   def inlandMode: Option[SummaryListRow] = getAnswerAndBuildRow[InlandMode](
-    page = InlandModePage,
-    formatAnswer =  formatEnumAsText(InlandMode.messageKeyPrefix),
+    page = pages.transport.transportMeans.departure.InlandModePage,
+    formatAnswer = formatAsText,
     prefix = "transport.transportMeans.departure.inlandMode",
-    id = Some("change-transport-means-inlandMode")
+    id = Some("change-transport-means-inland-mode")
   )
 
-  def  departureIdentificationType: Option[SummaryListRow] = getAnswerAndBuildRow[DepartureIdentification](
-    page = IdentificationPage,
-    formatAnswer = formatEnumAsText(Identification.messageKeyPrefix),
-    prefix = "transport.transportMeans.departure.identification",
+  def departureIdentificationType: Option[SummaryListRow] = getAnswerAndBuildRow[DepartureIdentification](
+    page = pages.transport.transportMeans.departure.IdentificationPage,
+    formatAnswer = formatAsText,
+    prefix = "transport.transportMeans.transportMeansCheckYourAnswers.means.identificationType",
     id = Some("change-transport-means-identification")
   )
 
   def departureIdentificationNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
-    page = MeansIdentificationNumberPage,
-    formatAnswer = formatEnumAsText(Identification.messageKeyPrefix),
+    page = pages.transport.transportMeans.departure.MeansIdentificationNumberPage,
+    formatAnswer = formatEnumAsText(DepartureIdentification.messageKeyPrefix),
     prefix = "transport.transportMeans.departure.meansIdentificationNumber",
     id = Some("change-transport-means-identification-number")
   )
 
   def departureNationality: Option[SummaryListRow] = getAnswerAndBuildRow[Nationality](
-    page = VehicleCountryPage,
-    formatAnswer = formatEnumAsText(Identification.messageKeyPrefix),
+    page = pages.transport.transportMeans.departure.VehicleCountryPage,
+    formatAnswer = formatEnumAsText(DepartureIdentification.messageKeyPrefix),
     prefix = "transport.transportMeans.departure.vehicleNationality",
     id = Some("change-transport-means-vehicle-nationality")
   )
 
   def activeBorderIdentificationType(index: Index): Option[SummaryListRow] = getAnswerAndBuildRow[ActiveIdentification](
     page = pages.transport.transportMeans.active.IdentificationPage(index),
-    formatAnswer = formatEnumAsText(Identification.messageKeyPrefix),
+    formatAnswer = formatEnumAsText(ActiveIdentification.messageKeyPrefix),
     prefix = "transport.transportMeans.active.identification",
     id = Some("change-transport-means-identification")
   )
 
   def activeBorderIdentificationNumber(index: Index): Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = pages.transport.transportMeans.active.IdentificationNumberPage(index),
-    formatAnswer = formatEnumAsText(Identification.messageKeyPrefix),
+    formatAnswer = formatEnumAsText(ActiveIdentification.messageKeyPrefix),
     prefix = "transport.transportMeans.active.meansIdentificationNumber",
     id = Some("change-transport-means-identification-number")
   )
 
-  def activeBorderNationality(index: Index): Option[SummaryListRow] = getAnswerAndBuildRow[Nationality](
-    page = pages.transport.transportMeans.active.NationalityPage(index),
-    formatAnswer = formatEnumAsText(Identification.messageKeyPrefix),
-    prefix = "transport.transportMeans.active.vehicleNationality",
-    id = Some("change-transport-means-vehicle-nationality")
-  )
-
   def activeBorderAddNationality(index: Index): Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = pages.transport.transportMeans.active.AddNationalityYesNoPage(index),
-    formatAnswer = formatEnumAsText(Identification.messageKeyPrefix),
+    formatAnswer = formatEnumAsText(ActiveIdentification.messageKeyPrefix),
     prefix = "transport.transportMeans.active.addNationalityYesNo",
     id = Some("change-add-transport-means-vehicle-nationality")
   )
 
+  def activeBorderNationality(index: Index): Option[SummaryListRow] = getAnswerAndBuildRow[Nationality](
+    page = pages.transport.transportMeans.active.NationalityPage(index),
+    formatAnswer = formatEnumAsText(ActiveIdentification.messageKeyPrefix),
+    prefix = "transport.transportMeans.active.vehicleNationality",
+    id = Some("change-transport-means-vehicle-nationality")
+  )
+
   def customsOfficeAtBorder(index: Index): Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
     page = pages.transport.transportMeans.active.CustomsOfficeActiveBorderPage(index),
-    formatAnswer = formatEnumAsText(Identification.messageKeyPrefix),
+    formatAnswer = formatEnumAsText(ActiveIdentification.messageKeyPrefix),
     prefix = "transport.transportMeans.active.customsOfficeActiveBorder",
     id = Some("change-transport-means-customs-office-at-border")
   )
 
-  def activeBorderConveyanceReferenceNumber(index: Index): Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+  def activeBorderConveyanceReferenceNumberYesNo(index: Index): Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = pages.transport.transportMeans.active.ConveyanceReferenceNumberYesNoPage(index),
-    formatAnswer = formatEnumAsText(Identification.messageKeyPrefix),
+    formatAnswer = formatEnumAsText(ActiveIdentification.messageKeyPrefix),
     prefix = "transport.transportMeans.active.conveyanceReferenceNumberYesNo",
     id = Some("change-add-transport-means-conveyance-reference-number")
   )
 
   def conveyanceReferenceNumber(index: Index): Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = pages.transport.transportMeans.active.ConveyanceReferenceNumberPage(index),
-    formatAnswer = formatEnumAsText(Identification.messageKeyPrefix),
+    formatAnswer = formatEnumAsText(ActiveIdentification.messageKeyPrefix),
     prefix = "transport.transportMeans.active.conveyanceReferenceNumber",
     id = Some("change-transport-means-conveyance-reference-number")
   )

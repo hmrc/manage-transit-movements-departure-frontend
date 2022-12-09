@@ -1092,6 +1092,7 @@ transport.transportMeans.departure.inlandMode.waterway = Inland waterway
 transport.transportMeans.departure.inlandMode.unknown = Unknown (own propulsion)
 transport.transportMeans.departure.inlandMode.checkYourAnswersLabel = Which inland mode of transport are you using?
 transport.transportMeans.departure.inlandMode.error.required = Select which inland mode of transport you’re using
+transport.transportMeans.departure.inlandMode.hidden = which inland mode of transport you’re using
 
 transport.transportMeans.departure.identification.title = Which identification do you want to use for this vehicle?
 transport.transportMeans.departure.identification.heading = Which identification do you want to use for this vehicle?
@@ -1225,13 +1226,13 @@ transport.transportMeans.transportMeansCheckYourAnswers.heading = Check your ans
 transport.transportMeans.transportMeansCheckYourAnswers.label.mode = Mode
 
 transport.transportMeans.transportMeansCheckYourAnswers.inlandMode.h2 = Inland mode of transport
-transport.transportMeans.transportMeansCheckYourAnswers.inlandMode.hidden = inland mode of transport
+transport.transportMeans.departure.inlandMode.change.hidden = which inland mode of transport you’re using
 
 transport.transportMeans.transportMeansCheckYourAnswers.means.h2 = Departure means of transport
 transport.transportMeans.transportMeansCheckYourAnswers.means.identificationType.label = Identification type
-transport.transportMeans.transportMeansCheckYourAnswers.means.identificationType.hidden = identification type for the departure means of transport
-transport.transportMeans.transportMeansCheckYourAnswers.means.identificationNumber.label = Identification number
-transport.transportMeans.transportMeansCheckYourAnswers.means.identificationNumber.hidden = identification number for the departure means of transport
+transport.transportMeans.transportMeansCheckYourAnswers.means.identificationType.change.hidden= identification type for the departure means of transport
+transport.transportMeans.transportMeansCheckYourAnswers.means.identificationType.checkYourAnswersLabel = Identification type
+transport.transportMeans.transportMeansCheckYourAnswers.means.identificationNumber.change.hidden = identification number for the departure means of transport
 transport.transportMeans.transportMeansCheckYourAnswers.means.country.label = Registered country
 transport.transportMeans.transportMeansCheckYourAnswers.means.country.label = registered country for the departure means of transport
 
@@ -1239,9 +1240,10 @@ transport.transportMeans.transportMeansCheckYourAnswers.border.h2 = Border mode 
 transport.transportMeans.transportMeansCheckYourAnswers.borderMode.h2 = Border mode of transport
 transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.h2 = Border means of transport {0}
 transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationType.label = Identification type
-transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationType.hidden = identification type for the border means of transport
+transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationType.checkYourAnswersLabel = Identification type
+transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationType.change.hidden = identification type for the border means of transport
 transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationNumber.label = Identification number
-transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationNumber.hidden =  identification number for the border means of transport
+transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationNumber.change.hidden = identification number for the border means of transport
 transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.country.label = Registered country
-transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.country.hidden = registered country for the border means of transport
+transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.country.change.hidden = registered country for the border means of transport
 transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.officeOfTransit.label = office of transit for the border means of transport
