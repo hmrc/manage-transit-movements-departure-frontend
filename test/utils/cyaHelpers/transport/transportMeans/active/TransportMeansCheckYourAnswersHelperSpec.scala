@@ -19,10 +19,26 @@ package utils.cyaHelpers.transport.transportMeans.active
 import base.SpecBase
 import generators.Generators
 import models.Mode
+import models.reference.{CustomsOffice, Nationality}
 import models.transport.transportMeans.departure.{InlandMode, Identification => DepartureIdentification}
+import models.transport.transportMeans.active.{Identification => ActiveIdentification}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.transport.transportMeans.departure.{InlandModePage, IdentificationPage => DepartureIdentificationPage}
+import pages.transport.transportMeans.active.{
+  AddNationalityYesNoPage,
+  ConveyanceReferenceNumberPage,
+  ConveyanceReferenceNumberYesNoPage,
+  CustomsOfficeActiveBorderPage,
+  IdentificationNumberPage,
+  IdentificationPage,
+  NationalityPage
+}
+import pages.transport.transportMeans.departure.{
+  InlandModePage,
+  MeansIdentificationNumberPage,
+  VehicleCountryPage,
+  IdentificationPage => DepartureIdentificationPage
+}
 import uk.gov.hmrc.govukfrontend.views.Aliases.{Key, SummaryListRow, Value}
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions}
@@ -116,565 +132,399 @@ class TransportMeansCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
         }
       }
     }
-    //
-    //    "customsOfficeIdentifier" - {
-    //      "must return None" - {
-    //        "when customsOfficeIdentifierPage is undefined" in {
-    //          forAll(arbitrary[Mode]) {
-    //            mode =>
-    //              val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-    //              val result = helper.customsOfficeIdentifier
-    //              result mustBe None
-    //          }
-    //        }
-    //      }
-    //
-    //      "must return Some(Row)" - {
-    //        "when customsOfficeIdentifierPage is defined" in {
-    //          forAll(arbitrary[Mode], arbitrary[CustomsOffice]) {
-    //            (mode, customsOffice) =>
-    //              val answers = emptyUserAnswers.setValue(CustomsOfficeIdentifierPage, customsOffice)
-    //              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-    //              val result  = helper.customsOfficeIdentifier
-    //
-    //              result mustBe Some(
-    //                SummaryListRow(
-    //                  key = Key("What is the customs office identifier for the location of goods?".toText),
-    //                  value = Value(customsOffice.toString.toText),
-    //                  actions = Some(
-    //                    Actions(
-    //                      items = List(
-    //                        ActionItem(
-    //                          content = "Change".toText,
-    //                          href = routes.CustomsOfficeIdentifierController.onPageLoad(answers.lrn, mode).url,
-    //                          visuallyHiddenText = Some("the customs office identifier for the location of goods"),
-    //                          attributes = Map("id" -> "change-location-of-goods-customs-office-identifier")
-    //                        )
-    //                      )
-    //                    )
-    //                  )
-    //                )
-    //              )
-    //          }
-    //        }
-    //      }
-    //    }
-    //
-    //    "eori" - {
-    //      "must return None" - {
-    //        "when eoriPage is undefined" in {
-    //          forAll(arbitrary[Mode]) {
-    //            mode =>
-    //              val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-    //              val result = helper.eori
-    //              result mustBe None
-    //          }
-    //        }
-    //      }
-    //
-    //      "must return Some(Row)" - {
-    //        "when eoriPage is defined" in {
-    //          forAll(arbitrary[Mode], arbitrary[String]) {
-    //            (mode, eori) =>
-    //              val answers = emptyUserAnswers.setValue(EoriPage, eori)
-    //              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-    //              val result  = helper.eori
-    //
-    //              result mustBe Some(
-    //                SummaryListRow(
-    //                  key = Key("EORI number or Trader Identification Number (TIN) for the location of goods".toText),
-    //                  value = Value(eori.toText),
-    //                  actions = Some(
-    //                    Actions(
-    //                      items = List(
-    //                        ActionItem(
-    //                          content = "Change".toText,
-    //                          href = routes.EoriController.onPageLoad(answers.lrn, mode).url,
-    //                          visuallyHiddenText = Some("EORI number or Trader Identification Number (TIN) for the location of goods"),
-    //                          attributes = Map("id" -> "change-location-of-goods-eori")
-    //                        )
-    //                      )
-    //                    )
-    //                  )
-    //                )
-    //              )
-    //          }
-    //        }
-    //      }
-    //    }
-    //
-    //    "authorisationNumber" - {
-    //      "must return None" - {
-    //        "when authorisationNumberPage is undefined" in {
-    //          forAll(arbitrary[Mode]) {
-    //            mode =>
-    //              val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-    //              val result = helper.authorisationNumber
-    //              result mustBe None
-    //          }
-    //        }
-    //      }
-    //
-    //      "must return Some(Row)" - {
-    //        "when authorisationNumberPage is defined" in {
-    //          forAll(arbitrary[Mode], arbitrary[String]) {
-    //            (mode, authorisationNumber) =>
-    //              val answers = emptyUserAnswers.setValue(AuthorisationNumberPage, authorisationNumber)
-    //              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-    //              val result  = helper.authorisationNumber
-    //
-    //              result mustBe Some(
-    //                SummaryListRow(
-    //                  key = Key("What is the authorisation number for the location of goods?".toText),
-    //                  value = Value(authorisationNumber.toText),
-    //                  actions = Some(
-    //                    Actions(
-    //                      items = List(
-    //                        ActionItem(
-    //                          content = "Change".toText,
-    //                          href = routes.AuthorisationNumberController.onPageLoad(answers.lrn, mode).url,
-    //                          visuallyHiddenText = Some("the authorisation number for the location of goods"),
-    //                          attributes = Map("id" -> "change-location-of-goods-authorisation-number")
-    //                        )
-    //                      )
-    //                    )
-    //                  )
-    //                )
-    //              )
-    //          }
-    //        }
-    //      }
-    //    }
-    //
-    //    "coordinates" - {
-    //      "must return None" - {
-    //        "when coordinatesPage is undefined" in {
-    //          forAll(arbitrary[Mode]) {
-    //            mode =>
-    //              val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-    //              val result = helper.coordinates
-    //              result mustBe None
-    //          }
-    //        }
-    //      }
-    //
-    //      "must return Some(Row)" - {
-    //        "when coordinatesPage is defined" in {
-    //          forAll(arbitrary[Mode], arbitrary[Coordinates]) {
-    //            (mode, coordinates) =>
-    //              val answers = emptyUserAnswers.setValue(CoordinatesPage, coordinates)
-    //              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-    //              val result  = helper.coordinates
-    //
-    //              result mustBe Some(
-    //                SummaryListRow(
-    //                  key = Key("Coordinates".toText),
-    //                  value = Value(coordinates.toString.toText),
-    //                  actions = Some(
-    //                    Actions(
-    //                      items = List(
-    //                        ActionItem(
-    //                          content = "Change".toText,
-    //                          href = routes.CoordinatesController.onPageLoad(answers.lrn, mode).url,
-    //                          visuallyHiddenText = Some("coordinates"),
-    //                          attributes = Map("id" -> "change-location-of-goods-coordinates")
-    //                        )
-    //                      )
-    //                    )
-    //                  )
-    //                )
-    //              )
-    //          }
-    //        }
-    //      }
-    //    }
-    //
-    //    "unLocode" - {
-    //      "must return None" - {
-    //        "when unLocodePage is undefined" in {
-    //          forAll(arbitrary[Mode]) {
-    //            mode =>
-    //              val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-    //              val result = helper.unLocode
-    //              result mustBe None
-    //          }
-    //        }
-    //      }
-    //
-    //      "must return Some(Row)" - {
-    //        "when unLocodePage is defined" in {
-    //          forAll(arbitrary[Mode], arbitrary[UnLocode]) {
-    //            (mode, unLocode) =>
-    //              val answers = emptyUserAnswers.setValue(UnLocodePage, unLocode)
-    //              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-    //              val result  = helper.unLocode
-    //
-    //              result mustBe Some(
-    //                SummaryListRow(
-    //                  key = Key("UN/LOCODE for the location of goods".toText),
-    //                  value = Value(unLocode.toString.toText),
-    //                  actions = Some(
-    //                    Actions(
-    //                      items = List(
-    //                        ActionItem(
-    //                          content = "Change".toText,
-    //                          href = routes.UnLocodeController.onPageLoad(answers.lrn, mode).url,
-    //                          visuallyHiddenText = Some("the UN/LOCODE for the location of goods"),
-    //                          attributes = Map("id" -> "change-location-of-goods-un-locode")
-    //                        )
-    //                      )
-    //                    )
-    //                  )
-    //                )
-    //              )
-    //          }
-    //        }
-    //      }
-    //    }
-    //
-    //    "address" - {
-    //      "must return None" - {
-    //        "when addressPage is undefined" in {
-    //          forAll(arbitrary[Mode]) {
-    //            mode =>
-    //              val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-    //              val result = helper.address
-    //              result mustBe None
-    //          }
-    //        }
-    //      }
-    //
-    //      "must return Some(Row)" - {
-    //        "when addressPage is defined" in {
-    //          forAll(arbitrary[Mode], arbitrary[DynamicAddress]) {
-    //            (mode, address) =>
-    //              val answers = emptyUserAnswers.setValue(AddressPage, address)
-    //              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-    //              val result  = helper.address
-    //
-    //              result mustBe Some(
-    //                SummaryListRow(
-    //                  key = Key("What is the address for the location of goods?".toText),
-    //                  value = Value(HtmlContent(address.toString)),
-    //                  actions = Some(
-    //                    Actions(
-    //                      items = List(
-    //                        ActionItem(
-    //                          content = "Change".toText,
-    //                          href = routes.AddressController.onPageLoad(answers.lrn, mode).url,
-    //                          visuallyHiddenText = Some("the address for the location of goods"),
-    //                          attributes = Map("id" -> "change-location-of-goods-address")
-    //                        )
-    //                      )
-    //                    )
-    //                  )
-    //                )
-    //              )
-    //          }
-    //        }
-    //      }
-    //    }
-    //
-    //    "country" - {
-    //      "must return None" - {
-    //        "when countryPage is undefined" in {
-    //          forAll(arbitrary[Mode]) {
-    //            mode =>
-    //              val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-    //              val result = helper.country
-    //              result mustBe None
-    //          }
-    //        }
-    //      }
-    //
-    //      "must return Some(Row)" - {
-    //        "when countryPage is defined" in {
-    //          forAll(arbitrary[Mode], arbitrary[Country]) {
-    //            (mode, country) =>
-    //              val answers = emptyUserAnswers.setValue(CountryPage, country)
-    //              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-    //              val result  = helper.country
-    //
-    //              result mustBe Some(
-    //                SummaryListRow(
-    //                  key = Key("Location of goods country".toText),
-    //                  value = Value(country.description.toText),
-    //                  actions = Some(
-    //                    Actions(
-    //                      items = List(
-    //                        ActionItem(
-    //                          content = "Change".toText,
-    //                          href = routes.CountryController.onPageLoad(answers.lrn, mode).url,
-    //                          visuallyHiddenText = Some("location of goods country"),
-    //                          attributes = Map("id" -> "change-location-of-goods-country")
-    //                        )
-    //                      )
-    //                    )
-    //                  )
-    //                )
-    //              )
-    //          }
-    //        }
-    //      }
-    //    }
-    //
-    //    "postalCode" - {
-    //      "must return None" - {
-    //        "when postalCodePage is undefined" in {
-    //          forAll(arbitrary[Mode]) {
-    //            mode =>
-    //              val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-    //              val result = helper.postalCode
-    //              result mustBe None
-    //          }
-    //        }
-    //      }
-    //
-    //      "must return Some(Row)" - {
-    //        "when postalCodePage is defined" in {
-    //          forAll(arbitrary[Mode], arbitrary[PostalCodeAddress]) {
-    //            (mode, postalCode) =>
-    //              val answers = emptyUserAnswers.setValue(PostalCodePage, postalCode)
-    //              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-    //              val result  = helper.postalCode
-    //
-    //              result mustBe Some(
-    //                SummaryListRow(
-    //                  key = Key("What is the address for the location of goods?".toText),
-    //                  value = Value(HtmlContent(postalCode.toString)),
-    //                  actions = Some(
-    //                    Actions(
-    //                      items = List(
-    //                        ActionItem(
-    //                          content = "Change".toText,
-    //                          href = routes.PostalCodeController.onPageLoad(answers.lrn, mode).url,
-    //                          visuallyHiddenText = Some("the address for the location of goods"),
-    //                          attributes = Map("id" -> "change-location-of-goods-postal-code")
-    //                        )
-    //                      )
-    //                    )
-    //                  )
-    //                )
-    //              )
-    //          }
-    //        }
-    //      }
-    //    }
-    //
-    //    "additionalIdentifierYesNo" - {
-    //      "must return None" - {
-    //        "when addIdentifierYesNoPage is undefined" in {
-    //          forAll(arbitrary[Mode]) {
-    //            mode =>
-    //              val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-    //              val result = helper.additionalIdentifierYesNo
-    //              result mustBe None
-    //          }
-    //        }
-    //      }
-    //
-    //      "must return Some(Row)" - {
-    //        "when addIdentifierYesNoPage is defined" in {
-    //          forAll(arbitrary[Mode]) {
-    //            mode =>
-    //              val answers = emptyUserAnswers.setValue(AddIdentifierYesNoPage, true)
-    //              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-    //              val result  = helper.additionalIdentifierYesNo
-    //
-    //              result mustBe Some(
-    //                SummaryListRow(
-    //                  key = Key("Do you want to add another identifier for the location of goods?".toText),
-    //                  value = Value("Yes".toText),
-    //                  actions = Some(
-    //                    Actions(
-    //                      items = List(
-    //                        ActionItem(
-    //                          content = "Change".toText,
-    //                          href = routes.AddIdentifierYesNoController.onPageLoad(answers.lrn, mode).url,
-    //                          visuallyHiddenText = Some("if you want to add another identifier for the location of goods"),
-    //                          attributes = Map("id" -> "change-location-of-goods-add-identifier")
-    //                        )
-    //                      )
-    //                    )
-    //                  )
-    //                )
-    //              )
-    //          }
-    //        }
-    //      }
-    //    }
-    //
-    //    "additionalIdentifier" - {
-    //      "must return None" - {
-    //        "when additionalIdentifierPage is undefined" in {
-    //          forAll(arbitrary[Mode]) {
-    //            mode =>
-    //              val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-    //              val result = helper.additionalIdentifier
-    //              result mustBe None
-    //          }
-    //        }
-    //      }
-    //
-    //      "must return Some(Row)" - {
-    //        "when postalCodePage is defined" in {
-    //          forAll(arbitrary[Mode], arbitrary[String]) {
-    //            (mode, additionalIdentifier) =>
-    //              val answers = emptyUserAnswers.setValue(AdditionalIdentifierPage, additionalIdentifier)
-    //              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-    //              val result  = helper.additionalIdentifier
-    //
-    //              result mustBe Some(
-    //                SummaryListRow(
-    //                  key = Key("Additional identifier".toText),
-    //                  value = Value(additionalIdentifier.toText),
-    //                  actions = Some(
-    //                    Actions(
-    //                      items = List(
-    //                        ActionItem(
-    //                          content = "Change".toText,
-    //                          href = routes.AdditionalIdentifierController.onPageLoad(answers.lrn, mode).url,
-    //                          visuallyHiddenText = Some("additional identifier"),
-    //                          attributes = Map("id" -> "change-location-of-goods-additional-identifier")
-    //                        )
-    //                      )
-    //                    )
-    //                  )
-    //                )
-    //              )
-    //          }
-    //        }
-    //      }
-    //    }
-    //
-    //    "contactYesNo" - {
-    //      "must return None" - {
-    //        "when contactYesNoPage is undefined" in {
-    //          forAll(arbitrary[Mode]) {
-    //            mode =>
-    //              val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-    //              val result = helper.contactYesNo
-    //              result mustBe None
-    //          }
-    //        }
-    //      }
-    //
-    //      "must return Some(Row)" - {
-    //        "when addContactYesNoPage is defined" in {
-    //          forAll(arbitrary[Mode]) {
-    //            mode =>
-    //              val answers = emptyUserAnswers.setValue(AddContactYesNoPage, true)
-    //              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-    //              val result  = helper.contactYesNo
-    //
-    //              result mustBe Some(
-    //                SummaryListRow(
-    //                  key = Key("Do you want to add a contact for the location of goods?".toText),
-    //                  value = Value("Yes".toText),
-    //                  actions = Some(
-    //                    Actions(
-    //                      items = List(
-    //                        ActionItem(
-    //                          content = "Change".toText,
-    //                          href = routes.AddContactYesNoController.onPageLoad(answers.lrn, mode).url,
-    //                          visuallyHiddenText = Some("if you want to add a contact for the location of goods"),
-    //                          attributes = Map("id" -> "change-location-of-goods-add-contact")
-    //                        )
-    //                      )
-    //                    )
-    //                  )
-    //                )
-    //              )
-    //          }
-    //        }
-    //      }
-    //    }
-    //
-    //    "contactName" - {
-    //      "must return None" - {
-    //        "when contactNamePage is undefined" in {
-    //          forAll(arbitrary[Mode]) {
-    //            mode =>
-    //              val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-    //              val result = helper.contactName
-    //              result mustBe None
-    //          }
-    //        }
-    //      }
-    //
-    //      "must return Some(Row)" - {
-    //        "when contactNamePage is defined" in {
-    //          forAll(arbitrary[Mode], arbitrary[String]) {
-    //            (mode, contactName) =>
-    //              val answers = emptyUserAnswers.setValue(NamePage, contactName)
-    //              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-    //              val result  = helper.contactName
-    //
-    //              result mustBe Some(
-    //                SummaryListRow(
-    //                  key = Key("Who is the contact for the location of goods?".toText),
-    //                  value = Value(contactName.toText),
-    //                  actions = Some(
-    //                    Actions(
-    //                      items = List(
-    //                        ActionItem(
-    //                          content = "Change".toText,
-    //                          href = contact.routes.NameController.onPageLoad(answers.lrn, mode).url,
-    //                          visuallyHiddenText = Some("the contact for the location of goods"),
-    //                          attributes = Map("id" -> "change-location-of-goods-contact")
-    //                        )
-    //                      )
-    //                    )
-    //                  )
-    //                )
-    //              )
-    //          }
-    //        }
-    //      }
-    //    }
-    //
-    //    "contactPhoneNumber" - {
-    //      "must return None" - {
-    //        "when contactPhoneNumber is undefined" in {
-    //          forAll(arbitrary[Mode]) {
-    //            mode =>
-    //              val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
-    //              val result = helper.contactPhoneNumber
-    //              result mustBe None
-    //          }
-    //        }
-    //      }
-    //
-    //      "must return Some(Row)" - {
-    //        "when contactPhoneNumber is defined" in {
-    //          forAll(arbitrary[Mode], arbitrary[String]) {
-    //            (mode, contactPhoneNumber) =>
-    //              val answers = emptyUserAnswers.setValue(TelephoneNumberPage, contactPhoneNumber)
-    //              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
-    //              val result  = helper.contactPhoneNumber
-    //
-    //              result mustBe Some(
-    //                SummaryListRow(
-    //                  key = Key("What is the contact for the location of goods’ telephone number?".toText),
-    //                  value = Value(contactPhoneNumber.toText),
-    //                  actions = Some(
-    //                    Actions(
-    //                      items = List(
-    //                        ActionItem(
-    //                          content = "Change".toText,
-    //                          href = contact.routes.TelephoneNumberController.onPageLoad(answers.lrn, mode).url,
-    //                          visuallyHiddenText = Some("the contact for the location of goods’ telephone number"),
-    //                          attributes = Map("id" -> "change-location-of-goods-contact-telephone-number")
-    //                        )
-    //                      )
-    //                    )
-    //                  )
-    //                )
-    //              )
-    //          }
-    //        }
-    //      }
-    //    }
+
+    "departureIdentificationNumber" - {
+      "must return None" - {
+        "when departureIdentificationNumberPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportMeansCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.departureIdentificationNumber
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when departureIdentificationNumberPage is defined" in {
+          forAll(arbitrary[Mode], arbitrary[String]) {
+            (mode, identificationNumber) =>
+              val answers = emptyUserAnswers.setValue(MeansIdentificationNumberPage, identificationNumber)
+              val helper  = new TransportMeansCheckYourAnswersHelper(answers, mode)
+              val result  = helper.departureIdentificationNumber
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Identification number".toText),
+                  value = Value(s"$identificationNumber".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = controllers.transport.transportMeans.departure.routes.MeansIdentificationNumberController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("identification number for the departure means of transport"),
+                          attributes = Map("id" -> "change-transport-means-identification-number")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "departureNationality" - {
+      "must return None" - {
+        "when vehicleCountryPage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportMeansCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.departureNationality
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when vehicleCountryPage is defined" in {
+          forAll(arbitrary[Mode], arbitrary[Nationality]) {
+            (mode, nationality) =>
+              val answers = emptyUserAnswers.setValue(VehicleCountryPage, nationality)
+              val helper  = new TransportMeansCheckYourAnswersHelper(answers, mode)
+              val result  = helper.departureNationality
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Registered country".toText),
+                  value = Value(s"$nationality".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = controllers.transport.transportMeans.departure.routes.VehicleCountryController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("registered country for the departure means of transport"),
+                          attributes = Map("id" -> "change-transport-means-vehicle-nationality")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "activeBorderIdentificationType" - {
+      "must return None" - {
+        "when ActiveBorderIdentificationTypePage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportMeansCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.activeBorderIdentificationType(index)
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when ActiveBorderIdentificationTypePage is defined" in {
+          forAll(arbitrary[Mode], arbitrary[ActiveIdentification]) {
+            (mode, activeIdentification) =>
+              val answers = emptyUserAnswers.setValue(IdentificationPage(index), activeIdentification)
+              val helper  = new TransportMeansCheckYourAnswersHelper(answers, mode)
+              val result  = helper.activeBorderIdentificationType(index)
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Identification type".toText),
+                  value = Value(messages(s"${"transport.transportMeans.active.identification"}.$activeIdentification").toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = controllers.transport.transportMeans.active.routes.IdentificationController.onPageLoad(answers.lrn, mode, index).url,
+                          visuallyHiddenText = Some("identification type for the border means of transport"),
+                          attributes = Map("id" -> "change-transport-means-identification")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "activeBorderIdentificationNumber" - {
+      "must return None" - {
+        "when ActiveBorderIdentificationNumberPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportMeansCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.activeBorderIdentificationNumber(index)
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when ActiveBorderIdentificationNumberPage is defined" in {
+          forAll(arbitrary[Mode], arbitrary[String]) {
+            (mode, identificationNumber) =>
+              val answers = emptyUserAnswers.setValue(IdentificationNumberPage(index), identificationNumber)
+              val helper  = new TransportMeansCheckYourAnswersHelper(answers, mode)
+              val result  = helper.activeBorderIdentificationNumber(index)
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Identification number".toText),
+                  value = Value(messages(s"${"transport.transportMeans.active.identification"}.$identificationNumber").toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = controllers.transport.transportMeans.active.routes.IdentificationNumberController.onPageLoad(answers.lrn, mode, index).url,
+                          visuallyHiddenText = Some("identification number for the border means of transport"),
+                          attributes = Map("id" -> "change-transport-means-identification-number")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "activeBorderAddNationality" - {
+      "must return None" - {
+        "when addNationality is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportMeansCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.activeBorderAddNationality(index)
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when addNationality is defined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(AddNationalityYesNoPage(index), true)
+              val helper  = new TransportMeansCheckYourAnswersHelper(answers, mode)
+              val result  = helper.activeBorderAddNationality(index)
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Do you want to add a registered country?".toText),
+                  value = Value("Yes".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = controllers.transport.transportMeans.active.routes.AddNationalityYesNoController.onPageLoad(answers.lrn, mode, index).url,
+                          visuallyHiddenText = Some("if you want to add a registered country"),
+                          attributes = Map("id" -> "change-add-transport-means-vehicle-nationality")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+
+    }
+
+    "activeBorderNationality" - {
+      "must return None" - {
+        "when NationalityPage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportMeansCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.activeBorderNationality(index)
+              result mustBe None
+          }
+        }
+
+        "must return Some(Row)" - {
+          "when vehicleCountryPage is defined" in {
+            forAll(arbitrary[Mode], arbitrary[Nationality]) {
+              (mode, nationality) =>
+                val answers = emptyUserAnswers.setValue(NationalityPage(index), nationality)
+                val helper  = new TransportMeansCheckYourAnswersHelper(answers, mode)
+                val result  = helper.activeBorderNationality(index)
+
+                result mustBe Some(
+                  SummaryListRow(
+                    key = Key("Registered country".toText),
+                    value = Value(messages(s"${"transport.transportMeans.active.identification"}.$nationality").toText),
+                    actions = Some(
+                      Actions(
+                        items = List(
+                          ActionItem(
+                            content = "Change".toText,
+                            href = controllers.transport.transportMeans.active.routes.NationalityController.onPageLoad(answers.lrn, mode, index).url,
+                            visuallyHiddenText = Some("registered country for the border means of transport"),
+                            attributes = Map("id" -> "change-transport-means-vehicle-nationality")
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+            }
+          }
+        }
+      }
+    }
+
+    "customsOfficeAtBorder" - {
+      "must return None" - {
+        "when CustomsOfficeActiveBorderPage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportMeansCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.customsOfficeAtBorder(index)
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when CustomsOfficeActiveBorderPage is defined" in {
+          forAll(arbitrary[Mode], arbitrary[CustomsOffice]) {
+            (mode, customsOffice) =>
+              val answers = emptyUserAnswers.setValue(CustomsOfficeActiveBorderPage(index), customsOffice)
+              val helper  = new TransportMeansCheckYourAnswersHelper(answers, mode)
+              val result  = helper.customsOfficeAtBorder(index)
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Office of transit".toText),
+                  value = Value(s"$customsOffice".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href =
+                            controllers.transport.transportMeans.active.routes.CustomsOfficeActiveBorderController.onPageLoad(answers.lrn, mode, index).url,
+                          visuallyHiddenText = Some("office of transit for the border means of transport"),
+                          attributes = Map("id" -> "change-transport-means-customs-office-at-border")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "activeBorderConveyanceReferenceNumberYesNo" - {
+      "must return None" - {
+        "when ActiveBorderConveyanceReferenceNumberYesNoPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportMeansCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.activeBorderConveyanceReferenceNumberYesNo(index)
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when activeBorderConveyanceReferenceNumberYesNoPage is defined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(ConveyanceReferenceNumberYesNoPage(index), true)
+              val helper  = new TransportMeansCheckYourAnswersHelper(answers, mode)
+              val result  = helper.activeBorderConveyanceReferenceNumberYesNo(index)
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Do you want to add a conveyance reference number?".toText),
+                  value = Value("Yes".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = controllers.transport.transportMeans.active.routes.ConveyanceReferenceNumberYesNoController
+                            .onPageLoad(answers.lrn, mode, index)
+                            .url,
+                          visuallyHiddenText = Some("if you want to add a conveyance reference number"),
+                          attributes = Map("id" -> "change-add-transport-means-conveyance-reference-number")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+
+    }
+
+    "conveyanceReferenceNumber" - {
+      "must return None" - {
+        "when ConveyanceReferenceNumberPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportMeansCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.conveyanceReferenceNumber(index)
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when ConveyanceReferenceNumberPage is defined" in {
+          forAll(arbitrary[Mode], arbitrary[String]) {
+            (mode, referenceNumber) =>
+              val answers = emptyUserAnswers.setValue(ConveyanceReferenceNumberPage(index), referenceNumber)
+              val helper  = new TransportMeansCheckYourAnswersHelper(answers, mode)
+              val result  = helper.conveyanceReferenceNumber(index)
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Conveyance reference number".toText),
+                  value = Value(s"$referenceNumber".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href =
+                            controllers.transport.transportMeans.active.routes.ConveyanceReferenceNumberController.onPageLoad(answers.lrn, mode, index).url,
+                          visuallyHiddenText = Some("conveyance reference number for the departure means of transport"),
+                          attributes = Map("id" -> "change-transport-means-conveyance-reference-number")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
 
   }
 

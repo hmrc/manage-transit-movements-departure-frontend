@@ -42,36 +42,36 @@ class TransportMeansCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)
 
   def departureIdentificationNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = pages.transport.transportMeans.departure.MeansIdentificationNumberPage,
-    formatAnswer = formatEnumAsText(DepartureIdentification.messageKeyPrefix),
-    prefix = "transport.transportMeans.departure.meansIdentificationNumber",
+    formatAnswer = formatAsText,
+    prefix = "transport.transportMeans.transportMeansCheckYourAnswers.means.identificationNumber",
     id = Some("change-transport-means-identification-number")
   )
 
   def departureNationality: Option[SummaryListRow] = getAnswerAndBuildRow[Nationality](
     page = pages.transport.transportMeans.departure.VehicleCountryPage,
-    formatAnswer = formatEnumAsText(DepartureIdentification.messageKeyPrefix),
-    prefix = "transport.transportMeans.departure.vehicleNationality",
+    formatAnswer = formatAsText,
+    prefix = "transport.transportMeans.transportMeansCheckYourAnswers.means.vehicleNationality",
     id = Some("change-transport-means-vehicle-nationality")
   )
 
   def activeBorderIdentificationType(index: Index): Option[SummaryListRow] = getAnswerAndBuildRow[ActiveIdentification](
     page = pages.transport.transportMeans.active.IdentificationPage(index),
     formatAnswer = formatEnumAsText(ActiveIdentification.messageKeyPrefix),
-    prefix = "transport.transportMeans.active.identification",
+    prefix = "transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationType",
     id = Some("change-transport-means-identification")
   )
 
   def activeBorderIdentificationNumber(index: Index): Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = pages.transport.transportMeans.active.IdentificationNumberPage(index),
     formatAnswer = formatEnumAsText(ActiveIdentification.messageKeyPrefix),
-    prefix = "transport.transportMeans.active.meansIdentificationNumber",
+    prefix = "transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationNumber",
     id = Some("change-transport-means-identification-number")
   )
 
   def activeBorderAddNationality(index: Index): Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = pages.transport.transportMeans.active.AddNationalityYesNoPage(index),
-    formatAnswer = formatEnumAsText(ActiveIdentification.messageKeyPrefix),
-    prefix = "transport.transportMeans.active.addNationalityYesNo",
+    formatAnswer = formatAsYesOrNo,
+    prefix = "transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.addNationalityYesNo",
     id = Some("change-add-transport-means-vehicle-nationality")
   )
 
@@ -84,21 +84,21 @@ class TransportMeansCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)
 
   def customsOfficeAtBorder(index: Index): Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
     page = pages.transport.transportMeans.active.CustomsOfficeActiveBorderPage(index),
-    formatAnswer = formatEnumAsText(ActiveIdentification.messageKeyPrefix),
+    formatAnswer = formatAsText,
     prefix = "transport.transportMeans.active.customsOfficeActiveBorder",
     id = Some("change-transport-means-customs-office-at-border")
   )
 
   def activeBorderConveyanceReferenceNumberYesNo(index: Index): Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = pages.transport.transportMeans.active.ConveyanceReferenceNumberYesNoPage(index),
-    formatAnswer = formatEnumAsText(ActiveIdentification.messageKeyPrefix),
+    formatAnswer = formatAsYesOrNo,
     prefix = "transport.transportMeans.active.conveyanceReferenceNumberYesNo",
     id = Some("change-add-transport-means-conveyance-reference-number")
   )
 
   def conveyanceReferenceNumber(index: Index): Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = pages.transport.transportMeans.active.ConveyanceReferenceNumberPage(index),
-    formatAnswer = formatEnumAsText(ActiveIdentification.messageKeyPrefix),
+    formatAnswer = formatAsText,
     prefix = "transport.transportMeans.active.conveyanceReferenceNumber",
     id = Some("change-transport-means-conveyance-reference-number")
   )
