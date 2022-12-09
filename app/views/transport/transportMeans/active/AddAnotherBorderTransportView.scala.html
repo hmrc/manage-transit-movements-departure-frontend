@@ -54,12 +54,11 @@
         @if(viewModel.allowMoreActiveBorderTransports) {
             @inputYesNo(
                 field = form("value"),
-                yesNoType = YesNoWithLegendAndHint(
-                    hintText = viewModel.hint,
+                hint = Some(viewModel.hint),
+                yesNoType = YesNoWithLegend(
                     legend = viewModel.legend
-
+                    )
                 )
-            )
         } else {
             <p class="govuk-body" data-testId="maxLimit">@viewModel.maxLimitLabel</p>
         }

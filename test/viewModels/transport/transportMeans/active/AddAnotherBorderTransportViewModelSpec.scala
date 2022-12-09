@@ -23,6 +23,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import viewModels.transport.transportMeans.active.AddAnotherBorderTransportViewModel.AddAnotherBorderTransportViewModelProvider
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 
 class AddAnotherBorderTransportViewModelSpec extends SpecBase with Generators with ScalaCheckPropertyChecks {
 
@@ -38,7 +39,7 @@ class AddAnotherBorderTransportViewModelSpec extends SpecBase with Generators wi
           result.title mustBe "You have added 1 border means of transport"
           result.heading mustBe "You have added 1 border means of transport"
           result.legend mustBe "Do you want to add another border means of transport?"
-          result.hint mustBe "Only include vehicles that cross into another CTC country. As the EU is one CTC country, you don’t need to provide vehicle changes that stay within the EU."
+          result.hint mustBe "Only include vehicles that cross into another CTC country. As the EU is one CTC country, you don’t need to provide vehicle changes that stay within the EU.".toText
           result.maxLimitLabel mustBe "You cannot add any more border means of transport. To add another, you need to remove one first."
       }
     }
@@ -58,7 +59,7 @@ class AddAnotherBorderTransportViewModelSpec extends SpecBase with Generators wi
           result.title mustBe s"You have added ${formatter.format(activeBorderTransports)} border means of transport"
           result.heading mustBe s"You have added ${formatter.format(activeBorderTransports)} border means of transport"
           result.legend mustBe "Do you want to add another border means of transport?"
-          result.hint mustBe "Only include vehicles that cross into another CTC country. As the EU is one CTC country, you don’t need to provide vehicle changes that stay within the EU."
+          result.hint mustBe "Only include vehicles that cross into another CTC country. As the EU is one CTC country, you don’t need to provide vehicle changes that stay within the EU.".toText
           result.maxLimitLabel mustBe "You cannot add any more border means of transport. To add another, you need to remove one first."
       }
     }

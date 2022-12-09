@@ -20,8 +20,10 @@ import config.FrontendAppConfig
 import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
 import play.api.mvc.Call
+import uk.gov.hmrc.govukfrontend.views.Aliases.Content
 import utils.cyaHelpers.transport.transportMeans.active.ActiveBorderTransportCheckYourAnswersHelper
 import viewModels.ListItem
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 
 import javax.inject.Inject
 
@@ -39,7 +41,7 @@ case class AddAnotherBorderTransportViewModel(
   def heading(implicit messages: Messages): String       = messages(s"$prefix.$singularOrPlural.heading", activeBorderTransports)
   def legend(implicit messages: Messages): String        = messages(s"$prefix.label")
   def maxLimitLabel(implicit messages: Messages): String = messages(s"$prefix.maxLimit.label")
-  def hint(implicit messages: Messages): String          = messages(s"$prefix.hint")
+  def hint(implicit messages: Messages): Content         = messages(s"$prefix.hint").toText
 
   def allowMoreActiveBorderTransports(implicit config: FrontendAppConfig): Boolean =
     activeBorderTransports < config.maxActiveBorderTransports
