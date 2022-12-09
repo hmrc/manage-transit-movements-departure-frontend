@@ -57,7 +57,8 @@ class ActiveBorderTransportCheckYourAnswersHelperSpec extends SpecBase with Scal
                   ListItem(
                     name = s"${messages(s"transport.transportMeans.active.identification.${active.identification}")} - ${active.identificationNumber}",
                     changeUrl = controllers.routes.SessionExpiredController.onPageLoad().url,
-                    removeUrl = Some(controllers.routes.SessionExpiredController.onPageLoad().url)
+                    removeUrl =
+                      Some(controllers.transport.transportMeans.active.routes.ConfirmRemoveBorderTransportController.onPageLoad(lrn, NormalMode, index).url)
                   )
                 )
               )
