@@ -50,9 +50,9 @@ class AddAnotherCountryOfRoutingViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Route details - Transit route")
 
-  behave like pageWithMoreItemsAllowed()
+  behave like pageWithMoreItemsAllowed(listItems.length)()
 
-  behave like pageWithItemsMaxedOut()
+  behave like pageWithItemsMaxedOut(maxedOutListItems.length)
 
   behave like pageWithSubmitButton("Save and continue")
 }
