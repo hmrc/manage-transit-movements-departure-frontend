@@ -47,9 +47,8 @@ object TransportMeansDomain {
 
   implicit val transportMeansActiveReader: UserAnswersReader[Option[Seq[TransportMeansActiveDomain]]] =
     SecurityDetailsTypePage.reader.flatMap {
-      case NoSecurityDetails =>
-        AnotherVehicleCrossingYesNoPage.filterOptionalDependent(identity)(arrayReader)
-      case _ => arrayReader.map(Some(_))
+      case NoSecurityDetails => AnotherVehicleCrossingYesNoPage.filterOptionalDependent(identity)(arrayReader)
+      case _                 => arrayReader.map(Some(_))
     }
 
   implicit val userAnswersReader: UserAnswersReader[TransportMeansDomain] =

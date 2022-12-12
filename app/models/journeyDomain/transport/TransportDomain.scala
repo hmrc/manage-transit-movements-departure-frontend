@@ -16,19 +16,32 @@
 
 package models.journeyDomain.transport
 
-import models.domain.UserAnswersReader
+import cats.implicits._
+import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
+import models.transport.transportMeans.departure.InlandMode
+import pages.transport.transportMeans.departure.InlandModePage
 
 case class TransportDomain(
   preRequisites: PreRequisitesDomain,
-  transportMeans: TransportMeansDomain
+  inlandMode: InlandMode,
+  transportMeans: Option[TransportMeansDomain]
 ) extends JourneyDomainModel
 
 object TransportDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[TransportDomain] =
+  implicit val userAnswersReader: UserAnswersReader[TransportDomain] = {
+
+    def transportMeansReads(inlandMode: InlandMode): UserAnswersReader[Option[TransportMeansDomain]] =
+      inlandMode match {
+        case InlandMode.Mail => none[TransportMeansDomain].pure[UserAnswersReader]
+        case _               => UserAnswersReader[TransportMeansDomain].map(Some(_))
+      }
+
     for {
       preRequisites  <- UserAnswersReader[PreRequisitesDomain]
-      transportMeans <- UserAnswersReader[TransportMeansDomain]
-    } yield TransportDomain(preRequisites, transportMeans)
+      inlandMode     <- InlandModePage.reader
+      transportMeans <- transportMeansReads(inlandMode)
+    } yield TransportDomain(preRequisites, inlandMode, transportMeans)
+  }
 }

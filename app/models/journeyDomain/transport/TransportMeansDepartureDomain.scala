@@ -37,14 +37,10 @@ object TransportMeansDepartureDomain {
 
   implicit val userAnswersReader: UserAnswersReader[TransportMeansDepartureDomain] =
     InlandModePage.reader.flatMap {
-      case InlandMode.Mail    => UserAnswersReader.apply(TransportMeansDomainWithMailInlandMode)
+      case InlandMode.Mail    => UserAnswersReader.fail(InlandModePage)
       case InlandMode.Unknown => UserAnswersReader[TransportMeansDomainWithUnknownInlandMode].widen[TransportMeansDepartureDomain]
       case _                  => UserAnswersReader[TransportMeansDomainWithAnyOtherInlandMode].widen[TransportMeansDepartureDomain]
     }
-}
-
-case object TransportMeansDomainWithMailInlandMode extends TransportMeansDepartureDomain {
-  override val inlandMode: InlandMode = InlandMode.Mail
 }
 
 case class TransportMeansDomainWithUnknownInlandMode(
