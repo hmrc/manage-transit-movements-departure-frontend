@@ -27,6 +27,8 @@ import models.transport.transportMeans.active.Identification
 import models.transport.transportMeans.active.Identification.{RegNumberRoadVehicle, TrainNumber}
 import models.{Index, Mode, UserAnswers}
 import pages.preTaskList.SecurityDetailsTypePage
+import pages.routeDetails.transit.AddOfficeOfTransitYesNoPage
+import pages.routeDetails.transit.index.OfficeOfTransitPage
 import pages.transport.transportMeans.BorderModeOfTransportPage
 import pages.transport.transportMeans.active._
 import play.api.i18n.Messages
@@ -43,13 +45,18 @@ case class TransportMeansActiveDomain(
   def asString(implicit messages: Messages): String =
     s"${identification.asString} - $identificationNumber"
 
+  def ifOfficeOfTransitPresent(userAnswers: UserAnswers, mode: Mode): Call =
+    userAnswers.get(OfficeOfTransitPage(Index(0))) match {
+      case Some(_) => controllers.transport.transportMeans.active.routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode)
+      case _       => controllers.transport.transportMeans.routes.TransportMeansCheckYourAnswersController.onPageLoad(userAnswers.lrn, mode)
+    }
+
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some {
     stage match {
       case AccessingJourney =>
         // TODO - Redirect to active border loop CYA page has been implemented so change links on add another border page work
         Call("GET", "#")
-      case CompletingJourney =>
-        controllers.transport.transportMeans.active.routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode)
+      case CompletingJourney => ifOfficeOfTransitPresent(userAnswers, mode)
     }
   }
 }
