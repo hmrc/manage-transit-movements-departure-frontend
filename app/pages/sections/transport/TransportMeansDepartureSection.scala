@@ -17,7 +17,7 @@
 package pages.sections.transport
 
 import pages.sections.Section
-import play.api.libs.json.{JsArray, JsObject, JsPath}
+import play.api.libs.json.{JsArray, JsPath}
 
 case object TransportMeansDepartureSection extends Section[JsArray] {
 

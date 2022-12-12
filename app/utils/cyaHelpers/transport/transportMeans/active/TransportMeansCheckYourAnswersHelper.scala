@@ -17,6 +17,7 @@
 package utils.cyaHelpers.transport.transportMeans.active
 
 import models.reference.{CustomsOffice, Nationality}
+import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.active.{Identification => ActiveIdentification}
 import models.transport.transportMeans.departure.{InlandMode, Identification => DepartureIdentification}
 import models.{Index, Mode, UserAnswers}
@@ -25,6 +26,20 @@ import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
 
 class TransportMeansCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
+
+  def anotherVehicleCrossing: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+    page = pages.transport.transportMeans.AnotherVehicleCrossingYesNoPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "transport.transportMeans.anotherVehicleCrossingYesNo",
+    id = Some("change-another-vehicle-crossing-border")
+  )
+
+  def modeCrossingBorder: Option[SummaryListRow] = getAnswerAndBuildRow[BorderModeOfTransport](
+    page = pages.transport.transportMeans.BorderModeOfTransportPage,
+    formatAnswer = formatAsText,
+    prefix = "transport.transportMeans.borderModeOfTransport",
+    id = Some("change-border-mode-of-transport")
+  )
 
   def inlandMode: Option[SummaryListRow] = getAnswerAndBuildRow[InlandMode](
     page = pages.transport.transportMeans.departure.InlandModePage,

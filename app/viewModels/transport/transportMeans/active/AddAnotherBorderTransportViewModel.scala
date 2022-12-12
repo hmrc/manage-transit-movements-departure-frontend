@@ -51,8 +51,7 @@ object AddAnotherBorderTransportViewModel {
 
   class AddAnotherBorderTransportViewModelProvider @Inject() () {
 
-
-    def apply(userAnswers: UserAnswers, mode : Mode)(implicit messages: Messages): AddAnotherBorderTransportViewModel = {
+    def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): AddAnotherBorderTransportViewModel = {
       val helper = new ActiveBordersTransportCheckYourAnswersHelper(userAnswers, mode)
 
       val listItems = helper.listItems.collect {

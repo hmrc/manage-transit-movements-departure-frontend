@@ -20,19 +20,13 @@ import base.SpecBase
 import generators.Generators
 import models.Mode
 import models.reference.{CustomsOffice, Nationality}
-import models.transport.transportMeans.departure.{InlandMode, Identification => DepartureIdentification}
+import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.active.{Identification => ActiveIdentification}
+import models.transport.transportMeans.departure.{InlandMode, Identification => DepartureIdentification}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.transport.transportMeans.active.{
-  AddNationalityYesNoPage,
-  ConveyanceReferenceNumberPage,
-  ConveyanceReferenceNumberYesNoPage,
-  CustomsOfficeActiveBorderPage,
-  IdentificationNumberPage,
-  IdentificationPage,
-  NationalityPage
-}
+import pages.transport.transportMeans.{AnotherVehicleCrossingYesNoPage, BorderModeOfTransportPage}
+import pages.transport.transportMeans.active._
 import pages.transport.transportMeans.departure.{
   InlandModePage,
   MeansIdentificationNumberPage,
@@ -524,6 +518,93 @@ class TransportMeansCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
           }
         }
       }
+    }
+
+    "modeCrossingBorder" - {
+      "must return None" - {
+        "when ModeCrossingBorderPage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportMeansCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.modeCrossingBorder
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when ModeCrossingBorderPage defined" in {
+          forAll(arbitrary[Mode], arbitrary[BorderModeOfTransport]) {
+            (mode, borderModeOfTransport) =>
+              val answers = emptyUserAnswers.setValue(BorderModeOfTransportPage, borderModeOfTransport)
+              val helper  = new TransportMeansCheckYourAnswersHelper(answers, mode)
+              val result  = helper.modeCrossingBorder
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Border mode of transport".toText),
+                  value = Value(s"$borderModeOfTransport".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = controllers.transport.transportMeans.routes.BorderModeOfTransportController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("border mode of transport"),
+                          attributes = Map("id" -> "change-border-mode-of-transport")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "anotherVehicleCrossing" - {
+      "must return None" - {
+        "when AnotherVehicleCrossingYesNoPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportMeansCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.anotherVehicleCrossing
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when AnotherVehicleCrossingYesNoPage is defined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(AnotherVehicleCrossingYesNoPage, true)
+              val helper  = new TransportMeansCheckYourAnswersHelper(answers, mode)
+              val result  = helper.anotherVehicleCrossing
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Are you using another vehicle to cross the border?".toText),
+                  value = Value("Yes".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = controllers.transport.transportMeans.active.routes.AddNationalityYesNoController.onPageLoad(answers.lrn, mode, index).url,
+                          visuallyHiddenText = Some("if you are using another vehicle to cross the border"),
+                          attributes = Map("id" -> "change-another-vehicle-crossing-border")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+
     }
 
   }

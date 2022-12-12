@@ -43,6 +43,8 @@ object TransportMeansAnswersViewModel {
       val section = Section(
         sectionTitle = messages("routeDetails.locationOfGoods.checkYourAnswers.subHeading"),
         rows = Seq(
+          helper.modeCrossingBorder,
+          helper.anotherVehicleCrossing,
           helper.inlandMode,
           helper.departureIdentificationType,
           helper.departureIdentificationNumber,
