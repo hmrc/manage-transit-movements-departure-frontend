@@ -17,7 +17,7 @@
 package utils.cyaHelpers.transport.transportMeans
 
 import base.SpecBase
-import generators.{Generators, TransportUserAnswersGenerator}
+import generators.Generators
 import models.Mode
 import models.domain.UserAnswersReader
 import models.journeyDomain.transport.TransportMeansActiveDomain
@@ -32,7 +32,7 @@ import uk.gov.hmrc.govukfrontend.views.Aliases.{Key, SummaryListRow, Value}
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions}
 
-class TransportMeansCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TransportUserAnswersGenerator {
+class TransportMeansCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "TransportMeansCheckYourAnswersHelper" - {
 
@@ -59,7 +59,7 @@ class TransportMeansCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
               val helper = new TransportMeansCheckYourAnswersHelper(userAnswers, mode)
               val result = helper.activeBorderTransportMeans(index).get
 
-              result.key.value mustBe s"Active border transport means ${index.display}"
+              result.key.value mustBe "Active border transport means 1"
               result.value.value mustBe s"${messages(s"transport.transportMeans.active.identification.${abtm.identification}")} - ${abtm.identificationNumber}"
               val actions = result.actions.get.items
               actions.size mustBe 1

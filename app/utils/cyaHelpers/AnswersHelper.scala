@@ -78,26 +78,6 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
         )
       }
 
-  // TODO - move away from using this
-  def getAnswerAndBuildSectionRow[A <: JourneyDomainModel, B](
-    page: QuestionPage[B],
-    formatAnswer: B => Content,
-    prefix: String,
-    id: Option[String],
-    args: Any*
-  )(implicit userAnswersReader: UserAnswersReader[A], rds: Reads[B]): Option[SummaryListRow] =
-    userAnswers.get(page) map {
-      answer =>
-        buildSimpleRow(
-          prefix = prefix,
-          label = messages(s"$prefix.checkYourAnswersLabel", args: _*),
-          answer = formatAnswer(answer),
-          id = id,
-          call = Some(UserAnswersNavigator.nextPage[A](userAnswers, mode, AccessingJourney)),
-          args = args: _*
-        )
-    }
-
   def getAnswerAndBuildSectionRow[A <: JourneyDomainModel](
     formatAnswer: A => Content,
     prefix: String,
@@ -128,48 +108,36 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
         (_, index) => block(index)
       }
 
-  protected def buildListItem[A <: JourneyDomainModel, B](
-    page: QuestionPage[B],
-    formatJourneyDomainModel: A => String,
-    formatType: B => String,
+  protected def buildListItem[A <: JourneyDomainModel](
+    nameWhenComplete: A => String,
+    nameWhenInProgress: Option[String],
     removeRoute: Option[Call]
-  )(implicit userAnswersReader: UserAnswersReader[A], rds: Reads[B]): Option[Either[ListItem, ListItem]] =
+  )(implicit userAnswersReader: UserAnswersReader[A]): Option[Either[ListItem, ListItem]] =
     userAnswersReader.run(userAnswers) match {
       case Left(readerError) =>
         readerError.page.route(userAnswers, mode).flatMap {
           changeRoute =>
-            getNameAndBuildListItem[B](
-              page = page,
-              formatName = formatType,
-              changeUrl = changeRoute.url,
-              removeUrl = removeRoute.map(_.url)
-            ).map(Left(_))
+            nameWhenInProgress
+              .map {
+                name =>
+                  ListItem(
+                    name = name,
+                    changeUrl = changeRoute.url,
+                    removeUrl = removeRoute.map(_.url)
+                  )
+              }
+              .map(Left(_))
         }
       case Right(journeyDomainModel) =>
         journeyDomainModel.routeIfCompleted(userAnswers, mode, AccessingJourney).map {
           changeRoute =>
             Right(
               ListItem(
-                name = formatJourneyDomainModel(journeyDomainModel),
+                name = nameWhenComplete(journeyDomainModel),
                 changeUrl = changeRoute.url,
                 removeUrl = removeRoute.map(_.url)
               )
             )
         }
-    }
-
-  private def getNameAndBuildListItem[T](
-    page: QuestionPage[T],
-    formatName: T => String,
-    changeUrl: String,
-    removeUrl: Option[String]
-  )(implicit rds: Reads[T]): Option[ListItem] =
-    userAnswers.get(page) map {
-      name =>
-        ListItem(
-          name = formatName(name),
-          changeUrl = changeUrl,
-          removeUrl = removeUrl
-        )
     }
 }

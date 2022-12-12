@@ -17,14 +17,14 @@
 package models.journeyDomain.transport
 
 import base.SpecBase
-import generators.{Generators, TransportUserAnswersGenerator}
+import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
 import models.transport.transportMeans.departure.InlandMode
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.transport.transportMeans.departure.InlandModePage
 
-class TransportDomainSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TransportUserAnswersGenerator {
+class TransportDomainSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "can be parsed from user answers" - {
 

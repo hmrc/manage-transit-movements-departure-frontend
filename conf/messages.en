@@ -572,17 +572,17 @@ routeDetails.checkYourAnswers.heading = Check your answers
 
 routeDetails.checkYourAnswers.routing.subheading = Transit route countries
 routeDetails.checkYourAnswers.routing.addOrRemove = Add or remove transit route countries
-routeDetails.checkYourAnswers.routing.countryOfRouting.checkYourAnswersLabel = Country of routing {0}
+routeDetails.checkYourAnswers.routing.countryOfRouting.label = Country of routing {0}
 routeDetails.checkYourAnswers.routing.countryOfRouting.change.hidden = country of routing {0}
 
 routeDetails.checkYourAnswers.transit.subheading = Offices of transit
 routeDetails.checkYourAnswers.transit.addOrRemove = Add or remove offices of transit
-routeDetails.checkYourAnswers.transit.officeOfTransit.checkYourAnswersLabel = Office of transit {0}
+routeDetails.checkYourAnswers.transit.officeOfTransit.label = Office of transit {0}
 routeDetails.checkYourAnswers.transit.officeOfTransit.change.hidden = office of transit {0}
 
 routeDetails.checkYourAnswers.exit.subheading = Offices of exit
 routeDetails.checkYourAnswers.exit.addOrRemove = Add or remove offices of exit
-routeDetails.checkYourAnswers.exit.officeOfExit.checkYourAnswersLabel = Office of exit {0}
+routeDetails.checkYourAnswers.exit.officeOfExit.label = Office of exit {0}
 routeDetails.checkYourAnswers.exit.officeOfExit.change.hidden = office of exit {0}
 
 # Route details - Routing
