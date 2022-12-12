@@ -66,7 +66,7 @@ class AddAnotherBorderTransportController @Inject() (
           formWithErrors => BadRequest(view(formWithErrors, lrn, mode, viewModel)),
           {
             case true  => Redirect(routes.IdentificationController.onPageLoad(lrn, NormalMode, Index(viewModel.activeBorderTransports)))
-            case false => Redirect(controllers.routes.SessionExpiredController.onPageLoad()) // TODO: Redirect to CYA page
+            case false => Redirect(controllers.transport.transportMeans.routes.TransportMeansCheckYourAnswersController.onPageLoad(lrn, mode))
           }
         )
   }
