@@ -17,19 +17,19 @@
 package controllers.transport.transportMeans
 
 import controllers.actions._
-import models.{Index, LocalReferenceNumber, Mode}
-import navigation.transport.TransportMeansNavigatorProvider
+import models.{LocalReferenceNumber, Mode}
+import navigation.transport.TransportNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.transport.transportMeans.active.TransportMeansAnswersViewModel.TransportMeansAnswersViewModelProvider
+import viewModels.transport.transportMeans.TransportMeansAnswersViewModel.TransportMeansAnswersViewModelProvider
 import views.html.transport.transportMeans.TransportMeansCheckYourAnswersView
 
 import javax.inject.Inject
 
 class TransportMeansCheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
-  navigatorProvider: TransportMeansNavigatorProvider,
+  navigatorProvider: TransportNavigatorProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: TransportMeansCheckYourAnswersView,
@@ -37,10 +37,10 @@ class TransportMeansCheckYourAnswersController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val sections = viewModelProvider(request.userAnswers, mode, activeIndex).section
-      Ok(view(lrn, mode, activeIndex, sections))
+      val sections = viewModelProvider(request.userAnswers, mode).sections
+      Ok(view(lrn, mode, sections))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {

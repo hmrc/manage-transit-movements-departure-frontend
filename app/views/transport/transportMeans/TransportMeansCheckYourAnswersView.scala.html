@@ -28,7 +28,7 @@
     formHelper: FormWithCSRF
 )
 
-@(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index,sections: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(lrn: LocalReferenceNumber, mode: Mode,sections: Seq[Section])(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("transport.transportMeans.transportMeansCheckYourAnswers.title"),
@@ -38,7 +38,7 @@
 
     @heading(
         heading = messages("transport.transportMeans.transportMeansCheckYourAnswers.heading"),
-        caption = Some(messages("transport.activeBorderModeOfTransport.caption"))
+        caption = Some(messages("transport.means.caption"))
     )
 
     @answerSections(sections)
@@ -46,7 +46,6 @@
     @formHelper(action = routes.TransportMeansCheckYourAnswersController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
         @button(
-            messageKey = "site.continue",
             preventDoubleClick = true,
             attributes = Map("id" -> "submit")
         )

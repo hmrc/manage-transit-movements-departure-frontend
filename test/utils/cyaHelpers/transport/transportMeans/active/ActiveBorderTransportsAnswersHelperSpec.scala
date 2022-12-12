@@ -27,7 +27,7 @@ import pages.preTaskList.SecurityDetailsTypePage
 import pages.transport.transportMeans.{AnotherVehicleCrossingYesNoPage, BorderModeOfTransportPage}
 import viewModels.ListItem
 
-class ActiveBordersTransportCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "ActiveBorderTransportCheckYourAnswersHelperSpec" - {
 
@@ -35,7 +35,7 @@ class ActiveBordersTransportCheckYourAnswersHelperSpec extends SpecBase with Sca
       "must return empty list of list items" in {
         val userAnswers = emptyUserAnswers
 
-        val helper = new ActiveBordersTransportCheckYourAnswersHelper(userAnswers, NormalMode)
+        val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
         helper.listItems mustBe Nil
       }
     }
@@ -50,7 +50,7 @@ class ActiveBordersTransportCheckYourAnswersHelperSpec extends SpecBase with Sca
 
           forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, index)) {
             userAnswers =>
-              val helper = new ActiveBorderTransportCheckYourAnswersHelper(userAnswers, NormalMode)
+              val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
               val active = TransportMeansActiveDomain.userAnswersReader(index).run(userAnswers).value
               helper.listItems mustBe Seq(
                 Right(
@@ -74,7 +74,7 @@ class ActiveBordersTransportCheckYourAnswersHelperSpec extends SpecBase with Sca
 
           forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, index)) {
             userAnswers =>
-              val helper = new ActiveBorderTransportCheckYourAnswersHelper(userAnswers, NormalMode)
+              val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
               val active = TransportMeansActiveDomain.userAnswersReader(index).run(userAnswers).value
               helper.listItems mustBe Seq(
                 Right(
@@ -89,7 +89,5 @@ class ActiveBordersTransportCheckYourAnswersHelperSpec extends SpecBase with Sca
         }
       }
     }
-
-    //TODO - Add other CYA tests once that page is created
   }
 }

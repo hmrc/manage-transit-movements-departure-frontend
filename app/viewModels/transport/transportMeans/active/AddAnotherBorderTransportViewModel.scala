@@ -22,7 +22,7 @@ import play.api.i18n.Messages
 import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.Aliases.Content
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-import utils.cyaHelpers.transport.transportMeans.active.ActiveBordersTransportCheckYourAnswersHelper
+import utils.cyaHelpers.transport.transportMeans.active.ActiveBorderTransportsAnswersHelper
 import viewModels.ListItem
 
 import javax.inject.Inject
@@ -52,7 +52,7 @@ object AddAnotherBorderTransportViewModel {
   class AddAnotherBorderTransportViewModelProvider @Inject() () {
 
     def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): AddAnotherBorderTransportViewModel = {
-      val helper = new ActiveBordersTransportCheckYourAnswersHelper(userAnswers, mode)
+      val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, mode)
 
       val listItems = helper.listItems.collect {
         case Left(value)  => value

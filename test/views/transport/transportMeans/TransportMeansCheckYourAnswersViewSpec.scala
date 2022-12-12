@@ -16,22 +16,36 @@
 
 package views.transport.transportMeans
 
+import controllers.transport.transportMeans.routes
+import models.Mode
+import org.scalacheck.Arbitrary.arbitrary
 import play.twirl.api.HtmlFormat
-import views.behaviours.ViewBehaviours
+import viewModels.sections.Section
+import views.behaviours.CheckYourAnswersViewBehaviours
 import views.html.transport.transportMeans.TransportMeansCheckYourAnswersView
 
-class TransportMeansCheckYourAnswersViewSpec extends ViewBehaviours {
+class TransportMeansCheckYourAnswersViewSpec extends CheckYourAnswersViewBehaviours {
 
-  override val urlContainsLrn: Boolean = true
-
-  override def view: HtmlFormat.Appendable =
-    injector.instanceOf[TransportMeansCheckYourAnswersView].apply(lrn)(fakeRequest, messages)
+  private val mode = arbitrary[Mode].sample.value
 
   override val prefix: String = "transport.transportMeans.transportMeansCheckYourAnswers"
+
+  override def view: HtmlFormat.Appendable = viewWithSections(sections)
+
+  override def viewWithSections(sections: Seq[Section]): HtmlFormat.Appendable =
+    injector.instanceOf[TransportMeansCheckYourAnswersView].apply(lrn, mode, sections)(fakeRequest, messages)
 
   behave like pageWithTitle()
 
   behave like pageWithBackLink()
 
+  behave like pageWithSectionCaption("Transport details - Modes and means of transport")
+
   behave like pageWithHeading()
+
+  behave like pageWithCheckYourAnswers()
+
+  behave like pageWithFormAction(routes.TransportMeansCheckYourAnswersController.onSubmit(lrn, mode).url)
+
+  behave like pageWithSubmitButton("Save and continue")
 }

@@ -1074,6 +1074,7 @@ declarationSubmitted.title = Declaration Submitted
 declarationSubmitted.heading = Declaration Submitted
 declarationSubmitted.paragraph1 = You have submitted your declaration.
 
+transport.means.caption = Transport details - Modes and means of transport
 transport.inlandMode.caption = Transport details - Inland mode of transport
 transport.departureMeansOfTransport.caption = Transport details - Departure means of transport
 transport.activeBorderModeOfTransport.caption = Transport details - Border mode of transport
@@ -1090,9 +1091,9 @@ transport.transportMeans.departure.inlandMode.mail = Mail (active mode of transp
 transport.transportMeans.departure.inlandMode.fixed = Fixed transport installations - pipelines or electric power lines used for the continuous transport of goods
 transport.transportMeans.departure.inlandMode.waterway = Inland waterway
 transport.transportMeans.departure.inlandMode.unknown = Unknown (own propulsion)
-transport.transportMeans.departure.inlandMode.checkYourAnswersLabel = Which inland mode of transport are you using?
+transport.transportMeans.departure.inlandMode.checkYourAnswersLabel = Mode
 transport.transportMeans.departure.inlandMode.error.required = Select which inland mode of transport you’re using
-transport.transportMeans.departure.inlandMode.hidden = which inland mode of transport you’re using
+transport.transportMeans.departure.inlandMode.change.hidden = inland mode of transport
 
 transport.transportMeans.departure.identification.title = Which identification do you want to use for this vehicle?
 transport.transportMeans.departure.identification.heading = Which identification do you want to use for this vehicle?
@@ -1119,13 +1120,15 @@ transport.transportMeans.departure.identification.europeanVesselIdNumber.arg = E
 transport.transportMeans.departure.identification.unknown = Unknown - this can only be used during the transitional period
 # TODO: Ask Gavin for content for unknown identification type
 transport.transportMeans.departure.identification.unknown.arg = ask gavin what this should be
-transport.transportMeans.departure.identification.checkYourAnswersLabel = Which identification do you want to use for this vehicle?
+transport.transportMeans.departure.identification.checkYourAnswersLabel = Identification type
+transport.transportMeans.departure.identification.change.hidden = identification type for the departure means of transport
 transport.transportMeans.departure.identification.error.required = Select which identification you want to use for this vehicle
 
 transport.transportMeans.departure.meansIdentificationNumber.title = What is the {0}?
 transport.transportMeans.departure.meansIdentificationNumber.heading = What is the {0}?
 transport.transportMeans.departure.meansIdentificationNumber.hint = This can be up to 35 characters long and include both letters and numbers.
 transport.transportMeans.departure.meansIdentificationNumber.checkYourAnswersLabel = Identification number
+transport.transportMeans.departure.meansIdentificationNumber.change.hidden = identification number for the departure means of transport
 transport.transportMeans.departure.meansIdentificationNumber.error.required = Enter the {0}
 transport.transportMeans.departure.meansIdentificationNumber.error.invalid = The {0} must only include letters a to z and numbers 0 to 9
 transport.transportMeans.departure.meansIdentificationNumber.error.length = The {0} must be 35 characters or less
@@ -1134,14 +1137,15 @@ transport.transportMeans.departure.vehicleCountry.title = What country is this v
 transport.transportMeans.departure.vehicleCountry.heading = What country is this vehicle registered to?
 transport.transportMeans.departure.vehicleCountry.hint = Enter the country or code, like AT or Austria.
 transport.transportMeans.departure.vehicleCountry.placeholder = Select a nationality
-transport.transportMeans.departure.vehicleCountry.change.hidden = the country the vehicle is registered to
-transport.transportMeans.departure.vehicleCountry.checkYourAnswersLabel = What country is this vehicle registered to?
+transport.transportMeans.departure.vehicleCountry.change.hidden = registered country for the departure means of transport
+transport.transportMeans.departure.vehicleCountry.checkYourAnswersLabel = Registered country
 transport.transportMeans.departure.vehicleCountry.error.required = Select the country the vehicle is registered to
 
 transport.transportMeans.anotherVehicleCrossingYesNo.title = Are you using another vehicle to cross the border?
 transport.transportMeans.anotherVehicleCrossingYesNo.heading = Are you using another vehicle to cross the border?
 transport.transportMeans.anotherVehicleCrossingYesNo.paragraph = This includes using a different vehicle to carry the inland mode over the border. For example, a truck on a ferry.
 transport.transportMeans.anotherVehicleCrossingYesNo.checkYourAnswersLabel = Are you using another vehicle to cross the border?
+transport.transportMeans.anotherVehicleCrossingYesNo.change.hidden = if you are using another vehicle to cross the border
 transport.transportMeans.anotherVehicleCrossingYesNo.error.required = Select yes if the vehicle will change before crossing the border
 
 transport.transportMeans.borderModeOfTransport.title = Which mode of transport are you using to cross the border?
@@ -1153,7 +1157,8 @@ transport.transportMeans.borderModeOfTransport.air = Air
 transport.transportMeans.borderModeOfTransport.mail = Mail (active mode of transport unknown)
 transport.transportMeans.borderModeOfTransport.fixed = Fixed transport installations - pipelines or electric power lines used for the continuous transport of goods
 transport.transportMeans.borderModeOfTransport.waterway = Inland waterway
-transport.transportMeans.borderModeOfTransport.checkYourAnswersLabel = Which mode of transport are you using to cross the border?
+transport.transportMeans.borderModeOfTransport.checkYourAnswersLabel = Border mode of transport
+transport.transportMeans.borderModeOfTransport.change.hidden = border mode of transport
 transport.transportMeans.borderModeOfTransport.error.required = Select which mode of transport you’re using to cross the border
 
 transport.transportMeans.active.identification.title = Which identification do you want to use for this vehicle?
@@ -1167,18 +1172,20 @@ transport.transportMeans.active.identification.regNumberAircraft = Registration 
 transport.transportMeans.active.identification.europeanVesselIdNumber = European vessel identification number (ENI code)
 transport.transportMeans.active.identification.inlandWaterwaysVehicle = Name of an inland waterways vehicle
 transport.transportMeans.active.identification.checkYourAnswersLabel = Which identification do you want to use for this vehicle?
+transport.transportMeans.active.identification.change.hidden = identification type for the border means of transport
 transport.transportMeans.active.identification.error.required = Select which identification you want to use for this vehicle
-transport.transportMeans.active.identification.checkYourAnswersLabel = Which identification do you want to use for the vehicle crossing the border
 transport.transportMeans.active.identification.error.required = Select which identification you want to use for this vehicle
 
 transport.transportMeans.active.addNationalityYesNo.title = Do you want to add the registered country for this vehicle?
 transport.transportMeans.active.addNationalityYesNo.heading = Do you want to add the registered country for this vehicle?
-transport.transportMeans.active.addNationalityYesNo.checkYourAnswersLabel = Do you want to add the registered country for this vehicle
+transport.transportMeans.active.addNationalityYesNo.checkYourAnswersLabel = Do you want to add the registered country for this vehicle?
+transport.transportMeans.active.addNationalityYesNo.change.hidden = if you want to add a registered country
 transport.transportMeans.active.addNationalityYesNo.error.required = Select yes if you want to add the registered country for the vehicle crossing the border
 
 transport.transportMeans.active.identificationNumber.title = What is the {0}?
 transport.transportMeans.active.identificationNumber.heading = What is the {0}?
-transport.transportMeans.active.identificationNumber.checkYourAnswersLabel = What is the {0}
+transport.transportMeans.active.identificationNumber.checkYourAnswersLabel = Identification number
+transport.transportMeans.active.identificationNumber.change.hidden = identification number for the border means of transport
 transport.transportMeans.active.identificationNumber.imoShipIdNumber = IMO ship identification number
 transport.transportMeans.active.identificationNumber.seaGoingVessel = name of the sea-going vessel
 transport.transportMeans.active.identificationNumber.trainNumber = train number
@@ -1240,32 +1247,8 @@ transport.transportMeans.active.confirmRemoveBorderTransport.heading = Are you s
 transport.transportMeans.active.confirmRemoveBorderTransport.checkYourAnswersLabel = Are you sure you want to remove this border means of transport?
 transport.transportMeans.active.confirmRemoveBorderTransport.error.required = Select yes if you want to remove this border means of transport
 
-
 transport.transportMeans.transportMeansCheckYourAnswers.title = Check your answers
 transport.transportMeans.transportMeansCheckYourAnswers.heading = Check your answers
-
-transport.transportMeans.transportMeansCheckYourAnswers.label.mode = Mode
-
-transport.transportMeans.transportMeansCheckYourAnswers.inlandMode.h2 = Inland mode of transport
-transport.transportMeans.departure.inlandMode.change.hidden = which inland mode of transport you’re using
-
-transport.transportMeans.transportMeansCheckYourAnswers.means.h2 = Departure means of transport
-transport.transportMeans.transportMeansCheckYourAnswers.means.identificationType.label = Identification type
-transport.transportMeans.transportMeansCheckYourAnswers.means.identificationType.change.hidden= identification type for the departure means of transport
-transport.transportMeans.transportMeansCheckYourAnswers.means.identificationType.checkYourAnswersLabel = Identification type
-transport.transportMeans.transportMeansCheckYourAnswers.means.identificationNumber.change.hidden = identification number for the departure means of transport
-transport.transportMeans.transportMeansCheckYourAnswers.means.identificationNumber.checkYourAnswersLabel = Identification number
-transport.transportMeans.transportMeansCheckYourAnswers.means.vehicleNationality.checkYourAnswersLabel = Registered country
-transport.transportMeans.transportMeansCheckYourAnswers.means.vehicleNationality.change.hidden = registered country for the departure means of transport
-
-transport.transportMeans.transportMeansCheckYourAnswers.border.h2 = Border mode of transport
-transport.transportMeans.transportMeansCheckYourAnswers.borderMode.h2 = Border mode of transport
-transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.h2 = Border means of transport {0}
-transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationType.label = Identification type
-transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationType.checkYourAnswersLabel = Identification type
-transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationType.change.hidden = identification type for the border means of transport
-transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationNumber.checkYourAnswersLabel = Identification number
-transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.identificationNumber.change.hidden = identification number for the border means of transport
-transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.officeOfTransit.label = office of transit for the border means of transport
-transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.addNationalityYesNo.change.hidden= if you want to add a registered country
-transport.transportMeans.transportMeansCheckYourAnswers.borderMeans.addNationalityYesNo.checkYourAnswersLabel= Do you want to add a registered country?
+transport.transportMeans.inlandMode.subheading = Inland mode of transport
+transport.transportMeans.departureMeans.subheading = Departure means of transport
+transport.transportMeans.borderMode.subheading = Border mode of transport
