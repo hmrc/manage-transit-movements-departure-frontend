@@ -24,8 +24,7 @@ import pages.transport.transportMeans.departure.InlandModePage
 
 case class TransportDomain(
   preRequisites: PreRequisitesDomain,
-  inlandMode: InlandMode,
-  transportMeans: Option[TransportMeansDomain]
+  transportMeans: TransportMeansDomain
 ) extends JourneyDomainModel
 
 object TransportDomain {
@@ -40,8 +39,7 @@ object TransportDomain {
 
     for {
       preRequisites  <- UserAnswersReader[PreRequisitesDomain]
-      inlandMode     <- InlandModePage.reader
-      transportMeans <- transportMeansReads(inlandMode)
-    } yield TransportDomain(preRequisites, inlandMode, transportMeans)
+      transportMeans <- UserAnswersReader[TransportMeansDomain]
+    } yield TransportDomain(preRequisites, transportMeans)
   }
 }
