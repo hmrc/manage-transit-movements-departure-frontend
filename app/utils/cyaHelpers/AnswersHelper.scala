@@ -110,7 +110,7 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
 
   protected def buildListItem[A <: JourneyDomainModel](
     nameWhenComplete: A => String,
-    nameWhenInProgress: Option[String],
+    nameWhenInProgress: => Option[String],
     removeRoute: Option[Call]
   )(implicit userAnswersReader: UserAnswersReader[A]): Option[Either[ListItem, ListItem]] =
     userAnswersReader.run(userAnswers) match {
