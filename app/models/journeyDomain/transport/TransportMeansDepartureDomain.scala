@@ -23,9 +23,7 @@ import models.reference.Nationality
 import models.transport.transportMeans.departure.{Identification, InlandMode}
 import pages.transport.transportMeans.departure.{IdentificationPage, InlandModePage, MeansIdentificationNumberPage, VehicleCountryPage}
 
-sealed trait TransportMeansDepartureDomain extends JourneyDomainModel {
-  val inlandMode: InlandMode
-}
+sealed trait TransportMeansDepartureDomain extends JourneyDomainModel
 
 sealed trait TransportMeansDomainWithIdentification extends TransportMeansDepartureDomain {
   val identification: Identification
@@ -47,7 +45,6 @@ case class TransportMeansDomainWithUnknownInlandMode(
   identificationNumber: String,
   nationality: Nationality
 ) extends TransportMeansDomainWithIdentification {
-  override val inlandMode: InlandMode         = InlandMode.Unknown
   override val identification: Identification = Identification.Unknown
 }
 
@@ -61,7 +58,6 @@ object TransportMeansDomainWithUnknownInlandMode {
 }
 
 case class TransportMeansDomainWithAnyOtherInlandMode(
-  inlandMode: InlandMode,
   identification: Identification,
   identificationNumber: String,
   nationality: Nationality
@@ -71,7 +67,6 @@ object TransportMeansDomainWithAnyOtherInlandMode {
 
   implicit val userAnswersReader: UserAnswersReader[TransportMeansDomainWithAnyOtherInlandMode] =
     (
-      InlandModePage.reader,
       IdentificationPage.reader,
       MeansIdentificationNumberPage.reader,
       VehicleCountryPage.reader

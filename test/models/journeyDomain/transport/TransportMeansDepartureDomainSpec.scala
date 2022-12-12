@@ -58,7 +58,7 @@ class TransportMeansDepartureDomainSpec extends SpecBase with Generators with Sc
               .setValue(MeansIdentificationNumberPage, identificationNumber)
               .setValue(VehicleCountryPage, nationality)
 
-            val expectedResult = TransportMeansDomainWithAnyOtherInlandMode(inlandMode, identification, identificationNumber, nationality)
+            val expectedResult = TransportMeansDomainWithAnyOtherInlandMode(identification, identificationNumber, nationality)
 
             val result: EitherType[TransportMeansDepartureDomain] = UserAnswersReader[TransportMeansDepartureDomain].run(userAnswers)
 
