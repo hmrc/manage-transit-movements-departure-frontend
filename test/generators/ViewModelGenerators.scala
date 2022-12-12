@@ -19,11 +19,13 @@ package generators
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.FormError
+import play.api.mvc.Call
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import viewModels.sections.Section
 import viewModels.taskList.{Task, TaskStatus}
+import viewModels.transport.transportMeans.active.AddAnotherBorderTransportViewModel
 import viewModels.{Link, ListItem}
 
 trait ViewModelGenerators {
@@ -182,5 +184,12 @@ trait ViewModelGenerators {
       changeUrl <- nonEmptyString
       removeUrl <- Gen.option(nonEmptyString)
     } yield ListItem(name, changeUrl, removeUrl)
+  }
+
+  implicit lazy val arbitraryAddAnotherBorderTransportViewModel: Arbitrary[AddAnotherBorderTransportViewModel] = Arbitrary {
+    for {
+      listItems    <- arbitrary[Seq[ListItem]]
+      onSubmitCall <- arbitrary[Call]
+    } yield AddAnotherBorderTransportViewModel(listItems, onSubmitCall)
   }
 }

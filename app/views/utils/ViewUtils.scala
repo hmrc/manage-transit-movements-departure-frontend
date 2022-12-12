@@ -58,20 +58,6 @@ object ViewUtils {
         fieldset = Some(Fieldset(legend = Some(Legend(content = Text(legend), classes = legendClass, isPageHeading = false))))
       )
     }
-
-    def withLegendAndHint(legend: String, legendIsVisible: Boolean = true, hintText: String): Radios = {
-      val legendClass = if (legendIsVisible) "govuk-fieldset__legend--m" else "govuk-visually-hidden"
-      radios.copy(
-        fieldset = Some(
-          Fieldset(
-            legend = Some(
-              Legend(content = Text(legend), classes = legendClass, isPageHeading = false)
-            )
-          )
-        ),
-        hint = Some(Hint(content = Text(hintText)))
-      )
-    }
   }
 
   implicit class TextAreaImplicits(textArea: Textarea)(implicit messages: Messages) extends RichTextareaSupport {

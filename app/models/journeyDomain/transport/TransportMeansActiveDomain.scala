@@ -23,12 +23,12 @@ import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, Use
 import models.journeyDomain.Stage.{AccessingJourney, CompletingJourney}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{CustomsOffice, Nationality}
+import models.transport.transportMeans.BorderModeOfTransport._
 import models.transport.transportMeans.active.Identification
-import models.transport.transportMeans.departure.InlandMode
-import models.transport.transportMeans.departure.InlandMode.Air
+import models.transport.transportMeans.active.Identification.{RegNumberRoadVehicle, TrainNumber}
 import pages.preTaskList.SecurityDetailsTypePage
+import pages.transport.transportMeans.BorderModeOfTransportPage
 import pages.transport.transportMeans.active._
-import pages.transport.transportMeans.departure.InlandModePage
 import play.api.i18n.Messages
 import play.api.mvc.Call
 
@@ -46,7 +46,8 @@ case class TransportMeansActiveDomain(
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some {
     stage match {
       case AccessingJourney =>
-        controllers.transport.transportMeans.routes.AnotherVehicleCrossingYesNoController.onPageLoad(userAnswers.lrn, mode)
+        // TODO - Redirect to active border loop CYA page has been implemented so change links on add another border page work
+        controllers.routes.SessionExpiredController.onPageLoad()
       case CompletingJourney =>
         controllers.transport.transportMeans.active.routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode)
     }
@@ -58,26 +59,38 @@ object TransportMeansActiveDomain {
   def asString(identification: Identification, identificationNumber: String)(implicit messages: Messages): String =
     messages(s"transport.transportMeans.active.identification.${identification.toString}").concat(s" - $identificationNumber")
 
-  def conveyanceReads(index: Index): UserAnswersReader[Option[String]] = {
-
-    val details = for {
-      securityDetails <- SecurityDetailsTypePage.reader
-      inlandMode      <- InlandModePage.reader
-    } yield (securityDetails, inlandMode)
-
-    details.flatMap {
-      case (NoSecurityDetails, inlandMode: InlandMode) if inlandMode != Air =>
-        ConveyanceReferenceNumberYesNoPage(index).filterOptionalDependent(identity)(ConveyanceReferenceNumberPage(index).reader)
-      case _ => ConveyanceReferenceNumberPage(index).reader.map(Some(_))
+  def userAnswersReader(index: Index): UserAnswersReader[TransportMeansActiveDomain] = {
+    val identificationReads: UserAnswersReader[Identification] = {
+      if (index.isFirst) {
+        BorderModeOfTransportPage.reader.flatMap {
+          case Rail => UserAnswersReader.apply(TrainNumber)
+          case Road => UserAnswersReader.apply(RegNumberRoadVehicle)
+          case _    => IdentificationPage(index).reader
+        }
+      } else {
+        IdentificationPage(index).reader
+      }
     }
-  }
 
-  def userAnswersReader(index: Index): UserAnswersReader[TransportMeansActiveDomain] =
+    val conveyanceReads: UserAnswersReader[Option[String]] =
+      for {
+        securityDetails <- SecurityDetailsTypePage.reader
+        borderMode      <- BorderModeOfTransportPage.reader
+        reader <- (securityDetails, borderMode) match {
+          case (x, Air) if x != NoSecurityDetails =>
+            ConveyanceReferenceNumberPage(index).reader.map(Some(_))
+          case _ =>
+            ConveyanceReferenceNumberYesNoPage(index).filterOptionalDependent(identity)(ConveyanceReferenceNumberPage(index).reader)
+        }
+      } yield reader
+
     (
-      IdentificationPage(index).reader,
+      identificationReads,
       IdentificationNumberPage(index).reader,
       AddNationalityYesNoPage(index).filterOptionalDependent(identity)(NationalityPage(index).reader),
       CustomsOfficeActiveBorderPage(index).reader,
-      conveyanceReads(index)
+      conveyanceReads
     ).tupled.map((TransportMeansActiveDomain.apply _).tupled)
+  }
+
 }

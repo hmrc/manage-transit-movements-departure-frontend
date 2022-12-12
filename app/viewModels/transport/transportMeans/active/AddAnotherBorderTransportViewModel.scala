@@ -16,31 +16,54 @@
 
 package viewModels.transport.transportMeans.active
 
-import models.{NormalMode, UserAnswers}
+import config.FrontendAppConfig
+import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
+import play.api.mvc.Call
+import uk.gov.hmrc.govukfrontend.views.Aliases.Content
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import utils.cyaHelpers.transport.transportMeans.active.ActiveBordersTransportCheckYourAnswersHelper
 import viewModels.ListItem
 
 import javax.inject.Inject
 
-case class AddAnotherBorderTransportViewModel(listItems: Seq[ListItem])
+case class AddAnotherBorderTransportViewModel(
+  listItems: Seq[ListItem],
+  onSubmitCall: Call
+) {
+
+  val activeBorderTransports: Int = listItems.length
+  val singularOrPlural: String    = if (activeBorderTransports == 1) "singular" else "plural"
+
+  val prefix: String = "transport.transportMeans.active.addAnotherBorderTransport"
+
+  def title(implicit messages: Messages): String         = messages(s"$prefix.$singularOrPlural.title", activeBorderTransports)
+  def heading(implicit messages: Messages): String       = messages(s"$prefix.$singularOrPlural.heading", activeBorderTransports)
+  def legend(implicit messages: Messages): String        = messages(s"$prefix.label")
+  def maxLimitLabel(implicit messages: Messages): String = messages(s"$prefix.maxLimit.label")
+  def hint(implicit messages: Messages): Content         = messages(s"$prefix.hint").toText
+
+  def allowMoreActiveBorderTransports(implicit config: FrontendAppConfig): Boolean =
+    activeBorderTransports < config.maxActiveBorderTransports
+}
 
 object AddAnotherBorderTransportViewModel {
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): AddAnotherBorderTransportViewModel =
-    new AddAnotherBorderTransportViewModelProvider()(userAnswers)
-
   class AddAnotherBorderTransportViewModelProvider @Inject() () {
 
-    def apply(userAnswers: UserAnswers)(implicit messages: Messages): AddAnotherBorderTransportViewModel = {
-      val helper = new ActiveBordersTransportCheckYourAnswersHelper(userAnswers, NormalMode)
+
+    def apply(userAnswers: UserAnswers, mode : Mode)(implicit messages: Messages): AddAnotherBorderTransportViewModel = {
+      val helper = new ActiveBordersTransportCheckYourAnswersHelper(userAnswers, mode)
 
       val listItems = helper.listItems.collect {
         case Left(value)  => value
         case Right(value) => value
       }
 
-      new AddAnotherBorderTransportViewModel(listItems)
+      new AddAnotherBorderTransportViewModel(
+        listItems,
+        onSubmitCall = controllers.transport.transportMeans.active.routes.AddAnotherBorderTransportController.onSubmit(userAnswers.lrn, mode)
+      )
     }
   }
 }

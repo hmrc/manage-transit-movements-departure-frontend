@@ -39,3 +39,8 @@ POST       /:lrn/transport-details/border-means-of-transport/add-another        
 GET        /:lrn/transport-details/border-means-of-transport/change-add-another                                              controllers.transport.transportMeans.active.AddAnotherBorderTransportController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/transport-details/border-means-of-transport/change-add-another                                              controllers.transport.transportMeans.active.AddAnotherBorderTransportController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
+GET        /:lrn/transport-details/border-means-of-transport/:activeIndex/remove                                             controllers.transport.transportMeans.active.ConfirmRemoveBorderTransportController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode, activeIndex: Index)
+POST       /:lrn/transport-details/border-means-of-transport/:activeIndex/remove                                             controllers.transport.transportMeans.active.ConfirmRemoveBorderTransportController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode, activeIndex: Index)
+GET        /:lrn/transport-details/border-means-of-transport/:activeIndex/change-remove                                      controllers.transport.transportMeans.active.ConfirmRemoveBorderTransportController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, activeIndex: Index)
+POST       /:lrn/transport-details/border-means-of-transport/:activeIndex/change-remove                                      controllers.transport.transportMeans.active.ConfirmRemoveBorderTransportController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode, activeIndex: Index)
+

@@ -14,21 +14,32 @@
  * limitations under the License.
  */
 
-package pages.transport.transportMeans.active
+package pages.transport.transportMeans
 
-import controllers.transport.transportMeans.active.routes
-import models.{Mode, UserAnswers}
+import controllers.transport.transportMeans.routes
+import models.transport.transportMeans.BorderModeOfTransport
+import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.TransportSection
+import pages.sections.transport.{TransportMeansActiveSection, TransportSection}
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object AddAnotherBorderTransportPage extends QuestionPage[Boolean] {
+import scala.util.Try
+
+case object BorderModeOfTransportPage extends QuestionPage[BorderModeOfTransport] {
 
   override def path: JsPath = TransportSection.path \ toString
 
-  override def toString: String = "addAnotherBorderTransport"
+  override def toString: String = "borderModeOfTransport"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.BorderModeOfTransportController.onPageLoad(userAnswers.lrn, mode))
+
+  override def cleanup(value: Option[BorderModeOfTransport], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(_) =>
+        userAnswers.remove(TransportMeansActiveSection(Index(0)))
+      case None =>
+        super.cleanup(value, userAnswers)
+    }
 }

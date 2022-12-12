@@ -1144,6 +1144,18 @@ transport.transportMeans.anotherVehicleCrossingYesNo.paragraph = This includes u
 transport.transportMeans.anotherVehicleCrossingYesNo.checkYourAnswersLabel = Are you using another vehicle to cross the border?
 transport.transportMeans.anotherVehicleCrossingYesNo.error.required = Select yes if the vehicle will change before crossing the border
 
+transport.transportMeans.borderModeOfTransport.title = Which mode of transport are you using to cross the border?
+transport.transportMeans.borderModeOfTransport.heading = Which mode of transport are you using to cross the border?
+transport.transportMeans.borderModeOfTransport.maritime = Maritime
+transport.transportMeans.borderModeOfTransport.rail = Rail
+transport.transportMeans.borderModeOfTransport.road = Road
+transport.transportMeans.borderModeOfTransport.air = Air
+transport.transportMeans.borderModeOfTransport.mail = Mail (active mode of transport unknown)
+transport.transportMeans.borderModeOfTransport.fixed = Fixed transport installations - pipelines or electric power lines used for the continuous transport of goods
+transport.transportMeans.borderModeOfTransport.waterway = Inland waterway
+transport.transportMeans.borderModeOfTransport.checkYourAnswersLabel = Which mode of transport are you using to cross the border?
+transport.transportMeans.borderModeOfTransport.error.required = Select which mode of transport you’re using to cross the border
+
 transport.transportMeans.active.identification.title = Which identification do you want to use for this vehicle?
 transport.transportMeans.active.identification.heading = Which identification do you want to use for this vehicle?
 transport.transportMeans.active.identification.imoShipIdNumber = IMO ship identification number
@@ -1219,8 +1231,15 @@ transport.transportMeans.active.addAnotherBorderTransport.plural.title = You hav
 transport.transportMeans.active.addAnotherBorderTransport.plural.heading = You have added {0} border means of transport
 transport.transportMeans.active.addAnotherBorderTransport.error.required =  Select yes if you want to add another border mode of transport
 transport.transportMeans.active.addAnotherBorderTransport.label = Do you want to add another border means of transport?
+transport.transportMeans.active.addAnotherBorderTransport.hidden = Do you want to add another border means of transport?
 transport.transportMeans.active.addAnotherBorderTransport.hint = Only include vehicles that cross into another CTC country. As the EU is one CTC country, you don’t need to provide vehicle changes that stay within the EU.
 transport.transportMeans.active.addAnotherBorderTransport.maxLimit.label = You cannot add any more border means of transport. To add another, you need to remove one first.
+
+transport.transportMeans.active.confirmRemoveBorderTransport.title = Are you sure you want to remove this border means of transport?
+transport.transportMeans.active.confirmRemoveBorderTransport.heading = Are you sure you want to remove this border means of transport?
+transport.transportMeans.active.confirmRemoveBorderTransport.checkYourAnswersLabel = Are you sure you want to remove this border means of transport?
+transport.transportMeans.active.confirmRemoveBorderTransport.error.required = Select yes if you want to remove this border means of transport
+
 
 transport.transportMeans.transportMeansCheckYourAnswers.title = Check your answers
 transport.transportMeans.transportMeansCheckYourAnswers.heading = Check your answers
