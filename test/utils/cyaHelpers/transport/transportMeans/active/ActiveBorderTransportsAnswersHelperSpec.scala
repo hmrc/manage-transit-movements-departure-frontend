@@ -27,7 +27,7 @@ import pages.preTaskList.SecurityDetailsTypePage
 import pages.transport.transportMeans.{AnotherVehicleCrossingYesNoPage, BorderModeOfTransportPage}
 import viewModels.ListItem
 
-class ActiveBorderTransportCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "ActiveBorderTransportCheckYourAnswersHelperSpec" - {
 
@@ -35,7 +35,7 @@ class ActiveBorderTransportCheckYourAnswersHelperSpec extends SpecBase with Scal
       "must return empty list of list items" in {
         val userAnswers = emptyUserAnswers
 
-        val helper = new ActiveBorderTransportCheckYourAnswersHelper(userAnswers, NormalMode)
+        val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
         helper.listItems mustBe Nil
       }
     }
@@ -50,13 +50,13 @@ class ActiveBorderTransportCheckYourAnswersHelperSpec extends SpecBase with Scal
 
           forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, index)) {
             userAnswers =>
-              val helper = new ActiveBorderTransportCheckYourAnswersHelper(userAnswers, NormalMode)
+              val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
               val active = TransportMeansActiveDomain.userAnswersReader(index).run(userAnswers).value
               helper.listItems mustBe Seq(
                 Right(
                   ListItem(
                     name = s"${messages(s"transport.transportMeans.active.identification.${active.identification}")} - ${active.identificationNumber}",
-                    changeUrl = controllers.routes.SessionExpiredController.onPageLoad().url,
+                    changeUrl = "#",
                     removeUrl =
                       Some(controllers.transport.transportMeans.active.routes.ConfirmRemoveBorderTransportController.onPageLoad(lrn, NormalMode, index).url)
                   )
@@ -74,13 +74,13 @@ class ActiveBorderTransportCheckYourAnswersHelperSpec extends SpecBase with Scal
 
           forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, index)) {
             userAnswers =>
-              val helper = new ActiveBorderTransportCheckYourAnswersHelper(userAnswers, NormalMode)
+              val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
               val active = TransportMeansActiveDomain.userAnswersReader(index).run(userAnswers).value
               helper.listItems mustBe Seq(
                 Right(
                   ListItem(
                     name = s"${messages(s"transport.transportMeans.active.identification.${active.identification}")} - ${active.identificationNumber}",
-                    changeUrl = controllers.routes.SessionExpiredController.onPageLoad().url,
+                    changeUrl = "#",
                     removeUrl = None
                   )
                 )
@@ -89,7 +89,5 @@ class ActiveBorderTransportCheckYourAnswersHelperSpec extends SpecBase with Scal
         }
       }
     }
-
-    //TODO - Add other CYA tests once that page is created
   }
 }

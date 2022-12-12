@@ -78,6 +78,7 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
         )
       }
 
+  // TODO - move away from using this
   def getAnswerAndBuildSectionRow[A <: JourneyDomainModel, B](
     page: QuestionPage[B],
     formatAnswer: B => Content,
@@ -96,6 +97,27 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
           args = args: _*
         )
     }
+
+  def getAnswerAndBuildSectionRow[A <: JourneyDomainModel](
+    formatAnswer: A => Content,
+    prefix: String,
+    id: Option[String],
+    args: Any*
+  )(implicit userAnswersReader: UserAnswersReader[A]): Option[SummaryListRow] =
+    userAnswersReader
+      .run(userAnswers)
+      .map(
+        x =>
+          buildSimpleRow(
+            prefix = prefix,
+            label = messages(s"$prefix.label", args: _*),
+            answer = formatAnswer(x),
+            id = id,
+            call = Some(UserAnswersNavigator.nextPage[A](userAnswers, mode, AccessingJourney)),
+            args = args: _*
+          )
+      )
+      .toOption
 
   protected def buildListItems(
     section: Section[JsArray]

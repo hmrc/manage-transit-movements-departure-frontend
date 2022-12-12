@@ -267,10 +267,11 @@ trait UserAnswersEntryGenerators {
   }
 
   private def generateTransportMeansAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.transport.transportMeans.BorderModeOfTransportPage
+    import pages.transport.transportMeans._
     generateTransportMeansDepartureAnswer orElse
       generateTransportMeansActiveAnswer orElse {
-        case BorderModeOfTransportPage => arbitrary[BorderModeOfTransport].map(Json.toJson(_))
+        case AnotherVehicleCrossingYesNoPage => arbitrary[Boolean].map(JsBoolean)
+        case BorderModeOfTransportPage       => arbitrary[BorderModeOfTransport].map(Json.toJson(_))
       }
   }
 

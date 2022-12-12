@@ -150,9 +150,8 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
         }
       }
 
-      // TODO - Redirect to cya page once implemented
       "when no submitted" - {
-        "must redirect to CYA" ignore {
+        "must redirect to CYA" in {
           when(mockViewModelProvider.apply(any(), any())(any()))
             .thenReturn(viewModelWithItemsNotMaxedOut)
 
@@ -166,15 +165,15 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            ???
+            controllers.transport.transportMeans.routes.TransportMeansCheckYourAnswersController.onPageLoad(lrn, mode).url
         }
       }
     }
 
     "when max limit reached" - {
-      "must redirect to CYA" ignore {
+      "must redirect to CYA" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(viewModelWithItemsNotMaxedOut)
+          .thenReturn(viewModelWithItemsMaxedOut)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -186,7 +185,7 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual
-          ???
+          controllers.transport.transportMeans.routes.TransportMeansCheckYourAnswersController.onPageLoad(lrn, mode).url
       }
     }
 
