@@ -1068,11 +1068,8 @@ transport.preRequisites.containerIndicator.checkYourAnswersLabel = Are you using
 transport.preRequisites.containerIndicator.error.required = Select yes if you’re using any containers
 transport.preRequisites.containerIndicator.paragraph = This can be any container used to transport goods in CTC transit. For example, a swap body, articulated lorry or shipping container.
 
-# Declaration
-
-declarationSubmitted.title = Declaration Submitted
-declarationSubmitted.heading = Declaration Submitted
-declarationSubmitted.paragraph1 = You have submitted your declaration.
+transport.transportMeans.active.label = Active border transport means {0}
+transport.transportMeans.active.change.hidden = active border transport means {0}
 
 transport.means.caption = Transport details - Modes and means of transport
 transport.inlandMode.caption = Transport details - Inland mode of transport
@@ -1252,3 +1249,12 @@ transport.transportMeans.transportMeansCheckYourAnswers.heading = Check your ans
 transport.transportMeans.inlandMode.subheading = Inland mode of transport
 transport.transportMeans.departureMeans.subheading = Departure means of transport
 transport.transportMeans.borderMode.subheading = Border mode of transport
+transport.transportMeans.borderMeans.subheading = Border means of transport
+transport.transportMeans.borderMeans.addOrRemove = Add or remove border means of transport
+
+
+# Declaration
+
+declarationSubmitted.title = Declaration Submitted
+declarationSubmitted.heading = Declaration Submitted
+declarationSubmitted.paragraph1 = You have submitted your declaration.

@@ -17,7 +17,6 @@
 package models.journeyDomain.transport
 
 import cats.implicits._
-import models.{Index, Mode, UserAnswers}
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.Stage.{AccessingJourney, CompletingJourney}
@@ -26,6 +25,7 @@ import models.reference.{CustomsOffice, Nationality}
 import models.transport.transportMeans.BorderModeOfTransport._
 import models.transport.transportMeans.active.Identification
 import models.transport.transportMeans.active.Identification.{RegNumberRoadVehicle, TrainNumber}
+import models.{Index, Mode, UserAnswers}
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.transport.transportMeans.BorderModeOfTransportPage
 import pages.transport.transportMeans.active._
@@ -47,7 +47,7 @@ case class TransportMeansActiveDomain(
     stage match {
       case AccessingJourney =>
         // TODO - Redirect to active border loop CYA page has been implemented so change links on add another border page work
-        controllers.routes.SessionExpiredController.onPageLoad()
+        Call("GET", "#")
       case CompletingJourney =>
         controllers.transport.transportMeans.active.routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode)
     }

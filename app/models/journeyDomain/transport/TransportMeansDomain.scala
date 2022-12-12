@@ -17,18 +17,24 @@
 package models.journeyDomain.transport
 
 import cats.implicits._
+import controllers.transport.transportMeans.routes
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.JourneyDomainModel
-import models.{Index, RichJsArray}
+import models.journeyDomain.{JourneyDomainModel, Stage}
+import models.{Index, Mode, RichJsArray, UserAnswers}
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.sections.transport.TransportMeansActiveListSection
 import pages.transport.transportMeans.AnotherVehicleCrossingYesNoPage
+import play.api.mvc.Call
 
 case class TransportMeansDomain(
   transportMeansDeparture: TransportMeansDepartureDomain,
   transportMeansActive: Option[Seq[TransportMeansActiveDomain]]
-) extends JourneyDomainModel
+) extends JourneyDomainModel {
+
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
+    Option(routes.TransportMeansCheckYourAnswersController.onPageLoad(userAnswers.lrn, mode))
+}
 
 object TransportMeansDomain {
 

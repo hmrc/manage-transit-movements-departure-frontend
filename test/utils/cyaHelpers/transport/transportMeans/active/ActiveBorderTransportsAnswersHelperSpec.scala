@@ -56,7 +56,7 @@ class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPr
                 Right(
                   ListItem(
                     name = s"${messages(s"transport.transportMeans.active.identification.${active.identification}")} - ${active.identificationNumber}",
-                    changeUrl = controllers.routes.SessionExpiredController.onPageLoad().url,
+                    changeUrl = "#",
                     removeUrl =
                       Some(controllers.transport.transportMeans.active.routes.ConfirmRemoveBorderTransportController.onPageLoad(lrn, NormalMode, index).url)
                   )
@@ -80,7 +80,7 @@ class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPr
                 Right(
                   ListItem(
                     name = s"${messages(s"transport.transportMeans.active.identification.${active.identification}")} - ${active.identificationNumber}",
-                    changeUrl = controllers.routes.SessionExpiredController.onPageLoad().url,
+                    changeUrl = "#",
                     removeUrl = None
                   )
                 )

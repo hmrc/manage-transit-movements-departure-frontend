@@ -17,8 +17,10 @@
 package utils.cyaHelpers.transport.transportMeans
 
 import base.SpecBase
-import generators.Generators
+import generators.{Generators, TransportUserAnswersGenerator}
 import models.Mode
+import models.domain.UserAnswersReader
+import models.journeyDomain.transport.TransportMeansActiveDomain
 import models.reference.Nationality
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.departure.{InlandMode, Identification => DepartureIdentification}
@@ -30,9 +32,46 @@ import uk.gov.hmrc.govukfrontend.views.Aliases.{Key, SummaryListRow, Value}
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions}
 
-class TransportMeansCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class TransportMeansCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TransportUserAnswersGenerator {
 
   "TransportMeansCheckYourAnswersHelper" - {
+
+    "activeBorderTransportMeans" - {
+      "must return None" - {
+        "when active border transport means is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportMeansCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.activeBorderTransportMeans(index)
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when incident is defined" in {
+          forAll(arbitraryTransportMeansActiveAnswers(emptyUserAnswers, index), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val abtm = UserAnswersReader[TransportMeansActiveDomain](
+                TransportMeansActiveDomain.userAnswersReader(index)
+              ).run(userAnswers).value
+
+              val helper = new TransportMeansCheckYourAnswersHelper(userAnswers, mode)
+              val result = helper.activeBorderTransportMeans(index).get
+
+              result.key.value mustBe s"Active border transport means ${index.display}"
+              result.value.value mustBe s"${messages(s"transport.transportMeans.active.identification.${abtm.identification}")} - ${abtm.identificationNumber}"
+              val actions = result.actions.get.items
+              actions.size mustBe 1
+              val action = actions.head
+              action.content.value mustBe "Change"
+              action.href mustBe "#"
+              action.visuallyHiddenText.get mustBe "active border transport means 1"
+              action.id mustBe "change-active-border-transport-means-1"
+          }
+        }
+      }
+    }
 
     "inlandMode" - {
       "must return None" - {

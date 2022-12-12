@@ -16,17 +16,26 @@
 
 package utils.cyaHelpers.transport.transportMeans
 
+import models.journeyDomain.transport.TransportMeansActiveDomain
 import models.reference.Nationality
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.departure.{Identification, InlandMode}
-import models.{Mode, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import pages.transport.transportMeans._
 import pages.transport.transportMeans.departure._
 import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
 
 class TransportMeansCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
+
+  def activeBorderTransportMeans(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[TransportMeansActiveDomain](
+    formatAnswer = _.asString.toText,
+    prefix = "transport.transportMeans.active",
+    id = Some(s"change-active-border-transport-means-${index.display}"),
+    args = index.display
+  )(TransportMeansActiveDomain.userAnswersReader(index))
 
   def anotherVehicleCrossing: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = AnotherVehicleCrossingYesNoPage,

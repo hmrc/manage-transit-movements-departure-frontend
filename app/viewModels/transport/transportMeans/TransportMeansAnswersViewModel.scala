@@ -16,9 +16,12 @@
 
 package viewModels.transport.transportMeans
 
-import models.{Mode, UserAnswers}
+import controllers.transport.transportMeans.active.routes
+import models.{Mode, RichOptionalJsArray, UserAnswers}
+import pages.sections.transport.TransportMeansActiveListSection
 import play.api.i18n.Messages
 import utils.cyaHelpers.transport.transportMeans.TransportMeansCheckYourAnswersHelper
+import viewModels.Link
 import viewModels.sections.Section
 
 import javax.inject.Inject
@@ -51,9 +54,25 @@ object TransportMeansAnswersViewModel {
         rows = Seq(helper.modeCrossingBorder, helper.anotherVehicleCrossing).flatten
       )
 
-      //val borderMeansSection = ??? // TODO - an 'add or remove' section for the active transport means stuff
+      val borderMeansSection = {
+        val rows = userAnswers
+          .get(TransportMeansActiveListSection)
+          .mapWithIndex {
+            (_, index) => helper.activeBorderTransportMeans(index)
+          }
 
-      new TransportMeansAnswersViewModel(Seq(inlandModeSection, departureMeansSection, borderModeSection))
+        Section(
+          sectionTitle = messages("transport.transportMeans.borderMeans.subheading"),
+          rows = rows,
+          addAnotherLink = Link(
+            id = "add-or-remove-border-means-of-transport",
+            text = messages("transport.transportMeans.borderMeans.addOrRemove"),
+            href = routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode).url
+          )
+        )
+      }
+
+      new TransportMeansAnswersViewModel(Seq(inlandModeSection, departureMeansSection, borderModeSection, borderMeansSection))
     }
   }
 }
