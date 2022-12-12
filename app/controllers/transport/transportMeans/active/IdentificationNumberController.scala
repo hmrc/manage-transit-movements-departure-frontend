@@ -19,9 +19,13 @@ package controllers.transport.transportMeans.active
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.transport.transportMeans.active.IdentificationNumberFormProvider
+import models.requests.SpecificDataRequestProvider1
+import models.transport.transportMeans.BorderModeOfTransport
+import models.transport.transportMeans.active.Identification
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansActiveNavigatorProvider
+import pages.transport.transportMeans.BorderModeOfTransportPage
 import pages.transport.transportMeans.active.{IdentificationNumberPage, IdentificationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -47,39 +51,55 @@ class IdentificationNumberController @Inject() (
 
   private val prefix = "transport.transportMeans.active.identificationNumber"
 
+  private type Request = SpecificDataRequestProvider1[BorderModeOfTransport]#SpecificDataRequest[_]
+
+  private def identificationType(index: Index)(implicit request: Request): Option[Identification] = request.arg match {
+    case BorderModeOfTransport.Rail => Some(Identification.TrainNumber)
+    case BorderModeOfTransport.Road => Some(Identification.RegNumberRoadVehicle)
+    case _                          => request.userAnswers.get(IdentificationPage(index))
+  }
+
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] =
     actions
       .requireData(lrn)
-      .andThen(getMandatoryPage(IdentificationPage(activeIndex))) {
+      .andThen(getMandatoryPage(BorderModeOfTransportPage)) {
         implicit request =>
-          val dynamicTitle = s"$prefix.${request.arg.toString}"
-          val form         = formProvider(prefix, dynamicTitle)
+          identificationType(activeIndex) match {
+            case Some(value) =>
+              val dynamicTitle = s"$prefix.$value"
+              val form         = formProvider(prefix, dynamicTitle)
 
-          val preparedForm = request.userAnswers.get(IdentificationNumberPage(activeIndex)) match {
-            case None        => form
-            case Some(value) => form.fill(value)
+              val preparedForm = request.userAnswers.get(IdentificationNumberPage(activeIndex)) match {
+                case None        => form
+                case Some(value) => form.fill(value)
+              }
+
+              Ok(view(preparedForm, lrn, dynamicTitle, mode, activeIndex))
+            case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
           }
-
-          Ok(view(preparedForm, lrn, dynamicTitle, mode, activeIndex))
       }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] =
     actions
       .requireData(lrn)
-      .andThen(getMandatoryPage(IdentificationPage(activeIndex)))
+      .andThen(getMandatoryPage(BorderModeOfTransportPage))
       .async {
         implicit request =>
-          val dynamicTitle = s"$prefix.${request.arg.toString}"
-          val form         = formProvider(prefix, dynamicTitle)
+          identificationType(activeIndex) match {
+            case Some(value) =>
+              val dynamicTitle = s"$prefix.$value"
+              val form         = formProvider(prefix, dynamicTitle)
 
-          form
-            .bindFromRequest()
-            .fold(
-              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, dynamicTitle, mode, activeIndex))),
-              value => {
-                implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, activeIndex)
-                IdentificationNumberPage(activeIndex).writeToUserAnswers(value).writeToSession().navigate()
-              }
-            )
+              form
+                .bindFromRequest()
+                .fold(
+                  formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, dynamicTitle, mode, activeIndex))),
+                  value => {
+                    implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, activeIndex)
+                    IdentificationNumberPage(activeIndex).writeToUserAnswers(value).writeToSession().navigate()
+                  }
+                )
+            case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+          }
       }
 }
