@@ -27,7 +27,7 @@ import models.transport.transportMeans.active.Identification
 import models.transport.transportMeans.active.Identification.{RegNumberRoadVehicle, TrainNumber}
 import models.{Index, Mode, UserAnswers}
 import pages.preTaskList.SecurityDetailsTypePage
-import pages.routeDetails.transit.index.OfficeOfTransitPage
+import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import pages.transport.transportMeans.BorderModeOfTransportPage
 import pages.transport.transportMeans.active._
 import play.api.i18n.Messages
@@ -45,9 +45,9 @@ case class TransportMeansActiveDomain(
     s"${identification.asString} - $identificationNumber"
 
   def ifOfficeOfTransitPresent(userAnswers: UserAnswers, mode: Mode): Call =
-    userAnswers.get(OfficeOfTransitPage(Index(0))) match {
+    userAnswers.get(OfficesOfTransitSection) match {
       case Some(_) => controllers.transport.transportMeans.active.routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode)
-      case _       => controllers.transport.transportMeans.routes.TransportMeansCheckYourAnswersController.onPageLoad(userAnswers.lrn, mode)
+      case None    => controllers.transport.transportMeans.routes.TransportMeansCheckYourAnswersController.onPageLoad(userAnswers.lrn, mode)
     }
 
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some {
