@@ -23,7 +23,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class TransportMeansActiveNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
-  "Pre Requisites Navigator" - {
+  "TransportMeansActiveNavigator" - {
 
     "when in NormalMode" - {
 
@@ -32,38 +32,45 @@ class TransportMeansActiveNavigatorSpec extends SpecBase with ScalaCheckProperty
       val navigator         = navigatorProvider.apply(mode, activeIndex)
 
       "when answers complete" - {
-        "must redirect to AddAnotherBorderTransportPage CYA" in {
-          forAll(arbitraryPreRequisitesAnswers(emptyUserAnswers)) {
-            initialAnswers =>
-              forAll(arbitraryTransportMeansDepartureAnswers(initialAnswers)) {
-                secondaryAnswers =>
-                  forAll(arbitraryTransportMeansActiveAnswers(secondaryAnswers, activeIndex)) {
-                    answers =>
-                      navigator
-                        .nextPage(answers)
-                        .mustBe(controllers.transport.transportMeans.active.routes.AddAnotherBorderTransportController.onPageLoad(answers.lrn, mode))
-                  }
-              }
-          }
-        }
-      }
-// TODO - CHANGE MUST BE TO CHECK YOUR ANSWERS PAGE ONCE IMPLEMENTED
-      "when in CheckMode" - {
-
-        val mode              = CheckMode
-        val navigatorProvider = new TransportMeansNavigatorProviderImpl()
-        val navigator         = navigatorProvider.apply(mode)
-
-        "when answers complete" - {
-          "must redirect to transport check your answers" ignore {
-            forAll(arbitraryTransportAnswers(emptyUserAnswers)) {
+        "and customs office of transit is present" - {
+          "must redirect to active transport check your answers" ignore {
+            forAll(arbitraryOfficeOfTransitAnswers(emptyUserAnswers, index)) {
               initialAnswers =>
-                forAll(arbitraryTransportMeansDepartureAnswers(initialAnswers)) {
+                forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, activeIndex)) {
                   answers =>
                     navigator
                       .nextPage(answers)
                       .mustBe(???)
                 }
+            }
+          }
+        }
+
+        "and customs office of transit is not present" - {
+          "must redirect to transport means check your answers" in {
+            forAll(arbitraryTransportMeansActiveAnswers(emptyUserAnswers, activeIndex)) {
+              answers =>
+                navigator
+                  .nextPage(answers)
+                  .mustBe(controllers.transport.transportMeans.routes.TransportMeansCheckYourAnswersController.onPageLoad(answers.lrn, mode))
+            }
+          }
+        }
+      }
+
+      "when in CheckMode" - {
+
+        val mode              = CheckMode
+        val navigatorProvider = new TransportMeansActiveNavigatorProviderImpl()
+        val navigator         = navigatorProvider.apply(mode, activeIndex)
+
+        "when answers complete" - {
+          "must redirect to transport means check your answers" in {
+            forAll(arbitraryTransportMeansAnswers(emptyUserAnswers)) {
+              answers =>
+                navigator
+                  .nextPage(answers)
+                  .mustBe(controllers.transport.transportMeans.routes.TransportMeansCheckYourAnswersController.onPageLoad(answers.lrn, mode))
             }
           }
         }

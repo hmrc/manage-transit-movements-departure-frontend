@@ -19,7 +19,6 @@ package models.journeyDomain.transport
 import cats.implicits._
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.Stage.{AccessingJourney, CompletingJourney}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{CustomsOffice, Nationality}
 import models.transport.transportMeans.BorderModeOfTransport._
@@ -27,6 +26,7 @@ import models.transport.transportMeans.active.Identification
 import models.transport.transportMeans.active.Identification.{RegNumberRoadVehicle, TrainNumber}
 import models.{Index, Mode, UserAnswers}
 import pages.preTaskList.SecurityDetailsTypePage
+import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import pages.transport.transportMeans.BorderModeOfTransportPage
 import pages.transport.transportMeans.active._
 import play.api.i18n.Messages
@@ -43,15 +43,12 @@ case class TransportMeansActiveDomain(
   def asString(implicit messages: Messages): String =
     TransportMeansActiveDomain.asString(identification, identificationNumber)
 
-  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some {
-    stage match {
-      case AccessingJourney =>
-        // TODO - Redirect to active border loop CYA page has been implemented so change links on add another border page work
-        Call("GET", "#")
-      case CompletingJourney =>
-        controllers.transport.transportMeans.active.routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode)
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some(
+    userAnswers.get(OfficesOfTransitSection) match {
+      case Some(_) => Call("GET", "#") // TODO - update to active CYA page
+      case None    => controllers.transport.transportMeans.routes.TransportMeansCheckYourAnswersController.onPageLoad(userAnswers.lrn, mode)
     }
-  }
+  )
 }
 
 object TransportMeansActiveDomain {
