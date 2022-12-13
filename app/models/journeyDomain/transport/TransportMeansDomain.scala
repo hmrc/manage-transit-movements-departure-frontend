@@ -21,16 +21,16 @@ import controllers.transport.transportMeans.routes
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
+import models.transport.transportMeans.departure.InlandMode
 import models.{Index, Mode, RichJsArray, UserAnswers}
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.sections.transport.TransportMeansActiveListSection
 import pages.transport.transportMeans.AnotherVehicleCrossingYesNoPage
+import pages.transport.transportMeans.departure.InlandModePage
 import play.api.mvc.Call
 
-case class TransportMeansDomain(
-  transportMeansDeparture: TransportMeansDepartureDomain,
-  transportMeansActive: Option[Seq[TransportMeansActiveDomain]]
-) extends JourneyDomainModel {
+sealed trait TransportMeansDomain extends JourneyDomainModel {
+  val inlandMode: InlandMode
 
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
     Option(routes.TransportMeansCheckYourAnswersController.onPageLoad(userAnswers.lrn, mode))
@@ -38,23 +38,48 @@ case class TransportMeansDomain(
 
 object TransportMeansDomain {
 
-  val arrayReader: UserAnswersReader[Seq[TransportMeansActiveDomain]] = TransportMeansActiveListSection.arrayReader.flatMap {
-    case x if x.isEmpty =>
-      UserAnswersReader[TransportMeansActiveDomain](TransportMeansActiveDomain.userAnswersReader(Index(0))).map(Seq(_))
-    case x =>
-      x.traverse[TransportMeansActiveDomain](TransportMeansActiveDomain.userAnswersReader)
-  }
+  implicit val userAnswersReader: UserAnswersReader[TransportMeansDomain] =
+    InlandModePage.reader.flatMap {
+      case InlandMode.Mail =>
+        UserAnswersReader(TransportMeansDomainWithMailInlandMode).widen[TransportMeansDomain]
+      case x =>
+        UserAnswersReader[TransportMeansDomainWithOtherInlandMode](
+          TransportMeansDomainWithOtherInlandMode.userAnswersReader(x)
+        ).widen[TransportMeansDomain]
+    }
+}
 
-  implicit val transportMeansActiveReader: UserAnswersReader[Option[Seq[TransportMeansActiveDomain]]] =
-    SecurityDetailsTypePage.reader.flatMap {
-      case NoSecurityDetails =>
-        AnotherVehicleCrossingYesNoPage.filterOptionalDependent(identity)(arrayReader)
-      case _ => arrayReader.map(Some(_))
+case object TransportMeansDomainWithMailInlandMode extends TransportMeansDomain {
+  override val inlandMode: InlandMode = InlandMode.Mail
+}
+
+case class TransportMeansDomainWithOtherInlandMode(
+  override val inlandMode: InlandMode,
+  transportMeansDeparture: TransportMeansDepartureDomain,
+  transportMeansActive: Option[Seq[TransportMeansActiveDomain]]
+) extends TransportMeansDomain
+
+object TransportMeansDomainWithOtherInlandMode {
+
+  implicit def userAnswersReader(inlandMode: InlandMode): UserAnswersReader[TransportMeansDomainWithOtherInlandMode] = {
+
+    val arrayReader: UserAnswersReader[Seq[TransportMeansActiveDomain]] = TransportMeansActiveListSection.arrayReader.flatMap {
+      case x if x.isEmpty =>
+        UserAnswersReader[TransportMeansActiveDomain](TransportMeansActiveDomain.userAnswersReader(Index(0))).map(Seq(_))
+      case x =>
+        x.traverse[TransportMeansActiveDomain](TransportMeansActiveDomain.userAnswersReader)
     }
 
-  implicit val userAnswersReader: UserAnswersReader[TransportMeansDomain] =
+    implicit val transportMeansActiveReader: UserAnswersReader[Option[Seq[TransportMeansActiveDomain]]] =
+      SecurityDetailsTypePage.reader.flatMap {
+        case NoSecurityDetails => AnotherVehicleCrossingYesNoPage.filterOptionalDependent(identity)(arrayReader)
+        case _                 => arrayReader.map(Some(_))
+      }
+
     (
+      UserAnswersReader(inlandMode),
       UserAnswersReader[TransportMeansDepartureDomain],
       UserAnswersReader[Option[Seq[TransportMeansActiveDomain]]]
-    ).tupled.map((TransportMeansDomain.apply _).tupled)
+    ).tupled.map((TransportMeansDomainWithOtherInlandMode.apply _).tupled)
+  }
 }

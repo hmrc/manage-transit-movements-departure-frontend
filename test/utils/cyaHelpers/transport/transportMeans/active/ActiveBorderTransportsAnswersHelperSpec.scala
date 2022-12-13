@@ -17,17 +17,22 @@
 package utils.cyaHelpers.transport.transportMeans.active
 
 import base.SpecBase
+import controllers.transport.transportMeans.active.routes
 import generators.Generators
 import models.NormalMode
 import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models.journeyDomain.transport.TransportMeansActiveDomain
 import models.transport.transportMeans.BorderModeOfTransport
+import models.transport.transportMeans.active.Identification
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.SecurityDetailsTypePage
+import pages.transport.transportMeans.active._
 import pages.transport.transportMeans.{AnotherVehicleCrossingYesNoPage, BorderModeOfTransportPage}
 import viewModels.ListItem
 
 class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+
+  private val prefix = "transport.transportMeans.active.identification"
 
   "ActiveBorderTransportCheckYourAnswersHelperSpec" - {
 
@@ -41,52 +46,111 @@ class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPr
     }
 
     "when user answers populated with a complete active border transport" - {
-      "and AnotherVehicleCrossingBorder has been answered" - {
-        "and Identification type is defined" in {
-          val initialAnswers = emptyUserAnswers
-            .setValue(SecurityDetailsTypePage, NoSecurityDetails)
-            .setValue(AnotherVehicleCrossingYesNoPage, true)
-            .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Fixed)
+      "and AnotherVehicleCrossingBorder has been answered" in {
+        val initialAnswers = emptyUserAnswers
+          .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+          .setValue(AnotherVehicleCrossingYesNoPage, true)
+          .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Fixed)
 
-          forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, index)) {
-            userAnswers =>
-              val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
-              val active = TransportMeansActiveDomain.userAnswersReader(index).run(userAnswers).value
-              helper.listItems mustBe Seq(
-                Right(
-                  ListItem(
-                    name = s"${messages(s"transport.transportMeans.active.identification.${active.identification}")} - ${active.identificationNumber}",
-                    changeUrl = "#",
-                    removeUrl =
-                      Some(controllers.transport.transportMeans.active.routes.ConfirmRemoveBorderTransportController.onPageLoad(lrn, NormalMode, index).url)
-                  )
+        forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, index)) {
+          userAnswers =>
+            val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
+            val active = TransportMeansActiveDomain.userAnswersReader(index).run(userAnswers).value
+            helper.listItems mustBe Seq(
+              Right(
+                ListItem(
+                  name = s"${messages(s"$prefix.${active.identification}")} - ${active.identificationNumber}",
+                  changeUrl = "#",
+                  removeUrl = Some(routes.ConfirmRemoveBorderTransportController.onPageLoad(lrn, NormalMode, index).url)
                 )
               )
-          }
+            )
         }
       }
 
-      "and AnotherVehicleCrossingBorder has not been answered" - {
-        "and Identification type is defined" in {
-          val initialAnswers = emptyUserAnswers
-            .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
-            .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Fixed)
+      "and AnotherVehicleCrossingBorder has not been answered" in {
+        val initialAnswers = emptyUserAnswers
+          .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
+          .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Fixed)
 
-          forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, index)) {
-            userAnswers =>
-              val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
-              val active = TransportMeansActiveDomain.userAnswersReader(index).run(userAnswers).value
-              helper.listItems mustBe Seq(
-                Right(
-                  ListItem(
-                    name = s"${messages(s"transport.transportMeans.active.identification.${active.identification}")} - ${active.identificationNumber}",
-                    changeUrl = "#",
-                    removeUrl = None
-                  )
+        forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, index)) {
+          userAnswers =>
+            val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
+            val active = TransportMeansActiveDomain.userAnswersReader(index).run(userAnswers).value
+            helper.listItems mustBe Seq(
+              Right(
+                ListItem(
+                  name = s"${messages(s"$prefix.${active.identification}")} - ${active.identificationNumber}",
+                  changeUrl = "#",
+                  removeUrl = None
                 )
               )
-          }
+            )
         }
+      }
+    }
+
+    "when user answers populated with an in progress active border transport" - {
+      "and identification type is defined" in {
+        val identificationType = Identification.SeaGoingVessel
+        val userAnswers = emptyUserAnswers
+          .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+          .setValue(AnotherVehicleCrossingYesNoPage, true)
+          .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Fixed)
+          .setValue(IdentificationPage(index), identificationType)
+
+        val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
+        helper.listItems mustBe Seq(
+          Left(
+            ListItem(
+              name = s"${messages(s"$prefix.$identificationType")}",
+              changeUrl = routes.IdentificationNumberController.onPageLoad(lrn, NormalMode, index).url,
+              removeUrl = Some(routes.ConfirmRemoveBorderTransportController.onPageLoad(lrn, NormalMode, index).url)
+            )
+          )
+        )
+      }
+
+      "and identification number is defined" in {
+        val identificationNumber = nonEmptyString.sample.value
+        val userAnswers = emptyUserAnswers
+          .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+          .setValue(AnotherVehicleCrossingYesNoPage, true)
+          .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Rail)
+          .setValue(IdentificationNumberPage(index), identificationNumber)
+
+        val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
+        helper.listItems mustBe Seq(
+          Left(
+            ListItem(
+              name = identificationNumber,
+              changeUrl = routes.AddNationalityYesNoController.onPageLoad(lrn, NormalMode, index).url,
+              removeUrl = Some(routes.ConfirmRemoveBorderTransportController.onPageLoad(lrn, NormalMode, index).url)
+            )
+          )
+        )
+      }
+
+      "and identification type and identification number is defined" in {
+        val identificationType   = Identification.SeaGoingVessel
+        val identificationNumber = nonEmptyString.sample.value
+        val userAnswers = emptyUserAnswers
+          .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+          .setValue(AnotherVehicleCrossingYesNoPage, true)
+          .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Fixed)
+          .setValue(IdentificationPage(index), identificationType)
+          .setValue(IdentificationNumberPage(index), identificationNumber)
+
+        val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
+        helper.listItems mustBe Seq(
+          Left(
+            ListItem(
+              name = s"${messages(s"$prefix.$identificationType")} - $identificationNumber",
+              changeUrl = routes.AddNationalityYesNoController.onPageLoad(lrn, NormalMode, index).url,
+              removeUrl = Some(routes.ConfirmRemoveBorderTransportController.onPageLoad(lrn, NormalMode, index).url)
+            )
+          )
+        )
       }
     }
   }

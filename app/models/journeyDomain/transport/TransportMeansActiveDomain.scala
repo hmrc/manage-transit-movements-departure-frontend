@@ -41,7 +41,7 @@ case class TransportMeansActiveDomain(
 ) extends JourneyDomainModel {
 
   def asString(implicit messages: Messages): String =
-    s"${identification.asString} - $identificationNumber"
+    TransportMeansActiveDomain.asString(identification, identificationNumber)
 
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some {
     stage match {
@@ -55,6 +55,9 @@ case class TransportMeansActiveDomain(
 }
 
 object TransportMeansActiveDomain {
+
+  def asString(identification: Identification, identificationNumber: String)(implicit messages: Messages): String =
+    s"${identification.asString} - $identificationNumber"
 
   def userAnswersReader(index: Index): UserAnswersReader[TransportMeansActiveDomain] = {
     val identificationReads: UserAnswersReader[Identification] = {

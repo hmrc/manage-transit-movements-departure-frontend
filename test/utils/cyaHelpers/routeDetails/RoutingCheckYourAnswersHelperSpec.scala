@@ -20,6 +20,8 @@ import base.SpecBase
 import controllers.routeDetails.routing.index.{routes => indexRoutes}
 import controllers.routeDetails.routing.{routes => routingRoutes}
 import generators.Generators
+import models.domain.UserAnswersReader
+import models.journeyDomain.routeDetails.routing.CountryOfRoutingDomain
 import models.reference.{Country, CountryCode, CustomsOffice}
 import models.{Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
@@ -214,7 +216,7 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
 
     "countryOfRouting" - {
       "must return None" - {
-        "when CountryOfRoutingPage undefined at index" in {
+        "when country of routing is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new RoutingCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -225,33 +227,25 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
       }
 
       "must return Some(Row)" - {
-        "when CountryOfRoutingPage defined at index" in {
-          forAll(arbitrary[Mode], arbitrary[Country]) {
-            (mode, country) =>
-              val answers = emptyUserAnswers
-                .setValue(CountryOfRoutingPage(index), country)
+        "when country of routing is defined" in {
+          forAll(arbitraryCountryOfRoutingAnswers(emptyUserAnswers, index), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val countryOfRouting = UserAnswersReader[CountryOfRoutingDomain](
+                CountryOfRoutingDomain.userAnswersReader(index)
+              ).run(userAnswers).value
 
-              val helper = new RoutingCheckYourAnswersHelper(answers, mode)
-              val result = helper.countryOfRouting(index)
+              val helper = new RoutingCheckYourAnswersHelper(userAnswers, mode)
+              val result = helper.countryOfRouting(index).get
 
-              result mustBe Some(
-                SummaryListRow(
-                  key = Key("Country of routing 1".toText),
-                  value = Value(country.description.toText),
-                  actions = Some(
-                    Actions(
-                      items = List(
-                        ActionItem(
-                          content = "Change".toText,
-                          href = indexRoutes.CountryOfRoutingController.onPageLoad(answers.lrn, mode, index).url,
-                          visuallyHiddenText = Some("country of routing 1"),
-                          attributes = Map("id" -> "change-country-of-routing-1")
-                        )
-                      )
-                    )
-                  )
-                )
-              )
+              result.key.value mustBe "Country of routing 1"
+              result.value.value mustBe countryOfRouting.country.toString
+              val actions = result.actions.get.items
+              actions.size mustBe 1
+              val action = actions.head
+              action.content.value mustBe "Change"
+              action.href mustBe indexRoutes.CountryOfRoutingController.onPageLoad(userAnswers.lrn, mode, index).url
+              action.visuallyHiddenText.get mustBe "country of routing 1"
+              action.id mustBe "change-country-of-routing-1"
           }
         }
       }
