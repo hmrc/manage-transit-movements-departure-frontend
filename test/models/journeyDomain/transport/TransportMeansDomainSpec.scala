@@ -177,7 +177,7 @@ class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks wi
     val departureIdentification       = arbitrary[DepartureIdentification].sample.value
     val departureIdentificationNumber = "1234"
     val vehicleCountry                = arbitrary[Nationality].sample.value
-    val borderMode                    = arbitrary[BorderModeOfTransport].sample.value
+    val borderMode                    = BorderModeOfTransport.Maritime
     val activeIdentification          = arbitrary[ActiveIdentification].sample.value
     val activeIdentificationNumber    = "1234"
     val transitOffice                 = arbitrary[CustomsOffice].sample.value
@@ -238,6 +238,69 @@ class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks wi
         mandatoryPage =>
           val updatedAnswers = userAnswers.removeValue(mandatoryPage)
           val result         = UserAnswersReader[TransportMeansWithMultipleActiveBorders](inlandMode).run(updatedAnswers)
+
+          result.left.value.page mustBe mandatoryPage
+      }
+    }
+  }
+
+  "TransportMeansWithOneActiveBorder" - {
+
+    val inlandMode                    = InlandMode.Maritime
+    val departureIdentification       = arbitrary[DepartureIdentification].sample.value
+    val departureIdentificationNumber = "1234"
+    val vehicleCountry                = arbitrary[Nationality].sample.value
+    val borderMode                    = BorderModeOfTransport.Maritime
+    val activeIdentification          = arbitrary[ActiveIdentification].sample.value
+    val activeIdentificationNumber    = "1234"
+    val transitOffice                 = arbitrary[CustomsOffice].sample.value
+
+    val userAnswers = emptyUserAnswers
+      .setValue(InlandModePage, inlandMode)
+      .setValue(DepartureIdentificationPage, departureIdentification)
+      .setValue(MeansIdentificationNumberPage, departureIdentificationNumber)
+      .setValue(VehicleCountryPage, vehicleCountry)
+      .setValue(AnotherVehicleCrossingYesNoPage, true)
+      .setValue(BorderModeOfTransportPage, borderMode)
+      .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+      .setValue(ActiveIdentificationPage(Index(0)), activeIdentification)
+      .setValue(IdentificationNumberPage(Index(0)), activeIdentificationNumber)
+      .setValue(ConveyanceReferenceNumberYesNoPage(Index(0)), false)
+      .setValue(AddNationalityYesNoPage(Index(0)), false)
+      .setValue(CustomsOfficeActiveBorderPage(Index(0)), transitOffice)
+
+    "can be parsed from userAnswers" in {
+
+      val result = UserAnswersReader[TransportMeansWithOneActiveBorder](inlandMode).run(userAnswers)
+
+      val expectedResult =
+        TransportMeansWithOneActiveBorder(
+          inlandMode,
+          TransportMeansDepartureDomainWithOtherInlandMode(departureIdentification, departureIdentificationNumber, vehicleCountry),
+          TransportMeansActiveDomain(activeIdentification, activeIdentificationNumber, None, transitOffice, None)
+        )
+
+      result.value mustBe expectedResult
+    }
+    "cannot be parsed from userAnswers" in {
+
+      val mandatoryPages = Seq(
+        InlandModePage,
+        DepartureIdentificationPage,
+        MeansIdentificationNumberPage,
+        VehicleCountryPage,
+        BorderModeOfTransportPage,
+        ActiveIdentificationPage(Index(0)),
+        IdentificationNumberPage(Index(0)),
+        ConveyanceReferenceNumberYesNoPage(Index(0)),
+        AddNationalityYesNoPage(Index(0)),
+        CustomsOfficeActiveBorderPage(Index(0))
+      )
+
+      mandatoryPages.map {
+        mandatoryPage =>
+          val updatedAnswers = userAnswers.removeValue(mandatoryPage)
+          val result         = UserAnswersReader[TransportMeansWithOneActiveBorder](inlandMode).run(updatedAnswers)
 
           result.left.value.page mustBe mandatoryPage
       }
