@@ -20,6 +20,8 @@ import base.SpecBase
 import controllers.routeDetails.transit.index.{routes => indexRoutes}
 import generators.Generators
 import models.SecurityDetailsType.NoSecurityDetails
+import models.domain.UserAnswersReader
+import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
 import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
@@ -127,7 +129,7 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
 
     "officeOfTransit" - {
       "must return None" - {
-        "when OfficeOfTransitPage undefined at index" in {
+        "when office of transit is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new TransitCheckYourAnswersHelper(emptyUserAnswers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
@@ -138,35 +140,25 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
       }
 
       "must return Some(Row)" - {
-        "when OfficeOfTransitPage defined at index" in {
-          forAll(arbitrary[Mode], arbitrary[CustomsOffice]) {
-            (mode, customsOffice) =>
-              val initialAnswers = emptyUserAnswers.setValue(OfficeOfTransitPage(index), customsOffice)
+        "when office of transit is defined" in {
+          forAll(arbitraryOfficeOfTransitAnswers(emptyUserAnswers, index), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val officeOfExit = UserAnswersReader[OfficeOfTransitDomain](
+                OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+              ).run(userAnswers).value
 
-              forAll(arbitraryOfficeOfTransitAnswers(initialAnswers, index)) {
-                answers =>
-                  val helper = new TransitCheckYourAnswersHelper(answers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-                  val result = helper.officeOfTransit(index)
+              val helper = new TransitCheckYourAnswersHelper(userAnswers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+              val result = helper.officeOfTransit(index).get
 
-                  result mustBe Some(
-                    SummaryListRow(
-                      key = Key("Office of transit 1".toText),
-                      value = Value(customsOffice.toString.toText),
-                      actions = Some(
-                        Actions(
-                          items = List(
-                            ActionItem(
-                              content = "Change".toText,
-                              href = indexRoutes.CheckOfficeOfTransitAnswersController.onPageLoad(answers.lrn, mode, index).url,
-                              visuallyHiddenText = Some("office of transit 1"),
-                              attributes = Map("id" -> "change-office-of-transit-1")
-                            )
-                          )
-                        )
-                      )
-                    )
-                  )
-              }
+              result.key.value mustBe "Office of transit 1"
+              result.value.value mustBe officeOfExit.label
+              val actions = result.actions.get.items
+              actions.size mustBe 1
+              val action = actions.head
+              action.content.value mustBe "Change"
+              action.href mustBe indexRoutes.CheckOfficeOfTransitAnswersController.onPageLoad(userAnswers.lrn, mode, index).url
+              action.visuallyHiddenText.get mustBe "office of transit 1"
+              action.id mustBe "change-office-of-transit-1"
           }
         }
       }

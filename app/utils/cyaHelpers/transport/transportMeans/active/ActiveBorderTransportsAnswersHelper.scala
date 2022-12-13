@@ -18,11 +18,10 @@ package utils.cyaHelpers.transport.transportMeans.active
 
 import controllers.transport.transportMeans.active.routes
 import models.journeyDomain.transport.TransportMeansActiveDomain
-import models.transport.transportMeans.active.Identification
 import models.{Mode, UserAnswers}
 import pages.sections.transport.TransportMeansActiveListSection
 import pages.transport.transportMeans.AnotherVehicleCrossingYesNoPage
-import pages.transport.transportMeans.active.IdentificationPage
+import pages.transport.transportMeans.active._
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import utils.cyaHelpers.AnswersHelper
@@ -39,12 +38,17 @@ class ActiveBorderTransportsAnswersHelper(userAnswers: UserAnswers, mode: Mode)(
           Some(routes.ConfirmRemoveBorderTransportController.onPageLoad(lrn, mode, index))
         }
 
-        buildListItem[TransportMeansActiveDomain, Identification](
-          page = IdentificationPage(index),
-          formatJourneyDomainModel = _.asString,
-          formatType = x => formatEnumAsString(Identification.messageKeyPrefix)(x.toString),
+        buildListItem[TransportMeansActiveDomain](
+          nameWhenComplete = _.asString,
+          nameWhenInProgress = (userAnswers.get(IdentificationPage(index)), userAnswers.get(IdentificationNumberPage(index))) match {
+            case (Some(identification), Some(identificationNumber)) =>
+              Some(TransportMeansActiveDomain.asString(identification, identificationNumber))
+            case (Some(identification), None)       => Some(identification.asString)
+            case (None, Some(identificationNumber)) => Some(identificationNumber)
+            case _                                  => None
+          },
           removeRoute = removeRoute
-        )(TransportMeansActiveDomain.userAnswersReader(index), implicitly)
+        )(TransportMeansActiveDomain.userAnswersReader(index))
     }
 
 }

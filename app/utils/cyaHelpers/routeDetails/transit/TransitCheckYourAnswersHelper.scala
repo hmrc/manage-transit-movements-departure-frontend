@@ -18,13 +18,13 @@ package utils.cyaHelpers.routeDetails.transit
 
 import controllers.routeDetails.transit.index.routes
 import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
-import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode, UserAnswers}
 import pages.routeDetails.transit._
-import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitPage}
+import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
 import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import utils.cyaHelpers.AnswersHelper
 import viewModels.ListItem
 
@@ -51,25 +51,20 @@ class TransitCheckYourAnswersHelper(
     id = Some("change-add-office-of-transit")
   )
 
-  def officeOfTransit(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[OfficeOfTransitDomain, CustomsOffice](
-    page = OfficeOfTransitPage(index),
-    formatAnswer = formatAsText,
+  def officeOfTransit(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[OfficeOfTransitDomain](
+    formatAnswer = _.label.toText,
     prefix = "routeDetails.checkYourAnswers.transit.officeOfTransit",
     id = Some(s"change-office-of-transit-${index.display}"),
     args = index.display
-  )(OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes), implicitly)
+  )(OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(OfficesOfTransitSection) {
       index =>
-        buildListItem[OfficeOfTransitDomain, Country](
-          page = OfficeOfTransitCountryPage(index),
-          formatJourneyDomainModel = _.label,
-          formatType = _.toString,
+        buildListItem[OfficeOfTransitDomain](
+          nameWhenComplete = _.label,
+          nameWhenInProgress = userAnswers.get(OfficeOfTransitCountryPage(index)).map(_.toString),
           removeRoute = if (index.isFirst) None else Some(routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, mode, index))
-        )(
-          OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes),
-          implicitly
-        )
+        )(OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
     }
 }

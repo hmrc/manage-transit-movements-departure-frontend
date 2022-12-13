@@ -18,7 +18,7 @@ package viewModels.transport.transportMeans
 
 import base.SpecBase
 import controllers.transport.transportMeans.active.routes
-import generators.{Generators, TransportUserAnswersGenerator}
+import generators.Generators
 import models.reference.Nationality
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.departure.{InlandMode, Identification => DepartureIdentification}
@@ -32,7 +32,7 @@ import pages.transport.transportMeans.{departure, AnotherVehicleCrossingYesNoPag
 import viewModels.sections.Section
 import viewModels.transport.transportMeans.TransportMeansAnswersViewModel.TransportMeansAnswersViewModelProvider
 
-class TransportMeansAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TransportUserAnswersGenerator {
+class TransportMeansAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   private val mode = arbitrary[Mode].sample.value
 

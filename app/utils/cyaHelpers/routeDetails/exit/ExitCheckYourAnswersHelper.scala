@@ -18,12 +18,12 @@ package utils.cyaHelpers.routeDetails.exit
 
 import controllers.routeDetails.exit.index.routes
 import models.journeyDomain.routeDetails.exit.OfficeOfExitDomain
-import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode, UserAnswers}
-import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
+import pages.routeDetails.exit.index.OfficeOfExitCountryPage
 import pages.sections.routeDetails.exit.OfficesOfExitSection
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import utils.cyaHelpers.AnswersHelper
 import viewModels.ListItem
 
@@ -33,22 +33,20 @@ class ExitCheckYourAnswersHelper(
 )(implicit messages: Messages)
     extends AnswersHelper(userAnswers, mode) {
 
-  def officeOfExit(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[OfficeOfExitDomain, CustomsOffice](
-    page = OfficeOfExitPage(index),
-    formatAnswer = formatAsText,
+  def officeOfExit(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[OfficeOfExitDomain](
+    formatAnswer = _.label.toText,
     prefix = "routeDetails.checkYourAnswers.exit.officeOfExit",
     id = Some(s"change-office-of-exit-${index.display}"),
     args = index.display
-  )(OfficeOfExitDomain.userAnswersReader(index), implicitly)
+  )(OfficeOfExitDomain.userAnswersReader(index))
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(OfficesOfExitSection) {
       index =>
-        buildListItem[OfficeOfExitDomain, Country](
-          page = OfficeOfExitCountryPage(index),
-          formatJourneyDomainModel = _.label,
-          formatType = _.toString,
+        buildListItem[OfficeOfExitDomain](
+          nameWhenComplete = _.label,
+          nameWhenInProgress = userAnswers.get(OfficeOfExitCountryPage(index)).map(_.toString),
           removeRoute = Some(routes.ConfirmRemoveOfficeOfExitController.onPageLoad(userAnswers.lrn, index, mode))
-        )(OfficeOfExitDomain.userAnswersReader(index), implicitly)
+        )(OfficeOfExitDomain.userAnswersReader(index))
     }
 }

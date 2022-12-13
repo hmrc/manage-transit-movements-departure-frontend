@@ -30,11 +30,10 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mod
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(GuaranteeDetailsSection) {
       index =>
-        buildListItem[GuaranteeDomain, GuaranteeType](
-          page = GuaranteeTypePage(index),
-          formatJourneyDomainModel = x => formatEnumAsString(GuaranteeType.messageKeyPrefix)(x.`type`),
-          formatType = formatEnumAsString(GuaranteeType.messageKeyPrefix),
+        buildListItem[GuaranteeDomain](
+          nameWhenComplete = x => formatEnumAsString(GuaranteeType.messageKeyPrefix)(x.`type`),
+          nameWhenInProgress = userAnswers.get(GuaranteeTypePage(index)).map(formatEnumAsString(GuaranteeType.messageKeyPrefix)),
           removeRoute = Some(guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, index))
-        )(GuaranteeDomain.userAnswersReader(index), implicitly)
+        )(GuaranteeDomain.userAnswersReader(index))
     }
 }

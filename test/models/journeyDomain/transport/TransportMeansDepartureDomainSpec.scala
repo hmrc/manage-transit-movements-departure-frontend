@@ -35,16 +35,6 @@ class TransportMeansDepartureDomainSpec extends SpecBase with Generators with Sc
     val nationality: Nationality       = arbitrary[Nationality].sample.value
 
     "can be parsed from user answers" - {
-      "when the InlandMode is 'Mail'" in {
-        val userAnswers = emptyUserAnswers
-          .setValue(InlandModePage, InlandMode.Mail)
-
-        val expectedResult = TransportMeansDomainWithMailInlandMode
-
-        val result: EitherType[TransportMeansDepartureDomain] = UserAnswersReader[TransportMeansDepartureDomain].run(userAnswers)
-
-        result.value mustBe expectedResult
-      }
 
       "when the InlandMode is 'Unknown'" in {
         val userAnswers = emptyUserAnswers
@@ -52,7 +42,7 @@ class TransportMeansDepartureDomainSpec extends SpecBase with Generators with Sc
           .setValue(MeansIdentificationNumberPage, identificationNumber)
           .setValue(VehicleCountryPage, nationality)
 
-        val expectedResult = TransportMeansDomainWithUnknownInlandMode(identificationNumber, nationality)
+        val expectedResult = TransportMeansDepartureDomainWithUnknownInlandMode(identificationNumber, nationality)
 
         val result: EitherType[TransportMeansDepartureDomain] = UserAnswersReader[TransportMeansDepartureDomain].run(userAnswers)
 
@@ -68,7 +58,7 @@ class TransportMeansDepartureDomainSpec extends SpecBase with Generators with Sc
               .setValue(MeansIdentificationNumberPage, identificationNumber)
               .setValue(VehicleCountryPage, nationality)
 
-            val expectedResult = TransportMeansDomainWithAnyOtherInlandMode(inlandMode, identification, identificationNumber, nationality)
+            val expectedResult = TransportMeansDepartureDomainWithOtherInlandMode(identification, identificationNumber, nationality)
 
             val result: EitherType[TransportMeansDepartureDomain] = UserAnswersReader[TransportMeansDepartureDomain].run(userAnswers)
 
@@ -80,6 +70,15 @@ class TransportMeansDepartureDomainSpec extends SpecBase with Generators with Sc
     "can not be parsed from user answers" - {
       "when answers are empty" in {
         val result: EitherType[TransportMeansDepartureDomain] = UserAnswersReader[TransportMeansDepartureDomain].run(emptyUserAnswers)
+
+        result.left.value.page mustBe InlandModePage
+      }
+
+      "when the InlandMode is 'Mail'" in {
+        val userAnswers = emptyUserAnswers
+          .setValue(InlandModePage, InlandMode.Mail)
+
+        val result: EitherType[TransportMeansDepartureDomain] = UserAnswersReader[TransportMeansDepartureDomain].run(userAnswers)
 
         result.left.value.page mustBe InlandModePage
       }
