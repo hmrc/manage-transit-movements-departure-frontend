@@ -42,10 +42,10 @@ object TransportMeansDomain {
     InlandModePage.reader.flatMap {
       case InlandMode.Mail =>
         UserAnswersReader(TransportMeansDomainWithMailInlandMode).widen[TransportMeansDomain]
-      case x =>
-        UserAnswersReader[TransportMeansDomainWithOtherInlandMode](
-          TransportMeansDomainWithOtherInlandMode.userAnswersReader(x)
-        ).widen[TransportMeansDomain]
+//      case x =>
+//        UserAnswersReader[TransportMeansDomainWithOtherInlandMode](
+//          TransportMeansDomainWithOtherInlandMode.userAnswersReader(x)
+//        ).widen[TransportMeansDomain]
     }
 }
 
@@ -53,33 +53,85 @@ case object TransportMeansDomainWithMailInlandMode extends TransportMeansDomain 
   override val inlandMode: InlandMode = InlandMode.Mail
 }
 
-case class TransportMeansDomainWithOtherInlandMode(
+case class TransportMeansWithOneActiveBorder(
   override val inlandMode: InlandMode,
   transportMeansDeparture: TransportMeansDepartureDomain,
-  transportMeansActive: Option[Seq[TransportMeansActiveDomain]]
+  transportMeansActive: TransportMeansActiveDomain
 ) extends TransportMeansDomain
 
-object TransportMeansDomainWithOtherInlandMode {
+object TransportMeansWithOneActiveBorder {
 
-  implicit def userAnswersReader(inlandMode: InlandMode): UserAnswersReader[TransportMeansDomainWithOtherInlandMode] = {
-
-    val arrayReader: UserAnswersReader[Seq[TransportMeansActiveDomain]] = TransportMeansActiveListSection.arrayReader.flatMap {
-      case x if x.isEmpty =>
-        UserAnswersReader[TransportMeansActiveDomain](TransportMeansActiveDomain.userAnswersReader(Index(0))).map(Seq(_))
-      case x =>
-        x.traverse[TransportMeansActiveDomain](TransportMeansActiveDomain.userAnswersReader)
-    }
-
-    implicit val transportMeansActiveReader: UserAnswersReader[Option[Seq[TransportMeansActiveDomain]]] =
-      SecurityDetailsTypePage.reader.flatMap {
-        case NoSecurityDetails => AnotherVehicleCrossingYesNoPage.filterOptionalDependent(identity)(arrayReader)
-        case _                 => arrayReader.map(Some(_))
-      }
-
+  implicit def userAnswersReader(inlandMode: InlandMode): UserAnswersReader[TransportMeansWithOneActiveBorder] =
     (
       UserAnswersReader(inlandMode),
       UserAnswersReader[TransportMeansDepartureDomain],
-      UserAnswersReader[Option[Seq[TransportMeansActiveDomain]]]
-    ).tupled.map((TransportMeansDomainWithOtherInlandMode.apply _).tupled)
-  }
+      UserAnswersReader[TransportMeansActiveDomain](TransportMeansActiveDomain.userAnswersReader(Index(0)))
+    ).tupled.map((TransportMeansWithOneActiveBorder.apply _).tupled)
 }
+
+case class TransportMeansWithMultipleActiveBorders(
+  override val inlandMode: InlandMode,
+  transportMeansDeparture: TransportMeansDepartureDomain,
+  transportMeansActive: Seq[TransportMeansActiveDomain]
+) extends TransportMeansDomain
+
+object TransportMeansWithMultipleActiveBorders {
+
+  val arrayReader: UserAnswersReader[Seq[TransportMeansActiveDomain]] = TransportMeansActiveListSection.arrayReader.flatMap {
+    case x if x.isEmpty =>
+      UserAnswersReader[TransportMeansActiveDomain](TransportMeansActiveDomain.userAnswersReader(Index(0))).map(Seq(_))
+    case x =>
+      x.traverse[TransportMeansActiveDomain](TransportMeansActiveDomain.userAnswersReader)
+  }
+
+  implicit def userAnswersReader(inlandMode: InlandMode): UserAnswersReader[TransportMeansWithMultipleActiveBorders] =
+    (
+      UserAnswersReader(inlandMode),
+      UserAnswersReader[TransportMeansDepartureDomain],
+      arrayReader
+    ).tupled.map((TransportMeansWithMultipleActiveBorders.apply _).tupled)
+}
+
+case class TransportMeansWithNoActiveBorder(
+  override val inlandMode: InlandMode,
+  transportMeansDeparture: TransportMeansDepartureDomain
+) extends TransportMeansDomain
+
+object TransportMeansWithNoActiveBorder {
+
+  implicit def userAnswersReader(inlandMode: InlandMode): UserAnswersReader[TransportMeansWithNoActiveBorder] =
+    (
+      UserAnswersReader(inlandMode),
+      UserAnswersReader[TransportMeansDepartureDomain]
+    ).tupled.map((TransportMeansWithNoActiveBorder.apply _).tupled)
+}
+//case class TransportMeansDomainWithOtherInlandMode(
+//  override val inlandMode: InlandMode,
+//  transportMeansDeparture: TransportMeansDepartureDomain,
+//  transportMeansActive: Option[Seq[TransportMeansActiveDomain]]
+//) extends TransportMeansDomain
+
+//object TransportMeansDomainWithOtherInlandMode {
+//
+//  implicit def userAnswersReader(inlandMode: InlandMode): UserAnswersReader[TransportMeansDomainWithOtherInlandMode] = {
+//
+//    val arrayReader: UserAnswersReader[Seq[TransportMeansActiveDomain]] = TransportMeansActiveListSection.arrayReader.flatMap {
+//      case x if x.isEmpty =>
+//        UserAnswersReader[TransportMeansActiveDomain](TransportMeansActiveDomain.userAnswersReader(Index(0))).map(Seq(_))
+//      case x =>
+//        x.traverse[TransportMeansActiveDomain](TransportMeansActiveDomain.userAnswersReader)
+//    }
+//
+//    implicit val transportMeansActiveReader: UserAnswersReader[Option[Seq[TransportMeansActiveDomain]]] =
+//      SecurityDetailsTypePage.reader.flatMap {
+//        case NoSecurityDetails => AnotherVehicleCrossingYesNoPage.filterOptionalDependent(identity)(arrayReader)
+//        case _                 => arrayReader.map(Some(_))
+//      }
+//
+//    (
+//      UserAnswersReader(inlandMode),
+//      UserAnswersReader[TransportMeansDepartureDomain],
+//      UserAnswersReader[Option[Seq[TransportMeansActiveDomain]]]
+//    ).tupled.map((TransportMeansDomainWithOtherInlandMode.apply _).tupled)
+//  }
+//}
