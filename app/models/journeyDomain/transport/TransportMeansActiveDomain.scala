@@ -27,7 +27,6 @@ import models.transport.transportMeans.active.Identification
 import models.transport.transportMeans.active.Identification.{RegNumberRoadVehicle, TrainNumber}
 import models.{Index, Mode, UserAnswers}
 import pages.preTaskList.SecurityDetailsTypePage
-import pages.routeDetails.transit.AddOfficeOfTransitYesNoPage
 import pages.routeDetails.transit.index.OfficeOfTransitPage
 import pages.transport.transportMeans.BorderModeOfTransportPage
 import pages.transport.transportMeans.active._
