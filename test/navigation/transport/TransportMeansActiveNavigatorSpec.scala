@@ -37,8 +37,8 @@ class TransportMeansActiveNavigatorSpec extends SpecBase with ScalaCheckProperty
       "when answers complete and office of transit is present" - {
         "must redirect to AddAnotherBorderTransportPage CYA" in {
           val userAnswers = emptyUserAnswers
-          userAnswers.setValue(OfficeOfTransitCountryPage(index), arbitrary[Country].sample.value)
-          userAnswers.setValue(OfficeOfTransitPage(index), arbitrary[CustomsOffice].sample.value)
+            .setValue(OfficeOfTransitCountryPage(index), arbitrary[Country].sample.value)
+            .setValue(OfficeOfTransitPage(index), arbitrary[CustomsOffice].sample.value)
           forAll(arbitraryPreRequisitesAnswers(userAnswers)) {
             initialAnswers =>
               forAll(arbitraryTransportMeansDepartureAnswers(initialAnswers)) {
@@ -78,7 +78,7 @@ class TransportMeansActiveNavigatorSpec extends SpecBase with ScalaCheckProperty
         val navigator         = navigatorProvider.apply(mode)
 
         "when answers complete" - {
-          "must redirect to transport check your answers" ignore {
+          "must redirect to final check your answers" ignore {
             forAll(arbitraryTransportAnswers(emptyUserAnswers)) {
               initialAnswers =>
                 forAll(arbitraryTransportMeansDepartureAnswers(initialAnswers)) {
