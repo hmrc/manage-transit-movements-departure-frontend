@@ -17,6 +17,7 @@
 package utils.cyaHelpers.transport.transportMeans
 
 import base.SpecBase
+import controllers.transport.transportMeans.active.routes
 import generators.Generators
 import models.Mode
 import models.domain.UserAnswersReader
@@ -68,7 +69,7 @@ class TransportMeansCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                   actions.size mustBe 1
                   val action = actions.head
                   action.content.value mustBe "Change"
-                  action.href mustBe "#" // TODO - update to active CYA page
+                  action.href mustBe routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode).url // TODO - update to active CYA page
                   action.visuallyHiddenText.get mustBe "active border transport means 1"
                   action.id mustBe "change-active-border-transport-means-1"
               }

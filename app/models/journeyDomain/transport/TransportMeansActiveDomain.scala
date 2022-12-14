@@ -17,6 +17,8 @@
 package models.journeyDomain.transport
 
 import cats.implicits._
+import controllers.transport.transportMeans.active.{routes => activeRoutes}
+import controllers.transport.transportMeans.{routes => transportMeansRoutes}
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
@@ -45,8 +47,8 @@ case class TransportMeansActiveDomain(
 
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some(
     userAnswers.get(OfficesOfTransitSection) match {
-      case Some(_) => Call("GET", "#") // TODO - update to active CYA page
-      case None    => controllers.transport.transportMeans.routes.TransportMeansCheckYourAnswersController.onPageLoad(userAnswers.lrn, mode)
+      case Some(_) => activeRoutes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode) // TODO - update to active CYA page
+      case None    => transportMeansRoutes.TransportMeansCheckYourAnswersController.onPageLoad(userAnswers.lrn, mode)
     }
   )
 }
