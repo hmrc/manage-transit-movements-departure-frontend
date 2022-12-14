@@ -16,10 +16,12 @@
 
 package pages.transport.transportMeans.departure
 
-import models.reference.Nationality
-import models.transport.transportMeans.departure.{Identification, InlandMode}
+import models.transport.transportMeans.departure.InlandMode
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
 import pages.behaviours.PageBehaviours
+import pages.sections.transport.{TransportMeansActiveListSection, TransportMeansDepartureSection}
+import play.api.libs.json.{JsArray, Json}
 
 class InlandModePageSpec extends PageBehaviours {
 
@@ -32,25 +34,40 @@ class InlandModePageSpec extends PageBehaviours {
     beRemovable[InlandMode](InlandModePage)
 
     "cleanup" - {
-      "when answer changes" - {
-        "must remove identification, identification number and vehicle country" in {
+      "when answer changes to something that isn't mail" - {
+        "must remove departure section" in {
           forAll(arbitrary[InlandMode]) {
             inlandMode =>
               val userAnswers = emptyUserAnswers
                 .setValue(InlandModePage, inlandMode)
-                .setValue(IdentificationPage, arbitrary[Identification].sample.value)
-                .setValue(MeansIdentificationNumberPage, arbitrary[String].sample.value)
-                .setValue(VehicleCountryPage, arbitrary[Nationality].sample.value)
+                .setValue(TransportMeansDepartureSection, Json.obj("foo" -> "bar"))
+                .setValue(TransportMeansActiveListSection, JsArray(Seq(Json.obj("foo" -> "bar"))))
 
-              forAll(arbitrary[InlandMode].retryUntil(_ != inlandMode)) {
-                differentInlandMode =>
-                  val result = userAnswers.setValue(InlandModePage, differentInlandMode)
+              forAll(Gen.oneOf(InlandMode.values).filterNot(_ == InlandMode.Mail).filterNot(_ == inlandMode)) {
+                differentInlandModeNotMail =>
+                  val result = userAnswers.setValue(InlandModePage, differentInlandModeNotMail)
 
-                  result.get(IdentificationPage) must not be defined
-                  result.get(MeansIdentificationNumberPage) must not be defined
-                  result.get(VehicleCountryPage) must not be defined
+                  result.get(TransportMeansDepartureSection) must not be defined
+                  result.get(TransportMeansActiveListSection) mustBe defined
               }
           }
+        }
+      }
+    }
+
+    "when answer changes to Mail" - {
+      "must remove departure and active sections" in {
+        forAll(arbitrary[InlandMode].suchThat(_ != InlandMode.Mail)) {
+          inlandMode =>
+            val userAnswers = emptyUserAnswers
+              .setValue(InlandModePage, inlandMode)
+              .setValue(TransportMeansDepartureSection, Json.obj("foo" -> "bar"))
+              .setValue(TransportMeansActiveListSection, JsArray(Seq(Json.obj("foo" -> "bar"))))
+
+            val result = userAnswers.setValue(InlandModePage, InlandMode.Mail)
+
+            result.get(TransportMeansDepartureSection) must not be defined
+            result.get(TransportMeansActiveListSection) must not be defined
         }
       }
     }
