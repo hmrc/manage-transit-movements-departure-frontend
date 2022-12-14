@@ -33,7 +33,7 @@ class IdentificationPageSpec extends PageBehaviours {
 
     "cleanup" - {
       "when answer changes" - {
-        "must remove identification, identification number and vehicle country" in {
+        "must remove identification number and vehicle country" in {
           forAll(arbitrary[Identification]) {
             identification =>
               val userAnswers = emptyUserAnswers
