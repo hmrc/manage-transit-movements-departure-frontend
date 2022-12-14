@@ -19,20 +19,26 @@ package utils.cyaHelpers.transport.transportMeans.active
 import base.SpecBase
 import controllers.transport.transportMeans.active.routes
 import generators.Generators
-import models.NormalMode
 import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models.journeyDomain.transport.TransportMeansActiveDomain
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.active.Identification
+import models.{Mode, NormalMode, UserAnswers}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.SecurityDetailsTypePage
+import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import pages.transport.transportMeans.active._
 import pages.transport.transportMeans.{AnotherVehicleCrossingYesNoPage, BorderModeOfTransportPage}
+import play.api.libs.json.JsArray
 import viewModels.ListItem
 
 class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   private val prefix = "transport.transportMeans.active.identification"
+
+  private def officesOfTransit(userAnswers: UserAnswers): JsArray =
+    arbitraryOfficeOfTransitAnswers(userAnswers, index).sample.value.getValue(OfficesOfTransitSection)
 
   "ActiveBorderTransportCheckYourAnswersHelperSpec" - {
 
@@ -49,19 +55,20 @@ class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPr
       "and AnotherVehicleCrossingBorder has been answered" in {
         val initialAnswers = emptyUserAnswers
           .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+          .setValue(OfficesOfTransitSection, officesOfTransit _)
           .setValue(AnotherVehicleCrossingYesNoPage, true)
           .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Fixed)
 
-        forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, index)) {
-          userAnswers =>
-            val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
+        forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, index), arbitrary[Mode]) {
+          (userAnswers, mode) =>
+            val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, mode)
             val active = TransportMeansActiveDomain.userAnswersReader(index).run(userAnswers).value
             helper.listItems mustBe Seq(
               Right(
                 ListItem(
                   name = s"${messages(s"$prefix.${active.identification}")} - ${active.identificationNumber}",
-                  changeUrl = "#",
-                  removeUrl = Some(routes.ConfirmRemoveBorderTransportController.onPageLoad(lrn, NormalMode, index).url)
+                  changeUrl = routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode).url, // TODO - update to active CYA page
+                  removeUrl = Some(routes.ConfirmRemoveBorderTransportController.onPageLoad(userAnswers.lrn, mode, index).url)
                 )
               )
             )
@@ -71,17 +78,18 @@ class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPr
       "and AnotherVehicleCrossingBorder has not been answered" in {
         val initialAnswers = emptyUserAnswers
           .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
+          .setValue(OfficesOfTransitSection, officesOfTransit _)
           .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Fixed)
 
-        forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, index)) {
-          userAnswers =>
-            val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
+        forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, index), arbitrary[Mode]) {
+          (userAnswers, mode) =>
+            val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, mode)
             val active = TransportMeansActiveDomain.userAnswersReader(index).run(userAnswers).value
             helper.listItems mustBe Seq(
               Right(
                 ListItem(
                   name = s"${messages(s"$prefix.${active.identification}")} - ${active.identificationNumber}",
-                  changeUrl = "#",
+                  changeUrl = routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode).url, // TODO - update to active CYA page
                   removeUrl = None
                 )
               )
@@ -99,16 +107,19 @@ class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPr
           .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Fixed)
           .setValue(IdentificationPage(index), identificationType)
 
-        val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
-        helper.listItems mustBe Seq(
-          Left(
-            ListItem(
-              name = s"${messages(s"$prefix.$identificationType")}",
-              changeUrl = routes.IdentificationNumberController.onPageLoad(lrn, NormalMode, index).url,
-              removeUrl = Some(routes.ConfirmRemoveBorderTransportController.onPageLoad(lrn, NormalMode, index).url)
+        forAll(arbitrary[Mode]) {
+          mode =>
+            val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, mode)
+            helper.listItems mustBe Seq(
+              Left(
+                ListItem(
+                  name = s"${messages(s"$prefix.$identificationType")}",
+                  changeUrl = routes.IdentificationNumberController.onPageLoad(userAnswers.lrn, mode, index).url,
+                  removeUrl = Some(routes.ConfirmRemoveBorderTransportController.onPageLoad(userAnswers.lrn, mode, index).url)
+                )
+              )
             )
-          )
-        )
+        }
       }
 
       "and identification number is defined" in {
@@ -119,16 +130,19 @@ class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPr
           .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Rail)
           .setValue(IdentificationNumberPage(index), identificationNumber)
 
-        val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
-        helper.listItems mustBe Seq(
-          Left(
-            ListItem(
-              name = identificationNumber,
-              changeUrl = routes.AddNationalityYesNoController.onPageLoad(lrn, NormalMode, index).url,
-              removeUrl = Some(routes.ConfirmRemoveBorderTransportController.onPageLoad(lrn, NormalMode, index).url)
+        forAll(arbitrary[Mode]) {
+          mode =>
+            val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, mode)
+            helper.listItems mustBe Seq(
+              Left(
+                ListItem(
+                  name = identificationNumber,
+                  changeUrl = routes.AddNationalityYesNoController.onPageLoad(userAnswers.lrn, mode, index).url,
+                  removeUrl = Some(routes.ConfirmRemoveBorderTransportController.onPageLoad(userAnswers.lrn, mode, index).url)
+                )
+              )
             )
-          )
-        )
+        }
       }
 
       "and identification type and identification number is defined" in {
@@ -141,16 +155,19 @@ class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPr
           .setValue(IdentificationPage(index), identificationType)
           .setValue(IdentificationNumberPage(index), identificationNumber)
 
-        val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, NormalMode)
-        helper.listItems mustBe Seq(
-          Left(
-            ListItem(
-              name = s"${messages(s"$prefix.$identificationType")} - $identificationNumber",
-              changeUrl = routes.AddNationalityYesNoController.onPageLoad(lrn, NormalMode, index).url,
-              removeUrl = Some(routes.ConfirmRemoveBorderTransportController.onPageLoad(lrn, NormalMode, index).url)
+        forAll(arbitrary[Mode]) {
+          mode =>
+            val helper = new ActiveBorderTransportsAnswersHelper(userAnswers, mode)
+            helper.listItems mustBe Seq(
+              Left(
+                ListItem(
+                  name = s"${messages(s"$prefix.$identificationType")} - $identificationNumber",
+                  changeUrl = routes.AddNationalityYesNoController.onPageLoad(userAnswers.lrn, mode, index).url,
+                  removeUrl = Some(routes.ConfirmRemoveBorderTransportController.onPageLoad(userAnswers.lrn, mode, index).url)
+                )
+              )
             )
-          )
-        )
+        }
       }
     }
   }

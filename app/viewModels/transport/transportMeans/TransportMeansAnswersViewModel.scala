@@ -17,10 +17,12 @@
 package viewModels.transport.transportMeans
 
 import controllers.transport.transportMeans.active.routes
-import models.{Mode, RichOptionalJsArray, UserAnswers}
+import models.{Index, Mode, RichOptionalJsArray, UserAnswers}
+import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import pages.sections.transport.TransportMeansActiveListSection
 import play.api.i18n.Messages
 import utils.cyaHelpers.transport.transportMeans.TransportMeansCheckYourAnswersHelper
+import utils.cyaHelpers.transport.transportMeans.active.ActiveBorderTransportAnswersHelper
 import viewModels.Link
 import viewModels.sections.Section
 
@@ -55,21 +57,28 @@ object TransportMeansAnswersViewModel {
       )
 
       val borderMeansSection = {
-        val rows = userAnswers
-          .get(TransportMeansActiveListSection)
-          .mapWithIndex {
-            (_, index) => helper.activeBorderTransportMeans(index)
-          }
+        if (userAnswers.get(OfficesOfTransitSection).isDefined) {
+          val rows = userAnswers
+            .get(TransportMeansActiveListSection)
+            .mapWithIndex {
+              (_, index) => helper.activeBorderTransportMeans(index)
+            }
 
-        Section(
-          sectionTitle = messages("transport.transportMeans.borderMeans.subheading"),
-          rows = rows,
-          addAnotherLink = Link(
-            id = "add-or-remove-border-means-of-transport",
-            text = messages("transport.transportMeans.borderMeans.addOrRemove"),
-            href = routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode).url
+          Section(
+            sectionTitle = messages("transport.transportMeans.borderMeans.subheading"),
+            rows = rows,
+            addAnotherLink = Link(
+              id = "add-or-remove-border-means-of-transport",
+              text = messages("transport.transportMeans.borderMeans.addOrRemove"),
+              href = routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode).url
+            )
           )
-        )
+        } else {
+          Section(
+            sectionTitle = messages("transport.transportMeans.borderMeans.subheading"),
+            rows = ActiveBorderTransportAnswersHelper.apply(userAnswers, mode, Index(0))
+          )
+        }
       }
 
       new TransportMeansAnswersViewModel(Seq(inlandModeSection, departureMeansSection, borderModeSection, borderMeansSection))
