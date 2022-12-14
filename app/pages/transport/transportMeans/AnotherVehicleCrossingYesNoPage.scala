@@ -19,9 +19,11 @@ package pages.transport.transportMeans
 import controllers.transport.transportMeans.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.TransportSection
+import pages.sections.transport.{TransportMeansActiveListSection, TransportSection}
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
+
+import scala.util.Try
 
 case object AnotherVehicleCrossingYesNoPage extends QuestionPage[Boolean] {
 
@@ -31,4 +33,10 @@ case object AnotherVehicleCrossingYesNoPage extends QuestionPage[Boolean] {
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.AnotherVehicleCrossingYesNoController.onPageLoad(userAnswers.lrn, mode))
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(false) => userAnswers.remove(BorderModeOfTransportPage).flatMap(_.remove(TransportMeansActiveListSection))
+      case _           => super.cleanup(value, userAnswers)
+    }
 }

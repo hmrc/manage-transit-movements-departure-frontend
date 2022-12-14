@@ -16,7 +16,11 @@
 
 package pages.transport.transportMeans
 
+import models.transport.transportMeans.BorderModeOfTransport
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.sections.transport.TransportMeansActiveListSection
+import play.api.libs.json.{JsArray, Json}
 
 class AnotherVehicleCrossingYesNoPageSpec extends PageBehaviours {
 
@@ -27,5 +31,24 @@ class AnotherVehicleCrossingYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](AnotherVehicleCrossingYesNoPage)
 
     beRemovable[Boolean](AnotherVehicleCrossingYesNoPage)
+
+    "cleanup" - {
+      "when NO selected" - {
+        "must clean up TransportMeansActiveListSection and border mode" in {
+          forAll(arbitrary[BorderModeOfTransport]) {
+            borderMode =>
+              val userAnswers = emptyUserAnswers
+                .setValue(AnotherVehicleCrossingYesNoPage, true)
+                .setValue(BorderModeOfTransportPage, borderMode)
+                .setValue(TransportMeansActiveListSection, JsArray(Seq(Json.obj("foo" -> "bar"))))
+
+              val result = userAnswers.setValue(AnotherVehicleCrossingYesNoPage, false)
+
+              result.get(TransportMeansActiveListSection) must not be defined
+              result.get(BorderModeOfTransportPage) must not be defined
+          }
+        }
+      }
+    }
   }
 }

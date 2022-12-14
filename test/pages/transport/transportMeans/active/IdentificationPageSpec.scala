@@ -17,6 +17,8 @@
 package pages.transport.transportMeans.active
 
 import models.transport.transportMeans.active.Identification
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
 import pages.behaviours.PageBehaviours
 
 class IdentificationPageSpec extends PageBehaviours {
@@ -28,5 +30,25 @@ class IdentificationPageSpec extends PageBehaviours {
     beSettable[Identification](IdentificationPage(activeIndex))
 
     beRemovable[Identification](IdentificationPage(activeIndex))
+
+    "cleanup" - {
+      "when answer changes" - {
+        "must remove identification number" in {
+          forAll(arbitrary[Identification], Gen.alphaNumStr) {
+            (identification, identificationNumber) =>
+              val userAnswers = emptyUserAnswers
+                .setValue(IdentificationPage(index), identification)
+                .setValue(IdentificationNumberPage(index), identificationNumber)
+
+              forAll(arbitrary[Identification].retryUntil(_ != identification)) {
+                differentIdentification =>
+                  val result = userAnswers.setValue(IdentificationPage(index), differentIdentification)
+
+                  result.get(IdentificationNumberPage(index)) must not be defined
+              }
+          }
+        }
+      }
+    }
   }
 }

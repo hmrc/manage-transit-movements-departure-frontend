@@ -18,9 +18,10 @@ package pages.transport.transportMeans.departure
 
 import controllers.transport.transportMeans.departure.routes
 import models.transport.transportMeans.departure.InlandMode
+import models.transport.transportMeans.departure.InlandMode.Mail
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.TransportMeansDepartureSection
+import pages.sections.transport.{TransportMeansActiveListSection, TransportMeansDepartureSection, TransportSection}
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
@@ -28,7 +29,7 @@ import scala.util.Try
 
 case object InlandModePage extends QuestionPage[InlandMode] {
 
-  override def path: JsPath = TransportMeansDepartureSection.path \ toString
+  override def path: JsPath = TransportSection.path \ toString
 
   override def toString: String = "inlandMode"
 
@@ -37,11 +38,10 @@ case object InlandModePage extends QuestionPage[InlandMode] {
 
   override def cleanup(value: Option[InlandMode], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
+      case Some(Mail) =>
+        userAnswers.remove(TransportMeansDepartureSection).flatMap(_.remove(TransportMeansActiveListSection))
       case Some(_) =>
-        userAnswers
-          .remove(IdentificationPage)
-          .flatMap(_.remove(MeansIdentificationNumberPage))
-          .flatMap(_.remove(VehicleCountryPage))
+        userAnswers.remove(TransportMeansDepartureSection)
       case None =>
         super.cleanup(value, userAnswers)
     }
