@@ -19,20 +19,25 @@ package utils.cyaHelpers.transport.transportMeans.active
 import base.SpecBase
 import controllers.transport.transportMeans.active.routes
 import generators.Generators
-import models.NormalMode
+import models.{NormalMode, UserAnswers}
 import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
 import models.journeyDomain.transport.TransportMeansActiveDomain
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.active.Identification
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.SecurityDetailsTypePage
+import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import pages.transport.transportMeans.active._
 import pages.transport.transportMeans.{AnotherVehicleCrossingYesNoPage, BorderModeOfTransportPage}
+import play.api.libs.json.JsArray
 import viewModels.ListItem
 
 class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   private val prefix = "transport.transportMeans.active.identification"
+
+  private def officesOfTransit(userAnswers: UserAnswers): JsArray =
+    arbitraryOfficeOfTransitAnswers(userAnswers, index).sample.value.getValue(OfficesOfTransitSection)
 
   "ActiveBorderTransportCheckYourAnswersHelperSpec" - {
 
@@ -49,6 +54,7 @@ class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPr
       "and AnotherVehicleCrossingBorder has been answered" in {
         val initialAnswers = emptyUserAnswers
           .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+          .setValue(OfficesOfTransitSection, officesOfTransit _)
           .setValue(AnotherVehicleCrossingYesNoPage, true)
           .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Fixed)
 
@@ -60,7 +66,7 @@ class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPr
               Right(
                 ListItem(
                   name = s"${messages(s"$prefix.${active.identification}")} - ${active.identificationNumber}",
-                  changeUrl = "#",
+                  changeUrl = "#", // TODO - update to active CYA page
                   removeUrl = Some(routes.ConfirmRemoveBorderTransportController.onPageLoad(lrn, NormalMode, index).url)
                 )
               )
@@ -71,6 +77,7 @@ class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPr
       "and AnotherVehicleCrossingBorder has not been answered" in {
         val initialAnswers = emptyUserAnswers
           .setValue(SecurityDetailsTypePage, EntrySummaryDeclarationSecurityDetails)
+          .setValue(OfficesOfTransitSection, officesOfTransit _)
           .setValue(BorderModeOfTransportPage, BorderModeOfTransport.Fixed)
 
         forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, index)) {
@@ -81,7 +88,7 @@ class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPr
               Right(
                 ListItem(
                   name = s"${messages(s"$prefix.${active.identification}")} - ${active.identificationNumber}",
-                  changeUrl = "#",
+                  changeUrl = "#", // TODO - update to active CYA page
                   removeUrl = None
                 )
               )

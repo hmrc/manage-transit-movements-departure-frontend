@@ -81,3 +81,19 @@ class ActiveBorderTransportAnswersHelper(
   )
 
 }
+
+object ActiveBorderTransportAnswersHelper {
+
+  def apply(userAnswers: UserAnswers, mode: Mode, index: Index)(implicit messages: Messages): Seq[SummaryListRow] = {
+    val helper = new ActiveBorderTransportAnswersHelper(userAnswers, mode, index)
+    Seq(
+      helper.activeBorderIdentificationType,
+      helper.activeBorderIdentificationNumber,
+      helper.activeBorderAddNationality,
+      helper.activeBorderNationality,
+      helper.customsOfficeAtBorder,
+      helper.activeBorderConveyanceReferenceNumberYesNo,
+      helper.conveyanceReferenceNumber
+    ).flatten
+  }
+}

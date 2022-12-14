@@ -81,6 +81,9 @@ trait SpecBase
     def setValue[T](page: QuestionPage[T], value: Option[T])(implicit format: Format[T]): UserAnswers =
       value.map(setValue(page, _)).getOrElse(userAnswers)
 
+    def setValue[T](page: QuestionPage[T], f: UserAnswers => T)(implicit format: Format[T]): UserAnswers =
+      setValue(page, f(userAnswers))
+
     def removeValue(page: QuestionPage[_]): UserAnswers =
       userAnswers.remove(page).success.value
   }

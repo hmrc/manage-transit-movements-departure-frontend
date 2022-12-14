@@ -50,24 +50,28 @@ class TransportMeansCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
 
       "must return Some(Row)" - {
         "when incident is defined" in {
-          forAll(arbitraryTransportMeansActiveAnswers(emptyUserAnswers, index), arbitrary[Mode]) {
-            (userAnswers, mode) =>
-              val abtm = UserAnswersReader[TransportMeansActiveDomain](
-                TransportMeansActiveDomain.userAnswersReader(index)
-              ).run(userAnswers).value
+          val prefix = "transport.transportMeans.active.identification"
+          forAll(arbitraryOfficeOfTransitAnswers(emptyUserAnswers, index)) {
+            initialAnswers =>
+              forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, index), arbitrary[Mode]) {
+                (userAnswers, mode) =>
+                  val abtm = UserAnswersReader[TransportMeansActiveDomain](
+                    TransportMeansActiveDomain.userAnswersReader(index)
+                  ).run(userAnswers).value
 
-              val helper = new TransportMeansCheckYourAnswersHelper(userAnswers, mode)
-              val result = helper.activeBorderTransportMeans(index).get
+                  val helper = new TransportMeansCheckYourAnswersHelper(userAnswers, mode)
+                  val result = helper.activeBorderTransportMeans(index).get
 
-              result.key.value mustBe "Active border transport means 1"
-              result.value.value mustBe s"${messages(s"transport.transportMeans.active.identification.${abtm.identification}")} - ${abtm.identificationNumber}"
-              val actions = result.actions.get.items
-              actions.size mustBe 1
-              val action = actions.head
-              action.content.value mustBe "Change"
-              action.href mustBe "#"
-              action.visuallyHiddenText.get mustBe "active border transport means 1"
-              action.id mustBe "change-active-border-transport-means-1"
+                  result.key.value mustBe "Active border transport means 1"
+                  result.value.value mustBe s"${messages(s"$prefix.${abtm.identification}")} - ${abtm.identificationNumber}"
+                  val actions = result.actions.get.items
+                  actions.size mustBe 1
+                  val action = actions.head
+                  action.content.value mustBe "Change"
+                  action.href mustBe "#" // TODO - update to active CYA page
+                  action.visuallyHiddenText.get mustBe "active border transport means 1"
+                  action.id mustBe "change-active-border-transport-means-1"
+              }
           }
         }
       }
