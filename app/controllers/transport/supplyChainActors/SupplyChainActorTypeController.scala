@@ -19,7 +19,7 @@ package controllers.transport.supplyChainActors
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
-import models.{LocalReferenceNumber, Mode}
+import models.{Index, LocalReferenceNumber, Mode}
 import models.transport.supplyChainActors.SupplyChainActorType
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class SupplyChainActorTypeController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: TransportNavigatorProvider,
+  navigatorProvider: TransportNavigatorProvider, //TODO: Switch to correct navigator when created
   actions: Actions,
   formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -47,25 +47,25 @@ class SupplyChainActorTypeController @Inject() (
 
   private val form = formProvider[SupplyChainActorType]("transport.supplyChainActors.supplyChainActorType")
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, actorIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(SupplyChainActorTypePage) match {
+      val preparedForm = request.userAnswers.get(SupplyChainActorTypePage(actorIndex)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, lrn, SupplyChainActorType.radioItems, mode))
+      Ok(view(preparedForm, lrn, SupplyChainActorType.radioItems, mode, actorIndex))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, actorIndex: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, SupplyChainActorType.radioItems, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, SupplyChainActorType.radioItems, mode, actorIndex))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            SupplyChainActorTypePage.writeToUserAnswers(value).writeToSession().navigate()
+            SupplyChainActorTypePage(actorIndex).writeToUserAnswers(value).writeToSession().navigate()
           }
         )
   }

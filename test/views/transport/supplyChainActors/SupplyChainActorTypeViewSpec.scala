@@ -30,7 +30,7 @@ class SupplyChainActorTypeViewSpec extends RadioViewBehaviours[SupplyChainActorT
   override def form: Form[SupplyChainActorType] = new EnumerableFormProvider()(prefix)
 
   override def applyView(form: Form[SupplyChainActorType]): HtmlFormat.Appendable =
-    injector.instanceOf[SupplyChainActorTypeView].apply(form, lrn, SupplyChainActorType.radioItems, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[SupplyChainActorTypeView].apply(form, lrn, SupplyChainActorType.radioItems, NormalMode, actorIndex)(fakeRequest, messages)
 
   override val prefix: String = "transport.supplyChainActors.supplyChainActorType"
 

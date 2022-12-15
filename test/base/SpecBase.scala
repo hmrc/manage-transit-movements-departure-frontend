@@ -56,6 +56,7 @@ trait SpecBase
   val packageIndex: Index   = Index(0)
   val containerIndex: Index = Index(0)
   val activeIndex: Index    = Index(0)
+  val actorIndex: Index     = Index(0)
 
   def fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
 

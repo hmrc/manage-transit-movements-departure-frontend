@@ -18,18 +18,18 @@ package pages.transport.supplyChainActors
 
 import controllers.transport.supplyChainActors.routes
 import models.transport.supplyChainActors.SupplyChainActorType
-import models.{Mode, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.SupplyChainActorsSection
+import pages.sections.transport.SupplyChainActorSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object SupplyChainActorTypePage extends QuestionPage[SupplyChainActorType] {
+case class SupplyChainActorTypePage(actorIndex: Index) extends QuestionPage[SupplyChainActorType] {
 
-  override def path: JsPath = SupplyChainActorsSection.path \ toString
+  override def path: JsPath = SupplyChainActorSection(actorIndex).path \ toString
 
   override def toString: String = "supplyChainActorType"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.SupplyChainActorTypeController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.SupplyChainActorTypeController.onPageLoad(userAnswers.lrn, mode, actorIndex))
 }

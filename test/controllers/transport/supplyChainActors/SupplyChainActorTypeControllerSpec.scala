@@ -37,12 +37,12 @@ class SupplyChainActorTypeControllerSpec extends SpecBase with AppWithDefaultMoc
   private val formProvider                   = new EnumerableFormProvider()
   private val form                           = formProvider[SupplyChainActorType]("transport.supplyChainActors.supplyChainActorType")
   private val mode                           = NormalMode
-  private lazy val supplyChainActorTypeRoute = routes.SupplyChainActorTypeController.onPageLoad(lrn, mode).url
+  private lazy val supplyChainActorTypeRoute = routes.SupplyChainActorTypeController.onPageLoad(lrn, mode, actorIndex).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
+      .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider)) //TODO: Switch to correct navigator when created
 
   "SupplyChainActorType Controller" - {
 
@@ -59,12 +59,12 @@ class SupplyChainActorTypeControllerSpec extends SpecBase with AppWithDefaultMoc
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, SupplyChainActorType.radioItems, mode)(request, messages).toString
+        view(form, lrn, SupplyChainActorType.radioItems, mode, actorIndex)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(SupplyChainActorTypePage, SupplyChainActorType.values.head)
+      val userAnswers = emptyUserAnswers.setValue(SupplyChainActorTypePage(actorIndex), SupplyChainActorType.values.head)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, supplyChainActorTypeRoute)
@@ -78,7 +78,7 @@ class SupplyChainActorTypeControllerSpec extends SpecBase with AppWithDefaultMoc
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, SupplyChainActorType.radioItems, mode)(request, messages).toString
+        view(filledForm, lrn, SupplyChainActorType.radioItems, mode, actorIndex)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -111,7 +111,7 @@ class SupplyChainActorTypeControllerSpec extends SpecBase with AppWithDefaultMoc
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, SupplyChainActorType.radioItems, mode)(request, messages).toString
+        view(boundForm, lrn, SupplyChainActorType.radioItems, mode, actorIndex)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
