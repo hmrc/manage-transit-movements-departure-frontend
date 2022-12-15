@@ -21,6 +21,7 @@ import models.transport.transportMeans.active.Identification
 import models.{Index, Mode, UserAnswers}
 import pages.transport.transportMeans.active._
 import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.Aliases
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
 
@@ -96,4 +97,5 @@ object ActiveBorderTransportAnswersHelper {
       helper.conveyanceReferenceNumber
     ).flatten
   }
+
 }
