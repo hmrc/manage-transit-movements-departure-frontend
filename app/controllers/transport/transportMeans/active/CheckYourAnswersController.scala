@@ -17,23 +17,22 @@
 package controllers.transport.transportMeans.active
 
 import controllers.actions._
-
-import javax.inject.Inject
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.routeDetails.TransitNavigatorProvider
+import navigation.transport.TransportMeansActiveNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.transport.transportMeans.active.CheckYourAnswersViewModel.CheckYourAnswersViewModelProvider
 import views.html.transport.transportMeans.active.CheckYourAnswersView
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
-  navigatorProvider: TransitNavigatorProvider,
+  navigatorProvider: TransportMeansActiveNavigatorProvider,
   view: CheckYourAnswersView,
   viewModelProvider: CheckYourAnswersViewModelProvider
 )(implicit ec: ExecutionContext)
@@ -48,7 +47,6 @@ class CheckYourAnswersController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      ???
+      Redirect(navigatorProvider(mode, activeIndex).nextPage(request.userAnswers))
   }
-
 }

@@ -67,7 +67,7 @@ class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPr
               Right(
                 ListItem(
                   name = s"${messages(s"$prefix.${active.identification}")} - ${active.identificationNumber}",
-                  changeUrl = routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode).url, // TODO - update to active CYA page
+                  changeUrl = routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, mode, activeIndex).url,
                   removeUrl = Some(routes.ConfirmRemoveBorderTransportController.onPageLoad(userAnswers.lrn, mode, index).url)
                 )
               )
@@ -89,7 +89,7 @@ class ActiveBorderTransportsAnswersHelperSpec extends SpecBase with ScalaCheckPr
               Right(
                 ListItem(
                   name = s"${messages(s"$prefix.${active.identification}")} - ${active.identificationNumber}",
-                  changeUrl = routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode).url, // TODO - update to active CYA page
+                  changeUrl = routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, mode, activeIndex).url,
                   removeUrl = None
                 )
               )

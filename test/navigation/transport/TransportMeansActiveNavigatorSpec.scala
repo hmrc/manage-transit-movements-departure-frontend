@@ -33,14 +33,14 @@ class TransportMeansActiveNavigatorSpec extends SpecBase with ScalaCheckProperty
 
       "when answers complete" - {
         "and customs office of transit is present" - {
-          "must redirect to active transport check your answers" ignore {
+          "must redirect to active transport check your answers" in {
             forAll(arbitraryOfficeOfTransitAnswers(emptyUserAnswers, index)) {
               initialAnswers =>
                 forAll(arbitraryTransportMeansActiveAnswers(initialAnswers, activeIndex)) {
                   answers =>
                     navigator
                       .nextPage(answers)
-                      .mustBe(???)
+                      .mustBe(controllers.transport.transportMeans.active.routes.CheckYourAnswersController.onPageLoad(lrn, mode, activeIndex))
                 }
             }
           }
