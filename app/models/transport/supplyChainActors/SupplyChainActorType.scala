@@ -22,13 +22,17 @@ sealed trait SupplyChainActorType
 
 object SupplyChainActorType extends RadioModel[SupplyChainActorType] {
 
-  case object Option1 extends WithName("option1") with SupplyChainActorType
-  case object Option2 extends WithName("option2") with SupplyChainActorType
+  case object Consolidator extends WithName("consolidator") with SupplyChainActorType
+  case object FreightForwarder extends WithName("freightForwarder") with SupplyChainActorType
+  case object Manufacturer extends WithName("manufacturer") with SupplyChainActorType
+  case object WarehouseKeeper extends WithName("warehouseKeeper") with SupplyChainActorType
 
   override val messageKeyPrefix: String = "transport.supplyChainActors.supplyChainActorType"
 
   val values: Seq[SupplyChainActorType] = Seq(
-    Option1,
-    Option2
+    Consolidator,
+    FreightForwarder,
+    Manufacturer,
+    WarehouseKeeper
   )
 }
