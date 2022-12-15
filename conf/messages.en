@@ -1290,3 +1290,6 @@ transport.supplyChainActors.addAnotherSupplyChainActor.maxLimit.label = You cann
 declarationSubmitted.title = Declaration Submitted
 declarationSubmitted.heading = Declaration Submitted
 declarationSubmitted.paragraph1 = You have submitted your declaration.
+
+transport.transportMeans.active.checkYourAnswers.title = Check your answers
+transport.transportMeans.active.checkYourAnswers.heading = Check your answers
