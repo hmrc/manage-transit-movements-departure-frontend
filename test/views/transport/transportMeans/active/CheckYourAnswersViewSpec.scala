@@ -16,22 +16,29 @@
 
 package views.transport.transportMeans.active
 
+import models.Mode
+import org.scalacheck.Arbitrary.arbitrary
 import play.twirl.api.HtmlFormat
-import views.behaviours.ViewBehaviours
+import viewModels.sections.Section
+import views.behaviours.CheckYourAnswersViewBehaviours
 import views.html.transport.transportMeans.active.CheckYourAnswersView
 
-class CheckYourAnswersViewSpec extends ViewBehaviours {
+class CheckYourAnswersViewSpec extends CheckYourAnswersViewBehaviours {
 
-  override val urlContainsLrn: Boolean = true
+  override val urlContainsLrn: Boolean     = true
+  override def view: HtmlFormat.Appendable = viewWithSections(sections)
+  private val mode                         = arbitrary[Mode].sample.value
 
-  override def view: HtmlFormat.Appendable =
-    injector.instanceOf[CheckYourAnswersView].apply(lrn)(fakeRequest, messages)
+  override def viewWithSections(sections: Seq[Section]): HtmlFormat.Appendable =
+    injector.instanceOf[CheckYourAnswersView].apply(lrn, mode, index, sections)(fakeRequest, messages)
 
   override val prefix: String = "transport.transportMeans.active.checkYourAnswers"
 
   behave like pageWithTitle()
 
   behave like pageWithBackLink()
+
+  behave like pageWithSectionCaption("Transport details - Border means of transport")
 
   behave like pageWithHeading()
 }

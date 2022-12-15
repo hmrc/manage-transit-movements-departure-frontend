@@ -17,19 +17,40 @@
 package controllers.transport.transportMeans.active
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import generators.Generators
+import models.NormalMode
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import viewModels.sections.Section
+import viewModels.transport.transportMeans.active.CheckYourAnswersViewModel
+import viewModels.transport.transportMeans.active.CheckYourAnswersViewModel.CheckYourAnswersViewModelProvider
 import views.html.transport.transportMeans.active.CheckYourAnswersView
 
-class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private lazy val checkYourAnswersRoute = routes.CheckYourAnswersController.onPageLoad(lrn).url
+  private lazy val mockViewModelProvider = mock[CheckYourAnswersViewModelProvider]
+
+  private lazy val checkYourAnswersRoute = routes.CheckYourAnswersController.onPageLoad(lrn, NormalMode, index).url
+
+  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
+    super
+      .guiceApplicationBuilder()
+      .overrides(bind[CheckYourAnswersViewModelProvider].toInstance(mockViewModelProvider))
 
   "CheckYourAnswers Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       setExistingUserAnswers(emptyUserAnswers)
+
+      val sampleSections = listWithMaxLength[Section]().sample.value
+
+      when(mockViewModelProvider.apply(any(), any(), any())(any()))
+        .thenReturn(CheckYourAnswersViewModel(sampleSections))
 
       val request = FakeRequest(GET, checkYourAnswersRoute)
       val result  = route(app, request).value
@@ -39,7 +60,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(lrn)(request, messages).toString
+        view(lrn, NormalMode, index, sampleSections)(request, messages).toString
     }
   }
 }

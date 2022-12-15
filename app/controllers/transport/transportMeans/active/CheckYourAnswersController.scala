@@ -24,7 +24,7 @@ import navigation.routeDetails.TransitNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.transport.transportMeans.TransportMeansAnswersViewModel.TransportMeansAnswersViewModelProvider
+import viewModels.transport.transportMeans.active.CheckYourAnswersViewModel.CheckYourAnswersViewModelProvider
 import views.html.transport.transportMeans.active.CheckYourAnswersView
 
 import scala.concurrent.ExecutionContext
@@ -35,14 +35,14 @@ class CheckYourAnswersController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   navigatorProvider: TransitNavigatorProvider,
   view: CheckYourAnswersView,
-  viewModelProvider: TransportMeansAnswersViewModelProvider
+  viewModelProvider: CheckYourAnswersViewModelProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val section = viewModelProvider(request.userAnswers, mode).sections
+      val section = viewModelProvider(request.userAnswers, mode, activeIndex).sections
       Ok(view(lrn, mode, activeIndex, section))
   }
 
