@@ -1,0 +1,5 @@
+
+GET        /:lrn/transport/supplyChainActors/which-type-of-supply-chain-actor-do-you-want-to-add                        controllers.transport.supplyChainActors.SupplyChainActorTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport/supplyChainActors/which-type-of-supply-chain-actor-do-you-want-to-add                        controllers.transport.supplyChainActors.SupplyChainActorTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport/supplyChainActors/change-which-type-of-supply-chain-actor-do-you-want-to-add                 controllers.transport.supplyChainActors.SupplyChainActorTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport/supplyChainActors/change-which-type-of-supply-chain-actor-do-you-want-to-add                 controllers.transport.supplyChainActors.SupplyChainActorTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
