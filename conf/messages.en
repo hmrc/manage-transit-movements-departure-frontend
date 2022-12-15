@@ -1252,16 +1252,20 @@ transport.transportMeans.borderMode.subheading = Border mode of transport
 transport.transportMeans.borderMeans.subheading = Border means of transport
 transport.transportMeans.borderMeans.addOrRemove = Add or remove border means of transport
 
+# Supply chain actor
+transport.supplyChainActors.caption = Transport details - Supply chain actor
+
+transport.supplyChainActors.supplyChainActorType.title = Which type of supply chain actor do you want to add?
+transport.supplyChainActors.supplyChainActorType.heading = Which type of supply chain actor do you want to add?
+transport.supplyChainActors.supplyChainActorType.consolidator = Consolidator
+transport.supplyChainActors.supplyChainActorType.freightForwarder = Freight forwarder
+transport.supplyChainActors.supplyChainActorType.manufacturer = Manufacturer
+transport.supplyChainActors.supplyChainActorType.warehouseKeeper = Warehouse keeper
+transport.supplyChainActors.supplyChainActorType.checkYourAnswersLabel = Which type of supply chain actor do you want to add?
+transport.supplyChainActors.supplyChainActorType.error.required = Select which type of supply chain actor you want to add
 
 # Declaration
 
 declarationSubmitted.title = Declaration Submitted
 declarationSubmitted.heading = Declaration Submitted
 declarationSubmitted.paragraph1 = You have submitted your declaration.
-
-transport.supplyChainActors.supplyChainActorType.title = Which type of supply chain actor do you want to add
-transport.supplyChainActors.supplyChainActorType.heading = Which type of supply chain actor do you want to add
-transport.supplyChainActors.supplyChainActorType.option1 = Option 1
-transport.supplyChainActors.supplyChainActorType.option2 = Option 2
-transport.supplyChainActors.supplyChainActorType.checkYourAnswersLabel = Which type of supply chain actor do you want to add
-transport.supplyChainActors.supplyChainActorType.error.required = Select  Which type of supply chain actor do you want to add
