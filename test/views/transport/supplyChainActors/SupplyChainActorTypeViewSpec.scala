@@ -43,6 +43,8 @@ class SupplyChainActorTypeViewSpec extends RadioViewBehaviours[SupplyChainActorT
 
   behave like pageWithBackLink()
 
+  behave like pageWithSectionCaption("Transport details - Supply chain actor")
+
   behave like pageWithHeading()
 
   behave like pageWithRadioItems()
