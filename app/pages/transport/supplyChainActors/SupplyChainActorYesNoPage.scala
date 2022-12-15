@@ -19,13 +19,13 @@ package pages.transport.supplyChainActors
 import controllers.transport.supplyChainActors.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.SupplyChainActorsSection
+import pages.sections.transport.SupplyChainActorListSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case object SupplyChainActorYesNoPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = SupplyChainActorsSection.path \ toString
+  override def path: JsPath = SupplyChainActorListSection.path \ toString
 
   override def toString: String = "supplyChainActorYesNo"
 

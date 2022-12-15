@@ -19,9 +19,9 @@ package pages.sections.transport
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object SupplyChainActorsSection extends QuestionPage[Nothing] {
+case object SupplyChainActorListSection extends QuestionPage[Nothing] {
 
   override def path: JsPath = TransportSection.path \ toString
 
-  override def toString: String = "supplyChainActors"
+  override def toString: String = "supplyChainActorList"
 }
