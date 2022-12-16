@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package pages.sections.transport
+package pages.transport.supplyChainActors
 
-import pages.sections.Section
-import play.api.libs.json.{JsArray, JsPath}
+import controllers.transport.supplyChainActors.routes
+import models.{Mode, UserAnswers}
+import pages.QuestionPage
+import pages.sections.transport.TransportSection
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
-case object SupplyChainActorListSection extends Section[JsArray] {
+case object SupplyChainActorYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = TransportSection.path \ toString
 
-  override def toString: String = "supplyChainActorList"
+  override def toString: String = "supplyChainActorYesNo"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.SupplyChainActorYesNoController.onPageLoad(userAnswers.lrn, mode))
 }

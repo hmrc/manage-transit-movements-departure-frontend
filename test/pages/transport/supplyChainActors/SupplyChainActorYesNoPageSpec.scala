@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package pages.sections.transport
+package pages.transport.supplyChainActors
 
-import pages.sections.Section
-import play.api.libs.json.{JsArray, JsPath}
+import pages.behaviours.PageBehaviours
 
-case object SupplyChainActorListSection extends Section[JsArray] {
+class SupplyChainActorYesNoPageSpec extends PageBehaviours {
 
-  override def path: JsPath = TransportSection.path \ toString
+  "SupplyChainActorYesNoPage" - {
 
-  override def toString: String = "supplyChainActorList"
+    beRetrievable[Boolean](SupplyChainActorYesNoPage)
+
+    beSettable[Boolean](SupplyChainActorYesNoPage)
+
+    beRemovable[Boolean](SupplyChainActorYesNoPage)
+  }
 }
