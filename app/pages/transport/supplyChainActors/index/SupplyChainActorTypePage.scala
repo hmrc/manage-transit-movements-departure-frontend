@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package pages.transport.supplyChainActors
+package pages.transport.supplyChainActors.index
 
-import controllers.transport.supplyChainActors.routes
+import controllers.transport.supplyChainActors.index.routes
 import models.transport.supplyChainActors.SupplyChainActorType
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage

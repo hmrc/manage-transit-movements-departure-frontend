@@ -27,10 +27,10 @@
     button: Button
 )
 
-@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, actorIndex: Index)(implicit request: Request[_], messages: Messages)
+@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, actorIndex: Index, supplyChainActor: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("transport.supplyChainActors.index.identificationNumber.title"),
+    title = messages("transport.supplyChainActors.index.identificationNumber.title", supplyChainActor),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -42,7 +42,7 @@
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages("transport.supplyChainActors.index.identificationNumber.heading"),
+                heading = messages("transport.supplyChainActors.index.identificationNumber.heading", supplyChainActor),
                 caption = Option(messages("transport.supplyChainActors.caption"))
             ),
             hint = Some(messages("transport.supplyChainActors.index.identificationNumber.hint")),

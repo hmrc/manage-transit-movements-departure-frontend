@@ -29,20 +29,22 @@ class IdentificationNumberViewSpec extends InputTextViewBehaviours[String] {
 
   override val prefix: String = "transport.supplyChainActors.index.identificationNumber"
 
+  private val validAnswer = "testString"
+
   override def form: Form[String] = new IdentificationNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[IdentificationNumberView].apply(form, lrn, NormalMode, actorIndex)(fakeRequest, messages)
+    injector.instanceOf[IdentificationNumberView].apply(form, lrn, NormalMode, actorIndex, validAnswer)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 
-  behave like pageWithTitle()
+  behave like pageWithTitle(validAnswer)
 
   behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Transport details - Supply chain actor")
 
-  behave like pageWithHeading()
+  behave like pageWithHeading(validAnswer)
 
   behave like pageWithHint("This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.")
 

@@ -22,7 +22,7 @@ import forms.transport.supplyChainActors.IdentificationNumberFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
-import pages.transport.supplyChainActors.index.IdentificationNumberPage
+import pages.transport.supplyChainActors.index.{IdentificationNumberPage, SupplyChainActorTypePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -39,32 +39,41 @@ class IdentificationNumberController @Inject() (
   formProvider: IdentificationNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
   view: IdentificationNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("transport.supplyChainActors.identificationNumber", "foo") // TODO: Update when SupplyChainActorType page is done
+  private val form = formProvider("transport.supplyChainActors.index.identificationNumber")
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, actorIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(IdentificationNumberPage(actorIndex)) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
-      Ok(view(preparedForm, lrn, mode, actorIndex))
-  }
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, actorIndex: Index): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(SupplyChainActorTypePage(actorIndex))) {
+      implicit request =>
+        val supplyChainActor = request.arg.asString
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, actorIndex: Index): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, actorIndex))),
-          value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            IdentificationNumberPage(actorIndex).writeToUserAnswers(value).writeToSession().navigate()
-          }
-        )
-  }
+        val preparedForm = request.userAnswers.get(IdentificationNumberPage(actorIndex)) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
+        Ok(view(preparedForm, lrn, mode, actorIndex, supplyChainActor))
+    }
+
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, actorIndex: Index): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(SupplyChainActorTypePage(actorIndex)))
+    .async {
+      implicit request =>
+        val supplyChainActor = request.arg.asString
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, actorIndex, supplyChainActor))),
+            value => {
+              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+              IdentificationNumberPage(actorIndex).writeToUserAnswers(value).writeToSession().navigate()
+            }
+          )
+    }
 }

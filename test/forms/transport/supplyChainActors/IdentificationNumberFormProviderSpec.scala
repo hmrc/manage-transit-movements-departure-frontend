@@ -16,16 +16,17 @@
 
 package forms.transport.supplyChainActors
 
+import forms.Constants.supplyChainActorIdentificationNumberLength
 import forms.behaviours.StringFieldBehaviours
 import org.scalacheck.Gen
-import play.api.data.FormError
+import play.api.data.{Field, FormError}
 
 class IdentificationNumberFormProviderSpec extends StringFieldBehaviours {
 
   private val prefix = Gen.alphaNumStr.sample.value
   val requiredKey    = s"$prefix.error.required"
   val lengthKey      = s"$prefix.error.length"
-  val maxLength      = 17
+  val maxLength: Int = supplyChainActorIdentificationNumberLength
 
   val form = new IdentificationNumberFormProvider()(prefix)
 
@@ -39,17 +40,24 @@ class IdentificationNumberFormProviderSpec extends StringFieldBehaviours {
       stringsWithMaxLength(maxLength)
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
+    "must not bind strings over max length" in {
+      val expectedError = FormError(fieldName, lengthKey, Seq(supplyChainActorIdentificationNumberLength))
+
+      val gen = for {
+        identificationNumber <- stringsLongerThan(supplyChainActorIdentificationNumberLength, Gen.alphaNumChar)
+      } yield identificationNumber
+
+      forAll(gen) {
+        invalidString =>
+          val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
+          result.errors must contain(expectedError)
+      }
+    }
   }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.transport.supplyChainActors
+package views.transport.supplyChainActors.index
 
 import forms.EnumerableFormProvider
 import models.NormalMode
@@ -23,7 +23,7 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import views.behaviours.RadioViewBehaviours
-import views.html.transport.supplyChainActors.SupplyChainActorTypeView
+import views.html.transport.supplyChainActors.index.SupplyChainActorTypeView
 
 class SupplyChainActorTypeViewSpec extends RadioViewBehaviours[SupplyChainActorType] {
 
@@ -32,7 +32,7 @@ class SupplyChainActorTypeViewSpec extends RadioViewBehaviours[SupplyChainActorT
   override def applyView(form: Form[SupplyChainActorType]): HtmlFormat.Appendable =
     injector.instanceOf[SupplyChainActorTypeView].apply(form, lrn, SupplyChainActorType.radioItems, NormalMode, actorIndex)(fakeRequest, messages)
 
-  override val prefix: String = "transport.supplyChainActors.supplyChainActorType"
+  override val prefix: String = "transport.supplyChainActors.index.supplyChainActorType"
 
   override def radioItems(fieldId: String, checkedValue: Option[SupplyChainActorType] = None): Seq[RadioItem] =
     SupplyChainActorType.radioItems(fieldId, checkedValue)
