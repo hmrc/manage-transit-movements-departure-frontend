@@ -1252,6 +1252,13 @@ transport.transportMeans.borderMode.subheading = Border mode of transport
 transport.transportMeans.borderMeans.subheading = Border means of transport
 transport.transportMeans.borderMeans.addOrRemove = Add or remove border means of transport
 
+transport.supplyChainActors.caption = Transport details - Supply chain actor
+
+transport.supplyChainActors.supplyChainActorYesNo.title = Do you want to add a supply chain actor?
+transport.supplyChainActors.supplyChainActorYesNo.heading = Do you want to add a supply chain actor?
+transport.supplyChainActors.supplyChainActorYesNo.paragraph = This is someone who helps move the goods to their destination. They can be a consolidator, freight forwarder, manufacturer or warehouse keeper.
+transport.supplyChainActors.supplyChainActorYesNo.checkYourAnswersLabel = Do you want to add a supply chain actor?
+transport.supplyChainActors.supplyChainActorYesNo.error.required = Select yes if you want to add a supply chain actor
 
 # Declaration
 
