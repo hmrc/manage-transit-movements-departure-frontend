@@ -1260,6 +1260,15 @@ transport.supplyChainActors.supplyChainActorYesNo.paragraph = This is someone wh
 transport.supplyChainActors.supplyChainActorYesNo.checkYourAnswersLabel = Do you want to add a supply chain actor?
 transport.supplyChainActors.supplyChainActorYesNo.error.required = Select yes if you want to add a supply chain actor
 
+transport.supplyChainActors.supplyChainActorType.title = Which type of supply chain actor do you want to add?
+transport.supplyChainActors.supplyChainActorType.heading = Which type of supply chain actor do you want to add?
+transport.supplyChainActors.supplyChainActorType.consolidator = Consolidator
+transport.supplyChainActors.supplyChainActorType.freightForwarder = Freight forwarder
+transport.supplyChainActors.supplyChainActorType.manufacturer = Manufacturer
+transport.supplyChainActors.supplyChainActorType.warehouseKeeper = Warehouse keeper
+transport.supplyChainActors.supplyChainActorType.checkYourAnswersLabel = Which type of supply chain actor do you want to add?
+transport.supplyChainActors.supplyChainActorType.error.required = Select which type of supply chain actor you want to add
+
 # Declaration
 
 declarationSubmitted.title = Declaration Submitted
