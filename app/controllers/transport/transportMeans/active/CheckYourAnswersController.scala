@@ -26,7 +26,6 @@ import viewModels.transport.transportMeans.active.CheckYourAnswersViewModel.Chec
 import views.html.transport.transportMeans.active.CheckYourAnswersView
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
@@ -35,8 +34,7 @@ class CheckYourAnswersController @Inject() (
   navigatorProvider: TransportMeansActiveNavigatorProvider,
   view: CheckYourAnswersView,
   viewModelProvider: CheckYourAnswersViewModelProvider
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
@@ -46,7 +44,6 @@ class CheckYourAnswersController @Inject() (
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      Redirect(navigatorProvider(mode, activeIndex).nextPage(request.userAnswers))
+    Redirect(controllers.transport.transportMeans.active.routes.AddAnotherBorderTransportController.onPageLoad(lrn, mode))
   }
 }
