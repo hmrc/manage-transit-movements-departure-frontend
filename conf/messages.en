@@ -1269,6 +1269,12 @@ transport.supplyChainActors.supplyChainActorType.warehouseKeeper = Warehouse kee
 transport.supplyChainActors.supplyChainActorType.checkYourAnswersLabel = Which type of supply chain actor do you want to add?
 transport.supplyChainActors.supplyChainActorType.error.required = Select which type of supply chain actor you want to add
 
+transport.supplyChainActors.identificationNumber.title = What’s the EORI number or Trader Identification Number (TIN) for the {0}?
+transport.supplyChainActors.identificationNumber.heading = What’s the EORI number or Trader Identification Number (TIN) for the {0}?
+transport.supplyChainActors.identificationNumber.checkYourAnswersLabel = What’s the EORI number or Trader Identification Number (TIN) for the {0}?
+transport.supplyChainActors.identificationNumber.error.required = Enter What’s the EORI number or Trader Identification Number (TIN) for the {0}?
+transport.supplyChainActors.identificationNumber.error.length = What’s the EORI number or Trader Identification Number (TIN) for the {0}? must be 17 characters or less
+
 # Declaration
 
 declarationSubmitted.title = Declaration Submitted
