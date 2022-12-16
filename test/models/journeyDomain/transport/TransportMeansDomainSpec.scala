@@ -22,6 +22,7 @@ import models.SecurityDetailsType
 import models.SecurityDetailsType._
 import models.domain.{EitherType, UserAnswersReader}
 import models.transport.transportMeans.departure.InlandMode
+import models.transport.transportMeans.departure.InlandMode.Maritime
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -54,7 +55,7 @@ class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks wi
           "and another vehicle crossing border is true" in {
             val initialAnswers = emptyUserAnswers
               .setValue(SecurityDetailsTypePage, NoSecurityDetails)
-              .setValue(InlandModePage, inlandMode)
+              .setValue(InlandModePage, Maritime)
               .setValue(AnotherVehicleCrossingYesNoPage, true)
 
             forAll(arbitraryTransportMeansAnswers(initialAnswers)) {
@@ -64,7 +65,7 @@ class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks wi
                 ).run(answers)
 
                 result.value.inlandMode mustBe inlandMode
-                result.value.asInstanceOf[TransportMeansDomainWithOtherInlandMode].transportMeansActive mustBe defined
+                result.value.asInstanceOf[TransportMeansDomainWithOtherInlandMode].transportMeansActiveList mustBe defined
             }
           }
 
@@ -81,7 +82,7 @@ class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks wi
                 ).run(answers)
 
                 result.value.inlandMode mustBe inlandMode
-                result.value.asInstanceOf[TransportMeansDomainWithOtherInlandMode].transportMeansActive must not be defined
+                result.value.asInstanceOf[TransportMeansDomainWithOtherInlandMode].transportMeansActiveList must not be defined
             }
           }
         }
@@ -100,7 +101,7 @@ class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks wi
               ).run(answers)
 
               result.value.inlandMode mustBe inlandMode
-              result.value.asInstanceOf[TransportMeansDomainWithOtherInlandMode].transportMeansActive mustBe defined
+              result.value.asInstanceOf[TransportMeansDomainWithOtherInlandMode].transportMeansActiveList mustBe defined
           }
         }
       }
