@@ -14,28 +14,29 @@
  * limitations under the License.
  */
 
-package controllers.transport.supplyChainActors
+package controllers.transport.supplyChainActors.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import controllers.transport.supplyChainActors.index.routes
 import forms.EnumerableFormProvider
 import models.NormalMode
 import models.transport.supplyChainActors.SupplyChainActorType
 import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.transport.supplyChainActors.SupplyChainActorTypePage
+import pages.transport.supplyChainActors.index.SupplyChainActorTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.transport.supplyChainActors.SupplyChainActorTypeView
+import views.html.transport.supplyChainActors.index.SupplyChainActorTypeView
 
 import scala.concurrent.Future
 
 class SupplyChainActorTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private val formProvider                   = new EnumerableFormProvider()
-  private val form                           = formProvider[SupplyChainActorType]("transport.supplyChainActors.supplyChainActorType")
+  private val form                           = formProvider[SupplyChainActorType]("transport.supplyChainActors.index.supplyChainActorType")
   private val mode                           = NormalMode
   private lazy val supplyChainActorTypeRoute = routes.SupplyChainActorTypeController.onPageLoad(lrn, mode, actorIndex).url
 

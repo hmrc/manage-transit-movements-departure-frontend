@@ -17,8 +17,13 @@
 package models.transport.supplyChainActors
 
 import models.{RadioModel, WithName}
+import play.api.i18n.Messages
 
-sealed trait SupplyChainActorType
+sealed trait SupplyChainActorType {
+
+  def asString(implicit messages: Messages): String =
+    messages(s"${SupplyChainActorType.messageKeyPrefix}.$this").toLowerCase
+}
 
 object SupplyChainActorType extends RadioModel[SupplyChainActorType] {
 
@@ -27,7 +32,7 @@ object SupplyChainActorType extends RadioModel[SupplyChainActorType] {
   case object Manufacturer extends WithName("manufacturer") with SupplyChainActorType
   case object WarehouseKeeper extends WithName("warehouseKeeper") with SupplyChainActorType
 
-  override val messageKeyPrefix: String = "transport.supplyChainActors.supplyChainActorType"
+  override val messageKeyPrefix: String = "transport.supplyChainActors.index.supplyChainActorType"
 
   val values: Seq[SupplyChainActorType] = Seq(
     Consolidator,

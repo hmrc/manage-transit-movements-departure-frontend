@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.transport.supplyChainActors
+package pages.transport.supplyChainActors.index
 
 import models.transport.supplyChainActors.SupplyChainActorType
 import pages.behaviours.PageBehaviours
