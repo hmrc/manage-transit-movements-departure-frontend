@@ -32,7 +32,7 @@ class IdentificationNumberFormProvider @Inject() extends Mappings {
         .verifying(
           StopOnFirstFail[String](
             maxLength(supplyChainActorIdentificationNumberLength, s"$prefix.error.length", args),
-            regexp(alphaNumericRegex, s"$prefix.error.invalid", args)
+            regexp(alphaNumericRegex, s"$prefix.error.invalidCharacter", args)
           )
         )
     )

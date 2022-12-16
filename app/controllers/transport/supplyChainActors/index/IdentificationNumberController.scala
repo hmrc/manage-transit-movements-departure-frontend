@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.transport.supplyChainActors
+package controllers.transport.supplyChainActors.index
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
@@ -22,12 +22,12 @@ import forms.transport.supplyChainActors.IdentificationNumberFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
-import pages.transport.supplyChainActors.IdentificationNumberPage
+import pages.transport.supplyChainActors.index.IdentificationNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.transport.supplyChainActors.IdentificationNumberView
+import views.html.transport.supplyChainActors.index.IdentificationNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
