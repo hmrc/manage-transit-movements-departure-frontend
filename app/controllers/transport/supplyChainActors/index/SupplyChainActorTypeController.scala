@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package controllers.transport.supplyChainActors
+package controllers.transport.supplyChainActors.index
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
-import models.{Index, LocalReferenceNumber, Mode}
 import models.transport.supplyChainActors.SupplyChainActorType
+import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
-import pages.transport.supplyChainActors.SupplyChainActorTypePage
+import pages.transport.supplyChainActors.index.SupplyChainActorTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.transport.supplyChainActors.SupplyChainActorTypeView
+import views.html.transport.supplyChainActors.index.SupplyChainActorTypeView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -45,7 +45,7 @@ class SupplyChainActorTypeController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider[SupplyChainActorType]("transport.supplyChainActors.supplyChainActorType")
+  private val form = formProvider[SupplyChainActorType]("transport.supplyChainActors.index.supplyChainActorType")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, actorIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
