@@ -33,6 +33,7 @@ class TransportMeansNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
 
       "when answers complete" - {
         "must redirect to transportMeans CYA" in {
+
           forAll(arbitraryTransportMeansAnswers(emptyUserAnswers)) {
             answers =>
               navigator

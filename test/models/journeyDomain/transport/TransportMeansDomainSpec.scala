@@ -22,7 +22,6 @@ import models.SecurityDetailsType
 import models.SecurityDetailsType._
 import models.domain.{EitherType, UserAnswersReader}
 import models.transport.transportMeans.departure.InlandMode
-import models.transport.transportMeans.departure.InlandMode.Maritime
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -54,8 +53,8 @@ class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks wi
         "and security type is in Set{0}" - {
           "and another vehicle crossing border is true" in {
             val initialAnswers = emptyUserAnswers
+              .setValue(InlandModePage, inlandMode)
               .setValue(SecurityDetailsTypePage, NoSecurityDetails)
-              .setValue(InlandModePage, Maritime)
               .setValue(AnotherVehicleCrossingYesNoPage, true)
 
             forAll(arbitraryTransportMeansAnswers(initialAnswers)) {

@@ -22,7 +22,6 @@ import models.Index
 import models.domain.{EitherType, UserAnswersReader}
 import models.journeyDomain.transport.TransportMeansActiveListDomain
 import org.scalacheck.Gen
-import pages.transport.transportMeans.active.IdentificationPage
 
 class TransportMeansActiveListDomainSpec extends SpecBase with Generators {
 
@@ -42,16 +41,5 @@ class TransportMeansActiveListDomainSpec extends SpecBase with Generators {
       result.value.transportMeansActiveListDomain.length mustBe numberOfActiveBorderMeans
 
     }
-
-    "cannot be parsed from UserAnswer" - {
-
-      "when there are no active border means" in {
-
-        val result: EitherType[TransportMeansActiveListDomain] = UserAnswersReader[TransportMeansActiveListDomain].run(emptyUserAnswers)
-
-        result.left.value.page mustBe IdentificationPage(Index(0))
-      }
-    }
   }
-
 }

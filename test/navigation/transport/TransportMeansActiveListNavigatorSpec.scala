@@ -28,13 +28,13 @@ class TransportMeansActiveListNavigatorSpec extends SpecBase with ScalaCheckProp
     "when in NormalMode" - {
 
       val mode              = NormalMode
-      val navigatorProvider = new TransportMeansActiveNavigatorProviderImpl()
-      val navigator         = navigatorProvider.apply(mode, activeIndex)
+      val navigatorProvider = new TransportMeansActiveListNavigatorProviderImpl()
+      val navigator         = navigatorProvider.apply(mode)
 
       "when answers complete" - {
         "must redirect to add another active border" in {
 
-          forAll(arbitraryTransportMeansActiveListAnswers(emptyUserAnswers)) {
+          forAll(arbitraryTransportMeansActiveAnswers(emptyUserAnswers, activeIndex)) {
             answers =>
               navigator
                 .nextPage(answers)
@@ -47,11 +47,12 @@ class TransportMeansActiveListNavigatorSpec extends SpecBase with ScalaCheckProp
       "when in CheckMode" - {
 
         val mode              = CheckMode
-        val navigatorProvider = new TransportMeansActiveNavigatorProviderImpl()
-        val navigator         = navigatorProvider.apply(mode, activeIndex)
+        val navigatorProvider = new TransportMeansActiveListNavigatorProviderImpl()
+        val navigator         = navigatorProvider.apply(mode)
 
         "when answers complete" - {
           "must redirect to transport means check your answers" in {
+
             forAll(arbitraryTransportMeansAnswers(emptyUserAnswers)) {
               answers =>
                 navigator
