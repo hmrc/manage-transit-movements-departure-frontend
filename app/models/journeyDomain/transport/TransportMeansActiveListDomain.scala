@@ -18,7 +18,7 @@ package models.journeyDomain.transport
 
 import cats.implicits._
 import controllers.transport.transportMeans.active.routes
-import models.domain.{GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
+import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{Index, Mode, RichJsArray, UserAnswers}
 import pages.sections.transport.TransportMeansActiveListSection
