@@ -20,6 +20,7 @@ import models.journeyDomain.transport.SupplyChainActorDomain
 import models.{Mode, UserAnswers}
 import pages.sections.transport.SupplyChainActorListSection
 import pages.transport.supplyChainActors.index.SupplyChainActorTypePage
+import controllers.transport.supplyChainActors.index.routes
 import play.api.i18n.Messages
 import utils.cyaHelpers.AnswersHelper
 import viewModels.ListItem
@@ -32,7 +33,7 @@ class SupplyChainActorsAnswersHelper(userAnswers: UserAnswers, mode: Mode)(impli
         buildListItem[SupplyChainActorDomain](
           nameWhenComplete = _.asString,
           nameWhenInProgress = userAnswers.get(SupplyChainActorTypePage(index)).map(_.asString),
-          removeRoute = None // TODO add remove page (CTCP-1730)
+          removeRoute = Some(routes.RemoveSupplyChainActorController.onPageLoad(lrn, mode, index))
         )(SupplyChainActorDomain.userAnswersReader(index))
     }
 
