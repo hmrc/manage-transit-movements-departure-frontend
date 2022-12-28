@@ -64,7 +64,7 @@ class TransportMeansActiveDomainSpec extends SpecBase with Generators with Scala
             nationality = Option(nationality),
             customsOffice = customsOffice,
             conveyanceReferenceNumber = Some(conveyanceNumber)
-          )
+          )(index)
 
           val result: EitherType[TransportMeansActiveDomain] = UserAnswersReader[TransportMeansActiveDomain](
             TransportMeansActiveDomain.userAnswersReader(index)
@@ -90,7 +90,7 @@ class TransportMeansActiveDomainSpec extends SpecBase with Generators with Scala
             nationality = Option(nationality),
             customsOffice = customsOffice,
             conveyanceReferenceNumber = Some(conveyanceNumber)
-          )
+          )(index)
 
           val result: EitherType[TransportMeansActiveDomain] = UserAnswersReader[TransportMeansActiveDomain](
             TransportMeansActiveDomain.userAnswersReader(index)
@@ -117,7 +117,7 @@ class TransportMeansActiveDomainSpec extends SpecBase with Generators with Scala
             nationality = None,
             customsOffice = customsOffice,
             conveyanceReferenceNumber = None
-          )
+          )(index)
 
           val result: EitherType[TransportMeansActiveDomain] = UserAnswersReader[TransportMeansActiveDomain](
             TransportMeansActiveDomain.userAnswersReader(index)
