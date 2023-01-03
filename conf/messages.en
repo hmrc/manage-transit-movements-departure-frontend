@@ -1210,7 +1210,7 @@ transport.transportMeans.active.customsOfficeActiveBorder.hint = Enter the offic
 transport.transportMeans.active.customsOfficeActiveBorder.placeholder = Select a customs office
 transport.transportMeans.active.customsOfficeActiveBorder.paragraph = This is the customs office after crossing the border.
 transport.transportMeans.active.customsOfficeActiveBorder.change.hidden = office of transit for the border means of transport
-transport.transportMeans.active.customsOfficeActiveBorder.checkYourAnswersLabel = Office of transit
+transport.transportMeans.active.customsOfficeActiveBorder.checkYourAnswersLabel = Customs office
 transport.transportMeans.active.customsOfficeActiveBorder.error.required = Enter the office of transit
 
 transport.transportMeans.active.conveyanceReferenceNumberYesNo.title = Do you want to add a conveyance reference number?
