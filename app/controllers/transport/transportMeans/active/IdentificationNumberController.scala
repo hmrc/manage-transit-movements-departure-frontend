@@ -54,9 +54,9 @@ class IdentificationNumberController @Inject() (
   private type Request = SpecificDataRequestProvider1[BorderModeOfTransport]#SpecificDataRequest[_]
 
   private def identificationType(index: Index)(implicit request: Request): Option[Identification] = request.arg match {
-    case BorderModeOfTransport.Rail if index == Index(0) => Some(Identification.TrainNumber)
-    case BorderModeOfTransport.Road if index == Index(0) => Some(Identification.RegNumberRoadVehicle)
-    case _                                               => request.userAnswers.get(IdentificationPage(index))
+    case BorderModeOfTransport.Rail if index.isFirst => Some(Identification.TrainNumber)
+    case BorderModeOfTransport.Road if index.isFirst => Some(Identification.RegNumberRoadVehicle)
+    case _                                           => request.userAnswers.get(IdentificationPage(index))
   }
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] =

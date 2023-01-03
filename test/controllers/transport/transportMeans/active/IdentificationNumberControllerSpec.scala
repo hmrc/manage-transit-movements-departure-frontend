@@ -19,9 +19,11 @@ package controllers.transport.transportMeans.active
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.transport.transportMeans.active.IdentificationNumberFormProvider
 import generators.Generators
-import models.NormalMode
+import models.reference.CustomsOffice
+import models.{Index, NormalMode}
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.active.Identification
+import models.transport.transportMeans.active.Identification.{RegNumberRoadVehicle, TrainNumber}
 import navigation.transport.TransportMeansActiveNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -29,7 +31,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.transport.transportMeans.BorderModeOfTransportPage
-import pages.transport.transportMeans.active.{IdentificationNumberPage, IdentificationPage}
+import pages.transport.transportMeans.active.{CustomsOfficeActiveBorderPage, IdentificationNumberPage, IdentificationPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -59,7 +61,7 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
     "must return OK and the correct view for a GET" - {
 
-      "when border mode is Rail" in {
+      "when border mode is Rail and index is 0" in {
 
         val identificationType = Identification.TrainNumber
         val userAnswers        = emptyUserAnswers.setValue(BorderModeOfTransportPage, BorderModeOfTransport.Rail)
@@ -75,6 +77,36 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
         contentAsString(result) mustEqual
           view(form(identificationType), lrn, s"$prefix.$identificationType", mode, index)(request, messages).toString
+      }
+
+      "when first border mode is either Road or Rail and the next Identification type is different" in {
+
+        val identificationType = Gen
+          .oneOf(Identification.values)
+          .filterNot(_ == TrainNumber)
+          .filterNot(_ == RegNumberRoadVehicle)
+          .sample
+          .value
+
+        val firstBorderMode = Gen.oneOf(Seq(BorderModeOfTransport.Rail, BorderModeOfTransport.Road))
+        val userAnswers = emptyUserAnswers
+          .setValue(BorderModeOfTransportPage, firstBorderMode.sample.value)
+          .setValue(IdentificationNumberPage(index), "BX998")
+          .setValue(CustomsOfficeActiveBorderPage(index), arbitrary[CustomsOffice].sample.value)
+          .setValue(IdentificationPage(Index(1)), identificationType)
+
+        setExistingUserAnswers(userAnswers)
+
+        val request = FakeRequest(GET, routes.IdentificationNumberController.onPageLoad(lrn, mode, Index(1)).url)
+
+        val result = route(app, request).value
+
+        val view = injector.instanceOf[IdentificationNumberView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form(identificationType), lrn, s"$prefix.$identificationType", mode, Index(1))(request, messages).toString
       }
 
       "when border mode is Road" in {
