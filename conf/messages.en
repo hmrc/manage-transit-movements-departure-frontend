@@ -1277,6 +1277,11 @@ transport.supplyChainActors.index.identificationNumber.error.required = Enter th
 transport.supplyChainActors.index.identificationNumber.error.length = The EORI number or Trader Identification Number (TIN) must be 17 characters or less
 transport.supplyChainActors.index.identificationNumber.error.invalidCharacter = The EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
 
+transport.supplyChainActors.index.removeSupplyChainActor.title = Are you sure you want to remove this supply chain actor?
+transport.supplyChainActors.index.removeSupplyChainActor.heading = Are you sure you want to remove this supply chain actor?
+transport.supplyChainActors.index.removeSupplyChainActor.checkYourAnswersLabel = Are you sure you want to remove this supply chain actor?
+transport.supplyChainActors.index.removeSupplyChainActor.error.required = Select yes if you want to remove this supply chain actor
+
 transport.supplyChainActors.addAnotherSupplyChainActor.singular.title = You have added 1 supply chain actor
 transport.supplyChainActors.addAnotherSupplyChainActor.plural.title = You have added {0} supply chain actors
 transport.supplyChainActors.addAnotherSupplyChainActor.singular.heading = You have added 1 supply chain actor
@@ -1293,3 +1298,4 @@ declarationSubmitted.paragraph1 = You have submitted your declaration.
 
 transport.transportMeans.active.checkYourAnswers.title = Check your answers
 transport.transportMeans.active.checkYourAnswers.heading = Check your answers
+
