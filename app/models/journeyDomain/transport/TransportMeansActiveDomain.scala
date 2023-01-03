@@ -40,14 +40,15 @@ case class TransportMeansActiveDomain(
   nationality: Option[Nationality],
   customsOffice: CustomsOffice,
   conveyanceReferenceNumber: Option[String]
-) extends JourneyDomainModel {
+)(index: Index)
+    extends JourneyDomainModel {
 
   def asString(implicit messages: Messages): String =
     TransportMeansActiveDomain.asString(identification, identificationNumber)
 
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some(
     userAnswers.get(OfficesOfTransitSection) match {
-      case Some(_) => activeRoutes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode) // TODO - update to active CYA page
+      case Some(_) => activeRoutes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, mode, index)
       case None    => transportMeansRoutes.TransportMeansCheckYourAnswersController.onPageLoad(userAnswers.lrn, mode)
     }
   )
@@ -89,7 +90,7 @@ object TransportMeansActiveDomain {
       AddNationalityYesNoPage(index).filterOptionalDependent(identity)(NationalityPage(index).reader),
       CustomsOfficeActiveBorderPage(index).reader,
       conveyanceReads
-    ).tupled.map((TransportMeansActiveDomain.apply _).tupled)
+    ).tupled.map((TransportMeansActiveDomain.apply _).tupled).map(_(index))
   }
 
 }
