@@ -16,7 +16,10 @@
 
 package pages.transport.supplyChainActors
 
+import org.scalacheck.Arbitrary._
 import pages.behaviours.PageBehaviours
+import pages.sections.transport.SupplyChainActorListSection
+import play.api.libs.json.{JsArray, Json}
 
 class SupplyChainActorYesNoPageSpec extends PageBehaviours {
 
@@ -27,5 +30,18 @@ class SupplyChainActorYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](SupplyChainActorYesNoPage)
 
     beRemovable[Boolean](SupplyChainActorYesNoPage)
+  }
+
+  "cleanup" - {
+    "when no is selected" - {
+      "must remove supply chain actors section" in {
+        val userAnswers = emptyUserAnswers
+          .setValue(SupplyChainActorListSection, JsArray(Seq(Json.obj("foo" -> "bar"))))
+
+        val result = userAnswers.setValue(SupplyChainActorYesNoPage, false)
+
+        result.get(SupplyChainActorListSection) mustNot be(defined)
+      }
+    }
   }
 }
