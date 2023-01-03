@@ -16,6 +16,7 @@
 
 package controllers.transport.supplyChainActors.index
 
+import config.FrontendAppConfig
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider

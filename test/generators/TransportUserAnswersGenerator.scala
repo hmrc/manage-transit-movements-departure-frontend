@@ -37,6 +37,9 @@ trait TransportUserAnswersGenerator {
     buildUserAnswers[TransportMeansDepartureDomain](userAnswers)
 
   def arbitraryTransportMeansActiveAnswers(userAnswers: UserAnswers, index: Index): Gen[UserAnswers] =
-    buildUserAnswers[TransportMeansActiveDomain](userAnswers)(userAnswersReader(index))
+    buildUserAnswers[TransportMeansActiveDomain](userAnswers)(TransportMeansActiveDomain.userAnswersReader(index))
+
+  def arbitrarySupplyChainActorAnswers(userAnswers: UserAnswers, index: Index): Gen[UserAnswers] =
+    buildUserAnswers[SupplyChainActorDomain](userAnswers)(SupplyChainActorDomain.userAnswersReader(index))
 
 }
