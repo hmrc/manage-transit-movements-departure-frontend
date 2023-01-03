@@ -17,13 +17,11 @@
 package models.journeyDomain.transport
 
 import cats.implicits.catsSyntaxTuple2Semigroupal
-import models.{Index, Mode, UserAnswers}
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.Stage.{AccessingJourney, CompletingJourney}
-import models.journeyDomain.transport.SupplyChainActorDomain.userAnswersReader
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.transport.supplyChainActors.SupplyChainActorType
-import models.transport.transportMeans.active.Identification
+import models.{Index, Mode, UserAnswers}
 import pages.transport.supplyChainActors.index.{IdentificationNumberPage, SupplyChainActorTypePage}
 import play.api.i18n.Messages
 import play.api.mvc.Call

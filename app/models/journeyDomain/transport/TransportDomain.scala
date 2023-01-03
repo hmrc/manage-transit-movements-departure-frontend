@@ -16,19 +16,22 @@
 
 package models.journeyDomain.transport
 
-import models.domain.UserAnswersReader
+import models.domain.{GettableAsFilterForNextReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
+import pages.transport.supplyChainActors.SupplyChainActorYesNoPage
 
 case class TransportDomain(
   preRequisites: PreRequisitesDomain,
-  transportMeans: TransportMeansDomain
+  transportMeans: TransportMeansDomain,
+  supplyChainActors: Option[SupplyChainActorsDomain]
 ) extends JourneyDomainModel
 
 object TransportDomain {
 
   implicit val userAnswersReader: UserAnswersReader[TransportDomain] =
     for {
-      preRequisites  <- UserAnswersReader[PreRequisitesDomain]
-      transportMeans <- UserAnswersReader[TransportMeansDomain]
-    } yield TransportDomain(preRequisites, transportMeans)
+      preRequisites     <- UserAnswersReader[PreRequisitesDomain]
+      transportMeans    <- UserAnswersReader[TransportMeansDomain]
+      supplyChainActors <- SupplyChainActorYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[SupplyChainActorsDomain])
+    } yield TransportDomain(preRequisites, transportMeans, supplyChainActors)
 }

@@ -21,7 +21,7 @@ import forms.transport.supplyChainActors.IdentificationNumberFormProvider
 import generators.Generators
 import models.NormalMode
 import models.transport.supplyChainActors.SupplyChainActorType
-import navigation.transport.TransportNavigatorProvider
+import navigation.transport.SupplyChainActorNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
@@ -46,8 +46,8 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
     super
       .guiceApplicationBuilder()
       .overrides(
-        bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider)
-      ) // TODO: Update to use the correct NavigatorProvider when built
+        bind(classOf[SupplyChainActorNavigatorProvider]).toInstance(fakeSupplyChainActorNavigatorProvider)
+      )
 
   "IdentificationNumber Controller" - {
 
