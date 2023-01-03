@@ -28,7 +28,6 @@ import viewModels.taskList.{Task, TaskStatus}
 import viewModels.transport.supplyChainActors.AddAnotherSupplyChainActorViewModel
 import viewModels.transport.transportMeans.active.AddAnotherBorderTransportViewModel
 import viewModels.{Link, ListItem}
-import views.html.transport.supplyChainActors.AddAnotherSupplyChainActorView
 
 trait ViewModelGenerators {
   self: Generators =>

@@ -23,11 +23,8 @@ import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.transport.supplyChainActors.AddAnotherSupplyChainActorViewModel
-import viewModels.transport.supplyChainActors.AddAnotherSupplyChainActorViewModel.AddAnotherSupplyChainActorViewModelProvider
-import viewModels.transport.transportMeans.active.AddAnotherBorderTransportViewModel
 import views.behaviours.ListWithActionsViewBehaviours
 import views.html.transport.supplyChainActors.AddAnotherSupplyChainActorView
-import views.html.transport.transportMeans.active.AddAnotherBorderTransportView
 
 class AddAnotherSupplyChainActorViewSpec extends ListWithActionsViewBehaviours {
 

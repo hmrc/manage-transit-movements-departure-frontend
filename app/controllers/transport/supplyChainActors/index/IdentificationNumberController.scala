@@ -21,7 +21,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.transport.supplyChainActors.IdentificationNumberFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
-import navigation.transport.{SupplyChainActorNavigatorProvider, TransportNavigatorProvider}
+import navigation.transport.SupplyChainActorNavigatorProvider
 import pages.transport.supplyChainActors.index.{IdentificationNumberPage, SupplyChainActorTypePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
