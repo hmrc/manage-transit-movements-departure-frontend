@@ -24,8 +24,6 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
 
-import scala.Console.println
-
 class ActiveBorderTransportAnswersHelper(
   userAnswers: UserAnswers,
   mode: Mode,
