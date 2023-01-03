@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -138,7 +138,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
     "must not bind when empty" in {
       val result: Field = form.bind(emptyForm).apply(fieldName)
 
-      result.errors mustBe Seq(FormError(fieldName, List(requiredAllDate), List()))
+      result.errors mustBe Seq(FormError(fieldName, List(requiredAllDate), List("day", "month", "year")))
     }
 
     "must not bind when one field is missing" in {

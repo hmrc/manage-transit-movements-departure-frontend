@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.implicits._
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Content
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, Text}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorLink
 import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 import uk.gov.hmrc.hmrcfrontend.views.implicits.RichErrorSummarySupport
 
@@ -122,6 +123,29 @@ object ViewUtils {
         case Some(value) => select.withHeadingAndSectionCaption(Text(heading), Text(value))
         case None        => select.withHeading(Text(heading))
       }
+  }
+
+  implicit class DateTimeRichFormErrors(formErrors: Seq[FormError])(implicit messages: Messages) {
+
+    def dateTimeErrorLink: Seq[ErrorLink] =
+      dateTimeErrorLinks(Text.apply)
+
+    def dateTimeErrorLinks(contentConstructor: String => Content): Seq[ErrorLink] =
+      formErrors.map {
+        formError =>
+          val getArg = formError.args.headOption.getOrElse("").toString
+
+          val key = getArg
+            .replaceAll("\\s", "")
+            .toIntOption match {
+            case Some(_) => s"#${formError.key}"
+            case _       => s"#${formError.key}${getArg.capitalize}"
+          }
+
+          ErrorLink(href = Some(key), content = contentConstructor(errorMessage(formError)))
+      }
+
+    def errorMessage(formError: FormError) = messages(formError.message, formError.args: _*)
   }
 
 }
