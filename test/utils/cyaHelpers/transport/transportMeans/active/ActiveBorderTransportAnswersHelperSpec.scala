@@ -228,7 +228,7 @@ class ActiveBorderTransportAnswersHelperSpec extends SpecBase with ScalaCheckPro
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Office of transit".toText),
+                  key = Key("Customs office".toText),
                   value = Value(s"$customsOffice".toText),
                   actions = Some(
                     Actions(
