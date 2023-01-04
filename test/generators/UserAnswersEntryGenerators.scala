@@ -251,9 +251,14 @@ trait UserAnswersEntryGenerators {
     }
   }
 
-  private def generateTransportAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
+  private def generateTransportAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.supplyChainActors._
     generatePreRequisitesAnswer orElse
-      generateTransportMeansAnswer
+      generateTransportMeansAnswer orElse
+      generateSupplyChainActorAnswers orElse {
+        case SupplyChainActorYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      }
+  }
 
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.preRequisites._
@@ -270,8 +275,7 @@ trait UserAnswersEntryGenerators {
   private def generateTransportMeansAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.transportMeans._
     generateTransportMeansDepartureAnswer orElse
-      generateTransportMeansActiveAnswer orElse
-      generateSupplyChainActorAnswers orElse {
+      generateTransportMeansActiveAnswer orElse {
         case AnotherVehicleCrossingYesNoPage => arbitrary[Boolean].map(JsBoolean)
         case BorderModeOfTransportPage       => arbitrary[BorderModeOfTransport].map(Json.toJson(_))
       }

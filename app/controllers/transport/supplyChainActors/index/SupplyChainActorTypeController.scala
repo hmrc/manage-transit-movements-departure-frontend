@@ -16,14 +16,13 @@
 
 package controllers.transport.supplyChainActors.index
 
-import config.FrontendAppConfig
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
 import models.transport.supplyChainActors.SupplyChainActorType
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
-import navigation.transport.TransportNavigatorProvider
+import navigation.transport.SupplyChainActorNavigatorProvider
 import pages.transport.supplyChainActors.index.SupplyChainActorTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -37,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class SupplyChainActorTypeController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: TransportNavigatorProvider, //TODO: Switch to correct navigator when created
+  navigatorProvider: SupplyChainActorNavigatorProvider,
   actions: Actions,
   formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -65,7 +64,7 @@ class SupplyChainActorTypeController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, SupplyChainActorType.radioItems, mode, actorIndex))),
           value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, actorIndex)
             SupplyChainActorTypePage(actorIndex).writeToUserAnswers(value).writeToSession().navigate()
           }
         )

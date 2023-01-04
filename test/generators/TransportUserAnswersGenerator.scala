@@ -16,7 +16,6 @@
 
 package generators
 
-import models.journeyDomain.transport.TransportMeansActiveDomain.userAnswersReader
 import models.journeyDomain.transport._
 import models.{Index, UserAnswers}
 import org.scalacheck.Gen
