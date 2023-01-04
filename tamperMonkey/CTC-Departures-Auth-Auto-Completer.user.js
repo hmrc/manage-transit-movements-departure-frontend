@@ -7,7 +7,7 @@
 // @match        http*://*/auth-login-stub/gg-sign-in?continue=*manage-transit-movements*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
 // @grant        none
-// @updateURL https://raw.githubusercontent.com/hmrc/???
+// @updateURL https://github.com/hmrc/manage-transit-movements-departure-frontend/raw/main/tamperMonkey/CTC-Departures-Auth-Auto-Completer.user.js
 // ==/UserScript==
 
 (function() {
