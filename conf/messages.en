@@ -1252,6 +1252,30 @@ transport.transportMeans.borderMode.subheading = Border mode of transport
 transport.transportMeans.borderMeans.subheading = Border means of transport
 transport.transportMeans.borderMeans.addOrRemove = Add or remove border means of transport
 
+transport.supplyChainActors.caption = Transport details - Supply chain actor
+
+transport.supplyChainActors.supplyChainActorYesNo.title = Do you want to add a supply chain actor?
+transport.supplyChainActors.supplyChainActorYesNo.heading = Do you want to add a supply chain actor?
+transport.supplyChainActors.supplyChainActorYesNo.paragraph = This is someone who helps move the goods to their destination. They can be a consolidator, freight forwarder, manufacturer or warehouse keeper.
+transport.supplyChainActors.supplyChainActorYesNo.checkYourAnswersLabel = Do you want to add a supply chain actor?
+transport.supplyChainActors.supplyChainActorYesNo.error.required = Select yes if you want to add a supply chain actor
+
+transport.supplyChainActors.index.supplyChainActorType.title = Which type of supply chain actor do you want to add?
+transport.supplyChainActors.index.supplyChainActorType.heading = Which type of supply chain actor do you want to add?
+transport.supplyChainActors.index.supplyChainActorType.consolidator = Consolidator
+transport.supplyChainActors.index.supplyChainActorType.freightForwarder = Freight forwarder
+transport.supplyChainActors.index.supplyChainActorType.manufacturer = Manufacturer
+transport.supplyChainActors.index.supplyChainActorType.warehouseKeeper = Warehouse keeper
+transport.supplyChainActors.index.supplyChainActorType.checkYourAnswersLabel = Which type of supply chain actor do you want to add?
+transport.supplyChainActors.index.supplyChainActorType.error.required = Select which type of supply chain actor you want to add
+
+transport.supplyChainActors.index.identificationNumber.title = What’s the EORI number or Trader Identification Number (TIN) for the {0}?
+transport.supplyChainActors.index.identificationNumber.heading = What’s the EORI number or Trader Identification Number (TIN) for the {0}?
+transport.supplyChainActors.index.identificationNumber.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
+transport.supplyChainActors.index.identificationNumber.checkYourAnswersLabel = What’s the EORI number or Trader Identification Number (TIN) for the {0}?
+transport.supplyChainActors.index.identificationNumber.error.required = Enter the EORI number or Trader Identification Number (TIN) for the supply chain actor
+transport.supplyChainActors.index.identificationNumber.error.length = The EORI number or Trader Identification Number (TIN) must be 17 characters or less
+transport.supplyChainActors.index.identificationNumber.error.invalidCharacter = The EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
 
 # Declaration
 

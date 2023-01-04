@@ -35,14 +35,14 @@ class ActiveBorderTransportAnswersHelper(
     page = IdentificationPage(index),
     formatAnswer = formatEnumAsText(Identification.messageKeyPrefix),
     prefix = "transport.transportMeans.active.identification",
-    id = Some("change-transport-means-identification")
+    id = Some("change-transport-means-active-identification")
   )
 
   def activeBorderIdentificationNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = IdentificationNumberPage(index),
     formatAnswer = formatAsText,
     prefix = "transport.transportMeans.active.identificationNumber",
-    id = Some("change-transport-means-identification-number")
+    id = Some("change-transport-means-active-identification-number")
   )
 
   def activeBorderAddNationality: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
@@ -56,7 +56,7 @@ class ActiveBorderTransportAnswersHelper(
     page = NationalityPage(index),
     formatAnswer = formatAsText,
     prefix = "transport.transportMeans.active.nationality",
-    id = Some("change-transport-means-vehicle-nationality")
+    id = Some("change-transport-means-active-vehicle-nationality")
   )
 
   def customsOfficeAtBorder: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](

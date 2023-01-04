@@ -53,8 +53,8 @@ class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks wi
         "and security type is in Set{0}" - {
           "and another vehicle crossing border is true" in {
             val initialAnswers = emptyUserAnswers
-              .setValue(SecurityDetailsTypePage, NoSecurityDetails)
               .setValue(InlandModePage, inlandMode)
+              .setValue(SecurityDetailsTypePage, NoSecurityDetails)
               .setValue(AnotherVehicleCrossingYesNoPage, true)
 
             forAll(arbitraryTransportMeansAnswers(initialAnswers)) {
@@ -64,7 +64,7 @@ class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks wi
                 ).run(answers)
 
                 result.value.inlandMode mustBe inlandMode
-                result.value.asInstanceOf[TransportMeansDomainWithOtherInlandMode].transportMeansActive mustBe defined
+                result.value.asInstanceOf[TransportMeansDomainWithOtherInlandMode].transportMeansActiveList mustBe defined
             }
           }
 
@@ -81,7 +81,7 @@ class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks wi
                 ).run(answers)
 
                 result.value.inlandMode mustBe inlandMode
-                result.value.asInstanceOf[TransportMeansDomainWithOtherInlandMode].transportMeansActive must not be defined
+                result.value.asInstanceOf[TransportMeansDomainWithOtherInlandMode].transportMeansActiveList must not be defined
             }
           }
         }
@@ -100,7 +100,7 @@ class TransportMeansDomainSpec extends SpecBase with ScalaCheckPropertyChecks wi
               ).run(answers)
 
               result.value.inlandMode mustBe inlandMode
-              result.value.asInstanceOf[TransportMeansDomainWithOtherInlandMode].transportMeansActive mustBe defined
+              result.value.asInstanceOf[TransportMeansDomainWithOtherInlandMode].transportMeansActiveList mustBe defined
           }
         }
       }

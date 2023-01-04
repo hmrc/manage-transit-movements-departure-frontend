@@ -18,7 +18,7 @@ package controllers.transport.transportMeans.active
 
 import controllers.actions._
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.transport.TransportMeansActiveNavigatorProvider
+import navigation.transport.TransportMeansActiveListNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -26,15 +26,17 @@ import viewModels.transport.transportMeans.active.CheckYourAnswersViewModel.Chec
 import views.html.transport.transportMeans.active.CheckYourAnswersView
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
-  navigatorProvider: TransportMeansActiveNavigatorProvider,
+  navigatorProvider: TransportMeansActiveListNavigatorProvider,
   view: CheckYourAnswersView,
   viewModelProvider: CheckYourAnswersViewModelProvider
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
@@ -44,6 +46,7 @@ class CheckYourAnswersController @Inject() (
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
-    Redirect(controllers.transport.transportMeans.active.routes.AddAnotherBorderTransportController.onPageLoad(lrn, mode))
+    implicit request =>
+      Redirect(navigatorProvider(mode).nextPage(request.userAnswers))
   }
 }

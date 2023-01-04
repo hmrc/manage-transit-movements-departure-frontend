@@ -19,12 +19,11 @@ package models.journeyDomain.transport
 import cats.implicits._
 import controllers.transport.transportMeans.routes
 import models.SecurityDetailsType.NoSecurityDetails
-import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
+import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.transport.transportMeans.departure.InlandMode
-import models.{Index, Mode, RichJsArray, UserAnswers}
+import models.{Mode, UserAnswers}
 import pages.preTaskList.SecurityDetailsTypePage
-import pages.sections.transport.TransportMeansActiveListSection
 import pages.transport.transportMeans.AnotherVehicleCrossingYesNoPage
 import pages.transport.transportMeans.departure.InlandModePage
 import play.api.mvc.Call
@@ -56,30 +55,23 @@ case object TransportMeansDomainWithMailInlandMode extends TransportMeansDomain 
 case class TransportMeansDomainWithOtherInlandMode(
   override val inlandMode: InlandMode,
   transportMeansDeparture: TransportMeansDepartureDomain,
-  transportMeansActive: Option[Seq[TransportMeansActiveDomain]]
+  transportMeansActiveList: Option[TransportMeansActiveListDomain]
 ) extends TransportMeansDomain
 
 object TransportMeansDomainWithOtherInlandMode {
 
   implicit def userAnswersReader(inlandMode: InlandMode): UserAnswersReader[TransportMeansDomainWithOtherInlandMode] = {
 
-    val arrayReader: UserAnswersReader[Seq[TransportMeansActiveDomain]] = TransportMeansActiveListSection.arrayReader.flatMap {
-      case x if x.isEmpty =>
-        UserAnswersReader[TransportMeansActiveDomain](TransportMeansActiveDomain.userAnswersReader(Index(0))).map(Seq(_))
-      case x =>
-        x.traverse[TransportMeansActiveDomain](TransportMeansActiveDomain.userAnswersReader)
-    }
-
-    implicit val transportMeansActiveReader: UserAnswersReader[Option[Seq[TransportMeansActiveDomain]]] =
+    implicit val transportMeansActiveReader: UserAnswersReader[Option[TransportMeansActiveListDomain]] =
       SecurityDetailsTypePage.reader.flatMap {
-        case NoSecurityDetails => AnotherVehicleCrossingYesNoPage.filterOptionalDependent(identity)(arrayReader)
-        case _                 => arrayReader.map(Some(_))
+        case NoSecurityDetails => AnotherVehicleCrossingYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[TransportMeansActiveListDomain])
+        case _                 => UserAnswersReader[TransportMeansActiveListDomain].map(Some(_))
       }
 
     (
       UserAnswersReader(inlandMode),
       UserAnswersReader[TransportMeansDepartureDomain],
-      UserAnswersReader[Option[Seq[TransportMeansActiveDomain]]]
+      UserAnswersReader[Option[TransportMeansActiveListDomain]]
     ).tupled.map((TransportMeansDomainWithOtherInlandMode.apply _).tupled)
   }
 }

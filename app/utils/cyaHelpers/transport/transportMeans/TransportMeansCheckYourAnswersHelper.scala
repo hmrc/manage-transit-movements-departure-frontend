@@ -62,21 +62,21 @@ class TransportMeansCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)
     page = IdentificationPage,
     formatAnswer = formatEnumAsText(Identification.messageKeyPrefix),
     prefix = "transport.transportMeans.departure.identification",
-    id = Some("change-transport-means-identification")
+    id = Some("change-transport-means-departure-identification")
   )
 
   def departureIdentificationNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = MeansIdentificationNumberPage,
     formatAnswer = formatAsText,
     prefix = "transport.transportMeans.departure.meansIdentificationNumber",
-    id = Some("change-transport-means-identification-number")
+    id = Some("change-transport-means-departure-identification-number")
   )
 
   def departureNationality: Option[SummaryListRow] = getAnswerAndBuildRow[Nationality](
     page = VehicleCountryPage,
     formatAnswer = formatAsText,
     prefix = "transport.transportMeans.departure.vehicleCountry",
-    id = Some("change-transport-means-vehicle-nationality")
+    id = Some("change-transport-means-departure-vehicle-nationality")
   )
 
 }

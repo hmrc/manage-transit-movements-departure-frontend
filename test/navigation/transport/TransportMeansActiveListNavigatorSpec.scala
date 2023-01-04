@@ -21,41 +21,43 @@ import generators.Generators
 import models._
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class TransportMeansNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class TransportMeansActiveListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
-  "Pre Requisites Navigator" - {
+  "TransportMeansActiveNavigator" - {
 
     "when in NormalMode" - {
 
       val mode              = NormalMode
-      val navigatorProvider = new TransportMeansNavigatorProviderImpl()
+      val navigatorProvider = new TransportMeansActiveListNavigatorProviderImpl()
       val navigator         = navigatorProvider.apply(mode)
 
       "when answers complete" - {
-        "must redirect to transportMeans CYA" in {
+        "must redirect to add another active border" in {
 
-          forAll(arbitraryTransportMeansAnswers(emptyUserAnswers)) {
+          forAll(arbitraryTransportMeansActiveAnswers(emptyUserAnswers, activeIndex)) {
             answers =>
               navigator
                 .nextPage(answers)
-                .mustBe(controllers.transport.transportMeans.routes.TransportMeansCheckYourAnswersController.onPageLoad(answers.lrn, mode))
+                .mustBe(controllers.transport.transportMeans.active.routes.AddAnotherBorderTransportController.onPageLoad(answers.lrn, mode))
           }
         }
+
       }
 
       "when in CheckMode" - {
 
         val mode              = CheckMode
-        val navigatorProvider = new TransportMeansNavigatorProviderImpl()
+        val navigatorProvider = new TransportMeansActiveListNavigatorProviderImpl()
         val navigator         = navigatorProvider.apply(mode)
 
         "when answers complete" - {
-          "must redirect to transport check your answers" ignore {
-            forAll(arbitraryTransportAnswers(emptyUserAnswers)) {
+          "must redirect to transport means check your answers" in {
+
+            forAll(arbitraryTransportMeansAnswers(emptyUserAnswers)) {
               answers =>
                 navigator
                   .nextPage(answers)
-                  .mustBe(???)
+                  .mustBe(controllers.transport.transportMeans.routes.TransportMeansCheckYourAnswersController.onPageLoad(answers.lrn, mode))
             }
           }
         }

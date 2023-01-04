@@ -64,7 +64,7 @@ class ActiveBorderTransportAnswersHelperSpec extends SpecBase with ScalaCheckPro
                           content = "Change".toText,
                           href = routes.IdentificationController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("identification type for the border means of transport"),
-                          attributes = Map("id" -> "change-transport-means-identification")
+                          attributes = Map("id" -> "change-transport-means-active-identification")
                         )
                       )
                     )
@@ -107,7 +107,7 @@ class ActiveBorderTransportAnswersHelperSpec extends SpecBase with ScalaCheckPro
                           content = "Change".toText,
                           href = routes.IdentificationNumberController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("identification number for the border means of transport"),
-                          attributes = Map("id" -> "change-transport-means-identification-number")
+                          attributes = Map("id" -> "change-transport-means-active-identification-number")
                         )
                       )
                     )
@@ -193,7 +193,7 @@ class ActiveBorderTransportAnswersHelperSpec extends SpecBase with ScalaCheckPro
                             content = "Change".toText,
                             href = routes.NationalityController.onPageLoad(answers.lrn, mode, index).url,
                             visuallyHiddenText = Some("registered country for the border means of transport"),
-                            attributes = Map("id" -> "change-transport-means-vehicle-nationality")
+                            attributes = Map("id" -> "change-transport-means-active-vehicle-nationality")
                           )
                         )
                       )

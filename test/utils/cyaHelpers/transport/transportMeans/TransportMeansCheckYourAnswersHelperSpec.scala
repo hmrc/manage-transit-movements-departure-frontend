@@ -152,7 +152,7 @@ class TransportMeansCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                           content = "Change".toText,
                           href = controllers.transport.transportMeans.departure.routes.IdentificationController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("identification type for the departure means of transport"),
-                          attributes = Map("id" -> "change-transport-means-identification")
+                          attributes = Map("id" -> "change-transport-means-departure-identification")
                         )
                       )
                     )
@@ -195,7 +195,7 @@ class TransportMeansCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                           content = "Change".toText,
                           href = controllers.transport.transportMeans.departure.routes.MeansIdentificationNumberController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("identification number for the departure means of transport"),
-                          attributes = Map("id" -> "change-transport-means-identification-number")
+                          attributes = Map("id" -> "change-transport-means-departure-identification-number")
                         )
                       )
                     )
@@ -238,7 +238,7 @@ class TransportMeansCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                           content = "Change".toText,
                           href = controllers.transport.transportMeans.departure.routes.VehicleCountryController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("registered country for the departure means of transport"),
-                          attributes = Map("id" -> "change-transport-means-vehicle-nationality")
+                          attributes = Map("id" -> "change-transport-means-departure-vehicle-nationality")
                         )
                       )
                     )

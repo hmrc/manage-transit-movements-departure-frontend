@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.transport.transportMeans.active.routes
+@import controllers.transport.supplyChainActors.index.routes
 @import models.LocalReferenceNumber
 @import viewModels.components.InputTextViewModel._
 @import views.html.components.{Button, ErrorSummary, InputText}
@@ -27,25 +27,25 @@
     button: Button
 )
 
-@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, activeIndex: Index)(implicit request: Request[_], messages: Messages)
+@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, actorIndex: Index, supplyChainActor: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("transport.transportMeans.active.conveyanceReferenceNumber.title"),
+    title = messages("transport.supplyChainActors.index.identificationNumber.title", supplyChainActor),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.ConveyanceReferenceNumberController.onSubmit(lrn, mode, activeIndex), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.IdentificationNumberController.onSubmit(lrn, mode, actorIndex), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages("transport.transportMeans.active.conveyanceReferenceNumber.heading"),
-                caption = Some(messages("transport.activeBorderMeansOfTransport.caption"))
+                heading = messages("transport.supplyChainActors.index.identificationNumber.heading", supplyChainActor),
+                caption = Option(messages("transport.supplyChainActors.caption"))
             ),
-            hint = Some(messages("transport.transportMeans.active.conveyanceReferenceNumber.hint")),
+            hint = Some(messages("transport.supplyChainActors.index.identificationNumber.hint")),
             inputClass = InputSize.Width20
         )
 
