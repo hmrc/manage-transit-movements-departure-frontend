@@ -133,15 +133,13 @@ object ViewUtils {
     def dateTimeErrorLinks(contentConstructor: String => Content): Seq[ErrorLink] =
       formErrors.map {
         formError =>
-          val getArg = formError.args.headOption.getOrElse("").toString
-
-          val key = getArg
-            .replaceAll("\\s", "")
-            .toIntOption match {
-            case Some(_) => s"#${formError.key}"
-            case _       => s"#${formError.key}${getArg.capitalize}"
+          val args = formError.key match {
+            case "date" => Seq("day", "month", "year")
+            case "time" => Seq("hour", "minute")
+            case _      => Seq("")
           }
-
+          val arg = formError.args.find(args.contains).getOrElse(args.head).toString
+          val key = s"#${formError.key}${arg.capitalize}"
           ErrorLink(href = Some(key), content = contentConstructor(errorMessage(formError)))
       }
 
