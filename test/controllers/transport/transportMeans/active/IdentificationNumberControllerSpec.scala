@@ -82,9 +82,11 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
       "when first border mode is either Road or Rail and the next Identification type is different" in {
 
         val identificationType = Gen
-          .oneOf(Identification.values)
-          .filterNot(_ == TrainNumber)
-          .filterNot(_ == RegNumberRoadVehicle)
+          .oneOf(
+            Identification.values
+              .filterNot(_ == TrainNumber)
+              .filterNot(_ == RegNumberRoadVehicle)
+          )
           .sample
           .value
 
