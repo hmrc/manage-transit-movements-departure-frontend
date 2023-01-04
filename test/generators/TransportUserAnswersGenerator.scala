@@ -16,7 +16,6 @@
 
 package generators
 
-import models.journeyDomain.transport.TransportMeansActiveDomain.userAnswersReader
 import models.journeyDomain.transport._
 import models.{Index, UserAnswers}
 import org.scalacheck.Gen
@@ -37,6 +36,9 @@ trait TransportUserAnswersGenerator {
     buildUserAnswers[TransportMeansDepartureDomain](userAnswers)
 
   def arbitraryTransportMeansActiveAnswers(userAnswers: UserAnswers, index: Index): Gen[UserAnswers] =
-    buildUserAnswers[TransportMeansActiveDomain](userAnswers)(userAnswersReader(index))
+    buildUserAnswers[TransportMeansActiveDomain](userAnswers)(TransportMeansActiveDomain.userAnswersReader(index))
+
+  def arbitrarySupplyChainActorAnswers(userAnswers: UserAnswers, index: Index): Gen[UserAnswers] =
+    buildUserAnswers[SupplyChainActorDomain](userAnswers)(SupplyChainActorDomain.userAnswersReader(index))
 
 }

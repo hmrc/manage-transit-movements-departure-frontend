@@ -21,6 +21,7 @@ import models.reference._
 import models.traderDetails.representative.RepresentativeCapacity
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.departure.{Identification, InlandMode}
+import models.transport.supplyChainActors.SupplyChainActorType
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import play.api.libs.json._
@@ -250,9 +251,14 @@ trait UserAnswersEntryGenerators {
     }
   }
 
-  private def generateTransportAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
+  private def generateTransportAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.supplyChainActors._
     generatePreRequisitesAnswer orElse
-      generateTransportMeansAnswer
+      generateTransportMeansAnswer orElse
+      generateSupplyChainActorAnswers orElse {
+        case SupplyChainActorYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      }
+  }
 
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.preRequisites._
@@ -295,6 +301,14 @@ trait UserAnswersEntryGenerators {
       case CustomsOfficeActiveBorderPage(_)      => arbitrary[CustomsOffice].map(Json.toJson(_))
       case ConveyanceReferenceNumberYesNoPage(_) => arbitrary[Boolean].map(JsBoolean)
       case ConveyanceReferenceNumberPage(_)      => Gen.alphaNumStr.map(JsString)
+    }
+  }
+
+  private def generateSupplyChainActorAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.supplyChainActors.index._
+    {
+      case SupplyChainActorTypePage(_) => arbitrary[SupplyChainActorType].map(Json.toJson(_))
+      case IdentificationNumberPage(_) => Gen.alphaNumStr.map(JsString)
     }
   }
 }

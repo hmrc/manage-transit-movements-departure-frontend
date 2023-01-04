@@ -17,6 +17,8 @@
 package pages.transport.supplyChainActors.index
 
 import models.transport.supplyChainActors.SupplyChainActorType
+import org.scalacheck.Arbitrary._
+import org.scalacheck.Gen
 import pages.behaviours.PageBehaviours
 
 class SupplyChainActorTypePageSpec extends PageBehaviours {
@@ -28,5 +30,35 @@ class SupplyChainActorTypePageSpec extends PageBehaviours {
     beSettable[SupplyChainActorType](SupplyChainActorTypePage(actorIndex))
 
     beRemovable[SupplyChainActorType](SupplyChainActorTypePage(actorIndex))
+  }
+
+  "cleanup" - {
+    val supplyActor          = arbitrary[SupplyChainActorType].sample.value
+    val updatedSupplyActor   = arbitrary[SupplyChainActorType].sample.value
+    val identificationNumber = Gen.alphaNumStr.sample.value
+
+    "when value changes" - {
+      "must clean up identification number page" in {
+        val preChange = emptyUserAnswers
+          .setValue(SupplyChainActorTypePage(actorIndex), supplyActor)
+          .setValue(IdentificationNumberPage(actorIndex), identificationNumber)
+
+        val postChange = preChange.setValue(SupplyChainActorTypePage(actorIndex), updatedSupplyActor)
+
+        postChange.get(IdentificationNumberPage(actorIndex)) mustNot be(defined)
+      }
+    }
+
+    "when value has not changed" - {
+      "must not clean up identification number page" in {
+        val preChange = emptyUserAnswers
+          .setValue(SupplyChainActorTypePage(actorIndex), supplyActor)
+          .setValue(IdentificationNumberPage(actorIndex), identificationNumber)
+
+        val postChange = preChange.setValue(SupplyChainActorTypePage(actorIndex), supplyActor)
+
+        postChange.get(IdentificationNumberPage(actorIndex)) must be(defined)
+      }
+    }
   }
 }

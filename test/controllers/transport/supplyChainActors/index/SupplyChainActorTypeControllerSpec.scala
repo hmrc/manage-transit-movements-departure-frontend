@@ -17,11 +17,10 @@
 package controllers.transport.supplyChainActors.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import controllers.transport.supplyChainActors.index.routes
 import forms.EnumerableFormProvider
 import models.NormalMode
 import models.transport.supplyChainActors.SupplyChainActorType
-import navigation.transport.TransportNavigatorProvider
+import navigation.transport.SupplyChainActorNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.transport.supplyChainActors.index.SupplyChainActorTypePage
@@ -43,7 +42,7 @@ class SupplyChainActorTypeControllerSpec extends SpecBase with AppWithDefaultMoc
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider)) //TODO: Switch to correct navigator when created
+      .overrides(bind(classOf[SupplyChainActorNavigatorProvider]).toInstance(fakeSupplyChainActorNavigatorProvider))
 
   "SupplyChainActorType Controller" - {
 

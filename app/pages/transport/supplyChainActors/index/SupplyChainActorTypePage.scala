@@ -24,6 +24,8 @@ import pages.sections.transport.SupplyChainActorSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
+import scala.util.Try
+
 case class SupplyChainActorTypePage(actorIndex: Index) extends QuestionPage[SupplyChainActorType] {
 
   override def path: JsPath = SupplyChainActorSection(actorIndex).path \ toString
@@ -32,4 +34,10 @@ case class SupplyChainActorTypePage(actorIndex: Index) extends QuestionPage[Supp
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.SupplyChainActorTypeController.onPageLoad(userAnswers.lrn, mode, actorIndex))
+
+  override def cleanup(value: Option[SupplyChainActorType], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(_) => userAnswers.remove(IdentificationNumberPage(actorIndex))
+      case None    => super.cleanup(value, userAnswers)
+    }
 }
