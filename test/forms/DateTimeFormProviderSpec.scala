@@ -138,7 +138,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
     "must not bind when empty" in {
       val result: Field = form.bind(emptyForm).apply(fieldName)
 
-      result.errors mustBe Seq(FormError(fieldName, List(requiredAllDate), List()))
+      result.errors mustBe Seq(FormError(fieldName, List(requiredAllDate), List("day", "month", "year")))
     }
 
     "must not bind when one field is missing" in {

@@ -22,7 +22,8 @@ import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.implicits._
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Content
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, Text}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorLink
 import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 import uk.gov.hmrc.hmrcfrontend.views.implicits.RichErrorSummarySupport
 
@@ -122,6 +123,27 @@ object ViewUtils {
         case Some(value) => select.withHeadingAndSectionCaption(Text(heading), Text(value))
         case None        => select.withHeading(Text(heading))
       }
+  }
+
+  implicit class DateTimeRichFormErrors(formErrors: Seq[FormError])(implicit messages: Messages) {
+
+    def dateTimeErrorLink: Seq[ErrorLink] =
+      dateTimeErrorLinks(Text.apply)
+
+    def dateTimeErrorLinks(contentConstructor: String => Content): Seq[ErrorLink] =
+      formErrors.map {
+        formError =>
+          val args = formError.key match {
+            case "date" => Seq("day", "month", "year")
+            case "time" => Seq("hour", "minute")
+            case _      => Seq("")
+          }
+          val arg = formError.args.find(args.contains).getOrElse(args.head).toString
+          val key = s"#${formError.key}${arg.capitalize}"
+          ErrorLink(href = Some(key), content = contentConstructor(errorMessage(formError)))
+      }
+
+    def errorMessage(formError: FormError) = messages(formError.message, formError.args: _*)
   }
 
 }
