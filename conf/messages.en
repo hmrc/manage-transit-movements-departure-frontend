@@ -1299,3 +1299,14 @@ declarationSubmitted.paragraph1 = You have submitted your declaration.
 transport.transportMeans.active.checkYourAnswers.title = Check your answers
 transport.transportMeans.active.checkYourAnswers.heading = Check your answers
 
+#Authorisations
+
+transport.authorisations.caption = Transport details - Authorisations
+
+transport.authorisations.authorisationType.title = Which type of authorisation do you want to add?
+transport.authorisations.authorisationType.heading = Which type of authorisation do you want to add?
+transport.authorisations.authorisationType.option1 = ACR - authorisation for the status of authorised consignor for Union transit
+transport.authorisations.authorisationType.option2 = SSE - authorisation for the use of seals of a special type
+transport.authorisations.authorisationType.option3 = TRD - authorisation to use transit declaration with a reduced dataset
+transport.authorisations.authorisationType.checkYourAnswersLabel = Authorisation type
+transport.authorisations.authorisationType.error.required = Select which type of authorisation you want to add

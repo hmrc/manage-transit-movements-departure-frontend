@@ -38,7 +38,7 @@ class AddAnotherSupplyChainActorController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: AddAnotherSupplyChainActorView,
   viewModelProvider: AddAnotherSupplyChainActorViewModelProvider
-)(implicit ec: ExecutionContext, config: FrontendAppConfig)
+)(implicit config: FrontendAppConfig)
     extends FrontendBaseController
     with I18nSupport {
 
@@ -66,7 +66,7 @@ class AddAnotherSupplyChainActorController @Inject() (
                 controllers.transport.supplyChainActors.index.routes.SupplyChainActorTypeController
                   .onPageLoad(request.userAnswers.lrn, mode, Index(viewModel.supplyChainActors))
               )
-            case false => Redirect(???) // TODO go to next section (authorisation nav)
+            case false => Redirect(???) // TODO go to next section (authorisations nav)
           }
         )
   }
