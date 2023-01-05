@@ -23,22 +23,22 @@ import org.scalacheck.Gen
 import views.html.components.InputDate
 import views.html.templates.MainTemplate
 
-import java.time.{Clock, LocalDate}
+import java.time.LocalDate
 
 class InputDateSpec extends A11ySpecBase {
 
   "the 'input date' component" must {
     val template  = app.injector.instanceOf[MainTemplate]
     val component = app.injector.instanceOf[InputDate]
-    val clock     = app.injector.instanceOf[Clock]
 
     val prefix      = Gen.alphaNumStr.sample.value
     val minDate     = arbitrary[LocalDate].sample.value
+    val maxDate     = arbitrary[LocalDate].sample.value
     val title       = nonEmptyString.sample.value
     val legend      = nonEmptyString.sample.value
     val legendClass = Gen.alphaNumStr.sample.value
     val hint        = Gen.option(nonEmptyString).sample.value
-    val form        = new DateFormProvider(clock)(prefix, minDate)
+    val form        = new DateFormProvider()(prefix, minDate, maxDate)
 
     "pass accessibility checks" when {
 

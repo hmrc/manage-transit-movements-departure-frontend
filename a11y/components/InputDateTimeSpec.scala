@@ -17,30 +17,34 @@
 package components
 
 import a11ySpecBase.A11ySpecBase
-import forms.DateFormProvider
+import forms.DateTimeFormProvider
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import play.api.data.FormError
-import views.html.components.DateErrorSummary
+import views.html.components.InputDateTime
 import views.html.templates.MainTemplate
 
 import java.time.LocalDate
 
-class DateErrorSummarySpec extends A11ySpecBase {
+class InputDateTimeSpec extends A11ySpecBase {
 
-  "the 'date error summary' component" must {
+  "the 'input date time' component" must {
     val template  = app.injector.instanceOf[MainTemplate]
-    val component = app.injector.instanceOf[DateErrorSummary]
+    val component = app.injector.instanceOf[InputDateTime]
 
     val prefix    = Gen.alphaNumStr.sample.value
     val minDate   = arbitrary[LocalDate].sample.value
     val maxDate   = arbitrary[LocalDate].sample.value
     val title     = nonEmptyString.sample.value
-    val formError = arbitrary[FormError].sample.value
-    val form      = new DateFormProvider()(prefix, minDate, maxDate).withError(formError)
+    val caption   = Gen.option(nonEmptyString).sample.value
+    val legend    = nonEmptyString.sample.value
+    val dateLabel = nonEmptyString.sample.value
+    val dateHint  = Gen.option(nonEmptyString).sample.value
+    val timeLabel = nonEmptyString.sample.value
+    val timeHint  = Gen.option(nonEmptyString).sample.value
+    val form      = new DateTimeFormProvider()(prefix, minDate, maxDate)
 
     val content = template.apply(title) {
-      component.apply(form).withHeading(title)
+      component.apply(caption, legend, form, dateLabel, dateHint, timeLabel, timeHint)
     }
 
     "pass accessibility checks" in {

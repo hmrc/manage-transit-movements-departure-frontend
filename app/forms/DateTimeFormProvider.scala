@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 class DateTimeFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String, dateMin: LocalDate, dateMax: LocalDate): Form[DateTime] =
+  def apply(prefix: String, minimumDate: LocalDate, maximumDate: LocalDate): Form[DateTime] =
     Form(
       mapping(
         "date" -> {
@@ -37,8 +37,8 @@ class DateTimeFormProvider @Inject() extends Mappings {
             twoRequiredKey = s"$prefix.date.error.required.multiple",
             requiredKey = s"$prefix.date.error.required"
           ).verifying(
-            maxDate(dateMax, s"$prefix.date.error.futureDate", dateMax.plusDays(1).formatAsString),
-            minDate(dateMin, s"$prefix.date.error.pastDate", dateMin.minusDays(1).formatAsString)
+            maxDate(maximumDate, s"$prefix.date.error.futureDate", maximumDate.plusDays(1).formatAsString),
+            minDate(minimumDate, s"$prefix.date.error.pastDate", minimumDate.minusDays(1).formatAsString)
           )
         },
         "time" -> {
