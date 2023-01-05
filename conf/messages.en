@@ -1168,7 +1168,7 @@ transport.transportMeans.active.identification.iataFlightNumber = IATA flight nu
 transport.transportMeans.active.identification.regNumberAircraft = Registration number of an aircraft
 transport.transportMeans.active.identification.europeanVesselIdNumber = European vessel identification number (ENI code)
 transport.transportMeans.active.identification.inlandWaterwaysVehicle = Name of an inland waterways vehicle
-transport.transportMeans.active.identification.checkYourAnswersLabel = Which identification do you want to use for this vehicle?
+transport.transportMeans.active.identification.checkYourAnswersLabel = Identification type
 transport.transportMeans.active.identification.change.hidden = identification type for the border means of transport
 transport.transportMeans.active.identification.error.required = Select which identification you want to use for this vehicle
 transport.transportMeans.active.identification.error.required = Select which identification you want to use for this vehicle
@@ -1210,7 +1210,7 @@ transport.transportMeans.active.customsOfficeActiveBorder.hint = Enter the offic
 transport.transportMeans.active.customsOfficeActiveBorder.placeholder = Select a customs office
 transport.transportMeans.active.customsOfficeActiveBorder.paragraph = This is the customs office after crossing the border.
 transport.transportMeans.active.customsOfficeActiveBorder.change.hidden = office of transit for the border means of transport
-transport.transportMeans.active.customsOfficeActiveBorder.checkYourAnswersLabel = Office of transit
+transport.transportMeans.active.customsOfficeActiveBorder.checkYourAnswersLabel = Customs office
 transport.transportMeans.active.customsOfficeActiveBorder.error.required = Enter the office of transit
 
 transport.transportMeans.active.conveyanceReferenceNumberYesNo.title = Do you want to add a conveyance reference number?

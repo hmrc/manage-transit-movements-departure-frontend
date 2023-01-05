@@ -30,34 +30,41 @@ class SupplyChainActorTypePageSpec extends PageBehaviours {
     beSettable[SupplyChainActorType](SupplyChainActorTypePage(actorIndex))
 
     beRemovable[SupplyChainActorType](SupplyChainActorTypePage(actorIndex))
-  }
 
-  "cleanup" - {
-    val supplyActor          = arbitrary[SupplyChainActorType].sample.value
-    val updatedSupplyActor   = arbitrary[SupplyChainActorType].sample.value
-    val identificationNumber = Gen.alphaNumStr.sample.value
+    "cleanup" - {
+      val identificationNumber = Gen.alphaNumStr.sample.value
 
-    "when value changes" - {
-      "must clean up identification number page" in {
-        val preChange = emptyUserAnswers
-          .setValue(SupplyChainActorTypePage(actorIndex), supplyActor)
-          .setValue(IdentificationNumberPage(actorIndex), identificationNumber)
+      "when value changes" - {
+        "must clean up identification number page" in {
+          forAll(arbitrary[SupplyChainActorType]) {
+            value =>
+              forAll(arbitrary[SupplyChainActorType].retryUntil(_ != value)) {
+                differentValue =>
+                  val userAnswers = emptyUserAnswers
+                    .setValue(SupplyChainActorTypePage(actorIndex), value)
+                    .setValue(IdentificationNumberPage(actorIndex), identificationNumber)
 
-        val postChange = preChange.setValue(SupplyChainActorTypePage(actorIndex), updatedSupplyActor)
+                  val result = userAnswers.setValue(SupplyChainActorTypePage(actorIndex), differentValue)
 
-        postChange.get(IdentificationNumberPage(actorIndex)) mustNot be(defined)
+                  result.get(IdentificationNumberPage(actorIndex)) mustNot be(defined)
+              }
+          }
+        }
       }
-    }
 
-    "when value has not changed" - {
-      "must not clean up identification number page" in {
-        val preChange = emptyUserAnswers
-          .setValue(SupplyChainActorTypePage(actorIndex), supplyActor)
-          .setValue(IdentificationNumberPage(actorIndex), identificationNumber)
+      "when value has not changed" - {
+        "must not clean up identification number page" in {
+          forAll(arbitrary[SupplyChainActorType]) {
+            value =>
+              val userAnswers = emptyUserAnswers
+                .setValue(SupplyChainActorTypePage(actorIndex), value)
+                .setValue(IdentificationNumberPage(actorIndex), identificationNumber)
 
-        val postChange = preChange.setValue(SupplyChainActorTypePage(actorIndex), supplyActor)
+              val result = userAnswers.setValue(SupplyChainActorTypePage(actorIndex), value)
 
-        postChange.get(IdentificationNumberPage(actorIndex)) must be(defined)
+              result.get(IdentificationNumberPage(actorIndex)) must be(defined)
+          }
+        }
       }
     }
   }

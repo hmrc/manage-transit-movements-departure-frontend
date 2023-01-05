@@ -55,7 +55,7 @@ class ActiveBorderTransportAnswersHelperSpec extends SpecBase with ScalaCheckPro
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Which identification do you want to use for this vehicle?".toText),
+                  key = Key("Identification type".toText),
                   value = Value(messages(s"${"transport.transportMeans.active.identification"}.$activeIdentification").toText),
                   actions = Some(
                     Actions(
@@ -228,7 +228,7 @@ class ActiveBorderTransportAnswersHelperSpec extends SpecBase with ScalaCheckPro
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Office of transit".toText),
+                  key = Key("Customs office".toText),
                   value = Value(s"$customsOffice".toText),
                   actions = Some(
                     Actions(
