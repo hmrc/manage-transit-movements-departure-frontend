@@ -3,4 +3,6 @@
 
 ->         /                                                     health.Routes
 
+->         /manage-transit-movements/departures                  app.transport.authorisations.Routes
+
 GET        /admin/metrics             @com.kenshoo.play.metrics.MetricsController.metrics

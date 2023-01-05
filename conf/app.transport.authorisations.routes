@@ -1,0 +1,6 @@
+
+GET        /:lrn/transport-details/authorisations/type                        controllers.transport.authorisations.AuthorisationTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport-details/authorisations/type                        controllers.transport.authorisations.AuthorisationTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport-details/authorisations/change-type                 controllers.transport.authorisations.AuthorisationTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport-details/authorisations/change-type                 controllers.transport.authorisations.AuthorisationTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
