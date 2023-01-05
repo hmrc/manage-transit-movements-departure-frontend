@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CTC-Departures PreTaskList Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      2.0
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @match        http*://*/manage-transit-movements/what-do-you-want-to-do
@@ -19,30 +19,30 @@
 })();
 
 window.addEventListener('load', function() {
-    var buttonPressed = GM_getValue('buttonPressed',false)
+    var preTaskT1NoSecurityButtonPressed = GM_getValue('preTaskT1NoSecurityButtonPressed',false)
 
     // Generate random numbers for LRN if LRN page is hit
     if(location.href.includes('manage-transit-movements/departures/local-reference-number')){
         GM_setValue('lrn', Math.floor((Math.random() + 1) * 10000))
     }
-    if(!buttonPressed && !location.href.includes('task-list')) {
-        document.body.appendChild(setup())
+    if(preTaskT1NoSecurityButtonPressed){
+        preTaskListT1NoSecurity()
     }else {
-        preTaskList()
+        if(!location.href.includes('task-list')) {
+            document.body.appendChild(setup())
+        }
     }
-
 }, false);
-
 
 function setup() {
     var panel = document.createElement('div')
-    panel.appendChild(createPreTaskButton())
+    panel.appendChild(createPreTaskT1NoSecurityButton())
     return panel
 }
 
-function createPreTaskButton() {
+function createPreTaskT1NoSecurityButton() {
     let button = document.createElement('button')
-            button.id='preTaskList'
+            button.id='preTaskT1NoSecurityButton'
 
             if (!!document.getElementById('global-header')) {
                 button.classList.add('button-start', 'govuk-!-display-none-print')
@@ -54,13 +54,12 @@ function createPreTaskButton() {
             button.style.top = '50px'
             button.innerHTML = 'Complete Pretask List (T1/No Security)'
             button.addEventListener("click", function handleClick() {
-                GM_setValue('buttonPressed',true)
-                preTaskList()
+                GM_setValue('preTaskT1NoSecurityButtonPressed',true)
+                preTaskListT1NoSecurity()
             })
 
             return button
 }
-
 
 const currentPageIs = (path) => {
     if(path.includes("*")) {
@@ -87,30 +86,30 @@ const lrnPage = (lrn) => {
     }
 }
 
-const officeOfDeparturePage = (lrn) => {
+const officeOfDeparturePage = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/office-of-departure`)){
-        document.getElementById('value-select').value = 'GB000068'
+        document.getElementById('value-select').value = data
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
-const procedureTypePage = (lrn) => {
+const procedureTypePage = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/procedure-type`)){
-        document.getElementById('value').click()
+        document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
-const declarationTypePage = (lrn) => {
+const declarationTypePage = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/declaration-type`)){
-        document.getElementById('value').click()
+        document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
-const securityDetails = (lrn) => {
+const securityDetails = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/security-details`)){
-        document.getElementById('value').click()
+        document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
@@ -124,21 +123,21 @@ const preTaskListCYA = (lrn) => {
 /* Sets button press to false on the landing page to prevent script running once you've went through the journey */
 const taskListPage = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
-        GM_setValue('buttonPressed', false)
+        GM_setValue('preTaskT1NoSecurityButtonPressed', false)
     }
 }
 /* #### Journeys #### */
 
 /* ## Pre task list journey ## */
 
-function preTaskList() {
+function preTaskListT1NoSecurity() {
     departureDeclarationPage()
     var lrn = GM_getValue('lrn', null)
     lrnPage(lrn)
-    officeOfDeparturePage(lrn)
-    procedureTypePage(lrn)
-    declarationTypePage(lrn)
-    securityDetails(lrn)
+    officeOfDeparturePage(lrn, 'GB000068')
+    procedureTypePage(lrn, 'value')
+    declarationTypePage(lrn, 'value')
+    securityDetails(lrn, 'value')
     preTaskListCYA(lrn)
     taskListPage(lrn)
 }
