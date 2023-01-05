@@ -11,7 +11,7 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
 // @grant        GM_setValue
 // @grant        GM_getValue
-// @updateURL https://raw.githubusercontent.com/hmrc/???
+// @updateURL https://github.com/hmrc/manage-transit-movements-departure-frontend/raw/main/tamperMonkey/CTC-Departures-PreTaskList-Auto-Completer.user.js
 // ==/UserScript==
 
 (function() {
