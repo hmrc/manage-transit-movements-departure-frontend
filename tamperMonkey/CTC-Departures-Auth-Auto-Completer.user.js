@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         CTC-Departures Auth Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      2.0
 // @description  Script to automatically fill out auth details
 // @author       Reece-Carruthers
-// @match        http*://*/auth-login-stub/gg-sign-in?continue=*manage-transit-movements*
+// @match        http*://*/auth-login-stub/gg-sign-in*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
 // @grant        none
 // @updateURL https://github.com/hmrc/manage-transit-movements-departure-frontend/raw/main/tamperMonkey/CTC-Departures-Auth-Auto-Completer.user.js
