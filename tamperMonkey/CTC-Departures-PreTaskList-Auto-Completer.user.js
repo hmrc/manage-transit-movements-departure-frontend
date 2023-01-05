@@ -19,10 +19,8 @@
 })();
 
 window.addEventListener('load', function() {
-
     generateLRN()
     isAButtonToggled()
-
 }, false);
 
 /* Main Functions */
