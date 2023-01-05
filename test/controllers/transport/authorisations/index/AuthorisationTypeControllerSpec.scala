@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package controllers.transport.authorisations
+package controllers.transport.authorisations.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import controllers.transport.authorisations.routes
 import forms.EnumerableFormProvider
 import models.NormalMode
 import models.transport.authorisations.AuthorisationType
 import navigation.transport.TransportMeansNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.transport.authorisation.AuthorisationTypePage
+import pages.transport.authorisation
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -64,7 +65,7 @@ class AuthorisationTypeControllerSpec extends SpecBase with AppWithDefaultMockFi
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(AuthorisationTypePage(index), AuthorisationType.values.head)
+      val userAnswers = emptyUserAnswers.setValue(authorisation.index.AuthorisationTypePage(index), AuthorisationType.values.head)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, authorisationTypeRoute)

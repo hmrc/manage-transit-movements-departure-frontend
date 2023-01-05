@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package pages.transport.authorisation
+package forms
 
-import models.transport.authorisations.AuthorisationType
-import pages.behaviours.PageBehaviours
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-class AuthorisationTypePageSpec extends PageBehaviours {
+class AuthorisationReferenceNumberFormProvider @Inject() extends Mappings {
 
-  "AuthorisationTypePage" - {
-
-    beRetrievable[AuthorisationType](AuthorisationTypePage(index))
-
-    beSettable[AuthorisationType](AuthorisationTypePage(index))
-
-    beRemovable[AuthorisationType](AuthorisationTypePage(index))
-  }
+  def apply(prefix: String): Form[String] =
+    Form(
+      "value" -> text(s"$prefix.error.required")
+        .verifying(maxLength(35, s"$prefix.error.length"))
+    )
 }

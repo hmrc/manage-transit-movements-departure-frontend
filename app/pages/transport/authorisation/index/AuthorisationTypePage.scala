@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package pages.transport.authorisation
+package pages.transport.authorisation.index
 
+import controllers.transport.authorisations.index.routes
 import models.transport.authorisations.AuthorisationType
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
@@ -30,5 +31,5 @@ case class AuthorisationTypePage(authorisationIndex: Index) extends QuestionPage
   override def toString: String = "authorisationType"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(controllers.transport.authorisations.routes.AuthorisationTypeController.onPageLoad(userAnswers.lrn, mode, authorisationIndex))
+    Some(routes.AuthorisationTypeController.onPageLoad(userAnswers.lrn, mode, authorisationIndex))
 }

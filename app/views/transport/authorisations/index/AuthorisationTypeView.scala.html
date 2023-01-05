@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.transport.authorisations.routes
+@import controllers.transport.authorisations.index.routes
 @import models.LocalReferenceNumber
 @import models.transport.authorisations.AuthorisationType
 @import views.html.components.{Button, ErrorSummary, InputRadio}
@@ -37,7 +37,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.AuthorisationTypeController.onSubmit(lrn, mode, authorisationIndex: Index), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.AuthorisationTypeController.onSubmit(lrn, mode, authorisationIndex), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.transport.authorisations
+package views.transport.authorisations.index
 
 import forms.EnumerableFormProvider
 import models.NormalMode

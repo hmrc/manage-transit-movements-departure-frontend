@@ -1310,3 +1310,9 @@ transport.authorisations.authorisationType.specialSeal = SSE - authorisation for
 transport.authorisations.authorisationType.transitDeclaration = TRD - authorisation to use transit declaration with a reduced dataset
 transport.authorisations.authorisationType.checkYourAnswersLabel = Authorisation type
 transport.authorisations.authorisationType.error.required = Select which type of authorisation you want to add
+
+transport.authorisationReferenceNumber.title = What’s the reference number for the [authorisation_type] authorisation?
+transport.authorisationReferenceNumber.heading = What’s the reference number for the [authorisation_type] authorisation?
+transport.authorisationReferenceNumber.checkYourAnswersLabel = What’s the reference number for the [authorisation_type] authorisation?
+transport.authorisationReferenceNumber.error.required = Enter What’s the reference number for the [authorisation_type] authorisation?
+transport.authorisationReferenceNumber.error.length = What’s the reference number for the [authorisation_type] authorisation? must be 35 characters or less

@@ -1,6 +1,1 @@
-
-GET        /:lrn/transport-details/authorisations/:authorisationIndex/type                        controllers.transport.authorisations.AuthorisationTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode, authorisationIndex: Index)
-POST       /:lrn/transport-details/authorisations/:authorisationIndex/type                        controllers.transport.authorisations.AuthorisationTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode, authorisationIndex: Index)
-GET        /:lrn/transport-details/authorisations/:authorisationIndex/change-type                 controllers.transport.authorisations.AuthorisationTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, authorisationIndex: Index)
-POST       /:lrn/transport-details/authorisations/:authorisationIndex/change-type                 controllers.transport.authorisations.AuthorisationTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode, authorisationIndex: Index)
-
+->         /                                                                                  app.transport.authorisations.index.Routes
