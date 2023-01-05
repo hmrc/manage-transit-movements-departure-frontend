@@ -16,15 +16,28 @@
 
 package forms
 
+import forms.Constants.maxAuthorisationRefNumberLength
 import forms.mappings.Mappings
+import models.domain.StringFieldRegex.alphaNumericRegex
+
 import javax.inject.Inject
 import play.api.data.Form
+import play.api.i18n.Messages
 
 class AuthorisationReferenceNumberFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String): Form[String] =
+  def apply(prefix: String, dynamicTitle: String)(implicit messages: Messages): Form[String] = {
+
+    val arg = messages(dynamicTitle)
+
     Form(
-      "value" -> text(s"$prefix.error.required")
-        .verifying(maxLength(35, s"$prefix.error.length"))
+      "value" -> text(s"$prefix.error.required", Seq(arg))
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(maxAuthorisationRefNumberLength, s"$prefix.error.length"),
+            regexp(alphaNumericRegex, s"$prefix.error.invalidCharacters")
+          )
+        )
     )
+  }
 }

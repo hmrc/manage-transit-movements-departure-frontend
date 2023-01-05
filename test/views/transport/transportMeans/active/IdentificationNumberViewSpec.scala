@@ -17,7 +17,7 @@
 package views.transport.transportMeans.active
 
 import base.SpecBase
-import forms.NameFormProvider
+import forms.transport.transportMeans.active.IdentificationNumberFormProvider
 import generators.Generators
 import models.NormalMode
 import models.transport.transportMeans.active.Identification
@@ -37,7 +37,7 @@ class IdentificationNumberViewSpec extends InputTextViewBehaviours[String] with 
 
   private val dynamicText = s"$prefix.${identificationType.toString}"
 
-  override def form: Form[String] = new NameFormProvider()(prefix)
+  override def form: Form[String] = new IdentificationNumberFormProvider()(prefix, dynamicText)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
     injector.instanceOf[IdentificationNumberView].apply(form, lrn, dynamicText, NormalMode, activeIndex)(fakeRequest, messages)
