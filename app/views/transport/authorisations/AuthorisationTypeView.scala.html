@@ -29,7 +29,7 @@
     button: Button
 )
 
-@(form: Form[AuthorisationType], lrn: LocalReferenceNumber, radios: (String, Option[AuthorisationType]) => Seq[RadioItem], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[AuthorisationType], lrn: LocalReferenceNumber, radios: (String, Option[AuthorisationType]) => Seq[RadioItem], mode: Mode, authorisationIndex: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("transport.authorisations.authorisationType.title"),
@@ -37,7 +37,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.AuthorisationTypeController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.AuthorisationTypeController.onSubmit(lrn, mode, authorisationIndex: Index), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

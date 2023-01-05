@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package pages.transport.authorisation
+package pages.sections.transport
 
-import models.transport.authorisations.AuthorisationType
-import pages.behaviours.PageBehaviours
+import play.api.libs.json.{JsArray, JsPath}
+import pages.sections.Section
 
-class AuthorisationTypePageSpec extends PageBehaviours {
+case object AuthorisationsSection extends Section[JsArray] {
 
-  "AuthorisationTypePage" - {
+  override def path: JsPath = TransportSection.path \ toString
 
-    beRetrievable[AuthorisationType](AuthorisationTypePage(index))
-
-    beSettable[AuthorisationType](AuthorisationTypePage(index))
-
-    beRemovable[AuthorisationType](AuthorisationTypePage(index))
-  }
+  override def toString: String = "authorisations"
 }

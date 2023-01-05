@@ -30,7 +30,7 @@ class AuthorisationTypeViewSpec extends RadioViewBehaviours[AuthorisationType] {
   override def form: Form[AuthorisationType] = new EnumerableFormProvider()(prefix)
 
   override def applyView(form: Form[AuthorisationType]): HtmlFormat.Appendable =
-    injector.instanceOf[AuthorisationTypeView].apply(form, lrn, AuthorisationType.radioItems, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[AuthorisationTypeView].apply(form, lrn, AuthorisationType.radioItems, NormalMode, index)(fakeRequest, messages)
 
   override val prefix: String = "transport.authorisations.authorisationType"
 

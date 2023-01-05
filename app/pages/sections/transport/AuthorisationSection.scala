@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.sections
+package pages.sections.transport
 
-import play.api.libs.json.JsPath
-import pages.QuestionPage
+import models.Index
+import pages.sections.Section
+import play.api.libs.json.{JsObject, JsPath}
 
-case object AuthorisationSection extends QuestionPage[Nothing] {
+case class AuthorisationSection(authorisationIndex: Index) extends Section[JsObject] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = AuthorisationsSection.path \ authorisationIndex.position
 
-  override def toString: String = "authorisationType"
 }

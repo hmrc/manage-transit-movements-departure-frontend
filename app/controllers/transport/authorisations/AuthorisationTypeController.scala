@@ -20,7 +20,7 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
 import models.transport.authorisations.AuthorisationType
-import models.{LocalReferenceNumber, Mode}
+import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansNavigatorProvider
 import pages.transport.authorisation.AuthorisationTypePage
@@ -47,25 +47,25 @@ class AuthorisationTypeController @Inject() (
 
   private val form = formProvider[AuthorisationType]("transport.authorisations.authorisationType")
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, authorisationIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(AuthorisationTypePage) match {
+      val preparedForm = request.userAnswers.get(AuthorisationTypePage(authorisationIndex)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, lrn, AuthorisationType.radioItems, mode))
+      Ok(view(preparedForm, lrn, AuthorisationType.radioItems, mode, authorisationIndex))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, authorisationIndex: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, AuthorisationType.radioItems, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, AuthorisationType.radioItems, mode, authorisationIndex))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            AuthorisationTypePage.writeToUserAnswers(value).writeToSession().navigate()
+            AuthorisationTypePage(authorisationIndex).writeToUserAnswers(value).writeToSession().navigate()
           }
         )
   }

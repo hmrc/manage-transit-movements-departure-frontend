@@ -37,7 +37,7 @@ class AuthorisationTypeControllerSpec extends SpecBase with AppWithDefaultMockFi
   private val formProvider                = new EnumerableFormProvider()
   private val form                        = formProvider[AuthorisationType]("transport.authorisations.authorisationType")
   private val mode                        = NormalMode
-  private lazy val authorisationTypeRoute = routes.AuthorisationTypeController.onPageLoad(lrn, mode).url
+  private lazy val authorisationTypeRoute = routes.AuthorisationTypeController.onPageLoad(lrn, mode, index).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -59,12 +59,12 @@ class AuthorisationTypeControllerSpec extends SpecBase with AppWithDefaultMockFi
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, AuthorisationType.radioItems, mode)(request, messages).toString
+        view(form, lrn, AuthorisationType.radioItems, mode, index)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(AuthorisationTypePage, AuthorisationType.values.head)
+      val userAnswers = emptyUserAnswers.setValue(AuthorisationTypePage(index), AuthorisationType.values.head)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, authorisationTypeRoute)
@@ -78,7 +78,7 @@ class AuthorisationTypeControllerSpec extends SpecBase with AppWithDefaultMockFi
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, AuthorisationType.radioItems, mode)(request, messages).toString
+        view(filledForm, lrn, AuthorisationType.radioItems, mode, index)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -111,7 +111,7 @@ class AuthorisationTypeControllerSpec extends SpecBase with AppWithDefaultMockFi
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, AuthorisationType.radioItems, mode)(request, messages).toString
+        view(boundForm, lrn, AuthorisationType.radioItems, mode, index)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
