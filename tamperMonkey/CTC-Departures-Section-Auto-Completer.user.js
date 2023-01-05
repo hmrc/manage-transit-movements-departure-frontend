@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CTC-Departures Section Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      2.0
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @match        http*://*/manage-transit-movements/departures/*/task-list
@@ -9,7 +9,7 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
 // @grant        GM_setValue
 // @grant        GM_getValue
-// @updateURL https://github.com/hmrc/manage-transit-movements-departure-frontend/raw/main/tamperMonkey/CTC-Departures-Section-Auto-Completer.user.js
+// @updateURL    https://github.com/hmrc/manage-transit-movements-departure-frontend/raw/main/tamperMonkey/CTC-Departures-Section-Auto-Completer.user.js
 // ==/UserScript==
 
 (function() {
@@ -17,47 +17,55 @@
 })();
 
 window.addEventListener('load', function() {
-    var routeDetailsButtonPressed = GM_getValue('routeDetailsButtonPressed', false)
-
-    if(location.href.includes('task-list')){
-        const lrn = location.href.split('/')[5]
-        GM_setValue('lrn',lrn)
-    }
-    if(routeDetailsButtonPressed){
-        routeDetails()
-    }else {
-        document.body.appendChild(setup())
-    }
-
+    saveLRN()
+    isAButtonToggled()
+    isSectionCompleted()
 }, false);
 
+/* Main Functions */
 
-function setup() {
-    var panel = document.createElement('div')
-    panel.appendChild(createRouteDetailsButton())
+function isAButtonToggled() {
+    if(GM_getValue('routeDetailsAuthorisedToggle',false)){
+        routeDetailsAuthorised()
+    }else {
+        document.body.appendChild(setupGUI())
+    }
+}
+
+function toggleButtonsOff() {
+    GM_setValue('routeDetailsAuthorisedToggle',false)
+}
+
+function setupGUI() {
+    const panel = document.createElement('div');
+    panel.appendChild(createRouteDetailsAuthorisedButton())
     return panel
 }
 
-function createRouteDetailsButton() {
-    let button = document.createElement('button')
-    button.id='routeDetails'
-    if (!!document.getElementById('global-header')) {
-        button.classList.add('button-start', 'govuk-!-display-none-print')
-    } else {
-        button.classList.add('govuk-button','govuk-!-display-none-print')
+/* Helper Functions */
+
+
+function isSectionCompleted() {
+    if (onLandingPage()) {
+        if (document.getElementById('route-details-status').innerText === 'COMPLETED') {
+            document.getElementById('routeDetailsAuthorised').remove()
+        }
     }
-
-    button.style.position = 'absolute'
-    button.style.top = '50px'
-    button.innerHTML = 'Complete Route Details (Authorised Place)'
-    button.addEventListener("click", function handleClick() {
-        GM_setValue('routeDetailsButtonPressed',true)
-        routeDetails()
-    })
-
-    return button
 }
 
+function saveLRN() {
+    if(onLandingPage()){
+        GM_setValue('lrn',location.href.split('/')[5])
+    }
+}
+
+function onLandingPage() {
+    return location.href.includes('task-list')
+}
+
+function getLRN() {
+    return GM_getValue('lrn', null)
+}
 
 const currentPageIs = (path) => {
     if(path.includes("*")) {
@@ -68,7 +76,29 @@ const currentPageIs = (path) => {
     }
 }
 
-/* #### RouteDetails Pages #### */
+/* Buttons */
+
+function createRouteDetailsAuthorisedButton() {
+    let button = document.createElement('button')
+    button.id='routeDetailsAuthorised'
+    if (!!document.getElementById('global-header')) {
+        button.classList.add('button-start', 'govuk-!-display-none-print')
+    } else {
+        button.classList.add('govuk-button','govuk-!-display-none-print')
+    }
+
+    button.style.position = 'absolute'
+    button.style.top = '50px'
+    button.innerHTML = 'Complete Route Details (Authorised Place)'
+    button.addEventListener("click", function handleClick() {
+        GM_setValue('routeDetailsAuthorisedToggle',true)
+        routeDetailsAuthorised()
+    })
+
+    return button
+}
+
+/* #### Route Details Pages #### */
 
 const startRouteDetails = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
@@ -76,14 +106,14 @@ const startRouteDetails = (lrn) => {
     }
 }
 
-const countryOfRoutingPage = (lrn, data) => {
+const countryOfDestination = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/routing/country-of-destination`)){
         document.getElementById('value-select').value = data
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
-const countryOfDestinationPage = (lrn, data) => {
+const officeOfDestination = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/routing/office-of-destination`)){
         document.getElementById('value-select').value = data
         document.getElementsByClassName('govuk-button')[0].click()
@@ -228,41 +258,40 @@ const loadingCYA = (lrn) => {
 
 const routeDetailsCYA = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/check-answers`)){
-        GM_setValue('routeDetailsButtonPressed',false)
+        toggleButtonsOff()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 /* #### Journeys #### */
 
-/* ## Route Details journey ## */
+/* ## Route Details Authorised Place journey ## */
 
-function routeDetails() {
-    let lrn = GM_getValue('lrn',null)
-    startRouteDetails(lrn)
-    countryOfRoutingPage(lrn, 'IT')
-    countryOfDestinationPage(lrn, 'IT034105')
-    bindingItinerary(lrn)
-    transitRouteAddCountry(lrn)
-    transitRouteCountry(lrn, 'DE')
-    transitRouteAddAnother(lrn)
-    routingCYA(lrn)
-    officeOfTransitCountry(lrn,'DE')
-    officeOfTransit(lrn,'DE004058')
-    officeOfTransitETA(lrn)
-    officeOfTransitLoopCYA(lrn)
-    officeOfTransitAddAnother(lrn)
-    locationOfGoodsType(lrn)
-    locationOfGoodsIdentification(lrn)
-    locationOfGoodsEORI(lrn)
-    locationOfGoodsAddAnotherIdentifier(lrn)
-    locationOfGoodsAddContact(lrn)
-    locationOfGoodsCYA(lrn)
-    placeOfLoadingUNLOCODE(lrn)
-    placeOfLoadingCountry(lrn, 'AR')
-    placeOfLoadingLocation(lrn)
-    loadingCYA(lrn)
-    routeDetailsCYA(lrn)
+function routeDetailsAuthorised() {
+    startRouteDetails(getLRN())
+    countryOfDestination(getLRN(), 'IT')
+    officeOfDestination(getLRN(), 'IT034105')
+    bindingItinerary(getLRN())
+    transitRouteAddCountry(getLRN())
+    transitRouteCountry(getLRN(), 'DE')
+    transitRouteAddAnother(getLRN())
+    routingCYA(getLRN())
+    officeOfTransitCountry(getLRN(),'DE')
+    officeOfTransit(getLRN(),'DE004058')
+    officeOfTransitETA(getLRN())
+    officeOfTransitLoopCYA(getLRN())
+    officeOfTransitAddAnother(getLRN())
+    locationOfGoodsType(getLRN())
+    locationOfGoodsIdentification(getLRN())
+    locationOfGoodsEORI(getLRN())
+    locationOfGoodsAddAnotherIdentifier(getLRN())
+    locationOfGoodsAddContact(getLRN())
+    locationOfGoodsCYA(getLRN())
+    placeOfLoadingUNLOCODE(getLRN())
+    placeOfLoadingCountry(getLRN(), 'AR')
+    placeOfLoadingLocation(getLRN())
+    loadingCYA(getLRN())
+    routeDetailsCYA(getLRN())
 }
 
 
