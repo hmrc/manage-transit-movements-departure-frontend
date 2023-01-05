@@ -20,17 +20,18 @@ import config.FrontendAppConfig
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.DateTimeFormProvider
-import models.{Index, LocalReferenceNumber, Mode}
+import models.{DateTime, Index, LocalReferenceNumber, Mode}
 import navigation.routeDetails.OfficeOfTransitNavigatorProvider
 import pages.routeDetails.routing.CountryOfDestinationPage
 import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.DateTimeService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.transit.index.OfficeOfTransitETAView
 
-import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,16 +44,18 @@ class OfficeOfTransitETAController @Inject() (
   actions: Actions,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: OfficeOfTransitETAView
+  view: OfficeOfTransitETAView,
+  dateTimeService: DateTimeService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val localDate  = LocalDate.now()
-  private val pastDate   = localDate.minusDays(appConfig.daysBefore)
-  private val futureDate = localDate.plusDays(appConfig.daysAfter)
-
-  private val form = formProvider("routeDetails.transit.index.officeOfTransitETA", pastDate, futureDate)
+  private def form: Form[DateTime] = {
+    val today      = dateTimeService.today
+    val pastDate   = today.minusDays(appConfig.daysBefore)
+    val futureDate = today.plusDays(appConfig.daysAfter)
+    formProvider("routeDetails.transit.index.officeOfTransitETA", pastDate, futureDate)
+  }
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
     .requireData(lrn)

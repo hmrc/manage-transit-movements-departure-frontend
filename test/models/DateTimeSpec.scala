@@ -35,7 +35,7 @@ class DateTimeSpec extends AnyFreeSpec with Matchers with OptionValues with Gene
 
       forAll(arbitrary[DateTime]) {
         dateTime =>
-          val formattedDate = dateTimeFormattedIE015(dateTime.concat)
+          val formattedDate = dateTime.toLocalDateTime.toIE015Format
 
           Json.toJson(dateTime) mustEqual JsString(formattedDate)
       }
@@ -47,7 +47,7 @@ class DateTimeSpec extends AnyFreeSpec with Matchers with OptionValues with Gene
 
       val localDateTimeWithoutNano = localDateTime.minusNanos(localDateTime.getNano)
 
-      val formattedDate = dateTimeFormattedIE015(localDateTimeWithoutNano)
+      val formattedDate = localDateTimeWithoutNano.toIE015Format
 
       val expectedResult = DateTime(localDateTime.toLocalDate, localDateTimeWithoutNano.toLocalTime)
 

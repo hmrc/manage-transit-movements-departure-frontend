@@ -231,7 +231,7 @@ trait Generators extends UserAnswersGenerator with ModelGenerators with ViewMode
     ).map {
       localDateTime =>
         val dateTimeWithoutSeconds = localDateTime.minusSeconds(localDateTime.getSecond).minusNanos(localDateTime.getNano)
-        DateTime.deconcatenate(dateTimeWithoutSeconds)
+        DateTime(dateTimeWithoutSeconds)
     }
   }
 
