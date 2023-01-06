@@ -28,9 +28,9 @@ sealed trait AuthorisationType {
 
 object AuthorisationType extends RadioModel[AuthorisationType] {
 
-  case object ACR extends WithName("authorisedConsignor") with AuthorisationType
-  case object SSE extends WithName("specialSeal") with AuthorisationType
-  case object TRD extends WithName("reducedDataSet") with AuthorisationType
+  case object ACR extends WithName("ACR") with AuthorisationType
+  case object SSE extends WithName("SSE") with AuthorisationType
+  case object TRD extends WithName("TRD") with AuthorisationType
 
   override val messageKeyPrefix: String = "transport.authorisations.authorisationType"
 
