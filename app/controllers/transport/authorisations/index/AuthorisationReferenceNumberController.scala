@@ -64,8 +64,7 @@ class AuthorisationReferenceNumberController @Inject() (
     (reducedDataSet, inlandMode, procedureType) match {
       case (Some(true), Some(Maritime) | Some(Rail) | Some(Air), _) if authorisationIndex.isFirst => Some(AuthorisationType.TRD)
       case (Some(true), _, Some(Simplified)) if authorisationIndex.isFirst                        => Some(AuthorisationType.ACR)
-      case _
-        => request.userAnswers.get(AuthorisationTypePage(authorisationIndex))
+      case _                                                                                      => request.userAnswers.get(AuthorisationTypePage(authorisationIndex))
     }
   }
 

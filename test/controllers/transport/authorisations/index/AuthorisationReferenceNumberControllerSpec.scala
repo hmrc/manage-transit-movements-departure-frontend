@@ -17,14 +17,19 @@
 package controllers.transport.authorisations.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import controllers.transport.authorisations.index.routes
 import forms.AuthorisationReferenceNumberFormProvider
-import models.NormalMode
+import models.{Index, NormalMode}
+import models.ProcedureType.{Normal, Simplified}
 import models.transport.authorisations.AuthorisationType
+import models.transport.transportMeans.departure.InlandMode
 import navigation.transport.TransportMeansNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.transport.authorisation.index.AuthorisationReferenceNumberPage
+import org.scalacheck.Gen
+import pages.preTaskList.ProcedureTypePage
+import pages.traderDetails.consignment.ApprovedOperatorPage
+import pages.transport.authorisation.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
+import pages.transport.transportMeans.departure.InlandModePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -41,7 +46,19 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
   private val formProvider                               = new AuthorisationReferenceNumberFormProvider()
   private def form(authorisationType: AuthorisationType) = formProvider(prefix, dynamicTitle(authorisationType))
   private val mode                                       = NormalMode
-  private lazy val authorisationReferenceNumberRoute     = routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, authorisationIndex).url
+  private val validAnswer                                = "testString"
+
+  private val firstInlandMode = Gen
+    .oneOf(
+      InlandMode.values
+        .filterNot(_ == InlandMode.Maritime)
+        .filterNot(_ == InlandMode.Rail)
+        .filterNot(_ == InlandMode.Air)
+    )
+    .sample
+    .value
+
+  private lazy val authorisationReferenceNumberRoute = routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, authorisationIndex).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -50,51 +67,147 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
 
   "AuthorisationReferenceNumber Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET" - {
 
-      val authorisationType = AuthorisationType.ACR
-      setExistingUserAnswers(emptyUserAnswers)
+      "when using reduced data set and Inland Mode is one of Maritime, Rail or Road" in {
+        val authorisationType = AuthorisationType.TRD
+        val inlandMode        = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
 
-      val request = FakeRequest(GET, authorisationReferenceNumberRoute)
+        val userAnswers = emptyUserAnswers
+          .setValue(ApprovedOperatorPage, true)
+          .setValue(InlandModePage, inlandMode)
+        setExistingUserAnswers(userAnswers)
 
-      val result = route(app, request).value
+        val request = FakeRequest(GET, authorisationReferenceNumberRoute)
 
-      val view = injector.instanceOf[AuthorisationReferenceNumberView]
+        val result = route(app, request).value
 
-      status(result) mustEqual OK
+        val view = injector.instanceOf[AuthorisationReferenceNumberView]
 
-      contentAsString(result) mustEqual
-        view(form(authorisationType), lrn, s"$prefix.$authorisationType", mode, authorisationIndex)(request, messages).toString
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form(authorisationType), lrn, s"$prefix.$authorisationType", mode, authorisationIndex)(request, messages).toString
+      }
+
+      "when using reduced data set and Inland Mode is not one of Maritime, Rail or Road and Procedure type is simplified" in {
+        val authorisationType = AuthorisationType.ACR
+
+        val userAnswers = emptyUserAnswers
+          .setValue(ApprovedOperatorPage, true)
+          .setValue(InlandModePage, firstInlandMode)
+          .setValue(ProcedureTypePage, Simplified)
+
+        setExistingUserAnswers(userAnswers)
+
+        val request = FakeRequest(GET, authorisationReferenceNumberRoute)
+
+        val result = route(app, request).value
+
+        val view = injector.instanceOf[AuthorisationReferenceNumberView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form(authorisationType), lrn, s"$prefix.$authorisationType", mode, authorisationIndex)(request, messages).toString
+      }
+
+      "when using reduced data set and Inland Mode is not one of Maritime, Rail or Road and Procedure type is normal" in {
+        val authorisationType = AuthorisationType.SSE
+
+        val userAnswers = emptyUserAnswers
+          .setValue(ApprovedOperatorPage, true)
+          .setValue(InlandModePage, firstInlandMode)
+          .setValue(ProcedureTypePage, Normal)
+          .setValue(AuthorisationTypePage(authorisationIndex), authorisationType)
+
+        setExistingUserAnswers(userAnswers)
+
+        val request = FakeRequest(GET, authorisationReferenceNumberRoute)
+
+        val result = route(app, request).value
+
+        val view = injector.instanceOf[AuthorisationReferenceNumberView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form(authorisationType), lrn, s"$prefix.$authorisationType", mode, authorisationIndex)(request, messages).toString
+      }
+
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must populate the view correctly on a GET when the question has previously been answered" - {
 
-      val authorisationType = AuthorisationType.TRD
-      val userAnswers       = emptyUserAnswers.setValue(AuthorisationReferenceNumberPage(authorisationIndex), "test string")
-      setExistingUserAnswers(userAnswers)
+      "when it is the first authorisation index" in {
+        val authorisationType = AuthorisationType.TRD
 
-      val request = FakeRequest(GET, authorisationReferenceNumberRoute)
+        val userAnswers = emptyUserAnswers
+          .setValue(ApprovedOperatorPage, true)
+          .setValue(InlandModePage, firstInlandMode)
+          .setValue(ProcedureTypePage, Normal)
+          .setValue(AuthorisationTypePage(authorisationIndex), authorisationType)
+          .setValue(AuthorisationReferenceNumberPage(authorisationIndex), validAnswer)
 
-      val result = route(app, request).value
+        setExistingUserAnswers(userAnswers)
 
-      val filledForm = form(authorisationType).bind(Map("value" -> "test string"))
+        val request = FakeRequest(GET, authorisationReferenceNumberRoute)
 
-      val view = injector.instanceOf[AuthorisationReferenceNumberView]
+        val result = route(app, request).value
 
-      status(result) mustEqual OK
+        val filledForm = form(authorisationType).bind(Map("value" -> validAnswer))
 
-      contentAsString(result) mustEqual
-        view(filledForm, lrn, s"$prefix.$authorisationType", mode, authorisationIndex)(request, messages).toString
+        val view = injector.instanceOf[AuthorisationReferenceNumberView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(filledForm, lrn, s"$prefix.$authorisationType", mode, authorisationIndex)(request, messages).toString
+      }
+
+      "when it is not the first authorisation index" in {
+        val authorisationType  = AuthorisationType.TRD
+        val authorisationType1 = AuthorisationType.SSE
+
+        val userAnswers = emptyUserAnswers
+          .setValue(ApprovedOperatorPage, true)
+          .setValue(InlandModePage, firstInlandMode)
+          .setValue(ProcedureTypePage, Normal)
+          .setValue(AuthorisationTypePage(authorisationIndex), authorisationType)
+          .setValue(AuthorisationReferenceNumberPage(authorisationIndex), validAnswer)
+          .setValue(AuthorisationTypePage(Index(1)), authorisationType1)
+          .setValue(AuthorisationReferenceNumberPage(Index(1)), validAnswer)
+
+        setExistingUserAnswers(userAnswers)
+
+        val request = FakeRequest(GET, routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, Index(1)).url)
+
+        val result = route(app, request).value
+
+        val filledForm = form(authorisationType).bind(Map("value" -> validAnswer))
+
+        val view = injector.instanceOf[AuthorisationReferenceNumberView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(filledForm, lrn, s"$prefix.$authorisationType1", mode, Index(1))(request, messages).toString
+      }
+
     }
 
     "must redirect to the next page when valid data is submitted" in {
+      val inlandMode = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers
+        .setValue(ApprovedOperatorPage, true)
+        .setValue(InlandModePage, inlandMode)
+      setExistingUserAnswers(userAnswers)
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       val request = FakeRequest(POST, authorisationReferenceNumberRoute)
-        .withFormUrlEncodedBody(("value", "test string"))
+        .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
 
@@ -105,11 +218,16 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
 
     "must return a Bad Request and errors when invalid data is submitted" in {
       val authorisationType = AuthorisationType.TRD
-      setExistingUserAnswers(emptyUserAnswers)
+      val inlandMode        = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
+
+      val userAnswers = emptyUserAnswers
+        .setValue(ApprovedOperatorPage, true)
+        .setValue(InlandModePage, inlandMode)
+      setExistingUserAnswers(userAnswers)
 
       val invalidAnswer = ""
 
-      val request    = FakeRequest(POST, authorisationReferenceNumberRoute).withFormUrlEncodedBody(("value", ""))
+      val request    = FakeRequest(POST, authorisationReferenceNumberRoute).withFormUrlEncodedBody(("value", invalidAnswer))
       val filledForm = form(authorisationType).bind(Map("value" -> invalidAnswer))
 
       val result = route(app, request).value
@@ -140,7 +258,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
       setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, authorisationReferenceNumberRoute)
-        .withFormUrlEncodedBody(("value", "test string"))
+        .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
 

@@ -18,7 +18,6 @@ package pages.transport.authorisation.index
 
 import models.transport.authorisations.AuthorisationType
 import pages.behaviours.PageBehaviours
-import pages.transport.authorisation
 
 class AuthorisationTypePageSpec extends PageBehaviours {
 
@@ -26,8 +25,8 @@ class AuthorisationTypePageSpec extends PageBehaviours {
 
     beRetrievable[AuthorisationType](AuthorisationTypePage(index))
 
-    beSettable[AuthorisationType](authorisation.index.AuthorisationTypePage(index))
+    beSettable[AuthorisationType](AuthorisationTypePage(index))
 
-    beRemovable[AuthorisationType](authorisation.index.AuthorisationTypePage(index))
+    beRemovable[AuthorisationType](AuthorisationTypePage(index))
   }
 }

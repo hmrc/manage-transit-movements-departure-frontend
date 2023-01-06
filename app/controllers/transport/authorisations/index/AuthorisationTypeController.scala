@@ -23,7 +23,6 @@ import models.transport.authorisations.AuthorisationType
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansNavigatorProvider
-import pages.transport.authorisation.index
 import pages.transport.authorisation.index.AuthorisationTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -50,7 +49,7 @@ class AuthorisationTypeController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, authorisationIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(index.AuthorisationTypePage(authorisationIndex)) match {
+      val preparedForm = request.userAnswers.get(AuthorisationTypePage(authorisationIndex)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
