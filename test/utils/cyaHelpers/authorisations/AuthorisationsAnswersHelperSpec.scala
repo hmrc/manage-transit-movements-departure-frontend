@@ -49,7 +49,6 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
 
       "and reduced data set indicator is 1" - {
 
-        //TODO: WHen nav is implemented remove this ignore
         "and inland mode is 1,2 or 4" in {
           val mode            = arbitrary[Mode].sample.value
           val procedureType   = arbitrary[ProcedureType].sample.value
@@ -75,7 +74,6 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
         }
 
         "and inland mode is not 1,2 or 4" - {
-          //TODO: WHen nav is implemented remove this ignore
           "and procedure type is simplified" in {
 
             val mode            = arbitrary[Mode].sample.value
