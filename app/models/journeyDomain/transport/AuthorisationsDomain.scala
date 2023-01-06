@@ -14,38 +14,39 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.routeDetails.exit
+package models.journeyDomain.transport
 
 import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{Index, Mode, RichJsArray, UserAnswers}
-import pages.sections.routeDetails.exit.OfficesOfExitSection
+import pages.sections.transport.AuthorisationsSection
 import play.api.mvc.Call
 
-case class ExitDomain(
-  officesOfExit: Seq[OfficeOfExitDomain]
-) extends JourneyDomainModel {
+case class AuthorisationsDomain(authorisationsDomain: Seq[AuthorisationDomain]) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
-    Some(controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(userAnswers.lrn, mode))
+    Some(controllers.transport.authorisations.routes.AddAnotherAuthorisationController.onPageLoad(userAnswers.lrn, mode))
 }
 
-object ExitDomain {
+object AuthorisationsDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[ExitDomain] = {
+  implicit val userAnswersReader: UserAnswersReader[AuthorisationsDomain] = {
 
-    implicit val officesOfExitReader: UserAnswersReader[Seq[OfficeOfExitDomain]] =
-      OfficesOfExitSection.arrayReader.flatMap {
+    val authReader: UserAnswersReader[Seq[AuthorisationDomain]] =
+      AuthorisationsSection.arrayReader.flatMap {
         case x if x.isEmpty =>
-          UserAnswersReader[OfficeOfExitDomain](
-            OfficeOfExitDomain.userAnswersReader(Index(0))
+          UserAnswersReader[AuthorisationDomain](
+            AuthorisationDomain.userAnswersReader(Index(0))
           ).map(Seq(_))
+
         case x =>
-          x.traverse[OfficeOfExitDomain](
-            OfficeOfExitDomain.userAnswersReader
-          )
+          x.traverse[AuthorisationDomain](
+            AuthorisationDomain.userAnswersReader
+          ).map(_.toSeq)
       }
 
-    UserAnswersReader[Seq[OfficeOfExitDomain]].map(ExitDomain(_))
+    UserAnswersReader[Seq[AuthorisationDomain]](authReader).map(AuthorisationsDomain(_))
+
   }
+
 }

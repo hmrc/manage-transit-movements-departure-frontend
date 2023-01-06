@@ -21,7 +21,7 @@ import generators.Generators
 import models.ProcedureType.Simplified
 import models.transport.authorisations.AuthorisationType
 import models.transport.transportMeans.departure.InlandMode
-import models.{Index, Mode, NormalMode}
+import models.{Index, Mode, NormalMode, ProcedureType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -50,13 +50,15 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
       "and reduced data set indicator is 1" - {
 
         //TODO: WHen nav is implemented remove this ignore
-        "and inland mode is 1,2 or 4" ignore {
+        "and inland mode is 1,2 or 4" in {
           val mode            = arbitrary[Mode].sample.value
+          val procedureType   = arbitrary[ProcedureType].sample.value
           val referenceNumber = Gen.alphaNumStr.sample.value
           val inlandMode      = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
 
           val answers = emptyUserAnswers
             .setValue(ApprovedOperatorPage, true)
+            .setValue(ProcedureTypePage, procedureType)
             .setValue(InlandModePage, inlandMode)
             .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
 
@@ -74,7 +76,7 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
 
         "and inland mode is not 1,2 or 4" - {
           //TODO: WHen nav is implemented remove this ignore
-          "and procedure type is simplified" ignore {
+          "and procedure type is simplified" in {
 
             val mode            = arbitrary[Mode].sample.value
             val referenceNumber = Gen.alphaNumStr.sample.value

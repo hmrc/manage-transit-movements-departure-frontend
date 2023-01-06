@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,18 @@
 package models.journeyDomain.transport
 
 import cats.implicits.catsSyntaxTuple2Semigroupal
+import models.ProcedureType._
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.Stage.{AccessingJourney, CompletingJourney}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.transport.authorisations.AuthorisationType
+import models.transport.authorisations.AuthorisationType.{ACR, TRD}
+import models.transport.transportMeans.departure.InlandMode._
 import models.{Index, Mode, UserAnswers}
+import pages.preTaskList.ProcedureTypePage
+import pages.traderDetails.consignment.ApprovedOperatorPage
 import pages.transport.authorisation.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
-import play.api.i18n.Messages
+import pages.transport.transportMeans.departure.InlandModePage
 import play.api.mvc.Call
 
 case class AuthorisationDomain(authorisationType: AuthorisationType, referenceNumber: String)(index: Index) extends JourneyDomainModel {
@@ -46,13 +51,33 @@ object AuthorisationDomain {
   def asString(authorisationType: AuthorisationType, referenceNumber: String): String =
     s"${authorisationType.toString} - $referenceNumber"
 
-  def userAnswersReader(index: Index): UserAnswersReader[AuthorisationDomain] = (
-    AuthorisationTypePage(index).reader,
-    AuthorisationReferenceNumberPage(index).reader
-  ).mapN {
-    (authType, authReferenceNumber) => AuthorisationDomain(authType, authReferenceNumber)(index)
-  }
+  // scalastyle:off cyclomatic.complexity
+  def userAnswersReader(index: Index): UserAnswersReader[AuthorisationDomain] = {
 
-  //TODO: Add Implementation when nav ticket is in sprint
+    val authorisationTypeReads: UserAnswersReader[AuthorisationType] = {
+      if (index.isFirst) {
+        for {
+          reducedDataSetIndicator <- ApprovedOperatorPage.reader
+          inlandMode              <- InlandModePage.reader
+          procedureType           <- ProcedureTypePage.reader
+
+          reader <- (reducedDataSetIndicator, inlandMode, procedureType) match {
+            case (true, Maritime | Rail | Air, _)                  => UserAnswersReader.apply(TRD)
+            case (true, Road | Mail | Fixed | Unknown, Simplified) => UserAnswersReader.apply(ACR)
+            case _                                                 => AuthorisationTypePage(index).reader
+          }
+        } yield reader
+      } else {
+        AuthorisationTypePage(index).reader
+      }
+    }
+
+    (
+      authorisationTypeReads,
+      AuthorisationReferenceNumberPage(index).reader
+    ).mapN {
+      (authType, authReferenceNumber) => AuthorisationDomain(authType, authReferenceNumber)(index)
+    }
+  }
 
 }
