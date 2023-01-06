@@ -21,14 +21,14 @@ import controllers.actions._
 import forms.AddAnotherFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.SessionRepository
+import uk.gov.hmrc.http.HttpVerbs.GET
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.transport.supplyChainActors.AddAnotherSupplyChainActorViewModel.AddAnotherSupplyChainActorViewModelProvider
 import views.html.transport.supplyChainActors.AddAnotherSupplyChainActorView
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 
 class AddAnotherSupplyChainActorController @Inject() (
   override val messagesApi: MessagesApi,
@@ -66,7 +66,7 @@ class AddAnotherSupplyChainActorController @Inject() (
                 controllers.transport.supplyChainActors.index.routes.SupplyChainActorTypeController
                   .onPageLoad(request.userAnswers.lrn, mode, Index(viewModel.supplyChainActors))
               )
-            case false => Redirect(???) // TODO go to next section (authorisations nav)
+            case false => Redirect(Call(GET, "#")) // TODO go to next section (authorisations nav)
           }
         )
   }
