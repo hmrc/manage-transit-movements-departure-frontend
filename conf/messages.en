@@ -1176,7 +1176,7 @@ transport.transportMeans.active.identification.error.required = Select which ide
 transport.transportMeans.active.addNationalityYesNo.title = Do you want to add the registered country for this vehicle?
 transport.transportMeans.active.addNationalityYesNo.heading = Do you want to add the registered country for this vehicle?
 transport.transportMeans.active.addNationalityYesNo.checkYourAnswersLabel = Do you want to add the registered country for this vehicle?
-transport.transportMeans.active.addNationalityYesNo.change.hidden = if you want to add a registered country
+transport.transportMeans.active.addNationalityYesNo.change.hidden = if you want to add the registered country for the border means of transport
 transport.transportMeans.active.addNationalityYesNo.error.required = Select yes if you want to add the registered country for the vehicle crossing the border
 
 transport.transportMeans.active.identificationNumber.title = What is the {0}?
@@ -1209,7 +1209,7 @@ transport.transportMeans.active.customsOfficeActiveBorder.heading = Where is the
 transport.transportMeans.active.customsOfficeActiveBorder.hint = Enter the office location or code, like Calais or FR620001.
 transport.transportMeans.active.customsOfficeActiveBorder.placeholder = Select a customs office
 transport.transportMeans.active.customsOfficeActiveBorder.paragraph = This is the customs office after crossing the border.
-transport.transportMeans.active.customsOfficeActiveBorder.change.hidden = office of transit for the border means of transport
+transport.transportMeans.active.customsOfficeActiveBorder.change.hidden = customs office for the border means of transport
 transport.transportMeans.active.customsOfficeActiveBorder.checkYourAnswersLabel = Customs office
 transport.transportMeans.active.customsOfficeActiveBorder.error.required = Enter the office of transit
 
@@ -1218,7 +1218,7 @@ transport.transportMeans.active.conveyanceReferenceNumberYesNo.heading = Do you 
 transport.transportMeans.active.conveyanceReferenceNumberYesNo.hint = This is a unique reference provided by the carrier to identify the means of transport.
 transport.transportMeans.active.conveyanceReferenceNumberYesNo.checkYourAnswersLabel = Do you want to add a conveyance reference number?
 transport.transportMeans.active.conveyanceReferenceNumberYesNo.error.required = Select yes if you want to add a conveyance reference number
-transport.transportMeans.active.conveyanceReferenceNumberYesNo.change.hidden = if you want to add a conveyance reference number
+transport.transportMeans.active.conveyanceReferenceNumberYesNo.change.hidden = if you want to add a conveyance reference number for the border means of transport
 
 transport.transportMeans.active.conveyanceReferenceNumber.title = What is the conveyance reference number?
 transport.transportMeans.active.conveyanceReferenceNumber.heading = What is the conveyance reference number?
@@ -1227,7 +1227,7 @@ transport.transportMeans.active.conveyanceReferenceNumber.checkYourAnswersLabel 
 transport.transportMeans.active.conveyanceReferenceNumber.error.required = Enter the conveyance reference number
 transport.transportMeans.active.conveyanceReferenceNumber.error.length = The reference number must be 17 characters or less
 transport.transportMeans.active.conveyanceReferenceNumber.error.invalid = The reference number must only include letters a to z and numbers 0 to 9
-transport.transportMeans.active.conveyanceReferenceNumber.change.hidden = conveyance reference number for the departure means of transport
+transport.transportMeans.active.conveyanceReferenceNumber.change.hidden = conveyance reference number for the border means of transport
 
 transport.transportMeans.active.addAnotherBorderTransport.singular.title = You have added {0} border means of transport
 transport.transportMeans.active.addAnotherBorderTransport.singular.heading = You have added {0} border means of transport
@@ -1314,9 +1314,9 @@ transport.authorisations.authorisationType.error.required = Select which type of
 transport.authorisations.authorisationReferenceNumber.title = What’s the reference number for the {0} authorisation?
 transport.authorisations.authorisationReferenceNumber.heading = What’s the reference number for the {0} authorisation?
 transport.authorisations.authorisationReferenceNumber.hint = This can be up to 35 characters long and include both letters and numbers.
-transport.authorisations.authorisationReferenceNumber.authorisedConsignor = consignor
-transport.authorisations.authorisationReferenceNumber.specialSeal = special seal
-transport.authorisations.authorisationReferenceNumber.reducedDataSet = reduced data set
+transport.authorisations.authorisationReferenceNumber.authorisedConsignor = ACR
+transport.authorisations.authorisationReferenceNumber.specialSeal = SSE
+transport.authorisations.authorisationReferenceNumber.reducedDataSet = TRD
 transport.authorisations.authorisationReferenceNumber.checkYourAnswersLabel = Authorisation reference number
 transport.authorisations.authorisationReferenceNumber.error.required = Enter the reference number for the {0} authorisation
 transport.authorisations.authorisationReferenceNumber.error.length = The reference number must be 35 characters or less
