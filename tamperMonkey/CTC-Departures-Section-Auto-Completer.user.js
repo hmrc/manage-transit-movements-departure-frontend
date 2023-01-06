@@ -1,12 +1,14 @@
 // ==UserScript==
 // @name         CTC-Departures Section Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      3.0
+// @version      4.0
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @match        http*://*/manage-transit-movements/departures/*/task-list
 // @match        http*://*/manage-transit-movements/departures/*/route-details/*
 // @match        http*://*/manage-transit-movements/departures/*/trader-details/*
+// @match        http*://*/manage-transit-movements/departures/*/transport-details/*
+// @match        http*://*/manage-transit-movements/departures/*/guarantee-details/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -32,22 +34,43 @@ function isAButtonToggled() {
     }
     else if(GM_getValue('routeDetailsAuthorisedToggle',false)){
         routeDetailsAuthorised()
-    }else {
-        document.body.appendChild(setupGUI())
+    }
+    else if(GM_getValue('transportDetailsToggle',false)){
+        transportDetails()
+    }
+    else if(GM_getValue('guaranteeDetailsWaiverToggle',false)){
+        guaranteeDetailsWaiver()
+    }
+    else {
+        if(onLandingPage()){
+            document.body.appendChild(setupGUI())
+        }
     }
 }
 
-function toggleButtonsOff() {
+function toggleTraderDetailsButtonsOff() {
     GM_setValue('traderDetailsReducedDataSetToggle',false)
+}
+function toggleRouteDetailsButtonsOff() {
     GM_setValue('routeDetailsAuthorisedToggle',false)
 }
+function toggleTransportDetailsButtonsOff() {
+    GM_setValue('transportDetailsToggle',false)
+}
+function toggleGuaranteeDetailsButtonsOff() {
+    GM_setValue('guaranteeDetailsWaiverToggle',false)
+}
+
 
 function setupGUI() {
     var panel = document.createElement('div')
-    GM_addStyle(' .guiStyle { position: absolute; top: 50px; display: grid; grid-template-rows: repeat(2, 1fr);')
+    GM_addStyle(' .guiStyle { position: absolute; top: 50px; display: grid; grid-template-rows: repeat(4, 1fr);')
     panel.classList.add('guiStyle')
     panel.appendChild(createTraderDetailsButton())
     panel.appendChild(createRouteDetailsAuthorisedButton())
+    panel.appendChild(createTransportDetailsButton())
+    panel.appendChild(createGuaranteeDetailsWaiverButton())
+    panel.appendChild(createCompleteAllButton())
     return panel
 }
 
@@ -61,6 +84,12 @@ function isSectionCompleted() {
         }
         if (document.getElementById('trader-details-status').innerText === 'COMPLETED') {
             document.getElementById('traderDetailsReducedDataSet').remove()
+        }
+        if (document.getElementById('transport-details-status').innerText === 'COMPLETED') {
+            document.getElementById('transportDetails').remove()
+        }
+        if (document.getElementById('guarantee-details-status').innerText === 'COMPLETED') {
+            document.getElementById('guaranteeDetailsWaiver').remove()
         }
     }
 }
@@ -93,6 +122,7 @@ const currentPageIs = (path) => {
 function createTraderDetailsButton() {
     let button = document.createElement('button')
     button.id='traderDetailsReducedDataSet'
+
     if (!!document.getElementById('global-header')) {
         button.classList.add('button-start', 'govuk-!-display-none-print')
     } else {
@@ -112,6 +142,7 @@ function createTraderDetailsButton() {
 function createRouteDetailsAuthorisedButton() {
     let button = document.createElement('button')
     button.id='routeDetailsAuthorised'
+
     if (!!document.getElementById('global-header')) {
         button.classList.add('button-start', 'govuk-!-display-none-print')
     } else {
@@ -123,6 +154,70 @@ function createRouteDetailsAuthorisedButton() {
     button.addEventListener("click", function handleClick() {
         GM_setValue('routeDetailsAuthorisedToggle',true)
         routeDetailsAuthorised()
+    })
+
+    return button
+}
+
+function createTransportDetailsButton() {
+    let button = document.createElement('button')
+    button.id='transportDetails'
+
+    if (!!document.getElementById('global-header')) {
+        button.classList.add('button-start', 'govuk-!-display-none-print')
+    } else {
+        button.classList.add('govuk-button','govuk-!-display-none-print')
+    }
+
+    button.style.margin = '1px'
+    button.innerHTML = 'Complete Transport Details (Up to Supply Chain)'
+    button.addEventListener("click", function handleClick() {
+        GM_setValue('transportDetailsToggle',true)
+        transportDetails()
+    })
+
+    return button
+}
+
+function createGuaranteeDetailsWaiverButton() {
+    let button = document.createElement('button')
+    button.id='guaranteeDetailsWaiver'
+
+    if (!!document.getElementById('global-header')) {
+        button.classList.add('button-start', 'govuk-!-display-none-print')
+    } else {
+        button.classList.add('govuk-button','govuk-!-display-none-print')
+    }
+
+    button.style.margin = '1px'
+    button.innerHTML = 'Complete Guarantee Details (Guarantee Waiver)'
+    button.addEventListener("click", function handleClick() {
+        GM_setValue('guaranteeDetailsWaiverToggle',true)
+        guaranteeDetailsWaiver()
+    })
+
+    return button
+}
+
+function createCompleteAllButton() {
+    let button = document.createElement('button')
+    button.id='completeAll'
+
+    if (!!document.getElementById('global-header')) {
+        button.classList.add('button-start', 'govuk-!-display-none-print')
+    } else {
+        button.classList.add('govuk-button','govuk-!-display-none-print')
+    }
+
+    button.style.margin = '1px'
+    button.style.marginTop = '5px'
+    button.innerHTML = 'Complete All Sections (Excluding Transport)'
+    button.addEventListener("click", function handleClick() {
+        GM_setValue('traderDetailsReducedDataSetToggle',true)
+        GM_setValue('routeDetailsAuthorisedToggle',true)
+        // GM_setValue('transportDetailsToggle',true) - uncomment when transport details is complete
+        GM_setValue('guaranteeDetailsWaiverToggle',true)
+        traderDetailsReducedDataSet()
     })
 
     return button
@@ -226,7 +321,7 @@ const consigneeAddress = (lrn, data, data2, data3) => {
 
 const traderDetailsCYA = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/check-answers`)){
-        toggleButtonsOff()
+        toggleTraderDetailsButtonsOff()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
@@ -391,7 +486,129 @@ const loadingCYA = (lrn) => {
 
 const routeDetailsCYA = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/check-answers`)){
-        toggleButtonsOff()
+        toggleRouteDetailsButtonsOff()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+/* #### Transport Details - UPDATE as journey develops #### */
+
+const startTransportDetails = (lrn) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
+        location.href = `/manage-transit-movements/departures/${lrn}/transport-details/apply-ucr-to-all-items`
+    }
+}
+
+const sameUCR = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/apply-ucr-to-all-items`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const sameCountry = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/items-same-destination-country`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const anyContainers = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/containers`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const inlandMode = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/inland-mode-of-transport`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const meansIdentification = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/departure-means-of-transport/identification`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const meansIdentificationNumber = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/departure-means-of-transport/identification-number`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const meansCountry = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/departure-means-of-transport/country`)){
+        document.getElementById('value-select').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const anotherVehicleCrossing = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/border-mode-of-transport/add`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const modesMeansCYA = (lrn) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/modes-means-of-transport/check-answers`)){
+        toggleTransportDetailsButtonsOff()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+/* #### Guarantee Details #### */
+
+
+const startGuaranteeDetails = (lrn) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
+        location.href = `/manage-transit-movements/departures/${lrn}/guarantee-details/1/guarantee-type`
+    }
+}
+
+const guaranteeType = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/guarantee-details/1/guarantee-type`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const guaranteeNumber = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/guarantee-details/1/guarantee-reference-number`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const accessCode = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/guarantee-details/1/access-code`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const liabilityAmount = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/guarantee-details/1/liability-amount`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const guaranteeLoopCYA = (lrn) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/guarantee-details/1/check-answers`)){
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const guaranteeAddAnother = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/guarantee-details/add-another-guarantee`)){
+        toggleGuaranteeDetailsButtonsOff()
+        document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
@@ -446,4 +663,31 @@ function routeDetailsAuthorised() {
     routeDetailsCYA(getLRN())
 }
 
+/* ## Transport Details journey ## */
+
+function transportDetails() {
+    startTransportDetails(getLRN())
+    sameUCR(getLRN(),'value-no')
+    sameCountry(getLRN(),'value-no')
+    anyContainers(getLRN(),'value-no')
+    inlandMode(getLRN(), 'value_1')
+    meansIdentification(getLRN(),'value')
+    meansIdentificationNumber(getLRN(),'wagon12')
+    meansCountry(getLRN(),'GB')
+    anotherVehicleCrossing(getLRN(),'value-no')
+    modesMeansCYA(getLRN())
+    /* Update when more of the journey has been developed */
+}
+
+/* ## Guarantee Details ## */
+
+function guaranteeDetailsWaiver() {
+    startGuaranteeDetails(getLRN())
+    guaranteeType(getLRN(), 'value')
+    guaranteeNumber(getLRN(), '01GB1234567890120A123456')
+    accessCode(getLRN(), '1234')
+    liabilityAmount(getLRN(), '1234')
+    guaranteeLoopCYA(getLRN())
+    guaranteeAddAnother(getLRN(), 'value-no')
+}
 
