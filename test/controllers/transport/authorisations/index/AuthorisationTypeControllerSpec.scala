@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.transport.authorisations
+package controllers.transport.authorisations.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.EnumerableFormProvider
@@ -23,12 +23,12 @@ import models.transport.authorisations.AuthorisationType
 import navigation.transport.TransportMeansNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.transport.authorisation.AuthorisationTypePage
+import pages.transport.authorisation.index.AuthorisationTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.transport.authorisations.AuthorisationTypeView
+import views.html.transport.authorisations.index.AuthorisationTypeView
 
 import scala.concurrent.Future
 

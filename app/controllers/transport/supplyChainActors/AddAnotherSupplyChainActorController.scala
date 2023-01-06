@@ -28,7 +28,6 @@ import viewModels.transport.supplyChainActors.AddAnotherSupplyChainActorViewMode
 import views.html.transport.supplyChainActors.AddAnotherSupplyChainActorView
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 
 class AddAnotherSupplyChainActorController @Inject() (
   override val messagesApi: MessagesApi,

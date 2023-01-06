@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.transport.authorisations
+package controllers.transport.authorisations.index
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
@@ -23,12 +23,12 @@ import models.transport.authorisations.AuthorisationType
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansNavigatorProvider
-import pages.transport.authorisation.AuthorisationTypePage
+import pages.transport.authorisation.index.AuthorisationTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.transport.authorisations.AuthorisationTypeView
+import views.html.transport.authorisations.index.AuthorisationTypeView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

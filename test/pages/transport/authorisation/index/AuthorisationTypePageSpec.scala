@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.transport.authorisation
+package pages.transport.authorisation.index
 
 import models.transport.authorisations.AuthorisationType
 import pages.behaviours.PageBehaviours

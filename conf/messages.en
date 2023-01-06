@@ -1305,8 +1305,19 @@ transport.authorisations.caption = Transport details - Authorisations
 
 transport.authorisations.authorisationType.title = Which type of authorisation do you want to add?
 transport.authorisations.authorisationType.heading = Which type of authorisation do you want to add?
-transport.authorisations.authorisationType.option1 = ACR - authorisation for the status of authorised consignor for Union transit
-transport.authorisations.authorisationType.option2 = SSE - authorisation for the use of seals of a special type
-transport.authorisations.authorisationType.option3 = TRD - authorisation to use transit declaration with a reduced dataset
+transport.authorisations.authorisationType.authorisedConsignor = ACR - authorisation for the status of authorised consignor for Union transit
+transport.authorisations.authorisationType.specialSeal = SSE - authorisation for the use of seals of a special type
+transport.authorisations.authorisationType.reducedDataSet = TRD - authorisation to use transit declaration with a reduced dataset
 transport.authorisations.authorisationType.checkYourAnswersLabel = Authorisation type
 transport.authorisations.authorisationType.error.required = Select which type of authorisation you want to add
+
+transport.authorisations.authorisationReferenceNumber.title = What’s the reference number for the {0} authorisation?
+transport.authorisations.authorisationReferenceNumber.heading = What’s the reference number for the {0} authorisation?
+transport.authorisations.authorisationReferenceNumber.hint = This can be up to 35 characters long and include both letters and numbers.
+transport.authorisations.authorisationReferenceNumber.authorisedConsignor = consignor
+transport.authorisations.authorisationReferenceNumber.specialSeal = special seal
+transport.authorisations.authorisationReferenceNumber.reducedDataSet = reduced data set
+transport.authorisations.authorisationReferenceNumber.checkYourAnswersLabel = Authorisation reference number
+transport.authorisations.authorisationReferenceNumber.error.required = Enter the reference number for the {0} authorisation
+transport.authorisations.authorisationReferenceNumber.error.length = The reference number must be 35 characters or less
+transport.authorisations.authorisationReferenceNumber.error.invalidCharacters = The reference number must only include letters a to z and numbers 0 to 9

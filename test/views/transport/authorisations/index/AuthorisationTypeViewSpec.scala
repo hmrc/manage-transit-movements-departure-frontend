@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.transport.authorisations
+package views.transport.authorisations.index
 
 import forms.EnumerableFormProvider
 import models.NormalMode
@@ -23,14 +23,14 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import views.behaviours.RadioViewBehaviours
-import views.html.transport.authorisations.AuthorisationTypeView
+import views.html.transport.authorisations.index.AuthorisationTypeView
 
 class AuthorisationTypeViewSpec extends RadioViewBehaviours[AuthorisationType] {
 
   override def form: Form[AuthorisationType] = new EnumerableFormProvider()(prefix)
 
   override def applyView(form: Form[AuthorisationType]): HtmlFormat.Appendable =
-    injector.instanceOf[AuthorisationTypeView].apply(form, lrn, AuthorisationType.radioItems, NormalMode, index)(fakeRequest, messages)
+    injector.instanceOf[AuthorisationTypeView].apply(form, lrn, AuthorisationType.radioItems, NormalMode, authorisationIndex)(fakeRequest, messages)
 
   override val prefix: String = "transport.authorisations.authorisationType"
 

@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-package models.transport.authorisations
+package pages.transport.authorisation.index
 
-import models.{RadioModel, WithName}
+import pages.behaviours.PageBehaviours
 
-sealed trait AuthorisationType
+class AuthorisationReferenceNumberPageSpec extends PageBehaviours {
 
-object AuthorisationType extends RadioModel[AuthorisationType] {
+  "AuthorisationReferenceNumberPage" - {
 
-  case object ACR extends WithName("authorisedConsignor") with AuthorisationType
-  case object SSE extends WithName("specialSeal") with AuthorisationType
-  case object TRD extends WithName("reducedDataSet") with AuthorisationType
+    beRetrievable[String](AuthorisationReferenceNumberPage(authorisationIndex))
 
-  override val messageKeyPrefix: String = "transport.authorisations.authorisationType"
+    beSettable[String](AuthorisationReferenceNumberPage(authorisationIndex))
 
-  val values: Seq[AuthorisationType] = Seq(
-    ACR,
-    SSE,
-    TRD
-  )
+    beRemovable[String](AuthorisationReferenceNumberPage(authorisationIndex))
+  }
 }
