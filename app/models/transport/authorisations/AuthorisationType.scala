@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,14 @@
 package models.transport.authorisations
 
 import models.{RadioModel, WithName}
+import play.api.i18n.Messages
 
-sealed trait AuthorisationType
+sealed trait AuthorisationType {
+
+  def asString(implicit messages: Messages): String =
+    messages(s"${AuthorisationType.messageKeyPrefix}.$this")
+
+}
 
 object AuthorisationType extends RadioModel[AuthorisationType] {
 

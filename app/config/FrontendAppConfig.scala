@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,6 +63,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val maxOfficesOfExit: Int          = configuration.get[Int]("limits.maxOfficesOfExit")
   lazy val maxActiveBorderTransports: Int = configuration.get[Int]("limits.maxActiveBorderTransports")
   lazy val maxSupplyChainActors: Int      = configuration.get[Int]("limits.maxSupplyChainActors")
+  lazy val maxAuthorisations: Int         = configuration.get[Int]("limits.maxAuthorisations")
 
   lazy val apiUrl = configuration.get[Service]("microservice.services.common-transit-convention-traders").baseUrl
 

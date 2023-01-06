@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package generators
 import models._
 import models.reference._
 import models.traderDetails.representative.RepresentativeCapacity
+import models.transport.authorisations.AuthorisationType
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.departure.{Identification, InlandMode}
 import models.transport.supplyChainActors.SupplyChainActorType
@@ -253,11 +254,16 @@ trait UserAnswersEntryGenerators {
 
   private def generateTransportAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.supplyChainActors._
+
+    val pf: PartialFunction[Gettable[_], Gen[JsValue]] = {
+      case SupplyChainActorYesNoPage => arbitrary[Boolean].map(JsBoolean)
+    }
+
     generatePreRequisitesAnswer orElse
       generateTransportMeansAnswer orElse
-      generateSupplyChainActorAnswers orElse {
-        case SupplyChainActorYesNoPage => arbitrary[Boolean].map(JsBoolean)
-      }
+      generateSupplyChainActorAnswers orElse
+      pf orElse
+      generateAuthorisationAnswers
   }
 
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
@@ -309,6 +315,14 @@ trait UserAnswersEntryGenerators {
     {
       case SupplyChainActorTypePage(_) => arbitrary[SupplyChainActorType].map(Json.toJson(_))
       case IdentificationNumberPage(_) => Gen.alphaNumStr.map(JsString)
+    }
+  }
+
+  private def generateAuthorisationAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.authorisation.index._
+    {
+      case AuthorisationTypePage(_)            => arbitrary[AuthorisationType].map(Json.toJson(_))
+      case AuthorisationReferenceNumberPage(_) => Gen.alphaNumStr.map(JsString)
     }
   }
 }
