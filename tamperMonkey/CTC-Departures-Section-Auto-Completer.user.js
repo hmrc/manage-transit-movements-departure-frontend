@@ -10,6 +10,7 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
 // @grant        GM_setValue
 // @grant        GM_getValue
+// @grant        GM_addStyle
 // @updateURL    https://github.com/hmrc/manage-transit-movements-departure-frontend/raw/main/tamperMonkey/CTC-Departures-Section-Auto-Completer.user.js
 // ==/UserScript==
 
@@ -32,7 +33,7 @@ function isAButtonToggled() {
     else if(GM_getValue('routeDetailsAuthorisedToggle',false)){
         routeDetailsAuthorised()
     }else {
-        setupGUI()
+        document.body.appendChild(setupGUI())
     }
 }
 
@@ -42,8 +43,12 @@ function toggleButtonsOff() {
 }
 
 function setupGUI() {
-    document.body.appendChild(document.createElement('div').appendChild(createRouteDetailsAuthorisedButton()))
-    document.body.appendChild(document.createElement('div').appendChild(createTraderDetailsButton()))
+    var panel = document.createElement('div')
+    GM_addStyle(' .guiStyle { position: absolute; top: 50px; display: grid; grid-template-rows: repeat(2, 1fr);')
+    panel.classList.add('guiStyle')
+    panel.appendChild(createTraderDetailsButton())
+    panel.appendChild(createRouteDetailsAuthorisedButton())
+    return panel
 }
 
 /* Helper Functions */
@@ -94,8 +99,7 @@ function createTraderDetailsButton() {
         button.classList.add('govuk-button','govuk-!-display-none-print')
     }
 
-    button.style.position = 'absolute'
-    button.style.top = '50px'
+    button.style.margin = '1px'
     button.innerHTML = 'Complete Trader Details (Reduced Data Set)'
     button.addEventListener("click", function handleClick() {
         GM_setValue('traderDetailsReducedDataSetToggle',true)
@@ -114,8 +118,7 @@ function createRouteDetailsAuthorisedButton() {
         button.classList.add('govuk-button','govuk-!-display-none-print')
     }
 
-    button.style.position = 'absolute'
-    button.style.top = '90px'
+    button.style.margin = '1px'
     button.innerHTML = 'Complete Route Details (Authorised Place)'
     button.addEventListener("click", function handleClick() {
         GM_setValue('routeDetailsAuthorisedToggle',true)
