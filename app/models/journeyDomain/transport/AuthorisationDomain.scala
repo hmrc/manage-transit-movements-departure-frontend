@@ -67,9 +67,9 @@ object AuthorisationDomain {
           procedureType           <- ProcedureTypePage.reader
 
           reader <- (reducedDataSetIndicator, inlandMode, procedureType) match {
-            case (true, Maritime | Rail | Air, _)                  => UserAnswersReader.apply(TRD)
-            case (true, Road | Mail | Fixed | Unknown, Simplified) => UserAnswersReader.apply(ACR)
-            case _                                                 => AuthorisationTypePage(index).reader
+            case (true, Maritime | Rail | Air, _)                             => UserAnswersReader.apply(TRD)
+            case (true, Road | Mail | Fixed | Unknown | Waterway, Simplified) => UserAnswersReader.apply(ACR)
+            case _                                                            => AuthorisationTypePage(index).reader
           }
         } yield reader
       } else {
