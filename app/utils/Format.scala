@@ -30,12 +30,13 @@ object Format {
   }
 
   implicit class RichLocalDateTime(localDateTime: LocalDateTime) {
-    def toIE015Format: String = localDateTime.format(dateTimeFormatIE015)
-    def toDateTime: DateTime  = DateTime(localDateTime)
+    def toIE015Format: String  = localDateTime.format(dateTimeFormatIE015)
+    def toDateTime: DateTime   = DateTime(localDateTime)
+    def formatAsString: String = localDateTime.format(DateTimeFormatter.ofPattern("d MMMM yyyy HH:mm"))
   }
 
   implicit class RichDateTime(dateTime: DateTime) {
-    def formatAsString: String = dateTime.toLocalDateTime.format(DateTimeFormatter.ofPattern("d MMMM yyyy HH:mm"))
+    def formatAsString: String = dateTime.toLocalDateTime.formatAsString
   }
 
   implicit class RichString(string: String) {
