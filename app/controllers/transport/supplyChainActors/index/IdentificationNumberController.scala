@@ -51,7 +51,7 @@ class IdentificationNumberController @Inject() (
     .requireData(lrn)
     .andThen(getMandatoryPage(SupplyChainActorTypePage(actorIndex))) {
       implicit request =>
-        val supplyChainActor = request.arg.asString
+        val supplyChainActor = request.arg.asString.toLowerCase
 
         val preparedForm = request.userAnswers.get(IdentificationNumberPage(actorIndex)) match {
           case None        => form
@@ -65,7 +65,7 @@ class IdentificationNumberController @Inject() (
     .andThen(getMandatoryPage(SupplyChainActorTypePage(actorIndex)))
     .async {
       implicit request =>
-        val supplyChainActor = request.arg.asString
+        val supplyChainActor = request.arg.asString.toLowerCase
         form
           .bindFromRequest()
           .fold(

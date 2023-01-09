@@ -22,7 +22,7 @@ import play.api.i18n.Messages
 sealed trait SupplyChainActorType {
 
   def asString(implicit messages: Messages): String =
-    messages(s"${SupplyChainActorType.messageKeyPrefix}.$this").toLowerCase
+    messages(s"${SupplyChainActorType.messageKeyPrefix}.$this")
 }
 
 object SupplyChainActorType extends RadioModel[SupplyChainActorType] {
