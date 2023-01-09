@@ -150,7 +150,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
 
       "when max number of supply chain actors" - {
         // TODO link to next journey (authorisations)
-        "must redirect to authorisation section" ignore {
+        "must redirect to authorisations section" ignore {
 
           when(mockViewModelProvider.apply(any(), any())(any()))
             .thenReturn(viewModelWithItemsMaxedOut)
@@ -194,7 +194,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
         }
         "and user selects No" - {
           // TODO link to next journey (authorisations)
-          "must redirect to authorisation section" ignore {
+          "must redirect to authorisations section" ignore {
 
             when(mockViewModelProvider.apply(any(), any())(any()))
               .thenReturn(viewModelWithItemsNotMaxedOut)

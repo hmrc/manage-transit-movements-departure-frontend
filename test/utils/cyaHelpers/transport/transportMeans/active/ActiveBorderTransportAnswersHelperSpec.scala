@@ -149,7 +149,7 @@ class ActiveBorderTransportAnswersHelperSpec extends SpecBase with ScalaCheckPro
                         ActionItem(
                           content = "Change".toText,
                           href = routes.AddNationalityYesNoController.onPageLoad(answers.lrn, mode, index).url,
-                          visuallyHiddenText = Some("if you want to add a registered country"),
+                          visuallyHiddenText = Some("if you want to add the registered country for the border means of transport"),
                           attributes = Map("id" -> "change-add-transport-means-vehicle-nationality")
                         )
                       )
@@ -236,7 +236,7 @@ class ActiveBorderTransportAnswersHelperSpec extends SpecBase with ScalaCheckPro
                         ActionItem(
                           content = "Change".toText,
                           href = routes.CustomsOfficeActiveBorderController.onPageLoad(answers.lrn, mode, index).url,
-                          visuallyHiddenText = Some("office of transit for the border means of transport"),
+                          visuallyHiddenText = Some("customs office for the border means of transport"),
                           attributes = Map("id" -> "change-transport-means-customs-office-at-border")
                         )
                       )
@@ -279,7 +279,7 @@ class ActiveBorderTransportAnswersHelperSpec extends SpecBase with ScalaCheckPro
                         ActionItem(
                           content = "Change".toText,
                           href = routes.ConveyanceReferenceNumberYesNoController.onPageLoad(answers.lrn, mode, index).url,
-                          visuallyHiddenText = Some("if you want to add a conveyance reference number"),
+                          visuallyHiddenText = Some("if you want to add a conveyance reference number for the border means of transport"),
                           attributes = Map("id" -> "change-add-transport-means-conveyance-reference-number")
                         )
                       )
@@ -323,7 +323,7 @@ class ActiveBorderTransportAnswersHelperSpec extends SpecBase with ScalaCheckPro
                         ActionItem(
                           content = "Change".toText,
                           href = routes.ConveyanceReferenceNumberController.onPageLoad(answers.lrn, mode, index).url,
-                          visuallyHiddenText = Some("conveyance reference number for the departure means of transport"),
+                          visuallyHiddenText = Some("conveyance reference number for the border means of transport"),
                           attributes = Map("id" -> "change-transport-means-conveyance-reference-number")
                         )
                       )

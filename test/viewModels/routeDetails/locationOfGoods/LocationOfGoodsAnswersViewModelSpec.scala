@@ -83,7 +83,7 @@ class LocationOfGoodsAnswersViewModelSpec extends SpecBase with ScalaCheckProper
       }
     }
 
-    "when 'Y' authorisation number" - {
+    "when 'Y' authorisations number" - {
       val qualifier = AuthorisationNumber
 
       "when an additional identifier and a contact have been provided" - {

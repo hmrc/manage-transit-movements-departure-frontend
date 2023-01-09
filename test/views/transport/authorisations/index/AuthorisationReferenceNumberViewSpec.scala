@@ -14,33 +14,32 @@
  * limitations under the License.
  */
 
-package views.transport.transportMeans.active
+package views.transport.authorisations.index
 
 import base.SpecBase
-import forms.transport.transportMeans.active.IdentificationNumberFormProvider
+import forms.AuthorisationReferenceNumberFormProvider
 import generators.Generators
 import models.NormalMode
-import models.transport.transportMeans.active.Identification
-import org.scalacheck.Arbitrary.arbitrary
+import models.transport.authorisations.AuthorisationType
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.transport.transportMeans.active.IdentificationNumberView
+import views.html.transport.authorisations.index.AuthorisationReferenceNumberView
 
-class IdentificationNumberViewSpec extends InputTextViewBehaviours[String] with Generators with SpecBase {
+class AuthorisationReferenceNumberViewSpec extends InputTextViewBehaviours[String] with Generators with SpecBase {
 
-  override val prefix: String = "transport.transportMeans.active.identificationNumber"
+  override val prefix: String = "transport.authorisations.authorisationReferenceNumber"
 
-  private val identificationType = arbitrary[Identification].sample.value
+  private val authorisationType = Arbitrary.arbitrary[AuthorisationType].sample.value
 
-  private val dynamicText = s"$prefix.${identificationType.toString}"
+  private val dynamicText = s"$prefix.${authorisationType.toString}"
 
-  override def form: Form[String] = new IdentificationNumberFormProvider()(prefix, dynamicText)
+  override def form: Form[String] = new AuthorisationReferenceNumberFormProvider()(prefix, dynamicText)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[IdentificationNumberView].apply(form, lrn, dynamicText, NormalMode, activeIndex)(fakeRequest, messages)
+    injector.instanceOf[AuthorisationReferenceNumberView].apply(form, lrn, dynamicText, NormalMode, authorisationIndex)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 
@@ -48,11 +47,11 @@ class IdentificationNumberViewSpec extends InputTextViewBehaviours[String] with 
 
   behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Transport details - Border means of transport")
+  behave like pageWithSectionCaption("Transport details - Authorisations")
 
   behave like pageWithHeading(messages(dynamicText))
 
-  behave like pageWithoutHint()
+  behave like pageWithHint("This can be up to 35 characters long and include both letters and numbers.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 
