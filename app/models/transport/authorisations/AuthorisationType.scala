@@ -17,14 +17,22 @@
 package models.transport.authorisations
 
 import models.{RadioModel, WithName}
+import play.api.i18n.Messages
 
-sealed trait AuthorisationType
+sealed trait AuthorisationType {
+
+  def asString(implicit messages: Messages): String =
+    messages(s"${AuthorisationType.messageKeyPrefix}.$this")
+
+  def forDisplay(implicit messages: Messages): String = messages(s"${AuthorisationType.messageKeyPrefix}.forDisplay.$this")
+
+}
 
 object AuthorisationType extends RadioModel[AuthorisationType] {
 
-  case object ACR extends WithName("authorisedConsignor") with AuthorisationType
-  case object SSE extends WithName("specialSeal") with AuthorisationType
-  case object TRD extends WithName("reducedDataSet") with AuthorisationType
+  case object ACR extends WithName("ACR") with AuthorisationType
+  case object SSE extends WithName("SSE") with AuthorisationType
+  case object TRD extends WithName("TRD") with AuthorisationType
 
   override val messageKeyPrefix: String = "transport.authorisations.authorisationType"
 

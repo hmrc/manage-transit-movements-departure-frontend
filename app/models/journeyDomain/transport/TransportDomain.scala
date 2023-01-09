@@ -28,10 +28,12 @@ case class TransportDomain(
 
 object TransportDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[TransportDomain] =
+  implicit val userAnswersReader: UserAnswersReader[TransportDomain] = {
     for {
       preRequisites     <- UserAnswersReader[PreRequisitesDomain]
       transportMeans    <- UserAnswersReader[TransportMeansDomain]
       supplyChainActors <- SupplyChainActorYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[SupplyChainActorsDomain])
     } yield TransportDomain(preRequisites, transportMeans, supplyChainActors)
+  }
+
 }

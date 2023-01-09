@@ -63,6 +63,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val maxOfficesOfExit: Int          = configuration.get[Int]("limits.maxOfficesOfExit")
   lazy val maxActiveBorderTransports: Int = configuration.get[Int]("limits.maxActiveBorderTransports")
   lazy val maxSupplyChainActors: Int      = configuration.get[Int]("limits.maxSupplyChainActors")
+  lazy val maxAuthorisations: Int         = configuration.get[Int]("limits.maxAuthorisations")
 
   lazy val apiUrl = configuration.get[Service]("microservice.services.common-transit-convention-traders").baseUrl
 
