@@ -39,7 +39,11 @@ case class AuthorisationDomain(authorisationType: AuthorisationType, referenceNu
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some {
     stage match {
       case AccessingJourney =>
-        controllers.transport.authorisations.index.routes.AuthorisationTypeController.onPageLoad(userAnswers.lrn, mode, index)
+        if (userAnswers.get(AuthorisationTypePage(index)).isEmpty && index.isFirst) {
+          controllers.transport.authorisations.index.routes.AuthorisationReferenceNumberController.onPageLoad(userAnswers.lrn, mode, index)
+        } else {
+          controllers.transport.authorisations.index.routes.AuthorisationTypeController.onPageLoad(userAnswers.lrn, mode, index)
+        }
       case CompletingJourney =>
         controllers.transport.authorisations.routes.AddAnotherAuthorisationController.onPageLoad(userAnswers.lrn, mode)
     }

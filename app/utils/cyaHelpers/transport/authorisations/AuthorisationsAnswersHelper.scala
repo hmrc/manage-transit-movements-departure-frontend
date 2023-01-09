@@ -22,6 +22,7 @@ import models.{Mode, UserAnswers}
 import pages.sections.transport.AuthorisationsSection
 import pages.transport.authorisation.index.AuthorisationTypePage
 import play.api.i18n.Messages
+import play.api.mvc.Call
 import utils.cyaHelpers.AnswersHelper
 import viewModels.ListItem
 
@@ -30,10 +31,16 @@ class AuthorisationsAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(AuthorisationsSection) {
       index =>
+        val removeRoute: Option[Call] = if (userAnswers.get(AuthorisationTypePage(index)).isEmpty && index.isFirst) {
+          None
+        } else {
+          Some(routes.RemoveSupplyChainActorController.onPageLoad(lrn, mode, index)) //TODO: Add ConfirmRemoveAuthorisation when created
+        }
+
         buildListItem[AuthorisationDomain](
           nameWhenComplete = _.asString,
           nameWhenInProgress = userAnswers.get(AuthorisationTypePage(index)).map(_.asString),
-          removeRoute = Some(routes.RemoveSupplyChainActorController.onPageLoad(lrn, mode, index)) //TODO: Add ConfirmRemoveAuthorisation when created
+          removeRoute = removeRoute
         )(AuthorisationDomain.userAnswersReader(index))
     }
 

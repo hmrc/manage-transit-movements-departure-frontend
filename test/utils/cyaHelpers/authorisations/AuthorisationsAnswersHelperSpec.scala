@@ -18,7 +18,7 @@ package utils.cyaHelpers.authorisations
 
 import base.SpecBase
 import generators.Generators
-import models.ProcedureType.Simplified
+import models.ProcedureType.{Normal, Simplified}
 import models.transport.authorisations.AuthorisationType
 import models.transport.transportMeans.departure.InlandMode
 import models.{Index, Mode, NormalMode, ProcedureType}
@@ -66,8 +66,8 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
             Right(
               ListItem(
                 name = s"${AuthorisationType.TRD} - $referenceNumber",
-                changeUrl = controllers.transport.authorisations.index.routes.AuthorisationTypeController.onPageLoad(lrn, mode, index).url,
-                removeUrl = Some(controllers.transport.supplyChainActors.index.routes.RemoveSupplyChainActorController.onPageLoad(lrn, mode, Index(0)).url)
+                changeUrl = controllers.transport.authorisations.index.routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, index).url,
+                removeUrl = None
               )
             )
           )
@@ -99,8 +99,8 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
               Right(
                 ListItem(
                   name = s"${AuthorisationType.ACR} - $referenceNumber",
-                  changeUrl = controllers.transport.authorisations.index.routes.AuthorisationTypeController.onPageLoad(lrn, mode, index).url,
-                  removeUrl = Some(controllers.transport.supplyChainActors.index.routes.RemoveSupplyChainActorController.onPageLoad(lrn, mode, Index(0)).url)
+                  changeUrl = controllers.transport.authorisations.index.routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, index).url,
+                  removeUrl = None
                 )
               )
             )
@@ -123,7 +123,7 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
 
             val answers = emptyUserAnswers
               .setValue(ApprovedOperatorPage, true)
-              .setValue(ProcedureTypePage, Simplified)
+              .setValue(ProcedureTypePage, Normal)
               .setValue(InlandModePage, inlandMode)
               .setValue(AuthorisationTypePage(Index(0)), authorisationType)
               .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
