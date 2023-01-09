@@ -16,13 +16,13 @@
 
 package utils.cyaHelpers.transport.authorisations
 
-import controllers.transport.supplyChainActors.index.routes
 import models.journeyDomain.transport.AuthorisationDomain
 import models.{Mode, UserAnswers}
 import pages.sections.transport.AuthorisationsSection
 import pages.transport.authorisation.index.AuthorisationTypePage
 import play.api.i18n.Messages
 import play.api.mvc.Call
+import uk.gov.hmrc.http.HttpVerbs.GET
 import utils.cyaHelpers.AnswersHelper
 import viewModels.ListItem
 
@@ -34,11 +34,11 @@ class AuthorisationsAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit
         val removeRoute: Option[Call] = if (userAnswers.get(AuthorisationTypePage(index)).isEmpty && index.isFirst) {
           None
         } else {
-          Some(routes.RemoveSupplyChainActorController.onPageLoad(lrn, mode, index)) //TODO: Add ConfirmRemoveAuthorisation when created
+          Some(Call(GET, "#")) //TODO: Add ConfirmRemoveAuthorisation when created
         }
 
         buildListItem[AuthorisationDomain](
-          nameWhenComplete = _.asString,
+          nameWhenComplete = _.asString(),
           nameWhenInProgress = userAnswers.get(AuthorisationTypePage(index)).map(_.asString),
           removeRoute = removeRoute
         )(AuthorisationDomain.userAnswersReader(index))

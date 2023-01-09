@@ -29,11 +29,12 @@ import pages.preTaskList.ProcedureTypePage
 import pages.traderDetails.consignment.ApprovedOperatorPage
 import pages.transport.authorisation.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
 import pages.transport.transportMeans.departure.InlandModePage
+import play.api.i18n.Messages
 import play.api.mvc.Call
 
 case class AuthorisationDomain(authorisationType: AuthorisationType, referenceNumber: String)(index: Index) extends JourneyDomainModel {
 
-  def asString: String =
+  def asString()(implicit messages: Messages): String =
     AuthorisationDomain.asString(authorisationType, referenceNumber)
 
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some {
@@ -52,8 +53,8 @@ case class AuthorisationDomain(authorisationType: AuthorisationType, referenceNu
 
 object AuthorisationDomain {
 
-  def asString(authorisationType: AuthorisationType, referenceNumber: String): String =
-    s"${authorisationType.toString} - $referenceNumber"
+  def asString(authorisationType: AuthorisationType, referenceNumber: String)(implicit messages: Messages): String =
+    s"${authorisationType.forDisplay} - $referenceNumber"
 
   // scalastyle:off cyclomatic.complexity
   def userAnswersReader(index: Index): UserAnswersReader[AuthorisationDomain] = {
@@ -79,9 +80,7 @@ object AuthorisationDomain {
     (
       authorisationTypeReads,
       AuthorisationReferenceNumberPage(index).reader
-    ).mapN {
-      (authType, authReferenceNumber) => AuthorisationDomain(authType, authReferenceNumber)(index)
-    }
+    ).tupled.map((AuthorisationDomain.apply _).tupled).map(_(index))
   }
 
 }

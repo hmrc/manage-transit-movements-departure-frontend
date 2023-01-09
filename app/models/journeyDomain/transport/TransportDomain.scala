@@ -29,19 +29,10 @@ case class TransportDomain(
 object TransportDomain {
 
   implicit val userAnswersReader: UserAnswersReader[TransportDomain] = {
-
-//    implicit val authorisationsReads: UserAnswersReader[Option[AuthorisationsDomain]] =
-//      ApprovedOperatorPage.reader.flatMap {
-//
-//        case true => UserAnswersReader[AuthorisationsDomain].map(Some(_))
-//        case _   => none[AuthorisationsDomain].pure[UserAnswersReader] //TODO: Replace with AddAuthorisationYesNoPage reader filterOptionalDependant when created
-//      }
-
     for {
       preRequisites     <- UserAnswersReader[PreRequisitesDomain]
       transportMeans    <- UserAnswersReader[TransportMeansDomain]
       supplyChainActors <- SupplyChainActorYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[SupplyChainActorsDomain])
-//      authorisations    <- UserAnswersReader[AuthorisationsDomain](authorisationsReads)
     } yield TransportDomain(preRequisites, transportMeans, supplyChainActors)
   }
 

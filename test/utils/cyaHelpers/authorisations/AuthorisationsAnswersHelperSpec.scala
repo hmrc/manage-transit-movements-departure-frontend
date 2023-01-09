@@ -30,6 +30,8 @@ import pages.preTaskList.ProcedureTypePage
 import pages.traderDetails.consignment.ApprovedOperatorPage
 import pages.transport.authorisation.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
 import pages.transport.transportMeans.departure.InlandModePage
+import play.api.mvc.Call
+import uk.gov.hmrc.http.HttpVerbs.GET
 import utils.cyaHelpers.transport.authorisations.AuthorisationsAnswersHelper
 import viewModels.ListItem
 
@@ -119,7 +121,7 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
                 ListItem(
                   name = s"$authorisationType - $referenceNumber",
                   changeUrl = controllers.transport.authorisations.index.routes.AuthorisationTypeController.onPageLoad(lrn, mode, index).url,
-                  removeUrl = Some(controllers.transport.supplyChainActors.index.routes.RemoveSupplyChainActorController.onPageLoad(lrn, mode, Index(0)).url)
+                  removeUrl = Some(Call(GET, "#").url)
                 )
               )
             )
