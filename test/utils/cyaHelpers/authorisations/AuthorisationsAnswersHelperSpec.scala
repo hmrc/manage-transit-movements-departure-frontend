@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package utils.cyaHelpers.authorisations
 
 import base.SpecBase
+import forms.Constants.maxAuthorisationRefNumberLength
 import generators.Generators
 import models.ProcedureType.{Normal, Simplified}
 import models.transport.authorisations.AuthorisationType
@@ -34,6 +35,18 @@ import viewModels.ListItem
 
 class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
+  private val mode                         = arbitrary[Mode].sample.value
+  private val procedureType                = arbitrary[ProcedureType].sample.value
+  private val referenceNumber              = Gen.alphaNumStr.sample.value.take(maxAuthorisationRefNumberLength)
+  private val authorisationTypeInlandModes = List(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)
+
+  private val inlandMode = Gen
+    .oneOf(
+      InlandMode.values.diff(authorisationTypeInlandModes)
+    )
+    .sample
+    .value
+
   "AuthorisationsAnswersHelper" - {
 
     "when empty user answers" - {
@@ -50,10 +63,7 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
       "and reduced data set indicator is 1" - {
 
         "and inland mode is 1,2 or 4" in {
-          val mode            = arbitrary[Mode].sample.value
-          val procedureType   = arbitrary[ProcedureType].sample.value
-          val referenceNumber = Gen.alphaNumStr.sample.value
-          val inlandMode      = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
+          val inlandMode = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
 
           val answers = emptyUserAnswers
             .setValue(ApprovedOperatorPage, true)
@@ -75,19 +85,6 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
 
         "and inland mode is not 1,2 or 4" - {
           "and procedure type is simplified" in {
-
-            val mode            = arbitrary[Mode].sample.value
-            val referenceNumber = Gen.alphaNumStr.sample.value
-            val inlandMode = Gen
-              .oneOf(
-                InlandMode.values
-                  .filterNot(_ == InlandMode.Maritime)
-                  .filterNot(_ == InlandMode.Rail)
-                  .filterNot(_ == InlandMode.Air)
-              )
-              .sample
-              .value
-
             val answers = emptyUserAnswers
               .setValue(ApprovedOperatorPage, true)
               .setValue(ProcedureTypePage, Simplified)
@@ -107,19 +104,7 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
           }
 
           "and procedure type is normal" in {
-
-            val mode              = arbitrary[Mode].sample.value
-            val referenceNumber   = Gen.alphaNumStr.sample.value
             val authorisationType = arbitrary[AuthorisationType].sample.value
-            val inlandMode = Gen
-              .oneOf(
-                InlandMode.values
-                  .filterNot(_ == InlandMode.Maritime)
-                  .filterNot(_ == InlandMode.Rail)
-                  .filterNot(_ == InlandMode.Air)
-              )
-              .sample
-              .value
 
             val answers = emptyUserAnswers
               .setValue(ApprovedOperatorPage, true)

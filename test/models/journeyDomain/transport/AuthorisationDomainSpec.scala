@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package models.journeyDomain.transport
 
 import base.SpecBase
+import forms.Constants.maxAuthorisationRefNumberLength
 import generators.Generators
 import models.ProcedureType.{Normal, Simplified}
 import models.domain.{EitherType, UserAnswersReader}
@@ -35,7 +36,7 @@ class AuthorisationDomainSpec extends SpecBase with Generators {
   "AuthorisationDomain" - {
 
     val authorisationType = arbitrary[AuthorisationType].sample.value
-    val referenceNumber   = Gen.alphaNumStr.sample.value
+    val referenceNumber   = Gen.alphaNumStr.sample.value.take(maxAuthorisationRefNumberLength)
 
     val authorisationTypeInlandModes = List(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)
     val inlandMode = Gen

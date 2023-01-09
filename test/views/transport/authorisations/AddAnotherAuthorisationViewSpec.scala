@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,8 @@ import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.transport.authorisations.AddAnotherAuthorisationViewModel
-import viewModels.transport.supplyChainActors.AddAnotherSupplyChainActorViewModel
 import views.behaviours.ListWithActionsViewBehaviours
 import views.html.transport.authorisations.AddAnotherAuthorisationView
-import views.html.transport.supplyChainActors.AddAnotherSupplyChainActorView
 
 class AddAnotherAuthorisationViewSpec extends ListWithActionsViewBehaviours {
 
