@@ -42,13 +42,6 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
   private val referenceNumber              = Gen.alphaNumStr.sample.value.take(maxAuthorisationRefNumberLength)
   private val authorisationTypeInlandModes = List(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)
 
-  private val inlandMode = Gen
-    .oneOf(
-      InlandMode.values.diff(authorisationTypeInlandModes)
-    )
-    .sample
-    .value
-
   "AuthorisationsAnswersHelper" - {
 
     "when empty user answers" - {
@@ -64,67 +57,77 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
 
       "and reduced data set indicator is 1" - {
 
-        "and inland mode is 1,2 or 4" in {
-          val inlandMode = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
+        "and inland mode is 1, 2 or 4" in {
+          val inlandModeGen = Gen.oneOf(authorisationTypeInlandModes).sample.value
 
-          val answers = emptyUserAnswers
-            .setValue(ApprovedOperatorPage, true)
-            .setValue(ProcedureTypePage, procedureType)
-            .setValue(InlandModePage, inlandMode)
-            .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
+          forAll(inlandModeGen) {
+            inlandMode =>
+              val answers = emptyUserAnswers
+                .setValue(ApprovedOperatorPage, true)
+                .setValue(ProcedureTypePage, procedureType)
+                .setValue(InlandModePage, inlandMode)
+                .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
 
-          val helper = new AuthorisationsAnswersHelper(answers, mode)
-          helper.listItems mustBe Seq(
-            Right(
-              ListItem(
-                name = s"${AuthorisationType.TRD} - $referenceNumber",
-                changeUrl = controllers.transport.authorisations.index.routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, index).url,
-                removeUrl = None
-              )
-            )
-          )
-        }
-
-        "and inland mode is not 1,2 or 4" - {
-          "and procedure type is simplified" in {
-            val answers = emptyUserAnswers
-              .setValue(ApprovedOperatorPage, true)
-              .setValue(ProcedureTypePage, Simplified)
-              .setValue(InlandModePage, inlandMode)
-              .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
-
-            val helper = new AuthorisationsAnswersHelper(answers, mode)
-            helper.listItems mustBe Seq(
-              Right(
-                ListItem(
-                  name = s"${AuthorisationType.ACR} - $referenceNumber",
-                  changeUrl = controllers.transport.authorisations.index.routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, index).url,
-                  removeUrl = None
+              val helper = new AuthorisationsAnswersHelper(answers, mode)
+              helper.listItems mustBe Seq(
+                Right(
+                  ListItem(
+                    name = s"${AuthorisationType.TRD} - $referenceNumber",
+                    changeUrl = controllers.transport.authorisations.index.routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, index).url,
+                    removeUrl = None
+                  )
                 )
               )
-            )
+          }
+        }
+
+        "and inland mode is not 1, 2 or 4" - {
+
+          val inlandModeGen = Gen.oneOf(InlandMode.values.diff(authorisationTypeInlandModes))
+
+          "and procedure type is simplified" in {
+            forAll(inlandModeGen) {
+              inlandMode =>
+                val answers = emptyUserAnswers
+                  .setValue(ApprovedOperatorPage, true)
+                  .setValue(ProcedureTypePage, Simplified)
+                  .setValue(InlandModePage, inlandMode)
+                  .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
+
+                val helper = new AuthorisationsAnswersHelper(answers, mode)
+                helper.listItems mustBe Seq(
+                  Right(
+                    ListItem(
+                      name = s"${AuthorisationType.ACR} - $referenceNumber",
+                      changeUrl = controllers.transport.authorisations.index.routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, index).url,
+                      removeUrl = None
+                    )
+                  )
+                )
+            }
           }
 
           "and procedure type is normal" in {
-            val authorisationType = arbitrary[AuthorisationType].sample.value
+            forAll(inlandModeGen, arbitrary[AuthorisationType]) {
+              (inlandMode, authorisationType) =>
+                val answers = emptyUserAnswers
+                  .setValue(ApprovedOperatorPage, true)
+                  .setValue(ProcedureTypePage, Normal)
+                  .setValue(InlandModePage, inlandMode)
+                  .setValue(AuthorisationTypePage(Index(0)), authorisationType)
+                  .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
 
-            val answers = emptyUserAnswers
-              .setValue(ApprovedOperatorPage, true)
-              .setValue(ProcedureTypePage, Normal)
-              .setValue(InlandModePage, inlandMode)
-              .setValue(AuthorisationTypePage(Index(0)), authorisationType)
-              .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
-
-            val helper = new AuthorisationsAnswersHelper(answers, mode)
-            helper.listItems mustBe Seq(
-              Right(
-                ListItem(
-                  name = s"$authorisationType - $referenceNumber",
-                  changeUrl = controllers.transport.authorisations.index.routes.AuthorisationTypeController.onPageLoad(lrn, mode, index).url,
-                  removeUrl = Some(Call(GET, "#").url)
+                val helper = new AuthorisationsAnswersHelper(answers, mode)
+                helper.listItems mustBe Seq(
+                  Right(
+                    ListItem(
+                      name = s"$authorisationType - $referenceNumber",
+                      changeUrl = controllers.transport.authorisations.index.routes.AuthorisationTypeController.onPageLoad(lrn, mode, index).url,
+                      removeUrl = Some(Call(GET, "#").url)
+                    )
+                  )
                 )
-              )
-            )
+            }
           }
         }
       }
