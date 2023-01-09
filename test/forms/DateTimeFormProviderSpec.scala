@@ -21,7 +21,7 @@ import generators.Generators
 import models.DateTime
 import org.scalacheck.Gen
 import play.api.data.{Field, Form, FormError}
-import utils.Format
+import utils.Format.RichLocalDate
 
 import java.time.LocalDate
 
@@ -255,7 +255,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
 
           val result: Form[DateTime] = form.bind(data)
 
-          val formattedArg = Format.dateFormatterDDMMYYYY.format(invalidDateTime)
+          val formattedArg = invalidDateTime.toLocalDate.formatAsString
 
           result.errors mustBe Seq(FormError(fieldName, List(maxDate), List(formattedArg)))
       }
@@ -284,7 +284,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
 
           val result: Form[DateTime] = form.bind(data)
 
-          val formattedArg = Format.dateFormatterDDMMYYYY.format(invalidDateTime)
+          val formattedArg = invalidDateTime.toLocalDate.formatAsString
 
           result.errors mustBe Seq(FormError(fieldName, List(minDate), List(formattedArg)))
       }
