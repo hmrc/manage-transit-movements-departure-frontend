@@ -562,6 +562,13 @@ const modesMeansCYA = (lrn) => {
     }
 }
 
+const addSupplyChainActor = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/supply-chain-actor/add`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
 /* #### Guarantee Details #### */
 
 
@@ -676,6 +683,7 @@ function transportDetails() {
     meansCountry(getLRN(),'GB')
     anotherVehicleCrossing(getLRN(),'value-no')
     modesMeansCYA(getLRN())
+    addSupplyChainActor(getLRN(), 'value-no')
     /* Update when more of the journey has been developed */
 }
 
