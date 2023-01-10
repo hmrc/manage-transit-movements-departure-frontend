@@ -72,7 +72,7 @@ private[mappings] class LocalTimeFormatter(
           _.map(_.copy(key = key, args = args))
         }
       case head :: Nil =>
-        Left(List(FormError(key, s"$requiredKey.$head", args)))
+        Left(List(FormError(key, s"$requiredKey.$head", missingFields ++ args)))
       case _ =>
         Left(List(FormError(key, allRequiredKey, args)))
     }

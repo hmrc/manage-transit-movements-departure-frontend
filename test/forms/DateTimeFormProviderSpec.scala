@@ -96,7 +96,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
       )
 
       val result = form.bind(data).apply(fieldName)
-      result.errors mustBe Seq(FormError(fieldName, List(hourRequired)))
+      result.errors mustBe Seq(FormError(fieldName, List(hourRequired), List("hour")))
     }
 
     "must not bind when hour is invalid" in {
@@ -117,7 +117,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
       )
 
       val result = form.bind(data).apply(fieldName)
-      result.errors mustBe Seq(FormError(fieldName, List(minuteRequired)))
+      result.errors mustBe Seq(FormError(fieldName, List(minuteRequired), List("minute")))
     }
 
     "must not bind when minute is invalid" in {
