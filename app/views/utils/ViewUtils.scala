@@ -21,6 +21,7 @@ import play.api.data.{Field, Form, FormError}
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases._
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorLink
@@ -127,10 +128,7 @@ object ViewUtils {
 
   implicit class DateTimeRichFormErrors(formErrors: Seq[FormError])(implicit messages: Messages) {
 
-    def dateTimeErrorLink: Seq[ErrorLink] =
-      dateTimeErrorLinks(Text.apply)
-
-    def dateTimeErrorLinks(contentConstructor: String => Content): Seq[ErrorLink] =
+    def toErrorLinks: Seq[ErrorLink] =
       formErrors.map {
         formError =>
           val args = formError.key match {
@@ -140,10 +138,8 @@ object ViewUtils {
           }
           val arg = formError.args.find(args.contains).getOrElse(args.head).toString
           val key = s"#${formError.key}${arg.capitalize}"
-          ErrorLink(href = Some(key), content = contentConstructor(errorMessage(formError)))
+          ErrorLink(href = Some(key), content = messages(formError.message, formError.args: _*).toText)
       }
-
-    def errorMessage(formError: FormError) = messages(formError.message, formError.args: _*)
   }
 
 }
