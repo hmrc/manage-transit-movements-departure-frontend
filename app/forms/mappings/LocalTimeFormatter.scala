@@ -66,15 +66,15 @@ private[mappings] class LocalTimeFormatter(
       .map(_._1.toLowerCase)
       .toList
 
-    fields.count(_._2.isDefined) match {
-      case 2 =>
+    missingFields match {
+      case Nil =>
         formatTime(key, data).left.map {
           _.map(_.copy(key = key, args = args))
         }
-      case 1 =>
-        Left(List(FormError(key, requiredKey, missingFields ++ args)))
-      case 0 =>
-        Left(List(FormError(key, allRequiredKey, missingFields ++ args)))
+      case head :: Nil =>
+        Left(List(FormError(key, s"$requiredKey.$head", args)))
+      case _ =>
+        Left(List(FormError(key, allRequiredKey, args)))
     }
   }
 

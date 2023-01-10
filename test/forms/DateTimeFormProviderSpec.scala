@@ -38,7 +38,8 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
 
   private val invalidTime     = s"$prefix.time.error.invalid"
   private val requiredAllTime = s"$prefix.time.error.required.all"
-  private val requiredOneTime = s"$prefix.time.error.required"
+  private val hourRequired    = s"$prefix.time.error.required.hour"
+  private val minuteRequired  = s"$prefix.time.error.required.minute"
 
   private val localDate  = LocalDate.now()
   private val dateBefore = localDate.minusDays(1)
@@ -85,7 +86,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
     "must not bind when empty" in {
       val result: Field = form.bind(emptyForm).apply(fieldName)
 
-      result.errors mustBe Seq(FormError(fieldName, List(requiredAllTime), List("hour", "minute")))
+      result.errors mustBe Seq(FormError(fieldName, List(requiredAllTime)))
     }
 
     "must not bind when hour is missing" in {
@@ -95,7 +96,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
       )
 
       val result = form.bind(data).apply(fieldName)
-      result.errors mustBe Seq(FormError(fieldName, List(requiredOneTime), List("hour")))
+      result.errors mustBe Seq(FormError(fieldName, List(hourRequired)))
     }
 
     "must not bind when hour is invalid" in {
@@ -116,7 +117,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
       )
 
       val result = form.bind(data).apply(fieldName)
-      result.errors mustBe Seq(FormError(fieldName, List(requiredOneTime), List("minute")))
+      result.errors mustBe Seq(FormError(fieldName, List(minuteRequired)))
     }
 
     "must not bind when minute is invalid" in {
@@ -138,7 +139,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
     "must not bind when empty" in {
       val result: Field = form.bind(emptyForm).apply(fieldName)
 
-      result.errors mustBe Seq(FormError(fieldName, List(requiredAllDate), List("day", "month", "year")))
+      result.errors mustBe Seq(FormError(fieldName, List(requiredAllDate)))
     }
 
     "must not bind when one field is missing" in {

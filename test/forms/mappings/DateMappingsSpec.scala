@@ -66,7 +66,7 @@ class DateMappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckProperty
 
     val result = form.bind(Map.empty[String, String])
 
-    result.errors must contain only FormError("value", "error.required.all", List("day", "month", "year"))
+    result.errors must contain only FormError("value", "error.required.all")
   }
 
   "must fail to bind a date with a missing day" in {

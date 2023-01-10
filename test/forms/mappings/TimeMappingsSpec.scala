@@ -59,7 +59,7 @@ class TimeMappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckProperty
 
     val result = form.bind(Map.empty[String, String])
 
-    result.errors must contain only FormError("value", "error.required.all", List("hour", "minute"))
+    result.errors must contain only FormError("value", "error.required.all")
   }
 
   "must fail to bind a time with a missing minute" in {
@@ -73,7 +73,7 @@ class TimeMappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckProperty
 
         val result = form.bind(data)
 
-        result.errors must contain only FormError("value", "error.required", List("minute"))
+        result.errors must contain only FormError("value", "error.required.minute")
     }
   }
 
@@ -105,7 +105,7 @@ class TimeMappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckProperty
 
         val result = form.bind(data)
 
-        result.errors must contain only FormError("value", "error.required", List("hour"))
+        result.errors must contain only FormError("value", "error.required.hour")
     }
   }
 

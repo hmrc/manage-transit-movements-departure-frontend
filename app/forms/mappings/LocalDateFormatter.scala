@@ -80,7 +80,7 @@ private[mappings] class LocalDateFormatter(
       case 1 =>
         Left(List(FormError(key, twoRequiredKey, missingFields ++ args)))
       case 0 =>
-        Left(List(FormError(key, allRequiredKey, missingFields ++ args)))
+        Left(List(FormError(key, allRequiredKey, args)))
     }
   }
 

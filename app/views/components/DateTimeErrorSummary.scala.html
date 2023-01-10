@@ -27,7 +27,7 @@
         ErrorSummary(
             errorList = form.errors
                     .map(err => err.copy(key = err.key, args = err.args))
-                    .dateTimeErrorLink,
+                    .toErrorLinks,
             title = Text(messages("error.summary.title"))
         )
     )
