@@ -1333,3 +1333,8 @@ transport.authorisations.addAnotherAuthorisation.plural.heading = You have added
 transport.authorisations.addAnotherAuthorisation.error.required = Select yes if you want to add another authorisation
 transport.authorisations.addAnotherAuthorisation.label = Do you want to add another authorisation?
 transport.authorisations.addAnotherAuthorisation.maxLimit.label = You cannot add any more authorisations. To add another, you need to remove one first.
+
+transport.authorisations.index.removeAuthorisationYesNo.title = Are you sure you want to remove
+transport.authorisations.index.removeAuthorisationYesNo.heading = Are you sure you want to remove
+transport.authorisations.index.removeAuthorisationYesNo.checkYourAnswersLabel = Are you sure you want to remove
+transport.authorisations.index.removeAuthorisationYesNo.error.required = Select yes if Are you sure you want to remove
