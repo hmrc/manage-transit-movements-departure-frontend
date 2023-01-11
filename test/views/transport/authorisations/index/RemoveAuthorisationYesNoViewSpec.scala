@@ -17,6 +17,9 @@
 package views.transport.authorisations.index
 
 import models.NormalMode
+import models.transport.authorisations.AuthorisationType
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -24,18 +27,26 @@ import views.html.transport.authorisations.index.RemoveAuthorisationYesNoView
 
 class RemoveAuthorisationYesNoViewSpec extends YesNoViewBehaviours {
 
+  private val authorisationType = Gen.oneOf(AuthorisationType.values).sample.value.toString
+
+  private val authorisationReferenceNumber = arbitrary[String].sample.value
+
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[RemoveAuthorisationYesNoView].apply(form, lrn, NormalMode, authorisationIndex)(fakeRequest, messages)
+    injector
+      .instanceOf[RemoveAuthorisationYesNoView]
+      .apply(form, lrn, NormalMode, authorisationIndex, authorisationType, authorisationReferenceNumber)(fakeRequest, messages)
 
   override val prefix: String = "transport.authorisations.index.removeAuthorisationYesNo"
 
-  behave like pageWithTitle()
+  behave like pageWithTitle(authorisationType, authorisationReferenceNumber)
 
   behave like pageWithBackLink()
 
-  behave like pageWithHeading()
+  behave like pageWithSectionCaption("Transport details - Authorisations")
 
-  behave like pageWithRadioItems()
+  behave like pageWithHeading(authorisationType, authorisationReferenceNumber)
+
+  behave like pageWithRadioItems(args = Seq(authorisationType, authorisationReferenceNumber))
 
   behave like pageWithSubmitButton("Save and continue")
 }

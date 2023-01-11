@@ -30,8 +30,6 @@ import pages.preTaskList.ProcedureTypePage
 import pages.traderDetails.consignment.ApprovedOperatorPage
 import pages.transport.authorisation.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
 import pages.transport.transportMeans.departure.InlandModePage
-import play.api.mvc.Call
-import uk.gov.hmrc.http.HttpVerbs.GET
 import utils.cyaHelpers.transport.authorisations.AuthorisationsAnswersHelper
 import viewModels.ListItem
 
@@ -73,7 +71,8 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
                 Right(
                   ListItem(
                     name = s"${AuthorisationType.TRD} - $referenceNumber",
-                    changeUrl = controllers.transport.authorisations.index.routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, index).url,
+                    changeUrl =
+                      controllers.transport.authorisations.index.routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, authorisationIndex).url,
                     removeUrl = None
                   )
                 )
@@ -99,7 +98,8 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
                   Right(
                     ListItem(
                       name = s"${AuthorisationType.ACR} - $referenceNumber",
-                      changeUrl = controllers.transport.authorisations.index.routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, index).url,
+                      changeUrl =
+                        controllers.transport.authorisations.index.routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, authorisationIndex).url,
                       removeUrl = None
                     )
                   )
@@ -122,8 +122,9 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
                   Right(
                     ListItem(
                       name = s"$authorisationType - $referenceNumber",
-                      changeUrl = controllers.transport.authorisations.index.routes.AuthorisationTypeController.onPageLoad(lrn, mode, index).url,
-                      removeUrl = Some(Call(GET, "#").url)
+                      changeUrl = controllers.transport.authorisations.index.routes.AuthorisationTypeController.onPageLoad(lrn, mode, authorisationIndex).url,
+                      removeUrl =
+                        Some(controllers.transport.authorisations.index.routes.RemoveAuthorisationYesNoController.onPageLoad(lrn, mode, authorisationIndex).url)
                     )
                   )
                 )

@@ -34,7 +34,7 @@ class AuthorisationsAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit
         val removeRoute: Option[Call] = if (userAnswers.get(AuthorisationTypePage(index)).isEmpty && index.isFirst) {
           None
         } else {
-          Some(Call(GET, "#")) //TODO: Add ConfirmRemoveAuthorisation when created
+          Some(controllers.transport.authorisations.index.routes.RemoveAuthorisationYesNoController.onPageLoad(lrn, mode, index))
         }
 
         buildListItem[AuthorisationDomain](

@@ -17,12 +17,13 @@
 package controllers.transport.authorisations.index
 
 import controllers.actions._
+import controllers.transport.authorisations.{routes => authRoutes}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.UserAnswersNavigator
-import navigation.transport.TransportMeansNavigatorProvider
-import pages.transport.authorisation.index.RemoveAuthorisationYesNoPage
+import pages.sections.transport.AuthorisationSection
+import pages.transport.authorisation.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -35,8 +36,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class RemoveAuthorisationYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: TransportMeansNavigatorProvider,
   actions: Actions,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: RemoveAuthorisationYesNoView
@@ -44,23 +45,41 @@ class RemoveAuthorisationYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("transport.authorisations.index.removeAuthorisationYesNo")
+  private def form(authType: String, authReference: String): Form[Boolean] =
+    formProvider("transport.authorisations.index.removeAuthorisationYesNo", authType, authReference)
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, authorisationIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      Ok(view(form, lrn, mode, authorisationIndex))
-  }
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, authorisationIndex: Index): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage.getFirst(AuthorisationTypePage(authorisationIndex)))
+    .andThen(getMandatoryPage.getSecond(AuthorisationReferenceNumberPage(authorisationIndex))) {
+      implicit request =>
+        val authType            = request.arg._1.toString
+        val authReferenceNumber = request.arg._2
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, authorisationIndex: Index): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, authorisationIndex))),
-          value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            RemoveAuthorisationYesNoPage(authorisationIndex).writeToUserAnswers(value).writeToSession().navigate()
-          }
-        )
-  }
+        Ok(view(form(authType, authReferenceNumber), lrn, mode, authorisationIndex, authType, authReferenceNumber))
+    }
+
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, authorisationIndex: Index): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage.getFirst(AuthorisationTypePage(authorisationIndex)))
+    .andThen(getMandatoryPage.getSecond(AuthorisationReferenceNumberPage(authorisationIndex)))
+    .async {
+      implicit request =>
+        val authType            = request.arg._1.toString
+        val authReferenceNumber = request.arg._2
+        form(authType, authReferenceNumber)
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, authorisationIndex, authType, authReferenceNumber))),
+            {
+              case true =>
+                AuthorisationSection(authorisationIndex)
+                  .removeFromUserAnswers()
+                  .writeToSession()
+                  .navigateTo(authRoutes.AddAnotherAuthorisationController.onPageLoad(lrn, mode))
+              case false =>
+                Future.successful(Redirect(authRoutes.AddAnotherAuthorisationController.onPageLoad(lrn, mode)))
+            }
+          )
+    }
 }
