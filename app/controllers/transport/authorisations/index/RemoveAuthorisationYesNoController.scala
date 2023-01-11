@@ -20,6 +20,8 @@ import controllers.actions._
 import controllers.transport.authorisations.{routes => authRoutes}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
+import models.requests.SpecificDataRequestProvider2
+import models.transport.authorisations.AuthorisationType
 import models.{Index, LocalReferenceNumber, Mode}
 import pages.sections.transport.AuthorisationSection
 import pages.transport.authorisation.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
@@ -45,18 +47,21 @@ class RemoveAuthorisationYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private def form(authType: String, authReference: String): Form[Boolean] =
-    formProvider("transport.authorisations.index.removeAuthorisationYesNo", authType, authReference)
+  private type Request = SpecificDataRequestProvider2[AuthorisationType, String]#SpecificDataRequest[_]
+
+  private def authType(implicit request: Request): AuthorisationType = request.arg._1
+
+  private def authRefNumber(implicit request: Request): String = request.arg._2
+
+  private def form(implicit request: Request): Form[Boolean] =
+    formProvider("transport.authorisations.index.removeAuthorisationYesNo", authType, authRefNumber)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, authorisationIndex: Index): Action[AnyContent] = actions
     .requireData(lrn)
     .andThen(getMandatoryPage.getFirst(AuthorisationTypePage(authorisationIndex)))
     .andThen(getMandatoryPage.getSecond(AuthorisationReferenceNumberPage(authorisationIndex))) {
       implicit request =>
-        val authType            = request.arg._1.toString
-        val authReferenceNumber = request.arg._2
-
-        Ok(view(form(authType, authReferenceNumber), lrn, mode, authorisationIndex, authType, authReferenceNumber))
+        Ok(view(form, lrn, mode, authorisationIndex, authType.toString, authRefNumber))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, authorisationIndex: Index): Action[AnyContent] = actions
@@ -65,12 +70,10 @@ class RemoveAuthorisationYesNoController @Inject() (
     .andThen(getMandatoryPage.getSecond(AuthorisationReferenceNumberPage(authorisationIndex)))
     .async {
       implicit request =>
-        val authType            = request.arg._1.toString
-        val authReferenceNumber = request.arg._2
-        form(authType, authReferenceNumber)
+        form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, authorisationIndex, authType, authReferenceNumber))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, authorisationIndex, authType.toString, authRefNumber))),
             {
               case true =>
                 AuthorisationSection(authorisationIndex)

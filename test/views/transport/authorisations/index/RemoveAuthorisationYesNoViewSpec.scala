@@ -18,8 +18,7 @@ package views.transport.authorisations.index
 
 import models.NormalMode
 import models.transport.authorisations.AuthorisationType
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
+import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -29,7 +28,7 @@ class RemoveAuthorisationYesNoViewSpec extends YesNoViewBehaviours {
 
   private val authorisationType = Gen.oneOf(AuthorisationType.values).sample.value.toString
 
-  private val authorisationReferenceNumber = arbitrary[String].sample.value
+  private val authorisationReferenceNumber = Arbitrary(Gen.alphaStr).arbitrary.sample.value
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
