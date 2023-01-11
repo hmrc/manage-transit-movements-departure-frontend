@@ -1333,3 +1333,10 @@ transport.authorisations.addAnotherAuthorisation.plural.heading = You have added
 transport.authorisations.addAnotherAuthorisation.error.required = Select yes if you want to add another authorisation
 transport.authorisations.addAnotherAuthorisation.label = Do you want to add another authorisation?
 transport.authorisations.addAnotherAuthorisation.maxLimit.label = You cannot add any more authorisations. To add another, you need to remove one first.
+
+transport.authorisations.addAuthorisationsYesNo.title = Do you want to add an authorisation?
+transport.authorisations.addAuthorisationsYesNo.heading = Do you want to add an authorisation?
+transport.authorisations.addAuthorisationsYesNo.checkYourAnswersLabel = Do you want to add an authorisation?
+transport.authorisations.addAuthorisationsYesNo.error.required = Select yes if you want to add an authorisation?
+transport.authorisations.addAuthorisationsYesNo.paragraph = This is someone who helps move the goods to their destination. They can be a consolidator, freight forwarder, manufacturer or warehouse keeper.
+
