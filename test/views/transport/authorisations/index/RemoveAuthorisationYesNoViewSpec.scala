@@ -25,7 +25,7 @@ import views.html.transport.authorisations.index.RemoveAuthorisationYesNoView
 class RemoveAuthorisationYesNoViewSpec extends YesNoViewBehaviours {
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[RemoveAuthorisationYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[RemoveAuthorisationYesNoView].apply(form, lrn, NormalMode, authorisationIndex)(fakeRequest, messages)
 
   override val prefix: String = "transport.authorisations.index.removeAuthorisationYesNo"
 

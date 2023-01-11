@@ -17,15 +17,16 @@
 package pages.transport.authorisations.index
 
 import pages.behaviours.PageBehaviours
+import pages.transport.authorisation.index.RemoveAuthorisationYesNoPage
 
 class RemoveAuthorisationYesNoPageSpec extends PageBehaviours {
 
   "RemoveAuthorisationYesNoPage" - {
 
-    beRetrievable[Boolean](RemoveAuthorisationYesNoPage)
+    beRetrievable[Boolean](RemoveAuthorisationYesNoPage(authorisationIndex))
 
-    beSettable[Boolean](RemoveAuthorisationYesNoPage)
+    beSettable[Boolean](RemoveAuthorisationYesNoPage(authorisationIndex))
 
-    beRemovable[Boolean](RemoveAuthorisationYesNoPage)
+    beRemovable[Boolean](RemoveAuthorisationYesNoPage(authorisationIndex))
   }
 }

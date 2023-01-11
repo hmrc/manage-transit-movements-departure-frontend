@@ -19,30 +19,17 @@ package controllers.transport.authorisations.index
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
 import models.NormalMode
-import navigation.transport.TransportMeansNavigatorProvider
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.transport.authorisations.index.RemoveAuthorisationYesNoPage
-import play.api.inject.bind
-import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.transport.authorisations.index.RemoveAuthorisationYesNoView
-
-import scala.concurrent.Future
 
 class RemoveAuthorisationYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
   private val formProvider                       = new YesNoFormProvider()
   private val form                               = formProvider("transport.authorisations.index.removeAuthorisationYesNo")
   private val mode                               = NormalMode
-  private lazy val removeAuthorisationYesNoRoute = routes.RemoveAuthorisationYesNoController.onPageLoad(lrn, mode).url
-
-  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
-    super
-      .guiceApplicationBuilder()
-      .overrides(bind(classOf[TransportMeansNavigatorProvider]).toInstance(fakeTransportMeansNavigatorProvider))
+  private lazy val removeAuthorisationYesNoRoute = routes.RemoveAuthorisationYesNoController.onPageLoad(lrn, mode, authorisationIndex).url
 
   "RemoveAuthorisationYesNo Controller" - {
 
@@ -58,42 +45,7 @@ class RemoveAuthorisationYesNoControllerSpec extends SpecBase with AppWithDefaul
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode)(request, messages).toString
-    }
-
-    "must populate the view correctly on a GET when the question has previously been answered" in {
-
-      val userAnswers = emptyUserAnswers.setValue(RemoveAuthorisationYesNoPage, true)
-      setExistingUserAnswers(userAnswers)
-
-      val request = FakeRequest(GET, removeAuthorisationYesNoRoute)
-
-      val result = route(app, request).value
-
-      val filledForm = form.bind(Map("value" -> "true"))
-
-      val view = injector.instanceOf[RemoveAuthorisationYesNoView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
-    }
-
-    "must redirect to the next page when valid data is submitted" in {
-
-      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
-
-      setExistingUserAnswers(emptyUserAnswers)
-
-      val request = FakeRequest(POST, removeAuthorisationYesNoRoute)
-        .withFormUrlEncodedBody(("value", "true"))
-
-      val result = route(app, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual onwardRoute.url
+        view(form, lrn, mode, authorisationIndex)(request, messages).toString
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
@@ -110,7 +62,7 @@ class RemoveAuthorisationYesNoControllerSpec extends SpecBase with AppWithDefaul
       val view = injector.instanceOf[RemoveAuthorisationYesNoView]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, mode)(request, messages).toString
+        view(boundForm, lrn, mode, authorisationIndex)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

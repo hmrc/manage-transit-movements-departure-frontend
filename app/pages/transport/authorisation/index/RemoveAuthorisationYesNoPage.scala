@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package pages.sections
+package pages.transport.authorisation.index
 
-import play.api.libs.json.JsPath
+import controllers.transport.authorisations.index.routes
+import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
+import pages.sections.transport.AuthorisationSection
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
-case object AuthorisationSection extends QuestionPage[Nothing] {
+case class RemoveAuthorisationYesNoPage(authorisationIndex: Index) extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = AuthorisationSection(authorisationIndex).path \ toString
 
   override def toString: String = "removeAuthorisationYesNo"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.RemoveAuthorisationYesNoController.onPageLoad(userAnswers.lrn, mode, authorisationIndex))
 }
