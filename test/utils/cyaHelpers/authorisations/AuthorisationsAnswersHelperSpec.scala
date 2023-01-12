@@ -28,7 +28,7 @@ import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.ProcedureTypePage
 import pages.traderDetails.consignment.ApprovedOperatorPage
-import pages.transport.authorisation.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
+import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
 import pages.transport.transportMeans.departure.InlandModePage
 import utils.cyaHelpers.transport.authorisations.AuthorisationsAnswersHelper
 import viewModels.ListItem
@@ -71,8 +71,9 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
                 Right(
                   ListItem(
                     name = s"${AuthorisationType.TRD} - $referenceNumber",
-                    changeUrl =
-                      controllers.transport.authorisations.index.routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, authorisationIndex).url,
+                    changeUrl = controllers.transport.authorisationsAndLimit.authorisations.index.routes.AuthorisationReferenceNumberController
+                      .onPageLoad(lrn, mode, authorisationIndex)
+                      .url,
                     removeUrl = None
                   )
                 )
@@ -98,8 +99,9 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
                   Right(
                     ListItem(
                       name = s"${AuthorisationType.ACR} - $referenceNumber",
-                      changeUrl =
-                        controllers.transport.authorisations.index.routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, authorisationIndex).url,
+                      changeUrl = controllers.transport.authorisationsAndLimit.authorisations.index.routes.AuthorisationReferenceNumberController
+                        .onPageLoad(lrn, mode, authorisationIndex)
+                        .url,
                       removeUrl = None
                     )
                   )
@@ -122,9 +124,14 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
                   Right(
                     ListItem(
                       name = s"$authorisationType - $referenceNumber",
-                      changeUrl = controllers.transport.authorisations.index.routes.AuthorisationTypeController.onPageLoad(lrn, mode, authorisationIndex).url,
-                      removeUrl =
-                        Some(controllers.transport.authorisations.index.routes.RemoveAuthorisationYesNoController.onPageLoad(lrn, mode, authorisationIndex).url)
+                      changeUrl = controllers.transport.authorisationsAndLimit.authorisations.index.routes.AuthorisationTypeController
+                        .onPageLoad(lrn, mode, authorisationIndex)
+                        .url,
+                      removeUrl = Some(
+                        controllers.transport.authorisationsAndLimit.authorisations.index.routes.RemoveAuthorisationYesNoController
+                          .onPageLoad(lrn, mode, authorisationIndex)
+                          .url
+                      )
                     )
                   )
                 )

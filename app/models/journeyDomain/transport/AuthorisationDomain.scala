@@ -27,7 +27,7 @@ import models.transport.transportMeans.departure.InlandMode._
 import models.{Index, Mode, UserAnswers}
 import pages.preTaskList.ProcedureTypePage
 import pages.traderDetails.consignment.ApprovedOperatorPage
-import pages.transport.authorisation.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
+import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
 import pages.transport.transportMeans.departure.InlandModePage
 import play.api.i18n.Messages
 import play.api.mvc.Call
@@ -41,12 +41,13 @@ case class AuthorisationDomain(authorisationType: AuthorisationType, referenceNu
     stage match {
       case AccessingJourney =>
         if (userAnswers.get(AuthorisationTypePage(index)).isEmpty && index.isFirst) {
-          controllers.transport.authorisations.index.routes.AuthorisationReferenceNumberController.onPageLoad(userAnswers.lrn, mode, index)
+          controllers.transport.authorisationsAndLimit.authorisations.index.routes.AuthorisationReferenceNumberController
+            .onPageLoad(userAnswers.lrn, mode, index)
         } else {
-          controllers.transport.authorisations.index.routes.AuthorisationTypeController.onPageLoad(userAnswers.lrn, mode, index)
+          controllers.transport.authorisationsAndLimit.authorisations.index.routes.AuthorisationTypeController.onPageLoad(userAnswers.lrn, mode, index)
         }
       case CompletingJourney =>
-        controllers.transport.authorisations.routes.AddAnotherAuthorisationController.onPageLoad(userAnswers.lrn, mode)
+        controllers.transport.authorisationsAndLimit.authorisations.routes.AddAnotherAuthorisationController.onPageLoad(userAnswers.lrn, mode)
     }
   }
 }

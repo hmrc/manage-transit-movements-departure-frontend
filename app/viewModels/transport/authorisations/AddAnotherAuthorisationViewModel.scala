@@ -58,7 +58,7 @@ object AddAnotherAuthorisationViewModel {
 
       new AddAnotherAuthorisationViewModel(
         listItems,
-        onSubmitCall = controllers.transport.authorisations.routes.AddAnotherAuthorisationController.onSubmit(userAnswers.lrn, mode)
+        onSubmitCall = controllers.transport.authorisationsAndLimit.authorisations.routes.AddAnotherAuthorisationController.onSubmit(userAnswers.lrn, mode)
       )
     }
   }

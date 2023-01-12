@@ -25,6 +25,7 @@ import models.transport.transportMeans.departure.{Identification, InlandMode}
 import models.transport.supplyChainActors.SupplyChainActorType
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
+import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
 import play.api.libs.json._
 import queries.Gettable
 
@@ -319,10 +320,7 @@ trait UserAnswersEntryGenerators {
   }
 
   private def generateAuthorisationAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.transport.authorisation.index._
-    {
-      case AuthorisationTypePage(_)            => arbitrary[AuthorisationType].map(Json.toJson(_))
-      case AuthorisationReferenceNumberPage(_) => Gen.alphaNumStr.map(JsString)
-    }
+    case AuthorisationTypePage(_)            => arbitrary[AuthorisationType].map(Json.toJson(_))
+    case AuthorisationReferenceNumberPage(_) => Gen.alphaNumStr.map(JsString)
   }
 }
