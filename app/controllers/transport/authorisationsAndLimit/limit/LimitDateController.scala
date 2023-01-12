@@ -22,7 +22,7 @@ import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.DateFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
-import navigation.transport.TransportMeansNavigator
+import navigation.transport.TransportNavigatorProvider
 import pages.transport.authorisationsAndLimit.limit.LimitDatePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -37,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class LimitDateController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: TransportMeansNavigator,
+  navigatorProvider: TransportNavigatorProvider,
   formProvider: DateFormProvider,
   actions: Actions,
   appConfig: FrontendAppConfig,
@@ -68,7 +68,7 @@ class LimitDateController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider
+            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
             LimitDatePage.writeToUserAnswers(value).writeToSession().navigate()
           }
         )

@@ -23,22 +23,25 @@
 @(
     field: Field,
     legend: String,
-    legendClass: String = "govuk-fieldset__legend--xl",
-    hint: Option[String] = None,
-    legendAsHeading: Boolean = false
+    caption: Option[String] = None,
+    hint: Option[String] = None
 )(implicit messages: Messages)
 
 @govukDateInput(
     DateInput(
-        fieldset = Some(Fieldset(
-            legend = Some(
-                Legend(
-                    content = Text(messages(legend)),
-                    isPageHeading = legendAsHeading,
-                    classes = legendClass
-                )
-            )
-        )),
+        fieldset = caption match {
+            case Some(x) => Some(Fieldset().withHeadingAndCaption(Text(messages(legend)), Text(x)))
+            case None =>
+                Some(Fieldset(
+                    legend = Some(
+                        Legend(
+                            content = Text(messages(legend)),
+                            classes = LegendSize.XL,
+                            isPageHeading = true
+                        )
+                    )
+                ))
+        },
         id = field.id,
         items = Seq(
             InputItem(
