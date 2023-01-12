@@ -6,7 +6,7 @@ POST       /:lrn/transport-details/authorisations/add-another                   
 GET        /:lrn/transport-details/authorisations/change-add-another                    controllers.transport.authorisations.AddAnotherAuthorisationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/transport-details/authorisations/change-add-another                    controllers.transport.authorisations.AddAnotherAuthorisationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/transport/authorisations/add                                           controllers.transport.authorisations.AddAuthorisationsYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/transport/authorisations/add                                           controllers.transport.authorisations.AddAuthorisationsYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/transport/authorisations/change-add                                    controllers.transport.authorisations.AddAuthorisationsYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/transport/authorisations/change-add                                    controllers.transport.authorisations.AddAuthorisationsYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/transport-details/authorisations/add                                           controllers.transport.authorisations.AddAuthorisationsYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport-details/authorisations/add                                           controllers.transport.authorisations.AddAuthorisationsYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport-details/authorisations/change-add                                    controllers.transport.authorisations.AddAuthorisationsYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport-details/authorisations/change-add                                    controllers.transport.authorisations.AddAuthorisationsYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
