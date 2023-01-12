@@ -23,7 +23,7 @@ import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.implicits._
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, Text}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorLink
 import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 import uk.gov.hmrc.hmrcfrontend.views.implicits.RichErrorSummarySupport
@@ -111,8 +111,8 @@ object ViewUtils {
     override def withFormField(field: Field): Fieldset                = fieldset
     override def withFormFieldWithErrorAsHtml(field: Field): Fieldset = fieldset
 
-    def withHeadingAndCaption(heading: Content, caption: Content): Fieldset =
-      withHeadingLegend(fieldset, heading, Some(caption))(
+    def withHeadingAndCaption(heading: String, caption: Option[String]): Fieldset =
+      withHeadingLegend(fieldset, Text(heading), caption.map(Text))(
         (fs, l) => fs.copy(legend = Some(l))
       )
   }

@@ -22,15 +22,16 @@ sealed trait InputDateViewModel
 
 object InputDateViewModel {
 
-  case class Date(
+  case class OrdinaryDateInput(
     heading: String,
     caption: Option[String] = None
   ) extends InputDateViewModel
 
-  case class DateWithAdditionalHtml(
+  case class DateInputWithAdditionalHtml(
     heading: String,
     caption: Option[String] = None,
     additionalHtml: Html
   ) extends InputDateViewModel
       with AdditionalHtmlViewModel
+
 }

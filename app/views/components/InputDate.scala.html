@@ -14,34 +14,25 @@
  * limitations under the License.
  *@
 
+@import viewModels.components.InputDateViewModel
+@import viewModels.components.InputDateViewModel._
+@import views.html.components.Heading
 @import views.utils.ViewUtils._
 
 @this(
-    govukDateInput: GovukDateInput
+    govukDateInput: GovukDateInput,
+    hmrcHeading: Heading
 )
 
 @(
     field: Field,
-    legend: String,
-    caption: Option[String] = None,
+    dateType: InputDateViewModel,
     hint: Option[String] = None
 )(implicit messages: Messages)
 
-@govukDateInput(
+@dateInput = @{
     DateInput(
-        fieldset = caption match {
-            case Some(x) => Some(Fieldset().withHeadingAndCaption(Text(messages(legend)), Text(x)))
-            case None =>
-                Some(Fieldset(
-                    legend = Some(
-                        Legend(
-                            content = Text(messages(legend)),
-                            classes = LegendSize.XL,
-                            isPageHeading = true
-                        )
-                    )
-                ))
-        },
+        fieldset = None,
         id = field.id,
         items = Seq(
             InputItem(
@@ -69,4 +60,15 @@
         hint = hint.map(hint => Hint(content = Text(messages(hint)))),
         errorMessage = field.error.map(err => ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(err.message, err.args: _*))))
     )
-)
+}
+
+@dateType match {
+    case OrdinaryDateInput(heading, caption) => {
+        @govukDateInput(dateInput.copy(fieldset = Some(Fieldset().withHeadingAndCaption(messages(heading), caption))))
+    }
+    case x @ DateInputWithAdditionalHtml(heading, caption, additionalHtml) => {
+        @hmrcHeading(heading, caption, Some(x.headingClasses))
+        @additionalHtml
+        @govukDateInput(dateInput.copy(fieldset = Some(Fieldset(legend = Some(Legend(content = Text(heading), isPageHeading = false, classes = "govuk-visually-hidden"))))))
+    }
+}

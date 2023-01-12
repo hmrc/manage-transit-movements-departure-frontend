@@ -68,21 +68,8 @@
 }
 
 @govukFieldset(
-    caption match {
-        case Some(x) => {
-            fieldset.withHeadingAndCaption(
-                heading = Text(messages(s"$messageKeyPrefix.heading", headingArgs: _*)),
-                caption = Text(x)
-            )
-        }
-        case None => {
-            fieldset.copy(
-                legend = Some(Legend(
-                    content = Text(messages(s"$messageKeyPrefix.heading", headingArgs: _*)),
-                    classes = LegendSize.XL,
-                    isPageHeading = true
-                ))
-            )
-        }
-    }
+    fieldset.withHeadingAndCaption(
+        heading = messages(s"$messageKeyPrefix.heading", headingArgs: _*),
+        caption = caption
+    )
 )
