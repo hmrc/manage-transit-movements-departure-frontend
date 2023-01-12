@@ -17,6 +17,7 @@
 package components
 
 import a11ySpecBase.A11ySpecBase
+import org.scalacheck.Arbitrary.arbitrary
 import viewModels.taskList.Task
 import views.html.components.TaskList
 import views.html.templates.MainTemplate
@@ -29,7 +30,7 @@ class ListWithActionsSpec extends A11ySpecBase {
 
     val title      = nonEmptyString.sample.value
     val sectionKey = nonEmptyString.sample.value
-    val tasks      = listWithMaxLength[Task]()(arbitraryTask).sample.value
+    val tasks      = arbitrary[List[Task]](arbitraryTasks(arbitraryTask)).sample.value
 
     val content = template.apply(title) {
       component.apply(sectionKey, tasks).withHeading(title)

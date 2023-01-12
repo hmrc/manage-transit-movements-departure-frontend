@@ -94,6 +94,14 @@ trait ViewModelGenerators {
     } yield Section(sectionTitle, rows, link)
   }
 
+  implicit lazy val arbitrarySections: Arbitrary[List[Section]] = Arbitrary {
+    listWithMaxLength[Section]().retryUntil {
+      sections =>
+        val sectionTitles = sections.map(_.sectionTitle)
+        sectionTitles.distinct.size == sectionTitles.size
+    }
+  }
+
   implicit lazy val arbitraryLink: Arbitrary[Link] = Arbitrary {
     for {
       id   <- nonEmptyString
@@ -130,6 +138,14 @@ trait ViewModelGenerators {
       override val messageKey: String   = arbitraryMessageKey
       override val id: String           = arbitraryId
       override val href: Option[String] = arbitraryHref
+    }
+  }
+
+  implicit def arbitraryTasks(implicit arbitraryTask: Arbitrary[Task]): Arbitrary[List[Task]] = Arbitrary {
+    listWithMaxLength[Task]()(arbitraryTask).retryUntil {
+      tasks =>
+        val ids = tasks.map(_.id)
+        ids.distinct.size == ids.size
     }
   }
 
@@ -178,6 +194,15 @@ trait ViewModelGenerators {
       disabled        <- arbitrary[Boolean]
       attributes      <- Gen.const(Map.empty[String, String])
     } yield RadioItem(content, id, value, label, hint, divider, checked, conditionalHtml, disabled, attributes)
+  }
+
+  implicit lazy val arbitraryRadioItems: Arbitrary[List[RadioItem]] = Arbitrary {
+    for {
+      radioItems   <- listWithMaxLength[RadioItem]()
+      checkedIndex <- Gen.choose(0, radioItems.length - 1)
+    } yield radioItems.zipWithIndex.map {
+      case (radioItem, index) => radioItem.copy(checked = index == checkedIndex)
+    }
   }
 
   implicit lazy val arbitraryListItem: Arbitrary[ListItem] = Arbitrary {

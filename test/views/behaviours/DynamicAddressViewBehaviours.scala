@@ -46,17 +46,13 @@ trait DynamicAddressViewBehaviours extends QuestionViewBehaviours[DynamicAddress
           }
         }
 
-        "must not render an error summary" in {
-          assertNotRenderedById(doc, "error-summary-title")
-        }
+        behave like pageWithoutErrorSummary()
       }
 
       for (field <- fields)
         s"when rendered with an error for field '$field'" - {
 
-          "must show an error summary" in {
-            assertRenderedById(docWithError(field), "error-summary-title")
-          }
+          behave like pageWithErrorSummary(field)
 
           s"must show an error in the label for field '$field'" in {
             val formGroupError = getElementByClass(docWithError(field), "govuk-form-group--error")

@@ -36,7 +36,7 @@ class InputRadioSpec extends A11ySpecBase {
     val title          = nonEmptyString.sample.value
     val caption        = Gen.option(nonEmptyString).sample.value
     val hint           = Gen.option(nonEmptyString).sample.value
-    val radioItems     = (_: String) => listWithMaxLength[RadioItem]().sample.value
+    val radioItems     = (_: String) => arbitrary[List[RadioItem]].sample.value
     val inline         = arbitrary[Boolean].sample.value
     val additionalHtml = arbitrary[Html].sample.value
     val form           = new YesNoFormProvider()(prefix)

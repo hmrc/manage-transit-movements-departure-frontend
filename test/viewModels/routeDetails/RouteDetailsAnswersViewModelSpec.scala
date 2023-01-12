@@ -41,7 +41,7 @@ class RouteDetailsAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyC
   "apply" - {
     "must pass CheckMode to view models" in {
       def dummySection  = arbitrary[Section].sample.value
-      def dummySections = listWithMaxLength[Section]().sample.value
+      def dummySections = arbitrary[List[Section]].sample.value
 
       val mockRoutingAnswersViewModelProvider             = mock[RoutingAnswersViewModelProvider]
       val mockTransitAnswersViewModelProvider             = mock[TransitAnswersViewModelProvider]
