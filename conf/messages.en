@@ -1343,3 +1343,6 @@ transport.authorisations.addAuthorisationsYesNo.checkYourAnswersLabel = Do you w
 transport.authorisations.addAuthorisationsYesNo.error.required = Select yes if you want to add an authorisation
 transport.authorisations.addAuthorisationsYesNo.paragraph = This is someone who helps move the goods to their destination. They can be a consolidator, freight forwarder, manufacturer or warehouse keeper.
 
+transport.authorisations.index.removeAuthorisationYesNo.title = Are you sure you want to remove {0} authorisation {1}?
+transport.authorisations.index.removeAuthorisationYesNo.heading = Are you sure you want to remove {0} authorisation {1}?
+transport.authorisations.index.removeAuthorisationYesNo.error.required = Select yes if you want to remove {0} authorisation {1}
