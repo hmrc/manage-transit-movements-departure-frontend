@@ -26,7 +26,7 @@ import views.html.transport.authorisations.index.RemoveAuthorisationYesNoView
 
 class RemoveAuthorisationYesNoViewSpec extends YesNoViewBehaviours {
 
-  private val authorisationType = Gen.oneOf(AuthorisationType.values).sample.value.toString
+  private val authorisationType = Gen.oneOf(AuthorisationType.values).sample.value.forDisplay
 
   private val authorisationReferenceNumber = Arbitrary(Gen.alphaStr).arbitrary.sample.value
 

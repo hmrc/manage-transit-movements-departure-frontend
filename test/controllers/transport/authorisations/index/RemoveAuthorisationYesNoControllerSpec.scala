@@ -67,7 +67,7 @@ class RemoveAuthorisationYesNoControllerSpec extends SpecBase with AppWithDefaul
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form(authType, authRefNumber), lrn, mode, authorisationIndex, authType.toString, authRefNumber)(request, messages).toString
+        view(form(authType, authRefNumber), lrn, mode, authorisationIndex, authType.forDisplay, authRefNumber)(request, messages).toString
     }
 
     "when yes submitted" - {
@@ -141,7 +141,7 @@ class RemoveAuthorisationYesNoControllerSpec extends SpecBase with AppWithDefaul
       val view = injector.instanceOf[RemoveAuthorisationYesNoView]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, mode, authorisationIndex, authType.toString, authRefNumber)(request, messages).toString
+        view(boundForm, lrn, mode, authorisationIndex, authType.forDisplay, authRefNumber)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

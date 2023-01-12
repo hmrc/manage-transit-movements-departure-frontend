@@ -61,7 +61,7 @@ class RemoveAuthorisationYesNoController @Inject() (
     .andThen(getMandatoryPage.getFirst(AuthorisationTypePage(authorisationIndex)))
     .andThen(getMandatoryPage.getSecond(AuthorisationReferenceNumberPage(authorisationIndex))) {
       implicit request =>
-        Ok(view(form, lrn, mode, authorisationIndex, authType.toString, authRefNumber))
+        Ok(view(form, lrn, mode, authorisationIndex, authType.forDisplay, authRefNumber))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, authorisationIndex: Index): Action[AnyContent] = actions
@@ -73,7 +73,7 @@ class RemoveAuthorisationYesNoController @Inject() (
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, authorisationIndex, authType.toString, authRefNumber))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, authorisationIndex, authType.forDisplay, authRefNumber))),
             {
               case true =>
                 AuthorisationSection(authorisationIndex)
