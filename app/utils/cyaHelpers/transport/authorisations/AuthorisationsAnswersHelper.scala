@@ -22,7 +22,6 @@ import pages.sections.transport.AuthorisationsSection
 import pages.transport.authorisation.index.AuthorisationTypePage
 import play.api.i18n.Messages
 import play.api.mvc.Call
-import uk.gov.hmrc.http.HttpVerbs.GET
 import utils.cyaHelpers.AnswersHelper
 import viewModels.ListItem
 

@@ -49,10 +49,10 @@ trait DateTimeInputViewBehaviours extends QuestionViewBehaviours[DateTime] with 
         }
       }
 
-      "when rendered with error" - {
-        "must show an error summary" in {
-          assertRenderedById(docWithError(), "error-summary-title")
-        }
+      "when rendered with an error" - {
+
+        behave like pageWithErrorSummary("date")
+        behave like pageWithErrorSummary("time")
 
         "must show an error class on the inputs for date" in {
           val docWithError = parseView(applyView(form.withError(FormError("date", errorMessage, Seq("day", "month", "year")))))

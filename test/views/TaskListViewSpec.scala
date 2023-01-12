@@ -16,6 +16,7 @@
 
 package views
 
+import org.scalacheck.Arbitrary.arbitrary
 import play.twirl.api.HtmlFormat
 import viewModels.taskList.Task
 import views.behaviours.TaskListViewBehaviours
@@ -49,7 +50,7 @@ class TaskListViewSpec extends TaskListViewBehaviours {
   )
 
   "when all tasks completed" - {
-    val tasks = listWithMaxLength[Task]()(arbitraryCompletedTask).sample.value
+    val tasks = arbitrary[List[Task]](arbitraryTasks(arbitraryCompletedTask)).sample.value
     val doc   = parseView(applyView(tasks))
 
     behave like pageWithContent(doc, "h2", "Now send your departure declaration")

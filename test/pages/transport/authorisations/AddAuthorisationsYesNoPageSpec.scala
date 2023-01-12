@@ -17,7 +17,7 @@
 package pages.transport.authorisations
 
 import pages.behaviours.PageBehaviours
-import pages.sections.transport.{AuthorisationSection, AuthorisationsSection}
+import pages.sections.transport.AuthorisationsSection
 import play.api.libs.json.{JsArray, Json}
 
 class AddAuthorisationsYesNoPageSpec extends PageBehaviours {
