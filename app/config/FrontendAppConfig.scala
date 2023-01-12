@@ -19,13 +19,23 @@ package config
 import com.google.inject.{Inject, Singleton}
 import play.api.Configuration
 
+import java.time.LocalDate
+
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   val appName: String = configuration.get[String]("appName")
 
-  lazy val daysBefore: Int = configuration.get[Int]("limits.officeOfTransitETA.daysBefore")
-  lazy val daysAfter: Int  = configuration.get[Int]("limits.officeOfTransitETA.daysAfter")
+  lazy val etaDateDaysBefore: Int = configuration.get[Int]("dates.officeOfTransitETA.daysBefore")
+  lazy val etaDateDaysAfter: Int  = configuration.get[Int]("dates.officeOfTransitETA.daysAfter")
+
+  lazy val limitDateDaysAfter: Int = configuration.get[Int]("dates.limitDate.daysAfter")
+
+  lazy val limitDateMin: LocalDate = LocalDate.of(
+    configuration.get[Int]("dates.limitDate.min.year"),
+    configuration.get[Int]("dates.limitDate.min.month"),
+    configuration.get[Int]("dates.limitDate.min.day")
+  )
 
   lazy val nctsEnquiriesUrl: String = configuration.get[String]("urls.nctsEnquiries")
   lazy val nctsGuidanceUrl: String  = configuration.get[String]("urls.nctsGuidance")
@@ -64,7 +74,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val maxActiveBorderTransports: Int = configuration.get[Int]("limits.maxActiveBorderTransports")
   lazy val maxSupplyChainActors: Int      = configuration.get[Int]("limits.maxSupplyChainActors")
   lazy val maxAuthorisations: Int         = configuration.get[Int]("limits.maxAuthorisations")
-  lazy val maxDaysLimit: Int              = configuration.get[Int]("limits.maxDaysLimit")
 
   lazy val apiUrl = configuration.get[Service]("microservice.services.common-transit-convention-traders").baseUrl
 

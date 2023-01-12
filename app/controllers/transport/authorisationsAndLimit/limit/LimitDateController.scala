@@ -24,9 +24,11 @@ import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
 import pages.transport.authorisationsAndLimit.limit.LimitDatePage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.DateTimeService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.transport.authorisationsAndLimit.limit.LimitDateView
 
@@ -42,15 +44,17 @@ class LimitDateController @Inject() (
   actions: Actions,
   appConfig: FrontendAppConfig,
   val controllerComponents: MessagesControllerComponents,
-  view: LimitDateView
+  view: LimitDateView,
+  dateTimeService: DateTimeService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val maxDate = LocalDate.now.plusDays(appConfig.maxDaysLimit)
-  private val minDate = LocalDate.now()
-
-  private val form = formProvider("transport.authorisationsAndLimit.limit.limitDate", minDate, maxDate)
+  private def form: Form[LocalDate] = {
+    val maxDate = dateTimeService.plusMinusDays(appConfig.limitDateDaysAfter)
+    val minDate = appConfig.limitDateMin
+    formProvider("transport.authorisationsAndLimit.limit.limitDate", minDate, maxDate)
+  }
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>

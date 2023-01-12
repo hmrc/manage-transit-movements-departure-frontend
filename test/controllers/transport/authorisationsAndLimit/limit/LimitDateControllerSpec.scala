@@ -1,15 +1,33 @@
+/*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package controllers.transport.authorisationsAndLimit.limit
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.DateFormProvider
 import models.NormalMode
+import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.when
 import pages.transport.authorisationsAndLimit.limit.LimitDatePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.DateTimeService
 import views.html.transport.authorisationsAndLimit.limit.LimitDateView
 
 import java.time.LocalDate
@@ -17,8 +35,13 @@ import scala.concurrent.Future
 
 class LimitDateControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
+  private val dateTimeService = injector.instanceOf[DateTimeService]
+
+  private val minDate = frontendAppConfig.limitDateMin
+  private val maxDate = dateTimeService.plusMinusDays(frontendAppConfig.limitDateDaysAfter)
+
   private val formProvider        = new DateFormProvider()
-  private val form                = formProvider("transport.authorisationsAndLimit.limit.limitDate")
+  private val form                = formProvider("transport.authorisationsAndLimit.limit.limitDate", minDate, maxDate)
   private val mode                = NormalMode
   private lazy val limitDateRoute = routes.LimitDateController.onPageLoad(lrn, mode).url
   private val date                = LocalDate.now
@@ -26,7 +49,7 @@ class LimitDateControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[PreTaskListDetailsNavigatorProvider]).toInstance(fakePreTaskListDetailsNavigatorProvider))
+      .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
 
   "LimitDate Controller" - {
 
@@ -57,9 +80,9 @@ class LimitDateControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       val filledForm = form.bind(
         Map(
-          "value.day"   -> date.getDayOfMonth.toString,
-          "value.month" -> date.getMonthValue.toString,
-          "value.year"  -> date.getYear.toString
+          "valueDay"   -> date.getDayOfMonth.toString,
+          "valueMonth" -> date.getMonthValue.toString,
+          "valueYear"  -> date.getYear.toString
         )
       )
 
@@ -79,9 +102,9 @@ class LimitDateControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       val request = FakeRequest(POST, limitDateRoute)
         .withFormUrlEncodedBody(
-          "value.day"   -> date.getDayOfMonth.toString,
-          "value.month" -> date.getMonthValue.toString,
-          "value.year"  -> date.getYear.toString
+          "valueDay"   -> date.getDayOfMonth.toString,
+          "valueMonth" -> date.getMonthValue.toString,
+          "valueYear"  -> date.getYear.toString
         )
 
       val result = route(app, request).value
@@ -129,9 +152,9 @@ class LimitDateControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       val request = FakeRequest(POST, limitDateRoute)
         .withFormUrlEncodedBody(
-          "value.day"   -> date.getDayOfMonth.toString,
-          "value.month" -> date.getMonthValue.toString,
-          "value.year"  -> date.getYear.toString
+          "valueDay"   -> date.getDayOfMonth.toString,
+          "valueMonth" -> date.getMonthValue.toString,
+          "valueYear"  -> date.getYear.toString
         )
 
       val result = route(app, request).value

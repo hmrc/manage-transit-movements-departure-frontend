@@ -21,7 +21,6 @@ import play.api.data.Form
 import utils.Format.RichLocalDate
 
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class DateFormProvider @Inject() extends Mappings {
@@ -34,8 +33,8 @@ class DateFormProvider @Inject() extends Mappings {
         twoRequiredKey = s"$prefix.error.required.two",
         requiredKey = s"$prefix.error.required"
       ).verifying(
-        minDate(minimumDate, s"$prefix.error.min.date", minimumDate.format(DateTimeFormatter.ofPattern("d MMMM yyyy"))),
-        maxDate(maximumDate, s"$prefix.error.max.date", minimumDate.minusDays(1).formatAsString)
+        minDate(minimumDate, s"$prefix.error.min.date", minimumDate.minusDays(1).formatAsString),
+        maxDate(maximumDate, s"$prefix.error.max.date", maximumDate.plusDays(1).formatAsString)
       )
     )
 }
