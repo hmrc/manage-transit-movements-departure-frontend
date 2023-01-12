@@ -54,7 +54,7 @@ class RemoveAuthorisationYesNoController @Inject() (
   private def authRefNumber(implicit request: Request): String = request.arg._2
 
   private def form(implicit request: Request): Form[Boolean] =
-    formProvider("transport.authorisations.index.removeAuthorisationYesNo", authType, authRefNumber)
+    formProvider("transport.authorisations.index.removeAuthorisationYesNo", authType.forDisplay, authRefNumber)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, authorisationIndex: Index): Action[AnyContent] = actions
     .requireData(lrn)
