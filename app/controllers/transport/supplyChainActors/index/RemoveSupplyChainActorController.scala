@@ -21,7 +21,7 @@ import controllers.transport.supplyChainActors.routes
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
-import pages.sections.transport.SupplyChainActorSection
+import pages.sections.transport.supplyChainActors.SupplyChainActorSection
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

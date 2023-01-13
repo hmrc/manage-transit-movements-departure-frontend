@@ -21,7 +21,7 @@ import controllers.transport.transportMeans.active.routes
 import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{Index, Mode, RichJsArray, UserAnswers}
-import pages.sections.transport.TransportMeansActiveListSection
+import pages.sections.transport.transportMeans.TransportMeansActiveListSection
 import play.api.mvc.Call
 
 case class TransportMeansActiveListDomain(

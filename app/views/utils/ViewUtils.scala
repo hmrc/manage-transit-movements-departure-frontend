@@ -16,17 +16,16 @@
 
 package views.utils
 
-import models.DateTime
 import play.api.data.{Field, Form, FormError}
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.implicits._
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, Text}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorLink
 import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
-import uk.gov.hmrc.hmrcfrontend.views.implicits.RichErrorSummarySupport
+import uk.gov.hmrc.hmrcfrontend.views.implicits.{RichDateInputSupport, RichErrorSummarySupport}
 
 import java.time.LocalDate
 
@@ -92,17 +91,12 @@ object ViewUtils {
   implicit class ErrorSummaryImplicits(errorSummary: ErrorSummary)(implicit messages: Messages) extends RichErrorSummarySupport {
 
     private def withErrorMapping[T](form: Form[T], fieldName: String, args: Seq[String]): ErrorSummary = {
-      val arg = form.errors.flatMap(_.args).find(args.contains).getOrElse(args.head)
-      errorSummary.withFormErrorsAsText(form, mapping = Map(fieldName -> s"${fieldName}_$arg"))
+      val arg = form.errors.flatMap(_.args).find(args.contains).getOrElse(args.head).toString
+      errorSummary.withFormErrorsAsText(form, mapping = Map(fieldName -> s"$fieldName${arg.capitalize}"))
     }
 
     def withDateErrorMapping(form: Form[LocalDate], fieldName: String): ErrorSummary = {
       val args = Seq("day", "month", "year")
-      withErrorMapping(form, fieldName, args)
-    }
-
-    def withDateTimeErrorMapping(form: Form[DateTime], fieldName: String): ErrorSummary = {
-      val args = Seq("day", "month", "year", "hour", "minute")
       withErrorMapping(form, fieldName, args)
     }
   }
@@ -111,8 +105,8 @@ object ViewUtils {
     override def withFormField(field: Field): Fieldset                = fieldset
     override def withFormFieldWithErrorAsHtml(field: Field): Fieldset = fieldset
 
-    def withHeadingAndCaption(heading: Content, caption: Content): Fieldset =
-      withHeadingLegend(fieldset, heading, Some(caption))(
+    def withHeadingAndCaption(heading: String, caption: Option[String]): Fieldset =
+      withHeadingLegend(fieldset, Text(heading), caption.map(Text))(
         (fs, l) => fs.copy(legend = Some(l))
       )
   }
@@ -124,6 +118,18 @@ object ViewUtils {
         case Some(value) => select.withHeadingAndSectionCaption(Text(heading), Text(value))
         case None        => select.withHeading(Text(heading))
       }
+  }
+
+  implicit class DateInputImplicits(dateInput: DateInput)(implicit messages: Messages) extends RichDateInputSupport {
+
+    def withHeadingAndCaption(heading: String, caption: Option[String]): DateInput =
+      caption match {
+        case Some(value) => dateInput.withHeadingAndSectionCaption(Text(heading), Text(value))
+        case None        => dateInput.withHeading(Text(heading))
+      }
+
+    def withVisuallyHiddenLegend(legend: String): DateInput =
+      dateInput.copy(fieldset = Some(Fieldset(legend = Some(Legend(content = Text(legend), isPageHeading = false, classes = "govuk-visually-hidden")))))
   }
 
   implicit class DateTimeRichFormErrors(formErrors: Seq[FormError])(implicit messages: Messages) {

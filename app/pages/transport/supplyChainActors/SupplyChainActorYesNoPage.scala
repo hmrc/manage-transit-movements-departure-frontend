@@ -19,7 +19,8 @@ package pages.transport.supplyChainActors
 import controllers.transport.supplyChainActors.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.{SupplyChainActorListSection, TransportSection}
+import pages.sections.transport.TransportSection
+import pages.sections.transport.supplyChainActors.SupplyChainActorListSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

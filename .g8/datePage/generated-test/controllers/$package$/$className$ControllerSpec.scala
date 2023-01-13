@@ -1,15 +1,17 @@
 package controllers.$package$
 
 import base.{SpecBase, AppWithDefaultMockFixtures}
-import forms.$formProvider$
+import forms.DateFormProvider
 import models.NormalMode
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.$package$.$className$Page
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.DateTimeService
 import views.html.$package$.$className$View
 
 import java.time.LocalDate
@@ -17,8 +19,13 @@ import scala.concurrent.Future
 
 class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider = new $formProvider$()
-  private val form         = formProvider("$package$.$className;format="decap"$")
+  private val dateTimeService = injector.instanceOf[DateTimeService]
+
+  private val minDate = dateTimeService.plusMinusDays(-1)
+  private val maxDate = dateTimeService.today
+
+  private val formProvider = new DateFormProvider()
+  private val form         = formProvider("$package$.$className;format="decap"$", minDate, maxDate)
   private val mode         = NormalMode
   private lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, mode).url
   private val date                        = LocalDate.now

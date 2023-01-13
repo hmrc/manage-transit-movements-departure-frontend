@@ -1,0 +1,5 @@
+
+GET        /:lrn/transport-details/authorisations/limit-date                                          controllers.transport.authorisationsAndLimit.limit.LimitDateController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport-details/authorisations/limit-date                                          controllers.transport.authorisationsAndLimit.limit.LimitDateController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport-details/authorisations/change-limit-date                                   controllers.transport.authorisationsAndLimit.limit.LimitDateController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport-details/authorisations/change-limit-date                                   controllers.transport.authorisationsAndLimit.limit.LimitDateController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

@@ -1346,3 +1346,14 @@ transport.authorisations.addAuthorisationsYesNo.paragraph = This is someone who 
 transport.authorisations.index.removeAuthorisationYesNo.title = Are you sure you want to remove {0} authorisation {1}?
 transport.authorisations.index.removeAuthorisationYesNo.heading = Are you sure you want to remove {0} authorisation {1}?
 transport.authorisations.index.removeAuthorisationYesNo.error.required = Select yes if you want to remove {0} authorisation {1}
+
+transport.authorisationsAndLimit.limit.limitDate.title = When is the limit date?
+transport.authorisationsAndLimit.limit.limitDate.heading = When is the limit date?
+transport.authorisationsAndLimit.limit.limitDate.checkYourAnswersLabel = Limit date
+transport.authorisationsAndLimit.limit.limitDate.paragraph = This has to be before {0}.
+transport.authorisationsAndLimit.limit.limitDate.error.required.all = Enter the limit date
+transport.authorisationsAndLimit.limit.limitDate.error.required.two = The limit date must include a {0} and {1}
+transport.authorisationsAndLimit.limit.limitDate.error.required = The limit date must include a {0}
+transport.authorisationsAndLimit.limit.limitDate.error.invalid = Enter a real limit date
+transport.authorisationsAndLimit.limit.limitDate.error.min.date = The limit date must be today or in the future
+transport.authorisationsAndLimit.limit.limitDate.error.max.date = The limit date must be before {0}

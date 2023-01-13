@@ -24,8 +24,11 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   val appName: String = configuration.get[String]("appName")
 
-  lazy val daysBefore: Int = configuration.get[Int]("limits.officeOfTransitETA.daysBefore")
-  lazy val daysAfter: Int  = configuration.get[Int]("limits.officeOfTransitETA.daysAfter")
+  lazy val etaDateDaysBefore: Int = configuration.get[Int]("dates.officeOfTransitETA.daysBefore")
+  lazy val etaDateDaysAfter: Int  = configuration.get[Int]("dates.officeOfTransitETA.daysAfter")
+
+  lazy val limitDateDaysBefore: Int = configuration.get[Int]("dates.limitDate.daysBefore")
+  lazy val limitDateDaysAfter: Int  = configuration.get[Int]("dates.limitDate.daysAfter")
 
   lazy val nctsEnquiriesUrl: String = configuration.get[String]("urls.nctsEnquiries")
   lazy val nctsGuidanceUrl: String  = configuration.get[String]("urls.nctsGuidance")

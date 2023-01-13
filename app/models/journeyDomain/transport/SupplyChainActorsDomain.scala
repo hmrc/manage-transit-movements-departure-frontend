@@ -20,7 +20,7 @@ import cats.implicits._
 import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{Index, Mode, RichJsArray, UserAnswers}
-import pages.sections.transport.SupplyChainActorListSection
+import pages.sections.transport.supplyChainActors.SupplyChainActorListSection
 import play.api.mvc.Call
 
 case class SupplyChainActorsDomain(

@@ -52,8 +52,8 @@ class OfficeOfTransitETAController @Inject() (
 
   private def form: Form[DateTime] = {
     val today      = dateTimeService.today
-    val pastDate   = today.minusDays(appConfig.daysBefore)
-    val futureDate = today.plusDays(appConfig.daysAfter)
+    val pastDate   = today.minusDays(appConfig.etaDateDaysBefore)
+    val futureDate = today.plusDays(appConfig.etaDateDaysAfter)
     formProvider("routeDetails.transit.index.officeOfTransitETA", pastDate, futureDate)
   }
 
