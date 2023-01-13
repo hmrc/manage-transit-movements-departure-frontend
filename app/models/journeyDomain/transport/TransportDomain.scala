@@ -33,19 +33,16 @@ object TransportDomain {
 
   implicit val userAnswersReader: UserAnswersReader[TransportDomain] = {
 
-
-    implicit val authorisationsAndLimitReads: UserAnswersReader[Option[AuthorisationsAndLimitDomain]] = {
+    implicit val authorisationsAndLimitReads: UserAnswersReader[Option[AuthorisationsAndLimitDomain]] =
       ApprovedOperatorPage.reader.flatMap {
-        case true => UserAnswersReader[AuthorisationsAndLimitDomain].map(Some(_))
+        case true  => UserAnswersReader[AuthorisationsAndLimitDomain].map(Some(_))
         case false => AddAuthorisationsYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AuthorisationsAndLimitDomain])
       }
-    }
-
 
     for {
-      preRequisites     <- UserAnswersReader[PreRequisitesDomain]
-      transportMeans    <- UserAnswersReader[TransportMeansDomain]
-      supplyChainActors <- SupplyChainActorYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[SupplyChainActorsDomain])
+      preRequisites          <- UserAnswersReader[PreRequisitesDomain]
+      transportMeans         <- UserAnswersReader[TransportMeansDomain]
+      supplyChainActors      <- SupplyChainActorYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[SupplyChainActorsDomain])
       authorisationsAndLimit <- authorisationsAndLimitReads
     } yield TransportDomain(preRequisites, transportMeans, supplyChainActors, authorisationsAndLimit)
   }

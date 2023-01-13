@@ -22,7 +22,7 @@ import forms.EnumerableFormProvider
 import models.transport.authorisations.AuthorisationType
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
-import navigation.transport.TransportMeansNavigatorProvider
+import navigation.transport.{AuthorisationNavigatorProvider, TransportMeansNavigatorProvider}
 import pages.transport.authorisation.index.AuthorisationTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AuthorisationTypeController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: TransportMeansNavigatorProvider,
+  navigatorProvider: AuthorisationNavigatorProvider,
   actions: Actions,
   formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -64,7 +64,7 @@ class AuthorisationTypeController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, AuthorisationType.radioItems, mode, authorisationIndex))),
           value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, authorisationIndex)
             AuthorisationTypePage(authorisationIndex).writeToUserAnswers(value).writeToSession().navigate()
           }
         )

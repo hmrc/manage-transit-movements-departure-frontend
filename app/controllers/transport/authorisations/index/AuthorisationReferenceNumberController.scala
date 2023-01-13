@@ -25,7 +25,7 @@ import models.transport.authorisations.AuthorisationType
 import models.transport.transportMeans.departure.InlandMode.{Air, Maritime, Rail}
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
-import navigation.transport.TransportMeansNavigatorProvider
+import navigation.transport.AuthorisationNavigatorProvider
 import pages.preTaskList.ProcedureTypePage
 import pages.traderDetails.consignment.ApprovedOperatorPage
 import pages.transport.authorisation.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
@@ -42,7 +42,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AuthorisationReferenceNumberController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: TransportMeansNavigatorProvider,
+  navigatorProvider: AuthorisationNavigatorProvider,
   formProvider: AuthorisationReferenceNumberFormProvider,
   actions: Actions,
   getMandatoryPage: SpecificDataRequiredActionProvider,
@@ -98,7 +98,7 @@ class AuthorisationReferenceNumberController @Inject() (
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, dynamicTitle, mode, authorisationIndex))),
               value => {
-                implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, authorisationIndex)
                 AuthorisationReferenceNumberPage(authorisationIndex).writeToUserAnswers(value).writeToSession().navigate()
               }
             )
