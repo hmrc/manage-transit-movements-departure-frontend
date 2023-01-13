@@ -17,7 +17,7 @@
 package navigation.transport
 
 import models.domain.UserAnswersReader
-import models.journeyDomain.transport.{AuthorisationDomain, SupplyChainActorDomain}
+import models.journeyDomain.transport.AuthorisationDomain
 import models.{CheckMode, Index, Mode, NormalMode}
 import navigation.UserAnswersNavigator
 

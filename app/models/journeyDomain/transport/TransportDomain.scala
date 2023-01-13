@@ -19,7 +19,7 @@ package models.journeyDomain.transport
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
 import pages.traderDetails.consignment.ApprovedOperatorPage
-import pages.transport.authorisations.AddAuthorisationsYesNoPage
+import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import pages.transport.supplyChainActors.SupplyChainActorYesNoPage
 
 case class TransportDomain(

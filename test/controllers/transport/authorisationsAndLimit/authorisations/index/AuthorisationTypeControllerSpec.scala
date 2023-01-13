@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.EnumerableFormProvider
 import models.NormalMode
 import models.transport.authorisations.AuthorisationType
-import navigation.transport.TransportMeansNavigatorProvider
+import navigation.transport.AuthorisationNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.transport.authorisationsAndLimit.authorisations.index.AuthorisationTypePage
@@ -42,7 +42,7 @@ class AuthorisationTypeControllerSpec extends SpecBase with AppWithDefaultMockFi
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[TransportMeansNavigatorProvider]).toInstance(fakeTransportMeansNavigatorProvider))
+      .overrides(bind(classOf[AuthorisationNavigatorProvider]).toInstance(fakeAuthorisationNavigatorProvider))
 
   "AuthorisationType Controller" - {
 
