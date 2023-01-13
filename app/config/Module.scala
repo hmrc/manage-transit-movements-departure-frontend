@@ -50,6 +50,7 @@ class Module extends AbstractModule {
     bind(classOf[TransportMeansActiveNavigatorProvider]).to(classOf[TransportMeansActiveNavigatorProviderImpl])
     bind(classOf[TransportMeansActiveListNavigatorProvider]).to(classOf[TransportMeansActiveListNavigatorProviderImpl])
     bind(classOf[SupplyChainActorNavigatorProvider]).to(classOf[SupplyChainActorNavigatorProviderImpl])
+    bind(classOf[AuthorisationNavigatorProvider]).to(classOf[AuthorisationNavigatorProviderImpl])
 
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])

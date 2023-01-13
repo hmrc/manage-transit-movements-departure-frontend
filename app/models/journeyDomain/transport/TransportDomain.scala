@@ -16,24 +16,38 @@
 
 package models.journeyDomain.transport
 
-import models.domain.{GettableAsFilterForNextReaderOps, UserAnswersReader}
+import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
+import pages.traderDetails.consignment.ApprovedOperatorPage
+import pages.transport.authorisations.AddAuthorisationsYesNoPage
 import pages.transport.supplyChainActors.SupplyChainActorYesNoPage
 
 case class TransportDomain(
   preRequisites: PreRequisitesDomain,
   transportMeans: TransportMeansDomain,
-  supplyChainActors: Option[SupplyChainActorsDomain]
+  supplyChainActors: Option[SupplyChainActorsDomain],
+  authorisationsAndLimit: Option[AuthorisationsAndLimitDomain]
 ) extends JourneyDomainModel
 
 object TransportDomain {
 
   implicit val userAnswersReader: UserAnswersReader[TransportDomain] = {
+
+
+    implicit val authorisationsAndLimitReads: UserAnswersReader[Option[AuthorisationsAndLimitDomain]] = {
+      ApprovedOperatorPage.reader.flatMap {
+        case true => UserAnswersReader[AuthorisationsAndLimitDomain].map(Some(_))
+        case false => AddAuthorisationsYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AuthorisationsAndLimitDomain])
+      }
+    }
+
+
     for {
       preRequisites     <- UserAnswersReader[PreRequisitesDomain]
       transportMeans    <- UserAnswersReader[TransportMeansDomain]
       supplyChainActors <- SupplyChainActorYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[SupplyChainActorsDomain])
-    } yield TransportDomain(preRequisites, transportMeans, supplyChainActors)
+      authorisationsAndLimit <- authorisationsAndLimitReads
+    } yield TransportDomain(preRequisites, transportMeans, supplyChainActors, authorisationsAndLimit)
   }
 
 }
