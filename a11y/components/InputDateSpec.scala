@@ -46,7 +46,7 @@ class InputDateSpec extends A11ySpecBase {
 
       "ordinary date input" in {
         val content = template.apply(title) {
-          component.apply(form,"value", OrdinaryDateInput(title, caption), hint)
+          component.apply(form, "value", OrdinaryDateInput(title, caption), hint)
         }
         content.toString() must passAccessibilityChecks
       }
