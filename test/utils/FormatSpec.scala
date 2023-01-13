@@ -44,13 +44,13 @@ class FormatSpec extends SpecBase {
       "must format date like dd MM yyyy" - {
         "when day is 1 to 9" in {
           val date   = LocalDate.of(2023, 1, 5)
-          val result = date.formatForHint
+          val result = date.formatForText
           result mustBe "05 01 2023"
         }
 
         "when day is 10+" in {
           val date   = LocalDate.of(2023, 1, 13)
-          val result = date.formatForHint
+          val result = date.formatForText
           result mustBe "13 01 2023"
         }
       }

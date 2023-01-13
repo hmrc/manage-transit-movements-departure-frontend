@@ -51,9 +51,8 @@ class LimitDateController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private lazy val maxDate = dateTimeService.plusMinusDays(appConfig.limitDateDaysAfter)
-
-  private lazy val hintDate = maxDate.formatForHint
+  private lazy val maxDate    = dateTimeService.plusMinusDays(appConfig.limitDateDaysAfter)
+  private lazy val maxDateArg = maxDate.formatForText
 
   private def form: Form[LocalDate] = {
     val minDate = appConfig.limitDateMin
@@ -66,7 +65,7 @@ class LimitDateController @Inject() (
         case None        => form
         case Some(value) => form.fill(value)
       }
-      Ok(view(preparedForm, lrn, mode, hintDate))
+      Ok(view(preparedForm, lrn, mode, maxDateArg))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
@@ -74,7 +73,7 @@ class LimitDateController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, hintDate))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, maxDateArg))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
             LimitDatePage.writeToUserAnswers(value).writeToSession().navigate()
