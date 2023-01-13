@@ -18,6 +18,7 @@ package controllers.transport.authorisationsAndLimit.authorisations
 
 import config.FrontendAppConfig
 import controllers.actions._
+import controllers.transport.authorisationsAndLimit.authorisations.index.{routes => authorisationRoutes}
 import forms.AddAnotherFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -62,11 +63,9 @@ class AddAnotherAuthorisationController @Inject() (
           formWithErrors => BadRequest(view(formWithErrors, lrn, mode, viewModel, viewModel.allowMoreAuthorisations)),
           {
             case true =>
-              Redirect(
-                controllers.transport.authorisationsAndLimit.authorisations.index.routes.AuthorisationTypeController
-                  .onPageLoad(request.userAnswers.lrn, mode, Index(viewModel.authorisations))
-              )
-            case false => Redirect(Call(GET, "#")) // TODO go to next section (authorisations nav)
+              Redirect(authorisationRoutes.AuthorisationTypeController.onPageLoad(lrn, mode, Index(viewModel.authorisations)))
+            case false =>
+              Redirect(Call(GET, "#")) // TODO go to next section (authorisations nav)
           }
         )
   }

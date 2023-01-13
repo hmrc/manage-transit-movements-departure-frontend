@@ -18,6 +18,8 @@ package controllers.transport.supplyChainActors
 
 import config.FrontendAppConfig
 import controllers.actions._
+import controllers.transport.supplyChainActors.index.{routes => supplyChainActorRoutes}
+import controllers.transport.supplyChainActors.{routes => supplyChainActorsRoutes}
 import forms.AddAnotherFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -47,7 +49,7 @@ class AddAnotherSupplyChainActorController @Inject() (
       val viewModel = viewModelProvider(request.userAnswers, mode)
       val form      = formProvider("transport.supplyChainActors.addAnotherSupplyChainActor", viewModel.allowMoreSupplyChainActors)
       viewModel.supplyChainActors match {
-        case 0 => Redirect(controllers.transport.supplyChainActors.routes.SupplyChainActorYesNoController.onPageLoad(request.userAnswers.lrn, mode))
+        case 0 => Redirect(supplyChainActorsRoutes.SupplyChainActorYesNoController.onPageLoad(lrn, mode))
         case _ => Ok(view(form, lrn, mode, viewModel, viewModel.allowMoreSupplyChainActors))
       }
   }
@@ -62,11 +64,9 @@ class AddAnotherSupplyChainActorController @Inject() (
           formWithErrors => BadRequest(view(formWithErrors, lrn, mode, viewModel, viewModel.allowMoreSupplyChainActors)),
           {
             case true =>
-              Redirect(
-                controllers.transport.supplyChainActors.index.routes.SupplyChainActorTypeController
-                  .onPageLoad(request.userAnswers.lrn, mode, Index(viewModel.supplyChainActors))
-              )
-            case false => Redirect(Call(GET, "#")) // TODO go to next section (authorisations nav)
+              Redirect(supplyChainActorRoutes.SupplyChainActorTypeController.onPageLoad(lrn, mode, Index(viewModel.supplyChainActors)))
+            case false =>
+              Redirect(Call(GET, "#")) // TODO go to next section (authorisations nav)
           }
         )
   }
