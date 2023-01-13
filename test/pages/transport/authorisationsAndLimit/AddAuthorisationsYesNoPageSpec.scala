@@ -17,7 +17,7 @@
 package pages.transport.authorisationsAndLimit
 
 import pages.behaviours.PageBehaviours
-import pages.sections.transport.authorisationsAndLimit.{AuthorisationsAndLimitSection, AuthorisationsSection}
+import pages.sections.transport.authorisationsAndLimit.AuthorisationsAndLimitSection
 import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import play.api.libs.json.Json
 
@@ -37,7 +37,7 @@ class AddAuthorisationsYesNoPageSpec extends PageBehaviours {
           val preChange  = emptyUserAnswers.setValue(AuthorisationsAndLimitSection, Json.obj("foo" -> "bar"))
           val postChange = preChange.setValue(AddAuthorisationsYesNoPage, false)
 
-          postChange.get(AuthorisationsSection) mustNot be(defined)
+          postChange.get(AuthorisationsAndLimitSection) mustNot be(defined)
         }
       }
 
@@ -46,7 +46,7 @@ class AddAuthorisationsYesNoPageSpec extends PageBehaviours {
           val preChange  = emptyUserAnswers.setValue(AuthorisationsAndLimitSection, Json.obj("foo" -> "bar"))
           val postChange = preChange.setValue(AddAuthorisationsYesNoPage, true)
 
-          postChange.get(AuthorisationsSection) must be(defined)
+          postChange.get(AuthorisationsAndLimitSection) must be(defined)
         }
       }
     }
