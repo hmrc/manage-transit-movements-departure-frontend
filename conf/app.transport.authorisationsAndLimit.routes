@@ -1,5 +1,5 @@
 ->         /                                                                                               app.transport.authorisationsAndLimit.authorisations.Routes
-->         /                                                                                               app.transport.authorisationsAndLimit.limitDate.Routes
+->         /                                                                                               app.transport.authorisationsAndLimit.limit.Routes
 
 GET        /:lrn/transport-details/authorisations/add                                   controllers.transport.authorisationsAndLimit.AddAuthorisationsYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/transport-details/authorisations/add                                   controllers.transport.authorisationsAndLimit.AddAuthorisationsYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)

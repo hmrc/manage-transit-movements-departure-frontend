@@ -16,7 +16,6 @@
 
 package views.utils
 
-import models.DateTime
 import play.api.data.{Field, Form, FormError}
 import play.api.i18n.Messages
 import play.twirl.api.Html
@@ -98,11 +97,6 @@ object ViewUtils {
 
     def withDateErrorMapping(form: Form[LocalDate], fieldName: String): ErrorSummary = {
       val args = Seq("day", "month", "year")
-      withErrorMapping(form, fieldName, args)
-    }
-
-    def withDateTimeErrorMapping(form: Form[DateTime], fieldName: String): ErrorSummary = {
-      val args = Seq("day", "month", "year", "hour", "minute")
       withErrorMapping(form, fieldName, args)
     }
   }

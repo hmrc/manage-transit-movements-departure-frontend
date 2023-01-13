@@ -37,21 +37,21 @@
         items = Seq(
             InputItem(
                 classes = s"govuk-input--width-2 ${errorClass(field.error, "day")}",
-                name = s"${field.id}.day",
+                name = s"${field.id}Day",
                 label = Some(messages("date.day.capitalized")),
                 value = field("day").value,
                 id = s"${field.id}_day"
             ),
             InputItem(
                 classes = s"govuk-input--width-2 ${errorClass(field.error, "month")}",
-                name = s"${field.id}.month",
+                name = s"${field.id}Month",
                 label = Some(messages("date.month.capitalized")),
                 value = field("month").value,
                 id = s"${field.id}_month"
             ),
             InputItem(
                 classes = s"govuk-input--width-4 ${errorClass(field.error, "year")}",
-                name = s"${field.id}.year",
+                name = s"${field.id}Year",
                 label = Some(messages("date.year.capitalized")),
                 value = field("year").value,
                 id = s"${field.id}_year"
