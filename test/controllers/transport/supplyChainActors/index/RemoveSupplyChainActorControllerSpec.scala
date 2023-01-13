@@ -26,7 +26,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, reset, verify, when}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.sections.transport.supplyChainActors
+import pages.sections.transport.supplyChainActors.SupplyChainActorSection
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.transport.supplyChainActors.index.RemoveSupplyChainActorView
@@ -81,7 +81,7 @@ class RemoveSupplyChainActorControllerSpec extends SpecBase with AppWithDefaultM
 
             val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
             verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
-            userAnswersCaptor.getValue.get(supplyChainActors.SupplyChainActorSection(index)) mustNot be(defined)
+            userAnswersCaptor.getValue.get(SupplyChainActorSection(index)) mustNot be(defined)
         }
       }
     }
