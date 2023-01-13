@@ -55,7 +55,7 @@ class LimitDateController @Inject() (
   private lazy val maxDateArg = maxDate.plusDays(1).formatForText
 
   private def form: Form[LocalDate] = {
-    val minDate = appConfig.limitDateMin
+    val minDate = dateTimeService.plusMinusDays(appConfig.limitDateDaysBefore)
     formProvider("transport.authorisationsAndLimit.limit.limitDate", minDate, maxDate)
   }
 

@@ -1355,5 +1355,5 @@ transport.authorisationsAndLimit.limit.limitDate.error.required.all = Enter the 
 transport.authorisationsAndLimit.limit.limitDate.error.required.two = The limit date must include a {0} and {1}
 transport.authorisationsAndLimit.limit.limitDate.error.required = The limit date must include a {0}
 transport.authorisationsAndLimit.limit.limitDate.error.invalid = Enter a real limit date
-transport.authorisationsAndLimit.limit.limitDate.error.min.date = The limit date must be after {0}
+transport.authorisationsAndLimit.limit.limitDate.error.min.date = The limit date must be today or in the future
 transport.authorisationsAndLimit.limit.limitDate.error.max.date = The limit date must be before {0}

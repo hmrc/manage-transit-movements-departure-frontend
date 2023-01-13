@@ -19,8 +19,6 @@ package config
 import com.google.inject.{Inject, Singleton}
 import play.api.Configuration
 
-import java.time.LocalDate
-
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
@@ -29,13 +27,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val etaDateDaysBefore: Int = configuration.get[Int]("dates.officeOfTransitETA.daysBefore")
   lazy val etaDateDaysAfter: Int  = configuration.get[Int]("dates.officeOfTransitETA.daysAfter")
 
-  lazy val limitDateDaysAfter: Int = configuration.get[Int]("dates.limitDate.daysAfter")
-
-  lazy val limitDateMin: LocalDate = LocalDate.of(
-    configuration.get[Int]("dates.limitDate.min.year"),
-    configuration.get[Int]("dates.limitDate.min.month"),
-    configuration.get[Int]("dates.limitDate.min.day")
-  )
+  lazy val limitDateDaysBefore: Int = configuration.get[Int]("dates.limitDate.daysBefore")
+  lazy val limitDateDaysAfter: Int  = configuration.get[Int]("dates.limitDate.daysAfter")
 
   lazy val nctsEnquiriesUrl: String = configuration.get[String]("urls.nctsEnquiries")
   lazy val nctsGuidanceUrl: String  = configuration.get[String]("urls.nctsGuidance")

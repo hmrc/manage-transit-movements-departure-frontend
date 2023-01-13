@@ -38,7 +38,7 @@ class LimitDateControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private val dateTimeService = injector.instanceOf[DateTimeService]
 
-  private val minDate    = frontendAppConfig.limitDateMin
+  private val minDate    = dateTimeService.plusMinusDays(frontendAppConfig.limitDateDaysBefore)
   private val maxDate    = dateTimeService.plusMinusDays(frontendAppConfig.limitDateDaysAfter)
   private val maxDateArg = maxDate.plusDays(1).formatForText
 
