@@ -16,10 +16,11 @@
 
 package utils.cyaHelpers.transport.authorisations
 
+import controllers.transport.authorisationsAndLimit.authorisations.index.routes
 import models.journeyDomain.transport.AuthorisationDomain
 import models.{Mode, UserAnswers}
-import pages.sections.transport.AuthorisationsSection
-import pages.transport.authorisation.index.AuthorisationTypePage
+import pages.sections.transport.authorisationsAndLimit.AuthorisationsSection
+import pages.transport.authorisationsAndLimit.authorisations.index.AuthorisationTypePage
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import utils.cyaHelpers.AnswersHelper
@@ -33,7 +34,7 @@ class AuthorisationsAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit
         val removeRoute: Option[Call] = if (userAnswers.get(AuthorisationTypePage(index)).isEmpty && index.isFirst) {
           None
         } else {
-          Some(controllers.transport.authorisations.index.routes.RemoveAuthorisationYesNoController.onPageLoad(lrn, mode, index))
+          Some(routes.RemoveAuthorisationYesNoController.onPageLoad(lrn, mode, index))
         }
 
         buildListItem[AuthorisationDomain](

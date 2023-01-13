@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, reset, verify, when}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
-import pages.sections.transport.TransportMeansActiveSection
+import pages.sections.transport.transportMeans.TransportMeansActiveSection
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.transport.transportMeans.active.ConfirmRemoveBorderTransportView

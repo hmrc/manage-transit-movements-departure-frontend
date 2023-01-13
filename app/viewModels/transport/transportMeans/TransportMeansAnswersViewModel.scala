@@ -19,7 +19,7 @@ package viewModels.transport.transportMeans
 import controllers.transport.transportMeans.active.routes
 import models.{Index, Mode, RichOptionalJsArray, UserAnswers}
 import pages.sections.routeDetails.transit.OfficesOfTransitSection
-import pages.sections.transport.TransportMeansActiveListSection
+import pages.sections.transport.transportMeans.TransportMeansActiveListSection
 import play.api.i18n.Messages
 import utils.cyaHelpers.transport.transportMeans.TransportMeansCheckYourAnswersHelper
 import utils.cyaHelpers.transport.transportMeans.active.ActiveBorderTransportAnswersHelper

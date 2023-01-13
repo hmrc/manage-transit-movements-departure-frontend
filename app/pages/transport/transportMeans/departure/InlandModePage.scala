@@ -21,7 +21,8 @@ import models.transport.transportMeans.departure.InlandMode
 import models.transport.transportMeans.departure.InlandMode.Mail
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.{TransportMeansActiveListSection, TransportMeansDepartureSection, TransportSection}
+import pages.sections.transport.TransportSection
+import pages.sections.transport.transportMeans.{TransportMeansActiveListSection, TransportMeansDepartureSection}
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

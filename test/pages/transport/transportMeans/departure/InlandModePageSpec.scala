@@ -20,7 +20,7 @@ import models.transport.transportMeans.departure.InlandMode
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.behaviours.PageBehaviours
-import pages.sections.transport.{TransportMeansActiveListSection, TransportMeansDepartureSection}
+import pages.sections.transport.transportMeans.{TransportMeansActiveListSection, TransportMeansDepartureSection}
 import play.api.libs.json.{JsArray, Json}
 
 class InlandModePageSpec extends PageBehaviours {

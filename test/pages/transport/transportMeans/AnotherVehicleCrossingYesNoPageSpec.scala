@@ -19,7 +19,7 @@ package pages.transport.transportMeans
 import models.transport.transportMeans.BorderModeOfTransport
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.sections.transport.TransportMeansActiveListSection
+import pages.sections.transport.transportMeans.TransportMeansActiveListSection
 import play.api.libs.json.{JsArray, Json}
 
 class AnotherVehicleCrossingYesNoPageSpec extends PageBehaviours {

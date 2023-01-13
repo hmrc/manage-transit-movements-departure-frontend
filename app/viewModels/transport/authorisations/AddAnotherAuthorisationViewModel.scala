@@ -17,6 +17,7 @@
 package viewModels.transport.authorisations
 
 import config.FrontendAppConfig
+import controllers.transport.authorisationsAndLimit.authorisations.routes
 import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
 import play.api.mvc.Call
@@ -58,7 +59,7 @@ object AddAnotherAuthorisationViewModel {
 
       new AddAnotherAuthorisationViewModel(
         listItems,
-        onSubmitCall = controllers.transport.authorisations.routes.AddAnotherAuthorisationController.onSubmit(userAnswers.lrn, mode)
+        onSubmitCall = routes.AddAnotherAuthorisationController.onSubmit(userAnswers.lrn, mode)
       )
     }
   }

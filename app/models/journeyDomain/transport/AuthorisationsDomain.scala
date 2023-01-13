@@ -19,13 +19,13 @@ package models.journeyDomain.transport
 import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{Index, Mode, RichJsArray, UserAnswers}
-import pages.sections.transport.AuthorisationsSection
+import pages.sections.transport.authorisationsAndLimit.AuthorisationsSection
 import play.api.mvc.Call
 
 case class AuthorisationsDomain(authorisationsDomain: Seq[AuthorisationDomain]) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
-    Some(controllers.transport.authorisations.routes.AddAnotherAuthorisationController.onPageLoad(userAnswers.lrn, mode))
+    Some(controllers.transport.authorisationsAndLimit.authorisations.routes.AddAnotherAuthorisationController.onPageLoad(userAnswers.lrn, mode))
 }
 
 object AuthorisationsDomain {

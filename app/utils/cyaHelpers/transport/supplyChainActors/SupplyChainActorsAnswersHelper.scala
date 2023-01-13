@@ -18,9 +18,9 @@ package utils.cyaHelpers.transport.supplyChainActors
 
 import models.journeyDomain.transport.SupplyChainActorDomain
 import models.{Mode, UserAnswers}
-import pages.sections.transport.SupplyChainActorListSection
 import pages.transport.supplyChainActors.index.SupplyChainActorTypePage
 import controllers.transport.supplyChainActors.index.routes
+import pages.sections.transport.supplyChainActors.SupplyChainActorListSection
 import play.api.i18n.Messages
 import utils.cyaHelpers.AnswersHelper
 import viewModels.ListItem

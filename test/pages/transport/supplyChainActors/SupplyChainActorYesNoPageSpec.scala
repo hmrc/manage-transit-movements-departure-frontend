@@ -18,7 +18,7 @@ package pages.transport.supplyChainActors
 
 import org.scalacheck.Arbitrary._
 import pages.behaviours.PageBehaviours
-import pages.sections.transport.SupplyChainActorListSection
+import pages.sections.transport.supplyChainActors.SupplyChainActorListSection
 import play.api.libs.json.{JsArray, Json}
 
 class SupplyChainActorYesNoPageSpec extends PageBehaviours {

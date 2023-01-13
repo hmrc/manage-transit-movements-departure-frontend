@@ -33,8 +33,8 @@ class DateFormProvider @Inject() extends Mappings {
         twoRequiredKey = s"$prefix.error.required.two",
         requiredKey = s"$prefix.error.required"
       ).verifying(
-        minDate(minimumDate, s"$prefix.error.min.date", minimumDate.formatAsString),
-        maxDate(maximumDate, s"$prefix.error.max.date", maximumDate.formatAsString)
+        minDate(minimumDate, s"$prefix.error.min.date", minimumDate.minusDays(1).formatAsString),
+        maxDate(maximumDate, s"$prefix.error.max.date", maximumDate.plusDays(1).formatAsString)
       )
     )
 }
