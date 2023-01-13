@@ -28,6 +28,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.DateTimeService
+import utils.Format.RichLocalDate
 import views.html.transport.authorisationsAndLimit.limit.LimitDateView
 
 import java.time.LocalDate
@@ -37,8 +38,9 @@ class LimitDateControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private val dateTimeService = injector.instanceOf[DateTimeService]
 
-  private val minDate = frontendAppConfig.limitDateMin
-  private val maxDate = dateTimeService.plusMinusDays(frontendAppConfig.limitDateDaysAfter)
+  private val minDate  = frontendAppConfig.limitDateMin
+  private val maxDate  = dateTimeService.plusMinusDays(frontendAppConfig.limitDateDaysAfter)
+  private val hintDate = maxDate.formatForHint
 
   private val formProvider        = new DateFormProvider()
   private val form                = formProvider("transport.authorisationsAndLimit.limit.limitDate", minDate, maxDate)
@@ -66,7 +68,7 @@ class LimitDateControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode)(request, messages).toString
+        view(form, lrn, mode, hintDate)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
@@ -91,7 +93,7 @@ class LimitDateControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
+        view(filledForm, lrn, mode, hintDate)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -130,7 +132,7 @@ class LimitDateControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
       val view = injector.instanceOf[LimitDateView]
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
+        view(filledForm, lrn, mode, hintDate)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

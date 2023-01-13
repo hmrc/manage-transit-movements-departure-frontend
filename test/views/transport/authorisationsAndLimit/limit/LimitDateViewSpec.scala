@@ -31,10 +31,12 @@ class LimitDateViewSpec extends DateInputViewBehaviours {
   private val minDate = arbitrary[LocalDate].sample.value
   private val maxDate = arbitrary[LocalDate].sample.value
 
+  private val hintDate = "15 08 2022"
+
   override def form: Form[LocalDate] = new DateFormProvider()(prefix, minDate, maxDate)
 
   override def applyView(form: Form[LocalDate]): HtmlFormat.Appendable =
-    injector.instanceOf[LimitDateView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[LimitDateView].apply(form, lrn, NormalMode, hintDate)(fakeRequest, messages)
 
   override val prefix: String = "transport.authorisationsAndLimit.limit.limitDate"
 
@@ -48,7 +50,7 @@ class LimitDateViewSpec extends DateInputViewBehaviours {
 
   behave like pageWithContent("p", "This has to be within the next 14 days.")
 
-  behave like pageWithHint("For example, 15 08 2022.")
+  behave like pageWithHint(s"For example, $hintDate.")
 
   behave like pageWithDateInput()
 

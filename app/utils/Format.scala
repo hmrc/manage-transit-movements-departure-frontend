@@ -27,6 +27,7 @@ object Format {
 
   implicit class RichLocalDate(localDate: LocalDate) {
     def formatAsString: String = localDate.format(DateTimeFormatter.ofPattern("d MMMM yyyy"))
+    def formatForHint: String  = localDate.format(DateTimeFormatter.ofPattern("dd MM yyyy"))
   }
 
   implicit class RichLocalDateTime(localDateTime: LocalDateTime) {

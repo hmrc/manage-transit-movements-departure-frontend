@@ -30,6 +30,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.DateTimeService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.Format.RichLocalDate
 import views.html.transport.authorisationsAndLimit.limit.LimitDateView
 
 import java.time.LocalDate
@@ -50,8 +51,11 @@ class LimitDateController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  private lazy val maxDate = dateTimeService.plusMinusDays(appConfig.limitDateDaysAfter)
+
+  private lazy val hintDate = maxDate.formatForHint
+
   private def form: Form[LocalDate] = {
-    val maxDate = dateTimeService.plusMinusDays(appConfig.limitDateDaysAfter)
     val minDate = appConfig.limitDateMin
     formProvider("transport.authorisationsAndLimit.limit.limitDate", minDate, maxDate)
   }
@@ -62,7 +66,7 @@ class LimitDateController @Inject() (
         case None        => form
         case Some(value) => form.fill(value)
       }
-      Ok(view(preparedForm, lrn, mode))
+      Ok(view(preparedForm, lrn, mode, hintDate))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
@@ -70,7 +74,7 @@ class LimitDateController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, hintDate))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
             LimitDatePage.writeToUserAnswers(value).writeToSession().navigate()
