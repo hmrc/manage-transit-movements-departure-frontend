@@ -26,7 +26,7 @@ import org.mockito.Mockito.{never, reset, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
-import pages.sections.transport.AuthorisationSection
+import pages.sections.transport.authorisationsAndLimit
 import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
 import play.api.data.Form
 import play.api.test.FakeRequest
@@ -93,7 +93,7 @@ class RemoveAuthorisationYesNoControllerSpec extends SpecBase with AppWithDefaul
 
         val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
-        userAnswersCaptor.getValue.get(AuthorisationSection(index)) mustNot be(defined)
+        userAnswersCaptor.getValue.get(authorisationsAndLimit.AuthorisationSection(index)) mustNot be(defined)
       }
     }
 

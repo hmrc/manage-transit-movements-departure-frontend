@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.sections
+package pages.sections.transport.authorisationsAndLimit
 
-import play.api.libs.json.JsPath
 import pages.QuestionPage
+import play.api.libs.json.{JsObject, JsPath}
 
-case object LimitSection extends QuestionPage[Nothing] {
+case object LimitSection extends QuestionPage[JsObject] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = AuthorisationsAndLimitSection.path \ toString
 
-  override def toString: String = "limitDate"
+  override def toString: String = "limit"
 }

@@ -20,7 +20,8 @@ import controllers.transport.transportMeans.routes
 import models.transport.transportMeans.BorderModeOfTransport
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.{TransportMeansActiveSection, TransportSection}
+import pages.sections.transport.TransportSection
+import pages.sections.transport.transportMeans.TransportMeansActiveSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

@@ -17,9 +17,9 @@
 package pages.transport.authorisationsAndLimit
 
 import pages.behaviours.PageBehaviours
-import pages.sections.transport.AuthorisationsSection
+import pages.sections.transport.authorisationsAndLimit.{AuthorisationsAndLimitSection, AuthorisationsSection}
 import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
-import play.api.libs.json.{JsArray, Json}
+import play.api.libs.json.Json
 
 class AddAuthorisationsYesNoPageSpec extends PageBehaviours {
 
@@ -34,7 +34,7 @@ class AddAuthorisationsYesNoPageSpec extends PageBehaviours {
     "cleanup" - {
       "when NO selected" - {
         "must clean up Authorisation section" in {
-          val preChange  = emptyUserAnswers.setValue(AuthorisationsSection, JsArray(Seq(Json.obj("foo" -> "bar"))))
+          val preChange  = emptyUserAnswers.setValue(AuthorisationsAndLimitSection, Json.obj("foo" -> "bar"))
           val postChange = preChange.setValue(AddAuthorisationsYesNoPage, false)
 
           postChange.get(AuthorisationsSection) mustNot be(defined)
@@ -43,7 +43,7 @@ class AddAuthorisationsYesNoPageSpec extends PageBehaviours {
 
       "when YES selected" - {
         "must do nothing" in {
-          val preChange  = emptyUserAnswers.setValue(AuthorisationsSection, JsArray(Seq(Json.obj("foo" -> "bar"))))
+          val preChange  = emptyUserAnswers.setValue(AuthorisationsAndLimitSection, Json.obj("foo" -> "bar"))
           val postChange = preChange.setValue(AddAuthorisationsYesNoPage, true)
 
           postChange.get(AuthorisationsSection) must be(defined)

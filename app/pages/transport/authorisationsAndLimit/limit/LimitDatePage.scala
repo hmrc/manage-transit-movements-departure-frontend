@@ -19,7 +19,7 @@ package pages.transport.authorisationsAndLimit.limit
 import controllers.transport.authorisationsAndLimit.limit.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.LimitSection
+import pages.sections.transport.authorisationsAndLimit.LimitSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

@@ -16,9 +16,11 @@
 
 package pages.transport.authorisationsAndLimit.authorisations
 
+import controllers.transport.authorisationsAndLimit.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.{AuthorisationsSection, TransportSection}
+import pages.sections.transport.TransportSection
+import pages.sections.transport.authorisationsAndLimit.AuthorisationsAndLimitSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
@@ -31,11 +33,11 @@ case object AddAuthorisationsYesNoPage extends QuestionPage[Boolean] {
   override def toString: String = "addAuthorisationsYesNo"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(controllers.transport.authorisationsAndLimit.routes.AddAuthorisationsYesNoController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.AddAuthorisationsYesNoController.onPageLoad(userAnswers.lrn, mode))
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) => userAnswers.remove(AuthorisationsSection)
+      case Some(false) => userAnswers.remove(AuthorisationsAndLimitSection)
       case _           => super.cleanup(value, userAnswers)
     }
 }

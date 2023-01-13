@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package pages.sections.transport
+package pages.sections.transport.transportMeans
 
-import models.Index
 import pages.sections.Section
-import play.api.libs.json.{JsObject, JsPath}
+import pages.sections.transport.TransportSection
+import play.api.libs.json.{JsArray, JsPath}
 
-case class AuthorisationSection(authorisationIndex: Index) extends Section[JsObject] {
+case object TransportMeansActiveListSection extends Section[JsArray] {
 
-  override def path: JsPath = AuthorisationsSection.path \ authorisationIndex.position
+  override def path: JsPath = TransportSection.path \ toString
 
+  override def toString: String = "transportMeansActiveList"
 }

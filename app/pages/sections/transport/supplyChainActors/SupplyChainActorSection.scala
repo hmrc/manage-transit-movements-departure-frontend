@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.sections.transport
+package pages.sections.transport.supplyChainActors
 
 import models.Index
 import pages.sections.Section
 import play.api.libs.json.{JsObject, JsPath}
 
-case class TransportMeansActiveSection(index: Index) extends Section[JsObject] {
+case class SupplyChainActorSection(index: Index) extends Section[JsObject] {
 
-  override def path: JsPath = TransportMeansActiveListSection.path \ index.position
+  override def path: JsPath = SupplyChainActorListSection.path \ index.position
 
 }

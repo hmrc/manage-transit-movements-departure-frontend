@@ -19,7 +19,8 @@ package pages.transport.transportMeans
 import controllers.transport.transportMeans.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.{TransportMeansActiveListSection, TransportSection}
+import pages.sections.transport.TransportSection
+import pages.sections.transport.transportMeans.TransportMeansActiveListSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

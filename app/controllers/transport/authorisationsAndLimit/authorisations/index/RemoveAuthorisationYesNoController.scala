@@ -17,12 +17,13 @@
 package controllers.transport.authorisationsAndLimit.authorisations.index
 
 import controllers.actions._
+import controllers.transport.authorisationsAndLimit.authorisations.{routes => authRoutes}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.requests.SpecificDataRequestProvider2
 import models.transport.authorisations.AuthorisationType
 import models.{Index, LocalReferenceNumber, Mode}
-import pages.sections.transport.AuthorisationSection
+import pages.sections.transport.authorisationsAndLimit.AuthorisationSection
 import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -30,7 +31,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.transport.authorisationsAndLimit.authorisations.index.RemoveAuthorisationYesNoView
-import controllers.transport.authorisationsAndLimit.authorisations.{routes => authRoutes}
+
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 

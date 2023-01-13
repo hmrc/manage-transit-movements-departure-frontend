@@ -19,7 +19,7 @@ package utils.cyaHelpers.transport.transportMeans.active
 import controllers.transport.transportMeans.active.routes
 import models.journeyDomain.transport.TransportMeansActiveDomain
 import models.{Mode, UserAnswers}
-import pages.sections.transport.TransportMeansActiveListSection
+import pages.sections.transport.transportMeans.TransportMeansActiveListSection
 import pages.transport.transportMeans.AnotherVehicleCrossingYesNoPage
 import pages.transport.transportMeans.active._
 import play.api.i18n.Messages

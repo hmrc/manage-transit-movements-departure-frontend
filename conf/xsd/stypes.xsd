@@ -1538,7 +1538,7 @@
     <xs:restriction base="DateType" />
   </xs:simpleType>
   <!--================================================================================-->
-  <!--===== limitDate                                                                 -->
+  <!--===== LimitDate                                                                 -->
   <!--================================================================================-->
   <xs:simpleType name="LimitDateContentType">
     <xs:annotation>

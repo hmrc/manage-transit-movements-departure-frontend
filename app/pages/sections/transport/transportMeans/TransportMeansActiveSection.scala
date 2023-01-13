@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.sections.transport
+package pages.sections.transport.transportMeans
 
+import models.Index
 import pages.sections.Section
-import play.api.libs.json.{JsArray, JsPath}
+import play.api.libs.json.{JsObject, JsPath}
 
-case object SupplyChainActorListSection extends Section[JsArray] {
+case class TransportMeansActiveSection(index: Index) extends Section[JsObject] {
 
-  override def path: JsPath = TransportSection.path \ toString
+  override def path: JsPath = TransportMeansActiveListSection.path \ index.position
 
-  override def toString: String = "supplyChainActorList"
 }

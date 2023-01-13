@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, reset, verify, when}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
-import pages.sections.transport.TransportMeansActiveSection
+import pages.sections.transport.transportMeans
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.transport.transportMeans.active.ConfirmRemoveBorderTransportView
@@ -75,7 +75,7 @@ class ConfirmRemoveBorderTransportControllerSpec extends SpecBase with AppWithDe
 
           val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
           verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
-          userAnswersCaptor.getValue.get(TransportMeansActiveSection(activeIndex)) mustNot be(defined)
+          userAnswersCaptor.getValue.get(transportMeans.TransportMeansActiveSection(activeIndex)) mustNot be(defined)
       }
     }
 

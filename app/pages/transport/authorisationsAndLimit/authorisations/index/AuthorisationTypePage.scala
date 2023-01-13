@@ -20,7 +20,7 @@ import controllers.transport.authorisationsAndLimit.authorisations.index.routes
 import models.transport.authorisations.AuthorisationType
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.AuthorisationSection
+import pages.sections.transport.authorisationsAndLimit.AuthorisationSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
@@ -31,7 +31,5 @@ case class AuthorisationTypePage(authorisationIndex: Index) extends QuestionPage
   override def toString: String = "authorisationType"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(
-      routes.AuthorisationTypeController.onPageLoad(userAnswers.lrn, mode, authorisationIndex)
-    )
+    Some(routes.AuthorisationTypeController.onPageLoad(userAnswers.lrn, mode, authorisationIndex))
 }

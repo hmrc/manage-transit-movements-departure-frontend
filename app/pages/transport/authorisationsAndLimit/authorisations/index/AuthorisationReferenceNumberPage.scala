@@ -16,21 +16,19 @@
 
 package pages.transport.authorisationsAndLimit.authorisations.index
 
+import controllers.transport.authorisationsAndLimit.authorisations.index.routes
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.AuthorisationSection
+import pages.sections.transport.authorisationsAndLimit
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case class AuthorisationReferenceNumberPage(authorisationIndex: Index) extends QuestionPage[String] {
 
-  override def path: JsPath = AuthorisationSection(authorisationIndex).path \ toString
+  override def path: JsPath = authorisationsAndLimit.AuthorisationSection(authorisationIndex).path \ toString
 
   override def toString: String = "authorisationReferenceNumber"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(
-      controllers.transport.authorisationsAndLimit.authorisations.index.routes.AuthorisationReferenceNumberController
-        .onPageLoad(userAnswers.lrn, mode, authorisationIndex)
-    )
+    Some(routes.AuthorisationReferenceNumberController.onPageLoad(userAnswers.lrn, mode, authorisationIndex))
 }

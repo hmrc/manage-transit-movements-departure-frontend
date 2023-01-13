@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.sections.transport
+package pages.sections.transport.authorisationsAndLimit
 
-import play.api.libs.json.{JsArray, JsPath}
 import pages.sections.Section
+import play.api.libs.json.{JsArray, JsPath}
 
 case object AuthorisationsSection extends Section[JsArray] {
 
-  override def path: JsPath = TransportSection.path \ toString
+  override def path: JsPath = AuthorisationsAndLimitSection.path \ toString
 
   override def toString: String = "authorisations"
 }

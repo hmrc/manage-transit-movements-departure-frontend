@@ -20,7 +20,7 @@ import controllers.transport.supplyChainActors.index.routes
 import models.transport.supplyChainActors.SupplyChainActorType
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.SupplyChainActorSection
+import pages.sections.transport.supplyChainActors.SupplyChainActorSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
