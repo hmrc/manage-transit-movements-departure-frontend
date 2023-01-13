@@ -21,6 +21,7 @@ import generators.{Generators, UserAnswersGenerator}
 import models.{CountryList, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -52,7 +53,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
   "Task List Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val sampleTasks = listWithMaxLength[Task]()(arbitraryTask).sample.value
+      val sampleTasks = arbitrary[List[Task]](arbitraryTasks(arbitraryTask)).sample.value
 
       when(mockViewModel.apply(any())(any(), any())).thenReturn(sampleTasks)
 

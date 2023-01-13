@@ -17,13 +17,14 @@
 package views.behaviours
 
 import generators.Generators
+import org.scalacheck.Arbitrary.arbitrary
 import viewModels.taskList.Task
 
 import scala.jdk.CollectionConverters._
 
 trait TaskListViewBehaviours extends ViewBehaviours with Generators {
 
-  lazy val tasks: Seq[Task] = listWithMaxLength[Task]()(arbitraryTask).sample.value
+  lazy val tasks: Seq[Task] = arbitrary[List[Task]](arbitraryTasks(arbitraryTask)).sample.value
 
   override val urlContainsLrn: Boolean = true
 

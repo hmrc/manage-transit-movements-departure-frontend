@@ -19,8 +19,10 @@ package controllers.transport.transportMeans.active
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
 import models.NormalMode
+import navigation.transport.TransportMeansActiveListNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -34,12 +36,13 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
   private lazy val mockViewModelProvider = mock[CheckYourAnswersViewModelProvider]
 
-  private lazy val checkYourAnswersRoute = routes.CheckYourAnswersController.onPageLoad(lrn, NormalMode, index).url
+  private val mode = NormalMode
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind[CheckYourAnswersViewModelProvider].toInstance(mockViewModelProvider))
+      .overrides(bind(classOf[TransportMeansActiveListNavigatorProvider]).toInstance(fakeTransportMeansActiveListNavigatorProvider))
 
   "CheckYourAnswers Controller" - {
 
@@ -47,12 +50,12 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val sampleSections = listWithMaxLength[Section]().sample.value
+      val sampleSections = arbitrary[List[Section]].sample.value
 
       when(mockViewModelProvider.apply(any(), any(), any())(any()))
         .thenReturn(CheckYourAnswersViewModel(sampleSections))
 
-      val request = FakeRequest(GET, checkYourAnswersRoute)
+      val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(lrn, mode, index).url)
       val result  = route(app, request).value
 
       val view = injector.instanceOf[CheckYourAnswersView]
@@ -60,7 +63,31 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(lrn, NormalMode, index, sampleSections)(request, messages).toString
+        view(lrn, mode, index, sampleSections)(request, messages).toString
+    }
+
+    "must redirect to Session Expired for a GET if no existing data is found" in {
+      setNoExistingUserAnswers()
+
+      val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(lrn, mode, index).url)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+    }
+
+    "must redirect to next page" in {
+      setExistingUserAnswers(emptyUserAnswers)
+
+      val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn, mode, index).url)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
     }
   }
 }
