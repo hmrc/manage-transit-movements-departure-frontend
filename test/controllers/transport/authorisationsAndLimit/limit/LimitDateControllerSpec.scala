@@ -40,7 +40,7 @@ class LimitDateControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private val minDate    = frontendAppConfig.limitDateMin
   private val maxDate    = dateTimeService.plusMinusDays(frontendAppConfig.limitDateDaysAfter)
-  private val maxDateArg = maxDate.formatForText
+  private val maxDateArg = maxDate.plusDays(1).formatForText
 
   private val formProvider        = new DateFormProvider()
   private val form                = formProvider("transport.authorisationsAndLimit.limit.limitDate", minDate, maxDate)

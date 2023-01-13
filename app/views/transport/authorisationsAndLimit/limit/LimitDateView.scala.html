@@ -41,7 +41,7 @@
         @errorSummary(form)
 
         @inputDate(
-            field = form("value"),
+            form = form,
             dateType = DateInputWithAdditionalHtml(
                 heading = messages("transport.authorisationsAndLimit.limit.limitDate.heading"),
                 caption = Some(messages("transport.authorisations.caption")),
