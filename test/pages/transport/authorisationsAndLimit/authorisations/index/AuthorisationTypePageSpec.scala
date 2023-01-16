@@ -18,6 +18,7 @@ package pages.transport.authorisationsAndLimit.authorisations.index
 
 import models.transport.authorisations.AuthorisationType
 import pages.behaviours.PageBehaviours
+import org.scalacheck.Arbitrary.arbitrary
 
 class AuthorisationTypePageSpec extends PageBehaviours {
 
@@ -28,5 +29,43 @@ class AuthorisationTypePageSpec extends PageBehaviours {
     beSettable[AuthorisationType](AuthorisationTypePage(index))
 
     beRemovable[AuthorisationType](AuthorisationTypePage(index))
+
+    "cleanup" - {
+      val referenceNumber = arbitrary[String].sample.value
+
+      "when answer changes" - {
+        "must remove Authorisation number" in {
+          forAll(arbitrary[AuthorisationType]) {
+            authorisationType =>
+              val userAnswers = emptyUserAnswers
+                .setValue(AuthorisationTypePage(authorisationIndex), authorisationType)
+                .setValue(AuthorisationReferenceNumberPage(authorisationIndex), referenceNumber)
+
+              forAll(arbitrary[AuthorisationType].retryUntil(_ != authorisationType)) {
+                differentAuthorisationType =>
+                  val result = userAnswers.setValue(AuthorisationTypePage(authorisationIndex), differentAuthorisationType)
+
+                  result.get(AuthorisationReferenceNumberPage(authorisationIndex)) must not be defined
+              }
+          }
+        }
+      }
+
+      "when answer has not changed" - {
+        "must not remove Authorisation reference number" in {
+          forAll(arbitrary[AuthorisationType]) {
+            authorisationType =>
+              val userAnswers = emptyUserAnswers
+                .setValue(AuthorisationTypePage(authorisationIndex), authorisationType)
+                .setValue(AuthorisationReferenceNumberPage(authorisationIndex), referenceNumber)
+
+              val result = userAnswers.setValue(AuthorisationTypePage(authorisationIndex), authorisationType)
+
+              result.get(AuthorisationReferenceNumberPage(authorisationIndex)) must be(defined)
+
+          }
+        }
+      }
+    }
   }
 }

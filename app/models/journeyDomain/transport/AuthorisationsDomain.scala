@@ -16,13 +16,15 @@
 
 package models.journeyDomain.transport
 
-import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
+import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{Index, Mode, RichJsArray, UserAnswers}
 import pages.sections.transport.authorisationsAndLimit.AuthorisationsSection
+import pages.traderDetails.consignment.ApprovedOperatorPage
+import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import play.api.mvc.Call
 
-case class AuthorisationsDomain(authorisationsDomain: Seq[AuthorisationDomain]) extends JourneyDomainModel {
+case class AuthorisationsDomain(authorisationsDomain: Option[Seq[AuthorisationDomain]]) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
     Some(controllers.transport.authorisationsAndLimit.authorisations.routes.AddAnotherAuthorisationController.onPageLoad(userAnswers.lrn, mode))
@@ -45,7 +47,13 @@ object AuthorisationsDomain {
           ).map(_.toSeq)
       }
 
-    UserAnswersReader[Seq[AuthorisationDomain]](authReader).map(AuthorisationsDomain(_))
+
+    ApprovedOperatorPage.reader.flatMap {
+      case true => UserAnswersReader[Seq[AuthorisationDomain]](authReader).map(x => AuthorisationsDomain(Some(x)))
+      case false => AddAuthorisationsYesNoPage.filterOptionalDependent(identity)(
+        UserAnswersReader[Seq[AuthorisationDomain]](authReader).map(x => AuthorisationsDomain(Some(x)))
+      )
+    }
 
   }
 

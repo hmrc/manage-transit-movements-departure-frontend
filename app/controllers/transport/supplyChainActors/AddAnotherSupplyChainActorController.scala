@@ -22,10 +22,10 @@ import controllers.transport.supplyChainActors.index.{routes => supplyChainActor
 import controllers.transport.supplyChainActors.{routes => supplyChainActorsRoutes}
 import forms.AddAnotherFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
+import navigation.transport.AuthorisationNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import uk.gov.hmrc.http.HttpVerbs.GET
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.transport.supplyChainActors.AddAnotherSupplyChainActorViewModel.AddAnotherSupplyChainActorViewModelProvider
 import views.html.transport.supplyChainActors.AddAnotherSupplyChainActorView
@@ -35,6 +35,7 @@ import javax.inject.Inject
 class AddAnotherSupplyChainActorController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
+  navigatorProvider: AuthorisationNavigatorProvider,
   actions: Actions,
   formProvider: AddAnotherFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -66,7 +67,7 @@ class AddAnotherSupplyChainActorController @Inject() (
             case true =>
               Redirect(supplyChainActorRoutes.SupplyChainActorTypeController.onPageLoad(lrn, mode, Index(viewModel.supplyChainActors)))
             case false =>
-              Redirect(Call(GET, "#")) // TODO go to next section (authorisations nav)
+              Redirect(navigatorProvider(mode, Index(0)).nextPage(request.userAnswers))
           }
         )
   }
