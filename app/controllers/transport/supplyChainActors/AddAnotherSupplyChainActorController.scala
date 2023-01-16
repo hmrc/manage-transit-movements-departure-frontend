@@ -22,7 +22,7 @@ import controllers.transport.supplyChainActors.index.{routes => supplyChainActor
 import controllers.transport.supplyChainActors.{routes => supplyChainActorsRoutes}
 import forms.AddAnotherFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.transport.AuthorisationNavigatorProvider
+import navigation.transport.TransportNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -35,7 +35,7 @@ import javax.inject.Inject
 class AddAnotherSupplyChainActorController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: AuthorisationNavigatorProvider,
+  navigatorProvider: TransportNavigatorProvider,
   actions: Actions,
   formProvider: AddAnotherFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -67,7 +67,7 @@ class AddAnotherSupplyChainActorController @Inject() (
             case true =>
               Redirect(supplyChainActorRoutes.SupplyChainActorTypeController.onPageLoad(lrn, mode, Index(viewModel.supplyChainActors)))
             case false =>
-              Redirect(navigatorProvider(mode, Index(0)).nextPage(request.userAnswers))
+              Redirect(navigatorProvider(mode).nextPage(request.userAnswers))
           }
         )
   }
