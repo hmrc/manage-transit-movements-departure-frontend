@@ -3,3 +3,8 @@ GET        /:lrn/transport-details/carrier/eori-tin                        contr
 POST       /:lrn/transport-details/carrier/eori-tin                        controllers.transport.carrierDetails.IdentificationNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/transport-details/carrier/change-eori-tin                 controllers.transport.carrierDetails.IdentificationNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/transport-details/carrier/change-eori-tin                 controllers.transport.carrierDetails.IdentificationNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/transport/carrierDetails/do-you-want-to-add-a-contact-for-the-carrier                        controllers.transport.carrierDetails.AddContactYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport/carrierDetails/do-you-want-to-add-a-contact-for-the-carrier                        controllers.transport.carrierDetails.AddContactYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport/carrierDetails/change-do-you-want-to-add-a-contact-for-the-carrier                 controllers.transport.carrierDetails.AddContactYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport/carrierDetails/change-do-you-want-to-add-a-contact-for-the-carrier                 controllers.transport.carrierDetails.AddContactYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
