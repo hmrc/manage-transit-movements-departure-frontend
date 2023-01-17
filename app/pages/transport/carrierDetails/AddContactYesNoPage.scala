@@ -19,7 +19,7 @@ package pages.transport.carrierDetails
 import controllers.transport.carrierDetails.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.CarrierDetailsSection
+import pages.sections.transport.carrierDetails.CarrierDetailsSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
