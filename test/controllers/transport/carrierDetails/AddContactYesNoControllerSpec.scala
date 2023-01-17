@@ -1,8 +1,25 @@
+/*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package controllers.transport.carrierDetails
 
-import base.{SpecBase, AppWithDefaultMockFixtures}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
 import models.NormalMode
+import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -17,9 +34,9 @@ import scala.concurrent.Future
 
 class AddContactYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
-  private val formProvider = new YesNoFormProvider()
-  private val form         = formProvider("transport.carrierDetails.addContactYesNo")
-  private val mode         = NormalMode
+  private val formProvider              = new YesNoFormProvider()
+  private val form                      = formProvider("transport.carrierDetails.addContactYesNo")
+  private val mode                      = NormalMode
   private lazy val addContactYesNoRoute = routes.AddContactYesNoController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
@@ -34,7 +51,7 @@ class AddContactYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixt
       setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, addContactYesNoRoute)
-      val result = route(app, request).value
+      val result  = route(app, request).value
 
       val view = injector.instanceOf[AddContactYesNoView]
 
@@ -70,7 +87,7 @@ class AddContactYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixt
       setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(POST, addContactYesNoRoute)
-      .withFormUrlEncodedBody(("value", "true"))
+        .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
 
@@ -83,7 +100,7 @@ class AddContactYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, addContactYesNoRoute).withFormUrlEncodedBody(("value", ""))
+      val request   = FakeRequest(POST, addContactYesNoRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
