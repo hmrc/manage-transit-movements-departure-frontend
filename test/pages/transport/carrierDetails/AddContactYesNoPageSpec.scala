@@ -17,6 +17,8 @@
 package pages.transport.carrierDetails
 
 import pages.behaviours.PageBehaviours
+import pages.sections.transport.carrierDetails.ContactSection
+import play.api.libs.json.Json
 
 class AddContactYesNoPageSpec extends PageBehaviours {
 
@@ -27,5 +29,27 @@ class AddContactYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](AddContactYesNoPage)
 
     beRemovable[Boolean](AddContactYesNoPage)
+
+    "cleanup" - {
+      "must remove contact details when no selected" in {
+        val userAnswers = emptyUserAnswers
+          .setValue(AddContactYesNoPage, true)
+          .setValue(ContactSection, Json.obj("foo" -> "bar"))
+
+        val result = userAnswers.setValue(AddContactYesNoPage, false)
+
+        result.get(ContactSection) must not be defined
+      }
+
+      "must keep contact details when yes selected" in {
+        val userAnswers = emptyUserAnswers
+          .setValue(AddContactYesNoPage, true)
+          .setValue(ContactSection, Json.obj("foo" -> "bar"))
+
+        val result = userAnswers.setValue(AddContactYesNoPage, true)
+
+        result.get(ContactSection) must be(defined)
+      }
+    }
   }
 }
