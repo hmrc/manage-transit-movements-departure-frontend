@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.transport.supplyChainActors.index
+package views.transport.carrierDetails
 
 import forms.EoriNumberFormProvider
 import models.NormalMode
@@ -23,28 +23,26 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.transport.supplyChainActors.index.IdentificationNumberView
+import views.html.transport.carrierDetails.IdentificationNumberView
 
 class IdentificationNumberViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "transport.supplyChainActors.index.identificationNumber"
-
-  private val validAnswer = "testString"
+  override val prefix: String = "transport.carrierDetails.identificationNumber"
 
   override def form: Form[String] = new EoriNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[IdentificationNumberView].apply(form, lrn, NormalMode, actorIndex, validAnswer)(fakeRequest, messages)
+    injector.instanceOf[IdentificationNumberView].apply(form, lrn, NormalMode)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 
-  behave like pageWithTitle(validAnswer)
+  behave like pageWithTitle()
 
   behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Transport details - Supply chain actor")
+  behave like pageWithSectionCaption("Transport details - Carrier")
 
-  behave like pageWithHeading(validAnswer)
+  behave like pageWithHeading()
 
   behave like pageWithHint("This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.")
 

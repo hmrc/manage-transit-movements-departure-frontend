@@ -18,7 +18,7 @@ package controllers.transport.supplyChainActors.index
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.transport.supplyChainActors.IdentificationNumberFormProvider
+import forms.EoriNumberFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.SupplyChainActorNavigatorProvider
@@ -36,7 +36,7 @@ class IdentificationNumberController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: SupplyChainActorNavigatorProvider,
-  formProvider: IdentificationNumberFormProvider,
+  formProvider: EoriNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   getMandatoryPage: SpecificDataRequiredActionProvider,

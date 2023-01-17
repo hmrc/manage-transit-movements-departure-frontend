@@ -18,6 +18,7 @@ package models.journeyDomain.transport
 
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
+import models.journeyDomain.transport.carrierDetails.CarrierDetailsDomain
 import pages.traderDetails.consignment.ApprovedOperatorPage
 import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import pages.transport.supplyChainActors.SupplyChainActorYesNoPage
@@ -26,14 +27,15 @@ case class TransportDomain(
   preRequisites: PreRequisitesDomain,
   transportMeans: TransportMeansDomain,
   supplyChainActors: Option[SupplyChainActorsDomain],
-  authorisationsAndLimit: Option[AuthorisationsAndLimitDomain]
+  authorisationsAndLimit: Option[AuthorisationsAndLimitDomain],
+  carrierDetails: CarrierDetailsDomain
 ) extends JourneyDomainModel
 
 object TransportDomain {
 
   implicit val userAnswersReader: UserAnswersReader[TransportDomain] = {
 
-    implicit val authorisationsAndLimitReads: UserAnswersReader[Option[AuthorisationsAndLimitDomain]] =
+    implicit lazy val authorisationsAndLimitReads: UserAnswersReader[Option[AuthorisationsAndLimitDomain]] =
       ApprovedOperatorPage.reader.flatMap {
         case true  => UserAnswersReader[AuthorisationsAndLimitDomain].map(Some(_))
         case false => AddAuthorisationsYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AuthorisationsAndLimitDomain])
@@ -44,7 +46,8 @@ object TransportDomain {
       transportMeans         <- UserAnswersReader[TransportMeansDomain]
       supplyChainActors      <- SupplyChainActorYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[SupplyChainActorsDomain])
       authorisationsAndLimit <- authorisationsAndLimitReads
-    } yield TransportDomain(preRequisites, transportMeans, supplyChainActors, authorisationsAndLimit)
+      carrierDetails         <- UserAnswersReader[CarrierDetailsDomain]
+    } yield TransportDomain(preRequisites, transportMeans, supplyChainActors, authorisationsAndLimit, carrierDetails)
   }
 
 }

@@ -252,19 +252,12 @@ trait UserAnswersEntryGenerators {
     }
   }
 
-  private def generateTransportAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.transport.supplyChainActors._
-
-    val pf: PartialFunction[Gettable[_], Gen[JsValue]] = {
-      case SupplyChainActorYesNoPage => arbitrary[Boolean].map(JsBoolean)
-    }
-
+  private def generateTransportAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
     generatePreRequisitesAnswer orElse
       generateTransportMeansAnswer orElse
-      generateSupplyChainActorAnswers orElse
-      pf orElse
-      generateAuthorisationAnswers
-  }
+      generateSupplyChainActorsAnswers orElse
+      generateAuthorisationAnswers orElse
+      generateCarrierDetailsAnswers
 
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.preRequisites._
@@ -310,6 +303,17 @@ trait UserAnswersEntryGenerators {
     }
   }
 
+  private def generateSupplyChainActorsAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.supplyChainActors._
+
+    val pf: PartialFunction[Gettable[_], Gen[JsValue]] = {
+      case SupplyChainActorYesNoPage => arbitrary[Boolean].map(JsBoolean)
+    }
+
+    pf orElse
+      generateSupplyChainActorAnswers
+  }
+
   private def generateSupplyChainActorAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.supplyChainActors.index._
     {
@@ -319,10 +323,21 @@ trait UserAnswersEntryGenerators {
   }
 
   private def generateAuthorisationAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
+    import pages.transport.authorisationsAndLimit.authorisations.index._
     {
       case AuthorisationTypePage(_)            => arbitrary[AuthorisationType].map(Json.toJson(_))
       case AuthorisationReferenceNumberPage(_) => Gen.alphaNumStr.map(JsString)
+    }
+  }
+
+  private def generateCarrierDetailsAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.carrierDetails._
+    import pages.transport.carrierDetails.contact._
+    {
+      case IdentificationNumberPage => Gen.alphaNumStr.map(JsString)
+      case AddContactYesNoPage      => arbitrary[Boolean].map(JsBoolean)
+      case NamePage                 => Gen.alphaNumStr.map(JsString)
+      case TelephoneNumberPage      => Gen.alphaNumStr.map(JsString)
     }
   }
 }

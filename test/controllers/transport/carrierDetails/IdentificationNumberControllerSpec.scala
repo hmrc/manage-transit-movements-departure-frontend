@@ -14,51 +14,40 @@
  * limitations under the License.
  */
 
-package controllers.transport.supplyChainActors.index
+package controllers.transport.carrierDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.EoriNumberFormProvider
-import generators.Generators
 import models.NormalMode
-import models.transport.supplyChainActors.SupplyChainActorType
-import navigation.transport.SupplyChainActorNavigatorProvider
+import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalacheck.Arbitrary.arbitrary
-import pages.transport.supplyChainActors.index.{IdentificationNumberPage, SupplyChainActorTypePage}
+import pages.transport.carrierDetails.IdentificationNumberPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.transport.supplyChainActors.index.IdentificationNumberView
+import views.html.transport.carrierDetails.IdentificationNumberView
 
 import scala.concurrent.Future
 
-class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private val formProvider                   = new EoriNumberFormProvider()
-  private val validAnswer                    = "testString"
-  private val form                           = formProvider("transport.supplyChainActors.index.identificationNumber")
+  private val form                           = formProvider("transport.carrierDetails.identificationNumber")
   private val mode                           = NormalMode
-  private lazy val identificationNumberRoute = routes.IdentificationNumberController.onPageLoad(lrn, mode, actorIndex).url
+  private lazy val identificationNumberRoute = routes.IdentificationNumberController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(
-        bind(classOf[SupplyChainActorNavigatorProvider]).toInstance(fakeSupplyChainActorNavigatorProvider)
-      )
+      .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
 
   "IdentificationNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val supplyChainActor = arbitrary[SupplyChainActorType].sample.value
-
-      val updatedUserAnswers = emptyUserAnswers
-        .setValue(SupplyChainActorTypePage(actorIndex), supplyChainActor)
-
-      setExistingUserAnswers(updatedUserAnswers)
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, identificationNumberRoute)
 
@@ -69,44 +58,36 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode, actorIndex, supplyChainActor.asString.toLowerCase)(request, messages).toString
+        view(form, lrn, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val supplyChainActor = arbitrary[SupplyChainActorType].sample.value
-
-      val updatedUserAnswers = emptyUserAnswers
-        .setValue(SupplyChainActorTypePage(actorIndex), supplyChainActor)
-        .setValue(IdentificationNumberPage(actorIndex), validAnswer)
-
-      setExistingUserAnswers(updatedUserAnswers)
+      val userAnswers = emptyUserAnswers.setValue(IdentificationNumberPage, "test string")
+      setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, identificationNumberRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> validAnswer))
+      val filledForm = form.bind(Map("value" -> "test string"))
 
       val view = injector.instanceOf[IdentificationNumberView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, actorIndex, supplyChainActor.asString.toLowerCase)(request, messages).toString
+        view(filledForm, lrn, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
-      val updatedUserAnswers = emptyUserAnswers
-        .setValue(SupplyChainActorTypePage(actorIndex), arbitrary[SupplyChainActorType].sample.value)
-
-      setExistingUserAnswers(updatedUserAnswers)
+      setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       val request = FakeRequest(POST, identificationNumberRoute)
-        .withFormUrlEncodedBody(("value", validAnswer))
+        .withFormUrlEncodedBody(("value", "test string"))
 
       val result = route(app, request).value
 
@@ -117,12 +98,7 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val supplyChainActor = arbitrary[SupplyChainActorType].sample.value
-
-      val updatedUserAnswers = emptyUserAnswers
-        .setValue(SupplyChainActorTypePage(actorIndex), supplyChainActor)
-
-      setExistingUserAnswers(updatedUserAnswers)
+      setExistingUserAnswers(emptyUserAnswers)
 
       val invalidAnswer = ""
 
@@ -136,7 +112,7 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
       val view = injector.instanceOf[IdentificationNumberView]
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, actorIndex, supplyChainActor.asString.toLowerCase)(request, messages).toString
+        view(filledForm, lrn, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

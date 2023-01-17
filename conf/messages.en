@@ -1276,7 +1276,7 @@ transport.supplyChainActors.index.identificationNumber.hint = This can be up to 
 transport.supplyChainActors.index.identificationNumber.checkYourAnswersLabel = What’s the EORI number or Trader Identification Number (TIN) for the {0}?
 transport.supplyChainActors.index.identificationNumber.error.required = Enter the EORI number or Trader Identification Number (TIN) for the supply chain actor
 transport.supplyChainActors.index.identificationNumber.error.length = The EORI number or Trader Identification Number (TIN) must be 17 characters or less
-transport.supplyChainActors.index.identificationNumber.error.invalidCharacter = The EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
+transport.supplyChainActors.index.identificationNumber.error.invalid = The EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
 
 transport.supplyChainActors.index.removeSupplyChainActor.title = Are you sure you want to remove this supply chain actor?
 transport.supplyChainActors.index.removeSupplyChainActor.heading = Are you sure you want to remove this supply chain actor?
@@ -1357,3 +1357,37 @@ transport.authorisationsAndLimit.limit.limitDate.error.required = The limit date
 transport.authorisationsAndLimit.limit.limitDate.error.invalid = Enter a real limit date
 transport.authorisationsAndLimit.limit.limitDate.error.min.date = The limit date must be today or in the future
 transport.authorisationsAndLimit.limit.limitDate.error.max.date = The limit date must be before {0}
+
+# Carrier details
+
+transport.carrierDetails.caption = Transport details - Carrier
+
+transport.carrierDetails.identificationNumber.title = What is the carrier’s EORI number or Trader Identification Number (TIN)?
+transport.carrierDetails.identificationNumber.heading = What is the carrier’s EORI number or Trader Identification Number (TIN)?
+transport.carrierDetails.identificationNumber.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
+transport.carrierDetails.identificationNumber.checkYourAnswersLabel = EORI number or Trader Identification Number
+transport.carrierDetails.identificationNumber.error.required = Enter the carrier’s EORI number or Trader Identification Number (TIN)
+transport.carrierDetails.identificationNumber.error.length = The EORI number or Trader Identification Number (TIN) must be 17 characters or less
+transport.carrierDetails.identificationNumber.error.invalid = The EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
+
+transport.carrierDetails.addContactYesNo.title = Do you want to add a contact for the carrier?
+transport.carrierDetails.addContactYesNo.heading = Do you want to add a contact for the carrier?
+transport.carrierDetails.addContactYesNo.checkYourAnswersLabel = Do you want to add a contact for the carrier?
+transport.carrierDetails.addContactYesNo.error.required = Select yes if you want to add a contact for the carrier
+
+transport.carrierDetails.contact.name.title = Who is the contact for the carrier?
+transport.carrierDetails.contact.name.heading = Who is the contact for the carrier?
+transport.carrierDetails.contact.name.checkYourAnswersLabel = Name
+transport.carrierDetails.contact.name.error.required = Enter the name of the contact for the carrier
+transport.carrierDetails.contact.name.error.length = The contact’s name must be 70 characters or less
+transport.carrierDetails.contact.name.error.invalid = The contact’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
+transport.carrierDetails.contact.telephoneNumber.title = What is the phone number for the carrier’s contact?
+transport.carrierDetails.contact.telephoneNumber.heading = What is {0}’s telephone number?
+transport.carrierDetails.contact.telephoneNumber.hint = Include the country code, for example +44 808 157 0192.
+transport.carrierDetails.contact.telephoneNumber.checkYourAnswersLabel = Telephone number
+transport.carrierDetails.contact.telephoneNumber.error.required = Enter {0}’s telephone number, including the country code
+transport.carrierDetails.contact.telephoneNumber.error.invalidCharacter = {0}’s telephone number must only include numbers 0 to 9 and a plus sign
+transport.carrierDetails.contact.telephoneNumber.error.invalidFormat = Enter {0}’s telephone number in the right format
+transport.carrierDetails.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less.
+transport.carrierDetails.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more.
