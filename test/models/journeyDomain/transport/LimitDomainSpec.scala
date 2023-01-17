@@ -17,12 +17,8 @@
 package models.journeyDomain.transport
 
 import base.SpecBase
-import forms.Constants.maxAuthorisationRefNumberLength
 import generators.Generators
 import models.domain.{EitherType, UserAnswersReader}
-import models.transport.authorisations.AuthorisationType
-import org.scalacheck.Gen
-import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
 import pages.transport.authorisationsAndLimit.limit.LimitDatePage
 
 import java.time.LocalDate
@@ -31,17 +27,13 @@ class LimitDomainSpec extends SpecBase with Generators {
 
   "LimitDomainSpec" - {
 
-    val authType      = AuthorisationType.ACR
-    val authRefNumber = Gen.alphaNumStr.sample.value.take(maxAuthorisationRefNumberLength)
-    val date          = LocalDate.now
+    val date = LocalDate.now
 
     "can be parsed from UserAnswers" - {
 
-      "when authorisation type is ACR" - {
+      "when limit date is provided" in {
 
         val userAnswers = emptyUserAnswers
-          .setValue(AuthorisationTypePage(authorisationIndex), authType)
-          .setValue(AuthorisationReferenceNumberPage(authorisationIndex), authRefNumber)
           .setValue(LimitDatePage, date)
 
         val expectedResult = LimitDomain(
@@ -52,7 +44,18 @@ class LimitDomainSpec extends SpecBase with Generators {
           .run(userAnswers)
 
         result.value mustBe expectedResult
+      }
 
+    }
+
+    "can not be parsed from UserAnswers" - {
+
+      "when limit date is not provided" in {
+
+        val result: EitherType[LimitDomain] = UserAnswersReader[LimitDomain](LimitDomain.userAnswersReader)
+          .run(emptyUserAnswers)
+
+        result.left.value.page mustBe LimitDatePage
       }
 
     }

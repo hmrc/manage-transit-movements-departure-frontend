@@ -97,3 +97,7 @@ class FakeSupplyChainActorNavigator(desiredRoute: Call, mode: Mode, index: Index
 class FakeAuthorisationNavigator(desiredRoute: Call, mode: Mode, index: Index) extends AuthorisationNavigator(mode, index) {
   override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
+
+class FakeAuthorisationsAndLimitNavigator(desiredRoute: Call, mode: Mode) extends AuthorisationsAndLimitNavigator(mode) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
+}

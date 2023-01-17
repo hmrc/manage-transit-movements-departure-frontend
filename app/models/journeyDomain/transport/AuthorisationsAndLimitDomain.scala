@@ -26,7 +26,7 @@ case class AuthorisationsAndLimitDomain(authorisationsDomain: AuthorisationsDoma
 object AuthorisationsAndLimitDomain {
 
   def limitReader(authDomain: AuthorisationsDomain): UserAnswersReader[Option[LimitDomain]] =
-    authDomain.authorisationsDomain.exists(_.authorisationType == AuthorisationType.ACR) match {
+    authDomain.authorisations.exists(_.authorisationType == AuthorisationType.ACR) match {
       case true  => UserAnswersReader[LimitDomain].map(Some(_))
       case false => none[LimitDomain].pure[UserAnswersReader]
     }

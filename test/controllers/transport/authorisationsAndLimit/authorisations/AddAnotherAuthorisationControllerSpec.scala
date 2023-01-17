@@ -20,6 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.AddAnotherFormProvider
 import generators.Generators
 import models.{Index, NormalMode}
+import navigation.transport.AuthorisationsAndLimitNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -27,7 +28,6 @@ import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpVerbs.GET
@@ -51,6 +51,7 @@ class AddAnotherAuthorisationControllerSpec extends SpecBase with AppWithDefault
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[AddAnotherAuthorisationViewModelProvider]).toInstance(mockViewModelProvider))
+      .overrides(bind(classOf[AuthorisationsAndLimitNavigatorProvider]).toInstance(fakeAuthorisationsAndLimitNavigatorProvider))
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -72,7 +73,7 @@ class AddAnotherAuthorisationControllerSpec extends SpecBase with AppWithDefault
     "onPageLoad" - {
 
       "when no authorisations" - {
-        "must redirect to AddAuthorisationYesNoController" ignore {
+        "must redirect to AddAuthorisationYesNoController" in {
           when(mockViewModelProvider.apply(any(), any())(any()))
             .thenReturn(viewModelWithNoItems)
 
@@ -84,8 +85,7 @@ class AddAnotherAuthorisationControllerSpec extends SpecBase with AppWithDefault
 
           status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual
-            Call(GET, "#") //TODO: Replace with AddAuthorisationYesNoController when created
+          redirectLocation(result).value mustEqual onwardRoute.url
         }
       }
 
@@ -151,8 +151,7 @@ class AddAnotherAuthorisationControllerSpec extends SpecBase with AppWithDefault
     "onSubmit" - {
 
       "when max number of authorisations" - {
-        // TODO link to next journey (carrier details)
-        "must redirect to carrier details" ignore {
+        "must redirect to carrier details" in {
 
           when(mockViewModelProvider.apply(any(), any())(any()))
             .thenReturn(viewModelWithItemsMaxedOut)
@@ -166,7 +165,7 @@ class AddAnotherAuthorisationControllerSpec extends SpecBase with AppWithDefault
 
           status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual ???
+          redirectLocation(result).value mustEqual onwardRoute.url
 
         }
       }
@@ -195,8 +194,7 @@ class AddAnotherAuthorisationControllerSpec extends SpecBase with AppWithDefault
           }
         }
         "and user selects No" - {
-          // TODO link to next journey (carrier details)
-          "must redirect to carrier details section" ignore {
+          "must redirect to carrier details section" in {
 
             when(mockViewModelProvider.apply(any(), any())(any()))
               .thenReturn(viewModelWithItemsNotMaxedOut)
@@ -210,7 +208,7 @@ class AddAnotherAuthorisationControllerSpec extends SpecBase with AppWithDefault
 
             status(result) mustEqual SEE_OTHER
 
-            redirectLocation(result).value mustEqual ???
+            redirectLocation(result).value mustEqual onwardRoute.url
 
           }
         }
