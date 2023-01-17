@@ -20,6 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.AddAnotherFormProvider
 import generators.Generators
 import models.{Index, NormalMode}
+import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -48,6 +49,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
+      .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
       .overrides(bind(classOf[AddAnotherSupplyChainActorViewModelProvider]).toInstance(mockViewModelProvider))
 
   override def beforeEach(): Unit = {
@@ -149,8 +151,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
     "onSubmit" - {
 
       "when max number of supply chain actors" - {
-        // TODO link to next journey (authorisations)
-        "must redirect to authorisations section" ignore {
+        "must redirect to authorisations section" in {
 
           when(mockViewModelProvider.apply(any(), any())(any()))
             .thenReturn(viewModelWithItemsMaxedOut)
@@ -164,14 +165,14 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
 
           status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual ???
+          redirectLocation(result).value mustEqual onwardRoute.url
 
         }
       }
 
       "when less than max number of supply chain actors" - {
         "and user selects Yes" - {
-          "must redirect to suppy chain actor type with next index" in {
+          "must redirect to supply chain actor type with next index" in {
 
             when(mockViewModelProvider.apply(any(), any())(any()))
               .thenReturn(viewModelWithItemsNotMaxedOut)
@@ -192,9 +193,9 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
 
           }
         }
+
         "and user selects No" - {
-          // TODO link to next journey (authorisations)
-          "must redirect to authorisations section" ignore {
+          "must redirect to authorisations section" in {
 
             when(mockViewModelProvider.apply(any(), any())(any()))
               .thenReturn(viewModelWithItemsNotMaxedOut)
@@ -208,7 +209,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
 
             status(result) mustEqual SEE_OTHER
 
-            redirectLocation(result).value mustEqual ???
+            redirectLocation(result).value mustEqual onwardRoute.url
 
           }
         }

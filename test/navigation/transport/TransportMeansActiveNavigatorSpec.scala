@@ -66,7 +66,7 @@ class TransportMeansActiveNavigatorSpec extends SpecBase with ScalaCheckProperty
 
         "when answers complete" - {
           "must redirect to transport means check your answers" in {
-            forAll(arbitraryTransportAnswers(emptyUserAnswers)) {
+            forAll(arbitraryTransportMeansAnswers(emptyUserAnswers)) {
               answers =>
                 navigator
                   .nextPage(answers)

@@ -93,3 +93,7 @@ class FakeTransportMeansActiveListNavigator(desiredRoute: Call, mode: Mode) exte
 class FakeSupplyChainActorNavigator(desiredRoute: Call, mode: Mode, index: Index) extends SupplyChainActorNavigator(mode, index) {
   override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
+
+class FakeAuthorisationNavigator(desiredRoute: Call, mode: Mode, index: Index) extends AuthorisationNavigator(mode, index) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
+}

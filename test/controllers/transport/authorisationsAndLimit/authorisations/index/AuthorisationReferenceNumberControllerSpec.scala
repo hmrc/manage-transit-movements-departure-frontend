@@ -22,7 +22,7 @@ import models.ProcedureType.{Normal, Simplified}
 import models.transport.authorisations.AuthorisationType
 import models.transport.transportMeans.departure.InlandMode
 import models.{Index, NormalMode}
-import navigation.transport.TransportMeansNavigatorProvider
+import navigation.transport.AuthorisationNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Gen
@@ -63,7 +63,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[TransportMeansNavigatorProvider]).toInstance(fakeTransportMeansNavigatorProvider))
+      .overrides(bind(classOf[AuthorisationNavigatorProvider]).toInstance(fakeAuthorisationNavigatorProvider))
 
   "AuthorisationReferenceNumber Controller" - {
 

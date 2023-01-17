@@ -46,7 +46,5 @@ object AuthorisationsDomain {
       }
 
     UserAnswersReader[Seq[AuthorisationDomain]](authReader).map(AuthorisationsDomain(_))
-
   }
-
 }
