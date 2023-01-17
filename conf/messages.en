@@ -1376,3 +1376,9 @@ transport.carrierDetails.contact.name.checkYourAnswersLabel = Name
 transport.carrierDetails.contact.name.error.required = Enter the name of the contact for the carrier
 transport.carrierDetails.contact.name.error.length = The contact’s name must be 70 characters or less
 transport.carrierDetails.contact.name.error.invalid = The contact’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
+transport.carrierDetails.contact.telephoneNumber.title = Telephone Number
+transport.carrierDetails.contact.telephoneNumber.heading = Telephone Number
+transport.carrierDetails.contact.telephoneNumber.checkYourAnswersLabel = Telephone Number
+transport.carrierDetails.contact.telephoneNumber.error.required = Enter Telephone Number
+transport.carrierDetails.contact.telephoneNumber.error.length = Telephone Number must be 100 characters or less
