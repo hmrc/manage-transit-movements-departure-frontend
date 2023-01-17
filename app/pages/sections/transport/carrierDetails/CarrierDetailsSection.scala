@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package pages.sections.transport
+package pages.sections.transport.carrierDetails
 
 import pages.sections.Section
+import pages.sections.transport.TransportSection
 import play.api.libs.json.{JsObject, JsPath}
 
 case object CarrierDetailsSection extends Section[JsObject] {

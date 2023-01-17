@@ -1369,3 +1369,9 @@ transport.carrierDetails.identificationNumber.checkYourAnswersLabel = EORI numbe
 transport.carrierDetails.identificationNumber.error.required = Enter the carrier’s EORI number or Trader Identification Number (TIN)
 transport.carrierDetails.identificationNumber.error.length = The EORI number or Trader Identification Number (TIN) must be 17 characters or less
 transport.carrierDetails.identificationNumber.error.invalid = The EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
+
+transport.carrierDetails.contact.name.title = Name
+transport.carrierDetails.contact.name.heading = Name
+transport.carrierDetails.contact.name.checkYourAnswersLabel = Name
+transport.carrierDetails.contact.name.error.required = Enter Name
+transport.carrierDetails.contact.name.error.length = Name must be 100 characters or less
