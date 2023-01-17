@@ -44,4 +44,7 @@ trait TransportUserAnswersGenerator {
   def arbitraryAuthorisationAnswers(userAnswers: UserAnswers, index: Index): Gen[UserAnswers] =
     buildUserAnswers[AuthorisationDomain](userAnswers)(AuthorisationDomain.userAnswersReader(index))
 
+  def arbitraryLimitAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[LimitDomain](userAnswers)
+
 }
