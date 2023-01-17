@@ -1357,3 +1357,9 @@ transport.authorisationsAndLimit.limit.limitDate.error.required = The limit date
 transport.authorisationsAndLimit.limit.limitDate.error.invalid = Enter a real limit date
 transport.authorisationsAndLimit.limit.limitDate.error.min.date = The limit date must be today or in the future
 transport.authorisationsAndLimit.limit.limitDate.error.max.date = The limit date must be before {0}
+
+transport.carrierDetails.identificationNumber.title = Identification Number
+transport.carrierDetails.identificationNumber.heading = Identification Number
+transport.carrierDetails.identificationNumber.checkYourAnswersLabel = Identification Number
+transport.carrierDetails.identificationNumber.error.required = Enter Identification Number
+transport.carrierDetails.identificationNumber.error.length = Identification Number must be 100 characters or less
