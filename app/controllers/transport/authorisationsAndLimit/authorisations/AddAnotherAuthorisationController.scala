@@ -21,6 +21,7 @@ import controllers.actions._
 import controllers.transport.authorisationsAndLimit.authorisations.index.{routes => authorisationRoutes}
 import forms.AddAnotherFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
+import navigation.transport.{AuthorisationNavigator, AuthorisationNavigatorProvider, TransportNavigatorProvider}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -34,6 +35,8 @@ import javax.inject.Inject
 class AddAnotherAuthorisationController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
+  navigatorProvider: TransportNavigatorProvider,
+  authNavigatorProvider: AuthorisationNavigatorProvider,
   actions: Actions,
   formProvider: AddAnotherFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -48,7 +51,7 @@ class AddAnotherAuthorisationController @Inject() (
       val viewModel = viewModelProvider(request.userAnswers, mode)
       val form      = formProvider("transport.authorisations.addAnotherAuthorisation", viewModel.allowMoreAuthorisations)
       viewModel.authorisations match {
-        case 0 => Redirect(Call(GET, "#")) //TODO: Replace with Add Authorisation page when created
+        case 0 => Redirect(authNavigatorProvider(mode, Index(0)).nextPage(request.userAnswers))
         case _ => Ok(view(form, lrn, mode, viewModel, viewModel.allowMoreAuthorisations))
       }
   }
@@ -65,7 +68,7 @@ class AddAnotherAuthorisationController @Inject() (
             case true =>
               Redirect(authorisationRoutes.AuthorisationTypeController.onPageLoad(lrn, mode, Index(viewModel.authorisations)))
             case false =>
-              Redirect(Call(GET, "#")) // TODO go to next section (authorisations nav)
+              Redirect(navigatorProvider(mode).nextPage(request.userAnswers))
           }
         )
   }
