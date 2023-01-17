@@ -8,3 +8,8 @@ GET        /:lrn/transport-details/carrier/add-contact                     contr
 POST       /:lrn/transport-details/carrier/add-contact                     controllers.transport.carrierDetails.AddContactYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/transport-details/carrier/change-add-contact              controllers.transport.carrierDetails.AddContactYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/transport-details/carrier/change-add-contact              controllers.transport.carrierDetails.AddContactYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/transport-details/carrier/contact-name                    controllers.transport.carrierDetails.contact.NameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport-details/carrier/contact-name                    controllers.transport.carrierDetails.contact.NameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport-details/carrier/change-contact-name             controllers.transport.carrierDetails.contact.NameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport-details/carrier/change-contact-name             controllers.transport.carrierDetails.contact.NameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

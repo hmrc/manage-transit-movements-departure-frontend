@@ -1374,3 +1374,10 @@ transport.carrierDetails.addContactYesNo.title = Do you want to add a contact fo
 transport.carrierDetails.addContactYesNo.heading = Do you want to add a contact for the carrier?
 transport.carrierDetails.addContactYesNo.checkYourAnswersLabel = Do you want to add a contact for the carrier?
 transport.carrierDetails.addContactYesNo.error.required = Select yes if you want to add a contact for the carrier
+
+transport.carrierDetails.contact.name.title = Who is the contact for the carrier?
+transport.carrierDetails.contact.name.heading = Who is the contact for the carrier?
+transport.carrierDetails.contact.name.checkYourAnswersLabel = Name
+transport.carrierDetails.contact.name.error.required = Enter the name of the contact for the carrier
+transport.carrierDetails.contact.name.error.length = The contact’s name must be 70 characters or less
+transport.carrierDetails.contact.name.error.invalid = The contact’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
