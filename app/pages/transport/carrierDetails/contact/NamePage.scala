@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package pages.transport.carrierDetails
+package pages.transport.carrierDetails.contact
 
-import controllers.transport.carrierDetails.routes
+import controllers.transport.carrierDetails.contact.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.carrierDetails.CarrierDetailsSection
+import pages.sections.transport.carrierDetails.ContactSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object IdentificationNumberPage extends QuestionPage[String] {
+case object NamePage extends QuestionPage[String] {
 
-  override def path: JsPath = CarrierDetailsSection.path \ toString
+  override def path: JsPath = ContactSection.path \ toString
 
-  override def toString: String = "identificationNumber"
+  override def toString: String = "name"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.IdentificationNumberController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.NameController.onPageLoad(userAnswers.lrn, mode))
 }
