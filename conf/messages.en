@@ -1276,7 +1276,7 @@ transport.supplyChainActors.index.identificationNumber.hint = This can be up to 
 transport.supplyChainActors.index.identificationNumber.checkYourAnswersLabel = What’s the EORI number or Trader Identification Number (TIN) for the {0}?
 transport.supplyChainActors.index.identificationNumber.error.required = Enter the EORI number or Trader Identification Number (TIN) for the supply chain actor
 transport.supplyChainActors.index.identificationNumber.error.length = The EORI number or Trader Identification Number (TIN) must be 17 characters or less
-transport.supplyChainActors.index.identificationNumber.error.invalidCharacter = The EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
+transport.supplyChainActors.index.identificationNumber.error.invalid = The EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
 
 transport.supplyChainActors.index.removeSupplyChainActor.title = Are you sure you want to remove this supply chain actor?
 transport.supplyChainActors.index.removeSupplyChainActor.heading = Are you sure you want to remove this supply chain actor?
@@ -1358,8 +1358,14 @@ transport.authorisationsAndLimit.limit.limitDate.error.invalid = Enter a real li
 transport.authorisationsAndLimit.limit.limitDate.error.min.date = The limit date must be today or in the future
 transport.authorisationsAndLimit.limit.limitDate.error.max.date = The limit date must be before {0}
 
-transport.carrierDetails.identificationNumber.title = Identification Number
-transport.carrierDetails.identificationNumber.heading = Identification Number
-transport.carrierDetails.identificationNumber.checkYourAnswersLabel = Identification Number
-transport.carrierDetails.identificationNumber.error.required = Enter Identification Number
-transport.carrierDetails.identificationNumber.error.length = Identification Number must be 100 characters or less
+# Carrier details
+
+transport.carrierDetails.caption = Transport details - Carrier
+
+transport.carrierDetails.identificationNumber.title = What is the carrier’s EORI number or Trader Identification Number (TIN)?
+transport.carrierDetails.identificationNumber.heading = What is the carrier’s EORI number or Trader Identification Number (TIN)?
+transport.carrierDetails.identificationNumber.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
+transport.carrierDetails.identificationNumber.checkYourAnswersLabel = EORI number or Trader Identification Number
+transport.carrierDetails.identificationNumber.error.required = Enter the carrier’s EORI number or Trader Identification Number (TIN)
+transport.carrierDetails.identificationNumber.error.length = The EORI number or Trader Identification Number (TIN) must be 17 characters or less
+transport.carrierDetails.identificationNumber.error.invalid = The EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9

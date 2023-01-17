@@ -16,7 +16,7 @@
 
 package views.transport.supplyChainActors.index
 
-import forms.transport.supplyChainActors.IdentificationNumberFormProvider
+import forms.EoriNumberFormProvider
 import models.NormalMode
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
@@ -31,7 +31,7 @@ class IdentificationNumberViewSpec extends InputTextViewBehaviours[String] {
 
   private val validAnswer = "testString"
 
-  override def form: Form[String] = new IdentificationNumberFormProvider()(prefix)
+  override def form: Form[String] = new EoriNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
     injector.instanceOf[IdentificationNumberView].apply(form, lrn, NormalMode, actorIndex, validAnswer)(fakeRequest, messages)

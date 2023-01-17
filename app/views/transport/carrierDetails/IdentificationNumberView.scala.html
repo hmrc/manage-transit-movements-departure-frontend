@@ -42,9 +42,11 @@
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages("transport.carrierDetails.identificationNumber.heading")
+                heading = messages("transport.carrierDetails.identificationNumber.heading"),
+                caption = Some(messages("transport.carrierDetails.caption"))
             ),
-            inputClass = InputSize.Width20
+            inputClass = InputSize.Width20,
+            hint = Some(messages("transport.carrierDetails.identificationNumber.hint"))
         )
 
         @button(attributes = Map("id" -> "submit"))

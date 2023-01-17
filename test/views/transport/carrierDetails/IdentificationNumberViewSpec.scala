@@ -40,9 +40,11 @@ class IdentificationNumberViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink()
 
+  behave like pageWithSectionCaption("Transport details - Carrier")
+
   behave like pageWithHeading()
 
-  behave like pageWithoutHint()
+  behave like pageWithHint("This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 
