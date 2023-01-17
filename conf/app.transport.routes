@@ -4,6 +4,7 @@
 ->         /                                                                                               app.transport.transportMeans.active.Routes
 ->         /                                                                                               app.transport.supplyChainActors.Routes
 ->         /                                                                                               app.transport.authorisationsAndLimit.Routes
+->         /                                                                                               app.transport.carrierDetails.Routes
 
 
 GET        /:lrn/transport-details/border-mode-of-transport/add                                            controllers.transport.transportMeans.AnotherVehicleCrossingYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
