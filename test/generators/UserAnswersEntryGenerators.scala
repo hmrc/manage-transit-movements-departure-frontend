@@ -28,6 +28,8 @@ import org.scalacheck.Gen
 import play.api.libs.json._
 import queries.Gettable
 
+import java.time.LocalDate
+
 trait UserAnswersEntryGenerators {
   self: Generators =>
 
@@ -257,6 +259,7 @@ trait UserAnswersEntryGenerators {
       generateTransportMeansAnswer orElse
       generateSupplyChainActorsAnswers orElse
       generateAuthorisationAnswers orElse
+      generateLimitAnswers orElse
       generateCarrierDetailsAnswers
 
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
@@ -327,6 +330,13 @@ trait UserAnswersEntryGenerators {
     {
       case AuthorisationTypePage(_)            => arbitrary[AuthorisationType].map(Json.toJson(_))
       case AuthorisationReferenceNumberPage(_) => Gen.alphaNumStr.map(JsString)
+    }
+  }
+
+  private def generateLimitAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.authorisationsAndLimit.limit.LimitDatePage
+    {
+      case LimitDatePage => arbitrary[LocalDate].map(Json.toJson(_))
     }
   }
 

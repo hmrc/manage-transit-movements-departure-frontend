@@ -151,6 +151,9 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
   protected val fakeAuthorisationNavigatorProvider: AuthorisationNavigatorProvider =
     (mode: Mode, index: Index) => new FakeAuthorisationNavigator(onwardRoute, mode, index)
 
+  protected val fakeAuthorisationsAndLimitNavigatorProvider: AuthorisationsAndLimitNavigatorProvider =
+    (mode: Mode) => new FakeAuthorisationsAndLimitNavigator(onwardRoute, mode)
+
   def guiceApplicationBuilder(): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .overrides(

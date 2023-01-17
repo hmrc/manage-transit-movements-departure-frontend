@@ -124,7 +124,7 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
                   Right(
                     ListItem(
                       name = s"$authorisationType - $referenceNumber",
-                      changeUrl = controllers.transport.authorisationsAndLimit.authorisations.index.routes.AuthorisationTypeController
+                      changeUrl = controllers.transport.authorisationsAndLimit.authorisations.index.routes.AuthorisationReferenceNumberController
                         .onPageLoad(lrn, mode, authorisationIndex)
                         .url,
                       removeUrl = Some(

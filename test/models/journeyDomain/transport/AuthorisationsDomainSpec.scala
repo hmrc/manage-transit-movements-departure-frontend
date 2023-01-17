@@ -37,7 +37,7 @@ class AuthorisationsDomainSpec extends SpecBase with Generators {
 
       val result: EitherType[AuthorisationsDomain] = UserAnswersReader[AuthorisationsDomain].run(userAnswers)
 
-      result.value.authorisationsDomain.length mustBe numberOfAuthorisations
+      result.value.authorisations.length mustBe numberOfAuthorisations
 
     }
   }

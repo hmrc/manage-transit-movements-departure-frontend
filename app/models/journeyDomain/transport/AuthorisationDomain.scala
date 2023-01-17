@@ -17,6 +17,8 @@
 package models.journeyDomain.transport
 
 import cats.implicits.catsSyntaxTuple2Semigroupal
+import controllers.transport.authorisationsAndLimit.authorisations.index.{routes => authorisationRoutes}
+import controllers.transport.authorisationsAndLimit.authorisations.{routes => authorisationsRoutes}
 import models.ProcedureType._
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.Stage.{AccessingJourney, CompletingJourney}
@@ -40,14 +42,10 @@ case class AuthorisationDomain(authorisationType: AuthorisationType, referenceNu
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some {
     stage match {
       case AccessingJourney =>
-        if (userAnswers.get(AuthorisationTypePage(index)).isEmpty && index.isFirst) {
-          controllers.transport.authorisationsAndLimit.authorisations.index.routes.AuthorisationReferenceNumberController
-            .onPageLoad(userAnswers.lrn, mode, index)
-        } else {
-          controllers.transport.authorisationsAndLimit.authorisations.index.routes.AuthorisationTypeController.onPageLoad(userAnswers.lrn, mode, index)
-        }
+        // User cannot change authorisation type, they have to remove it when they want to make a change.
+        authorisationRoutes.AuthorisationReferenceNumberController.onPageLoad(userAnswers.lrn, mode, index)
       case CompletingJourney =>
-        controllers.transport.authorisationsAndLimit.authorisations.routes.AddAnotherAuthorisationController.onPageLoad(userAnswers.lrn, mode)
+        authorisationsRoutes.AddAnotherAuthorisationController.onPageLoad(userAnswers.lrn, mode)
     }
   }
 }

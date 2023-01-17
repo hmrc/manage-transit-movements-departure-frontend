@@ -16,17 +16,25 @@
 
 package models.journeyDomain.transport
 
+import cats.implicits.{catsSyntaxApplicativeId, none}
 import models.domain.UserAnswersReader
 import models.journeyDomain.JourneyDomainModel
+import models.transport.authorisations.AuthorisationType
 
-case class AuthorisationsAndLimitDomain(authorisationsDomain: AuthorisationsDomain) extends JourneyDomainModel //TODO: Add LimitDomain as param when created
+case class AuthorisationsAndLimitDomain(authorisationsDomain: AuthorisationsDomain, limitDomain: Option[LimitDomain]) extends JourneyDomainModel
 
 object AuthorisationsAndLimitDomain {
+
+  def limitReader(authDomain: AuthorisationsDomain): UserAnswersReader[Option[LimitDomain]] =
+    authDomain.authorisations.exists(_.authorisationType == AuthorisationType.ACR) match {
+      case true  => UserAnswersReader[LimitDomain].map(Some(_))
+      case false => none[LimitDomain].pure[UserAnswersReader]
+    }
 
   implicit val userAnswersReader: UserAnswersReader[AuthorisationsAndLimitDomain] = {
     for {
       authorisations <- UserAnswersReader[AuthorisationsDomain]
-    } yield AuthorisationsAndLimitDomain(authorisations)
+      limit          <- limitReader(authorisations)
+    } yield AuthorisationsAndLimitDomain(authorisations, limit)
   }
-
 }
