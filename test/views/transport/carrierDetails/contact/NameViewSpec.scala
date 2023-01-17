@@ -40,6 +40,8 @@ class NameViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink()
 
+  behave like pageWithSectionCaption("Transport details - Carrier")
+
   behave like pageWithHeading()
 
   behave like pageWithoutHint()
