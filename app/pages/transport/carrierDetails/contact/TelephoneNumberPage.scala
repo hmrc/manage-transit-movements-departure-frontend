@@ -14,28 +14,21 @@
  * limitations under the License.
  */
 
-package pages.transport.carrierDetails
+package pages.transport.carrierDetails.contact
 
-import controllers.transport.carrierDetails.routes
+import controllers.transport.carrierDetails.contact.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.carrierDetails.{CarrierDetailsSection, ContactSection}
+import pages.sections.transport.carrierDetails.ContactSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-import scala.util.Try
+case object TelephoneNumberPage extends QuestionPage[String] {
 
-case object AddContactYesNoPage extends QuestionPage[Boolean] {
+  override def path: JsPath = ContactSection.path \ toString
 
-  override def path: JsPath = CarrierDetailsSection.path \ toString
-
-  override def toString: String = "addContactYesNo"
+  override def toString: String = "telephoneNumber"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.AddContactYesNoController.onPageLoad(userAnswers.lrn, mode))
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = value match {
-    case Some(false) => userAnswers.remove(ContactSection)
-    case _           => super.cleanup(value, userAnswers)
-  }
+    Some(routes.TelephoneNumberController.onPageLoad(userAnswers.lrn, mode))
 }
