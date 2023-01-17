@@ -335,6 +335,7 @@ trait UserAnswersEntryGenerators {
     import pages.transport.carrierDetails.contact._
     {
       case IdentificationNumberPage => Gen.alphaNumStr.map(JsString)
+      case AddContactYesNoPage      => arbitrary[Boolean].map(JsBoolean)
       case NamePage                 => Gen.alphaNumStr.map(JsString)
       case TelephoneNumberPage      => Gen.alphaNumStr.map(JsString)
     }
