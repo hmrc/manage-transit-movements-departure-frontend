@@ -18,11 +18,12 @@ package controllers.transport.carrierDetails.contact
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.TelephoneNumberFormProvider
+import generators.Generators
 import models.NormalMode
 import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.transport.carrierDetails.contact.TelephoneNumberPage
+import pages.transport.carrierDetails.contact._
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -31,10 +32,11 @@ import views.html.transport.carrierDetails.contact.TelephoneNumberView
 
 import scala.concurrent.Future
 
-class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val formProvider              = new TelephoneNumberFormProvider()
-  private val form                      = formProvider("transport.carrierDetails.contact.telephoneNumber")
+  private val name                      = nonEmptyString.sample.value
+  private val form                      = formProvider("transport.carrierDetails.contact.telephoneNumber", name)
   private val mode                      = NormalMode
   private lazy val telephoneNumberRoute = routes.TelephoneNumberController.onPageLoad(lrn, mode).url
 
@@ -49,7 +51,8 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
     "must return OK and the correct view for a GET" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.setValue(NamePage, name)
+      setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, telephoneNumberRoute)
 
@@ -60,12 +63,15 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode)(request, messages).toString
+        view(form, lrn, mode, name)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(TelephoneNumberPage, validAnswer)
+      val userAnswers = emptyUserAnswers
+        .setValue(NamePage, name)
+        .setValue(TelephoneNumberPage, validAnswer)
+
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, telephoneNumberRoute)
@@ -79,12 +85,13 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
+        view(filledForm, lrn, mode, name)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.setValue(NamePage, name)
+      setExistingUserAnswers(userAnswers)
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
@@ -100,7 +107,8 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.setValue(NamePage, name)
+      setExistingUserAnswers(userAnswers)
 
       val invalidAnswer = ""
 
@@ -114,34 +122,67 @@ class TelephoneNumberControllerSpec extends SpecBase with AppWithDefaultMockFixt
       val view = injector.instanceOf[TelephoneNumberView]
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
+        view(filledForm, lrn, mode, name)(request, messages).toString
     }
 
-    "must redirect to Session Expired for a GET if no existing data is found" in {
+    "must redirect to Session Expired for a GET" - {
 
-      setNoExistingUserAnswers()
+      "when no existing data is found" in {
 
-      val request = FakeRequest(GET, telephoneNumberRoute)
+        setNoExistingUserAnswers()
 
-      val result = route(app, request).value
+        val request = FakeRequest(GET, telephoneNumberRoute)
 
-      status(result) mustEqual SEE_OTHER
+        val result = route(app, request).value
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
+
+      "when no contact name is found" in {
+
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(GET, telephoneNumberRoute)
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
     }
 
-    "must redirect to Session Expired for a POST if no existing data is found" in {
+    "must redirect to Session Expired for a POST" - {
 
-      setNoExistingUserAnswers()
+      "when no existing data is found" in {
 
-      val request = FakeRequest(POST, telephoneNumberRoute)
-        .withFormUrlEncodedBody(("value", validAnswer))
+        setNoExistingUserAnswers()
 
-      val result = route(app, request).value
+        val request = FakeRequest(POST, telephoneNumberRoute)
+          .withFormUrlEncodedBody(("value", validAnswer))
 
-      status(result) mustEqual SEE_OTHER
+        val result = route(app, request).value
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
+
+      "when no contact name is found" in {
+
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(POST, telephoneNumberRoute)
+          .withFormUrlEncodedBody(("value", validAnswer))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
     }
   }
 }

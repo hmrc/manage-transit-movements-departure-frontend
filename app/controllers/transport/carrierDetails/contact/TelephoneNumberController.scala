@@ -19,10 +19,12 @@ package controllers.transport.carrierDetails.contact
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.TelephoneNumberFormProvider
+import models.requests.SpecificDataRequestProvider1
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
-import pages.transport.carrierDetails.contact.TelephoneNumberPage
+import pages.transport.carrierDetails.contact.{NamePage, TelephoneNumberPage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -36,6 +38,7 @@ class TelephoneNumberController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: TransportNavigatorProvider,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: TelephoneNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
@@ -44,27 +47,37 @@ class TelephoneNumberController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("transport.carrierDetails.contact.telephoneNumber")
+  private def form(implicit request: Request): Form[String] =
+    formProvider("transport.carrierDetails.contact.telephoneNumber", contactName)
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(TelephoneNumberPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
-      Ok(view(preparedForm, lrn, mode))
-  }
+  private type Request = SpecificDataRequestProvider1[String]#SpecificDataRequest[_]
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            TelephoneNumberPage.writeToUserAnswers(value).writeToSession().navigate()
-          }
-        )
-  }
+  private def contactName(implicit request: Request): String = request.arg
+
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(NamePage)) {
+      implicit request =>
+        val preparedForm = request.userAnswers.get(TelephoneNumberPage) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
+        Ok(view(preparedForm, lrn, mode, contactName))
+    }
+
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(NamePage))
+    .async {
+      implicit request =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, contactName))),
+            value => {
+              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+              TelephoneNumberPage.writeToUserAnswers(value).writeToSession().navigate()
+            }
+          )
+    }
 }

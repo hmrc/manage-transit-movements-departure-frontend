@@ -336,6 +336,7 @@ trait UserAnswersEntryGenerators {
     {
       case IdentificationNumberPage => Gen.alphaNumStr.map(JsString)
       case NamePage                 => Gen.alphaNumStr.map(JsString)
+      case TelephoneNumberPage      => Gen.alphaNumStr.map(JsString)
     }
   }
 }
