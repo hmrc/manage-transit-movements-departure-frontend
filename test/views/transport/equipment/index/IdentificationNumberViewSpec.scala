@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.transport.equipment
+package views.transport.equipment.index
 
 import forms.NameFormProvider
 import models.NormalMode
@@ -23,7 +23,7 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.transport.equipment.IdentificationNumberView
+import views.html.transport.equipment.index.IdentificationNumberView
 
 class IdentificationNumberViewSpec extends InputTextViewBehaviours[String] {
 

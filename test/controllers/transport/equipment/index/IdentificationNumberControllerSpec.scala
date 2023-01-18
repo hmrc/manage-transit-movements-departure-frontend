@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.transport.equipment
+package controllers.transport.equipment.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.ContainerIdentificationFormProvider
@@ -22,12 +22,12 @@ import models.{Index, NormalMode}
 import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.transport.equipment.IdentificationNumberPage
+import pages.transport.equipment.index.IdentificationNumberPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.transport.equipment.IdentificationNumberView
+import views.html.transport.equipment.index.IdentificationNumberView
 
 import scala.concurrent.Future
 

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package pages.transport.equipment
+package pages.transport.equipment.index
 
-import controllers.transport.equipment.routes
+import controllers.transport.equipment.index.routes
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.transport.EquipmentSection

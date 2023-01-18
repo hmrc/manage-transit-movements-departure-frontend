@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.transport.equipment
+package controllers.transport.equipment.index
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
@@ -24,13 +24,13 @@ import models.{Index, LocalReferenceNumber, Mode, RichOptionalJsArray}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
 import pages.sections.transport.EquipmentsSection
-import pages.transport.equipment.IdentificationNumberPage
+import pages.transport.equipment.index.IdentificationNumberPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.transport.equipment.IdentificationNumberView
+import views.html.transport.equipment.index.IdentificationNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

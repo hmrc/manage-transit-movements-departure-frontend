@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.transport.equipment
+package pages.transport.equipment.index
 
 import pages.behaviours.PageBehaviours
 

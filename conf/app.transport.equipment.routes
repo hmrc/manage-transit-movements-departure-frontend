@@ -1,5 +1,1 @@
-
-GET        /:lrn/transport-details/equipment/:equipmentIndex/container-identification-number                           controllers.transport.equipment.IdentificationNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode, equipmentIndex: Index)
-POST       /:lrn/transport-details/equipment/:equipmentIndex/container-identification-number                           controllers.transport.equipment.IdentificationNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode, equipmentIndex: Index)
-GET        /:lrn/transport-details/equipment/:equipmentIndex/change-container-identification-number                    controllers.transport.equipment.IdentificationNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, equipmentIndex: Index)
-POST       /:lrn/transport-details/equipment/:equipmentIndex/change-container-identification-number                    controllers.transport.equipment.IdentificationNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode, equipmentIndex: Index)
+->            /                                                                app.transport.equipment.index.Routes
