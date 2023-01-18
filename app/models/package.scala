@@ -65,6 +65,9 @@ package object models {
 
     def validate[T](implicit rds: Reads[T]): Option[T] =
       arr.flatMap(_.validate[T].asOpt)
+
+    def length: Int = arr.getOrElse(JsArray()).value.length
+
   }
 
   implicit class RichJsValue(jsValue: JsValue) {
