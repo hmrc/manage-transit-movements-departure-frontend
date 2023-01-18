@@ -19,13 +19,13 @@ package pages.transport.equipment
 import controllers.transport.equipment.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.EquipmentSection
+import pages.sections.transport.TransportSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
 case object AddContainerIdentificationNumberYesNoPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = EquipmentSection.path \ toString
+  override def path: JsPath = TransportSection.path \ toString
 
   override def toString: String = "addContainerIdentificationNumberYesNo"
 

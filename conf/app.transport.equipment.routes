@@ -1,4 +1,4 @@
-->            /                                                                app.transport.equipment.index.Routes
+->         /                                                                                           app.transport.equipment.index.Routes
 
 GET        /:lrn/transport-details/equipment/add-container-identification-number                       controllers.transport.equipment.AddContainerIdentificationNumberYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/transport-details/equipment/add-container-identification-number                       controllers.transport.equipment.AddContainerIdentificationNumberYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)

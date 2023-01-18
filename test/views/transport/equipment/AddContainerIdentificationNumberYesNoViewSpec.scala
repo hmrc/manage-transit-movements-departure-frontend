@@ -33,6 +33,8 @@ class AddContainerIdentificationNumberYesNoViewSpec extends YesNoViewBehaviours 
 
   behave like pageWithBackLink()
 
+  behave like pageWithSectionCaption("Transport details - Equipment")
+
   behave like pageWithHeading()
 
   behave like pageWithRadioItems()
