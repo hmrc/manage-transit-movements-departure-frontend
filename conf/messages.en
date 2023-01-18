@@ -1409,3 +1409,8 @@ transport.equipment.addTransportEquipmentYesNo.heading = Do you need to add any 
 transport.equipment.addTransportEquipmentYesNo.paragraph = This includes any containers or seals.
 transport.equipment.addTransportEquipmentYesNo.checkYourAnswersLabel = Do you need to add any transport equipment?
 transport.equipment.addTransportEquipmentYesNo.error.required = Select yes if you want to add any transport equipment
+
+transport.equipment.addContainerIdentificationNumberYesNo.title = Do you want to add a container identification number?
+transport.equipment.addContainerIdentificationNumberYesNo.heading = Do you want to add a container identification number?
+transport.equipment.addContainerIdentificationNumberYesNo.checkYourAnswersLabel = Do you want to add a container identification number?
+transport.equipment.addContainerIdentificationNumberYesNo.error.required = Select yes if you want to add a container identification number
