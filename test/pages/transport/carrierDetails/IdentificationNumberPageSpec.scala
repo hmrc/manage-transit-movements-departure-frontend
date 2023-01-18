@@ -20,7 +20,7 @@ import pages.behaviours.PageBehaviours
 
 class IdentificationNumberPageSpec extends PageBehaviours {
 
-  "ContainerIdentificationNumberPage" - {
+  "IdentificationNumberPage" - {
 
     beRetrievable[String](IdentificationNumberPage)
 
