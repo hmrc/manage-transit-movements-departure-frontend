@@ -1,0 +1,5 @@
+
+GET        /:lrn/transport-details/equipment/add-container-identification-number                       controllers.transport.equipment.AddContainerIdentificationNumberYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport-details/equipment/add-container-identification-number                       controllers.transport.equipment.AddContainerIdentificationNumberYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport-details/equipment/change-add-container-identification-number                controllers.transport.equipment.AddContainerIdentificationNumberYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport-details/equipment/change-add-container-identification-number                controllers.transport.equipment.AddContainerIdentificationNumberYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

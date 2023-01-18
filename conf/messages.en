@@ -1391,3 +1391,8 @@ transport.carrierDetails.contact.telephoneNumber.error.invalidCharacters = {0}�
 transport.carrierDetails.contact.telephoneNumber.error.invalidFormat = Enter {0}’s telephone number in the right format
 transport.carrierDetails.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less
 transport.carrierDetails.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more
+
+transport.equipment.addContainerIdentificationNumberYesNo.title = Do you want to add a container identification number
+transport.equipment.addContainerIdentificationNumberYesNo.heading = Do you want to add a container identification number
+transport.equipment.addContainerIdentificationNumberYesNo.checkYourAnswersLabel = Do you want to add a container identification number
+transport.equipment.addContainerIdentificationNumberYesNo.error.required = Select yes if Do you want to add a container identification number
