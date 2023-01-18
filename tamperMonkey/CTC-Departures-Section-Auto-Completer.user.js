@@ -178,7 +178,7 @@ function createTransportDetailsButton() {
     }
 
     button.style.margin = '1px'
-    button.innerHTML = 'Complete Transport Details (Up to Supply Chain)'
+    button.innerHTML = 'Complete Transport Details (Up to Authorisations)'
     button.addEventListener("click", function handleClick() {
         GM_setValue('transportDetailsToggle',true)
         transportDetails()
@@ -576,20 +576,37 @@ const addSupplyChainActor = (lrn, data) => {
     }
 }
 
+// Uncomment transport details code once authorisation type navigation has been tested
+
 const authRefNumber = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/authorisations/1/reference-number`)){
-        document.getElementById('value').value = data
-        document.getElementsByClassName('govuk-button')[0].click()
+        toggleTransportDetailsButtonsOff()
+        // document.getElementById('value').value = data
+        // document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
-const addAnotherAuthType = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/authorisations/add-another`)){
-        document.getElementById(data).click()
-        document.getElementsByClassName('govuk-button')[0].click()
-    }
-}
-//         toggleTransportDetailsButtonsOff()
+//
+// const addAnotherAuthType = (lrn, data) => {
+//     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/authorisations/add-another`)){
+//         document.getElementById(data).click()
+//         document.getElementsByClassName('govuk-button')[0].click()
+//     }
+// }
+//
+// const carrierEORI = (lrn, data) => {
+//     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/carrier/eori-tin`)){
+//         document.getElementById('value').value = data
+//         document.getElementsByClassName('govuk-button')[0].click()
+//     }
+// }
+//
+// const addCarrierContact = (lrn, data) => {
+//     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/carrier/add-contact`)){
+//         document.getElementById(data).click()
+//         document.getElementsByClassName('govuk-button')[0].click()
+//     }
+// }
 
 /* #### Guarantee Details #### */
 
@@ -707,7 +724,9 @@ function transportDetails() {
     modesMeansCYA(getLRN())
     addSupplyChainActor(getLRN(), 'value-no')
     authRefNumber(getLRN(), 'TRD123')
-    addAnotherAuthType(getLRN(), 'value-no')
+    // addAnotherAuthType(getLRN(), 'value-no')
+    // carrierEORI(getLRN(), 'carrierEORI123')
+    // addCarrierContact(getLRN(), 'value-no')
     /* Update when more of the journey has been developed */
 }
 
