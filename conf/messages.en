@@ -1404,3 +1404,8 @@ transport.equipment.containerIdentificationNumber.error.length = The identificat
 transport.equipment.containerIdentificationNumber.error.invalid = The identification number must only include letters a to z and numbers 0 to 9
 transport.equipment.containerIdentificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique container identification number
 
+transport.equipment.addTransportEquipmentYesNo.title = Do you need to add any transport equipment?
+transport.equipment.addTransportEquipmentYesNo.heading = Do you need to add any transport equipment?
+transport.equipment.addTransportEquipmentYesNo.paragraph = This includes any containers or seals.
+transport.equipment.addTransportEquipmentYesNo.checkYourAnswersLabel = Do you need to add any transport equipment?
+transport.equipment.addTransportEquipmentYesNo.error.required = Select yes if you want to add any transport equipment
