@@ -21,7 +21,7 @@ import controllers.actions._
 import controllers.transport.authorisationsAndLimit.authorisations.index.{routes => authorisationRoutes}
 import forms.AddAnotherFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.transport.AuthorisationsAndLimitNavigatorProvider
+import navigation.transport.TransportNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -34,7 +34,7 @@ import javax.inject.Inject
 class AddAnotherAuthorisationController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: AuthorisationsAndLimitNavigatorProvider,
+  navigatorProvider: TransportNavigatorProvider,
   actions: Actions,
   formProvider: AddAnotherFormProvider,
   val controllerComponents: MessagesControllerComponents,
