@@ -1,6 +1,12 @@
-->         /                                                                                           app.transport.equipment.index.Routes
+->         /                                                                                            app.transport.equipment.index.Routes
 
-GET        /:lrn/transport-details/equipment/add-container-identification-number                       controllers.transport.equipment.AddContainerIdentificationNumberYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/transport-details/equipment/add-container-identification-number                       controllers.transport.equipment.AddContainerIdentificationNumberYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/transport-details/equipment/change-add-container-identification-number                controllers.transport.equipment.AddContainerIdentificationNumberYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/transport-details/equipment/change-add-container-identification-number                controllers.transport.equipment.AddContainerIdentificationNumberYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/transport-details/equipment/add-transport-equipment                     controllers.transport.equipment.AddTransportEquipmentYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport-details/equipment/add-transport-equipment                     controllers.transport.equipment.AddTransportEquipmentYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport-details/equipment/change-add-transport-equipment              controllers.transport.equipment.AddTransportEquipmentYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport-details/equipment/change-add-transport-equipment              controllers.transport.equipment.AddTransportEquipmentYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/transport-details/equipment/add-container-identification-number         controllers.transport.equipment.AddContainerIdentificationNumberYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport-details/equipment/add-container-identification-number         controllers.transport.equipment.AddContainerIdentificationNumberYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport-details/equipment/change-add-container-identification-number  controllers.transport.equipment.AddContainerIdentificationNumberYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport-details/equipment/change-add-container-identification-number  controllers.transport.equipment.AddContainerIdentificationNumberYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
