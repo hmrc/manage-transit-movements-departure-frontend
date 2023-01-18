@@ -23,16 +23,16 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.transport.equipment.index.IdentificationNumberView
+import views.html.transport.equipment.index.ContainerIdentificationNumberView
 
-class IdentificationNumberViewSpec extends InputTextViewBehaviours[String] {
+class ContainerIdentificationNumberViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "transport.equipment.identificationNumber"
+  override val prefix: String = "transport.equipment.containerIdentificationNumber"
 
   override def form: Form[String] = new NameFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[IdentificationNumberView].apply(form, lrn, NormalMode, equipmentIndex)(fakeRequest, messages)
+    injector.instanceOf[ContainerIdentificationNumberView].apply(form, lrn, NormalMode, equipmentIndex)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 
@@ -40,9 +40,9 @@ class IdentificationNumberViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink()
 
-  behave like pageWithHeading()
-
   behave like pageWithSectionCaption("Transport details - Equipment")
+
+  behave like pageWithHeading()
 
   behave like pageWithHint("This can be up to 17 characters long and include both letters and numbers.")
 

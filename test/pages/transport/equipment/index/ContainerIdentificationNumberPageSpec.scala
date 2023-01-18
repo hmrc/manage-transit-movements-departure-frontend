@@ -16,19 +16,16 @@
 
 package pages.transport.equipment.index
 
-import controllers.transport.equipment.index.routes
-import models.{Index, Mode, UserAnswers}
-import pages.QuestionPage
-import pages.sections.transport.EquipmentSection
-import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import pages.behaviours.PageBehaviours
 
-case class IdentificationNumberPage(equipmentIndex: Index) extends QuestionPage[String] {
+class ContainerIdentificationNumberPageSpec extends PageBehaviours {
 
-  override def path: JsPath = EquipmentSection(equipmentIndex).path \ toString
+  "ContainerIdentificationNumberPage" - {
 
-  override def toString: String = "identificationNumber"
+    beRetrievable[String](ContainerIdentificationNumberPage(equipmentIndex))
 
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.IdentificationNumberController.onPageLoad(userAnswers.lrn, mode, equipmentIndex))
+    beSettable[String](ContainerIdentificationNumberPage(equipmentIndex))
+
+    beRemovable[String](ContainerIdentificationNumberPage(equipmentIndex))
+  }
 }

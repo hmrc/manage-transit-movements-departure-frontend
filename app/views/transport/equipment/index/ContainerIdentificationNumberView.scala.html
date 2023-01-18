@@ -30,22 +30,22 @@
 @(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("transport.equipment.identificationNumber.title"),
+    title = messages("transport.equipment.containerIdentificationNumber.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.IdentificationNumberController.onSubmit(lrn, mode, equipmentIndex), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.ContainerIdentificationNumberController.onSubmit(lrn, mode, equipmentIndex), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages("transport.equipment.identificationNumber.heading"),
+                heading = messages("transport.equipment.containerIdentificationNumber.heading"),
                 caption = Some(messages("transport.equipment.caption"))
             ),
-            hint = Some(messages("transport.equipment.identificationNumber.hint")),
+            hint = Some(messages("transport.equipment.containerIdentificationNumber.hint")),
             inputClass = InputSize.Width20
         )
 

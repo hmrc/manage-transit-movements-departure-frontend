@@ -24,44 +24,44 @@ import models.{Index, LocalReferenceNumber, Mode, RichOptionalJsArray}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
 import pages.sections.transport.EquipmentsSection
-import pages.transport.equipment.index.IdentificationNumberPage
+import pages.transport.equipment.index.ContainerIdentificationNumberPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.transport.equipment.index.IdentificationNumberView
+import views.html.transport.equipment.index.ContainerIdentificationNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class IdentificationNumberController @Inject() (
+class ContainerIdentificationNumberController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: TransportNavigatorProvider,
   formProvider: ContainerIdentificationFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
-  view: IdentificationNumberView
+  view: ContainerIdentificationNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   private def form(equipmentIndex: Index)(implicit request: DataRequest[_]): Form[String] =
-    formProvider("transport.equipment.identificationNumber", otherContainerIdentificationNumbers(equipmentIndex))
+    formProvider("transport.equipment.containerIdentificationNumber", otherContainerIdentificationNumbers(equipmentIndex))
 
   private def otherContainerIdentificationNumbers(equipmentIndex: Index)(implicit request: DataRequest[_]): Seq[String] = {
     val numberOfEquipments = request.userAnswers.get(EquipmentsSection).length
     (0 until numberOfEquipments)
       .map(Index(_))
       .filterNot(_ == equipmentIndex)
-      .map(IdentificationNumberPage)
+      .map(ContainerIdentificationNumberPage)
       .flatMap(request.userAnswers.get(_))
   }
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(IdentificationNumberPage(equipmentIndex)) match {
+      val preparedForm = request.userAnswers.get(ContainerIdentificationNumberPage(equipmentIndex)) match {
         case None        => form(equipmentIndex)
         case Some(value) => form(equipmentIndex).fill(value)
       }
@@ -76,7 +76,7 @@ class IdentificationNumberController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, equipmentIndex))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            IdentificationNumberPage(equipmentIndex).writeToUserAnswers(value).writeToSession().navigate()
+            ContainerIdentificationNumberPage(equipmentIndex).writeToUserAnswers(value).writeToSession().navigate()
           }
         )
   }

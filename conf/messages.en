@@ -1395,12 +1395,12 @@ transport.carrierDetails.contact.telephoneNumber.error.minLength = {0}’s telep
 #TransportEquipment
 transport.equipment.caption = Transport details - Equipment
 
-transport.equipment.identificationNumber.title = What’s the container identification number?
-transport.equipment.identificationNumber.heading = What’s the container identification number?
-transport.equipment.identificationNumber.hint = This can be up to 17 characters long and include both letters and numbers.
-transport.equipment.identificationNumber.checkYourAnswersLabel = What’s the container identification number?
-transport.equipment.identificationNumber.error.required = Enter the container identification number
-transport.equipment.identificationNumber.error.length = The identification number must be 17 characters or less
-transport.equipment.identificationNumber.error.invalid = The identification number must only include letters a to z and numbers 0 to 9
-transport.equipment.identificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique container identification number
+transport.equipment.containerIdentificationNumber.title = What’s the container identification number?
+transport.equipment.containerIdentificationNumber.heading = What’s the container identification number?
+transport.equipment.containerIdentificationNumber.hint = This can be up to 17 characters long and include both letters and numbers.
+transport.equipment.containerIdentificationNumber.checkYourAnswersLabel = What’s the container identification number?
+transport.equipment.containerIdentificationNumber.error.required = Enter the container identification number
+transport.equipment.containerIdentificationNumber.error.length = The identification number must be 17 characters or less
+transport.equipment.containerIdentificationNumber.error.invalid = The identification number must only include letters a to z and numbers 0 to 9
+transport.equipment.containerIdentificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique container identification number
 
