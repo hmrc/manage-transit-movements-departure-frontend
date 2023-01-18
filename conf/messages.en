@@ -920,8 +920,8 @@ routeDetails.locationOfGoods.contact.telephoneNumber.change.hidden = the contact
 routeDetails.locationOfGoods.contact.telephoneNumber.error.required = Enter {0}’s telephone number.
 routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidCharacters = {0}’s telephone number must only include numbers 0 to 9 and a plus sign
 routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidFormat = {0}’s telephone number must start with a plus sign
-routeDetails.locationOfGoods.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less.
-routeDetails.locationOfGoods.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more.
+routeDetails.locationOfGoods.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less
+routeDetails.locationOfGoods.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more
 
 # Route details - Loading and unloading
 
@@ -1383,11 +1383,11 @@ transport.carrierDetails.contact.name.error.length = The contact’s name must b
 transport.carrierDetails.contact.name.error.invalid = The contact’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 
 transport.carrierDetails.contact.telephoneNumber.title = What is the phone number for the carrier’s contact?
-transport.carrierDetails.contact.telephoneNumber.heading = What is {0}’s telephone number?
+transport.carrierDetails.contact.telephoneNumber.heading = What is {0}’s phone number?
 transport.carrierDetails.contact.telephoneNumber.hint = Include the country code, for example +44 808 157 0192.
 transport.carrierDetails.contact.telephoneNumber.checkYourAnswersLabel = Telephone number
 transport.carrierDetails.contact.telephoneNumber.error.required = Enter {0}’s telephone number, including the country code
 transport.carrierDetails.contact.telephoneNumber.error.invalidCharacters = {0}’s telephone number must only include numbers 0 to 9 and a plus sign
 transport.carrierDetails.contact.telephoneNumber.error.invalidFormat = Enter {0}’s telephone number in the right format
-transport.carrierDetails.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less.
-transport.carrierDetails.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more.
+transport.carrierDetails.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less
+transport.carrierDetails.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more
