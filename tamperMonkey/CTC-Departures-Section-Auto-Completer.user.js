@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CTC-Departures Section Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      4.0
+// @version      5.0
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @match        http*://*/manage-transit-movements/departures/*/task-list
@@ -13,6 +13,7 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_addStyle
+// @downloadURL  https://github.com/hmrc/manage-transit-movements-departure-frontend/raw/main/tamperMonkey/CTC-Departures-Section-Auto-Completer.user.js
 // @updateURL    https://github.com/hmrc/manage-transit-movements-departure-frontend/raw/main/tamperMonkey/CTC-Departures-Section-Auto-Completer.user.js
 // ==/UserScript==
 
@@ -36,13 +37,20 @@ function isAButtonToggled() {
         routeDetailsAuthorised()
     }
     else if(GM_getValue('transportDetailsToggle',false)){
-        transportDetails()
+        // Work around for when transport details is accessed before trader details, as nav sends you back to trader details and stops the script running
+        if(location.href.includes('trader-details')){
+            GM_setValue('traderDetailsReducedDataSetToggle',true)
+            traderDetailsReducedDataSet()
+        } else{
+            transportDetails()
+        }
     }
     else if(GM_getValue('guaranteeDetailsWaiverToggle',false)){
         guaranteeDetailsWaiver()
     }
     else {
         if(onLandingPage()){
+            console.log(location.href)
             document.body.appendChild(setupGUI())
         }
     }
@@ -170,7 +178,7 @@ function createTransportDetailsButton() {
     }
 
     button.style.margin = '1px'
-    button.innerHTML = 'Complete Transport Details (Up to Supply Chain)'
+    button.innerHTML = 'Complete Transport Details (Up to Authorisations)'
     button.addEventListener("click", function handleClick() {
         GM_setValue('transportDetailsToggle',true)
         transportDetails()
@@ -557,10 +565,48 @@ const anotherVehicleCrossing = (lrn, data) => {
 
 const modesMeansCYA = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/modes-means-of-transport/check-answers`)){
-        toggleTransportDetailsButtonsOff()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
+
+const addSupplyChainActor = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/supply-chain-actor/add`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+// Uncomment transport details code once authorisation type navigation has been tested
+
+const authRefNumber = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/authorisations/1/reference-number`)){
+        toggleTransportDetailsButtonsOff()
+        // document.getElementById('value').value = data
+        // document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+//
+// const addAnotherAuthType = (lrn, data) => {
+//     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/authorisations/add-another`)){
+//         document.getElementById(data).click()
+//         document.getElementsByClassName('govuk-button')[0].click()
+//     }
+// }
+//
+// const carrierEORI = (lrn, data) => {
+//     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/carrier/eori-tin`)){
+//         document.getElementById('value').value = data
+//         document.getElementsByClassName('govuk-button')[0].click()
+//     }
+// }
+//
+// const addCarrierContact = (lrn, data) => {
+//     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/carrier/add-contact`)){
+//         document.getElementById(data).click()
+//         document.getElementsByClassName('govuk-button')[0].click()
+//     }
+// }
 
 /* #### Guarantee Details #### */
 
@@ -676,6 +722,11 @@ function transportDetails() {
     meansCountry(getLRN(),'GB')
     anotherVehicleCrossing(getLRN(),'value-no')
     modesMeansCYA(getLRN())
+    addSupplyChainActor(getLRN(), 'value-no')
+    authRefNumber(getLRN(), 'TRD123')
+    // addAnotherAuthType(getLRN(), 'value-no')
+    // carrierEORI(getLRN(), 'carrierEORI123')
+    // addCarrierContact(getLRN(), 'value-no')
     /* Update when more of the journey has been developed */
 }
 
