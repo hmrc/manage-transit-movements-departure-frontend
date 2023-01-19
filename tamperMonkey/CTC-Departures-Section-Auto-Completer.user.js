@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CTC-Departures Section Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      5.0
+// @version      6.0
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @match        http*://*/manage-transit-movements/departures/*/task-list
@@ -50,7 +50,7 @@ function isAButtonToggled() {
     }
     else {
         if(onLandingPage()){
-            console.log(location.href)
+            setReducedDataSet()
             document.body.appendChild(setupGUI())
         }
     }
@@ -72,12 +72,13 @@ function toggleGuaranteeDetailsButtonsOff() {
 
 function setupGUI() {
     var panel = document.createElement('div')
-    GM_addStyle(' .guiStyle { position: absolute; top: 50px; display: grid; grid-template-rows: repeat(4, 1fr);')
+    GM_addStyle(' .guiStyle { position: absolute; top: 50px; display: grid; grid-template-rows: repeat(5, 1fr);')
     panel.classList.add('guiStyle')
     panel.appendChild(createTraderDetailsButton())
     panel.appendChild(createRouteDetailsAuthorisedButton())
     panel.appendChild(createTransportDetailsButton())
     panel.appendChild(createGuaranteeDetailsWaiverButton())
+    panel.appendChild(createReducedDataSetSwitch())
     panel.appendChild(createCompleteAllButton())
     return panel
 }
@@ -105,6 +106,24 @@ function isSectionCompleted() {
 function saveLRN() {
     if(onLandingPage()){
         GM_setValue('lrn',location.href.split('/')[5])
+    }
+}
+
+function setReducedDataSet() {
+    if(GM_getValue('reducedDataSetSwitch', 'notSet').includes('notSet')) {
+        GM_setValue('reducedDataSetSwitch', true)
+    }
+}
+
+function getReducedDataSet() {
+    return GM_getValue('reducedDataSetSwitch', null)
+}
+
+function getReducedDataSetAnswer() {
+    if(getReducedDataSet()) {
+        return 'value'
+    }else {
+        return 'value-no'
     }
 }
 
@@ -202,6 +221,36 @@ function createGuaranteeDetailsWaiverButton() {
     button.addEventListener("click", function handleClick() {
         GM_setValue('guaranteeDetailsWaiverToggle',true)
         guaranteeDetailsWaiver()
+    })
+
+    return button
+}
+
+function createReducedDataSetSwitch() {
+    let button = document.createElement('button')
+    button.id='reducedDataSetSwitch'
+
+    if (!!document.getElementById('global-header')) {
+        button.classList.add('button-start', 'govuk-!-display-none-print')
+    } else {
+        button.classList.add('govuk-button','govuk-!-display-none-print')
+    }
+
+    button.style.margin = '1px'
+    button.style.marginTop = '5px'
+
+    if(getReducedDataSet()){
+        button.innerHTML = 'Using a Reduced Data Set'
+    }else{
+        button.innerHTML = 'Using the Full Data Set'
+    }
+
+    button.addEventListener("click", function handleClick() {
+        if(getReducedDataSet()) {
+            GM_setValue('reducedDataSetSwitch',false)
+        }else {
+            GM_setValue('reducedDataSetSwitch',true)
+        }
     })
 
     return button
@@ -671,7 +720,7 @@ function traderDetailsReducedDataSet(){
     transitHolderAddress(getLRN(), '12 Italy Road', 'Rome', 'IT65')
     addContact(getLRN(), 'value-no')
     actingRepresentative(getLRN(), 'value-no')
-    reducedDataSet(getLRN(), 'value')
+    reducedDataSet(getLRN(), getReducedDataSetAnswer())
     moreThanOneConsignee(getLRN(), 'value-no')
     consigneeEoriTin(getLRN(), 'value-no')
     consigneeName(getLRN(), 'consignee')
