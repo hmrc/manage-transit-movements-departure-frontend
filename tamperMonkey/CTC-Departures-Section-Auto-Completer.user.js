@@ -31,7 +31,7 @@ window.addEventListener('load', function() {
 
 function isAButtonToggled() {
     if(GM_getValue('traderDetailsReducedDataSetToggle',false)){
-        traderDetailsReducedDataSet()
+        traderDetails()
     }
     else if(GM_getValue('routeDetailsAuthorisedToggle',false)){
         routeDetailsAuthorised()
@@ -40,7 +40,7 @@ function isAButtonToggled() {
         // Work around for when transport details is accessed before trader details, as nav sends you back to trader details and stops the script running
         if(location.href.includes('trader-details')){
             GM_setValue('traderDetailsReducedDataSetToggle',true)
-            traderDetailsReducedDataSet()
+            traderDetails()
         } else{
             transportDetails()
         }
@@ -92,7 +92,8 @@ function isSectionCompleted() {
             document.getElementById('routeDetailsAuthorised').remove()
         }
         if (document.getElementById('trader-details-status').innerText === 'COMPLETED') {
-            document.getElementById('traderDetailsReducedDataSet').remove()
+            document.getElementById('traderDetails').remove()
+            document.getElementById('reducedDataSetSwitch').remove()
         }
         if (document.getElementById('transport-details-status').innerText === 'COMPLETED') {
             document.getElementById('transportDetails').remove()
@@ -110,7 +111,7 @@ function saveLRN() {
 }
 
 function setReducedDataSet() {
-    if(GM_getValue('reducedDataSetSwitch', 'notSet').includes('notSet')) {
+    if(GM_getValue('reducedDataSetSwitch', 'notSet') === 'notSet') {
         GM_setValue('reducedDataSetSwitch', true)
     }
 }
@@ -148,7 +149,7 @@ const currentPageIs = (path) => {
 
 function createTraderDetailsButton() {
     let button = document.createElement('button')
-    button.id='traderDetailsReducedDataSet'
+    button.id='traderDetails'
 
     if (!!document.getElementById('global-header')) {
         button.classList.add('button-start', 'govuk-!-display-none-print')
@@ -157,10 +158,15 @@ function createTraderDetailsButton() {
     }
 
     button.style.margin = '1px'
-    button.innerHTML = 'Complete Trader Details (Reduced Data Set)'
+    if(getReducedDataSet()) {
+        button.innerHTML = 'Complete Trader Details (Reduced Data Set)'
+    }else {
+        button.innerHTML = 'Trader Details (Full Data Set)'
+    }
+
     button.addEventListener("click", function handleClick() {
         GM_setValue('traderDetailsReducedDataSetToggle',true)
-        traderDetailsReducedDataSet()
+        traderDetails()
     })
 
     return button
@@ -246,10 +252,19 @@ function createReducedDataSetSwitch() {
     }
 
     button.addEventListener("click", function handleClick() {
+        let button = document.getElementById('reducedDataSetSwitch');
         if(getReducedDataSet()) {
             GM_setValue('reducedDataSetSwitch',false)
+            button.innerHTML = 'Using a Full Data Set'
+            button.style.backgroundColor = '#00752d'
+
+            document.getElementById('traderDetails').innerHTML = 'Trader Details (Full Data Set)'
         }else {
             GM_setValue('reducedDataSetSwitch',true)
+            button.innerHTML = 'Using a Reduced Data Set'
+            button.style.backgroundColor = '#007025'
+
+            document.getElementById('traderDetails').innerHTML = 'Trader Details (Reduced Data Set)'
         }
     })
 
@@ -274,7 +289,7 @@ function createCompleteAllButton() {
         GM_setValue('routeDetailsAuthorisedToggle',true)
         // GM_setValue('transportDetailsToggle',true) - uncomment when transport details is complete
         GM_setValue('guaranteeDetailsWaiverToggle',true)
-        traderDetailsReducedDataSet()
+        traderDetails()
     })
 
     return button
@@ -334,6 +349,43 @@ const actingRepresentative = (lrn, data) => {
 
 const reducedDataSet = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/consignment/reduced-data-set`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const consignorEoriTin = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/consignor/add-eori-tin`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const consignorName = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/consignment/consignor/name`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const consignorCountry = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/consignor/country`)){
+        document.getElementById('value-select').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const consignorAddress = (lrn, data, data2, data3) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/consignor/address`)){
+        document.getElementById('numberAndStreet').value = data
+        document.getElementById('city').value = data2
+        document.getElementById('postalCode').value = data3
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const consignorContact = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/consignment/consignor/add-contact`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
@@ -627,6 +679,14 @@ const addSupplyChainActor = (lrn, data) => {
 
 // Uncomment transport details code once authorisation type navigation has been tested
 
+const addAuth = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/authorisations/add`)){
+        toggleTransportDetailsButtonsOff()
+        // document.getElementById(data).click()
+        // document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
 const authRefNumber = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/authorisations/1/reference-number`)){
         toggleTransportDetailsButtonsOff()
@@ -712,7 +772,14 @@ const guaranteeAddAnother = (lrn, data) => {
 
 /* Trader Details Journey */
 
-function traderDetailsReducedDataSet(){
+function traderDetails(){
+    if(!getReducedDataSet()) {
+        consignorEoriTin(getLRN(), 'value-no')
+        consignorName(getLRN(), 'consignor')
+        consignorCountry(getLRN(), 'IT')
+        consignorAddress(getLRN(), '22 Italy Road', 'Rome', 'IT53')
+        consignorContact(getLRN(), 'value-no')
+    }
     startTraderDetails(getLRN())
     addEoriTin(getLRN(), 'value-no')
     transitHolderName(getLRN(), 'Person')
@@ -761,6 +828,9 @@ function routeDetailsAuthorised() {
 /* ## Transport Details journey ## */
 
 function transportDetails() {
+    if(!getReducedDataSet()) {
+        addAuth(getLRN(), 'value-no')
+    }
     startTransportDetails(getLRN())
     sameUCR(getLRN(),'value-no')
     sameCountry(getLRN(),'value-no')
