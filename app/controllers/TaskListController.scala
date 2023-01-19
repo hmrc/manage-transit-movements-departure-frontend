@@ -17,6 +17,7 @@
 package controllers
 
 import com.google.inject.Inject
+import connectors.BackendConnector
 import controllers.actions.{Actions, CheckDependentTaskCompletedActionProvider}
 import models.LocalReferenceNumber
 import models.journeyDomain.PreTaskListDomain
@@ -38,7 +39,8 @@ class TaskListController @Inject() (
   view: TaskListView,
   viewModel: TaskListViewModel,
   countriesService: CountriesService,
-  apiService: ApiService
+  apiService: ApiService,
+  backendConnector: BackendConnector
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -65,7 +67,8 @@ class TaskListController @Inject() (
     .andThen(checkDependentTaskCompleted[PreTaskListDomain])
     .async {
       implicit request =>
-        apiService.submitDeclaration(request.userAnswers).map {
+        //apiService.submitDeclaration(request.userAnswers).map {
+        backendConnector.submit(lrn).map {
           case response if is2xx(response.status) =>
             Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad())
           case response if is4xx(response.status) =>
