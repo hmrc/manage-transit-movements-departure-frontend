@@ -17,7 +17,7 @@
 package navigation.transport
 
 import models.domain.UserAnswersReader
-import models.journeyDomain.transport.TransportMeansActiveListDomain
+import models.journeyDomain.transport.transportMeans.TransportMeansActiveListDomain
 import models.{CheckMode, Mode, NormalMode}
 import navigation.UserAnswersNavigator
 

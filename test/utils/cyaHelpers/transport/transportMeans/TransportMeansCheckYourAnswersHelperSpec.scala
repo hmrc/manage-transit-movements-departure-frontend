@@ -21,7 +21,7 @@ import controllers.transport.transportMeans.active.routes
 import generators.Generators
 import models.Mode
 import models.domain.UserAnswersReader
-import models.journeyDomain.transport.TransportMeansActiveDomain
+import models.journeyDomain.transport.transportMeans.TransportMeansActiveDomain
 import models.reference.Nationality
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.departure.{InlandMode, Identification => DepartureIdentification}

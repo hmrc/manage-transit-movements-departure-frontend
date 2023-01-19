@@ -22,7 +22,7 @@ import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import viewModels.transport.authorisations.AddAnotherAuthorisationViewModel
+import viewModels.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationViewModel
 import views.behaviours.ListWithActionsViewBehaviours
 import views.html.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationView
 

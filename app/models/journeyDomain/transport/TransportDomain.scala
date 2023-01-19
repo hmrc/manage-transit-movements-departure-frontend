@@ -18,7 +18,11 @@ package models.journeyDomain.transport
 
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
+import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationsAndLimitDomain
 import models.journeyDomain.transport.carrierDetails.CarrierDetailsDomain
+import models.journeyDomain.transport.preRequisites.PreRequisitesDomain
+import models.journeyDomain.transport.supplyChainActors.SupplyChainActorsDomain
+import models.journeyDomain.transport.transportMeans.TransportMeansDomain
 import pages.traderDetails.consignment.ApprovedOperatorPage
 import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import pages.transport.supplyChainActors.SupplyChainActorYesNoPage
