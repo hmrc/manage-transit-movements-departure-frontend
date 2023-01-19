@@ -681,7 +681,7 @@ const addSupplyChainActor = (lrn, data) => {
 
 const addAuth = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/authorisations/add`)){
-        toggleTransportDetailsButtonsOff()
+        toggleTransportDetailsButtonsOff() // Will need changed once journey develops
         // document.getElementById(data).click()
         // document.getElementsByClassName('govuk-button')[0].click()
     }
@@ -689,7 +689,7 @@ const addAuth = (lrn, data) => {
 
 const authRefNumber = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/authorisations/1/reference-number`)){
-        toggleTransportDetailsButtonsOff()
+        toggleTransportDetailsButtonsOff() // Will need changed once journey develops
         // document.getElementById('value').value = data
         // document.getElementsByClassName('govuk-button')[0].click()
     }
