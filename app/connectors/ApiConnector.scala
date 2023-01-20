@@ -18,13 +18,16 @@ package connectors
 
 import api.Conversions
 import config.FrontendAppConfig
-import generated.TransitOperationType06
+import generated.{CC015CType, TransitOperationType06}
 import models.UserAnswers
+import models.domain.UserAnswersReader
+import models.journeyDomain.DepartureDomain
 import play.api.Logging
 import play.api.http.HeaderNames
 import scalaxb.`package`.toXML
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, HttpClient, HttpErrorFunctions, HttpResponse}
+import models.journeyDomain.DepartureDomain.userAnswersReader
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,7 +39,12 @@ class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConf
     HeaderNames.CONTENT_TYPE -> "application/xml"
   )
 
-  // TODO - build out for remaining sections
+  // TODO - Get the country codes and security agreement
+  def createPayload(userAnswers: UserAnswers): Either[Object, CC015CType] =
+    for {
+      departureDomain <- UserAnswersReader[DepartureDomain](userAnswersReader(Seq.empty, Seq.empty)).run(userAnswers)
+    } yield ???
+
   def createSubmission(userAnswers: UserAnswers): Either[String, String] =
     for {
       transitOperation <- Conversions.transitOperation(userAnswers)
