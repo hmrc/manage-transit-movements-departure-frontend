@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport.preRequisites
+package models.journeyDomain.transport
 
 import cats.implicits._
 import models.DeclarationType.Option4

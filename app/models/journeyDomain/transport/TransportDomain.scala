@@ -20,7 +20,6 @@ import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, Use
 import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationsAndLimitDomain
 import models.journeyDomain.transport.carrierDetails.CarrierDetailsDomain
-import models.journeyDomain.transport.preRequisites.PreRequisitesDomain
 import models.journeyDomain.transport.supplyChainActors.SupplyChainActorsDomain
 import models.journeyDomain.transport.transportMeans.TransportMeansDomain
 import pages.traderDetails.consignment.ApprovedOperatorPage

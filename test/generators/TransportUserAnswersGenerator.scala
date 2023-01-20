@@ -19,7 +19,6 @@ package generators
 import models.journeyDomain.transport._
 import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationDomain
 import models.journeyDomain.transport.authorisationsAndLimit.limit.LimitDomain
-import models.journeyDomain.transport.preRequisites.PreRequisitesDomain
 import models.journeyDomain.transport.supplyChainActors.SupplyChainActorDomain
 import models.journeyDomain.transport.transportMeans.{TransportMeansActiveDomain, TransportMeansDepartureDomain, TransportMeansDomain}
 import models.{Index, UserAnswers}

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport.preRequisites
+package models.journeyDomain.transport
 
 import base.SpecBase
 import generators.Generators
