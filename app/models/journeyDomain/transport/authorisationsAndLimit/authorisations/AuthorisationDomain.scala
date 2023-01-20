@@ -19,7 +19,6 @@ package models.journeyDomain.transport.authorisationsAndLimit.authorisations
 import cats.implicits.catsSyntaxTuple2Semigroupal
 import controllers.transport.authorisationsAndLimit.authorisations.index.{routes => authorisationRoutes}
 import controllers.transport.authorisationsAndLimit.authorisations.{routes => authorisationsRoutes}
-import models.DeclarationType.Option4
 import models.ProcedureType._
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.Stage.{AccessingJourney, CompletingJourney}
@@ -28,7 +27,7 @@ import models.transport.authorisations.AuthorisationType
 import models.transport.authorisations.AuthorisationType.{ACR, TRD}
 import models.transport.transportMeans.departure.InlandMode._
 import models.{Index, Mode, UserAnswers}
-import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage}
+import pages.preTaskList.ProcedureTypePage
 import pages.traderDetails.consignment.ApprovedOperatorPage
 import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
 import pages.transport.transportMeans.departure.InlandModePage
@@ -37,7 +36,7 @@ import play.api.mvc.Call
 
 case class AuthorisationDomain(authorisationType: AuthorisationType, referenceNumber: String)(index: Index) extends JourneyDomainModel {
 
-  def asString()(implicit messages: Messages): String =
+  def asString(implicit messages: Messages): String =
     AuthorisationDomain.asString(authorisationType, referenceNumber)
 
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some {
@@ -59,16 +58,10 @@ object AuthorisationDomain {
   // scalastyle:off cyclomatic.complexity
   def userAnswersReader(index: Index): UserAnswersReader[AuthorisationDomain] = {
 
-    def reducedDataSetReads: UserAnswersReader[Boolean] =
-      DeclarationTypePage.reader.flatMap {
-        case Option4 => UserAnswersReader(true)
-        case _       => ApprovedOperatorPage.reader
-      }
-
     val authorisationTypeReads: UserAnswersReader[AuthorisationType] = {
       if (index.isFirst) {
         for {
-          reducedDataSetIndicator <- reducedDataSetReads
+          reducedDataSetIndicator <- ApprovedOperatorPage.inferredReader
           inlandMode              <- InlandModePage.reader
           procedureType           <- ProcedureTypePage.reader
 

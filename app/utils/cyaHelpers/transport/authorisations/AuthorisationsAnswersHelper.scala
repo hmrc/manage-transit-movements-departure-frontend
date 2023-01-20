@@ -38,7 +38,7 @@ class AuthorisationsAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit
         }
 
         buildListItem[AuthorisationDomain](
-          nameWhenComplete = _.asString(),
+          nameWhenComplete = _.asString,
           nameWhenInProgress = userAnswers.get(AuthorisationTypePage(index)).map(_.forDisplay),
           removeRoute = removeRoute
         )(AuthorisationDomain.userAnswersReader(index))
