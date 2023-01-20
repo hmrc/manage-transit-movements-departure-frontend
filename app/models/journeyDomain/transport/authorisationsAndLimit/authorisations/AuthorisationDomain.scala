@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport
+package models.journeyDomain.transport.authorisationsAndLimit.authorisations
 
 import cats.implicits.catsSyntaxTuple2Semigroupal
 import controllers.transport.authorisationsAndLimit.authorisations.index.{routes => authorisationRoutes}

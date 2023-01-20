@@ -17,7 +17,7 @@
 package utils.cyaHelpers.transport.transportMeans.active
 
 import controllers.transport.transportMeans.active.routes
-import models.journeyDomain.transport.TransportMeansActiveDomain
+import models.journeyDomain.transport.transportMeans.TransportMeansActiveDomain
 import models.{Mode, UserAnswers}
 import pages.sections.transport.transportMeans.TransportMeansActiveListSection
 import pages.transport.transportMeans.AnotherVehicleCrossingYesNoPage

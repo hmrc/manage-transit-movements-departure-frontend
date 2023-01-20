@@ -16,7 +16,7 @@
 
 package utils.cyaHelpers.transport.supplyChainActors
 
-import models.journeyDomain.transport.SupplyChainActorDomain
+import models.journeyDomain.transport.supplyChainActors.SupplyChainActorDomain
 import models.{Mode, UserAnswers}
 import pages.transport.supplyChainActors.index.SupplyChainActorTypePage
 import controllers.transport.supplyChainActors.index.routes

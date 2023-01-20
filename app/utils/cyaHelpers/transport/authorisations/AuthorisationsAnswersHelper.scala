@@ -17,7 +17,7 @@
 package utils.cyaHelpers.transport.authorisations
 
 import controllers.transport.authorisationsAndLimit.authorisations.index.routes
-import models.journeyDomain.transport.AuthorisationDomain
+import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationDomain
 import models.{Mode, UserAnswers}
 import pages.sections.transport.authorisationsAndLimit.AuthorisationsSection
 import pages.transport.authorisationsAndLimit.authorisations.index.AuthorisationTypePage

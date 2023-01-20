@@ -16,7 +16,7 @@
 
 package utils.cyaHelpers.transport.transportMeans
 
-import models.journeyDomain.transport.TransportMeansActiveDomain
+import models.journeyDomain.transport.transportMeans.TransportMeansActiveDomain
 import models.reference.Nationality
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.departure.{Identification, InlandMode}

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport
+package models.journeyDomain.transport.authorisationsAndLimit.authorisations
 
 import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}

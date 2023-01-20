@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport
+package models.journeyDomain.transport.authorisationsAndLimit.authorisations
 
 import base.SpecBase
 import forms.Constants.maxAuthorisationRefNumberLength
 import generators.Generators
 import models.SecurityDetailsType._
 import models.domain.{EitherType, UserAnswersReader}
+import models.journeyDomain.transport.authorisationsAndLimit.limit.LimitDomain
 import models.transport.authorisations.AuthorisationType
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

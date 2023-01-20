@@ -32,8 +32,8 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpVerbs.GET
 import viewModels.ListItem
-import viewModels.transport.authorisations.AddAnotherAuthorisationViewModel
-import viewModels.transport.authorisations.AddAnotherAuthorisationViewModel.AddAnotherAuthorisationViewModelProvider
+import viewModels.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationViewModel
+import viewModels.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationViewModel.AddAnotherAuthorisationViewModelProvider
 import views.html.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationView
 
 class AddAnotherAuthorisationControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with Generators {

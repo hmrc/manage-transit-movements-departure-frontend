@@ -14,41 +14,42 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport
+package models.journeyDomain.transport.transportMeans
 
 import cats.implicits._
+import controllers.transport.transportMeans.active.routes
 import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{Index, Mode, RichJsArray, UserAnswers}
-import pages.sections.transport.supplyChainActors.SupplyChainActorListSection
+import pages.sections.transport.transportMeans.TransportMeansActiveListSection
 import play.api.mvc.Call
 
-case class SupplyChainActorsDomain(
-  SupplyChainActorsDomain: Seq[SupplyChainActorDomain]
+case class TransportMeansActiveListDomain(
+  transportMeansActiveListDomain: Seq[TransportMeansActiveDomain]
 ) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
-    Some(controllers.transport.supplyChainActors.routes.AddAnotherSupplyChainActorController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode))
 }
 
-object SupplyChainActorsDomain {
+object TransportMeansActiveListDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[SupplyChainActorsDomain] = {
+  implicit val userAnswersReader: UserAnswersReader[TransportMeansActiveListDomain] = {
 
-    val actorsReader: UserAnswersReader[Seq[SupplyChainActorDomain]] =
-      SupplyChainActorListSection.arrayReader.flatMap {
+    val activeListReader: UserAnswersReader[Seq[TransportMeansActiveDomain]] =
+      TransportMeansActiveListSection.arrayReader.flatMap {
         case x if x.isEmpty =>
-          UserAnswersReader[SupplyChainActorDomain](
-            SupplyChainActorDomain.userAnswersReader(Index(0))
+          UserAnswersReader[TransportMeansActiveDomain](
+            TransportMeansActiveDomain.userAnswersReader(Index(0))
           ).map(Seq(_))
 
         case x =>
-          x.traverse[SupplyChainActorDomain](
-            SupplyChainActorDomain.userAnswersReader
+          x.traverse[TransportMeansActiveDomain](
+            TransportMeansActiveDomain.userAnswersReader
           ).map(_.toSeq)
       }
 
-    UserAnswersReader[Seq[SupplyChainActorDomain]](actorsReader).map(SupplyChainActorsDomain(_))
+    UserAnswersReader[Seq[TransportMeansActiveDomain]](activeListReader).map(TransportMeansActiveListDomain(_))
 
   }
 }

@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.transport.transportMeans.active.routes
 import generators.Generators
 import models.SecurityDetailsType.{EntrySummaryDeclarationSecurityDetails, NoSecurityDetails}
-import models.journeyDomain.transport.TransportMeansActiveDomain
+import models.journeyDomain.transport.transportMeans.TransportMeansActiveDomain
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.active.Identification
 import models.{Mode, NormalMode, UserAnswers}

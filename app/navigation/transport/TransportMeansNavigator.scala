@@ -17,7 +17,7 @@
 package navigation.transport
 
 import models.domain.UserAnswersReader
-import models.journeyDomain.transport.TransportMeansDomain
+import models.journeyDomain.transport.transportMeans.TransportMeansDomain
 import models.{CheckMode, Mode, NormalMode}
 import navigation.UserAnswersNavigator
 

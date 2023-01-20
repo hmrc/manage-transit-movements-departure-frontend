@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport
+package models.journeyDomain.transport.authorisationsAndLimit.authorisations
 
 import cats.implicits.{catsSyntaxApplicativeId, none}
 import models.domain.UserAnswersReader
 import models.journeyDomain.JourneyDomainModel
+import models.journeyDomain.transport.authorisationsAndLimit.limit.LimitDomain
 import models.transport.authorisations.AuthorisationType
 
 case class AuthorisationsAndLimitDomain(authorisationsDomain: AuthorisationsDomain, limitDomain: Option[LimitDomain]) extends JourneyDomainModel

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewModels.transport.authorisations
+package viewModels.transport.authorisationsAndLimit.authorisations
 
 import config.FrontendAppConfig
 import controllers.transport.authorisationsAndLimit.authorisations.routes

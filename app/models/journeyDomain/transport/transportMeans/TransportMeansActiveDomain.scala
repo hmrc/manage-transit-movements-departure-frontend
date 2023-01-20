@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport
+package models.journeyDomain.transport.transportMeans
 
 import cats.implicits._
 import controllers.transport.transportMeans.active.{routes => activeRoutes}

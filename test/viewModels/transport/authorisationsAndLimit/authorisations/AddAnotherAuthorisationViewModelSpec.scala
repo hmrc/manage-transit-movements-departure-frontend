@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewModels.transport.authorisations
+package viewModels.transport.authorisationsAndLimit.authorisations
 
 import base.SpecBase
 import generators.Generators
@@ -22,7 +22,7 @@ import models.{Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import viewModels.transport.authorisations.AddAnotherAuthorisationViewModel.AddAnotherAuthorisationViewModelProvider
+import viewModels.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationViewModel.AddAnotherAuthorisationViewModelProvider
 
 class AddAnotherAuthorisationViewModelSpec extends SpecBase with Generators with ScalaCheckPropertyChecks {
 

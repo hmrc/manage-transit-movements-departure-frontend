@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport
+package models.journeyDomain.transport.supplyChainActors
 
 import cats.implicits.catsSyntaxTuple2Semigroupal
 import models.domain.{GettableAsReaderOps, UserAnswersReader}

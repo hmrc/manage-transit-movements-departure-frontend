@@ -14,31 +14,30 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.incident
+package models.journeyDomain.transport.supplyChainActors
 
 import base.SpecBase
 import generators.Generators
 import models.Index
 import models.domain.{EitherType, UserAnswersReader}
-import models.journeyDomain.transport.TransportMeansActiveListDomain
 import org.scalacheck.Gen
 
-class TransportMeansActiveListDomainSpec extends SpecBase with Generators {
+class SupplyChainActorsDomainSpec extends SpecBase with Generators {
 
-  "TransportMeansActiveDomainList" - {
+  "SupplyChainActorsDomain" - {
 
     "can be parsed from UserAnswers" in {
 
-      val numberOfActiveBorderMeans = Gen.choose(1, frontendAppConfig.maxActiveBorderTransports).sample.value
+      val numberOfSupplyChainActors = Gen.choose(1, frontendAppConfig.maxSupplyChainActors).sample.value
 
-      val userAnswers = (0 until numberOfActiveBorderMeans).foldLeft(emptyUserAnswers)({
+      val userAnswers = (0 until numberOfSupplyChainActors).foldLeft(emptyUserAnswers)({
         case (updatedUserAnswers, index) =>
-          arbitraryTransportMeansActiveAnswers(updatedUserAnswers, Index(index)).sample.value
+          arbitrarySupplyChainActorAnswers(updatedUserAnswers, Index(index)).sample.value
       })
 
-      val result: EitherType[TransportMeansActiveListDomain] = UserAnswersReader[TransportMeansActiveListDomain].run(userAnswers)
+      val result: EitherType[SupplyChainActorsDomain] = UserAnswersReader[SupplyChainActorsDomain].run(userAnswers)
 
-      result.value.transportMeansActiveListDomain.length mustBe numberOfActiveBorderMeans
+      result.value.SupplyChainActorsDomain.length mustBe numberOfSupplyChainActors
 
     }
   }
