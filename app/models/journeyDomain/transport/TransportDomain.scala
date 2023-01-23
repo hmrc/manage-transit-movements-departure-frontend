@@ -16,7 +16,7 @@
 
 package models.journeyDomain.transport
 
-import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
+import models.domain.{GettableAsFilterForNextReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationsAndLimitDomain
 import models.journeyDomain.transport.carrierDetails.CarrierDetailsDomain
@@ -39,7 +39,7 @@ object TransportDomain {
   implicit val userAnswersReader: UserAnswersReader[TransportDomain] = {
 
     implicit lazy val authorisationsAndLimitReads: UserAnswersReader[Option[AuthorisationsAndLimitDomain]] =
-      ApprovedOperatorPage.reader.flatMap {
+      ApprovedOperatorPage.inferredReader.flatMap {
         case true  => UserAnswersReader[AuthorisationsAndLimitDomain].map(Some(_))
         case false => AddAuthorisationsYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AuthorisationsAndLimitDomain])
       }

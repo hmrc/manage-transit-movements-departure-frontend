@@ -18,15 +18,17 @@ package controllers.transport.authorisationsAndLimit.authorisations.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.AuthorisationReferenceNumberFormProvider
+import generators.Generators
+import models.DeclarationType.Option4
 import models.ProcedureType.{Normal, Simplified}
 import models.transport.authorisations.AuthorisationType
 import models.transport.transportMeans.departure.InlandMode
-import models.{Index, NormalMode}
+import models.{DeclarationType, Index, NormalMode}
 import navigation.transport.AuthorisationNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Gen
-import pages.preTaskList.ProcedureTypePage
+import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage}
 import pages.traderDetails.consignment.ApprovedOperatorPage
 import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
 import pages.transport.transportMeans.departure.InlandModePage
@@ -35,10 +37,11 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.transport.authorisationsAndLimit.authorisations.index.AuthorisationReferenceNumberView
+import org.scalacheck.Arbitrary.arbitrary
 
 import scala.concurrent.Future
 
-class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val prefix                                             = "transport.authorisations.authorisationReferenceNumber"
   private def dynamicTitle(authorisationType: AuthorisationType) = messages(s"$prefix.$authorisationType")
@@ -47,6 +50,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
   private def form(authorisationType: AuthorisationType) = formProvider(prefix, dynamicTitle(authorisationType))
   private val mode                                       = NormalMode
   private val validAnswer                                = "testString"
+  private val nonTIRDeclarationType                      = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
 
   private val firstInlandMode = Gen
     .oneOf(
@@ -69,11 +73,35 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
 
     "must return OK and the correct view for a GET" - {
 
+      "when DeclarationType is TIR and reduced data set is undefined" in {
+
+        val authorisationType = AuthorisationType.TRD
+        val inlandMode        = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
+
+        val userAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, Option4)
+          .setValue(InlandModePage, inlandMode)
+        setExistingUserAnswers(userAnswers)
+
+        val request = FakeRequest(GET, authorisationReferenceNumberRoute)
+
+        val result = route(app, request).value
+
+        val view = injector.instanceOf[AuthorisationReferenceNumberView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form(authorisationType), lrn, s"$prefix.$authorisationType", mode, authorisationIndex)(request, messages).toString
+
+      }
+
       "when using reduced data set and Inland Mode is one of Maritime, Rail or Road" in {
         val authorisationType = AuthorisationType.TRD
         val inlandMode        = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
 
         val userAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, nonTIRDeclarationType)
           .setValue(ApprovedOperatorPage, true)
           .setValue(InlandModePage, inlandMode)
         setExistingUserAnswers(userAnswers)
@@ -94,6 +122,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
         val authorisationType = AuthorisationType.ACR
 
         val userAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, nonTIRDeclarationType)
           .setValue(ApprovedOperatorPage, true)
           .setValue(InlandModePage, firstInlandMode)
           .setValue(ProcedureTypePage, Simplified)
@@ -116,6 +145,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
         val authorisationType = AuthorisationType.SSE
 
         val userAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, nonTIRDeclarationType)
           .setValue(ApprovedOperatorPage, true)
           .setValue(InlandModePage, firstInlandMode)
           .setValue(ProcedureTypePage, Normal)
@@ -143,6 +173,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
         val authorisationType = AuthorisationType.TRD
 
         val userAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, nonTIRDeclarationType)
           .setValue(ApprovedOperatorPage, true)
           .setValue(InlandModePage, firstInlandMode)
           .setValue(ProcedureTypePage, Normal)
@@ -170,6 +201,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
         val authorisationType1 = AuthorisationType.SSE
 
         val userAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, nonTIRDeclarationType)
           .setValue(ApprovedOperatorPage, true)
           .setValue(InlandModePage, firstInlandMode)
           .setValue(ProcedureTypePage, Normal)
@@ -200,6 +232,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
       val inlandMode = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
 
       val userAnswers = emptyUserAnswers
+        .setValue(DeclarationTypePage, nonTIRDeclarationType)
         .setValue(ApprovedOperatorPage, true)
         .setValue(InlandModePage, inlandMode)
       setExistingUserAnswers(userAnswers)
@@ -221,6 +254,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
       val inlandMode        = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
 
       val userAnswers = emptyUserAnswers
+        .setValue(DeclarationTypePage, nonTIRDeclarationType)
         .setValue(ApprovedOperatorPage, true)
         .setValue(InlandModePage, inlandMode)
       setExistingUserAnswers(userAnswers)
