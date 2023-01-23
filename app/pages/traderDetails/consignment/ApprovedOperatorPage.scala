@@ -44,7 +44,7 @@ case object ApprovedOperatorPage extends QuestionPage[Boolean] {
     Some(controllers.traderDetails.consignment.routes.ApprovedOperatorController.onPageLoad(userAnswers.lrn, mode))
 
   def inferredReader: UserAnswersReader[Boolean] = DeclarationTypePage.reader.flatMap {
-    case Option4 => UserAnswersReader(true)
+    case Option4 => UserAnswersReader(false)
     case _       => ApprovedOperatorPage.reader
   }
 }
