@@ -17,42 +17,14 @@
 package api
 
 import generated.{Number0, Number1}
-import models.DateTime
-
-import java.util.GregorianCalendar
-import javax.xml.datatype.{DatatypeFactory, XMLGregorianCalendar}
+import javax.xml.datatype.DatatypeFactory
 
 object ApiXmlHelpers {
 
-  // TODO - Need formatters for these dates to match schema regex
-  def dateToXMLGregorian(dateTime: DateTime): Option[XMLGregorianCalendar] =
-    Some(
-      DatatypeFactory
-        .newInstance()
-        .newXMLGregorianCalendar(
-          new GregorianCalendar(
-            dateTime.date.getYear,
-            dateTime.date.getMonthValue,
-            dateTime.date.getDayOfMonth
-          )
-        )
-    )
-
-  def dateTimeToXMLGregorian(dateTime: DateTime): Option[XMLGregorianCalendar] =
-    Some(
-      DatatypeFactory
-        .newInstance()
-        .newXMLGregorianCalendar(
-          new GregorianCalendar(
-            dateTime.date.getYear,
-            dateTime.date.getMonthValue,
-            dateTime.date.getDayOfMonth,
-            dateTime.time.getHour,
-            dateTime.time.getMinute,
-            dateTime.time.getSecond
-          )
-        )
-    )
+  def toDate(date: String) =
+    DatatypeFactory
+      .newInstance()
+      .newXMLGregorianCalendar(date.replace("Z", ""))
 
   def boolToFlag(x: Boolean) = x match {
     case true => Number1
