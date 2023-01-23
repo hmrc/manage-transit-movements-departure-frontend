@@ -73,6 +73,31 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
 
     "must return OK and the correct view for a GET" - {
 
+      "when DeclarationType is TIR and reduced data set is undefined" in {
+
+        val authorisationType = arbitrary[AuthorisationType].sample.value
+        val inlandMode        = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
+
+        val userAnswers = emptyUserAnswers
+          .setValue(ProcedureTypePage, Normal)
+          .setValue(DeclarationTypePage, Option4)
+          .setValue(InlandModePage, inlandMode)
+          .setValue(AuthorisationTypePage(index), authorisationType)
+        setExistingUserAnswers(userAnswers)
+
+        val request = FakeRequest(GET, authorisationReferenceNumberRoute)
+
+        val result = route(app, request).value
+
+        val view = injector.instanceOf[AuthorisationReferenceNumberView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form(authorisationType), lrn, s"$prefix.$authorisationType", mode, authorisationIndex)(request, messages).toString
+
+      }
+
       "when using reduced data set and Inland Mode is one of Maritime, Rail or Road" in {
         val authorisationType = AuthorisationType.TRD
         val inlandMode        = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
