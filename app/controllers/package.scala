@@ -15,9 +15,11 @@
  */
 
 import cats.data.ReaderT
-import models.UserAnswers
-import models.journeyDomain.WriterError
+import models.domain.UserAnswersReader
+import models.journeyDomain.Stage.CompletingJourney
+import models.journeyDomain.{JourneyDomainModel, ReaderError, WriterError}
 import models.requests.MandatoryDataRequest
+import models.{Mode, UserAnswers}
 import navigation.UserAnswersNavigator
 import pages.QuestionPage
 import play.api.libs.json.Format
@@ -25,6 +27,8 @@ import play.api.mvc.Results.Redirect
 import play.api.mvc.{Call, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
+import viewModels.taskList.TaskStatus._
+import viewModels.taskList.{Task, TaskStatus}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
@@ -41,8 +45,8 @@ package object controllers {
       ReaderT[EitherType, UserAnswers, Write[A]](
         userAnswers =>
           userAnswers.set[A](page, value) match {
-            case Success(value)     => Right((page, value))
-            case Failure(exception) => Left(WriterError(page, Some(s"Failed to write $value to page ${page.path} with exception: ${exception.toString}")))
+            case Success(userAnswers) => Right((page, userAnswers))
+            case Failure(exception)   => Left(WriterError(page, Some(s"Failed to write $value to page ${page.path} with exception: ${exception.toString}")))
           }
       )
 
@@ -54,12 +58,27 @@ package object controllers {
             case Failure(exception) => Left(WriterError(page, Some(s"Failed to remove ${page.path} with exception: ${exception.toString}")))
           }
       }
-
-    private def updateTasks(userAnswers: UserAnswers)(implicit navigator: UserAnswersNavigator): UserAnswersWriter[Write[A]] =
-      ???
   }
 
   implicit class SettableOpsRunner[A](userAnswersWriter: UserAnswersWriter[Write[A]]) {
+
+    def updateTask[T <: JourneyDomainModel](mode: Mode)(implicit reads: UserAnswersReader[T]): UserAnswersWriter[Write[A]] =
+      userAnswersWriter.flatMapF {
+        case (page, userAnswers) =>
+          page.path.path.headOption.map(_.toJsonString) match {
+            case Some(section) =>
+              val (status: TaskStatus, href: Option[Call]) = UserAnswersReader[T].run(userAnswers) match {
+                case Left(ReaderError(page, _)) => (InProgress, page.route(userAnswers, mode))
+                case Right(x)                   => (Completed, x.routeIfCompleted(userAnswers, mode, CompletingJourney))
+              }
+              Task.apply(section, status, href.map(_.url)) match {
+                case Some(task) => Right((page, userAnswers.updateTask(task)))
+                case None       => Left(WriterError(page, Some(s"Failed to find task for section $section")))
+              }
+            case None =>
+              Left(WriterError(page, Some(s"Failed to find section in JSON path ${page.path}")))
+          }
+      }
 
     def writeToSession(
       userAnswers: UserAnswers

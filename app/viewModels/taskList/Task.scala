@@ -41,6 +41,14 @@ abstract class Task {
 object Task {
   import play.api.libs.functional.syntax._
 
+  def apply(section: String, status: TaskStatus, href: Option[String]): Option[Task] = section match {
+    case TraderDetailsTask.section    => Some(TraderDetailsTask(status, href))
+    case RouteDetailsTask.section     => Some(RouteDetailsTask(status, href))
+    case TransportTask.section        => Some(TransportTask(status, href))
+    case GuaranteeDetailsTask.section => Some(GuaranteeDetailsTask(status, href))
+    case _                            => None
+  }
+
   implicit val reads: Reads[Task] = (json: JsValue) => {
     type Tuple = (String, TaskStatus, Option[String])
     implicit val tupleReads: Reads[Tuple] = (
@@ -51,12 +59,9 @@ object Task {
 
     json.validate[Tuple].flatMap {
       case (section, status, href) =>
-        section match {
-          case TraderDetailsTask.section    => JsSuccess(TraderDetailsTask(status, href))
-          case RouteDetailsTask.section     => JsSuccess(RouteDetailsTask(status, href))
-          case TransportTask.section        => JsSuccess(TransportTask(status, href))
-          case GuaranteeDetailsTask.section => JsSuccess(GuaranteeDetailsTask(status, href))
-          case x                            => JsError(s"$x is not a valid task")
+        Task(section, status, href) match {
+          case Some(value) => JsSuccess(value)
+          case None        => JsError(s"$section is not a valid task")
         }
     }
   }
