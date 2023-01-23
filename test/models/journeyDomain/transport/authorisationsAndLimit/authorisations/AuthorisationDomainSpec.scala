@@ -30,6 +30,7 @@ import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage}
 import pages.traderDetails.consignment.ApprovedOperatorPage
+import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
 import pages.transport.transportMeans.departure.InlandModePage
 
@@ -42,17 +43,43 @@ class AuthorisationDomainSpec extends SpecBase with Generators {
 
     "can be parsed from UserAnswers" - {
 
-      "when reduced data set indicator is undefined (TIR)" - {
+      "when DeclarationType is TIR (reduced data set is 0)" in {
+        val inlandModeGen = Gen.oneOf(InlandMode.values.diff(authorisationTypeInlandModes))
 
-        "and procedure type is normal" in {
+        forAll(inlandModeGen, arbitrary[AuthorisationType]) {
+          (inlandMode, authorisationType) =>
+            val userAnswers = emptyUserAnswers
+              .setValue(ProcedureTypePage, Normal)
+              .setValue(DeclarationTypePage, DeclarationType.Option4)
+              .setValue(InlandModePage, inlandMode)
+              .setValue(AuthorisationTypePage(Index(0)), authorisationType)
+              .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
 
+            val expectedResult = AuthorisationDomain(
+              authorisationType = authorisationType,
+              referenceNumber = referenceNumber
+            )(authorisationIndex)
+
+            val result: EitherType[AuthorisationDomain] =
+              UserAnswersReader[AuthorisationDomain](AuthorisationDomain.userAnswersReader(authorisationIndex))
+                .run(userAnswers)
+
+            result.value mustBe expectedResult
+        }
+      }
+
+      "when reduced data set indicator is 1" - {
+        val declarationTypeGen = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)
+
+        "and inland mode is 1,2 or 4" in {
           val inlandModeGen = Gen.oneOf(authorisationTypeInlandModes)
 
-          forAll(inlandModeGen) {
-            inlandMode =>
+          forAll(inlandModeGen, arbitrary[ProcedureType], declarationTypeGen) {
+            (inlandMode, procedureType, declarationType) =>
               val userAnswers = emptyUserAnswers
-                .setValue(ProcedureTypePage, Normal)
-                .setValue(DeclarationTypePage, Option4)
+                .setValue(ProcedureTypePage, procedureType)
+                .setValue(DeclarationTypePage, declarationType)
+                .setValue(ApprovedOperatorPage, true)
                 .setValue(InlandModePage, inlandMode)
                 .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
 
@@ -68,100 +95,114 @@ class AuthorisationDomainSpec extends SpecBase with Generators {
           }
         }
 
-        "when reduced data set indicator is 1" - {
-          val declarationTypeGen = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)
+        "and inland mode is not 1,2 or 4" - {
+          val inlandModeGen = Gen.oneOf(InlandMode.values.diff(authorisationTypeInlandModes))
+          "and procedure type is simplified" in {
 
-          "and inland mode is 1,2 or 4" in {
-            val inlandModeGen = Gen.oneOf(authorisationTypeInlandModes)
-
-            forAll(inlandModeGen, arbitrary[ProcedureType], declarationTypeGen) {
-              (inlandMode, procedureType, declarationType) =>
+            forAll(inlandModeGen, declarationTypeGen) {
+              (inlandMode, declarationType) =>
                 val userAnswers = emptyUserAnswers
-                  .setValue(ProcedureTypePage, procedureType)
+                  .setValue(ProcedureTypePage, Simplified)
                   .setValue(DeclarationTypePage, declarationType)
                   .setValue(ApprovedOperatorPage, true)
                   .setValue(InlandModePage, inlandMode)
                   .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
 
                 val expectedResult = AuthorisationDomain(
-                  authorisationType = AuthorisationType.TRD,
+                  authorisationType = AuthorisationType.ACR,
                   referenceNumber = referenceNumber
                 )(authorisationIndex)
 
-                val result: EitherType[AuthorisationDomain] = UserAnswersReader[AuthorisationDomain](AuthorisationDomain.userAnswersReader(authorisationIndex))
-                  .run(userAnswers)
+                val result: EitherType[AuthorisationDomain] =
+                  UserAnswersReader[AuthorisationDomain](AuthorisationDomain.userAnswersReader(authorisationIndex))
+                    .run(userAnswers)
 
                 result.value mustBe expectedResult
             }
           }
 
-          "and inland mode is not 1,2 or 4" - {
-            val inlandModeGen = Gen.oneOf(InlandMode.values.diff(authorisationTypeInlandModes))
-            "and procedure type is simplified" in {
+          "and procedure type is normal" in {
+            forAll(inlandModeGen, arbitrary[AuthorisationType], declarationTypeGen) {
+              (inlandMode, authorisationType, declarationType) =>
+                val userAnswers = emptyUserAnswers
+                  .setValue(ProcedureTypePage, Normal)
+                  .setValue(DeclarationTypePage, declarationType)
+                  .setValue(ApprovedOperatorPage, true)
+                  .setValue(InlandModePage, inlandMode)
+                  .setValue(AuthorisationTypePage(Index(0)), authorisationType)
+                  .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
 
+                val expectedResult = AuthorisationDomain(
+                  authorisationType = authorisationType,
+                  referenceNumber = referenceNumber
+                )(authorisationIndex)
+
+                val result: EitherType[AuthorisationDomain] =
+                  UserAnswersReader[AuthorisationDomain](AuthorisationDomain.userAnswersReader(authorisationIndex))
+                    .run(userAnswers)
+
+                result.value mustBe expectedResult
+            }
+          }
+        }
+      }
+
+      "when reduced data set indicator is 0" ignore {} //TODO: Add in tests once nav is in
+
+    }
+
+    "cannot be parsed from user answers" - {
+
+      "and DeclarationType is TIR (reduced data set is 0)" - {
+        "must go to authorisation type" in {
+          val inlandModeGen = Gen.oneOf(authorisationTypeInlandModes)
+          forAll(inlandModeGen) {
+            inlandMode =>
+              val userAnswers = emptyUserAnswers
+                .setValue(ProcedureTypePage, Normal)
+                .setValue(DeclarationTypePage, DeclarationType.Option4)
+                .setValue(InlandModePage, inlandMode)
+
+              val result: EitherType[AuthorisationDomain] = UserAnswersReader[AuthorisationDomain](
+                AuthorisationDomain.userAnswersReader(index)
+              ).run(userAnswers)
+
+              result.left.value.page mustBe AuthorisationTypePage(index)
+          }
+        }
+      }
+
+      "and reduced data set indicator is 1" - {
+        val declarationTypeGen = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)
+
+        "and inland mode is 1,2 or 4 " - {
+          "must bypass authorisation type and go to authorisation reference number" in {
+            val inlandModeGen = Gen.oneOf(authorisationTypeInlandModes)
+            forAll(inlandModeGen, declarationTypeGen) {
+              (inlandMode, declarationType) =>
+                val userAnswers = emptyUserAnswers
+                  .setValue(ProcedureTypePage, Normal)
+                  .setValue(DeclarationTypePage, declarationType)
+                  .setValue(ApprovedOperatorPage, true)
+                  .setValue(InlandModePage, inlandMode)
+
+                val result: EitherType[AuthorisationDomain] = UserAnswersReader[AuthorisationDomain](
+                  AuthorisationDomain.userAnswersReader(index)
+                ).run(userAnswers)
+
+                result.left.value.page mustBe AuthorisationReferenceNumberPage(index)
+            }
+          }
+        }
+
+        "and inland mode is not 1,2 or 4" - {
+          "and procedure type is simplified" - {
+            "must bypass authorisation type and go to authorisation reference number" in {
+              val inlandModeGen = Gen.oneOf(InlandMode.values.diff(authorisationTypeInlandModes))
               forAll(inlandModeGen, declarationTypeGen) {
                 (inlandMode, declarationType) =>
                   val userAnswers = emptyUserAnswers
                     .setValue(ProcedureTypePage, Simplified)
-                    .setValue(DeclarationTypePage, declarationType)
-                    .setValue(ApprovedOperatorPage, true)
-                    .setValue(InlandModePage, inlandMode)
-                    .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
-
-                  val expectedResult = AuthorisationDomain(
-                    authorisationType = AuthorisationType.ACR,
-                    referenceNumber = referenceNumber
-                  )(authorisationIndex)
-
-                  val result: EitherType[AuthorisationDomain] =
-                    UserAnswersReader[AuthorisationDomain](AuthorisationDomain.userAnswersReader(authorisationIndex))
-                      .run(userAnswers)
-
-                  result.value mustBe expectedResult
-              }
-            }
-
-            "and procedure type is normal" in {
-              forAll(inlandModeGen, arbitrary[AuthorisationType], declarationTypeGen) {
-                (inlandMode, authorisationType, declarationType) =>
-                  val userAnswers = emptyUserAnswers
-                    .setValue(ProcedureTypePage, Normal)
-                    .setValue(DeclarationTypePage, declarationType)
-                    .setValue(ApprovedOperatorPage, true)
-                    .setValue(InlandModePage, inlandMode)
-                    .setValue(AuthorisationTypePage(Index(0)), authorisationType)
-                    .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
-
-                  val expectedResult = AuthorisationDomain(
-                    authorisationType = authorisationType,
-                    referenceNumber = referenceNumber
-                  )(authorisationIndex)
-
-                  val result: EitherType[AuthorisationDomain] =
-                    UserAnswersReader[AuthorisationDomain](AuthorisationDomain.userAnswersReader(authorisationIndex))
-                      .run(userAnswers)
-
-                  result.value mustBe expectedResult
-              }
-            }
-          }
-
-          "when reduced data set indicator is 0" ignore {} //TODO: Add in tests once nav is in
-        }
-      }
-
-      "cannot be parsed from user answers" - {
-
-        "and reduced data set indicator is 1" - {
-          val declarationTypeGen = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)
-
-          "and inland mode is 1,2 or 4 " - {
-            "must bypass authorisation type and go to authorisation reference number" in {
-              val inlandModeGen = Gen.oneOf(authorisationTypeInlandModes)
-              forAll(inlandModeGen, declarationTypeGen) {
-                (inlandMode, declarationType) =>
-                  val userAnswers = emptyUserAnswers
-                    .setValue(ProcedureTypePage, Normal)
                     .setValue(DeclarationTypePage, declarationType)
                     .setValue(ApprovedOperatorPage, true)
                     .setValue(InlandModePage, inlandMode)
@@ -171,28 +212,6 @@ class AuthorisationDomainSpec extends SpecBase with Generators {
                   ).run(userAnswers)
 
                   result.left.value.page mustBe AuthorisationReferenceNumberPage(index)
-              }
-            }
-          }
-
-          "and inland mode is not 1,2 or 4" - {
-            "and procedure type is simplified" - {
-              "must bypass authorisation type and go to authorisation reference number" in {
-                val inlandModeGen = Gen.oneOf(InlandMode.values.diff(authorisationTypeInlandModes))
-                forAll(inlandModeGen, declarationTypeGen) {
-                  (inlandMode, declarationType) =>
-                    val userAnswers = emptyUserAnswers
-                      .setValue(ProcedureTypePage, Simplified)
-                      .setValue(DeclarationTypePage, declarationType)
-                      .setValue(ApprovedOperatorPage, true)
-                      .setValue(InlandModePage, inlandMode)
-
-                    val result: EitherType[AuthorisationDomain] = UserAnswersReader[AuthorisationDomain](
-                      AuthorisationDomain.userAnswersReader(index)
-                    ).run(userAnswers)
-
-                    result.left.value.page mustBe AuthorisationReferenceNumberPage(index)
-                }
               }
             }
           }

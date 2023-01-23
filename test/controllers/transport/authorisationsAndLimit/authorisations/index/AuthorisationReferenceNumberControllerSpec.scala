@@ -75,12 +75,14 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
 
       "when DeclarationType is TIR and reduced data set is undefined" in {
 
-        val authorisationType = AuthorisationType.TRD
+        val authorisationType = arbitrary[AuthorisationType].sample.value
         val inlandMode        = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
 
         val userAnswers = emptyUserAnswers
+          .setValue(ProcedureTypePage, Normal)
           .setValue(DeclarationTypePage, Option4)
           .setValue(InlandModePage, inlandMode)
+          .setValue(AuthorisationTypePage(index), authorisationType)
         setExistingUserAnswers(userAnswers)
 
         val request = FakeRequest(GET, authorisationReferenceNumberRoute)
