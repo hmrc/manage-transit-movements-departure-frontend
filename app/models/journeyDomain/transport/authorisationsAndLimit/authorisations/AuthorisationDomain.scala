@@ -36,7 +36,7 @@ import play.api.mvc.Call
 
 case class AuthorisationDomain(authorisationType: AuthorisationType, referenceNumber: String)(index: Index) extends JourneyDomainModel {
 
-  def asString()(implicit messages: Messages): String =
+  def asString(implicit messages: Messages): String =
     AuthorisationDomain.asString(authorisationType, referenceNumber)
 
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] = Some {
@@ -61,7 +61,7 @@ object AuthorisationDomain {
     val authorisationTypeReads: UserAnswersReader[AuthorisationType] = {
       if (index.isFirst) {
         for {
-          reducedDataSetIndicator <- ApprovedOperatorPage.reader
+          reducedDataSetIndicator <- ApprovedOperatorPage.inferredReader
           inlandMode              <- InlandModePage.reader
           procedureType           <- ProcedureTypePage.reader
 

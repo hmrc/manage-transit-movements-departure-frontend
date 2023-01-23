@@ -57,7 +57,7 @@ class AuthorisationReferenceNumberController @Inject() (
   private type Request = DataRequest[AnyContent]
 
   private def authorisationType(authorisationIndex: Index)(implicit request: Request): Option[AuthorisationType] = {
-    val reducedDataSet = request.userAnswers.get(ApprovedOperatorPage)
+    val reducedDataSet = ApprovedOperatorPage.inferredReader.run(request.userAnswers).toOption
     val inlandMode     = request.userAnswers.get(InlandModePage)
     val procedureType  = request.userAnswers.get(ProcedureTypePage)
 

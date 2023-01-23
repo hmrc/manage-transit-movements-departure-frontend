@@ -17,16 +17,17 @@
 package utils.cyaHelpers.authorisations
 
 import base.SpecBase
+import controllers.transport.authorisationsAndLimit.authorisations.index.routes
 import forms.Constants.maxAuthorisationRefNumberLength
 import generators.Generators
 import models.ProcedureType.{Normal, Simplified}
 import models.transport.authorisations.AuthorisationType
 import models.transport.transportMeans.departure.InlandMode
-import models.{Index, Mode, NormalMode, ProcedureType}
+import models.{DeclarationType, Index, Mode, NormalMode, ProcedureType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.preTaskList.ProcedureTypePage
+import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage}
 import pages.traderDetails.consignment.ApprovedOperatorPage
 import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
 import pages.transport.transportMeans.departure.InlandModePage
@@ -36,7 +37,6 @@ import viewModels.ListItem
 class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   private val mode                         = arbitrary[Mode].sample.value
-  private val procedureType                = arbitrary[ProcedureType].sample.value
   private val referenceNumber              = Gen.alphaNumStr.sample.value.take(maxAuthorisationRefNumberLength)
   private val authorisationTypeInlandModes = List(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)
 
@@ -51,18 +51,19 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
       }
     }
 
-    "when user answers populated " - {
+    "when user answers populated with a complete authorisation" - {
 
       "and reduced data set indicator is 1" - {
 
         "and inland mode is 1, 2 or 4" in {
           val inlandModeGen = Gen.oneOf(authorisationTypeInlandModes).sample.value
 
-          forAll(inlandModeGen) {
-            inlandMode =>
+          forAll(arbitrary[ProcedureType], arbitrary[DeclarationType](arbitraryNonOption4DeclarationType), inlandModeGen) {
+            (procedureType, declarationType, inlandMode) =>
               val answers = emptyUserAnswers
-                .setValue(ApprovedOperatorPage, true)
                 .setValue(ProcedureTypePage, procedureType)
+                .setValue(DeclarationTypePage, declarationType)
+                .setValue(ApprovedOperatorPage, true)
                 .setValue(InlandModePage, inlandMode)
                 .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
 
@@ -70,10 +71,8 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
               helper.listItems mustBe Seq(
                 Right(
                   ListItem(
-                    name = s"${AuthorisationType.TRD} - $referenceNumber",
-                    changeUrl = controllers.transport.authorisationsAndLimit.authorisations.index.routes.AuthorisationReferenceNumberController
-                      .onPageLoad(lrn, mode, authorisationIndex)
-                      .url,
+                    name = s"TRD - $referenceNumber",
+                    changeUrl = routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, authorisationIndex).url,
                     removeUrl = None
                   )
                 )
@@ -86,11 +85,12 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
           val inlandModeGen = Gen.oneOf(InlandMode.values.diff(authorisationTypeInlandModes))
 
           "and procedure type is simplified" in {
-            forAll(inlandModeGen) {
-              inlandMode =>
+            forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType), inlandModeGen) {
+              (declarationType, inlandMode) =>
                 val answers = emptyUserAnswers
-                  .setValue(ApprovedOperatorPage, true)
                   .setValue(ProcedureTypePage, Simplified)
+                  .setValue(DeclarationTypePage, declarationType)
+                  .setValue(ApprovedOperatorPage, true)
                   .setValue(InlandModePage, inlandMode)
                   .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
 
@@ -98,10 +98,8 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
                 helper.listItems mustBe Seq(
                   Right(
                     ListItem(
-                      name = s"${AuthorisationType.ACR} - $referenceNumber",
-                      changeUrl = controllers.transport.authorisationsAndLimit.authorisations.index.routes.AuthorisationReferenceNumberController
-                        .onPageLoad(lrn, mode, authorisationIndex)
-                        .url,
+                      name = s"ACR - $referenceNumber",
+                      changeUrl = routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, authorisationIndex).url,
                       removeUrl = None
                     )
                   )
@@ -110,11 +108,12 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
           }
 
           "and procedure type is normal" in {
-            forAll(inlandModeGen, arbitrary[AuthorisationType]) {
-              (inlandMode, authorisationType) =>
+            forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType), inlandModeGen, arbitrary[AuthorisationType]) {
+              (declarationType, inlandMode, authorisationType) =>
                 val answers = emptyUserAnswers
-                  .setValue(ApprovedOperatorPage, true)
                   .setValue(ProcedureTypePage, Normal)
+                  .setValue(DeclarationTypePage, declarationType)
+                  .setValue(ApprovedOperatorPage, true)
                   .setValue(InlandModePage, inlandMode)
                   .setValue(AuthorisationTypePage(Index(0)), authorisationType)
                   .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
@@ -123,21 +122,39 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
                 helper.listItems mustBe Seq(
                   Right(
                     ListItem(
-                      name = s"$authorisationType - $referenceNumber",
-                      changeUrl = controllers.transport.authorisationsAndLimit.authorisations.index.routes.AuthorisationReferenceNumberController
-                        .onPageLoad(lrn, mode, authorisationIndex)
-                        .url,
-                      removeUrl = Some(
-                        controllers.transport.authorisationsAndLimit.authorisations.index.routes.RemoveAuthorisationYesNoController
-                          .onPageLoad(lrn, mode, authorisationIndex)
-                          .url
-                      )
+                      name = s"${authorisationType.forDisplay} - $referenceNumber",
+                      changeUrl = routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, authorisationIndex).url,
+                      removeUrl = Some(routes.RemoveAuthorisationYesNoController.onPageLoad(lrn, mode, authorisationIndex).url)
                     )
                   )
                 )
             }
           }
         }
+      }
+    }
+
+    "when user answers populated with an in progress authorisation" in {
+      val inlandModeGen = Gen.oneOf(InlandMode.values.diff(authorisationTypeInlandModes))
+      forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType), inlandModeGen, arbitrary[AuthorisationType]) {
+        (declarationType, inlandMode, authorisationType) =>
+          val answers = emptyUserAnswers
+            .setValue(ProcedureTypePage, Normal)
+            .setValue(DeclarationTypePage, declarationType)
+            .setValue(ApprovedOperatorPage, true)
+            .setValue(InlandModePage, inlandMode)
+            .setValue(AuthorisationTypePage(Index(0)), authorisationType)
+
+          val helper = new AuthorisationsAnswersHelper(answers, mode)
+          helper.listItems mustBe Seq(
+            Left(
+              ListItem(
+                name = authorisationType.forDisplay,
+                changeUrl = routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, authorisationIndex).url,
+                removeUrl = Some(routes.RemoveAuthorisationYesNoController.onPageLoad(lrn, mode, authorisationIndex).url)
+              )
+            )
+          )
       }
     }
   }
