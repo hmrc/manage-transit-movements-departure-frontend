@@ -24,6 +24,7 @@ import play.api.libs.json.JsObject
 case class TraderDetailsTask(status: TaskStatus, href: Option[String]) extends Task {
   override val id: String         = "trader-details"
   override val messageKey: String = "traderDetails"
+  override val section: String    = TraderDetailsTask.section
 }
 
 object TraderDetailsTask {
@@ -34,4 +35,6 @@ object TraderDetailsTask {
 
     new TraderDetailsTask(status, href)
   }
+
+  val section: String = ".traderDetails"
 }

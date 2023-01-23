@@ -18,7 +18,7 @@ import cats.data.ReaderT
 import models.UserAnswers
 import models.journeyDomain.WriterError
 import models.requests.MandatoryDataRequest
-import navigation.Navigator
+import navigation.UserAnswersNavigator
 import pages.QuestionPage
 import play.api.libs.json.Format
 import play.api.mvc.Results.Redirect
@@ -54,6 +54,9 @@ package object controllers {
             case Failure(exception) => Left(WriterError(page, Some(s"Failed to remove ${page.path} with exception: ${exception.toString}")))
           }
       }
+
+    private def updateTasks(userAnswers: UserAnswers)(implicit navigator: UserAnswersNavigator): UserAnswersWriter[Write[A]] =
+      ???
   }
 
   implicit class SettableOpsRunner[A](userAnswersWriter: UserAnswersWriter[Write[A]]) {
@@ -81,7 +84,7 @@ package object controllers {
 
   implicit class NavigatorOps[A](write: Future[Write[A]]) {
 
-    def navigate()(implicit navigator: Navigator, executionContext: ExecutionContext): Future[Result] =
+    def navigate()(implicit navigator: UserAnswersNavigator, executionContext: ExecutionContext): Future[Result] =
       navigate {
         case (_, userAnswers) => navigator.nextPage(userAnswers)
       }

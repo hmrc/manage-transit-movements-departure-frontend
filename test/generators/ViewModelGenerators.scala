@@ -120,11 +120,13 @@ trait ViewModelGenerators {
       arbitraryMessageKey <- Gen.alphaNumStr
       arbitraryId         <- Gen.alphaNumStr
       arbitraryHref       <- Gen.option(Gen.alphaNumStr)
+      arbitrarySection    <- Gen.alphaNumStr
     } yield new Task {
       override val status: TaskStatus   = arbitraryStatus
       override val messageKey: String   = arbitraryMessageKey
       override val id: String           = arbitraryId
       override val href: Option[String] = arbitraryHref
+      override val section: String      = arbitrarySection
     }
   }
 
@@ -133,11 +135,13 @@ trait ViewModelGenerators {
       arbitraryMessageKey <- Gen.alphaNumStr
       arbitraryId         <- Gen.alphaNumStr
       arbitraryHref       <- Gen.option(Gen.alphaNumStr)
+      arbitrarySection    <- Gen.alphaNumStr
     } yield new Task {
       override val status: TaskStatus   = TaskStatus.Completed
       override val messageKey: String   = arbitraryMessageKey
       override val id: String           = arbitraryId
       override val href: Option[String] = arbitraryHref
+      override val section: String      = arbitrarySection
     }
   }
 

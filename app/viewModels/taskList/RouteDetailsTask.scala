@@ -24,6 +24,7 @@ import play.api.libs.json.JsObject
 case class RouteDetailsTask(status: TaskStatus, href: Option[String]) extends Task {
   override val id: String         = "route-details"
   override val messageKey: String = "routeDetails"
+  override val section: String    = RouteDetailsTask.section
 }
 
 object RouteDetailsTask {
@@ -40,4 +41,6 @@ object RouteDetailsTask {
 
     new RouteDetailsTask(status, href)
   }
+
+  val section: String = ".routeDetails"
 }

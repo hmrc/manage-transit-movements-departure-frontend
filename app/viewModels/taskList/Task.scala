@@ -17,13 +17,15 @@
 package viewModels.taskList
 
 import play.api.i18n.Messages
-import viewModels.taskList.TaskStatus.{CannotStartYet, Completed, InProgress, NotStarted}
+import play.api.libs.json._
+import viewModels.taskList.TaskStatus._
 
 abstract class Task {
   val status: TaskStatus
   val id: String
   val href: Option[String]
   val messageKey: String
+  val section: String
 
   def name(implicit messages: Messages): String = messages {
     status match {
@@ -34,4 +36,36 @@ abstract class Task {
   }
 
   def isCompleted: Boolean = status == Completed
+}
+
+object Task {
+  import play.api.libs.functional.syntax._
+
+  implicit val reads: Reads[Task] = (json: JsValue) => {
+    type Tuple = (String, TaskStatus, Option[String])
+    implicit val tupleReads: Reads[Tuple] = (
+      (__ \ "section").read[String] and
+        (__ \ "status").read[TaskStatus] and
+        (__ \ "href").readNullable[String]
+    ).tupled
+
+    json.validate[Tuple].flatMap {
+      case (section, status, href) =>
+        section match {
+          case TraderDetailsTask.section    => JsSuccess(TraderDetailsTask(status, href))
+          case RouteDetailsTask.section     => JsSuccess(RouteDetailsTask(status, href))
+          case TransportTask.section        => JsSuccess(TransportTask(status, href))
+          case GuaranteeDetailsTask.section => JsSuccess(GuaranteeDetailsTask(status, href))
+          case x                            => JsError(s"$x is not a valid task")
+        }
+    }
+  }
+
+  implicit val writes: Writes[Task] = (
+    (__ \ "section").write[String] and
+      (__ \ "status").write[TaskStatus] and
+      (__ \ "href").writeNullable[String]
+  ).apply {
+    task => (task.section, task.status, task.href)
+  }
 }

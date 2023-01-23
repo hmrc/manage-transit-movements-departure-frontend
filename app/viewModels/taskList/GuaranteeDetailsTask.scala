@@ -24,6 +24,7 @@ import play.api.libs.json.JsArray
 case class GuaranteeDetailsTask(status: TaskStatus, href: Option[String]) extends Task {
   override val id: String         = "guarantee-details"
   override val messageKey: String = "guaranteeDetails"
+  override val section: String    = GuaranteeDetailsTask.section
 }
 
 object GuaranteeDetailsTask {
@@ -37,4 +38,6 @@ object GuaranteeDetailsTask {
 
     new GuaranteeDetailsTask(status, href)
   }
+
+  val section: String = ".guaranteeDetails"
 }

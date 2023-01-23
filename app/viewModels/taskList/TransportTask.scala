@@ -24,6 +24,7 @@ import play.api.libs.json.JsObject
 case class TransportTask(status: TaskStatus, href: Option[String]) extends Task {
   override val id: String         = "transport-details"
   override val messageKey: String = "transportDetails"
+  override val section: String    = TransportTask.section
 }
 
 object TransportTask {
@@ -34,4 +35,6 @@ object TransportTask {
 
     new TransportTask(status, href)
   }
+
+  val section: String = ".transportDetails"
 }
