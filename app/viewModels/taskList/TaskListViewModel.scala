@@ -16,26 +16,25 @@
 
 package viewModels.taskList
 
-import config.FrontendAppConfig
 import models.UserAnswers
 
 class TaskListViewModel {
 
-  def apply(userAnswers: UserAnswers)(implicit config: FrontendAppConfig): Seq[Task] = {
+  def apply(userAnswers: UserAnswers): Seq[Task] = {
 
-    def task(section: String, href: String, dependentSections: Seq[String] = Nil): Option[Task] = {
+    def task(section: String, dependentSections: Seq[String] = Nil): Option[Task] = {
       val tasks = userAnswers.tasks
       tasks.find(_.section == section).orElse {
         val status = if (dependentSections.allCompleted(tasks)) TaskStatus.NotStarted else TaskStatus.CannotStartYet
-        Task(section, status, if (status == TaskStatus.CannotStartYet) None else Some(href))
+        Task(section, status)
       }
     }
 
     Seq(
-      task(TraderDetailsTask.section, config.traderDetailsFrontendUrl(userAnswers.lrn)),
-      task(RouteDetailsTask.section, config.routeDetailsFrontendUrl(userAnswers.lrn)),
-      task(TransportTask.section, config.transportDetailsFrontendUrl(userAnswers.lrn), Seq(RouteDetailsTask.section, TransportTask.section)),
-      task(GuaranteeDetailsTask.section, config.guaranteeDetailsFrontendUrl(userAnswers.lrn))
+      task(TraderDetailsTask.section),
+      task(RouteDetailsTask.section),
+      task(TransportTask.section, Seq(RouteDetailsTask.section, TransportTask.section)),
+      task(GuaranteeDetailsTask.section)
     ).flatten
   }
 }

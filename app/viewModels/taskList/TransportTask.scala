@@ -16,25 +16,18 @@
 
 package viewModels.taskList
 
-import models.UserAnswers
-import models.journeyDomain.transport.TransportDomain
-import pages.sections.transport.TransportSection
-import play.api.libs.json.JsObject
+import config.FrontendAppConfig
+import models.LocalReferenceNumber
 
-case class TransportTask(status: TaskStatus, href: Option[String]) extends Task {
+case class TransportTask(status: TaskStatus) extends Task {
   override val id: String         = "transport-details"
   override val messageKey: String = "transportDetails"
   override val section: String    = TransportTask.section
+
+  override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String =
+    config.transportDetailsFrontendUrl(lrn)
 }
 
 object TransportTask {
-
-  def apply(userAnswers: UserAnswers): TransportTask = {
-    val (status, href) = new TaskProvider(userAnswers).noDependencyOnOtherTask // TODO - dependent on route details?
-      .readUserAnswers[TransportDomain, JsObject](TransportSection)
-
-    new TransportTask(status, href)
-  }
-
   val section: String = ".transportDetails"
 }

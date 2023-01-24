@@ -15,11 +15,10 @@
  */
 
 import cats.data.ReaderT
+import models.UserAnswers
 import models.domain.UserAnswersReader
-import models.journeyDomain.Stage.CompletingJourney
-import models.journeyDomain.{JourneyDomainModel, ReaderError, WriterError}
+import models.journeyDomain.{JourneyDomainModel, WriterError}
 import models.requests.MandatoryDataRequest
-import models.{Mode, UserAnswers}
 import navigation.UserAnswersNavigator
 import pages.QuestionPage
 import play.api.libs.json.Format
@@ -27,8 +26,8 @@ import play.api.mvc.Results.Redirect
 import play.api.mvc.{Call, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
+import viewModels.taskList.Task
 import viewModels.taskList.TaskStatus._
-import viewModels.taskList.{Task, TaskStatus}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
@@ -62,16 +61,16 @@ package object controllers {
 
   implicit class SettableOpsRunner[A](userAnswersWriter: UserAnswersWriter[Write[A]]) {
 
-    def updateTask[T <: JourneyDomainModel](mode: Mode)(implicit reads: UserAnswersReader[T]): UserAnswersWriter[Write[A]] =
+    def updateTask[T <: JourneyDomainModel]()(implicit reads: UserAnswersReader[T]): UserAnswersWriter[Write[A]] =
       userAnswersWriter.flatMapF {
         case (page, userAnswers) =>
           page.path.path.headOption.map(_.toJsonString) match {
             case Some(section) =>
-              val (status: TaskStatus, href: Option[Call]) = UserAnswersReader[T].run(userAnswers) match {
-                case Left(ReaderError(page, _)) => (InProgress, page.route(userAnswers, mode))
-                case Right(x)                   => (Completed, x.routeIfCompleted(userAnswers, mode, CompletingJourney))
+              val status = UserAnswersReader[T].run(userAnswers) match {
+                case Left(_)  => InProgress
+                case Right(_) => Completed
               }
-              Task.apply(section, status, href.map(_.url)) match {
+              Task.apply(section, status) match {
                 case Some(task) => Right((page, userAnswers.updateTask(task)))
                 case None       => Left(WriterError(page, Some(s"Failed to find task for section $section")))
               }

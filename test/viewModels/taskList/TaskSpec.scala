@@ -22,120 +22,56 @@ import play.api.libs.json.{JsError, Json}
 class TaskSpec extends SpecBase {
 
   "must deserialise from json" - {
-    "when trader details" - {
-      "when href defined" in {
-        val json = Json.parse("""
-            |{
-            |    "section" : ".traderDetails",
-            |    "status" : "in-progress",
-            |    "href" : "#"
-            |}
-            |""".stripMargin)
+    "when trader details" in {
+      val json = Json.parse("""
+          |{
+          |    "section" : ".traderDetails",
+          |    "status" : "completed"
+          |}
+          |""".stripMargin)
 
-        val task = json.as[Task]
+      val task = json.as[Task]
 
-        task mustBe TraderDetailsTask(TaskStatus.InProgress, Some("#"))
-      }
-
-      "when href undefined" in {
-        val json = Json.parse("""
-            |{
-            |    "section" : ".traderDetails",
-            |    "status" : "completed"
-            |}
-            |""".stripMargin)
-
-        val task = json.as[Task]
-
-        task mustBe TraderDetailsTask(TaskStatus.Completed, None)
-      }
+      task mustBe TraderDetailsTask(TaskStatus.Completed)
     }
 
-    "when route details" - {
-      "when href defined" in {
-        val json = Json.parse("""
-            |{
-            |    "section" : ".routeDetails",
-            |    "status" : "in-progress",
-            |    "href" : "#"
-            |}
-            |""".stripMargin)
+    "when route details" in {
+      val json = Json.parse("""
+          |{
+          |    "section" : ".routeDetails",
+          |    "status" : "completed"
+          |}
+          |""".stripMargin)
 
-        val task = json.as[Task]
+      val task = json.as[Task]
 
-        task mustBe RouteDetailsTask(TaskStatus.InProgress, Some("#"))
-      }
-
-      "when href undefined" in {
-        val json = Json.parse("""
-            |{
-            |    "section" : ".routeDetails",
-            |    "status" : "completed"
-            |}
-            |""".stripMargin)
-
-        val task = json.as[Task]
-
-        task mustBe RouteDetailsTask(TaskStatus.Completed, None)
-      }
+      task mustBe RouteDetailsTask(TaskStatus.Completed)
     }
 
-    "when transport details" - {
-      "when href defined" in {
-        val json = Json.parse("""
-            |{
-            |    "section" : ".transportDetails",
-            |    "status" : "in-progress",
-            |    "href" : "#"
-            |}
-            |""".stripMargin)
+    "when transport details" in {
+      val json = Json.parse("""
+          |{
+          |    "section" : ".transportDetails",
+          |    "status" : "completed"
+          |}
+          |""".stripMargin)
 
-        val task = json.as[Task]
+      val task = json.as[Task]
 
-        task mustBe TransportTask(TaskStatus.InProgress, Some("#"))
-      }
-
-      "when href undefined" in {
-        val json = Json.parse("""
-            |{
-            |    "section" : ".transportDetails",
-            |    "status" : "completed"
-            |}
-            |""".stripMargin)
-
-        val task = json.as[Task]
-
-        task mustBe TransportTask(TaskStatus.Completed, None)
-      }
+      task mustBe TransportTask(TaskStatus.Completed)
     }
 
-    "when guarantee details" - {
-      "when href defined" in {
-        val json = Json.parse("""
-            |{
-            |    "section" : ".guaranteeDetails",
-            |    "status" : "in-progress",
-            |    "href" : "#"
-            |}
-            |""".stripMargin)
+    "when guarantee details" in {
+      val json = Json.parse("""
+          |{
+          |    "section" : ".guaranteeDetails",
+          |    "status" : "completed"
+          |}
+          |""".stripMargin)
 
-        val task = json.as[Task]
+      val task = json.as[Task]
 
-        task mustBe GuaranteeDetailsTask(TaskStatus.InProgress, Some("#"))
-      }
-
-      "when href undefined" in {
-        val json = Json.parse("""
-            |{
-            |    "section" : ".guaranteeDetails",
-            |    "status" : "completed"
-            |}
-            |""".stripMargin)
-
-        val task = json.as[Task]
-
-        task mustBe GuaranteeDetailsTask(TaskStatus.Completed, None)
-      }
+      task mustBe GuaranteeDetailsTask(TaskStatus.Completed)
     }
 
     "when something else" in {
@@ -150,29 +86,15 @@ class TaskSpec extends SpecBase {
     }
   }
 
-  "must serialise to json" - {
-    "when href defined" in {
-      val task = TraderDetailsTask(TaskStatus.Completed, Some("#"))
-      val json = Json.toJson[Task](task)
-      json mustBe Json.parse("""
-          |{
-          |    "section" : ".traderDetails",
-          |    "status" : "completed",
-          |    "href" : "#"
-          |}
-          |""".stripMargin)
-    }
-
-    "when href undefined" in {
-      val task = TraderDetailsTask(TaskStatus.Completed, None)
-      val json = Json.toJson[Task](task)
-      json mustBe Json.parse("""
-          |{
-          |    "section" : ".traderDetails",
-          |    "status" : "completed"
-          |}
-          |""".stripMargin)
-    }
+  "must serialise to json" in {
+    val task = TraderDetailsTask(TaskStatus.Completed)
+    val json = Json.toJson[Task](task)
+    json mustBe Json.parse("""
+        |{
+        |    "section" : ".traderDetails",
+        |    "status" : "completed"
+        |}
+        |""".stripMargin)
   }
 
 }

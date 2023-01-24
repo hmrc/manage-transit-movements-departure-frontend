@@ -16,28 +16,18 @@
 
 package viewModels.taskList
 
-import models.UserAnswers
-import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
-import pages.sections.guaranteeDetails.GuaranteeDetailsSection
-import play.api.libs.json.JsArray
+import config.FrontendAppConfig
+import models.LocalReferenceNumber
 
-case class GuaranteeDetailsTask(status: TaskStatus, href: Option[String]) extends Task {
+case class GuaranteeDetailsTask(status: TaskStatus) extends Task {
   override val id: String         = "guarantee-details"
   override val messageKey: String = "guaranteeDetails"
   override val section: String    = GuaranteeDetailsTask.section
+
+  override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String =
+    config.guaranteeDetailsFrontendUrl(lrn)
 }
 
 object GuaranteeDetailsTask {
-
-  def apply(userAnswers: UserAnswers): GuaranteeDetailsTask = {
-    val (status, href) = new TaskProvider(userAnswers).noDependencyOnOtherTask
-      .readUserAnswers[GuaranteeDetailsDomain, JsArray](
-        section = GuaranteeDetailsSection,
-        inProgressRoute = Some(controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn))
-      )
-
-    new GuaranteeDetailsTask(status, href)
-  }
-
   val section: String = ".guaranteeDetails"
 }

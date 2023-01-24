@@ -94,29 +94,29 @@ class UserAnswersSpec extends SpecBase {
     "updateTask" - {
       "must set task status" - {
         "when task has not previously been set" in {
-          val task   = TraderDetailsTask(TaskStatus.InProgress, Some("#"))
+          val task   = TraderDetailsTask(TaskStatus.InProgress)
           val result = emptyUserAnswers.updateTask(task)
           result.tasks mustBe Seq(task)
         }
 
         "when task has previously been set" in {
-          val tasks       = Seq(TraderDetailsTask(TaskStatus.InProgress, Some("#1")))
-          val updatedTask = TraderDetailsTask(TaskStatus.Completed, Some("#2"))
+          val tasks       = Seq(TraderDetailsTask(TaskStatus.InProgress))
+          val updatedTask = TraderDetailsTask(TaskStatus.Completed)
           val result      = emptyUserAnswers.copy(tasks = tasks).updateTask(updatedTask)
           result.tasks mustBe Seq(updatedTask)
         }
 
         "when there are other tasks" in {
           val tasks = Seq(
-            TraderDetailsTask(TaskStatus.InProgress, Some("#1")),
-            RouteDetailsTask(TaskStatus.NotStarted, Some("#2")),
-            TransportTask(TaskStatus.CannotStartYet, Some("#3"))
+            TraderDetailsTask(TaskStatus.InProgress),
+            RouteDetailsTask(TaskStatus.NotStarted),
+            TransportTask(TaskStatus.CannotStartYet)
           )
-          val updatedTask = TraderDetailsTask(TaskStatus.Completed, Some("#4"))
+          val updatedTask = TraderDetailsTask(TaskStatus.Completed)
           val result      = emptyUserAnswers.copy(tasks = tasks).updateTask(updatedTask)
           result.tasks mustBe Seq(
-            RouteDetailsTask(TaskStatus.NotStarted, Some("#2")),
-            TransportTask(TaskStatus.CannotStartYet, Some("#3")),
+            RouteDetailsTask(TaskStatus.NotStarted),
+            TransportTask(TaskStatus.CannotStartYet),
             updatedTask
           )
         }

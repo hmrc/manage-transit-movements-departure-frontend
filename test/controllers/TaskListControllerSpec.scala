@@ -51,7 +51,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
     "must return OK and the correct view for a GET" in {
       val sampleTasks = arbitrary[List[Task]](arbitraryTasks(arbitraryTask)).sample.value
 
-      when(mockViewModel.apply(any())(any())).thenReturn(sampleTasks)
+      when(mockViewModel.apply(any())).thenReturn(sampleTasks)
 
       val userAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
       setExistingUserAnswers(userAnswers)

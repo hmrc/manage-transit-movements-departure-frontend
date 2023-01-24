@@ -16,6 +16,8 @@
 
 package generators
 
+import config.FrontendAppConfig
+import models.LocalReferenceNumber
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.FormError
@@ -119,14 +121,14 @@ trait ViewModelGenerators {
       arbitraryStatus     <- arbitrary[TaskStatus]
       arbitraryMessageKey <- Gen.alphaNumStr
       arbitraryId         <- Gen.alphaNumStr
-      arbitraryHref       <- Gen.option(Gen.alphaNumStr)
+      arbitraryHref       <- Gen.alphaNumStr
       arbitrarySection    <- Gen.alphaNumStr
     } yield new Task {
-      override val status: TaskStatus   = arbitraryStatus
-      override val messageKey: String   = arbitraryMessageKey
-      override val id: String           = arbitraryId
-      override val href: Option[String] = arbitraryHref
-      override val section: String      = arbitrarySection
+      override val status: TaskStatus                                                          = arbitraryStatus
+      override val messageKey: String                                                          = arbitraryMessageKey
+      override val id: String                                                                  = arbitraryId
+      override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String = arbitraryHref
+      override val section: String                                                             = arbitrarySection
     }
   }
 
@@ -134,14 +136,14 @@ trait ViewModelGenerators {
     for {
       arbitraryMessageKey <- Gen.alphaNumStr
       arbitraryId         <- Gen.alphaNumStr
-      arbitraryHref       <- Gen.option(Gen.alphaNumStr)
+      arbitraryHref       <- Gen.alphaNumStr
       arbitrarySection    <- Gen.alphaNumStr
     } yield new Task {
-      override val status: TaskStatus   = TaskStatus.Completed
-      override val messageKey: String   = arbitraryMessageKey
-      override val id: String           = arbitraryId
-      override val href: Option[String] = arbitraryHref
-      override val section: String      = arbitrarySection
+      override val status: TaskStatus                                                          = TaskStatus.Completed
+      override val messageKey: String                                                          = arbitraryMessageKey
+      override val id: String                                                                  = arbitraryId
+      override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String = arbitraryHref
+      override val section: String                                                             = arbitrarySection
     }
   }
 

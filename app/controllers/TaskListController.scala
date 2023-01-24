@@ -17,7 +17,6 @@
 package controllers
 
 import com.google.inject.Inject
-import config.FrontendAppConfig
 import controllers.actions.{Actions, CheckDependentTaskCompletedActionProvider}
 import models.LocalReferenceNumber
 import models.journeyDomain.PreTaskListDomain
@@ -39,7 +38,7 @@ class TaskListController @Inject() (
   view: TaskListView,
   viewModel: TaskListViewModel,
   apiService: ApiService
-)(implicit ec: ExecutionContext, config: FrontendAppConfig)
+)(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 

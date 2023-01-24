@@ -18,12 +18,8 @@ package viewModels.taskList
 
 import base.SpecBase
 import generators.Generators
-import models.NormalMode
-import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.routeDetails.routing.{CountryOfDestinationPage, OfficeOfDestinationPage}
 import viewModels.taskList.TaskStatus._
 
 class RouteDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -31,76 +27,47 @@ class RouteDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with G
   "name" - {
     "must be Route details" - {
       "when status is CannotStartYet" in {
-        forAll(Gen.option(Gen.alphaNumStr)) {
-          href =>
-            val task = RouteDetailsTask(CannotStartYet, href)
-            task.name mustBe "Route details"
-        }
+        val task = RouteDetailsTask(CannotStartYet)
+        task.name mustBe "Route details"
       }
     }
 
     "must be Add route details" - {
       "when status is NotStarted" in {
-        forAll(Gen.option(Gen.alphaNumStr)) {
-          href =>
-            val task = RouteDetailsTask(NotStarted, href)
-            task.name mustBe "Add route details"
-        }
+        val task = RouteDetailsTask(NotStarted)
+        task.name mustBe "Add route details"
       }
     }
 
     "must be Edit route details" - {
       "when status is Completed" in {
-        forAll(Gen.option(Gen.alphaNumStr)) {
-          href =>
-            val task = RouteDetailsTask(Completed, href)
-            task.name mustBe "Edit route details"
-        }
+        val task = RouteDetailsTask(Completed)
+        task.name mustBe "Edit route details"
       }
 
       "when status is InProgress" in {
-        forAll(Gen.option(Gen.alphaNumStr)) {
-          href =>
-            val task = RouteDetailsTask(InProgress, href)
-            task.name mustBe "Edit route details"
-        }
+        val task = RouteDetailsTask(InProgress)
+        task.name mustBe "Edit route details"
       }
     }
   }
 
   "id" - {
     "must be route-details" in {
-      val task = RouteDetailsTask(emptyUserAnswers)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-      task.id mustBe "route-details"
+      forAll(arbitrary[TaskStatus]) {
+        taskStatus =>
+          val task = RouteDetailsTask(taskStatus)
+          task.id mustBe "route-details"
+      }
     }
   }
 
-  "apply" - {
-    "when NotStarted" in {
-      val userAnswers = emptyUserAnswers
-      val task        = RouteDetailsTask(userAnswers)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-      task.status mustBe NotStarted
-      task.href.get mustBe
-        controllers.routeDetails.routing.routes.CountryOfDestinationController.onPageLoad(userAnswers.lrn, NormalMode).url
-    }
-
-    "when InProgress" in {
-      val userAnswers = emptyUserAnswers
-        .setValue(CountryOfDestinationPage, arbitrary[Country].sample.value)
-        .setValue(OfficeOfDestinationPage, arbitrary[CustomsOffice].sample.value)
-      val task = RouteDetailsTask(userAnswers)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-      task.status mustBe InProgress
-      task.href.get mustBe
-        controllers.routeDetails.routing.routes.BindingItineraryController.onPageLoad(userAnswers.lrn, NormalMode).url
-    }
-
-    "when Completed" in {
-      forAll(arbitraryRouteDetailsAnswers(emptyUserAnswers)) {
-        userAnswers =>
-          val task = RouteDetailsTask(userAnswers)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-          task.status mustBe Completed
-          task.href.get mustBe
-            controllers.routeDetails.routes.RouteDetailsAnswersController.onPageLoad(userAnswers.lrn).url
+  "href" - {
+    "must end with /route-details" in {
+      forAll(arbitrary[TaskStatus]) {
+        taskStatus =>
+          val task = RouteDetailsTask(taskStatus)
+          task.href(lrn)(frontendAppConfig) must endWith(s"/$lrn/route-details")
       }
     }
   }

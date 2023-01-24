@@ -16,6 +16,8 @@
 
 package viewModels.taskList
 
+import config.FrontendAppConfig
+import models.LocalReferenceNumber
 import play.api.i18n.Messages
 import play.api.libs.json._
 import viewModels.taskList.TaskStatus._
@@ -23,7 +25,7 @@ import viewModels.taskList.TaskStatus._
 abstract class Task {
   val status: TaskStatus
   val id: String
-  val href: Option[String]
+  def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String
   val messageKey: String
   val section: String
 
@@ -43,25 +45,24 @@ abstract class Task {
 object Task {
   import play.api.libs.functional.syntax._
 
-  def apply(section: String, status: TaskStatus, href: Option[String]): Option[Task] = section match {
-    case TraderDetailsTask.section    => Some(TraderDetailsTask(status, href))
-    case RouteDetailsTask.section     => Some(RouteDetailsTask(status, href))
-    case TransportTask.section        => Some(TransportTask(status, href))
-    case GuaranteeDetailsTask.section => Some(GuaranteeDetailsTask(status, href))
+  def apply(section: String, status: TaskStatus): Option[Task] = section match {
+    case TraderDetailsTask.section    => Some(TraderDetailsTask(status))
+    case RouteDetailsTask.section     => Some(RouteDetailsTask(status))
+    case TransportTask.section        => Some(TransportTask(status))
+    case GuaranteeDetailsTask.section => Some(GuaranteeDetailsTask(status))
     case _                            => None
   }
 
   implicit val reads: Reads[Task] = (json: JsValue) => {
-    type Tuple = (String, TaskStatus, Option[String])
+    type Tuple = (String, TaskStatus)
     implicit val tupleReads: Reads[Tuple] = (
       (__ \ "section").read[String] and
-        (__ \ "status").read[TaskStatus] and
-        (__ \ "href").readNullable[String]
+        (__ \ "status").read[TaskStatus]
     ).tupled
 
     json.validate[Tuple].flatMap {
-      case (section, status, href) =>
-        Task(section, status, href) match {
+      case (section, status) =>
+        Task(section, status) match {
           case Some(value) => JsSuccess(value)
           case None        => JsError(s"$section is not a valid task")
         }
@@ -70,9 +71,8 @@ object Task {
 
   implicit val writes: Writes[Task] = (
     (__ \ "section").write[String] and
-      (__ \ "status").write[TaskStatus] and
-      (__ \ "href").writeNullable[String]
+      (__ \ "status").write[TaskStatus]
   ).apply {
-    task => (task.section, task.status, task.href)
+    task => (task.section, task.status)
   }
 }
