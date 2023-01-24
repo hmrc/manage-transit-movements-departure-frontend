@@ -22,11 +22,13 @@ import controllers.routeDetails.transit.index.{routes => indexRoutes}
 import forms.AddAnotherFormProvider
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.RouteDetailsNavigatorProvider
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.ListItem
 import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel.AddAnotherOfficeOfTransitViewModelProvider
@@ -44,7 +46,8 @@ class AddAnotherOfficeOfTransitController @Inject() (
   config: FrontendAppConfig,
   viewModelProvider: AddAnotherOfficeOfTransitViewModelProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: AddAnotherOfficeOfTransitView
+  view: AddAnotherOfficeOfTransitView,
+  countriesService: CountriesService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -57,10 +60,7 @@ class AddAnotherOfficeOfTransitController @Inject() (
       viewData(mode) flatMap {
         case (officesOfTransit, numberOfOfficesOfTransit, allowMoreOfficesOfTransit) =>
           numberOfOfficesOfTransit match {
-            case 0 =>
-              navigatorProvider(mode).map {
-                navigator => Redirect(navigator.nextPage(request.userAnswers))
-              }
+            case 0 => redirectToNextPage(mode)
             case _ => Future.successful(Ok(view(form(allowMoreOfficesOfTransit), lrn, mode, officesOfTransit, allowMoreOfficesOfTransit)))
           }
       }
@@ -77,14 +77,20 @@ class AddAnotherOfficeOfTransitController @Inject() (
               {
                 case true =>
                   Future.successful(Redirect(indexRoutes.OfficeOfTransitCountryController.onPageLoad(lrn, mode, Index(numberOfOfficesOfTransit))))
-                case false =>
-                  navigatorProvider(mode).map {
-                    navigator => Redirect(navigator.nextPage(request.userAnswers))
-                  }
+                case false => redirectToNextPage(mode)
               }
             )
       }
   }
+
+  private def redirectToNextPage(mode: Mode)(implicit request: DataRequest[_]): Future[Result] =
+    for {
+      ctcCountries                          <- countriesService.getCountryCodesCTC()
+      customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+    } yield {
+      val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+      Redirect(navigator.nextPage(request.userAnswers))
+    }
 
   private def viewData(mode: Mode)(implicit request: DataRequest[_], ec: ExecutionContext): Future[(Seq[ListItem], Int, Boolean)] =
     viewModelProvider.apply(request.userAnswers, mode).map {

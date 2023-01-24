@@ -22,11 +22,13 @@ import controllers.routeDetails.exit.index.{routes => indexRoutes}
 import forms.AddAnotherFormProvider
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.RouteDetailsNavigatorProvider
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.ListItem
 import viewModels.routeDetails.exit.AddAnotherOfficeOfExitViewModel.AddAnotherOfficeOfExitViewModelProvider
@@ -44,7 +46,8 @@ class AddAnotherOfficeOfExitController @Inject() (
   config: FrontendAppConfig,
   viewModelProvider: AddAnotherOfficeOfExitViewModelProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: AddAnotherOfficeOfExitView
+  view: AddAnotherOfficeOfExitView,
+  countriesService: CountriesService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -56,10 +59,7 @@ class AddAnotherOfficeOfExitController @Inject() (
     implicit request =>
       lazy val (officesOfExit, numberOfOfficesOfExit, allowMoreOfficesOfExit) = viewData(mode)
       numberOfOfficesOfExit match {
-        case 0 =>
-          navigatorProvider(mode).map {
-            navigator => Redirect(navigator.nextPage(request.userAnswers))
-          }
+        case 0 => redirectToNextPage(mode)
         case _ => Future.successful(Ok(view(form(allowMoreOfficesOfExit), lrn, mode, officesOfExit, allowMoreOfficesOfExit)))
       }
   }
@@ -76,13 +76,19 @@ class AddAnotherOfficeOfExitController @Inject() (
               Future.successful(
                 Redirect(indexRoutes.OfficeOfExitCountryController.onPageLoad(lrn, Index(numberOfOfficesOfExit), mode))
               )
-            case false =>
-              navigatorProvider(mode).map {
-                navigator => Redirect(navigator.nextPage(request.userAnswers))
-              }
+            case false => redirectToNextPage(mode)
           }
         )
   }
+
+  private def redirectToNextPage(mode: Mode)(implicit request: DataRequest[_]): Future[Result] =
+    for {
+      ctcCountries                          <- countriesService.getCountryCodesCTC()
+      customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+    } yield {
+      val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+      Redirect(navigator.nextPage(request.userAnswers))
+    }
 
   private def viewData(mode: Mode)(implicit request: DataRequest[_]): (Seq[ListItem], Int, Boolean) = {
     val officesOfExit         = viewModelProvider.apply(request.userAnswers, mode).listItems

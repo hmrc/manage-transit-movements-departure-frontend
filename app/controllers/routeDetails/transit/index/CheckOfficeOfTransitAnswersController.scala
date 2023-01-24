@@ -19,9 +19,11 @@ package controllers.routeDetails.transit.index
 import com.google.inject.Inject
 import controllers.actions.Actions
 import models.{Index, LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.TransitNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.routeDetails.transit.OfficeOfTransitAnswersViewModel.OfficeOfTransitAnswersViewModelProvider
 import views.html.routeDetails.transit.index.CheckOfficeOfTransitAnswersView
@@ -34,7 +36,8 @@ class CheckOfficeOfTransitAnswersController @Inject() (
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: CheckOfficeOfTransitAnswersView,
-  viewModelProvider: OfficeOfTransitAnswersViewModelProvider
+  viewModelProvider: OfficeOfTransitAnswersViewModelProvider,
+  countriesService: CountriesService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -47,8 +50,12 @@ class CheckOfficeOfTransitAnswersController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      navigatorProvider(mode).map {
-        navigator => Redirect(navigator.nextPage(request.userAnswers))
+      for {
+        ctcCountries                          <- countriesService.getCountryCodesCTC()
+        customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+      } yield {
+        val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+        Redirect(navigator.nextPage(request.userAnswers))
       }
   }
 }

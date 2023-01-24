@@ -20,9 +20,11 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
 import models.CountryList.countriesOfRoutingReads
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.reference.Country
 import models.requests.SpecificDataRequestProvider1
 import models.{CountryList, Index, LocalReferenceNumber, Mode, RichOptionalJsArray}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.OfficeOfExitNavigatorProvider
 import pages.routeDetails.exit.index.OfficeOfExitCountryPage
 import pages.routeDetails.routing.CountryOfDestinationPage
@@ -90,10 +92,18 @@ class OfficeOfExitCountryController @Inject() (
                   value =>
                     customsOfficesService.getCustomsOfficesOfExitForCountry(value.code).flatMap {
                       case x if x.customsOffices.nonEmpty =>
-                        navigatorProvider(mode, index).flatMap {
-                          implicit navigator =>
-                            OfficeOfExitCountryPage(index).writeToUserAnswers(value).writeToSession().navigate()
-                        }
+                        for {
+                          ctcCountries                          <- countriesService.getCountryCodesCTC()
+                          customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                          result <- {
+                            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index, ctcCountries, customsSecurityAgreementAreaCountries)
+                            OfficeOfExitCountryPage(index)
+                              .writeToUserAnswers(value)
+                              .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                              .writeToSession()
+                              .navigate()
+                          }
+                        } yield result
                       case _ =>
                         val formWithErrors = form.withError(FormError("value", s"$prefix.error.noOffices"))
                         Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, index, mode)))

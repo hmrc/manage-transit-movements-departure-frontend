@@ -19,9 +19,11 @@ package controllers.routeDetails.loadingAndUnloading
 import com.google.inject.Inject
 import controllers.actions.Actions
 import models.{LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.RouteDetailsNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersViewModel.LoadingAndUnloadingAnswersViewModelProvider
 import views.html.routeDetails.loadingAndUnloading.LoadingAndUnloadingAnswersView
@@ -34,7 +36,8 @@ class LoadingAndUnloadingAnswersController @Inject() (
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: LoadingAndUnloadingAnswersView,
-  viewModelProvider: LoadingAndUnloadingAnswersViewModelProvider
+  viewModelProvider: LoadingAndUnloadingAnswersViewModelProvider,
+  countriesService: CountriesService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -47,8 +50,12 @@ class LoadingAndUnloadingAnswersController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      navigatorProvider(mode).map {
-        navigator => Redirect(navigator.nextPage(request.userAnswers))
+      for {
+        ctcCountries                          <- countriesService.getCountryCodesCTC()
+        customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+      } yield {
+        val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+        Redirect(navigator.nextPage(request.userAnswers))
       }
   }
 

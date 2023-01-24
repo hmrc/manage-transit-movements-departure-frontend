@@ -19,12 +19,15 @@ package controllers.routeDetails.locationOfGoods.contact
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.TelephoneNumberFormProvider
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.{LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import pages.routeDetails.locationOfGoods.contact.{NamePage, TelephoneNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.locationOfGoods.contact.TelephoneNumberView
 
@@ -39,7 +42,8 @@ class TelephoneNumberController @Inject() (
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   getMandatoryPage: SpecificDataRequiredActionProvider,
-  view: TelephoneNumberView
+  view: TelephoneNumberView,
+  countriesService: CountriesService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -69,10 +73,18 @@ class TelephoneNumberController @Inject() (
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, contactName, mode))),
             value =>
-              navigatorProvider(mode).flatMap {
-                implicit navigator =>
-                  TelephoneNumberPage.writeToUserAnswers(value).writeToSession().navigate()
-              }
+              for {
+                ctcCountries                          <- countriesService.getCountryCodesCTC()
+                customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                result <- {
+                  implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+                  TelephoneNumberPage
+                    .writeToUserAnswers(value)
+                    .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                    .writeToSession()
+                    .navigate()
+                }
+              } yield result
           )
     }
 }

@@ -19,7 +19,9 @@ package controllers.routeDetails.locationOfGoods
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.locationOfGoods.PostalCodeFormProvider
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.{LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import pages.routeDetails.locationOfGoods.PostalCodePage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -75,10 +77,18 @@ class PostalCodeController @Inject() (
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, countryList.countries))),
                 value =>
-                  navigatorProvider(mode).flatMap {
-                    implicit navigator =>
-                      PostalCodePage.writeToUserAnswers(value).writeToSession().navigate()
-                  }
+                  for {
+                    ctcCountries                          <- countriesService.getCountryCodesCTC()
+                    customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                    result <- {
+                      implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+                      PostalCodePage
+                        .writeToUserAnswers(value)
+                        .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                        .writeToSession()
+                        .navigate()
+                    }
+                  } yield result
               )
 
         }

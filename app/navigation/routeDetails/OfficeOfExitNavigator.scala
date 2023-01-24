@@ -20,30 +20,24 @@ import models._
 import models.domain.UserAnswersReader
 import models.journeyDomain.routeDetails.exit.OfficeOfExitDomain
 import navigation.UserAnswersNavigator
-import services.CountriesService
-import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class OfficeOfExitNavigatorProviderImpl @Inject() (
-  countriesService: CountriesService
-)(implicit ec: ExecutionContext)
-    extends OfficeOfExitNavigatorProvider {
+class OfficeOfExitNavigatorProviderImpl @Inject() () extends OfficeOfExitNavigatorProvider {
 
-  def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator] =
+  def apply(mode: Mode, index: Index, ctcCountries: CountryList, customsSecurityAgreementAreaCountries: CountryList): UserAnswersNavigator =
     mode match {
       case NormalMode =>
-        Future.successful(new OfficeOfExitNavigator(mode, index))
+        new OfficeOfExitNavigator(mode, index)
       case CheckMode =>
-        RouteDetailsNavigatorProvider(countriesService, mode)
+        new RouteDetailsNavigator(mode, ctcCountries, customsSecurityAgreementAreaCountries)
     }
 }
 
 trait OfficeOfExitNavigatorProvider {
 
-  def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator]
+  def apply(mode: Mode, index: Index, ctcCountries: CountryList, customsSecurityAgreementAreaCountries: CountryList): UserAnswersNavigator
 }
 
 class OfficeOfExitNavigator(

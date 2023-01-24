@@ -19,13 +19,7 @@ package navigation.routeDetails
 import base.SpecBase
 import generators.Generators
 import models._
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import services.CountriesService
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class CountryOfRoutingNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -33,10 +27,9 @@ class CountryOfRoutingNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
     "when in NormalMode" - {
 
-      val mode                 = NormalMode
-      val mockCountriesService = mock[CountriesService]
-      val navigatorProvider    = new CountryOfRoutingNavigatorProviderImpl(mockCountriesService)
-      val navigator            = navigatorProvider.apply(mode, index).futureValue
+      val mode              = NormalMode
+      val navigatorProvider = new CountryOfRoutingNavigatorProviderImpl()
+      val navigator         = navigatorProvider.apply(mode, index, ctcCountriesList, customsSecurityAgreementAreaCountriesList)
 
       "when answers complete" - {
         "must redirect to add another country of routing" in {
@@ -52,14 +45,9 @@ class CountryOfRoutingNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
     "when in CheckMode" - {
 
-      val mode                 = CheckMode
-      val mockCountriesService = mock[CountriesService]
-      when(mockCountriesService.getCountryCodesCTC()(any()))
-        .thenReturn(Future.successful(CountryList(ctcCountries)))
-      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any()))
-        .thenReturn(Future.successful(CountryList(customsSecurityAgreementAreaCountries)))
-      val navigatorProvider = new CountryOfRoutingNavigatorProviderImpl(mockCountriesService)
-      val navigator         = navigatorProvider.apply(mode, index).futureValue
+      val mode              = CheckMode
+      val navigatorProvider = new CountryOfRoutingNavigatorProviderImpl()
+      val navigator         = navigatorProvider.apply(mode, index, ctcCountriesList, customsSecurityAgreementAreaCountriesList)
 
       "when answers complete" - {
         "must redirect to route details check your answers" in {

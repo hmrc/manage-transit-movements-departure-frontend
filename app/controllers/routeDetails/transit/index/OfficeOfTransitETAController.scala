@@ -20,7 +20,9 @@ import config.FrontendAppConfig
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.DateTimeFormProvider
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.{DateTime, Index, LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.OfficeOfTransitNavigatorProvider
 import pages.routeDetails.routing.CountryOfDestinationPage
 import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
@@ -28,7 +30,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.DateTimeService
+import services.{CountriesService, DateTimeService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.transit.index.OfficeOfTransitETAView
 
@@ -45,7 +47,8 @@ class OfficeOfTransitETAController @Inject() (
   getMandatoryPage: SpecificDataRequiredActionProvider,
   val controllerComponents: MessagesControllerComponents,
   view: OfficeOfTransitETAView,
-  dateTimeService: DateTimeService
+  dateTimeService: DateTimeService,
+  countriesService: CountriesService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -85,10 +88,18 @@ class OfficeOfTransitETAController @Inject() (
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, country.description, customsOffice.name, mode, index))),
                 value =>
-                  navigatorProvider(mode, index).flatMap {
-                    implicit navigator =>
-                      OfficeOfTransitETAPage(index).writeToUserAnswers(value).writeToSession().navigate()
-                  }
+                  for {
+                    ctcCountries                          <- countriesService.getCountryCodesCTC()
+                    customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                    result <- {
+                      implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index, ctcCountries, customsSecurityAgreementAreaCountries)
+                      OfficeOfTransitETAPage(index)
+                        .writeToUserAnswers(value)
+                        .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                        .writeToSession()
+                        .navigate()
+                    }
+                  } yield result
               )
         }
     }
