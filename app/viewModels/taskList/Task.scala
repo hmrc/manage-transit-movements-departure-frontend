@@ -38,8 +38,6 @@ abstract class Task {
   }
 
   def isCompleted: Boolean = status == Completed
-
-  def isACompletedDependentSection(dependentSection: String): Boolean = dependentSection == section && isCompleted
 }
 
 object Task {

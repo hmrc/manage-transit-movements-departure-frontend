@@ -23,6 +23,10 @@ package object taskList {
   }
 
   implicit class RichDependentSection(dependentSection: String) {
-    def isCompleted(tasks: Seq[Task]): Boolean = tasks.exists(_.isACompletedDependentSection(dependentSection))
+
+    def isCompleted(tasks: Seq[Task]): Boolean =
+      tasks.exists(
+        task => task.section == dependentSection && task.isCompleted
+      )
   }
 }

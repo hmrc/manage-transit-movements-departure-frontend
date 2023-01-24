@@ -33,7 +33,7 @@ class TaskListViewModel {
     Seq(
       task(TraderDetailsTask.section),
       task(RouteDetailsTask.section),
-      task(TransportTask.section, Seq(RouteDetailsTask.section, TransportTask.section)),
+      task(TransportTask.section, Seq(TraderDetailsTask.section, RouteDetailsTask.section)),
       task(GuaranteeDetailsTask.section)
     ).flatten
   }
