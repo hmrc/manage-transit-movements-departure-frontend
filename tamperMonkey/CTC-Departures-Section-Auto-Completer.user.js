@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CTC-Departures Section Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      6.0
+// @version      7.0
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @match        http*://*/manage-transit-movements/departures/*/task-list
@@ -71,7 +71,7 @@ function toggleGuaranteeDetailsButtonsOff() {
 
 
 function setupGUI() {
-    var panel = document.createElement('div')
+    const panel = document.createElement('div');
     GM_addStyle(' .guiStyle { position: absolute; top: 50px; display: grid; grid-template-rows: repeat(5, 1fr);')
     panel.classList.add('guiStyle')
     panel.appendChild(createTraderDetailsButton())
@@ -303,6 +303,13 @@ const startTraderDetails = (lrn) => {
     }
 }
 
+const tirIdentificaitonKnown = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/holder-of-transit/is-tir-id-known`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
 const addEoriTin = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/transit-holder/add-eori-tin`)){
         document.getElementById(data).click()
@@ -446,6 +453,13 @@ const startRouteDetails = (lrn) => {
 const countryOfDestination = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/routing/country-of-destination`)){
         document.getElementById('value-select').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const addLocationOfGoods = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/location-of-goods/add-location-of-goods`)){
+        document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
@@ -608,6 +622,13 @@ const startTransportDetails = (lrn) => {
     }
 }
 
+const countryOfDispatchTIR = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/country-of-dispatch`)){
+        document.getElementById('value-select').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
 const sameUCR = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/apply-ucr-to-all-items`)){
         document.getElementById(data).click()
@@ -722,7 +743,19 @@ const authRefNumber = (lrn, data) => {
 
 const startGuaranteeDetails = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
-        location.href = `/manage-transit-movements/departures/${lrn}/guarantee-details/1/guarantee-type`
+        let url = document.querySelectorAll(`[href="/manage-transit-movements/departures/${lrn}/guarantee-details/guarantee-added-tir"]`)
+        if(url.length != 0){
+            url[0].click()
+        }else{
+            document.querySelectorAll(`[href="/manage-transit-movements/departures/${lrn}/guarantee-details/1/guarantee-type"]`)[0].click()
+        }
+    }
+}
+
+const tirDeclaration = (lrn) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/guarantee-details/guarantee-added-tir`)){
+        toggleGuaranteeDetailsButtonsOff()
+        document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
@@ -781,6 +814,7 @@ function traderDetails(){
         consignorContact(getLRN(), 'value-no')
     }
     startTraderDetails(getLRN())
+    tirIdentificaitonKnown(getLRN(),'value-no')
     addEoriTin(getLRN(), 'value-no')
     transitHolderName(getLRN(), 'Person')
     transitHolderCountry(getLRN(), 'IT')
@@ -801,6 +835,7 @@ function traderDetails(){
 function routeDetailsAuthorised() {
     startRouteDetails(getLRN())
     countryOfDestination(getLRN(), 'IT')
+    addLocationOfGoods(getLRN(),'value')
     officeOfDestination(getLRN(), 'IT034105')
     bindingItinerary(getLRN(), 'value-no')
     transitRouteAddCountry(getLRN(), 'value')
@@ -828,10 +863,8 @@ function routeDetailsAuthorised() {
 /* ## Transport Details journey ## */
 
 function transportDetails() {
-    if(!getReducedDataSet()) {
-        addAuth(getLRN(), 'value-no')
-    }
     startTransportDetails(getLRN())
+    countryOfDispatchTIR(getLRN(), 'IT')
     sameUCR(getLRN(),'value-no')
     sameCountry(getLRN(),'value-no')
     anyContainers(getLRN(),'value-no')
@@ -842,6 +875,7 @@ function transportDetails() {
     anotherVehicleCrossing(getLRN(),'value-no')
     modesMeansCYA(getLRN())
     addSupplyChainActor(getLRN(), 'value-no')
+    addAuth(getLRN(), 'value-no')
     authRefNumber(getLRN(), 'TRD123')
     // addAnotherAuthType(getLRN(), 'value-no')
     // carrierEORI(getLRN(), 'carrierEORI123')
@@ -854,6 +888,7 @@ function transportDetails() {
 function guaranteeDetailsWaiver() {
     startGuaranteeDetails(getLRN())
     guaranteeType(getLRN(), 'value')
+    tirDeclaration(getLRN())
     guaranteeNumber(getLRN(), '01GB1234567890120A123456')
     accessCode(getLRN(), '1234')
     liabilityAmount(getLRN(), '1234')
