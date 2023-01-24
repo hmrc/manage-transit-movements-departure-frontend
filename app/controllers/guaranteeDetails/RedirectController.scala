@@ -18,13 +18,15 @@ package controllers.guaranteeDetails
 
 import com.google.inject.Inject
 import controllers.actions.Actions
-import models.LocalReferenceNumber
+import models.{LocalReferenceNumber, NormalMode}
+import navigation.guaranteeDetails.GuaranteeDetailsNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 class RedirectController @Inject() (
   override val messagesApi: MessagesApi,
+  navigatorProvider: GuaranteeDetailsNavigatorProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents
 ) extends FrontendBaseController
@@ -32,7 +34,7 @@ class RedirectController @Inject() (
 
   def redirect(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      Redirect(routes.AddAnotherGuaranteeController.onPageLoad(request.userAnswers.lrn))
+      Redirect(navigatorProvider.apply(NormalMode).nextPage(request.userAnswers))
   }
 
 }

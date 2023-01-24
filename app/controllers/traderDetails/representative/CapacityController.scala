@@ -19,6 +19,7 @@ package controllers.traderDetails.representative
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
+import models.journeyDomain.traderDetails.TraderDetailsDomain
 import models.traderDetails.representative.RepresentativeCapacity
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
@@ -65,7 +66,7 @@ class CapacityController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, RepresentativeCapacity.radioItems, mode))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            CapacityPage.writeToUserAnswers(value).writeToSession().navigate()
+            CapacityPage.writeToUserAnswers(value).updateTask[TraderDetailsDomain]().writeToSession().navigate()
           }
         )
   }

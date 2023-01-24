@@ -21,7 +21,7 @@ import forms.OtherReferenceFormProvider
 import generators.Generators
 import models.{GuaranteeType, NormalMode}
 import models.GuaranteeType.{CashDepositGuarantee, GuaranteeNotRequiredExemptPublicBody}
-import navigation.GuaranteeNavigatorProvider
+import navigation.guaranteeDetails.GuaranteeNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary

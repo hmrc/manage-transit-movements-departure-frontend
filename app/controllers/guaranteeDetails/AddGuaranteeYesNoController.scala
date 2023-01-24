@@ -18,9 +18,8 @@ package controllers.guaranteeDetails
 
 import controllers.actions._
 import forms.YesNoFormProvider
-import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
 import models.{LocalReferenceNumber, NormalMode}
-import navigation.UserAnswersNavigator
+import navigation.guaranteeDetails.GuaranteeDetailsNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -32,6 +31,7 @@ import javax.inject.Inject
 class AddGuaranteeYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
+  navigatorProvider: GuaranteeDetailsNavigatorProvider,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -54,7 +54,7 @@ class AddGuaranteeYesNoController @Inject() (
           formWithErrors => BadRequest(view(formWithErrors, lrn)),
           {
             case true =>
-              Redirect(UserAnswersNavigator.nextPage[GuaranteeDetailsDomain](request.userAnswers, NormalMode))
+              Redirect(navigatorProvider.apply(NormalMode).nextPage(request.userAnswers))
             case false =>
               Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
           }

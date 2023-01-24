@@ -19,7 +19,7 @@ package controllers.guaranteeDetails.guarantee
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.GuaranteeReferenceNumberFormProvider
 import models.NormalMode
-import navigation.GuaranteeNavigatorProvider
+import navigation.guaranteeDetails.GuaranteeNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.guaranteeDetails.guarantee.ReferenceNumberPage

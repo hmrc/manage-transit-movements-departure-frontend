@@ -17,12 +17,20 @@
 package controllers.guaranteeDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import navigation.guaranteeDetails.GuaranteeDetailsNavigatorProvider
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
 class RedirectControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private lazy val redirectRoute = routes.RedirectController.redirect(lrn).url
+
+  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
+    super
+      .guiceApplicationBuilder()
+      .overrides(bind(classOf[GuaranteeDetailsNavigatorProvider]).toInstance(fakeGuaranteeDetailsNavigatorProvider))
 
   "Redirect Controller" - {
 
@@ -35,7 +43,7 @@ class RedirectControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn).url
+      redirectLocation(result).value mustEqual onwardRoute.url
     }
   }
 }

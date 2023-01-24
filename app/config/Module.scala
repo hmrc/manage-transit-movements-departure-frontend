@@ -19,6 +19,7 @@ package config
 import com.google.inject.AbstractModule
 import controllers.actions._
 import navigation._
+import navigation.guaranteeDetails._
 import navigation.routeDetails._
 import navigation.traderDetails._
 import navigation.transport._
@@ -33,6 +34,7 @@ class Module extends AbstractModule {
 
     bind(classOf[TraderDetailsNavigatorProvider]).to(classOf[TraderDetailsNavigatorProviderImpl])
 
+    bind(classOf[GuaranteeDetailsNavigatorProvider]).to(classOf[GuaranteeDetailsNavigatorProviderImpl])
     bind(classOf[GuaranteeNavigatorProvider]).to(classOf[GuaranteeNavigatorProviderImpl])
 
     bind(classOf[RouteDetailsNavigatorProvider]).to(classOf[RouteDetailsNavigatorProviderImpl])
