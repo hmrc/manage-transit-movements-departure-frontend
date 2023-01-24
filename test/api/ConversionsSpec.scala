@@ -18,9 +18,11 @@ package api
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
-import generated.TransitOperationType06
+import generated.{MESSAGE_1Sequence, MESSAGE_FROM_TRADERSequence, TransitOperationType06}
 import generators.Generators
 import models.UserAnswers
+import models.reference.CustomsOffice
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 import pages.traderDetails.consignment.ApprovedOperatorPage
@@ -30,39 +32,38 @@ import scala.xml.{NodeSeq, XML}
 
 class ConversionsSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
-  "transitOperationType" - {
+  "Conversions" - {
 
-    "can be parsed from PreTaskListDomain" in {
+    "message is called" - {
 
-      val preTask: UserAnswers       = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
-      val traderDetails: UserAnswers = arbitraryTraderDetailsAnswers(preTask).sample.value
-      val uA: UserAnswers            = arbitraryRouteDetailsAnswers(traderDetails).sample.value
+      "will convert to API format" in {
 
-      val expected: NodeSeq = XML.loadString(
-        """<TransitOperation""" +
-          """ xmlns:tns="http://ncts.dgtaxud.ec" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">""" +
-          s"""<LRN>${uA.lrn.value}</LRN>""" +
-          s"""<declarationType>${uA.get(DeclarationTypePage).get}</declarationType>""" +
-          """<additionalDeclarationType>A</additionalDeclarationType>""" +
-          s"""<security>${uA.get(SecurityDetailsTypePage).get.securityContentType}</security>""" +
-          s"""<reducedDatasetIndicator>${uA.get(ApprovedOperatorPage).get match {
-            case true => 1
-            case _    => 0
-          }}</reducedDatasetIndicator>""" +
-          """<bindingItinerary>1</bindingItinerary>""" +
-          """</TransitOperation>""".stripMargin
-      )
+        val converted = Conversions.message
 
-      val tryConv: Either[String, TransitOperationType06] = Conversions.transitOperation(uA)
+        val expected = MESSAGE_FROM_TRADERSequence(
+          None,
+          MESSAGE_1Sequence(
+            messageRecipient = "NCTS",
+            preparationDateAndTime = converted.messagE_1Sequence2.preparationDateAndTime,
+            messageIdentification = "CC015C"
+          )
+        )
 
-      val xml: NodeSeq = tryConv match {
-        case Left(value)  => throw new Error(value)
-        case Right(value) => toXML[TransitOperationType06](value, "TransitOperation", generated.defaultScope)
+        converted mustBe expected
+
       }
 
-      xml shouldBe expected
+    }
+
+    "messageType is called" - {
+
+      "will convert to API format" in {
+
+        Conversions.messageType.toString mustBe "CC015C"
+
+      }
 
     }
-  }
 
+  }
 }

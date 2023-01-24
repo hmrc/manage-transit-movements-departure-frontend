@@ -17,25 +17,19 @@
 package api
 
 import generated._
-import models.DynamicAddress
 import models.journeyDomain.PreTaskListDomain
 import models.journeyDomain.guaranteeDetails.{GuaranteeDetailsDomain, GuaranteeDomain}
 import models.journeyDomain.routeDetails.exit.ExitDomain
 import models.journeyDomain.routeDetails.routing.RoutingDomain
 import models.journeyDomain.routeDetails.transit.TransitDomain
 import models.journeyDomain.traderDetails.TraderDetailsDomain
-import models.journeyDomain.traderDetails.holderOfTransit.{AdditionalContactDomain, HolderOfTransitDomain}
+import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain
+import models.journeyDomain.transport.TransportDomain
 import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationsDomain
-import models.reference.{Country, CustomsOffice}
+import models.reference.CustomsOffice
 import org.joda.time.DateTime
-import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 
-import scala.xml.NamespaceBinding
-
-object Conversions {
-
-  val scope: NamespaceBinding              = scalaxb.toScope(Some("ncts") -> "http://ncts.dgtaxud.ec")
-  val formatterNoMillis: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss")
+object Conversions extends ConversionHelper {
 
   def message: MESSAGE_FROM_TRADERSequence =
     MESSAGE_FROM_TRADERSequence(
@@ -115,14 +109,14 @@ object Conversions {
             .map(
               officeOfExitDomain =>
                 CustomsOfficeOfExitForTransitDeclaredType02(
-                  transitDomain.officesOfExit.indexOf(officeOfExitDomain.customsOffice).toString,
+                  transitDomain.officesOfExit.indexOf(officeOfExitDomain).toString,
                   officeOfExitDomain.customsOffice.id
                 )
             )
       )
       .getOrElse(Seq.empty)
 
-  def holderOfTheTransitProcedureType(domain: TraderDetailsDomain): HolderOfTheTransitProcedureType14 =
+  def holderOfTheTransitProcedure(domain: TraderDetailsDomain): HolderOfTheTransitProcedureType14 =
     domain.holderOfTransit match {
       case HolderOfTransitDomain.HolderOfTransitEori(eori, name, country, address, additionalContact) =>
         holderOfTheTransitProcedure(eori.map(
@@ -147,7 +141,7 @@ object Conversions {
         )
     }
 
-  def guaranteeType(domain: GuaranteeDetailsDomain): Seq[GuaranteeType02] =
+  def guarantee(domain: GuaranteeDetailsDomain): Seq[GuaranteeType02] =
     domain.guarantees.map {
       case guaranteeDomain @ GuaranteeDomain.GuaranteeOfTypesABR(guaranteeType) =>
         GuaranteeType02(
@@ -183,19 +177,36 @@ object Conversions {
         )
     }
 
-  private def holderOfTheTransitProcedure(id: Option[String],
-                                          name: Option[String],
-                                          country: Country,
-                                          address: DynamicAddress,
-                                          additionalContact: Option[AdditionalContactDomain]
-  ) =
-    HolderOfTheTransitProcedureType14(
-      identificationNumber = id,
-      TIRHolderIdentificationNumber = None,
-      name = name,
-      Address = Some(AddressType17(address.numberAndStreet, address.postalCode, address.city, country.code.toString)),
-      ContactPerson = additionalContact.map(
-        x => ContactPersonType05(x.name, x.telephoneNumber, None)
-      )
+  def consignment(transportDomain: TransportDomain, traderDetailsDomain: TraderDetailsDomain): ConsignmentType20 =
+    ConsignmentType20(
+      countryOfDispatch = transportDomain.preRequisites.countryOfDispatch.map(
+        x => x.code.code
+      ),
+      countryOfDestination = transportDomain.preRequisites.itemsDestinationCountry.map(
+        x => x.code.code
+      ),
+      containerIndicator = Some(ApiXmlHelpers.boolToFlag(transportDomain.preRequisites.containerIndicator)),
+      inlandModeOfTransport = Some(transportDomain.transportMeans.inlandMode.inlandModeType.toString),
+      modeOfTransportAtTheBorder = ???,
+      grossMass = ???,
+      referenceNumberUCR = transportDomain.preRequisites.ucr,
+      Carrier = carrierType(transportDomain.carrierDetails),
+      Consignor = consignor(traderDetailsDomain.consignment.consignor),
+      Consignee = consignee(traderDetailsDomain.consignment.consignee),
+      AdditionalSupplyChainActor = additionalSupplyChainActor(transportDomain.supplyChainActors),
+      TransportEquipment = transportEquipment(),
+      LocationOfGoods = locationOfGoods(),
+      DepartureTransportMeans = departureTransportMeans(),
+      CountryOfRoutingOfConsignment = countryOfRoutingOfConsignment(),
+      ActiveBorderTransportMeans = activeBorderTransportMeans(),
+      PlaceOfLoading = placeOfLoading(),
+      PlaceOfUnloading = placeOfUnloading(),
+      PreviousDocument = previousDocument(),
+      SupportingDocument = supportingDocument(),
+      TransportDocument = transportDocument(),
+      AdditionalReference = additionalReference(),
+      AdditionalInformation = additionalInformation(),
+      TransportCharges = transportCharges(),
+      HouseConsignment = houseConsignment()
     )
 }

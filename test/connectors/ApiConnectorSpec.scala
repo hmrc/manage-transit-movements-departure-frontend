@@ -20,26 +20,48 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock._
 import generators.Generators
 import helper.WireMockServerHandler
-import models.UserAnswers
+import models.{CountryList, UserAnswers}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.test.Helpers._
+import services.CountriesService
+import play.api.inject.bind
 import uk.gov.hmrc.http.{BadRequestException, HttpResponse, UpstreamErrorResponse}
+
+import scala.concurrent.Future
 
 class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler with Generators {
 
-  val preTask: UserAnswers       = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
-  val traderDetails: UserAnswers = arbitraryTraderDetailsAnswers(preTask).sample.value
-  val uA: UserAnswers            = arbitraryRouteDetailsAnswers(traderDetails).sample.value
+  val preTask: UserAnswers                   = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
+  val traderDetails: UserAnswers             = arbitraryTraderDetailsAnswers(preTask).sample.value
+  val uA: UserAnswers                        = arbitraryRouteDetailsAnswers(traderDetails).sample.value
+  val mockCountriesService: CountriesService = mock[CountriesService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
+      .overrides(bind[CountriesService].toInstance(mockCountriesService))
       .configure(conf = "microservice.services.common-transit-convention-traders.port" -> server.port())
 
   private lazy val connector: ApiConnector = app.injector.instanceOf[ApiConnector]
 
   val departureId: String = "someid"
+
+  private val countriesResponseJson: String =
+    """
+      |[
+      | {
+      |   "code":"GB",
+      |   "description":"United Kingdom"
+      | },
+      | {
+      |   "code":"AD",
+      |   "description":"Andorra"
+      | }
+      |]
+      |""".stripMargin
 
   val expected: String = Json
     .obj(
@@ -65,6 +87,11 @@ class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with Wir
 
         server.stubFor(post(urlEqualTo(uri)).willReturn(okJson(expected)))
 
+        when(mockCountriesService.getCountryCodesCTC()(any()))
+          .thenReturn(Future.successful(CountryList(ctcCountries)))
+        when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any()))
+          .thenReturn(Future.successful(CountryList(customsSecurityAgreementAreaCountries)))
+
         val res: HttpResponse = await(connector.submitDeclaration(uA))
         res.status mustBe OK
 
@@ -73,6 +100,11 @@ class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with Wir
       "for bad request" in {
 
         server.stubFor(post(urlEqualTo(uri)).willReturn(badRequest()))
+
+        when(mockCountriesService.getCountryCodesCTC()(any()))
+          .thenReturn(Future.successful(CountryList(ctcCountries)))
+        when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any()))
+          .thenReturn(Future.successful(CountryList(customsSecurityAgreementAreaCountries)))
 
         intercept[BadRequestException] {
           await(connector.submitDeclaration(uA))
@@ -83,6 +115,11 @@ class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with Wir
       "for internal server error" in {
 
         server.stubFor(post(urlEqualTo(uri)).willReturn(serverError()))
+
+        when(mockCountriesService.getCountryCodesCTC()(any()))
+          .thenReturn(Future.successful(CountryList(ctcCountries)))
+        when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any()))
+          .thenReturn(Future.successful(CountryList(customsSecurityAgreementAreaCountries)))
 
         intercept[UpstreamErrorResponse] {
           await(connector.submitDeclaration(uA))

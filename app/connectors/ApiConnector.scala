@@ -44,7 +44,6 @@ class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConf
     HeaderNames.CONTENT_TYPE -> "application/xml"
   )
 
-  // TODO - Build out submission model from domain and replace createSubmission
   def createPayload(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Either[ReaderError, CC015CType]] =
     for {
       countries <- countriesService.getCountryCodesCTC()
@@ -53,55 +52,24 @@ class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConf
       reducedDatasetIndicator = userAnswers.get(ApprovedOperatorPage).getOrElse(false) // TODO - can we get this from the domain models?
     } yield domain.map {
       case DepartureDomain(preTaskList, traderDetails, routeDetails, guaranteeDetails, transportDetails) =>
-        val message: MESSAGE_FROM_TRADERSequence = Conversions.message
-        val messageType: MessageType015          = Conversions.messageType
-        val correlationIdentifier                = Conversions.correlationIdentifier
-
-        val transitOperation: TransitOperationType06 = Conversions.transitOperation(
-          userAnswers.lrn.value,
-          preTaskList,
-          reducedDatasetIndicator,
-          routeDetails.routing
-        )
-
-        val authorisations = Conversions.authorisations(
-          transportDetails.authorisationsAndLimit.map(
-            x => x.authorisationsDomain
-          )
-        )
-
-        val customsOfficeOfDeparture: CustomsOfficeOfDepartureType03 =
-          Conversions.customsOfficeOfDeparture(preTaskList.officeOfDeparture)
-
-        val customsOfficeOfDestinationDeclared: CustomsOfficeOfDestinationDeclaredType01 =
-          Conversions.customsOfficeOfDestination(routeDetails.routing.officeOfDestination)
-
-        val customsOfficeOfTransitDeclared: Seq[CustomsOfficeOfTransitDeclaredType03] =
-          Conversions.customsOfficeOfTransit(routeDetails.transit)
-
-        val customsOfficeOfExitForTransitDeclared: Seq[CustomsOfficeOfExitForTransitDeclaredType02] =
-          Conversions.customsOfficeOfExit(routeDetails.exit)
-
-        val holderOfTheTransitProcedure: HolderOfTheTransitProcedureType14 = Conversions.holderOfTheTransitProcedureType(traderDetails)
-
-        val representative: Option[RepresentativeType05] = Conversions.representative(traderDetails)
-
-        val guarantee: Seq[GuaranteeType02] = Conversions.guaranteeType(guaranteeDetails)
-
         CC015CType(
-          messagE_FROM_TRADERSequence1 = message,
-          messageType = messageType,
-          correlatioN_IDENTIFIERSequence3 = correlationIdentifier,
-          TransitOperation = transitOperation,
-          Authorisation = authorisations,
-          CustomsOfficeOfDeparture = customsOfficeOfDeparture,
-          CustomsOfficeOfDestinationDeclared = customsOfficeOfDestinationDeclared,
-          CustomsOfficeOfTransitDeclared = customsOfficeOfTransitDeclared,
-          CustomsOfficeOfExitForTransitDeclared = customsOfficeOfExitForTransitDeclared,
-          HolderOfTheTransitProcedure = holderOfTheTransitProcedure,
-          Representative = representative,
-          Guarantee = guarantee,
-          Consignment = ???,
+          messagE_FROM_TRADERSequence1 = Conversions.message,
+          messageType = Conversions.messageType,
+          correlatioN_IDENTIFIERSequence3 = Conversions.correlationIdentifier,
+          TransitOperation = Conversions.transitOperation(userAnswers.lrn.value, preTaskList, reducedDatasetIndicator, routeDetails.routing),
+          Authorisation = Conversions.authorisations(
+            transportDetails.authorisationsAndLimit.map(
+              x => x.authorisationsDomain
+            )
+          ),
+          CustomsOfficeOfDeparture = Conversions.customsOfficeOfDeparture(preTaskList.officeOfDeparture),
+          CustomsOfficeOfDestinationDeclared = Conversions.customsOfficeOfDestination(routeDetails.routing.officeOfDestination),
+          CustomsOfficeOfTransitDeclared = Conversions.customsOfficeOfTransit(routeDetails.transit),
+          CustomsOfficeOfExitForTransitDeclared = Conversions.customsOfficeOfExit(routeDetails.exit),
+          HolderOfTheTransitProcedure = Conversions.holderOfTheTransitProcedure(traderDetails),
+          Representative = Conversions.representative(traderDetails),
+          Guarantee = Conversions.guarantee(guaranteeDetails),
+          Consignment = Conversions.consignment(transportDetails, traderDetails),
           attributes = Map("@PhaseID" -> DataRecord(PhaseIDtype.fromString("NCTS5.0", scope)))
         )
     }
@@ -111,7 +79,7 @@ class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConf
     val declarationUrl = s"${appConfig.apiUrl}/movements/departures"
 
     createPayload(userAnswers) flatMap {
-      case Left(msg) => throw new BadRequestException(s"${msg.page.toString}-${msg.message.getOrElse("Something went wrong")}")
+      case Left(msg) => throw new BadRequestException(s"${msg.page.toString} at path ${msg.page.path}: ${msg.message.getOrElse("Something went wrong")}")
       case Right(submissionModel) =>
         val payload: String = toXML[CC015CType](submissionModel, "ncts:CC015C", scope).toString
         httpClient.POSTString(declarationUrl, payload, requestHeaders)
