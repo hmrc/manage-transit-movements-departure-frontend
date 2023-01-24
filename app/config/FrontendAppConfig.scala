@@ -17,6 +17,7 @@
 package config
 
 import com.google.inject.{Inject, Singleton}
+import models.LocalReferenceNumber
 import play.api.Configuration
 
 @Singleton
@@ -71,4 +72,15 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val apiUrl = configuration.get[Service]("microservice.services.common-transit-convention-traders").baseUrl
 
   lazy val declarationEnabled: Boolean = configuration.get[Boolean]("declaration.enabled")
+
+  def traderDetailsFrontendUrl(lrn: LocalReferenceNumber): String    = frontendUrl(lrn, "traderDetails")
+  def routeDetailsFrontendUrl(lrn: LocalReferenceNumber): String     = frontendUrl(lrn, "routeDetails")
+  def transportDetailsFrontendUrl(lrn: LocalReferenceNumber): String = frontendUrl(lrn, "transportDetails")
+  def guaranteeDetailsFrontendUrl(lrn: LocalReferenceNumber): String = frontendUrl(lrn, "guaranteeDetails")
+  def itemsFrontendUrl(lrn: LocalReferenceNumber): String            = frontendUrl(lrn, "items")
+
+  private def frontendUrl(lrn: LocalReferenceNumber, section: String): String = {
+    val url: String = configuration.get[String](s"urls.${section}Frontend")
+    url.replace(":lrn", lrn.toString)
+  }
 }

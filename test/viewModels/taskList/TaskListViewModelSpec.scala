@@ -24,14 +24,25 @@ class TaskListViewModelSpec extends SpecBase {
     "must create tasks" in {
       val answers = emptyUserAnswers
 
-      val tasks = new TaskListViewModel().apply(answers)(Nil, Nil)
+      val tasks = new TaskListViewModel().apply(answers)(frontendAppConfig)
 
       tasks.size mustBe 4
 
       tasks.head.name mustBe "Add trader details"
+      tasks.head.status mustBe TaskStatus.NotStarted
+      tasks.head.href.get must endWith("/trader-details")
+
       tasks(1).name mustBe "Add route details"
-      tasks(2).name mustBe "Add transport details"
+      tasks(1).status mustBe TaskStatus.NotStarted
+      tasks(1).href.get must endWith("/route-details")
+
+      tasks(2).name mustBe "Transport details"
+      tasks(2).status mustBe TaskStatus.CannotStartYet
+      tasks(2).href must not be defined
+
       tasks(3).name mustBe "Add guarantee details"
+      tasks(3).status mustBe TaskStatus.NotStarted
+      tasks(3).href.get must endWith("/guarantee-details")
     }
   }
 }

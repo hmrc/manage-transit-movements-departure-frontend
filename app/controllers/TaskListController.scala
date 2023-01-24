@@ -17,12 +17,13 @@
 package controllers
 
 import com.google.inject.Inject
+import config.FrontendAppConfig
 import controllers.actions.{Actions, CheckDependentTaskCompletedActionProvider}
 import models.LocalReferenceNumber
 import models.journeyDomain.PreTaskListDomain
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{ApiService, CountriesService}
+import services.ApiService
 import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.TaskListViewModel
@@ -37,27 +38,17 @@ class TaskListController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: TaskListView,
   viewModel: TaskListViewModel,
-  countriesService: CountriesService,
   apiService: ApiService
-)(implicit ec: ExecutionContext)
+)(implicit ec: ExecutionContext, config: FrontendAppConfig)
     extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkDependentTaskCompleted[PreTaskListDomain])
-    .async {
+    .andThen(checkDependentTaskCompleted[PreTaskListDomain]) {
       implicit request =>
-        for {
-          ctcCountries                             <- countriesService.getCountryCodesCTC()
-          customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
-        } yield {
-          val tasks = viewModel(request.userAnswers)(
-            ctcCountries.countryCodes,
-            customsSecurityAgreementAreaCountryCodes.countryCodes
-          )
-          Ok(view(lrn, tasks))
-        }
+        val tasks = viewModel(request.userAnswers)
+        Ok(view(lrn, tasks))
     }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions
