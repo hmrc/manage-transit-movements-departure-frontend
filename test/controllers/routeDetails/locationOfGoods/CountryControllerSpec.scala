@@ -18,8 +18,8 @@ package controllers.routeDetails.locationOfGoods
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.CountryFormProvider
-import models.{CountryList, NormalMode}
 import generators.Generators
+import models.{CountryList, NormalMode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -28,7 +28,6 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.CountriesService
 import views.html.routeDetails.locationOfGoods.CountryView
 
 import scala.concurrent.Future
@@ -43,14 +42,12 @@ class CountryControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
   private val form         = formProvider("routeDetails.locationOfGoods.country", countryList)
   private val mode         = NormalMode
 
-  private val mockCountriesService: CountriesService = mock[CountriesService]
-  private lazy val countryRoute                      = routes.CountryController.onPageLoad(lrn, mode).url
+  private lazy val countryRoute = routes.CountryController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[LocationOfGoodsNavigatorProvider]).toInstance(fakeLocationOfGoodsNavigatorProvider))
-      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "Country Controller" - {
 

@@ -21,12 +21,12 @@ import controllers.actions._
 import controllers.routeDetails.transit.index.{routes => indexRoutes}
 import forms.AddAnotherFormProvider
 import models.requests.DataRequest
-import models.{Index, LocalReferenceNumber, Mode}
+import models.{CountryList, Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.routeDetails.RouteDetailsNavigatorProvider
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -35,7 +35,7 @@ import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel.AddAno
 import views.html.routeDetails.transit.AddAnotherOfficeOfTransitView
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class AddAnotherOfficeOfTransitController @Inject() (
   override val messagesApi: MessagesApi,
@@ -57,46 +57,50 @@ class AddAnotherOfficeOfTransitController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      viewData(mode) flatMap {
+      for {
+        ctcCountries                          <- countriesService.getCountryCodesCTC()
+        customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+      } yield viewData(mode, ctcCountries, customsSecurityAgreementAreaCountries) match {
         case (officesOfTransit, numberOfOfficesOfTransit, allowMoreOfficesOfTransit) =>
           numberOfOfficesOfTransit match {
-            case 0 => redirectToNextPage(mode)
-            case _ => Future.successful(Ok(view(form(allowMoreOfficesOfTransit), lrn, mode, officesOfTransit, allowMoreOfficesOfTransit)))
+            case 0 =>
+              val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+              Redirect(navigator.nextPage(request.userAnswers))
+            case _ =>
+              Ok(view(form(allowMoreOfficesOfTransit), lrn, mode, officesOfTransit, allowMoreOfficesOfTransit))
           }
       }
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      viewData(mode) flatMap {
+      for {
+        ctcCountries                          <- countriesService.getCountryCodesCTC()
+        customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+      } yield viewData(mode, ctcCountries, customsSecurityAgreementAreaCountries) match {
         case (officesOfTransit, numberOfOfficesOfTransit, allowMoreOfficesOfTransit) =>
           form(allowMoreOfficesOfTransit)
             .bindFromRequest()
             .fold(
-              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, officesOfTransit, allowMoreOfficesOfTransit))),
+              formWithErrors => BadRequest(view(formWithErrors, lrn, mode, officesOfTransit, allowMoreOfficesOfTransit)),
               {
-                case true =>
-                  Future.successful(Redirect(indexRoutes.OfficeOfTransitCountryController.onPageLoad(lrn, mode, Index(numberOfOfficesOfTransit))))
-                case false => redirectToNextPage(mode)
+                case true => Redirect(indexRoutes.OfficeOfTransitCountryController.onPageLoad(lrn, mode, Index(numberOfOfficesOfTransit)))
+                case false =>
+                  val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+                  Redirect(navigator.nextPage(request.userAnswers))
               }
             )
       }
   }
 
-  private def redirectToNextPage(mode: Mode)(implicit request: DataRequest[_]): Future[Result] =
-    for {
-      ctcCountries                          <- countriesService.getCountryCodesCTC()
-      customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
-    } yield {
-      val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
-      Redirect(navigator.nextPage(request.userAnswers))
-    }
-
-  private def viewData(mode: Mode)(implicit request: DataRequest[_], ec: ExecutionContext): Future[(Seq[ListItem], Int, Boolean)] =
-    viewModelProvider.apply(request.userAnswers, mode).map {
-      viewModel =>
-        val officesOfTransit         = viewModel.listItems
-        val numberOfOfficesOfTransit = officesOfTransit.length
-        (officesOfTransit, numberOfOfficesOfTransit, numberOfOfficesOfTransit < config.maxOfficesOfTransit)
-    }
+  private def viewData(
+    mode: Mode,
+    ctcCountries: CountryList,
+    customsSecurityAgreementAreaCountries: CountryList
+  )(implicit request: DataRequest[_]): (Seq[ListItem], Int, Boolean) = {
+    val viewModel                = viewModelProvider(request.userAnswers, mode, ctcCountries, customsSecurityAgreementAreaCountries)
+    val officesOfTransit         = viewModel.listItems
+    val numberOfOfficesOfTransit = officesOfTransit.length
+    (officesOfTransit, numberOfOfficesOfTransit, numberOfOfficesOfTransit < config.maxOfficesOfTransit)
+  }
 }

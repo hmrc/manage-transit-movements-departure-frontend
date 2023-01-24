@@ -19,18 +19,21 @@ package controllers.routeDetails.routing
 import config.FrontendAppConfig
 import controllers.actions._
 import controllers.routeDetails.routing.index.{routes => indexRoutes}
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.AddAnotherFormProvider
-import models.domain.UserAnswersReader
-import models.journeyDomain.routeDetails.routing.CountryOfRoutingDomain
+import models.CountryList.countriesOfRoutingReads
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.requests.DataRequest
-import models.{Index, LocalReferenceNumber, Mode}
+import models.{Index, LocalReferenceNumber, Mode, RichOptionalJsArray}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.RoutingNavigatorProvider
 import pages.routeDetails.routing.CountriesOfRoutingInSecurityAgreement
+import pages.sections.routeDetails.routing.CountriesOfRoutingSection
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import repositories.SessionRepository
-import services.SecurityAgreementService
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.ListItem
 import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel.AddAnotherCountryOfRoutingViewModelProvider
@@ -41,12 +44,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherCountryOfRoutingController @Inject() (
   override val messagesApi: MessagesApi,
+  implicit val sessionRepository: SessionRepository,
   navigatorProvider: RoutingNavigatorProvider,
   actions: Actions,
   formProvider: AddAnotherFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  securityAgreementService: SecurityAgreementService,
-  sessionRepository: SessionRepository,
+  countriesService: CountriesService,
   config: FrontendAppConfig,
   viewModelProvider: AddAnotherCountryOfRoutingViewModelProvider,
   view: AddAnotherCountryOfRoutingView
@@ -77,15 +80,23 @@ class AddAnotherCountryOfRoutingController @Inject() (
             case true =>
               Future.successful(Redirect(indexRoutes.CountryOfRoutingController.onPageLoad(lrn, mode, Index(numberOfCountries))))
             case false =>
-              UserAnswersReader[Seq[CountryOfRoutingDomain]].run(request.userAnswers) match {
-                case Left(value) => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
-                case Right(value) =>
+              request.userAnswers.get(CountriesOfRoutingSection).validate(countriesOfRoutingReads).map(_.countries) match {
+                case Some(countriesOfRouting) =>
                   for {
-                    securityAgreement <- securityAgreementService.areAllCountriesInSecurityAgreement(value.map(_.country))
-                    updatedAnswers    <- Future.fromTry(request.userAnswers.set(CountriesOfRoutingInSecurityAgreement, securityAgreement))
-                    _                 <- sessionRepository.set(updatedAnswers)
-                    navigator         <- navigatorProvider(mode)
-                  } yield Redirect(navigator.nextPage(updatedAnswers))
+                    ctcCountries                          <- countriesService.getCountryCodesCTC()
+                    customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                    inSecurityAgreement = countriesOfRouting.map(_.code.code).forall(customsSecurityAgreementAreaCountries.countryCodes.contains(_))
+                    result <- {
+                      implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+                      CountriesOfRoutingInSecurityAgreement
+                        .writeToUserAnswers(inSecurityAgreement)
+                        .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                        .writeToSession()
+                        .navigate()
+                    }
+                  } yield result
+                case None =>
+                  Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
               }
           }
         )
