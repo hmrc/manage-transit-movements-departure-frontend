@@ -1,6 +1,8 @@
 
 ->         /                   app.guaranteeDetails.guarantee.Routes
 
+GET        /:lrn/guarantee-details                                                  controllers.guaranteeDetails.RedirectController.redirect(lrn: LocalReferenceNumber)
+
 GET        /:lrn/guarantee-details/guarantee-added-tir                              controllers.guaranteeDetails.GuaranteeAddedTIRController.onPageLoad(lrn: LocalReferenceNumber)
 POST       /:lrn/guarantee-details/guarantee-added-tir                              controllers.guaranteeDetails.GuaranteeAddedTIRController.onSubmit(lrn: LocalReferenceNumber)
 
