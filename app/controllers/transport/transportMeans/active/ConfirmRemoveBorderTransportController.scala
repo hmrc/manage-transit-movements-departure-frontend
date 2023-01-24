@@ -19,6 +19,7 @@ package controllers.transport.transportMeans.active
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.{Index, LocalReferenceNumber, Mode}
 import pages.sections.transport.transportMeans.TransportMeansActiveSection
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -60,6 +61,7 @@ class ConfirmRemoveBorderTransportController @Inject() (
             case true =>
               TransportMeansActiveSection(activeIndex)
                 .removeFromUserAnswers()
+                .updateTask[TransportDomain]()
                 .writeToSession()
                 .navigateTo(routes.AddAnotherBorderTransportController.onPageLoad(lrn, mode))
             case false =>

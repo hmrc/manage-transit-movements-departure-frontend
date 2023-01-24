@@ -19,6 +19,7 @@ package controllers.transport.transportMeans.active
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.NationalityFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansActiveNavigatorProvider
@@ -71,7 +72,7 @@ class NationalityController @Inject() (
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, nationalityList.nationalities, mode, index))),
               value => {
                 implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index)
-                NationalityPage(index).writeToUserAnswers(value).writeToSession().navigate()
+                NationalityPage(index).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
               }
             )
       }

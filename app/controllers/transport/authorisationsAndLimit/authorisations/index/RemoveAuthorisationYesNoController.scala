@@ -20,6 +20,7 @@ import controllers.actions._
 import controllers.transport.authorisationsAndLimit.authorisations.{routes => authRoutes}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.requests.SpecificDataRequestProvider2
 import models.transport.authorisations.AuthorisationType
 import models.{Index, LocalReferenceNumber, Mode}
@@ -78,6 +79,7 @@ class RemoveAuthorisationYesNoController @Inject() (
               case true =>
                 AuthorisationSection(authorisationIndex)
                   .removeFromUserAnswers()
+                  .updateTask[TransportDomain]()
                   .writeToSession()
                   .navigateTo(authRoutes.AddAnotherAuthorisationController.onPageLoad(lrn, mode))
               case false =>

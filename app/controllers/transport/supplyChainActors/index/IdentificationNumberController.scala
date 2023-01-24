@@ -19,6 +19,7 @@ package controllers.transport.supplyChainActors.index
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EoriNumberFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.SupplyChainActorNavigatorProvider
@@ -72,7 +73,7 @@ class IdentificationNumberController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, actorIndex, supplyChainActor))),
             value => {
               implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, actorIndex)
-              IdentificationNumberPage(actorIndex).writeToUserAnswers(value).writeToSession().navigate()
+              IdentificationNumberPage(actorIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
             }
           )
     }

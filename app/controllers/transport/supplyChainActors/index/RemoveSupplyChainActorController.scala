@@ -20,6 +20,7 @@ import controllers.actions._
 import controllers.transport.supplyChainActors.routes
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.{Index, LocalReferenceNumber, Mode}
 import pages.sections.transport.supplyChainActors.SupplyChainActorSection
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -59,6 +60,7 @@ class RemoveSupplyChainActorController @Inject() (
             case true =>
               SupplyChainActorSection(index)
                 .removeFromUserAnswers()
+                .updateTask[TransportDomain]()
                 .writeToSession()
                 .navigateTo(routes.AddAnotherSupplyChainActorController.onPageLoad(lrn, mode))
             case false =>

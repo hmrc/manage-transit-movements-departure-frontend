@@ -19,6 +19,7 @@ package controllers.transport.carrierDetails.contact
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.TelephoneNumberFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.requests.SpecificDataRequestProvider1
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
@@ -76,7 +77,7 @@ class TelephoneNumberController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, contactName))),
             value => {
               implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              TelephoneNumberPage.writeToUserAnswers(value).writeToSession().navigate()
+              TelephoneNumberPage.writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
             }
           )
     }
