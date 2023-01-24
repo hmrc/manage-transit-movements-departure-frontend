@@ -18,5 +18,111 @@ package models.journeyDomain.transport
 
 import base.SpecBase
 import generators.Generators
+import models.DeclarationType
+import models.domain.{EitherType, UserAnswersReader}
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.preTaskList.DeclarationTypePage
+import pages.traderDetails.consignment.ApprovedOperatorPage
+import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
+import pages.transport.supplyChainActors.SupplyChainActorYesNoPage
 
-class TransportDomainSpec extends SpecBase with Generators {}
+class TransportDomainSpec extends SpecBase with Generators with ScalaCheckPropertyChecks {
+
+  "can be parsed from user answers" - {
+
+    "when reduced data set indicator is true" in {
+      forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)) {
+        declarationType =>
+          val initialUserAnswers = emptyUserAnswers
+            .setValue(DeclarationTypePage, declarationType)
+            .setValue(ApprovedOperatorPage, true)
+
+          forAll(arbitraryTransportAnswers(initialUserAnswers)) {
+            userAnswers =>
+              val result: EitherType[TransportDomain] = UserAnswersReader[TransportDomain].run(userAnswers)
+              result.value.authorisationsAndLimit must be(defined)
+          }
+      }
+    }
+
+    "when reduced data set indicator is undefined" - {
+      "and not adding authorisations" in {
+
+        val initialUserAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, DeclarationType.Option4)
+          .setValue(AddAuthorisationsYesNoPage, false)
+
+        forAll(arbitraryTransportAnswers(initialUserAnswers)) {
+          userAnswers =>
+            val result: EitherType[TransportDomain] = UserAnswersReader[TransportDomain].run(userAnswers)
+            result.value.authorisationsAndLimit must not be defined
+        }
+      }
+
+      "and adding authorisations" in {
+        val initialUserAnswers = emptyUserAnswers
+          .setValue(DeclarationTypePage, DeclarationType.Option4)
+          .setValue(AddAuthorisationsYesNoPage, true)
+
+        forAll(arbitraryTransportAnswers(initialUserAnswers)) {
+          userAnswers =>
+            val result: EitherType[TransportDomain] = UserAnswersReader[TransportDomain].run(userAnswers)
+            result.value.authorisationsAndLimit must be(defined)
+        }
+      }
+    }
+
+    "when reduced data set indicator is false" - {
+      "and not adding authorisations" in {
+        forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)) {
+          declarationType =>
+            val initialUserAnswers = emptyUserAnswers
+              .setValue(DeclarationTypePage, declarationType)
+              .setValue(ApprovedOperatorPage, false)
+              .setValue(AddAuthorisationsYesNoPage, false)
+
+            forAll(arbitraryTransportAnswers(initialUserAnswers)) {
+              userAnswers =>
+                val result: EitherType[TransportDomain] = UserAnswersReader[TransportDomain].run(userAnswers)
+                result.value.authorisationsAndLimit must not be defined
+            }
+        }
+      }
+
+      "and adding authorisations" in {
+        forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)) {
+          declarationType =>
+            val initialUserAnswers = emptyUserAnswers
+              .setValue(DeclarationTypePage, declarationType)
+              .setValue(ApprovedOperatorPage, false)
+              .setValue(AddAuthorisationsYesNoPage, true)
+
+            forAll(arbitraryTransportAnswers(initialUserAnswers)) {
+              userAnswers =>
+                val result: EitherType[TransportDomain] = UserAnswersReader[TransportDomain].run(userAnswers)
+                result.value.authorisationsAndLimit must be(defined)
+            }
+        }
+      }
+    }
+
+    "when adding supply chain actors" in {
+      val initialUserAnswers = emptyUserAnswers.setValue(SupplyChainActorYesNoPage, true)
+      forAll(arbitraryTransportAnswers(initialUserAnswers)) {
+        userAnswers =>
+          val result: EitherType[TransportDomain] = UserAnswersReader[TransportDomain].run(userAnswers)
+          result.value.supplyChainActors must be(defined)
+      }
+    }
+
+    "when not adding supply chain actors" in {
+      val initialUserAnswers = emptyUserAnswers.setValue(SupplyChainActorYesNoPage, false)
+      forAll(arbitraryTransportAnswers(initialUserAnswers)) {
+        userAnswers =>
+          val result: EitherType[TransportDomain] = UserAnswersReader[TransportDomain].run(userAnswers)
+          result.value.supplyChainActors must not be defined
+      }
+    }
+  }
+}

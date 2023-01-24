@@ -260,7 +260,8 @@ trait UserAnswersEntryGenerators {
       generateSupplyChainActorsAnswers orElse
       generateAuthorisationAnswers orElse
       generateLimitAnswers orElse
-      generateCarrierDetailsAnswers
+      generateCarrierDetailsAnswers orElse
+      generateEquipmentAnswers
 
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.preRequisites._
@@ -326,8 +327,10 @@ trait UserAnswersEntryGenerators {
   }
 
   private def generateAuthorisationAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.authorisationsAndLimit.authorisations._
     import pages.transport.authorisationsAndLimit.authorisations.index._
     {
+      case AddAuthorisationsYesNoPage          => arbitrary[Boolean].map(JsBoolean)
       case AuthorisationTypePage(_)            => arbitrary[AuthorisationType].map(Json.toJson(_))
       case AuthorisationReferenceNumberPage(_) => Gen.alphaNumStr.map(JsString)
     }
@@ -348,6 +351,16 @@ trait UserAnswersEntryGenerators {
       case AddContactYesNoPage      => arbitrary[Boolean].map(JsBoolean)
       case NamePage                 => Gen.alphaNumStr.map(JsString)
       case TelephoneNumberPage      => Gen.alphaNumStr.map(JsString)
+    }
+  }
+
+  private def generateEquipmentAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.equipment._
+    import pages.transport.equipment.index._
+    {
+      case AddTransportEquipmentYesNoPage            => arbitrary[Boolean].map(JsBoolean)
+      case AddContainerIdentificationNumberYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case ContainerIdentificationNumberPage(_)      => Gen.alphaNumStr.map(JsString)
     }
   }
 }

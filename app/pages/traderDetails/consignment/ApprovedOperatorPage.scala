@@ -16,10 +16,12 @@
 
 package pages.traderDetails.consignment
 
+import models.DeclarationType.Option4
 import models.SecurityDetailsType.NoSecurityDetails
+import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.preTaskList.SecurityDetailsTypePage
+import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 import pages.sections.traderDetails.{TraderDetailsConsignmentSection, TraderDetailsConsignorSection}
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
@@ -40,4 +42,9 @@ case object ApprovedOperatorPage extends QuestionPage[Boolean] {
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(controllers.traderDetails.consignment.routes.ApprovedOperatorController.onPageLoad(userAnswers.lrn, mode))
+
+  def inferredReader: UserAnswersReader[Boolean] = DeclarationTypePage.reader.flatMap {
+    case Option4 => UserAnswersReader(false)
+    case _       => ApprovedOperatorPage.reader
+  }
 }
