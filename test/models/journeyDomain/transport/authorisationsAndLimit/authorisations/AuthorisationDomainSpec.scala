@@ -145,11 +145,55 @@ class AuthorisationDomainSpec extends SpecBase with Generators {
         }
       }
 
-      "when reduced data set indicator is 0" ignore {} //TODO: Add in tests once nav is in
+      "when reduced data set indicator is 0" in {
 
+        forAll(arbitrary[ProcedureType], arbitrary[InlandMode], arbitrary[AuthorisationType], arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)) {
+          (procedureType, inlandMode, authorisationType, declarationType) =>
+            val userAnswers = emptyUserAnswers
+              .setValue(ProcedureTypePage, procedureType)
+              .setValue(DeclarationTypePage, declarationType)
+              .setValue(ApprovedOperatorPage, false)
+              .setValue(InlandModePage, inlandMode)
+              .setValue(AddAuthorisationsYesNoPage, true)
+              .setValue(AuthorisationTypePage(Index(0)), authorisationType)
+              .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
+
+            val expectedResult = AuthorisationDomain(
+              authorisationType = authorisationType,
+              referenceNumber = referenceNumber
+            )(authorisationIndex)
+
+            val result: EitherType[AuthorisationDomain] =
+              UserAnswersReader[AuthorisationDomain](AuthorisationDomain.userAnswersReader(authorisationIndex))
+                .run(userAnswers)
+
+            result.value mustBe expectedResult
+        }
+
+      }
     }
 
     "cannot be parsed from user answers" - {
+
+      "and reduced data set is 0" - {
+        "must go to authorisation type page" in {
+          forAll(arbitrary[ProcedureType], arbitrary[InlandMode], arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)) {
+            (procedureType, inlandMode, declarationType) =>
+              val userAnswers = emptyUserAnswers
+                .setValue(ProcedureTypePage, procedureType)
+                .setValue(DeclarationTypePage, declarationType)
+                .setValue(ApprovedOperatorPage, false)
+                .setValue(InlandModePage, inlandMode)
+                .setValue(AddAuthorisationsYesNoPage, true)
+
+              val result: EitherType[AuthorisationDomain] = UserAnswersReader[AuthorisationDomain](
+                AuthorisationDomain.userAnswersReader(index)
+              ).run(userAnswers)
+
+              result.left.value.page mustBe AuthorisationTypePage(index)
+          }
+        }
+      }
 
       "and DeclarationType is TIR (reduced data set is 0)" - {
         "must go to authorisation type" in {
