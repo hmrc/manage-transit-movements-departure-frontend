@@ -69,7 +69,7 @@ class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConf
           HolderOfTheTransitProcedure = Conversions.holderOfTheTransitProcedure(traderDetails),
           Representative = Conversions.representative(traderDetails),
           Guarantee = Conversions.guarantee(guaranteeDetails),
-          Consignment = Conversions.consignment(transportDetails, traderDetails),
+          Consignment = Conversions.consignment(transportDetails, traderDetails, routeDetails),
           attributes = Map("@PhaseID" -> DataRecord(PhaseIDtype.fromString("NCTS5.0", scope)))
         )
     }

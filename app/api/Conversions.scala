@@ -19,6 +19,7 @@ package api
 import generated._
 import models.journeyDomain.PreTaskListDomain
 import models.journeyDomain.guaranteeDetails.{GuaranteeDetailsDomain, GuaranteeDomain}
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.journeyDomain.routeDetails.exit.ExitDomain
 import models.journeyDomain.routeDetails.routing.RoutingDomain
 import models.journeyDomain.routeDetails.transit.TransitDomain
@@ -177,7 +178,7 @@ object Conversions extends ConversionHelper {
         )
     }
 
-  def consignment(transportDomain: TransportDomain, traderDetailsDomain: TraderDetailsDomain): ConsignmentType20 =
+  def consignment(transportDomain: TransportDomain, traderDetailsDomain: TraderDetailsDomain, routeDetailsDomain: RouteDetailsDomain): ConsignmentType20 =
     ConsignmentType20(
       countryOfDispatch = transportDomain.preRequisites.countryOfDispatch.map(
         x => x.code.code
@@ -187,26 +188,26 @@ object Conversions extends ConversionHelper {
       ),
       containerIndicator = Some(ApiXmlHelpers.boolToFlag(transportDomain.preRequisites.containerIndicator)),
       inlandModeOfTransport = Some(transportDomain.transportMeans.inlandMode.inlandModeType.toString),
-      modeOfTransportAtTheBorder = ???,
-      grossMass = ???,
+      modeOfTransportAtTheBorder = ???, // TODO - come back to this
+      grossMass = ???, // TODO - Need items for this
       referenceNumberUCR = transportDomain.preRequisites.ucr,
       Carrier = carrierType(transportDomain.carrierDetails),
       Consignor = consignor(traderDetailsDomain.consignment.consignor),
       Consignee = consignee(traderDetailsDomain.consignment.consignee),
       AdditionalSupplyChainActor = additionalSupplyChainActor(transportDomain.supplyChainActors),
-      TransportEquipment = transportEquipment(),
-      LocationOfGoods = locationOfGoods(),
-      DepartureTransportMeans = departureTransportMeans(),
-      CountryOfRoutingOfConsignment = countryOfRoutingOfConsignment(),
-      ActiveBorderTransportMeans = activeBorderTransportMeans(),
-      PlaceOfLoading = placeOfLoading(),
-      PlaceOfUnloading = placeOfUnloading(),
-      PreviousDocument = previousDocument(),
-      SupportingDocument = supportingDocument(),
-      TransportDocument = transportDocument(),
-      AdditionalReference = additionalReference(),
-      AdditionalInformation = additionalInformation(),
-      TransportCharges = transportCharges(),
-      HouseConsignment = houseConsignment()
+      TransportEquipment = transportEquipment(), // TODO - when the journey is built
+      LocationOfGoods = locationOfGoods(routeDetailsDomain.locationOfGoods),
+      DepartureTransportMeans = departureTransportMeans(transportDomain.transportMeans),
+      CountryOfRoutingOfConsignment = countryOfRoutingOfConsignment(routeDetailsDomain.routing),
+      ActiveBorderTransportMeans = activeBorderTransportMeans(transportDomain.transportMeans),
+      PlaceOfLoading = placeOfLoading(routeDetailsDomain.loadingAndUnloading),
+      PlaceOfUnloading = placeOfUnloading(routeDetailsDomain.loadingAndUnloading),
+      PreviousDocument = previousDocument(), // TODO - when the journey is built
+      SupportingDocument = supportingDocument(), // TODO - when the journey is built
+      TransportDocument = transportDocument(), // TODO - when the journey is built
+      AdditionalReference = additionalReference(), // TODO - what is this?
+      AdditionalInformation = additionalInformation(), // TODO - what is this?
+      TransportCharges = transportCharges(), // TODO - what is this?
+      HouseConsignment = houseConsignment() // TODO - whats is this if we already have a consignment?
     )
 }

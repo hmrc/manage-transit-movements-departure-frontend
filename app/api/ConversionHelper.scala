@@ -18,10 +18,18 @@ package api
 
 import generated._
 import models.DynamicAddress
+import models.journeyDomain.routeDetails.loadingAndUnloading.LoadingAndUnloadingDomain
+import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
+import models.journeyDomain.routeDetails.routing.RoutingDomain
 import models.journeyDomain.traderDetails.consignment.{ConsignmentConsigneeDomain, ConsignmentConsignorDomain}
 import models.journeyDomain.traderDetails.holderOfTransit.AdditionalContactDomain
 import models.journeyDomain.transport.carrierDetails.CarrierDetailsDomain
 import models.journeyDomain.transport.supplyChainActors.SupplyChainActorsDomain
+import models.journeyDomain.transport.transportMeans.{
+  TransportMeansDepartureDomainWithOtherInlandMode,
+  TransportMeansDomain,
+  TransportMeansDomainWithOtherInlandMode
+}
 import models.reference.Country
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 
@@ -82,17 +90,132 @@ trait ConversionHelper {
 
   protected def transportEquipment(): Seq[TransportEquipmentType06] = ???
 
-  protected def locationOfGoods(): Option[LocationOfGoodsType05] = ???
+  protected def locationOfGoods(domain: Option[LocationOfGoodsDomain]): Option[LocationOfGoodsType05] =
+    domain.map(
+      locationOfGoodsDomain =>
+        LocationOfGoodsType05(
+          typeOfLocation = locationOfGoodsDomain.typeOfLocation.code,
+          qualifierOfIdentification = locationOfGoodsDomain.qualifierOfIdentification.code,
+          authorisationNumber = locationOfGoodsDomain match {
+            case LocationOfGoodsDomain.LocationOfGoodsY(_, authorisationNumber, _, _) => Some(authorisationNumber)
+            case _                                                                    => None
+          },
+          additionalIdentifier = locationOfGoodsDomain match {
+            case LocationOfGoodsDomain.LocationOfGoodsY(_, _, additionalIdentifier, _) => additionalIdentifier
+            case _                                                                     => None
+          },
+          UNLocode = locationOfGoodsDomain match {
+            case LocationOfGoodsDomain.LocationOfGoodsU(_, unLocode, _) => Some(unLocode.unLocodeExtendedCode)
+            case _                                                      => None
+          },
+          CustomsOffice = locationOfGoodsDomain match {
+            case LocationOfGoodsDomain.LocationOfGoodsV(_, customsOffice) => Some(CustomsOfficeType02(customsOffice.id))
+            case _                                                        => None
+          },
+          GNSS = locationOfGoodsDomain match {
+            case LocationOfGoodsDomain.LocationOfGoodsW(_, coordinates, _) => Some(GNSSType(coordinates.latitude, coordinates.longitude))
+            case _                                                         => None
+          },
+          EconomicOperator = locationOfGoodsDomain match {
+            case LocationOfGoodsDomain.LocationOfGoodsX(_, identificationNumber, _, _) => Some(EconomicOperatorType03(identificationNumber))
+            case _                                                                     => None
+          },
+          Address = locationOfGoodsDomain match {
+            case LocationOfGoodsDomain.LocationOfGoodsZ(_, country, address, _) =>
+              Some(AddressType14(address.numberAndStreet, address.postalCode, address.city, country.code.code))
+            case _ => None
+          },
+          PostcodeAddress = locationOfGoodsDomain match {
+            case LocationOfGoodsDomain.LocationOfGoodsT(_, postalCodeAddress, _) =>
+              Some(PostcodeAddressType02(Some(postalCodeAddress.streetNumber), postalCodeAddress.postalCode, postalCodeAddress.country.code.code))
+            case _ => None
+          },
+          ContactPerson = locationOfGoodsDomain.contactPerson.map(
+            p => ContactPersonType06(p.name, p.telephoneNumber)
+          )
+        )
+    )
 
-  protected def departureTransportMeans(): Seq[DepartureTransportMeansType03] = ???
+  protected def departureTransportMeans(domain: TransportMeansDomain): Seq[DepartureTransportMeansType03] =
+    domain match {
+      case TransportMeansDomainWithOtherInlandMode(_, transportMeansDepartureDomain, _) =>
+        val means: TransportMeansDepartureDomainWithOtherInlandMode =
+          transportMeansDepartureDomain.asInstanceOf[TransportMeansDepartureDomainWithOtherInlandMode]
 
-  protected def countryOfRoutingOfConsignment(): Seq[CountryOfRoutingOfConsignmentType01] = ???
+        Seq(
+          DepartureTransportMeansType03("0",
+                                        Some(means.identification.identificationType.toString),
+                                        Some(means.identificationNumber),
+                                        Some(means.nationality.code)
+          )
+        )
+      case _ => Seq.empty
+    }
 
-  protected def activeBorderTransportMeans(): Seq[ActiveBorderTransportMeansType02] = ???
+  protected def activeBorderTransportMeans(domain: TransportMeansDomain): Seq[ActiveBorderTransportMeansType02] =
+    domain match {
+      case TransportMeansDomainWithOtherInlandMode(_, _, transportMeansActiveList) =>
+        transportMeansActiveList
+          .map(
+            activeList =>
+              activeList.transportMeansActiveListDomain.map(
+                active =>
+                  ActiveBorderTransportMeansType02(
+                    sequenceNumber = activeList.transportMeansActiveListDomain.indexOf(active).toString,
+                    customsOfficeAtBorderReferenceNumber = Some(active.customsOffice.id),
+                    typeOfIdentification = Some(active.identification.borderModeType.toString),
+                    identificationNumber = Some(active.identificationNumber),
+                    nationality = active.nationality.map(
+                      n => n.code
+                    ),
+                    conveyanceReferenceNumber = active.conveyanceReferenceNumber
+                  )
+              )
+          )
+          .getOrElse(Seq.empty)
+      case _ => Seq.empty
+    }
 
-  protected def placeOfLoading(): Option[PlaceOfLoadingType03] = ???
+  protected def countryOfRoutingOfConsignment(domain: RoutingDomain): Seq[CountryOfRoutingOfConsignmentType01] =
+    domain.countriesOfRouting.map(
+      c =>
+        CountryOfRoutingOfConsignmentType01(
+          domain.countriesOfRouting.indexOf(c).toString,
+          c.country.code.code
+        )
+    )
 
-  protected def placeOfUnloading(): Option[PlaceOfUnloadingType01] = ???
+  protected def placeOfLoading(domain: LoadingAndUnloadingDomain): Option[PlaceOfLoadingType03] =
+    domain.loading.map(
+      x =>
+        PlaceOfLoadingType03(
+          x.unLocode.map(
+            locode => locode.unLocodeExtendedCode
+          ),
+          x.additionalInformation.map(
+            info => info.country.code.code
+          ),
+          x.additionalInformation.map(
+            info => info.location
+          )
+        )
+    )
+
+  protected def placeOfUnloading(domain: LoadingAndUnloadingDomain): Option[PlaceOfUnloadingType01] =
+    domain.unloading.map(
+      x =>
+        PlaceOfUnloadingType01(
+          x.unLocode.map(
+            locode => locode.unLocodeExtendedCode
+          ),
+          x.additionalInformation.map(
+            info => info.country.code.code
+          ),
+          x.additionalInformation.map(
+            info => info.location
+          )
+        )
+    )
 
   protected def previousDocument(): Seq[PreviousDocumentType09] = ???
 
