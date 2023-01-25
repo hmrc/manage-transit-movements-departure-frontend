@@ -19,6 +19,7 @@ package controllers.transport.transportMeans.active
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.transport.transportMeans.active.ConveyanceReferenceNumberFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansActiveNavigatorProvider
@@ -63,7 +64,7 @@ class ConveyanceReferenceNumberController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, activeIndex))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, activeIndex)
-            ConveyanceReferenceNumberPage(activeIndex).writeToUserAnswers(value).writeToSession().navigate()
+            ConveyanceReferenceNumberPage(activeIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
           }
         )
   }

@@ -19,6 +19,7 @@ package controllers.transport.transportMeans.departure
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.transport.transportMeans.departure.InlandMode
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
@@ -65,7 +66,7 @@ class InlandModeController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, InlandMode.radioItems, mode))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            InlandModePage.writeToUserAnswers(value).writeToSession().navigate()
+            InlandModePage.writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
           }
         )
   }

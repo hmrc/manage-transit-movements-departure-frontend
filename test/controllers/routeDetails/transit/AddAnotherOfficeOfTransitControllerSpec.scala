@@ -35,8 +35,6 @@ import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel
 import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel.AddAnotherOfficeOfTransitViewModelProvider
 import views.html.routeDetails.transit.AddAnotherOfficeOfTransitView
 
-import scala.concurrent.Future
-
 class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   private val formProvider                            = new AddAnotherFormProvider()
@@ -67,8 +65,8 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
 
     "redirect to correct start page in this sub-section" - {
       "when 0 offices of transit" in {
-        when(mockViewModelProvider.apply(any(), any())(any(), any()))
-          .thenReturn(Future.successful(AddAnotherOfficeOfTransitViewModel(Nil)))
+        when(mockViewModelProvider.apply(any(), any(), any(), any())(any()))
+          .thenReturn(AddAnotherOfficeOfTransitViewModel(Nil))
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -88,8 +86,8 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
 
         val allowMoreOfficesOfTransit = true
 
-        when(mockViewModelProvider.apply(any(), any())(any(), any()))
-          .thenReturn(Future.successful(AddAnotherOfficeOfTransitViewModel(listItems)))
+        when(mockViewModelProvider.apply(any(), any(), any(), any())(any()))
+          .thenReturn(AddAnotherOfficeOfTransitViewModel(listItems))
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -111,8 +109,8 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
 
         val listItems = maxedOutListItems
 
-        when(mockViewModelProvider.apply(any(), any())(any(), any()))
-          .thenReturn(Future.successful(AddAnotherOfficeOfTransitViewModel(listItems)))
+        when(mockViewModelProvider.apply(any(), any(), any(), any())(any()))
+          .thenReturn(AddAnotherOfficeOfTransitViewModel(listItems))
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -132,8 +130,8 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
     "when max limit not reached" - {
       "when yes submitted" - {
         "must redirect to office of transit country page at next index" in {
-          when(mockViewModelProvider.apply(any(), any())(any(), any()))
-            .thenReturn(Future.successful(AddAnotherOfficeOfTransitViewModel(listItems)))
+          when(mockViewModelProvider.apply(any(), any(), any(), any())(any()))
+            .thenReturn(AddAnotherOfficeOfTransitViewModel(listItems))
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -151,8 +149,8 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
 
       "when no submitted" - {
         "must redirect to the next page" in {
-          when(mockViewModelProvider.apply(any(), any())(any(), any()))
-            .thenReturn(Future.successful(AddAnotherOfficeOfTransitViewModel(listItems)))
+          when(mockViewModelProvider.apply(any(), any(), any(), any())(any()))
+            .thenReturn(AddAnotherOfficeOfTransitViewModel(listItems))
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -170,8 +168,8 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
 
     "when max limit reached" - {
       "must redirect to the next page" in {
-        when(mockViewModelProvider.apply(any(), any())(any(), any()))
-          .thenReturn(Future.successful(AddAnotherOfficeOfTransitViewModel(maxedOutListItems)))
+        when(mockViewModelProvider.apply(any(), any(), any(), any())(any()))
+          .thenReturn(AddAnotherOfficeOfTransitViewModel(maxedOutListItems))
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -188,8 +186,8 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
 
     "must return a Bad Request and errors" - {
       "when invalid data is submitted and max limit not reached" in {
-        when(mockViewModelProvider.apply(any(), any())(any(), any()))
-          .thenReturn(Future.successful(AddAnotherOfficeOfTransitViewModel(listItems)))
+        when(mockViewModelProvider.apply(any(), any(), any(), any())(any()))
+          .thenReturn(AddAnotherOfficeOfTransitViewModel(listItems))
 
         val allowMoreOfficesOfTransit = true
 

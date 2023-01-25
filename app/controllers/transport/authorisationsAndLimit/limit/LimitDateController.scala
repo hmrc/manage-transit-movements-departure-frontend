@@ -20,6 +20,7 @@ import config.FrontendAppConfig
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.DateFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
@@ -76,7 +77,7 @@ class LimitDateController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, maxDateArg))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            LimitDatePage.writeToUserAnswers(value).writeToSession().navigate()
+            LimitDatePage.writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
           }
         )
   }

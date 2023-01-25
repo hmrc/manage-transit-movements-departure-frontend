@@ -19,6 +19,7 @@ package controllers.traderDetails.holderOfTransit
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.traderDetails.TirIdNumberFormProvider
+import models.journeyDomain.traderDetails.TraderDetailsDomain
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.traderDetails.TraderDetailsNavigatorProvider
@@ -63,7 +64,7 @@ class TirIdentificationController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            TirIdentificationPage.writeToUserAnswers(value).writeToSession().navigate()
+            TirIdentificationPage.writeToUserAnswers(value).updateTask[TraderDetailsDomain]().writeToSession().navigate()
           }
         )
   }

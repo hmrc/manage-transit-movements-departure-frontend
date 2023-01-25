@@ -19,8 +19,10 @@ package controllers.guaranteeDetails.guarantee
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.GuaranteeReferenceNumberFormProvider
+import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.{GuaranteeNavigatorProvider, UserAnswersNavigator}
+import navigation.UserAnswersNavigator
+import navigation.guaranteeDetails.GuaranteeNavigatorProvider
 import pages.guaranteeDetails.guarantee.ReferenceNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -62,7 +64,7 @@ class ReferenceNumberController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index)
-            ReferenceNumberPage(index).writeToUserAnswers(value).writeToSession().navigate()
+            ReferenceNumberPage(index).writeToUserAnswers(value).updateTask[GuaranteeDetailsDomain]().writeToSession().navigate()
           }
         )
   }

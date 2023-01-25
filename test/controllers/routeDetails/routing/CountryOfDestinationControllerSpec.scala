@@ -30,7 +30,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{CountriesService, CustomsOfficesService}
+import services.CustomsOfficesService
 import views.html.routeDetails.routing.CountryOfDestinationView
 
 import scala.concurrent.Future
@@ -45,21 +45,19 @@ class CountryOfDestinationControllerSpec extends SpecBase with AppWithDefaultMoc
   private val form         = formProvider("routeDetails.routing.countryOfDestination", countryList)
   private val mode         = NormalMode
 
-  private val mockCountriesService: CountriesService           = mock[CountriesService]
   private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
 
   private lazy val countryOfDestinationRoute = routes.CountryOfDestinationController.onPageLoad(lrn, mode).url
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    reset(mockCountriesService); reset(mockCustomsOfficesService)
+    reset(mockCustomsOfficesService)
   }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[RoutingNavigatorProvider]).toInstance(fakeRoutingNavigatorProvider))
-      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
       .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
   "CountryOfDestination Controller" - {

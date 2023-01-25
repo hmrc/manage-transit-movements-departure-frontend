@@ -18,32 +18,26 @@ package navigation.routeDetails
 
 import models.domain.UserAnswersReader
 import models.journeyDomain.routeDetails.loadingAndUnloading.LoadingAndUnloadingDomain
-import models.{CheckMode, Mode, NormalMode}
+import models.{CheckMode, CountryList, Mode, NormalMode}
 import navigation.UserAnswersNavigator
-import services.CountriesService
-import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class LoadingAndUnloadingNavigatorProviderImpl @Inject() (
-  countriesService: CountriesService
-)(implicit ec: ExecutionContext)
-    extends LoadingAndUnloadingNavigatorProvider {
+class LoadingAndUnloadingNavigatorProviderImpl @Inject() () extends LoadingAndUnloadingNavigatorProvider {
 
-  def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator] =
+  def apply(mode: Mode, ctcCountries: CountryList, customsSecurityAgreementAreaCountries: CountryList): UserAnswersNavigator =
     mode match {
       case NormalMode =>
-        Future.successful(new LoadingAndUnloadingNavigator(mode))
+        new LoadingAndUnloadingNavigator(mode)
       case CheckMode =>
-        RouteDetailsNavigatorProvider(countriesService, mode)
+        new RouteDetailsNavigator(mode, ctcCountries, customsSecurityAgreementAreaCountries)
     }
 }
 
 trait LoadingAndUnloadingNavigatorProvider {
 
-  def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator]
+  def apply(mode: Mode, ctcCountries: CountryList, customsSecurityAgreementAreaCountries: CountryList): UserAnswersNavigator
 }
 
 class LoadingAndUnloadingNavigator(override val mode: Mode) extends UserAnswersNavigator {

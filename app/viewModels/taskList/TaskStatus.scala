@@ -16,9 +16,12 @@
 
 package viewModels.taskList
 
+import play.api.libs.json._
+
 sealed trait TaskStatus {
   val messageKey: String
   val tag: String
+  val jsonString: String
 }
 
 object TaskStatus {
@@ -26,20 +29,38 @@ object TaskStatus {
   case object Completed extends TaskStatus {
     override val messageKey: String = "taskStatus.completed"
     override val tag: String        = "govuk-tag--green"
+    override val jsonString: String = "completed"
   }
 
   case object InProgress extends TaskStatus {
     override val messageKey: String = "taskStatus.inProgress"
     override val tag: String        = "govuk-tag--blue"
+    override val jsonString: String = "in-progress"
   }
 
   case object NotStarted extends TaskStatus {
     override val messageKey: String = "taskStatus.notStarted"
     override val tag: String        = "govuk-tag--grey"
+    override val jsonString: String = "not-started"
   }
 
   case object CannotStartYet extends TaskStatus {
     override val messageKey: String = "taskStatus.cannotStartYet"
     override val tag: String        = "govuk-tag--red"
+    override val jsonString: String = "cannot-start-yet"
+  }
+
+  implicit val reads: Reads[TaskStatus] = (json: JsValue) => {
+    json.validate[String].flatMap {
+      case Completed.jsonString      => JsSuccess(Completed)
+      case InProgress.jsonString     => JsSuccess(InProgress)
+      case NotStarted.jsonString     => JsSuccess(NotStarted)
+      case CannotStartYet.jsonString => JsSuccess(CannotStartYet)
+      case x                         => JsError(s"$x is not a valid task status")
+    }
+  }
+
+  implicit val writes: Writes[TaskStatus] = Writes {
+    x => JsString(x.jsonString)
   }
 }

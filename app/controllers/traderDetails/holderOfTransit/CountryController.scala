@@ -19,6 +19,7 @@ package controllers.traderDetails.holderOfTransit
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
+import models.journeyDomain.traderDetails.TraderDetailsDomain
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.traderDetails.TraderDetailsNavigatorProvider
@@ -79,7 +80,7 @@ class CountryController @Inject() (
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode, name))),
                 value => {
                   implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-                  CountryPage.writeToUserAnswers(value).writeToSession().navigate()
+                  CountryPage.writeToUserAnswers(value).updateTask[TraderDetailsDomain]().writeToSession().navigate()
                 }
               )
         }

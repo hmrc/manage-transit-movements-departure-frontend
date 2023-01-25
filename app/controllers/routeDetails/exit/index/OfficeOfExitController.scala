@@ -19,14 +19,15 @@ package controllers.routeDetails.exit.index
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CustomsOfficeForCountryFormProvider
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.{Index, LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.OfficeOfExitNavigatorProvider
-import pages.routeDetails.exit
 import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.CustomsOfficesService
+import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.exit.index.OfficeOfExitView
 
@@ -39,7 +40,8 @@ class OfficeOfExitController @Inject() (
   navigatorProvider: OfficeOfExitNavigatorProvider,
   actions: Actions,
   formProvider: CustomsOfficeForCountryFormProvider,
-  service: CustomsOfficesService,
+  customsOfficesService: CustomsOfficesService,
+  countriesService: CountriesService,
   val controllerComponents: MessagesControllerComponents,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   view: OfficeOfExitView
@@ -53,7 +55,7 @@ class OfficeOfExitController @Inject() (
     .async {
       implicit request =>
         val country = request.arg
-        service.getCustomsOfficesOfExitForCountry(country.code).map {
+        customsOfficesService.getCustomsOfficesOfExitForCountry(country.code).map {
           customsOfficeList =>
             val form = formProvider("routeDetails.exit.index.officeOfExit", customsOfficeList, country.description)
             val preparedForm = request.userAnswers.get(OfficeOfExitPage(index)) match {
@@ -71,7 +73,7 @@ class OfficeOfExitController @Inject() (
     .async {
       implicit request =>
         val country = request.arg
-        service.getCustomsOfficesOfExitForCountry(country.code).flatMap {
+        customsOfficesService.getCustomsOfficesOfExitForCountry(country.code).flatMap {
           customsOfficeList =>
             val form = formProvider("routeDetails.exit.index.officeOfExit", customsOfficeList, country.description)
             form
@@ -79,10 +81,18 @@ class OfficeOfExitController @Inject() (
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, country.description, index, mode))),
                 value =>
-                  navigatorProvider(mode, index).flatMap {
-                    implicit navigator =>
-                      exit.index.OfficeOfExitPage(index).writeToUserAnswers(value).writeToSession().navigate()
-                  }
+                  for {
+                    ctcCountries                          <- countriesService.getCountryCodesCTC()
+                    customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                    result <- {
+                      implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index, ctcCountries, customsSecurityAgreementAreaCountries)
+                      OfficeOfExitPage(index)
+                        .writeToUserAnswers(value)
+                        .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                        .writeToSession()
+                        .navigate()
+                    }
+                  } yield result
               )
         }
     }

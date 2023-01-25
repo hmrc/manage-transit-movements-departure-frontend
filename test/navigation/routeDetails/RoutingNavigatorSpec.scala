@@ -19,13 +19,7 @@ package navigation.routeDetails
 import base.SpecBase
 import generators.Generators
 import models._
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import services.CountriesService
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class RoutingNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -33,10 +27,9 @@ class RoutingNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with G
 
     "when in NormalMode" - {
 
-      val mode                 = NormalMode
-      val mockCountriesService = mock[CountriesService]
-      val navigatorProvider    = new RoutingNavigatorProviderImpl(mockCountriesService)
-      val navigator            = navigatorProvider.apply(mode).futureValue
+      val mode              = NormalMode
+      val navigatorProvider = new RoutingNavigatorProviderImpl()
+      val navigator         = navigatorProvider.apply(mode, ctcCountriesList, customsSecurityAgreementAreaCountriesList)
 
       "when answers complete" - {
         "must redirect to routing check your answers" in {
@@ -52,14 +45,9 @@ class RoutingNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with G
 
     "when in CheckMode" - {
 
-      val mode                 = CheckMode
-      val mockCountriesService = mock[CountriesService]
-      when(mockCountriesService.getCountryCodesCTC()(any()))
-        .thenReturn(Future.successful(CountryList(ctcCountries)))
-      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any()))
-        .thenReturn(Future.successful(CountryList(customsSecurityAgreementAreaCountries)))
-      val navigatorProvider = new RoutingNavigatorProviderImpl(mockCountriesService)
-      val navigator         = navigatorProvider.apply(mode).futureValue
+      val mode              = CheckMode
+      val navigatorProvider = new RoutingNavigatorProviderImpl()
+      val navigator         = navigatorProvider.apply(mode, ctcCountriesList, customsSecurityAgreementAreaCountriesList)
 
       "when answers complete" - {
         "must redirect to route details check your answers" in {

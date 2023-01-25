@@ -20,6 +20,7 @@ import controllers.actions._
 import controllers.routeDetails.transit.{routes => transitRoutes}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.reference.CustomsOffice
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode}
@@ -28,6 +29,7 @@ import pages.sections.routeDetails.transit.OfficeOfTransitSection
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.transit.index.ConfirmRemoveOfficeOfTransitView
 
@@ -40,7 +42,8 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ConfirmRemoveOfficeOfTransitView
+  view: ConfirmRemoveOfficeOfTransitView,
+  countriesService: CountriesService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -76,10 +79,15 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index, prefix, args: _*))),
               {
                 case true =>
-                  OfficeOfTransitSection(index)
-                    .removeFromUserAnswers()
-                    .writeToSession()
-                    .navigateTo(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn, mode))
+                  for {
+                    ctcCountries                          <- countriesService.getCountryCodesCTC()
+                    customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                    result <- OfficeOfTransitSection(index)
+                      .removeFromUserAnswers()
+                      .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                      .writeToSession()
+                      .navigateTo(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn, mode))
+                  } yield result
                 case false =>
                   Future.successful(Redirect(transitRoutes.AddAnotherOfficeOfTransitController.onPageLoad(lrn, mode)))
               }

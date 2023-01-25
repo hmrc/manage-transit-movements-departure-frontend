@@ -35,7 +35,6 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{CountriesService, SecurityAgreementService}
 import viewModels.ListItem
 import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel
 import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel.AddAnotherCountryOfRoutingViewModelProvider
@@ -52,23 +51,17 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
 
   private lazy val addAnotherCountryOfRoutingRoute = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, mode).url
 
-  private val mockViewModelProvider        = mock[AddAnotherCountryOfRoutingViewModelProvider]
-  private val mockSecurityAgreementService = mock[SecurityAgreementService]
-  private val mockCountriesService         = mock[CountriesService]
+  private val mockViewModelProvider = mock[AddAnotherCountryOfRoutingViewModelProvider]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[RoutingNavigatorProvider]).toInstance(fakeRoutingNavigatorProvider))
       .overrides(bind(classOf[AddAnotherCountryOfRoutingViewModelProvider]).toInstance(mockViewModelProvider))
-      .overrides(bind(classOf[SecurityAgreementService]).toInstance(mockSecurityAgreementService))
-      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   override def beforeEach(): Unit = {
     super.beforeEach()
     reset(mockViewModelProvider)
-    reset(mockSecurityAgreementService)
-    reset(mockCountriesService)
   }
 
   private val listItem          = arbitrary[ListItem].sample.value
@@ -167,9 +160,6 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
           when(mockViewModelProvider.apply(any(), any())(any()))
             .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
 
-          when(mockSecurityAgreementService.areAllCountriesInSecurityAgreement(any())(any(), any()))
-            .thenReturn(Future.successful(true))
-
           when(mockSessionRepository.set(any())(any()))
             .thenReturn(Future.successful(true))
 
@@ -197,9 +187,6 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
         when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(AddAnotherCountryOfRoutingViewModel(maxedOutListItems))
 
-        when(mockSecurityAgreementService.areAllCountriesInSecurityAgreement(any())(any(), any()))
-          .thenReturn(Future.successful(true))
-
         when(mockSessionRepository.set(any())(any()))
           .thenReturn(Future.successful(true))
 
@@ -225,9 +212,6 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
       "when invalid data is submitted and max limit not reached" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
-
-        when(mockSecurityAgreementService.areAllCountriesInSecurityAgreement(any())(any(), any()))
-          .thenReturn(Future.successful(true))
 
         when(mockSessionRepository.set(any())(any()))
           .thenReturn(Future.successful(true))

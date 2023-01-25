@@ -19,6 +19,7 @@ package controllers.traderDetails.holderOfTransit.contact
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.NameFormProvider
+import models.journeyDomain.traderDetails.TraderDetailsDomain
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.traderDetails.TraderDetailsNavigatorProvider
@@ -63,7 +64,7 @@ class NameController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            NamePage.writeToUserAnswers(value).writeToSession().navigate()
+            NamePage.writeToUserAnswers(value).updateTask[TraderDetailsDomain]().writeToSession().navigate()
           }
         )
   }

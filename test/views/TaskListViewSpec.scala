@@ -41,7 +41,7 @@ class TaskListViewSpec extends TaskListViewBehaviours {
 
   behave like pageWithContent("h2", "Departure details")
 
-  behave like pageWithTaskList()
+  behave like pageWithTaskList(lrn)
 
   behave like pageWithLink(
     "transit-movements",

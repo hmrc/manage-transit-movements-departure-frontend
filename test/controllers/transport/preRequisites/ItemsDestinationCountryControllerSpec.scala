@@ -28,7 +28,6 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.CountriesService
 import views.html.transport.preRequisites.ItemsDestinationCountryView
 
 import scala.concurrent.Future
@@ -43,14 +42,12 @@ class ItemsDestinationCountryControllerSpec extends SpecBase with AppWithDefault
   private val form         = formProvider("transport.preRequisites.itemsDestinationCountry", countryList)
   private val mode         = NormalMode
 
-  private val mockCountriesService: CountriesService = mock[CountriesService]
-  private lazy val itemsDestinationCountryRoute      = routes.ItemsDestinationCountryController.onPageLoad(lrn, mode).url
+  private lazy val itemsDestinationCountryRoute = routes.ItemsDestinationCountryController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
-      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "ItemsDestinationCountry Controller" - {
 

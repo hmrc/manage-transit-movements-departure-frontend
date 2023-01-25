@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.guaranteeDetails
 
 import models._
 import models.domain.UserAnswersReader
 import models.journeyDomain.guaranteeDetails.GuaranteeDomain
+import navigation.UserAnswersNavigator
 
 import javax.inject.{Inject, Singleton}
 

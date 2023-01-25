@@ -17,8 +17,9 @@
 package base
 
 import controllers.actions._
-import models.{Index, Mode, UserAnswers}
+import models.{CountryList, Index, Mode, UserAnswers}
 import navigation._
+import navigation.guaranteeDetails.{GuaranteeDetailsNavigatorProvider, GuaranteeNavigatorProvider}
 import navigation.routeDetails._
 import navigation.traderDetails.TraderDetailsNavigatorProvider
 import navigation.transport._
@@ -32,7 +33,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Call
 import repositories.SessionRepository
-import uk.gov.hmrc.http.HeaderCarrier
+import services.CountriesService
 
 import scala.concurrent.Future
 
@@ -41,10 +42,14 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
 
   override def beforeEach(): Unit = {
     reset(mockSessionRepository); reset(mockDataRetrievalActionProvider)
+
+    when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(CountryList(Nil)))
+    when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
   }
 
   final val mockSessionRepository: SessionRepository                     = mock[SessionRepository]
   final val mockDataRetrievalActionProvider: DataRetrievalActionProvider = mock[DataRetrievalActionProvider]
+  final val mockCountriesService: CountriesService                       = mock[CountriesService]
 
   final override def fakeApplication(): Application =
     guiceApplicationBuilder()
@@ -64,6 +69,9 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
   protected val fakePreTaskListNavigatorProvider: PreTaskListNavigatorProvider =
     (mode: Mode) => new FakePreTaskListNavigator(onwardRoute, mode)
 
+  protected val fakeGuaranteeDetailsNavigatorProvider: GuaranteeDetailsNavigatorProvider =
+    (mode: Mode) => new FakeGuaranteeDetailsNavigator(onwardRoute, mode)
+
   protected val fakeGuaranteeNavigatorProvider: GuaranteeNavigatorProvider =
     (mode: Mode, index: Index) => new FakeGuaranteeNavigator(onwardRoute, mode, index)
 
@@ -71,67 +79,31 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
     (mode: Mode) => new FakeTraderDetailsNavigator(onwardRoute, mode)
 
   protected val fakeRouteDetailsNavigatorProvider: RouteDetailsNavigatorProvider =
-    new RouteDetailsNavigatorProvider {
-
-      override def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[RouteDetailsNavigator] =
-        Future.successful(new FakeRouteDetailsNavigator(onwardRoute, mode))
-    }
+    (mode: Mode, _: CountryList, _: CountryList) => new FakeRouteDetailsNavigator(onwardRoute, mode)
 
   val fakeRoutingNavigatorProvider: RoutingNavigatorProvider =
-    new RoutingNavigatorProvider {
-
-      override def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[RoutingNavigator] =
-        Future.successful(new FakeRoutingNavigator(onwardRoute, mode))
-    }
+    (mode: Mode, _: CountryList, _: CountryList) => new FakeRoutingNavigator(onwardRoute, mode)
 
   protected val fakeCountryOfRoutingNavigatorProvider: CountryOfRoutingNavigatorProvider =
-    new CountryOfRoutingNavigatorProvider {
-
-      override def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[CountryOfRoutingNavigator] =
-        Future.successful(new FakeCountryOfRoutingNavigator(onwardRoute, mode, index))
-    }
+    (mode: Mode, index: Index, _: CountryList, _: CountryList) => new FakeCountryOfRoutingNavigator(onwardRoute, mode, index)
 
   val fakeTransitNavigatorProvider: TransitNavigatorProvider =
-    new TransitNavigatorProvider {
-
-      override def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[TransitNavigator] =
-        Future.successful(new FakeTransitNavigator(onwardRoute, mode))
-    }
+    (mode: Mode, _: CountryList, _: CountryList) => new FakeTransitNavigator(onwardRoute, mode)
 
   protected val fakeOfficeOfTransitNavigatorProvider: OfficeOfTransitNavigatorProvider =
-    new OfficeOfTransitNavigatorProvider {
-
-      override def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfTransitNavigator] =
-        Future.successful(new FakeOfficeOfTransitNavigator(onwardRoute, mode, index))
-    }
+    (mode: Mode, index: Index, _: CountryList, _: CountryList) => new FakeOfficeOfTransitNavigator(onwardRoute, mode, index)
 
   val fakeExitNavigatorProvider: ExitNavigatorProvider =
-    new ExitNavigatorProvider {
-
-      override def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[ExitNavigator] =
-        Future.successful(new FakeExitNavigator(onwardRoute, mode))
-    }
+    (mode: Mode, _: CountryList, _: CountryList) => new FakeExitNavigator(onwardRoute, mode)
 
   protected val fakeOfficeOfExitNavigatorProvider: OfficeOfExitNavigatorProvider =
-    new OfficeOfExitNavigatorProvider {
-
-      override def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[OfficeOfExitNavigator] =
-        Future.successful(new FakeOfficeOfExitNavigator(onwardRoute, mode, index))
-    }
+    (mode: Mode, index: Index, _: CountryList, _: CountryList) => new FakeOfficeOfExitNavigator(onwardRoute, mode, index)
 
   protected val fakeLocationOfGoodsNavigatorProvider: LocationOfGoodsNavigatorProvider =
-    new LocationOfGoodsNavigatorProvider {
-
-      override def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[LocationOfGoodsNavigator] =
-        Future.successful(new FakeLocationOfGoodsNavigator(onwardRoute, mode))
-    }
+    (mode: Mode, _: CountryList, _: CountryList) => new FakeLocationOfGoodsNavigator(onwardRoute, mode)
 
   protected val fakeLoadingNavigatorProvider: LoadingAndUnloadingNavigatorProvider =
-    new LoadingAndUnloadingNavigatorProvider {
-
-      override def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[LoadingAndUnloadingNavigator] =
-        Future.successful(new FakeLoadingAndUnloadingNavigator(onwardRoute, mode))
-    }
+    (mode: Mode, _: CountryList, _: CountryList) => new FakeLoadingAndUnloadingNavigator(onwardRoute, mode)
 
   protected val fakeTransportNavigatorProvider: TransportNavigatorProvider =
     (mode: Mode) => new FakeTransportNavigator(onwardRoute, mode)
@@ -157,6 +129,7 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[IdentifierAction].to[FakeIdentifierAction],
         bind[SessionRepository].toInstance(mockSessionRepository),
-        bind[DataRetrievalActionProvider].toInstance(mockDataRetrievalActionProvider)
+        bind[DataRetrievalActionProvider].toInstance(mockDataRetrievalActionProvider),
+        bind[CountriesService].toInstance(mockCountriesService)
       )
 }

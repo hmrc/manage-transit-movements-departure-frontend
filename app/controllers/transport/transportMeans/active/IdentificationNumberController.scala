@@ -19,6 +19,7 @@ package controllers.transport.transportMeans.active
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.transport.transportMeans.active.IdentificationNumberFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.requests.SpecificDataRequestProvider1
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.active.Identification
@@ -96,7 +97,7 @@ class IdentificationNumberController @Inject() (
                   formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, dynamicTitle, mode, activeIndex))),
                   value => {
                     implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, activeIndex)
-                    IdentificationNumberPage(activeIndex).writeToUserAnswers(value).writeToSession().navigate()
+                    IdentificationNumberPage(activeIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
                   }
                 )
             case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
