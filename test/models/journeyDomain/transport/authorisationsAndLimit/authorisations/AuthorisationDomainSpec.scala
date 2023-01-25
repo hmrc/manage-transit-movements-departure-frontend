@@ -31,7 +31,6 @@ import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage}
 import pages.traderDetails.consignment.ApprovedOperatorPage
 import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
-import pages.transport.carrierDetails.IdentificationNumberPage
 import pages.transport.transportMeans.departure.InlandModePage
 
 class AuthorisationDomainSpec extends SpecBase with Generators {
@@ -178,22 +177,21 @@ class AuthorisationDomainSpec extends SpecBase with Generators {
     "cannot be parsed from user answers" - {
 
       "and reduced data set is 0" - {
-          "must go to authorisation type page" in {
-            forAll(arbitrary[ProcedureType], arbitrary[InlandMode], arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)) {
-              (procedureType, inlandMode, declarationType) =>
-                val userAnswers = emptyUserAnswers
-                  .setValue(ProcedureTypePage, procedureType)
-                  .setValue(DeclarationTypePage, declarationType)
-                  .setValue(ApprovedOperatorPage, false)
-                  .setValue(InlandModePage, inlandMode)
-                  .setValue(AddAuthorisationsYesNoPage, true)
+        "must go to authorisation type page" in {
+          forAll(arbitrary[ProcedureType], arbitrary[InlandMode], arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)) {
+            (procedureType, inlandMode, declarationType) =>
+              val userAnswers = emptyUserAnswers
+                .setValue(ProcedureTypePage, procedureType)
+                .setValue(DeclarationTypePage, declarationType)
+                .setValue(ApprovedOperatorPage, false)
+                .setValue(InlandModePage, inlandMode)
+                .setValue(AddAuthorisationsYesNoPage, true)
 
-                val result: EitherType[AuthorisationDomain] = UserAnswersReader[AuthorisationDomain](
-                  AuthorisationDomain.userAnswersReader(index)
-                ).run(userAnswers)
+              val result: EitherType[AuthorisationDomain] = UserAnswersReader[AuthorisationDomain](
+                AuthorisationDomain.userAnswersReader(index)
+              ).run(userAnswers)
 
-                result.left.value.page mustBe AuthorisationTypePage(index)
-            }
+              result.left.value.page mustBe AuthorisationTypePage(index)
           }
         }
       }
