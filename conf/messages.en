@@ -1414,3 +1414,9 @@ transport.equipment.addContainerIdentificationNumberYesNo.title = Do you want to
 transport.equipment.addContainerIdentificationNumberYesNo.heading = Do you want to add a container identification number?
 transport.equipment.addContainerIdentificationNumberYesNo.checkYourAnswersLabel = Do you want to add a container identification number?
 transport.equipment.addContainerIdentificationNumberYesNo.error.required = Select yes if you want to add a container identification number
+
+transport.equipment.index.seals.containerSealIdentificationNumber.title = What is the Seal Identification Number for the Container
+transport.equipment.index.seals.containerSealIdentificationNumber.heading = What is the Seal Identification Number for the Container
+transport.equipment.index.seals.containerSealIdentificationNumber.checkYourAnswersLabel = What is the Seal Identification Number for the Container
+transport.equipment.index.seals.containerSealIdentificationNumber.error.required = Enter What is the Seal Identification Number for the Container
+transport.equipment.index.seals.containerSealIdentificationNumber.error.length = What is the Seal Identification Number for the Container must be 20 characters or less

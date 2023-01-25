@@ -1,0 +1,5 @@
+
+GET        /:lrn/transport/equipment/index/seals/what-is-the-seal-identification-number-for-the-container                        controllers.transport.equipment.index.seals.ContainerSealIdentificationNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport/equipment/index/seals/what-is-the-seal-identification-number-for-the-container                        controllers.transport.equipment.index.seals.ContainerSealIdentificationNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport/equipment/index/seals/change-what-is-the-seal-identification-number-for-the-container                 controllers.transport.equipment.index.seals.ContainerSealIdentificationNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport/equipment/index/seals/change-what-is-the-seal-identification-number-for-the-container                 controllers.transport.equipment.index.seals.ContainerSealIdentificationNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
