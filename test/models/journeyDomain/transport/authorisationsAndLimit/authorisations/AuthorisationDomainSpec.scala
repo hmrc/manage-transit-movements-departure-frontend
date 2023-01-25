@@ -19,7 +19,6 @@ package models.journeyDomain.transport.authorisationsAndLimit.authorisations
 import base.SpecBase
 import forms.Constants.maxAuthorisationRefNumberLength
 import generators.Generators
-import models.DeclarationType.Option4
 import models.ProcedureType.{Normal, Simplified}
 import models.domain.{EitherType, UserAnswersReader}
 import models.transport.authorisations.AuthorisationType
@@ -30,7 +29,6 @@ import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage}
 import pages.traderDetails.consignment.ApprovedOperatorPage
-import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
 import pages.transport.transportMeans.departure.InlandModePage
 

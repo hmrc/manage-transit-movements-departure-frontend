@@ -24,10 +24,11 @@ class TaskListViewModel {
 
     def task(section: String, dependentSections: Seq[String] = Nil): Option[Task] = {
       val tasks = userAnswers.tasks
-      tasks.find(_.section == section).orElse {
-        val status = if (dependentSections.allCompleted(tasks)) TaskStatus.NotStarted else TaskStatus.CannotStartYet
-        Task(section, status)
-      }
+      val status = tasks.getOrElse(
+        section,
+        if (dependentSections.allCompleted(tasks)) TaskStatus.NotStarted else TaskStatus.CannotStartYet
+      )
+      Task(section, status)
     }
 
     Seq(

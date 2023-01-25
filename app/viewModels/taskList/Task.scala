@@ -19,7 +19,6 @@ package viewModels.taskList
 import config.FrontendAppConfig
 import models.LocalReferenceNumber
 import play.api.i18n.Messages
-import play.api.libs.json._
 import viewModels.taskList.TaskStatus._
 
 abstract class Task {
@@ -41,7 +40,6 @@ abstract class Task {
 }
 
 object Task {
-  import play.api.libs.functional.syntax._
 
   def apply(section: String, status: TaskStatus): Option[Task] = section match {
     case TraderDetailsTask.section    => Some(TraderDetailsTask(status))
@@ -49,28 +47,5 @@ object Task {
     case TransportTask.section        => Some(TransportTask(status))
     case GuaranteeDetailsTask.section => Some(GuaranteeDetailsTask(status))
     case _                            => None
-  }
-
-  implicit val reads: Reads[Task] = (json: JsValue) => {
-    type Tuple = (String, TaskStatus)
-    implicit val tupleReads: Reads[Tuple] = (
-      (__ \ "section").read[String] and
-        (__ \ "status").read[TaskStatus]
-    ).tupled
-
-    json.validate[Tuple].flatMap {
-      case (section, status) =>
-        Task(section, status) match {
-          case Some(value) => JsSuccess(value)
-          case None        => JsError(s"$section is not a valid task")
-        }
-    }
-  }
-
-  implicit val writes: Writes[Task] = (
-    (__ \ "section").write[String] and
-      (__ \ "status").write[TaskStatus]
-  ).apply {
-    task => (task.section, task.status)
   }
 }

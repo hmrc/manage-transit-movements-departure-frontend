@@ -16,17 +16,22 @@
 
 package viewModels
 
+import viewModels.taskList.TaskStatus.Completed
+
 package object taskList {
 
   implicit class RichDependentSections(dependentSections: Seq[String]) {
-    def allCompleted(tasks: Seq[Task]): Boolean = dependentSections.forall(_.isCompleted(tasks))
+
+    def allCompleted(tasks: Map[String, TaskStatus]): Boolean =
+      dependentSections.forall(_.isCompleted(tasks))
   }
 
   implicit class RichDependentSection(dependentSection: String) {
 
-    def isCompleted(tasks: Seq[Task]): Boolean =
-      tasks.exists(
-        task => task.section == dependentSection && task.isCompleted
-      )
+    def isCompleted(tasks: Map[String, TaskStatus]): Boolean =
+      tasks.exists {
+        case (`dependentSection`, Completed) => true
+        case _                               => false
+      }
   }
 }

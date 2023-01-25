@@ -47,9 +47,9 @@ class TaskListViewModelSpec extends SpecBase {
 
     "when trader details and route details completed" - {
       "transport details must be 'not started'" in {
-        val tasks = Seq(
-          TraderDetailsTask(TaskStatus.Completed),
-          RouteDetailsTask(TaskStatus.Completed)
+        val tasks = Map(
+          TraderDetailsTask.section -> TaskStatus.Completed,
+          RouteDetailsTask.section  -> TaskStatus.Completed
         )
         val answers = emptyUserAnswers.copy(tasks = tasks)
         val result  = new TaskListViewModel().apply(answers)

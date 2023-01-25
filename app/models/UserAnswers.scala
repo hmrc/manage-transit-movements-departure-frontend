@@ -19,7 +19,7 @@ package models
 import pages._
 import play.api.libs.json._
 import queries.Gettable
-import viewModels.taskList.Task
+import viewModels.taskList.{Task, TaskStatus}
 
 import java.time.LocalDateTime
 import scala.util.{Failure, Success, Try}
@@ -28,7 +28,7 @@ final case class UserAnswers(
   lrn: LocalReferenceNumber,
   eoriNumber: EoriNumber,
   data: JsObject = Json.obj(),
-  tasks: Seq[Task] = Nil,
+  tasks: Map[String, TaskStatus] = Map(),
   createdAt: LocalDateTime = LocalDateTime.now,
   lastUpdated: LocalDateTime = LocalDateTime.now,
   id: Id = Id()
@@ -81,7 +81,7 @@ final case class UserAnswers(
   }
 
   def updateTask(task: Task): UserAnswers = {
-    val tasks = this.tasks.filterNot(_.section == task.section) :+ task
+    val tasks = this.tasks.updated(task.section, task.status)
     this.copy(tasks = tasks)
   }
 }
@@ -95,7 +95,7 @@ object UserAnswers {
       (__ \ "lrn").read[LocalReferenceNumber] and
         (__ \ "eoriNumber").read[EoriNumber] and
         (__ \ "data").read[JsObject] and
-        (__ \ "tasks").read[Seq[Task]] and
+        (__ \ "tasks").read[Map[String, TaskStatus]] and
         (__ \ "createdAt").read[LocalDateTime] and
         (__ \ "lastUpdated").read[LocalDateTime] and
         (__ \ "_id").read[Id]
@@ -106,7 +106,7 @@ object UserAnswers {
       (__ \ "lrn").write[LocalReferenceNumber] and
         (__ \ "eoriNumber").write[EoriNumber] and
         (__ \ "data").write[JsObject] and
-        (__ \ "tasks").write[Seq[Task]] and
+        (__ \ "tasks").write[Map[String, TaskStatus]] and
         (__ \ "createdAt").write[LocalDateTime] and
         (__ \ "lastUpdated").write[LocalDateTime] and
         (__ \ "_id").write[Id]

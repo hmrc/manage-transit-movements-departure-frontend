@@ -17,84 +17,52 @@
 package viewModels.taskList
 
 import base.SpecBase
-import play.api.libs.json.{JsError, Json}
+import generators.Generators
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class TaskSpec extends SpecBase {
+class TaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
-  "must deserialise from json" - {
+  "apply" - {
     "when trader details" in {
-      val json = Json.parse("""
-          |{
-          |    "section" : ".traderDetails",
-          |    "status" : "completed"
-          |}
-          |""".stripMargin)
-
-      val task = json.as[Task]
-
-      task mustBe TraderDetailsTask(TaskStatus.Completed)
+      forAll(arbitrary[TaskStatus]) {
+        taskStatus =>
+          val result = Task.apply(".traderDetails", taskStatus)
+          result.get mustBe TraderDetailsTask(taskStatus)
+      }
     }
 
     "when route details" in {
-      val json = Json.parse("""
-          |{
-          |    "section" : ".routeDetails",
-          |    "status" : "completed"
-          |}
-          |""".stripMargin)
-
-      val task = json.as[Task]
-
-      task mustBe RouteDetailsTask(TaskStatus.Completed)
+      forAll(arbitrary[TaskStatus]) {
+        taskStatus =>
+          val result = Task.apply(".routeDetails", taskStatus)
+          result.get mustBe RouteDetailsTask(taskStatus)
+      }
     }
 
     "when transport details" in {
-      val json = Json.parse("""
-          |{
-          |    "section" : ".transportDetails",
-          |    "status" : "completed"
-          |}
-          |""".stripMargin)
-
-      val task = json.as[Task]
-
-      task mustBe TransportTask(TaskStatus.Completed)
+      forAll(arbitrary[TaskStatus]) {
+        taskStatus =>
+          val result = Task.apply(".transportDetails", taskStatus)
+          result.get mustBe TransportTask(taskStatus)
+      }
     }
 
     "when guarantee details" in {
-      val json = Json.parse("""
-          |{
-          |    "section" : ".guaranteeDetails",
-          |    "status" : "completed"
-          |}
-          |""".stripMargin)
-
-      val task = json.as[Task]
-
-      task mustBe GuaranteeDetailsTask(TaskStatus.Completed)
+      forAll(arbitrary[TaskStatus]) {
+        taskStatus =>
+          val result = Task.apply(".guaranteeDetails", taskStatus)
+          result.get mustBe GuaranteeDetailsTask(taskStatus)
+      }
     }
 
     "when something else" in {
-      val json   = Json.parse("""
-          |{
-          |    "section" : "foo",
-          |    "status": "completed"
-          |}
-          |""".stripMargin)
-      val result = json.validate[Task]
-      result mustBe a[JsError]
+      forAll(arbitrary[TaskStatus]) {
+        taskStatus =>
+          val result = Task.apply(".foo", taskStatus)
+          result must not be defined
+      }
     }
-  }
-
-  "must serialise to json" in {
-    val task = TraderDetailsTask(TaskStatus.Completed)
-    val json = Json.toJson[Task](task)
-    json mustBe Json.parse("""
-        |{
-        |    "section" : ".traderDetails",
-        |    "status" : "completed"
-        |}
-        |""".stripMargin)
   }
 
 }
