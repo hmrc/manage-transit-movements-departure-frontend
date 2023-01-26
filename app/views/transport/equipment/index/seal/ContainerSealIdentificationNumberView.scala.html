@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.transport.equipment.index.seals.routes
+@import controllers.transport.equipment.index.seal.routes
 @import models.LocalReferenceNumber
 @import viewModels.components.InputTextViewModel._
 @import views.html.components.{Button, ErrorSummary, InputText}
@@ -27,23 +27,25 @@
     button: Button
 )
 
-@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, sealIndex: Index, prefix: String, args: String*)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("transport.equipment.index.seals.containerSealIdentificationNumber.title"),
+    title = messages(s"$prefix.title", args: _*),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.ContainerSealIdentificationNumberController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.ContainerSealIdentificationNumberController.onSubmit(lrn, mode, equipmentIndex, sealIndex), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages("transport.equipment.index.seals.containerSealIdentificationNumber.heading")
+                heading = messages(s"$prefix.heading", args: _*),
+                caption = Some(messages("transport.equipment.caption"))
             ),
+            hint = Some(messages(s"$prefix.hint")),
             inputClass = InputSize.Width20
         )
 

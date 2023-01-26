@@ -1415,8 +1415,20 @@ transport.equipment.addContainerIdentificationNumberYesNo.heading = Do you want 
 transport.equipment.addContainerIdentificationNumberYesNo.checkYourAnswersLabel = Do you want to add a container identification number?
 transport.equipment.addContainerIdentificationNumberYesNo.error.required = Select yes if you want to add a container identification number
 
-transport.equipment.index.seals.containerSealIdentificationNumber.title = What is the Seal Identification Number for the Container
-transport.equipment.index.seals.containerSealIdentificationNumber.heading = What is the Seal Identification Number for the Container
-transport.equipment.index.seals.containerSealIdentificationNumber.checkYourAnswersLabel = What is the Seal Identification Number for the Container
-transport.equipment.index.seals.containerSealIdentificationNumber.error.required = Enter What is the Seal Identification Number for the Container
-transport.equipment.index.seals.containerSealIdentificationNumber.error.length = What is the Seal Identification Number for the Container must be 20 characters or less
+transport.equipment.index.seal.containerSealIdentificationNumber.withContainer.title = What is the seal identification number for container {0}?
+transport.equipment.index.seal.containerSealIdentificationNumber.withContainer.heading = What is the seal identification number for container {0}?
+transport.equipment.index.seal.containerSealIdentificationNumber.withContainer.hint = This can be up to 20 characters long and include both letters and numbers.
+transport.equipment.index.seal.containerSealIdentificationNumber.withContainer.checkYourAnswersLabel = What is the seal identification number for container {0}?
+transport.equipment.index.seal.containerSealIdentificationNumber.withContainer.error.required = Enter the seal identification number for container {0}
+transport.equipment.index.seal.containerSealIdentificationNumber.withContainer.error.invalid = The identification number must only include letters a to z and numbers 0 to 9
+transport.equipment.index.seal.containerSealIdentificationNumber.withContainer.error.length = The identification number must be 20 characters or less
+transport.equipment.index.seal.containerSealIdentificationNumber.withContainer.error.duplicate = This identification number has already been submitted. Enter a unique seal identification number
+
+transport.equipment.index.seal.containerSealIdentificationNumber.withoutContainer.title = What is the seal identification number?
+transport.equipment.index.seal.containerSealIdentificationNumber.withoutContainer.heading = What is the seal identification number?
+transport.equipment.index.seal.containerSealIdentificationNumber.withoutContainer.hint = This can be up to 20 characters long and include both letters and numbers.
+transport.equipment.index.seal.containerSealIdentificationNumber.withoutContainer.checkYourAnswersLabel = What is the seal identification number?
+transport.equipment.index.seal.containerSealIdentificationNumber.withoutContainer.error.required = Enter the seal identification number
+transport.equipment.index.seal.containerSealIdentificationNumber.withoutContainer.error.invalid = The identification number must only include letters a to z and numbers 0 to 9
+transport.equipment.index.seal.containerSealIdentificationNumber.withoutContainer.error.length = The identification number must be 20 characters or less
+transport.equipment.index.seal.containerSealIdentificationNumber.withoutContainer.error.duplicate = This identification number has already been submitted. Enter a unique seal identification number

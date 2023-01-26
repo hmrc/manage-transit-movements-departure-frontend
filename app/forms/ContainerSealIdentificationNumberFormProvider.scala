@@ -16,15 +16,24 @@
 
 package forms
 
+import forms.Constants.maxContainerSealIdNumberLength
 import forms.mappings.Mappings
+import models.domain.StringFieldRegex.alphaNumericRegex
+
 import javax.inject.Inject
 import play.api.data.Form
 
 class ContainerSealIdentificationNumberFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String): Form[String] =
+  def apply(prefix: String, otherSealContainerIdentificationNumbers: Seq[String], args: String*): Form[String] =
     Form(
-      "value" -> text(s"$prefix.error.required")
-        .verifying(maxLength(20, s"$prefix.error.length"))
+      "value" -> text(s"$prefix.error.required", args = args)
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(maxContainerSealIdNumberLength, s"$prefix.error.length"),
+            regexp(alphaNumericRegex, s"$prefix.error.invalid"),
+            valueIsNotInList(otherSealContainerIdentificationNumbers, s"$prefix.error.duplicate")
+          )
+        )
     )
 }
