@@ -5,6 +5,7 @@
 ->         /                                              app.guaranteeDetails.Routes
 ->         /                                              app.routeDetails.Routes
 ->         /                                              app.transport.Routes
+->         /                                              app.draftDepartures.Routes
 
 GET        /                                              controllers.RedirectController.onPageLoad()
 
