@@ -20,30 +20,24 @@ import models._
 import models.domain.UserAnswersReader
 import models.journeyDomain.routeDetails.routing.CountryOfRoutingDomain
 import navigation.UserAnswersNavigator
-import services.CountriesService
-import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CountryOfRoutingNavigatorProviderImpl @Inject() (
-  countriesService: CountriesService
-)(implicit ec: ExecutionContext)
-    extends CountryOfRoutingNavigatorProvider {
+class CountryOfRoutingNavigatorProviderImpl @Inject() () extends CountryOfRoutingNavigatorProvider {
 
-  def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator] =
+  def apply(mode: Mode, index: Index, ctcCountries: CountryList, customsSecurityAgreementAreaCountries: CountryList): UserAnswersNavigator =
     mode match {
       case NormalMode =>
-        Future.successful(new CountryOfRoutingNavigator(mode, index))
+        new CountryOfRoutingNavigator(mode, index)
       case CheckMode =>
-        RouteDetailsNavigatorProvider(countriesService, mode)
+        new RouteDetailsNavigator(mode, ctcCountries, customsSecurityAgreementAreaCountries)
     }
 }
 
 trait CountryOfRoutingNavigatorProvider {
 
-  def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator]
+  def apply(mode: Mode, index: Index, ctcCountries: CountryList, customsSecurityAgreementAreaCountries: CountryList): UserAnswersNavigator
 }
 
 class CountryOfRoutingNavigator(

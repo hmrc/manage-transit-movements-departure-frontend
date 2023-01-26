@@ -19,13 +19,15 @@ package controllers.routeDetails.loadingAndUnloading.loading
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.UnLocodeFormProvider
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.{LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
 import pages.routeDetails.loadingAndUnloading.loading.UnLocodePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.UnLocodesService
+import services.{CountriesService, UnLocodesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.loadingAndUnloading.loading.UnLocodeView
 
@@ -37,7 +39,8 @@ class UnLocodeController @Inject() (
   implicit val sessionRepository: SessionRepository,
   actions: Actions,
   formProvider: UnLocodeFormProvider,
-  service: UnLocodesService,
+  unLocodesService: UnLocodesService,
+  countriesService: CountriesService,
   navigatorProvider: LoadingAndUnloadingNavigatorProvider,
   val controllerComponents: MessagesControllerComponents,
   view: UnLocodeView
@@ -47,7 +50,7 @@ class UnLocodeController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      service.getUnLocodes().map {
+      unLocodesService.getUnLocodes().map {
         unLocodeList =>
           val form = formProvider("routeDetails.loadingAndUnloading.loading.unLocode", unLocodeList)
           val preparedForm = request.userAnswers.get(UnLocodePage) match {
@@ -61,7 +64,7 @@ class UnLocodeController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      service.getUnLocodes().flatMap {
+      unLocodesService.getUnLocodes().flatMap {
         unLocodeList =>
           val form = formProvider("routeDetails.loadingAndUnloading.loading.unLocode", unLocodeList)
           form
@@ -69,10 +72,18 @@ class UnLocodeController @Inject() (
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, unLocodeList.unLocodes, mode))),
               value =>
-                navigatorProvider(mode).flatMap {
-                  implicit navigator =>
-                    UnLocodePage.writeToUserAnswers(value).writeToSession().navigate()
-                }
+                for {
+                  ctcCountries                          <- countriesService.getCountryCodesCTC()
+                  customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                  result <- {
+                    implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+                    UnLocodePage
+                      .writeToUserAnswers(value)
+                      .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                      .writeToSession()
+                      .navigate()
+                  }
+                } yield result
             )
       }
   }

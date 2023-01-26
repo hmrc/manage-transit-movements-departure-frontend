@@ -16,7 +16,8 @@
 
 package navigation
 
-import models.{Index, Mode, UserAnswers}
+import models.{CountryList, Index, Mode, UserAnswers}
+import navigation.guaranteeDetails.{GuaranteeDetailsNavigator, GuaranteeNavigator}
 import navigation.routeDetails._
 import navigation.traderDetails.TraderDetailsNavigator
 import navigation.transport._
@@ -30,6 +31,10 @@ class FakePreTaskListNavigator(desiredRoute: Call, mode: Mode) extends PreTaskLi
   override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
+class FakeGuaranteeDetailsNavigator(desiredRoute: Call, mode: Mode) extends GuaranteeDetailsNavigator(mode) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
+}
+
 class FakeGuaranteeNavigator(desiredRoute: Call, mode: Mode, index: Index) extends GuaranteeNavigator(mode, index) {
   override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
@@ -38,7 +43,7 @@ class FakeTraderDetailsNavigator(desiredRoute: Call, mode: Mode) extends TraderD
   override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
-class FakeRouteDetailsNavigator(desiredRoute: Call, mode: Mode) extends RouteDetailsNavigator(mode, Nil, Nil) {
+class FakeRouteDetailsNavigator(desiredRoute: Call, mode: Mode) extends RouteDetailsNavigator(mode, CountryList(Nil), CountryList(Nil)) {
   override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
@@ -50,11 +55,12 @@ class FakeCountryOfRoutingNavigator(desiredRoute: Call, mode: Mode, index: Index
   override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
-class FakeTransitNavigator(desiredRoute: Call, mode: Mode) extends TransitNavigator(mode, Nil, Nil) {
+class FakeTransitNavigator(desiredRoute: Call, mode: Mode) extends TransitNavigator(mode, CountryList(Nil), CountryList(Nil)) {
   override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
-class FakeOfficeOfTransitNavigator(desiredRoute: Call, mode: Mode, index: Index) extends OfficeOfTransitNavigator(mode, index, Nil, Nil) {
+class FakeOfficeOfTransitNavigator(desiredRoute: Call, mode: Mode, index: Index)
+    extends OfficeOfTransitNavigator(mode, index, CountryList(Nil), CountryList(Nil)) {
   override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 

@@ -19,12 +19,15 @@ package controllers.routeDetails.loadingAndUnloading.loading
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.{LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
 import pages.routeDetails.loadingAndUnloading.loading.AddUnLocodeYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.loadingAndUnloading.loading.AddUnLocodeYesNoView
 
@@ -38,7 +41,8 @@ class AddUnLocodeYesNoController @Inject() (
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: AddUnLocodeYesNoView
+  view: AddUnLocodeYesNoView,
+  countriesService: CountriesService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -62,10 +66,18 @@ class AddUnLocodeYesNoController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value =>
-            navigatorProvider(mode).flatMap {
-              implicit navigator =>
-                AddUnLocodeYesNoPage.writeToUserAnswers(value).writeToSession().navigate()
-            }
+            for {
+              ctcCountries                          <- countriesService.getCountryCodesCTC()
+              customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+              result <- {
+                implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+                AddUnLocodeYesNoPage
+                  .writeToUserAnswers(value)
+                  .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                  .writeToSession()
+                  .navigate()
+              }
+            } yield result
         )
   }
 }

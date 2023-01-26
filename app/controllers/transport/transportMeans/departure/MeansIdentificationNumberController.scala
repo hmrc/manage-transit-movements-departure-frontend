@@ -19,6 +19,7 @@ package controllers.transport.transportMeans.departure
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.MeansIdentificationNumberProvider
+import models.journeyDomain.transport.TransportDomain
 import models.requests.SpecificDataRequestProvider1
 import models.transport.transportMeans.departure.{Identification, InlandMode}
 import models.{LocalReferenceNumber, Mode}
@@ -84,7 +85,7 @@ class MeansIdentificationNumberController @Inject() (
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, value))),
                 value => {
                   implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-                  MeansIdentificationNumberPage.writeToUserAnswers(value).writeToSession().navigate()
+                  MeansIdentificationNumberPage.writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
                 }
               )
           case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))

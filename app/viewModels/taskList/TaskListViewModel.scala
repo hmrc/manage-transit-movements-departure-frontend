@@ -20,14 +20,22 @@ import models.UserAnswers
 
 class TaskListViewModel {
 
-  def apply(userAnswers: UserAnswers)(
-    ctcCountryCodes: Seq[String],
-    customsSecurityAgreementAreaCountryCodes: Seq[String]
-  ): Seq[Task] =
+  def apply(userAnswers: UserAnswers): Seq[Task] = {
+
+    def task(section: String, dependentSections: Seq[String] = Nil): Option[Task] = {
+      val tasks = userAnswers.tasks
+      val status = tasks.getOrElse(
+        section,
+        if (dependentSections.allCompleted(tasks)) TaskStatus.NotStarted else TaskStatus.CannotStartYet
+      )
+      Task(section, status)
+    }
+
     Seq(
-      TraderDetailsTask(userAnswers),
-      RouteDetailsTask(userAnswers)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes),
-      TransportTask(userAnswers),
-      GuaranteeDetailsTask(userAnswers)
-    )
+      task(TraderDetailsTask.section),
+      task(RouteDetailsTask.section),
+      task(TransportTask.section, Seq(TraderDetailsTask.section, RouteDetailsTask.section)),
+      task(GuaranteeDetailsTask.section)
+    ).flatten
+  }
 }

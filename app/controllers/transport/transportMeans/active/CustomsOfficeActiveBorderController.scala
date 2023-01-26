@@ -19,6 +19,7 @@ package controllers.transport.transportMeans.active
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CustomsOfficeFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansActiveNavigatorProvider
@@ -68,7 +69,7 @@ class CustomsOfficeActiveBorderController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOffices, mode, activeIndex))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, activeIndex)
-            CustomsOfficeActiveBorderPage(activeIndex).writeToUserAnswers(value).writeToSession().navigate()
+            CustomsOfficeActiveBorderPage(activeIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
           }
         )
   }

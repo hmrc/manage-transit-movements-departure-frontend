@@ -19,6 +19,7 @@ package controllers.transport.supplyChainActors.index
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.transport.supplyChainActors.SupplyChainActorType
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
@@ -65,7 +66,7 @@ class SupplyChainActorTypeController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, SupplyChainActorType.radioItems, mode, actorIndex))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, actorIndex)
-            SupplyChainActorTypePage(actorIndex).writeToUserAnswers(value).writeToSession().navigate()
+            SupplyChainActorTypePage(actorIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
           }
         )
   }

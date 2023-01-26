@@ -20,26 +20,16 @@ import base.SpecBase
 import generators.Generators
 import models.reference.{Country, CustomsOffice}
 import models.{CountryList, Index, Mode}
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitPage}
-import services.CountriesService
 import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel.AddAnotherOfficeOfTransitViewModelProvider
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class AddAnotherOfficeOfTransitViewModelSpec extends SpecBase with Generators {
 
   "must get list items" in {
 
     val mode = arbitrary[Mode].sample.value
-
-    val countriesService = mock[CountriesService]
-    when(countriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(CountryList(Nil)))
-    when(countriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(CountryList(Nil)))
 
     val noOfOfficesOfTransit = Gen.choose(1, frontendAppConfig.maxOfficesOfTransit).sample.value
     val country              = arbitrary[Country].sample.value
@@ -53,8 +43,8 @@ class AddAnotherOfficeOfTransitViewModelSpec extends SpecBase with Generators {
           .setValue(AddOfficeOfTransitETAYesNoPage(Index(i)), false)
     }
 
-    val viewModelProvider = new AddAnotherOfficeOfTransitViewModelProvider(countriesService)
-    val result            = viewModelProvider.apply(userAnswers, mode).futureValue
+    val viewModelProvider = new AddAnotherOfficeOfTransitViewModelProvider()
+    val result            = viewModelProvider.apply(userAnswers, mode, CountryList(Nil), CountryList(Nil))
     result.listItems.length mustBe noOfOfficesOfTransit
   }
 

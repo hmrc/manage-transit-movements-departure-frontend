@@ -19,6 +19,7 @@ package controllers.transport.preRequisites
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
@@ -71,7 +72,7 @@ class CountryOfDispatchController @Inject() (
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode))),
               value => {
                 implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-                CountryOfDispatchPage.writeToUserAnswers(value).writeToSession().navigate()
+                CountryOfDispatchPage.writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
               }
             )
       }

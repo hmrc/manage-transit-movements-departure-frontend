@@ -23,14 +23,13 @@ import models.reference.Country
 import models.{DynamicAddress, NormalMode}
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
 import pages.routeDetails.locationOfGoods.{AddressPage, CountryPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.CountriesService
 import views.html.routeDetails.locationOfGoods.AddressView
 
 import scala.concurrent.Future
@@ -48,18 +47,10 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
   private val mode              = NormalMode
   private lazy val addressRoute = routes.AddressController.onPageLoad(lrn, mode).url
 
-  private lazy val mockCountriesService: CountriesService = mock[CountriesService]
-
-  override def beforeEach(): Unit = {
-    reset(mockCountriesService)
-    super.beforeEach()
-  }
-
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[LocationOfGoodsNavigatorProvider]).toInstance(fakeLocationOfGoodsNavigatorProvider))
-      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "Address Controller" - {
 

@@ -19,6 +19,7 @@ package controllers.transport.transportMeans
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.{LocalReferenceNumber, Mode}
 import models.transport.transportMeans.BorderModeOfTransport
 import navigation.UserAnswersNavigator
@@ -65,7 +66,7 @@ class BorderModeOfTransportController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, BorderModeOfTransport.radioItems, mode))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            BorderModeOfTransportPage.writeToUserAnswers(value).writeToSession().navigate()
+            BorderModeOfTransportPage.writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
           }
         )
   }

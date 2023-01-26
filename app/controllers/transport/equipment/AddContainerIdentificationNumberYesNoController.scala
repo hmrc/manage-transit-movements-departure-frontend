@@ -19,6 +19,7 @@ package controllers.transport.equipment
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
@@ -64,7 +65,7 @@ class AddContainerIdentificationNumberYesNoController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            AddContainerIdentificationNumberYesNoPage.writeToUserAnswers(value).writeToSession().navigate()
+            AddContainerIdentificationNumberYesNoPage.writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
           }
         )
   }

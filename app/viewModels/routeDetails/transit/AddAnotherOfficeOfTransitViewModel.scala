@@ -16,38 +16,36 @@
 
 package viewModels.routeDetails.transit
 
-import models.{Mode, UserAnswers}
+import models.{CountryList, Mode, UserAnswers}
 import play.api.i18n.Messages
-import services.CountriesService
-import uk.gov.hmrc.http.HeaderCarrier
 import utils.cyaHelpers.routeDetails.transit.TransitCheckYourAnswersHelper
 import viewModels.ListItem
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
 
 case class AddAnotherOfficeOfTransitViewModel(listItems: Seq[ListItem])
 
 object AddAnotherOfficeOfTransitViewModel {
 
-  class AddAnotherOfficeOfTransitViewModelProvider @Inject() (countriesService: CountriesService)(implicit ec: ExecutionContext) {
+  class AddAnotherOfficeOfTransitViewModelProvider @Inject() () {
 
-    def apply(userAnswers: UserAnswers, mode: Mode)(implicit hc: HeaderCarrier, messages: Messages): Future[AddAnotherOfficeOfTransitViewModel] =
-      for {
-        ctcCountries                             <- countriesService.getCountryCodesCTC()
-        customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
-      } yield {
-        val helper = new TransitCheckYourAnswersHelper(userAnswers, mode)(
-          ctcCountries.countryCodes,
-          customsSecurityAgreementAreaCountryCodes.countryCodes
-        )
+    def apply(
+      userAnswers: UserAnswers,
+      mode: Mode,
+      ctcCountries: CountryList,
+      customsSecurityAgreementAreaCountries: CountryList
+    )(implicit messages: Messages): AddAnotherOfficeOfTransitViewModel = {
+      val helper = new TransitCheckYourAnswersHelper(userAnswers, mode)(
+        ctcCountries.countryCodes,
+        customsSecurityAgreementAreaCountries.countryCodes
+      )
 
-        val listItems = helper.listItems.collect {
-          case Left(value)  => value
-          case Right(value) => value
-        }
-
-        new AddAnotherOfficeOfTransitViewModel(listItems)
+      val listItems = helper.listItems.collect {
+        case Left(value)  => value
+        case Right(value) => value
       }
+
+      new AddAnotherOfficeOfTransitViewModel(listItems)
+    }
   }
 }

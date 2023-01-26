@@ -19,6 +19,7 @@ package controllers.traderDetails.consignment.consignor
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
+import models.journeyDomain.traderDetails.TraderDetailsDomain
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.traderDetails.TraderDetailsNavigatorProvider
@@ -64,7 +65,7 @@ class EoriYesNoController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            EoriYesNoPage.writeToUserAnswers(value).writeToSession().navigate()
+            EoriYesNoPage.writeToUserAnswers(value).updateTask[TraderDetailsDomain]().writeToSession().navigate()
           }
         )
   }

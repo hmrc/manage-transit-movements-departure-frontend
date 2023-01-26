@@ -28,7 +28,6 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.CountriesService
 import views.html.routeDetails.loadingAndUnloading.unloading.CountryView
 
 import scala.concurrent.Future
@@ -43,14 +42,12 @@ class CountryControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
   private val form         = formProvider("routeDetails.loadingAndUnloading.unloading.country", countryList)
   private val mode         = NormalMode
 
-  private val mockCountriesService: CountriesService = mock[CountriesService]
-  private lazy val countryRoute                      = routes.CountryController.onPageLoad(lrn, mode).url
+  private lazy val countryRoute = routes.CountryController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[LoadingAndUnloadingNavigatorProvider]).toInstance(fakeLoadingNavigatorProvider))
-      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "Country Controller" - {
 

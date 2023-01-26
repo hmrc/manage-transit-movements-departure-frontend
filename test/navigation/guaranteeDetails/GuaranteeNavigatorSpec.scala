@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.guaranteeDetails
 
 import base.SpecBase
 import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
@@ -29,7 +29,7 @@ import pages.preTaskList.DeclarationTypePage
 
 class GuaranteeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
-  "Guarantee Details Navigator" - {
+  "Guarantee Navigator" - {
 
     "when answers complete" - {
       "when not a single-page journey" - {

@@ -19,6 +19,7 @@ package models
 import base.SpecBase
 import pages.QuestionPage
 import play.api.libs.json.{JsPath, Json}
+import viewModels.taskList._
 
 import scala.util.Try
 
@@ -87,6 +88,38 @@ class UserAnswersSpec extends SpecBase {
         )
 
         result.data mustBe expectedData
+      }
+    }
+
+    "updateTask" - {
+      "must set task status" - {
+        "when task has not previously been set" in {
+          val task   = TraderDetailsTask(TaskStatus.InProgress)
+          val result = emptyUserAnswers.updateTask(task)
+          result.tasks mustBe Map(TraderDetailsTask.section -> TaskStatus.InProgress)
+        }
+
+        "when task has previously been set" in {
+          val tasks       = Map(TraderDetailsTask.section -> TaskStatus.InProgress)
+          val updatedTask = TraderDetailsTask(TaskStatus.Completed)
+          val result      = emptyUserAnswers.copy(tasks = tasks).updateTask(updatedTask)
+          result.tasks mustBe Map(TraderDetailsTask.section -> TaskStatus.Completed)
+        }
+
+        "when there are other tasks" in {
+          val tasks = Map(
+            TraderDetailsTask.section -> TaskStatus.InProgress,
+            RouteDetailsTask.section  -> TaskStatus.NotStarted,
+            TransportTask.section     -> TaskStatus.CannotStartYet
+          )
+          val updatedTask = TraderDetailsTask(TaskStatus.Completed)
+          val result      = emptyUserAnswers.copy(tasks = tasks).updateTask(updatedTask)
+          result.tasks mustBe Map(
+            TraderDetailsTask.section -> TaskStatus.Completed,
+            RouteDetailsTask.section  -> TaskStatus.NotStarted,
+            TransportTask.section     -> TaskStatus.CannotStartYet
+          )
+        }
       }
     }
   }

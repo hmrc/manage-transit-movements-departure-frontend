@@ -14,14 +14,18 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
 @import viewModels.taskList._
 @import viewModels.taskList.TaskStatus._
 
-@this()
+@this(
+    config: FrontendAppConfig
+)
 
 @(
     sectionKey: String,
-    tasks: Seq[Task]
+    tasks: Seq[Task],
+    lrn: LocalReferenceNumber
 )(implicit messages: Messages)
 
 <ol class="app-task-list">
@@ -32,9 +36,9 @@
             @for(task <- tasks) {
                 <li class="app-task-list__item">
                     <span class="app-task-list__task-name">
-                        @task.href match {
-                            case Some(href) => { <a href="@href" aria-describedby="@task.id-status">@task.name</a> }
-                            case None       => { @task.name }
+                        @task.status match {
+                            case CannotStartYet => { @task.name }
+                            case _              => { <a href="@{task.href(lrn)(config)}" aria-describedby="@task.id-status">@task.name</a> }
                         }
                     </span>
 

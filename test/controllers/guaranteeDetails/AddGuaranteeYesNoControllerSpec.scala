@@ -19,11 +19,13 @@ package controllers.guaranteeDetails
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
 import generators.Generators
-import models.DeclarationType.Option4
-import models.{DeclarationType, Index, NormalMode}
+import models.DeclarationType
+import navigation.guaranteeDetails.GuaranteeDetailsNavigatorProvider
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.DeclarationTypePage
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.guaranteeDetails.AddGuaranteeYesNoView
@@ -33,6 +35,11 @@ class AddGuaranteeYesNoControllerSpec extends SpecBase with AppWithDefaultMockFi
   private val formProvider                = new YesNoFormProvider()
   private val form                        = formProvider("guaranteeDetails.addGuaranteeYesNo")
   private lazy val addGuaranteeYesNoRoute = routes.AddGuaranteeYesNoController.onPageLoad(lrn).url
+
+  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
+    super
+      .guiceApplicationBuilder()
+      .overrides(bind(classOf[GuaranteeDetailsNavigatorProvider]).toInstance(fakeGuaranteeDetailsNavigatorProvider))
 
   "AddGuaranteeYesNoController" - {
 
@@ -51,39 +58,17 @@ class AddGuaranteeYesNoControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "when yes submitted" - {
-      "and non-TIR declaration type" - {
-        "must redirect to declaration type page at index 0" in {
-          val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
-          val userAnswers     = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
-          setExistingUserAnswers(userAnswers)
+      "must redirect to next page" in {
+        setExistingUserAnswers(emptyUserAnswers)
 
-          val request = FakeRequest(POST, addGuaranteeYesNoRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+        val request = FakeRequest(POST, addGuaranteeYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
-          val result = route(app, request).value
+        val result = route(app, request).value
 
-          status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual
-            controllers.guaranteeDetails.guarantee.routes.GuaranteeTypeController.onPageLoad(lrn, NormalMode, Index(0)).url
-        }
-      }
-
-      "and TIR declaration type" - {
-        "must redirect to added guarantee page" in {
-          val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
-          setExistingUserAnswers(userAnswers)
-
-          val request = FakeRequest(POST, addGuaranteeYesNoRoute)
-            .withFormUrlEncodedBody(("value", "true"))
-
-          val result = route(app, request).value
-
-          status(result) mustEqual SEE_OTHER
-
-          redirectLocation(result).value mustEqual
-            routes.GuaranteeAddedTIRController.onPageLoad(lrn).url
-        }
+        redirectLocation(result).value mustEqual onwardRoute.url
       }
     }
 

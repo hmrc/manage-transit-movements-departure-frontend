@@ -19,7 +19,7 @@ package generators
 import models.domain.UserAnswersReader
 import models.journeyDomain.{DepartureDomain, ReaderError}
 import models.reference.Country
-import models.{EoriNumber, LocalReferenceNumber, RichJsObject, UserAnswers}
+import models.{CountryList, EoriNumber, LocalReferenceNumber, RichJsObject, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -32,10 +32,12 @@ trait UserAnswersGenerator
     with GuaranteeDetailsUserAnswersGenerator {
   self: Generators =>
 
-  val ctcCountries: Seq[Country]                            = listWithMaxLength[Country]().sample.get
-  val ctcCountryCodes: Seq[String]                          = ctcCountries.map(_.code.code)
-  val customsSecurityAgreementAreaCountries: Seq[Country]   = listWithMaxLength[Country]().sample.get
-  val customsSecurityAgreementAreaCountryCodes: Seq[String] = customsSecurityAgreementAreaCountries.map(_.code.code)
+  val ctcCountries: Seq[Country]                             = listWithMaxLength[Country]().sample.get
+  val ctcCountriesList: CountryList                          = CountryList(ctcCountries)
+  val ctcCountryCodes: Seq[String]                           = ctcCountries.map(_.code.code)
+  val customsSecurityAgreementAreaCountries: Seq[Country]    = listWithMaxLength[Country]().sample.get
+  val customsSecurityAgreementAreaCountriesList: CountryList = CountryList(customsSecurityAgreementAreaCountries)
+  val customsSecurityAgreementAreaCountryCodes: Seq[String]  = customsSecurityAgreementAreaCountries.map(_.code.code)
 
   def arbitraryDepartureAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[DepartureDomain](userAnswers)(

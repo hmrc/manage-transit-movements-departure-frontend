@@ -24,14 +24,40 @@ class TaskListViewModelSpec extends SpecBase {
     "must create tasks" in {
       val answers = emptyUserAnswers
 
-      val tasks = new TaskListViewModel().apply(answers)(Nil, Nil)
+      val tasks = new TaskListViewModel().apply(answers)
 
       tasks.size mustBe 4
 
       tasks.head.name mustBe "Add trader details"
+      tasks.head.status mustBe TaskStatus.NotStarted
+      tasks.head.href(answers.lrn)(frontendAppConfig) must endWith(s"/$lrn/trader-details")
+
       tasks(1).name mustBe "Add route details"
-      tasks(2).name mustBe "Add transport details"
+      tasks(1).status mustBe TaskStatus.NotStarted
+      tasks(1).href(answers.lrn)(frontendAppConfig) must endWith(s"/$lrn/route-details")
+
+      tasks(2).name mustBe "Transport details"
+      tasks(2).status mustBe TaskStatus.CannotStartYet
+      tasks(2).href(answers.lrn)(frontendAppConfig) must endWith(s"/$lrn/transport-details")
+
       tasks(3).name mustBe "Add guarantee details"
+      tasks(3).status mustBe TaskStatus.NotStarted
+      tasks(3).href(answers.lrn)(frontendAppConfig) must endWith(s"/$lrn/guarantee-details")
+    }
+
+    "when trader details and route details completed" - {
+      "transport details must be 'not started'" in {
+        val tasks = Map(
+          TraderDetailsTask.section -> TaskStatus.Completed,
+          RouteDetailsTask.section  -> TaskStatus.Completed
+        )
+        val answers = emptyUserAnswers.copy(tasks = tasks)
+        val result  = new TaskListViewModel().apply(answers)
+
+        result(2).name mustBe "Add transport details"
+        result(2).status mustBe TaskStatus.NotStarted
+        result(2).href(answers.lrn)(frontendAppConfig) must endWith(s"/$lrn/transport-details")
+      }
     }
   }
 }

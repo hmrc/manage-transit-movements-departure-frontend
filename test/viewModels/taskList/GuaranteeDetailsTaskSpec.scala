@@ -17,16 +17,9 @@
 package viewModels.taskList
 
 import base.SpecBase
-import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
-import controllers.guaranteeDetails.{routes => guaranteeDetailsRoutes}
 import generators.Generators
-import models.DeclarationType.Option4
-import models.{DeclarationType, GuaranteeType, Index, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.guaranteeDetails.guarantee.GuaranteeTypePage
-import pages.preTaskList.DeclarationTypePage
 import viewModels.taskList.TaskStatus._
 
 class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -34,106 +27,47 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
   "name" - {
     "must be Guarantee Details" - {
       "when status is CannotStartYet" in {
-        forAll(Gen.option(Gen.alphaNumStr)) {
-          href =>
-            val task = GuaranteeDetailsTask(CannotStartYet, href)
-            task.name mustBe "Guarantee details"
-        }
+        val task = GuaranteeDetailsTask(CannotStartYet)
+        task.name mustBe "Guarantee details"
       }
     }
 
     "must be Add guarantee details" - {
       "when status is NotStarted" in {
-        forAll(Gen.option(Gen.alphaNumStr)) {
-          href =>
-            val task = GuaranteeDetailsTask(NotStarted, href)
-            task.name mustBe "Add guarantee details"
-        }
+        val task = GuaranteeDetailsTask(NotStarted)
+        task.name mustBe "Add guarantee details"
       }
     }
 
     "must be Edit guarantee details" - {
       "when status is Completed" in {
-        forAll(Gen.option(Gen.alphaNumStr)) {
-          href =>
-            val task = GuaranteeDetailsTask(Completed, href)
-            task.name mustBe "Edit guarantee details"
-        }
+        val task = GuaranteeDetailsTask(Completed)
+        task.name mustBe "Edit guarantee details"
       }
 
       "when status is InProgress" in {
-        forAll(Gen.option(Gen.alphaNumStr)) {
-          href =>
-            val task = GuaranteeDetailsTask(InProgress, href)
-            task.name mustBe "Edit guarantee details"
-        }
+        val task = GuaranteeDetailsTask(InProgress)
+        task.name mustBe "Edit guarantee details"
       }
     }
   }
 
   "id" - {
     "must be guarantee-details" in {
-      val task = GuaranteeDetailsTask(emptyUserAnswers)
-      task.id mustBe "guarantee-details"
+      forAll(arbitrary[TaskStatus]) {
+        taskStatus =>
+          val task = GuaranteeDetailsTask(taskStatus)
+          task.id mustBe "guarantee-details"
+      }
     }
   }
 
-  "apply" - {
-    "when NotStarted" - {
-      "and TIR declaration type" in {
-        val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
-        val task        = GuaranteeDetailsTask(userAnswers)
-        task.status mustBe NotStarted
-        task.href.get mustBe guaranteeDetailsRoutes.GuaranteeAddedTIRController.onPageLoad(userAnswers.lrn).url
-      }
-
-      "and non-TIR declaration type" in {
-        forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType)) {
-          declarationType =>
-            val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
-            val task        = GuaranteeDetailsTask(userAnswers)
-            task.status mustBe NotStarted
-            task.href.get mustBe guaranteeRoutes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, NormalMode, Index(0)).url
-        }
-      }
-    }
-
-    "when InProgress" - {
-
-      "and 0,1,2,4,5,9 guarantee type" in {
-        forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType), arbitrary[GuaranteeType](arbitrary012459GuaranteeType)) {
-          (declarationType, guaranteeType) =>
-            val userAnswers = emptyUserAnswers
-              .setValue(DeclarationTypePage, declarationType)
-              .setValue(GuaranteeTypePage(index), guaranteeType)
-
-            val task = GuaranteeDetailsTask(userAnswers)
-            task.status mustBe InProgress
-            task.href.get mustBe guaranteeDetailsRoutes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn).url
-        }
-      }
-    }
-
-    "when Completed" - {
-      "when TIR declaration type" in {
-        val initialAnswers = emptyUserAnswers.setValue(DeclarationTypePage, Option4)
-        forAll(arbitraryGuaranteeDetailsAnswers(initialAnswers)) {
-          userAnswers =>
-            val task = GuaranteeDetailsTask(userAnswers)
-            task.status mustBe Completed
-            task.href.get mustBe guaranteeDetailsRoutes.GuaranteeAddedTIRController.onPageLoad(userAnswers.lrn).url
-        }
-      }
-
-      "when non-TIR declaration type" in {
-        val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
-        val initialAnswers  = emptyUserAnswers.setValue(DeclarationTypePage, declarationType)
-        forAll(arbitraryGuaranteeDetailsAnswers(initialAnswers)) {
-          userAnswers =>
-            val task = GuaranteeDetailsTask(userAnswers)
-            task.status mustBe Completed
-            task.href.get mustBe guaranteeDetailsRoutes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn).url
-        }
+  "href" - {
+    "must end with /guarantee-details" in {
+      forAll(arbitrary[TaskStatus]) {
+        taskStatus =>
+          val task = GuaranteeDetailsTask(taskStatus)
+          task.href(lrn)(frontendAppConfig) must endWith(s"/$lrn/guarantee-details")
       }
     }
   }

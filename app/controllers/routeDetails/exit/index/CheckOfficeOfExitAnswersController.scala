@@ -18,9 +18,11 @@ package controllers.routeDetails.exit.index
 
 import controllers.actions._
 import models.{Index, LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.ExitNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.routeDetails.exit.OfficeOfExitAnswersViewModel.OfficeOfExitAnswersViewModelProvider
 import views.html.routeDetails.exit.index.CheckOfficeOfExitAnswersView
@@ -34,7 +36,8 @@ class CheckOfficeOfExitAnswersController @Inject() (
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: CheckOfficeOfExitAnswersView,
-  viewModelProvider: OfficeOfExitAnswersViewModelProvider
+  viewModelProvider: OfficeOfExitAnswersViewModelProvider,
+  countriesService: CountriesService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -47,8 +50,12 @@ class CheckOfficeOfExitAnswersController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      navigatorProvider(mode).map {
-        navigator => Redirect(navigator.nextPage(request.userAnswers))
+      for {
+        ctcCountries                          <- countriesService.getCountryCodesCTC()
+        customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+      } yield {
+        val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+        Redirect(navigator.nextPage(request.userAnswers))
       }
   }
 }

@@ -20,6 +20,7 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.AuthorisationReferenceNumberFormProvider
 import models.ProcedureType.Simplified
+import models.journeyDomain.transport.TransportDomain
 import models.requests.DataRequest
 import models.transport.authorisations.AuthorisationType
 import models.transport.transportMeans.departure.InlandMode.{Air, Maritime, Rail}
@@ -99,7 +100,7 @@ class AuthorisationReferenceNumberController @Inject() (
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, dynamicTitle, mode, authorisationIndex))),
               value => {
                 implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, authorisationIndex)
-                AuthorisationReferenceNumberPage(authorisationIndex).writeToUserAnswers(value).writeToSession().navigate()
+                AuthorisationReferenceNumberPage(authorisationIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
               }
             )
         case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))

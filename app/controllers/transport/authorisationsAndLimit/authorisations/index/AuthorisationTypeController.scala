@@ -19,6 +19,7 @@ package controllers.transport.authorisationsAndLimit.authorisations.index
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.transport.authorisations.AuthorisationType
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
@@ -65,7 +66,7 @@ class AuthorisationTypeController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, AuthorisationType.radioItems, mode, authorisationIndex))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, authorisationIndex)
-            AuthorisationTypePage(authorisationIndex).writeToUserAnswers(value).writeToSession().navigate()
+            AuthorisationTypePage(authorisationIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
           }
         )
   }

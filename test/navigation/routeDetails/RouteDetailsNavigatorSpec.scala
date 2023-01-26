@@ -20,14 +20,8 @@ import base.SpecBase
 import controllers.routeDetails.routes
 import generators.Generators
 import models._
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import services.CountriesService
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -37,13 +31,8 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
       "must redirect to check your answers" in {
         forAll(arbitraryRouteDetailsAnswers(emptyUserAnswers), arbitrary[Mode]) {
           (answers, mode) =>
-            val mockCountriesService = mock[CountriesService]
-            when(mockCountriesService.getCountryCodesCTC()(any()))
-              .thenReturn(Future.successful(CountryList(ctcCountries)))
-            when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any()))
-              .thenReturn(Future.successful(CountryList(customsSecurityAgreementAreaCountries)))
-            val navigatorProvider = new RouteDetailsNavigatorProviderImpl(mockCountriesService)
-            val navigator         = navigatorProvider.apply(mode).futureValue
+            val navigatorProvider = new RouteDetailsNavigatorProviderImpl()
+            val navigator         = navigatorProvider.apply(mode, ctcCountriesList, customsSecurityAgreementAreaCountriesList)
 
             navigator
               .nextPage(answers)

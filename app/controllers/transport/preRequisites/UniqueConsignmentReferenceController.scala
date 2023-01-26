@@ -19,6 +19,7 @@ package controllers.transport.preRequisites
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.UCRFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
@@ -63,7 +64,7 @@ class UniqueConsignmentReferenceController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            UniqueConsignmentReferencePage.writeToUserAnswers(value).writeToSession().navigate()
+            UniqueConsignmentReferencePage.writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
           }
         )
   }

@@ -38,7 +38,7 @@
     <span class="govuk-caption-xl">@lrn.toString</span>
     @heading(heading = messages("taskList.heading"))
 
-    @taskList("taskList.departureDetails", tasks)
+    @taskList("taskList.departureDetails", tasks, lrn)
 
      @if(config.declarationEnabled) {
          @* TODO - @if(tasks.forall(_.isCompleted)) { *@

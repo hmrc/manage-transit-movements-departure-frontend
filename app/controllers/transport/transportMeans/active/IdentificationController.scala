@@ -19,6 +19,7 @@ package controllers.transport.transportMeans.active
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.transport.transportMeans.active.Identification
 import models.{Index, LocalReferenceNumber, Mode, UserAnswers}
 import navigation.UserAnswersNavigator
@@ -67,7 +68,7 @@ class IdentificationController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, radioOptions(request.userAnswers, activeIndex), mode, activeIndex))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, activeIndex)
-            IdentificationPage(activeIndex).writeToUserAnswers(value).writeToSession().navigate()
+            IdentificationPage(activeIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
           }
         )
   }
