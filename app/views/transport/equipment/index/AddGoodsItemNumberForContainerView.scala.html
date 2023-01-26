@@ -27,10 +27,10 @@
     button: Button
 )
 
-@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, containerIdentificationNumber: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("transport.equipment.index.addGoodsItemNumberForContainer.title"),
+    title = messages("transport.equipment.index.addGoodsItemNumberForContainer.title", containerIdentificationNumber),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -41,8 +41,10 @@
 
         @inputYesNo(
             field = form("value"),
-            yesNoType = OrdinaryYesNo(
-                heading = messages("transport.equipment.index.addGoodsItemNumberForContainer.heading")
+            yesNoType = YesNoWithAdditionalHtml(
+                heading = messages("transport.equipment.index.addGoodsItemNumberForContainer.heading", containerIdentificationNumber),
+                caption = Some(messages("transport.equipment.caption")),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("transport.equipment.index.addGoodsItemNumberForContainer.paragraph")}</p>""")
             )
         )
 

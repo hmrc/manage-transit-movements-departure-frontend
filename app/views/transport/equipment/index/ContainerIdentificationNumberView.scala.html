@@ -30,7 +30,7 @@
 @(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("transport.equipment.containerIdentificationNumber.title"),
+    title = messages("transport.equipment.index.containerIdentificationNumber.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -42,10 +42,10 @@
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages("transport.equipment.containerIdentificationNumber.heading"),
+                heading = messages("transport.equipment.index.containerIdentificationNumber.heading"),
                 caption = Some(messages("transport.equipment.caption"))
             ),
-            hint = Some(messages("transport.equipment.containerIdentificationNumber.hint")),
+            hint = Some(messages("transport.equipment.index.containerIdentificationNumber.hint")),
             inputClass = InputSize.Width20
         )
 

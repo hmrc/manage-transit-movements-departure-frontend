@@ -1391,14 +1391,14 @@ transport.carrierDetails.contact.telephoneNumber.error.minLength = {0}’s telep
 #TransportEquipment
 transport.equipment.caption = Transport details - Equipment
 
-transport.equipment.containerIdentificationNumber.title = What’s the container identification number?
-transport.equipment.containerIdentificationNumber.heading = What’s the container identification number?
-transport.equipment.containerIdentificationNumber.hint = This can be up to 17 characters long and include both letters and numbers.
-transport.equipment.containerIdentificationNumber.checkYourAnswersLabel = What’s the container identification number?
-transport.equipment.containerIdentificationNumber.error.required = Enter the container identification number
-transport.equipment.containerIdentificationNumber.error.length = The identification number must be 17 characters or less
-transport.equipment.containerIdentificationNumber.error.invalid = The identification number must only include letters a to z and numbers 0 to 9
-transport.equipment.containerIdentificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique container identification number
+transport.equipment.index.containerIdentificationNumber.title = What’s the container identification number?
+transport.equipment.index.containerIdentificationNumber.heading = What’s the container identification number?
+transport.equipment.index.containerIdentificationNumber.hint = This can be up to 17 characters long and include both letters and numbers.
+transport.equipment.index.containerIdentificationNumber.checkYourAnswersLabel = What’s the container identification number?
+transport.equipment.index.containerIdentificationNumber.error.required = Enter the container identification number
+transport.equipment.index.containerIdentificationNumber.error.length = The identification number must be 17 characters or less
+transport.equipment.index.containerIdentificationNumber.error.invalid = The identification number must only include letters a to z and numbers 0 to 9
+transport.equipment.index.containerIdentificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique container identification number
 
 transport.equipment.addTransportEquipmentYesNo.title = Do you need to add any transport equipment?
 transport.equipment.addTransportEquipmentYesNo.heading = Do you need to add any transport equipment?
@@ -1413,5 +1413,6 @@ transport.equipment.addContainerIdentificationNumberYesNo.error.required = Selec
 
 transport.equipment.index.addGoodsItemNumberForContainer.title = Do you want to add a goods item number for container {0}?
 transport.equipment.index.addGoodsItemNumberForContainer.heading = Do you want to add a goods item number for container {0}?
+transport.equipment.index.addGoodsItemNumberForContainer.paragraph = Placeholder text
 transport.equipment.index.addGoodsItemNumberForContainer.checkYourAnswersLabel = Do you want to add a goods item number for container {0}?
-transport.equipment.index.addGoodsItemNumberForContainer.error.required = Select yes if Do you want to add a goods item number for container {0}?
+transport.equipment.index.addGoodsItemNumberForContainer.error.required = Select yes if you want to add a goods item number for container {0}
