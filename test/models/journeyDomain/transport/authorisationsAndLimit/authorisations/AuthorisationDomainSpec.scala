@@ -29,6 +29,7 @@ import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage}
 import pages.traderDetails.consignment.ApprovedOperatorPage
+import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
 import pages.transport.transportMeans.departure.InlandModePage
 

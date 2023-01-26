@@ -26,42 +26,22 @@ import org.mockito.Mockito.when
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.test.Helpers._
-import services.CountriesService
-import play.api.inject.bind
 import uk.gov.hmrc.http.{BadRequestException, HttpResponse, UpstreamErrorResponse}
 
 import scala.concurrent.Future
 
 class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler with Generators {
 
-  val preTask: UserAnswers                   = arbitraryPreTaskListAnswers(emptyUserAnswers).sample.value
-  val traderDetails: UserAnswers             = arbitraryTraderDetailsAnswers(preTask).sample.value
-  val uA: UserAnswers                        = arbitraryRouteDetailsAnswers(traderDetails).sample.value
-  val mockCountriesService: CountriesService = mock[CountriesService]
+  val uA: UserAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind[CountriesService].toInstance(mockCountriesService))
       .configure(conf = "microservice.services.common-transit-convention-traders.port" -> server.port())
 
   private lazy val connector: ApiConnector = app.injector.instanceOf[ApiConnector]
 
   val departureId: String = "someid"
-
-  private val countriesResponseJson: String =
-    """
-      |[
-      | {
-      |   "code":"GB",
-      |   "description":"United Kingdom"
-      | },
-      | {
-      |   "code":"AD",
-      |   "description":"Andorra"
-      | }
-      |]
-      |""".stripMargin
 
   val expected: String = Json
     .obj(
