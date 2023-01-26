@@ -19,6 +19,7 @@ package controllers.transport.equipment.index
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.requests.SpecificDataRequestProvider1
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
@@ -77,7 +78,7 @@ class AddGoodsItemNumberForContainerController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, equipmentIndex, containerIdentificationNumber))),
             value => {
               implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              AddGoodsItemNumberForContainerPage(equipmentIndex).writeToUserAnswers(value).writeToSession().navigate()
+              AddGoodsItemNumberForContainerPage(equipmentIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
             }
           )
     }
