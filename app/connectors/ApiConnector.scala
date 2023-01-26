@@ -82,7 +82,6 @@ class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConf
       case Left(msg) => throw new BadRequestException(s"${msg.page.toString} at path ${msg.page.path}: ${msg.message.getOrElse("Something went wrong")}")
       case Right(submissionModel) =>
         val payload: String = toXML[CC015CType](submissionModel, "ncts:CC015C", scope).toString
-        println(s"ACHI: ${payload.toString}")
         httpClient.POSTString(declarationUrl, payload, requestHeaders)
     }
 
