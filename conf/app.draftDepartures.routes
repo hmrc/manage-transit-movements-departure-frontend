@@ -1,0 +1,2 @@
+
+GET        /:lrn/draftDepartures/draft-departure-declarations                        controllers.draftDepartures.DraftDashboardController.onPageLoad(lrn: LocalReferenceNumber)
