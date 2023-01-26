@@ -1432,3 +1432,8 @@ transport.equipment.index.itemNumber.checkYourAnswersLabel = Item number
 transport.equipment.index.itemNumber.error.required = Enter the goods item number for the transport equipment
 transport.equipment.index.itemNumber.error.length = The goods item number must be 5 characters or less
 transport.equipment.index.itemNumber.error.invalidCharacters = The goods item number must only include numbers 0 to 9
+
+transport.equipment.index.addSealYesNo.title = Do you want to add a seal for container {0}?
+transport.equipment.index.addSealYesNo.heading = Do you want to add a seal for container {0}?
+transport.equipment.index.addSealYesNo.checkYourAnswersLabel = Do you want to add a seal for container {0}?
+transport.equipment.index.addSealYesNo.error.required = Select yes if you want to add a seal for container {0}
