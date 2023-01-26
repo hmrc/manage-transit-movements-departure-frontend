@@ -20,15 +20,15 @@ import forms.behaviours.StringFieldBehaviours
 import org.scalacheck.Gen
 import play.api.data.FormError
 
-class ContainerSealIdentificationNumberFormProviderSpec extends StringFieldBehaviours {
+class ContainerIdentificationNumberFormProviderSpec extends StringFieldBehaviours {
 
   private val prefix = Gen.alphaNumStr.sample.value
   val requiredKey    = s"$prefix.error.required"
   val duplicateKey   = s"$prefix.error.duplicate"
   val lengthKey      = s"$prefix.error.length"
-  val maxLength      = 20
+  val maxLength      = 17
 
-  val form = new ContainerSealIdentificationNumberFormProvider()(prefix, Nil)
+  val form = new ContainerIdentificationNumberFormProvider()(prefix, Nil)
 
   ".value" - {
 
@@ -55,7 +55,7 @@ class ContainerSealIdentificationNumberFormProviderSpec extends StringFieldBehav
 
     "must not bind if value exists in the list of other ids" in {
       val otherIds  = Seq("foo", "bar")
-      val form      = new ContainerSealIdentificationNumberFormProvider()(prefix, otherIds)
+      val form      = new ContainerIdentificationNumberFormProvider()(prefix, otherIds)
       val boundForm = form.bind(Map("value" -> "foo"))
       val field     = boundForm("value")
       field.errors mustEqual Seq(FormError(fieldName, duplicateKey))

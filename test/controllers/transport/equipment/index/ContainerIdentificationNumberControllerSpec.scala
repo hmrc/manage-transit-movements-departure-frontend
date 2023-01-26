@@ -17,7 +17,7 @@
 package controllers.transport.equipment.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.ContainerIdentificationFormProvider
+import forms.ContainerIdentificationNumberFormProvider
 import models.{Index, NormalMode}
 import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
@@ -33,7 +33,7 @@ import scala.concurrent.Future
 
 class ContainerIdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                            = new ContainerIdentificationFormProvider()
+  private val formProvider                            = new ContainerIdentificationNumberFormProvider()
   private def form(otherIds: Seq[String] = Nil)       = formProvider("transport.equipment.containerIdentificationNumber", otherIds)
   private val validAnswer                             = "testString"
   private val mode                                    = NormalMode

@@ -23,7 +23,7 @@ import play.api.data.Form
 
 import javax.inject.Inject
 
-class ContainerIdentificationFormProvider @Inject() extends Mappings {
+class ContainerIdentificationNumberFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String, otherContainerIdentificationNumbers: Seq[String]): Form[String] =
     Form(

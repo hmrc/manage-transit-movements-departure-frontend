@@ -95,7 +95,7 @@ class ContainerSealIdentificationNumberController @Inject() (
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
             ContainerSealIdentificationNumberPage(equipmentIndex: Index, sealIndex: Index)
               .writeToUserAnswers(value)
-              .updateTask[TransportDomain]
+              .updateTask[TransportDomain]()
               .writeToSession()
               .navigate()
           }
