@@ -19,7 +19,7 @@ package api
 import generated.{Number0, Number1}
 import javax.xml.datatype.DatatypeFactory
 
-object ApiXmlHelpers {
+object ApiXmlHelper {
 
   def toDate(date: String) =
     DatatypeFactory

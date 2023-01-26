@@ -16,8 +16,8 @@
 
 package connectors
 
-import api.Conversions
-import api.Conversions.scope
+import api.submission.Header.scope
+import api.submission._
 import config.FrontendAppConfig
 import generated._
 import models.UserAnswers
@@ -53,23 +53,23 @@ class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConf
     } yield domain.map {
       case DepartureDomain(preTaskList, traderDetails, routeDetails, guaranteeDetails, transportDetails) =>
         CC015CType(
-          messagE_FROM_TRADERSequence1 = Conversions.message,
-          messageType = Conversions.messageType,
-          correlatioN_IDENTIFIERSequence3 = Conversions.correlationIdentifier,
-          TransitOperation = Conversions.transitOperation(userAnswers.lrn.value, preTaskList, reducedDatasetIndicator, routeDetails.routing),
-          Authorisation = Conversions.authorisations(
+          messagE_FROM_TRADERSequence1 = Header.message,
+          messageType = Header.messageType,
+          correlatioN_IDENTIFIERSequence3 = Header.correlationIdentifier,
+          TransitOperation = TransitOperation.transform(userAnswers.lrn.value, preTaskList, reducedDatasetIndicator, routeDetails.routing),
+          Authorisation = Authorisations.transform(
             transportDetails.authorisationsAndLimit.map(
               x => x.authorisationsDomain
             )
           ),
-          CustomsOfficeOfDeparture = Conversions.customsOfficeOfDeparture(preTaskList.officeOfDeparture),
-          CustomsOfficeOfDestinationDeclared = Conversions.customsOfficeOfDestination(routeDetails.routing.officeOfDestination),
-          CustomsOfficeOfTransitDeclared = Conversions.customsOfficeOfTransit(routeDetails.transit),
-          CustomsOfficeOfExitForTransitDeclared = Conversions.customsOfficeOfExit(routeDetails.exit),
-          HolderOfTheTransitProcedure = Conversions.holderOfTheTransitProcedure(traderDetails),
-          Representative = Conversions.representative(traderDetails),
-          Guarantee = Conversions.guarantee(guaranteeDetails),
-          Consignment = Conversions.consignment(transportDetails, traderDetails, routeDetails),
+          CustomsOfficeOfDeparture = CustomsOffices.transformOfficeOfDeparture(preTaskList.officeOfDeparture),
+          CustomsOfficeOfDestinationDeclared = CustomsOffices.transformOfficeOfDestination(routeDetails.routing.officeOfDestination),
+          CustomsOfficeOfTransitDeclared = CustomsOffices.transformOfficeOfTransit(routeDetails.transit),
+          CustomsOfficeOfExitForTransitDeclared = CustomsOffices.transformOfficeOfExit(routeDetails.exit),
+          HolderOfTheTransitProcedure = HolderOfTheTransitProcedure.transform(traderDetails),
+          Representative = Representative.transform(traderDetails),
+          Guarantee = Guarantee.transform(guaranteeDetails),
+          Consignment = Consignment.transform(transportDetails, traderDetails, routeDetails),
           attributes = Map("@PhaseID" -> DataRecord(PhaseIDtype.fromString("NCTS5.0", scope)))
         )
     }

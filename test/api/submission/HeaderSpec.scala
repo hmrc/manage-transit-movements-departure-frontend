@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package api
+package api.submission
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
-import generated.{MESSAGE_1Sequence, MESSAGE_FROM_TRADERSequence, TransitOperationType06}
+import generated.{MESSAGE_1Sequence, MESSAGE_FROM_TRADERSequence}
 import generators.Generators
-import models.UserAnswers
-import models.reference.CustomsOffice
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
-import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
-import pages.traderDetails.consignment.ApprovedOperatorPage
-import scalaxb._
 
-import scala.xml.{NodeSeq, XML}
-
-class ConversionsSpec extends SpecBase with UserAnswersSpecHelper with Generators {
+class HeaderSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
   "Conversions" - {
 
@@ -38,7 +29,7 @@ class ConversionsSpec extends SpecBase with UserAnswersSpecHelper with Generator
 
       "will convert to API format" in {
 
-        val converted = Conversions.message
+        val converted = Header.message
 
         val expected = MESSAGE_FROM_TRADERSequence(
           None,
@@ -59,7 +50,7 @@ class ConversionsSpec extends SpecBase with UserAnswersSpecHelper with Generator
 
       "will convert to API format" in {
 
-        Conversions.messageType.toString mustBe "CC015C"
+        Header.messageType.toString mustBe "CC015C"
 
       }
 
