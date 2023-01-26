@@ -1410,3 +1410,8 @@ transport.equipment.addContainerIdentificationNumberYesNo.title = Do you want to
 transport.equipment.addContainerIdentificationNumberYesNo.heading = Do you want to add a container identification number?
 transport.equipment.addContainerIdentificationNumberYesNo.checkYourAnswersLabel = Do you want to add a container identification number?
 transport.equipment.addContainerIdentificationNumberYesNo.error.required = Select yes if you want to add a container identification number
+
+transport.equipment.index.addGoodsItemNumberForContainer.title = Do you want to add a goods item number for container {0}?
+transport.equipment.index.addGoodsItemNumberForContainer.heading = Do you want to add a goods item number for container {0}?
+transport.equipment.index.addGoodsItemNumberForContainer.checkYourAnswersLabel = Do you want to add a goods item number for container {0}?
+transport.equipment.index.addGoodsItemNumberForContainer.error.required = Select yes if Do you want to add a goods item number for container {0}?
