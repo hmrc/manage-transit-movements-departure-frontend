@@ -19,6 +19,7 @@ package controllers.transport.equipment.index
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.requests.SpecificDataRequestProvider1
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
@@ -76,7 +77,7 @@ class AddSealYesNoController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, equipmentIndex, containerNumber))),
             value => {
               implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              AddSealYesNoPage(equipmentIndex).writeToUserAnswers(value).writeToSession().navigate()
+              AddSealYesNoPage(equipmentIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
             }
           )
     }
