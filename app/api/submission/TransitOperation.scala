@@ -20,10 +20,16 @@ import api.ApiXmlHelper
 import generated.TransitOperationType06
 import models.journeyDomain.PreTaskListDomain
 import models.journeyDomain.routeDetails.routing.RoutingDomain
+import models.journeyDomain.transport.TransportDomain
 
 object TransitOperation {
 
-  def transform(lrn: String, preTaskListDomain: PreTaskListDomain, reducedDatasetIndicator: Boolean, routingDomain: RoutingDomain): TransitOperationType06 =
+  def transform(lrn: String,
+                preTaskListDomain: PreTaskListDomain,
+                reducedDatasetIndicator: Boolean,
+                routingDomain: RoutingDomain,
+                transportDomain: TransportDomain
+  ): TransitOperationType06 =
     TransitOperationType06(
       LRN = lrn,
       declarationType = preTaskListDomain.declarationType.toString,
@@ -35,6 +41,12 @@ object TransitOperation {
       specificCircumstanceIndicator = None, // TODO - what is this? Needed?
       communicationLanguageAtDeparture = None, // TODO - what is this? Needed?
       bindingItinerary = ApiXmlHelper.boolToFlag(routingDomain.bindingItinerary),
-      limitDate = None // TODO - what is this? Needed?
+      limitDate = transportDomain.authorisationsAndLimit.flatMap(
+        a =>
+          a.limitDomain
+            .map(
+              l => ApiXmlHelper.toDate(l.limitDate.toString)
+            )
+      )
     )
 }

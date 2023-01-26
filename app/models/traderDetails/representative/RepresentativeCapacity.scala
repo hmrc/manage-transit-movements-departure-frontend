@@ -18,12 +18,19 @@ package models.traderDetails.representative
 
 import models.{RadioModel, WithName}
 
-sealed trait RepresentativeCapacity
+sealed trait RepresentativeCapacity {
+  val code: String
+}
 
 object RepresentativeCapacity extends RadioModel[RepresentativeCapacity] {
 
-  case object Direct extends WithName("direct") with RepresentativeCapacity
-  case object Indirect extends WithName("indirect") with RepresentativeCapacity
+  case object Direct extends WithName("direct") with RepresentativeCapacity {
+    override val code: String = "2"
+  }
+
+  case object Indirect extends WithName("indirect") with RepresentativeCapacity {
+    override val code: String = "3"
+  }
 
   override val messageKeyPrefix: String = "traderDetails.representative.capacity"
 

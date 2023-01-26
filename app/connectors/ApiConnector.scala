@@ -56,7 +56,7 @@ class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConf
           messagE_FROM_TRADERSequence1 = Header.message,
           messageType = Header.messageType,
           correlatioN_IDENTIFIERSequence3 = Header.correlationIdentifier,
-          TransitOperation = TransitOperation.transform(userAnswers.lrn.value, preTaskList, reducedDatasetIndicator, routeDetails.routing),
+          TransitOperation = TransitOperation.transform(userAnswers.lrn.value, preTaskList, reducedDatasetIndicator, routeDetails.routing, transportDetails),
           Authorisation = Authorisations.transform(
             transportDetails.authorisationsAndLimit.map(
               x => x.authorisationsDomain
@@ -82,6 +82,7 @@ class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConf
       case Left(msg) => throw new BadRequestException(s"${msg.page.toString} at path ${msg.page.path}: ${msg.message.getOrElse("Something went wrong")}")
       case Right(submissionModel) =>
         val payload: String = toXML[CC015CType](submissionModel, "ncts:CC015C", scope).toString
+        println(s"ACHI: ${payload.toString}")
         httpClient.POSTString(declarationUrl, payload, requestHeaders)
     }
 

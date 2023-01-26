@@ -49,7 +49,7 @@ object HolderOfTheTransitProcedure {
       identificationNumber = id,
       TIRHolderIdentificationNumber = None,
       name = name,
-      Address = Some(AddressType17(address.numberAndStreet, address.postalCode, address.city, country.code.toString)),
+      Address = Some(AddressType17(address.numberAndStreet, address.postalCode, address.city, country.code.code)),
       ContactPerson = additionalContact.map(
         x => ContactPersonType05(x.name, x.telephoneNumber, None)
       )

@@ -41,8 +41,8 @@ object Consignment {
       ),
       containerIndicator = Some(ApiXmlHelper.boolToFlag(transportDomain.preRequisites.containerIndicator)),
       inlandModeOfTransport = Some(transportDomain.transportMeans.inlandMode.inlandModeType.toString),
-      modeOfTransportAtTheBorder = modeOfTransportAtTheBorder(transportDomain.transportMeans),
-      grossMass = 0, // TODO - from items domain when we have the journey built
+      modeOfTransportAtTheBorder = None, // TODO - need to know where to get this?
+      grossMass = 1d, // TODO - from items domain when we have the journey built
       referenceNumberUCR = transportDomain.preRequisites.ucr,
       Carrier = carrierType(transportDomain.carrierDetails),
       Consignor = consignor(traderDetailsDomain.consignment.consignor),
@@ -61,7 +61,61 @@ object Consignment {
       AdditionalReference = Seq.empty, // TODO - at item level when the journey is built
       AdditionalInformation = Seq.empty, // TODO - at item level when the journey is built
       TransportCharges = None, // TODO - at item level when the journey is built
-      HouseConsignment = Seq.empty // TODO - from items domain when we have it
+      HouseConsignment = Seq(houseConsignment()) // TODO - from items domain when we have it
+    )
+
+  // TODO - this is test data for submission API test
+  private def houseConsignment() =
+    HouseConsignmentType10(
+      sequenceNumber = "1",
+      countryOfDispatch = None,
+      grossMass = 4380979244.527545,
+      referenceNumberUCR = None,
+      Consignor = None,
+      Consignee = None,
+      AdditionalSupplyChainActor = Seq.empty,
+      DepartureTransportMeans = Seq.empty,
+      PreviousDocument = Seq.empty,
+      SupportingDocument = Seq.empty,
+      TransportDocument = Seq.empty,
+      AdditionalReference = Seq.empty,
+      AdditionalInformation = Seq.empty,
+      TransportCharges = None,
+      ConsignmentItem = Seq(consignmentItem())
+    )
+
+  // TODO - this is test data for submission API test
+  private def consignmentItem() =
+    ConsignmentItemType09(
+      goodsItemNumber = "34564",
+      declarationGoodsItemNumber = 25,
+      declarationType = None,
+      countryOfDispatch = None,
+      countryOfDestination = None,
+      referenceNumberUCR = None,
+      Consignee = None,
+      AdditionalSupplyChainActor = Seq.empty,
+      Commodity = commodity(),
+      Packaging = Seq(packaging())
+    )
+
+  // TODO - this is test data for submission API test
+  private def commodity() =
+    CommodityType06(
+      descriptionOfGoods = "foobarbaz",
+      cusCode = None,
+      CommodityCode = None,
+      DangerousGoods = Seq.empty,
+      GoodsMeasure = None
+    )
+
+  // TODO - this is test data for submission API test
+  private def packaging() =
+    PackagingType03(
+      sequenceNumber = "1",
+      typeOfPackages = "Nu",
+      numberOfPackages = None,
+      shippingMarks = None
     )
 
   private def carrierType(domain: CarrierDetailsDomain): Option[CarrierType04] =
@@ -78,7 +132,7 @@ object Consignment {
       consignor =>
         ConsignorType07(
           consignor.eori.map(
-            x => x.toString
+            x => x.value
           ),
           Some(consignor.name),
           Some(AddressType17(consignor.address.numberAndStreet, consignor.address.postalCode, consignor.address.city, consignor.country.code.code))
@@ -90,7 +144,7 @@ object Consignment {
       consignee =>
         ConsigneeType05(
           consignee.eori.map(
-            x => x.toString
+            x => x.value
           ),
           Some(consignee.name),
           Some(AddressType17(consignee.address.numberAndStreet, consignee.address.postalCode, consignee.address.city, consignee.country.code.code))
@@ -220,13 +274,6 @@ object Consignment {
           )
           .getOrElse(Seq.empty)
       case _ => Seq.empty
-    }
-
-  private def modeOfTransportAtTheBorder(domain: TransportMeansDomain): Option[String] =
-    domain match {
-      case TransportMeansDomainWithOtherInlandMode(_, transportMeansDeparture, _) =>
-        Some(transportMeansDeparture.asInstanceOf[TransportMeansDepartureDomainWithIdentification].identification.identificationType.toString)
-      case _ => None
     }
 
   private def countryOfRoutingOfConsignment(domain: RoutingDomain): Seq[CountryOfRoutingOfConsignmentType01] =
