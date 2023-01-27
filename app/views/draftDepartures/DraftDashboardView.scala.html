@@ -14,21 +14,32 @@
  * limitations under the License.
  *@
 
-@import models.LocalReferenceNumber
 @import views.html.components.Heading
+@import viewModels.drafts.AllDraftDeparturesViewModel
+@import views.html.components.DraftDeparturesTable
 
 @this(
     mainTemplate: MainTemplate,
+        draftDeparturesTable: DraftDeparturesTable,
     heading: Heading
 )
 
-@(lrn: LocalReferenceNumber)(implicit request: Request[_], messages: Messages)
+
+@(eori: EoriNumber, viewModel: AllDraftDeparturesViewModel)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("draftDepartures.draftDashboard.title"),
-    showBackLink = true,
-    lrn = Some(lrn)
+    showBackLink = true
 ) {
 
     @heading(messages("draftDepartures.draftDashboard.heading"))
+
+ @draftDeparturesTable(
+  dataRows = viewModel.dataRows,
+  visuallyHiddenHeader = messages("viewArrivalNotifications.heading.hidden"),
+  rowHeadingUpdated = messages("viewArrivalNotifications.table.updated"),
+  rowHeadingReferenceNumber = messages("viewArrivalNotifications.table.mrn"),
+  rowHeadingStatus = messages("viewArrivalNotifications.table.status"),
+  rowHeadingAction = messages("viewArrivalNotifications.table.action")
+ )
 }

@@ -23,6 +23,7 @@ import navigation.guaranteeDetails._
 import navigation.routeDetails._
 import navigation.traderDetails._
 import navigation.transport._
+import services.{DraftDepartureService, MongoDraftDepartureService}
 
 import java.time.Clock
 
@@ -64,5 +65,6 @@ class Module extends AbstractModule {
     bind(classOf[RenderConfig]).to(classOf[RenderConfigImpl]).asEagerSingleton()
 
     bind(classOf[Clock]).toInstance(Clock.systemUTC)
+    bind(classOf[DraftDepartureService]).to(classOf[MongoDraftDepartureService])
   }
 }

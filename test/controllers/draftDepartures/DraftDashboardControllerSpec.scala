@@ -16,7 +16,7 @@ class DraftDashboardControllerSpec extends SpecBase with AppWithDefaultMockFixtu
       setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, draftDashboardRoute)
-      val result = route(app, request).value
+      val result  = route(app, request).value
 
       val view = injector.instanceOf[DraftDashboardView]
 

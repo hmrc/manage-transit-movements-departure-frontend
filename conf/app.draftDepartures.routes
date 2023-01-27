@@ -1,2 +1,2 @@
 
-GET        /:lrn/dashboard                        controllers.draftDepartures.DraftDashboardController.onPageLoad(lrn: LocalReferenceNumber)
+GET        /dashboard                        controllers.draftDepartures.DraftDashboardController.onPageLoad()

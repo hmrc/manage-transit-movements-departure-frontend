@@ -6,3 +6,8 @@ $hmrc-assets-path: "/manage-transit-movements/departures/assets/lib/hmrc-fronten
 
 @import "partials/shame";
 @import "partials/task-list";
+
+@import "components/pagination";
+@import "components/search";
+@import "components/shame";
+@import "components/table";
