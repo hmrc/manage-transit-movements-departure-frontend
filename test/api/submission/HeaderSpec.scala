@@ -18,7 +18,7 @@ package api.submission
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
-import generated.{MESSAGE_1Sequence, MESSAGE_FROM_TRADERSequence}
+import generated.{CORRELATION_IDENTIFIERSequence, MESSAGE_1Sequence, MESSAGE_FROM_TRADERSequence}
 import generators.Generators
 
 class HeaderSpec extends SpecBase with UserAnswersSpecHelper with Generators {
@@ -51,6 +51,16 @@ class HeaderSpec extends SpecBase with UserAnswersSpecHelper with Generators {
       "will convert to API format" in {
 
         Header.messageType.toString mustBe "CC015C"
+
+      }
+
+    }
+
+    "correlationIdentifier is called" - {
+
+      "will convert to API format" in {
+
+        Header.correlationIdentifier mustBe CORRELATION_IDENTIFIERSequence(None)
 
       }
 

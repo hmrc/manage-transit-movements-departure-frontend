@@ -31,7 +31,7 @@ sealed trait LocationOfGoodsDomain extends JourneyDomainModel {
 
   val qualifierOfIdentification: LocationOfGoodsIdentification
 
-  val contactPerson: Option[AdditionalContactDomain]
+  val contactPerson: Option[AdditionalContactDomain] = None
 
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
     Some(controllers.routeDetails.locationOfGoods.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, mode))
@@ -59,7 +59,6 @@ object LocationOfGoodsDomain {
   ) extends LocationOfGoodsDomain {
 
     override val qualifierOfIdentification: LocationOfGoodsIdentification = CustomsOfficeIdentifier
-    override val contactPerson: Option[AdditionalContactDomain]           = None
   }
 
   object LocationOfGoodsV {

@@ -49,7 +49,7 @@ class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConf
       countries <- countriesService.getCountryCodesCTC()
       security  <- countriesService.getCustomsSecurityAgreementAreaCountries()
       domain                  = UserAnswersReader[DepartureDomain](userAnswersReader(countries.countryCodes, security.countryCodes)).run(userAnswers)
-      reducedDatasetIndicator = userAnswers.get(ApprovedOperatorPage).getOrElse(false) // TODO - can we get this from the domain models?
+      reducedDatasetIndicator = userAnswers.get(ApprovedOperatorPage).getOrElse(false)
     } yield domain.map {
       case DepartureDomain(preTaskList, traderDetails, routeDetails, guaranteeDetails, transportDetails) =>
         CC015CType(

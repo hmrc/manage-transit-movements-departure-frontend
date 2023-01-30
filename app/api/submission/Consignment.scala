@@ -41,7 +41,9 @@ object Consignment {
       ),
       containerIndicator = Some(ApiXmlHelper.boolToFlag(transportDomain.preRequisites.containerIndicator)),
       inlandModeOfTransport = Some(transportDomain.transportMeans.inlandMode.inlandModeType.toString),
-      modeOfTransportAtTheBorder = None, // TODO - need to know where to get this?
+      // TODO - In user answers modeOfTransportAtTheBorder is in the active list domain and has multiple entries.
+      // Do we set this to none here and populate in ActiveBorderTransportMeans?
+      modeOfTransportAtTheBorder = None,
       grossMass = 1d, // TODO - from items domain when we have the journey built
       referenceNumberUCR = transportDomain.preRequisites.ucr,
       Carrier = carrierType(transportDomain.carrierDetails),
@@ -62,60 +64,6 @@ object Consignment {
       AdditionalInformation = Seq.empty, // TODO - at item level when the journey is built
       TransportCharges = None, // TODO - at item level when the journey is built
       HouseConsignment = Seq(houseConsignment()) // TODO - from items domain when we have it
-    )
-
-  // TODO - this is test data for submission API test
-  private def houseConsignment() =
-    HouseConsignmentType10(
-      sequenceNumber = "1",
-      countryOfDispatch = None,
-      grossMass = 4380979244.527545,
-      referenceNumberUCR = None,
-      Consignor = None,
-      Consignee = None,
-      AdditionalSupplyChainActor = Seq.empty,
-      DepartureTransportMeans = Seq.empty,
-      PreviousDocument = Seq.empty,
-      SupportingDocument = Seq.empty,
-      TransportDocument = Seq.empty,
-      AdditionalReference = Seq.empty,
-      AdditionalInformation = Seq.empty,
-      TransportCharges = None,
-      ConsignmentItem = Seq(consignmentItem())
-    )
-
-  // TODO - this is test data for submission API test
-  private def consignmentItem() =
-    ConsignmentItemType09(
-      goodsItemNumber = "34564",
-      declarationGoodsItemNumber = 25,
-      declarationType = None,
-      countryOfDispatch = None,
-      countryOfDestination = None,
-      referenceNumberUCR = None,
-      Consignee = None,
-      AdditionalSupplyChainActor = Seq.empty,
-      Commodity = commodity(),
-      Packaging = Seq(packaging())
-    )
-
-  // TODO - this is test data for submission API test
-  private def commodity() =
-    CommodityType06(
-      descriptionOfGoods = "foobarbaz",
-      cusCode = None,
-      CommodityCode = None,
-      DangerousGoods = Seq.empty,
-      GoodsMeasure = None
-    )
-
-  // TODO - this is test data for submission API test
-  private def packaging() =
-    PackagingType03(
-      sequenceNumber = "1",
-      typeOfPackages = "Nu",
-      numberOfPackages = None,
-      shippingMarks = None
     )
 
   private def carrierType(domain: CarrierDetailsDomain): Option[CarrierType04] =
@@ -236,21 +184,8 @@ object Consignment {
       case _ => None
     }
 
-  private def departureTransportMeans(domain: TransportMeansDomain): Seq[DepartureTransportMeansType03] =
-    domain match {
-      case TransportMeansDomainWithOtherInlandMode(_, transportMeansDepartureDomain, _) =>
-        val means: TransportMeansDepartureDomainWithOtherInlandMode =
-          transportMeansDepartureDomain.asInstanceOf[TransportMeansDepartureDomainWithOtherInlandMode]
-
-        Seq(
-          DepartureTransportMeansType03("0",
-                                        Some(means.identification.identificationType.toString),
-                                        Some(means.identificationNumber),
-                                        Some(means.nationality.code)
-          )
-        )
-      case _ => Seq.empty
-    }
+  // TODO - need to know how to capture this?
+  private def departureTransportMeans(domain: TransportMeansDomain): Seq[DepartureTransportMeansType03] = Seq.empty
 
   private def activeBorderTransportMeans(domain: TransportMeansDomain): Seq[ActiveBorderTransportMeansType02] =
     domain match {
@@ -315,5 +250,65 @@ object Consignment {
             info => info.location
           )
         )
+    )
+
+  /** **************************************************************************************
+    * TODO - Test data section!!                                                            *
+    * This section must be updated from journey domain models when the journeys are built   *
+    * **************************************************************************************
+    */
+
+  // TODO - this is test data for submission API test
+  private def houseConsignment() =
+    HouseConsignmentType10(
+      sequenceNumber = "1",
+      countryOfDispatch = None,
+      grossMass = 1d,
+      referenceNumberUCR = None,
+      Consignor = None,
+      Consignee = None,
+      AdditionalSupplyChainActor = Seq.empty,
+      DepartureTransportMeans = Seq.empty,
+      PreviousDocument = Seq.empty,
+      SupportingDocument = Seq.empty,
+      TransportDocument = Seq.empty,
+      AdditionalReference = Seq.empty,
+      AdditionalInformation = Seq.empty,
+      TransportCharges = None,
+      ConsignmentItem = Seq(consignmentItem())
+    )
+
+  // TODO - this is test data for submission API test
+  private def consignmentItem() =
+    ConsignmentItemType09(
+      goodsItemNumber = "1",
+      declarationGoodsItemNumber = 1,
+      declarationType = None,
+      countryOfDispatch = None,
+      countryOfDestination = None,
+      referenceNumberUCR = None,
+      Consignee = None,
+      AdditionalSupplyChainActor = Seq.empty,
+      Commodity = commodity(),
+      Packaging = Seq(packaging())
+    )
+
+  // TODO - this is test data for submission API test
+  private def commodity() =
+    CommodityType06(
+      descriptionOfGoods = "test",
+      cusCode = None,
+      CommodityCode = None,
+      DangerousGoods = Seq.empty,
+      GoodsMeasure = None
+    )
+
+  // TODO - this is test data for submission API test
+  private def packaging() =
+    PackagingType03(
+      sequenceNumber = "1",
+      typeOfPackages = "Nu",
+      numberOfPackages = None,
+      shippingMarks = None
     )
 }
