@@ -20,7 +20,6 @@ import forms.Constants.conveyanceRefNumberLength
 import forms.behaviours.StringFieldBehaviours
 import forms.transport.transportMeans.active.ConveyanceReferenceNumberFormProvider
 import models.domain.StringFieldRegex.alphaNumericRegex
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import play.api.data.FormError
 
@@ -56,12 +55,11 @@ class ConveyanceReferenceNumberFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
 
-    behave like fieldThatDoesNotBindInvalidData(
+    behave like fieldWithInvalidCharacters(
       form = form,
       fieldName = fieldName,
-      regex = alphaNumericRegex.regex,
-      gen = stringsWithLength(conveyanceRefNumberLength, arbitrary[Char]),
-      invalidKey = invalidKey
+      error = FormError(fieldName, invalidKey, Seq(alphaNumericRegex.regex)),
+      length = conveyanceRefNumberLength
     )
   }
 }
