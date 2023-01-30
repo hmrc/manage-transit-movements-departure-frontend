@@ -56,7 +56,7 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
     "when pre task list not completed" - {
       "everything must be 'cannot start yet'" in {
-        forAll(arbitrary[TaskStatus].retryUntil(_ != TaskStatus.Completed)) {
+        forAll(arbitrary[TaskStatus](arbitraryIncompleteTaskStatus)) {
           taskStatus =>
             val tasks   = Map(PreTaskListTask.section -> taskStatus)
             val answers = emptyUserAnswers.copy(tasks = tasks)

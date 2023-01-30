@@ -41,7 +41,7 @@ class PreTaskListCompletedActionSpec extends SpecBase with ScalaCheckPropertyChe
   "CheckTaskAlreadyCompletedAction" - {
 
     "return None if dependent section is incomplete" in {
-      forAll(arbitrary[TaskStatus].retryUntil(_ != TaskStatus.Completed)) {
+      forAll(arbitrary[TaskStatus](arbitraryIncompleteTaskStatus)) {
         taskStatus =>
           val action = new Harness()
           val tasks  = Map(PreTaskListTask.section -> taskStatus)

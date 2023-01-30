@@ -27,7 +27,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.ApiService
-import viewModels.taskList.{TaskListTask, TaskListViewModel}
+import viewModels.taskList.{PreTaskListTask, TaskListTask, TaskListViewModel, TaskStatus}
 import views.html.TaskListView
 
 class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators with UserAnswersGenerator {
@@ -53,7 +53,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       when(mockViewModel.apply(any())).thenReturn(sampleTasks)
 
-      val userAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
+      val userAnswers = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, routes.TaskListController.onPageLoad(lrn).url)
@@ -96,7 +96,8 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       when(mockApiService.submitDeclaration(any())(any()))
         .thenReturn(response(OK))
 
-      val userAnswers: UserAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
+      val initialAnswers           = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
+      val userAnswers: UserAnswers = arbitraryDepartureAnswers(initialAnswers).sample.value
 
       setExistingUserAnswers(userAnswers)
 
@@ -113,7 +114,8 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       when(mockApiService.submitDeclaration(any())(any()))
         .thenReturn(response(BAD_REQUEST))
 
-      val userAnswers: UserAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
+      val initialAnswers           = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
+      val userAnswers: UserAnswers = arbitraryDepartureAnswers(initialAnswers).sample.value
 
       setExistingUserAnswers(userAnswers)
 
@@ -128,7 +130,8 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       when(mockApiService.submitDeclaration(any())(any()))
         .thenReturn(response(INTERNAL_SERVER_ERROR))
 
-      val userAnswers: UserAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
+      val initialAnswers           = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
+      val userAnswers: UserAnswers = arbitraryDepartureAnswers(initialAnswers).sample.value
 
       setExistingUserAnswers(userAnswers)
 
