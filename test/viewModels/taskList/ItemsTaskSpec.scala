@@ -63,7 +63,7 @@ class ItemsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
   }
 
   "href" - {
-    "must end with /transport-details" in {
+    "must end with /items/:lrn" in {
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val task = ItemsTask(taskStatus)
