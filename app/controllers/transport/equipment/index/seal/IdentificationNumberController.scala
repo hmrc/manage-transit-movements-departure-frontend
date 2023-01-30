@@ -18,82 +18,64 @@ package controllers.transport.equipment.index.seal
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.ContainerSealIdentificationNumberFormProvider
+import forms.transport.equipment.index.seal.IdentificationNumberFormProvider
 import models.journeyDomain.transport.TransportDomain
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode, RichOptionalJsArray}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
 import pages.sections.SealsSection
-import pages.transport.equipment.index.ContainerIdentificationNumberPage
-import pages.transport.equipment.index.seal.ContainerSealIdentificationNumberPage
-import play.api.data.Form
+import pages.transport.equipment.index.seal.IdentificationNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.transport.equipment.index.seal.ContainerSealIdentificationNumberView
+import views.html.transport.equipment.index.seal.IdentificationNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ContainerSealIdentificationNumberController @Inject() (
+class IdentificationNumberController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: TransportNavigatorProvider,
-  formProvider: ContainerSealIdentificationNumberFormProvider,
+  formProvider: IdentificationNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
-  view: ContainerSealIdentificationNumberView
+  view: IdentificationNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private def prefix(equipmentIndex: Index)(implicit request: DataRequest[_]): (String, Seq[String]) =
-    request.userAnswers
-      .get(ContainerIdentificationNumberPage(equipmentIndex))
-      .fold[(String, Seq[String])](("transport.equipment.index.seal.containerSealIdentificationNumber.withoutContainer", Seq.empty))(
-        value => ("transport.equipment.index.seal.containerSealIdentificationNumber.withContainer", Seq(value))
-      )
-
-  private def form(prefix: String, args: Seq[String], equipmentIndex: Index, sealIndex: Index)(implicit
-    request: DataRequest[_]
-  ): Form[String] =
-    formProvider(
-      prefix,
-      otherSealIdentificationNumbers(equipmentIndex, sealIndex),
-      args: _*
-    )
-
-  private def otherSealIdentificationNumbers(equipmentIndex: Index, sealIndex: Index)(implicit request: DataRequest[_]): Seq[String] = {
+  private def otherIdentificationNumbers(equipmentIndex: Index, sealIndex: Index)(implicit request: DataRequest[_]): Seq[String] = {
     val numberOfSeals = request.userAnswers.get(SealsSection(equipmentIndex)).length
     (0 until numberOfSeals)
       .map(Index(_))
       .filterNot(_ == sealIndex)
-      .map(ContainerSealIdentificationNumberPage(equipmentIndex, _))
+      .map(IdentificationNumberPage(equipmentIndex, _))
       .flatMap(request.userAnswers.get(_))
   }
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, sealIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val (p, args) = prefix(equipmentIndex)
-      val preparedForm = request.userAnswers.get(ContainerSealIdentificationNumberPage(equipmentIndex: Index, sealIndex: Index)) match {
-        case None        => form(p, args, equipmentIndex, sealIndex)
-        case Some(value) => form(p, args, equipmentIndex, sealIndex).fill(value)
+      val form = formProvider("transport.equipment.index.seal.identificationNumber", otherIdentificationNumbers(equipmentIndex, sealIndex))
+      val preparedForm = request.userAnswers.get(IdentificationNumberPage(equipmentIndex: Index, sealIndex: Index)) match {
+        case None        => form
+        case Some(value) => form.fill(value)
       }
-      Ok(view(preparedForm, lrn, mode, equipmentIndex, sealIndex, p, args: _*))
+      Ok(view(preparedForm, lrn, mode, equipmentIndex, sealIndex))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, sealIndex: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      val (p, args) = prefix(equipmentIndex)
-      form(p, args, equipmentIndex, sealIndex)
+      val form = formProvider("transport.equipment.index.seal.identificationNumber", otherIdentificationNumbers(equipmentIndex, sealIndex))
+      form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, equipmentIndex, sealIndex, p, args: _*))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, equipmentIndex, sealIndex))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            ContainerSealIdentificationNumberPage(equipmentIndex: Index, sealIndex: Index)
+            IdentificationNumberPage(equipmentIndex: Index, sealIndex: Index)
               .writeToUserAnswers(value)
               .updateTask[TransportDomain]()
               .writeToSession()

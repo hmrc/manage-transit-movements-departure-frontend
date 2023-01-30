@@ -27,25 +27,25 @@
     button: Button
 )
 
-@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, sealIndex: Index, prefix: String, args: String*)(implicit request: Request[_], messages: Messages)
+@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, sealIndex: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages(s"$prefix.title", args: _*),
+    title = messages("transport.equipment.index.seal.identificationNumber.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.ContainerSealIdentificationNumberController.onSubmit(lrn, mode, equipmentIndex, sealIndex), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.IdentificationNumberController.onSubmit(lrn, mode, equipmentIndex, sealIndex), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages(s"$prefix.heading", args: _*),
+                heading = messages("transport.equipment.index.seal.identificationNumber.heading"),
                 caption = Some(messages("transport.equipment.caption"))
             ),
-            hint = Some(messages(s"$prefix.hint")),
+            hint = Some(messages("transport.equipment.index.seal.identificationNumber.hint")),
             inputClass = InputSize.Width20
         )
 

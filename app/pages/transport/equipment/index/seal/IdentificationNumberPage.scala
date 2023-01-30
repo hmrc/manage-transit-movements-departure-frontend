@@ -23,12 +23,12 @@ import pages.sections.SealSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case class ContainerSealIdentificationNumberPage(equipmentIndex: Index, sealIndex: Index) extends QuestionPage[String] {
+case class IdentificationNumberPage(equipmentIndex: Index, sealIndex: Index) extends QuestionPage[String] {
 
   override def path: JsPath = SealSection(equipmentIndex, sealIndex).path \ toString
 
-  override def toString: String = "containerSealIdentificationNumber"
+  override def toString: String = "identificationNumber"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.ContainerSealIdentificationNumberController.onPageLoad(userAnswers.lrn, mode, equipmentIndex, sealIndex))
+    Some(routes.IdentificationNumberController.onPageLoad(userAnswers.lrn, mode, equipmentIndex, sealIndex))
 }
