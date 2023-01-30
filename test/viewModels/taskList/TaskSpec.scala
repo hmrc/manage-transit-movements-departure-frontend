@@ -48,6 +48,14 @@ class TaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
       }
     }
 
+    "when items" in {
+      forAll(arbitrary[TaskStatus]) {
+        taskStatus =>
+          val result = Task.apply(".items", taskStatus)
+          result.get mustBe ItemsTask(taskStatus)
+      }
+    }
+
     "when guarantee details" in {
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>

@@ -19,7 +19,7 @@ package viewModels.taskList
 import config.FrontendAppConfig
 import models.LocalReferenceNumber
 
-case class TraderDetailsTask(status: TaskStatus) extends Task {
+case class TraderDetailsTask(status: TaskStatus) extends TaskListTask {
   override val id: String         = "trader-details"
   override val messageKey: String = "traderDetails"
   override val section: String    = TraderDetailsTask.section

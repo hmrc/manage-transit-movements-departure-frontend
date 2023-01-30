@@ -150,6 +150,10 @@ task.transportDetails = Transport details
 task.transportDetails.add = Add transport details
 task.transportDetails.edit = Edit transport details
 
+task.items = Items
+task.items.add = Add items
+task.items.edit = Edit items
+
 # Trader details
 
 traderDetails.caption = Trader details
