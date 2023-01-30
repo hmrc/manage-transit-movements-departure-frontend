@@ -17,15 +17,14 @@
 package controllers
 
 import com.google.inject.Inject
-import controllers.actions.{Actions, CheckDependentTaskCompletedActionProvider}
+import controllers.actions.{Actions, DependentTasksCompletedActionProvider}
 import models.LocalReferenceNumber
-import models.journeyDomain.PreTaskListDomain
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.ApiService
 import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.taskList.TaskListViewModel
+import viewModels.taskList.{PreTaskListTask, TaskListViewModel}
 import views.html.TaskListView
 
 import scala.concurrent.ExecutionContext
@@ -33,7 +32,7 @@ import scala.concurrent.ExecutionContext
 class TaskListController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
-  checkDependentTaskCompleted: CheckDependentTaskCompletedActionProvider,
+  checkDependentTasksCompleted: DependentTasksCompletedActionProvider,
   val controllerComponents: MessagesControllerComponents,
   view: TaskListView,
   viewModel: TaskListViewModel,
@@ -44,7 +43,7 @@ class TaskListController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkDependentTaskCompleted[PreTaskListDomain]) {
+    .andThen(checkDependentTasksCompleted(PreTaskListTask.section)) {
       implicit request =>
         val tasks = viewModel(request.userAnswers)
         Ok(view(lrn, tasks))
@@ -52,7 +51,7 @@ class TaskListController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkDependentTaskCompleted[PreTaskListDomain])
+    .andThen(checkDependentTasksCompleted(PreTaskListTask.section))
     .async {
       implicit request =>
         apiService.submitDeclaration(request.userAnswers).map {

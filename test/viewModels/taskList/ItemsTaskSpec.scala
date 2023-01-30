@@ -22,52 +22,52 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import viewModels.taskList.TaskStatus._
 
-class TransportTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class ItemsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "name" - {
-    "must be Transport details" - {
+    "must be Items" - {
       "when status is CannotStartYet" in {
-        val task = TransportTask(CannotStartYet)
-        task.name mustBe "Transport details"
+        val task = ItemsTask(CannotStartYet)
+        task.name mustBe "Items"
       }
     }
 
-    "must be Add transport details" - {
+    "must be Add items" - {
       "when status is NotStarted" in {
-        val task = TransportTask(NotStarted)
-        task.name mustBe "Add transport details"
+        val task = ItemsTask(NotStarted)
+        task.name mustBe "Add items"
       }
     }
 
-    "must be Edit transport details" - {
+    "must be Edit items" - {
       "when status is Completed" in {
-        val task = TransportTask(Completed)
-        task.name mustBe "Edit transport details"
+        val task = ItemsTask(Completed)
+        task.name mustBe "Edit items"
       }
 
       "when status is InProgress" in {
-        val task = TransportTask(InProgress)
-        task.name mustBe "Edit transport details"
+        val task = ItemsTask(InProgress)
+        task.name mustBe "Edit items"
       }
     }
   }
 
   "id" - {
-    "must be transport-details" in {
+    "must be items" in {
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
-          val task = TransportTask(taskStatus)
-          task.id mustBe "transport-details"
+          val task = ItemsTask(taskStatus)
+          task.id mustBe "items"
       }
     }
   }
 
   "href" - {
-    "must end with /transport-details" in {
+    "must end with /items/:lrn" in {
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
-          val task = TransportTask(taskStatus)
-          task.href(lrn)(frontendAppConfig) must endWith(s"/$lrn/transport-details")
+          val task = ItemsTask(taskStatus)
+          task.href(lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
       }
     }
   }

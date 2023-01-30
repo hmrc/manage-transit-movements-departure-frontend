@@ -37,7 +37,7 @@ class ProcedureTypeController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
-  checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
+  checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
   formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ProcedureTypeView
@@ -49,7 +49,7 @@ class ProcedureTypeController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain]) {
+    .andThen(checkIfPreTaskListAlreadyCompleted) {
       implicit request =>
         val preparedForm = request.userAnswers.get(ProcedureTypePage) match {
           case None        => form
@@ -61,7 +61,7 @@ class ProcedureTypeController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+    .andThen(checkIfPreTaskListAlreadyCompleted)
     .async {
       implicit request =>
         form
@@ -70,7 +70,7 @@ class ProcedureTypeController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, ProcedureType.radioItems, lrn, mode))),
             value => {
               implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              ProcedureTypePage.writeToUserAnswers(value).writeToSession().navigate()
+              ProcedureTypePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
             }
           )
     }

@@ -19,7 +19,7 @@ package viewModels.taskList
 import config.FrontendAppConfig
 import models.LocalReferenceNumber
 
-case class GuaranteeDetailsTask(status: TaskStatus) extends Task {
+case class GuaranteeDetailsTask(status: TaskStatus) extends TaskListTask {
   override val id: String         = "guarantee-details"
   override val messageKey: String = "guaranteeDetails"
   override val section: String    = GuaranteeDetailsTask.section
