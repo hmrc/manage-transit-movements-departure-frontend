@@ -47,11 +47,14 @@ class DependentTasksCompletedActionSpec extends SpecBase with ScalaCheckProperty
 
   "DependentTasksCompletedAction" - {
 
-    "return None if dependent section is completed" in {
-      val tasks                  = Map(PreTaskListTask.section -> TaskStatus.Completed)
-      val result: Future[Result] = harness(tasks)
-      status(result) mustBe OK
-      redirectLocation(result) mustBe None
+    "return None if dependent sections are completed" in {
+      forAll(nonEmptyString, nonEmptyString) {
+        (section1, section2) =>
+          val tasks  = Map(section1 -> TaskStatus.Completed, section2 -> TaskStatus.Completed)
+          val result = harness(tasks, section1, section2)
+          status(result) mustBe OK
+          redirectLocation(result) mustBe None
+      }
     }
 
     "return to LRN page if pre- task list is incomplete" in {
