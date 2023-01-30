@@ -68,7 +68,7 @@ class DependentTasksCompletedActionSpec extends SpecBase with ScalaCheckProperty
     "return to task list if any other dependent section is incomplete" in {
       forAll(nonEmptyString, arbitrary[TaskStatus](arbitraryIncompleteTaskStatus)) {
         (section, taskStatus) =>
-          val tasks  = Map(section -> taskStatus)
+          val tasks  = Map(PreTaskListTask.section -> TaskStatus.Completed, section -> taskStatus)
           val result = harness(tasks, section)
           status(result) mustBe SEE_OTHER
           redirectLocation(result).value mustBe
