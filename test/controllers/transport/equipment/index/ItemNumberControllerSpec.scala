@@ -17,68 +17,68 @@
 package controllers.transport.equipment.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.ContainerIdentificationNumberFormProvider
-import models.{Index, NormalMode}
+import forms.ItemNumberFormProvider
+import models.NormalMode
 import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.transport.equipment.index.ContainerIdentificationNumberPage
+import pages.transport.equipment.index.ItemNumberPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.transport.equipment.index.ContainerIdentificationNumberView
+import views.html.transport.equipment.index.ItemNumberView
 
 import scala.concurrent.Future
 
-class ContainerIdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class ItemNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                            = new ContainerIdentificationNumberFormProvider()
-  private def form(otherIds: Seq[String] = Nil)       = formProvider("transport.equipment.index.containerIdentificationNumber", otherIds)
-  private val validAnswer                             = "testString"
-  private val mode                                    = NormalMode
-  private def identificationNumberRoute(index: Index) = routes.ContainerIdentificationNumberController.onPageLoad(lrn, mode, index).url
+  private val formProvider         = new ItemNumberFormProvider()
+  private val form                 = formProvider("transport.equipment.index.itemNumber")
+  private val mode                 = NormalMode
+  private lazy val itemNumberRoute = routes.ItemNumberController.onPageLoad(lrn, mode, index).url
+  private val validAnswer          = "12345"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
 
-  "IdentificationNumber Controller" - {
+  "ItemNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, identificationNumberRoute(equipmentIndex))
+      val request = FakeRequest(GET, itemNumberRoute)
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[ContainerIdentificationNumberView]
+      val view = injector.instanceOf[ItemNumberView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form(), lrn, mode, equipmentIndex)(request, messages).toString
+        view(form, lrn, mode, index)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(ContainerIdentificationNumberPage(equipmentIndex), validAnswer)
+      val userAnswers = emptyUserAnswers.setValue(ItemNumberPage(index), validAnswer)
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, identificationNumberRoute(equipmentIndex))
+      val request = FakeRequest(GET, itemNumberRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form().bind(Map("value" -> validAnswer))
+      val filledForm = form.bind(Map("value" -> validAnswer))
 
-      val view = injector.instanceOf[ContainerIdentificationNumberView]
+      val view = injector.instanceOf[ItemNumberView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, equipmentIndex)(request, messages).toString
+        view(filledForm, lrn, mode, index)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -87,7 +87,7 @@ class ContainerIdentificationNumberControllerSpec extends SpecBase with AppWithD
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      val request = FakeRequest(POST, identificationNumberRoute(equipmentIndex))
+      val request = FakeRequest(POST, itemNumberRoute)
         .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
@@ -97,49 +97,30 @@ class ContainerIdentificationNumberControllerSpec extends SpecBase with AppWithD
       redirectLocation(result).value mustEqual onwardRoute.url
     }
 
-    "when duplicate value is submitted" in {
-      val userAnswers = emptyUserAnswers.setValue(ContainerIdentificationNumberPage(equipmentIndex), validAnswer)
-      setExistingUserAnswers(userAnswers)
-
-      val request = FakeRequest(POST, identificationNumberRoute(Index(1)))
-        .withFormUrlEncodedBody(("value", validAnswer))
-
-      val filledForm = form(Seq(validAnswer)).bind(Map("value" -> validAnswer))
-
-      val result = route(app, request).value
-
-      status(result) mustEqual BAD_REQUEST
-
-      val view = injector.instanceOf[ContainerIdentificationNumberView]
-
-      contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, Index(1))(request, messages).toString
-    }
-
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
       val invalidAnswer = ""
 
-      val request    = FakeRequest(POST, identificationNumberRoute(equipmentIndex)).withFormUrlEncodedBody(("value", ""))
-      val filledForm = form().bind(Map("value" -> invalidAnswer))
+      val request    = FakeRequest(POST, itemNumberRoute).withFormUrlEncodedBody(("value", ""))
+      val filledForm = form.bind(Map("value" -> invalidAnswer))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[ContainerIdentificationNumberView]
+      val view = injector.instanceOf[ItemNumberView]
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, equipmentIndex)(request, messages).toString
+        view(filledForm, lrn, mode, index)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, identificationNumberRoute(equipmentIndex))
+      val request = FakeRequest(GET, itemNumberRoute)
 
       val result = route(app, request).value
 
@@ -152,7 +133,7 @@ class ContainerIdentificationNumberControllerSpec extends SpecBase with AppWithD
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, identificationNumberRoute(equipmentIndex))
+      val request = FakeRequest(POST, itemNumberRoute)
         .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
