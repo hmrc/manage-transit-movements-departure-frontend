@@ -16,7 +16,7 @@
 
 @import config.FrontendAppConfig
 @import models.LocalReferenceNumber
-@import viewModels.taskList.Task
+@import viewModels.taskList._
 @import views.html.components.{Button, Heading, TaskList}
 
 @this(
@@ -28,7 +28,7 @@
     button: Button
 )
 
-@(lrn: LocalReferenceNumber, tasks: Seq[Task])(implicit request: Request[_], messages: Messages)
+@(lrn: LocalReferenceNumber, tasks: Seq[TaskListTask])(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("taskList.title"),

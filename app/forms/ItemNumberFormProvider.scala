@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package forms
 
-import config.FrontendAppConfig
-import models.LocalReferenceNumber
+import forms.Constants.itemNumberLength
+import forms.mappings.Mappings
+import models.domain.StringFieldRegex.numericRegex
+import play.api.data.Form
 
-case class TransportTask(status: TaskStatus) extends TaskListTask {
-  override val id: String         = "transport-details"
-  override val messageKey: String = "transportDetails"
-  override val section: String    = TransportTask.section
+import javax.inject.Inject
 
-  override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String =
-    config.transportDetailsFrontendUrl(lrn)
-}
+class ItemNumberFormProvider @Inject() extends Mappings {
 
-object TransportTask {
-  val section: String = ".transportDetails"
+  def apply(prefix: String): Form[String] =
+    Form(
+      "value" -> text(s"$prefix.error.required")
+        .verifying(
+          maxLength(itemNumberLength, s"$prefix.error.length"),
+          regexp(numericRegex, s"$prefix.error.invalidCharacters")
+        )
+    )
 }

@@ -19,15 +19,15 @@ package viewModels.taskList
 import config.FrontendAppConfig
 import models.LocalReferenceNumber
 
-case class TransportTask(status: TaskStatus) extends TaskListTask {
-  override val id: String         = "transport-details"
-  override val messageKey: String = "transportDetails"
-  override val section: String    = TransportTask.section
+case class ItemsTask(status: TaskStatus) extends TaskListTask {
+  override val id: String         = "items"
+  override val messageKey: String = "items"
+  override val section: String    = ItemsTask.section
 
   override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String =
-    config.transportDetailsFrontendUrl(lrn)
+    config.itemsFrontendUrl(lrn)
 }
 
-object TransportTask {
-  val section: String = ".transportDetails"
+object ItemsTask {
+  val section: String = ".items"
 }

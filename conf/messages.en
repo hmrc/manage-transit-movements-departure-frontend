@@ -150,6 +150,10 @@ task.transportDetails = Transport details
 task.transportDetails.add = Add transport details
 task.transportDetails.edit = Edit transport details
 
+task.items = Items
+task.items.add = Add items
+task.items.edit = Edit items
+
 # Trader details
 
 traderDetails.caption = Trader details
@@ -1388,17 +1392,9 @@ transport.carrierDetails.contact.telephoneNumber.error.invalidFormat = Enter {0}
 transport.carrierDetails.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less
 transport.carrierDetails.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more
 
-#TransportEquipment
-transport.equipment.caption = Transport details - Transport equipment
+# Transport equipment
 
-transport.equipment.index.containerIdentificationNumber.title = What’s the container identification number?
-transport.equipment.index.containerIdentificationNumber.heading = What’s the container identification number?
-transport.equipment.index.containerIdentificationNumber.hint = This can be up to 17 characters long and include both letters and numbers.
-transport.equipment.index.containerIdentificationNumber.checkYourAnswersLabel = What’s the container identification number?
-transport.equipment.index.containerIdentificationNumber.error.required = Enter the container identification number
-transport.equipment.index.containerIdentificationNumber.error.length = The identification number must be 17 characters or less
-transport.equipment.index.containerIdentificationNumber.error.invalid = The identification number must only include letters a to z and numbers 0 to 9
-transport.equipment.index.containerIdentificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique container identification number
+transport.equipment.caption = Transport details - Transport equipment
 
 transport.equipment.addTransportEquipmentYesNo.title = Do you need to add any transport equipment?
 transport.equipment.addTransportEquipmentYesNo.heading = Do you need to add any transport equipment?
@@ -1410,6 +1406,23 @@ transport.equipment.addContainerIdentificationNumberYesNo.title = Do you want to
 transport.equipment.addContainerIdentificationNumberYesNo.heading = Do you want to add a container identification number?
 transport.equipment.addContainerIdentificationNumberYesNo.checkYourAnswersLabel = Do you want to add a container identification number?
 transport.equipment.addContainerIdentificationNumberYesNo.error.required = Select yes if you want to add a container identification number
+
+transport.equipment.index.containerIdentificationNumber.title = What’s the container identification number?
+transport.equipment.index.containerIdentificationNumber.heading = What’s the container identification number?
+transport.equipment.index.containerIdentificationNumber.hint = This can be up to 17 characters long and include both letters and numbers.
+transport.equipment.index.containerIdentificationNumber.checkYourAnswersLabel = What’s the container identification number?
+transport.equipment.index.containerIdentificationNumber.error.required = Enter the container identification number
+transport.equipment.index.containerIdentificationNumber.error.length = The identification number must be 17 characters or less
+transport.equipment.index.containerIdentificationNumber.error.invalid = The identification number must only include letters a to z and numbers 0 to 9
+transport.equipment.index.containerIdentificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique container identification number
+
+transport.equipment.index.itemNumber.title = What is the goods item number for the transport equipment?
+transport.equipment.index.itemNumber.heading = What is the goods item number for the transport equipment?
+transport.equipment.index.itemNumber.hint = This can be up to 5 numbers long.
+transport.equipment.index.itemNumber.checkYourAnswersLabel = Item number
+transport.equipment.index.itemNumber.error.required = Enter the goods item number for the transport equipment
+transport.equipment.index.itemNumber.error.length = The goods item number must be 5 characters or less
+transport.equipment.index.itemNumber.error.invalidCharacters = The goods item number must only include numbers 0 to 9
 
 transport.equipment.index.addGoodsItemNumberYesNo.title = Do you want to add a goods item number to the transport equipment?
 transport.equipment.index.addGoodsItemNumberYesNo.heading = Do you want to add a goods item number to the transport equipment?

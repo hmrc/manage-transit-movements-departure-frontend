@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package pages.transport.equipment.index
 
-import config.FrontendAppConfig
-import models.LocalReferenceNumber
+import pages.behaviours.PageBehaviours
 
-case class TransportTask(status: TaskStatus) extends TaskListTask {
-  override val id: String         = "transport-details"
-  override val messageKey: String = "transportDetails"
-  override val section: String    = TransportTask.section
+class ItemNumberPageSpec extends PageBehaviours {
 
-  override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String =
-    config.transportDetailsFrontendUrl(lrn)
-}
+  "ItemNumberPage" - {
 
-object TransportTask {
-  val section: String = ".transportDetails"
+    beRetrievable[String](ItemNumberPage(index))
+
+    beSettable[String](ItemNumberPage(index))
+
+    beRemovable[String](ItemNumberPage(index))
+  }
 }

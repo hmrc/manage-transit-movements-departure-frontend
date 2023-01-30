@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package viewModels.taskList
+package pages.transport.equipment.index
 
-import config.FrontendAppConfig
-import models.LocalReferenceNumber
+import controllers.transport.equipment.index.routes
+import models.{Index, Mode, UserAnswers}
+import pages.QuestionPage
+import pages.sections.transport.EquipmentSection
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
-case class TransportTask(status: TaskStatus) extends TaskListTask {
-  override val id: String         = "transport-details"
-  override val messageKey: String = "transportDetails"
-  override val section: String    = TransportTask.section
+case class ItemNumberPage(index: Index) extends QuestionPage[String] {
 
-  override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String =
-    config.transportDetailsFrontendUrl(lrn)
-}
+  override def path: JsPath = EquipmentSection(index).path \ toString
 
-object TransportTask {
-  val section: String = ".transportDetails"
+  override def toString: String = "itemNumber"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.ItemNumberController.onPageLoad(userAnswers.lrn, mode, index))
 }

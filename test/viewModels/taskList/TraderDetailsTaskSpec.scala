@@ -53,7 +53,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
   }
 
   "id" - {
-    "must be route-details" in {
+    "must be trader-details" in {
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val task = TraderDetailsTask(taskStatus)

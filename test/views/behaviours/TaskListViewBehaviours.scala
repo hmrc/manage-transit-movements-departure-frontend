@@ -19,14 +19,14 @@ package views.behaviours
 import generators.Generators
 import models.LocalReferenceNumber
 import org.scalacheck.Arbitrary.arbitrary
-import viewModels.taskList.Task
+import viewModels.taskList.TaskListTask
 import viewModels.taskList.TaskStatus.CannotStartYet
 
 import scala.jdk.CollectionConverters._
 
 trait TaskListViewBehaviours extends ViewBehaviours with Generators {
 
-  lazy val tasks: Seq[Task] = arbitrary[List[Task]](arbitraryTasks(arbitraryTask)).sample.value
+  lazy val tasks: Seq[TaskListTask] = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
 
   override val urlContainsLrn: Boolean = true
 

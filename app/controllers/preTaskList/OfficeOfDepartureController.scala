@@ -40,7 +40,7 @@ class OfficeOfDepartureController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
-  checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
+  checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
   formProvider: CustomsOfficeFormProvider,
   customsOfficesService: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
@@ -53,7 +53,7 @@ class OfficeOfDepartureController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+    .andThen(checkIfPreTaskListAlreadyCompleted)
     .async {
       implicit request =>
         customsOfficesService.getCustomsOfficesOfDeparture.map {
@@ -72,7 +72,7 @@ class OfficeOfDepartureController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+    .andThen(checkIfPreTaskListAlreadyCompleted)
     .async {
       implicit request =>
         customsOfficesService.getCustomsOfficesOfDeparture.flatMap {
@@ -83,7 +83,7 @@ class OfficeOfDepartureController @Inject() (
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
                 value => {
                   implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-                  OfficeOfDeparturePage.writeToUserAnswers(value).writeToSession().navigate()
+                  OfficeOfDeparturePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
                 }
               )
         }
