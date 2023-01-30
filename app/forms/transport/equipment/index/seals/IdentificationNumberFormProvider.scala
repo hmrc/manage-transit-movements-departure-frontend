@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-package forms
+package forms.transport.equipment.index.seals
 
-import forms.Constants.maxContainerIdNumberLength
+import forms.Constants.maxSealIdNumberLength
+import forms.StopOnFirstFail
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.alphaNumericRegex
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class ContainerIdentificationNumberFormProvider @Inject() extends Mappings {
+class IdentificationNumberFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String, otherContainerIdentificationNumbers: Seq[String]): Form[String] =
+  def apply(prefix: String, otherIdentificationNumbers: Seq[String]): Form[String] =
     Form(
       "value" -> text(s"$prefix.error.required")
         .verifying(
           StopOnFirstFail[String](
-            maxLength(maxContainerIdNumberLength, s"$prefix.error.length"),
+            maxLength(maxSealIdNumberLength, s"$prefix.error.length"),
             regexp(alphaNumericRegex, s"$prefix.error.invalid"),
-            valueIsNotInList(otherContainerIdentificationNumbers, s"$prefix.error.duplicate")
+            valueIsNotInList(otherIdentificationNumbers, s"$prefix.error.duplicate")
           )
         )
     )
