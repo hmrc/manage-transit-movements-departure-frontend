@@ -20,7 +20,7 @@ import config.FrontendAppConfig
 import models.{Index, Mode, UserAnswers}
 import play.api.i18n.Messages
 import play.api.mvc.Call
-import utils.cyaHelpers.transport.supplyChainActors.SupplyChainActorsAnswersHelper
+import utils.cyaHelpers.transport.equipment.SealsAnswersHelper
 import viewModels.ListItem
 
 import javax.inject.Inject
@@ -49,7 +49,7 @@ object AddAnotherSealViewModel {
   class AddAnotherSealViewModelProvider @Inject() () {
 
     def apply(userAnswers: UserAnswers, mode: Mode, equipmentIndex: Index)(implicit messages: Messages): AddAnotherSealViewModel = {
-      val helper = new SupplyChainActorsAnswersHelper(userAnswers, mode)
+      val helper = new SealsAnswersHelper(userAnswers, mode, equipmentIndex)
 
       val listItems = helper.listItems.collect {
         case Left(value)  => value

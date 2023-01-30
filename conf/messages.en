@@ -1430,13 +1430,13 @@ transport.equipment.index.seals.identificationNumber.error.invalid = The identif
 transport.equipment.index.seals.identificationNumber.error.length = The identification number must be 20 characters or less
 transport.equipment.index.seals.identificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique seal identification number
 
-transport.equipment.index.seals.addAnotherSeal.singular.title = You have added 1 seal to the transport equipment
-transport.equipment.index.seals.addAnotherSeal.plural.title = You have added {0} seals to the transport equipment
-transport.equipment.index.seals.addAnotherSeal.singular.heading = You have added 1 seal to the transport equipment
-transport.equipment.index.seals.addAnotherSeal.plural.heading = You have added {0} seals to the transport equipment
-transport.equipment.index.seals.addAnotherSeal.error.required = Select yes if you want to add another seal to the transport equipment
-transport.equipment.index.seals.addAnotherSeal.label = Do you want to add another seal to the transport equipment?
-transport.equipment.index.seals.addAnotherSeal.maxLimit.label = You cannot add any more seals. To add another, you need to remove one first.
+transport.equipment.index.addAnotherSeal.singular.title = You have added 1 seal to the transport equipment
+transport.equipment.index.addAnotherSeal.plural.title = You have added {0} seals to the transport equipment
+transport.equipment.index.addAnotherSeal.singular.heading = You have added 1 seal to the transport equipment
+transport.equipment.index.addAnotherSeal.plural.heading = You have added {0} seals to the transport equipment
+transport.equipment.index.addAnotherSeal.error.required = Select yes if you want to add another seal to the transport equipment
+transport.equipment.index.addAnotherSeal.label = Do you want to add another seal to the transport equipment?
+transport.equipment.index.addAnotherSeal.maxLimit.label = You cannot add any more seals. To add another, you need to remove one first.
 
 transport.equipment.index.itemNumber.title = What is the goods item number?
 transport.equipment.index.itemNumber.heading = What is the goods item number?
