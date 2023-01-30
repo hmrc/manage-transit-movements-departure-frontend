@@ -59,6 +59,7 @@ trait SpecBase
   val actorIndex: Index         = Index(0)
   val authorisationIndex: Index = Index(0)
   val equipmentIndex: Index     = Index(0)
+  val sealIndex: Index          = Index(0)
 
   def fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
 
