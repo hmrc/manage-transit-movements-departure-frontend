@@ -27,7 +27,7 @@ import views.html.transport.equipment.index.ContainerIdentificationNumberView
 
 class ContainerIdentificationNumberViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "transport.equipment.containerIdentificationNumber"
+  override val prefix: String = "transport.equipment.index.containerIdentificationNumber"
 
   override def form: Form[String] = new NameFormProvider()(prefix)
 
@@ -40,7 +40,7 @@ class ContainerIdentificationNumberViewSpec extends InputTextViewBehaviours[Stri
 
   behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Transport details - Equipment")
+  behave like pageWithSectionCaption("Transport details - Transport equipment")
 
   behave like pageWithHeading()
 

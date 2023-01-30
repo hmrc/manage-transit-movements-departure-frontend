@@ -42,7 +42,8 @@
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages("transport.equipment.index.itemNumber.heading")
+                heading = messages("transport.equipment.index.itemNumber.heading"),
+                caption = Some(messages("transport.equipment.caption"))
             ),
             inputClass = InputSize.Width20
         )

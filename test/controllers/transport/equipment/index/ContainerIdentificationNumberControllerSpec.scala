@@ -34,7 +34,7 @@ import scala.concurrent.Future
 class ContainerIdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private val formProvider                            = new ContainerIdentificationFormProvider()
-  private def form(otherIds: Seq[String] = Nil)       = formProvider("transport.equipment.containerIdentificationNumber", otherIds)
+  private def form(otherIds: Seq[String] = Nil)       = formProvider("transport.equipment.index.containerIdentificationNumber", otherIds)
   private val validAnswer                             = "testString"
   private val mode                                    = NormalMode
   private def identificationNumberRoute(index: Index) = routes.ContainerIdentificationNumberController.onPageLoad(lrn, mode, index).url

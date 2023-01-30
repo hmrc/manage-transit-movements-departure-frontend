@@ -40,6 +40,8 @@ class ItemNumberViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithBackLink()
 
+  behave like pageWithSectionCaption("Transport details - Transport equipment")
+
   behave like pageWithHeading()
 
   behave like pageWithoutHint()
