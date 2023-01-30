@@ -22,6 +22,7 @@ sealed trait TaskStatus {
   val messageKey: String
   val tag: String
   val jsonString: String
+  def isCompleted: Boolean = this == TaskStatus.Completed
 }
 
 object TaskStatus {

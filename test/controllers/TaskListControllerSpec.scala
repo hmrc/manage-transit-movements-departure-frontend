@@ -27,7 +27,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.ApiService
-import viewModels.taskList.{Task, TaskListViewModel}
+import viewModels.taskList.{TaskListTask, TaskListViewModel}
 import views.html.TaskListView
 
 class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators with UserAnswersGenerator {
@@ -49,7 +49,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
   "Task List Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val sampleTasks = arbitrary[List[Task]](arbitraryTasks(arbitraryTask)).sample.value
+      val sampleTasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
 
       when(mockViewModel.apply(any())).thenReturn(sampleTasks)
 

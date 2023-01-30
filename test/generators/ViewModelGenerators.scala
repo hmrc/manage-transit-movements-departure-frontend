@@ -26,7 +26,7 @@ import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import viewModels.sections.Section
-import viewModels.taskList.{Task, TaskStatus}
+import viewModels.taskList.{TaskListTask, TaskStatus}
 import viewModels.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationViewModel
 import viewModels.transport.supplyChainActors.AddAnotherSupplyChainActorViewModel
 import viewModels.transport.transportMeans.active.AddAnotherBorderTransportViewModel
@@ -116,14 +116,14 @@ trait ViewModelGenerators {
     Gen.oneOf(TaskStatus.Completed, TaskStatus.InProgress, TaskStatus.NotStarted, TaskStatus.CannotStartYet)
   }
 
-  implicit lazy val arbitraryTask: Arbitrary[Task] = Arbitrary {
+  implicit lazy val arbitraryTask: Arbitrary[TaskListTask] = Arbitrary {
     for {
       arbitraryStatus     <- arbitrary[TaskStatus]
       arbitraryMessageKey <- Gen.alphaNumStr
       arbitraryId         <- Gen.alphaNumStr
       arbitraryHref       <- Gen.alphaNumStr
       arbitrarySection    <- Gen.alphaNumStr
-    } yield new Task {
+    } yield new TaskListTask {
       override val status: TaskStatus                                                          = arbitraryStatus
       override val messageKey: String                                                          = arbitraryMessageKey
       override val id: String                                                                  = arbitraryId
@@ -132,13 +132,13 @@ trait ViewModelGenerators {
     }
   }
 
-  implicit lazy val arbitraryCompletedTask: Arbitrary[Task] = Arbitrary {
+  implicit lazy val arbitraryCompletedTask: Arbitrary[TaskListTask] = Arbitrary {
     for {
       arbitraryMessageKey <- Gen.alphaNumStr
       arbitraryId         <- Gen.alphaNumStr
       arbitraryHref       <- Gen.alphaNumStr
       arbitrarySection    <- Gen.alphaNumStr
-    } yield new Task {
+    } yield new TaskListTask {
       override val status: TaskStatus                                                          = TaskStatus.Completed
       override val messageKey: String                                                          = arbitraryMessageKey
       override val id: String                                                                  = arbitraryId
@@ -147,8 +147,8 @@ trait ViewModelGenerators {
     }
   }
 
-  implicit def arbitraryTasks(implicit arbitraryTask: Arbitrary[Task]): Arbitrary[List[Task]] = Arbitrary {
-    listWithMaxLength[Task]()(arbitraryTask).retryUntil {
+  implicit def arbitraryTasks(implicit arbitraryTask: Arbitrary[TaskListTask]): Arbitrary[List[TaskListTask]] = Arbitrary {
+    listWithMaxLength[TaskListTask]()(arbitraryTask).retryUntil {
       tasks =>
         val ids = tasks.map(_.id)
         ids.distinct.size == ids.size

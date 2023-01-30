@@ -37,7 +37,7 @@ class SecurityDetailsTypeController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
-  checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
+  checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
   formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: SecurityDetailsTypeView
@@ -49,7 +49,7 @@ class SecurityDetailsTypeController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain]) {
+    .andThen(checkIfPreTaskListAlreadyCompleted) {
       implicit request =>
         val preparedForm = request.userAnswers.get(SecurityDetailsTypePage) match {
           case None        => form
@@ -61,7 +61,7 @@ class SecurityDetailsTypeController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+    .andThen(checkIfPreTaskListAlreadyCompleted)
     .async {
       implicit request =>
         form
@@ -70,7 +70,7 @@ class SecurityDetailsTypeController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, SecurityDetailsType.radioItems, lrn, mode))),
             value => {
               implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              SecurityDetailsTypePage.writeToUserAnswers(value).writeToSession().navigate()
+              SecurityDetailsTypePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
             }
           )
     }
