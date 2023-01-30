@@ -33,7 +33,7 @@ class AddSealYesNoViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Transport details - Equipment")
+  behave like pageWithSectionCaption("Transport details - Transport equipment")
 
   behave like pageWithHeading()
 
