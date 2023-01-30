@@ -16,23 +16,23 @@
 
 package views.transport.equipment.index
 
-import forms.NameFormProvider
+import forms.ItemNumberFormProvider
 import models.NormalMode
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.transport.equipment.index.ContainerIdentificationNumberView
+import views.html.transport.equipment.index.ItemNumberView
 
-class ContainerIdentificationNumberViewSpec extends InputTextViewBehaviours[String] {
+class ItemNumberViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String = "transport.equipment.index.containerIdentificationNumber"
+  override val prefix: String = "transport.equipment.index.itemNumber"
 
-  override def form: Form[String] = new NameFormProvider()(prefix)
+  override def form: Form[String] = new ItemNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[ContainerIdentificationNumberView].apply(form, lrn, NormalMode, equipmentIndex)(fakeRequest, messages)
+    injector.instanceOf[ItemNumberView].apply(form, lrn, NormalMode, index)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 
@@ -44,7 +44,7 @@ class ContainerIdentificationNumberViewSpec extends InputTextViewBehaviours[Stri
 
   behave like pageWithHeading()
 
-  behave like pageWithHint("This can be up to 17 characters long and include both letters and numbers.")
+  behave like pageWithoutHint()
 
   behave like pageWithInputText(Some(InputSize.Width20))
 
