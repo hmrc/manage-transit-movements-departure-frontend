@@ -1407,14 +1407,14 @@ transport.equipment.addContainerIdentificationNumberYesNo.heading = Do you want 
 transport.equipment.addContainerIdentificationNumberYesNo.checkYourAnswersLabel = Do you want to add a container identification number?
 transport.equipment.addContainerIdentificationNumberYesNo.error.required = Select yes if you want to add a container identification number
 
-transport.equipment.index.containerIdentificationNumber.title = What’s the container identification number?
-transport.equipment.index.containerIdentificationNumber.heading = What’s the container identification number?
+transport.equipment.index.containerIdentificationNumber.title = What is the identification number for the transport equipment?
+transport.equipment.index.containerIdentificationNumber.heading = What is the identification number for the transport equipment?
 transport.equipment.index.containerIdentificationNumber.hint = This can be up to 17 characters long and include both letters and numbers.
-transport.equipment.index.containerIdentificationNumber.checkYourAnswersLabel = What’s the container identification number?
-transport.equipment.index.containerIdentificationNumber.error.required = Enter the container identification number
+transport.equipment.index.containerIdentificationNumber.checkYourAnswersLabel = What is the identification number for the transport equipment?
+transport.equipment.index.containerIdentificationNumber.error.required = Enter the container identification number for the transport equipment
 transport.equipment.index.containerIdentificationNumber.error.length = The identification number must be 17 characters or less
 transport.equipment.index.containerIdentificationNumber.error.invalid = The identification number must only include letters a to z and numbers 0 to 9
-transport.equipment.index.containerIdentificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique container identification number
+transport.equipment.index.containerIdentificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique identification number
 
 transport.equipment.index.addSealYesNo.title = Do you want to add a seal to the transport equipment?
 transport.equipment.index.addSealYesNo.heading = Do you want to add a seal to the transport equipment?
@@ -1437,3 +1437,8 @@ transport.equipment.index.itemNumber.checkYourAnswersLabel = Item number
 transport.equipment.index.itemNumber.error.required = Enter the goods item number for the transport equipment
 transport.equipment.index.itemNumber.error.length = The goods item number must be 5 characters or less
 transport.equipment.index.itemNumber.error.invalidCharacters = The goods item number must only include numbers 0 to 9
+
+transport.equipment.index.addGoodsItemNumberYesNo.title = Do you want to add a goods item number to the transport equipment?
+transport.equipment.index.addGoodsItemNumberYesNo.heading = Do you want to add a goods item number to the transport equipment?
+transport.equipment.index.addGoodsItemNumberYesNo.checkYourAnswersLabel = Do you want to add a goods item number to the transport equipment?
+transport.equipment.index.addGoodsItemNumberYesNo.error.required = Select yes if you want to add a goods item number to the transport equipment
