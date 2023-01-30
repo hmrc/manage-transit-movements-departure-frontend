@@ -23,12 +23,12 @@ import pages.sections.transport.EquipmentSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case class AddGoodsItemNumberForContainerPage(equipmentIndex: Index) extends QuestionPage[Boolean] {
+case class AddGoodsItemNumberYesNoPage(equipmentIndex: Index) extends QuestionPage[Boolean] {
 
   override def path: JsPath = EquipmentSection(equipmentIndex).path \ toString
 
-  override def toString: String = "addGoodsItemNumberForContainerYesNo"
+  override def toString: String = "addGoodsItemNumberYesNo"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.AddGoodsItemNumberForContainerController.onPageLoad(userAnswers.lrn, mode, equipmentIndex))
+    Some(routes.AddGoodsItemNumberYesNoController.onPageLoad(userAnswers.lrn, mode, equipmentIndex))
 }

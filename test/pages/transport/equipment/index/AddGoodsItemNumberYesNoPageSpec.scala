@@ -18,14 +18,14 @@ package pages.transport.equipment.index
 
 import pages.behaviours.PageBehaviours
 
-class AddGoodsItemNumberForContainerPageSpec extends PageBehaviours {
+class AddGoodsItemNumberYesNoPageSpec extends PageBehaviours {
 
-  "AddGoodsItemNumberForContainerPage" - {
+  "AddGoodsItemNumberYesNoPage" - {
 
-    beRetrievable[Boolean](AddGoodsItemNumberForContainerPage(equipmentIndex))
+    beRetrievable[Boolean](AddGoodsItemNumberYesNoPage(equipmentIndex))
 
-    beSettable[Boolean](AddGoodsItemNumberForContainerPage(equipmentIndex))
+    beSettable[Boolean](AddGoodsItemNumberYesNoPage(equipmentIndex))
 
-    beRemovable[Boolean](AddGoodsItemNumberForContainerPage(equipmentIndex))
+    beRemovable[Boolean](AddGoodsItemNumberYesNoPage(equipmentIndex))
   }
 }

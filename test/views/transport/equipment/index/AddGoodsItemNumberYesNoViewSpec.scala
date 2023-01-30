@@ -17,30 +17,27 @@
 package views.transport.equipment.index
 
 import models.NormalMode
-import org.scalacheck.Gen
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.transport.equipment.index.AddGoodsItemNumberForContainerView
+import views.html.transport.equipment.index.AddGoodsItemNumberYesNoView
 
-class AddGoodsItemNumberForContainerViewSpec extends YesNoViewBehaviours {
-
-  val containerNumber: String = Gen.alphaNumStr.sample.value
+class AddGoodsItemNumberYesNoViewSpec extends YesNoViewBehaviours {
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[AddGoodsItemNumberForContainerView].apply(form, lrn, NormalMode, equipmentIndex, containerNumber)(fakeRequest, messages)
+    injector.instanceOf[AddGoodsItemNumberYesNoView].apply(form, lrn, NormalMode, equipmentIndex)(fakeRequest, messages)
 
-  override val prefix: String = "transport.equipment.index.addGoodsItemNumberForContainer"
+  override val prefix: String = "transport.equipment.index.addGoodsItemNumberYesNo"
 
-  behave like pageWithTitle(args = containerNumber)
+  behave like pageWithTitle()
 
   behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Transport details - Equipment")
+  behave like pageWithSectionCaption("Transport details - Transport equipment")
 
-  behave like pageWithHeading(args = containerNumber)
+  behave like pageWithHeading()
 
-  behave like pageWithRadioItems(args = Seq(containerNumber))
+  behave like pageWithRadioItems()
 
   behave like pageWithSubmitButton("Save and continue")
 }

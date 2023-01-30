@@ -20,22 +20,21 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.journeyDomain.transport.TransportDomain
-import models.requests.SpecificDataRequestProvider1
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
-import pages.transport.equipment.index.{AddGoodsItemNumberForContainerPage, ContainerIdentificationNumberPage}
+import pages.transport.equipment.index.AddGoodsItemNumberYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.transport.equipment.index.AddGoodsItemNumberForContainerView
+import views.html.transport.equipment.index.AddGoodsItemNumberYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddGoodsItemNumberForContainerController @Inject() (
+class AddGoodsItemNumberYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: TransportNavigatorProvider,
@@ -43,42 +42,36 @@ class AddGoodsItemNumberForContainerController @Inject() (
   getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: AddGoodsItemNumberForContainerView
+  view: AddGoodsItemNumberYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private type Request = SpecificDataRequestProvider1[String]#SpecificDataRequest[_]
-
-  private def containerIdentificationNumber(implicit request: Request): String = request.arg
-
-  private def form(implicit request: Request): Form[Boolean] =
-    formProvider("transport.equipment.index.addGoodsItemNumberForContainer", containerIdentificationNumber)
+  private val form: Form[Boolean] =
+    formProvider("transport.equipment.index.addGoodsItemNumberYesNo")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index): Action[AnyContent] = actions
-    .requireData(lrn)
-    .andThen(getMandatoryPage(ContainerIdentificationNumberPage(equipmentIndex))) {
+    .requireData(lrn) {
       implicit request =>
-        val preparedForm = request.userAnswers.get(AddGoodsItemNumberForContainerPage(equipmentIndex)) match {
+        val preparedForm = request.userAnswers.get(AddGoodsItemNumberYesNoPage(equipmentIndex)) match {
           case None        => form
           case Some(value) => form.fill(value)
         }
 
-        Ok(view(preparedForm, lrn, mode, equipmentIndex, containerIdentificationNumber))
+        Ok(view(preparedForm, lrn, mode, equipmentIndex))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(ContainerIdentificationNumberPage(equipmentIndex)))
     .async {
       implicit request =>
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, equipmentIndex, containerIdentificationNumber))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, equipmentIndex))),
             value => {
               implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              AddGoodsItemNumberForContainerPage(equipmentIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
+              AddGoodsItemNumberYesNoPage(equipmentIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
             }
           )
     }

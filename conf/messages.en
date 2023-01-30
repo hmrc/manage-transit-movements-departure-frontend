@@ -1389,7 +1389,7 @@ transport.carrierDetails.contact.telephoneNumber.error.maxLength = {0}’s telep
 transport.carrierDetails.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more
 
 #TransportEquipment
-transport.equipment.caption = Transport details - Equipment
+transport.equipment.caption = Transport details - Transport equipment
 
 transport.equipment.index.containerIdentificationNumber.title = What’s the container identification number?
 transport.equipment.index.containerIdentificationNumber.heading = What’s the container identification number?
@@ -1411,8 +1411,7 @@ transport.equipment.addContainerIdentificationNumberYesNo.heading = Do you want 
 transport.equipment.addContainerIdentificationNumberYesNo.checkYourAnswersLabel = Do you want to add a container identification number?
 transport.equipment.addContainerIdentificationNumberYesNo.error.required = Select yes if you want to add a container identification number
 
-transport.equipment.index.addGoodsItemNumberForContainer.title = Do you want to add a goods item number for container {0}?
-transport.equipment.index.addGoodsItemNumberForContainer.heading = Do you want to add a goods item number for container {0}?
-transport.equipment.index.addGoodsItemNumberForContainer.paragraph = Placeholder text
-transport.equipment.index.addGoodsItemNumberForContainer.checkYourAnswersLabel = Do you want to add a goods item number for container {0}?
-transport.equipment.index.addGoodsItemNumberForContainer.error.required = Select yes if you want to add a goods item number for container {0}
+transport.equipment.index.addGoodsItemNumberYesNo.title = Do you want to add a goods item number to the transport equipment?
+transport.equipment.index.addGoodsItemNumberYesNo.heading = Do you want to add a goods item number to the transport equipment?
+transport.equipment.index.addGoodsItemNumberYesNo.checkYourAnswersLabel = Do you want to add a goods item number to the transport equipment?
+transport.equipment.index.addGoodsItemNumberYesNo.error.required = Select yes if you want to add a goods item number to the transport equipment

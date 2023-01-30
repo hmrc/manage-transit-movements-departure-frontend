@@ -22,82 +22,73 @@ import models.NormalMode
 import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
-import pages.transport.equipment.index.{AddGoodsItemNumberForContainerPage, ContainerIdentificationNumberPage}
+import pages.transport.equipment.index.AddGoodsItemNumberYesNoPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.transport.equipment.index.AddGoodsItemNumberForContainerView
+import views.html.transport.equipment.index.AddGoodsItemNumberYesNoView
 
 import scala.concurrent.Future
 
-class AddGoodsItemNumberForContainerControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
+class AddGoodsItemNumberYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
-  private val formProvider                             = new YesNoFormProvider()
-  private val containerNumber: String                  = Gen.alphaNumStr.sample.value
-  private val form                                     = formProvider("transport.equipment.index.addGoodsItemNumberForContainer", containerNumber)
-  private val mode                                     = NormalMode
-  private lazy val addGoodsItemNumberForContainerRoute = routes.AddGoodsItemNumberForContainerController.onPageLoad(lrn, mode, equipmentIndex).url
+  private val formProvider                      = new YesNoFormProvider()
+  private val form                              = formProvider("transport.equipment.index.addGoodsItemNumberYesNo")
+  private val mode                              = NormalMode
+  private lazy val addGoodsItemNumberYesNoRoute = routes.AddGoodsItemNumberYesNoController.onPageLoad(lrn, mode, equipmentIndex).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
 
-  "AddGoodsItemNumberForContainer Controller" - {
+  "AddGoodsItemNumberYesNo Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val userAnswer = emptyUserAnswers
-        .setValue(ContainerIdentificationNumberPage(equipmentIndex), containerNumber)
+      setExistingUserAnswers(emptyUserAnswers)
 
-      setExistingUserAnswers(userAnswer)
-
-      val request = FakeRequest(GET, addGoodsItemNumberForContainerRoute)
+      val request = FakeRequest(GET, addGoodsItemNumberYesNoRoute)
       val result  = route(app, request).value
 
-      val view = injector.instanceOf[AddGoodsItemNumberForContainerView]
+      val view = injector.instanceOf[AddGoodsItemNumberYesNoView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode, equipmentIndex, containerNumber)(request, messages).toString
+        view(form, lrn, mode, equipmentIndex)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .setValue(ContainerIdentificationNumberPage(equipmentIndex), containerNumber)
-        .setValue(AddGoodsItemNumberForContainerPage(equipmentIndex), true)
+        .setValue(AddGoodsItemNumberYesNoPage(equipmentIndex), true)
 
       setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(GET, addGoodsItemNumberForContainerRoute)
+      val request = FakeRequest(GET, addGoodsItemNumberYesNoRoute)
 
       val result = route(app, request).value
 
       val filledForm = form.bind(Map("value" -> "true"))
 
-      val view = injector.instanceOf[AddGoodsItemNumberForContainerView]
+      val view = injector.instanceOf[AddGoodsItemNumberYesNoView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, equipmentIndex, containerNumber)(request, messages).toString
+        view(filledForm, lrn, mode, equipmentIndex)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      val userAnswer = emptyUserAnswers
-        .setValue(ContainerIdentificationNumberPage(equipmentIndex), containerNumber)
+      setExistingUserAnswers(emptyUserAnswers)
 
-      setExistingUserAnswers(userAnswer)
-
-      val request = FakeRequest(POST, addGoodsItemNumberForContainerRoute)
+      val request = FakeRequest(POST, addGoodsItemNumberYesNoRoute)
         .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
@@ -109,29 +100,26 @@ class AddGoodsItemNumberForContainerControllerSpec extends SpecBase with AppWith
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswer = emptyUserAnswers
-        .setValue(ContainerIdentificationNumberPage(equipmentIndex), containerNumber)
+      setExistingUserAnswers(emptyUserAnswers)
 
-      setExistingUserAnswers(userAnswer)
-
-      val request   = FakeRequest(POST, addGoodsItemNumberForContainerRoute).withFormUrlEncodedBody(("value", ""))
+      val request   = FakeRequest(POST, addGoodsItemNumberYesNoRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
 
-      val view = injector.instanceOf[AddGoodsItemNumberForContainerView]
+      val view = injector.instanceOf[AddGoodsItemNumberYesNoView]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, mode, equipmentIndex, containerNumber)(request, messages).toString
+        view(boundForm, lrn, mode, equipmentIndex)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, addGoodsItemNumberForContainerRoute)
+      val request = FakeRequest(GET, addGoodsItemNumberYesNoRoute)
 
       val result = route(app, request).value
 
@@ -144,7 +132,7 @@ class AddGoodsItemNumberForContainerControllerSpec extends SpecBase with AppWith
 
       setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, addGoodsItemNumberForContainerRoute)
+      val request = FakeRequest(POST, addGoodsItemNumberYesNoRoute)
         .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
