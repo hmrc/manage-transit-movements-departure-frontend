@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms.transport.equipment.index.seal
+package forms.transport.equipment.index.seals
 
 import forms.Constants.maxSealIdNumberLength
 import forms.StopOnFirstFail

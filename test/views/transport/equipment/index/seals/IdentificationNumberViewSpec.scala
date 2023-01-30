@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package views.transport.equipment.index.seal
+package views.transport.equipment.index.seals
 
-import forms.transport.equipment.index.seal.IdentificationNumberFormProvider
+import forms.transport.equipment.index.seals.IdentificationNumberFormProvider
 import models.NormalMode
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.transport.equipment.index.seal.IdentificationNumberView
+import views.html.transport.equipment.index.seals.IdentificationNumberView
 
 class IdentificationNumberViewSpec extends InputTextViewBehaviours[String] {
 
-  override val prefix: String     = "transport.equipment.index.seal.identificationNumber"
+  override val prefix: String     = "transport.equipment.index.seals.identificationNumber"
   override def form: Form[String] = new IdentificationNumberFormProvider()(prefix, Nil)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =

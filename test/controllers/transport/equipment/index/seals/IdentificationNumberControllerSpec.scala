@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package controllers.transport.equipment.index.seal
+package controllers.transport.equipment.index.seals
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.transport.equipment.index.seal.IdentificationNumberFormProvider
+import forms.transport.equipment.index.seals.IdentificationNumberFormProvider
 import models.NormalMode
 import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.transport.equipment.index.seal.IdentificationNumberPage
+import pages.transport.equipment.index.seals.IdentificationNumberPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.transport.equipment.index.seal.IdentificationNumberView
+import views.html.transport.equipment.index.seals.IdentificationNumberView
 
 import scala.concurrent.Future
 
 class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   private val formProvider = new IdentificationNumberFormProvider()
-  private val form         = formProvider("transport.equipment.index.seal.identificationNumber", Nil)
+  private val form         = formProvider("transport.equipment.index.seals.identificationNumber", Nil)
 
   private val mode = NormalMode
 

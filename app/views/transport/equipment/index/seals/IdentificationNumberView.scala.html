@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.transport.equipment.index.seal.routes
+@import controllers.transport.equipment.index.seals.routes
 @import models.LocalReferenceNumber
 @import viewModels.components.InputTextViewModel._
 @import views.html.components.{Button, ErrorSummary, InputText}
@@ -30,7 +30,7 @@
 @(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, sealIndex: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("transport.equipment.index.seal.identificationNumber.title"),
+    title = messages("transport.equipment.index.seals.identificationNumber.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -42,10 +42,10 @@
         @inputText(
             field = form("value"),
             inputTextType = OrdinaryTextInput(
-                heading = messages("transport.equipment.index.seal.identificationNumber.heading"),
+                heading = messages("transport.equipment.index.seals.identificationNumber.heading"),
                 caption = Some(messages("transport.equipment.caption"))
             ),
-            hint = Some(messages("transport.equipment.index.seal.identificationNumber.hint")),
+            hint = Some(messages("transport.equipment.index.seals.identificationNumber.hint")),
             inputClass = InputSize.Width20
         )
 

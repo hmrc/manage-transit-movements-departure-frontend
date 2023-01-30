@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package forms
+package forms.transport.equipment.index.seals
 
 import forms.behaviours.StringFieldBehaviours
-import forms.transport.equipment.index.seal.IdentificationNumberFormProvider
 import org.scalacheck.Gen
 import play.api.data.FormError
 

@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package controllers.transport.equipment.index.seal
+package controllers.transport.equipment.index.seals
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.transport.equipment.index.seal.IdentificationNumberFormProvider
+import forms.transport.equipment.index.seals.IdentificationNumberFormProvider
 import models.journeyDomain.transport.TransportDomain
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode, RichOptionalJsArray}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
 import pages.sections.SealsSection
-import pages.transport.equipment.index.seal.IdentificationNumberPage
+import pages.transport.equipment.index.seals.IdentificationNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.transport.equipment.index.seal.IdentificationNumberView
+import views.html.transport.equipment.index.seals.IdentificationNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -58,7 +58,7 @@ class IdentificationNumberController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, sealIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val form = formProvider("transport.equipment.index.seal.identificationNumber", otherIdentificationNumbers(equipmentIndex, sealIndex))
+      val form = formProvider("transport.equipment.index.seals.identificationNumber", otherIdentificationNumbers(equipmentIndex, sealIndex))
       val preparedForm = request.userAnswers.get(IdentificationNumberPage(equipmentIndex: Index, sealIndex: Index)) match {
         case None        => form
         case Some(value) => form.fill(value)
@@ -68,7 +68,7 @@ class IdentificationNumberController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, sealIndex: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      val form = formProvider("transport.equipment.index.seal.identificationNumber", otherIdentificationNumbers(equipmentIndex, sealIndex))
+      val form = formProvider("transport.equipment.index.seals.identificationNumber", otherIdentificationNumbers(equipmentIndex, sealIndex))
       form
         .bindFromRequest()
         .fold(

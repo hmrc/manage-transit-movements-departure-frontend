@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package pages.transport.equipment.index.seal
+package pages.transport.equipment.index.seals
 
-import controllers.transport.equipment.index.seal.routes
+import controllers.transport.equipment.index.seals.routes
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.SealSection
