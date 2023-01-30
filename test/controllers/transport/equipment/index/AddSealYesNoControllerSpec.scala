@@ -22,9 +22,8 @@ import models.NormalMode
 import navigation.transport.TransportMeansNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalacheck.{Arbitrary, Gen}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.transport.equipment.index.{AddSealYesNoPage, ContainerIdentificationNumberPage}
+import pages.transport.equipment.index.AddSealYesNoPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -36,8 +35,7 @@ import scala.concurrent.Future
 class AddSealYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
   private val formProvider           = new YesNoFormProvider()
-  private val containerNumber        = Arbitrary(Gen.alphaStr).arbitrary.sample.value
-  private val form                   = formProvider("transport.equipment.index.addSealYesNo", containerNumber)
+  private val form                   = formProvider("transport.equipment.index.addSealYesNo")
   private val mode                   = NormalMode
   private lazy val addSealYesNoRoute = routes.AddSealYesNoController.onPageLoad(lrn, mode, equipmentIndex).url
 
@@ -50,9 +48,7 @@ class AddSealYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixture
 
     "must return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.setValue(ContainerIdentificationNumberPage(equipmentIndex), containerNumber)
-
-      setExistingUserAnswers(userAnswers)
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, addSealYesNoRoute)
       val result  = route(app, request).value
@@ -62,14 +58,12 @@ class AddSealYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixture
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode, equipmentIndex, containerNumber)(request, messages).toString
+        view(form, lrn, mode, equipmentIndex)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers
-        .setValue(ContainerIdentificationNumberPage(equipmentIndex), containerNumber)
-        .setValue(AddSealYesNoPage(equipmentIndex), true)
+      val userAnswers = emptyUserAnswers.setValue(AddSealYesNoPage(equipmentIndex), true)
 
       setExistingUserAnswers(userAnswers)
 
@@ -84,16 +78,14 @@ class AddSealYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixture
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, equipmentIndex, containerNumber)(request, messages).toString
+        view(filledForm, lrn, mode, equipmentIndex)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      val userAnswers = emptyUserAnswers.setValue(ContainerIdentificationNumberPage(equipmentIndex), containerNumber)
-
-      setExistingUserAnswers(userAnswers)
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(POST, addSealYesNoRoute)
         .withFormUrlEncodedBody(("value", "true"))
@@ -107,9 +99,7 @@ class AddSealYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixture
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.setValue(ContainerIdentificationNumberPage(equipmentIndex), containerNumber)
-
-      setExistingUserAnswers(userAnswers)
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request   = FakeRequest(POST, addSealYesNoRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
@@ -121,7 +111,7 @@ class AddSealYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixture
       val view = injector.instanceOf[AddSealYesNoView]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, mode, equipmentIndex, containerNumber)(request, messages).toString
+        view(boundForm, lrn, mode, equipmentIndex)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

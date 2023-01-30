@@ -20,11 +20,10 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.journeyDomain.transport.TransportDomain
-import models.requests.SpecificDataRequestProvider1
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportMeansNavigatorProvider
-import pages.transport.equipment.index.{AddSealYesNoPage, ContainerIdentificationNumberPage}
+import pages.transport.equipment.index.AddSealYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -42,39 +41,32 @@ class AddSealYesNoController @Inject() (
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  getMandatoryPage: SpecificDataRequiredActionProvider,
   view: AddSealYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private def form(implicit request: Request): Form[Boolean] = formProvider("transport.equipment.index.addSealYesNo", containerNumber)
-
-  private type Request = SpecificDataRequestProvider1[String]#SpecificDataRequest[_]
-
-  private def containerNumber(implicit request: Request): String = request.arg
+  private def form: Form[Boolean] = formProvider("transport.equipment.index.addSealYesNo")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index): Action[AnyContent] = actions
-    .requireData(lrn)
-    .andThen(getMandatoryPage(ContainerIdentificationNumberPage(equipmentIndex))) {
+    .requireData(lrn) {
       implicit request =>
         val preparedForm = request.userAnswers.get(AddSealYesNoPage(equipmentIndex)) match {
           case None        => form
           case Some(value) => form.fill(value)
         }
 
-        Ok(view(preparedForm, lrn, mode, equipmentIndex, containerNumber))
+        Ok(view(preparedForm, lrn, mode, equipmentIndex))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(getMandatoryPage(ContainerIdentificationNumberPage(equipmentIndex)))
     .async {
       implicit request =>
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, equipmentIndex, containerNumber))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, equipmentIndex))),
             value => {
               implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
               AddSealYesNoPage(equipmentIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()

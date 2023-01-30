@@ -17,7 +17,6 @@
 package views.transport.equipment.index
 
 import models.NormalMode
-import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -25,22 +24,20 @@ import views.html.transport.equipment.index.AddSealYesNoView
 
 class AddSealYesNoViewSpec extends YesNoViewBehaviours {
 
-  private val containerNumber = Arbitrary(Gen.alphaStr).arbitrary.sample.value
-
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[AddSealYesNoView].apply(form, lrn, NormalMode, equipmentIndex, containerNumber)(fakeRequest, messages)
+    injector.instanceOf[AddSealYesNoView].apply(form, lrn, NormalMode, equipmentIndex)(fakeRequest, messages)
 
   override val prefix: String = "transport.equipment.index.addSealYesNo"
 
-  behave like pageWithTitle(containerNumber)
+  behave like pageWithTitle()
 
   behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Transport details - Equipment")
 
-  behave like pageWithHeading(containerNumber)
+  behave like pageWithHeading()
 
-  behave like pageWithRadioItems(args = Seq(containerNumber))
+  behave like pageWithRadioItems()
 
   behave like pageWithSubmitButton("Save and continue")
 }

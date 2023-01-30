@@ -27,10 +27,10 @@
     button: Button
 )
 
-@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, containerNumber: String )(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("transport.equipment.index.addSealYesNo.title", containerNumber),
+    title = messages("transport.equipment.index.addSealYesNo.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -42,7 +42,7 @@
         @inputYesNo(
             field = form("value"),
             yesNoType = OrdinaryYesNo(
-                heading = messages("transport.equipment.index.addSealYesNo.heading", containerNumber),
+                heading = messages("transport.equipment.index.addSealYesNo.heading"),
                 caption = Some(messages("transport.equipment.caption"))
             )
         )
