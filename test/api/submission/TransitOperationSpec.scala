@@ -21,14 +21,11 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generated._
 import generators.Generators
-import models.UserAnswers
 import models.domain.UserAnswersReader
 import models.journeyDomain.DepartureDomain
 import models.journeyDomain.DepartureDomain.userAnswersReader
 
 class TransitOperationSpec extends SpecBase with UserAnswersSpecHelper with Generators {
-
-  val uA: UserAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
 
   "TransitOperation" - {
 
@@ -36,39 +33,43 @@ class TransitOperationSpec extends SpecBase with UserAnswersSpecHelper with Gene
 
       "will convert to API format" in {
 
-        UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)).run(uA).map {
-          case DepartureDomain(preTaskList, _, routeDetails, _, transportDetails) =>
-            val expected: TransitOperationType06 = TransitOperationType06(
-              LRN = uA.lrn.value,
-              declarationType = preTaskList.declarationType.toString,
-              additionalDeclarationType = "A",
-              TIRCarnetNumber = preTaskList.tirCarnetReference,
-              presentationOfTheGoodsDateAndTime = None,
-              security = preTaskList.securityDetailsType.securityContentType.toString,
-              reducedDatasetIndicator = ApiXmlHelper.boolToFlag(false),
-              specificCircumstanceIndicator = None,
-              communicationLanguageAtDeparture = None,
-              bindingItinerary = ApiXmlHelper.boolToFlag(routeDetails.routing.bindingItinerary),
-              limitDate = transportDetails.authorisationsAndLimit.flatMap(
-                a =>
-                  a.limitDomain
-                    .map(
-                      l => ApiXmlHelper.toDate(l.limitDate.toString)
+        arbitraryDepartureAnswers(emptyUserAnswers).map(
+          arbitraryDepartureUserAnswers =>
+            UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
+              .run(arbitraryDepartureUserAnswers)
+              .map {
+                case DepartureDomain(preTaskList, _, routeDetails, _, transportDetails) =>
+                  val expected: TransitOperationType06 = TransitOperationType06(
+                    LRN = arbitraryDepartureUserAnswers.lrn.value,
+                    declarationType = preTaskList.declarationType.toString,
+                    additionalDeclarationType = "A",
+                    TIRCarnetNumber = preTaskList.tirCarnetReference,
+                    presentationOfTheGoodsDateAndTime = None,
+                    security = preTaskList.securityDetailsType.securityContentType.toString,
+                    reducedDatasetIndicator = ApiXmlHelper.boolToFlag(false),
+                    specificCircumstanceIndicator = None,
+                    communicationLanguageAtDeparture = None,
+                    bindingItinerary = ApiXmlHelper.boolToFlag(routeDetails.routing.bindingItinerary),
+                    limitDate = transportDetails.authorisationsAndLimit.flatMap(
+                      a =>
+                        a.limitDomain
+                          .map(
+                            l => ApiXmlHelper.toDate(l.limitDate.toString)
+                          )
                     )
-              )
-            )
+                  )
 
-            val converted = TransitOperation.transform(
-              lrn = uA.lrn.value,
-              preTaskListDomain = preTaskList,
-              reducedDatasetIndicator = false,
-              routingDomain = routeDetails.routing,
-              transportDomain = transportDetails
-            )
+                  val converted = TransitOperation.transform(
+                    lrn = arbitraryDepartureUserAnswers.lrn.value,
+                    preTaskListDomain = preTaskList,
+                    reducedDatasetIndicator = false,
+                    routingDomain = routeDetails.routing,
+                    transportDomain = transportDetails
+                  )
 
-            converted mustBe expected
-        }
-
+                  converted mustBe expected
+              }
+        )
       }
 
     }

@@ -20,7 +20,6 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generated._
 import generators.Generators
-import models.UserAnswers
 import models.domain.UserAnswersReader
 import models.journeyDomain.DepartureDomain
 import models.journeyDomain.DepartureDomain.userAnswersReader
@@ -28,55 +27,58 @@ import models.journeyDomain.guaranteeDetails.GuaranteeDomain
 
 class GuaranteeSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
-  val uA: UserAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
-
   "Guarantee" - {
 
     "transform is called" - {
 
       "will convert to API format" in {
 
-        UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)).run(uA).map {
-          case DepartureDomain(_, _, _, guaranteeDetails, _) =>
-            val expected: Seq[Object] = guaranteeDetails.guarantees.map {
-              case guaranteeDomain @ GuaranteeDomain.GuaranteeOfTypesABR(guaranteeType) =>
-                GuaranteeType02(
-                  guaranteeDomain.index.position.toString,
-                  guaranteeType.toString,
-                  None
-                )
-              case guaranteeDomain @ GuaranteeDomain.GuaranteeOfTypes01249(guaranteeType, grn, accessCode, liabilityAmount) =>
-                GuaranteeType02(
-                  guaranteeDomain.index.position.toString,
-                  guaranteeType.toString,
-                  None,
-                  Seq(GuaranteeReferenceType03(guaranteeDomain.index.position.toString, Some(grn), Some(accessCode), Some(liabilityAmount)))
-                )
-              case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType5(guaranteeType, grn) =>
-                GuaranteeType02(
-                  guaranteeDomain.index.position.toString,
-                  guaranteeType.toString,
-                  None,
-                  Seq(GuaranteeReferenceType03(guaranteeDomain.index.position.toString, Some(grn), None, None))
-                )
-              case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType8(guaranteeType, otherReference) =>
-                GuaranteeType02(
-                  guaranteeDomain.index.position.toString,
-                  guaranteeType.toString,
-                  Some(otherReference)
-                )
-              case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType3(guaranteeType, otherReference) =>
-                GuaranteeType02(
-                  guaranteeDomain.index.position.toString,
-                  guaranteeType.toString,
-                  otherReference
-                )
-            }
+        arbitraryDepartureAnswers(emptyUserAnswers).map(
+          arbitraryDepartureUserAnswers =>
+            UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
+              .run(arbitraryDepartureUserAnswers)
+              .map {
+                case DepartureDomain(_, _, _, guaranteeDetails, _) =>
+                  val expected: Seq[Object] = guaranteeDetails.guarantees.map {
+                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfTypesABR(guaranteeType) =>
+                      GuaranteeType02(
+                        guaranteeDomain.index.position.toString,
+                        guaranteeType.toString,
+                        None
+                      )
+                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfTypes01249(guaranteeType, grn, accessCode, liabilityAmount) =>
+                      GuaranteeType02(
+                        guaranteeDomain.index.position.toString,
+                        guaranteeType.toString,
+                        None,
+                        Seq(GuaranteeReferenceType03(guaranteeDomain.index.position.toString, Some(grn), Some(accessCode), Some(liabilityAmount)))
+                      )
+                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType5(guaranteeType, grn) =>
+                      GuaranteeType02(
+                        guaranteeDomain.index.position.toString,
+                        guaranteeType.toString,
+                        None,
+                        Seq(GuaranteeReferenceType03(guaranteeDomain.index.position.toString, Some(grn), None, None))
+                      )
+                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType8(guaranteeType, otherReference) =>
+                      GuaranteeType02(
+                        guaranteeDomain.index.position.toString,
+                        guaranteeType.toString,
+                        Some(otherReference)
+                      )
+                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType3(guaranteeType, otherReference) =>
+                      GuaranteeType02(
+                        guaranteeDomain.index.position.toString,
+                        guaranteeType.toString,
+                        otherReference
+                      )
+                  }
 
-            val converted = Guarantee.transform(guaranteeDetails)
+                  val converted = Guarantee.transform(guaranteeDetails)
 
-            converted mustBe expected
-        }
+                  converted mustBe expected
+              }
+        )
 
       }
 

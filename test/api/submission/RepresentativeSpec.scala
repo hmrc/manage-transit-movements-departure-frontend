@@ -20,14 +20,11 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generated.{ContactPersonType05, RepresentativeType05}
 import generators.Generators
-import models.UserAnswers
 import models.domain.UserAnswersReader
 import models.journeyDomain.DepartureDomain
 import models.journeyDomain.DepartureDomain.userAnswersReader
 
 class RepresentativeSpec extends SpecBase with UserAnswersSpecHelper with Generators {
-
-  val uA: UserAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
 
   "Representative" - {
 
@@ -35,21 +32,26 @@ class RepresentativeSpec extends SpecBase with UserAnswersSpecHelper with Genera
 
       "will convert to API format" in {
 
-        UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)).run(uA).map {
-          case DepartureDomain(_, traderDetails, _, _, _) =>
-            val expected: Option[RepresentativeType05] = traderDetails.representative.map {
-              r =>
-                RepresentativeType05(
-                  r.eori.value,
-                  r.capacity.code,
-                  Some(ContactPersonType05(r.name, r.phone, None))
-                )
-            }
+        arbitraryDepartureAnswers(emptyUserAnswers).map(
+          arbitraryDepartureUserAnswers =>
+            UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
+              .run(arbitraryDepartureUserAnswers)
+              .map {
+                case DepartureDomain(_, traderDetails, _, _, _) =>
+                  val expected: Option[RepresentativeType05] = traderDetails.representative.map {
+                    r =>
+                      RepresentativeType05(
+                        r.eori.value,
+                        r.capacity.code,
+                        Some(ContactPersonType05(r.name, r.phone, None))
+                      )
+                  }
 
-            val converted: Option[RepresentativeType05] = Representative.transform(traderDetails)
+                  val converted: Option[RepresentativeType05] = Representative.transform(traderDetails)
 
-            converted mustBe expected
-        }
+                  converted mustBe expected
+              }
+        )
 
       }
 

@@ -20,7 +20,6 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generated._
 import generators.Generators
-import models.UserAnswers
 import models.domain.UserAnswersReader
 import models.journeyDomain.DepartureDomain
 import models.journeyDomain.DepartureDomain.userAnswersReader
@@ -28,45 +27,48 @@ import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain
 
 class HolderOfTheTransitProcedureSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
-  val uA: UserAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
-
   "HolderOfTheTransitProcedure" - {
 
     "transform is called" - {
 
       "will convert to API format" in {
 
-        UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)).run(uA).map {
-          case DepartureDomain(_, traderDetails, _, _, _) =>
-            val expected: HolderOfTheTransitProcedureType14 = traderDetails.holderOfTransit match {
-              case HolderOfTransitDomain.HolderOfTransitEori(eori, name, country, address, additionalContact) =>
-                HolderOfTheTransitProcedureType14(
-                  identificationNumber = eori.map(
-                    x => x.value
-                  ),
-                  TIRHolderIdentificationNumber = None,
-                  name = Some(name),
-                  Address = Some(AddressType17(address.numberAndStreet, address.postalCode, address.city, country.code.code)),
-                  ContactPerson = additionalContact.map(
-                    x => ContactPersonType05(x.name, x.telephoneNumber, None)
-                  )
-                )
-              case HolderOfTransitDomain.HolderOfTransitTIR(tir, name, country, address, additionalContact) =>
-                HolderOfTheTransitProcedureType14(
-                  identificationNumber = tir,
-                  TIRHolderIdentificationNumber = None,
-                  name = Some(name),
-                  Address = Some(AddressType17(address.numberAndStreet, address.postalCode, address.city, country.code.code)),
-                  ContactPerson = additionalContact.map(
-                    x => ContactPersonType05(x.name, x.telephoneNumber, None)
-                  )
-                )
-            }
+        arbitraryDepartureAnswers(emptyUserAnswers).map(
+          arbitraryDepartureUserAnswers =>
+            UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
+              .run(arbitraryDepartureUserAnswers)
+              .map {
+                case DepartureDomain(_, traderDetails, _, _, _) =>
+                  val expected: HolderOfTheTransitProcedureType14 = traderDetails.holderOfTransit match {
+                    case HolderOfTransitDomain.HolderOfTransitEori(eori, name, country, address, additionalContact) =>
+                      HolderOfTheTransitProcedureType14(
+                        identificationNumber = eori.map(
+                          x => x.value
+                        ),
+                        TIRHolderIdentificationNumber = None,
+                        name = Some(name),
+                        Address = Some(AddressType17(address.numberAndStreet, address.postalCode, address.city, country.code.code)),
+                        ContactPerson = additionalContact.map(
+                          x => ContactPersonType05(x.name, x.telephoneNumber, None)
+                        )
+                      )
+                    case HolderOfTransitDomain.HolderOfTransitTIR(tir, name, country, address, additionalContact) =>
+                      HolderOfTheTransitProcedureType14(
+                        identificationNumber = tir,
+                        TIRHolderIdentificationNumber = None,
+                        name = Some(name),
+                        Address = Some(AddressType17(address.numberAndStreet, address.postalCode, address.city, country.code.code)),
+                        ContactPerson = additionalContact.map(
+                          x => ContactPersonType05(x.name, x.telephoneNumber, None)
+                        )
+                      )
+                  }
 
-            val converted: HolderOfTheTransitProcedureType14 = HolderOfTheTransitProcedure.transform(traderDetails)
+                  val converted: HolderOfTheTransitProcedureType14 = HolderOfTheTransitProcedure.transform(traderDetails)
 
-            converted mustBe expected
-        }
+                  converted mustBe expected
+              }
+        )
 
       }
 

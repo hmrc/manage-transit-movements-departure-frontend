@@ -20,7 +20,6 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generated._
 import generators.Generators
-import models.UserAnswers
 import models.domain.UserAnswersReader
 import models.journeyDomain.DepartureDomain
 import models.journeyDomain.DepartureDomain.userAnswersReader
@@ -28,42 +27,45 @@ import models.journeyDomain.transport.authorisationsAndLimit.authorisations.Auth
 
 class AuthorisationsSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
-  val uA: UserAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
-
   "Authorisations" - {
 
     "transform is called" - {
 
       "will convert to API format" in {
 
-        UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)).run(uA).map {
-          case DepartureDomain(_, _, _, _, transportDetails) =>
-            val domain: Option[AuthorisationsDomain] = transportDetails.authorisationsAndLimit.map(
-              x => x.authorisationsDomain
-            )
-
-            val expected: Seq[AuthorisationType03] = domain
-              .map(
-                authorisation =>
-                  authorisation.authorisations.map(
-                    a =>
-                      AuthorisationType03(
-                        authorisation.authorisations.indexOf(a).toString,
-                        a.authorisationType.toString,
-                        a.referenceNumber
-                      )
+        arbitraryDepartureAnswers(emptyUserAnswers).map(
+          arbitraryDepartureUserAnswers =>
+            UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
+              .run(arbitraryDepartureUserAnswers)
+              .map {
+                case DepartureDomain(_, _, _, _, transportDetails) =>
+                  val domain: Option[AuthorisationsDomain] = transportDetails.authorisationsAndLimit.map(
+                    x => x.authorisationsDomain
                   )
-              )
-              .getOrElse(Seq.empty)
 
-            val converted: Seq[AuthorisationType03] = Authorisations.transform(
-              transportDetails.authorisationsAndLimit.map(
-                x => x.authorisationsDomain
-              )
-            )
+                  val expected: Seq[AuthorisationType03] = domain
+                    .map(
+                      authorisation =>
+                        authorisation.authorisations.map(
+                          a =>
+                            AuthorisationType03(
+                              authorisation.authorisations.indexOf(a).toString,
+                              a.authorisationType.toString,
+                              a.referenceNumber
+                            )
+                        )
+                    )
+                    .getOrElse(Seq.empty)
 
-            converted mustBe expected
-        }
+                  val converted: Seq[AuthorisationType03] = Authorisations.transform(
+                    transportDetails.authorisationsAndLimit.map(
+                      x => x.authorisationsDomain
+                    )
+                  )
+
+                  converted mustBe expected
+              }
+        )
 
       }
 

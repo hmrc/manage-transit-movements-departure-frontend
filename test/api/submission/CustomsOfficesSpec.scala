@@ -20,14 +20,11 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generated._
 import generators.Generators
-import models.UserAnswers
 import models.domain.UserAnswersReader
 import models.journeyDomain.DepartureDomain
 import models.journeyDomain.DepartureDomain.userAnswersReader
 
 class CustomsOfficesSpec extends SpecBase with UserAnswersSpecHelper with Generators {
-
-  val uA: UserAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
 
   "CustomsOffices" - {
 
@@ -35,13 +32,18 @@ class CustomsOfficesSpec extends SpecBase with UserAnswersSpecHelper with Genera
 
       "will convert to API format" in {
 
-        UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)).run(uA).map {
-          case DepartureDomain(preTaskList, _, _, _, _) =>
-            val expected: CustomsOfficeOfDepartureType03  = CustomsOfficeOfDepartureType03(preTaskList.officeOfDeparture.id)
-            val converted: CustomsOfficeOfDepartureType03 = CustomsOffices.transformOfficeOfDeparture(preTaskList.officeOfDeparture)
+        arbitraryDepartureAnswers(emptyUserAnswers).map(
+          arbitraryDepartureUserAnswers =>
+            UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
+              .run(arbitraryDepartureUserAnswers)
+              .map {
+                case DepartureDomain(preTaskList, _, _, _, _) =>
+                  val expected: CustomsOfficeOfDepartureType03  = CustomsOfficeOfDepartureType03(preTaskList.officeOfDeparture.id)
+                  val converted: CustomsOfficeOfDepartureType03 = CustomsOffices.transformOfficeOfDeparture(preTaskList.officeOfDeparture)
 
-            converted mustBe expected
-        }
+                  converted mustBe expected
+              }
+        )
 
       }
 
@@ -51,42 +53,52 @@ class CustomsOfficesSpec extends SpecBase with UserAnswersSpecHelper with Genera
 
       "will convert to API format" in {
 
-        UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)).run(uA).map {
-          case DepartureDomain(_, _, routeDetails, _, _) =>
-            val expected: CustomsOfficeOfDestinationDeclaredType01  = CustomsOfficeOfDestinationDeclaredType01(routeDetails.routing.officeOfDestination.id)
-            val converted: CustomsOfficeOfDestinationDeclaredType01 = CustomsOffices.transformOfficeOfDestination(routeDetails.routing.officeOfDestination)
+        arbitraryDepartureAnswers(emptyUserAnswers).map(
+          arbitraryDepartureUserAnswers =>
+            UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
+              .run(arbitraryDepartureUserAnswers)
+              .map {
+                case DepartureDomain(_, _, routeDetails, _, _) =>
+                  val expected: CustomsOfficeOfDestinationDeclaredType01 = CustomsOfficeOfDestinationDeclaredType01(routeDetails.routing.officeOfDestination.id)
+                  val converted: CustomsOfficeOfDestinationDeclaredType01 =
+                    CustomsOffices.transformOfficeOfDestination(routeDetails.routing.officeOfDestination)
 
-            converted mustBe expected
-        }
+                  converted mustBe expected
+              }
+        )
 
       }
-
     }
 
     "transformOfficeOfTransit is called" - {
 
       "will convert to API format" in {
 
-        UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)).run(uA).map {
-          case DepartureDomain(_, _, routeDetails, _, _) =>
-            val expected: Seq[CustomsOfficeOfTransitDeclaredType03] = routeDetails.transit
-              .map(
-                transitDomain =>
-                  transitDomain.officesOfTransit
+        arbitraryDepartureAnswers(emptyUserAnswers).map(
+          arbitraryDepartureUserAnswers =>
+            UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
+              .run(arbitraryDepartureUserAnswers)
+              .map {
+                case DepartureDomain(_, _, routeDetails, _, _) =>
+                  val expected: Seq[CustomsOfficeOfTransitDeclaredType03] = routeDetails.transit
                     .map(
-                      officeOfTransitDomain =>
-                        CustomsOfficeOfTransitDeclaredType03(
-                          transitDomain.officesOfTransit.indexOf(officeOfTransitDomain.customsOffice).toString,
-                          officeOfTransitDomain.customsOffice.id
-                        )
+                      transitDomain =>
+                        transitDomain.officesOfTransit
+                          .map(
+                            officeOfTransitDomain =>
+                              CustomsOfficeOfTransitDeclaredType03(
+                                transitDomain.officesOfTransit.indexOf(officeOfTransitDomain.customsOffice).toString,
+                                officeOfTransitDomain.customsOffice.id
+                              )
+                          )
                     )
-              )
-              .getOrElse(Seq.empty)
+                    .getOrElse(Seq.empty)
 
-            val converted: Seq[CustomsOfficeOfTransitDeclaredType03] = CustomsOffices.transformOfficeOfTransit(routeDetails.transit)
+                  val converted: Seq[CustomsOfficeOfTransitDeclaredType03] = CustomsOffices.transformOfficeOfTransit(routeDetails.transit)
 
-            converted mustBe expected
-        }
+                  converted mustBe expected
+              }
+        )
 
       }
 
@@ -96,26 +108,31 @@ class CustomsOfficesSpec extends SpecBase with UserAnswersSpecHelper with Genera
 
       "will convert to API format" in {
 
-        UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)).run(uA).map {
-          case DepartureDomain(_, _, routeDetails, _, _) =>
-            val expected: Seq[CustomsOfficeOfExitForTransitDeclaredType02] = routeDetails.exit
-              .map(
-                transitDomain =>
-                  transitDomain.officesOfExit
+        arbitraryDepartureAnswers(emptyUserAnswers).map(
+          arbitraryDepartureUserAnswers =>
+            UserAnswersReader[DepartureDomain](userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
+              .run(arbitraryDepartureUserAnswers)
+              .map {
+                case DepartureDomain(_, _, routeDetails, _, _) =>
+                  val expected: Seq[CustomsOfficeOfExitForTransitDeclaredType02] = routeDetails.exit
                     .map(
-                      officeOfExitDomain =>
-                        CustomsOfficeOfExitForTransitDeclaredType02(
-                          transitDomain.officesOfExit.indexOf(officeOfExitDomain).toString,
-                          officeOfExitDomain.customsOffice.id
-                        )
+                      transitDomain =>
+                        transitDomain.officesOfExit
+                          .map(
+                            officeOfExitDomain =>
+                              CustomsOfficeOfExitForTransitDeclaredType02(
+                                transitDomain.officesOfExit.indexOf(officeOfExitDomain).toString,
+                                officeOfExitDomain.customsOffice.id
+                              )
+                          )
                     )
-              )
-              .getOrElse(Seq.empty)
+                    .getOrElse(Seq.empty)
 
-            val converted: Seq[CustomsOfficeOfExitForTransitDeclaredType02] = CustomsOffices.transformOfficeOfExit(routeDetails.exit)
+                  val converted: Seq[CustomsOfficeOfExitForTransitDeclaredType02] = CustomsOffices.transformOfficeOfExit(routeDetails.exit)
 
-            converted mustBe expected
-        }
+                  converted mustBe expected
+              }
+        )
 
       }
 

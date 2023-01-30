@@ -185,7 +185,18 @@ object Consignment {
     }
 
   // TODO - need to know how to capture this?
-  private def departureTransportMeans(domain: TransportMeansDomain): Seq[DepartureTransportMeansType03] = Seq.empty
+  private def departureTransportMeans(domain: TransportMeansDomain): Seq[DepartureTransportMeansType03] =
+    domain match {
+      case TransportMeansDomainWithOtherInlandMode(_, means: TransportMeansDepartureDomainWithIdentification, _) =>
+        Seq(
+          DepartureTransportMeansType03("0",
+                                        Some(means.identification.identificationType.toString),
+                                        Some(means.identificationNumber),
+                                        Some(means.nationality.code)
+          )
+        )
+      case _ => Seq.empty
+    }
 
   private def activeBorderTransportMeans(domain: TransportMeansDomain): Seq[ActiveBorderTransportMeansType02] =
     domain match {
