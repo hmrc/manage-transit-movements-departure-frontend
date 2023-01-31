@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package pages.transport.equipment.index
+package pages.sections.transport.equipment
 
-import pages.behaviours.PageBehaviours
+import models.Index
+import pages.sections.Section
+import play.api.libs.json.{JsArray, JsPath}
 
-class ItemNumberPageSpec extends PageBehaviours {
+case class ItemNumbersSection(equipmentIndex: Index) extends Section[JsArray] {
 
-  "ItemNumberPage" - {
+  override def path: JsPath = EquipmentSection(equipmentIndex).path \ toString
 
-    beRetrievable[String](ItemNumberPage(index))
-
-    beSettable[String](ItemNumberPage(index))
-
-    beRemovable[String](ItemNumberPage(index))
-  }
+  override def toString: String = "itemNumbers"
 }

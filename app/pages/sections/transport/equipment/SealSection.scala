@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.sections.transport
+package pages.sections.transport.equipment
 
+import models.Index
 import pages.sections.Section
-import play.api.libs.json.{JsArray, JsPath}
+import play.api.libs.json.{JsObject, JsPath}
 
-case object EquipmentsSection extends Section[JsArray] {
+case class SealSection(equipmentIndex: Index, sealIndex: Index) extends Section[JsObject] {
 
-  override def path: JsPath = TransportSection.path \ toString
+  override def path: JsPath = SealsSection(equipmentIndex).path \ sealIndex.position
 
-  override def toString: String = "equipments"
 }

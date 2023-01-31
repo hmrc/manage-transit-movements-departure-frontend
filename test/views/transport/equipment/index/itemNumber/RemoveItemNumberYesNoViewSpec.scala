@@ -14,39 +14,33 @@
  * limitations under the License.
  */
 
-package views.transport.equipment.index
+package views.transport.equipment.index.itemNumber
 
-import forms.ItemNumberFormProvider
+import generators.Generators
 import models.NormalMode
-import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import viewModels.InputSize
-import views.behaviours.InputTextViewBehaviours
-import views.html.transport.equipment.index.ItemNumberView
+import views.behaviours.YesNoViewBehaviours
+import views.html.transport.equipment.index.itemNumber.RemoveItemNumberYesNoView
 
-class ItemNumberViewSpec extends InputTextViewBehaviours[String] {
+class RemoveItemNumberYesNoViewSpec extends YesNoViewBehaviours with Generators {
 
-  override val prefix: String = "transport.equipment.index.itemNumber"
+  private val itemNumber = nonEmptyString.sample.value
 
-  override def form: Form[String] = new ItemNumberFormProvider()(prefix)
+  override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
+    injector.instanceOf[RemoveItemNumberYesNoView].apply(form, lrn, NormalMode, equipmentIndex, itemNumberIndex, itemNumber)(fakeRequest, messages)
 
-  override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[ItemNumberView].apply(form, lrn, NormalMode, index)(fakeRequest, messages)
+  override val prefix: String = "transport.equipment.index.itemNumber.removeItemNumberYesNo"
 
-  implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
-
-  behave like pageWithTitle()
+  behave like pageWithTitle(itemNumber)
 
   behave like pageWithBackLink()
 
   behave like pageWithSectionCaption("Transport details - Transport equipment")
 
-  behave like pageWithHeading()
+  behave like pageWithHeading(itemNumber)
 
-  behave like pageWithoutHint()
-
-  behave like pageWithInputText(Some(InputSize.Width20))
+  behave like pageWithRadioItems(args = Seq(itemNumber))
 
   behave like pageWithSubmitButton("Save and continue")
 }

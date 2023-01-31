@@ -19,7 +19,7 @@ package pages.transport.equipment.index
 import controllers.transport.equipment.index.routes
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.EquipmentSection
+import pages.sections.transport.equipment.EquipmentSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

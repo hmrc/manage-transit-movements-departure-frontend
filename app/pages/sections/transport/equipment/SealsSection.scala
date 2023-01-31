@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-package pages.transport.equipment.index
+package pages.sections.transport.equipment
 
-import controllers.transport.equipment.index.routes
-import models.{Index, Mode, UserAnswers}
-import pages.QuestionPage
-import pages.sections.transport.equipment.EquipmentSection
-import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import models.Index
+import pages.sections.Section
+import play.api.libs.json.{JsArray, JsPath}
 
-case class ContainerIdentificationNumberPage(equipmentIndex: Index) extends QuestionPage[String] {
+case class SealsSection(equipmentIndex: Index) extends Section[JsArray] {
 
   override def path: JsPath = EquipmentSection(equipmentIndex).path \ toString
 
-  override def toString: String = "containerIdentificationNumber"
+  override def toString: String = "seals"
 
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.ContainerIdentificationNumberController.onPageLoad(userAnswers.lrn, mode, equipmentIndex))
 }
