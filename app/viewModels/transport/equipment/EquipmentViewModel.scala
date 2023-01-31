@@ -40,14 +40,14 @@ object EquipmentViewModel {
       )
 
       val sealsSection = Section(
-        sectionTitle = messages("transport.equipment.checkYourAnswers.seals"),
+        sectionTitle = messages("transport.equipment.index.checkYourAnswers.seals"),
         rows = Seq(
           helper.sealsYesNo
         ).flatten
       )
 
       val itemNumbersSection = Section(
-        sectionTitle = messages("transport.equipment.checkYourAnswers.itemNumbers"),
+        sectionTitle = messages("transport.equipment.index.checkYourAnswers.itemNumbers"),
         rows = Seq(
           helper.itemNumbersYesNo
         ).flatten

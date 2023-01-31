@@ -1463,7 +1463,7 @@ transport.equipment.index.seals.removeSealYesNo.title = Are you sure you want to
 transport.equipment.index.seals.removeSealYesNo.heading = Are you sure you want to remove seal {0}?
 transport.equipment.index.seals.removeSealYesNo.error.required = Select yes if you want to remove seal {0}
 
-transport.equipment.checkYourAnswers.title = Check your answers
-transport.equipment.checkYourAnswers.heading = Check your answers
-transport.equipment.checkYourAnswers.seals = Seals
-transport.equipment.checkYourAnswers.itemNumbers = Goods item numbers
+transport.equipment.index.checkYourAnswers.title = Check your answers
+transport.equipment.index.checkYourAnswers.heading = Check your answers
+transport.equipment.index.checkYourAnswers.seals = Seals
+transport.equipment.index.checkYourAnswers.itemNumbers = Goods item numbers
