@@ -18,8 +18,9 @@ package viewModels.transport.equipment
 
 import base.SpecBase
 import generators.Generators
-import models.Mode
+import models.{Index, Mode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
 import pages.transport.equipment.index._
 import viewModels.transport.equipment.EquipmentViewModel.EquipmentViewModelProvider
 
@@ -50,10 +51,21 @@ class EquipmentViewModelSpec extends SpecBase with Generators {
 
       "must return row for each answer" in {
 
+        val numberOfSeals = Gen.choose(1, 10: Int).sample.value
+
+        implicit class TestRichUserAnswers(userAnswers: UserAnswers) {
+          def setSealsValues(): UserAnswers =
+            (0 until numberOfSeals).foldLeft(userAnswers) {
+              (acc, i) =>
+                acc.setValue(seals.IdentificationNumberPage(index, Index(i)), nonEmptyString.sample.value)
+            }
+        }
+
         val answers = emptyUserAnswers
           .setValue(AddContainerIdentificationNumberYesNoPage(index), true)
           .setValue(ContainerIdentificationNumberPage(index), containerId)
           .setValue(AddSealYesNoPage(index), true)
+          .setSealsValues()
           .setValue(AddGoodsItemNumberYesNoPage(index), true)
 
         val mode              = arbitrary[Mode].sample.value
@@ -68,7 +80,7 @@ class EquipmentViewModelSpec extends SpecBase with Generators {
         sections.head.rows(1).value.value mustBe containerId
 
         sections(1).sectionTitle.get mustBe "Seals"
-        sections(1).rows.size mustBe 1
+        sections(1).rows.size mustBe 1 + numberOfSeals
         sections(1).rows.head.value.value mustBe "Yes"
 
         sections(2).sectionTitle.get mustBe "Goods item numbers"

@@ -16,6 +16,7 @@
 
 package utils.cyaHelpers.transport.equipment
 
+import models.journeyDomain.transport.equipment.seal.SealDomain
 import models.{Index, Mode, UserAnswers}
 import pages.transport.equipment.index._
 import play.api.i18n.Messages
@@ -25,33 +26,40 @@ import utils.cyaHelpers.AnswersHelper
 class EquipmentAnswersHelper(
   userAnswers: UserAnswers,
   mode: Mode,
-  index: Index
+  equipmentIndex: Index
 )(implicit messages: Messages)
     extends AnswersHelper(userAnswers, mode) {
 
   def containerIdentificationNumberYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
-    page = AddContainerIdentificationNumberYesNoPage(index),
+    page = AddContainerIdentificationNumberYesNoPage(equipmentIndex),
     formatAnswer = formatAsYesOrNo,
     prefix = "transport.equipment.index.addContainerIdentificationNumberYesNo",
     id = Some("change-add-container-identification-number")
   )
 
   def containerIdentificationNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
-    page = ContainerIdentificationNumberPage(index),
+    page = ContainerIdentificationNumberPage(equipmentIndex),
     formatAnswer = formatAsText,
     prefix = "transport.equipment.index.containerIdentificationNumber",
     id = Some("change-container-identification-number")
   )
 
   def sealsYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
-    page = AddSealYesNoPage(index),
+    page = AddSealYesNoPage(equipmentIndex),
     formatAnswer = formatAsYesOrNo,
     prefix = "transport.equipment.index.addSealYesNo",
     id = Some("change-add-seals")
   )
 
+  def seal(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[SealDomain](
+    formatAnswer = formatAsText,
+    prefix = "transport.equipment.index.checkYourAnswers.seal",
+    id = Some(s"change-seal-${index.display}"),
+    args = index.display
+  )(SealDomain.userAnswersReader(equipmentIndex, index))
+
   def itemNumbersYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
-    page = AddGoodsItemNumberYesNoPage(index),
+    page = AddGoodsItemNumberYesNoPage(equipmentIndex),
     formatAnswer = formatAsYesOrNo,
     prefix = "transport.equipment.index.addGoodsItemNumberYesNo",
     id = Some("change-add-item-numbers")

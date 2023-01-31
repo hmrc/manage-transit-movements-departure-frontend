@@ -17,7 +17,8 @@
 package utils.cyaHelpers.transport.equipment
 
 import base.SpecBase
-import controllers.transport.equipment.index.routes
+import controllers.transport.equipment.index.routes._
+import controllers.transport.equipment.index.seals.routes._
 import generators.Generators
 import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
@@ -61,7 +62,7 @@ class EquipmentAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.AddContainerIdentificationNumberYesNoController.onPageLoad(answers.lrn, mode, index).url,
+                          href = AddContainerIdentificationNumberYesNoController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("if you want to add an identification number"),
                           attributes = Map("id" -> "change-add-container-identification-number")
                         )
@@ -106,7 +107,7 @@ class EquipmentAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.ContainerIdentificationNumberController.onPageLoad(answers.lrn, mode, index).url,
+                          href = ContainerIdentificationNumberController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("identification number"),
                           attributes = Map("id" -> "change-container-identification-number")
                         )
@@ -151,7 +152,7 @@ class EquipmentAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.AddSealYesNoController.onPageLoad(answers.lrn, mode, index).url,
+                          href = AddSealYesNoController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("if you want to add a seal"),
                           attributes = Map("id" -> "change-add-seals")
                         )
@@ -160,6 +161,40 @@ class EquipmentAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
                   )
                 )
               )
+          }
+        }
+      }
+    }
+
+    "seal" - {
+      "must return None" - {
+        "when seal is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new EquipmentAnswersHelper(emptyUserAnswers, mode, equipmentIndex)
+              val result = helper.seal(sealIndex)
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when office of exit is defined" in {
+          forAll(arbitrary[Mode], nonEmptyString) {
+            (mode, sealIdNumber) =>
+              val userAnswers = emptyUserAnswers.setValue(seals.IdentificationNumberPage(equipmentIndex, sealIndex), sealIdNumber)
+              val helper      = new EquipmentAnswersHelper(userAnswers, mode, equipmentIndex)
+              val result      = helper.seal(index).get
+
+              result.key.value mustBe "Seal 1"
+              result.value.value mustBe sealIdNumber
+              val actions = result.actions.get.items
+              actions.size mustBe 1
+              val action = actions.head
+              action.content.value mustBe "Change"
+              action.href mustBe IdentificationNumberController.onPageLoad(userAnswers.lrn, mode, equipmentIndex, sealIndex).url
+              action.visuallyHiddenText.get mustBe "seal 1"
+              action.id mustBe "change-seal-1"
           }
         }
       }
@@ -196,7 +231,7 @@ class EquipmentAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
                       items = List(
                         ActionItem(
                           content = "Change".toText,
-                          href = routes.AddGoodsItemNumberYesNoController.onPageLoad(answers.lrn, mode, index).url,
+                          href = AddGoodsItemNumberYesNoController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("if you want to add a goods item number"),
                           attributes = Map("id" -> "change-add-item-numbers")
                         )

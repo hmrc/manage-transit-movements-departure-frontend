@@ -16,7 +16,8 @@
 
 package viewModels.transport.equipment
 
-import models.{Index, Mode, UserAnswers}
+import models.{Index, Mode, RichOptionalJsArray, UserAnswers}
+import pages.sections.transport.equipment.SealsSection
 import play.api.i18n.Messages
 import utils.cyaHelpers.transport.equipment.EquipmentAnswersHelper
 import viewModels.sections.Section
@@ -29,8 +30,8 @@ object EquipmentViewModel {
 
   class EquipmentViewModelProvider @Inject() () {
 
-    def apply(userAnswers: UserAnswers, mode: Mode, index: Index)(implicit messages: Messages): EquipmentViewModel = {
-      val helper = new EquipmentAnswersHelper(userAnswers, mode, index)
+    def apply(userAnswers: UserAnswers, mode: Mode, equipmentIndex: Index)(implicit messages: Messages): EquipmentViewModel = {
+      val helper = new EquipmentAnswersHelper(userAnswers, mode, equipmentIndex)
 
       val preSection = Section(
         rows = Seq(
@@ -41,16 +42,16 @@ object EquipmentViewModel {
 
       val sealsSection = Section(
         sectionTitle = messages("transport.equipment.index.checkYourAnswers.seals"),
-        rows = Seq(
-          helper.sealsYesNo
-        ).flatten
+        rows = helper.sealsYesNo.toList ++ userAnswers
+          .get(SealsSection(equipmentIndex))
+          .mapWithIndex {
+            (_, index) => helper.seal(index)
+          }
       )
 
       val itemNumbersSection = Section(
         sectionTitle = messages("transport.equipment.index.checkYourAnswers.itemNumbers"),
-        rows = Seq(
-          helper.itemNumbersYesNo
-        ).flatten
+        rows = helper.itemNumbersYesNo.toList // TODO - add list of item numbers once domain has been built
       )
 
       new EquipmentViewModel(Seq(preSection, sealsSection, itemNumbersSection))
