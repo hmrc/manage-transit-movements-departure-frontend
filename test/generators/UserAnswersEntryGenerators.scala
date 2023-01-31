@@ -261,7 +261,8 @@ trait UserAnswersEntryGenerators {
       generateAuthorisationAnswers orElse
       generateLimitAnswers orElse
       generateCarrierDetailsAnswers orElse
-      generateEquipmentAnswers
+      generateEquipmentAnswers orElse
+      generateSealAnswers
 
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.preRequisites._
@@ -361,6 +362,14 @@ trait UserAnswersEntryGenerators {
       case AddTransportEquipmentYesNoPage            => arbitrary[Boolean].map(JsBoolean)
       case AddContainerIdentificationNumberYesNoPage => arbitrary[Boolean].map(JsBoolean)
       case ContainerIdentificationNumberPage(_)      => Gen.alphaNumStr.map(JsString)
+      case AddSealYesNoPage(_)                       => arbitrary[Boolean].map(JsBoolean)
+    }
+  }
+
+  private def generateSealAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.equipment.index.seals._
+    {
+      case IdentificationNumberPage(_, _) => Gen.alphaNumStr.map(JsString)
     }
   }
 }
