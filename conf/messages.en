@@ -1454,3 +1454,7 @@ transport.equipment.index.addGoodsItemNumberYesNo.error.required = Select yes if
 transport.equipment.index.itemNumber.removeItemNumberYesNo.title = Are you sure you want to remove goods item number {0}?
 transport.equipment.index.itemNumber.removeItemNumberYesNo.heading = Are you sure you want to remove goods item number {0}?
 transport.equipment.index.itemNumber.removeItemNumberYesNo.error.required = Select yes if you want to remove goods item number {0}
+
+transport.equipment.index.seals.removeSealYesNo.title = Are you sure you want to remove seal {0}?
+transport.equipment.index.seals.removeSealYesNo.heading = Are you sure you want to remove seal {0}?
+transport.equipment.index.seals.removeSealYesNo.error.required = Select yes if you want to remove seal {0}
