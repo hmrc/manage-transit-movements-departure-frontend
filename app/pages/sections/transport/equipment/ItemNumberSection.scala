@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.sections.transport
+package pages.sections.transport.equipment
 
 import models.Index
 import pages.sections.Section
 import play.api.libs.json.{JsObject, JsPath}
 
-case class EquipmentSection(equipmentIndex: Index) extends Section[JsObject] {
+case class ItemNumberSection(equipmentIndex: Index, itemNumberIndex: Index) extends Section[JsObject] {
 
-  override def path: JsPath = EquipmentsSection.path \ equipmentIndex.position
+  override def path: JsPath = ItemNumbersSection(equipmentIndex).path \ itemNumberIndex.position
 
 }
