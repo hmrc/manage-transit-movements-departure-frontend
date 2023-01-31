@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.transport.equipment.index
+package views.transport.equipment.index.itemNumber
 
 import forms.ItemNumberFormProvider
 import models.NormalMode
@@ -23,7 +23,7 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.transport.equipment.index.ItemNumberView
+import views.html.transport.equipment.index.itemNumber.ItemNumberView
 
 class ItemNumberViewSpec extends InputTextViewBehaviours[String] {
 
@@ -32,7 +32,7 @@ class ItemNumberViewSpec extends InputTextViewBehaviours[String] {
   override def form: Form[String] = new ItemNumberFormProvider()(prefix)
 
   override def applyView(form: Form[String]): HtmlFormat.Appendable =
-    injector.instanceOf[ItemNumberView].apply(form, lrn, NormalMode, index)(fakeRequest, messages)
+    injector.instanceOf[ItemNumberView].apply(form, lrn, NormalMode, equipmentIndex, itemNumberIndex)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[String] = Arbitrary(Gen.alphaStr)
 

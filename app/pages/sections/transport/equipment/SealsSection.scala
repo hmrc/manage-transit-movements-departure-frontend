@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package pages.sections
+package pages.sections.transport.equipment
 
 import models.Index
-import pages.sections.transport.EquipmentSection
+import pages.sections.Section
 import play.api.libs.json.{JsArray, JsPath}
 
 case class SealsSection(equipmentIndex: Index) extends Section[JsArray] {
