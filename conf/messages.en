@@ -1442,3 +1442,11 @@ transport.equipment.index.addGoodsItemNumberYesNo.title = Do you want to add a g
 transport.equipment.index.addGoodsItemNumberYesNo.heading = Do you want to add a goods item number to the transport equipment?
 transport.equipment.index.addGoodsItemNumberYesNo.checkYourAnswersLabel = Do you want to add a goods item number to the transport equipment?
 transport.equipment.index.addGoodsItemNumberYesNo.error.required = Select yes if you want to add a goods item number to the transport equipment
+
+transport.equipment.index.addAnotherGoodsItemNumber.singular.title = You have added 1 goods item number to the transport equipment
+transport.equipment.index.addAnotherGoodsItemNumber.plural.title = You have added {0} goods item numbers to the transport equipment
+transport.equipment.index.addAnotherGoodsItemNumber.singular.heading = You have added 1 goods item number to the transport equipment
+transport.equipment.index.addAnotherGoodsItemNumber.plural.heading = You have added {0} goods item numbers to the transport equipment
+transport.equipment.index.addAnotherGoodsItemNumber.label = Do you want to add another goods item number to the transport equipment?
+transport.equipment.index.addAnotherGoodsItemNumber.maxLimit.label = You cannot add any more goods item numbers. To add another, you need to remove one first.
+transport.equipment.index.addAnotherGoodsItemNumber.error.required = Select yes if you want to add another goods item number to the transport equipment
