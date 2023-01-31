@@ -143,31 +143,60 @@ class RemoveAuthorisationYesNoControllerSpec extends SpecBase with AppWithDefaul
         view(boundForm, lrn, mode, authorisationIndex, authType.forDisplay, authRefNumber)(request, messages).toString
     }
 
-    "must redirect to Session Expired for a GET if no existing data is found" in {
+    "must redirect to Session Expired for a GET" - {
+      "if no existing data found" in {
+        setNoExistingUserAnswers()
 
-      setNoExistingUserAnswers()
+        val request = FakeRequest(GET, removeAuthorisationYesNoRoute)
 
-      val request = FakeRequest(GET, removeAuthorisationYesNoRoute)
+        val result = route(app, request).value
 
-      val result = route(app, request).value
+        status(result) mustEqual SEE_OTHER
 
-      status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      "if no authorisation number is found" in {
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(GET, removeAuthorisationYesNoRoute)
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
     }
 
-    "must redirect to Session Expired for a POST if no existing data is found" in {
+    "must redirect to Session Expired for a POST" - {
+      "if no existing data is found" in {
 
-      setNoExistingUserAnswers()
+        setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, removeAuthorisationYesNoRoute)
-        .withFormUrlEncodedBody(("value", "true"))
+        val request = FakeRequest(POST, removeAuthorisationYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
-      val result = route(app, request).value
+        val result = route(app, request).value
 
-      status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
+
+      "if no authorisation number is found" in {
+
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(POST, removeAuthorisationYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
     }
   }
 }

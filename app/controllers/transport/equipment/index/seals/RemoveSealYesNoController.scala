@@ -17,12 +17,13 @@
 package controllers.transport.equipment.index.seals
 
 import controllers.actions._
+import controllers.transport.equipment.index.{routes => indexRoutes}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.journeyDomain.transport.TransportDomain
 import models.requests.SpecificDataRequestProvider1
 import models.{Index, LocalReferenceNumber, Mode}
-import pages.sections.{SealSection, transport}
+import pages.sections.transport.equipment.SealSection
 import pages.transport.equipment.index.seals.IdentificationNumberPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -73,9 +74,9 @@ class RemoveSealYesNoController @Inject() (
                   .removeFromUserAnswers()
                   .updateTask[TransportDomain]()
                   .writeToSession()
-                  .navigateTo(Call("GET", "#")) //update when add another created
+                  .navigateTo(indexRoutes.AddAnotherSealController.onPageLoad(lrn, mode, equipmentIndex))
               case false =>
-                Future.successful(Redirect(Call("GET", "#"))) //update when add another created
+                Future.successful(Redirect(indexRoutes.AddAnotherSealController.onPageLoad(lrn, mode, equipmentIndex)))
             }
           )
     }

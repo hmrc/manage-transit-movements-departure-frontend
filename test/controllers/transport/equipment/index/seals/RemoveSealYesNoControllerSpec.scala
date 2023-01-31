@@ -23,8 +23,7 @@ import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify}
-import pages.sections
-import pages.sections.SealSection
+import pages.sections.transport.equipment.SealSection
 import pages.transport.equipment.index.seals.IdentificationNumberPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -58,6 +57,7 @@ class RemoveSealYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
     "must redirect to the next page" - {
       "when yes is submitted" in {
+
         val userAnswers = emptyUserAnswers.setValue(IdentificationNumberPage(equipmentIndex, sealIndex), sealIdNumber)
         setExistingUserAnswers(userAnswers)
 
@@ -68,14 +68,16 @@ class RemoveSealYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual "#"
+        redirectLocation(result).value mustEqual
+          controllers.transport.equipment.index.routes.AddAnotherSealController.onPageLoad(lrn, mode, equipmentIndex).url
 
         val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
-        userAnswersCaptor.getValue.get(sections.SealSection(equipmentIndex, sealIndex)) mustNot be(defined)
+        userAnswersCaptor.getValue.get(SealSection(equipmentIndex, sealIndex)) mustNot be(defined)
       }
 
       "when no is submitted" in {
+
         val userAnswers = emptyUserAnswers.setValue(IdentificationNumberPage(equipmentIndex, sealIndex), sealIdNumber)
         setExistingUserAnswers(userAnswers)
 
@@ -86,7 +88,8 @@ class RemoveSealYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual "#"
+        redirectLocation(result).value mustEqual
+          controllers.transport.equipment.index.routes.AddAnotherSealController.onPageLoad(lrn, mode, equipmentIndex).url
 
         verify(mockSessionRepository, never()).set(any())(any())
       }
@@ -94,7 +97,8 @@ class RemoveSealYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.setValue(IdentificationNumberPage(equipmentIndex, sealIndex), sealIdNumber)
+      setExistingUserAnswers(userAnswers)
 
       val request   = FakeRequest(POST, removeSealYesNoRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
@@ -109,31 +113,62 @@ class RemoveSealYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixt
         view(boundForm, lrn, mode, equipmentIndex, sealIndex, sealIdNumber)(request, messages).toString
     }
 
-    "must redirect to Session Expired for a GET if no existing data is found" in {
+    "must redirect to Session Expired for a GET" - {
+      "if no existing data is found" in {
 
-      setNoExistingUserAnswers()
+        setNoExistingUserAnswers()
 
-      val request = FakeRequest(GET, removeSealYesNoRoute)
+        val request = FakeRequest(GET, removeSealYesNoRoute)
 
-      val result = route(app, request).value
+        val result = route(app, request).value
 
-      status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
+
+      "if no seal number is found" in {
+
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(GET, removeSealYesNoRoute)
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
     }
 
-    "must redirect to Session Expired for a POST if no existing data is found" in {
+    "must redirect to Session Expired for a POST" - {
+      "if no existing data is found" in {
 
-      setNoExistingUserAnswers()
+        setNoExistingUserAnswers()
 
-      val request = FakeRequest(POST, removeSealYesNoRoute)
-        .withFormUrlEncodedBody(("value", "true"))
+        val request = FakeRequest(POST, removeSealYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
-      val result = route(app, request).value
+        val result = route(app, request).value
 
-      status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
+
+      "if no seal number is found" in {
+
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(POST, removeSealYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      }
     }
   }
 }
