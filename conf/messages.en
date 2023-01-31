@@ -1405,12 +1405,14 @@ transport.equipment.addTransportEquipmentYesNo.error.required = Select yes if yo
 transport.equipment.index.addContainerIdentificationNumberYesNo.title = Do you want to add a container identification number?
 transport.equipment.index.addContainerIdentificationNumberYesNo.heading = Do you want to add a container identification number?
 transport.equipment.index.addContainerIdentificationNumberYesNo.checkYourAnswersLabel = Do you want to add a container identification number?
+transport.equipment.index.addContainerIdentificationNumberYesNo.change.hidden = if you want to add an identification number
 transport.equipment.index.addContainerIdentificationNumberYesNo.error.required = Select yes if you want to add a container identification number
 
 transport.equipment.index.containerIdentificationNumber.title = What is the identification number for the transport equipment?
 transport.equipment.index.containerIdentificationNumber.heading = What is the identification number for the transport equipment?
 transport.equipment.index.containerIdentificationNumber.hint = This can be up to 17 characters long and include both letters and numbers.
-transport.equipment.index.containerIdentificationNumber.checkYourAnswersLabel = What is the identification number for the transport equipment?
+transport.equipment.index.containerIdentificationNumber.checkYourAnswersLabel = Container identification number
+transport.equipment.index.containerIdentificationNumber.change.hidden = identification number
 transport.equipment.index.containerIdentificationNumber.error.required = Enter the container identification number for the transport equipment
 transport.equipment.index.containerIdentificationNumber.error.length = The identification number must be 17 characters or less
 transport.equipment.index.containerIdentificationNumber.error.invalid = The identification number must only include letters a to z and numbers 0 to 9
@@ -1418,7 +1420,8 @@ transport.equipment.index.containerIdentificationNumber.error.duplicate = This i
 
 transport.equipment.index.addSealYesNo.title = Do you want to add a seal to the transport equipment?
 transport.equipment.index.addSealYesNo.heading = Do you want to add a seal to the transport equipment?
-transport.equipment.index.addSealYesNo.checkYourAnswersLabel = Do you want to add a seal to the transport equipment?
+transport.equipment.index.addSealYesNo.checkYourAnswersLabel = Do you want to add a seal?
+transport.equipment.index.addSealYesNo.change.hidden = if you want to add a seal
 transport.equipment.index.addSealYesNo.error.required = Select yes if you want to add a seal to the transport equipment
 
 transport.equipment.index.seals.identificationNumber.title = What is the seal identification number?
@@ -1448,7 +1451,8 @@ transport.equipment.index.itemNumber.error.invalidCharacters = The goods item nu
 
 transport.equipment.index.addGoodsItemNumberYesNo.title = Do you want to add a goods item number to the transport equipment?
 transport.equipment.index.addGoodsItemNumberYesNo.heading = Do you want to add a goods item number to the transport equipment?
-transport.equipment.index.addGoodsItemNumberYesNo.checkYourAnswersLabel = Do you want to add a goods item number to the transport equipment?
+transport.equipment.index.addGoodsItemNumberYesNo.checkYourAnswersLabel = Do you want to add a goods item number?
+transport.equipment.index.addGoodsItemNumberYesNo.change.hidden = if you want to add a goods item number
 transport.equipment.index.addGoodsItemNumberYesNo.error.required = Select yes if you want to add a goods item number to the transport equipment
 
 transport.equipment.index.itemNumber.removeItemNumberYesNo.title = Are you sure you want to remove goods item number {0}?
@@ -1458,3 +1462,8 @@ transport.equipment.index.itemNumber.removeItemNumberYesNo.error.required = Sele
 transport.equipment.index.seals.removeSealYesNo.title = Are you sure you want to remove seal {0}?
 transport.equipment.index.seals.removeSealYesNo.heading = Are you sure you want to remove seal {0}?
 transport.equipment.index.seals.removeSealYesNo.error.required = Select yes if you want to remove seal {0}
+
+transport.equipment.checkYourAnswers.title = Check your answers
+transport.equipment.checkYourAnswers.heading = Check your answers
+transport.equipment.checkYourAnswers.seals = Seals
+transport.equipment.checkYourAnswers.itemNumbers = Goods item numbers
