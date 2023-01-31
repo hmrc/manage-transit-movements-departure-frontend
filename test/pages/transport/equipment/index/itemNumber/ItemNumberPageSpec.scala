@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package pages.transport.equipment.index
+package pages.transport.equipment.index.itemNumber
 
-import controllers.transport.equipment.index.routes
-import models.{Index, Mode, UserAnswers}
-import pages.QuestionPage
-import pages.sections.transport.EquipmentSection
-import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import pages.behaviours.PageBehaviours
 
-case class ItemNumberPage(index: Index) extends QuestionPage[String] {
+class ItemNumberPageSpec extends PageBehaviours {
 
-  override def path: JsPath = EquipmentSection(index).path \ toString
+  "ItemNumberPage" - {
 
-  override def toString: String = "itemNumber"
+    beRetrievable[String](ItemNumberPage(equipmentIndex, itemNumberIndex))
 
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.ItemNumberController.onPageLoad(userAnswers.lrn, mode, index))
+    beSettable[String](ItemNumberPage(equipmentIndex, itemNumberIndex))
+
+    beRemovable[String](ItemNumberPage(equipmentIndex, itemNumberIndex))
+  }
 }

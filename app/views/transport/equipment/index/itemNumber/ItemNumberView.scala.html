@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.transport.equipment.index.routes
+@import controllers.transport.equipment.index.itemNumber.routes
 @import models.LocalReferenceNumber
 @import viewModels.components.InputTextViewModel._
 @import views.html.components.{Button, ErrorSummary, InputText}
@@ -27,7 +27,7 @@
     button: Button
 )
 
-@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, index: Index)(implicit request: Request[_], messages: Messages)
+@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, itemNumberIndex: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("transport.equipment.index.itemNumber.title"),
@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.ItemNumberController.onSubmit(lrn, mode, index), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.ItemNumberController.onSubmit(lrn, mode, equipmentIndex, itemNumberIndex), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

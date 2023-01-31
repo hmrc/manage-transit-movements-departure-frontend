@@ -19,7 +19,7 @@ package pages.transport.equipment.index.seals
 import controllers.transport.equipment.index.seals.routes
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.SealSection
+import pages.sections.transport.equipment.SealSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

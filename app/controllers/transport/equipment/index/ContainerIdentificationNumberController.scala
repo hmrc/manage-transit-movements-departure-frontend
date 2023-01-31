@@ -24,7 +24,7 @@ import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode, RichOptionalJsArray}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
-import pages.sections.transport.EquipmentsSection
+import pages.sections.transport.equipment.EquipmentsSection
 import pages.transport.equipment.index.ContainerIdentificationNumberPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}

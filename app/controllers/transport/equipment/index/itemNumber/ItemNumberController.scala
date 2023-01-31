@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.transport.equipment.index
+package controllers.transport.equipment.index.itemNumber
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
@@ -23,12 +23,12 @@ import models.journeyDomain.transport.TransportDomain
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
-import pages.transport.equipment.index.ItemNumberPage
+import pages.transport.equipment.index.itemNumber.ItemNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.transport.equipment.index.ItemNumberView
+import views.html.transport.equipment.index.itemNumber.ItemNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -47,24 +47,24 @@ class ItemNumberController @Inject() (
 
   private val form = formProvider("transport.equipment.index.itemNumber")
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, itemNumberIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(ItemNumberPage(index)) match {
+      val preparedForm = request.userAnswers.get(ItemNumberPage(equipmentIndex, itemNumberIndex)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
-      Ok(view(preparedForm, lrn, mode, index))
+      Ok(view(preparedForm, lrn, mode, equipmentIndex, itemNumberIndex))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, itemNumberIndex: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, equipmentIndex, itemNumberIndex))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            ItemNumberPage(index).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
+            ItemNumberPage(equipmentIndex, itemNumberIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
           }
         )
   }
