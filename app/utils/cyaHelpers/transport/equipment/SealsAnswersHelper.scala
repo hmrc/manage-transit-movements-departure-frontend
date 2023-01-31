@@ -35,7 +35,7 @@ class SealsAnswersHelper(userAnswers: UserAnswers, mode: Mode, equipmentIndex: I
           None
         } else {
           Some(
-            controllers.transport.supplyChainActors.index.routes.RemoveSupplyChainActorController.onPageLoad(userAnswers.lrn, mode, index)
+            Call("GET", "#")
           ) //TODO: Change to ConfirmRemoveSeal when added
         }
         buildListItem[SealDomain](

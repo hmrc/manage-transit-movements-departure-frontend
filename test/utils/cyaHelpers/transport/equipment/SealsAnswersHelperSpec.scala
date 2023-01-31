@@ -25,6 +25,7 @@ import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.transport.equipment.index.AddSealYesNoPage
 import pages.transport.equipment.index.seals.IdentificationNumberPage
+import play.api.mvc.Call
 import viewModels.ListItem
 
 class SealsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -61,18 +62,15 @@ class SealsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with
                     ListItem(
                       name = sealId,
                       changeUrl = routes.IdentificationNumberController.onPageLoad(userAnswers.lrn, mode, equipmentIndex, Index(0)).url,
-                      removeUrl = Some(
-                        controllers.transport.supplyChainActors.index.routes.RemoveSupplyChainActorController.onPageLoad(userAnswers.lrn, mode, Index(0)).url
-                      ) //TODO: Change to RemoveSeal when added
+                      removeUrl = Some(Call("GET", "#").url)
+                      //TODO: Change to RemoveSeal when added
                     )
                   ),
                   Right(
                     ListItem(
                       name = sealId,
                       changeUrl = routes.IdentificationNumberController.onPageLoad(userAnswers.lrn, mode, equipmentIndex, Index(1)).url,
-                      removeUrl = Some(
-                        controllers.transport.supplyChainActors.index.routes.RemoveSupplyChainActorController.onPageLoad(userAnswers.lrn, mode, Index(1)).url
-                      ) //TODO: Change to RemoveSeal when added
+                      removeUrl = Some(Call("GET", "#").url) //TODO: Change to RemoveSeal when added
                     )
                   )
                 )
@@ -101,9 +99,7 @@ class SealsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with
                     ListItem(
                       name = sealId,
                       changeUrl = routes.IdentificationNumberController.onPageLoad(userAnswers.lrn, mode, equipmentIndex, Index(1)).url,
-                      removeUrl = Some(
-                        controllers.transport.supplyChainActors.index.routes.RemoveSupplyChainActorController.onPageLoad(userAnswers.lrn, mode, Index(1)).url
-                      ) //TODO: Change to RemoveSeal when added
+                      removeUrl = Some(Call("GET", "#").url) //TODO: Change to RemoveSeal when added
                     )
                   )
                 )
