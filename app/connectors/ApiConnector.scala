@@ -44,7 +44,7 @@ class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConf
     HeaderNames.CONTENT_TYPE -> "application/xml"
   )
 
-  def createPayload(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Either[ReaderError, CC015CType]] =
+  private def createPayload(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Either[ReaderError, CC015CType]] =
     for {
       countries <- countriesService.getCountryCodesCTC()
       security  <- countriesService.getCustomsSecurityAgreementAreaCountries()
