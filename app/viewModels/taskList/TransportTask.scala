@@ -19,7 +19,7 @@ package viewModels.taskList
 import config.FrontendAppConfig
 import models.LocalReferenceNumber
 
-case class TransportTask(status: TaskStatus) extends Task {
+case class TransportTask(status: TaskStatus) extends TaskListTask {
   override val id: String         = "transport-details"
   override val messageKey: String = "transportDetails"
   override val section: String    = TransportTask.section

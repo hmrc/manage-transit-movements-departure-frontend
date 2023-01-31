@@ -46,7 +46,7 @@ class $className$Controller @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, $className$.radioItems, mode))),
         value => {
           implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-          $className$Page.writeToUserAnswers(value).writeToSession().navigate()
+          $className$Page.writeToUserAnswers(value).updateTask[$navRoute$Domain]().writeToSession().navigate()
         }
       )
   }

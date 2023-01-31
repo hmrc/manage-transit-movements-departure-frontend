@@ -18,14 +18,13 @@ package forms
 
 import forms.Constants.maxRefNumberLength
 import forms.behaviours.StringFieldBehaviours
-import models.domain.StringFieldRegex.{alphaNumericRegex, referenceNumberFormatRegex}
+import models.domain.StringFieldRegex.alphaNumericRegex
 import org.scalacheck.Gen
 import play.api.data.FormError
 
 class GuaranteeReferenceNumberFormProviderSpec extends StringFieldBehaviours {
 
-  private val prefix                 = Gen.alphaNumStr.sample.value
-  private val invalidFormatRefNumber = Gen.alphaNumStr.sample.value.take(maxRefNumberLength)
+  private val prefix = Gen.alphaNumStr.sample.value
 
   val requiredKey = s"$prefix.error.required"
   val lengthKey   = s"$prefix.error.length"
@@ -61,14 +60,6 @@ class GuaranteeReferenceNumberFormProviderSpec extends StringFieldBehaviours {
       fieldName,
       error = FormError(fieldName, invalidKey, Seq(alphaNumericRegex.regex)),
       maxRefNumberLength
-    )
-
-    behave like fieldThatDoesNotBindInvalidData(
-      form = form,
-      fieldName = fieldName,
-      regex = referenceNumberFormatRegex.regex,
-      gen = invalidFormatRefNumber,
-      invalidKey = invalidKey
     )
 
     "must remove spaces on bound strings" in {

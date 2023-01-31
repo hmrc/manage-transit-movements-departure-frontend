@@ -18,7 +18,7 @@ package controllers.transport.equipment.index
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.ContainerIdentificationFormProvider
+import forms.ContainerIdentificationNumberFormProvider
 import models.journeyDomain.transport.TransportDomain
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode, RichOptionalJsArray}
@@ -40,7 +40,7 @@ class ContainerIdentificationNumberController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: TransportNavigatorProvider,
-  formProvider: ContainerIdentificationFormProvider,
+  formProvider: ContainerIdentificationNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: ContainerIdentificationNumberView
@@ -49,7 +49,7 @@ class ContainerIdentificationNumberController @Inject() (
     with I18nSupport {
 
   private def form(equipmentIndex: Index)(implicit request: DataRequest[_]): Form[String] =
-    formProvider("transport.equipment.containerIdentificationNumber", otherContainerIdentificationNumbers(equipmentIndex))
+    formProvider("transport.equipment.index.containerIdentificationNumber", otherContainerIdentificationNumbers(equipmentIndex))
 
   private def otherContainerIdentificationNumbers(equipmentIndex: Index)(implicit request: DataRequest[_]): Seq[String] = {
     val numberOfEquipments = request.userAnswers.get(EquipmentsSection).length

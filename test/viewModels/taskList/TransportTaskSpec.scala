@@ -39,7 +39,7 @@ class TransportTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
       }
     }
 
-    "must be Edit route details" - {
+    "must be Edit transport details" - {
       "when status is Completed" in {
         val task = TransportTask(Completed)
         task.name mustBe "Edit transport details"
@@ -53,7 +53,7 @@ class TransportTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
   }
 
   "id" - {
-    "must be route-details" in {
+    "must be transport-details" in {
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val task = TransportTask(taskStatus)
