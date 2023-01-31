@@ -36,9 +36,9 @@ class AddAnotherSealViewModelSpec extends SpecBase with Generators with ScalaChe
           val result = new AddAnotherSealViewModelProvider()(userAnswers, mode, equipmentIndex)
 
           result.listItems.length mustBe 1
-          result.title mustBe "You have added 1 seal to the transport equipment"
-          result.heading mustBe "You have added 1 seal to the transport equipment"
-          result.legend mustBe "Do you want to add another seal to the transport equipment?"
+          result.title mustBe "You have added 1 seal"
+          result.heading mustBe "You have added 1 seal"
+          result.legend mustBe "Do you want to add another seal?"
           result.maxLimitLabel mustBe "You cannot add any more seals. To add another, you need to remove one first."
       }
     }
@@ -55,9 +55,9 @@ class AddAnotherSealViewModelSpec extends SpecBase with Generators with ScalaChe
 
           val result = new AddAnotherSealViewModelProvider()(userAnswers, mode, equipmentIndex)
           result.listItems.length mustBe seals
-          result.title mustBe s"You have added ${formatter.format(seals)} seals to the transport equipment"
-          result.heading mustBe s"You have added ${formatter.format(seals)} seals to the transport equipment"
-          result.legend mustBe "Do you want to add another seal to the transport equipment?"
+          result.title mustBe s"You have added ${formatter.format(seals)} seals"
+          result.heading mustBe s"You have added ${formatter.format(seals)} seals"
+          result.legend mustBe "Do you want to add another seal?"
           result.maxLimitLabel mustBe "You cannot add any more seals. To add another, you need to remove one first."
       }
     }
