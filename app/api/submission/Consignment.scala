@@ -128,7 +128,7 @@ object Consignment {
           EconomicOperator = economicOperator(locationOfGoodsDomain),
           Address = address(locationOfGoodsDomain),
           PostcodeAddress = postcodeAddress(locationOfGoodsDomain),
-          ContactPerson = locationOfGoodsDomain.contactPerson.map(
+          ContactPerson = locationOfGoodsDomain.additionalContact.map(
             p => ContactPersonType06(p.name, p.telephoneNumber)
           )
         )

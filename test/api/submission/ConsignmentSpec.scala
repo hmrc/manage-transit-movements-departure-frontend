@@ -140,7 +140,7 @@ class ConsignmentSpec extends SpecBase with UserAnswersSpecHelper with Generator
                               )
                             case _ => None
                           },
-                          ContactPerson = locationOfGoodsDomain.contactPerson.map(
+                          ContactPerson = locationOfGoodsDomain.additionalContact.map(
                             p => ContactPersonType06(p.name, p.telephoneNumber)
                           )
                         )

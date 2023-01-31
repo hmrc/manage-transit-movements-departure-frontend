@@ -31,7 +31,7 @@ sealed trait LocationOfGoodsDomain extends JourneyDomainModel {
 
   val qualifierOfIdentification: LocationOfGoodsIdentification
 
-  val contactPerson: Option[AdditionalContactDomain] = None
+  val additionalContact: Option[AdditionalContactDomain] = None
 
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
     Some(controllers.routeDetails.locationOfGoods.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn, mode))
@@ -74,11 +74,10 @@ object LocationOfGoodsDomain {
     typeOfLocation: LocationType,
     identificationNumber: String,
     additionalIdentifier: Option[String],
-    additionalContact: Option[AdditionalContactDomain]
+    override val additionalContact: Option[AdditionalContactDomain]
   ) extends LocationOfGoodsDomain {
 
     override val qualifierOfIdentification: LocationOfGoodsIdentification = EoriNumber
-    override val contactPerson: Option[AdditionalContactDomain]           = additionalContact
   }
 
   object LocationOfGoodsX {
@@ -96,11 +95,10 @@ object LocationOfGoodsDomain {
     typeOfLocation: LocationType,
     authorisationNumber: String,
     additionalIdentifier: Option[String],
-    additionalContact: Option[AdditionalContactDomain]
+    override val additionalContact: Option[AdditionalContactDomain]
   ) extends LocationOfGoodsDomain {
 
     override val qualifierOfIdentification: LocationOfGoodsIdentification = AuthorisationNumber
-    override val contactPerson: Option[AdditionalContactDomain]           = additionalContact
   }
 
   object LocationOfGoodsY {
@@ -117,11 +115,10 @@ object LocationOfGoodsDomain {
   case class LocationOfGoodsW(
     typeOfLocation: LocationType,
     coordinates: Coordinates,
-    additionalContact: Option[AdditionalContactDomain]
+    override val additionalContact: Option[AdditionalContactDomain]
   ) extends LocationOfGoodsDomain {
 
     override val qualifierOfIdentification: LocationOfGoodsIdentification = CoordinatesIdentifier
-    override val contactPerson: Option[AdditionalContactDomain]           = additionalContact
   }
 
   object LocationOfGoodsW {
@@ -138,11 +135,10 @@ object LocationOfGoodsDomain {
     typeOfLocation: LocationType,
     country: Country,
     address: DynamicAddress,
-    additionalContact: Option[AdditionalContactDomain]
+    override val additionalContact: Option[AdditionalContactDomain]
   ) extends LocationOfGoodsDomain {
 
     override val qualifierOfIdentification: LocationOfGoodsIdentification = AddressIdentifier
-    override val contactPerson: Option[AdditionalContactDomain]           = additionalContact
   }
 
   object LocationOfGoodsZ {
@@ -159,11 +155,10 @@ object LocationOfGoodsDomain {
   case class LocationOfGoodsU(
     typeOfLocation: LocationType,
     unLocode: UnLocode,
-    additionalContact: Option[AdditionalContactDomain]
+    override val additionalContact: Option[AdditionalContactDomain]
   ) extends LocationOfGoodsDomain {
 
     override val qualifierOfIdentification: LocationOfGoodsIdentification = UnlocodeIdentifier
-    override val contactPerson: Option[AdditionalContactDomain]           = additionalContact
   }
 
   object LocationOfGoodsU {
@@ -179,11 +174,10 @@ object LocationOfGoodsDomain {
   case class LocationOfGoodsT(
     typeOfLocation: LocationType,
     postalCodeAddress: PostalCodeAddress,
-    additionalContact: Option[AdditionalContactDomain]
+    override val additionalContact: Option[AdditionalContactDomain]
   ) extends LocationOfGoodsDomain {
 
     override val qualifierOfIdentification: LocationOfGoodsIdentification = PostalCode
-    override val contactPerson: Option[AdditionalContactDomain]           = additionalContact
   }
 
   object LocationOfGoodsT {
