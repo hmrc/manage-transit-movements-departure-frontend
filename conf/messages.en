@@ -1442,3 +1442,8 @@ transport.equipment.index.addGoodsItemNumberYesNo.title = Do you want to add a g
 transport.equipment.index.addGoodsItemNumberYesNo.heading = Do you want to add a goods item number to the transport equipment?
 transport.equipment.index.addGoodsItemNumberYesNo.checkYourAnswersLabel = Do you want to add a goods item number to the transport equipment?
 transport.equipment.index.addGoodsItemNumberYesNo.error.required = Select yes if you want to add a goods item number to the transport equipment
+
+transport.equipment.index.seals.removeSealYesNo.title = Are you sure you want to remove seal
+transport.equipment.index.seals.removeSealYesNo.heading = Are you sure you want to remove seal
+transport.equipment.index.seals.removeSealYesNo.checkYourAnswersLabel = Are you sure you want to remove seal
+transport.equipment.index.seals.removeSealYesNo.error.required = Select yes if Are you sure you want to remove seal
