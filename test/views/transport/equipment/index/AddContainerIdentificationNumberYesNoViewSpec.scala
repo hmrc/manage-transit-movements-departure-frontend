@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package views.transport.equipment
+package views.transport.equipment.index
 
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.transport.equipment.AddContainerIdentificationNumberYesNoView
+import views.html.transport.equipment.index.AddContainerIdentificationNumberYesNoView
 
 class AddContainerIdentificationNumberYesNoViewSpec extends YesNoViewBehaviours {
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[AddContainerIdentificationNumberYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[AddContainerIdentificationNumberYesNoView].apply(form, lrn, NormalMode, equipmentIndex)(fakeRequest, messages)
 
-  override val prefix: String = "transport.equipment.addContainerIdentificationNumberYesNo"
+  override val prefix: String = "transport.equipment.index.addContainerIdentificationNumberYesNo"
 
   behave like pageWithTitle()
 

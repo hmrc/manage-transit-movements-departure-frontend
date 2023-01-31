@@ -1402,10 +1402,10 @@ transport.equipment.addTransportEquipmentYesNo.paragraph = This includes any con
 transport.equipment.addTransportEquipmentYesNo.checkYourAnswersLabel = Do you need to add any transport equipment?
 transport.equipment.addTransportEquipmentYesNo.error.required = Select yes if you want to add any transport equipment
 
-transport.equipment.addContainerIdentificationNumberYesNo.title = Do you want to add a container identification number?
-transport.equipment.addContainerIdentificationNumberYesNo.heading = Do you want to add a container identification number?
-transport.equipment.addContainerIdentificationNumberYesNo.checkYourAnswersLabel = Do you want to add a container identification number?
-transport.equipment.addContainerIdentificationNumberYesNo.error.required = Select yes if you want to add a container identification number
+transport.equipment.index.addContainerIdentificationNumberYesNo.title = Do you want to add a container identification number?
+transport.equipment.index.addContainerIdentificationNumberYesNo.heading = Do you want to add a container identification number?
+transport.equipment.index.addContainerIdentificationNumberYesNo.checkYourAnswersLabel = Do you want to add a container identification number?
+transport.equipment.index.addContainerIdentificationNumberYesNo.error.required = Select yes if you want to add a container identification number
 
 transport.equipment.index.containerIdentificationNumber.title = What is the identification number for the transport equipment?
 transport.equipment.index.containerIdentificationNumber.heading = What is the identification number for the transport equipment?

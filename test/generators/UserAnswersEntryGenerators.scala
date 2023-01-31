@@ -261,8 +261,7 @@ trait UserAnswersEntryGenerators {
       generateAuthorisationAnswers orElse
       generateLimitAnswers orElse
       generateCarrierDetailsAnswers orElse
-      generateEquipmentAnswers orElse
-      generateSealAnswers
+      generateEquipmentAnswers
 
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.preRequisites._
@@ -358,18 +357,30 @@ trait UserAnswersEntryGenerators {
   private def generateEquipmentAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.equipment._
     import pages.transport.equipment.index._
-    {
-      case AddTransportEquipmentYesNoPage            => arbitrary[Boolean].map(JsBoolean)
-      case AddContainerIdentificationNumberYesNoPage => arbitrary[Boolean].map(JsBoolean)
-      case ContainerIdentificationNumberPage(_)      => Gen.alphaNumStr.map(JsString)
-      case AddSealYesNoPage(_)                       => arbitrary[Boolean].map(JsBoolean)
+
+    val pf: PartialFunction[Gettable[_], Gen[JsValue]] = {
+      case AddTransportEquipmentYesNoPage               => arbitrary[Boolean].map(JsBoolean)
+      case AddContainerIdentificationNumberYesNoPage(_) => arbitrary[Boolean].map(JsBoolean)
+      case ContainerIdentificationNumberPage(_)         => Gen.alphaNumStr.map(JsString)
+      case AddSealYesNoPage(_)                          => arbitrary[Boolean].map(JsBoolean)
     }
+
+    pf orElse
+      generateSealAnswers orElse
+      generateItemNumberAnswers
   }
 
   private def generateSealAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.equipment.index.seals._
     {
       case IdentificationNumberPage(_, _) => Gen.alphaNumStr.map(JsString)
+    }
+  }
+
+  private def generateItemNumberAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.equipment.index.itemNumber._
+    {
+      case ItemNumberPage(_, _) => Gen.alphaNumStr.map(JsString)
     }
   }
 }
