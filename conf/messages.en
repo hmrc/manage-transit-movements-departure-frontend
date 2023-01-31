@@ -1430,11 +1430,11 @@ transport.equipment.index.seals.identificationNumber.error.invalid = The identif
 transport.equipment.index.seals.identificationNumber.error.length = The identification number must be 20 characters or less
 transport.equipment.index.seals.identificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique seal identification number
 
-transport.equipment.index.itemNumber.title = What is the goods item number for the transport equipment?
-transport.equipment.index.itemNumber.heading = What is the goods item number for the transport equipment?
+transport.equipment.index.itemNumber.title = What is the goods item number?
+transport.equipment.index.itemNumber.heading = What is the goods item number?
 transport.equipment.index.itemNumber.hint = This can be up to 5 numbers long.
 transport.equipment.index.itemNumber.checkYourAnswersLabel = Item number
-transport.equipment.index.itemNumber.error.required = Enter the goods item number for the transport equipment
+transport.equipment.index.itemNumber.error.required = Enter the goods item number
 transport.equipment.index.itemNumber.error.length = The goods item number must be 5 characters or less
 transport.equipment.index.itemNumber.error.invalidCharacters = The goods item number must only include numbers 0 to 9
 
