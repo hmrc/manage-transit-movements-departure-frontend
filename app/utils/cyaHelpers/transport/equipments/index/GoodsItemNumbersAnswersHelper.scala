@@ -16,6 +16,7 @@
 
 package utils.cyaHelpers.transport.equipments.index
 
+import controllers.transport.equipment.index.itemNumber.routes
 import models.journeyDomain.transport.equipment.index.itemNumber.ItemNumberDomain
 import models.{Index, Mode, UserAnswers}
 import pages.sections.transport.equipment.ItemNumbersSection
@@ -33,7 +34,7 @@ class GoodsItemNumbersAnswersHelper(userAnswers: UserAnswers, mode: Mode, equipm
     buildListItems(ItemNumbersSection(equipmentIndex)) {
       itemNumberIndex =>
         val removeRoute: Option[Call] = if (equipmentIndex.isFirst && userAnswers.get(ContainerIdentificationNumberPage(equipmentIndex)).nonEmpty) {
-          Some(Call("GET", "#")) // TODO: replace confirmRemoveGoodsItemNumber when built
+          Some(routes.RemoveItemNumberYesNoController.onPageLoad(lrn, mode, equipmentIndex, itemNumberIndex))
         } else {
           None
         }
