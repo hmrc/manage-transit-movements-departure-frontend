@@ -18,7 +18,7 @@ package utils.cyaHelpers.transport.equipment
 
 import models.journeyDomain.transport.equipment.seal.SealDomain
 import models.{Index, Mode, UserAnswers}
-import pages.sections.SealsSection
+import pages.sections.transport.equipment.SealsSection
 import pages.transport.equipment.index.AddSealYesNoPage
 import pages.transport.equipment.index.seals.IdentificationNumberPage
 import play.api.i18n.Messages
