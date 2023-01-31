@@ -16,26 +16,31 @@
 
 package views.transport.equipment.index.seals
 
+import generators.Generators
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.transport.equipment.index.seals.RemoveSealYesNoView
 
-class RemoveSealYesNoViewSpec extends YesNoViewBehaviours {
+class RemoveSealYesNoViewSpec extends YesNoViewBehaviours with Generators {
+
+  private val sealIdNumber = nonEmptyString.sample.value
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[RemoveSealYesNoView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[RemoveSealYesNoView].apply(form, lrn, NormalMode, equipmentIndex, sealIndex, sealIdNumber)(fakeRequest, messages)
 
   override val prefix: String = "transport.equipment.index.seals.removeSealYesNo"
 
-  behave like pageWithTitle()
+  behave like pageWithTitle(sealIdNumber)
 
   behave like pageWithBackLink()
 
-  behave like pageWithHeading()
+  behave like pageWithSectionCaption("Transport details - Transport equipment")
 
-  behave like pageWithRadioItems()
+  behave like pageWithHeading(sealIdNumber)
+
+  behave like pageWithRadioItems(args = Seq(sealIdNumber))
 
   behave like pageWithSubmitButton("Save and continue")
 }

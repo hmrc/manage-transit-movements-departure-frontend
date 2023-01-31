@@ -18,37 +18,32 @@ package controllers.transport.equipment.index.seals
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
-import models.NormalMode
-import navigation.transport.TransportNavigatorProvider
+import generators.Generators
+import models.{NormalMode, UserAnswers}
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
-import pages.transport.equipment.index.seals.RemoveSealYesNoPage
-import play.api.inject.bind
-import play.api.inject.guice.GuiceApplicationBuilder
+import org.mockito.Mockito.{never, verify}
+import pages.sections
+import pages.sections.SealSection
+import pages.transport.equipment.index.seals.IdentificationNumberPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.transport.equipment.index.seals.RemoveSealYesNoView
 
-import scala.concurrent.Future
+class RemoveSealYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-class RemoveSealYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
-
+  private val sealIdNumber              = nonEmptyString.sample.value
   private val formProvider              = new YesNoFormProvider()
-  private val form                      = formProvider("transport.equipment.index.seals.removeSealYesNo")
+  private val form                      = formProvider("transport.equipment.index.seals.removeSealYesNo", sealIdNumber)
   private val mode                      = NormalMode
-  private lazy val removeSealYesNoRoute = routes.RemoveSealYesNoController.onPageLoad(lrn, mode).url
-
-  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
-    super
-      .guiceApplicationBuilder()
-      .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
+  private lazy val removeSealYesNoRoute = routes.RemoveSealYesNoController.onPageLoad(lrn, mode, equipmentIndex, sealIndex).url
 
   "RemoveSealYesNo Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.setValue(IdentificationNumberPage(equipmentIndex, sealIndex), sealIdNumber)
+      setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, removeSealYesNoRoute)
       val result  = route(app, request).value
@@ -58,42 +53,43 @@ class RemoveSealYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixt
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode)(request, messages).toString
+        view(form, lrn, mode, equipmentIndex, sealIndex, sealIdNumber)(request, messages).toString
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must redirect to the next page" - {
+      "when yes is submitted" in {
+        val userAnswers = emptyUserAnswers.setValue(IdentificationNumberPage(equipmentIndex, sealIndex), sealIdNumber)
+        setExistingUserAnswers(userAnswers)
 
-      val userAnswers = emptyUserAnswers.setValue(RemoveSealYesNoPage, true)
-      setExistingUserAnswers(userAnswers)
+        val request = FakeRequest(POST, removeSealYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
-      val request = FakeRequest(GET, removeSealYesNoRoute)
+        val result = route(app, request).value
 
-      val result = route(app, request).value
+        status(result) mustEqual SEE_OTHER
 
-      val filledForm = form.bind(Map("value" -> "true"))
+        redirectLocation(result).value mustEqual "#"
 
-      val view = injector.instanceOf[RemoveSealYesNoView]
+        val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
+        userAnswersCaptor.getValue.get(sections.SealSection(equipmentIndex, sealIndex)) mustNot be(defined)
+      }
 
-      status(result) mustEqual OK
+      "when no is submitted" in {
+        val userAnswers = emptyUserAnswers.setValue(IdentificationNumberPage(equipmentIndex, sealIndex), sealIdNumber)
+        setExistingUserAnswers(userAnswers)
 
-      contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
-    }
+        val request = FakeRequest(POST, removeSealYesNoRoute)
+          .withFormUrlEncodedBody(("value", "false"))
 
-    "must redirect to the next page when valid data is submitted" in {
+        val result = route(app, request).value
 
-      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+        status(result) mustEqual SEE_OTHER
 
-      setExistingUserAnswers(emptyUserAnswers)
+        redirectLocation(result).value mustEqual "#"
 
-      val request = FakeRequest(POST, removeSealYesNoRoute)
-        .withFormUrlEncodedBody(("value", "true"))
-
-      val result = route(app, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual onwardRoute.url
+        verify(mockSessionRepository, never()).set(any())(any())
+      }
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
@@ -110,7 +106,7 @@ class RemoveSealYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixt
       val view = injector.instanceOf[RemoveSealYesNoView]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, mode)(request, messages).toString
+        view(boundForm, lrn, mode, equipmentIndex, sealIndex, sealIdNumber)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

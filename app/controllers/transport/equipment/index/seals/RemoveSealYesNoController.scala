@@ -20,12 +20,13 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.journeyDomain.transport.TransportDomain
-import models.{LocalReferenceNumber, Mode}
-import navigation.UserAnswersNavigator
-import navigation.transport.TransportNavigatorProvider
-import pages.transport.equipment.index.seals.RemoveSealYesNoPage
+import models.requests.SpecificDataRequestProvider1
+import models.{Index, LocalReferenceNumber, Mode}
+import pages.sections.{SealSection, transport}
+import pages.transport.equipment.index.seals.IdentificationNumberPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.transport.equipment.index.seals.RemoveSealYesNoView
@@ -36,8 +37,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class RemoveSealYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: TransportNavigatorProvider,
   actions: Actions,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: RemoveSealYesNoView
@@ -45,28 +46,37 @@ class RemoveSealYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("transport.equipment.index.seals.removeSealYesNo")
+  private type Request = SpecificDataRequestProvider1[String]#SpecificDataRequest[_]
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(RemoveSealYesNoPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+  private def form(implicit request: Request): Form[Boolean] =
+    formProvider("transport.equipment.index.seals.removeSealYesNo", request.arg)
 
-      Ok(view(preparedForm, lrn, mode))
-  }
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, sealIndex: Index): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage.getFirst(IdentificationNumberPage(equipmentIndex, sealIndex))) {
+      implicit request =>
+        Ok(view(form, lrn, mode, equipmentIndex, sealIndex, request.arg))
+    }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            RemoveSealYesNoPage.writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
-          }
-        )
-  }
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, sealIndex: Index): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage.getFirst(IdentificationNumberPage(equipmentIndex, sealIndex)))
+    .async {
+      implicit request =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, equipmentIndex, sealIndex, request.arg))),
+            {
+              case true =>
+                SealSection(equipmentIndex, sealIndex)
+                  .removeFromUserAnswers()
+                  .updateTask[TransportDomain]()
+                  .writeToSession()
+                  .navigateTo(Call("GET", "#")) //update when add another created
+              case false =>
+                Future.successful(Redirect(Call("GET", "#"))) //update when add another created
+            }
+          )
+    }
 }
