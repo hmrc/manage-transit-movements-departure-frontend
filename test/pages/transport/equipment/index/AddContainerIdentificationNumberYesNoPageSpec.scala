@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.transport.equipment
+package pages.transport.equipment.index
 
 import pages.behaviours.PageBehaviours
 
@@ -22,10 +22,10 @@ class AddContainerIdentificationNumberYesNoPageSpec extends PageBehaviours {
 
   "AddContainerIdentificationNumberYesNoPage" - {
 
-    beRetrievable[Boolean](AddContainerIdentificationNumberYesNoPage)
+    beRetrievable[Boolean](AddContainerIdentificationNumberYesNoPage(equipmentIndex))
 
-    beSettable[Boolean](AddContainerIdentificationNumberYesNoPage)
+    beSettable[Boolean](AddContainerIdentificationNumberYesNoPage(equipmentIndex))
 
-    beRemovable[Boolean](AddContainerIdentificationNumberYesNoPage)
+    beRemovable[Boolean](AddContainerIdentificationNumberYesNoPage(equipmentIndex))
   }
 }
