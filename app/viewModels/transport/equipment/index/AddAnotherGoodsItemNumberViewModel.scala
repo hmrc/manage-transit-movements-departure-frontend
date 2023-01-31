@@ -18,10 +18,9 @@ package viewModels.transport.equipment.index
 
 import config.FrontendAppConfig
 import controllers.transport.equipment.index.routes
-import models.{Mode, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import play.api.i18n.Messages
 import play.api.mvc.Call
-import utils.cyaHelpers.transport.authorisations.AuthorisationsAnswersHelper
 import utils.cyaHelpers.transport.equipments.index.GoodsItemNumbersAnswersHelper
 import viewModels.ListItem
 
@@ -50,8 +49,8 @@ object AddAnotherGoodsItemNumberViewModel {
 
   class AddAnotherGoodsItemNumberViewModelProvider @Inject() () {
 
-    def apply(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages): AddAnotherGoodsItemNumberViewModel = {
-      val helper = new GoodsItemNumbersAnswersHelper(userAnswers, mode)
+    def apply(userAnswers: UserAnswers, mode: Mode, equipmentIndex: Index)(implicit messages: Messages): AddAnotherGoodsItemNumberViewModel = {
+      val helper = new GoodsItemNumbersAnswersHelper(userAnswers, mode, equipmentIndex)
 
       val listItems = helper.listItems.collect {
         case Left(value)  => value
@@ -60,7 +59,7 @@ object AddAnotherGoodsItemNumberViewModel {
 
       new AddAnotherGoodsItemNumberViewModel(
         listItems,
-        onSubmitCall = routes.AddAnotherGoodsItemNumberController.onSubmit(userAnswers.lrn, mode)
+        onSubmitCall = routes.AddAnotherGoodsItemNumberController.onSubmit(userAnswers.lrn, mode, equipmentIndex)
       )
     }
   }

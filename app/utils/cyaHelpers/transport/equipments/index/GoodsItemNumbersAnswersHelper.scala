@@ -16,32 +16,33 @@
 
 package utils.cyaHelpers.transport.equipments.index
 
-import controllers.transport.authorisationsAndLimit.authorisations.index.routes
-import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationDomain
-import models.{Mode, UserAnswers}
-import pages.sections.transport.authorisationsAndLimit.AuthorisationsSection
-import pages.transport.authorisationsAndLimit.authorisations.index.AuthorisationTypePage
+import models.journeyDomain.transport.equipment.index.itemNumber.ItemNumberDomain
+import models.{Index, Mode, UserAnswers}
+import pages.sections.transport.equipment.ItemNumbersSection
+import pages.transport.equipment.index.ContainerIdentificationNumberPage
+import pages.transport.equipment.index.itemNumber.ItemNumberPage
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import utils.cyaHelpers.AnswersHelper
 import viewModels.ListItem
 
-class GoodsItemNumbersAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
+class GoodsItemNumbersAnswersHelper(userAnswers: UserAnswers, mode: Mode, equipmentIndex: Index)(implicit messages: Messages)
+    extends AnswersHelper(userAnswers, mode) {
 
   def listItems: Seq[Either[ListItem, ListItem]] =
-    buildListItems(AuthorisationsSection) {
-      index =>
-        val removeRoute: Option[Call] = if (userAnswers.get(AuthorisationTypePage(index)).isEmpty && index.isFirst) {
-          None
+    buildListItems(ItemNumbersSection(equipmentIndex)) {
+      itemNumberIndex =>
+        val removeRoute: Option[Call] = if (equipmentIndex.isFirst && userAnswers.get(ContainerIdentificationNumberPage(equipmentIndex)).nonEmpty) {
+          Some(Call("GET", "#")) // TODO: replace confirmRemoveGoodsItemNumber when built
         } else {
-          Some(routes.RemoveAuthorisationYesNoController.onPageLoad(lrn, mode, index))
+          None
         }
 
-        buildListItem[AuthorisationDomain](
-          nameWhenComplete = _.asString,
-          nameWhenInProgress = userAnswers.get(AuthorisationTypePage(index)).map(_.forDisplay),
+        buildListItem[ItemNumberDomain](
+          nameWhenComplete = _.itemNumber,
+          nameWhenInProgress = userAnswers.get(ItemNumberPage(equipmentIndex, itemNumberIndex)),
           removeRoute = removeRoute
-        )(AuthorisationDomain.userAnswersReader(index))
+        )(ItemNumberDomain.userAnswersReader(equipmentIndex, itemNumberIndex))
     }
 
 }
