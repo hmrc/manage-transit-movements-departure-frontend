@@ -1479,10 +1479,10 @@ transport.equipment.index.checkYourAnswers.seal.change.hidden = seal {0}
 transport.equipment.index.checkYourAnswers.itemNumber.label = Goods item number {0}
 transport.equipment.index.checkYourAnswers.itemNumber.change.hidden = goods item number {0}
 
-transport.equipment.index.addAnotherGoodsItemNumber.singular.title = You have added 1 goods item number to the transport equipment
-transport.equipment.index.addAnotherGoodsItemNumber.plural.title = You have added {0} goods item numbers to the transport equipment
-transport.equipment.index.addAnotherGoodsItemNumber.singular.heading = You have added 1 goods item number to the transport equipment
-transport.equipment.index.addAnotherGoodsItemNumber.plural.heading = You have added {0} goods item numbers to the transport equipment
-transport.equipment.index.addAnotherGoodsItemNumber.label = Do you want to add another goods item number to the transport equipment?
+transport.equipment.index.addAnotherGoodsItemNumber.singular.title = You have added 1 goods item number
+transport.equipment.index.addAnotherGoodsItemNumber.plural.title = You have added {0} goods item numbers
+transport.equipment.index.addAnotherGoodsItemNumber.singular.heading = You have added 1 goods item number
+transport.equipment.index.addAnotherGoodsItemNumber.plural.heading = You have added {0} goods item numbers
+transport.equipment.index.addAnotherGoodsItemNumber.label = Do you want to add another goods item number?
 transport.equipment.index.addAnotherGoodsItemNumber.maxLimit.label = You cannot add any more goods item numbers. To add another, you need to remove one first.
-transport.equipment.index.addAnotherGoodsItemNumber.error.required = Select yes if you want to add another goods item number to the transport equipment
+transport.equipment.index.addAnotherGoodsItemNumber.error.required = Select yes if you want to add another goods item number
