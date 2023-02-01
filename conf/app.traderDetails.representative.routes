@@ -18,3 +18,8 @@ POST       /:lrn/trader-details/representative/phone                            
 GET        /:lrn/trader-details/representative/change-phone                                    controllers.traderDetails.representative.TelephoneNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/trader-details/representative/change-phone                                    controllers.traderDetails.representative.TelephoneNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
+
+GET        /:lrn/traderDetails/representative/do-you-want-to-add-your-details                        controllers.traderDetails.representative.AddDetailsController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/traderDetails/representative/do-you-want-to-add-your-details                        controllers.traderDetails.representative.AddDetailsController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/traderDetails/representative/change-do-you-want-to-add-your-details                 controllers.traderDetails.representative.AddDetailsController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/traderDetails/representative/change-do-you-want-to-add-your-details                 controllers.traderDetails.representative.AddDetailsController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
