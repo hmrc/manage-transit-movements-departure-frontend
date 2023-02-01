@@ -40,7 +40,7 @@ class GuaranteeSpec extends SpecBase with UserAnswersSpecHelper with Generators 
               .map {
                 case DepartureDomain(_, _, _, guaranteeDetails, _) =>
                   val expected: Seq[Object] = guaranteeDetails.guarantees.map {
-                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfTypesABR(guaranteeType) =>
+                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfTypesAB(guaranteeType) =>
                       GuaranteeType02(
                         guaranteeDomain.index.position.toString,
                         guaranteeType.toString,

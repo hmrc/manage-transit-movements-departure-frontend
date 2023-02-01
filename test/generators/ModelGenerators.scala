@@ -132,14 +132,6 @@ trait ModelGenerators {
       )
     }
 
-  lazy val arbitraryARGuaranteeType: Arbitrary[GuaranteeType] =
-    Arbitrary {
-      Gen.oneOf(
-        GuaranteeWaiverByAgreement,
-        GuaranteeNotRequired
-      )
-    }
-
   implicit lazy val arbitraryRepresentativeCapacity: Arbitrary[models.traderDetails.representative.RepresentativeCapacity] =
     Arbitrary {
       Gen.oneOf(models.traderDetails.representative.RepresentativeCapacity.values)

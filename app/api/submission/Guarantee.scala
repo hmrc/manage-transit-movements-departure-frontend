@@ -23,7 +23,7 @@ object Guarantee {
 
   def transform(domain: GuaranteeDetailsDomain): Seq[GuaranteeType02] =
     domain.guarantees.map {
-      case guaranteeDomain @ GuaranteeDomain.GuaranteeOfTypesABR(guaranteeType) =>
+      case guaranteeDomain @ GuaranteeDomain.GuaranteeOfTypesAB(guaranteeType) =>
         GuaranteeType02(
           guaranteeDomain.index.position.toString,
           guaranteeType.toString,

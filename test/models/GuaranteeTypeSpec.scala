@@ -76,8 +76,7 @@ class GuaranteeTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
             FlatRateVoucher,
             GuaranteeWaiverSecured,
             GuaranteeNotRequiredExemptPublicBody,
-            GuaranteeWaiverByAgreement,
-            GuaranteeNotRequired
+            GuaranteeWaiverByAgreement
           )
 
           radios mustBe expected
@@ -97,8 +96,7 @@ class GuaranteeTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
             GuaranteeWaiverSecured,
             GuaranteeNotRequiredExemptPublicBody,
             IndividualGuaranteeMultiple,
-            GuaranteeWaiverByAgreement,
-            GuaranteeNotRequired
+            GuaranteeWaiverByAgreement
           )
 
           radios mustBe expected
