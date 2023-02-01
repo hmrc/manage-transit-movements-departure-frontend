@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.transport.equipment
+package controllers.transport.equipment.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
@@ -23,21 +23,21 @@ import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.transport.equipment.AddContainerIdentificationNumberYesNoPage
+import pages.transport.equipment.index.AddContainerIdentificationNumberYesNoPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.transport.equipment.AddContainerIdentificationNumberYesNoView
+import views.html.transport.equipment.index.AddContainerIdentificationNumberYesNoView
 
 import scala.concurrent.Future
 
 class AddContainerIdentificationNumberYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
 
   private val formProvider                                    = new YesNoFormProvider()
-  private val form                                            = formProvider("transport.equipment.addContainerIdentificationNumberYesNo")
+  private val form                                            = formProvider("transport.equipment.index.addContainerIdentificationNumberYesNo")
   private val mode                                            = NormalMode
-  private lazy val addContainerIdentificationNumberYesNoRoute = routes.AddContainerIdentificationNumberYesNoController.onPageLoad(lrn, mode).url
+  private lazy val addContainerIdentificationNumberYesNoRoute = routes.AddContainerIdentificationNumberYesNoController.onPageLoad(lrn, mode, equipmentIndex).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -58,12 +58,12 @@ class AddContainerIdentificationNumberYesNoControllerSpec extends SpecBase with 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode)(request, messages).toString
+        view(form, lrn, mode, equipmentIndex)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(AddContainerIdentificationNumberYesNoPage, true)
+      val userAnswers = emptyUserAnswers.setValue(AddContainerIdentificationNumberYesNoPage(equipmentIndex), true)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, addContainerIdentificationNumberYesNoRoute)
@@ -77,7 +77,7 @@ class AddContainerIdentificationNumberYesNoControllerSpec extends SpecBase with 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
+        view(filledForm, lrn, mode, equipmentIndex)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -110,7 +110,7 @@ class AddContainerIdentificationNumberYesNoControllerSpec extends SpecBase with 
       val view = injector.instanceOf[AddContainerIdentificationNumberYesNoView]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, mode)(request, messages).toString
+        view(boundForm, lrn, mode, equipmentIndex)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

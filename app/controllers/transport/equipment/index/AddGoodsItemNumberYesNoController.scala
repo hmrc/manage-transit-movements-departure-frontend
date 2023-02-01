@@ -39,7 +39,6 @@ class AddGoodsItemNumberYesNoController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: TransportNavigatorProvider,
   actions: Actions,
-  getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: AddGoodsItemNumberYesNoView

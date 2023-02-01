@@ -1402,15 +1402,17 @@ transport.equipment.addTransportEquipmentYesNo.paragraph = This includes any con
 transport.equipment.addTransportEquipmentYesNo.checkYourAnswersLabel = Do you need to add any transport equipment?
 transport.equipment.addTransportEquipmentYesNo.error.required = Select yes if you want to add any transport equipment
 
-transport.equipment.addContainerIdentificationNumberYesNo.title = Do you want to add a container identification number?
-transport.equipment.addContainerIdentificationNumberYesNo.heading = Do you want to add a container identification number?
-transport.equipment.addContainerIdentificationNumberYesNo.checkYourAnswersLabel = Do you want to add a container identification number?
-transport.equipment.addContainerIdentificationNumberYesNo.error.required = Select yes if you want to add a container identification number
+transport.equipment.index.addContainerIdentificationNumberYesNo.title = Do you want to add a container identification number?
+transport.equipment.index.addContainerIdentificationNumberYesNo.heading = Do you want to add a container identification number?
+transport.equipment.index.addContainerIdentificationNumberYesNo.checkYourAnswersLabel = Do you want to add a container identification number?
+transport.equipment.index.addContainerIdentificationNumberYesNo.change.hidden = if you want to add an identification number
+transport.equipment.index.addContainerIdentificationNumberYesNo.error.required = Select yes if you want to add a container identification number
 
 transport.equipment.index.containerIdentificationNumber.title = What is the identification number for the transport equipment?
 transport.equipment.index.containerIdentificationNumber.heading = What is the identification number for the transport equipment?
 transport.equipment.index.containerIdentificationNumber.hint = This can be up to 17 characters long and include both letters and numbers.
-transport.equipment.index.containerIdentificationNumber.checkYourAnswersLabel = What is the identification number for the transport equipment?
+transport.equipment.index.containerIdentificationNumber.checkYourAnswersLabel = Container identification number
+transport.equipment.index.containerIdentificationNumber.change.hidden = identification number
 transport.equipment.index.containerIdentificationNumber.error.required = Enter the container identification number for the transport equipment
 transport.equipment.index.containerIdentificationNumber.error.length = The identification number must be 17 characters or less
 transport.equipment.index.containerIdentificationNumber.error.invalid = The identification number must only include letters a to z and numbers 0 to 9
@@ -1418,7 +1420,8 @@ transport.equipment.index.containerIdentificationNumber.error.duplicate = This i
 
 transport.equipment.index.addSealYesNo.title = Do you want to add a seal to the transport equipment?
 transport.equipment.index.addSealYesNo.heading = Do you want to add a seal to the transport equipment?
-transport.equipment.index.addSealYesNo.checkYourAnswersLabel = Do you want to add a seal to the transport equipment?
+transport.equipment.index.addSealYesNo.checkYourAnswersLabel = Do you want to add a seal?
+transport.equipment.index.addSealYesNo.change.hidden = if you want to add a seal
 transport.equipment.index.addSealYesNo.error.required = Select yes if you want to add a seal to the transport equipment
 
 transport.equipment.index.seals.identificationNumber.title = What is the seal identification number?
@@ -1430,12 +1433,12 @@ transport.equipment.index.seals.identificationNumber.error.invalid = The identif
 transport.equipment.index.seals.identificationNumber.error.length = The identification number must be 20 characters or less
 transport.equipment.index.seals.identificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique seal identification number
 
-transport.equipment.index.addAnotherSeal.singular.title = You have added 1 seal to the transport equipment
-transport.equipment.index.addAnotherSeal.plural.title = You have added {0} seals to the transport equipment
-transport.equipment.index.addAnotherSeal.singular.heading = You have added 1 seal to the transport equipment
-transport.equipment.index.addAnotherSeal.plural.heading = You have added {0} seals to the transport equipment
-transport.equipment.index.addAnotherSeal.error.required = Select yes if you want to add another seal to the transport equipment
-transport.equipment.index.addAnotherSeal.label = Do you want to add another seal to the transport equipment?
+transport.equipment.index.addAnotherSeal.singular.title = You have added 1 seal
+transport.equipment.index.addAnotherSeal.plural.title = You have added {0} seals
+transport.equipment.index.addAnotherSeal.singular.heading = You have added 1 seal
+transport.equipment.index.addAnotherSeal.plural.heading = You have added {0} seals
+transport.equipment.index.addAnotherSeal.error.required = Select yes if you want to add another seal
+transport.equipment.index.addAnotherSeal.label = Do you want to add another seal?
 transport.equipment.index.addAnotherSeal.maxLimit.label = You cannot add any more seals. To add another, you need to remove one first.
 
 transport.equipment.index.itemNumber.title = What is the goods item number?
@@ -1448,12 +1451,26 @@ transport.equipment.index.itemNumber.error.invalidCharacters = The goods item nu
 
 transport.equipment.index.addGoodsItemNumberYesNo.title = Do you want to add a goods item number to the transport equipment?
 transport.equipment.index.addGoodsItemNumberYesNo.heading = Do you want to add a goods item number to the transport equipment?
-transport.equipment.index.addGoodsItemNumberYesNo.checkYourAnswersLabel = Do you want to add a goods item number to the transport equipment?
+transport.equipment.index.addGoodsItemNumberYesNo.checkYourAnswersLabel = Do you want to add a goods item number?
+transport.equipment.index.addGoodsItemNumberYesNo.change.hidden = if you want to add a goods item number
 transport.equipment.index.addGoodsItemNumberYesNo.error.required = Select yes if you want to add a goods item number to the transport equipment
 
 transport.equipment.index.itemNumber.removeItemNumberYesNo.title = Are you sure you want to remove goods item number {0}?
 transport.equipment.index.itemNumber.removeItemNumberYesNo.heading = Are you sure you want to remove goods item number {0}?
 transport.equipment.index.itemNumber.removeItemNumberYesNo.error.required = Select yes if you want to remove goods item number {0}
+
+transport.equipment.index.seals.removeSealYesNo.title = Are you sure you want to remove seal {0}?
+transport.equipment.index.seals.removeSealYesNo.heading = Are you sure you want to remove seal {0}?
+transport.equipment.index.seals.removeSealYesNo.error.required = Select yes if you want to remove seal {0}
+
+transport.equipment.index.checkYourAnswers.title = Check your answers
+transport.equipment.index.checkYourAnswers.heading = Check your answers
+transport.equipment.index.checkYourAnswers.seals = Seals
+transport.equipment.index.checkYourAnswers.itemNumbers = Goods item numbers
+transport.equipment.index.checkYourAnswers.seal.label = Seal {0}
+transport.equipment.index.checkYourAnswers.seal.change.hidden = seal {0}
+transport.equipment.index.checkYourAnswers.itemNumber.label = Seal {0}
+transport.equipment.index.checkYourAnswers.itemNumber.change.hidden = seal {0}
 
 transport.equipment.index.addAnotherGoodsItemNumber.singular.title = You have added 1 goods item number to the transport equipment
 transport.equipment.index.addAnotherGoodsItemNumber.plural.title = You have added {0} goods item numbers to the transport equipment

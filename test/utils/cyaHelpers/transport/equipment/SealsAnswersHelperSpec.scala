@@ -25,7 +25,6 @@ import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.transport.equipment.index.AddSealYesNoPage
 import pages.transport.equipment.index.seals.IdentificationNumberPage
-import play.api.mvc.Call
 import viewModels.ListItem
 
 class SealsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -62,15 +61,14 @@ class SealsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with
                     ListItem(
                       name = sealId,
                       changeUrl = routes.IdentificationNumberController.onPageLoad(userAnswers.lrn, mode, equipmentIndex, Index(0)).url,
-                      removeUrl = Some(Call("GET", "#").url)
-                      //TODO: Change to RemoveSeal when added
+                      removeUrl = Some(routes.RemoveSealYesNoController.onPageLoad(userAnswers.lrn, mode, equipmentIndex, Index(0)).url)
                     )
                   ),
                   Right(
                     ListItem(
                       name = sealId,
                       changeUrl = routes.IdentificationNumberController.onPageLoad(userAnswers.lrn, mode, equipmentIndex, Index(1)).url,
-                      removeUrl = Some(Call("GET", "#").url) //TODO: Change to RemoveSeal when added
+                      removeUrl = Some(routes.RemoveSealYesNoController.onPageLoad(userAnswers.lrn, mode, equipmentIndex, Index(1)).url)
                     )
                   )
                 )
@@ -99,7 +97,7 @@ class SealsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with
                     ListItem(
                       name = sealId,
                       changeUrl = routes.IdentificationNumberController.onPageLoad(userAnswers.lrn, mode, equipmentIndex, Index(1)).url,
-                      removeUrl = Some(Call("GET", "#").url) //TODO: Change to RemoveSeal when added
+                      removeUrl = Some(routes.RemoveSealYesNoController.onPageLoad(userAnswers.lrn, mode, equipmentIndex, Index(1)).url)
                     )
                   )
                 )

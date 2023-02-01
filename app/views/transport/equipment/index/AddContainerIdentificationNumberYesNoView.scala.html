@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.transport.equipment.routes
+@import controllers.transport.equipment.index.routes
 @import models.LocalReferenceNumber
 @import viewModels.components.InputYesNoViewModel._
 @import views.html.components.{Button, ErrorSummary, InputYesNo}
@@ -27,22 +27,22 @@
     button: Button
 )
 
-@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("transport.equipment.addContainerIdentificationNumberYesNo.title"),
+    title = messages("transport.equipment.index.addContainerIdentificationNumberYesNo.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.AddContainerIdentificationNumberYesNoController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.AddContainerIdentificationNumberYesNoController.onSubmit(lrn, mode, equipmentIndex), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
         @inputYesNo(
             field = form("value"),
             yesNoType = OrdinaryYesNo(
-                heading = messages("transport.equipment.addContainerIdentificationNumberYesNo.heading"),
+                heading = messages("transport.equipment.index.addContainerIdentificationNumberYesNo.heading"),
                 caption = Some(messages("transport.equipment.caption"))
             )
         )

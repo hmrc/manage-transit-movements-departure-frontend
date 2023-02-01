@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package pages.transport.equipment
+package pages.transport.equipment.index
 
-import controllers.transport.equipment.routes
-import models.{Mode, UserAnswers}
+import controllers.transport.equipment.index.routes
+import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.TransportSection
+import pages.sections.transport.equipment.EquipmentSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object AddContainerIdentificationNumberYesNoPage extends QuestionPage[Boolean] {
+case class AddContainerIdentificationNumberYesNoPage(equipmentIndex: Index) extends QuestionPage[Boolean] {
 
-  override def path: JsPath = TransportSection.path \ toString
+  override def path: JsPath = EquipmentSection(equipmentIndex).path \ toString
 
   override def toString: String = "addContainerIdentificationNumberYesNo"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.AddContainerIdentificationNumberYesNoController.onPageLoad(userAnswers.lrn, mode))
+    Some(routes.AddContainerIdentificationNumberYesNoController.onPageLoad(userAnswers.lrn, mode, equipmentIndex))
 }

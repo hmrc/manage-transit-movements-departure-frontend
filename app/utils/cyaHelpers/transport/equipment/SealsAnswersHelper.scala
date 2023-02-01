@@ -35,8 +35,8 @@ class SealsAnswersHelper(userAnswers: UserAnswers, mode: Mode, equipmentIndex: I
           None
         } else {
           Some(
-            Call("GET", "#")
-          ) //TODO: Change to ConfirmRemoveSeal when added
+            controllers.transport.equipment.index.seals.routes.RemoveSealYesNoController.onPageLoad(lrn, mode, equipmentIndex, index)
+          )
         }
         buildListItem[SealDomain](
           nameWhenComplete = _.identificationNumber,

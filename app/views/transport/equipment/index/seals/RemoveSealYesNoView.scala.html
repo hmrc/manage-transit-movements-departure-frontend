@@ -14,39 +14,37 @@
  * limitations under the License.
  *@
 
-@import controllers.transport.equipment.index.itemNumber.routes
+@import controllers.transport.equipment.index.seals.routes
 @import models.LocalReferenceNumber
-@import viewModels.components.InputTextViewModel._
-@import views.html.components.{Button, ErrorSummary, InputText}
+@import viewModels.components.InputYesNoViewModel._
+@import views.html.components.{Button, ErrorSummary, InputYesNo}
 
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
-    inputText: InputText,
+    inputYesNo: InputYesNo,
     errorSummary: ErrorSummary,
     button: Button
 )
 
-@(form: Form[String], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, itemNumberIndex: Index)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, sealIndex: Index, sealIdNumber: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("transport.equipment.index.itemNumber.title"),
+    title = messages("transport.equipment.index.seals.removeSealYesNo.title", sealIdNumber),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.ItemNumberController.onSubmit(lrn, mode, equipmentIndex, itemNumberIndex), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.RemoveSealYesNoController.onSubmit(lrn, mode, equipmentIndex, sealIndex), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
-        @inputText(
+        @inputYesNo(
             field = form("value"),
-            inputTextType = OrdinaryTextInput(
-                heading = messages("transport.equipment.index.itemNumber.heading"),
+            yesNoType = OrdinaryYesNo(
+                heading = messages("transport.equipment.index.seals.removeSealYesNo.heading", sealIdNumber),
                 caption = Some(messages("transport.equipment.caption"))
-            ),
-            inputClass = InputSize.Width20,
-            hint = Some(messages("transport.equipment.index.itemNumber.hint"))
+            )
         )
 
         @button(attributes = Map("id" -> "submit"))

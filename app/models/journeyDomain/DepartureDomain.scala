@@ -17,28 +17,27 @@
 package models.journeyDomain
 
 import models.domain.UserAnswersReader
+import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
 import models.journeyDomain.routeDetails.RouteDetailsDomain
+import models.journeyDomain.traderDetails.TraderDetailsDomain
+import models.journeyDomain.transport.TransportDomain
 
-// TODO - Need to implement this domain model for the remaining sections
 case class DepartureDomain(
   preTaskList: PreTaskListDomain,
-  // traderDetails: TraderDetailsDomain,
-  routeDetails: RouteDetailsDomain
-  // guarantee: GuaranteeDetailsDomain
-  // transport: TransportDomain,
+  traderDetails: TraderDetailsDomain,
+  routeDetails: RouteDetailsDomain,
+  guaranteeDetails: GuaranteeDetailsDomain,
+  transportDetails: TransportDomain
 )
 
 object DepartureDomain {
 
   def userAnswersReader(ctcCountryCode: Seq[String], customsSecurityAgreement: Seq[String]): UserAnswersReader[DepartureDomain] =
     for {
-      preTaskListDomain  <- UserAnswersReader[PreTaskListDomain]
-      routeDetailsDomain <- RouteDetailsDomain.userAnswersReader(ctcCountryCode, customsSecurityAgreement)
-      // traderDetailsDomain <- UserAnswersReader[TraderDetailsDomain]
-      // guaranteeDomain     <- UserAnswersReader[GuaranteeDetailsDomain]
-      // transportDomain    <- UserAnswersReader[TransportDomain]
-    } yield DepartureDomain(preTaskListDomain, routeDetailsDomain)
-//    } yield DepartureDomain(preTaskListDomain, routeDetailsDomain, transportDomain, guaranteeDomain)
-
-//  implicit val format: OFormat[DepartureDomain] = Json.format[DepartureDomain]
+      preTaskListDomain   <- UserAnswersReader[PreTaskListDomain]
+      routeDetailsDomain  <- RouteDetailsDomain.userAnswersReader(ctcCountryCode, customsSecurityAgreement)
+      traderDetailsDomain <- UserAnswersReader[TraderDetailsDomain]
+      guaranteeDomain     <- UserAnswersReader[GuaranteeDetailsDomain]
+      transportDomain     <- UserAnswersReader[TransportDomain]
+    } yield DepartureDomain(preTaskListDomain, traderDetailsDomain, routeDetailsDomain, guaranteeDomain, transportDomain)
 }

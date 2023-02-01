@@ -14,28 +14,20 @@
  * limitations under the License.
  */
 
-package models.traderDetails.representative
+package api
 
-import models.{RadioModel, WithName}
+import generated.{Number0, Number1}
+import javax.xml.datatype.DatatypeFactory
 
-sealed trait RepresentativeCapacity {
-  val code: String
-}
+object ApiXmlHelper {
 
-object RepresentativeCapacity extends RadioModel[RepresentativeCapacity] {
+  def toDate(date: String) =
+    DatatypeFactory
+      .newInstance()
+      .newXMLGregorianCalendar(date.replace("Z", ""))
 
-  case object Direct extends WithName("direct") with RepresentativeCapacity {
-    override val code: String = "2"
+  def boolToFlag(x: Boolean) = x match {
+    case true => Number1
+    case _    => Number0
   }
-
-  case object Indirect extends WithName("indirect") with RepresentativeCapacity {
-    override val code: String = "3"
-  }
-
-  override val messageKeyPrefix: String = "traderDetails.representative.capacity"
-
-  val values: Seq[RepresentativeCapacity] = Seq(
-    Direct,
-    Indirect
-  )
 }

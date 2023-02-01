@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package controllers.transport.equipment
+package controllers.transport.equipment.index
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.journeyDomain.transport.TransportDomain
-import models.{LocalReferenceNumber, Mode}
+import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
-import pages.transport.equipment.AddContainerIdentificationNumberYesNoPage
+import pages.transport.equipment.index.AddContainerIdentificationNumberYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.transport.equipment.AddContainerIdentificationNumberYesNoView
+import views.html.transport.equipment.index.AddContainerIdentificationNumberYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -45,27 +45,27 @@ class AddContainerIdentificationNumberYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("transport.equipment.addContainerIdentificationNumberYesNo")
+  private val form = formProvider("transport.equipment.index.addContainerIdentificationNumberYesNo")
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(AddContainerIdentificationNumberYesNoPage) match {
+      val preparedForm = request.userAnswers.get(AddContainerIdentificationNumberYesNoPage(equipmentIndex)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, lrn, mode))
+      Ok(view(preparedForm, lrn, mode, equipmentIndex))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, equipmentIndex))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            AddContainerIdentificationNumberYesNoPage.writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
+            AddContainerIdentificationNumberYesNoPage(equipmentIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
           }
         )
   }

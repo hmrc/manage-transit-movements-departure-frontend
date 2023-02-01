@@ -16,80 +16,73 @@
 
 package connectors
 
-import api.Conversions
+import api.submission.Header.scope
+import api.submission._
 import config.FrontendAppConfig
-import generated.TransitOperationType06
+import generated._
 import models.UserAnswers
+import models.domain.UserAnswersReader
+import models.journeyDomain.{DepartureDomain, ReaderError}
 import play.api.Logging
 import play.api.http.HeaderNames
 import scalaxb.`package`.toXML
-import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, HttpClient, HttpErrorFunctions, HttpResponse}
+import models.journeyDomain.DepartureDomain.userAnswersReader
+import pages.traderDetails.consignment.ApprovedOperatorPage
+import scalaxb.DataRecord
+import services.CountriesService
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConfig)(implicit ec: ExecutionContext) extends HttpErrorFunctions with Logging {
+class ApiConnector @Inject() (httpClient: HttpClient, appConfig: FrontendAppConfig, countriesService: CountriesService)(implicit ec: ExecutionContext)
+    extends HttpErrorFunctions
+    with Logging {
 
   private val requestHeaders = Seq(
     HeaderNames.ACCEPT       -> "application/vnd.hmrc.2.0+json",
     HeaderNames.CONTENT_TYPE -> "application/xml"
   )
 
-  // TODO - build out for remaining sections
-  def createSubmission(userAnswers: UserAnswers): Either[String, String] =
+  private def createPayload(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Either[ReaderError, CC015CType]] =
     for {
-      transitOperation <- Conversions.transitOperation(userAnswers)
-    } yield payloadXml(transitOperation)
-
-  def payloadXml(transitOperation: TransitOperationType06): String =
-    (<ncts:CC015C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
-      <messageRecipient>3pekcCFaMGmCMz1CPGUlhyml9gJCV6</messageRecipient>
-      <preparationDateAndTime>2022-07-02T03:11:04</preparationDateAndTime>
-      <messageIdentification>wrxe</messageIdentification>
-      <messageType>CC015C</messageType>
-      {toXML[TransitOperationType06](transitOperation, "TransitOperation", generated.defaultScope)}
-      <CustomsOfficeOfDeparture>
-        <referenceNumber>GB000218</referenceNumber>
-      </CustomsOfficeOfDeparture>
-      <CustomsOfficeOfDestinationDeclared>
-        <referenceNumber>GB000218</referenceNumber>
-      </CustomsOfficeOfDestinationDeclared>
-      <HolderOfTheTransitProcedure>
-        <identificationNumber>ezv3Z</identificationNumber>
-      </HolderOfTheTransitProcedure>
-      <Guarantee>
-        <sequenceNumber>66710</sequenceNumber>
-        <guaranteeType>P</guaranteeType>
-        <otherGuaranteeReference>iNkM2E</otherGuaranteeReference>
-      </Guarantee>
-      <Consignment>
-        <grossMass>4380979244.527545</grossMass>
-        <HouseConsignment>
-          <sequenceNumber>66710</sequenceNumber>
-          <grossMass>4380979244.527545</grossMass>
-          <ConsignmentItem>
-            <goodsItemNumber>34564</goodsItemNumber>
-            <declarationGoodsItemNumber>25</declarationGoodsItemNumber>
-            <Commodity>
-              <descriptionOfGoods>fds9YFrlk6DX7pnwQNgJmksfZ4z9uGjDy6Kaucb13r3kEleTuLHD5zKtbAKUU005AaZeVdTgdAnJKzuGliZGRb1E83Y0Z8IuyeFfnXgT7NwX81eGFb3vRXAWUFswwwprqZBcffnBLwLObF45W7evl7C6J4Tihj1d1a2ZKcAU6ttLNy</descriptionOfGoods>
-            </Commodity>
-            <Packaging>
-              <sequenceNumber>66710</sequenceNumber>
-              <typeOfPackages>Nu</typeOfPackages>
-            </Packaging>
-          </ConsignmentItem>
-        </HouseConsignment>
-      </Consignment>
-    </ncts:CC015C>).mkString
+      countries <- countriesService.getCountryCodesCTC()
+      security  <- countriesService.getCustomsSecurityAgreementAreaCountries()
+      domain                  = UserAnswersReader[DepartureDomain](userAnswersReader(countries.countryCodes, security.countryCodes)).run(userAnswers)
+      reducedDatasetIndicator = userAnswers.get(ApprovedOperatorPage).getOrElse(false)
+    } yield domain.map {
+      case DepartureDomain(preTaskList, traderDetails, routeDetails, guaranteeDetails, transportDetails) =>
+        CC015CType(
+          messagE_FROM_TRADERSequence1 = Header.message,
+          messageType = Header.messageType,
+          correlatioN_IDENTIFIERSequence3 = Header.correlationIdentifier,
+          TransitOperation = TransitOperation.transform(userAnswers.lrn.value, preTaskList, reducedDatasetIndicator, routeDetails.routing, transportDetails),
+          Authorisation = Authorisations.transform(
+            transportDetails.authorisationsAndLimit.map(
+              x => x.authorisationsDomain
+            )
+          ),
+          CustomsOfficeOfDeparture = CustomsOffices.transformOfficeOfDeparture(preTaskList.officeOfDeparture),
+          CustomsOfficeOfDestinationDeclared = CustomsOffices.transformOfficeOfDestination(routeDetails.routing.officeOfDestination),
+          CustomsOfficeOfTransitDeclared = CustomsOffices.transformOfficeOfTransit(routeDetails.transit),
+          CustomsOfficeOfExitForTransitDeclared = CustomsOffices.transformOfficeOfExit(routeDetails.exit),
+          HolderOfTheTransitProcedure = HolderOfTheTransitProcedure.transform(traderDetails),
+          Representative = Representative.transform(traderDetails),
+          Guarantee = Guarantee.transform(guaranteeDetails),
+          Consignment = Consignment.transform(transportDetails, traderDetails, routeDetails),
+          attributes = Map("@PhaseID" -> DataRecord(PhaseIDtype.fromString("NCTS5.0", scope)))
+        )
+    }
 
   def submitDeclaration(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
 
     val declarationUrl = s"${appConfig.apiUrl}/movements/departures"
 
-    createSubmission(userAnswers) match {
-      case Left(msg)    => throw new BadRequestException(msg)
-      case Right(value) => httpClient.POSTString(declarationUrl, value, requestHeaders)
+    createPayload(userAnswers) flatMap {
+      case Left(msg) => throw new BadRequestException(s"${msg.page.toString} at path ${msg.page.path}: ${msg.message.getOrElse("Something went wrong")}")
+      case Right(submissionModel) =>
+        val payload: String = toXML[CC015CType](submissionModel, "ncts:CC015C", scope).toString
+        httpClient.POSTString(declarationUrl, payload, requestHeaders)
     }
 
   }
