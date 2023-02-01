@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.CurrencyCodeFormProvider
 import generators.Generators
 import models.{CurrencyCodeList, NormalMode}
-import navigation.guaranteeDetails.GuaranteeDetailsNavigatorProvider
+import navigation.guaranteeDetails.GuaranteeNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.guaranteeDetails.guarantee.CurrencyPage
@@ -49,14 +49,14 @@ class CurrencyControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[GuaranteeDetailsNavigatorProvider]).toInstance(fakeGuaranteeDetailsNavigatorProvider))
+      .overrides(bind(classOf[GuaranteeNavigatorProvider]).toInstance(fakeGuaranteeNavigatorProvider))
       .overrides(bind(classOf[CurrenciesService]).toInstance(mockCurrenciesService))
 
   "Currency Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      when(mockCurrenciesService.getCurrencyCodes()).thenReturn(Future.successful(currencyCodeList))
+      when(mockCurrenciesService.getCurrencyCodes()(any())).thenReturn(Future.successful(currencyCodeList))
       setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, currencyRoute)
@@ -73,7 +73,7 @@ class CurrencyControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      when(mockCurrenciesService.getCurrencyCodes()).thenReturn(Future.successful(currencyCodeList))
+      when(mockCurrenciesService.getCurrencyCodes()(any())).thenReturn(Future.successful(currencyCodeList))
       val userAnswers = emptyUserAnswers.setValue(CurrencyPage(index), currencyCode1)
       setExistingUserAnswers(userAnswers)
 
@@ -93,7 +93,7 @@ class CurrencyControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
     "must redirect to the next page when valid data is submitted" in {
 
-      when(mockCurrenciesService.getCurrencyCodes()).thenReturn(Future.successful(currencyCodeList))
+      when(mockCurrenciesService.getCurrencyCodes()(any())).thenReturn(Future.successful(currencyCodeList))
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(emptyUserAnswers)
@@ -110,7 +110,7 @@ class CurrencyControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      when(mockCurrenciesService.getCurrencyCodes()).thenReturn(Future.successful(currencyCodeList))
+      when(mockCurrenciesService.getCurrencyCodes()(any())).thenReturn(Future.successful(currencyCodeList))
       setExistingUserAnswers(emptyUserAnswers)
 
       val request   = FakeRequest(POST, currencyRoute).withFormUrlEncodedBody(("value", "invalid value"))

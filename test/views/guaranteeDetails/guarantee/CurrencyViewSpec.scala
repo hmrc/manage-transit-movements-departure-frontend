@@ -40,13 +40,11 @@ class CurrencyViewSpec extends InputSelectViewBehaviours[CurrencyCode] {
 
   behave like pageWithBackLink()
 
+  behave like pageWithSectionCaption("Guarantee details")
+
   behave like pageWithHeading()
 
   behave like pageWithSelect()
-
-  behave like pageWithHint("What currency do you want to use for the liability hint")
-
-  behave like pageWithContent("label", "What currency do you want to use for the liability label")
 
   behave like pageWithSubmitButton("Save and continue")
 }

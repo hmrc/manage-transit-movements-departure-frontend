@@ -72,6 +72,20 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       |]
       |""".stripMargin
 
+  private val currencyCodesResponseJson: String =
+    """
+      |[
+      | {
+      |   "currency":"GBP",
+      |   "description":"Sterling"
+      | },
+      | {
+      |   "currency":"CHF",
+      |   "description":"Swiss Franc"
+      | }
+      |]
+      |""".stripMargin
+
   private val countriesWithoutZipResponseJson: String =
     """
       |[
@@ -262,6 +276,27 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
       "must return an exception when an error response is returned" in {
         checkErrorResponse(s"/$baseUrl/country-without-zip", connector.getCountriesWithoutZip())
+      }
+    }
+
+    "getCurrencyCodes" - {
+      "must return a successful future response with a sequence of currency codes" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$baseUrl/currency-codes"))
+            .willReturn(okJson(currencyCodesResponseJson))
+        )
+
+        val expectedResult =
+          Seq(
+            CurrencyCode("GBP", "Sterling"),
+            CurrencyCode("CHF", "Swiss Franc")
+          )
+
+        connector.getCurrencyCodes().futureValue mustBe expectedResult
+      }
+
+      "must return an exception when an error response is returned" in {
+        checkErrorResponse(s"/$baseUrl/currency-codes", connector.getCurrencyCodes())
       }
     }
   }
