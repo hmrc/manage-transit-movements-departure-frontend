@@ -36,9 +36,9 @@ class AddAnotherGoodsItemNumberViewModelSpec extends SpecBase with Generators wi
           val result = new AddAnotherGoodsItemNumberViewModelProvider()(userAnswers, mode, equipmentIndex)
 
           result.listItems.length mustBe 1
-          result.title mustBe "You have added 1 goods item number to the transport equipment"
-          result.heading mustBe "You have added 1 goods item number to the transport equipment"
-          result.legend mustBe "Do you want to add another goods item number to the transport equipment?"
+          result.title mustBe "You have added 1 goods item number"
+          result.heading mustBe "You have added 1 goods item number"
+          result.legend mustBe "Do you want to add another goods item number?"
           result.maxLimitLabel mustBe "You cannot add any more goods item numbers. To add another, you need to remove one first."
       }
     }
@@ -55,9 +55,9 @@ class AddAnotherGoodsItemNumberViewModelSpec extends SpecBase with Generators wi
 
           val result = new AddAnotherGoodsItemNumberViewModelProvider()(userAnswers, mode, equipmentIndex)
           result.listItems.length mustBe itemNumbers
-          result.title mustBe s"You have added ${formatter.format(itemNumbers)} goods item numbers to the transport equipment"
-          result.heading mustBe s"You have added ${formatter.format(itemNumbers)} goods item numbers to the transport equipment"
-          result.legend mustBe "Do you want to add another goods item number to the transport equipment?"
+          result.title mustBe s"You have added ${formatter.format(itemNumbers)} goods item numbers"
+          result.heading mustBe s"You have added ${formatter.format(itemNumbers)} goods item numbers"
+          result.legend mustBe "Do you want to add another goods item number?"
           result.maxLimitLabel mustBe "You cannot add any more goods item numbers. To add another, you need to remove one first."
       }
     }
