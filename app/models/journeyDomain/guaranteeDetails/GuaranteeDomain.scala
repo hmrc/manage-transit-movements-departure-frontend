@@ -42,13 +42,13 @@ object GuaranteeDomain {
   implicit def userAnswersReader(index: Index): UserAnswersReader[GuaranteeDomain] =
     DeclarationTypePage.reader.flatMap {
       case Option4 =>
-        GuaranteeTypePage(index).mandatoryReader(_ == TIRGuarantee).map(GuaranteeOfTypesABR(_)(index))
+        GuaranteeTypePage(index).mandatoryReader(_ == TIRGuarantee).map(GuaranteeOfTypesAB(_)(index))
       case _ =>
         GuaranteeTypePage(index).reader.flatMap {
           guaranteeType =>
             guaranteeType match {
-              case GuaranteeWaiverByAgreement | GuaranteeNotRequired =>
-                GuaranteeOfTypesABR.userAnswersReader(index, guaranteeType)
+              case GuaranteeWaiverByAgreement =>
+                GuaranteeOfTypesAB.userAnswersReader(index, guaranteeType)
               case GuaranteeWaiver | ComprehensiveGuarantee | IndividualGuarantee | FlatRateVoucher | IndividualGuaranteeMultiple =>
                 GuaranteeOfTypes01249.userAnswersReader(index, guaranteeType)
               case GuaranteeWaiverSecured =>
@@ -64,7 +64,7 @@ object GuaranteeDomain {
     }
   // scalastyle:on cyclomatic.complexity
 
-  case class GuaranteeOfTypesABR(
+  case class GuaranteeOfTypesAB(
     `type`: GuaranteeType
   )(override val index: Index)
       extends GuaranteeDomain {
@@ -79,10 +79,10 @@ object GuaranteeDomain {
     }
   }
 
-  object GuaranteeOfTypesABR {
+  object GuaranteeOfTypesAB {
 
     def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
-      UserAnswersReader(GuaranteeOfTypesABR(guaranteeType)(index))
+      UserAnswersReader(GuaranteeOfTypesAB(guaranteeType)(index))
   }
 
   case class GuaranteeOfTypes01249(

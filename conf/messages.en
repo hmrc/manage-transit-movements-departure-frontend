@@ -499,7 +499,6 @@ guaranteeDetails.guarantee.guaranteeType.8 = (8) Guarantee not required – exem
 guaranteeDetails.guarantee.guaranteeType.9 = (9) Individual guarantee with multiple usage
 guaranteeDetails.guarantee.guaranteeType.A = (A) Guarantee waiver by agreement
 guaranteeDetails.guarantee.guaranteeType.B = (B) Guarantee for goods dispatched under TIR procedure
-guaranteeDetails.guarantee.guaranteeType.R = (R) Guarantee not required – goods carried on the Rhine, the Danube or their waterways
 guaranteeDetails.guarantee.guaranteeType.checkYourAnswersLabel = Guarantee type
 guaranteeDetails.guarantee.guaranteeType.change.hidden = type of guarantee
 guaranteeDetails.guarantee.guaranteeType.error.required = Select which type of guarantee you are using

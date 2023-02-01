@@ -45,8 +45,6 @@ object GuaranteeType extends RadioModelU[GuaranteeType] {
 
   case object TIRGuarantee extends WithName("B") with GuaranteeType
 
-  case object GuaranteeNotRequired extends WithName("R") with GuaranteeType
-
   val values: Seq[GuaranteeType] = Seq(
     GuaranteeWaiver,
     ComprehensiveGuarantee,
@@ -57,8 +55,7 @@ object GuaranteeType extends RadioModelU[GuaranteeType] {
     GuaranteeNotRequiredExemptPublicBody,
     IndividualGuaranteeMultiple,
     GuaranteeWaiverByAgreement,
-    TIRGuarantee,
-    GuaranteeNotRequired
+    TIRGuarantee
   )
 
   override def valuesU(userAnswers: UserAnswers): Seq[GuaranteeType] = {

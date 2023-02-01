@@ -67,7 +67,6 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with Generator
         .setValue(OtherReferenceYesNoPage(Index(0)), false)
         .setValue(GuaranteeTypePage(Index(1)), GuaranteeWaiver)
         .setValue(GuaranteeTypePage(Index(2)), GuaranteeWaiverByAgreement)
-        .setValue(GuaranteeTypePage(Index(3)), GuaranteeNotRequired)
 
       val helper = new GuaranteeDetailsCheckYourAnswersHelper(userAnswers, NormalMode)
       helper.listItems mustBe Seq(
@@ -90,13 +89,6 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with Generator
             name = "(A) Guarantee waiver by agreement",
             changeUrl = guaranteeRoutes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, CheckMode, Index(2)).url,
             removeUrl = Some(guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(2)).url)
-          )
-        ),
-        Right(
-          ListItem(
-            name = "(R) Guarantee not required – goods carried on the Rhine, the Danube or their waterways",
-            changeUrl = guaranteeRoutes.GuaranteeTypeController.onPageLoad(userAnswers.lrn, CheckMode, Index(3)).url,
-            removeUrl = Some(guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(userAnswers.lrn, Index(3)).url)
           )
         )
       )
