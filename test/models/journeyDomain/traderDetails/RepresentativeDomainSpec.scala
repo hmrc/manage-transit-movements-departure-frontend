@@ -24,14 +24,13 @@ import models.domain.{EitherType, UserAnswersReader}
 import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.traderDetails.representative.{CapacityPage, EoriPage, NamePage, TelephoneNumberPage}
+import pages.traderDetails.representative.{EoriPage, NamePage, TelephoneNumberPage}
 
 class RepresentativeDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
-  private val eori     = arbitrary[EoriNumber].sample.value
-  private val name     = Gen.alphaNumStr.sample.value
-  private val capacity = Gen.oneOf(RepresentativeCapacity.values).sample.value
-  private val phone    = Gen.alphaNumStr.sample.value
+  private val eori  = arbitrary[EoriNumber].sample.value
+  private val name  = Gen.alphaNumStr.sample.value
+  private val phone = Gen.alphaNumStr.sample.value
 
   "Representative" - {
 
@@ -42,19 +41,18 @@ class RepresentativeDomainSpec extends SpecBase with UserAnswersSpecHelper with 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriPage)(eori.value)
           .unsafeSetVal(NamePage)(name)
-          .unsafeSetVal(CapacityPage)(capacity)
           .unsafeSetVal(TelephoneNumberPage)(phone)
 
         val expectedResult = RepresentativeDomain(
           eori = eori,
           name = name,
-          capacity = capacity,
           phone = phone
         )
 
         val result: EitherType[RepresentativeDomain] = UserAnswersReader[RepresentativeDomain].run(userAnswers)
 
         result.value mustBe expectedResult
+        result.value.capacity mustBe RepresentativeCapacity.Direct
       }
     }
 
@@ -78,21 +76,10 @@ class RepresentativeDomainSpec extends SpecBase with UserAnswersSpecHelper with 
         result.left.value.page mustBe NamePage
       }
 
-      "when representative has no capacity" in {
-        val userAnswers = emptyUserAnswers
-          .unsafeSetVal(EoriPage)(eori.value)
-          .unsafeSetVal(NamePage)(name)
-
-        val result: EitherType[RepresentativeDomain] = UserAnswersReader[RepresentativeDomain].run(userAnswers)
-
-        result.left.value.page mustBe CapacityPage
-      }
-
       "when representative has no phone" in {
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriPage)(eori.value)
           .unsafeSetVal(NamePage)(name)
-          .unsafeSetVal(CapacityPage)(capacity)
 
         val result: EitherType[RepresentativeDomain] = UserAnswersReader[RepresentativeDomain].run(userAnswers)
 

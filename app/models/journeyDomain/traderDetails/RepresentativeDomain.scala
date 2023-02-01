@@ -21,14 +21,16 @@ import models.EoriNumber
 import models.domain._
 import models.journeyDomain.JourneyDomainModel
 import models.traderDetails.representative.RepresentativeCapacity
+import models.traderDetails.representative.RepresentativeCapacity.Direct
 import pages.traderDetails.representative._
 
 case class RepresentativeDomain(
   eori: EoriNumber,
   name: String,
-  capacity: RepresentativeCapacity,
   phone: String
-) extends JourneyDomainModel
+) extends JourneyDomainModel {
+  val capacity: RepresentativeCapacity = Direct
+}
 
 object RepresentativeDomain {
 
@@ -36,7 +38,6 @@ object RepresentativeDomain {
     (
       EoriPage.reader.map(EoriNumber(_)),
       NamePage.reader,
-      CapacityPage.reader,
       TelephoneNumberPage.reader
     ).tupled.map((RepresentativeDomain.apply _).tupled)
 }

@@ -18,7 +18,6 @@ package generators
 
 import models._
 import models.reference._
-import models.traderDetails.representative.RepresentativeCapacity
 import models.transport.authorisations.AuthorisationType
 import models.transport.supplyChainActors.SupplyChainActorType
 import models.transport.transportMeans.BorderModeOfTransport
@@ -84,7 +83,6 @@ trait UserAnswersEntryGenerators {
     {
       case EoriPage            => Gen.alphaNumStr.map(JsString)
       case NamePage            => Gen.alphaNumStr.map(JsString)
-      case CapacityPage        => arbitrary[RepresentativeCapacity].map(Json.toJson(_))
       case TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
     }
   }

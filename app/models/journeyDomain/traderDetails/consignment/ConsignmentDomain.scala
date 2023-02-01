@@ -16,12 +16,10 @@
 
 package models.journeyDomain.traderDetails.consignment
 
-import cats.data.Kleisli
 import cats.implicits._
 import models.DeclarationType.Option4
 import models.SecurityDetailsType.NoSecurityDetails
-import models.UserAnswers
-import models.domain.{EitherType, GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
+import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
 import pages.preTaskList.{DeclarationTypePage, SecurityDetailsTypePage}
 import pages.traderDetails.consignment._
