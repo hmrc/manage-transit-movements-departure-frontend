@@ -279,6 +279,13 @@ traderDetails.representative.eori.error.invalid = Your EORI number or Trader Ide
 traderDetails.representative.eori.error.length = Your EORI number or Trader Identification Number (TIN) must be 17 characters or less
 traderDetails.representative.eori.change.hidden = representative’s EORI number or Trader Identification Number (TIN)
 
+traderDetails.representative.addDetails.title = Do you want to add your details?
+traderDetails.representative.addDetails.heading = Do you want to add your details?
+traderDetails.representative.addDetails.paragraph = This includes your name, phone number and EORI number or Trader Identification Number (TIN).
+traderDetails.representative.addDetails.checkYourAnswersLabel = Do you want to add your details?
+traderDetails.representative.addDetails.change.hidden = if you want to add your details
+traderDetails.representative.addDetails.error.required = Select yes if you want to add your details
+
 traderDetails.representative.name.title = What is your name?
 traderDetails.representative.name.heading = What is your name?
 traderDetails.representative.name.checkYourAnswersLabel = Representative’s name
