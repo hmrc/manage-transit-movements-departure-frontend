@@ -16,7 +16,6 @@
 
 package utils.cyaHelpers.traderDetails
 
-import models.traderDetails.representative.RepresentativeCapacity
 import models.{Mode, UserAnswers}
 import pages.traderDetails.ActingAsRepresentativePage
 import pages.traderDetails.representative._
@@ -52,13 +51,6 @@ class RepresentativeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)
     formatAnswer = formatAsText,
     prefix = "traderDetails.representative.name",
     id = Some("change-representative-name")
-  )
-
-  def capacity: Option[SummaryListRow] = getAnswerAndBuildRow[RepresentativeCapacity](
-    page = CapacityPage,
-    formatAnswer = formatEnumAsText(RepresentativeCapacity.messageKeyPrefix),
-    prefix = "traderDetails.representative.capacity",
-    id = Some("change-representative-capacity")
   )
 
   def phoneNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](

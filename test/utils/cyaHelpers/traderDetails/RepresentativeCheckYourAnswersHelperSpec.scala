@@ -20,7 +20,6 @@ import base.SpecBase
 import controllers.traderDetails.representative.routes
 import generators.Generators
 import models.Mode
-import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -199,50 +198,6 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                           href = routes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("representative’s name"),
                           attributes = Map("id" -> "change-representative-name")
-                        )
-                      )
-                    )
-                  )
-                )
-              )
-          }
-        }
-      }
-    }
-
-    "capacity" - {
-      "must return None" - {
-        s"when $CapacityPage is undefined" in {
-          forAll(arbitrary[Mode]) {
-            mode =>
-              val helper = new RepresentativeCheckYourAnswersHelper(emptyUserAnswers, mode)
-              val result = helper.capacity
-              result mustBe None
-          }
-        }
-      }
-
-      "must return Some(Row)" - {
-        s"when $CapacityPage is defined" in {
-          forAll(Gen.oneOf(RepresentativeCapacity.values), arbitrary[Mode]) {
-            (capacity, mode) =>
-              val answers = emptyUserAnswers.setValue(CapacityPage, capacity)
-
-              val helper = new RepresentativeCheckYourAnswersHelper(answers, mode)
-              val result = helper.capacity
-
-              result mustBe Some(
-                SummaryListRow(
-                  key = Key("Representative capacity".toText),
-                  value = Value(messages(s"traderDetails.representative.capacity.$capacity").toText),
-                  actions = Some(
-                    Actions(
-                      items = List(
-                        ActionItem(
-                          content = "Change".toText,
-                          href = routes.CapacityController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("representative capacity"),
-                          attributes = Map("id" -> "change-representative-capacity")
                         )
                       )
                     )

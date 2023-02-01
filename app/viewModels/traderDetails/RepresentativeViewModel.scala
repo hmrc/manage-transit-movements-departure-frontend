@@ -39,7 +39,6 @@ object RepresentativeViewModel {
           helper.eori,
           helper.addDetails,
           helper.name,
-          helper.capacity,
           helper.phoneNumber
         ).flatten
       )
