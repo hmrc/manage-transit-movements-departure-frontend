@@ -25,6 +25,7 @@ import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.departure.{Identification, InlandMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
+import pages.transport.equipment.index.itemNumber.ItemNumberPage
 import play.api.libs.json._
 import queries.Gettable
 
@@ -262,7 +263,8 @@ trait UserAnswersEntryGenerators {
       generateLimitAnswers orElse
       generateCarrierDetailsAnswers orElse
       generateEquipmentAnswers orElse
-      generateSealAnswers
+      generateSealAnswers orElse
+      generateGoodsItemNumberAnswers
 
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.preRequisites._
@@ -363,6 +365,7 @@ trait UserAnswersEntryGenerators {
       case AddContainerIdentificationNumberYesNoPage => arbitrary[Boolean].map(JsBoolean)
       case ContainerIdentificationNumberPage(_)      => Gen.alphaNumStr.map(JsString)
       case AddSealYesNoPage(_)                       => arbitrary[Boolean].map(JsBoolean)
+      case AddGoodsItemNumberYesNoPage(_)            => arbitrary[Boolean].map(JsBoolean)
     }
   }
 
@@ -371,5 +374,9 @@ trait UserAnswersEntryGenerators {
     {
       case IdentificationNumberPage(_, _) => Gen.alphaNumStr.map(JsString)
     }
+  }
+
+  private def generateGoodsItemNumberAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    case ItemNumberPage(_, _) => Gen.alphaNumStr.map(JsString)
   }
 }

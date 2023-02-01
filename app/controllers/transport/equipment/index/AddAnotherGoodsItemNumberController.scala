@@ -18,7 +18,7 @@ package controllers.transport.equipment.index
 
 import config.FrontendAppConfig
 import controllers.actions._
-import controllers.transport.equipment.index.itemNumber.routes
+import controllers.transport.equipment.index.itemNumber.{routes => itemNumberRoutes}
 import forms.AddAnotherFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.transport.TransportNavigatorProvider
@@ -48,8 +48,8 @@ class AddAnotherGoodsItemNumberController @Inject() (
     implicit request =>
       val viewModel = viewModelProvider(request.userAnswers, mode, equipmentIndex)
       val form      = formProvider("transport.equipment.index.addAnotherGoodsItemNumber", viewModel.allowMoreGoodsItemNumbers)
-      viewModel.goodsItemNumbers match {
-        case 0 => Redirect(controllers.transport.equipment.index.routes.AddGoodsItemNumberYesNoController.onPageLoad(lrn, mode, equipmentIndex))
+      viewModel.goodsItemNumbersCount match {
+        case 0 => Redirect(routes.AddGoodsItemNumberYesNoController.onPageLoad(lrn, mode, equipmentIndex))
         case _ => Ok(view(form, lrn, mode, equipmentIndex, viewModel, viewModel.allowMoreGoodsItemNumbers))
       }
   }
@@ -64,7 +64,7 @@ class AddAnotherGoodsItemNumberController @Inject() (
           formWithErrors => BadRequest(view(formWithErrors, lrn, mode, equipmentIndex, viewModel, viewModel.allowMoreGoodsItemNumbers)),
           {
             case true =>
-              Redirect(routes.ItemNumberController.onPageLoad(lrn, mode, equipmentIndex, Index(viewModel.goodsItemNumbers)))
+              Redirect(itemNumberRoutes.ItemNumberController.onPageLoad(lrn, mode, equipmentIndex, Index(viewModel.goodsItemNumbersCount)))
             case false =>
               Redirect(navigatorProvider(mode).nextPage(request.userAnswers))
           }

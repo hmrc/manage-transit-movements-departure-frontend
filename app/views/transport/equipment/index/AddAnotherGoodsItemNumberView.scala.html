@@ -39,6 +39,8 @@
     lrn = Some(lrn)
 ) {
 
+    @errorSummary(form.errors)
+
     @heading(
         heading = viewModel.heading,
         caption = Some(messages("transport.equipment.caption"))

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package utils.cyaHelpers.transport.equipments.index
+package utils.cyaHelpers.transport.equipment
 
 import controllers.transport.equipment.index.itemNumber.routes
 import models.journeyDomain.transport.equipment.index.itemNumber.ItemNumberDomain

@@ -21,7 +21,7 @@ import controllers.transport.equipment.index.routes
 import models.{Index, Mode, UserAnswers}
 import play.api.i18n.Messages
 import play.api.mvc.Call
-import utils.cyaHelpers.transport.equipments.index.GoodsItemNumbersAnswersHelper
+import utils.cyaHelpers.transport.equipment.GoodsItemNumbersAnswersHelper
 import viewModels.ListItem
 
 import javax.inject.Inject
@@ -31,18 +31,18 @@ case class AddAnotherGoodsItemNumberViewModel(
   onSubmitCall: Call
 ) {
 
-  val goodsItemNumbers: Int    = listItems.length
-  val singularOrPlural: String = if (goodsItemNumbers == 1) "singular" else "plural"
+  val goodsItemNumbersCount: Int = listItems.length
+  val singularOrPlural: String   = if (goodsItemNumbersCount == 1) "singular" else "plural"
 
   val prefix: String = "transport.equipment.index.addAnotherGoodsItemNumber"
 
-  def title(implicit messages: Messages): String         = messages(s"$prefix.$singularOrPlural.title", goodsItemNumbers)
-  def heading(implicit messages: Messages): String       = messages(s"$prefix.$singularOrPlural.heading", goodsItemNumbers)
+  def title(implicit messages: Messages): String         = messages(s"$prefix.$singularOrPlural.title", goodsItemNumbersCount)
+  def heading(implicit messages: Messages): String       = messages(s"$prefix.$singularOrPlural.heading", goodsItemNumbersCount)
   def legend(implicit messages: Messages): String        = messages(s"$prefix.label")
   def maxLimitLabel(implicit messages: Messages): String = messages(s"$prefix.maxLimit.label")
 
   def allowMoreGoodsItemNumbers(implicit config: FrontendAppConfig): Boolean =
-    goodsItemNumbers < config.maxGoodsItemNumbers
+    goodsItemNumbersCount < config.maxGoodsItemNumbers
 }
 
 object AddAnotherGoodsItemNumberViewModel {

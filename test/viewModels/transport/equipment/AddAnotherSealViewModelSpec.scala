@@ -43,7 +43,7 @@ class AddAnotherSealViewModelSpec extends SpecBase with Generators with ScalaChe
       }
     }
 
-    "when there are multiple supply chain actors" in {
+    "when there are multiple seals" in {
       val formatter = java.text.NumberFormat.getIntegerInstance
 
       forAll(arbitrary[Mode], Gen.choose(2, frontendAppConfig.maxSeals)) {
