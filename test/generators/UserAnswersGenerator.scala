@@ -22,6 +22,7 @@ import models.reference.Country
 import models.{CountryList, EoriNumber, LocalReferenceNumber, RichJsObject, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
+import utils.Status
 
 trait UserAnswersGenerator
     extends UserAnswersEntryGenerators
@@ -49,7 +50,7 @@ trait UserAnswersGenerator
       for {
         lrn        <- arbitrary[LocalReferenceNumber]
         eoriNumber <- arbitrary[EoriNumber]
-        initialAnswers = UserAnswers(lrn, eoriNumber)
+        initialAnswers = UserAnswers(lrn, eoriNumber, status = Status.Draft)
         answers <- arbitraryDepartureAnswers(initialAnswers)
       } yield answers
     }

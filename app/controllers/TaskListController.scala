@@ -21,13 +21,14 @@ import controllers.actions.{Actions, DependentTasksCompletedActionProvider}
 import models.LocalReferenceNumber
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import services.ApiService
 import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.{PreTaskListTask, TaskListViewModel}
 import views.html.TaskListView
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class TaskListController @Inject() (
   override val messagesApi: MessagesApi,
@@ -36,7 +37,8 @@ class TaskListController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: TaskListView,
   viewModel: TaskListViewModel,
-  apiService: ApiService
+  apiService: ApiService,
+  implicit val sessionRepository: SessionRepository
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -54,15 +56,17 @@ class TaskListController @Inject() (
     .andThen(checkDependentTasksCompleted(PreTaskListTask.section))
     .async {
       implicit request =>
-        apiService.submitDeclaration(request.userAnswers).map {
+        apiService.submitDeclaration(request.userAnswers).flatMap {
           case response if is2xx(response.status) =>
-            Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad())
+            for {
+              _ <- sessionRepository.set(request.userAnswers.updateStatus(utils.Status.Submitted))
+            } yield Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad())
           case response if is4xx(response.status) =>
             // TODO - log and audit fail. How to handle this?
-            BadRequest
+            Future.successful(BadRequest)
           case _ =>
             // TODO - log and audit fail. How to handle this?
-            InternalServerError("Something went wrong")
+            Future.successful(InternalServerError("Something went wrong"))
         }
     }
 }

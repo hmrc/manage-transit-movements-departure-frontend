@@ -34,6 +34,7 @@ import play.api.mvc.{AnyContent, Request, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
+import utils.Status
 
 import scala.concurrent.Future
 
@@ -86,7 +87,7 @@ class DataRetrievalActionSpec extends AnyFreeSpec with Matchers with GuiceOneApp
 
       "when there are existing answers for this LRN" in {
 
-        when(sessionRepository.get(any())(any())) thenReturn Future.successful(Some(UserAnswers(lrn, eoriNumber)))
+        when(sessionRepository.get(any())(any())) thenReturn Future.successful(Some(UserAnswers(lrn, eoriNumber, status = Status.Draft)))
 
         harness(lrn, request => request.userAnswers mustBe defined)
       }

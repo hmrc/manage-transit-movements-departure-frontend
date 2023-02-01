@@ -19,6 +19,7 @@ package services
 import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
+import utils.Status
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -29,6 +30,6 @@ class UserAnswersService @Inject() (
 
   def getOrCreateUserAnswers(eoriNumber: EoriNumber, localReferenceNumber: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[UserAnswers] =
     sessionRepository.get(localReferenceNumber) map {
-      _ getOrElse UserAnswers(localReferenceNumber, eoriNumber)
+      _ getOrElse UserAnswers(localReferenceNumber, eoriNumber, status = Status.Draft)
     }
 }
