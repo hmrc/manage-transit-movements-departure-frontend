@@ -29,8 +29,10 @@ class ItemNumberFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text(s"$prefix.error.required")
         .verifying(
-          maxLength(itemNumberLength, s"$prefix.error.length"),
-          regexp(numericRegex, s"$prefix.error.invalidCharacters")
+          StopOnFirstFail[String](
+            maxLength(itemNumberLength, s"$prefix.error.length"),
+            regexp(numericRegex, s"$prefix.error.invalidCharacters")
+          )
         )
     )
 }
