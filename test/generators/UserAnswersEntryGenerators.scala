@@ -261,9 +261,7 @@ trait UserAnswersEntryGenerators {
       generateAuthorisationAnswers orElse
       generateLimitAnswers orElse
       generateCarrierDetailsAnswers orElse
-      generateEquipmentAnswers orElse
-      generateSealAnswers orElse
-      generateItemNumberAnswers
+      generateEquipmentAnswers
 
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.preRequisites._

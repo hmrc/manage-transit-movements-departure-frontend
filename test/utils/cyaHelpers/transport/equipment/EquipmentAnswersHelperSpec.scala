@@ -266,15 +266,15 @@ class EquipmentAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
               val helper      = new EquipmentAnswersHelper(userAnswers, mode, equipmentIndex)
               val result      = helper.itemNumber(index).get
 
-              result.key.value mustBe "ItemNumber 1"
+              result.key.value mustBe "Goods item number 1"
               result.value.value mustBe goodsItemNumber
               val actions = result.actions.get.items
               actions.size mustBe 1
               val action = actions.head
               action.content.value mustBe "Change"
               action.href mustBe ItemNumberController.onPageLoad(userAnswers.lrn, mode, equipmentIndex, itemNumberIndex).url
-              action.visuallyHiddenText.get mustBe "itemNumber 1"
-              action.id mustBe "change-itemNumber-1"
+              action.visuallyHiddenText.get mustBe "goods item number 1"
+              action.id mustBe "change-goods-item-number-1"
           }
         }
       }
