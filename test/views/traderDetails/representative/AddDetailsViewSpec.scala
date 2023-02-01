@@ -33,7 +33,11 @@ class AddDetailsViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithBackLink()
 
+  behave like pageWithSectionCaption("Trader details - Representative")
+
   behave like pageWithHeading()
+
+  behave like pageWithContent("p", "This includes your name, phone number and EORI number or Trader Identification Number (TIN).")
 
   behave like pageWithRadioItems()
 

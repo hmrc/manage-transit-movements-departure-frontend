@@ -41,8 +41,10 @@
 
         @inputYesNo(
             field = form("value"),
-            yesNoType = OrdinaryYesNo(
-                heading = messages("traderDetails.representative.addDetails.heading")
+            yesNoType = YesNoWithAdditionalHtml(
+                heading = messages("traderDetails.representative.addDetails.heading"),
+                caption = Some(messages("traderDetails.representative.caption")),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("traderDetails.representative.addDetails.paragraph")}</p>""")
             )
         )
 
