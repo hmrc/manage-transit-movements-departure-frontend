@@ -39,6 +39,13 @@ class RepresentativeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)
     id = Some("change-representative-eori-number")
   )
 
+  def addDetails: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+    page = AddDetailsPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "traderDetails.representative.addDetails",
+    id = Some("change-add-details")
+  )
+
   def name: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = NamePage,
     formatAnswer = formatAsText,

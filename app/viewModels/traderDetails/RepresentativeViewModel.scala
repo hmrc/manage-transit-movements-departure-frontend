@@ -37,6 +37,7 @@ object RepresentativeViewModel {
         rows = Seq(
           helper.actingAsRepresentative,
           helper.eori,
+          helper.addDetails,
           helper.name,
           helper.phoneNumber
         ).flatten

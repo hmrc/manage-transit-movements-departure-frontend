@@ -121,6 +121,50 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
       }
     }
 
+    "addDetails" - {
+      "must return None" - {
+        s"when $AddDetailsPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new RepresentativeCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.addDetails
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        s"when $AddDetailsPage is defined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(AddDetailsPage, true)
+
+              val helper = new RepresentativeCheckYourAnswersHelper(answers, mode)
+              val result = helper.addDetails
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Do you want to add your details?".toText),
+                  value = Value("Yes".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = controllers.traderDetails.representative.routes.AddDetailsController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("if you want to add your details"),
+                          attributes = Map("id" -> "change-add-details")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
     "name" - {
       "must return None" - {
         s"when $NamePage is undefined" in {
