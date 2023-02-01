@@ -16,16 +16,15 @@
 
 package controllers
 
-import controllers.actions.{Actions, IdentifierAction}
-import models.{domain, DeclarationType, LocalReferenceNumber, NormalMode}
+import controllers.actions.Actions
 import models.domain.UserAnswersReader
 import models.journeyDomain.PreTaskListDomain
+import models.{LocalReferenceNumber, NormalMode}
 import navigation.PreTaskListNavigatorProvider
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import javax.inject.Inject
-import scala.concurrent.Future
 
 class DraftController @Inject() (
   val controllerComponents: MessagesControllerComponents,
