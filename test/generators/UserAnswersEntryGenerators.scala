@@ -363,6 +363,7 @@ trait UserAnswersEntryGenerators {
       case AddContainerIdentificationNumberYesNoPage(_) => arbitrary[Boolean].map(JsBoolean)
       case ContainerIdentificationNumberPage(_)         => Gen.alphaNumStr.map(JsString)
       case AddSealYesNoPage(_)                          => arbitrary[Boolean].map(JsBoolean)
+      case AddGoodsItemNumberYesNoPage(_)               => arbitrary[Boolean].map(JsBoolean)
     }
 
     pf orElse

@@ -29,6 +29,7 @@ import viewModels.sections.Section
 import viewModels.taskList.{TaskListTask, TaskStatus}
 import viewModels.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationViewModel
 import viewModels.transport.equipment.AddAnotherSealViewModel
+import viewModels.transport.equipment.index.AddAnotherGoodsItemNumberViewModel
 import viewModels.transport.supplyChainActors.AddAnotherSupplyChainActorViewModel
 import viewModels.transport.transportMeans.active.AddAnotherBorderTransportViewModel
 import viewModels.{Link, ListItem}
@@ -250,5 +251,12 @@ trait ViewModelGenerators {
       listItems    <- arbitrary[Seq[ListItem]]
       onSubmitCall <- arbitrary[Call]
     } yield AddAnotherSealViewModel(listItems, onSubmitCall)
+  }
+
+  implicit lazy val arbitraryAddAnotherGoodsItemNumberViewModel: Arbitrary[AddAnotherGoodsItemNumberViewModel] = Arbitrary {
+    for {
+      listItems    <- arbitrary[Seq[ListItem]]
+      onSubmitCall <- arbitrary[Call]
+    } yield AddAnotherGoodsItemNumberViewModel(listItems, onSubmitCall)
   }
 }

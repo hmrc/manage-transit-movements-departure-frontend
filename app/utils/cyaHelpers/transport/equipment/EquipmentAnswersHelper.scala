@@ -16,6 +16,7 @@
 
 package utils.cyaHelpers.transport.equipment
 
+import models.journeyDomain.transport.equipment.index.itemNumber.ItemNumberDomain
 import models.journeyDomain.transport.equipment.seal.SealDomain
 import models.{Index, Mode, UserAnswers}
 import pages.transport.equipment.index._
@@ -64,4 +65,11 @@ class EquipmentAnswersHelper(
     prefix = "transport.equipment.index.addGoodsItemNumberYesNo",
     id = Some("change-add-item-numbers")
   )
+
+  def itemNumber(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[ItemNumberDomain](
+    formatAnswer = formatAsText,
+    prefix = "transport.equipment.index.checkYourAnswers.itemNumber",
+    id = Some(s"change-goods-item-number-${index.display}"),
+    args = index.display
+  )(ItemNumberDomain.userAnswersReader(equipmentIndex, index))
 }
