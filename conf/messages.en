@@ -552,6 +552,13 @@ guaranteeDetails.guarantee.liabilityAmount.error.invalidFormat = The liability a
 guaranteeDetails.guarantee.liabilityAmount.error.invalidValue = The liability amount must be £9,999,999,999,999,999.99 or less
 guaranteeDetails.guarantee.liabilityAmount.change.hidden = liability amount
 
+guaranteeDetails.guarantee.currency.title = What currency do you want to use for the liability?
+guaranteeDetails.guarantee.currency.heading = What currency do you want to use for the liability?
+guaranteeDetails.guarantee.currency.placeholder = Select a currency
+guaranteeDetails.guarantee.currency.change.hidden = liability currency
+guaranteeDetails.guarantee.currency.checkYourAnswersLabel = What currency do you want to use for the liability
+guaranteeDetails.guarantee.currency.error.required = Select the currency you want to use for the liability
+
 guaranteeDetails.guarantee.removeGuaranteeYesNo.title = Are you sure you want to remove this guarantee?
 guaranteeDetails.guarantee.removeGuaranteeYesNo.heading = Are you sure you want to remove this guarantee?
 guaranteeDetails.guarantee.removeGuaranteeYesNo.error.required = Select yes if you want to remove this guarantee

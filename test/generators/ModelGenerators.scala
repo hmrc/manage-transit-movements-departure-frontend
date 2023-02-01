@@ -314,4 +314,12 @@ trait ModelGenerators {
       } yield Nationality(code, desc)
     }
 
+  implicit lazy val arbitraryCurrencyCode: Arbitrary[CurrencyCode] =
+    Arbitrary {
+      for {
+        currency <- nonEmptyString
+        desc     <- nonEmptyString
+      } yield CurrencyCode(currency, desc)
+    }
+
 }
