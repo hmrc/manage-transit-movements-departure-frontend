@@ -19,6 +19,7 @@ package utils.cyaHelpers.transport.equipment
 import base.SpecBase
 import controllers.transport.equipment.index.routes._
 import controllers.transport.equipment.index.seals.routes._
+import controllers.transport.equipment.index.itemNumber.routes._
 import generators.Generators
 import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
@@ -179,7 +180,7 @@ class EquipmentAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
 
       "must return Some(Row)" - {
-        "when office of exit is defined" in {
+        "when seal is defined" in {
           forAll(arbitrary[Mode], nonEmptyString) {
             (mode, sealIdNumber) =>
               val userAnswers = emptyUserAnswers.setValue(seals.IdentificationNumberPage(equipmentIndex, sealIndex), sealIdNumber)
@@ -245,5 +246,38 @@ class EquipmentAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
     }
 
+    "itemNumber" - {
+      "must return None" - {
+        "when itemNumber is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new EquipmentAnswersHelper(emptyUserAnswers, mode, equipmentIndex)
+              val result = helper.itemNumber(itemNumberIndex)
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when itemNumber is defined" in {
+          forAll(arbitrary[Mode], nonEmptyString) {
+            (mode, goodsItemNumber) =>
+              val userAnswers = emptyUserAnswers.setValue(itemNumber.ItemNumberPage(equipmentIndex, itemNumberIndex), goodsItemNumber)
+              val helper      = new EquipmentAnswersHelper(userAnswers, mode, equipmentIndex)
+              val result      = helper.itemNumber(index).get
+
+              result.key.value mustBe "ItemNumber 1"
+              result.value.value mustBe goodsItemNumber
+              val actions = result.actions.get.items
+              actions.size mustBe 1
+              val action = actions.head
+              action.content.value mustBe "Change"
+              action.href mustBe ItemNumberController.onPageLoad(userAnswers.lrn, mode, equipmentIndex, itemNumberIndex).url
+              action.visuallyHiddenText.get mustBe "itemNumber 1"
+              action.id mustBe "change-itemNumber-1"
+          }
+        }
+      }
+    }
   }
 }

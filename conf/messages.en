@@ -1469,8 +1469,8 @@ transport.equipment.index.checkYourAnswers.seals = Seals
 transport.equipment.index.checkYourAnswers.itemNumbers = Goods item numbers
 transport.equipment.index.checkYourAnswers.seal.label = Seal {0}
 transport.equipment.index.checkYourAnswers.seal.change.hidden = seal {0}
-transport.equipment.index.checkYourAnswers.itemNumber.label = Seal {0}
-transport.equipment.index.checkYourAnswers.itemNumber.change.hidden = seal {0}
+transport.equipment.index.checkYourAnswers.itemNumber.label = ItemNumber {0}
+transport.equipment.index.checkYourAnswers.itemNumber.change.hidden = itemNumber {0}
 
 transport.equipment.index.addAnotherGoodsItemNumber.singular.title = You have added 1 goods item number to the transport equipment
 transport.equipment.index.addAnotherGoodsItemNumber.plural.title = You have added {0} goods item numbers to the transport equipment

@@ -17,7 +17,7 @@
 package viewModels.transport.equipment
 
 import models.{Index, Mode, RichOptionalJsArray, UserAnswers}
-import pages.sections.transport.equipment.SealsSection
+import pages.sections.transport.equipment.{ItemNumbersSection, SealsSection}
 import play.api.i18n.Messages
 import utils.cyaHelpers.transport.equipment.EquipmentAnswersHelper
 import viewModels.sections.Section
@@ -51,7 +51,11 @@ object EquipmentViewModel {
 
       val itemNumbersSection = Section(
         sectionTitle = messages("transport.equipment.index.checkYourAnswers.itemNumbers"),
-        rows = helper.itemNumbersYesNo.toList // TODO - add list of item numbers once domain has been built
+        rows = helper.itemNumbersYesNo.toList ++ userAnswers
+          .get(ItemNumbersSection(equipmentIndex))
+          .mapWithIndex {
+            (_, index) => helper.itemNumber(index)
+          }
       )
 
       new EquipmentViewModel(Seq(preSection, sealsSection, itemNumbersSection))

@@ -51,13 +51,20 @@ class EquipmentViewModelSpec extends SpecBase with Generators {
 
       "must return row for each answer" in {
 
-        val numberOfSeals = Gen.choose(1, 10: Int).sample.value
+        val numberOfSeals            = Gen.choose(1, 10: Int).sample.value
+        val numberOfGoodsItemNumbers = Gen.choose(1, 10: Int).sample.value
 
         implicit class TestRichUserAnswers(userAnswers: UserAnswers) {
           def setSealsValues(): UserAnswers =
             (0 until numberOfSeals).foldLeft(userAnswers) {
               (acc, i) =>
                 acc.setValue(seals.IdentificationNumberPage(index, Index(i)), nonEmptyString.sample.value)
+            }
+
+          def setGoodsItemNumberValues(): UserAnswers =
+            (0 until numberOfGoodsItemNumbers).foldLeft(userAnswers) {
+              (acc, i) =>
+                acc.setValue(itemNumber.ItemNumberPage(index, Index(i)), nonEmptyString.sample.value)
             }
         }
 
@@ -67,6 +74,7 @@ class EquipmentViewModelSpec extends SpecBase with Generators {
           .setValue(AddSealYesNoPage(index), true)
           .setSealsValues()
           .setValue(AddGoodsItemNumberYesNoPage(index), true)
+          .setGoodsItemNumberValues()
 
         val mode              = arbitrary[Mode].sample.value
         val viewModelProvider = injector.instanceOf[EquipmentViewModelProvider]
@@ -84,7 +92,7 @@ class EquipmentViewModelSpec extends SpecBase with Generators {
         sections(1).rows.head.value.value mustBe "Yes"
 
         sections(2).sectionTitle.get mustBe "Goods item numbers"
-        sections(2).rows.size mustBe 1
+        sections(2).rows.size mustBe 1 + numberOfGoodsItemNumbers
         sections(2).rows.head.value.value mustBe "Yes"
       }
     }

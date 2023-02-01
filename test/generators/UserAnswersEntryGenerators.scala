@@ -25,7 +25,6 @@ import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.departure.{Identification, InlandMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.transport.equipment.index.itemNumber.ItemNumberPage
 import play.api.libs.json._
 import queries.Gettable
 
@@ -366,7 +365,7 @@ trait UserAnswersEntryGenerators {
       case AddContainerIdentificationNumberYesNoPage(_) => arbitrary[Boolean].map(JsBoolean)
       case ContainerIdentificationNumberPage(_)         => Gen.alphaNumStr.map(JsString)
       case AddSealYesNoPage(_)                          => arbitrary[Boolean].map(JsBoolean)
-      case AddGoodsItemNumberYesNoPage(_)            => arbitrary[Boolean].map(JsBoolean)
+      case AddGoodsItemNumberYesNoPage(_)               => arbitrary[Boolean].map(JsBoolean)
     }
 
     pf orElse
