@@ -52,5 +52,12 @@ class ItemNumberFormProviderSpec extends StringFieldBehaviours {
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
+    "when value breaks multiple validation rules" - {
+      "should only return one error" in {
+        val result = form.bind(Map(fieldName -> "123565rt")).apply(fieldName)
+        result.errors.size mustBe 1
+      }
+    }
   }
 }

@@ -1469,5 +1469,5 @@ transport.equipment.index.checkYourAnswers.seals = Seals
 transport.equipment.index.checkYourAnswers.itemNumbers = Goods item numbers
 transport.equipment.index.checkYourAnswers.seal.label = Seal {0}
 transport.equipment.index.checkYourAnswers.seal.change.hidden = seal {0}
-transport.equipment.index.checkYourAnswers.itemNumber.label = Seal {0}
-transport.equipment.index.checkYourAnswers.itemNumber.change.hidden = seal {0}
+transport.equipment.index.checkYourAnswers.itemNumber.label = Goods item number {0}
+transport.equipment.index.checkYourAnswers.itemNumber.change.hidden = goods item number {0}
