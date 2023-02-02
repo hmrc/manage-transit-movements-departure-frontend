@@ -20,6 +20,7 @@ import cats.implicits._
 import models.domain._
 import models.journeyDomain.traderDetails.consignment.ConsignmentDomain
 import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain
+import models.journeyDomain.traderDetails.representative.RepresentativeDomain
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{Mode, UserAnswers}
 import pages.traderDetails.ActingAsRepresentativePage

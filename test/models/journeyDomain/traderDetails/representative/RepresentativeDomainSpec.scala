@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.traderDetails
+package models.journeyDomain.traderDetails.representative
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
@@ -24,7 +24,7 @@ import models.domain.{EitherType, UserAnswersReader}
 import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.traderDetails.representative.{EoriPage, NamePage, TelephoneNumberPage}
+import pages.traderDetails.representative.{AddDetailsPage, EoriPage, NamePage, TelephoneNumberPage}
 
 class RepresentativeDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
@@ -36,17 +36,34 @@ class RepresentativeDomainSpec extends SpecBase with UserAnswersSpecHelper with 
 
     "can be parsed from UserAnswers" - {
 
-      "when has all representative fields complete" in {
+      "when mandatory eori field complete" in {
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriPage)(eori.value)
+          .unsafeSetVal(AddDetailsPage)(false)
+
+        val expectedResult = RepresentativeDomain(
+          eori = eori,
+          None
+        )
+
+        val result: EitherType[RepresentativeDomain] = UserAnswersReader[RepresentativeDomain].run(userAnswers)
+
+        result.value mustBe expectedResult
+        result.value.capacity mustBe RepresentativeCapacity.Direct
+      }
+
+      "when all optional fields complete" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(EoriPage)(eori.value)
+          .unsafeSetVal(AddDetailsPage)(true)
           .unsafeSetVal(NamePage)(name)
           .unsafeSetVal(TelephoneNumberPage)(phone)
 
         val expectedResult = RepresentativeDomain(
           eori = eori,
-          name = name,
-          phone = phone
+          Some(RepresentativeDetailsDomain(name, phone))
         )
 
         val result: EitherType[RepresentativeDomain] = UserAnswersReader[RepresentativeDomain].run(userAnswers)
@@ -67,23 +84,15 @@ class RepresentativeDomainSpec extends SpecBase with UserAnswersSpecHelper with 
         result.left.value.page mustBe EoriPage
       }
 
-      "when representative has no name" in {
+      "when additional representative details are not optional" in {
+
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriPage)(eori.value)
+          .unsafeSetVal(AddDetailsPage)(true)
 
         val result: EitherType[RepresentativeDomain] = UserAnswersReader[RepresentativeDomain].run(userAnswers)
 
         result.left.value.page mustBe NamePage
-      }
-
-      "when representative has no phone" in {
-        val userAnswers = emptyUserAnswers
-          .unsafeSetVal(EoriPage)(eori.value)
-          .unsafeSetVal(NamePage)(name)
-
-        val result: EitherType[RepresentativeDomain] = UserAnswersReader[RepresentativeDomain].run(userAnswers)
-
-        result.left.value.page mustBe TelephoneNumberPage
       }
     }
   }
