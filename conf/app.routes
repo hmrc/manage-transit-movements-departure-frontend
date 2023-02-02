@@ -6,7 +6,7 @@
 ->         /                                              app.routeDetails.Routes
 ->         /                                              app.transport.Routes
 
-GET        /tasks/:lrn                                    controllers.DraftController.draftRedirect(lrn: models.LocalReferenceNumber)
+GET        /drafts/:lrn                                    controllers.DraftController.draftRedirect(lrn: models.LocalReferenceNumber)
 
 GET        /                                              controllers.RedirectController.onPageLoad()
 
