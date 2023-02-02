@@ -23,6 +23,7 @@ import models.DeclarationType.Option4
 import models.domain.{EitherType, UserAnswersReader}
 import models.GuaranteeType._
 import models.journeyDomain.guaranteeDetails.GuaranteeDomain._
+import models.reference.CurrencyCode
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.guaranteeDetails.guarantee._
@@ -46,17 +47,20 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
         val grn             = Gen.alphaNumStr.sample.value
         val accessCode      = Gen.alphaNumStr.sample.value
         val liabilityAmount = arbitrary[BigDecimal].sample.value
+        val currencyCode    = arbitrary[CurrencyCode].sample.value
 
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, declarationType)
           .setValue(GuaranteeTypePage(index), guaranteeType)
           .setValue(ReferenceNumberPage(index), grn)
+          .setValue(CurrencyPage(index), currencyCode)
           .setValue(AccessCodePage(index), accessCode)
           .setValue(LiabilityAmountPage(index), liabilityAmount)
 
         val expectedResult = GuaranteeOfTypes01249(
           `type` = guaranteeType,
           grn = grn,
+          currencyCode = currencyCode,
           accessCode = accessCode,
           liabilityAmount = liabilityAmount
         )(index)
@@ -71,16 +75,19 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
       "when 5 guarantee type" in {
         val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
         val guaranteeType   = `5`.sample.value
-        val grn             = Gen.alphaNumStr.sample.value
+        val liabilityAmount = arbitrary[BigDecimal].sample.value
+        val currencyCode    = arbitrary[CurrencyCode].sample.value
 
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, declarationType)
           .setValue(GuaranteeTypePage(index), guaranteeType)
-          .setValue(ReferenceNumberPage(index), grn)
+          .setValue(CurrencyPage(index), currencyCode)
+          .setValue(LiabilityAmountPage(index), liabilityAmount)
 
         val expectedResult = GuaranteeOfType5(
           `type` = guaranteeType,
-          grn = grn
+          currencyCode = currencyCode,
+          liabilityAmount = liabilityAmount
         )(index)
 
         val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
@@ -90,7 +97,7 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
         result.value mustBe expectedResult
       }
 
-      "when A,R guarantee type" in {
+      "when A guarantee type" in {
         val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
         val guaranteeType   = `A`.sample.value
 
@@ -133,15 +140,25 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
         val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
         val guaranteeType   = `8`.sample.value
         val otherReference  = Gen.alphaNumStr.sample.value
+        val liabilityAmount = arbitrary[BigDecimal].sample.value
+        val currencyCode    = arbitrary[CurrencyCode].sample.value
 
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, declarationType)
           .setValue(GuaranteeTypePage(index), guaranteeType)
           .setValue(OtherReferencePage(index), otherReference)
+          .setValue(CurrencyPage(index), currencyCode)
+          .setValue(LiabilityAmountPage(index), liabilityAmount)
+
+        val type8And3Domain = Type8And3GuaranteeDomain(
+          otherReference = otherReference,
+          currencyCode = currencyCode,
+          liabilityAmount = liabilityAmount
+        )
 
         val expectedResult = GuaranteeOfType8(
           `type` = guaranteeType,
-          otherReference = otherReference
+          type8And3Guarantee = type8And3Domain
         )(index)
 
         val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
@@ -155,6 +172,8 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
         val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
         val guaranteeType   = `3`.sample.value
         val otherReference  = Gen.alphaNumStr.sample.value
+        val liabilityAmount = arbitrary[BigDecimal].sample.value
+        val currencyCode    = arbitrary[CurrencyCode].sample.value
 
         "when otherReference provided" in {
 
@@ -163,10 +182,18 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
             .setValue(GuaranteeTypePage(index), guaranteeType)
             .setValue(OtherReferenceYesNoPage(index), true)
             .setValue(OtherReferencePage(index), otherReference)
+            .setValue(CurrencyPage(index), currencyCode)
+            .setValue(LiabilityAmountPage(index), liabilityAmount)
+
+          val type8And3Domain = Type8And3GuaranteeDomain(
+            otherReference = otherReference,
+            currencyCode = currencyCode,
+            liabilityAmount = liabilityAmount
+          )
 
           val expectedResult = GuaranteeOfType3(
             `type` = guaranteeType,
-            otherReference = Some(otherReference)
+            type8And3Guarantee = Some(type8And3Domain)
           )(index)
 
           val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
@@ -176,7 +203,7 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
           result.value mustBe expectedResult
         }
 
-        "when otherReference not provided" in {
+        "when type8And3Guarantee not provided" in {
 
           val userAnswers = emptyUserAnswers
             .setValue(DeclarationTypePage, declarationType)
@@ -185,7 +212,7 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
 
           val expectedResult = GuaranteeOfType3(
             `type` = guaranteeType,
-            otherReference = None
+            type8And3Guarantee = None
           )(index)
 
           val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
@@ -221,11 +248,15 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
             val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
             val guaranteeType   = `0,1,2,4,9`.sample.value
             val grn             = Gen.alphaNumStr.sample.value
+            val currencyCode    = arbitrary[CurrencyCode].sample.value
+            val liabilityAmount = arbitrary[BigDecimal].sample.value
 
             val userAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
               .setValue(GuaranteeTypePage(index), guaranteeType)
               .setValue(ReferenceNumberPage(index), grn)
+              .setValue(CurrencyPage(index), currencyCode)
+              .setValue(LiabilityAmountPage(index), liabilityAmount)
 
             val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
               GuaranteeDomain.userAnswersReader(index)
@@ -234,17 +265,38 @@ class GuaranteeDomainSpec extends SpecBase with Generators {
             result.left.value.page mustBe AccessCodePage(index)
           }
 
-          "when liability amount missing" in {
+          "when currency code missing" in {
             val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
             val guaranteeType   = `0,1,2,4,9`.sample.value
             val grn             = Gen.alphaNumStr.sample.value
-            val accessCOde      = Gen.alphaNumStr.sample.value
+            val accessCode      = Gen.alphaNumStr.sample.value
 
             val userAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
               .setValue(GuaranteeTypePage(index), guaranteeType)
               .setValue(ReferenceNumberPage(index), grn)
-              .setValue(AccessCodePage(index), accessCOde)
+              .setValue(AccessCodePage(index), accessCode)
+
+            val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
+              GuaranteeDomain.userAnswersReader(index)
+            ).run(userAnswers)
+
+            result.left.value.page mustBe CurrencyPage(index)
+          }
+
+          "when liability amount missing" in {
+            val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+            val guaranteeType   = `0,1,2,4,9`.sample.value
+            val grn             = Gen.alphaNumStr.sample.value
+            val accessCode      = Gen.alphaNumStr.sample.value
+            val currencyCode    = arbitrary[CurrencyCode].sample.value
+
+            val userAnswers = emptyUserAnswers
+              .setValue(DeclarationTypePage, declarationType)
+              .setValue(GuaranteeTypePage(index), guaranteeType)
+              .setValue(ReferenceNumberPage(index), grn)
+              .setValue(AccessCodePage(index), accessCode)
+              .setValue(CurrencyPage(index), currencyCode)
 
             val result: EitherType[GuaranteeDomain] = UserAnswersReader[GuaranteeDomain](
               GuaranteeDomain.userAnswersReader(index)

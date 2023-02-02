@@ -89,7 +89,7 @@ object GuaranteeDomain {
   case class GuaranteeOfTypes01249(
     `type`: GuaranteeType,
     grn: String,
-    currency: CurrencyCode,
+    currencyCode: CurrencyCode,
     liabilityAmount: BigDecimal,
     accessCode: String
   )(override val index: Index)
@@ -105,13 +105,13 @@ object GuaranteeDomain {
         LiabilityAmountPage(index).reader,
         AccessCodePage(index).reader
       ).mapN {
-        (`type`, grn, currency, liabilityAmount, accessCode) => GuaranteeOfTypes01249(`type`, grn, currency, liabilityAmount, accessCode)(index)
+        (`type`, grn, currencyCode, liabilityAmount, accessCode) => GuaranteeOfTypes01249(`type`, grn, currencyCode, liabilityAmount, accessCode)(index)
       }
   }
 
   case class GuaranteeOfType5(
     `type`: GuaranteeType,
-    currency: CurrencyCode,
+    currencyCode: CurrencyCode,
     liabilityAmount: BigDecimal
   )(override val index: Index)
       extends GuaranteeDomain
@@ -124,7 +124,7 @@ object GuaranteeDomain {
         CurrencyPage(index).reader,
         LiabilityAmountPage(index).reader
       ).mapN {
-        (`type`, currency, liabilityAmount) => GuaranteeOfType5(`type`, currency, liabilityAmount)(index)
+        (`type`, currencyCode, liabilityAmount) => GuaranteeOfType5(`type`, currencyCode, liabilityAmount)(index)
       }
   }
 

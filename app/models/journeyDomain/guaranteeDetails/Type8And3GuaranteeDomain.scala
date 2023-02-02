@@ -23,7 +23,7 @@ import models.journeyDomain.JourneyDomainModel
 import models.reference.CurrencyCode
 import pages.guaranteeDetails.guarantee.{CurrencyPage, LiabilityAmountPage, OtherReferencePage}
 
-case class Type8And3GuaranteeDomain(otherReference: String, currency: CurrencyCode, liabilityAmount: BigDecimal) extends JourneyDomainModel
+case class Type8And3GuaranteeDomain(otherReference: String, currencyCode: CurrencyCode, liabilityAmount: BigDecimal) extends JourneyDomainModel
 
 object Type8And3GuaranteeDomain {
 
