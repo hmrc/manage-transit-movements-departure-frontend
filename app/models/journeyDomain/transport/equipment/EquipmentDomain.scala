@@ -17,24 +17,30 @@
 package models.journeyDomain.transport.equipment
 
 import cats.implicits._
+import controllers.transport.equipment.index.routes
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.transport.equipment.index.itemNumber.ItemNumbersDomain
 import models.journeyDomain.transport.equipment.seal.SealsDomain
+import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.transport.authorisations.AuthorisationType
-import models.{Index, ProcedureType}
+import models.{Index, Mode, ProcedureType, UserAnswers}
 import pages.preTaskList.ProcedureTypePage
 import pages.sections.transport.authorisationsAndLimit.AuthorisationsSection
 import pages.transport.authorisationsAndLimit.authorisations.index.AuthorisationTypePage
 import pages.transport.equipment.index._
 import pages.transport.preRequisites.ContainerIndicatorPage
+import play.api.mvc.Call
 
 case class EquipmentDomain(
   containerId: Option[String],
   seals: Option[SealsDomain],
   goodsItemNumbers: Option[ItemNumbersDomain]
 )(index: Index)
-    extends JourneyDomainModel
+    extends JourneyDomainModel {
+
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
+    Some(routes.EquipmentAnswersController.onPageLoad(userAnswers.lrn, mode, index))
+}
 
 object EquipmentDomain {
 

@@ -19,9 +19,9 @@ package generators
 import models.journeyDomain.transport._
 import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationDomain
 import models.journeyDomain.transport.authorisationsAndLimit.limit.LimitDomain
-import models.journeyDomain.transport.equipment.EquipmentDomain
 import models.journeyDomain.transport.equipment.index.itemNumber.ItemNumberDomain
 import models.journeyDomain.transport.equipment.seal.SealDomain
+import models.journeyDomain.transport.equipment.{EquipmentDomain, EquipmentsDomain}
 import models.journeyDomain.transport.supplyChainActors.SupplyChainActorDomain
 import models.journeyDomain.transport.transportMeans._
 import models.{Index, UserAnswers}
@@ -53,6 +53,9 @@ trait TransportUserAnswersGenerator {
 
   def arbitraryLimitAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[LimitDomain](userAnswers)
+
+  def arbitraryEquipmentsAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[EquipmentsDomain](userAnswers)
 
   def arbitraryEquipmentAnswers(userAnswers: UserAnswers, equipmentIndex: Index): Gen[UserAnswers] =
     buildUserAnswers[EquipmentDomain](userAnswers)(EquipmentDomain.userAnswersReader(equipmentIndex))

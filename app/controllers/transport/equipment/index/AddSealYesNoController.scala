@@ -22,7 +22,7 @@ import forms.YesNoFormProvider
 import models.journeyDomain.transport.TransportDomain
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
-import navigation.transport.TransportMeansNavigatorProvider
+import navigation.transport.EquipmentNavigatorProvider
 import pages.transport.equipment.index.AddSealYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -37,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddSealYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: TransportMeansNavigatorProvider,
+  navigatorProvider: EquipmentNavigatorProvider,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -68,7 +68,7 @@ class AddSealYesNoController @Inject() (
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, equipmentIndex))),
             value => {
-              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, equipmentIndex)
               AddSealYesNoPage(equipmentIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
             }
           )

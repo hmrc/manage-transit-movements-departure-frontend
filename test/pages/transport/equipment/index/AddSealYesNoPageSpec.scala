@@ -17,6 +17,8 @@
 package pages.transport.equipment.index
 
 import pages.behaviours.PageBehaviours
+import pages.sections.transport.equipment.SealsSection
+import play.api.libs.json.{JsArray, Json}
 
 class AddSealYesNoPageSpec extends PageBehaviours {
 
@@ -27,5 +29,18 @@ class AddSealYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](AddSealYesNoPage(equipmentIndex))
 
     beRemovable[Boolean](AddSealYesNoPage(equipmentIndex))
+
+    "cleanup" - {
+      "when no selected" - {
+        "must remove seals" in {
+          val userAnswers = emptyUserAnswers
+            .setValue(SealsSection(equipmentIndex), JsArray(Seq(Json.obj("foo" -> "bar"))))
+
+          val result = userAnswers.setValue(AddSealYesNoPage(equipmentIndex), false)
+
+          result.get(SealsSection(equipmentIndex)) must not be defined
+        }
+      }
+    }
   }
 }

@@ -19,7 +19,7 @@ package controllers.transport.equipment.index
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
 import models.NormalMode
-import navigation.transport.TransportNavigatorProvider
+import navigation.transport.EquipmentNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -42,7 +42,7 @@ class AddContainerIdentificationNumberYesNoControllerSpec extends SpecBase with 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
+      .overrides(bind(classOf[EquipmentNavigatorProvider]).toInstance(fakeEquipmentNavigatorProvider))
 
   "AddContainerIdentificationNumberYesNo Controller" - {
 

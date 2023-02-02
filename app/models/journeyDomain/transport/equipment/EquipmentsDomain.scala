@@ -17,10 +17,16 @@
 package models.journeyDomain.transport.equipment
 
 import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
-import models.{Index, RichJsArray}
+import models.journeyDomain.{JourneyDomainModel, Stage}
+import models.{Index, Mode, RichJsArray, UserAnswers}
 import pages.sections.transport.equipment.EquipmentsSection
+import play.api.mvc.Call
 
-case class EquipmentsDomain(value: Seq[EquipmentDomain])
+case class EquipmentsDomain(value: Seq[EquipmentDomain]) extends JourneyDomainModel {
+
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
+    super.routeIfCompleted(userAnswers, mode, stage) // TODO - add another transport equipment page
+}
 
 object EquipmentsDomain {
 
