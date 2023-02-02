@@ -46,31 +46,42 @@ class GuaranteeSpec extends SpecBase with UserAnswersSpecHelper with Generators 
                         guaranteeType.toString,
                         None
                       )
-                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfTypes01249(guaranteeType, grn, accessCode, liabilityAmount) =>
+                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfTypes01249(guaranteeType, grn, currency, liabilityAmount, accessCode) =>
                       GuaranteeType02(
                         guaranteeDomain.index.position.toString,
                         guaranteeType.toString,
                         None,
-                        Seq(GuaranteeReferenceType03(guaranteeDomain.index.position.toString, Some(grn), Some(accessCode), Some(liabilityAmount)))
+                        Seq(GuaranteeReferenceType03(guaranteeDomain.index.position.toString, Some(grn), Some(accessCode), Some(liabilityAmount), Some(currency.currency)))
                       )
-                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType5(guaranteeType, grn) =>
+                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType5(guaranteeType, currency, liabilityAmount) =>
                       GuaranteeType02(
                         guaranteeDomain.index.position.toString,
                         guaranteeType.toString,
                         None,
-                        Seq(GuaranteeReferenceType03(guaranteeDomain.index.position.toString, Some(grn), None, None))
+                        Seq(GuaranteeReferenceType03(guaranteeDomain.index.position.toString, None, None, Some(liabilityAmount), Some(currency.currency)))
                       )
-                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType8(guaranteeType, otherReference) =>
+                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType8(guaranteeType, type8and3) =>
                       GuaranteeType02(
                         guaranteeDomain.index.position.toString,
                         guaranteeType.toString,
-                        Some(otherReference)
+                        Some(type8and3.otherReference),
+                        Seq(GuaranteeReferenceType03(guaranteeDomain.index.position.toString, None, None, Some(type8and3.liabilityAmount), Some(type8and3.currency.currency)))
                       )
-                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType3(guaranteeType, otherReference) =>
+                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType3(guaranteeType, type8and3) =>
                       GuaranteeType02(
                         guaranteeDomain.index.position.toString,
                         guaranteeType.toString,
-                        otherReference
+                        type8and3.map(
+                          x => x.otherReference
+                        ),
+                        type8and3
+                          .map(
+                            x =>
+                              Seq(
+                                GuaranteeReferenceType03(guaranteeDomain.index.position.toString, None, None, Some(x.liabilityAmount), Some(x.currency.currency))
+                              )
+                          )
+                          .getOrElse(Seq.empty)
                       )
                   }
 
