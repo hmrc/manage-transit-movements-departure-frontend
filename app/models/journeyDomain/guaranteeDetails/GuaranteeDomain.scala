@@ -22,6 +22,7 @@ import models.GuaranteeType._
 import models.domain._
 import models.journeyDomain.Stage.{AccessingJourney, CompletingJourney}
 import models.journeyDomain.{JourneyDomainModel, Stage}
+import models.reference.CurrencyCode
 import models.{CheckMode, GuaranteeType, Index, Mode, UserAnswers}
 import pages.guaranteeDetails.guarantee._
 import pages.preTaskList.DeclarationTypePage
@@ -88,8 +89,9 @@ object GuaranteeDomain {
   case class GuaranteeOfTypes01249(
     `type`: GuaranteeType,
     grn: String,
-    accessCode: String,
-    liabilityAmount: BigDecimal
+    currency: CurrencyCode,
+    liabilityAmount: BigDecimal,
+    accessCode: String
   )(override val index: Index)
       extends GuaranteeDomain
 
@@ -99,16 +101,18 @@ object GuaranteeDomain {
       (
         UserAnswersReader(guaranteeType),
         ReferenceNumberPage(index).reader,
-        AccessCodePage(index).reader,
-        LiabilityAmountPage(index).reader
+        CurrencyPage(index).reader,
+        LiabilityAmountPage(index).reader,
+        AccessCodePage(index).reader
       ).mapN {
-        (`type`, grn, accessCode, liabilityAmount) => GuaranteeOfTypes01249(`type`, grn, accessCode, liabilityAmount)(index)
+        (`type`, grn, currency, liabilityAmount, accessCode) => GuaranteeOfTypes01249(`type`, grn, currency, liabilityAmount, accessCode)(index)
       }
   }
 
   case class GuaranteeOfType5(
     `type`: GuaranteeType,
-    grn: String
+    currency: CurrencyCode,
+    liabilityAmount: BigDecimal,
   )(override val index: Index)
       extends GuaranteeDomain
 
@@ -117,15 +121,16 @@ object GuaranteeDomain {
     def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
       (
         UserAnswersReader(guaranteeType),
-        ReferenceNumberPage(index).reader
+        CurrencyPage(index).reader,
+        LiabilityAmountPage(index).reader,
       ).mapN {
-        (`type`, grn) => GuaranteeOfType5(`type`, grn)(index)
+        (`type`, currency, liabilityAmount) => GuaranteeOfType5(`type`, currency, liabilityAmount)(index)
       }
   }
 
   case class GuaranteeOfType8(
     `type`: GuaranteeType,
-    otherReference: String
+    type8And3Guarantee: Type8And3GuaranteeDomain,
   )(override val index: Index)
       extends GuaranteeDomain
 
@@ -134,15 +139,15 @@ object GuaranteeDomain {
     def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
       (
         UserAnswersReader(guaranteeType),
-        OtherReferencePage(index).reader
+        UserAnswersReader[Type8And3GuaranteeDomain](Type8And3GuaranteeDomain.userAnswersReader(index))
       ).mapN {
-        (`type`, otherReference) => GuaranteeOfType8(`type`, otherReference)(index)
+        (`type`, type8And3Guarantee) => GuaranteeOfType8(`type`, type8And3Guarantee)(index)
       }
   }
 
   case class GuaranteeOfType3(
     `type`: GuaranteeType,
-    otherReference: Option[String]
+    type8And3Guarantee: Option[Type8And3GuaranteeDomain]
   )(override val index: Index)
       extends GuaranteeDomain
 
@@ -151,9 +156,10 @@ object GuaranteeDomain {
     def userAnswersReader(index: Index, guaranteeType: GuaranteeType): UserAnswersReader[GuaranteeDomain] =
       (
         UserAnswersReader(guaranteeType),
-        OtherReferenceYesNoPage(index).filterOptionalDependent(identity)(OtherReferencePage(index).reader)
-      ).mapN {
-        (`type`, otherReference) => GuaranteeOfType3(`type`, otherReference)(index)
+        OtherReferenceYesNoPage(index)
+          .filterOptionalDependent(identity)(UserAnswersReader[Type8And3GuaranteeDomain](Type8And3GuaranteeDomain.userAnswersReader(index))
+      )).mapN {
+        (`type`, type8And3Guarantee) => GuaranteeOfType3(`type`, type8And3Guarantee)(index)
       }
   }
 }
