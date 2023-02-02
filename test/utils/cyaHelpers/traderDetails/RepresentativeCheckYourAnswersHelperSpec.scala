@@ -100,7 +100,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Representative’s EORI number or Trader Identification Number (TIN)".toText),
+                  key = Key("EORI number or Trader Identification Number (TIN)".toText),
                   value = Value(eori.toText),
                   actions = Some(
                     Actions(
@@ -188,7 +188,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Representative’s name".toText),
+                  key = Key("Name".toText),
                   value = Value(representativeName.toText),
                   actions = Some(
                     Actions(
@@ -232,7 +232,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Representative’s phone number".toText),
+                  key = Key("Phone number".toText),
                   value = Value(representativePhoneNumber.toText),
                   actions = Some(
                     Actions(

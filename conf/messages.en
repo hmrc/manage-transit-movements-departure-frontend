@@ -272,7 +272,7 @@ traderDetails.holderOfTransit.contact.telephoneNumber.change.hidden = contact’
 
 traderDetails.representative.eori.title = What is your EORI number or Trader Identification Number (TIN)?
 traderDetails.representative.eori.heading = What is your EORI number or Trader Identification Number (TIN)?
-traderDetails.representative.eori.checkYourAnswersLabel = Representative’s EORI number or Trader Identification Number (TIN)
+traderDetails.representative.eori.checkYourAnswersLabel = EORI number or Trader Identification Number (TIN)
 traderDetails.representative.eori.error.required = Enter your EORI number or Trader Identification Number (TIN)
 traderDetails.representative.eori.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
 traderDetails.representative.eori.error.invalid = Your EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
@@ -281,14 +281,14 @@ traderDetails.representative.eori.change.hidden = representative’s EORI number
 
 traderDetails.representative.addDetails.title = Do you want to add your details?
 traderDetails.representative.addDetails.heading = Do you want to add your details?
-traderDetails.representative.addDetails.paragraph = This includes your name, phone number and EORI number or Trader Identification Number (TIN).
+traderDetails.representative.addDetails.paragraph = This includes your name and phone number.
 traderDetails.representative.addDetails.checkYourAnswersLabel = Do you want to add your details?
 traderDetails.representative.addDetails.change.hidden = if you want to add your details
 traderDetails.representative.addDetails.error.required = Select yes if you want to add your details
 
 traderDetails.representative.name.title = What is your name?
 traderDetails.representative.name.heading = What is your name?
-traderDetails.representative.name.checkYourAnswersLabel = Representative’s name
+traderDetails.representative.name.checkYourAnswersLabel = Name
 traderDetails.representative.name.error.required = Enter your name
 traderDetails.representative.name.error.length = Your name must be 70 characters or less
 traderDetails.representative.name.error.invalid = Your name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, asterisks(*), forward slashes, full stops, hyphens, percent signs, question marks and spaces
@@ -304,7 +304,7 @@ traderDetails.representative.capacity.change.hidden = representative capacity
 
 traderDetails.representative.telephoneNumber.title = What is your phone number?
 traderDetails.representative.telephoneNumber.heading = What is your phone number?
-traderDetails.representative.telephoneNumber.checkYourAnswersLabel = Representative’s phone number
+traderDetails.representative.telephoneNumber.checkYourAnswersLabel = Phone number
 traderDetails.representative.telephoneNumber.error.required = Enter your phone number
 traderDetails.representative.telephoneNumber.hint = Must include the country code, like +44 808 157 0192.
 traderDetails.representative.telephoneNumber.error.maxLength = Your phone number must be {0} characters or less
