@@ -103,3 +103,20 @@ class FakeSupplyChainActorNavigator(desiredRoute: Call, mode: Mode, index: Index
 class FakeAuthorisationNavigator(desiredRoute: Call, mode: Mode, index: Index) extends AuthorisationNavigator(mode, index) {
   override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
+
+class FakeEquipmentsNavigator(desiredRoute: Call, mode: Mode) extends EquipmentsNavigator(mode) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
+}
+
+class FakeEquipmentNavigator(desiredRoute: Call, index: Index, mode: Mode) extends EquipmentNavigator(mode, index) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
+}
+
+class FakeSealNavigator(desiredRoute: Call, equipmentIndex: Index, sealIndex: Index, mode: Mode) extends SealNavigator(mode, equipmentIndex, sealIndex) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
+}
+
+class FakeItemNumberNavigator(desiredRoute: Call, equipmentIndex: Index, itemNumberIndex: Index, mode: Mode)
+    extends ItemNumberNavigator(mode, equipmentIndex, itemNumberIndex) {
+  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
+}

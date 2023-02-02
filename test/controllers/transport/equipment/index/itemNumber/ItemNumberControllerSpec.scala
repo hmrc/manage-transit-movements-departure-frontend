@@ -19,7 +19,7 @@ package controllers.transport.equipment.index.itemNumber
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.ItemNumberFormProvider
 import models.NormalMode
-import navigation.transport.TransportNavigatorProvider
+import navigation.transport.ItemNumberNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.transport.equipment.index.itemNumber.ItemNumberPage
@@ -42,7 +42,7 @@ class ItemNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
+      .overrides(bind(classOf[ItemNumberNavigatorProvider]).toInstance(fakeItemNumberNavigatorProvider))
 
   "ItemNumber Controller" - {
 

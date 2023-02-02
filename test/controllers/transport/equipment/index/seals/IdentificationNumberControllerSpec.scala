@@ -19,7 +19,7 @@ package controllers.transport.equipment.index.seals
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.transport.equipment.index.seals.IdentificationNumberFormProvider
 import models.NormalMode
-import navigation.transport.TransportNavigatorProvider
+import navigation.transport.SealNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.transport.equipment.index.seals.IdentificationNumberPage
@@ -44,7 +44,7 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
+      .overrides(bind(classOf[SealNavigatorProvider]).toInstance(fakeSealNavigatorProvider))
 
   "IdentificationNumber Controller" - {
 

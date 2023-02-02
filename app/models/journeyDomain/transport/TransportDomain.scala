@@ -20,6 +20,7 @@ import models.domain.{GettableAsFilterForNextReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationsAndLimitDomain
 import models.journeyDomain.transport.carrierDetails.CarrierDetailsDomain
+import models.journeyDomain.transport.equipment.EquipmentsAndChargesDomain
 import models.journeyDomain.transport.supplyChainActors.SupplyChainActorsDomain
 import models.journeyDomain.transport.transportMeans.TransportMeansDomain
 import pages.traderDetails.consignment.ApprovedOperatorPage
@@ -31,7 +32,8 @@ case class TransportDomain(
   transportMeans: TransportMeansDomain,
   supplyChainActors: Option[SupplyChainActorsDomain],
   authorisationsAndLimit: Option[AuthorisationsAndLimitDomain],
-  carrierDetails: CarrierDetailsDomain
+  carrierDetails: CarrierDetailsDomain,
+  equipmentsAndCharges: EquipmentsAndChargesDomain
 ) extends JourneyDomainModel
 
 object TransportDomain {
@@ -50,7 +52,8 @@ object TransportDomain {
       supplyChainActors      <- SupplyChainActorYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[SupplyChainActorsDomain])
       authorisationsAndLimit <- authorisationsAndLimitReads
       carrierDetails         <- UserAnswersReader[CarrierDetailsDomain]
-    } yield TransportDomain(preRequisites, transportMeans, supplyChainActors, authorisationsAndLimit, carrierDetails)
+      equipmentsAndCharges   <- UserAnswersReader[EquipmentsAndChargesDomain]
+    } yield TransportDomain(preRequisites, transportMeans, supplyChainActors, authorisationsAndLimit, carrierDetails, equipmentsAndCharges)
   }
 
 }

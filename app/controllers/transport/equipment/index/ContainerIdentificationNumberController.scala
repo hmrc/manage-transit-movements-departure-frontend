@@ -23,7 +23,7 @@ import models.journeyDomain.transport.TransportDomain
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode, RichOptionalJsArray}
 import navigation.UserAnswersNavigator
-import navigation.transport.TransportNavigatorProvider
+import navigation.transport.EquipmentNavigatorProvider
 import pages.sections.transport.equipment.EquipmentsSection
 import pages.transport.equipment.index.ContainerIdentificationNumberPage
 import play.api.data.Form
@@ -39,7 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ContainerIdentificationNumberController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: TransportNavigatorProvider,
+  navigatorProvider: EquipmentNavigatorProvider,
   formProvider: ContainerIdentificationNumberFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
@@ -76,7 +76,7 @@ class ContainerIdentificationNumberController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, equipmentIndex))),
           value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, equipmentIndex)
             ContainerIdentificationNumberPage(equipmentIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
           }
         )

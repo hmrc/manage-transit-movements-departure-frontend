@@ -20,7 +20,7 @@ import config.FrontendAppConfig
 import controllers.actions._
 import forms.AddAnotherFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.transport.TransportNavigatorProvider
+import navigation.transport.EquipmentNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -33,7 +33,7 @@ import javax.inject.Inject
 class AddAnotherSealController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: TransportNavigatorProvider,
+  navigatorProvider: EquipmentNavigatorProvider,
   actions: Actions,
   formProvider: AddAnotherFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -68,7 +68,7 @@ class AddAnotherSealController @Inject() (
                   .onPageLoad(lrn, mode, equipmentIndex, Index(viewModel.numberOfSeals))
               )
             case false =>
-              Redirect(navigatorProvider(mode).nextPage(request.userAnswers))
+              Redirect(navigatorProvider(mode, equipmentIndex).nextPage(request.userAnswers))
           }
         )
   }
