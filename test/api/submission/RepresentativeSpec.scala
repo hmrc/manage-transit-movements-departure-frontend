@@ -42,7 +42,7 @@ class RepresentativeSpec extends SpecBase with UserAnswersSpecHelper with Genera
                     r =>
                       RepresentativeType05(
                         r.eori.value,
-                        "direct",
+                        "2",
                         r.representativeDetails.map(
                           x => ContactPersonType05(x.name, x.telephoneNumber, None)
                         )
