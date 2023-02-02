@@ -17,6 +17,8 @@
 package pages.transport.equipment.index
 
 import pages.behaviours.PageBehaviours
+import pages.sections.transport.equipment.ItemNumbersSection
+import play.api.libs.json.{JsArray, Json}
 
 class AddGoodsItemNumberYesNoPageSpec extends PageBehaviours {
 
@@ -27,5 +29,18 @@ class AddGoodsItemNumberYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](AddGoodsItemNumberYesNoPage(equipmentIndex))
 
     beRemovable[Boolean](AddGoodsItemNumberYesNoPage(equipmentIndex))
+
+    "cleanup" - {
+      "when no selected" - {
+        "must remove goods item numbers" in {
+          val userAnswers = emptyUserAnswers
+            .setValue(ItemNumbersSection(equipmentIndex), JsArray(Seq(Json.obj("foo" -> "bar"))))
+
+          val result = userAnswers.setValue(AddGoodsItemNumberYesNoPage(equipmentIndex), false)
+
+          result.get(ItemNumbersSection(equipmentIndex)) must not be defined
+        }
+      }
+    }
   }
 }
