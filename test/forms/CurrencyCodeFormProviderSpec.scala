@@ -50,13 +50,13 @@ class CurrencyCodeFormProviderSpec extends StringFieldBehaviours with Generators
       requiredError = FormError(fieldName, requiredKey)
     )
 
-    "not bind if customs office id does not exist in the currency" in {
+    "not bind if currency code is not in the list " in {
       val boundForm = form.bind(Map("value" -> "foobar"))
       val field     = boundForm("value")
       field.errors mustNot be(empty)
     }
 
-    "bind a currencyCode id which is in the list" in {
+    "bind a currency which is in the list" in {
       val boundForm = form.bind(Map("value" -> currencyCode1.currency))
       val field     = boundForm("value")
       field.errors must be(empty)
