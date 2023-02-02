@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport.equipment.index.itemNumber
+package models.journeyDomain.transport.equipment
 
 import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.{Index, RichJsArray}
-import pages.sections.transport.equipment.ItemNumbersSection
+import pages.sections.transport.equipment.EquipmentsSection
 
-case class ItemNumbersDomain(value: Seq[ItemNumberDomain])
+case class EquipmentsDomain(value: Seq[EquipmentDomain])
 
-object ItemNumbersDomain {
+object EquipmentsDomain {
 
-  implicit def userAnswersReader(equipmentIndex: Index): UserAnswersReader[ItemNumbersDomain] =
-    ItemNumbersSection(equipmentIndex).arrayReader
+  implicit val userAnswersReader: UserAnswersReader[EquipmentsDomain] =
+    EquipmentsSection.arrayReader
       .flatMap {
         case x if x.isEmpty =>
-          UserAnswersReader(ItemNumberDomain.userAnswersReader(equipmentIndex, Index(0))).map(Seq(_))
+          UserAnswersReader(EquipmentDomain.userAnswersReader(Index(0))).map(Seq(_))
         case x =>
-          x.traverse[ItemNumberDomain](ItemNumberDomain.userAnswersReader(equipmentIndex, _))
+          x.traverse[EquipmentDomain]
       }
-      .map(ItemNumbersDomain(_))
+      .map(EquipmentsDomain(_))
 }

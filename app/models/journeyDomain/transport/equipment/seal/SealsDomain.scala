@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport.equipment.index.itemNumber
+package models.journeyDomain.transport.equipment.seal
 
 import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.{Index, RichJsArray}
-import pages.sections.transport.equipment.ItemNumbersSection
+import pages.sections.transport.equipment.SealsSection
 
-case class ItemNumbersDomain(value: Seq[ItemNumberDomain])
+case class SealsDomain(value: Seq[SealDomain])
 
-object ItemNumbersDomain {
+object SealsDomain {
 
-  implicit def userAnswersReader(equipmentIndex: Index): UserAnswersReader[ItemNumbersDomain] =
-    ItemNumbersSection(equipmentIndex).arrayReader
+  implicit def userAnswersReader(equipmentIndex: Index): UserAnswersReader[SealsDomain] =
+    SealsSection(equipmentIndex).arrayReader
       .flatMap {
         case x if x.isEmpty =>
-          UserAnswersReader(ItemNumberDomain.userAnswersReader(equipmentIndex, Index(0))).map(Seq(_))
+          UserAnswersReader(SealDomain.userAnswersReader(equipmentIndex, Index(0))).map(Seq(_))
         case x =>
-          x.traverse[ItemNumberDomain](ItemNumberDomain.userAnswersReader(equipmentIndex, _))
+          x.traverse[SealDomain](SealDomain.userAnswersReader(equipmentIndex, _))
       }
-      .map(ItemNumbersDomain(_))
+      .map(SealsDomain(_))
 }
