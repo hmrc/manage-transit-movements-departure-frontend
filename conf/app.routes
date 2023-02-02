@@ -6,6 +6,8 @@
 ->         /                                              app.routeDetails.Routes
 ->         /                                              app.transport.Routes
 
+GET        /drafts/:lrn                                    controllers.DraftController.draftRedirect(lrn: models.LocalReferenceNumber)
+
 GET        /                                              controllers.RedirectController.onPageLoad()
 
 ->         /hmrc-frontend                                 hmrcfrontend.Routes

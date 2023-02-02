@@ -1462,11 +1462,11 @@ transport.equipment.index.itemNumber.error.required = Enter the goods item numbe
 transport.equipment.index.itemNumber.error.length = The goods item number must be 5 characters or less
 transport.equipment.index.itemNumber.error.invalidCharacters = The goods item number must only include numbers 0 to 9
 
-transport.equipment.index.addGoodsItemNumberYesNo.title = Do you want to add a goods item number to the transport equipment?
-transport.equipment.index.addGoodsItemNumberYesNo.heading = Do you want to add a goods item number to the transport equipment?
+transport.equipment.index.addGoodsItemNumberYesNo.title = Do you want to add a goods item number?
+transport.equipment.index.addGoodsItemNumberYesNo.heading = Do you want to add a goods item number?
 transport.equipment.index.addGoodsItemNumberYesNo.checkYourAnswersLabel = Do you want to add a goods item number?
 transport.equipment.index.addGoodsItemNumberYesNo.change.hidden = if you want to add a goods item number
-transport.equipment.index.addGoodsItemNumberYesNo.error.required = Select yes if you want to add a goods item number to the transport equipment
+transport.equipment.index.addGoodsItemNumberYesNo.error.required = Select yes if you want to add a goods item number
 
 transport.equipment.index.itemNumber.removeItemNumberYesNo.title = Are you sure you want to remove goods item number {0}?
 transport.equipment.index.itemNumber.removeItemNumberYesNo.heading = Are you sure you want to remove goods item number {0}?

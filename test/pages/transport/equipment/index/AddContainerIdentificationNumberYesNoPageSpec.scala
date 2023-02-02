@@ -27,5 +27,18 @@ class AddContainerIdentificationNumberYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](AddContainerIdentificationNumberYesNoPage(equipmentIndex))
 
     beRemovable[Boolean](AddContainerIdentificationNumberYesNoPage(equipmentIndex))
+
+    "cleanup" - {
+      "when no selected" - {
+        "must remove container identification number" in {
+          val userAnswers = emptyUserAnswers
+            .setValue(ContainerIdentificationNumberPage(equipmentIndex), nonEmptyString.sample.value)
+
+          val result = userAnswers.setValue(AddContainerIdentificationNumberYesNoPage(equipmentIndex), false)
+
+          result.get(ContainerIdentificationNumberPage(equipmentIndex)) must not be defined
+        }
+      }
+    }
   }
 }

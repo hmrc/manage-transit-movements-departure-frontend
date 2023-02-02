@@ -19,7 +19,7 @@ package controllers.transport.equipment.index
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.ContainerIdentificationNumberFormProvider
 import models.{Index, NormalMode}
-import navigation.transport.TransportNavigatorProvider
+import navigation.transport.EquipmentNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.transport.equipment.index.ContainerIdentificationNumberPage
@@ -42,7 +42,7 @@ class ContainerIdentificationNumberControllerSpec extends SpecBase with AppWithD
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
+      .overrides(bind(classOf[EquipmentNavigatorProvider]).toInstance(fakeEquipmentNavigatorProvider))
 
   "IdentificationNumber Controller" - {
 

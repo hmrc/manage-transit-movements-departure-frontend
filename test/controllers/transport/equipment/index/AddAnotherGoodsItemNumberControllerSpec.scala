@@ -17,24 +17,24 @@
 package controllers.transport.equipment.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import controllers.transport.equipment.index.itemNumber.{routes => itemNumberRoutes}
 import forms.AddAnotherFormProvider
 import generators.Generators
 import models.{Index, NormalMode}
+import navigation.transport.EquipmentNavigatorProvider
 import org.mockito.ArgumentMatchers.any
-import navigation.transport.TransportNavigatorProvider
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import org.scalatestplus.mockito.MockitoSugar
-import play.api.inject.guice.GuiceApplicationBuilder
 import viewModels.ListItem
 import viewModels.transport.equipment.index.AddAnotherGoodsItemNumberViewModel
 import viewModels.transport.equipment.index.AddAnotherGoodsItemNumberViewModel.AddAnotherGoodsItemNumberViewModelProvider
 import views.html.transport.equipment.index.AddAnotherGoodsItemNumberView
-import controllers.transport.equipment.index.itemNumber.{routes => itemNumberRoutes}
 
 class AddAnotherGoodsItemNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with Generators {
 
@@ -53,7 +53,7 @@ class AddAnotherGoodsItemNumberControllerSpec extends SpecBase with AppWithDefau
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[AddAnotherGoodsItemNumberViewModelProvider]).toInstance(mockViewModelProvider))
-      .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
+      .overrides(bind(classOf[EquipmentNavigatorProvider]).toInstance(fakeEquipmentNavigatorProvider))
 
   override def beforeEach(): Unit = {
     super.beforeEach()
