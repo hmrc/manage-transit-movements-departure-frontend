@@ -345,7 +345,7 @@ class EquipmentDomainSpec extends SpecBase with Generators {
       }
     }
 
-    "goodsItemNumberReads" - {
+    "goodsItemNumbersReads" - {
       "can be read form user answers" - {
         "when at index 0" - {
           val index = Index(0)
@@ -359,7 +359,7 @@ class EquipmentDomainSpec extends SpecBase with Generators {
               val expectedResult = None
 
               val result: EitherType[Option[ItemNumbersDomain]] = UserAnswersReader[Option[ItemNumbersDomain]](
-                EquipmentDomain.goodsItemNumberReads(index)
+                EquipmentDomain.goodsItemNumbersReads(index)
               ).run(userAnswers)
 
               result.value mustBe expectedResult
@@ -380,7 +380,7 @@ class EquipmentDomainSpec extends SpecBase with Generators {
               )
 
               val result: EitherType[Option[ItemNumbersDomain]] = UserAnswersReader[Option[ItemNumbersDomain]](
-                EquipmentDomain.goodsItemNumberReads(index)
+                EquipmentDomain.goodsItemNumbersReads(index)
               ).run(userAnswers)
 
               result.value mustBe expectedResult
@@ -400,7 +400,7 @@ class EquipmentDomainSpec extends SpecBase with Generators {
             )
 
             val result: EitherType[Option[ItemNumbersDomain]] = UserAnswersReader[Option[ItemNumbersDomain]](
-              EquipmentDomain.goodsItemNumberReads(index)
+              EquipmentDomain.goodsItemNumbersReads(index)
             ).run(userAnswers)
 
             result.value mustBe expectedResult
@@ -425,7 +425,7 @@ class EquipmentDomainSpec extends SpecBase with Generators {
             )
 
             val result: EitherType[Option[ItemNumbersDomain]] = UserAnswersReader[Option[ItemNumbersDomain]](
-              EquipmentDomain.goodsItemNumberReads(index)
+              EquipmentDomain.goodsItemNumbersReads(index)
             ).run(userAnswers)
 
             result.value mustBe expectedResult
@@ -445,7 +445,7 @@ class EquipmentDomainSpec extends SpecBase with Generators {
             )
 
             val result: EitherType[Option[ItemNumbersDomain]] = UserAnswersReader[Option[ItemNumbersDomain]](
-              EquipmentDomain.goodsItemNumberReads(index)
+              EquipmentDomain.goodsItemNumbersReads(index)
             ).run(userAnswers)
 
             result.value mustBe expectedResult
@@ -462,7 +462,7 @@ class EquipmentDomainSpec extends SpecBase with Generators {
               .setValue(ContainerIdentificationNumberPage(index), containerId)
 
             val result: EitherType[Option[ItemNumbersDomain]] = UserAnswersReader[Option[ItemNumbersDomain]](
-              EquipmentDomain.goodsItemNumberReads(index)
+              EquipmentDomain.goodsItemNumbersReads(index)
             ).run(userAnswers)
 
             result.left.value.page mustBe AddGoodsItemNumberYesNoPage(equipmentIndex)

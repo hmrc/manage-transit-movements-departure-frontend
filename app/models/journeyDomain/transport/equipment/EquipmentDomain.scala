@@ -41,7 +41,7 @@ object EquipmentDomain {
   implicit def userAnswersReader(equipmentIndex: Index): UserAnswersReader[EquipmentDomain] = for {
     containerId      <- containerIdReads(equipmentIndex)
     seals            <- sealsReads(equipmentIndex)
-    goodsItemNumbers <- if (seals.isDefined) goodsItemNumberReads(equipmentIndex) else none[ItemNumbersDomain].pure[UserAnswersReader]
+    goodsItemNumbers <- if (seals.isDefined) goodsItemNumbersReads(equipmentIndex) else none[ItemNumbersDomain].pure[UserAnswersReader]
   } yield EquipmentDomain(containerId, seals, goodsItemNumbers)(equipmentIndex)
 
   def containerIdReads(equipmentIndex: Index): UserAnswersReader[Option[String]] = equipmentIndex.position match {
@@ -71,7 +71,7 @@ object EquipmentDomain {
     }
   } yield reader
 
-  def goodsItemNumberReads(equipmentIndex: Index): UserAnswersReader[Option[ItemNumbersDomain]] =
+  def goodsItemNumbersReads(equipmentIndex: Index): UserAnswersReader[Option[ItemNumbersDomain]] =
     ContainerIdentificationNumberPage(equipmentIndex).optionalReader.flatMap {
       case Some(_) if equipmentIndex.isFirst =>
         AddGoodsItemNumberYesNoPage(equipmentIndex).filterOptionalDependent(identity) {
