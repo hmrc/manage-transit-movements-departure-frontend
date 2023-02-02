@@ -17,7 +17,6 @@
 package models.journeyDomain.transport.equipment
 
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.transport.equipment.seal.EquipmentsDomain
 import pages.transport.equipment.AddTransportEquipmentYesNoPage
 import pages.transport.preRequisites.ContainerIndicatorPage
 

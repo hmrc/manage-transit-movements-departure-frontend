@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.transport.equipment.seal
+package models.journeyDomain.transport.equipment
 
 import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
-import models.journeyDomain.transport.equipment.EquipmentDomain
 import models.{Index, RichJsArray}
 import pages.sections.transport.equipment.EquipmentsSection
 

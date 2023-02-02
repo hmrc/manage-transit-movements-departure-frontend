@@ -20,7 +20,6 @@ import base.SpecBase
 import generators.{Generators, UserAnswersGenerator}
 import models.Index
 import models.domain.{EitherType, UserAnswersReader}
-import models.journeyDomain.transport.equipment.seal.EquipmentsDomain
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.transport.equipment.index.ContainerIdentificationNumberPage

@@ -38,12 +38,11 @@ case class EquipmentDomain(
 
 object EquipmentDomain {
 
-  implicit def userAnswersReader(equipmentIndex: Index): UserAnswersReader[EquipmentDomain] =
-    (
-      containerIdReads(equipmentIndex),
-      sealsReads(equipmentIndex),
-      goodItemNumberReads(equipmentIndex)
-    ).tupled.map((EquipmentDomain.apply _).tupled).map(_(equipmentIndex))
+  implicit def userAnswersReader(equipmentIndex: Index): UserAnswersReader[EquipmentDomain] = for {
+    containerId      <- containerIdReads(equipmentIndex)
+    seals            <- sealsReads(equipmentIndex)
+    goodsItemNumbers <- if (seals.isDefined) goodsItemNumberReads(equipmentIndex) else none[ItemNumbersDomain].pure[UserAnswersReader]
+  } yield EquipmentDomain(containerId, seals, goodsItemNumbers)(equipmentIndex)
 
   def containerIdReads(equipmentIndex: Index): UserAnswersReader[Option[String]] = equipmentIndex.position match {
     case 0 =>
@@ -72,17 +71,13 @@ object EquipmentDomain {
     }
   } yield reader
 
-  def goodItemNumberReads(equipmentIndex: Index): UserAnswersReader[Option[ItemNumbersDomain]] =
-    AddSealYesNoPage(equipmentIndex)
-      .filterOptionalDependent(identity) {
-        ContainerIdentificationNumberPage(equipmentIndex).optionalReader.flatMap {
-          case Some(_) if equipmentIndex.isFirst =>
-            AddGoodsItemNumberYesNoPage(equipmentIndex).filterOptionalDependent(identity) {
-              UserAnswersReader[ItemNumbersDomain](ItemNumbersDomain.userAnswersReader(equipmentIndex))
-            }
-          case _ =>
-            UserAnswersReader[ItemNumbersDomain](ItemNumbersDomain.userAnswersReader(equipmentIndex)).map(Option(_))
+  def goodsItemNumberReads(equipmentIndex: Index): UserAnswersReader[Option[ItemNumbersDomain]] =
+    ContainerIdentificationNumberPage(equipmentIndex).optionalReader.flatMap {
+      case Some(_) if equipmentIndex.isFirst =>
+        AddGoodsItemNumberYesNoPage(equipmentIndex).filterOptionalDependent(identity) {
+          UserAnswersReader[ItemNumbersDomain](ItemNumbersDomain.userAnswersReader(equipmentIndex))
         }
-      }
-      .map(_.flatten)
+      case _ =>
+        UserAnswersReader[ItemNumbersDomain](ItemNumbersDomain.userAnswersReader(equipmentIndex)).map(Option(_))
+    }
 }
