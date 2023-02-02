@@ -294,14 +294,6 @@ traderDetails.representative.name.error.length = Your name must be 70 characters
 traderDetails.representative.name.error.invalid = Your name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, asterisks(*), forward slashes, full stops, hyphens, percent signs, question marks and spaces
 traderDetails.representative.name.change.hidden = representative’s name
 
-traderDetails.representative.capacity.title = What is your capacity?
-traderDetails.representative.capacity.heading = What is your capacity?
-traderDetails.representative.capacity.direct = Direct (principal solely liable)
-traderDetails.representative.capacity.indirect = Indirect (principal and agent jointly liable)
-traderDetails.representative.capacity.checkYourAnswersLabel = Representative capacity
-traderDetails.representative.capacity.error.required = Select which capacity you are acting in
-traderDetails.representative.capacity.change.hidden = representative capacity
-
 traderDetails.representative.telephoneNumber.title = What is your phone number?
 traderDetails.representative.telephoneNumber.heading = What is your phone number?
 traderDetails.representative.telephoneNumber.checkYourAnswersLabel = Phone number

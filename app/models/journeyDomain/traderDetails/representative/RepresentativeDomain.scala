@@ -20,16 +20,12 @@ import cats.implicits._
 import models.EoriNumber
 import models.domain._
 import models.journeyDomain.JourneyDomainModel
-import models.traderDetails.representative.RepresentativeCapacity
-import models.traderDetails.representative.RepresentativeCapacity.Direct
 import pages.traderDetails.representative._
 
 case class RepresentativeDomain(
   eori: EoriNumber,
   representativeDetails: Option[RepresentativeDetailsDomain]
-) extends JourneyDomainModel {
-  val capacity: RepresentativeCapacity = Direct
-}
+) extends JourneyDomainModel
 
 object RepresentativeDomain {
 

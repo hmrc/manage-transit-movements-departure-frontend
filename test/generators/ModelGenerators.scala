@@ -140,11 +140,6 @@ trait ModelGenerators {
       )
     }
 
-  implicit lazy val arbitraryRepresentativeCapacity: Arbitrary[models.traderDetails.representative.RepresentativeCapacity] =
-    Arbitrary {
-      Gen.oneOf(models.traderDetails.representative.RepresentativeCapacity.values)
-    }
-
   implicit lazy val arbitraryCountryCode: Arbitrary[CountryCode] =
     Arbitrary {
       Gen

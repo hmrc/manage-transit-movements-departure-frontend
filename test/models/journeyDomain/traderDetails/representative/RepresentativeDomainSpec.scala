@@ -21,7 +21,6 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.EoriNumber
 import models.domain.{EitherType, UserAnswersReader}
-import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.traderDetails.representative.{AddDetailsPage, EoriPage, NamePage, TelephoneNumberPage}
@@ -50,7 +49,6 @@ class RepresentativeDomainSpec extends SpecBase with UserAnswersSpecHelper with 
         val result: EitherType[RepresentativeDomain] = UserAnswersReader[RepresentativeDomain].run(userAnswers)
 
         result.value mustBe expectedResult
-        result.value.capacity mustBe RepresentativeCapacity.Direct
       }
 
       "when all optional fields complete" in {
@@ -69,7 +67,6 @@ class RepresentativeDomainSpec extends SpecBase with UserAnswersSpecHelper with 
         val result: EitherType[RepresentativeDomain] = UserAnswersReader[RepresentativeDomain].run(userAnswers)
 
         result.value mustBe expectedResult
-        result.value.capacity mustBe RepresentativeCapacity.Direct
       }
     }
 
