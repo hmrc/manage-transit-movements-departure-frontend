@@ -81,7 +81,7 @@ class RepresentativeDomainSpec extends SpecBase with UserAnswersSpecHelper with 
         result.left.value.page mustBe EoriPage
       }
 
-      "when additional representative details are not optional" in {
+      "when additional representative details are not optional and has no name" in {
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(EoriPage)(eori.value)
@@ -90,6 +90,18 @@ class RepresentativeDomainSpec extends SpecBase with UserAnswersSpecHelper with 
         val result: EitherType[RepresentativeDomain] = UserAnswersReader[RepresentativeDomain].run(userAnswers)
 
         result.left.value.page mustBe NamePage
+      }
+
+      "when additional representative details are not optional and has no telephone number" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(EoriPage)(eori.value)
+          .unsafeSetVal(AddDetailsPage)(true)
+          .unsafeSetVal(NamePage)(name)
+
+        val result: EitherType[RepresentativeDomain] = UserAnswersReader[RepresentativeDomain].run(userAnswers)
+
+        result.left.value.page mustBe TelephoneNumberPage
       }
     }
   }
