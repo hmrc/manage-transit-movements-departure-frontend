@@ -132,14 +132,6 @@ trait ModelGenerators {
       )
     }
 
-  lazy val arbitraryARGuaranteeType: Arbitrary[GuaranteeType] =
-    Arbitrary {
-      Gen.oneOf(
-        GuaranteeWaiverByAgreement,
-        GuaranteeNotRequired
-      )
-    }
-
   implicit lazy val arbitraryCountryCode: Arbitrary[CountryCode] =
     Arbitrary {
       Gen
@@ -307,6 +299,14 @@ trait ModelGenerators {
         code <- nonEmptyString
         desc <- nonEmptyString
       } yield Nationality(code, desc)
+    }
+
+  implicit lazy val arbitraryCurrencyCode: Arbitrary[CurrencyCode] =
+    Arbitrary {
+      for {
+        currency <- nonEmptyString
+        desc     <- nonEmptyString
+      } yield CurrencyCode(currency, desc)
     }
 
 }

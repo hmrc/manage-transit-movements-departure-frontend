@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.AddAnotherFormProvider
 import generators.Generators
 import models.{Index, NormalMode}
-import navigation.transport.TransportNavigatorProvider
+import navigation.transport.EquipmentNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -52,7 +52,7 @@ class AddAnotherSealControllerSpec extends SpecBase with AppWithDefaultMockFixtu
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[AddAnotherSealViewModelProvider]).toInstance(mockViewModelProvider))
-      .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
+      .overrides(bind(classOf[EquipmentNavigatorProvider]).toInstance(fakeEquipmentNavigatorProvider))
 
   override def beforeEach(): Unit = {
     super.beforeEach()

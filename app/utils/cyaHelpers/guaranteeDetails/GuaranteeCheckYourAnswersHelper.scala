@@ -17,6 +17,7 @@
 package utils.cyaHelpers.guaranteeDetails
 
 import models.GuaranteeType._
+import models.reference.CurrencyCode
 import models.{GuaranteeType, Index, Mode, UserAnswers}
 import pages.guaranteeDetails.guarantee._
 import play.api.i18n.Messages
@@ -74,5 +75,12 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
     formatAnswer = formatAsCurrency,
     prefix = "guaranteeDetails.guarantee.liabilityAmount",
     id = Some("change-liability-amount")
+  )
+
+  def liabilityCurrency: Option[SummaryListRow] = getAnswerAndBuildRow[CurrencyCode](
+    page = CurrencyPage(index),
+    formatAnswer = formatAsText,
+    prefix = "guaranteeDetails.guarantee.currency",
+    id = Some("change-liability-currency")
   )
 }

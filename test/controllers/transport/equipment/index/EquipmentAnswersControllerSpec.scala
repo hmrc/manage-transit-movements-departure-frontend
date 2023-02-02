@@ -19,7 +19,7 @@ package controllers.transport.equipment.index
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
 import models.NormalMode
-import navigation.transport.TransportNavigatorProvider
+import navigation.transport.EquipmentsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
@@ -40,7 +40,7 @@ class EquipmentAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind[TransportNavigatorProvider].toInstance(fakeTransportNavigatorProvider))
+      .overrides(bind[EquipmentsNavigatorProvider].toInstance(fakeEquipmentsNavigatorProvider))
       .overrides(bind[EquipmentViewModelProvider].toInstance(mockViewModelProvider))
 
   "Check Your Answers Controller" - {

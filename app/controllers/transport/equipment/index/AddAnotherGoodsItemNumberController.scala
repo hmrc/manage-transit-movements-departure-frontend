@@ -21,7 +21,7 @@ import controllers.actions._
 import controllers.transport.equipment.index.itemNumber.{routes => itemNumberRoutes}
 import forms.AddAnotherFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.transport.TransportNavigatorProvider
+import navigation.transport.EquipmentNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -34,7 +34,7 @@ import javax.inject.Inject
 class AddAnotherGoodsItemNumberController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: TransportNavigatorProvider,
+  navigatorProvider: EquipmentNavigatorProvider,
   actions: Actions,
   formProvider: AddAnotherFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -66,7 +66,7 @@ class AddAnotherGoodsItemNumberController @Inject() (
             case true =>
               Redirect(itemNumberRoutes.ItemNumberController.onPageLoad(lrn, mode, equipmentIndex, Index(viewModel.goodsItemNumbersCount)))
             case false =>
-              Redirect(navigatorProvider(mode).nextPage(request.userAnswers))
+              Redirect(navigatorProvider(mode, equipmentIndex).nextPage(request.userAnswers))
           }
         )
   }

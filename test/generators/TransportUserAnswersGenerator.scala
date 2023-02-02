@@ -21,8 +21,9 @@ import models.journeyDomain.transport.authorisationsAndLimit.authorisations.Auth
 import models.journeyDomain.transport.authorisationsAndLimit.limit.LimitDomain
 import models.journeyDomain.transport.equipment.index.itemNumber.ItemNumberDomain
 import models.journeyDomain.transport.equipment.seal.SealDomain
+import models.journeyDomain.transport.equipment.{EquipmentDomain, EquipmentsDomain}
 import models.journeyDomain.transport.supplyChainActors.SupplyChainActorDomain
-import models.journeyDomain.transport.transportMeans.{TransportMeansActiveDomain, TransportMeansDepartureDomain, TransportMeansDomain}
+import models.journeyDomain.transport.transportMeans._
 import models.{Index, UserAnswers}
 import org.scalacheck.Gen
 
@@ -52,6 +53,12 @@ trait TransportUserAnswersGenerator {
 
   def arbitraryLimitAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
     buildUserAnswers[LimitDomain](userAnswers)
+
+  def arbitraryEquipmentsAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
+    buildUserAnswers[EquipmentsDomain](userAnswers)
+
+  def arbitraryEquipmentAnswers(userAnswers: UserAnswers, equipmentIndex: Index): Gen[UserAnswers] =
+    buildUserAnswers[EquipmentDomain](userAnswers)(EquipmentDomain.userAnswersReader(equipmentIndex))
 
   def arbitrarySealAnswers(userAnswers: UserAnswers, equipmentIndex: Index, sealIndex: Index): Gen[UserAnswers] =
     buildUserAnswers[SealDomain](userAnswers)(SealDomain.userAnswersReader(equipmentIndex, sealIndex))

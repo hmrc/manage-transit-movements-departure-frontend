@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import controllers.actions.Actions
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
-import navigation.transport.TransportNavigatorProvider
+import navigation.transport.EquipmentsNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -33,7 +33,7 @@ class EquipmentAnswersController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: EquipmentAnswersView,
   viewModelProvider: EquipmentViewModelProvider,
-  navigatorProvider: TransportNavigatorProvider
+  navigatorProvider: EquipmentsNavigatorProvider
 ) extends FrontendBaseController
     with I18nSupport {
 

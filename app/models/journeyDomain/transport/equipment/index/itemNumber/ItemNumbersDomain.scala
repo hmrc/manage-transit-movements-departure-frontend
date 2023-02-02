@@ -20,7 +20,7 @@ import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.{Index, RichJsArray}
 import pages.sections.transport.equipment.ItemNumbersSection
 
-case class ItemNumbersDomain(itemNumbers: Seq[ItemNumberDomain])
+case class ItemNumbersDomain(value: Seq[ItemNumberDomain])
 
 object ItemNumbersDomain {
 

@@ -491,7 +491,6 @@ guaranteeDetails.guarantee.guaranteeType.8 = (8) Guarantee not required – exem
 guaranteeDetails.guarantee.guaranteeType.9 = (9) Individual guarantee with multiple usage
 guaranteeDetails.guarantee.guaranteeType.A = (A) Guarantee waiver by agreement
 guaranteeDetails.guarantee.guaranteeType.B = (B) Guarantee for goods dispatched under TIR procedure
-guaranteeDetails.guarantee.guaranteeType.R = (R) Guarantee not required – goods carried on the Rhine, the Danube or their waterways
 guaranteeDetails.guarantee.guaranteeType.checkYourAnswersLabel = Guarantee type
 guaranteeDetails.guarantee.guaranteeType.change.hidden = type of guarantee
 guaranteeDetails.guarantee.guaranteeType.error.required = Select which type of guarantee you are using
@@ -550,6 +549,13 @@ guaranteeDetails.guarantee.liabilityAmount.error.invalidCharacters = The liabili
 guaranteeDetails.guarantee.liabilityAmount.error.invalidFormat = The liability amount must only have up to 2 decimal places, for example 999.99
 guaranteeDetails.guarantee.liabilityAmount.error.invalidValue = The liability amount must be £9,999,999,999,999,999.99 or less
 guaranteeDetails.guarantee.liabilityAmount.change.hidden = liability amount
+
+guaranteeDetails.guarantee.currency.title = What currency do you want to use for the liability?
+guaranteeDetails.guarantee.currency.heading = What currency do you want to use for the liability?
+guaranteeDetails.guarantee.currency.placeholder = Select a currency
+guaranteeDetails.guarantee.currency.change.hidden = liability currency
+guaranteeDetails.guarantee.currency.checkYourAnswersLabel = Liability currency
+guaranteeDetails.guarantee.currency.error.required = Select the currency you want to use for the liability
 
 guaranteeDetails.guarantee.removeGuaranteeYesNo.title = Are you sure you want to remove this guarantee?
 guaranteeDetails.guarantee.removeGuaranteeYesNo.heading = Are you sure you want to remove this guarantee?
@@ -1417,11 +1423,11 @@ transport.equipment.index.containerIdentificationNumber.error.length = The ident
 transport.equipment.index.containerIdentificationNumber.error.invalid = The identification number must only include letters a to z and numbers 0 to 9
 transport.equipment.index.containerIdentificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique identification number
 
-transport.equipment.index.addSealYesNo.title = Do you want to add a seal to the transport equipment?
-transport.equipment.index.addSealYesNo.heading = Do you want to add a seal to the transport equipment?
+transport.equipment.index.addSealYesNo.title = Do you want to add a seal?
+transport.equipment.index.addSealYesNo.heading = Do you want to add a seal?
 transport.equipment.index.addSealYesNo.checkYourAnswersLabel = Do you want to add a seal?
 transport.equipment.index.addSealYesNo.change.hidden = if you want to add a seal
-transport.equipment.index.addSealYesNo.error.required = Select yes if you want to add a seal to the transport equipment
+transport.equipment.index.addSealYesNo.error.required = Select yes if you want to add a seal
 
 transport.equipment.index.seals.identificationNumber.title = What is the seal identification number?
 transport.equipment.index.seals.identificationNumber.heading = What is the seal identification number?
@@ -1471,10 +1477,10 @@ transport.equipment.index.checkYourAnswers.seal.change.hidden = seal {0}
 transport.equipment.index.checkYourAnswers.itemNumber.label = Goods item number {0}
 transport.equipment.index.checkYourAnswers.itemNumber.change.hidden = goods item number {0}
 
-transport.equipment.index.addAnotherGoodsItemNumber.singular.title = You have added 1 goods item number to the transport equipment
-transport.equipment.index.addAnotherGoodsItemNumber.plural.title = You have added {0} goods item numbers to the transport equipment
-transport.equipment.index.addAnotherGoodsItemNumber.singular.heading = You have added 1 goods item number to the transport equipment
-transport.equipment.index.addAnotherGoodsItemNumber.plural.heading = You have added {0} goods item numbers to the transport equipment
-transport.equipment.index.addAnotherGoodsItemNumber.label = Do you want to add another goods item number to the transport equipment?
+transport.equipment.index.addAnotherGoodsItemNumber.singular.title = You have added 1 goods item number
+transport.equipment.index.addAnotherGoodsItemNumber.plural.title = You have added {0} goods item numbers
+transport.equipment.index.addAnotherGoodsItemNumber.singular.heading = You have added 1 goods item number
+transport.equipment.index.addAnotherGoodsItemNumber.plural.heading = You have added {0} goods item numbers
+transport.equipment.index.addAnotherGoodsItemNumber.label = Do you want to add another goods item number?
 transport.equipment.index.addAnotherGoodsItemNumber.maxLimit.label = You cannot add any more goods item numbers. To add another, you need to remove one first.
-transport.equipment.index.addAnotherGoodsItemNumber.error.required = Select yes if you want to add another goods item number to the transport equipment
+transport.equipment.index.addAnotherGoodsItemNumber.error.required = Select yes if you want to add another goods item number

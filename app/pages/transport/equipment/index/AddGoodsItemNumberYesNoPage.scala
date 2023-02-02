@@ -19,16 +19,23 @@ package pages.transport.equipment.index
 import controllers.transport.equipment.index.routes
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.equipment.EquipmentSection
+import pages.sections.transport.equipment.{EquipmentSection, ItemNumbersSection}
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
+
+import scala.util.Try
 
 case class AddGoodsItemNumberYesNoPage(equipmentIndex: Index) extends QuestionPage[Boolean] {
 
   override def path: JsPath = EquipmentSection(equipmentIndex).path \ toString
 
-  override def toString: String = "addGoodsItemNumberYesNo"
+  override def toString: String = "addGoodsItemNumbersYesNo"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.AddGoodsItemNumberYesNoController.onPageLoad(userAnswers.lrn, mode, equipmentIndex))
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = value match {
+    case Some(false) => userAnswers.remove(ItemNumbersSection(equipmentIndex))
+    case _           => super.cleanup(value, userAnswers)
+  }
 }

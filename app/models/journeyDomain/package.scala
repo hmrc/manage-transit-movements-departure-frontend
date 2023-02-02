@@ -121,5 +121,20 @@ package object domain {
       val fn: UserAnswers => EitherType[JsArray] = ua => Right(ua.get(jsArray).getOrElse(JsArray()))
       UserAnswersReader(fn)
     }
+
+    def fieldReader[T](page: Index => Gettable[T])(implicit rds: Reads[T]): UserAnswersReader[Seq[T]] = {
+      val fn: UserAnswers => EitherType[Seq[T]] = ua => {
+        Right {
+          ua.get(jsArray).getOrElse(JsArray()).value.indices.foldLeft[Seq[T]](Nil) {
+            (acc, i) =>
+              ua.get(page(Index(i))) match {
+                case Some(value) => acc :+ value
+                case None        => acc
+              }
+          }
+        }
+      }
+      UserAnswersReader(fn)
+    }
   }
 }
