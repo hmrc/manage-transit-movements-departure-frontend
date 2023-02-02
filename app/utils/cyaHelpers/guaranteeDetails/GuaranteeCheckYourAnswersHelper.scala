@@ -70,6 +70,13 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
     id = Some("change-access-code")
   )
 
+  def liabilityCurrency: Option[SummaryListRow] = getAnswerAndBuildRow[CurrencyCode](
+    page = CurrencyPage(index),
+    formatAnswer = formatAsText,
+    prefix = "guaranteeDetails.guarantee.currency",
+    id = Some("change-liability-currency")
+  )
+
   def liabilityAmount: Option[SummaryListRow] = getAnswerAndBuildRow[BigDecimal](
     page = LiabilityAmountPage(index),
     formatAnswer = formatAsCurrency,
@@ -77,10 +84,4 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
     id = Some("change-liability-amount")
   )
 
-  def liabilityCurrency: Option[SummaryListRow] = getAnswerAndBuildRow[CurrencyCode](
-    page = CurrencyPage(index),
-    formatAnswer = formatAsText,
-    prefix = "guaranteeDetails.guarantee.currency",
-    id = Some("change-liability-currency")
-  )
 }
