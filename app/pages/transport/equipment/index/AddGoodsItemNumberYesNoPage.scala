@@ -27,7 +27,7 @@ case class AddGoodsItemNumberYesNoPage(equipmentIndex: Index) extends QuestionPa
 
   override def path: JsPath = EquipmentSection(equipmentIndex).path \ toString
 
-  override def toString: String = "addGoodsItemNumberYesNo"
+  override def toString: String = "addGoodsItemNumbersYesNo"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.AddGoodsItemNumberYesNoController.onPageLoad(userAnswers.lrn, mode, equipmentIndex))

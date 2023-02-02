@@ -16,13 +16,73 @@
 
 package models.journeyDomain.transport.equipment
 
+import cats.implicits._
+import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, JsArrayGettableAsReaderOps, UserAnswersReader}
+import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.transport.equipment.index.itemNumber.ItemNumbersDomain
 import models.journeyDomain.transport.equipment.seal.SealsDomain
+import models.transport.authorisations.AuthorisationType
+import models.{Index, ProcedureType}
+import pages.preTaskList.ProcedureTypePage
+import pages.sections.transport.authorisationsAndLimit.AuthorisationsSection
+import pages.transport.authorisationsAndLimit.authorisations.index.AuthorisationTypePage
+import pages.transport.equipment.index._
+import pages.transport.preRequisites.ContainerIndicatorPage
 
 case class EquipmentDomain(
   containerId: Option[String],
   seals: Option[SealsDomain],
   goodsItemNumbers: Option[ItemNumbersDomain]
-)
+)(index: Index)
+    extends JourneyDomainModel
 
-object EquipmentDomain {}
+object EquipmentDomain {
+
+  implicit def userAnswersReader(equipmentIndex: Index): UserAnswersReader[EquipmentDomain] =
+    (
+      containerIdReads(equipmentIndex),
+      sealsReads(equipmentIndex),
+      goodItemNumberReads(equipmentIndex)
+    ).tupled.map((EquipmentDomain.apply _).tupled).map(_(equipmentIndex))
+
+  def containerIdReads(equipmentIndex: Index): UserAnswersReader[Option[String]] = equipmentIndex.position match {
+    case 0 =>
+      ContainerIdentificationNumberPage(equipmentIndex).reader.map(Option(_))
+    case _ =>
+      ContainerIndicatorPage
+        .filterOptionalDependent(identity) {
+          AddContainerIdentificationNumberYesNoPage(equipmentIndex).filterOptionalDependent(identity) {
+            ContainerIdentificationNumberPage(equipmentIndex).reader
+          }
+        }
+        .map(_.flatten)
+  }
+
+  def sealsReads(equipmentIndex: Index): UserAnswersReader[Option[SealsDomain]] = for {
+    procedureType      <- ProcedureTypePage.reader
+    authorisationTypes <- AuthorisationsSection.fieldReader(AuthorisationTypePage)
+    hasSSEAuthorisation = authorisationTypes.contains(AuthorisationType.SSE)
+    reader <- (procedureType, hasSSEAuthorisation) match {
+      case (ProcedureType.Simplified, true) =>
+        UserAnswersReader[SealsDomain](SealsDomain.userAnswersReader(equipmentIndex)).map(Option(_))
+      case _ =>
+        AddSealYesNoPage(equipmentIndex).filterOptionalDependent(identity) {
+          UserAnswersReader[SealsDomain](SealsDomain.userAnswersReader(equipmentIndex))
+        }
+    }
+  } yield reader
+
+  def goodItemNumberReads(equipmentIndex: Index): UserAnswersReader[Option[ItemNumbersDomain]] =
+    AddSealYesNoPage(equipmentIndex)
+      .filterOptionalDependent(identity) {
+        ContainerIdentificationNumberPage(equipmentIndex).optionalReader.flatMap {
+          case Some(_) if equipmentIndex.isFirst =>
+            AddGoodsItemNumberYesNoPage(equipmentIndex).filterOptionalDependent(identity) {
+              UserAnswersReader[ItemNumbersDomain](ItemNumbersDomain.userAnswersReader(equipmentIndex))
+            }
+          case _ =>
+            UserAnswersReader[ItemNumbersDomain](ItemNumbersDomain.userAnswersReader(equipmentIndex)).map(Option(_))
+        }
+      }
+      .map(_.flatten)
+}

@@ -17,20 +17,21 @@
 package models.journeyDomain.transport.equipment.seal
 
 import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
+import models.journeyDomain.transport.equipment.EquipmentDomain
 import models.{Index, RichJsArray}
-import pages.sections.transport.equipment.SealsSection
+import pages.sections.transport.equipment.EquipmentsSection
 
-case class SealsDomain(value: Seq[SealDomain])
+case class EquipmentsDomain(value: Seq[EquipmentDomain])
 
-object SealsDomain {
+object EquipmentsDomain {
 
-  implicit def userAnswersReader(equipmentIndex: Index): UserAnswersReader[SealsDomain] =
-    SealsSection(equipmentIndex).arrayReader
+  implicit val userAnswersReader: UserAnswersReader[EquipmentsDomain] =
+    EquipmentsSection.arrayReader
       .flatMap {
         case x if x.isEmpty =>
-          UserAnswersReader(SealDomain.userAnswersReader(equipmentIndex, Index(0))).map(Seq(_))
+          UserAnswersReader(EquipmentDomain.userAnswersReader(Index(0))).map(Seq(_))
         case x =>
-          x.traverse[SealDomain](SealDomain.userAnswersReader(equipmentIndex, _))
+          x.traverse[EquipmentDomain]
       }
-      .map(SealsDomain(_))
+      .map(EquipmentsDomain(_))
 }

@@ -27,7 +27,7 @@ case class AddSealYesNoPage(equipmentIndex: Index) extends QuestionPage[Boolean]
 
   override def path: JsPath = EquipmentSection(equipmentIndex).path \ toString
 
-  override def toString: String = "addSealYesNo"
+  override def toString: String = "addSealsYesNo"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.AddSealYesNoController.onPageLoad(userAnswers.lrn, mode, equipmentIndex))
