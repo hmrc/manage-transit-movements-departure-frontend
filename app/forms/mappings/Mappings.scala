@@ -16,8 +16,8 @@
 
 package forms.mappings
 
-import models.reference.{Country, CustomsOffice, Nationality, UnLocode}
-import models.{CountryList, CustomsOfficeList, Enumerable, LocalReferenceNumber, NationalityList, UnLocodeList}
+import models.reference.{Country, CurrencyCode, CustomsOffice, Nationality, UnLocode}
+import models.{CountryList, CurrencyCodeList, CustomsOfficeList, Enumerable, LocalReferenceNumber, NationalityList, UnLocodeList}
 import play.api.data.FieldMapping
 import play.api.data.Forms.of
 import play.api.data.format.Formats.ignoredFormat
@@ -108,6 +108,13 @@ trait Mappings extends Formatters with Constraints {
     invalidValueKey: String = "error.invalidValue"
   ): FieldMapping[BigDecimal] =
     of(currencyFormatter(requiredKey, invalidCharactersKey, invalidFormatKey, invalidValueKey))
+
+  protected def currencyCode(
+    currencyCodeList: CurrencyCodeList,
+    errorKey: String = "error.required",
+    args: Seq[Any] = Seq.empty
+  ): FieldMapping[CurrencyCode] =
+    of(currencyCodeFormatter(currencyCodeList, errorKey, args))
 
   protected def nationality(
     nationalityList: NationalityList,

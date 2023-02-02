@@ -22,6 +22,7 @@ import forms.Constants.accessCodeLength
 import generators.Generators
 import models.DeclarationType.Option4
 import models.GuaranteeType._
+import models.reference.CurrencyCode
 import models.{DeclarationType, GuaranteeType, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -365,6 +366,50 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
                           href = routes.LiabilityAmountController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("liability amount"),
                           attributes = Map("id" -> "change-liability-amount")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "liabilityCurrency" - {
+      "must return None" - {
+        "when CurrencyPage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new GuaranteeCheckYourAnswersHelper(emptyUserAnswers, mode, index)
+              val result = helper.liabilityCurrency
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when CurrencyPage defined" in {
+          forAll(arbitrary[Mode], arbitrary[CurrencyCode]) {
+            (mode, currencyCode) =>
+              val answers = emptyUserAnswers.setValue(CurrencyPage(index), currencyCode)
+
+              val helper = new GuaranteeCheckYourAnswersHelper(answers, mode, index)
+              val result = helper.liabilityCurrency
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Liability currency".toText),
+                  value = Value(currencyCode.currency.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = routes.CurrencyController.onPageLoad(answers.lrn, mode, index).url,
+                          visuallyHiddenText = Some("liability currency"),
+                          attributes = Map("id" -> "change-liability-currency")
                         )
                       )
                     )
