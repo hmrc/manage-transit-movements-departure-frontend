@@ -1421,15 +1421,15 @@ transport.equipment.index.addContainerIdentificationNumberYesNo.checkYourAnswers
 transport.equipment.index.addContainerIdentificationNumberYesNo.change.hidden = if you want to add an identification number
 transport.equipment.index.addContainerIdentificationNumberYesNo.error.required = Select yes if you want to add a container identification number
 
-transport.equipment.index.containerIdentificationNumber.title = What is the identification number for the transport equipment?
-transport.equipment.index.containerIdentificationNumber.heading = What is the identification number for the transport equipment?
+transport.equipment.index.containerIdentificationNumber.title = What is the container identification number?
+transport.equipment.index.containerIdentificationNumber.heading = What is the container identification number?
 transport.equipment.index.containerIdentificationNumber.hint = This can be up to 17 characters long and include both letters and numbers.
 transport.equipment.index.containerIdentificationNumber.checkYourAnswersLabel = Container identification number
 transport.equipment.index.containerIdentificationNumber.change.hidden = identification number
-transport.equipment.index.containerIdentificationNumber.error.required = Enter the container identification number for the transport equipment
+transport.equipment.index.containerIdentificationNumber.error.required = Enter the container identification number
 transport.equipment.index.containerIdentificationNumber.error.length = The identification number must be 17 characters or less
 transport.equipment.index.containerIdentificationNumber.error.invalid = The identification number must only include letters a to z and numbers 0 to 9
-transport.equipment.index.containerIdentificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique identification number
+transport.equipment.index.containerIdentificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique container identification number
 
 transport.equipment.index.addSealYesNo.title = Do you want to add a seal?
 transport.equipment.index.addSealYesNo.heading = Do you want to add a seal?
