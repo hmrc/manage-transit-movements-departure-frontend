@@ -39,6 +39,7 @@ case class GuaranteeTypePage(index: Index) extends QuestionPage[GuaranteeType] {
         userAnswers
           .remove(ReferenceNumberPage(index))
           .flatMap(_.remove(AccessCodePage(index)))
+          .flatMap(_.remove(CurrencyPage(index)))
           .flatMap(_.remove(LiabilityAmountPage(index)))
           .flatMap(_.remove(OtherReferenceYesNoPage(index)))
           .flatMap(_.remove(OtherReferencePage(index)))

@@ -33,8 +33,12 @@ case class OtherReferenceYesNoPage(index: Index) extends QuestionPage[Boolean] {
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) => userAnswers.remove(OtherReferencePage(index))
-      case _           => super.cleanup(value, userAnswers)
+      case Some(false) =>
+        userAnswers
+          .remove(OtherReferencePage(index))
+          .flatMap(_.remove(CurrencyPage(index)))
+          .flatMap(_.remove(LiabilityAmountPage(index)))
+      case _ => super.cleanup(value, userAnswers)
     }
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
