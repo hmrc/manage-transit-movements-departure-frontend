@@ -29,31 +29,56 @@ object Guarantee {
           guaranteeType.toString,
           None
         )
-      case guaranteeDomain @ GuaranteeDomain.GuaranteeOfTypes01249(guaranteeType, grn, accessCode, liabilityAmount) =>
+      case guaranteeDomain @ GuaranteeDomain.GuaranteeOfTypes01249(guaranteeType, grn, currency, liabilityAmount, accessCode) =>
         GuaranteeType02(
           guaranteeDomain.index.position.toString,
           guaranteeType.toString,
           None,
-          Seq(GuaranteeReferenceType03(guaranteeDomain.index.position.toString, Some(grn), Some(accessCode), Some(liabilityAmount)))
+          Seq(GuaranteeReferenceType03(guaranteeDomain.index.position.toString, Some(grn), Some(accessCode), Some(liabilityAmount), Some(currency.currency)))
         )
-      case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType5(guaranteeType, grn) =>
+      case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType5(guaranteeType, currency, liabilityAmount) =>
         GuaranteeType02(
           guaranteeDomain.index.position.toString,
           guaranteeType.toString,
           None,
-          Seq(GuaranteeReferenceType03(guaranteeDomain.index.position.toString, Some(grn), None, None))
+          Seq(GuaranteeReferenceType03(guaranteeDomain.index.position.toString, None, None, Some(liabilityAmount), Some(currency.currency)))
         )
-      case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType8(guaranteeType, otherReference) =>
+      case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType8(guaranteeType, otherReference, currencyCode, liabilityAmount) =>
         GuaranteeType02(
           guaranteeDomain.index.position.toString,
           guaranteeType.toString,
-          Some(otherReference)
+          Some(otherReference),
+          Seq(
+            GuaranteeReferenceType03(
+              guaranteeDomain.index.position.toString,
+              None,
+              None,
+              Some(liabilityAmount),
+              Some(currencyCode.currency)
+            )
+          )
         )
-      case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType3(guaranteeType, otherReference) =>
+      case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType3WithReference(guaranteeType, otherReference, currencyCode, liabilityAmount) =>
         GuaranteeType02(
           guaranteeDomain.index.position.toString,
           guaranteeType.toString,
-          otherReference
+          Some(otherReference),
+          Seq(
+            GuaranteeReferenceType03(
+              guaranteeDomain.index.position.toString,
+              None,
+              None,
+              Some(liabilityAmount),
+              Some(currencyCode.currency)
+            )
+          )
+        )
+      case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType3WithoutReference(guaranteeType) =>
+        GuaranteeType02(
+          guaranteeDomain.index.position.toString,
+          guaranteeType.toString,
+          None,
+          Seq.empty
         )
     }
 }
