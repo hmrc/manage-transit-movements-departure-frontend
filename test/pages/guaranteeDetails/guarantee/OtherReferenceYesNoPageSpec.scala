@@ -16,6 +16,7 @@
 
 package pages.guaranteeDetails.guarantee
 
+import models.reference.CurrencyCode
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
@@ -31,25 +32,37 @@ class OtherReferenceYesNoPageSpec extends PageBehaviours {
 
     "cleanup" - {
       "when NO selected" - {
-        "must clean up OtherReferencePage" in {
-          forAll(arbitrary[String]) {
-            ref =>
-              val preChange  = emptyUserAnswers.setValue(OtherReferencePage(index), ref)
+        "must clean up" in {
+          forAll(arbitrary[String], arbitrary[CurrencyCode], arbitrary[BigDecimal]) {
+            (ref, currencyCode, amount) =>
+              val preChange = emptyUserAnswers
+                .setValue(OtherReferencePage(index), ref)
+                .setValue(CurrencyPage(index), currencyCode)
+                .setValue(LiabilityAmountPage(index), amount)
+
               val postChange = preChange.setValue(OtherReferenceYesNoPage(index), false)
 
               postChange.get(OtherReferencePage(index)) mustNot be(defined)
+              postChange.get(LiabilityAmountPage(index)) mustNot be(defined)
+              postChange.get(CurrencyPage(index)) mustNot be(defined)
           }
         }
       }
 
       "when YES selected" - {
-        "must not clean up OtherReferencePage" in {
-          forAll(arbitrary[String]) {
-            ref =>
-              val preChange  = emptyUserAnswers.setValue(OtherReferencePage(index), ref)
+        "must not clean up" in {
+          forAll(arbitrary[String], arbitrary[CurrencyCode], arbitrary[BigDecimal]) {
+            (ref, currencyCode, amount) =>
+              val preChange = emptyUserAnswers
+                .setValue(OtherReferencePage(index), ref)
+                .setValue(CurrencyPage(index), currencyCode)
+                .setValue(LiabilityAmountPage(index), amount)
+
               val postChange = preChange.setValue(OtherReferenceYesNoPage(index), true)
 
               postChange.get(OtherReferencePage(index)) must be(defined)
+              postChange.get(LiabilityAmountPage(index)) must be(defined)
+              postChange.get(CurrencyPage(index)) must be(defined)
           }
         }
       }
