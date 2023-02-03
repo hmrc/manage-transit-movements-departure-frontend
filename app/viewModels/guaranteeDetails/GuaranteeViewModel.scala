@@ -41,8 +41,8 @@ object GuaranteeViewModel {
         helper.otherReferenceYesNo,
         helper.otherReference,
         helper.accessCode,
-        helper.liabilityAmount,
-        helper.liabilityCurrency
+        helper.liabilityCurrency,
+        helper.liabilityAmount
       ).flatten
 
       new GuaranteeViewModel(Section(rows))
