@@ -25,7 +25,7 @@ class ItemNumberFormProviderSpec extends StringFieldBehaviours {
   private val prefix = Gen.alphaNumStr.sample.value
   val requiredKey    = s"$prefix.error.required"
   val lengthKey      = s"$prefix.error.length"
-  val maxLength      = 5
+  val maxLength      = 4
 
   val form = new ItemNumberFormProvider()(prefix)
 
