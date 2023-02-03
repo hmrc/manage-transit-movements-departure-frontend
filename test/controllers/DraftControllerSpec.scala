@@ -16,15 +16,23 @@
 
 package controllers
 
+import org.mockito.ArgumentMatchers.any
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import models.DeclarationType.Option1
-import models.NormalMode
 import models.ProcedureType.Normal
 import models.SecurityDetailsType.NoSecurityDetails
 import models.reference.CustomsOffice
-import pages.preTaskList._
+import models.{LocalReferenceNumber, NormalMode}
+import org.mockito.Mockito.{times, verify, when}
+import pages.preTaskList.{DeclarationTypePage, DetailsConfirmedPage, OfficeOfDeparturePage, ProcedureTypePage, SecurityDetailsTypePage, TIRCarnetReferencePage}
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
+import viewModels.taskList.TaskListViewModel
+
+import scala.concurrent.Future
 
 class DraftControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 

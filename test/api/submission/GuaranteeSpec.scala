@@ -46,64 +46,31 @@ class GuaranteeSpec extends SpecBase with UserAnswersSpecHelper with Generators 
                         guaranteeType.toString,
                         None
                       )
-                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfTypes01249(guaranteeType, grn, currency, liabilityAmount, accessCode) =>
+                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfTypes01249(guaranteeType, grn, accessCode, liabilityAmount) =>
                       GuaranteeType02(
                         guaranteeDomain.index.position.toString,
                         guaranteeType.toString,
                         None,
-                        Seq(
-                          GuaranteeReferenceType03(
-                            guaranteeDomain.index.position.toString,
-                            Some(grn),
-                            Some(accessCode),
-                            Some(liabilityAmount),
-                            Some(currency.currency)
-                          )
-                        )
+                        Seq(GuaranteeReferenceType03(guaranteeDomain.index.position.toString, Some(grn), Some(accessCode), Some(liabilityAmount)))
                       )
-                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType5(guaranteeType, currency, liabilityAmount) =>
+                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType5(guaranteeType, grn) =>
                       GuaranteeType02(
                         guaranteeDomain.index.position.toString,
                         guaranteeType.toString,
                         None,
-                        Seq(GuaranteeReferenceType03(guaranteeDomain.index.position.toString, None, None, Some(liabilityAmount), Some(currency.currency)))
+                        Seq(GuaranteeReferenceType03(guaranteeDomain.index.position.toString, Some(grn), None, None))
                       )
-                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType8(guaranteeType, otherReference, currencyCode, liabilityAmount) =>
+                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType8(guaranteeType, otherReference) =>
                       GuaranteeType02(
                         guaranteeDomain.index.position.toString,
                         guaranteeType.toString,
-                        Some(otherReference),
-                        Seq(
-                          GuaranteeReferenceType03(
-                            guaranteeDomain.index.position.toString,
-                            None,
-                            None,
-                            Some(liabilityAmount),
-                            Some(currencyCode.currency)
-                          )
-                        )
+                        Some(otherReference)
                       )
-                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType3WithReference(guaranteeType, otherReference, currencyCode, liabilityAmount) =>
+                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType3(guaranteeType, otherReference) =>
                       GuaranteeType02(
                         guaranteeDomain.index.position.toString,
                         guaranteeType.toString,
-                        Some(otherReference),
-                        Seq(
-                          GuaranteeReferenceType03(
-                            guaranteeDomain.index.position.toString,
-                            None,
-                            None,
-                            Some(liabilityAmount),
-                            Some(currencyCode.currency)
-                          )
-                        )
-                      )
-                    case guaranteeDomain @ GuaranteeDomain.GuaranteeOfType3WithoutReference(guaranteeType) =>
-                      GuaranteeType02(
-                        guaranteeDomain.index.position.toString,
-                        guaranteeType.toString,
-                        None,
-                        Seq.empty
+                        otherReference
                       )
                   }
 
