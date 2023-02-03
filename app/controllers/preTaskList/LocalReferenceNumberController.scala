@@ -55,18 +55,19 @@ class LocalReferenceNumberController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
           value => {
-            def getOrCreateUserAnswers(): Future[UserAnswers] =
+            def getOrCreateUserAnswers(): Future[Option[UserAnswers]] =
               sessionRepository.get(value).flatMap {
-                case Some(userAnswers) =>
-                  Future.successful(userAnswers)
                 case None =>
                   sessionRepository.put(value).flatMap {
-                    _ => getOrCreateUserAnswers()
+                    _ => sessionRepository.get(value)
                   }
+                case someUserAnswers =>
+                  Future.successful(someUserAnswers)
               }
 
             getOrCreateUserAnswers().map {
-              userAnswers => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers))
+              case Some(userAnswers) => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers))
+              case None              => Redirect(controllers.routes.ErrorController.technicalDifficulties())
             }
           }
         )

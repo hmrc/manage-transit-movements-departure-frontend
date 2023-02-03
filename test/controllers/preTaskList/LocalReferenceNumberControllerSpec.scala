@@ -107,5 +107,23 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
         verify(mockSessionRepository, times(1)).get(eqTo(lrn))(any())
       }
     }
+
+    "must redirect to technical difficulties" - {
+      "when both GETs return a None" in {
+        when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(None) thenReturn Future.successful(None)
+        when(mockSessionRepository.put(any())(any())) thenReturn Future.successful(true)
+
+        val request = FakeRequest(POST, localReferenceNumberRoute)
+          .withFormUrlEncodedBody(("value", lrn.toString))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
+
+        verify(mockSessionRepository, times(2)).get(eqTo(lrn))(any())
+        verify(mockSessionRepository, times(1)).put(eqTo(lrn))(any())
+      }
+    }
   }
 }
