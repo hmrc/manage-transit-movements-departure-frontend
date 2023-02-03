@@ -16,10 +16,12 @@
 
 package viewModels.transport.equipment
 
+import controllers.transport.equipment.index.routes
 import models.{Index, Mode, RichOptionalJsArray, UserAnswers}
 import pages.sections.transport.equipment.{ItemNumbersSection, SealsSection}
 import play.api.i18n.Messages
 import utils.cyaHelpers.transport.equipment.EquipmentAnswersHelper
+import viewModels.Link
 import viewModels.sections.Section
 
 import javax.inject.Inject
@@ -46,7 +48,12 @@ object EquipmentViewModel {
           .get(SealsSection(equipmentIndex))
           .mapWithIndex {
             (_, index) => helper.seal(index)
-          }
+          },
+        addAnotherLink = Link(
+          id = "add-or-remove-seals",
+          text = messages("transport.equipment.index.checkYourAnswers.seals.addOrRemove"),
+          href = routes.AddAnotherSealController.onPageLoad(userAnswers.lrn, mode, equipmentIndex).url
+        )
       )
 
       val itemNumbersSection = Section(
@@ -55,7 +62,12 @@ object EquipmentViewModel {
           .get(ItemNumbersSection(equipmentIndex))
           .mapWithIndex {
             (_, index) => helper.itemNumber(index)
-          }
+          },
+        addAnotherLink = Link(
+          id = "add-or-remove-goods-item-numbers",
+          text = messages("transport.equipment.index.checkYourAnswers.itemNumbers.addOrRemove"),
+          href = routes.AddAnotherGoodsItemNumberController.onPageLoad(userAnswers.lrn, mode, equipmentIndex).url
+        )
       )
 
       new EquipmentViewModel(Seq(preSection, sealsSection, itemNumbersSection))
