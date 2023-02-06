@@ -81,4 +81,19 @@ trait StringFieldBehaviours extends FieldBehaviours {
     }
   }
 
+  def stringFieldWithMaximumIntValue(form: Form[_], fieldName: String, max: Int, fieldMax: Int, expectedError: FormError): Unit =
+    s"must not bind values > $max and < $max" in {
+      forAll(positiveIntsMinMax(max, fieldMax)) {
+        number =>
+          val result = form.bind(Map(fieldName -> number.toString)).apply(fieldName)
+          result.errors mustEqual Seq(expectedError)
+      }
+    }
+
+  def stringFieldWithMinimumIntValue(form: Form[_], fieldName: String, min: Int, expectedError: FormError): Unit =
+    s"must not bind values < $min" in {
+      val testCase = min - 1
+      val result   = form.bind(Map(fieldName -> testCase.toString)).apply(fieldName)
+      result.errors mustEqual Seq(expectedError)
+    }
 }

@@ -36,4 +36,5 @@ object Constants {
   lazy val maxContainerIdNumberLength: Int      = 17
   lazy val maxSealIdNumberLength: Int           = 20
   lazy val itemNumberLength: Int                = 4
+  lazy val itemNumberMax: Int                   = 1999
 }
