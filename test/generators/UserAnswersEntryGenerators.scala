@@ -81,6 +81,7 @@ trait UserAnswersEntryGenerators {
   private def generateRepresentativeAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.traderDetails.representative._
     {
+      case AddDetailsPage      => arbitrary[Boolean].map(JsBoolean)
       case EoriPage            => Gen.alphaNumStr.map(JsString)
       case NamePage            => Gen.alphaNumStr.map(JsString)
       case TelephoneNumberPage => Gen.alphaNumStr.map(JsString)

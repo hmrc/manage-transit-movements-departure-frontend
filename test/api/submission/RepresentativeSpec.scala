@@ -42,8 +42,10 @@ class RepresentativeSpec extends SpecBase with UserAnswersSpecHelper with Genera
                     r =>
                       RepresentativeType05(
                         r.eori.value,
-                        r.capacity.code,
-                        Some(ContactPersonType05(r.name, r.phone, None))
+                        "2",
+                        r.representativeDetails.map(
+                          x => ContactPersonType05(x.name, x.telephoneNumber, None)
+                        )
                       )
                   }
 

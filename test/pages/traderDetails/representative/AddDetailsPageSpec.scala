@@ -16,6 +16,7 @@
 
 package pages.traderDetails.representative
 
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class AddDetailsPageSpec extends PageBehaviours {
@@ -27,5 +28,37 @@ class AddDetailsPageSpec extends PageBehaviours {
     beSettable[Boolean](AddDetailsPage)
 
     beRemovable[Boolean](AddDetailsPage)
+
+    "cleanup" - {
+      "when NO selected" - {
+        "must clean up name and telephone pages" in {
+          forAll(arbitrary[String], arbitrary[String]) {
+            (name, telephone) =>
+              val preChange = emptyUserAnswers
+                .setValue(AddDetailsPage, true)
+                .setValue(NamePage, name)
+                .setValue(TelephoneNumberPage, telephone)
+              val postChange = preChange.setValue(AddDetailsPage, false)
+
+              postChange.get(NamePage) mustNot be(defined)
+              postChange.get(TelephoneNumberPage) mustNot be(defined)
+          }
+        }
+      }
+
+      "when YES selected" - {
+        "must do nothing" in {
+          forAll(arbitrary[String], arbitrary[String]) {
+            (name, telephone) =>
+              val preChange = emptyUserAnswers
+                .setValue(NamePage, name)
+                .setValue(TelephoneNumberPage, telephone)
+              val postChange = preChange.setValue(AddDetailsPage, true)
+
+              postChange.get(NamePage) must be(defined)
+          }
+        }
+      }
+    }
   }
 }

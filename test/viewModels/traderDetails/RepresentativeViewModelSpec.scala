@@ -45,6 +45,7 @@ class RepresentativeViewModelSpec extends SpecBase with Generators {
         val answers = emptyUserAnswers
           .setValue(ActingAsRepresentativePage, true)
           .setValue(EoriPage, "eori")
+          .setValue(AddDetailsPage, true)
           .setValue(NamePage, "name")
           .setValue(TelephoneNumberPage, "phone")
 
@@ -55,11 +56,12 @@ class RepresentativeViewModelSpec extends SpecBase with Generators {
         sections.size mustBe 1
 
         sections.head.sectionTitle.get mustBe "Representative"
-        sections.head.rows.size mustBe 4
+        sections.head.rows.size mustBe 5
         sections.head.rows.head.value.content.asHtml.toString() mustBe "Yes"
         sections.head.rows(1).value.content.asHtml.toString() mustBe "eori"
-        sections.head.rows(2).value.content.asHtml.toString() mustBe "name"
-        sections.head.rows(3).value.content.asHtml.toString() mustBe "phone"
+        sections.head.rows(2).value.content.asHtml.toString() mustBe "Yes"
+        sections.head.rows(3).value.content.asHtml.toString() mustBe "name"
+        sections.head.rows(4).value.content.asHtml.toString() mustBe "phone"
       }
     }
   }
