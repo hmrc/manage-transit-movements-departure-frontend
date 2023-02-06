@@ -88,7 +88,8 @@ class RemoveItemNumberYesNoControllerSpec extends SpecBase with AppWithDefaultMo
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual "#"
+        redirectLocation(result).value mustEqual
+          controllers.transport.equipment.index.routes.AddAnotherGoodsItemNumberController.onPageLoad(userAnswers.lrn, mode, equipmentIndex).url
 
         verify(mockSessionRepository, never()).set(any())(any())
       }
