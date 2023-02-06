@@ -16,7 +16,10 @@
 
 package pages.transport.preRequisites
 
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.sections.transport.equipment.EquipmentsSection
+import play.api.libs.json.{JsArray, Json}
 
 class ContainerIndicatorPageSpec extends PageBehaviours {
 
@@ -27,5 +30,37 @@ class ContainerIndicatorPageSpec extends PageBehaviours {
     beSettable[Boolean](ContainerIndicatorPage)
 
     beRemovable[Boolean](ContainerIndicatorPage)
+
+    "cleanup" - {
+      "when answer changes" - {
+        "must remove transport equipments section" in {
+          forAll(arbitrary[Boolean]) {
+            indicator =>
+              val userAnswers = emptyUserAnswers
+                .setValue(ContainerIndicatorPage, indicator)
+                .setValue(EquipmentsSection, JsArray(Seq(Json.obj("foo" -> "bar"))))
+
+              val result = userAnswers.setValue(ContainerIndicatorPage, !indicator)
+
+              result.get(EquipmentsSection) must not be defined
+          }
+        }
+      }
+
+      "when answer doesn't change" - {
+        "must do nothing" in {
+          forAll(arbitrary[Boolean]) {
+            indicator =>
+              val userAnswers = emptyUserAnswers
+                .setValue(ContainerIndicatorPage, indicator)
+                .setValue(EquipmentsSection, JsArray(Seq(Json.obj("foo" -> "bar"))))
+
+              val result = userAnswers.setValue(ContainerIndicatorPage, indicator)
+
+              result.get(EquipmentsSection) must be(defined)
+          }
+        }
+      }
+    }
   }
 }

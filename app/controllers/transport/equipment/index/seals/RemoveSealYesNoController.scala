@@ -17,7 +17,7 @@
 package controllers.transport.equipment.index.seals
 
 import controllers.actions._
-import controllers.transport.equipment.index.{routes => indexRoutes}
+import controllers.transport.equipment.index.routes
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.journeyDomain.transport.TransportDomain
@@ -64,6 +64,7 @@ class RemoveSealYesNoController @Inject() (
     .andThen(getMandatoryPage.getFirst(IdentificationNumberPage(equipmentIndex, sealIndex)))
     .async {
       implicit request =>
+        lazy val redirect = routes.AddAnotherSealController.onPageLoad(lrn, mode, equipmentIndex)
         form
           .bindFromRequest()
           .fold(
@@ -74,9 +75,9 @@ class RemoveSealYesNoController @Inject() (
                   .removeFromUserAnswers()
                   .updateTask[TransportDomain]()
                   .writeToSession()
-                  .navigateTo(indexRoutes.AddAnotherSealController.onPageLoad(lrn, mode, equipmentIndex))
+                  .navigateTo(redirect)
               case false =>
-                Future.successful(Redirect(indexRoutes.AddAnotherSealController.onPageLoad(lrn, mode, equipmentIndex)))
+                Future.successful(Redirect(redirect))
             }
           )
     }

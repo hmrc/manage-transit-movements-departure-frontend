@@ -34,6 +34,9 @@ case object ApprovedOperatorPage extends QuestionPage[Boolean] {
 
   override def toString: String = "approvedOperator"
 
+  // TODO - this answer affects transport details authorisation nav.
+  //  what cleanup logic do we need?
+  //  if we split out into separate FEs we'll need endpoints to do this cleanup in the backend cache
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     (userAnswers.get(SecurityDetailsTypePage), value) match {
       case (Some(NoSecurityDetails), Some(true)) => userAnswers.remove(TraderDetailsConsignorSection)
