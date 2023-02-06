@@ -43,11 +43,10 @@ import scala.concurrent.Future
 
 class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private val prefix                                             = "transport.authorisations.authorisationReferenceNumber"
-  private def dynamicTitle(authorisationType: AuthorisationType) = messages(authorisationType.forDisplay)
+  private val prefix = "transport.authorisations.authorisationReferenceNumber"
 
   private val formProvider                               = new AuthorisationReferenceNumberFormProvider()
-  private def form(authorisationType: AuthorisationType) = formProvider(prefix, dynamicTitle(authorisationType))
+  private def form(authorisationType: AuthorisationType) = formProvider(prefix, authorisationType.forDisplay)
   private val mode                                       = NormalMode
   private val validAnswer                                = "testString"
   private val nonTIRDeclarationType                      = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value

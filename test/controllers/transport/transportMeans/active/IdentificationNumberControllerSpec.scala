@@ -42,11 +42,10 @@ import scala.concurrent.Future
 
 class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
-  private val prefix                                           = "transport.transportMeans.active.identificationNumber"
-  private def dynamicTitle(identificationType: Identification) = messages(identificationType.forDisplay)
+  private val prefix = "transport.transportMeans.active.identificationNumber"
 
   private val formProvider                             = new IdentificationNumberFormProvider()
-  private def form(identificationType: Identification) = formProvider(prefix, dynamicTitle(identificationType))
+  private def form(identificationType: Identification) = formProvider(prefix, identificationType.forDisplay)
   private val mode                                     = NormalMode
   private lazy val identificationNumberRoute           = routes.IdentificationNumberController.onPageLoad(lrn, mode, index).url
 
