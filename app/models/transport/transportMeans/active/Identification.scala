@@ -24,6 +24,9 @@ sealed trait Identification {
 
   def asString(implicit messages: Messages): String =
     messages(s"${Identification.messageKeyPrefix}.$this")
+
+  def forDisplay(implicit messages: Messages): String =
+    messages(s"${Identification.messageKeyPrefix}.forDisplay.$this")
 }
 
 object Identification extends RadioModel[Identification] {

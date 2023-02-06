@@ -20,10 +20,10 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.transport.transportMeans.active.IdentificationNumberFormProvider
 import generators.Generators
 import models.reference.CustomsOffice
-import models.{Index, NormalMode}
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.active.Identification
 import models.transport.transportMeans.active.Identification.{RegNumberRoadVehicle, TrainNumber}
+import models.{Index, NormalMode}
 import navigation.transport.TransportMeansActiveNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -43,7 +43,7 @@ import scala.concurrent.Future
 class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   private val prefix                                           = "transport.transportMeans.active.identificationNumber"
-  private def dynamicTitle(identificationType: Identification) = messages(s"$prefix.$identificationType")
+  private def dynamicTitle(identificationType: Identification) = messages(identificationType.forDisplay)
 
   private val formProvider                             = new IdentificationNumberFormProvider()
   private def form(identificationType: Identification) = formProvider(prefix, dynamicTitle(identificationType))
@@ -76,7 +76,7 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(identificationType), lrn, s"$prefix.$identificationType", mode, index)(request, messages).toString
+          view(form(identificationType), lrn, identificationType.forDisplay, mode, index)(request, messages).toString
       }
 
       "when first border mode is either Road or Rail and the next Identification type is different" in {
@@ -108,7 +108,7 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(identificationType), lrn, s"$prefix.$identificationType", mode, Index(1))(request, messages).toString
+          view(form(identificationType), lrn, identificationType.forDisplay, mode, Index(1))(request, messages).toString
       }
 
       "when border mode is Road" in {
@@ -126,7 +126,7 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(identificationType), lrn, s"$prefix.$identificationType", mode, index)(request, messages).toString
+          view(form(identificationType), lrn, identificationType.forDisplay, mode, index)(request, messages).toString
       }
 
       "when border mode is something else" in {
@@ -152,7 +152,7 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
             status(result) mustEqual OK
 
             contentAsString(result) mustEqual
-              view(form(identificationType), lrn, s"$prefix.$identificationType", mode, index)(request, messages).toString
+              view(form(identificationType), lrn, identificationType.forDisplay, mode, index)(request, messages).toString
         }
       }
     }
@@ -178,7 +178,7 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, s"$prefix.$identificationType", mode, index)(request, messages).toString
+        view(filledForm, lrn, identificationType.forDisplay, mode, index)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -216,7 +216,7 @@ class IdentificationNumberControllerSpec extends SpecBase with AppWithDefaultMoc
       val view = injector.instanceOf[IdentificationNumberView]
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, s"$prefix.$identificationType", mode, index)(request, messages).toString
+        view(filledForm, lrn, identificationType.forDisplay, mode, index)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

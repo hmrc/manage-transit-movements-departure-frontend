@@ -17,10 +17,14 @@
 package pages.transport.transportMeans.active
 
 import controllers.transport.transportMeans.active.routes
+import models.domain.{GettableAsReaderOps, UserAnswersReader}
+import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.active.Identification
+import models.transport.transportMeans.active.Identification.{RegNumberRoadVehicle, TrainNumber}
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.transport.transportMeans.TransportMeansActiveSection
+import pages.transport.transportMeans.BorderModeOfTransportPage
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
@@ -39,5 +43,16 @@ case class IdentificationPage(index: Index) extends QuestionPage[Identification]
     value match {
       case Some(_) => userAnswers.remove(IdentificationNumberPage(index))
       case _       => super.cleanup(value, userAnswers)
+    }
+
+  def inferredReader: UserAnswersReader[Identification] =
+    if (index.isFirst) {
+      BorderModeOfTransportPage.reader.flatMap {
+        case BorderModeOfTransport.Rail => UserAnswersReader.apply(TrainNumber)
+        case BorderModeOfTransport.Road => UserAnswersReader.apply(RegNumberRoadVehicle)
+        case _                          => IdentificationPage(index).reader
+      }
+    } else {
+      IdentificationPage(index).reader
     }
 }
