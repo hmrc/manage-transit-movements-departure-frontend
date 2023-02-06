@@ -23,10 +23,11 @@ import models.DeclarationType.Option4
 import models.ProcedureType.{Normal, Simplified}
 import models.transport.authorisations.AuthorisationType
 import models.transport.transportMeans.departure.InlandMode
-import models.{DeclarationType, Index, NormalMode}
+import models.{DeclarationType, Index, NormalMode, ProcedureType}
 import navigation.transport.AuthorisationNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage}
 import pages.traderDetails.consignment.ApprovedOperatorPage
@@ -37,20 +38,20 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.transport.authorisationsAndLimit.authorisations.index.AuthorisationReferenceNumberView
-import org.scalacheck.Arbitrary.arbitrary
 
 import scala.concurrent.Future
 
 class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val prefix                                             = "transport.authorisations.authorisationReferenceNumber"
-  private def dynamicTitle(authorisationType: AuthorisationType) = messages(s"$prefix.$authorisationType")
+  private def dynamicTitle(authorisationType: AuthorisationType) = messages(authorisationType.forDisplay)
 
   private val formProvider                               = new AuthorisationReferenceNumberFormProvider()
   private def form(authorisationType: AuthorisationType) = formProvider(prefix, dynamicTitle(authorisationType))
   private val mode                                       = NormalMode
   private val validAnswer                                = "testString"
   private val nonTIRDeclarationType                      = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+  private val procedureType                              = arbitrary[ProcedureType].sample.value
 
   private val firstInlandMode = Gen
     .oneOf(
@@ -94,7 +95,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(authorisationType), lrn, s"$prefix.$authorisationType", mode, authorisationIndex)(request, messages).toString
+          view(form(authorisationType), lrn, authorisationType.forDisplay, mode, authorisationIndex)(request, messages).toString
 
       }
 
@@ -103,6 +104,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
         val inlandMode        = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
 
         val userAnswers = emptyUserAnswers
+          .setValue(ProcedureTypePage, procedureType)
           .setValue(DeclarationTypePage, nonTIRDeclarationType)
           .setValue(ApprovedOperatorPage, true)
           .setValue(InlandModePage, inlandMode)
@@ -117,7 +119,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(authorisationType), lrn, s"$prefix.$authorisationType", mode, authorisationIndex)(request, messages).toString
+          view(form(authorisationType), lrn, authorisationType.forDisplay, mode, authorisationIndex)(request, messages).toString
       }
 
       "when using reduced data set and Inland Mode is not one of Maritime, Rail or Road and Procedure type is simplified" in {
@@ -140,7 +142,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(authorisationType), lrn, s"$prefix.$authorisationType", mode, authorisationIndex)(request, messages).toString
+          view(form(authorisationType), lrn, authorisationType.forDisplay, mode, authorisationIndex)(request, messages).toString
       }
 
       "when using reduced data set and Inland Mode is not one of Maritime, Rail or Road and Procedure type is normal" in {
@@ -164,7 +166,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(authorisationType), lrn, s"$prefix.$authorisationType", mode, authorisationIndex)(request, messages).toString
+          view(form(authorisationType), lrn, authorisationType.forDisplay, mode, authorisationIndex)(request, messages).toString
       }
 
     }
@@ -195,7 +197,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(filledForm, lrn, s"$prefix.$authorisationType", mode, authorisationIndex)(request, messages).toString
+          view(filledForm, lrn, authorisationType.forDisplay, mode, authorisationIndex)(request, messages).toString
       }
 
       "when it is not the first authorisation index" in {
@@ -225,7 +227,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(filledForm, lrn, s"$prefix.$authorisationType1", mode, Index(1))(request, messages).toString
+          view(filledForm, lrn, authorisationType1.forDisplay, mode, Index(1))(request, messages).toString
       }
 
     }
@@ -234,6 +236,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
       val inlandMode = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
 
       val userAnswers = emptyUserAnswers
+        .setValue(ProcedureTypePage, procedureType)
         .setValue(DeclarationTypePage, nonTIRDeclarationType)
         .setValue(ApprovedOperatorPage, true)
         .setValue(InlandModePage, inlandMode)
@@ -256,6 +259,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
       val inlandMode        = Gen.oneOf(Seq(InlandMode.Maritime, InlandMode.Rail, InlandMode.Air)).sample.value
 
       val userAnswers = emptyUserAnswers
+        .setValue(ProcedureTypePage, procedureType)
         .setValue(DeclarationTypePage, nonTIRDeclarationType)
         .setValue(ApprovedOperatorPage, true)
         .setValue(InlandModePage, inlandMode)
@@ -273,7 +277,7 @@ class AuthorisationReferenceNumberControllerSpec extends SpecBase with AppWithDe
       val view = injector.instanceOf[AuthorisationReferenceNumberView]
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, s"$prefix.$authorisationType", mode, authorisationIndex)(request, messages).toString
+        view(filledForm, lrn, authorisationType.forDisplay, mode, authorisationIndex)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
