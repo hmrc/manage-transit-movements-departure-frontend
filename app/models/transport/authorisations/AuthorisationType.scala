@@ -24,7 +24,8 @@ sealed trait AuthorisationType {
   def asString(implicit messages: Messages): String =
     messages(s"${AuthorisationType.messageKeyPrefix}.$this")
 
-  def forDisplay(implicit messages: Messages): String = messages(s"${AuthorisationType.messageKeyPrefix}.forDisplay.$this")
+  def forDisplay(implicit messages: Messages): String =
+    messages(s"${AuthorisationType.messageKeyPrefix}.forDisplay.$this")
 
 }
 

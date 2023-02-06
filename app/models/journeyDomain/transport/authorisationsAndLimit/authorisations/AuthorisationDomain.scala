@@ -19,18 +19,12 @@ package models.journeyDomain.transport.authorisationsAndLimit.authorisations
 import cats.implicits.catsSyntaxTuple2Semigroupal
 import controllers.transport.authorisationsAndLimit.authorisations.index.{routes => authorisationRoutes}
 import controllers.transport.authorisationsAndLimit.authorisations.{routes => authorisationsRoutes}
-import models.ProcedureType._
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.Stage.{AccessingJourney, CompletingJourney}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.transport.authorisations.AuthorisationType
-import models.transport.authorisations.AuthorisationType.{ACR, TRD}
-import models.transport.transportMeans.departure.InlandMode._
 import models.{Index, Mode, UserAnswers}
-import pages.preTaskList.ProcedureTypePage
-import pages.traderDetails.consignment.ApprovedOperatorPage
 import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
-import pages.transport.transportMeans.departure.InlandModePage
 import play.api.i18n.Messages
 import play.api.mvc.Call
 
@@ -56,30 +50,10 @@ object AuthorisationDomain {
     s"${authorisationType.forDisplay} - $referenceNumber"
 
   // scalastyle:off cyclomatic.complexity
-  def userAnswersReader(index: Index): UserAnswersReader[AuthorisationDomain] = {
-
-    val authorisationTypeReads: UserAnswersReader[AuthorisationType] = {
-      if (index.isFirst) {
-        for {
-          reducedDataSetIndicator <- ApprovedOperatorPage.inferredReader
-          inlandMode              <- InlandModePage.reader
-          procedureType           <- ProcedureTypePage.reader
-
-          reader <- (reducedDataSetIndicator, inlandMode, procedureType) match {
-            case (true, Maritime | Rail | Air, _)                             => UserAnswersReader.apply(TRD)
-            case (true, Road | Mail | Fixed | Unknown | Waterway, Simplified) => UserAnswersReader.apply(ACR)
-            case _                                                            => AuthorisationTypePage(index).reader
-          }
-        } yield reader
-      } else {
-        AuthorisationTypePage(index).reader
-      }
-    }
-
+  def userAnswersReader(index: Index): UserAnswersReader[AuthorisationDomain] =
     (
-      authorisationTypeReads,
+      AuthorisationTypePage(index).inferredReader,
       AuthorisationReferenceNumberPage(index).reader
     ).tupled.map((AuthorisationDomain.apply _).tupled).map(_(index))
-  }
 
 }

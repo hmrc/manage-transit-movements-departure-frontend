@@ -19,18 +19,12 @@ package controllers.transport.authorisationsAndLimit.authorisations.index
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.AuthorisationReferenceNumberFormProvider
-import models.ProcedureType.Simplified
 import models.journeyDomain.transport.TransportDomain
 import models.requests.DataRequest
-import models.transport.authorisations.AuthorisationType
-import models.transport.transportMeans.departure.InlandMode.{Air, Maritime, Rail}
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.AuthorisationNavigatorProvider
-import pages.preTaskList.ProcedureTypePage
-import pages.traderDetails.consignment.ApprovedOperatorPage
 import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
-import pages.transport.transportMeans.departure.InlandModePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -46,7 +40,6 @@ class AuthorisationReferenceNumberController @Inject() (
   navigatorProvider: AuthorisationNavigatorProvider,
   formProvider: AuthorisationReferenceNumberFormProvider,
   actions: Actions,
-  getMandatoryPage: SpecificDataRequiredActionProvider,
   val controllerComponents: MessagesControllerComponents,
   view: AuthorisationReferenceNumberView
 )(implicit ec: ExecutionContext)
@@ -55,34 +48,22 @@ class AuthorisationReferenceNumberController @Inject() (
 
   private val prefix = "transport.authorisations.authorisationReferenceNumber"
 
-  private type Request = DataRequest[AnyContent]
-
-  private def authorisationType(authorisationIndex: Index)(implicit request: Request): Option[AuthorisationType] = {
-    val reducedDataSet = ApprovedOperatorPage.inferredReader.run(request.userAnswers).toOption
-    val inlandMode     = request.userAnswers.get(InlandModePage)
-    val procedureType  = request.userAnswers.get(ProcedureTypePage)
-
-    (reducedDataSet, inlandMode, procedureType) match {
-      case (Some(true), Some(Maritime) | Some(Rail) | Some(Air), _) if authorisationIndex.isFirst => Some(AuthorisationType.TRD)
-      case (Some(true), _, Some(Simplified)) if authorisationIndex.isFirst                        => Some(AuthorisationType.ACR)
-      case _                                                                                      => request.userAnswers.get(AuthorisationTypePage(authorisationIndex))
-    }
-  }
+  private def authorisationType(authorisationIndex: Index)(implicit request: DataRequest[_]): Option[String] =
+    AuthorisationTypePage(authorisationIndex).inferredReader.run(request.userAnswers).toOption.map(_.forDisplay)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, authorisationIndex: Index): Action[AnyContent] = actions
     .requireData(lrn) {
       implicit request =>
         authorisationType(authorisationIndex) match {
           case Some(value) =>
-            val dynamicTitle = s"$prefix.$value"
-            val form         = formProvider(prefix, dynamicTitle)
+            val form = formProvider(prefix, value)
 
             val preparedForm = request.userAnswers.get(AuthorisationReferenceNumberPage(authorisationIndex)) match {
               case None        => form
               case Some(value) => form.fill(value)
             }
 
-            Ok(view(preparedForm, lrn, dynamicTitle, mode, authorisationIndex))
+            Ok(view(preparedForm, lrn, value, mode, authorisationIndex))
           case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
         }
     }
@@ -91,13 +72,11 @@ class AuthorisationReferenceNumberController @Inject() (
     implicit request =>
       authorisationType(authorisationIndex) match {
         case Some(value) =>
-          val dynamicTitle = s"$prefix.$value"
-          val form         = formProvider(prefix, dynamicTitle)
-
+          val form = formProvider(prefix, value)
           form
             .bindFromRequest()
             .fold(
-              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, dynamicTitle, mode, authorisationIndex))),
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, value, mode, authorisationIndex))),
               value => {
                 implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, authorisationIndex)
                 AuthorisationReferenceNumberPage(authorisationIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
