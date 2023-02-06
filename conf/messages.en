@@ -1324,15 +1324,9 @@ transport.authorisations.authorisationReferenceNumber.title = What’s the refer
 transport.authorisations.authorisationReferenceNumber.heading = What’s the reference number for the {0} authorisation?
 transport.authorisations.authorisationReferenceNumber.hint = This can be up to 35 characters long and include both letters and numbers.
 transport.authorisations.authorisationReferenceNumber.checkYourAnswersLabel = Authorisation reference number
-transport.authorisations.authorisationReferenceNumber.ACR = ACR
-transport.authorisations.authorisationReferenceNumber.SSE = SSE
-transport.authorisations.authorisationReferenceNumber.TRD = TRD
 transport.authorisations.authorisationReferenceNumber.error.required = Enter the reference number for the {0} authorisation
 transport.authorisations.authorisationReferenceNumber.error.length = The reference number must be 35 characters or less
 transport.authorisations.authorisationReferenceNumber.error.invalidCharacters = The reference number must only include letters a to z and numbers 0 to 9
-transport.authorisations.authorisationReferenceNumber.ACR = ACR
-transport.authorisations.authorisationReferenceNumber.SSE = SSE
-transport.authorisations.authorisationReferenceNumber.TRD = TRD
 
 transport.authorisations.addAnotherAuthorisation.singular.title = You have added 1 authorisation
 transport.authorisations.addAnotherAuthorisation.plural.title = You have added {0} authorisations
