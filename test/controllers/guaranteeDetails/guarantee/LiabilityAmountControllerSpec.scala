@@ -18,11 +18,14 @@ package controllers.guaranteeDetails.guarantee
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.MoneyFormProvider
+import generators.Generators
 import models.NormalMode
+import models.reference.CurrencyCode
 import navigation.guaranteeDetails.GuaranteeNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.guaranteeDetails.guarantee.LiabilityAmountPage
+import org.scalacheck.Arbitrary.arbitrary
+import pages.guaranteeDetails.guarantee.{CurrencyPage, LiabilityAmountPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -31,13 +34,15 @@ import views.html.guaranteeDetails.guarantee.LiabilityAmountView
 
 import scala.concurrent.Future
 
-class LiabilityAmountControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class LiabilityAmountControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private val formProvider              = new MoneyFormProvider()
   private val form                      = formProvider("guaranteeDetails.guarantee.liabilityAmount")
   private val mode                      = NormalMode
   private lazy val referenceNumberRoute = routes.LiabilityAmountController.onPageLoad(lrn, mode, index).url
   private val validAnswer: BigDecimal   = 999.99
+
+  private val currency = arbitrary[CurrencyCode].sample.value
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -48,7 +53,8 @@ class LiabilityAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
     "must return OK and the correct view for a GET" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.setValue(CurrencyPage(index), currency)
+      setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, referenceNumberRoute)
 
@@ -59,13 +65,16 @@ class LiabilityAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode, index)(request, messages).toString
+        view(form, lrn, mode, index, currency.symbol)(request, messages).toString
 
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(LiabilityAmountPage(index), validAnswer)
+      val userAnswers = emptyUserAnswers
+        .setValue(CurrencyPage(index), currency)
+        .setValue(LiabilityAmountPage(index), validAnswer)
+
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, referenceNumberRoute)
@@ -79,13 +88,14 @@ class LiabilityAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, index)(request, messages).toString
+        view(filledForm, lrn, mode, index, currency.symbol)(request, messages).toString
 
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.setValue(CurrencyPage(index), currency)
+      setExistingUserAnswers(userAnswers)
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
@@ -101,7 +111,8 @@ class LiabilityAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      setExistingUserAnswers(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.setValue(CurrencyPage(index), currency)
+      setExistingUserAnswers(userAnswers)
 
       val invalidAnswer = ""
 
@@ -115,7 +126,7 @@ class LiabilityAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
       val view = injector.instanceOf[LiabilityAmountView]
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, mode, index)(request, messages).toString
+        view(filledForm, lrn, mode, index, currency.symbol)(request, messages).toString
 
     }
 

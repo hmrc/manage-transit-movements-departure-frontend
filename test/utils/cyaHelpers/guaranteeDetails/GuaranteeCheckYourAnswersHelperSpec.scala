@@ -349,15 +349,17 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
         "when LiabilityAmountPage defined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val answers = emptyUserAnswers.setValue(LiabilityAmountPage(index), 1000: BigDecimal)
+              val answers = emptyUserAnswers
+                .setValue(CurrencyPage(index), CurrencyCode("EUR", Some("Euros")))
+                .setValue(LiabilityAmountPage(index), 1000: BigDecimal)
 
               val helper = new GuaranteeCheckYourAnswersHelper(answers, mode, index)
               val result = helper.liabilityAmount
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Liability amount (in pounds)".toText),
-                  value = Value("£1,000.00".toText),
+                  key = Key("Liability amount".toText),
+                  value = Value("€1,000.00".toText),
                   actions = Some(
                     Actions(
                       items = List(
@@ -401,7 +403,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
               result mustBe Some(
                 SummaryListRow(
                   key = Key("Liability currency".toText),
-                  value = Value(currencyCode.currency.toText),
+                  value = Value(currencyCode.toString.toText),
                   actions = Some(
                     Actions(
                       items = List(

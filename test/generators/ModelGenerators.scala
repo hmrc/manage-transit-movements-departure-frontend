@@ -305,7 +305,7 @@ trait ModelGenerators {
     Arbitrary {
       for {
         currency <- nonEmptyString
-        desc     <- nonEmptyString
+        desc     <- Gen.option(nonEmptyString)
       } yield CurrencyCode(currency, desc)
     }
 

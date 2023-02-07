@@ -16,15 +16,16 @@
 
 package utils.cyaHelpers
 
-import models.reference.{Country, CountryCode}
-import models.{CountryList, DateTime, DynamicAddress, PostalCodeAddress}
+import models.reference.{Country, CurrencyCode}
+import models.{DateTime, DynamicAddress, PostalCodeAddress}
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.html.components._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import utils.Format.RichDateTime
 
-import scala.math.BigDecimal.RoundingMode
+import java.text.NumberFormat
+import java.util.Currency
 
 private[utils] class SummaryListRowHelper(implicit messages: Messages) {
 
@@ -48,23 +49,18 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
 
   protected def formatAsPassword(answer: String): Content = ("•" * answer.length).toText
 
-  /**
-    * @param answer the value to be formatted
-    * @return the value, comma separated if necessary, in pounds and pence
-    */
-  protected def formatAsCurrency(answer: BigDecimal): Content = {
-    val str            = String.valueOf(answer.abs.setScale(2, RoundingMode.HALF_UP))
-    val numberOfDigits = str.takeWhile(_ != '.').length
-    str.zipWithIndex
-      .foldLeft(if (answer < 0) "-£" else "£") {
-        case (acc, (char, index)) =>
-          if (index % 3 == numberOfDigits % 3 && index > 0 && index < numberOfDigits) {
-            acc + ',' + char
-          } else {
-            acc + char
-          }
+  protected def formatAsCurrency(answer: BigDecimal, currencyCode: CurrencyCode): Content = {
+    val str =
+      try {
+        val format   = NumberFormat.getCurrencyInstance()
+        val currency = Currency.getInstance(currencyCode.currency)
+        format.setCurrency(currency)
+        format.format(answer)
+      } catch {
+        case _: Throwable => s"$answer ${currencyCode.currency}"
       }
-      .toText
+
+    str.toText
   }
 
   protected def formatEnumAsText[T](messageKeyPrefix: String)(answer: T): Content =
@@ -72,9 +68,6 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
 
   protected def formatEnumAsString[T](messageKeyPrefix: String)(answer: T): String =
     messages(s"$messageKeyPrefix.$answer")
-
-  protected def formatAsCountryList(countryList: CountryList)(answer: CountryCode): Content =
-    s"${countryList.getCountry(answer).map(_.description).getOrElse(answer.code)}".toText
 
   protected def formatAsCountry(country: Country): Content = country.description.toText
 

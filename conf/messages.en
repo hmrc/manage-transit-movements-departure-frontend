@@ -540,14 +540,14 @@ guaranteeDetails.guarantee.accessCode.error.length = The access code must be 4 c
 guaranteeDetails.guarantee.accessCode.error.invalid = The access code must only include the letters a to z and numbers 0 to 9
 guaranteeDetails.guarantee.accessCode.change.hidden = access code
 
-guaranteeDetails.guarantee.liabilityAmount.title = How much is the liability in pounds?
-guaranteeDetails.guarantee.liabilityAmount.heading = How much is the liability in pounds?
-guaranteeDetails.guarantee.liabilityAmount.checkYourAnswersLabel = Liability amount (in pounds)
+guaranteeDetails.guarantee.liabilityAmount.title = How much is the liability amount?
+guaranteeDetails.guarantee.liabilityAmount.heading = How much is the liability amount?
+guaranteeDetails.guarantee.liabilityAmount.checkYourAnswersLabel = Liability amount
 guaranteeDetails.guarantee.liabilityAmount.hint = This can have up to 2 decimal places, for example 999.99.
 guaranteeDetails.guarantee.liabilityAmount.error.required = Enter the liability amount in pounds
 guaranteeDetails.guarantee.liabilityAmount.error.invalidCharacters = The liability amount must only include numbers 0 to 9 and a decimal point
 guaranteeDetails.guarantee.liabilityAmount.error.invalidFormat = The liability amount must only have up to 2 decimal places, for example 999.99
-guaranteeDetails.guarantee.liabilityAmount.error.invalidValue = The liability amount must be £9,999,999,999,999,999.99 or less
+guaranteeDetails.guarantee.liabilityAmount.error.invalidValue = The liability amount must be 9,999,999,999,999,999.99 or less
 guaranteeDetails.guarantee.liabilityAmount.change.hidden = liability amount
 
 guaranteeDetails.guarantee.currency.title = What currency do you want to use for the liability?

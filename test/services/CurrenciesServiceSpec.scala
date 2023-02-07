@@ -33,8 +33,8 @@ class CurrenciesServiceSpec extends SpecBase with BeforeAndAfterEach with Genera
   val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   val service                                      = new CurrenciesService(mockRefDataConnector)
 
-  val currencyCode1: CurrencyCode      = CurrencyCode("CHF", "Swiss Franc")
-  val currencyCode2: CurrencyCode      = CurrencyCode("GBP", "Sterling")
+  val currencyCode1: CurrencyCode      = CurrencyCode("CHF", Some("Swiss Franc"))
+  val currencyCode2: CurrencyCode      = CurrencyCode("GBP", Some("Sterling"))
   val currencyCodes: Seq[CurrencyCode] = Seq(currencyCode1, currencyCode2)
 
   override def beforeEach(): Unit = {
