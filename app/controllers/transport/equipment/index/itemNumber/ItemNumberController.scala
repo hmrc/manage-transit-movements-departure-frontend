@@ -64,7 +64,13 @@ class ItemNumberController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, equipmentIndex, itemNumberIndex))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, equipmentIndex, itemNumberIndex)
-            ItemNumberPage(equipmentIndex, itemNumberIndex).writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
+            ItemNumberPage(equipmentIndex, itemNumberIndex)
+              .writeToUserAnswers(
+                value.replaceFirst("^0+(?!$)", "")
+              )
+              .updateTask[TransportDomain]()
+              .writeToSession()
+              .navigate()
           }
         )
   }

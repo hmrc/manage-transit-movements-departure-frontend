@@ -1459,7 +1459,7 @@ transport.equipment.index.itemNumber.heading = What is the goods item number?
 transport.equipment.index.itemNumber.hint = This can be up to 4 numbers long.
 transport.equipment.index.itemNumber.checkYourAnswersLabel = Item number
 transport.equipment.index.itemNumber.error.required = Enter the goods item number
-transport.equipment.index.itemNumber.error.length = The goods item number must be 4 characters or less
+transport.equipment.index.itemNumber.error.length = The goods item number must be 4 numbers or less
 transport.equipment.index.itemNumber.error.invalidCharacters = The goods item number must only include numbers 0 to 9
 transport.equipment.index.itemNumber.error.range = The goods item number must be more than 0 and less than 2000
 
