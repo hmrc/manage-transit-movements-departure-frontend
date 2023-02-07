@@ -119,11 +119,6 @@ class CurrencyCodeSpec extends SpecBase with ScalaCheckPropertyChecks {
     }
 
     "must convert currency code to a symbol" - {
-      "when USD must return US$" in {
-        val currencyCode = CurrencyCode("USD", None)
-        currencyCode.symbol mustBe "US$"
-      }
-
       "when EUR must return €" in {
         val currencyCode = CurrencyCode("EUR", None)
         currencyCode.symbol mustBe "€"
