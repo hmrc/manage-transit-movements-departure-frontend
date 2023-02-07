@@ -1442,11 +1442,12 @@ transport.equipment.index.addAnotherSeal.maxLimit.label = You cannot add any mor
 
 transport.equipment.index.itemNumber.title = What is the goods item number?
 transport.equipment.index.itemNumber.heading = What is the goods item number?
-transport.equipment.index.itemNumber.hint = This can be up to 5 numbers long.
+transport.equipment.index.itemNumber.hint = This can be up to 4 numbers long.
 transport.equipment.index.itemNumber.checkYourAnswersLabel = Item number
 transport.equipment.index.itemNumber.error.required = Enter the goods item number
-transport.equipment.index.itemNumber.error.length = The goods item number must be 5 characters or less
+transport.equipment.index.itemNumber.error.length = The goods item number must be 4 numbers or less
 transport.equipment.index.itemNumber.error.invalidCharacters = The goods item number must only include numbers 0 to 9
+transport.equipment.index.itemNumber.error.range = The goods item number must be more than 0 and less than 2000
 
 transport.equipment.index.addGoodsItemNumberYesNo.title = Do you want to add a goods item number?
 transport.equipment.index.addGoodsItemNumberYesNo.heading = Do you want to add a goods item number?
