@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,25 @@ import models.UserAnswers
 
 class TaskListViewModel {
 
-  def apply(userAnswers: UserAnswers)(
-    ctcCountryCodes: Seq[String],
-    customsSecurityAgreementAreaCountryCodes: Seq[String]
-  ): Seq[Task] =
+  def apply(userAnswers: UserAnswers): Seq[TaskListTask] = {
+
+    def task(section: String, dependentSections: Seq[String] = Nil): Option[Task] = {
+      val tasks = userAnswers.tasks
+      val status = tasks.getOrElse(
+        section,
+        if ((PreTaskListTask.section +: dependentSections).allCompleted(tasks)) TaskStatus.NotStarted else TaskStatus.CannotStartYet
+      )
+      Task(section, status)
+    }
+
     Seq(
-      TraderDetailsTask(userAnswers),
-      RouteDetailsTask(userAnswers)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes),
-      TransportTask(userAnswers),
-      GuaranteeDetailsTask(userAnswers)
-    )
+      task(TraderDetailsTask.section),
+      task(RouteDetailsTask.section),
+      task(TransportTask.section, Seq(TraderDetailsTask.section, RouteDetailsTask.section)),
+      task(ItemsTask.section, Seq(TraderDetailsTask.section, RouteDetailsTask.section, TransportTask.section)),
+      task(GuaranteeDetailsTask.section)
+    ).flatten.collect {
+      case task: TaskListTask => task
+    }
+  }
 }

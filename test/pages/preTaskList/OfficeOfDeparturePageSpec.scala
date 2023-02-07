@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,12 +35,10 @@ class OfficeOfDeparturePageSpec extends PageBehaviours {
     beRemovable[CustomsOffice](OfficeOfDeparturePage)
 
     "cleanup" - {
-      "when changing from XI to GB" - {
-        "and declaration type is TIR" - {
+      "when changing to a GB customs office" - {
+        "and declaration type is TIR (i.e. we've changed from XI to GB)" - {
           "must clean up DeclarationTypePage and TIRCarnetReferencePage" in {
-            forAll(
-              arbitrary[String]
-            ) {
+            forAll(arbitrary[String]) {
               ref =>
                 val preChange = emptyUserAnswers
                   .setValue(OfficeOfDeparturePage, xiCustomsOffice)

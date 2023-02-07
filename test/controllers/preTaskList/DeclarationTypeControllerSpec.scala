@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.preTaskList.DeclarationTypeFormProvider
+import forms.EnumerableFormProvider
 import models.{DeclarationType, NormalMode}
 import navigation.PreTaskListNavigatorProvider
 import org.mockito.ArgumentMatchers.any
@@ -36,8 +36,8 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
   private lazy val declarationTypeRoute = routes.DeclarationTypeController.onPageLoad(lrn, NormalMode).url
 
-  private val formProvider = new DeclarationTypeFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new EnumerableFormProvider()
+  private val form         = formProvider[DeclarationType]("declarationType")
   private val mode         = NormalMode
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =

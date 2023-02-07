@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,16 +21,54 @@ import models.GuaranteeType._
 import models._
 import models.domain.StringFieldRegex.{coordinatesLatitudeMaxRegex, coordinatesLongitudeMaxRegex}
 import models.reference._
+import models.transport.transportMeans.departure.InlandMode
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
+import play.api.mvc.Call
+import uk.gov.hmrc.http.HttpVerbs._
 import wolfendale.scalacheck.regexp.RegexpGen
 
 trait ModelGenerators {
   self: Generators =>
 
-  implicit lazy val arbitraryLocationType: Arbitrary[models.LocationType] =
+  implicit lazy val arbitraryAuthorisationType: Arbitrary[models.transport.authorisations.AuthorisationType] =
     Arbitrary {
-      Gen.oneOf(models.LocationType.values)
+      Gen.oneOf(models.transport.authorisations.AuthorisationType.values)
+    }
+
+  implicit lazy val arbitrarySupplyChainActorType: Arbitrary[models.transport.supplyChainActors.SupplyChainActorType] =
+    Arbitrary {
+      Gen.oneOf(models.transport.supplyChainActors.SupplyChainActorType.values)
+    }
+
+  implicit lazy val arbitraryBorderModeOfTransport: Arbitrary[models.transport.transportMeans.BorderModeOfTransport] =
+    Arbitrary {
+      Gen.oneOf(models.transport.transportMeans.BorderModeOfTransport.values)
+    }
+
+  implicit lazy val arbitraryIdentificationActive: Arbitrary[models.transport.transportMeans.active.Identification] =
+    Arbitrary {
+      Gen.oneOf(models.transport.transportMeans.active.Identification.values)
+    }
+
+  implicit lazy val arbitraryIdentificationDeparture: Arbitrary[models.transport.transportMeans.departure.Identification] =
+    Arbitrary {
+      Gen.oneOf(models.transport.transportMeans.departure.Identification.values)
+    }
+
+  implicit lazy val arbitraryInlandMode: Arbitrary[InlandMode] =
+    Arbitrary {
+      Gen.oneOf(InlandMode.values)
+    }
+
+  lazy val arbitraryNonMailOrUnknownInlandMode: Arbitrary[InlandMode] =
+    Arbitrary {
+      Gen.oneOf(InlandMode.values.filterNot(_ == InlandMode.Mail).filterNot(_ == InlandMode.Unknown))
+    }
+
+  implicit lazy val arbitraryLocationType: Arbitrary[LocationType] =
+    Arbitrary {
+      Gen.oneOf(LocationType.values)
     }
 
   implicit lazy val arbitraryLocationOfGoodsIdentification: Arbitrary[LocationOfGoodsIdentification] =
@@ -92,19 +130,6 @@ trait ModelGenerators {
         GuaranteeNotRequiredExemptPublicBody,
         IndividualGuaranteeMultiple
       )
-    }
-
-  lazy val arbitraryARGuaranteeType: Arbitrary[GuaranteeType] =
-    Arbitrary {
-      Gen.oneOf(
-        GuaranteeWaiverByAgreement,
-        GuaranteeNotRequired
-      )
-    }
-
-  implicit lazy val arbitraryRepresentativeCapacity: Arbitrary[models.traderDetails.representative.RepresentativeCapacity] =
-    Arbitrary {
-      Gen.oneOf(models.traderDetails.representative.RepresentativeCapacity.values)
     }
 
   implicit lazy val arbitraryCountryCode: Arbitrary[CountryCode] =
@@ -259,6 +284,29 @@ trait ModelGenerators {
         unLocodeExtendedCode <- nonEmptyString
         name                 <- nonEmptyString
       } yield UnLocode(unLocodeExtendedCode, name)
+    }
+
+  implicit lazy val arbitraryCall: Arbitrary[Call] = Arbitrary {
+    for {
+      method <- Gen.oneOf(GET, POST)
+      url    <- nonEmptyString
+    } yield Call(method, url)
+  }
+
+  implicit lazy val arbitraryNationality: Arbitrary[Nationality] =
+    Arbitrary {
+      for {
+        code <- nonEmptyString
+        desc <- nonEmptyString
+      } yield Nationality(code, desc)
+    }
+
+  implicit lazy val arbitraryCurrencyCode: Arbitrary[CurrencyCode] =
+    Arbitrary {
+      for {
+        currency <- nonEmptyString
+        desc     <- Gen.option(nonEmptyString)
+      } yield CurrencyCode(currency, desc)
     }
 
 }

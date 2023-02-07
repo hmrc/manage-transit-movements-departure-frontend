@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ class CacheConnector @Inject() (
 )(implicit ec: ExecutionContext)
     extends Logging {
 
-  private val baseUrl = s"${config.cacheUrl}/${config.appName}"
+  private val baseUrl = s"${config.cacheUrl}"
 
   def get(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
     val url = s"$baseUrl/user-answers/$lrn"
@@ -48,6 +48,14 @@ class CacheConnector @Inject() (
     val url = s"$baseUrl/user-answers"
 
     http.POST[UserAnswers, HttpResponse](url, userAnswers).map {
+      _.status == OK
+    }
+  }
+
+  def put(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    val url = s"$baseUrl/user-answers"
+
+    http.PUT[String, HttpResponse](url, lrn.toString).map {
       _.status == OK
     }
   }

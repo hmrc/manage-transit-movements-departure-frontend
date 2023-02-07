@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -124,6 +124,12 @@ trait Constraints {
         Valid
       case _ =>
         Invalid(errorKey)
+    }
+
+  protected def valueIsNotInList[T](list: Seq[T], errorKey: String): Constraint[T] =
+    Constraint {
+      case x if list.contains(x) => Invalid(errorKey)
+      case _                     => Valid
     }
 
 }

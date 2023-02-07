@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,7 @@ package viewModels.routeDetails.transit
 import base.SpecBase
 import generators.Generators
 import models.Mode
-import models.reference.CustomsOffice
 import org.scalacheck.Arbitrary.arbitrary
-import pages.routeDetails.transit.index.OfficeOfTransitPage
 import pages.routeDetails.transit._
 import viewModels.Link
 import viewModels.routeDetails.transit.TransitAnswersViewModel.TransitAnswersViewModelProvider
@@ -31,10 +29,11 @@ class TransitAnswersViewModelSpec extends SpecBase with Generators {
   "must return sections" in {
     val mode = arbitrary[Mode].sample.value
 
-    val userAnswers = emptyUserAnswers
+    val initialAnswers = emptyUserAnswers
       .setValue(T2DeclarationTypeYesNoPage, arbitrary[Boolean].sample.value)
       .setValue(AddOfficeOfTransitYesNoPage, arbitrary[Boolean].sample.value)
-      .setValue(OfficeOfTransitPage(index), arbitrary[CustomsOffice].sample.value)
+
+    val userAnswers = arbitraryOfficeOfTransitAnswers(initialAnswers, index).sample.value
 
     val viewModelProvider = injector.instanceOf[TransitAnswersViewModelProvider]
     val sections          = viewModelProvider.apply(userAnswers, mode)(Nil, Nil).sections

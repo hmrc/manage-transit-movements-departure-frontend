@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ package controllers.routeDetails.routing
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.AddAnotherFormProvider
 import generators.Generators
+import models.SecurityDetailsType.NoSecurityDetails
+import models.reference.{Country, CountryCode}
 import models.{Index, NormalMode}
 import navigation.routeDetails.RoutingNavigatorProvider
 import org.mockito.ArgumentMatchers.any
@@ -26,6 +28,9 @@ import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.preTaskList.SecurityDetailsTypePage
+import pages.routeDetails.routing.BindingItineraryPage
+import pages.routeDetails.routing.index.CountryOfRoutingPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -34,6 +39,8 @@ import viewModels.ListItem
 import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel
 import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel.AddAnotherCountryOfRoutingViewModelProvider
 import views.html.routeDetails.routing.AddAnotherCountryOfRoutingView
+
+import scala.concurrent.Future
 
 class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
@@ -153,7 +160,15 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
           when(mockViewModelProvider.apply(any(), any())(any()))
             .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
 
-          setExistingUserAnswers(emptyUserAnswers)
+          when(mockSessionRepository.set(any())(any()))
+            .thenReturn(Future.successful(true))
+
+          val ua = emptyUserAnswers
+            .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+            .setValue(BindingItineraryPage, true)
+            .setValue(CountryOfRoutingPage(Index(0)), Country(CountryCode("GB"), "description"))
+
+          setExistingUserAnswers(ua)
 
           val request = FakeRequest(POST, addAnotherCountryOfRoutingRoute)
             .withFormUrlEncodedBody(("value", "false"))
@@ -172,7 +187,15 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
         when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(AddAnotherCountryOfRoutingViewModel(maxedOutListItems))
 
-        setExistingUserAnswers(emptyUserAnswers)
+        when(mockSessionRepository.set(any())(any()))
+          .thenReturn(Future.successful(true))
+
+        val ua = emptyUserAnswers
+          .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+          .setValue(BindingItineraryPage, true)
+          .setValue(CountryOfRoutingPage(Index(0)), Country(CountryCode("GB"), "description"))
+
+        setExistingUserAnswers(ua)
 
         val request = FakeRequest(POST, addAnotherCountryOfRoutingRoute)
           .withFormUrlEncodedBody(("value", ""))
@@ -190,9 +213,17 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
         when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
 
-        val allowMoreCountries = true
+        when(mockSessionRepository.set(any())(any()))
+          .thenReturn(Future.successful(true))
 
-        setExistingUserAnswers(emptyUserAnswers)
+        val ua = emptyUserAnswers
+          .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+          .setValue(BindingItineraryPage, true)
+          .setValue(CountryOfRoutingPage(Index(0)), Country(CountryCode("GB"), "description"))
+
+        setExistingUserAnswers(ua)
+
+        val allowMoreCountries = true
 
         val request = FakeRequest(POST, addAnotherCountryOfRoutingRoute)
           .withFormUrlEncodedBody(("value", ""))

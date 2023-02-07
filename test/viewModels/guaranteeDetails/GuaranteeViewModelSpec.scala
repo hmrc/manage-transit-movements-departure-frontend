@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,16 @@
 package viewModels.guaranteeDetails
 
 import base.SpecBase
-import generators.{Generators, GuaranteeDetailsUserAnswersGenerator}
-import models.{DeclarationType, GuaranteeType}
+import generators.Generators
 import models.DeclarationType.Option4
 import models.GuaranteeType._
+import models.{DeclarationType, GuaranteeType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.guaranteeDetails.guarantee.{GuaranteeTypePage, OtherReferenceYesNoPage}
 import pages.preTaskList._
 
-class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with GuaranteeDetailsUserAnswersGenerator {
+class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "apply" - {
 
@@ -47,7 +47,7 @@ class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with
 
       "when not TIR" - {
         "when 0,1,2,4,9 guarantee type" - {
-          "must return 4 rows" in {
+          "must return 5 rows" in {
             val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
             val guaranteeType   = arbitrary[GuaranteeType](arbitrary01249GuaranteeType).sample.value
             val initialAnswers = emptyUserAnswers
@@ -59,13 +59,13 @@ class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with
                 val result  = GuaranteeViewModel(answers, index)
                 val section = result.section
                 section.sectionTitle mustNot be(defined)
-                section.rows.length mustBe 4
+                section.rows.length mustBe 5
             }
           }
         }
 
         "when 5 guarantee type" - {
-          "must return 2 rows" in {
+          "must return 3 rows" in {
             val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
             val initialAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
@@ -76,18 +76,17 @@ class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with
                 val result  = GuaranteeViewModel(answers, index)
                 val section = result.section
                 section.sectionTitle mustNot be(defined)
-                section.rows.length mustBe 2
+                section.rows.length mustBe 3
             }
           }
         }
 
-        "when A,R guarantee type" - {
+        "when A guarantee type" - {
           "must return 1 row" in {
             val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
-            val guaranteeType   = arbitrary[GuaranteeType](arbitraryARGuaranteeType).sample.value
             val initialAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
-              .setValue(GuaranteeTypePage(index), guaranteeType)
+              .setValue(GuaranteeTypePage(index), GuaranteeType.GuaranteeWaiverByAgreement)
 
             forAll(arbitraryGuaranteeAnswers(initialAnswers, index)) {
               answers =>
@@ -100,7 +99,7 @@ class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with
         }
 
         "when 8 guarantee type" - {
-          "must return 2 rows" in {
+          "must return 4 rows" in {
             val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
             val initialAnswers = emptyUserAnswers
               .setValue(DeclarationTypePage, declarationType)
@@ -111,14 +110,14 @@ class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with
                 val result  = GuaranteeViewModel(answers, index)
                 val section = result.section
                 section.sectionTitle mustNot be(defined)
-                section.rows.length mustBe 2
+                section.rows.length mustBe 4
             }
           }
         }
 
         "when 3 guarantee type" - {
           "when other ref answered" - {
-            "must return 3 rows" in {
+            "must return 5 rows" in {
               val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
               val initialAnswers = emptyUserAnswers
                 .setValue(DeclarationTypePage, declarationType)
@@ -130,7 +129,7 @@ class GuaranteeViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with
                   val result  = GuaranteeViewModel(answers, index)
                   val section = result.section
                   section.sectionTitle mustNot be(defined)
-                  section.rows.length mustBe 3
+                  section.rows.length mustBe 5
               }
             }
           }

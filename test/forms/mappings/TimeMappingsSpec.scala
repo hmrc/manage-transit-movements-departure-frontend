@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ class TimeMappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckProperty
 
     val result = form.bind(Map.empty[String, String])
 
-    result.errors must contain only FormError("value", "error.required.all", List("hour", "minute"))
+    result.errors must contain only FormError("value", "error.required.all")
   }
 
   "must fail to bind a time with a missing minute" in {
@@ -73,7 +73,7 @@ class TimeMappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckProperty
 
         val result = form.bind(data)
 
-        result.errors must contain only FormError("value", "error.required", List("minute"))
+        result.errors must contain only FormError("value", "error.required.minute", List("minute"))
     }
   }
 
@@ -105,7 +105,7 @@ class TimeMappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckProperty
 
         val result = form.bind(data)
 
-        result.errors must contain only FormError("value", "error.required", List("hour"))
+        result.errors must contain only FormError("value", "error.required.hour", List("hour"))
     }
   }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,20 @@ import config.FrontendAppConfig
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.DateTimeFormProvider
-import models.{Index, LocalReferenceNumber, Mode}
+import models.journeyDomain.routeDetails.RouteDetailsDomain
+import models.{DateTime, Index, LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.OfficeOfTransitNavigatorProvider
 import pages.routeDetails.routing.CountryOfDestinationPage
 import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitETAPage, OfficeOfTransitPage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.{CountriesService, DateTimeService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.transit.index.OfficeOfTransitETAView
 
-import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,16 +46,19 @@ class OfficeOfTransitETAController @Inject() (
   actions: Actions,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: OfficeOfTransitETAView
+  view: OfficeOfTransitETAView,
+  dateTimeService: DateTimeService,
+  countriesService: CountriesService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val localDate  = LocalDate.now()
-  private val pastDate   = localDate.minusDays(appConfig.daysBefore)
-  private val futureDate = localDate.plusDays(appConfig.daysAfter)
-
-  private val form = formProvider("routeDetails.transit.index.officeOfTransitETA", pastDate, futureDate)
+  private def form: Form[DateTime] = {
+    val today      = dateTimeService.today
+    val pastDate   = today.minusDays(appConfig.etaDateDaysBefore)
+    val futureDate = today.plusDays(appConfig.etaDateDaysAfter)
+    formProvider("routeDetails.transit.index.officeOfTransitETA", pastDate, futureDate)
+  }
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
     .requireData(lrn)
@@ -82,10 +88,18 @@ class OfficeOfTransitETAController @Inject() (
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, country.description, customsOffice.name, mode, index))),
                 value =>
-                  navigatorProvider(mode, index).flatMap {
-                    implicit navigator =>
-                      OfficeOfTransitETAPage(index).writeToUserAnswers(value).writeToSession().navigate()
-                  }
+                  for {
+                    ctcCountries                          <- countriesService.getCountryCodesCTC()
+                    customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                    result <- {
+                      implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index, ctcCountries, customsSecurityAgreementAreaCountries)
+                      OfficeOfTransitETAPage(index)
+                        .writeToUserAnswers(value)
+                        .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                        .writeToSession()
+                        .navigate()
+                    }
+                  } yield result
               )
         }
     }

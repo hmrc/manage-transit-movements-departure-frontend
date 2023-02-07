@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,11 +31,11 @@ class LiabilityAmountViewSpec extends CurrencyInputViewBehaviours {
   override def form: Form[BigDecimal] = new MoneyFormProvider()(prefix)
 
   override def applyView(form: Form[BigDecimal]): HtmlFormat.Appendable =
-    injector.instanceOf[LiabilityAmountView].apply(form, lrn, NormalMode, index)(fakeRequest, messages)
+    injector.instanceOf[LiabilityAmountView].apply(form, lrn, NormalMode, index, currencySymbol)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[BigDecimal] = Arbitrary(Gen.double.map(BigDecimal(_)))
 
-  override val inputPrefix: Option[String] = Some("£")
+  override val inputPrefix: Option[String] = Some(currencySymbol)
 
   behave like pageWithTitle()
 

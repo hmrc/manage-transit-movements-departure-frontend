@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,9 @@ package controllers.routeDetails.routing
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.{LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.RoutingNavigatorProvider
 import pages.routeDetails.routing.CountryOfDestinationPage
 import play.api.data.FormError
@@ -75,10 +77,18 @@ class CountryOfDestinationController @Inject() (
               value =>
                 customsOfficesService.getCustomsOfficesOfDestinationForCountry(value.code).flatMap {
                   case x if x.customsOffices.nonEmpty =>
-                    navigatorProvider(mode).flatMap {
-                      implicit navigator =>
-                        CountryOfDestinationPage.writeToUserAnswers(value).writeToSession().navigate()
-                    }
+                    for {
+                      ctcCountries                          <- countriesService.getCountryCodesCTC()
+                      customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                      result <- {
+                        implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+                        CountryOfDestinationPage
+                          .writeToUserAnswers(value)
+                          .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                          .writeToSession()
+                          .navigate()
+                      }
+                    } yield result
                   case _ =>
                     val formWithErrors = form.withError(FormError("value", s"$prefix.error.noOffices"))
                     Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode)))

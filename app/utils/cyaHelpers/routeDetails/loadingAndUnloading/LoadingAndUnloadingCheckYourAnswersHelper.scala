@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,76 +30,76 @@ class LoadingAndUnloadingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: 
     page = loading.AddUnLocodeYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "routeDetails.loadingAndUnloading.loading.addUnLocodeYesNo",
-    id = Some("add-loading-un-locode")
+    id = Some("change-add-loading-un-locode")
   )
 
   def loadingUnLocode: Option[SummaryListRow] = getAnswerAndBuildRow[UnLocode](
     page = loading.UnLocodePage,
     formatAnswer = formatAsText,
     prefix = "routeDetails.loadingAndUnloading.loading.unLocode",
-    id = Some("loading-un-locode")
+    id = Some("change-loading-un-locode")
   )
 
   def addLoadingCountryAndLocation: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = loading.AddExtraInformationYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "routeDetails.loadingAndUnloading.loading.addExtraInformationYesNo",
-    id = Some("add-loading-country-and-location")
+    id = Some("change-add-loading-country-and-location")
   )
 
   def loadingCountry: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
     page = loading.CountryPage,
     formatAnswer = formatAsText,
     prefix = "routeDetails.loadingAndUnloading.loading.country",
-    id = Some("loading-country")
+    id = Some("change-loading-country")
   )
 
   def loadingLocation: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = loading.LocationPage,
     formatAnswer = formatAsText,
     prefix = "routeDetails.loadingAndUnloading.loading.location",
-    id = Some("loading-location")
+    id = Some("change-loading-location")
   )
 
   def addPlaceOfUnloading: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = loadingAndUnloading.AddPlaceOfUnloadingPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "routeDetails.loadingAndUnloading.addPlaceOfUnloading",
-    id = Some("add-place-of-unloading")
+    id = Some("change-add-place-of-unloading")
   )
 
   def addUnloadingUnLocode: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = unloading.UnLocodeYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "routeDetails.loadingAndUnloading.unloading.addUnLocodeYesNo",
-    id = Some("add-unloading-un-locode")
+    id = Some("change-add-unloading-un-locode")
   )
 
   def unloadingUnLocode: Option[SummaryListRow] = getAnswerAndBuildRow[UnLocode](
     page = unloading.UnLocodePage,
     formatAnswer = formatAsText,
     prefix = "routeDetails.loadingAndUnloading.unloading.unLocode",
-    id = Some("unloading-un-locode")
+    id = Some("change-unloading-un-locode")
   )
 
   def addUnloadingCountryAndLocation: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = unloading.AddExtraInformationYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "routeDetails.loadingAndUnloading.unloading.addExtraInformationYesNo",
-    id = Some("add-unloading-country-and-location")
+    id = Some("change-add-unloading-country-and-location")
   )
 
   def unloadingCountry: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
     page = unloading.CountryPage,
     formatAnswer = formatAsText,
     prefix = "routeDetails.loadingAndUnloading.unloading.country",
-    id = Some("unloading-country")
+    id = Some("change-unloading-country")
   )
 
   def unloadingLocation: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = unloading.LocationPage,
     formatAnswer = formatAsText,
     prefix = "routeDetails.loadingAndUnloading.unloading.location",
-    id = Some("unloading-location")
+    id = Some("change-unloading-location")
   )
 }

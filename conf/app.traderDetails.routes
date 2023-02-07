@@ -3,6 +3,8 @@
 ->         /                   app.traderDetails.representative.Routes
 ->         /                   app.traderDetails.consignment.Routes
 
+GET        /:lrn/trader-details                                             controllers.traderDetails.RedirectController.redirect(lrn: LocalReferenceNumber)
+
 GET        /:lrn/trader-details/representative/acting                       controllers.traderDetails.ActingAsRepresentativeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/trader-details/representative/acting                       controllers.traderDetails.ActingAsRepresentativeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/trader-details/representative/change-acting                controllers.traderDetails.ActingAsRepresentativeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import controllers.actions._
 import controllers.routeDetails.exit.{routes => exitRoutes}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.reference.CustomsOffice
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode}
@@ -28,6 +29,7 @@ import pages.sections.routeDetails.exit.OfficeOfExitSection
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.exit.index.ConfirmRemoveOfficeOfExitView
 
@@ -40,7 +42,8 @@ class ConfirmRemoveOfficeOfExitController @Inject() (
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ConfirmRemoveOfficeOfExitView
+  view: ConfirmRemoveOfficeOfExitView,
+  countriesService: CountriesService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -76,10 +79,15 @@ class ConfirmRemoveOfficeOfExitController @Inject() (
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, index, mode, prefix, args: _*))),
               {
                 case true =>
-                  OfficeOfExitSection(index)
-                    .removeFromUserAnswers()
-                    .writeToSession()
-                    .navigateTo(exitRoutes.AddAnotherOfficeOfExitController.onPageLoad(lrn, mode))
+                  for {
+                    ctcCountries                          <- countriesService.getCountryCodesCTC()
+                    customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                    result <- OfficeOfExitSection(index)
+                      .removeFromUserAnswers()
+                      .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                      .writeToSession()
+                      .navigateTo(exitRoutes.AddAnotherOfficeOfExitController.onPageLoad(lrn, mode))
+                  } yield result
                 case false =>
                   Future.successful(Redirect(exitRoutes.AddAnotherOfficeOfExitController.onPageLoad(lrn, mode)))
               }

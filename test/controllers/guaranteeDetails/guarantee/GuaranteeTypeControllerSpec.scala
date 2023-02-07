@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 package controllers.guaranteeDetails.guarantee
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.GuaranteeTypeFormProvider
+import forms.EnumerableFormProvider
 import models.{GuaranteeType, NormalMode}
-import navigation.GuaranteeNavigatorProvider
+import navigation.guaranteeDetails.GuaranteeNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.guaranteeDetails.guarantee.GuaranteeTypePage
@@ -33,8 +33,8 @@ import scala.concurrent.Future
 
 class GuaranteeTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider            = new GuaranteeTypeFormProvider()
-  private val form                    = formProvider()
+  private val formProvider            = new EnumerableFormProvider()
+  private val form                    = formProvider[GuaranteeType]("guaranteeDetails.guarantee.guaranteeType")
   private val mode                    = NormalMode
   private lazy val guaranteeTypeRoute = routes.GuaranteeTypeController.onPageLoad(lrn, mode, index).url
 

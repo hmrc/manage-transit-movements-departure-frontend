@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,15 @@
 
 package controllers
 
-import cats.data.EitherT
-import cats.implicits._
 import com.google.inject.Inject
-import controllers.actions.{Actions, CheckDependentTaskCompletedActionProvider}
+import controllers.actions.{Actions, DependentTasksCompletedActionProvider}
 import models.LocalReferenceNumber
-import models.journeyDomain.{DepartureDomain, PreTaskListDomain}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{ApiService, CountriesService}
+import services.ApiService
 import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.taskList.TaskListViewModel
+import viewModels.taskList.{PreTaskListTask, TaskListViewModel}
 import views.html.TaskListView
 
 import scala.concurrent.ExecutionContext
@@ -35,11 +32,10 @@ import scala.concurrent.ExecutionContext
 class TaskListController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
-  checkDependentTaskCompleted: CheckDependentTaskCompletedActionProvider,
+  checkDependentTasksCompleted: DependentTasksCompletedActionProvider,
   val controllerComponents: MessagesControllerComponents,
   view: TaskListView,
   viewModel: TaskListViewModel,
-  countriesService: CountriesService,
   apiService: ApiService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
@@ -47,58 +43,26 @@ class TaskListController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkDependentTaskCompleted[PreTaskListDomain])
-    .async {
+    .andThen(checkDependentTasksCompleted(PreTaskListTask.section)) {
       implicit request =>
-        for {
-          ctcCountries                             <- countriesService.getCountryCodesCTC()
-          customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries()
-        } yield {
-          val tasks = viewModel(request.userAnswers)(
-            ctcCountries.countryCodes,
-            customsSecurityAgreementAreaCountryCodes.countryCodes
-          )
-          Ok(view(lrn, tasks))
-        }
+        val tasks = viewModel(request.userAnswers)
+        Ok(view(lrn, tasks))
     }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkDependentTaskCompleted[PreTaskListDomain])
+    .andThen(checkDependentTasksCompleted(PreTaskListTask.section))
     .async {
-
       implicit request =>
-        // TODO - move to service layer
-        (for {
-          ctcCountries                          <- EitherT.right(countriesService.getCountryCodesCTC())
-          customsSecurityAgreementAreaCountries <- EitherT.right(countriesService.getCustomsSecurityAgreementAreaCountries())
-          data = DepartureDomain
-            .userAnswersReader(
-              ctcCountries.countryCodes,
-              customsSecurityAgreementAreaCountries.countryCodes
-            )
-            .run(request.userAnswers)
-          response <- EitherT(data.traverse(apiService.submitDeclaration(_)))
-        } yield response.status match {
-
-          case status if is2xx(status) =>
+        apiService.submitDeclaration(request.userAnswers).map {
+          case response if is2xx(response.status) =>
             Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad())
-          case status if is4xx(status) =>
+          case response if is4xx(response.status) =>
             // TODO - log and audit fail. How to handle this?
             BadRequest
           case _ =>
             // TODO - log and audit fail. How to handle this?
             InternalServerError("Something went wrong")
-
-        }).value.map {
-
-          case Right(value) =>
-            value
-          case Left(e) =>
-            // TODO - log and audit fail. How to handle this?
-            InternalServerError(s"Something went wrong: ${e.message}")
-
         }
-
     }
 }

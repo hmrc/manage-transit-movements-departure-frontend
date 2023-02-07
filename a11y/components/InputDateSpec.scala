@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,40 +20,40 @@ import a11ySpecBase.A11ySpecBase
 import forms.DateFormProvider
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
+import play.twirl.api.Html
+import viewModels.components.InputDateViewModel.{DateInputWithAdditionalHtml, OrdinaryDateInput}
 import views.html.components.InputDate
 import views.html.templates.MainTemplate
 
-import java.time.{Clock, LocalDate}
+import java.time.LocalDate
 
 class InputDateSpec extends A11ySpecBase {
 
   "the 'input date' component" must {
     val template  = app.injector.instanceOf[MainTemplate]
     val component = app.injector.instanceOf[InputDate]
-    val clock     = app.injector.instanceOf[Clock]
 
-    val prefix      = Gen.alphaNumStr.sample.value
-    val minDate     = arbitrary[LocalDate].sample.value
-    val title       = nonEmptyString.sample.value
-    val legend      = nonEmptyString.sample.value
-    val legendClass = Gen.alphaNumStr.sample.value
-    val hint        = Gen.option(nonEmptyString).sample.value
-    val form        = new DateFormProvider(clock)(prefix, minDate)
+    val prefix         = Gen.alphaNumStr.sample.value
+    val minDate        = arbitrary[LocalDate].sample.value
+    val maxDate        = arbitrary[LocalDate].sample.value
+    val title          = nonEmptyString.sample.value
+    val hint           = Gen.option(nonEmptyString).sample.value
+    val caption        = Gen.option(nonEmptyString).sample.value
+    val additionalHtml = arbitrary[Html].sample.value
+    val form           = new DateFormProvider()(prefix, minDate, maxDate)
 
     "pass accessibility checks" when {
 
-      "legend is heading" in {
+      "ordinary date input" in {
         val content = template.apply(title) {
-          val legendIsHeading = true
-          component.apply(form("value"), legend, legendClass, hint, legendIsHeading)
+          component.apply(form, dateType = OrdinaryDateInput(title, caption), hint = hint)
         }
         content.toString() must passAccessibilityChecks
       }
 
-      "legend isn't heading" in {
+      "date input with additional html" in {
         val content = template.apply(title) {
-          val legendIsHeading = false
-          component.apply(form("value"), legend, legendClass, hint, legendIsHeading).withHeading(title)
+          component.apply(form, dateType = DateInputWithAdditionalHtml(title, caption, additionalHtml), hint = hint)
         }
         content.toString() must passAccessibilityChecks
       }

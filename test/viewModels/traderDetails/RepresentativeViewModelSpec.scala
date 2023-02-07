@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package viewModels.traderDetails
 import base.SpecBase
 import generators.Generators
 import models.Mode
-import models.traderDetails.representative.RepresentativeCapacity.Direct
 import org.scalacheck.Arbitrary.arbitrary
 import pages.traderDetails.ActingAsRepresentativePage
 import pages.traderDetails.representative._
@@ -46,8 +45,8 @@ class RepresentativeViewModelSpec extends SpecBase with Generators {
         val answers = emptyUserAnswers
           .setValue(ActingAsRepresentativePage, true)
           .setValue(EoriPage, "eori")
+          .setValue(AddDetailsPage, true)
           .setValue(NamePage, "name")
-          .setValue(CapacityPage, Direct)
           .setValue(TelephoneNumberPage, "phone")
 
         val mode              = arbitrary[Mode].sample.value
@@ -60,8 +59,8 @@ class RepresentativeViewModelSpec extends SpecBase with Generators {
         sections.head.rows.size mustBe 5
         sections.head.rows.head.value.content.asHtml.toString() mustBe "Yes"
         sections.head.rows(1).value.content.asHtml.toString() mustBe "eori"
-        sections.head.rows(2).value.content.asHtml.toString() mustBe "name"
-        sections.head.rows(3).value.content.asHtml.toString() mustBe "Direct (principal solely liable)"
+        sections.head.rows(2).value.content.asHtml.toString() mustBe "Yes"
+        sections.head.rows(3).value.content.asHtml.toString() mustBe "name"
         sections.head.rows(4).value.content.asHtml.toString() mustBe "phone"
       }
     }

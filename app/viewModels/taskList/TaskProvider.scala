@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ private[viewModels] class TaskProvider(userAnswers: UserAnswers) {
       section: Section[U],
       inProgressRoute: Option[Call] = None
     )(implicit rds: Reads[U], userAnswersReader: UserAnswersReader[T]): (TaskStatus, Option[String]) = {
-      lazy val (status, onwardRoute) = UserAnswersReader[T].run(userAnswers) match {
+      lazy val (status, onwardRoute) = userAnswersReader.run(userAnswers) match {
         case Left(ReaderError(page, _)) =>
           val route = page.route(userAnswers, NormalMode).map(_.url)
           userAnswers.get(section) match {

@@ -2,13 +2,14 @@ package controllers.$package$
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.$formProvider$
+import forms.DateFormProvider
 import models.{Mode, LocalReferenceNumber}
 import navigation.UserAnswersNavigator
 import pages.$package$.$className$Page
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.DateTimeService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.$package$.$className$View
 
@@ -19,13 +20,18 @@ class $className;format="cap"$Controller @Inject()(
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: $navRoute$NavigatorProvider,
-  formProvider: $formProvider$,
+  formProvider: DateFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
-  view: $className$View
+  view: $className$View,
+  dateTimeService: DateTimeService
 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider("$package$.$className;format="decap"$")
+  private def form: Form[LocalDate] = {
+    val minDate: LocalDate = dateTimeService.plusMinusDays(-1)
+    val maxDate: LocalDate = dateTimeService.today
+    formProvider("$package$.$className;format="decap"$", minDate, maxDate)
+  }
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
@@ -44,7 +50,7 @@ class $className;format="cap"$Controller @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
         value => {
           implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-          $className$Page.writeToUserAnswers(value).writeToSession().navigate()
+          $className$Page.writeToUserAnswers(value).updateTask[$navRoute$Domain]().writeToSession().navigate()
         }
       )
   }

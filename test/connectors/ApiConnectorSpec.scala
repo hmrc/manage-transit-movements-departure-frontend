@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,21 @@ package connectors
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock._
+import generators.Generators
 import helper.WireMockServerHandler
-import models.journeyDomain.routeDetails.RouteDetailsDomain
-import models.journeyDomain.routeDetails.loadingAndUnloading.LoadingAndUnloadingDomain
-import models.journeyDomain.routeDetails.routing.RoutingDomain
-import models.journeyDomain.{DepartureDomain, PreTaskListDomain}
-import models.reference.{Country, CountryCode, CustomsOffice}
-import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}
+import models.{CountryList, UserAnswers}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{BadRequestException, HttpResponse, UpstreamErrorResponse}
 
-class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler {
+import scala.concurrent.Future
+
+class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler with Generators {
+
+  val uA: UserAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -57,34 +59,6 @@ class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with Wir
 
   val uri = "/movements/departures"
 
-  val customsOffice: CustomsOffice = CustomsOffice("foo", "bar", None)
-
-  val preTaskListDomain: PreTaskListDomain = PreTaskListDomain(LocalReferenceNumber("refno").get,
-                                                               customsOffice,
-                                                               ProcedureType.Normal,
-                                                               DeclarationType.Option1,
-                                                               None,
-                                                               SecurityDetailsType.NoSecurityDetails,
-                                                               true
-  )
-
-  val routingDomain: RoutingDomain = RoutingDomain(
-    Country(CountryCode("GB"), "My country"),
-    customsOffice,
-    false,
-    Seq.empty
-  )
-
-  val routeDetailsDomain: RouteDetailsDomain = RouteDetailsDomain(
-    routingDomain,
-    None,
-    None,
-    None,
-    LoadingAndUnloadingDomain(None, None)
-  )
-
-  val request = DepartureDomain(preTaskListDomain, routeDetailsDomain)
-
   "ApiConnector" - {
 
     "submitDeclaration is called" - {
@@ -93,7 +67,12 @@ class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with Wir
 
         server.stubFor(post(urlEqualTo(uri)).willReturn(okJson(expected)))
 
-        val res: HttpResponse = await(connector.submitDeclaration(request))
+        when(mockCountriesService.getCountryCodesCTC()(any()))
+          .thenReturn(Future.successful(CountryList(ctcCountries)))
+        when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any()))
+          .thenReturn(Future.successful(CountryList(customsSecurityAgreementAreaCountries)))
+
+        val res: HttpResponse = await(connector.submitDeclaration(uA))
         res.status mustBe OK
 
       }
@@ -102,8 +81,13 @@ class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with Wir
 
         server.stubFor(post(urlEqualTo(uri)).willReturn(badRequest()))
 
+        when(mockCountriesService.getCountryCodesCTC()(any()))
+          .thenReturn(Future.successful(CountryList(ctcCountries)))
+        when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any()))
+          .thenReturn(Future.successful(CountryList(customsSecurityAgreementAreaCountries)))
+
         intercept[BadRequestException] {
-          await(connector.submitDeclaration(request))
+          await(connector.submitDeclaration(uA))
         }
 
       }
@@ -112,8 +96,13 @@ class ApiConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with Wir
 
         server.stubFor(post(urlEqualTo(uri)).willReturn(serverError()))
 
+        when(mockCountriesService.getCountryCodesCTC()(any()))
+          .thenReturn(Future.successful(CountryList(ctcCountries)))
+        when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any()))
+          .thenReturn(Future.successful(CountryList(customsSecurityAgreementAreaCountries)))
+
         intercept[UpstreamErrorResponse] {
-          await(connector.submitDeclaration(request))
+          await(connector.submitDeclaration(uA))
         }
 
       }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import forms.OtherReferenceFormProvider
 import generators.Generators
 import models.{GuaranteeType, NormalMode}
 import models.GuaranteeType.{CashDepositGuarantee, GuaranteeNotRequiredExemptPublicBody}
-import navigation.GuaranteeNavigatorProvider
+import navigation.guaranteeDetails.GuaranteeNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,20 @@
 package views.behaviours
 
 import generators.Generators
-import viewModels.taskList.Task
+import models.LocalReferenceNumber
+import org.scalacheck.Arbitrary.arbitrary
+import viewModels.taskList.TaskListTask
+import viewModels.taskList.TaskStatus.CannotStartYet
 
 import scala.jdk.CollectionConverters._
 
 trait TaskListViewBehaviours extends ViewBehaviours with Generators {
 
-  lazy val tasks: Seq[Task] = listWithMaxLength[Task]()(arbitraryTask).sample.value
+  lazy val tasks: Seq[TaskListTask] = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
 
   override val urlContainsLrn: Boolean = true
 
-  def pageWithTaskList(): Unit =
+  def pageWithTaskList(lrn: LocalReferenceNumber): Unit =
     "page with task list" - {
 
       val taskList = getElementByClass(doc, "app-task-list")
@@ -41,17 +44,17 @@ trait TaskListViewBehaviours extends ViewBehaviours with Generators {
           s"task ${taskIndex + 1}" - {
             val name = renderedTask.getElementsByClass("app-task-list__task-name").first()
 
-            task.href match {
-              case Some(href) =>
-                "must contain a name with a link" in {
-                  val link = name.getElementsByTag("a").first()
-                  getElementHref(link) mustBe href
-                  link.attr("aria-describedby") mustBe s"${task.id}-status"
-                  link.text() mustBe task.name
-                }
-              case None =>
+            task.status match {
+              case CannotStartYet =>
                 "must contain a name" in {
                   name.text() mustBe task.name
+                }
+              case _ =>
+                "must contain a name with a link" in {
+                  val link = name.getElementsByTag("a").first()
+                  getElementHref(link) mustBe task.href(lrn)(frontendAppConfig)
+                  link.attr("aria-describedby") mustBe s"${task.id}-status"
+                  link.text() mustBe task.name
                 }
             }
 

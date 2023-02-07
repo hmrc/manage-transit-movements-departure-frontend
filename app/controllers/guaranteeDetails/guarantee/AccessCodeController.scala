@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,10 @@ package controllers.guaranteeDetails.guarantee
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.AccessCodeFormProvider
+import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.{GuaranteeNavigatorProvider, UserAnswersNavigator}
+import navigation.UserAnswersNavigator
+import navigation.guaranteeDetails.GuaranteeNavigatorProvider
 import pages.guaranteeDetails.guarantee.AccessCodePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -62,7 +64,7 @@ class AccessCodeController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index)
-            AccessCodePage(index).writeToUserAnswers(value).writeToSession().navigate()
+            AccessCodePage(index).writeToUserAnswers(value).updateTask[GuaranteeDetailsDomain]().writeToSession().navigate()
           }
         )
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ class DateTimeSpec extends AnyFreeSpec with Matchers with OptionValues with Gene
 
       forAll(arbitrary[DateTime]) {
         dateTime =>
-          val formattedDate = dateTimeFormattedIE015(dateTime.concat)
+          val formattedDate = dateTime.toLocalDateTime.toIE015Format
 
           Json.toJson(dateTime) mustEqual JsString(formattedDate)
       }
@@ -47,7 +47,7 @@ class DateTimeSpec extends AnyFreeSpec with Matchers with OptionValues with Gene
 
       val localDateTimeWithoutNano = localDateTime.minusNanos(localDateTime.getNano)
 
-      val formattedDate = dateTimeFormattedIE015(localDateTimeWithoutNano)
+      val formattedDate = localDateTimeWithoutNano.toIE015Format
 
       val expectedResult = DateTime(localDateTime.toLocalDate, localDateTimeWithoutNano.toLocalTime)
 

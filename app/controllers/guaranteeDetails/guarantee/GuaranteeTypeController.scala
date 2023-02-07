@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,11 @@ package controllers.guaranteeDetails.guarantee
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.GuaranteeTypeFormProvider
+import forms.EnumerableFormProvider
+import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
 import models.{GuaranteeType, Index, LocalReferenceNumber, Mode}
-import navigation.{GuaranteeNavigatorProvider, UserAnswersNavigator}
+import navigation.UserAnswersNavigator
+import navigation.guaranteeDetails.GuaranteeNavigatorProvider
 import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,14 +38,14 @@ class GuaranteeTypeController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: GuaranteeNavigatorProvider,
   actions: Actions,
-  formProvider: GuaranteeTypeFormProvider,
+  formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: GuaranteeTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider[GuaranteeType]("guaranteeDetails.guarantee.guaranteeType")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
@@ -63,7 +65,7 @@ class GuaranteeTypeController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, GuaranteeType.radioItems, mode, index))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index)
-            GuaranteeTypePage(index).writeToUserAnswers(value).writeToSession().navigate()
+            GuaranteeTypePage(index).writeToUserAnswers(value).updateTask[GuaranteeDetailsDomain]().writeToSession().navigate()
           }
         )
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,28 +16,18 @@
 
 package viewModels.taskList
 
-import models.UserAnswers
-import models.journeyDomain.routeDetails.RouteDetailsDomain
-import pages.sections.routeDetails.RouteDetailsSection
-import play.api.libs.json.JsObject
+import config.FrontendAppConfig
+import models.LocalReferenceNumber
 
-case class RouteDetailsTask(status: TaskStatus, href: Option[String]) extends Task {
+case class RouteDetailsTask(status: TaskStatus) extends TaskListTask {
   override val id: String         = "route-details"
   override val messageKey: String = "routeDetails"
+  override val section: String    = RouteDetailsTask.section
+
+  override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String =
+    config.routeDetailsFrontendUrl(lrn)
 }
 
 object RouteDetailsTask {
-
-  def apply(userAnswers: UserAnswers)(
-    ctcCountryCodes: Seq[String],
-    customsSecurityAgreementAreaCountryCodes: Seq[String]
-  ): RouteDetailsTask = {
-    val (status, href) = new TaskProvider(userAnswers).noDependencyOnOtherTask
-      .readUserAnswers[RouteDetailsDomain, JsObject](RouteDetailsSection)(
-        implicitly,
-        RouteDetailsDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-      )
-
-    new RouteDetailsTask(status, href)
-  }
+  val section: String = ".routeDetails"
 }

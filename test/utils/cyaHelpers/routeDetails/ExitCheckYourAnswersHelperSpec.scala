@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ package utils.cyaHelpers.routeDetails
 import base.SpecBase
 import controllers.routeDetails.exit.index.routes
 import generators.Generators
+import models.domain.UserAnswersReader
+import models.journeyDomain.routeDetails.exit.OfficeOfExitDomain
 import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
@@ -30,6 +32,43 @@ import viewModels.ListItem
 class ExitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "ExitCheckYourAnswersHelper" - {
+
+    "officeOfExit" - {
+      "must return None" - {
+        "when office of exit is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new ExitCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.officeOfExit(index)
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when office of exit is defined" in {
+          forAll(arbitraryOfficeOfExitAnswers(emptyUserAnswers, index), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val officeOfExit = UserAnswersReader[OfficeOfExitDomain](
+                OfficeOfExitDomain.userAnswersReader(index)
+              ).run(userAnswers).value
+
+              val helper = new ExitCheckYourAnswersHelper(userAnswers, mode)
+              val result = helper.officeOfExit(index).get
+
+              result.key.value mustBe "Office of exit 1"
+              result.value.value mustBe officeOfExit.label
+              val actions = result.actions.get.items
+              actions.size mustBe 1
+              val action = actions.head
+              action.content.value mustBe "Change"
+              action.href mustBe routes.CheckOfficeOfExitAnswersController.onPageLoad(userAnswers.lrn, index, mode).url
+              action.visuallyHiddenText.get mustBe "office of exit 1"
+              action.id mustBe "change-office-of-exit-1"
+          }
+        }
+      }
+    }
 
     "listItems" - {
       "must return list items" in {

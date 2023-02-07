@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,39 @@
 
 package models
 
-sealed trait LocationOfGoodsIdentification
+sealed trait LocationOfGoodsIdentification {
+  val code: String
+}
 
 object LocationOfGoodsIdentification extends RadioModel[LocationOfGoodsIdentification] {
 
-  case object CustomsOfficeIdentifier extends WithName("customsOfficeIdentifier") with LocationOfGoodsIdentification
-  case object EoriNumber extends WithName("eoriNumber") with LocationOfGoodsIdentification
-  case object AuthorisationNumber extends WithName("authorisationNumber") with LocationOfGoodsIdentification
-  case object CoordinatesIdentifier extends WithName("coordinates") with LocationOfGoodsIdentification
-  case object UnlocodeIdentifier extends WithName("unlocode") with LocationOfGoodsIdentification
-  case object AddressIdentifier extends WithName("address") with LocationOfGoodsIdentification
-  case object PostalCode extends WithName("postalCode") with LocationOfGoodsIdentification
+  case object CustomsOfficeIdentifier extends WithName("customsOfficeIdentifier") with LocationOfGoodsIdentification {
+    override val code: String = "V"
+  }
+
+  case object EoriNumber extends WithName("eoriNumber") with LocationOfGoodsIdentification {
+    override val code: String = "X"
+  }
+
+  case object AuthorisationNumber extends WithName("authorisationNumber") with LocationOfGoodsIdentification {
+    override val code: String = "Y"
+  }
+
+  case object CoordinatesIdentifier extends WithName("coordinates") with LocationOfGoodsIdentification {
+    override val code: String = "W"
+  }
+
+  case object UnlocodeIdentifier extends WithName("unlocode") with LocationOfGoodsIdentification {
+    override val code: String = "U"
+  }
+
+  case object AddressIdentifier extends WithName("address") with LocationOfGoodsIdentification {
+    override val code: String = "Z"
+  }
+
+  case object PostalCode extends WithName("postalCode") with LocationOfGoodsIdentification {
+    override val code: String = "T"
+  }
 
   override val messageKeyPrefix: String = "routeDetails.locationOfGoods.identification"
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,4 +71,10 @@ trait ViewSpecAssertions extends ViewSpecGetters {
 
   def assertPageHasNoSignOutLink(doc: Document): Assertion =
     doc.getElementsByClass("hmrc-sign-out-nav__link").isEmpty mustBe true
+
+  def assertRenderedByClass(doc: Document, className: String): Assertion =
+    assert(!doc.getElementsByClass(className).isEmpty, "\n\nElement with class " + className + " was not rendered on the page.\n")
+
+  def assertNotRenderedByClass(doc: Document, className: String): Assertion =
+    assert(doc.getElementsByClass(className).isEmpty, "\n\nElement with class " + className + " was rendered on the page.\n")
 }

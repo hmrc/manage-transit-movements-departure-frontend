@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -43,7 +44,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
   "Check Your Answers Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val sampleSections = listWithMaxLength[Section]().sample.value
+      val sampleSections = arbitrary[List[Section]].sample.value
 
       when(mockViewModelProvider.apply(any())(any()))
         .thenReturn(TraderDetailsViewModel(sampleSections))

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,13 +30,13 @@ class OfficeOfExitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, i
     page = OfficeOfExitCountryPage(index),
     formatAnswer = formatAsText,
     prefix = "routeDetails.exit.index.officeOfExitCountry",
-    id = Some("office-of-exit-country")
+    id = Some("change-office-of-exit-country")
   )
 
   def officeOfExit: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
     page = OfficeOfExitPage(index),
     formatAnswer = formatAsText,
     prefix = "routeDetails.exit.index.officeOfExit",
-    id = Some("office-of-exit")
+    id = Some("change-office-of-exit")
   )
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,14 +32,10 @@ case object ProcedureTypePage extends QuestionPage[ProcedureType] {
 
   override def toString: String = "procedureType"
 
-  override def cleanup(updatedValue: Option[ProcedureType], previousValue: Option[ProcedureType], userAnswers: UserAnswers): Try[UserAnswers] =
-    (updatedValue, previousValue, userAnswers.get(DeclarationTypePage)) match {
-      case (Some(Simplified), Some(Normal), Some(Option4)) =>
-        userAnswers
-          .remove(DeclarationTypePage)
-          .flatMap(_.remove(TIRCarnetReferencePage))
-      case _ =>
-        super.cleanup(updatedValue, previousValue, userAnswers)
+  override def cleanup(value: Option[ProcedureType], userAnswers: UserAnswers): Try[UserAnswers] =
+    (value, userAnswers.get(DeclarationTypePage)) match {
+      case (Some(Simplified), Some(Option4)) => userAnswers.remove(DeclarationTypePage).flatMap(_.remove(TIRCarnetReferencePage))
+      case _                                 => super.cleanup(value, userAnswers)
     }
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =

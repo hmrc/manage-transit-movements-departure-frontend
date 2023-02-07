@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package viewModels.routeDetails.exit
 
-import models.{Index, Mode, RichOptionalJsArray, UserAnswers}
+import models.{Mode, RichOptionalJsArray, UserAnswers}
 import pages.sections.routeDetails.exit.OfficesOfExitSection
 import play.api.i18n.Messages
 import utils.cyaHelpers.routeDetails.exit.ExitCheckYourAnswersHelper
@@ -40,7 +40,7 @@ object ExitAnswersViewModel {
         rows = userAnswers
           .get(OfficesOfExitSection)
           .mapWithIndex {
-            (_, index) => helper.officeOfExit(Index(index))
+            (_, index) => helper.officeOfExit(index)
           },
         addAnotherLink = Link(
           id = "add-or-remove-offices-of-exit",

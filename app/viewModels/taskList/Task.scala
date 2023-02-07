@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,19 @@
 
 package viewModels.taskList
 
+import config.FrontendAppConfig
+import models.LocalReferenceNumber
 import play.api.i18n.Messages
-import viewModels.taskList.TaskStatus.{CannotStartYet, Completed, InProgress, NotStarted}
+import viewModels.taskList.TaskStatus._
 
-abstract class Task {
+trait Task {
+  val section: String
   val status: TaskStatus
+}
+
+abstract class TaskListTask extends Task {
   val id: String
-  val href: Option[String]
+  def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String
   val messageKey: String
 
   def name(implicit messages: Messages): String = messages {
@@ -34,4 +40,17 @@ abstract class Task {
   }
 
   def isCompleted: Boolean = status == Completed
+}
+
+object Task {
+
+  def apply(section: String, status: TaskStatus): Option[Task] = section match {
+    case PreTaskListTask.section      => Some(PreTaskListTask(status))
+    case TraderDetailsTask.section    => Some(TraderDetailsTask(status))
+    case RouteDetailsTask.section     => Some(RouteDetailsTask(status))
+    case TransportTask.section        => Some(TransportTask(status))
+    case ItemsTask.section            => Some(ItemsTask(status))
+    case GuaranteeDetailsTask.section => Some(GuaranteeDetailsTask(status))
+    case _                            => None
+  }
 }

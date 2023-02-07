@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package controllers.traderDetails.consignment.consignor
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.DynamicAddressFormProvider
+import models.journeyDomain.traderDetails.TraderDetailsDomain
 import models.reference.Country
 import models.requests.SpecificDataRequestProvider2
 import models.{DynamicAddress, LocalReferenceNumber, Mode}
@@ -90,7 +91,7 @@ class AddressController @Inject() (
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, name, isPostalCodeRequired))),
                 value => {
                   implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-                  AddressPage.writeToUserAnswers(value).writeToSession().navigate()
+                  AddressPage.writeToUserAnswers(value).updateTask[TraderDetailsDomain]().writeToSession().navigate()
                 }
               )
         }

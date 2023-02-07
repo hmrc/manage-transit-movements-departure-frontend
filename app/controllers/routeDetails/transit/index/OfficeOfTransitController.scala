@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,16 @@ package controllers.routeDetails.transit.index
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CustomsOfficeForCountryFormProvider
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.{Index, LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.OfficeOfTransitNavigatorProvider
 import pages.routeDetails.routing.CountryOfDestinationPage
 import pages.routeDetails.transit.index.{OfficeOfTransitCountryPage, OfficeOfTransitPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.CustomsOfficesService
+import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.transit.index.OfficeOfTransitView
 
@@ -39,7 +41,8 @@ class OfficeOfTransitController @Inject() (
   navigatorProvider: OfficeOfTransitNavigatorProvider,
   actions: Actions,
   formProvider: CustomsOfficeForCountryFormProvider,
-  service: CustomsOfficesService,
+  customsOfficesService: CustomsOfficesService,
+  countriesService: CountriesService,
   val controllerComponents: MessagesControllerComponents,
   view: OfficeOfTransitView,
   getMandatoryPage: SpecificDataRequiredActionProvider
@@ -54,7 +57,7 @@ class OfficeOfTransitController @Inject() (
       .async {
         implicit request =>
           val country = request.arg
-          service.getCustomsOfficesOfTransitForCountry(country.code).map {
+          customsOfficesService.getCustomsOfficesOfTransitForCountry(country.code).map {
             customsOfficeList =>
               val form = formProvider("routeDetails.transit.index.officeOfTransit", customsOfficeList, country.description)
               val preparedForm = request.userAnswers.get(OfficeOfTransitPage(index)) match {
@@ -72,7 +75,7 @@ class OfficeOfTransitController @Inject() (
       .async {
         implicit request =>
           val country = request.arg
-          service.getCustomsOfficesOfTransitForCountry(country.code).flatMap {
+          customsOfficesService.getCustomsOfficesOfTransitForCountry(country.code).flatMap {
             customsOfficeList =>
               val form = formProvider("routeDetails.transit.index.officeOfTransit", customsOfficeList, country.description)
               form
@@ -81,10 +84,18 @@ class OfficeOfTransitController @Inject() (
                   formWithErrors =>
                     Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, country.description, mode, index))),
                   value =>
-                    navigatorProvider(mode, index).flatMap {
-                      implicit navigator =>
-                        OfficeOfTransitPage(index).writeToUserAnswers(value).writeToSession().navigate()
-                    }
+                    for {
+                      ctcCountries                          <- countriesService.getCountryCodesCTC()
+                      customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                      result <- {
+                        implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index, ctcCountries, customsSecurityAgreementAreaCountries)
+                        OfficeOfTransitPage(index)
+                          .writeToUserAnswers(value)
+                          .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                          .writeToSession()
+                          .navigate()
+                      }
+                    } yield result
                 )
           }
       }

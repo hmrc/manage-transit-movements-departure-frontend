@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,22 @@
 
 package generators
 
+import config.FrontendAppConfig
+import models.LocalReferenceNumber
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.data.FormError
+import play.api.mvc.Call
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import viewModels.sections.Section
-import viewModels.taskList.{Task, TaskStatus}
+import viewModels.taskList.{TaskListTask, TaskStatus}
+import viewModels.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationViewModel
+import viewModels.transport.equipment.AddAnotherSealViewModel
+import viewModels.transport.equipment.index.AddAnotherGoodsItemNumberViewModel
+import viewModels.transport.supplyChainActors.AddAnotherSupplyChainActorViewModel
+import viewModels.transport.transportMeans.active.AddAnotherBorderTransportViewModel
 import viewModels.{Link, ListItem}
 
 trait ViewModelGenerators {
@@ -90,6 +98,14 @@ trait ViewModelGenerators {
     } yield Section(sectionTitle, rows, link)
   }
 
+  implicit lazy val arbitrarySections: Arbitrary[List[Section]] = Arbitrary {
+    listWithMaxLength[Section]().retryUntil {
+      sections =>
+        val sectionTitles = sections.map(_.sectionTitle)
+        sectionTitles.distinct.size == sectionTitles.size
+    }
+  }
+
   implicit lazy val arbitraryLink: Arbitrary[Link] = Arbitrary {
     for {
       id   <- nonEmptyString
@@ -102,30 +118,46 @@ trait ViewModelGenerators {
     Gen.oneOf(TaskStatus.Completed, TaskStatus.InProgress, TaskStatus.NotStarted, TaskStatus.CannotStartYet)
   }
 
-  implicit lazy val arbitraryTask: Arbitrary[Task] = Arbitrary {
+  lazy val arbitraryIncompleteTaskStatus: Arbitrary[TaskStatus] = Arbitrary {
+    Gen.oneOf(TaskStatus.InProgress, TaskStatus.NotStarted, TaskStatus.CannotStartYet)
+  }
+
+  implicit lazy val arbitraryTask: Arbitrary[TaskListTask] = Arbitrary {
     for {
       arbitraryStatus     <- arbitrary[TaskStatus]
       arbitraryMessageKey <- Gen.alphaNumStr
       arbitraryId         <- Gen.alphaNumStr
-      arbitraryHref       <- Gen.option(Gen.alphaNumStr)
-    } yield new Task {
-      override val status: TaskStatus   = arbitraryStatus
-      override val messageKey: String   = arbitraryMessageKey
-      override val id: String           = arbitraryId
-      override val href: Option[String] = arbitraryHref
+      arbitraryHref       <- Gen.alphaNumStr
+      arbitrarySection    <- Gen.alphaNumStr
+    } yield new TaskListTask {
+      override val status: TaskStatus                                                          = arbitraryStatus
+      override val messageKey: String                                                          = arbitraryMessageKey
+      override val id: String                                                                  = arbitraryId
+      override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String = arbitraryHref
+      override val section: String                                                             = arbitrarySection
     }
   }
 
-  implicit lazy val arbitraryCompletedTask: Arbitrary[Task] = Arbitrary {
+  implicit lazy val arbitraryCompletedTask: Arbitrary[TaskListTask] = Arbitrary {
     for {
       arbitraryMessageKey <- Gen.alphaNumStr
       arbitraryId         <- Gen.alphaNumStr
-      arbitraryHref       <- Gen.option(Gen.alphaNumStr)
-    } yield new Task {
-      override val status: TaskStatus   = TaskStatus.Completed
-      override val messageKey: String   = arbitraryMessageKey
-      override val id: String           = arbitraryId
-      override val href: Option[String] = arbitraryHref
+      arbitraryHref       <- Gen.alphaNumStr
+      arbitrarySection    <- Gen.alphaNumStr
+    } yield new TaskListTask {
+      override val status: TaskStatus                                                          = TaskStatus.Completed
+      override val messageKey: String                                                          = arbitraryMessageKey
+      override val id: String                                                                  = arbitraryId
+      override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String = arbitraryHref
+      override val section: String                                                             = arbitrarySection
+    }
+  }
+
+  implicit def arbitraryTasks(implicit arbitraryTask: Arbitrary[TaskListTask]): Arbitrary[List[TaskListTask]] = Arbitrary {
+    listWithMaxLength[TaskListTask]()(arbitraryTask).retryUntil {
+      tasks =>
+        val ids = tasks.map(_.id)
+        ids.distinct.size == ids.size
     }
   }
 
@@ -176,11 +208,55 @@ trait ViewModelGenerators {
     } yield RadioItem(content, id, value, label, hint, divider, checked, conditionalHtml, disabled, attributes)
   }
 
+  implicit lazy val arbitraryRadioItems: Arbitrary[List[RadioItem]] = Arbitrary {
+    for {
+      radioItems   <- listWithMaxLength[RadioItem]()
+      checkedIndex <- Gen.choose(0, radioItems.length - 1)
+    } yield radioItems.zipWithIndex.map {
+      case (radioItem, index) => radioItem.copy(checked = index == checkedIndex)
+    }
+  }
+
   implicit lazy val arbitraryListItem: Arbitrary[ListItem] = Arbitrary {
     for {
       name      <- nonEmptyString
       changeUrl <- nonEmptyString
       removeUrl <- Gen.option(nonEmptyString)
     } yield ListItem(name, changeUrl, removeUrl)
+  }
+
+  implicit lazy val arbitraryAddAnotherBorderTransportViewModel: Arbitrary[AddAnotherBorderTransportViewModel] = Arbitrary {
+    for {
+      listItems    <- arbitrary[Seq[ListItem]]
+      onSubmitCall <- arbitrary[Call]
+    } yield AddAnotherBorderTransportViewModel(listItems, onSubmitCall)
+  }
+
+  implicit lazy val arbitraryAddAnotherSupplyChainActorViewModel: Arbitrary[AddAnotherSupplyChainActorViewModel] = Arbitrary {
+    for {
+      listItems    <- arbitrary[Seq[ListItem]]
+      onSubmitCall <- arbitrary[Call]
+    } yield AddAnotherSupplyChainActorViewModel(listItems, onSubmitCall)
+  }
+
+  implicit lazy val arbitraryAddAnotherAuthorisationViewModel: Arbitrary[AddAnotherAuthorisationViewModel] = Arbitrary {
+    for {
+      listItems    <- arbitrary[Seq[ListItem]]
+      onSubmitCall <- arbitrary[Call]
+    } yield AddAnotherAuthorisationViewModel(listItems, onSubmitCall)
+  }
+
+  implicit lazy val arbitraryAddAnotherSealViewModel: Arbitrary[AddAnotherSealViewModel] = Arbitrary {
+    for {
+      listItems    <- arbitrary[Seq[ListItem]]
+      onSubmitCall <- arbitrary[Call]
+    } yield AddAnotherSealViewModel(listItems, onSubmitCall)
+  }
+
+  implicit lazy val arbitraryAddAnotherGoodsItemNumberViewModel: Arbitrary[AddAnotherGoodsItemNumberViewModel] = Arbitrary {
+    for {
+      listItems    <- arbitrary[Seq[ListItem]]
+      onSubmitCall <- arbitrary[Call]
+    } yield AddAnotherGoodsItemNumberViewModel(listItems, onSubmitCall)
   }
 }

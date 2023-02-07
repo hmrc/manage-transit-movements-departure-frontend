@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package controllers.preTaskList
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.preTaskList.SecurityDetailsFormProvider
+import forms.EnumerableFormProvider
 import models.journeyDomain.PreTaskListDomain
 import models.{LocalReferenceNumber, Mode, SecurityDetailsType}
 import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
@@ -37,19 +37,19 @@ class SecurityDetailsTypeController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
-  checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
-  formProvider: SecurityDetailsFormProvider,
+  checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
+  formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: SecurityDetailsTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider[SecurityDetailsType]("securityDetailsType")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain]) {
+    .andThen(checkIfPreTaskListAlreadyCompleted) {
       implicit request =>
         val preparedForm = request.userAnswers.get(SecurityDetailsTypePage) match {
           case None        => form
@@ -61,7 +61,7 @@ class SecurityDetailsTypeController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+    .andThen(checkIfPreTaskListAlreadyCompleted)
     .async {
       implicit request =>
         form
@@ -70,7 +70,7 @@ class SecurityDetailsTypeController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, SecurityDetailsType.radioItems, lrn, mode))),
             value => {
               implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              SecurityDetailsTypePage.writeToUserAnswers(value).writeToSession().navigate()
+              SecurityDetailsTypePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
             }
           )
     }

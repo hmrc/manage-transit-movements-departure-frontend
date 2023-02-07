@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package controllers.preTaskList
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.preTaskList.DeclarationTypeFormProvider
+import forms.EnumerableFormProvider
 import models.journeyDomain.PreTaskListDomain
 import models.requests.DataRequest
 import models.{DeclarationType, LocalReferenceNumber, Mode}
@@ -38,19 +38,19 @@ class DeclarationTypeController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
-  checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
-  formProvider: DeclarationTypeFormProvider,
+  checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
+  formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: DeclarationTypeView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider[DeclarationType]("declarationType")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain]) {
+    .andThen(checkIfPreTaskListAlreadyCompleted) {
       implicit request =>
         val preparedForm = request.userAnswers.get(DeclarationTypePage) match {
           case None        => form
@@ -62,7 +62,7 @@ class DeclarationTypeController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+    .andThen(checkIfPreTaskListAlreadyCompleted)
     .async {
       implicit request: DataRequest[AnyContent] =>
         form
@@ -71,7 +71,7 @@ class DeclarationTypeController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))),
             value => {
               implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              DeclarationTypePage.writeToUserAnswers(value).writeToSession().navigate()
+              DeclarationTypePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
             }
           )
     }

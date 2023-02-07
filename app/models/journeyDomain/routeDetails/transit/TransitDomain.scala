@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ object TransitDomain {
   ): UserAnswersReader[TransitDomain] = {
 
     implicit val officesOfTransitReader: UserAnswersReader[OfficesOfTransit] =
-      OfficesOfTransitSection.reader.flatMap {
+      OfficesOfTransitSection.arrayReader.flatMap {
         case x if x.isEmpty =>
           UserAnswersReader[OfficeOfTransitDomain](
             OfficeOfTransitDomain.userAnswersReader(Index(0), ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
@@ -56,7 +56,7 @@ object TransitDomain {
         case x =>
           x.traverse[OfficeOfTransitDomain](
             OfficeOfTransitDomain.userAnswersReader(_, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-          ).map(_.toSeq)
+          )
       }
 
     lazy val addOfficesOfTransitReader: UserAnswersReader[OfficesOfTransit] =

@@ -3,6 +3,7 @@ import sbt.Def
 import scoverage.ScoverageKeys
 import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
+import java.io.File
 
 lazy val appName: String = "manage-transit-movements-departure-frontend"
 
@@ -10,6 +11,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 lazy val root = (project in file("."))
   .enablePlugins(
+    ScalaxbPlugin,
     PlayScala,
     SbtAutoBuildPlugin,
     SbtDistributablesPlugin
@@ -25,6 +27,10 @@ lazy val root = (project in file("."))
   .settings(scalaVersion := "2.13.8")
   .settings(headerSettings(A11yTest): _*)
   .settings(automateHeaderSettings(A11yTest))
+  .settings(
+    Compile / scalaxb / scalaxbXsdSource := new File("./conf/xsd"),
+    Compile / scalaxb / scalaxbDispatchVersion := "1.1.3",
+    Compile / scalaxb / scalaxbPackageName := "generated")
   .settings(
     name := appName,
     RoutesKeys.routesImport ++= Seq("models._", "models.OptionBinder._"),
@@ -44,7 +50,7 @@ lazy val root = (project in file("."))
     ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;.*repositories.*;" +
       ".*BuildInfo.*;.*javascript.*;.*Routes.*;.*GuiceInjector;" +
       ".*ControllerConfiguration",
-    ScoverageKeys.coverageExcludedPackages := ".*views.html.components.*",
+    ScoverageKeys.coverageExcludedPackages := ".*views.html.components.*;.*scalaxb.*;.*generated.*",
     ScoverageKeys.coverageMinimumStmtTotal := 90,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting  := true,
@@ -55,7 +61,8 @@ lazy val root = (project in file("."))
       "-language:postfixOps",
       "-language:higherKinds",
       "-Wconf:src=routes/.*:s",
-      "-Wconf:cat=unused-imports&src=html/.*:s"
+      "-Wconf:cat=unused-imports&src=html/.*:s",
+      "-Wconf:src=src_managed/.*:s"
     ),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
@@ -65,7 +72,7 @@ lazy val root = (project in file("."))
       Resolver.jcenterRepo
     ),
     Concat.groups := Seq(
-      "javascripts/application.js" -> group(Seq("javascripts/ctc.js", "javascripts/accessible-autocomplete.js", "javascripts/autocomplete.js"))
+      "javascripts/application.js" -> group(Seq("javascripts/ctc.js"))
     ),
     uglifyCompressOptions := Seq("unused=false", "dead_code=false", "warnings=false"),
     Assets / pipelineStages := Seq(digest, concat, uglify),

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,10 @@ package controllers.transport.preRequisites
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.UCRFormProvider
+import models.journeyDomain.transport.TransportDomain
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
-import navigation.transport.PreRequisitesNavigatorProvider
+import navigation.transport.TransportNavigatorProvider
 import pages.transport.preRequisites.UniqueConsignmentReferencePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -35,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class UniqueConsignmentReferenceController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: PreRequisitesNavigatorProvider,
+  navigatorProvider: TransportNavigatorProvider,
   formProvider: UCRFormProvider,
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
@@ -63,7 +64,7 @@ class UniqueConsignmentReferenceController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            UniqueConsignmentReferencePage.writeToUserAnswers(value).writeToSession().navigate()
+            UniqueConsignmentReferencePage.writeToUserAnswers(value).updateTask[TransportDomain]().writeToSession().navigate()
           }
         )
   }

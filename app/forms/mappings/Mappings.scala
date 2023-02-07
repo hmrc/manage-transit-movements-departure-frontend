@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package forms.mappings
 
-import models.reference.{Country, CustomsOffice, UnLocode}
-import models.{CountryList, CustomsOfficeList, Enumerable, LocalReferenceNumber, UnLocodeList}
+import models.reference.{Country, CurrencyCode, CustomsOffice, Nationality, UnLocode}
+import models.{CountryList, CurrencyCodeList, CustomsOfficeList, Enumerable, LocalReferenceNumber, NationalityList, UnLocodeList}
 import play.api.data.FieldMapping
 import play.api.data.Forms.of
 import play.api.data.format.Formats.ignoredFormat
@@ -108,4 +108,18 @@ trait Mappings extends Formatters with Constraints {
     invalidValueKey: String = "error.invalidValue"
   ): FieldMapping[BigDecimal] =
     of(currencyFormatter(requiredKey, invalidCharactersKey, invalidFormatKey, invalidValueKey))
+
+  protected def currencyCode(
+    currencyCodeList: CurrencyCodeList,
+    errorKey: String = "error.required",
+    args: Seq[Any] = Seq.empty
+  ): FieldMapping[CurrencyCode] =
+    of(currencyCodeFormatter(currencyCodeList, errorKey, args))
+
+  protected def nationality(
+    nationalityList: NationalityList,
+    errorKey: String = "error.required",
+    args: Seq[Any] = Seq.empty
+  ): FieldMapping[Nationality] =
+    of(nationalityFormatter(nationalityList, errorKey, args))
 }

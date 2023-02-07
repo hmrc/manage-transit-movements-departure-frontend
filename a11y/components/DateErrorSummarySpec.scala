@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,20 +24,20 @@ import play.api.data.FormError
 import views.html.components.DateErrorSummary
 import views.html.templates.MainTemplate
 
-import java.time.{Clock, LocalDate}
+import java.time.LocalDate
 
 class DateErrorSummarySpec extends A11ySpecBase {
 
   "the 'date error summary' component" must {
     val template  = app.injector.instanceOf[MainTemplate]
     val component = app.injector.instanceOf[DateErrorSummary]
-    val clock     = app.injector.instanceOf[Clock]
 
     val prefix    = Gen.alphaNumStr.sample.value
     val minDate   = arbitrary[LocalDate].sample.value
+    val maxDate   = arbitrary[LocalDate].sample.value
     val title     = nonEmptyString.sample.value
     val formError = arbitrary[FormError].sample.value
-    val form      = new DateFormProvider(clock)(prefix, minDate).withError(formError)
+    val form      = new DateFormProvider()(prefix, minDate, maxDate).withError(formError)
 
     val content = template.apply(title) {
       component.apply(form).withHeading(title)

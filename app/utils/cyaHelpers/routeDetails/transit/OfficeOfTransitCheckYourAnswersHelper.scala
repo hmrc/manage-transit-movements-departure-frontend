@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,28 +30,28 @@ class OfficeOfTransitCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     page = OfficeOfTransitCountryPage(index),
     formatAnswer = formatAsText,
     prefix = "routeDetails.transit.index.officeOfTransitCountry",
-    id = Some("office-of-transit-country")
+    id = Some("change-office-of-transit-country")
   )
 
   def officeOfTransit: Option[SummaryListRow] = getAnswerAndBuildRow[CustomsOffice](
     page = OfficeOfTransitPage(index),
     formatAnswer = formatAsText,
     prefix = "routeDetails.transit.index.officeOfTransit",
-    id = Some("office-of-transit")
+    id = Some("change-office-of-transit")
   )
 
   def addOfficeOfTransitETA: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = AddOfficeOfTransitETAYesNoPage(index),
     formatAnswer = formatAsYesOrNo,
     prefix = "routeDetails.transit.index.addOfficeOfTransitETAYesNo",
-    id = Some("office-of-transit-add-eta")
+    id = Some("change-office-of-transit-add-eta")
   )
 
   def officeOfTransitETA: Option[SummaryListRow] = getAnswerAndBuildRow[DateTime](
     page = OfficeOfTransitETAPage(index),
     formatAnswer = formatAsDateTime,
     prefix = "routeDetails.transit.index.officeOfTransitETA",
-    id = Some("office-of-transit-eta")
+    id = Some("change-office-of-transit-eta")
   )
 
 }

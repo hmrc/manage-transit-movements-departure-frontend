@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package config
 
 import com.google.inject.{Inject, Singleton}
+import models.LocalReferenceNumber
 import play.api.Configuration
 
 @Singleton
@@ -24,8 +25,11 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   val appName: String = configuration.get[String]("appName")
 
-  lazy val daysBefore: Int = configuration.get[Int]("limits.officeOfTransitETA.daysBefore")
-  lazy val daysAfter: Int  = configuration.get[Int]("limits.officeOfTransitETA.daysAfter")
+  lazy val etaDateDaysBefore: Int = configuration.get[Int]("dates.officeOfTransitETA.daysBefore")
+  lazy val etaDateDaysAfter: Int  = configuration.get[Int]("dates.officeOfTransitETA.daysAfter")
+
+  lazy val limitDateDaysBefore: Int = configuration.get[Int]("dates.limitDate.daysBefore")
+  lazy val limitDateDaysAfter: Int  = configuration.get[Int]("dates.limitDate.daysAfter")
 
   lazy val nctsEnquiriesUrl: String = configuration.get[String]("urls.nctsEnquiries")
   lazy val nctsGuidanceUrl: String  = configuration.get[String]("urls.nctsGuidance")
@@ -57,12 +61,28 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val cacheUrl: String = configuration.get[Service]("microservice.services.manage-transit-movements-departure-cache").fullServiceUrl
 
-  lazy val maxGuarantees: Int         = configuration.get[Int]("limits.maxGuarantees")
-  lazy val maxCountriesOfRouting: Int = configuration.get[Int]("limits.maxCountriesOfRouting")
-  lazy val maxOfficesOfTransit: Int   = configuration.get[Int]("limits.maxOfficesOfTransit")
-  lazy val maxOfficesOfExit: Int      = configuration.get[Int]("limits.maxOfficesOfExit")
+  lazy val maxGuarantees: Int             = configuration.get[Int]("limits.maxGuarantees")
+  lazy val maxCountriesOfRouting: Int     = configuration.get[Int]("limits.maxCountriesOfRouting")
+  lazy val maxOfficesOfTransit: Int       = configuration.get[Int]("limits.maxOfficesOfTransit")
+  lazy val maxOfficesOfExit: Int          = configuration.get[Int]("limits.maxOfficesOfExit")
+  lazy val maxActiveBorderTransports: Int = configuration.get[Int]("limits.maxActiveBorderTransports")
+  lazy val maxSupplyChainActors: Int      = configuration.get[Int]("limits.maxSupplyChainActors")
+  lazy val maxAuthorisations: Int         = configuration.get[Int]("limits.maxAuthorisations")
+  lazy val maxSeals: Int                  = configuration.get[Int]("limits.maxSeals")
+  lazy val maxGoodsItemNumbers: Int       = configuration.get[Int]("limits.maxGoodsItemNumbers")
 
   lazy val apiUrl = configuration.get[Service]("microservice.services.common-transit-convention-traders").baseUrl
 
   lazy val declarationEnabled: Boolean = configuration.get[Boolean]("declaration.enabled")
+
+  def traderDetailsFrontendUrl(lrn: LocalReferenceNumber): String    = frontendUrl(lrn, "traderDetails")
+  def routeDetailsFrontendUrl(lrn: LocalReferenceNumber): String     = frontendUrl(lrn, "routeDetails")
+  def transportDetailsFrontendUrl(lrn: LocalReferenceNumber): String = frontendUrl(lrn, "transportDetails")
+  def guaranteeDetailsFrontendUrl(lrn: LocalReferenceNumber): String = frontendUrl(lrn, "guaranteeDetails")
+  def itemsFrontendUrl(lrn: LocalReferenceNumber): String            = frontendUrl(lrn, "items")
+
+  private def frontendUrl(lrn: LocalReferenceNumber, section: String): String = {
+    val url: String = configuration.get[String](s"urls.${section}Frontend")
+    url.replace(":lrn", lrn.toString)
+  }
 }

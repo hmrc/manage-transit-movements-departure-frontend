@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.preTaskList.SecurityDetailsFormProvider
+import forms.EnumerableFormProvider
 import models.SecurityDetailsType.NoSecurityDetails
 import models.{NormalMode, SecurityDetailsType}
 import navigation.PreTaskListNavigatorProvider
@@ -34,8 +34,8 @@ import scala.concurrent.Future
 
 class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val formProvider                  = new SecurityDetailsFormProvider()
-  private val form                          = formProvider()
+  private val formProvider                  = new EnumerableFormProvider()
+  private val form                          = formProvider[SecurityDetailsType]("securityDetailsType")
   private val mode                          = NormalMode
   private lazy val securityDetailsTypeRoute = routes.SecurityDetailsTypeController.onPageLoad(lrn, mode).url
 

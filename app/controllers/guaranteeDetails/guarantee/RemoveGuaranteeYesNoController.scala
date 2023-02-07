@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import controllers.actions._
 import controllers.guaranteeDetails.routes._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
+import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
 import models.{Index, LocalReferenceNumber}
 import pages.sections.guaranteeDetails.GuaranteeSection
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -59,6 +60,7 @@ class RemoveGuaranteeYesNoController @Inject() (
             case true =>
               GuaranteeSection(index)
                 .removeFromUserAnswers()
+                .updateTask[GuaranteeDetailsDomain]()
                 .writeToSession()
                 .navigateTo(AddAnotherGuaranteeController.onPageLoad(lrn))
             case false =>

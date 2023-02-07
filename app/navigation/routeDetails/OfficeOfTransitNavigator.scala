@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,44 +20,35 @@ import models._
 import models.domain.UserAnswersReader
 import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
 import navigation.UserAnswersNavigator
-import services.CountriesService
-import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class OfficeOfTransitNavigatorProviderImpl @Inject() (
-  countriesService: CountriesService
-)(implicit ec: ExecutionContext)
-    extends OfficeOfTransitNavigatorProvider {
+class OfficeOfTransitNavigatorProviderImpl @Inject() () extends OfficeOfTransitNavigatorProvider {
 
-  def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator] =
-    for {
-      ctcCountryCodes                          <- countriesService.getCountryCodesCTC().map(_.countryCodes)
-      customsSecurityAgreementAreaCountryCodes <- countriesService.getCustomsSecurityAgreementAreaCountries().map(_.countryCodes)
-    } yield mode match {
+  def apply(mode: Mode, index: Index, ctcCountries: CountryList, customsSecurityAgreementAreaCountries: CountryList): UserAnswersNavigator =
+    mode match {
       case NormalMode =>
-        new OfficeOfTransitNavigator(mode, index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+        new OfficeOfTransitNavigator(mode, index, ctcCountries, customsSecurityAgreementAreaCountries)
       case CheckMode =>
-        new RouteDetailsNavigator(mode, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+        new RouteDetailsNavigator(mode, ctcCountries, customsSecurityAgreementAreaCountries)
     }
 }
 
 trait OfficeOfTransitNavigatorProvider {
 
-  def apply(mode: Mode, index: Index)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator]
+  def apply(mode: Mode, index: Index, ctcCountries: CountryList, customsSecurityAgreementAreaCountries: CountryList): UserAnswersNavigator
 }
 
 class OfficeOfTransitNavigator(
   override val mode: Mode,
   index: Index,
-  ctcCountryCodes: Seq[String],
-  customsSecurityAgreementAreaCountryCodes: Seq[String]
+  ctcCountries: CountryList,
+  customsSecurityAgreementAreaCountries: CountryList
 ) extends UserAnswersNavigator {
 
   override type T = OfficeOfTransitDomain
 
   implicit override val reader: UserAnswersReader[OfficeOfTransitDomain] =
-    OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+    OfficeOfTransitDomain.userAnswersReader(index, ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes)
 }

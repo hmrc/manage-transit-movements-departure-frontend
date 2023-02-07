@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import base.SpecBase
 import controllers.routeDetails.routing.index.{routes => indexRoutes}
 import controllers.routeDetails.routing.{routes => routingRoutes}
 import generators.Generators
+import models.domain.UserAnswersReader
+import models.journeyDomain.routeDetails.routing.CountryOfRoutingDomain
 import models.reference.{Country, CountryCode, CustomsOffice}
 import models.{Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
@@ -68,7 +70,7 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                           content = "Change".toText,
                           href = routingRoutes.CountryOfDestinationController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("country of destination"),
-                          attributes = Map("id" -> "country-of-destination")
+                          attributes = Map("id" -> "change-country-of-destination")
                         )
                       )
                     )
@@ -112,7 +114,7 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                           content = "Change".toText,
                           href = routingRoutes.OfficeOfDestinationController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("office of destination"),
-                          attributes = Map("id" -> "office-of-destination")
+                          attributes = Map("id" -> "change-office-of-destination")
                         )
                       )
                     )
@@ -147,7 +149,7 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Do you want the transit to follow a binding itinerary?".toText),
+                  key = Key("Are you using a binding itinerary?".toText),
                   value = Value("Yes".toText),
                   actions = Some(
                     Actions(
@@ -155,8 +157,8 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                         ActionItem(
                           content = "Change".toText,
                           href = routingRoutes.BindingItineraryController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("if you want the transit to follow a binding itinerary"),
-                          attributes = Map("id" -> "binding-itinerary")
+                          visuallyHiddenText = Some("if you are using a binding itinerary"),
+                          attributes = Map("id" -> "change-binding-itinerary")
                         )
                       )
                     )
@@ -200,7 +202,7 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                           content = "Change".toText,
                           href = routingRoutes.AddCountryOfRoutingYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add a country to the transit route"),
-                          attributes = Map("id" -> "add-country-of-routing")
+                          attributes = Map("id" -> "change-add-country-of-routing")
                         )
                       )
                     )
@@ -214,7 +216,7 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
 
     "countryOfRouting" - {
       "must return None" - {
-        "when CountryOfRoutingPage undefined at index" in {
+        "when country of routing is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new RoutingCheckYourAnswersHelper(emptyUserAnswers, mode)
@@ -225,33 +227,25 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
       }
 
       "must return Some(Row)" - {
-        "when CountryOfRoutingPage defined at index" in {
-          forAll(arbitrary[Mode], arbitrary[Country]) {
-            (mode, country) =>
-              val answers = emptyUserAnswers
-                .setValue(CountryOfRoutingPage(index), country)
+        "when country of routing is defined" in {
+          forAll(arbitraryCountryOfRoutingAnswers(emptyUserAnswers, index), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val countryOfRouting = UserAnswersReader[CountryOfRoutingDomain](
+                CountryOfRoutingDomain.userAnswersReader(index)
+              ).run(userAnswers).value
 
-              val helper = new RoutingCheckYourAnswersHelper(answers, mode)
-              val result = helper.countryOfRouting(index)
+              val helper = new RoutingCheckYourAnswersHelper(userAnswers, mode)
+              val result = helper.countryOfRouting(index).get
 
-              result mustBe Some(
-                SummaryListRow(
-                  key = Key("Country of routing 1".toText),
-                  value = Value(country.description.toText),
-                  actions = Some(
-                    Actions(
-                      items = List(
-                        ActionItem(
-                          content = "Change".toText,
-                          href = indexRoutes.CountryOfRoutingController.onPageLoad(answers.lrn, mode, index).url,
-                          visuallyHiddenText = Some("country of routing 1"),
-                          attributes = Map("id" -> "change-country-of-routing-1")
-                        )
-                      )
-                    )
-                  )
-                )
-              )
+              result.key.value mustBe "Country of routing 1"
+              result.value.value mustBe countryOfRouting.country.toString
+              val actions = result.actions.get.items
+              actions.size mustBe 1
+              val action = actions.head
+              action.content.value mustBe "Change"
+              action.href mustBe indexRoutes.CountryOfRoutingController.onPageLoad(userAnswers.lrn, mode, index).url
+              action.visuallyHiddenText.get mustBe "country of routing 1"
+              action.id mustBe "change-country-of-routing-1"
           }
         }
       }

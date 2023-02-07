@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ class TIRCarnetReferenceController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
-  checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
+  checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: TIRCarnetReferenceFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -55,7 +55,7 @@ class TIRCarnetReferenceController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
     actions
       .requireData(lrn)
-      .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+      .andThen(checkIfPreTaskListAlreadyCompleted)
       .andThen(getMandatoryPage.getFirst(ProcedureTypePage))
       .andThen(getMandatoryPage.getSecond(DeclarationTypePage)) {
         implicit request =>
@@ -75,7 +75,7 @@ class TIRCarnetReferenceController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+    .andThen(checkIfPreTaskListAlreadyCompleted)
     .async {
       implicit request =>
         form
@@ -84,7 +84,7 @@ class TIRCarnetReferenceController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
             value => {
               implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              TIRCarnetReferencePage.writeToUserAnswers(value).writeToSession().navigate()
+              TIRCarnetReferencePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
             }
           )
     }

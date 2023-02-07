@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,12 @@ import generators.Generators
 import models.NormalMode
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.when
 import pages.routeDetails.locationOfGoods.CoordinatesPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.CountriesService
 import views.html.routeDetails.locationOfGoods.CoordinatesView
 
 import scala.concurrent.Future
@@ -42,13 +41,6 @@ class CoordinatesControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
   private val mode                  = NormalMode
   private lazy val coordinatesRoute = routes.CoordinatesController.onPageLoad(lrn, mode).url
-
-  private lazy val mockCountriesService: CountriesService = mock[CountriesService]
-
-  override def beforeEach(): Unit = {
-    reset(mockCountriesService)
-    super.beforeEach()
-  }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

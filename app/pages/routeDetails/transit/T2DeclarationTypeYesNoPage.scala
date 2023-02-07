@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,19 +31,10 @@ case object T2DeclarationTypeYesNoPage extends QuestionPage[Boolean] {
 
   override def toString: String = "t2DeclarationTypeYesNo"
 
-  override def cleanup(
-    updatedValue: Option[Boolean],
-    previousValue: Option[Boolean],
-    userAnswers: UserAnswers
-  ): Try[UserAnswers] =
-    (updatedValue, previousValue) match {
-      case (Some(x), Some(y)) if x == y =>
-        super.cleanup(updatedValue, previousValue, userAnswers)
-      case _ =>
-        userAnswers
-          .remove(AddOfficeOfTransitYesNoPage)
-          .flatMap(_.remove(OfficesOfTransitSection))
-    }
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = value match {
+    case Some(_) => userAnswers.remove(AddOfficeOfTransitYesNoPage).flatMap(_.remove(OfficesOfTransitSection))
+    case None    => super.cleanup(value, userAnswers)
+  }
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.T2DeclarationTypeYesNoController.onPageLoad(userAnswers.lrn, mode))

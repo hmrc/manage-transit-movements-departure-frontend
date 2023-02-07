@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,11 @@ package controllers.preTaskList
 
 import controllers.actions._
 import forms.preTaskList.LocalReferenceNumberFormProvider
-import models.NormalMode
+import models.{NormalMode, UserAnswers}
 import navigation.PreTaskListNavigatorProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.UserAnswersService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.LocalReferenceNumberView
 
@@ -35,7 +34,6 @@ class LocalReferenceNumberController @Inject() (
   sessionRepository: SessionRepository,
   navigatorProvider: PreTaskListNavigatorProvider,
   identify: IdentifierAction,
-  userAnswersService: UserAnswersService,
   formProvider: LocalReferenceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: LocalReferenceNumberView
@@ -56,11 +54,22 @@ class LocalReferenceNumberController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
-          value =>
-            for {
-              userAnswers <- userAnswersService.getOrCreateUserAnswers(request.eoriNumber, value)
-              _           <- sessionRepository.set(userAnswers)
-            } yield Redirect(navigatorProvider(NormalMode).nextPage(userAnswers))
+          value => {
+            def getOrCreateUserAnswers(): Future[Option[UserAnswers]] =
+              sessionRepository.get(value).flatMap {
+                case None =>
+                  sessionRepository.put(value).flatMap {
+                    _ => sessionRepository.get(value)
+                  }
+                case someUserAnswers =>
+                  Future.successful(someUserAnswers)
+              }
+
+            getOrCreateUserAnswers().map {
+              case Some(userAnswers) => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers))
+              case None              => Redirect(controllers.routes.ErrorController.technicalDifficulties())
+            }
+          }
         )
   }
 }

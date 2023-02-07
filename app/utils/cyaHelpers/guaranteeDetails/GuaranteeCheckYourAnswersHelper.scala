@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package utils.cyaHelpers.guaranteeDetails
 
 import models.GuaranteeType._
+import models.reference.CurrencyCode
 import models.{GuaranteeType, Index, Mode, UserAnswers}
 import pages.guaranteeDetails.guarantee._
 import play.api.i18n.Messages
@@ -30,21 +31,21 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
     page = GuaranteeTypePage(index),
     formatAnswer = formatEnumAsText(GuaranteeType.messageKeyPrefix),
     prefix = "guaranteeDetails.guarantee.guaranteeType",
-    id = Some("type")
+    id = Some("change-type")
   )(_ == TIRGuarantee)
 
   def guaranteeReferenceNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = ReferenceNumberPage(index),
     formatAnswer = formatAsText,
     prefix = "guaranteeDetails.guarantee.referenceNumber",
-    id = Some("reference-number")
+    id = Some("change-reference-number")
   )
 
   def otherReferenceYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = OtherReferenceYesNoPage(index),
     formatAnswer = formatAsYesOrNo,
     prefix = "guaranteeDetails.guarantee.otherReferenceYesNo",
-    id = Some("add-other-reference")
+    id = Some("change-add-other-reference")
   )
 
   def otherReference: Option[SummaryListRow] =
@@ -58,7 +59,7 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
           page = OtherReferencePage(index),
           formatAnswer = formatAsText,
           prefix = s"guaranteeDetails.guarantee.otherReference.$key",
-          id = Some("other-reference")
+          id = Some("change-other-reference")
         )
     }
 
@@ -66,13 +67,25 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
     page = AccessCodePage(index),
     formatAnswer = formatAsPassword,
     prefix = "guaranteeDetails.guarantee.accessCode",
-    id = Some("access-code")
+    id = Some("change-access-code")
   )
 
-  def liabilityAmount: Option[SummaryListRow] = getAnswerAndBuildRow[BigDecimal](
-    page = LiabilityAmountPage(index),
-    formatAnswer = formatAsCurrency,
-    prefix = "guaranteeDetails.guarantee.liabilityAmount",
-    id = Some("liability-amount")
+  def liabilityCurrency: Option[SummaryListRow] = getAnswerAndBuildRow[CurrencyCode](
+    page = CurrencyPage(index),
+    formatAnswer = formatAsText,
+    prefix = "guaranteeDetails.guarantee.currency",
+    id = Some("change-liability-currency")
   )
+
+  def liabilityAmount: Option[SummaryListRow] =
+    userAnswers.get(CurrencyPage(index)).flatMap {
+      currencyCode =>
+        getAnswerAndBuildRow[BigDecimal](
+          page = LiabilityAmountPage(index),
+          formatAnswer = formatAsCurrency(_, currencyCode),
+          prefix = "guaranteeDetails.guarantee.liabilityAmount",
+          id = Some("change-liability-amount")
+        )
+    }
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package views.preTaskList
 
-import forms.preTaskList.DeclarationTypeFormProvider
+import forms.EnumerableFormProvider
 import models.{DeclarationType, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -26,7 +26,7 @@ import views.html.preTaskList.DeclarationTypeView
 
 class DeclarationTypeViewSpec extends RadioViewBehaviours[DeclarationType] {
 
-  override def form: Form[DeclarationType] = new DeclarationTypeFormProvider()()
+  override def form: Form[DeclarationType] = new EnumerableFormProvider()(prefix)
 
   override def applyView(form: Form[DeclarationType]): HtmlFormat.Appendable =
     injector.instanceOf[DeclarationTypeView].apply(form, radioItems, lrn, NormalMode)(fakeRequest, messages)

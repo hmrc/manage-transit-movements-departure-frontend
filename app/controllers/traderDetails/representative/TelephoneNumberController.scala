@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package controllers.traderDetails.representative
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.TelephoneNumberFormProvider
+import models.journeyDomain.traderDetails.TraderDetailsDomain
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.traderDetails.TraderDetailsNavigatorProvider
@@ -63,7 +64,7 @@ class TelephoneNumberController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
           value => {
             implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            TelephoneNumberPage.writeToUserAnswers(value).writeToSession().navigate()
+            TelephoneNumberPage.writeToUserAnswers(value).updateTask[TraderDetailsDomain]().writeToSession().navigate()
           }
         )
   }

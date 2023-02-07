@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package viewModels.traderDetails
 
 import base.SpecBase
-import generators.{Generators, TraderDetailsUserAnswersGenerator}
+import generators.Generators
 import models.reference.{Country, CountryCode}
 import models.{DynamicAddress, Mode}
 import org.scalacheck.Arbitrary.arbitrary
@@ -25,7 +25,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.traderDetails.consignment._
 import viewModels.traderDetails.ConsignmentViewModel.ConsignmentViewModelProvider
 
-class ConsignmentViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TraderDetailsUserAnswersGenerator {
+class ConsignmentViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "apply" - {
     "when user answers empty" - {

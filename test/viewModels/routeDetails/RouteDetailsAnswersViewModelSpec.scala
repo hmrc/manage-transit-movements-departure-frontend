@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package viewModels.routeDetails
 
 import base.SpecBase
-import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import generators.Generators
 import models.CheckMode
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, when}
@@ -36,12 +36,12 @@ import viewModels.routeDetails.transit.TransitAnswersViewModel
 import viewModels.routeDetails.transit.TransitAnswersViewModel.TransitAnswersViewModelProvider
 import viewModels.sections.Section
 
-class RouteDetailsAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class RouteDetailsAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "apply" - {
     "must pass CheckMode to view models" in {
       def dummySection  = arbitrary[Section].sample.value
-      def dummySections = listWithMaxLength[Section]().sample.value
+      def dummySections = arbitrary[List[Section]].sample.value
 
       val mockRoutingAnswersViewModelProvider             = mock[RoutingAnswersViewModelProvider]
       val mockTransitAnswersViewModelProvider             = mock[TransitAnswersViewModelProvider]

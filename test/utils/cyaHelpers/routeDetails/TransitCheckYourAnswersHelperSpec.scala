@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,10 @@ package utils.cyaHelpers.routeDetails
 
 import base.SpecBase
 import controllers.routeDetails.transit.index.{routes => indexRoutes}
-import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import generators.Generators
 import models.SecurityDetailsType.NoSecurityDetails
+import models.domain.UserAnswersReader
+import models.journeyDomain.routeDetails.transit.OfficeOfTransitDomain
 import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
@@ -33,7 +35,7 @@ import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import utils.cyaHelpers.routeDetails.transit.TransitCheckYourAnswersHelper
 import viewModels.ListItem
 
-class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with RouteDetailsUserAnswersGenerator {
+class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "TransitCheckYourAnswersHelper" - {
 
@@ -69,7 +71,7 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                           content = "Change".toText,
                           href = controllers.routeDetails.transit.routes.T2DeclarationTypeYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if the transit includes any T2 declarations"),
-                          attributes = Map("id" -> "includes-t2-declarations")
+                          attributes = Map("id" -> "change-includes-t2-declarations")
                         )
                       )
                     )
@@ -113,7 +115,7 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
                           content = "Change".toText,
                           href = controllers.routeDetails.transit.routes.AddOfficeOfTransitYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add an office of transit"),
-                          attributes = Map("id" -> "add-office-of-transit")
+                          attributes = Map("id" -> "change-add-office-of-transit")
                         )
                       )
                     )
@@ -127,7 +129,7 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
 
     "officeOfTransit" - {
       "must return None" - {
-        "when OfficeOfTransitPage undefined at index" in {
+        "when office of transit is undefined" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new TransitCheckYourAnswersHelper(emptyUserAnswers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
@@ -138,35 +140,25 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
       }
 
       "must return Some(Row)" - {
-        "when OfficeOfTransitPage defined at index" in {
-          forAll(arbitrary[Mode], arbitrary[CustomsOffice]) {
-            (mode, customsOffice) =>
-              val initialAnswers = emptyUserAnswers.setValue(OfficeOfTransitPage(index), customsOffice)
+        "when office of transit is defined" in {
+          forAll(arbitraryOfficeOfTransitAnswers(emptyUserAnswers, index), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val officeOfExit = UserAnswersReader[OfficeOfTransitDomain](
+                OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+              ).run(userAnswers).value
 
-              forAll(arbitraryOfficeOfTransitAnswers(initialAnswers, index)) {
-                answers =>
-                  val helper = new TransitCheckYourAnswersHelper(answers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-                  val result = helper.officeOfTransit(index)
+              val helper = new TransitCheckYourAnswersHelper(userAnswers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+              val result = helper.officeOfTransit(index).get
 
-                  result mustBe Some(
-                    SummaryListRow(
-                      key = Key("Office of transit 1".toText),
-                      value = Value(customsOffice.toString.toText),
-                      actions = Some(
-                        Actions(
-                          items = List(
-                            ActionItem(
-                              content = "Change".toText,
-                              href = indexRoutes.CheckOfficeOfTransitAnswersController.onPageLoad(answers.lrn, mode, index).url,
-                              visuallyHiddenText = Some("office of transit 1"),
-                              attributes = Map("id" -> "change-office-of-transit-1")
-                            )
-                          )
-                        )
-                      )
-                    )
-                  )
-              }
+              result.key.value mustBe "Office of transit 1"
+              result.value.value mustBe officeOfExit.label
+              val actions = result.actions.get.items
+              actions.size mustBe 1
+              val action = actions.head
+              action.content.value mustBe "Change"
+              action.href mustBe indexRoutes.CheckOfficeOfTransitAnswersController.onPageLoad(userAnswers.lrn, mode, index).url
+              action.visuallyHiddenText.get mustBe "office of transit 1"
+              action.id mustBe "change-office-of-transit-1"
           }
         }
       }

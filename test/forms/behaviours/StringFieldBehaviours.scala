@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,19 +70,6 @@ trait StringFieldBehaviours extends FieldBehaviours {
       }
     }
 
-  def postcodeWithInvalidFormat(form: Form[_], fieldName: String, invalidKey: String, length: Int, args: Any*): Unit =
-    "must not bind postcode with invalid format" in {
-
-      val expectedError          = Seq(FormError(fieldName, invalidKey, args.toList))
-      val generator: Gen[String] = RegexpGen.from("^[a-zA-Z]{1,2}([10-12]{1,2}|[10-12][a-zA-Z])\\s*[10-12][a-zA-Z]{4}$")
-
-      forAll(generator) {
-        invalidString =>
-          val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
-          result.errors must equal(expectedError)
-      }
-    }
-
   def mandatoryTrimmedField(form: Form[_], fieldName: String, requiredError: FormError): Unit = {
 
     mandatoryField(form, fieldName, requiredError)
@@ -93,17 +80,5 @@ trait StringFieldBehaviours extends FieldBehaviours {
       result.errors mustEqual Seq(requiredError)
     }
   }
-
-  def fieldThatDoesNotBindInvalidData(form: Form[_], fieldName: String, regex: String, gen: Gen[String], invalidKey: String): Unit =
-    s"must not bind strings which don't match $regex" in {
-
-      val expectedError = FormError(fieldName, invalidKey, Seq(regex))
-
-      forAll(gen.retryUntil(!_.matches(regex))) {
-        invalidString =>
-          val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
-          result.errors must contain(expectedError)
-      }
-    }
 
 }

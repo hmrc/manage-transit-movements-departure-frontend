@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package forms
 import forms.Constants._
 import forms.behaviours.{FieldBehaviours, StringFieldBehaviours}
 import models.domain.StringFieldRegex._
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
 
@@ -49,12 +48,11 @@ class EoriNumberFormProviderSpec extends StringFieldBehaviours with FieldBehavio
       requiredError = FormError(fieldName, requiredKey)
     )
 
-    behave like fieldThatDoesNotBindInvalidData(
+    behave like fieldWithInvalidCharacters(
       form = form,
       fieldName = fieldName,
-      regex = alphaNumericRegex.regex,
-      gen = stringsWithLength(maxEoriNumberLength, arbitrary[Char]),
-      invalidKey = invalidCharactersKey
+      error = FormError(fieldName, invalidCharactersKey, Seq(alphaNumericRegex.regex)),
+      length = maxEoriNumberLength
     )
 
     "must not bind strings over max length" in {

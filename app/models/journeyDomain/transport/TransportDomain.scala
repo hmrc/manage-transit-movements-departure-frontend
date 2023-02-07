@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,44 @@
 
 package models.journeyDomain.transport
 
-import models.domain.UserAnswersReader
+import models.domain.{GettableAsFilterForNextReaderOps, UserAnswersReader}
 import models.journeyDomain.JourneyDomainModel
+import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationsAndLimitDomain
+import models.journeyDomain.transport.carrierDetails.CarrierDetailsDomain
+import models.journeyDomain.transport.equipment.EquipmentsAndChargesDomain
+import models.journeyDomain.transport.supplyChainActors.SupplyChainActorsDomain
+import models.journeyDomain.transport.transportMeans.TransportMeansDomain
+import pages.traderDetails.consignment.ApprovedOperatorPage
+import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
+import pages.transport.supplyChainActors.SupplyChainActorYesNoPage
 
 case class TransportDomain(
-  preRequisites: PreRequisitesDomain
+  preRequisites: PreRequisitesDomain,
+  transportMeans: TransportMeansDomain,
+  supplyChainActors: Option[SupplyChainActorsDomain],
+  authorisationsAndLimit: Option[AuthorisationsAndLimitDomain],
+  carrierDetails: CarrierDetailsDomain,
+  equipmentsAndCharges: EquipmentsAndChargesDomain
 ) extends JourneyDomainModel
 
 object TransportDomain {
 
-  implicit val userAnswersReader: UserAnswersReader[TransportDomain] =
+  implicit val userAnswersReader: UserAnswersReader[TransportDomain] = {
+
+    implicit lazy val authorisationsAndLimitReads: UserAnswersReader[Option[AuthorisationsAndLimitDomain]] =
+      ApprovedOperatorPage.inferredReader.flatMap {
+        case true  => UserAnswersReader[AuthorisationsAndLimitDomain].map(Some(_))
+        case false => AddAuthorisationsYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[AuthorisationsAndLimitDomain])
+      }
+
     for {
-      preRequisites <- UserAnswersReader[PreRequisitesDomain]
-    } yield TransportDomain(preRequisites)
+      preRequisites          <- UserAnswersReader[PreRequisitesDomain]
+      transportMeans         <- UserAnswersReader[TransportMeansDomain]
+      supplyChainActors      <- SupplyChainActorYesNoPage.filterOptionalDependent(identity)(UserAnswersReader[SupplyChainActorsDomain])
+      authorisationsAndLimit <- authorisationsAndLimitReads
+      carrierDetails         <- UserAnswersReader[CarrierDetailsDomain]
+      equipmentsAndCharges   <- UserAnswersReader[EquipmentsAndChargesDomain]
+    } yield TransportDomain(preRequisites, transportMeans, supplyChainActors, authorisationsAndLimit, carrierDetails, equipmentsAndCharges)
+  }
+
 }

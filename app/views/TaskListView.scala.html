@@ -1,5 +1,5 @@
 @*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 @import config.FrontendAppConfig
 @import models.LocalReferenceNumber
-@import viewModels.taskList.Task
+@import viewModels.taskList._
 @import views.html.components.{Button, Heading, TaskList}
 
 @this(
@@ -28,7 +28,7 @@
     button: Button
 )
 
-@(lrn: LocalReferenceNumber, tasks: Seq[Task])(implicit request: Request[_], messages: Messages)
+@(lrn: LocalReferenceNumber, tasks: Seq[TaskListTask])(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("taskList.title"),
@@ -38,7 +38,7 @@
     <span class="govuk-caption-xl">@lrn.toString</span>
     @heading(heading = messages("taskList.heading"))
 
-    @taskList("taskList.departureDetails", tasks)
+    @taskList("taskList.departureDetails", tasks, lrn)
 
      @if(config.declarationEnabled) {
          @* TODO - @if(tasks.forall(_.isCompleted)) { *@

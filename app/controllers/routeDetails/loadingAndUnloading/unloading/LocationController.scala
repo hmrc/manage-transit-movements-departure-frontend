@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,15 @@ package controllers.routeDetails.loadingAndUnloading.unloading
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.LocationFormProvider
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.{LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.LoadingAndUnloadingNavigatorProvider
-import pages.routeDetails.loadingAndUnloading.unloading.CountryPage
-import pages.routeDetails.loadingAndUnloading.unloading.LocationPage
+import pages.routeDetails.loadingAndUnloading.unloading.{CountryPage, LocationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.loadingAndUnloading.unloading.LocationView
 
@@ -40,7 +42,8 @@ class LocationController @Inject() (
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   getMandatoryPage: SpecificDataRequiredActionProvider,
-  view: LocationView
+  view: LocationView,
+  countriesService: CountriesService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -70,10 +73,18 @@ class LocationController @Inject() (
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, location, mode))),
             value =>
-              navigatorProvider(mode).flatMap {
-                implicit navigator =>
-                  LocationPage.writeToUserAnswers(value).writeToSession().navigate()
-              }
+              for {
+                ctcCountries                          <- countriesService.getCountryCodesCTC()
+                customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                result <- {
+                  implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+                  LocationPage
+                    .writeToUserAnswers(value)
+                    .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                    .writeToSession()
+                    .navigate()
+                }
+              } yield result
           )
     }
 }

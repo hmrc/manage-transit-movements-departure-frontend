@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,8 +45,6 @@ object GuaranteeType extends RadioModelU[GuaranteeType] {
 
   case object TIRGuarantee extends WithName("B") with GuaranteeType
 
-  case object GuaranteeNotRequired extends WithName("R") with GuaranteeType
-
   val values: Seq[GuaranteeType] = Seq(
     GuaranteeWaiver,
     ComprehensiveGuarantee,
@@ -57,8 +55,7 @@ object GuaranteeType extends RadioModelU[GuaranteeType] {
     GuaranteeNotRequiredExemptPublicBody,
     IndividualGuaranteeMultiple,
     GuaranteeWaiverByAgreement,
-    TIRGuarantee,
-    GuaranteeNotRequired
+    TIRGuarantee
   )
 
   override def valuesU(userAnswers: UserAnswers): Seq[GuaranteeType] = {

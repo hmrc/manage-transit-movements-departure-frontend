@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,16 @@ package controllers.routeDetails.locationOfGoods
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CustomsOfficeFormProvider
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.{LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import pages.preTaskList.OfficeOfDeparturePage
 import pages.routeDetails.locationOfGoods.CustomsOfficeIdentifierPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.CustomsOfficesService
+import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.locationOfGoods.CustomsOfficeIdentifierView
 
@@ -39,7 +41,8 @@ class CustomsOfficeIdentifierController @Inject() (
   navigatorProvider: LocationOfGoodsNavigatorProvider,
   actions: Actions,
   formProvider: CustomsOfficeFormProvider,
-  service: CustomsOfficesService,
+  customsOfficesService: CustomsOfficesService,
+  countriesService: CountriesService,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   val controllerComponents: MessagesControllerComponents,
   view: CustomsOfficeIdentifierView
@@ -53,7 +56,7 @@ class CustomsOfficeIdentifierController @Inject() (
     .async {
       implicit request =>
         val office = request.arg
-        service.getCustomsOfficesOfDepartureForCountry(office.countryCode).map {
+        customsOfficesService.getCustomsOfficesOfDepartureForCountry(office.countryCode).map {
           customsOfficeList =>
             val form = formProvider("routeDetails.locationOfGoods.customsOfficeIdentifier", customsOfficeList)
             val preparedForm = request.userAnswers.get(CustomsOfficeIdentifierPage) match {
@@ -71,7 +74,7 @@ class CustomsOfficeIdentifierController @Inject() (
     .async {
       implicit request =>
         val office = request.arg
-        service.getCustomsOfficesOfDepartureForCountry(office.countryCode).flatMap {
+        customsOfficesService.getCustomsOfficesOfDepartureForCountry(office.countryCode).flatMap {
           customsOfficeList =>
             val form = formProvider("routeDetails.locationOfGoods.customsOfficeIdentifier", customsOfficeList)
             form
@@ -79,10 +82,18 @@ class CustomsOfficeIdentifierController @Inject() (
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
                 value =>
-                  navigatorProvider(mode).flatMap {
-                    implicit navigator =>
-                      CustomsOfficeIdentifierPage.writeToUserAnswers(value).writeToSession().navigate()
-                  }
+                  for {
+                    ctcCountries                          <- countriesService.getCountryCodesCTC()
+                    customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                    result <- {
+                      implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+                      CustomsOfficeIdentifierPage
+                        .writeToUserAnswers(value)
+                        .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                        .writeToSession()
+                        .navigate()
+                    }
+                  } yield result
               )
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package controllers.routeDetails.exit.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
-import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import generators.Generators
 import models.reference.{Country, CustomsOffice}
 import models.{Index, NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
@@ -34,12 +34,7 @@ import views.html.routeDetails.exit.index.ConfirmRemoveOfficeOfExitView
 
 import scala.concurrent.Future
 
-class ConfirmRemoveOfficeOfExitControllerSpec
-    extends SpecBase
-    with AppWithDefaultMockFixtures
-    with Generators
-    with RouteDetailsUserAnswersGenerator
-    with ScalaCheckPropertyChecks {
+class ConfirmRemoveOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators with ScalaCheckPropertyChecks {
 
   private val prefix        = "routeDetails.exit.index.confirmRemoveOfficeOfExit"
   private val defaultPrefix = s"$prefix.default"

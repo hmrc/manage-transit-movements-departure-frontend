@@ -1,5 +1,5 @@
 @*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,9 +41,10 @@
 
         @inputYesNo(
             field = form("value"),
-            yesNoType = OrdinaryYesNo(
+            yesNoType = YesNoWithAdditionalHtml(
                 heading = messages("traderDetails.holderOfTransit.eoriYesNo.heading"),
-                caption = Some(messages("traderDetails.holderOfTransit.caption"))
+                caption = Some(messages("traderDetails.holderOfTransit.caption")),
+                additionalHtml = Html(s"""<p class="govuk-body">${messages("traderDetails.holderOfTransit.eoriYesNo.paragraph")}</p>""")
             )
         )
 

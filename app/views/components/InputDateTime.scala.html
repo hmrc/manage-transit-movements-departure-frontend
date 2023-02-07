@@ -1,5 +1,5 @@
 @*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  *@
 
 @import views.utils.ViewUtils._
-@import views.html.components.{Heading, InputDate, InputTime}
+@import views.html.components.Heading
 
 @this(
     heading: Heading,
@@ -50,21 +50,21 @@
         items = Seq(
             InputItem(
                 classes = s"govuk-input--width-2 ${errorClass(form("date").error, "day")}",
-                name = s"dateDay",
+                name = "dateDay",
                 label = Some(messages("date.day.capitalized")),
                 value = form("dateDay").value,
                 id = "dateDay"
             ),
             InputItem(
                 classes = s"govuk-input--width-2 ${errorClass(form("date").error, "month")}",
-                name = s"dateMonth",
+                name = "dateMonth",
                 label = Some(messages("date.month.capitalized")),
                 value = form("dateMonth").value,
                 id = "dateMonth"
             ),
             InputItem(
                 classes = s"govuk-input--width-4 ${errorClass(form("date").error, "year")}",
-                name = s"dateYear",
+                name = "dateYear",
                 label = Some(messages("date.year.capitalized")),
                 value = form("dateYear").value,
                 id = "dateYear"
@@ -90,7 +90,7 @@
         items = Seq(
             InputItem(
                 classes = s"govuk-input--width-2 ${errorClass(form("time").error, "hour")}",
-                name = s"timeHour",
+                name = "timeHour",
                 label = Some(messages("date.hour.capitalized")),
                 value = form("timeHour").value,
                 id = "timeHour"

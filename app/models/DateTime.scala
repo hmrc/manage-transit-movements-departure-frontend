@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,32 +17,29 @@
 package models
 
 import play.api.libs.json._
-import utils.Format._
 
 import java.time.format.DateTimeParseException
 import java.time.{LocalDate, LocalDateTime, LocalTime}
 
 case class DateTime(date: LocalDate, time: LocalTime) {
-
-  val concat: LocalDateTime = LocalDateTime.of(date, time)
-
+  def toLocalDateTime: LocalDateTime = LocalDateTime.of(date, time)
 }
 
 object DateTime {
+  import utils.Format._
 
-  def deconcatenate(localDateTime: LocalDateTime): DateTime = {
+  def apply(localDateTime: LocalDateTime): DateTime = {
     val date = localDateTime.toLocalDate
     val time = localDateTime.toLocalTime
-
     DateTime(date, time)
   }
 
-  implicit val writes: Writes[DateTime] = (o: DateTime) => Json.toJson(dateTimeFormattedIE015(o.concat))
+  implicit val writes: Writes[DateTime] = (x: DateTime) => Json.toJson(x.toLocalDateTime.toIE015Format)
 
   implicit val reads: Reads[DateTime] = (json: JsValue) => {
     json.validate[String].flatMap {
       x =>
-        try JsSuccess(deconcatenate(LocalDateTime.parse(x, dateTimeFormatIE015)))
+        try JsSuccess(x.parseWithIE015Format.toDateTime)
         catch {
           case exception: DateTimeParseException =>
             JsError(s"Failed to parse $json to LocalDateTime with the following exception: $exception")

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import play.api.inject.Injector
 import play.api.libs.json.{Format, Json, Reads}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
+import uk.gov.hmrc.govukfrontend.views.Aliases.{ActionItem, Content, Key, Value}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.Future
@@ -48,12 +49,18 @@ trait SpecBase
   val eoriNumber: EoriNumber    = EoriNumber("GB1234567891234")
   val lrn: LocalReferenceNumber = LocalReferenceNumber("ABCD1234567890123").get
 
-  val index: Index          = Index(0)
-  val referenceIndex: Index = Index(0)
-  val documentIndex: Index  = Index(0)
-  val itemIndex: Index      = Index(0)
-  val packageIndex: Index   = Index(0)
-  val containerIndex: Index = Index(0)
+  val index: Index              = Index(0)
+  val referenceIndex: Index     = Index(0)
+  val documentIndex: Index      = Index(0)
+  val itemIndex: Index          = Index(0)
+  val packageIndex: Index       = Index(0)
+  val containerIndex: Index     = Index(0)
+  val activeIndex: Index        = Index(0)
+  val actorIndex: Index         = Index(0)
+  val authorisationIndex: Index = Index(0)
+  val equipmentIndex: Index     = Index(0)
+  val sealIndex: Index          = Index(0)
+  val itemNumberIndex: Index    = Index(0)
 
   def fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
 
@@ -79,8 +86,27 @@ trait SpecBase
     def setValue[T](page: QuestionPage[T], value: Option[T])(implicit format: Format[T]): UserAnswers =
       value.map(setValue(page, _)).getOrElse(userAnswers)
 
+    def setValue[T](page: QuestionPage[T], f: UserAnswers => T)(implicit format: Format[T]): UserAnswers =
+      setValue(page, f(userAnswers))
+
     def removeValue(page: QuestionPage[_]): UserAnswers =
       userAnswers.remove(page).success.value
+  }
+
+  implicit class RichContent(c: Content) {
+    def value: String = c.asHtml.toString()
+  }
+
+  implicit class RichKey(k: Key) {
+    def value: String = k.content.value
+  }
+
+  implicit class RichValue(v: Value) {
+    def value: String = v.content.value
+  }
+
+  implicit class RichAction(ai: ActionItem) {
+    def id: String = ai.attributes.get("id").value
   }
 
   def response(status: Int): Future[HttpResponse] = Future.successful(HttpResponse(status, ""))

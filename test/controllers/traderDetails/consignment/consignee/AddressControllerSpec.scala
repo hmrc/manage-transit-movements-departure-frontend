@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import models.reference.Country
 import models.{DynamicAddress, NormalMode}
 import navigation.traderDetails.TraderDetailsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.traderDetails.consignment.consignee.{AddressPage, CountryPage, NamePage}
@@ -31,7 +31,6 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.CountriesService
 import views.html.traderDetails.consignment.consignee.AddressView
 
 import scala.concurrent.Future
@@ -49,18 +48,10 @@ class AddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures wit
   private val mode              = NormalMode
   private lazy val addressRoute = routes.AddressController.onPageLoad(lrn, mode).url
 
-  private lazy val mockCountriesService: CountriesService = mock[CountriesService]
-
-  override def beforeEach(): Unit = {
-    reset(mockCountriesService)
-    super.beforeEach()
-  }
-
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[TraderDetailsNavigatorProvider]).toInstance(fakeTraderDetailsNavigatorProvider))
-      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "Address Controller" - {
 

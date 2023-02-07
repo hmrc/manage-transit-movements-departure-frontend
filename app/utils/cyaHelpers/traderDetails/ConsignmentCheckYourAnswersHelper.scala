@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,104 +29,104 @@ class ConsignmentCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
     page = ApprovedOperatorPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.consignment.approvedOperator",
-    id = Some("has-reduced-data-set")
+    id = Some("change-has-reduced-data-set")
   )
 
   def consignorEoriYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = consignor.EoriYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.consignment.consignor.eoriYesNo",
-    id = Some("has-consignor-eori")
+    id = Some("change-has-consignor-eori")
   )
 
   def consignorEori: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignor.EoriPage,
     formatAnswer = formatAsText,
     prefix = "traderDetails.consignment.consignor.eori",
-    id = Some("consignor-eori-number")
+    id = Some("change-consignor-eori-number")
   )
 
   def consignorName: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignor.NamePage,
     formatAnswer = formatAsText,
     prefix = "traderDetails.consignment.consignor.name",
-    id = Some("consignor-name")
+    id = Some("change-consignor-name")
   )
 
   def consignorCountry: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
     page = consignor.CountryPage,
     formatAnswer = formatAsCountry,
     prefix = "traderDetails.consignment.consignor.country",
-    id = Some("consignor-country")
+    id = Some("change-consignor-country")
   )
 
   def consignorAddress: Option[SummaryListRow] = getAnswerAndBuildRow[DynamicAddress](
     page = consignor.AddressPage,
     formatAnswer = formatAsDynamicAddress,
     prefix = "traderDetails.consignment.consignor.address",
-    id = Some("consignor-address")
+    id = Some("change-consignor-address")
   )
 
   def addConsignorContact: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = consignor.AddContactPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.consignment.consignor.addContact",
-    id = Some("has-consignor-contact")
+    id = Some("change-has-consignor-contact")
   )
 
   def consignorContactName: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignor.contact.NamePage,
     formatAnswer = formatAsText,
     prefix = "traderDetails.consignment.consignor.contact.name",
-    id = Some("consignor-contact-name")
+    id = Some("change-consignor-contact-name")
   )
 
   def consignorContactTelephoneNumber: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignor.contact.TelephoneNumberPage,
     formatAnswer = formatAsText,
     prefix = "traderDetails.consignment.consignor.contact.telephoneNumber",
-    id = Some("consignor-contact-phone-number")
+    id = Some("change-consignor-contact-phone-number")
   )
 
   def moreThanOneConsignee: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = MoreThanOneConsigneePage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.consignment.moreThanOneConsignee",
-    id = Some("has-more-than-one-consignee")
+    id = Some("change-has-more-than-one-consignee")
   )
 
   def consigneeEoriYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = consignee.EoriYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "traderDetails.consignment.consignee.eoriYesNo",
-    id = Some("has-consignee-eori")
+    id = Some("change-has-consignee-eori")
   )
 
   def consigneeEori: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignee.EoriNumberPage,
     formatAnswer = formatAsText,
     prefix = "traderDetails.consignment.consignee.eoriNumber",
-    id = Some("consignee-eori-number")
+    id = Some("change-consignee-eori-number")
   )
 
   def consigneeName: Option[SummaryListRow] = getAnswerAndBuildRow[String](
     page = consignee.NamePage,
     formatAnswer = formatAsText,
     prefix = "traderDetails.consignment.consignee.name",
-    id = Some("consignee-name")
+    id = Some("change-consignee-name")
   )
 
   def consigneeCountry: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
     page = consignee.CountryPage,
     formatAnswer = formatAsCountry,
     prefix = "traderDetails.consignment.consignee.country",
-    id = Some("consignee-country")
+    id = Some("change-consignee-country")
   )
 
   def consigneeAddress: Option[SummaryListRow] = getAnswerAndBuildRow[DynamicAddress](
     page = consignee.AddressPage,
     formatAnswer = formatAsDynamicAddress,
     prefix = "traderDetails.consignment.consignee.address",
-    id = Some("consignee-address")
+    id = Some("change-consignee-address")
   )
 }

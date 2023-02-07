@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,9 +50,9 @@ class AddAnotherOfficeOfTransitViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Route details - Office of transit")
 
-  behave like pageWithMoreItemsAllowed()
+  behave like pageWithMoreItemsAllowed(listItems.length)()
 
-  behave like pageWithItemsMaxedOut()
+  behave like pageWithItemsMaxedOut(maxedOutListItems.length)
 
   behave like pageWithSubmitButton("Continue")
 }

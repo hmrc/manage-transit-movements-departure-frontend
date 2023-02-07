@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,50 +18,42 @@ package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.{Generators, UserAnswersGenerator}
-import models.{CountryList, UserAnswers}
+import models.UserAnswers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{ApiService, CountriesService}
-import viewModels.taskList.{Task, TaskListViewModel}
+import services.ApiService
+import viewModels.taskList.{PreTaskListTask, TaskListTask, TaskListViewModel, TaskStatus}
 import views.html.TaskListView
-
-import scala.concurrent.Future
 
 class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators with UserAnswersGenerator {
 
-  private lazy val mockViewModel                     = mock[TaskListViewModel]
-  private val mockCountriesService: CountriesService = mock[CountriesService]
-  private val mockApiService: ApiService             = mock[ApiService]
+  private lazy val mockViewModel         = mock[TaskListViewModel]
+  private val mockApiService: ApiService = mock[ApiService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind[TaskListViewModel].toInstance(mockViewModel))
-      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
       .overrides(bind(classOf[ApiService]).toInstance(mockApiService))
 
   override def beforeEach(): Unit = {
-    reset(mockViewModel); reset(mockCountriesService); reset(mockApiService)
+    reset(mockViewModel); reset(mockApiService)
     super.beforeEach()
   }
 
   "Task List Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val sampleTasks = listWithMaxLength[Task]()(arbitraryTask).sample.value
+      val sampleTasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
 
-      when(mockViewModel.apply(any())(any(), any())).thenReturn(sampleTasks)
+      when(mockViewModel.apply(any())).thenReturn(sampleTasks)
 
-      when(mockCountriesService.getCountryCodesCTC()(any()))
-        .thenReturn(Future.successful(CountryList(ctcCountries)))
-      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any()))
-        .thenReturn(Future.successful(CountryList(customsSecurityAgreementAreaCountries)))
-
-      val userAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
+      val userAnswers = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, routes.TaskListController.onPageLoad(lrn).url)
@@ -101,15 +93,11 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
     }
 
     "must redirect to confirmation page when submission success" in {
-      when(mockCountriesService.getCountryCodesCTC()(any()))
-        .thenReturn(Future.successful(CountryList(ctcCountries)))
-      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any()))
-        .thenReturn(Future.successful(CountryList(customsSecurityAgreementAreaCountries)))
-
       when(mockApiService.submitDeclaration(any())(any()))
         .thenReturn(response(OK))
 
-      val userAnswers: UserAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
+      val initialAnswers           = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
+      val userAnswers: UserAnswers = arbitraryDepartureAnswers(initialAnswers).sample.value
 
       setExistingUserAnswers(userAnswers)
 
@@ -123,15 +111,11 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
     }
 
     "must return a bad request for a 400" in {
-      when(mockCountriesService.getCountryCodesCTC()(any()))
-        .thenReturn(Future.successful(CountryList(ctcCountries)))
-      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any()))
-        .thenReturn(Future.successful(CountryList(customsSecurityAgreementAreaCountries)))
-
       when(mockApiService.submitDeclaration(any())(any()))
         .thenReturn(response(BAD_REQUEST))
 
-      val userAnswers: UserAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
+      val initialAnswers           = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
+      val userAnswers: UserAnswers = arbitraryDepartureAnswers(initialAnswers).sample.value
 
       setExistingUserAnswers(userAnswers)
 
@@ -143,15 +127,11 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
     }
 
     "must return a internal server error for a 500" in {
-      when(mockCountriesService.getCountryCodesCTC()(any()))
-        .thenReturn(Future.successful(CountryList(ctcCountries)))
-      when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any()))
-        .thenReturn(Future.successful(CountryList(customsSecurityAgreementAreaCountries)))
-
       when(mockApiService.submitDeclaration(any())(any()))
         .thenReturn(response(INTERNAL_SERVER_ERROR))
 
-      val userAnswers: UserAnswers = arbitraryDepartureAnswers(emptyUserAnswers).sample.value
+      val initialAnswers           = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
+      val userAnswers: UserAnswers = arbitraryDepartureAnswers(initialAnswers).sample.value
 
       setExistingUserAnswers(userAnswers)
 

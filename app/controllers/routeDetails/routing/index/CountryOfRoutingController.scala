@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,10 @@ package controllers.routeDetails.routing.index
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.CountryFormProvider
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.reference.Country
 import models.{CountryList, Index, LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.CountryOfRoutingNavigatorProvider
 import pages.routeDetails.routing.index.CountryOfRoutingPage
 import play.api.data.Form
@@ -40,7 +42,7 @@ class CountryOfRoutingController @Inject() (
   navigatorProvider: CountryOfRoutingNavigatorProvider,
   actions: Actions,
   formProvider: CountryFormProvider,
-  service: CountriesService,
+  countriesService: CountriesService,
   val controllerComponents: MessagesControllerComponents,
   view: CountryOfRoutingView
 )(implicit ec: ExecutionContext)
@@ -52,7 +54,7 @@ class CountryOfRoutingController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      service.getCountries().map {
+      countriesService.getCountries().map {
         countryList =>
           val preparedForm = request.userAnswers.get(CountryOfRoutingPage(index)) match {
             case None        => form(countryList)
@@ -65,17 +67,25 @@ class CountryOfRoutingController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      service.getCountries().flatMap {
+      countriesService.getCountries().flatMap {
         countryList =>
           form(countryList)
             .bindFromRequest()
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, countryList.countries, mode, index))),
               value =>
-                navigatorProvider(mode, index).flatMap {
-                  implicit navigator =>
-                    CountryOfRoutingPage(index).writeToUserAnswers(value).writeToSession().navigate()
-                }
+                for {
+                  ctcCountries                          <- countriesService.getCountryCodesCTC()
+                  customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                  result <- {
+                    implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index, ctcCountries, customsSecurityAgreementAreaCountries)
+                    CountryOfRoutingPage(index)
+                      .writeToUserAnswers(value)
+                      .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                      .writeToSession()
+                      .navigate()
+                  }
+                } yield result
             )
       }
   }

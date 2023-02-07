@@ -1,5 +1,5 @@
 @*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 @import controllers.preTaskList.routes
 @import views.html.components.{Button, ErrorSummary, InputRadio}
 @import models.{LocalReferenceNumber, SecurityDetailsType}
+@import viewModels.components.InputRadioViewModel
+@import viewModels.components.InputRadioViewModel._
 
 @this(
     mainTemplate: MainTemplate,
@@ -40,7 +42,7 @@
 
         @inputRadio(
             field = form("value"),
-            legend = messages("securityDetailsType.heading"),
+            radioType = Radio(heading = messages("securityDetailsType.heading")),
             radioItems = fieldId => radios(fieldId, form.value)
         )
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,15 @@ package controllers.routeDetails.locationOfGoods
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.UnLocodeFormProvider
+import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.{LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
 import navigation.routeDetails.LocationOfGoodsNavigatorProvider
 import pages.routeDetails.locationOfGoods.UnLocodePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.UnLocodesService
+import services.{CountriesService, UnLocodesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.routeDetails.locationOfGoods.UnLocodeView
 
@@ -38,7 +40,8 @@ class UnLocodeController @Inject() (
   navigatorProvider: LocationOfGoodsNavigatorProvider,
   actions: Actions,
   formProvider: UnLocodeFormProvider,
-  service: UnLocodesService,
+  unLocodesService: UnLocodesService,
+  countriesService: CountriesService,
   val controllerComponents: MessagesControllerComponents,
   view: UnLocodeView
 )(implicit ec: ExecutionContext)
@@ -49,7 +52,7 @@ class UnLocodeController @Inject() (
     .requireData(lrn)
     .async {
       implicit request =>
-        service.getUnLocodes().map {
+        unLocodesService.getUnLocodes().map {
           unLocodeList =>
             val form = formProvider("routeDetails.locationOfGoods.unLocode", unLocodeList)
             val preparedForm = request.userAnswers
@@ -67,7 +70,7 @@ class UnLocodeController @Inject() (
     .requireData(lrn)
     .async {
       implicit request =>
-        service.getUnLocodes().flatMap {
+        unLocodesService.getUnLocodes().flatMap {
           unLocodeList =>
             val form = formProvider("routeDetails.locationOfGoods.unLocode", unLocodeList)
             form
@@ -75,10 +78,18 @@ class UnLocodeController @Inject() (
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, unLocodeList.unLocodes, mode))),
                 value =>
-                  navigatorProvider(mode).flatMap {
-                    implicit navigator =>
-                      UnLocodePage.writeToUserAnswers(value).writeToSession().navigate()
-                  }
+                  for {
+                    ctcCountries                          <- countriesService.getCountryCodesCTC()
+                    customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                    result <- {
+                      implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+                      UnLocodePage
+                        .writeToUserAnswers(value)
+                        .updateTask()(RouteDetailsDomain.userAnswersReader(ctcCountries.countryCodes, customsSecurityAgreementAreaCountries.countryCodes))
+                        .writeToSession()
+                        .navigate()
+                    }
+                  } yield result
               )
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +69,7 @@ class OfficeOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.OfficeOfTransitCountryController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("office of transit country"),
-                          attributes = Map("id" -> "office-of-transit-country")
+                          attributes = Map("id" -> "change-office-of-transit-country")
                         )
                       )
                     )
@@ -116,7 +116,7 @@ class OfficeOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.OfficeOfTransitController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("office of transit"),
-                          attributes = Map("id" -> "office-of-transit")
+                          attributes = Map("id" -> "change-office-of-transit")
                         )
                       )
                     )
@@ -163,7 +163,7 @@ class OfficeOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.AddOfficeOfTransitETAYesNoController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("do you want to add a time of arrival"),
-                          attributes = Map("id" -> "office-of-transit-add-eta")
+                          attributes = Map("id" -> "change-office-of-transit-add-eta")
                         )
                       )
                     )
@@ -210,7 +210,7 @@ class OfficeOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = routes.OfficeOfTransitETAController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("the estimated date and time of arrival"),
-                          attributes = Map("id" -> "office-of-transit-eta")
+                          attributes = Map("id" -> "change-office-of-transit-eta")
                         )
                       )
                     )

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,18 @@
 
 package viewModels.taskList
 
-import models.UserAnswers
-import models.journeyDomain.traderDetails._
-import pages.sections.traderDetails.TraderDetailsSection
-import play.api.libs.json.JsObject
+import config.FrontendAppConfig
+import models.LocalReferenceNumber
 
-case class TraderDetailsTask(status: TaskStatus, href: Option[String]) extends Task {
+case class TraderDetailsTask(status: TaskStatus) extends TaskListTask {
   override val id: String         = "trader-details"
   override val messageKey: String = "traderDetails"
+  override val section: String    = TraderDetailsTask.section
+
+  override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String =
+    config.traderDetailsFrontendUrl(lrn)
 }
 
 object TraderDetailsTask {
-
-  def apply(userAnswers: UserAnswers): TraderDetailsTask = {
-    val (status, href) = new TaskProvider(userAnswers).noDependencyOnOtherTask
-      .readUserAnswers[TraderDetailsDomain, JsObject](TraderDetailsSection)
-
-    new TraderDetailsTask(status, href)
-  }
+  val section: String = ".traderDetails"
 }

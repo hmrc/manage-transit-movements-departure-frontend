@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package viewModels.taskList
 
 import base.SpecBase
+import play.api.libs.json.{JsError, JsString, Json}
 
 class TaskStatusSpec extends SpecBase {
 
@@ -53,6 +54,55 @@ class TaskStatusSpec extends SpecBase {
 
     "when CannotStartYet" in {
       TaskStatus.CannotStartYet.tag mustBe "govuk-tag--red"
+    }
+  }
+
+  "must serialise to json" - {
+    "when completed" in {
+      val result = Json.toJson[TaskStatus](TaskStatus.Completed)
+      result mustBe JsString("completed")
+    }
+
+    "when in progress" in {
+      val result = Json.toJson[TaskStatus](TaskStatus.InProgress)
+      result mustBe JsString("in-progress")
+    }
+
+    "when not started" in {
+      val result = Json.toJson[TaskStatus](TaskStatus.NotStarted)
+      result mustBe JsString("not-started")
+    }
+
+    "when cannot start yet" in {
+      val result = Json.toJson[TaskStatus](TaskStatus.CannotStartYet)
+      result mustBe JsString("cannot-start-yet")
+    }
+  }
+
+  "must deserialise from json" - {
+    "when completed" in {
+      val result = JsString("completed").as[TaskStatus]
+      result mustBe TaskStatus.Completed
+    }
+
+    "when in progress" in {
+      val result = JsString("in-progress").as[TaskStatus]
+      result mustBe TaskStatus.InProgress
+    }
+
+    "when not started" in {
+      val result = JsString("not-started").as[TaskStatus]
+      result mustBe TaskStatus.NotStarted
+    }
+
+    "when cannot start yet" in {
+      val result = JsString("cannot-start-yet").as[TaskStatus]
+      result mustBe TaskStatus.CannotStartYet
+    }
+
+    "when something else" in {
+      val result = JsString("foo").validate[TaskStatus]
+      result mustBe a[JsError]
     }
   }
 }

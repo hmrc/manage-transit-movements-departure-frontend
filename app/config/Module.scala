@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package config
 import com.google.inject.AbstractModule
 import controllers.actions._
 import navigation._
+import navigation.guaranteeDetails._
 import navigation.routeDetails._
 import navigation.traderDetails._
 import navigation.transport._
@@ -33,6 +34,7 @@ class Module extends AbstractModule {
 
     bind(classOf[TraderDetailsNavigatorProvider]).to(classOf[TraderDetailsNavigatorProviderImpl])
 
+    bind(classOf[GuaranteeDetailsNavigatorProvider]).to(classOf[GuaranteeDetailsNavigatorProviderImpl])
     bind(classOf[GuaranteeNavigatorProvider]).to(classOf[GuaranteeNavigatorProviderImpl])
 
     bind(classOf[RouteDetailsNavigatorProvider]).to(classOf[RouteDetailsNavigatorProviderImpl])
@@ -45,13 +47,22 @@ class Module extends AbstractModule {
     bind(classOf[LocationOfGoodsNavigatorProvider]).to(classOf[LocationOfGoodsNavigatorProviderImpl])
     bind(classOf[LoadingAndUnloadingNavigatorProvider]).to(classOf[LoadingAndUnloadingNavigatorProviderImpl])
 
-    bind(classOf[PreRequisitesNavigatorProvider]).to(classOf[PreRequisitesNavigatorProviderImpl])
+    bind(classOf[TransportNavigatorProvider]).to(classOf[TransportNavigatorProviderImpl])
+    bind(classOf[TransportMeansNavigatorProvider]).to(classOf[TransportMeansNavigatorProviderImpl])
+    bind(classOf[TransportMeansActiveNavigatorProvider]).to(classOf[TransportMeansActiveNavigatorProviderImpl])
+    bind(classOf[TransportMeansActiveListNavigatorProvider]).to(classOf[TransportMeansActiveListNavigatorProviderImpl])
+    bind(classOf[SupplyChainActorNavigatorProvider]).to(classOf[SupplyChainActorNavigatorProviderImpl])
+    bind(classOf[AuthorisationNavigatorProvider]).to(classOf[AuthorisationNavigatorProviderImpl])
+    bind(classOf[EquipmentsNavigatorProvider]).to(classOf[EquipmentsNavigatorProviderImpl])
+    bind(classOf[EquipmentNavigatorProvider]).to(classOf[EquipmentNavigatorProviderImpl])
+    bind(classOf[SealNavigatorProvider]).to(classOf[SealNavigatorProviderImpl])
+    bind(classOf[ItemNumberNavigatorProvider]).to(classOf[ItemNumberNavigatorProviderImpl])
 
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])
     bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl])
-    bind(classOf[CheckTaskAlreadyCompletedActionProvider]).to(classOf[CheckTaskAlreadyCompletedActionProviderImpl])
-    bind(classOf[CheckDependentTaskCompletedActionProvider]).to(classOf[CheckDependentTaskCompletedActionProviderImpl])
+    bind(classOf[PreTaskListCompletedAction]).to(classOf[PreTaskListCompletedActionImpl])
+    bind(classOf[DependentTasksCompletedActionProvider]).to(classOf[DependentTasksCompletedActionProviderImpl])
     bind(classOf[SpecificDataRequiredActionProvider]).to(classOf[SpecificDataRequiredActionImpl]).asEagerSingleton()
 
     bind(classOf[RenderConfig]).to(classOf[RenderConfigImpl]).asEagerSingleton()

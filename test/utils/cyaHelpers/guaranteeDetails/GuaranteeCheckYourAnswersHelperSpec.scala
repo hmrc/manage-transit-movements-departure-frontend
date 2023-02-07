@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import forms.Constants.accessCodeLength
 import generators.Generators
 import models.DeclarationType.Option4
 import models.GuaranteeType._
+import models.reference.CurrencyCode
 import models.{DeclarationType, GuaranteeType, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -95,7 +96,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
                             content = "Change".toText,
                             href = routes.GuaranteeTypeController.onPageLoad(answers.lrn, mode, index).url,
                             visuallyHiddenText = Some("type of guarantee"),
-                            attributes = Map("id" -> "type")
+                            attributes = Map("id" -> "change-type")
                           )
                         )
                       )
@@ -140,7 +141,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
                           content = "Change".toText,
                           href = routes.ReferenceNumberController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("guarantee reference number"),
-                          attributes = Map("id" -> "reference-number")
+                          attributes = Map("id" -> "change-reference-number")
                         )
                       )
                     )
@@ -184,7 +185,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
                           content = "Change".toText,
                           href = routes.OtherReferenceYesNoController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("if you want to add a reference for the guarantee"),
-                          attributes = Map("id" -> "add-other-reference")
+                          attributes = Map("id" -> "change-add-other-reference")
                         )
                       )
                     )
@@ -244,7 +245,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
                             content = "Change".toText,
                             href = routes.OtherReferenceController.onPageLoad(answers.lrn, mode, index).url,
                             visuallyHiddenText = Some("reference for the guarantee"),
-                            attributes = Map("id" -> "other-reference")
+                            attributes = Map("id" -> "change-other-reference")
                           )
                         )
                       )
@@ -275,7 +276,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
                             content = "Change".toText,
                             href = routes.OtherReferenceController.onPageLoad(answers.lrn, mode, index).url,
                             visuallyHiddenText = Some("reference"),
-                            attributes = Map("id" -> "other-reference")
+                            attributes = Map("id" -> "change-other-reference")
                           )
                         )
                       )
@@ -320,7 +321,7 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
                           content = "Change".toText,
                           href = routes.AccessCodeController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("access code"),
-                          attributes = Map("id" -> "access-code")
+                          attributes = Map("id" -> "change-access-code")
                         )
                       )
                     )
@@ -348,15 +349,17 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
         "when LiabilityAmountPage defined" in {
           forAll(arbitrary[Mode]) {
             mode =>
-              val answers = emptyUserAnswers.setValue(LiabilityAmountPage(index), 1000: BigDecimal)
+              val answers = emptyUserAnswers
+                .setValue(CurrencyPage(index), CurrencyCode("EUR", Some("Euros")))
+                .setValue(LiabilityAmountPage(index), 1000: BigDecimal)
 
               val helper = new GuaranteeCheckYourAnswersHelper(answers, mode, index)
               val result = helper.liabilityAmount
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Liability amount (in pounds)".toText),
-                  value = Value("£1,000.00".toText),
+                  key = Key("Liability amount".toText),
+                  value = Value("€1,000.00".toText),
                   actions = Some(
                     Actions(
                       items = List(
@@ -364,7 +367,51 @@ class GuaranteeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProper
                           content = "Change".toText,
                           href = routes.LiabilityAmountController.onPageLoad(answers.lrn, mode, index).url,
                           visuallyHiddenText = Some("liability amount"),
-                          attributes = Map("id" -> "liability-amount")
+                          attributes = Map("id" -> "change-liability-amount")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "liabilityCurrency" - {
+      "must return None" - {
+        "when CurrencyPage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new GuaranteeCheckYourAnswersHelper(emptyUserAnswers, mode, index)
+              val result = helper.liabilityCurrency
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when CurrencyPage defined" in {
+          forAll(arbitrary[Mode], arbitrary[CurrencyCode]) {
+            (mode, currencyCode) =>
+              val answers = emptyUserAnswers.setValue(CurrencyPage(index), currencyCode)
+
+              val helper = new GuaranteeCheckYourAnswersHelper(answers, mode, index)
+              val result = helper.liabilityCurrency
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Liability currency".toText),
+                  value = Value(currencyCode.toString.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = routes.CurrencyController.onPageLoad(answers.lrn, mode, index).url,
+                          visuallyHiddenText = Some("liability currency"),
+                          attributes = Map("id" -> "change-liability-currency")
                         )
                       )
                     )

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package controllers.preTaskList
 
 import com.google.inject.Inject
-import controllers.actions.{Actions, CheckTaskAlreadyCompletedActionProvider}
+import controllers.actions.{Actions, PreTaskListCompletedAction}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import models.domain.UserAnswersReader
 import models.journeyDomain.{PreTaskListDomain, ReaderError}
@@ -37,7 +37,7 @@ class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
   actions: Actions,
-  checkIfTaskAlreadyCompleted: CheckTaskAlreadyCompletedActionProvider,
+  checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
   viewModelProvider: PreTaskListViewModelProvider
@@ -48,7 +48,7 @@ class CheckYourAnswersController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain]) {
+    .andThen(checkIfPreTaskListAlreadyCompleted) {
       implicit request =>
         UserAnswersReader[PreTaskListDomain].run(request.userAnswers) match {
           case Left(ReaderError(page, _)) if page != DetailsConfirmedPage =>
@@ -62,11 +62,12 @@ class CheckYourAnswersController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfTaskAlreadyCompleted[PreTaskListDomain])
+    .andThen(checkIfPreTaskListAlreadyCompleted)
     .async {
       implicit request =>
         DetailsConfirmedPage
           .writeToUserAnswers(true)
+          .updateTask[PreTaskListDomain]()
           .writeToSession()
           .navigateTo(controllers.routes.TaskListController.onPageLoad(lrn))
     }

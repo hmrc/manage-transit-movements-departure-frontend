@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,85 +17,57 @@
 package viewModels.taskList
 
 import base.SpecBase
-import generators.{Generators, TransportUserAnswersGenerator}
-import models.NormalMode
-import org.scalacheck.Gen
+import generators.Generators
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.transport.preRequisites._
 import viewModels.taskList.TaskStatus._
 
-class TransportTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with TransportUserAnswersGenerator {
+class TransportTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "name" - {
     "must be Transport details" - {
       "when status is CannotStartYet" in {
-        forAll(Gen.option(Gen.alphaNumStr)) {
-          href =>
-            val task = TransportTask(CannotStartYet, href)
-            task.name mustBe "Transport details"
-        }
+        val task = TransportTask(CannotStartYet)
+        task.name mustBe "Transport details"
       }
     }
 
     "must be Add transport details" - {
       "when status is NotStarted" in {
-        forAll(Gen.option(Gen.alphaNumStr)) {
-          href =>
-            val task = TransportTask(NotStarted, href)
-            task.name mustBe "Add transport details"
-        }
+        val task = TransportTask(NotStarted)
+        task.name mustBe "Add transport details"
       }
     }
 
-    "must be Edit route details" - {
+    "must be Edit transport details" - {
       "when status is Completed" in {
-        forAll(Gen.option(Gen.alphaNumStr)) {
-          href =>
-            val task = TransportTask(Completed, href)
-            task.name mustBe "Edit transport details"
-        }
+        val task = TransportTask(Completed)
+        task.name mustBe "Edit transport details"
       }
 
       "when status is InProgress" in {
-        forAll(Gen.option(Gen.alphaNumStr)) {
-          href =>
-            val task = TransportTask(InProgress, href)
-            task.name mustBe "Edit transport details"
-        }
+        val task = TransportTask(InProgress)
+        task.name mustBe "Edit transport details"
       }
     }
   }
 
   "id" - {
     "must be transport-details" in {
-      val task = TransportTask(emptyUserAnswers)
-      task.id mustBe "transport-details"
+      forAll(arbitrary[TaskStatus]) {
+        taskStatus =>
+          val task = TransportTask(taskStatus)
+          task.id mustBe "transport-details"
+      }
     }
   }
 
-  "apply" - {
-    "when NotStarted" in {
-      val userAnswers = emptyUserAnswers
-      val task        = TransportTask(userAnswers)
-      task.status mustBe NotStarted
-      task.href.get mustBe
-        controllers.transport.preRequisites.routes.SameUcrYesNoController.onPageLoad(userAnswers.lrn, NormalMode).url
-    }
-
-    "when InProgress" ignore {
-      val userAnswers = emptyUserAnswers
-        .setValue(SameUcrYesNoPage, true)
-      val task = TransportTask(userAnswers)
-      task.status mustBe InProgress
-      task.href.get mustBe ???
-    }
-
-    "when Completed" ignore {
-      forAll(arbitraryTransportAnswers(emptyUserAnswers)) {
-        userAnswers =>
-          val task = TransportTask(userAnswers)
-          task.status mustBe Completed
-          task.href.get mustBe ???
+  "href" - {
+    "must end with /transport-details" in {
+      forAll(arbitrary[TaskStatus]) {
+        taskStatus =>
+          val task = TransportTask(taskStatus)
+          task.href(lrn)(frontendAppConfig) must endWith(s"/$lrn/transport-details")
       }
     }
   }

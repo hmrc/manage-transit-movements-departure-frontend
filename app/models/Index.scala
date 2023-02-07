@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,8 @@ package models
 import play.api.mvc.PathBindable
 
 case class Index(position: Int) {
-  val display: Int = position + 1
+  val display: Int     = position + 1
+  def isFirst: Boolean = position == 0
 }
 
 object Index {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,9 +37,9 @@ case class CountryOfRoutingPage(index: Index) extends QuestionPage[Country] {
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.CountryOfRoutingController.onPageLoad(userAnswers.lrn, mode, index))
 
-  override def cleanup(updatedValue: Option[Country], previousValue: Option[Country], userAnswers: UserAnswers): Try[UserAnswers] =
-    (updatedValue, previousValue) match {
-      case (Some(x), Some(y)) if x != y => userAnswers.remove(TransitSection).flatMap(_.remove(ExitSection))
-      case _                            => super.cleanup(updatedValue, previousValue, userAnswers)
+  override def cleanup(value: Option[Country], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(_) => userAnswers.remove(TransitSection).flatMap(_.remove(ExitSection))
+      case None    => super.cleanup(value, userAnswers)
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,11 @@ package controllers.guaranteeDetails.guarantee
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.MoneyFormProvider
+import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
 import models.{Index, LocalReferenceNumber, Mode}
-import navigation.{GuaranteeNavigatorProvider, UserAnswersNavigator}
-import pages.guaranteeDetails.guarantee.LiabilityAmountPage
+import navigation.UserAnswersNavigator
+import navigation.guaranteeDetails.GuaranteeNavigatorProvider
+import pages.guaranteeDetails.guarantee.{CurrencyPage, LiabilityAmountPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -38,6 +40,7 @@ class LiabilityAmountController @Inject() (
   navigatorProvider: GuaranteeNavigatorProvider,
   formProvider: MoneyFormProvider,
   actions: Actions,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
   val controllerComponents: MessagesControllerComponents,
   view: LiabilityAmountView
 )(implicit ec: ExecutionContext)
@@ -46,25 +49,30 @@ class LiabilityAmountController @Inject() (
 
   private val form: Form[BigDecimal] = formProvider("guaranteeDetails.guarantee.liabilityAmount")
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(LiabilityAmountPage(index)) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
-      Ok(view(preparedForm, lrn, mode, index))
-  }
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(CurrencyPage(index))) {
+      implicit request =>
+        val preparedForm = request.userAnswers.get(LiabilityAmountPage(index)) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
+        Ok(view(preparedForm, lrn, mode, index, request.arg.symbol))
+    }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index))),
-          value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index)
-            LiabilityAmountPage(index).writeToUserAnswers(value).writeToSession().navigate()
-          }
-        )
-  }
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, index: Index): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(CurrencyPage(index)))
+    .async {
+      implicit request =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index, request.arg.symbol))),
+            value => {
+              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index)
+              LiabilityAmountPage(index).writeToUserAnswers(value).updateTask[GuaranteeDetailsDomain]().writeToSession().navigate()
+            }
+          )
+    }
 }

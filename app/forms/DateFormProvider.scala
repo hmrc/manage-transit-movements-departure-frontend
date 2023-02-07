@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,14 @@ package forms
 
 import forms.mappings.Mappings
 import play.api.data.Form
+import utils.Format.RichLocalDate
 
-import java.time.format.DateTimeFormatter
-import java.time.{Clock, LocalDate}
+import java.time.LocalDate
 import javax.inject.Inject
 
-class DateFormProvider @Inject() (clock: Clock) extends Mappings {
+class DateFormProvider @Inject() extends Mappings {
 
-  def apply(prefix: String, minimumDate: LocalDate): Form[LocalDate] =
+  def apply(prefix: String, minimumDate: LocalDate, maximumDate: LocalDate): Form[LocalDate] =
     Form(
       "value" -> localDate(
         invalidKey = s"$prefix.error.invalid",
@@ -33,8 +33,8 @@ class DateFormProvider @Inject() (clock: Clock) extends Mappings {
         twoRequiredKey = s"$prefix.error.required.two",
         requiredKey = s"$prefix.error.required"
       ).verifying(
-        minDate(minimumDate, s"$prefix.error.min.date", minimumDate.format(DateTimeFormatter.ofPattern("d MMMM yyyy"))),
-        maxDate(LocalDate.now(clock), s"$prefix.error.max.date")
+        minDate(minimumDate, s"$prefix.error.min.date", minimumDate.minusDays(1).formatAsString),
+        maxDate(maximumDate, s"$prefix.error.max.date", maximumDate.plusDays(1).formatAsString)
       )
     )
 }

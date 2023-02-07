@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.CountryFormProvider
 import generators.Generators
 import models.{CountryList, NormalMode}
-import navigation.transport.PreRequisitesNavigatorProvider
+import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.transport.preRequisites.CountryOfDispatchPage
@@ -28,7 +28,6 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.CountriesService
 import views.html.transport.preRequisites.CountryOfDispatchView
 
 import scala.concurrent.Future
@@ -43,14 +42,12 @@ class CountryOfDispatchControllerSpec extends SpecBase with AppWithDefaultMockFi
   private val form         = formProvider("transport.preRequisites.countryOfDispatch", countryList)
   private val mode         = NormalMode
 
-  private val mockCountriesService: CountriesService = mock[CountriesService]
-  private lazy val countryOfDispatchRoute            = routes.CountryOfDispatchController.onPageLoad(lrn, mode).url
+  private lazy val countryOfDispatchRoute = routes.CountryOfDispatchController.onPageLoad(lrn, mode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[PreRequisitesNavigatorProvider]).toInstance(fakePreRequisitesNavigatorProvider))
-      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
+      .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
 
   "CountryOfDispatch Controller" - {
 

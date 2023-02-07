@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = hotRoutes.TirIdentificationYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you know the Transit procedure TIR identification number"),
-                          attributes = Map("id" -> "has-transit-holder-tir-id")
+                          attributes = Map("id" -> "change-has-transit-holder-tir-id")
                         )
                       )
                     )
@@ -111,7 +111,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = hotRoutes.TirIdentificationController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("TIR holder’s identification number"),
-                          attributes = Map("id" -> "transit-holder-tir-id-number")
+                          attributes = Map("id" -> "change-transit-holder-tir-id-number")
                         )
                       )
                     )
@@ -155,7 +155,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = hotRoutes.EoriYesNoController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you know the transit holder’s EORI number or Trader Identification Number (TIN)"),
-                          attributes = Map("id" -> "has-transit-holder-eori")
+                          attributes = Map("id" -> "change-has-transit-holder-eori")
                         )
                       )
                     )
@@ -199,7 +199,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = hotRoutes.EoriController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("transit holder’s EORI number or Trader Identification Number (TIN)"),
-                          attributes = Map("id" -> "transit-holder-eori-number")
+                          attributes = Map("id" -> "change-transit-holder-eori-number")
                         )
                       )
                     )
@@ -243,7 +243,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = hotRoutes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("transit holder’s name"),
-                          attributes = Map("id" -> "transit-holder-name")
+                          attributes = Map("id" -> "change-transit-holder-name")
                         )
                       )
                     )
@@ -287,7 +287,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = hotRoutes.CountryController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("transit holder’s country"),
-                          attributes = Map("id" -> "transit-holder-country")
+                          attributes = Map("id" -> "change-transit-holder-country")
                         )
                       )
                     )
@@ -331,7 +331,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = hotRoutes.AddressController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("transit holder’s address"),
-                          attributes = Map("id" -> "transit-holder-address")
+                          attributes = Map("id" -> "change-transit-holder-address")
                         )
                       )
                     )
@@ -375,7 +375,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = hotRoutes.AddContactController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you want to add a contact"),
-                          attributes = Map("id" -> "has-transit-holder-contact")
+                          attributes = Map("id" -> "change-has-transit-holder-contact")
                         )
                       )
                     )
@@ -419,7 +419,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = contactRoutes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("contact’s name"),
-                          attributes = Map("id" -> "transit-holder-contact-name")
+                          attributes = Map("id" -> "change-transit-holder-contact-name")
                         )
                       )
                     )
@@ -463,7 +463,7 @@ class HolderOfTransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
                           content = "Change".toText,
                           href = contactRoutes.TelephoneNumberController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("contact’s phone number"),
-                          attributes = Map("id" -> "transit-holder-contact-phone-number")
+                          attributes = Map("id" -> "change-transit-holder-contact-phone-number")
                         )
                       )
                     )

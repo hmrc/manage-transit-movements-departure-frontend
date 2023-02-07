@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.CountriesService
 import views.html.routeDetails.routing.index.CountryOfRoutingView
 
 import scala.concurrent.Future
@@ -43,14 +42,12 @@ class CountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFix
   private val form         = formProvider("routeDetails.routing.index.countryOfRouting", countryList)
   private val mode         = NormalMode
 
-  private val mockCountriesService: CountriesService = mock[CountriesService]
-  private lazy val countryOfRoutingRoute             = routes.CountryOfRoutingController.onPageLoad(lrn, mode, index).url
+  private lazy val countryOfRoutingRoute = routes.CountryOfRoutingController.onPageLoad(lrn, mode, index).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[CountryOfRoutingNavigatorProvider]).toInstance(fakeCountryOfRoutingNavigatorProvider))
-      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "CountryOfRouting Controller" - {
 

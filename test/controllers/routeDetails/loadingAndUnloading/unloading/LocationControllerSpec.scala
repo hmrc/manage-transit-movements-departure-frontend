@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,6 @@ class LocationControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
   "Location Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      //TODO: change to PlaceOfUnLoadingCountryPage once created
       val userAnswers = emptyUserAnswers.setValue(CountryPage, country)
       setExistingUserAnswers(userAnswers)
 

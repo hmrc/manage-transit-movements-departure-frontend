@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,11 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.OtherReferenceFormProvider
 import models.GuaranteeType.{CashDepositGuarantee, GuaranteeNotRequiredExemptPublicBody}
+import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
 import models.requests.SpecificDataRequestProvider1
 import models.{GuaranteeType, Index, LocalReferenceNumber, Mode}
-import navigation.{GuaranteeNavigatorProvider, UserAnswersNavigator}
+import navigation.UserAnswersNavigator
+import navigation.guaranteeDetails.GuaranteeNavigatorProvider
 import pages.guaranteeDetails.guarantee.{GuaranteeTypePage, OtherReferencePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -92,7 +94,7 @@ class OtherReferenceController @Inject() (
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, index, prefix))),
                 value => {
                   implicit val navigator: UserAnswersNavigator = navigatorProvider(mode, index)
-                  OtherReferencePage(index).writeToUserAnswers(value).writeToSession().navigate()
+                  OtherReferencePage(index).writeToUserAnswers(value).updateTask[GuaranteeDetailsDomain]().writeToSession().navigate()
                 }
               )
         }

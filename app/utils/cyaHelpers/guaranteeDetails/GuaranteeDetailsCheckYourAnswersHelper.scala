@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,10 @@ package utils.cyaHelpers.guaranteeDetails
 
 import controllers.guaranteeDetails.guarantee.{routes => guaranteeRoutes}
 import models.journeyDomain.guaranteeDetails.GuaranteeDomain
-import models.{GuaranteeType, Index, Mode, UserAnswers}
+import models.{GuaranteeType, Mode, UserAnswers}
 import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import pages.sections.guaranteeDetails.GuaranteeDetailsSection
 import play.api.i18n.Messages
-import play.api.libs.json.Reads
 import utils.cyaHelpers.AnswersHelper
 import viewModels.ListItem
 
@@ -30,13 +29,11 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mod
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(GuaranteeDetailsSection) {
-      position =>
-        val index = Index(position)
-        buildListItem[GuaranteeDomain, GuaranteeType](
-          page = GuaranteeTypePage(index),
-          formatJourneyDomainModel = x => formatEnumAsString(GuaranteeType.messageKeyPrefix)(x.`type`),
-          formatType = formatEnumAsString(GuaranteeType.messageKeyPrefix),
+      index =>
+        buildListItem[GuaranteeDomain](
+          nameWhenComplete = x => formatEnumAsString(GuaranteeType.messageKeyPrefix)(x.`type`),
+          nameWhenInProgress = userAnswers.get(GuaranteeTypePage(index)).map(formatEnumAsString(GuaranteeType.messageKeyPrefix)),
           removeRoute = Some(guaranteeRoutes.RemoveGuaranteeYesNoController.onPageLoad(lrn, index))
-        )(GuaranteeDomain.userAnswersReader(index), implicitly[Reads[GuaranteeType]])
+        )(GuaranteeDomain.userAnswersReader(index))
     }
 }

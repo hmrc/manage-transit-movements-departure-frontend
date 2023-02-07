@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,10 +40,12 @@ case class GuaranteeDetailsDomain(
 object GuaranteeDetailsDomain {
 
   implicit val userAnswersReader: UserAnswersReader[GuaranteeDetailsDomain] =
-    GuaranteeDetailsSection.reader.flatMap {
-      case x if x.isEmpty =>
-        UserAnswersReader[GuaranteeDomain](GuaranteeDomain.userAnswersReader(Index(0))).map(Seq(_)).map(GuaranteeDetailsDomain(_))
-      case x =>
-        x.traverse[GuaranteeDomain](GuaranteeDomain.userAnswersReader).map(GuaranteeDetailsDomain.apply)
-    }
+    GuaranteeDetailsSection.arrayReader
+      .flatMap {
+        case x if x.isEmpty =>
+          UserAnswersReader[GuaranteeDomain](GuaranteeDomain.userAnswersReader(Index(0))).map(Seq(_))
+        case x =>
+          x.traverse[GuaranteeDomain](GuaranteeDomain.userAnswersReader)
+      }
+      .map(GuaranteeDetailsDomain(_))
 }

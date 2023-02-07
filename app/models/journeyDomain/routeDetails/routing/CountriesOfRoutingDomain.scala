@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +27,11 @@ import pages.sections.routeDetails.routing.CountriesOfRoutingSection
 object CountriesOfRoutingDomain {
 
   implicit val userAnswersReader: UserAnswersReader[Seq[CountryOfRoutingDomain]] = {
-    val arrayReader: UserAnswersReader[Seq[CountryOfRoutingDomain]] = CountriesOfRoutingSection.reader.flatMap {
+    val arrayReader: UserAnswersReader[Seq[CountryOfRoutingDomain]] = CountriesOfRoutingSection.arrayReader.flatMap {
       case x if x.isEmpty =>
         UserAnswersReader[CountryOfRoutingDomain](CountryOfRoutingDomain.userAnswersReader(Index(0))).map(Seq(_))
       case x =>
-        x.traverse[CountryOfRoutingDomain](CountryOfRoutingDomain.userAnswersReader).map(_.toSeq)
+        x.traverse[CountryOfRoutingDomain](CountryOfRoutingDomain.userAnswersReader)
     }
 
     for {

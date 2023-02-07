@@ -2,7 +2,7 @@ package controllers.$package$
 
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.$package$.$formProvider$
+import forms.EnumerableFormProvider
 import models.{Mode, LocalReferenceNumber}
 import models.$package$.$className$
 import navigation.UserAnswersNavigator
@@ -21,12 +21,12 @@ class $className$Controller @Inject()(
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: $navRoute$NavigatorProvider,
   actions: Actions,
-  formProvider: $formProvider$,
+  formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: $className$View
 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider[$className$]("$package$.$className;format="decap"$")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
@@ -46,7 +46,7 @@ class $className$Controller @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, $className$.radioItems, mode))),
         value => {
           implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-          $className$Page.writeToUserAnswers(value).writeToSession().navigate()
+          $className$Page.writeToUserAnswers(value).updateTask[$navRoute$Domain]().writeToSession().navigate()
         }
       )
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,16 @@ package generators
 
 import models._
 import models.reference._
-import models.traderDetails.representative.RepresentativeCapacity
+import models.transport.authorisations.AuthorisationType
+import models.transport.supplyChainActors.SupplyChainActorType
+import models.transport.transportMeans.BorderModeOfTransport
+import models.transport.transportMeans.departure.{Identification, InlandMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.transport.preRequisites.{CountryOfDispatchPage, ItemsDestinationCountryPage, TransportedToSameCountryYesNoPage, UniqueConsignmentReferencePage}
 import play.api.libs.json._
 import queries.Gettable
+
+import java.time.LocalDate
 
 trait UserAnswersEntryGenerators {
   self: Generators =>
@@ -77,9 +81,9 @@ trait UserAnswersEntryGenerators {
   private def generateRepresentativeAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.traderDetails.representative._
     {
+      case AddDetailsPage      => arbitrary[Boolean].map(JsBoolean)
       case EoriPage            => Gen.alphaNumStr.map(JsString)
       case NamePage            => Gen.alphaNumStr.map(JsString)
-      case CapacityPage        => arbitrary[RepresentativeCapacity].map(Json.toJson(_))
       case TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
     }
   }
@@ -129,6 +133,7 @@ trait UserAnswersEntryGenerators {
       case OtherReferencePage(_)      => Gen.alphaNumStr.map(JsString)
       case AccessCodePage(_)          => Gen.alphaNumStr.map(JsString)
       case LiabilityAmountPage(_)     => Gen.choose(BigDecimal("0"), BigDecimal("9999999999999999.99")).map(Json.toJson(_))
+      case CurrencyPage(_)            => arbitrary[CurrencyCode].map(Json.toJson(_))
     }
   }
 
@@ -250,17 +255,133 @@ trait UserAnswersEntryGenerators {
   }
 
   private def generateTransportAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
-    generatePreRequisitesAnswer
+    generatePreRequisitesAnswer orElse
+      generateTransportMeansAnswer orElse
+      generateSupplyChainActorsAnswers orElse
+      generateAuthorisationAnswers orElse
+      generateLimitAnswers orElse
+      generateCarrierDetailsAnswers orElse
+      generateEquipmentAnswers
 
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.transport.preRequisites.SameUcrYesNoPage
+    import pages.transport.preRequisites._
     {
       case SameUcrYesNoPage                  => arbitrary[Boolean].map(JsBoolean)
       case UniqueConsignmentReferencePage    => Gen.alphaNumStr.map(JsString)
       case CountryOfDispatchPage             => arbitrary[Country].map(Json.toJson(_))
       case TransportedToSameCountryYesNoPage => arbitrary[Boolean].map(JsBoolean)
       case ItemsDestinationCountryPage       => arbitrary[Country].map(Json.toJson(_))
+      case ContainerIndicatorPage            => arbitrary[Boolean].map(JsBoolean)
     }
   }
 
+  private def generateTransportMeansAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.transportMeans._
+    generateTransportMeansDepartureAnswer orElse
+      generateTransportMeansActiveAnswer orElse {
+        case AnotherVehicleCrossingYesNoPage => arbitrary[Boolean].map(JsBoolean)
+        case BorderModeOfTransportPage       => arbitrary[BorderModeOfTransport].map(Json.toJson(_))
+      }
+  }
+
+  private def generateTransportMeansDepartureAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.transportMeans.departure._
+    {
+      case InlandModePage                => arbitrary[InlandMode].map(Json.toJson(_))
+      case IdentificationPage            => arbitrary[Identification].map(Json.toJson(_))
+      case MeansIdentificationNumberPage => Gen.alphaNumStr.map(JsString)
+      case VehicleCountryPage            => arbitrary[Nationality].map(Json.toJson(_))
+    }
+  }
+
+  private def generateTransportMeansActiveAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.transportMeans.active._
+    {
+      case IdentificationPage(_)                 => arbitrary[Identification].map(Json.toJson(_))
+      case IdentificationNumberPage(_)           => Gen.alphaNumStr.map(JsString)
+      case AddNationalityYesNoPage(_)            => arbitrary[Boolean].map(JsBoolean)
+      case NationalityPage(_)                    => arbitrary[Nationality].map(Json.toJson(_))
+      case CustomsOfficeActiveBorderPage(_)      => arbitrary[CustomsOffice].map(Json.toJson(_))
+      case ConveyanceReferenceNumberYesNoPage(_) => arbitrary[Boolean].map(JsBoolean)
+      case ConveyanceReferenceNumberPage(_)      => Gen.alphaNumStr.map(JsString)
+    }
+  }
+
+  private def generateSupplyChainActorsAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.supplyChainActors._
+
+    val pf: PartialFunction[Gettable[_], Gen[JsValue]] = {
+      case SupplyChainActorYesNoPage => arbitrary[Boolean].map(JsBoolean)
+    }
+
+    pf orElse
+      generateSupplyChainActorAnswers
+  }
+
+  private def generateSupplyChainActorAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.supplyChainActors.index._
+    {
+      case SupplyChainActorTypePage(_) => arbitrary[SupplyChainActorType].map(Json.toJson(_))
+      case IdentificationNumberPage(_) => Gen.alphaNumStr.map(JsString)
+    }
+  }
+
+  private def generateAuthorisationAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.authorisationsAndLimit.authorisations._
+    import pages.transport.authorisationsAndLimit.authorisations.index._
+    {
+      case AddAuthorisationsYesNoPage          => arbitrary[Boolean].map(JsBoolean)
+      case AuthorisationTypePage(_)            => arbitrary[AuthorisationType].map(Json.toJson(_))
+      case AuthorisationReferenceNumberPage(_) => Gen.alphaNumStr.map(JsString)
+    }
+  }
+
+  private def generateLimitAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.authorisationsAndLimit.limit.LimitDatePage
+    {
+      case LimitDatePage => arbitrary[LocalDate].map(Json.toJson(_))
+    }
+  }
+
+  private def generateCarrierDetailsAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.carrierDetails._
+    import pages.transport.carrierDetails.contact._
+    {
+      case IdentificationNumberPage => Gen.alphaNumStr.map(JsString)
+      case AddContactYesNoPage      => arbitrary[Boolean].map(JsBoolean)
+      case NamePage                 => Gen.alphaNumStr.map(JsString)
+      case TelephoneNumberPage      => Gen.alphaNumStr.map(JsString)
+    }
+  }
+
+  private def generateEquipmentAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.equipment._
+    import pages.transport.equipment.index._
+
+    val pf: PartialFunction[Gettable[_], Gen[JsValue]] = {
+      case AddTransportEquipmentYesNoPage               => arbitrary[Boolean].map(JsBoolean)
+      case AddContainerIdentificationNumberYesNoPage(_) => arbitrary[Boolean].map(JsBoolean)
+      case ContainerIdentificationNumberPage(_)         => Gen.alphaNumStr.map(JsString)
+      case AddSealYesNoPage(_)                          => arbitrary[Boolean].map(JsBoolean)
+      case AddGoodsItemNumberYesNoPage(_)               => arbitrary[Boolean].map(JsBoolean)
+    }
+
+    pf orElse
+      generateSealAnswers orElse
+      generateItemNumberAnswers
+  }
+
+  private def generateSealAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.equipment.index.seals._
+    {
+      case IdentificationNumberPage(_, _) => Gen.alphaNumStr.map(JsString)
+    }
+  }
+
+  private def generateItemNumberAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.transport.equipment.index.itemNumber._
+    {
+      case ItemNumberPage(_, _) => Gen.alphaNumStr.map(JsString)
+    }
+  }
 }

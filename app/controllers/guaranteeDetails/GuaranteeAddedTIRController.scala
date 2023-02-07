@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package controllers.guaranteeDetails
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import models.GuaranteeType.TIRGuarantee
+import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
 import models.{Index, LocalReferenceNumber}
 import pages.guaranteeDetails.guarantee.GuaranteeTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -49,6 +50,7 @@ class GuaranteeAddedTIRController @Inject() (
     implicit request =>
       GuaranteeTypePage(Index(0))
         .writeToUserAnswers(TIRGuarantee)
+        .updateTask[GuaranteeDetailsDomain]()
         .writeToSession()
         .navigateTo(controllers.routes.TaskListController.onPageLoad(lrn))
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{CountriesService, CustomsOfficesService}
+import services.CustomsOfficesService
 import views.html.routeDetails.transit.index.OfficeOfTransitCountryView
 
 import scala.concurrent.Future
@@ -46,21 +46,19 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with AppWithDefaultM
   private val form         = formProvider("routeDetails.transit.index.officeOfTransitCountry", countryList)
   private val mode         = NormalMode
 
-  private val mockCountriesService: CountriesService           = mock[CountriesService]
   private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
 
   private lazy val officeOfTransitCountryRoute = routes.OfficeOfTransitCountryController.onPageLoad(lrn, mode, index).url
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    reset(mockCountriesService); reset(mockCustomsOfficesService)
+    reset(mockCustomsOfficesService)
   }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[OfficeOfTransitNavigatorProvider]).toInstance(fakeOfficeOfTransitNavigatorProvider))
-      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
       .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
   "OfficeOfTransitCountry Controller" - {

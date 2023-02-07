@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package pages.guaranteeDetails.guarantee
 
 import models.DeclarationType.Option4
+import models.reference.CurrencyCode
 import models.{DeclarationType, GuaranteeType, Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
@@ -35,12 +36,13 @@ class GuaranteeTypePageSpec extends PageBehaviours {
     "cleanup" - {
       "when value has changed" - {
         "must clean up" in {
-          forAll(arbitrary[GuaranteeType], arbitrary[String], arbitrary[BigDecimal]) {
-            (guaranteeType, str, amount) =>
+          forAll(arbitrary[GuaranteeType], arbitrary[String], arbitrary[BigDecimal], arbitrary[CurrencyCode]) {
+            (guaranteeType, str, amount, currencyCode) =>
               val preChange = emptyUserAnswers
                 .setValue(GuaranteeTypePage(index), guaranteeType)
                 .setValue(ReferenceNumberPage(index), str)
                 .setValue(AccessCodePage(index), str)
+                .setValue(CurrencyPage(index), currencyCode)
                 .setValue(LiabilityAmountPage(index), amount)
                 .setValue(OtherReferenceYesNoPage(index), true)
                 .setValue(OtherReferencePage(index), str)
@@ -52,6 +54,7 @@ class GuaranteeTypePageSpec extends PageBehaviours {
                   postChange.get(ReferenceNumberPage(index)) mustNot be(defined)
                   postChange.get(AccessCodePage(index)) mustNot be(defined)
                   postChange.get(LiabilityAmountPage(index)) mustNot be(defined)
+                  postChange.get(CurrencyPage(index)) mustNot be(defined)
                   postChange.get(OtherReferenceYesNoPage(index)) mustNot be(defined)
                   postChange.get(OtherReferencePage(index)) mustNot be(defined)
               }
@@ -61,12 +64,13 @@ class GuaranteeTypePageSpec extends PageBehaviours {
 
       "when value has not changed" - {
         "must not clean up" in {
-          forAll(arbitrary[GuaranteeType], arbitrary[String], arbitrary[BigDecimal]) {
-            (guaranteeType, str, amount) =>
+          forAll(arbitrary[GuaranteeType], arbitrary[String], arbitrary[BigDecimal], arbitrary[CurrencyCode]) {
+            (guaranteeType, str, amount, currencyCode) =>
               val preChange = emptyUserAnswers
                 .setValue(GuaranteeTypePage(index), guaranteeType)
                 .setValue(ReferenceNumberPage(index), str)
                 .setValue(AccessCodePage(index), str)
+                .setValue(CurrencyPage(index), currencyCode)
                 .setValue(LiabilityAmountPage(index), amount)
                 .setValue(OtherReferenceYesNoPage(index), true)
                 .setValue(OtherReferencePage(index), str)
@@ -76,6 +80,7 @@ class GuaranteeTypePageSpec extends PageBehaviours {
               postChange.get(ReferenceNumberPage(index)) must be(defined)
               postChange.get(AccessCodePage(index)) must be(defined)
               postChange.get(LiabilityAmountPage(index)) must be(defined)
+              postChange.get(CurrencyPage(index)) must be(defined)
               postChange.get(OtherReferenceYesNoPage(index)) must be(defined)
               postChange.get(OtherReferencePage(index)) must be(defined)
           }

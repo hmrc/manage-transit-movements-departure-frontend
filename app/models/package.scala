@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,25 +33,28 @@ package object models {
 
   implicit class RichJsArray(arr: JsArray) {
 
-    def zipWithIndex: List[(JsValue, Int)] = arr.value.toList.zipWithIndex
+    def zipWithIndex: List[(JsValue, Index)] = arr.value.toList.zipWithIndex.map(
+      x => (x._1, Index(x._2))
+    )
 
-    def filterWithIndex(f: (JsValue, Int) => Boolean): Seq[(JsValue, Int)] =
+    def filterWithIndex(f: (JsValue, Index) => Boolean): Seq[(JsValue, Index)] =
       arr.zipWithIndex.filter {
         case (value, i) => f(value, i)
       }
 
     def isEmpty: Boolean = arr.value.isEmpty
 
-    def traverse[T](implicit userAnswersReader: Index => UserAnswersReader[T]): UserAnswersReader[List[T]] =
+    def traverse[T](implicit userAnswersReader: Index => UserAnswersReader[T]): UserAnswersReader[Seq[T]] =
       arr.zipWithIndex
         .traverse[UserAnswersReader, T] {
-          case (_, index) => UserAnswersReader[T](userAnswersReader(Index(index)))
+          case (_, index) => userAnswersReader(index)
         }
+        .map(_.toSeq)
   }
 
   implicit class RichOptionalJsArray(arr: Option[JsArray]) {
 
-    def mapWithIndex[T](f: (JsValue, Int) => Option[T]): Seq[T] =
+    def mapWithIndex[T](f: (JsValue, Index) => Option[T]): Seq[T] =
       arr
         .map {
           _.zipWithIndex.flatMap {
@@ -62,6 +65,9 @@ package object models {
 
     def validate[T](implicit rds: Reads[T]): Option[T] =
       arr.flatMap(_.validate[T].asOpt)
+
+    def length: Int = arr.getOrElse(JsArray()).value.length
+
   }
 
   implicit class RichJsValue(jsValue: JsValue) {

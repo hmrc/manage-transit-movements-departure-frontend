@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,9 +37,9 @@ class ApprovedOperatorViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithHeading()
 
-  behave like pageWithContent("p", "You must be an approved airline, shipping or rail freight operator to use a reduced data set.")
+  behave like pageWithContent("p", "This simplifies the declaration process, enabling you to complete submissions with less data.")
 
-  behave like pageWithHint("This simplifies the declaration process, enabling you to complete submissions with less data.")
+  behave like pageWithHint("You can only use a reduced data set if you are an approved airline, shipping or rail freight operator.")
 
   behave like pageWithRadioItems()
 

@@ -1,5 +1,5 @@
 @*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@
 @import models.{Index, LocalReferenceNumber}
 @import models.GuaranteeType
 @import views.html.components.{Button, ErrorSummary, InputRadio}
+@import viewModels.components.InputRadioViewModel
+@import viewModels.components.InputRadioViewModel._
 
 @this(
     mainTemplate: MainTemplate,
@@ -41,9 +43,11 @@
 
         @inputRadio(
             field = form("value"),
-            legend = messages("guaranteeDetails.guarantee.guaranteeType.heading"),
-            radioItems = fieldId => radios(fieldId, form.value),
-            caption = Some(messages("guaranteeDetails.caption"))
+            radioType = Radio(
+                heading = messages("guaranteeDetails.guarantee.guaranteeType.heading"),
+                caption = Some(messages("guaranteeDetails.caption"))
+            ),
+            radioItems = fieldId => radios(fieldId, form.value)
         )
 
         @button(attributes = Map("id" -> "submit"))

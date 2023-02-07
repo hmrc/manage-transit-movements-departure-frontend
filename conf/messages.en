@@ -39,10 +39,6 @@ session_expired.heading = For your security, we signed you out
 session_expired.guidance = We did not save your answers.
 session_expired.button = Sign in
 
-unauthorisedWithGroupAccess.title = You cannot use this service authorisation
-unauthorisedWithGroupAccess.heading = You cannot use this service
-unauthorisedWithGroupAccess.p = If you already have access, you must contact your group administrator to update your access rights.
-
 unauthorised.title = You cannot use this service
 unauthorised.heading = You cannot use this service
 unauthorised.paragraph1 = You must have an account with an activated EORI number.
@@ -154,6 +150,10 @@ task.transportDetails = Transport details
 task.transportDetails.add = Add transport details
 task.transportDetails.edit = Edit transport details
 
+task.items = Items
+task.items.add = Add items
+task.items.edit = Edit items
+
 # Trader details
 
 traderDetails.caption = Trader details
@@ -176,6 +176,7 @@ traderDetails.checkYourAnswers.title = Check your answers
 
 traderDetails.holderOfTransit.eoriYesNo.title = Do you know the transit holder’s EORI number or Trader Identification Number (TIN)?
 traderDetails.holderOfTransit.eoriYesNo.heading = Do you know the transit holder’s EORI number or Trader Identification Number (TIN)?
+traderDetails.holderOfTransit.eoriYesNo.paragraph = The transit holder is the person responsible for the transit procedure. They can submit the declaration themselves or a third party can do it on their behalf.
 traderDetails.holderOfTransit.eoriYesNo.checkYourAnswersLabel = Do you know the transit holder’s EORI number or Trader Identification Number (TIN)?
 traderDetails.holderOfTransit.eoriYesNo.error.required = Select yes if you know the transit holder’s EORI number or Trader Identification Number (TIN)
 traderDetails.holderOfTransit.eoriYesNo.change.hidden = if you know the transit holder’s EORI number or Trader Identification Number (TIN)
@@ -271,32 +272,31 @@ traderDetails.holderOfTransit.contact.telephoneNumber.change.hidden = contact’
 
 traderDetails.representative.eori.title = What is your EORI number or Trader Identification Number (TIN)?
 traderDetails.representative.eori.heading = What is your EORI number or Trader Identification Number (TIN)?
-traderDetails.representative.eori.checkYourAnswersLabel = Representative’s EORI number or Trader Identification Number (TIN)
+traderDetails.representative.eori.checkYourAnswersLabel = EORI number or Trader Identification Number (TIN)
 traderDetails.representative.eori.error.required = Enter your EORI number or Trader Identification Number (TIN)
 traderDetails.representative.eori.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
 traderDetails.representative.eori.error.invalid = Your EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
 traderDetails.representative.eori.error.length = Your EORI number or Trader Identification Number (TIN) must be 17 characters or less
 traderDetails.representative.eori.change.hidden = representative’s EORI number or Trader Identification Number (TIN)
 
+traderDetails.representative.addDetails.title = Do you want to add your details?
+traderDetails.representative.addDetails.heading = Do you want to add your details?
+traderDetails.representative.addDetails.paragraph = This includes your name and phone number.
+traderDetails.representative.addDetails.checkYourAnswersLabel = Do you want to add your details?
+traderDetails.representative.addDetails.change.hidden = if you want to add your details
+traderDetails.representative.addDetails.error.required = Select yes if you want to add your details
+
 traderDetails.representative.name.title = What is your name?
 traderDetails.representative.name.heading = What is your name?
-traderDetails.representative.name.checkYourAnswersLabel = Representative’s name
+traderDetails.representative.name.checkYourAnswersLabel = Name
 traderDetails.representative.name.error.required = Enter your name
 traderDetails.representative.name.error.length = Your name must be 70 characters or less
 traderDetails.representative.name.error.invalid = Your name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, asterisks(*), forward slashes, full stops, hyphens, percent signs, question marks and spaces
 traderDetails.representative.name.change.hidden = representative’s name
 
-traderDetails.representative.capacity.title = What is your capacity?
-traderDetails.representative.capacity.heading = What is your capacity?
-traderDetails.representative.capacity.direct = Direct (principal solely liable)
-traderDetails.representative.capacity.indirect = Indirect (principal and agent jointly liable)
-traderDetails.representative.capacity.checkYourAnswersLabel = Representative capacity
-traderDetails.representative.capacity.error.required = Select which capacity you are acting in
-traderDetails.representative.capacity.change.hidden = representative capacity
-
 traderDetails.representative.telephoneNumber.title = What is your phone number?
 traderDetails.representative.telephoneNumber.heading = What is your phone number?
-traderDetails.representative.telephoneNumber.checkYourAnswersLabel = Representative’s phone number
+traderDetails.representative.telephoneNumber.checkYourAnswersLabel = Phone number
 traderDetails.representative.telephoneNumber.error.required = Enter your phone number
 traderDetails.representative.telephoneNumber.hint = Must include the country code, like +44 808 157 0192.
 traderDetails.representative.telephoneNumber.error.maxLength = Your phone number must be {0} characters or less
@@ -315,8 +315,8 @@ traderDetails.consignment.approvedOperator.title = Do you want to use a reduced 
 traderDetails.consignment.approvedOperator.heading = Do you want to use a reduced data set?
 traderDetails.consignment.approvedOperator.checkYourAnswersLabel = Do you want to use a reduced data set?
 traderDetails.consignment.approvedOperator.error.required = Select yes if you want to use a reduced data set
-traderDetails.consignment.approvedOperator.hint = This simplifies the declaration process, enabling you to complete submissions with less data.
-traderDetails.consignment.approvedOperator.paragraph = You must be an approved airline, shipping or rail freight operator to use a reduced data set.
+traderDetails.consignment.approvedOperator.hint = You can only use a reduced data set if you are an approved airline, shipping or rail freight operator.
+traderDetails.consignment.approvedOperator.paragraph = This simplifies the declaration process, enabling you to complete submissions with less data.
 traderDetails.consignment.approvedOperator.label = Do you want to use a reduced data set?
 traderDetails.consignment.approvedOperator.change.hidden = if you want to use a reduced data set
 
@@ -491,7 +491,6 @@ guaranteeDetails.guarantee.guaranteeType.8 = (8) Guarantee not required – exem
 guaranteeDetails.guarantee.guaranteeType.9 = (9) Individual guarantee with multiple usage
 guaranteeDetails.guarantee.guaranteeType.A = (A) Guarantee waiver by agreement
 guaranteeDetails.guarantee.guaranteeType.B = (B) Guarantee for goods dispatched under TIR procedure
-guaranteeDetails.guarantee.guaranteeType.R = (R) Guarantee not required – goods carried on the Rhine, the Danube or their waterways
 guaranteeDetails.guarantee.guaranteeType.checkYourAnswersLabel = Guarantee type
 guaranteeDetails.guarantee.guaranteeType.change.hidden = type of guarantee
 guaranteeDetails.guarantee.guaranteeType.error.required = Select which type of guarantee you are using
@@ -541,15 +540,22 @@ guaranteeDetails.guarantee.accessCode.error.length = The access code must be 4 c
 guaranteeDetails.guarantee.accessCode.error.invalid = The access code must only include the letters a to z and numbers 0 to 9
 guaranteeDetails.guarantee.accessCode.change.hidden = access code
 
-guaranteeDetails.guarantee.liabilityAmount.title = How much is the liability in pounds?
-guaranteeDetails.guarantee.liabilityAmount.heading = How much is the liability in pounds?
-guaranteeDetails.guarantee.liabilityAmount.checkYourAnswersLabel = Liability amount (in pounds)
+guaranteeDetails.guarantee.liabilityAmount.title = How much is the liability amount?
+guaranteeDetails.guarantee.liabilityAmount.heading = How much is the liability amount?
+guaranteeDetails.guarantee.liabilityAmount.checkYourAnswersLabel = Liability amount
 guaranteeDetails.guarantee.liabilityAmount.hint = This can have up to 2 decimal places, for example 999.99.
 guaranteeDetails.guarantee.liabilityAmount.error.required = Enter the liability amount in pounds
 guaranteeDetails.guarantee.liabilityAmount.error.invalidCharacters = The liability amount must only include numbers 0 to 9 and a decimal point
 guaranteeDetails.guarantee.liabilityAmount.error.invalidFormat = The liability amount must only have up to 2 decimal places, for example 999.99
-guaranteeDetails.guarantee.liabilityAmount.error.invalidValue = The liability amount must be £9,999,999,999,999,999.99 or less
+guaranteeDetails.guarantee.liabilityAmount.error.invalidValue = The liability amount must be 9,999,999,999,999,999.99 or less
 guaranteeDetails.guarantee.liabilityAmount.change.hidden = liability amount
+
+guaranteeDetails.guarantee.currency.title = What currency do you want to use for the liability?
+guaranteeDetails.guarantee.currency.heading = What currency do you want to use for the liability?
+guaranteeDetails.guarantee.currency.placeholder = Select a currency
+guaranteeDetails.guarantee.currency.change.hidden = liability currency
+guaranteeDetails.guarantee.currency.checkYourAnswersLabel = Liability currency
+guaranteeDetails.guarantee.currency.error.required = Select the currency you want to use for the liability
 
 guaranteeDetails.guarantee.removeGuaranteeYesNo.title = Are you sure you want to remove this guarantee?
 guaranteeDetails.guarantee.removeGuaranteeYesNo.heading = Are you sure you want to remove this guarantee?
@@ -571,17 +577,17 @@ routeDetails.checkYourAnswers.heading = Check your answers
 
 routeDetails.checkYourAnswers.routing.subheading = Transit route countries
 routeDetails.checkYourAnswers.routing.addOrRemove = Add or remove transit route countries
-routeDetails.checkYourAnswers.routing.countryOfRouting.checkYourAnswersLabel = Country of routing {0}
+routeDetails.checkYourAnswers.routing.countryOfRouting.label = Country of routing {0}
 routeDetails.checkYourAnswers.routing.countryOfRouting.change.hidden = country of routing {0}
 
 routeDetails.checkYourAnswers.transit.subheading = Offices of transit
 routeDetails.checkYourAnswers.transit.addOrRemove = Add or remove offices of transit
-routeDetails.checkYourAnswers.transit.officeOfTransit.checkYourAnswersLabel = Office of transit {0}
+routeDetails.checkYourAnswers.transit.officeOfTransit.label = Office of transit {0}
 routeDetails.checkYourAnswers.transit.officeOfTransit.change.hidden = office of transit {0}
 
 routeDetails.checkYourAnswers.exit.subheading = Offices of exit
 routeDetails.checkYourAnswers.exit.addOrRemove = Add or remove offices of exit
-routeDetails.checkYourAnswers.exit.officeOfExit.checkYourAnswersLabel = Office of exit {0}
+routeDetails.checkYourAnswers.exit.officeOfExit.label = Office of exit {0}
 routeDetails.checkYourAnswers.exit.officeOfExit.change.hidden = office of exit {0}
 
 # Route details - Routing
@@ -609,9 +615,9 @@ routeDetails.routing.officeOfDestination.error.required = Enter the office of de
 routeDetails.routing.bindingItinerary.title = Are you using a binding itinerary?
 routeDetails.routing.bindingItinerary.heading = Are you using a binding itinerary?
 routeDetails.routing.bindingItinerary.paragraph = This diverts the route around countries that represent a higher risk to the goods in transit.
-routeDetails.routing.bindingItinerary.checkYourAnswersLabel = Do you want the transit to follow a binding itinerary?
+routeDetails.routing.bindingItinerary.checkYourAnswersLabel = Are you using a binding itinerary?
 routeDetails.routing.bindingItinerary.error.required = Select yes if you are using a binding itinerary
-routeDetails.routing.bindingItinerary.change.hidden = if you want the transit to follow a binding itinerary
+routeDetails.routing.bindingItinerary.change.hidden = if you are using a binding itinerary
 
 routeDetails.routing.addCountryOfRoutingYesNo.title = Do you want to add a country to the transit route?
 routeDetails.routing.addCountryOfRoutingYesNo.heading = Do you want to add a country to the transit route?
@@ -697,18 +703,19 @@ routeDetails.transit.index.officeOfTransitETA.heading = When do you expect the t
 routeDetails.transit.index.officeOfTransitETA.checkYourAnswersLabel = Estimated date and time of arrival
 routeDetails.transit.index.officeOfTransitETA.change.hidden = the estimated date and time of arrival
 routeDetails.transit.index.officeOfTransitETA.date.title = Date
-routeDetails.transit.index.officeOfTransitETA.date.hint = For example, 14 1 2020
+routeDetails.transit.index.officeOfTransitETA.date.hint = For example, 14 1 2020.
 routeDetails.transit.index.officeOfTransitETA.time.title = Time
-routeDetails.transit.index.officeOfTransitETA.time.hint = Use the 24-hour format. For example, 14 30
-routeDetails.transit.index.officeOfTransitETA.date.error.invalid = Enter a real date that you expect the transit to arrive
+routeDetails.transit.index.officeOfTransitETA.time.hint = Use the 24-hour format. For example, 14 30.
+routeDetails.transit.index.officeOfTransitETA.date.error.invalid = Enter a real date for the arrival at the office of transit
 routeDetails.transit.index.officeOfTransitETA.date.error.required.all = Enter the estimated date of arrival at the office of transit
-routeDetails.transit.index.officeOfTransitETA.date.error.required.multiple = The estimated date of arrival at the office of transit must include {0} and {1}
-routeDetails.transit.index.officeOfTransitETA.date.error.required = The estimated date of arrival at the office of transit must include {0}
+routeDetails.transit.index.officeOfTransitETA.date.error.required.multiple = The estimated date of arrival at the office of transit must include a {0} and {1}
+routeDetails.transit.index.officeOfTransitETA.date.error.required = The estimated date of arrival at the office of transit must include a {0}
 routeDetails.transit.index.officeOfTransitETA.date.error.pastDate = The estimated date of arrival at the office of transit must be after {0}
 routeDetails.transit.index.officeOfTransitETA.date.error.futureDate = The estimated date of arrival at the office of transit must be before {0}
-routeDetails.transit.index.officeOfTransitETA.time.error.invalid = Enter a real time that you expect the transit to arrive
+routeDetails.transit.index.officeOfTransitETA.time.error.invalid = Enter a real time for the arrival at the office of transit
 routeDetails.transit.index.officeOfTransitETA.time.error.required.all = Enter the estimated time of arrival at the office of transit
-routeDetails.transit.index.officeOfTransitETA.time.error.required = The estimated time of arrival at the office of transit must include {0}
+routeDetails.transit.index.officeOfTransitETA.time.error.required.hour = The estimated time of arrival at the office of transit must include an {0}
+routeDetails.transit.index.officeOfTransitETA.time.error.required.minute = The estimated time of arrival at the office of transit must include a {0}
 
 routeDetails.transit.index.confirmRemoveOfficeOfTransit.title = Are you sure you want to remove {0} as an office of transit?
 routeDetails.transit.index.confirmRemoveOfficeOfTransit.heading = Are you sure you want to remove {0} as an office of transit?
@@ -916,10 +923,10 @@ routeDetails.locationOfGoods.contact.telephoneNumber.hint = This has to include 
 routeDetails.locationOfGoods.contact.telephoneNumber.checkYourAnswersLabel = What is the contact for the location of goods’ telephone number?
 routeDetails.locationOfGoods.contact.telephoneNumber.change.hidden = the contact for the location of goods’ telephone number
 routeDetails.locationOfGoods.contact.telephoneNumber.error.required = Enter {0}’s telephone number.
-routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidCharacter = {0}’s telephone number must only include numbers 0 to 9 and a plus sign
+routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidCharacters = {0}’s telephone number must only include numbers 0 to 9 and a plus sign
 routeDetails.locationOfGoods.contact.telephoneNumber.error.invalidFormat = {0}’s telephone number must start with a plus sign
-routeDetails.locationOfGoods.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less.
-routeDetails.locationOfGoods.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more.
+routeDetails.locationOfGoods.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less
+routeDetails.locationOfGoods.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more
 
 # Route details - Loading and unloading
 
@@ -1058,7 +1065,7 @@ transport.preRequisites.itemsDestinationCountry.title = What country are the ite
 transport.preRequisites.itemsDestinationCountry.heading = What country are the items being transported to?
 transport.preRequisites.itemsDestinationCountry.hint = Enter the country, like France or Portugal.
 transport.preRequisites.itemsDestinationCountry.placeholder = Select a country
-transport.preRequisites.itemsDestinationCountry.checkYourAnswersLabel = What country are the items being transported to
+transport.preRequisites.itemsDestinationCountry.checkYourAnswersLabel = What country are the items being transported to?
 transport.preRequisites.itemsDestinationCountry.error.required = Enter the country the items are being transported to
 
 transport.preRequisites.containerIndicator.title = Are you using any containers?
@@ -1067,8 +1074,409 @@ transport.preRequisites.containerIndicator.checkYourAnswersLabel = Are you using
 transport.preRequisites.containerIndicator.error.required = Select yes if you’re using any containers
 transport.preRequisites.containerIndicator.paragraph = This can be any container used to transport goods in CTC transit. For example, a swap body, articulated lorry or shipping container.
 
+transport.transportMeans.active.label = Active border transport means {0}
+transport.transportMeans.active.change.hidden = active border transport means {0}
+
+transport.means.caption = Transport details - Modes and means of transport
+transport.inlandMode.caption = Transport details - Inland mode of transport
+transport.departureMeansOfTransport.caption = Transport details - Departure means of transport
+transport.activeBorderModeOfTransport.caption = Transport details - Border mode of transport
+transport.activeBorderMeansOfTransport.caption = Transport details - Border means of transport
+
+transport.transportMeans.departure.inlandMode.title = Which inland mode of transport are you using?
+transport.transportMeans.departure.inlandMode.heading = Which inland mode of transport are you using?
+transport.transportMeans.departure.inlandMode.paragraph = This is the type of transport used from the UK office of departure to a UK port or airport.
+transport.transportMeans.departure.inlandMode.maritime = Maritime
+transport.transportMeans.departure.inlandMode.rail = Rail
+transport.transportMeans.departure.inlandMode.road = Road
+transport.transportMeans.departure.inlandMode.air = Air
+transport.transportMeans.departure.inlandMode.mail = Mail (active mode of transport unknown)
+transport.transportMeans.departure.inlandMode.fixed = Fixed transport installations - pipelines or electric power lines used for the continuous transport of goods
+transport.transportMeans.departure.inlandMode.waterway = Inland waterway
+transport.transportMeans.departure.inlandMode.unknown = Unknown (own propulsion)
+transport.transportMeans.departure.inlandMode.checkYourAnswersLabel = Mode
+transport.transportMeans.departure.inlandMode.error.required = Select which inland mode of transport you’re using
+transport.transportMeans.departure.inlandMode.change.hidden = inland mode of transport
+
+transport.transportMeans.departure.identification.title = Which identification do you want to use for this vehicle?
+transport.transportMeans.departure.identification.heading = Which identification do you want to use for this vehicle?
+transport.transportMeans.departure.identification.seaGoingVessel = Name of a sea-going vessel
+transport.transportMeans.departure.identification.seaGoingVessel.arg = name of the sea-going vessel
+transport.transportMeans.departure.identification.iataFlightNumber = IATA flight number
+transport.transportMeans.departure.identification.iataFlightNumber.arg = IATA flight number
+transport.transportMeans.departure.identification.inlandWaterwaysVehicle = Name of an inland waterways vehicle
+transport.transportMeans.departure.identification.inlandWaterwaysVehicle.arg = name of the inland waterways vehicle
+transport.transportMeans.departure.identification.imoShipIdNumber = IMO ship identification number
+transport.transportMeans.departure.identification.imoShipIdNumber.arg = IMO ship identification number
+transport.transportMeans.departure.identification.wagonNumber = Wagon number
+transport.transportMeans.departure.identification.wagonNumber.arg = wagon number
+transport.transportMeans.departure.identification.trainNumber = Train number
+transport.transportMeans.departure.identification.trainNumber.arg = train number
+transport.transportMeans.departure.identification.regNumberRoadVehicle = Registration number of a road vehicle
+transport.transportMeans.departure.identification.regNumberRoadVehicle.arg = registration number of the road vehicle
+transport.transportMeans.departure.identification.regNumberRoadTrailer = Registration number of a road trailer
+transport.transportMeans.departure.identification.regNumberRoadTrailer.arg = registration number of the road trailer
+transport.transportMeans.departure.identification.regNumberAircraft = Registration number of an aircraft
+transport.transportMeans.departure.identification.regNumberAircraft.arg = registration number of the aircraft
+transport.transportMeans.departure.identification.europeanVesselIdNumber = European vessel identification number (ENI code)
+transport.transportMeans.departure.identification.europeanVesselIdNumber.arg = European vessel identification number (ENI code)
+transport.transportMeans.departure.identification.unknown = Unknown - this can only be used during the transitional period
+# TODO: Ask Gavin for content for unknown identification type
+transport.transportMeans.departure.identification.unknown.arg = ask gavin what this should be
+transport.transportMeans.departure.identification.checkYourAnswersLabel = Identification type
+transport.transportMeans.departure.identification.change.hidden = identification type for the departure means of transport
+transport.transportMeans.departure.identification.error.required = Select which identification you want to use for this vehicle
+
+transport.transportMeans.departure.meansIdentificationNumber.title = What is the {0}?
+transport.transportMeans.departure.meansIdentificationNumber.heading = What is the {0}?
+transport.transportMeans.departure.meansIdentificationNumber.hint = This can be up to 35 characters long and include both letters and numbers.
+transport.transportMeans.departure.meansIdentificationNumber.checkYourAnswersLabel = Identification number
+transport.transportMeans.departure.meansIdentificationNumber.change.hidden = identification number for the departure means of transport
+transport.transportMeans.departure.meansIdentificationNumber.error.required = Enter the {0}
+transport.transportMeans.departure.meansIdentificationNumber.error.invalid = The {0} must only include letters a to z and numbers 0 to 9
+transport.transportMeans.departure.meansIdentificationNumber.error.length = The {0} must be 35 characters or less
+
+transport.transportMeans.departure.vehicleCountry.title = What country is this vehicle registered to?
+transport.transportMeans.departure.vehicleCountry.heading = What country is this vehicle registered to?
+transport.transportMeans.departure.vehicleCountry.hint = Enter the country or code, like AT or Austria.
+transport.transportMeans.departure.vehicleCountry.placeholder = Select a nationality
+transport.transportMeans.departure.vehicleCountry.change.hidden = registered country for the departure means of transport
+transport.transportMeans.departure.vehicleCountry.checkYourAnswersLabel = Registered country
+transport.transportMeans.departure.vehicleCountry.error.required = Select the country the vehicle is registered to
+
+transport.transportMeans.anotherVehicleCrossingYesNo.title = Are you using another vehicle to cross the border?
+transport.transportMeans.anotherVehicleCrossingYesNo.heading = Are you using another vehicle to cross the border?
+transport.transportMeans.anotherVehicleCrossingYesNo.paragraph = This includes using a different vehicle to carry the inland mode over the border. For example, a truck on a ferry.
+transport.transportMeans.anotherVehicleCrossingYesNo.checkYourAnswersLabel = Are you using another vehicle to cross the border?
+transport.transportMeans.anotherVehicleCrossingYesNo.change.hidden = if you are using another vehicle to cross the border
+transport.transportMeans.anotherVehicleCrossingYesNo.error.required = Select yes if the vehicle will change before crossing the border
+
+transport.transportMeans.borderModeOfTransport.title = Which mode of transport are you using to cross the border?
+transport.transportMeans.borderModeOfTransport.heading = Which mode of transport are you using to cross the border?
+transport.transportMeans.borderModeOfTransport.maritime = Maritime
+transport.transportMeans.borderModeOfTransport.rail = Rail
+transport.transportMeans.borderModeOfTransport.road = Road
+transport.transportMeans.borderModeOfTransport.air = Air
+transport.transportMeans.borderModeOfTransport.mail = Mail (active mode of transport unknown)
+transport.transportMeans.borderModeOfTransport.fixed = Fixed transport installations - pipelines or electric power lines used for the continuous transport of goods
+transport.transportMeans.borderModeOfTransport.waterway = Inland waterway
+transport.transportMeans.borderModeOfTransport.checkYourAnswersLabel = Border mode of transport
+transport.transportMeans.borderModeOfTransport.change.hidden = border mode of transport
+transport.transportMeans.borderModeOfTransport.error.required = Select which mode of transport you’re using to cross the border
+
+transport.transportMeans.active.identification.title = Which identification do you want to use for this vehicle?
+transport.transportMeans.active.identification.heading = Which identification do you want to use for this vehicle?
+transport.transportMeans.active.identification.imoShipIdNumber = IMO ship identification number
+transport.transportMeans.active.identification.seaGoingVessel = Name of a sea-going vessel
+transport.transportMeans.active.identification.trainNumber = Train number
+transport.transportMeans.active.identification.regNumberRoadVehicle = Registration number of a road vehicle
+transport.transportMeans.active.identification.iataFlightNumber = IATA flight number
+transport.transportMeans.active.identification.regNumberAircraft = Registration number of an aircraft
+transport.transportMeans.active.identification.europeanVesselIdNumber = European vessel identification number (ENI code)
+transport.transportMeans.active.identification.inlandWaterwaysVehicle = Name of an inland waterways vehicle
+transport.transportMeans.active.identification.forDisplay.imoShipIdNumber = IMO ship identification number
+transport.transportMeans.active.identification.forDisplay.seaGoingVessel = name of the sea-going vessel
+transport.transportMeans.active.identification.forDisplay.trainNumber = train number
+transport.transportMeans.active.identification.forDisplay.regNumberRoadVehicle = registration number of the road vehicle
+transport.transportMeans.active.identification.forDisplay.iataFlightNumber = IATA flight number
+transport.transportMeans.active.identification.forDisplay.regNumberAircraft = registration number of the aircraft
+transport.transportMeans.active.identification.forDisplay.europeanVesselIdNumber = European vessel identification number (ENI code)
+transport.transportMeans.active.identification.forDisplay.inlandWaterwaysVehicle = name of the inland waterways vehicle
+transport.transportMeans.active.identification.checkYourAnswersLabel = Identification type
+transport.transportMeans.active.identification.change.hidden = identification type for the border means of transport
+transport.transportMeans.active.identification.error.required = Select which identification you want to use for this vehicle
+transport.transportMeans.active.identification.error.required = Select which identification you want to use for this vehicle
+
+transport.transportMeans.active.addNationalityYesNo.title = Do you want to add the registered country for this vehicle?
+transport.transportMeans.active.addNationalityYesNo.heading = Do you want to add the registered country for this vehicle?
+transport.transportMeans.active.addNationalityYesNo.checkYourAnswersLabel = Do you want to add the registered country for this vehicle?
+transport.transportMeans.active.addNationalityYesNo.change.hidden = if you want to add the registered country for the border means of transport
+transport.transportMeans.active.addNationalityYesNo.error.required = Select yes if you want to add the registered country for the vehicle crossing the border
+
+transport.transportMeans.active.identificationNumber.title = What is the {0}?
+transport.transportMeans.active.identificationNumber.heading = What is the {0}?
+transport.transportMeans.active.identificationNumber.checkYourAnswersLabel = Identification number
+transport.transportMeans.active.identificationNumber.change.hidden = identification number for the border means of transport
+transport.transportMeans.active.identificationNumber.error.required = Enter the {0}
+transport.transportMeans.active.identificationNumber.error.length = The {0} must be 35 characters or less
+transport.transportMeans.active.identificationNumber.error.invalid = The {0} must only include letters a to z and numbers 0 to 9
+
+transport.transportMeans.active.nationality.title = What country is this vehicle registered to?
+transport.transportMeans.active.nationality.heading = What country is this vehicle registered to?
+transport.transportMeans.active.nationality.hint = Enter the country or code, like AT or Austria.
+transport.transportMeans.active.nationality.label = What country is this vehicle registered to?
+transport.transportMeans.active.nationality.placeholder = Select a nationality
+transport.transportMeans.active.nationality.change.hidden = registered country for the border means of transport
+transport.transportMeans.active.nationality.checkYourAnswersLabel = Registered country
+transport.transportMeans.active.nationality.error.required = Select the country the vehicle is registered to
+
+transport.transportMeans.active.customsOfficeActiveBorder.title = Where is the office of transit?
+transport.transportMeans.active.customsOfficeActiveBorder.heading = Where is the office of transit?
+transport.transportMeans.active.customsOfficeActiveBorder.hint = Enter the office location or code, like Calais or FR620001.
+transport.transportMeans.active.customsOfficeActiveBorder.placeholder = Select a customs office
+transport.transportMeans.active.customsOfficeActiveBorder.paragraph = This is the customs office after crossing the border.
+transport.transportMeans.active.customsOfficeActiveBorder.change.hidden = customs office for the border means of transport
+transport.transportMeans.active.customsOfficeActiveBorder.checkYourAnswersLabel = Customs office
+transport.transportMeans.active.customsOfficeActiveBorder.error.required = Enter the office of transit
+
+transport.transportMeans.active.conveyanceReferenceNumberYesNo.title = Do you want to add a conveyance reference number?
+transport.transportMeans.active.conveyanceReferenceNumberYesNo.heading = Do you want to add a conveyance reference number?
+transport.transportMeans.active.conveyanceReferenceNumberYesNo.hint = This is a unique reference provided by the carrier to identify the means of transport.
+transport.transportMeans.active.conveyanceReferenceNumberYesNo.checkYourAnswersLabel = Do you want to add a conveyance reference number?
+transport.transportMeans.active.conveyanceReferenceNumberYesNo.error.required = Select yes if you want to add a conveyance reference number
+transport.transportMeans.active.conveyanceReferenceNumberYesNo.change.hidden = if you want to add a conveyance reference number for the border means of transport
+
+transport.transportMeans.active.conveyanceReferenceNumber.title = What is the conveyance reference number?
+transport.transportMeans.active.conveyanceReferenceNumber.heading = What is the conveyance reference number?
+transport.transportMeans.active.conveyanceReferenceNumber.hint = This can be up to 17 characters long and include both letters and numbers.
+transport.transportMeans.active.conveyanceReferenceNumber.checkYourAnswersLabel = Conveyance reference number
+transport.transportMeans.active.conveyanceReferenceNumber.error.required = Enter the conveyance reference number
+transport.transportMeans.active.conveyanceReferenceNumber.error.length = The reference number must be 17 characters or less
+transport.transportMeans.active.conveyanceReferenceNumber.error.invalid = The reference number must only include letters a to z and numbers 0 to 9
+transport.transportMeans.active.conveyanceReferenceNumber.change.hidden = conveyance reference number for the border means of transport
+
+transport.transportMeans.active.addAnotherBorderTransport.singular.title = You have added {0} border means of transport
+transport.transportMeans.active.addAnotherBorderTransport.singular.heading = You have added {0} border means of transport
+transport.transportMeans.active.addAnotherBorderTransport.plural.title = You have added {0} border means of transport
+transport.transportMeans.active.addAnotherBorderTransport.plural.heading = You have added {0} border means of transport
+transport.transportMeans.active.addAnotherBorderTransport.error.required =  Select yes if you want to add another border mode of transport
+transport.transportMeans.active.addAnotherBorderTransport.label = Do you want to add another border means of transport?
+transport.transportMeans.active.addAnotherBorderTransport.hidden = Do you want to add another border means of transport?
+transport.transportMeans.active.addAnotherBorderTransport.hint = Only include vehicles that cross into another CTC country. As the EU is one CTC country, you don’t need to provide vehicle changes that stay within the EU.
+transport.transportMeans.active.addAnotherBorderTransport.maxLimit.label = You cannot add any more border means of transport. To add another, you need to remove one first.
+
+transport.transportMeans.active.confirmRemoveBorderTransport.title = Are you sure you want to remove this border means of transport?
+transport.transportMeans.active.confirmRemoveBorderTransport.heading = Are you sure you want to remove this border means of transport?
+transport.transportMeans.active.confirmRemoveBorderTransport.checkYourAnswersLabel = Are you sure you want to remove this border means of transport?
+transport.transportMeans.active.confirmRemoveBorderTransport.error.required = Select yes if you want to remove this border means of transport
+
+transport.transportMeans.transportMeansCheckYourAnswers.title = Check your answers
+transport.transportMeans.transportMeansCheckYourAnswers.heading = Check your answers
+transport.transportMeans.inlandMode.subheading = Inland mode of transport
+transport.transportMeans.departureMeans.subheading = Departure means of transport
+transport.transportMeans.borderMode.subheading = Border mode of transport
+transport.transportMeans.borderMeans.subheading = Border means of transport
+transport.transportMeans.borderMeans.addOrRemove = Add or remove border means of transport
+
+transport.supplyChainActors.caption = Transport details - Supply chain actor
+
+transport.supplyChainActors.supplyChainActorYesNo.title = Do you want to add a supply chain actor?
+transport.supplyChainActors.supplyChainActorYesNo.heading = Do you want to add a supply chain actor?
+transport.supplyChainActors.supplyChainActorYesNo.paragraph = This is someone who helps move the goods to their destination. They can be a consolidator, freight forwarder, manufacturer or warehouse keeper.
+transport.supplyChainActors.supplyChainActorYesNo.checkYourAnswersLabel = Do you want to add a supply chain actor?
+transport.supplyChainActors.supplyChainActorYesNo.error.required = Select yes if you want to add a supply chain actor
+
+transport.supplyChainActors.index.supplyChainActorType.title = Which type of supply chain actor do you want to add?
+transport.supplyChainActors.index.supplyChainActorType.heading = Which type of supply chain actor do you want to add?
+transport.supplyChainActors.index.supplyChainActorType.consolidator = Consolidator
+transport.supplyChainActors.index.supplyChainActorType.freightForwarder = Freight forwarder
+transport.supplyChainActors.index.supplyChainActorType.manufacturer = Manufacturer
+transport.supplyChainActors.index.supplyChainActorType.warehouseKeeper = Warehouse keeper
+transport.supplyChainActors.index.supplyChainActorType.checkYourAnswersLabel = Which type of supply chain actor do you want to add?
+transport.supplyChainActors.index.supplyChainActorType.error.required = Select which type of supply chain actor you want to add
+
+transport.supplyChainActors.index.identificationNumber.title = What’s the EORI number or Trader Identification Number (TIN) for the {0}?
+transport.supplyChainActors.index.identificationNumber.heading = What’s the EORI number or Trader Identification Number (TIN) for the {0}?
+transport.supplyChainActors.index.identificationNumber.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
+transport.supplyChainActors.index.identificationNumber.checkYourAnswersLabel = What’s the EORI number or Trader Identification Number (TIN) for the {0}?
+transport.supplyChainActors.index.identificationNumber.error.required = Enter the EORI number or Trader Identification Number (TIN) for the supply chain actor
+transport.supplyChainActors.index.identificationNumber.error.length = The EORI number or Trader Identification Number (TIN) must be 17 characters or less
+transport.supplyChainActors.index.identificationNumber.error.invalid = The EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
+
+transport.supplyChainActors.index.removeSupplyChainActor.title = Are you sure you want to remove this supply chain actor?
+transport.supplyChainActors.index.removeSupplyChainActor.heading = Are you sure you want to remove this supply chain actor?
+transport.supplyChainActors.index.removeSupplyChainActor.checkYourAnswersLabel = Are you sure you want to remove this supply chain actor?
+transport.supplyChainActors.index.removeSupplyChainActor.error.required = Select yes if you want to remove this supply chain actor
+
+transport.supplyChainActors.addAnotherSupplyChainActor.singular.title = You have added 1 supply chain actor
+transport.supplyChainActors.addAnotherSupplyChainActor.plural.title = You have added {0} supply chain actors
+transport.supplyChainActors.addAnotherSupplyChainActor.singular.heading = You have added 1 supply chain actor
+transport.supplyChainActors.addAnotherSupplyChainActor.plural.heading = You have added {0} supply chain actors
+transport.supplyChainActors.addAnotherSupplyChainActor.error.required = Select yes if you want to add another supply chain actor
+transport.supplyChainActors.addAnotherSupplyChainActor.label = Do you want to add another supply chain actor?
+transport.supplyChainActors.addAnotherSupplyChainActor.maxLimit.label = You cannot add any more supply chain actors. To add another, you need to remove one first.
+
 # Declaration
 
 declarationSubmitted.title = Declaration Submitted
 declarationSubmitted.heading = Declaration Submitted
 declarationSubmitted.paragraph1 = You have submitted your declaration.
+
+transport.transportMeans.active.checkYourAnswers.title = Check your answers
+transport.transportMeans.active.checkYourAnswers.heading = Check your answers
+
+#Authorisations
+
+transport.authorisations.caption = Transport details - Authorisations
+
+transport.authorisations.authorisationType.title = Which type of authorisation do you want to add?
+transport.authorisations.authorisationType.heading = Which type of authorisation do you want to add?
+transport.authorisations.authorisationType.ACR = ACR - authorisation for the status of authorised consignor for Union transit
+transport.authorisations.authorisationType.SSE = SSE - authorisation for the use of seals of a special type
+transport.authorisations.authorisationType.TRD = TRD - authorisation to use transit declaration with a reduced dataset
+transport.authorisations.authorisationType.forDisplay.ACR = ACR
+transport.authorisations.authorisationType.forDisplay.SSE = SSE
+transport.authorisations.authorisationType.forDisplay.TRD = TRD
+transport.authorisations.authorisationType.checkYourAnswersLabel = Authorisation type
+transport.authorisations.authorisationType.error.required = Select which type of authorisation you want to add
+
+transport.authorisations.authorisationReferenceNumber.title = What’s the reference number for the {0} authorisation?
+transport.authorisations.authorisationReferenceNumber.heading = What’s the reference number for the {0} authorisation?
+transport.authorisations.authorisationReferenceNumber.hint = This can be up to 35 characters long and include both letters and numbers.
+transport.authorisations.authorisationReferenceNumber.checkYourAnswersLabel = Authorisation reference number
+transport.authorisations.authorisationReferenceNumber.error.required = Enter the reference number for the {0} authorisation
+transport.authorisations.authorisationReferenceNumber.error.length = The reference number must be 35 characters or less
+transport.authorisations.authorisationReferenceNumber.error.invalidCharacters = The reference number must only include letters a to z and numbers 0 to 9
+
+transport.authorisations.addAnotherAuthorisation.singular.title = You have added 1 authorisation
+transport.authorisations.addAnotherAuthorisation.plural.title = You have added {0} authorisations
+transport.authorisations.addAnotherAuthorisation.singular.heading = You have added 1 authorisation
+transport.authorisations.addAnotherAuthorisation.plural.heading = You have added {0} authorisations
+transport.authorisations.addAnotherAuthorisation.error.required = Select yes if you want to add another authorisation
+transport.authorisations.addAnotherAuthorisation.label = Do you want to add another authorisation?
+transport.authorisations.addAnotherAuthorisation.maxLimit.label = You cannot add any more authorisations. To add another, you need to remove one first.
+
+transport.authorisations.addAuthorisationsYesNo.title = Do you want to add an authorisation?
+transport.authorisations.addAuthorisationsYesNo.heading = Do you want to add an authorisation?
+transport.authorisations.addAuthorisationsYesNo.checkYourAnswersLabel = Do you want to add an authorisation?
+transport.authorisations.addAuthorisationsYesNo.error.required = Select yes if you want to add an authorisation
+transport.authorisations.addAuthorisationsYesNo.paragraph = This is someone who helps move the goods to their destination. They can be a consolidator, freight forwarder, manufacturer or warehouse keeper.
+
+transport.authorisations.index.removeAuthorisationYesNo.title = Are you sure you want to remove {0} authorisation {1}?
+transport.authorisations.index.removeAuthorisationYesNo.heading = Are you sure you want to remove {0} authorisation {1}?
+transport.authorisations.index.removeAuthorisationYesNo.error.required = Select yes if you want to remove {0} authorisation {1}
+
+transport.authorisationsAndLimit.limit.limitDate.title = When is the limit date?
+transport.authorisationsAndLimit.limit.limitDate.heading = When is the limit date?
+transport.authorisationsAndLimit.limit.limitDate.checkYourAnswersLabel = Limit date
+transport.authorisationsAndLimit.limit.limitDate.paragraph = This has to be before {0}.
+transport.authorisationsAndLimit.limit.limitDate.error.required.all = Enter the limit date
+transport.authorisationsAndLimit.limit.limitDate.error.required.two = The limit date must include a {0} and {1}
+transport.authorisationsAndLimit.limit.limitDate.error.required = The limit date must include a {0}
+transport.authorisationsAndLimit.limit.limitDate.error.invalid = Enter a real limit date
+transport.authorisationsAndLimit.limit.limitDate.error.min.date = The limit date must be today or in the future
+transport.authorisationsAndLimit.limit.limitDate.error.max.date = The limit date must be before {0}
+
+# Carrier details
+
+transport.carrierDetails.caption = Transport details - Carrier
+
+transport.carrierDetails.identificationNumber.title = What is the carrier’s EORI number or Trader Identification Number (TIN)?
+transport.carrierDetails.identificationNumber.heading = What is the carrier’s EORI number or Trader Identification Number (TIN)?
+transport.carrierDetails.identificationNumber.hint = This can be up to 17 characters long and include both letters and numbers. For example, GB123456789000.
+transport.carrierDetails.identificationNumber.checkYourAnswersLabel = EORI number or Trader Identification Number
+transport.carrierDetails.identificationNumber.error.required = Enter the carrier’s EORI number or Trader Identification Number (TIN)
+transport.carrierDetails.identificationNumber.error.length = The EORI number or Trader Identification Number (TIN) must be 17 characters or less
+transport.carrierDetails.identificationNumber.error.invalid = The EORI number or Trader Identification Number (TIN) must only include letters a to z and numbers 0 to 9
+
+transport.carrierDetails.addContactYesNo.title = Do you want to add a contact for the carrier?
+transport.carrierDetails.addContactYesNo.heading = Do you want to add a contact for the carrier?
+transport.carrierDetails.addContactYesNo.checkYourAnswersLabel = Do you want to add a contact for the carrier?
+transport.carrierDetails.addContactYesNo.error.required = Select yes if you want to add a contact for the carrier
+
+transport.carrierDetails.contact.name.title = Who is the contact for the carrier?
+transport.carrierDetails.contact.name.heading = Who is the contact for the carrier?
+transport.carrierDetails.contact.name.checkYourAnswersLabel = Name
+transport.carrierDetails.contact.name.error.required = Enter the name of the contact for the carrier
+transport.carrierDetails.contact.name.error.length = The contact’s name must be 70 characters or less
+transport.carrierDetails.contact.name.error.invalid = The contact’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
+transport.carrierDetails.contact.telephoneNumber.title = What is the phone number for the carrier’s contact?
+transport.carrierDetails.contact.telephoneNumber.heading = What is {0}’s phone number?
+transport.carrierDetails.contact.telephoneNumber.hint = Include the country code, for example +44 808 157 0192.
+transport.carrierDetails.contact.telephoneNumber.checkYourAnswersLabel = Telephone number
+transport.carrierDetails.contact.telephoneNumber.error.required = Enter {0}’s telephone number, including the country code
+transport.carrierDetails.contact.telephoneNumber.error.invalidCharacters = {0}’s telephone number must only include numbers 0 to 9 and a plus sign
+transport.carrierDetails.contact.telephoneNumber.error.invalidFormat = Enter {0}’s telephone number in the right format
+transport.carrierDetails.contact.telephoneNumber.error.maxLength = {0}’s telephone number must be {1} characters or less
+transport.carrierDetails.contact.telephoneNumber.error.minLength = {0}’s telephone number must be {1} characters or more
+
+# Transport equipment
+
+transport.equipment.caption = Transport details - Transport equipment
+
+transport.equipment.addTransportEquipmentYesNo.title = Do you need to add any transport equipment?
+transport.equipment.addTransportEquipmentYesNo.heading = Do you need to add any transport equipment?
+transport.equipment.addTransportEquipmentYesNo.paragraph = This includes any containers or seals.
+transport.equipment.addTransportEquipmentYesNo.checkYourAnswersLabel = Do you need to add any transport equipment?
+transport.equipment.addTransportEquipmentYesNo.error.required = Select yes if you want to add any transport equipment
+
+transport.equipment.index.addContainerIdentificationNumberYesNo.title = Do you want to add a container identification number?
+transport.equipment.index.addContainerIdentificationNumberYesNo.heading = Do you want to add a container identification number?
+transport.equipment.index.addContainerIdentificationNumberYesNo.checkYourAnswersLabel = Do you want to add a container identification number?
+transport.equipment.index.addContainerIdentificationNumberYesNo.change.hidden = if you want to add an identification number
+transport.equipment.index.addContainerIdentificationNumberYesNo.error.required = Select yes if you want to add a container identification number
+
+transport.equipment.index.containerIdentificationNumber.title = What is the container identification number?
+transport.equipment.index.containerIdentificationNumber.heading = What is the container identification number?
+transport.equipment.index.containerIdentificationNumber.hint = This can be up to 17 characters long and include both letters and numbers.
+transport.equipment.index.containerIdentificationNumber.checkYourAnswersLabel = Container identification number
+transport.equipment.index.containerIdentificationNumber.change.hidden = identification number
+transport.equipment.index.containerIdentificationNumber.error.required = Enter the container identification number
+transport.equipment.index.containerIdentificationNumber.error.length = The identification number must be 17 characters or less
+transport.equipment.index.containerIdentificationNumber.error.invalid = The identification number must only include letters a to z and numbers 0 to 9
+transport.equipment.index.containerIdentificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique container identification number
+
+transport.equipment.index.addSealYesNo.title = Do you want to add a seal?
+transport.equipment.index.addSealYesNo.heading = Do you want to add a seal?
+transport.equipment.index.addSealYesNo.checkYourAnswersLabel = Do you want to add a seal?
+transport.equipment.index.addSealYesNo.change.hidden = if you want to add a seal
+transport.equipment.index.addSealYesNo.error.required = Select yes if you want to add a seal
+
+transport.equipment.index.seals.identificationNumber.title = What is the seal identification number?
+transport.equipment.index.seals.identificationNumber.heading = What is the seal identification number?
+transport.equipment.index.seals.identificationNumber.hint = This can be up to 20 characters long and include both letters and numbers.
+transport.equipment.index.seals.identificationNumber.checkYourAnswersLabel = What is the seal identification number?
+transport.equipment.index.seals.identificationNumber.error.required = Enter the seal identification number
+transport.equipment.index.seals.identificationNumber.error.invalid = The identification number must only include letters a to z and numbers 0 to 9
+transport.equipment.index.seals.identificationNumber.error.length = The identification number must be 20 characters or less
+transport.equipment.index.seals.identificationNumber.error.duplicate = This identification number has already been submitted. Enter a unique seal identification number
+
+transport.equipment.index.addAnotherSeal.singular.title = You have added 1 seal
+transport.equipment.index.addAnotherSeal.plural.title = You have added {0} seals
+transport.equipment.index.addAnotherSeal.singular.heading = You have added 1 seal
+transport.equipment.index.addAnotherSeal.plural.heading = You have added {0} seals
+transport.equipment.index.addAnotherSeal.error.required = Select yes if you want to add another seal
+transport.equipment.index.addAnotherSeal.label = Do you want to add another seal?
+transport.equipment.index.addAnotherSeal.maxLimit.label = You cannot add any more seals. To add another, you need to remove one first.
+
+transport.equipment.index.itemNumber.title = What is the goods item number?
+transport.equipment.index.itemNumber.heading = What is the goods item number?
+transport.equipment.index.itemNumber.hint = This can be up to 5 numbers long.
+transport.equipment.index.itemNumber.checkYourAnswersLabel = Item number
+transport.equipment.index.itemNumber.error.required = Enter the goods item number
+transport.equipment.index.itemNumber.error.length = The goods item number must be 5 characters or less
+transport.equipment.index.itemNumber.error.invalidCharacters = The goods item number must only include numbers 0 to 9
+
+transport.equipment.index.addGoodsItemNumberYesNo.title = Do you want to add a goods item number?
+transport.equipment.index.addGoodsItemNumberYesNo.heading = Do you want to add a goods item number?
+transport.equipment.index.addGoodsItemNumberYesNo.checkYourAnswersLabel = Do you want to add a goods item number?
+transport.equipment.index.addGoodsItemNumberYesNo.change.hidden = if you want to add a goods item number
+transport.equipment.index.addGoodsItemNumberYesNo.error.required = Select yes if you want to add a goods item number
+
+transport.equipment.index.itemNumber.removeItemNumberYesNo.title = Are you sure you want to remove goods item number {0}?
+transport.equipment.index.itemNumber.removeItemNumberYesNo.heading = Are you sure you want to remove goods item number {0}?
+transport.equipment.index.itemNumber.removeItemNumberYesNo.error.required = Select yes if you want to remove goods item number {0}
+
+transport.equipment.index.seals.removeSealYesNo.title = Are you sure you want to remove seal {0}?
+transport.equipment.index.seals.removeSealYesNo.heading = Are you sure you want to remove seal {0}?
+transport.equipment.index.seals.removeSealYesNo.error.required = Select yes if you want to remove seal {0}
+
+transport.equipment.index.checkYourAnswers.title = Check your answers
+transport.equipment.index.checkYourAnswers.heading = Check your answers
+transport.equipment.index.checkYourAnswers.seals = Seals
+transport.equipment.index.checkYourAnswers.seals.addOrRemove = Add or remove seals
+transport.equipment.index.checkYourAnswers.itemNumbers = Goods item numbers
+transport.equipment.index.checkYourAnswers.itemNumbers.addOrRemove = Add or remove goods item numbers
+transport.equipment.index.checkYourAnswers.seal.label = Seal {0}
+transport.equipment.index.checkYourAnswers.seal.change.hidden = seal {0}
+transport.equipment.index.checkYourAnswers.itemNumber.label = Goods item number {0}
+transport.equipment.index.checkYourAnswers.itemNumber.change.hidden = goods item number {0}
+
+transport.equipment.index.addAnotherGoodsItemNumber.singular.title = You have added 1 goods item number
+transport.equipment.index.addAnotherGoodsItemNumber.plural.title = You have added {0} goods item numbers
+transport.equipment.index.addAnotherGoodsItemNumber.singular.heading = You have added 1 goods item number
+transport.equipment.index.addAnotherGoodsItemNumber.plural.heading = You have added {0} goods item numbers
+transport.equipment.index.addAnotherGoodsItemNumber.label = Do you want to add another goods item number?
+transport.equipment.index.addAnotherGoodsItemNumber.maxLimit.label = You cannot add any more goods item numbers. To add another, you need to remove one first.
+transport.equipment.index.addAnotherGoodsItemNumber.error.required = Select yes if you want to add another goods item number

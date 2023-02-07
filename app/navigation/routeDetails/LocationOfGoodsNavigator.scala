@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,32 +18,26 @@ package navigation.routeDetails
 
 import models.domain.UserAnswersReader
 import models.journeyDomain.routeDetails.locationOfGoods.LocationOfGoodsDomain
-import models.{CheckMode, Mode, NormalMode}
+import models.{CheckMode, CountryList, Mode, NormalMode}
 import navigation.UserAnswersNavigator
-import services.CountriesService
-import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class LocationOfGoodsNavigatorProviderImpl @Inject() (
-  countriesService: CountriesService
-)(implicit ec: ExecutionContext)
-    extends LocationOfGoodsNavigatorProvider {
+class LocationOfGoodsNavigatorProviderImpl @Inject() () extends LocationOfGoodsNavigatorProvider {
 
-  def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator] =
+  def apply(mode: Mode, ctcCountries: CountryList, customsSecurityAgreementAreaCountries: CountryList): UserAnswersNavigator =
     mode match {
       case NormalMode =>
-        Future.successful(new LocationOfGoodsNavigator(mode))
+        new LocationOfGoodsNavigator(mode)
       case CheckMode =>
-        RouteDetailsNavigatorProvider(countriesService, mode)
+        new RouteDetailsNavigator(mode, ctcCountries, customsSecurityAgreementAreaCountries)
     }
 }
 
 trait LocationOfGoodsNavigatorProvider {
 
-  def apply(mode: Mode)(implicit hc: HeaderCarrier): Future[UserAnswersNavigator]
+  def apply(mode: Mode, ctcCountries: CountryList, customsSecurityAgreementAreaCountries: CountryList): UserAnswersNavigator
 }
 
 class LocationOfGoodsNavigator(override val mode: Mode) extends UserAnswersNavigator {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +16,18 @@
 
 package viewModels.taskList
 
-import models.UserAnswers
-import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
-import pages.sections.guaranteeDetails.GuaranteeDetailsSection
-import play.api.libs.json.JsArray
+import config.FrontendAppConfig
+import models.LocalReferenceNumber
 
-case class GuaranteeDetailsTask(status: TaskStatus, href: Option[String]) extends Task {
+case class GuaranteeDetailsTask(status: TaskStatus) extends TaskListTask {
   override val id: String         = "guarantee-details"
   override val messageKey: String = "guaranteeDetails"
+  override val section: String    = GuaranteeDetailsTask.section
+
+  override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String =
+    config.guaranteeDetailsFrontendUrl(lrn)
 }
 
 object GuaranteeDetailsTask {
-
-  def apply(userAnswers: UserAnswers): GuaranteeDetailsTask = {
-    val (status, href) = new TaskProvider(userAnswers).noDependencyOnOtherTask
-      .readUserAnswers[GuaranteeDetailsDomain, JsArray](
-        section = GuaranteeDetailsSection,
-        inProgressRoute = Some(controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(userAnswers.lrn))
-      )
-
-    new GuaranteeDetailsTask(status, href)
-  }
+  val section: String = ".guaranteeDetails"
 }

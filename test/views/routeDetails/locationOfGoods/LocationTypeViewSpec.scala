@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package views.routeDetails.locationOfGoods
 
-import forms.locationOfGoods.LocationTypeFormProvider
+import forms.EnumerableFormProvider
 import models.{LocationType, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -26,7 +26,7 @@ import views.html.routeDetails.locationOfGoods.LocationTypeView
 
 class LocationTypeViewSpec extends RadioViewBehaviours[LocationType] {
 
-  override def form: Form[LocationType] = new LocationTypeFormProvider()()
+  override def form: Form[LocationType] = new EnumerableFormProvider()(prefix)
 
   override def applyView(form: Form[LocationType]): HtmlFormat.Appendable =
     injector.instanceOf[LocationTypeView].apply(form, lrn, LocationType.radioItems, NormalMode)(fakeRequest, messages)

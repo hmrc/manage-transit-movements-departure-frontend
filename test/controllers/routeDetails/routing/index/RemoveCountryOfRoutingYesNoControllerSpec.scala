@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package controllers.routeDetails.routing.index
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.routeDetails.routing.{routes => routingRoutes}
 import forms.YesNoFormProvider
-import generators.{Generators, RouteDetailsUserAnswersGenerator}
+import generators.Generators
 import models.reference.Country
 import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
@@ -34,12 +34,7 @@ import views.html.routeDetails.routing.index.RemoveCountryOfRoutingYesNoView
 
 import scala.concurrent.Future
 
-class RemoveCountryOfRoutingYesNoControllerSpec
-    extends SpecBase
-    with AppWithDefaultMockFixtures
-    with ScalaCheckPropertyChecks
-    with Generators
-    with RouteDetailsUserAnswersGenerator {
+class RemoveCountryOfRoutingYesNoControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   private val formProvider           = new YesNoFormProvider()
   private def form(country: Country) = formProvider("routeDetails.routing.index.removeCountryOfRoutingYesNo", country.toString)

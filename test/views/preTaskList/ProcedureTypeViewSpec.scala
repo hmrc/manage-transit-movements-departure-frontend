@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package views.preTaskList
 
-import forms.preTaskList.ProcedureTypeFormProvider
+import forms.EnumerableFormProvider
 import models.{NormalMode, ProcedureType}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -26,7 +26,7 @@ import views.html.preTaskList.ProcedureTypeView
 
 class ProcedureTypeViewSpec extends RadioViewBehaviours[ProcedureType] {
 
-  override def form: Form[ProcedureType] = new ProcedureTypeFormProvider()()
+  override def form: Form[ProcedureType] = new EnumerableFormProvider()(prefix)
 
   override def applyView(form: Form[ProcedureType]): HtmlFormat.Appendable =
     injector.instanceOf[ProcedureTypeView].apply(form, radioItems, lrn, NormalMode)(fakeRequest, messages)

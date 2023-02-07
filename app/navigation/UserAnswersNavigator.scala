@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ object UserAnswersNavigator extends Logging {
   )(implicit userAnswersReader: UserAnswersReader[T]): Call = {
     lazy val errorCall = controllers.routes.ErrorController.notFound()
 
-    UserAnswersReader[T].run(userAnswers) match {
+    userAnswersReader.run(userAnswers) match {
       case Left(ReaderError(page, _)) =>
         page.route(userAnswers, mode).getOrElse {
           logger.debug(s"Route not defined for page ${page.path}")

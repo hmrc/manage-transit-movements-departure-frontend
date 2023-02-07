@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package utils.cyaHelpers
 import models.domain.UserAnswersReader
 import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.Stage.AccessingJourney
-import models.{LocalReferenceNumber, Mode, RichOptionalJsArray, UserAnswers}
+import models.{Index, LocalReferenceNumber, Mode, RichOptionalJsArray, UserAnswers}
 import navigation.UserAnswersNavigator
 import pages.QuestionPage
 import pages.sections.Section
@@ -78,76 +78,66 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
         )
       }
 
-  def getAnswerAndBuildSectionRow[A <: JourneyDomainModel, B](
-    page: QuestionPage[B],
-    formatAnswer: B => Content,
+  def getAnswerAndBuildSectionRow[A <: JourneyDomainModel](
+    formatAnswer: A => Content,
     prefix: String,
     id: Option[String],
     args: Any*
-  )(implicit userAnswersReader: UserAnswersReader[A], rds: Reads[B]): Option[SummaryListRow] =
-    userAnswers.get(page) map {
-      answer =>
-        buildSimpleRow(
-          prefix = prefix,
-          label = messages(s"$prefix.checkYourAnswersLabel", args: _*),
-          answer = formatAnswer(answer),
-          id = id,
-          call = Some(UserAnswersNavigator.nextPage[A](userAnswers, mode, AccessingJourney)),
-          args = args: _*
-        )
-    }
+  )(implicit userAnswersReader: UserAnswersReader[A]): Option[SummaryListRow] =
+    userAnswersReader
+      .run(userAnswers)
+      .map(
+        x =>
+          buildSimpleRow(
+            prefix = prefix,
+            label = messages(s"$prefix.label", args: _*),
+            answer = formatAnswer(x),
+            id = id,
+            call = Some(UserAnswersNavigator.nextPage[A](userAnswers, mode, AccessingJourney)),
+            args = args: _*
+          )
+      )
+      .toOption
 
   protected def buildListItems(
     section: Section[JsArray]
-  )(block: Int => Option[Either[ListItem, ListItem]]): Seq[Either[ListItem, ListItem]] =
+  )(block: Index => Option[Either[ListItem, ListItem]]): Seq[Either[ListItem, ListItem]] =
     userAnswers
       .get(section)
       .mapWithIndex {
         (_, index) => block(index)
       }
 
-  protected def buildListItem[A <: JourneyDomainModel, B](
-    page: QuestionPage[B],
-    formatJourneyDomainModel: A => String,
-    formatType: B => String,
+  protected def buildListItem[A <: JourneyDomainModel](
+    nameWhenComplete: A => String,
+    nameWhenInProgress: => Option[String],
     removeRoute: Option[Call]
-  )(implicit userAnswersReader: UserAnswersReader[A], rds: Reads[B]): Option[Either[ListItem, ListItem]] =
-    UserAnswersReader[A].run(userAnswers) match {
+  )(implicit userAnswersReader: UserAnswersReader[A]): Option[Either[ListItem, ListItem]] =
+    userAnswersReader.run(userAnswers) match {
       case Left(readerError) =>
         readerError.page.route(userAnswers, mode).flatMap {
           changeRoute =>
-            getNameAndBuildListItem[B](
-              page = page,
-              formatName = formatType,
-              changeUrl = changeRoute.url,
-              removeUrl = removeRoute.map(_.url)
-            ).map(Left(_))
+            nameWhenInProgress
+              .map {
+                name =>
+                  ListItem(
+                    name = name,
+                    changeUrl = changeRoute.url,
+                    removeUrl = removeRoute.map(_.url)
+                  )
+              }
+              .map(Left(_))
         }
       case Right(journeyDomainModel) =>
         journeyDomainModel.routeIfCompleted(userAnswers, mode, AccessingJourney).map {
           changeRoute =>
             Right(
               ListItem(
-                name = formatJourneyDomainModel(journeyDomainModel),
+                name = nameWhenComplete(journeyDomainModel),
                 changeUrl = changeRoute.url,
                 removeUrl = removeRoute.map(_.url)
               )
             )
         }
-    }
-
-  protected def getNameAndBuildListItem[T](
-    page: QuestionPage[T],
-    formatName: T => String,
-    changeUrl: String,
-    removeUrl: Option[String]
-  )(implicit rds: Reads[T]): Option[ListItem] =
-    userAnswers.get(page) map {
-      name =>
-        ListItem(
-          name = formatName(name),
-          changeUrl = changeUrl,
-          removeUrl = removeUrl
-        )
     }
 }

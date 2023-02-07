@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,9 @@
 package components
 
 import a11ySpecBase.A11ySpecBase
-import viewModels.taskList.Task
+import models.LocalReferenceNumber
+import org.scalacheck.Arbitrary.arbitrary
+import viewModels.taskList.TaskListTask
 import views.html.components.TaskList
 import views.html.templates.MainTemplate
 
@@ -29,10 +31,11 @@ class ListWithActionsSpec extends A11ySpecBase {
 
     val title      = nonEmptyString.sample.value
     val sectionKey = nonEmptyString.sample.value
-    val tasks      = listWithMaxLength[Task]()(arbitraryTask).sample.value
+    val tasks      = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
+    val lrn        = arbitrary[LocalReferenceNumber].sample.value
 
     val content = template.apply(title) {
-      component.apply(sectionKey, tasks).withHeading(title)
+      component.apply(sectionKey, tasks, lrn).withHeading(title)
     }
 
     "pass accessibility checks" in {

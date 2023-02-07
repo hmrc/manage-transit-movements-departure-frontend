@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package models.journeyDomain.transport
 import cats.implicits._
 import models.DeclarationType.Option4
 import models.domain.{UserAnswersReader, _}
-import models.journeyDomain.JourneyDomainModel
 import models.reference.Country
 import pages.preTaskList.DeclarationTypePage
 import pages.transport.preRequisites._
@@ -29,7 +28,7 @@ case class PreRequisitesDomain(
   countryOfDispatch: Option[Country],
   itemsDestinationCountry: Option[Country],
   containerIndicator: Boolean
-) extends JourneyDomainModel
+)
 
 object PreRequisitesDomain {
 

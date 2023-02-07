@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import generators.Generators
 import models.DateTime
 import org.scalacheck.Gen
 import play.api.data.{Field, Form, FormError}
-import utils.Format
+import utils.Format.RichLocalDate
 
 import java.time.LocalDate
 
@@ -38,7 +38,8 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
 
   private val invalidTime     = s"$prefix.time.error.invalid"
   private val requiredAllTime = s"$prefix.time.error.required.all"
-  private val requiredOneTime = s"$prefix.time.error.required"
+  private val hourRequired    = s"$prefix.time.error.required.hour"
+  private val minuteRequired  = s"$prefix.time.error.required.minute"
 
   private val localDate  = LocalDate.now()
   private val dateBefore = localDate.minusDays(1)
@@ -85,7 +86,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
     "must not bind when empty" in {
       val result: Field = form.bind(emptyForm).apply(fieldName)
 
-      result.errors mustBe Seq(FormError(fieldName, List(requiredAllTime), List("hour", "minute")))
+      result.errors mustBe Seq(FormError(fieldName, List(requiredAllTime)))
     }
 
     "must not bind when hour is missing" in {
@@ -95,7 +96,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
       )
 
       val result = form.bind(data).apply(fieldName)
-      result.errors mustBe Seq(FormError(fieldName, List(requiredOneTime), List("hour")))
+      result.errors mustBe Seq(FormError(fieldName, List(hourRequired), List("hour")))
     }
 
     "must not bind when hour is invalid" in {
@@ -116,7 +117,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
       )
 
       val result = form.bind(data).apply(fieldName)
-      result.errors mustBe Seq(FormError(fieldName, List(requiredOneTime), List("minute")))
+      result.errors mustBe Seq(FormError(fieldName, List(minuteRequired), List("minute")))
     }
 
     "must not bind when minute is invalid" in {
@@ -138,7 +139,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
     "must not bind when empty" in {
       val result: Field = form.bind(emptyForm).apply(fieldName)
 
-      result.errors mustBe Seq(FormError(fieldName, List(requiredAllDate), List()))
+      result.errors mustBe Seq(FormError(fieldName, List(requiredAllDate)))
     }
 
     "must not bind when one field is missing" in {
@@ -255,7 +256,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
 
           val result: Form[DateTime] = form.bind(data)
 
-          val formattedArg = Format.dateFormatterDDMMYYYY.format(invalidDateTime)
+          val formattedArg = invalidDateTime.toLocalDate.formatAsString
 
           result.errors mustBe Seq(FormError(fieldName, List(maxDate), List(formattedArg)))
       }
@@ -284,7 +285,7 @@ class DateTimeFormProviderSpec extends FieldBehaviours with Generators {
 
           val result: Form[DateTime] = form.bind(data)
 
-          val formattedArg = Format.dateFormatterDDMMYYYY.format(invalidDateTime)
+          val formattedArg = invalidDateTime.toLocalDate.formatAsString
 
           result.errors mustBe Seq(FormError(fieldName, List(minDate), List(formattedArg)))
       }

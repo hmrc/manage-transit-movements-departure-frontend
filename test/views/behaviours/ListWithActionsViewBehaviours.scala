@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,28 +37,27 @@ trait ListWithActionsViewBehaviours extends YesNoViewBehaviours with Generators 
 
   def applyMaxedOutView: HtmlFormat.Appendable
 
-  def pageWithMoreItemsAllowed(additionalBehaviours: Unit = ()): Unit =
+  def pageWithMoreItemsAllowed(h1Args: Any*)(h2Args: Any*): Unit =
     "page with more items allowed" - {
 
-      behave like pageWithTitle(doc, s"$prefix.singular", listItems.length)
+      behave like pageWithTitle(doc, s"$prefix.singular", h1Args: _*)
 
-      behave like pageWithHeading(doc, s"$prefix.singular", listItems.length)
+      behave like pageWithHeading(doc, s"$prefix.singular", h1Args: _*)
 
       behave like pageWithListWithActions(doc, listItems)
 
-      behave like pageWithRadioItems(legendIsHeading = false)
+      behave like pageWithRadioItems(legendIsHeading = false, args = h2Args)
 
-      additionalBehaviours
     }
 
-  def pageWithItemsMaxedOut(): Unit =
+  def pageWithItemsMaxedOut(args: Any*): Unit =
     "page with items maxed out" - {
 
       val doc = parseView(applyMaxedOutView)
 
-      behave like pageWithTitle(doc, s"$prefix.plural", maxedOutListItems.length)
+      behave like pageWithTitle(doc, s"$prefix.plural", args: _*)
 
-      behave like pageWithHeading(doc, s"$prefix.plural", maxedOutListItems.length)
+      behave like pageWithHeading(doc, s"$prefix.plural", args: _*)
 
       behave like pageWithListWithActions(doc, maxedOutListItems)
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,8 +76,7 @@ class GuaranteeTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
             FlatRateVoucher,
             GuaranteeWaiverSecured,
             GuaranteeNotRequiredExemptPublicBody,
-            GuaranteeWaiverByAgreement,
-            GuaranteeNotRequired
+            GuaranteeWaiverByAgreement
           )
 
           radios mustBe expected
@@ -97,8 +96,7 @@ class GuaranteeTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
             GuaranteeWaiverSecured,
             GuaranteeNotRequiredExemptPublicBody,
             IndividualGuaranteeMultiple,
-            GuaranteeWaiverByAgreement,
-            GuaranteeNotRequired
+            GuaranteeWaiverByAgreement
           )
 
           radios mustBe expected

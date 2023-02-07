@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import base.SpecBase
 import controllers.traderDetails.representative.routes
 import generators.Generators
 import models.Mode
-import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -66,7 +65,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                           content = "Change".toText,
                           href = controllers.traderDetails.routes.ActingAsRepresentativeController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("if you are acting as a representative"),
-                          attributes = Map("id" -> "has-acting-representative")
+                          attributes = Map("id" -> "change-has-acting-representative")
                         )
                       )
                     )
@@ -101,7 +100,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Representative’s EORI number or Trader Identification Number (TIN)".toText),
+                  key = Key("EORI number or Trader Identification Number (TIN)".toText),
                   value = Value(eori.toText),
                   actions = Some(
                     Actions(
@@ -110,7 +109,51 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                           content = "Change".toText,
                           href = routes.EoriController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("representative’s EORI number or Trader Identification Number (TIN)"),
-                          attributes = Map("id" -> "representative-eori-number")
+                          attributes = Map("id" -> "change-representative-eori-number")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
+        }
+      }
+    }
+
+    "addDetails" - {
+      "must return None" - {
+        s"when $AddDetailsPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new RepresentativeCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.addDetails
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        s"when $AddDetailsPage is defined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(AddDetailsPage, true)
+
+              val helper = new RepresentativeCheckYourAnswersHelper(answers, mode)
+              val result = helper.addDetails
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Do you want to add your details?".toText),
+                  value = Value("Yes".toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = controllers.traderDetails.representative.routes.AddDetailsController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("if you want to add your details"),
+                          attributes = Map("id" -> "change-add-details")
                         )
                       )
                     )
@@ -145,7 +188,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Representative’s name".toText),
+                  key = Key("Name".toText),
                   value = Value(representativeName.toText),
                   actions = Some(
                     Actions(
@@ -154,51 +197,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                           content = "Change".toText,
                           href = routes.NameController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("representative’s name"),
-                          attributes = Map("id" -> "representative-name")
-                        )
-                      )
-                    )
-                  )
-                )
-              )
-          }
-        }
-      }
-    }
-
-    "capacity" - {
-      "must return None" - {
-        s"when $CapacityPage is undefined" in {
-          forAll(arbitrary[Mode]) {
-            mode =>
-              val helper = new RepresentativeCheckYourAnswersHelper(emptyUserAnswers, mode)
-              val result = helper.capacity
-              result mustBe None
-          }
-        }
-      }
-
-      "must return Some(Row)" - {
-        s"when $CapacityPage is defined" in {
-          forAll(Gen.oneOf(RepresentativeCapacity.values), arbitrary[Mode]) {
-            (capacity, mode) =>
-              val answers = emptyUserAnswers.setValue(CapacityPage, capacity)
-
-              val helper = new RepresentativeCheckYourAnswersHelper(answers, mode)
-              val result = helper.capacity
-
-              result mustBe Some(
-                SummaryListRow(
-                  key = Key("Representative capacity".toText),
-                  value = Value(messages(s"traderDetails.representative.capacity.$capacity").toText),
-                  actions = Some(
-                    Actions(
-                      items = List(
-                        ActionItem(
-                          content = "Change".toText,
-                          href = routes.CapacityController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("representative capacity"),
-                          attributes = Map("id" -> "representative-capacity")
+                          attributes = Map("id" -> "change-representative-name")
                         )
                       )
                     )
@@ -233,7 +232,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Representative’s phone number".toText),
+                  key = Key("Phone number".toText),
                   value = Value(representativePhoneNumber.toText),
                   actions = Some(
                     Actions(
@@ -242,7 +241,7 @@ class RepresentativeCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                           content = "Change".toText,
                           href = routes.TelephoneNumberController.onPageLoad(answers.lrn, mode).url,
                           visuallyHiddenText = Some("representative’s phone number"),
-                          attributes = Map("id" -> "representative-phone-number")
+                          attributes = Map("id" -> "change-representative-phone-number")
                         )
                       )
                     )

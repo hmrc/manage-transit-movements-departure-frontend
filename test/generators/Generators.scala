@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,8 @@ import wolfendale.scalacheck.regexp.RegexpGen
 import java.time._
 import scala.util.matching.Regex
 
-// TODO: Move away from mixing style to using objects
 // scalastyle:off number.of.methods
-trait Generators extends ModelGenerators with ViewModelGenerators with DomainModelGenerators {
+trait Generators extends UserAnswersGenerator with ModelGenerators with ViewModelGenerators with DomainModelGenerators {
 
   lazy val stringMaxLength = 36
 
@@ -232,7 +231,7 @@ trait Generators extends ModelGenerators with ViewModelGenerators with DomainMod
     ).map {
       localDateTime =>
         val dateTimeWithoutSeconds = localDateTime.minusSeconds(localDateTime.getSecond).minusNanos(localDateTime.getNano)
-        DateTime.deconcatenate(dateTimeWithoutSeconds)
+        DateTime(dateTimeWithoutSeconds)
     }
   }
 

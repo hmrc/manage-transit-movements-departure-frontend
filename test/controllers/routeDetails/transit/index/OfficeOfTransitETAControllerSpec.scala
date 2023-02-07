@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,9 +103,9 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
       "when country defined at index" in {
 
         val userAnswers = emptyUserAnswers
-          .setValue(OfficeOfTransitETAPage(index), dateTime)
           .setValue(OfficeOfTransitCountryPage(index), transitCountry)
           .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
+          .setValue(OfficeOfTransitETAPage(index), dateTime)
 
         setExistingUserAnswers(userAnswers)
 
@@ -134,9 +134,9 @@ class OfficeOfTransitETAControllerSpec extends SpecBase with AppWithDefaultMockF
       "when only country of destination defined" in {
 
         val userAnswers = emptyUserAnswers
-          .setValue(OfficeOfTransitETAPage(index), dateTime)
           .setValue(CountryOfDestinationPage, transitCountry)
           .setValue(OfficeOfTransitPage(index), transitCustomsOffice)
+          .setValue(OfficeOfTransitETAPage(index), dateTime)
 
         setExistingUserAnswers(userAnswers)
 

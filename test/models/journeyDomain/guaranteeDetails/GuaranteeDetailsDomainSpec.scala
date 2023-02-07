@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ package models.journeyDomain.guaranteeDetails
 import base.SpecBase
 import generators.Generators
 import models.DeclarationType.Option4
-import models.domain._
 import models.GuaranteeType._
-import models.journeyDomain.guaranteeDetails.GuaranteeDomain.GuaranteeOfTypesABR
+import models.domain._
+import models.journeyDomain.guaranteeDetails.GuaranteeDomain.GuaranteeOfTypesAB
 import models.{DeclarationType, Index}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.guaranteeDetails.guarantee.GuaranteeTypePage
@@ -39,7 +39,7 @@ class GuaranteeDetailsDomainSpec extends SpecBase with Generators {
 
         val expectedResult = GuaranteeDetailsDomain(
           Seq(
-            GuaranteeOfTypesABR(
+            GuaranteeOfTypesAB(
               `type` = TIRGuarantee
             )(Index(0))
           )
@@ -56,16 +56,12 @@ class GuaranteeDetailsDomainSpec extends SpecBase with Generators {
         val userAnswers = emptyUserAnswers
           .setValue(DeclarationTypePage, declarationType)
           .setValue(GuaranteeTypePage(Index(0)), GuaranteeWaiverByAgreement)
-          .setValue(GuaranteeTypePage(Index(1)), GuaranteeNotRequired)
 
         val expectedResult = GuaranteeDetailsDomain(
           Seq(
-            GuaranteeOfTypesABR(
+            GuaranteeOfTypesAB(
               `type` = GuaranteeWaiverByAgreement
-            )(Index(0)),
-            GuaranteeOfTypesABR(
-              `type` = GuaranteeNotRequired
-            )(Index(1))
+            )(Index(0))
           )
         )
 

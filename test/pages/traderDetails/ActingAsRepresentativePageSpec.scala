@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,9 @@
 
 package pages.traderDetails
 
-import models.traderDetails.representative.RepresentativeCapacity
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.traderDetails.representative.{CapacityPage, EoriPage, NamePage, TelephoneNumberPage}
+import pages.traderDetails.representative.{AddDetailsPage, EoriPage, NamePage, TelephoneNumberPage}
 
 class ActingAsRepresentativePageSpec extends PageBehaviours {
 
@@ -34,19 +33,18 @@ class ActingAsRepresentativePageSpec extends PageBehaviours {
     "cleanup" - {
       "when NO selected" - {
         "must clean up Representative pages" in {
-          forAll(arbitrary[String], arbitrary[String], arbitrary[String], arbitrary[RepresentativeCapacity]) {
-            (eori, name, telephone, capacity) =>
+          forAll(arbitrary[String], arbitrary[String], arbitrary[String]) {
+            (eori, name, telephone) =>
               val preChange = emptyUserAnswers
                 .setValue(ActingAsRepresentativePage, true)
                 .setValue(EoriPage, eori)
+                .setValue(AddDetailsPage, true)
                 .setValue(NamePage, name)
-                .setValue(CapacityPage, capacity)
                 .setValue(TelephoneNumberPage, telephone)
               val postChange = preChange.setValue(ActingAsRepresentativePage, false)
 
               postChange.get(EoriPage) mustNot be(defined)
               postChange.get(NamePage) mustNot be(defined)
-              postChange.get(CapacityPage) mustNot be(defined)
               postChange.get(TelephoneNumberPage) mustNot be(defined)
           }
         }

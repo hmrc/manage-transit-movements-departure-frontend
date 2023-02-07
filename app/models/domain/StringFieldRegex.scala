@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ object StringFieldRegex {
   val stringFieldRegex: Regex         = "[\\sa-zA-Z0-9&'@/.\\-? ]*".r
   val stringFieldRegexAsterisk: Regex = "[\\sa-zA-Z0-9&'*/.\\-? ]*".r
   val alphaNumericRegex: Regex        = "^[a-zA-Z0-9]*$".r
+  val numericRegex: Regex             = "^[0-9]*$".r
 
   val referenceNumberFormatRegex: Regex = "[0-9]{2}[a-zA-Z]{2}[a-zA-Z0-9]{12}[0-9]([a-zA-Z][0-9]{6})?".r
 
@@ -32,7 +33,7 @@ object StringFieldRegex {
   val tirIdNumberCharacterRegex: Regex = "^[a-zA-Z0-9/]+$".r
   val tirIdNumberFormatRegex: Regex    = "^[a-zA-Z]{3}\\/[0-9]{3}\\/[0-9]{0,9}$".r
 
-  val alphaNumericWithSpacesRegex: Regex = "^[a-zA-Z\\s*0-9]*$".r
+  val alphaNumericWithSpacesRegex: Regex = "^[a-zA-Z\\s0-9]*$".r
 
   val coordinatesCharacterRegex: Regex     = "^[0-9.+-]+$".r
   val coordinatesLatitudeMaxRegex: String  = "^[+-]?([0-8]?[0-9]\\.[0-9]{5,7})$"

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import viewModels.InputSize
 
 trait CurrencyInputViewBehaviours extends InputTextViewBehaviours[BigDecimal] {
 
+  val currencySymbol: String = nonEmptyString.sample.value
+
   def pageWithCurrencyInput(): Unit = {
 
     behave like pageWithInputText(Some(InputSize.Width10))
@@ -34,7 +36,7 @@ trait CurrencyInputViewBehaviours extends InputTextViewBehaviours[BigDecimal] {
       }
 
       "must have correct prefix" in {
-        assert(getElementByClass(doc, "govuk-input__prefix").text() == "£")
+        assert(getElementByClass(doc, "govuk-input__prefix").text() == currencySymbol)
       }
     }
   }
