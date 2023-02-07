@@ -31,11 +31,11 @@ class LiabilityAmountViewSpec extends CurrencyInputViewBehaviours {
   override def form: Form[BigDecimal] = new MoneyFormProvider()(prefix)
 
   override def applyView(form: Form[BigDecimal]): HtmlFormat.Appendable =
-    injector.instanceOf[LiabilityAmountView].apply(form, lrn, NormalMode, index)(fakeRequest, messages)
+    injector.instanceOf[LiabilityAmountView].apply(form, lrn, NormalMode, index, currencySymbol)(fakeRequest, messages)
 
   implicit override val arbitraryT: Arbitrary[BigDecimal] = Arbitrary(Gen.double.map(BigDecimal(_)))
 
-  override val inputPrefix: Option[String] = Some("£")
+  override val inputPrefix: Option[String] = Some(currencySymbol)
 
   behave like pageWithTitle()
 

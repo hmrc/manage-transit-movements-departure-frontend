@@ -288,8 +288,8 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
         val expectedResult =
           Seq(
-            CurrencyCode("GBP", "Sterling"),
-            CurrencyCode("CHF", "Swiss Franc")
+            CurrencyCode("GBP", Some("Sterling")),
+            CurrencyCode("CHF", Some("Swiss Franc"))
           )
 
         connector.getCurrencyCodes().futureValue mustBe expectedResult

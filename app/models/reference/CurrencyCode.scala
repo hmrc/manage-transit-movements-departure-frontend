@@ -20,10 +20,18 @@ import models.Selectable
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 
-case class CurrencyCode(currency: String, description: String) extends Selectable {
-  override def toString: String = currency
+import java.util.Currency
+import scala.util.Try
+
+case class CurrencyCode(currency: String, description: Option[String]) extends Selectable {
+
+  override def toString: String = currency + description.fold("")(
+    x => s" - $x"
+  )
 
   override def toSelectItem(selected: Boolean): SelectItem = SelectItem(Some(currency), this.toString, selected)
+
+  val symbol: String = Try(Currency.getInstance(currency).getSymbol).getOrElse(currency)
 }
 
 object CurrencyCode {

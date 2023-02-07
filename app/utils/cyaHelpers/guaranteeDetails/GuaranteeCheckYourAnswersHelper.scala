@@ -77,11 +77,15 @@ class GuaranteeCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode, inde
     id = Some("change-liability-currency")
   )
 
-  def liabilityAmount: Option[SummaryListRow] = getAnswerAndBuildRow[BigDecimal](
-    page = LiabilityAmountPage(index),
-    formatAnswer = formatAsCurrency,
-    prefix = "guaranteeDetails.guarantee.liabilityAmount",
-    id = Some("change-liability-amount")
-  )
+  def liabilityAmount: Option[SummaryListRow] =
+    userAnswers.get(CurrencyPage(index)).flatMap {
+      currencyCode =>
+        getAnswerAndBuildRow[BigDecimal](
+          page = LiabilityAmountPage(index),
+          formatAnswer = formatAsCurrency(_, currencyCode),
+          prefix = "guaranteeDetails.guarantee.liabilityAmount",
+          id = Some("change-liability-amount")
+        )
+    }
 
 }
