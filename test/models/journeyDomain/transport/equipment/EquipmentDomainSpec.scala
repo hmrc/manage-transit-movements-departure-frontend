@@ -26,6 +26,7 @@ import models.{Index, ProcedureType}
 import pages.preTaskList.ProcedureTypePage
 import pages.sections.transport.equipment.EquipmentSection
 import pages.transport.authorisationsAndLimit.authorisations.index.AuthorisationTypePage
+import pages.transport.equipment.AddTransportEquipmentYesNoPage
 import pages.transport.equipment.index._
 import pages.transport.equipment.index.itemNumber.ItemNumberPage
 import pages.transport.equipment.index.seals.IdentificationNumberPage
@@ -127,29 +128,47 @@ class EquipmentDomainSpec extends SpecBase with Generators {
           result.value mustBe expectedResult
         }
       }
+
+      "cannot be parsed from user answers" - {
+        "when adding transport equipment" - {
+          "and normal procedure type" in {
+            val userAnswers = emptyUserAnswers
+              .setValue(ProcedureTypePage, ProcedureType.Normal)
+              .setValue(ContainerIndicatorPage, false)
+              .setValue(AddTransportEquipmentYesNoPage, true)
+
+            val result: EitherType[EquipmentDomain] = UserAnswersReader[EquipmentDomain](
+              EquipmentDomain.userAnswersReader(index)
+            ).run(userAnswers)
+
+            result.left.value.page mustBe AddSealYesNoPage(equipmentIndex)
+          }
+        }
+      }
     }
 
     "containerIdReads" - {
       "can be read from user answers" - {
-        "when at index 0" in {
-          val index = Index(0)
+        "when container indicator is true" - {
+          "and at index 0" in {
+            val index = Index(0)
 
-          val userAnswers = emptyUserAnswers
-            .setValue(ContainerIdentificationNumberPage(index), containerId)
+            val userAnswers = emptyUserAnswers
+              .setValue(ContainerIndicatorPage, true)
+              .setValue(ContainerIdentificationNumberPage(index), containerId)
 
-          val expectedResult = Some(containerId)
+            val expectedResult = Some(containerId)
 
-          val result: EitherType[Option[String]] = UserAnswersReader[Option[String]](
-            EquipmentDomain.containerIdReads(index)
-          ).run(userAnswers)
+            val result: EitherType[Option[String]] = UserAnswersReader[Option[String]](
+              EquipmentDomain.containerIdReads(index)
+            ).run(userAnswers)
 
-          result.value mustBe expectedResult
-        }
+            result.value mustBe expectedResult
+          }
 
-        "when not at index 0" - {
-          val index = Index(1)
+          "and not at index 0" - {
+            val index = Index(1)
 
-          "and container indicator is true" - {
             "and add container id yes/no is true" in {
               val userAnswers = emptyUserAnswers
                 .setValue(ContainerIndicatorPage, true)
@@ -181,19 +200,19 @@ class EquipmentDomainSpec extends SpecBase with Generators {
               result.value mustBe expectedResult
             }
           }
+        }
 
-          "and container indicator is false" in {
-            val userAnswers = emptyUserAnswers
-              .setValue(ContainerIndicatorPage, false)
+        "when container indicator is false" in {
+          val userAnswers = emptyUserAnswers
+            .setValue(ContainerIndicatorPage, false)
 
-            val expectedResult = None
+          val expectedResult = None
 
-            val result: EitherType[Option[String]] = UserAnswersReader[Option[String]](
-              EquipmentDomain.containerIdReads(index)
-            ).run(userAnswers)
+          val result: EitherType[Option[String]] = UserAnswersReader[Option[String]](
+            EquipmentDomain.containerIdReads(index)
+          ).run(userAnswers)
 
-            result.value mustBe expectedResult
-          }
+          result.value mustBe expectedResult
         }
       }
 
@@ -202,9 +221,12 @@ class EquipmentDomainSpec extends SpecBase with Generators {
           val index = Index(0)
 
           "and container id is unanswered" in {
+            val userAnswers = emptyUserAnswers
+              .setValue(ContainerIndicatorPage, true)
+
             val result: EitherType[Option[String]] = UserAnswersReader[Option[String]](
               EquipmentDomain.containerIdReads(index)
-            ).run(emptyUserAnswers)
+            ).run(userAnswers)
 
             result.left.value.page mustBe ContainerIdentificationNumberPage(index)
           }

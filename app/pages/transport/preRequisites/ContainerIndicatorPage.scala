@@ -20,8 +20,11 @@ import controllers.transport.preRequisites.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.transport.PreRequisitesSection
+import pages.sections.transport.equipment.EquipmentsSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
+
+import scala.util.Try
 
 case object ContainerIndicatorPage extends QuestionPage[Boolean] {
 
@@ -31,4 +34,10 @@ case object ContainerIndicatorPage extends QuestionPage[Boolean] {
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.ContainerIndicatorController.onPageLoad(userAnswers.lrn, mode))
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(_) => userAnswers.remove(EquipmentsSection)
+      case None    => super.cleanup(value, userAnswers)
+    }
 }

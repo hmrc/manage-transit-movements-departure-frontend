@@ -42,6 +42,7 @@ case class AuthorisationTypePage(authorisationIndex: Index) extends QuestionPage
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.AuthorisationTypeController.onPageLoad(userAnswers.lrn, mode, authorisationIndex))
 
+  // TODO - if user adds or removes a SSE type authorisation this affects the transport equipment seals and goods item numbers nav.
   override def cleanup(value: Option[AuthorisationType], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(_) => userAnswers.remove(AuthorisationReferenceNumberPage(authorisationIndex))

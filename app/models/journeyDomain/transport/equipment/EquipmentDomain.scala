@@ -50,18 +50,17 @@ object EquipmentDomain {
     goodsItemNumbers <- if (seals.isDefined) goodsItemNumbersReads(equipmentIndex) else none[ItemNumbersDomain].pure[UserAnswersReader]
   } yield EquipmentDomain(containerId, seals, goodsItemNumbers)(equipmentIndex)
 
-  def containerIdReads(equipmentIndex: Index): UserAnswersReader[Option[String]] = equipmentIndex.position match {
-    case 0 =>
-      ContainerIdentificationNumberPage(equipmentIndex).reader.map(Option(_))
-    case _ =>
-      ContainerIndicatorPage
-        .filterOptionalDependent(identity) {
-          AddContainerIdentificationNumberYesNoPage(equipmentIndex).filterOptionalDependent(identity) {
-            ContainerIdentificationNumberPage(equipmentIndex).reader
-          }
+  def containerIdReads(equipmentIndex: Index): UserAnswersReader[Option[String]] =
+    ContainerIndicatorPage.reader.flatMap {
+      case true if equipmentIndex.isFirst =>
+        ContainerIdentificationNumberPage(equipmentIndex).reader.map(Option(_))
+      case true =>
+        AddContainerIdentificationNumberYesNoPage(equipmentIndex).filterOptionalDependent(identity) {
+          ContainerIdentificationNumberPage(equipmentIndex).reader
         }
-        .map(_.flatten)
-  }
+      case false =>
+        none[String].pure[UserAnswersReader]
+    }
 
   def sealsReads(equipmentIndex: Index): UserAnswersReader[Option[SealsDomain]] = for {
     procedureType      <- ProcedureTypePage.reader
