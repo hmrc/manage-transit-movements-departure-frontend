@@ -4,3 +4,5 @@ GET        /:lrn/transport-details/equipment/add-transport-equipment            
 POST       /:lrn/transport-details/equipment/add-transport-equipment                     controllers.transport.equipment.AddTransportEquipmentYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/transport-details/equipment/change-add-transport-equipment              controllers.transport.equipment.AddTransportEquipmentYesNoController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/transport-details/equipment/change-add-transport-equipment              controllers.transport.equipment.AddTransportEquipmentYesNoController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/transport/equipment/you-have-added-1-transport-equipment                        controllers.transport.equipment.AddAnotherTransportEquipmentController.onPageLoad(lrn: LocalReferenceNumber)
