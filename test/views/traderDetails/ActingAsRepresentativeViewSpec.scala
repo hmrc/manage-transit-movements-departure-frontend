@@ -37,6 +37,8 @@ class ActingAsRepresentativeViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithHeading()
 
+  behave like pageWithContent("p", "This means moving the goods for someone else or completing the declaration on behalf of a transit holder.")
+
   behave like pageWithRadioItems()
 
   behave like pageWithSubmitButton("Save and continue")
