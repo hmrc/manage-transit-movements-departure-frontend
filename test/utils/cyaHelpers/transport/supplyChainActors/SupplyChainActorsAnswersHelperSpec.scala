@@ -77,6 +77,27 @@ class SupplyChainActorsAnswersHelperSpec extends SpecBase with ScalaCheckPropert
           }
         }
       }
+
+      "when user answers populated with an in progress supply chain actor" in {
+
+        forAll(arbitrary[Mode], arbitrary[SupplyChainActorType]) {
+          (mode, actorRole) =>
+            val userAnswers = emptyUserAnswers
+              .setValue(SupplyChainActorYesNoPage, true)
+              .setValue(SupplyChainActorTypePage(Index(0)), actorRole)
+
+            val helper = new SupplyChainActorsAnswersHelper(userAnswers, mode)
+            helper.listItems mustBe Seq(
+              Left(
+                ListItem(
+                  name = s"${actorRole.asString}",
+                  changeUrl = routes.IdentificationNumberController.onPageLoad(userAnswers.lrn, mode, Index(0)).url,
+                  removeUrl = Some(routes.RemoveSupplyChainActorController.onPageLoad(userAnswers.lrn, mode, Index(0)).url)
+                )
+              )
+            )
+        }
+      }
     }
   }
 
