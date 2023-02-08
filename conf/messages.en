@@ -1481,3 +1481,8 @@ transport.equipment.index.addAnotherGoodsItemNumber.plural.heading = You have ad
 transport.equipment.index.addAnotherGoodsItemNumber.label = Do you want to add another goods item number?
 transport.equipment.index.addAnotherGoodsItemNumber.maxLimit.label = You cannot add any more goods item numbers. To add another, you need to remove one first.
 transport.equipment.index.addAnotherGoodsItemNumber.error.required = Select yes if you want to add another goods item number
+
+transport.equipment.index.removeTransportEquipment.title = Are you sure you want to remove transport equipment
+transport.equipment.index.removeTransportEquipment.heading = Are you sure you want to remove transport equipment
+transport.equipment.index.removeTransportEquipment.checkYourAnswersLabel = Are you sure you want to remove transport equipment
+transport.equipment.index.removeTransportEquipment.error.required = Select yes if Are you sure you want to remove transport equipment
