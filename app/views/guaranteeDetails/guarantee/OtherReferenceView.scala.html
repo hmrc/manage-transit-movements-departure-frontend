@@ -44,7 +44,7 @@
             inputTextType = TextInputWithHiddenLabel(
                 heading = messages(s"$prefix.heading"),
                 caption = Some(messages("guaranteeDetails.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("guaranteeDetails.guarantee.otherReference.paragraph")}</p>""")
+                additionalHtml = messages("guaranteeDetails.guarantee.otherReference.paragraph").toParagraph
             ),
             hint = Some(messages("guaranteeDetails.guarantee.otherReference.hint")),
             inputClass = InputSize.Width20

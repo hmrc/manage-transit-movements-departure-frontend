@@ -45,7 +45,7 @@
             yesNoType = YesNoWithAdditionalHtml(
                 heading = messages("routeDetails.transit.index.addOfficeOfTransitETAYesNo.heading", officeOfTransit.toString),
                 caption = Some(messages("routeDetails.transit.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.transit.index.addOfficeOfTransitETAYesNo.paragraph")}</p>""")
+                additionalHtml = messages("routeDetails.transit.index.addOfficeOfTransitETAYesNo.paragraph").toParagraph
             )
         )
 

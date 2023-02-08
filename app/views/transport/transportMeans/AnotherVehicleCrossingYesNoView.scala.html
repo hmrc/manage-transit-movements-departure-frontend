@@ -44,7 +44,7 @@
             yesNoType = YesNoWithAdditionalHtml(
                 heading = messages("transport.transportMeans.anotherVehicleCrossingYesNo.heading"),
                 caption = Some(messages("transport.activeBorderModeOfTransport.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("transport.transportMeans.anotherVehicleCrossingYesNo.paragraph")}</p>""")
+                additionalHtml = messages("transport.transportMeans.anotherVehicleCrossingYesNo.paragraph").toParagraph
             )
         )
 

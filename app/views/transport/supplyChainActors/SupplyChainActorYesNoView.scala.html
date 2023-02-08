@@ -44,7 +44,7 @@
             yesNoType = YesNoWithAdditionalHtml(
                 heading = messages("transport.supplyChainActors.supplyChainActorYesNo.heading"),
                 caption = Option(messages("transport.supplyChainActors.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("transport.supplyChainActors.supplyChainActorYesNo.paragraph")}</p>""")
+                additionalHtml = messages("transport.supplyChainActors.supplyChainActorYesNo.paragraph").toParagraph
             )
         )
 

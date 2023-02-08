@@ -44,7 +44,7 @@
             yesNoType = YesNoWithAdditionalHtml(
                 heading = messages("transport.preRequisites.containerIndicator.heading"),
                 caption = Some(messages("transport.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("transport.preRequisites.containerIndicator.paragraph")}</p>""")
+                additionalHtml = messages("transport.preRequisites.containerIndicator.paragraph").toParagraph
             )
         )
 
