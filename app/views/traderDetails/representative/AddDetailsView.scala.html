@@ -44,7 +44,7 @@
             yesNoType = YesNoWithAdditionalHtml(
                 heading = messages("traderDetails.representative.addDetails.heading"),
                 caption = Some(messages("traderDetails.representative.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("traderDetails.representative.addDetails.paragraph")}</p>""")
+                additionalHtml = messages("traderDetails.representative.addDetails.paragraph").toParagraph
             )
         )
 

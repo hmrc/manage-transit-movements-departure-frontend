@@ -47,7 +47,7 @@
             field = form("value"),
             selectType = SelectWithAdditionalHtml(
                 heading = messages("officeOfDeparture.heading"),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("officeOfDeparture.paragraph")}</p>""")
+                additionalHtml = messages("officeOfDeparture.paragraph").toParagraph
             ),
             hint = Some(messages("officeOfDeparture.hint")),
             selectItems = customsOffices.toSelectItems(form.value),
