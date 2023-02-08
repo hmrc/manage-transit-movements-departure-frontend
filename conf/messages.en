@@ -166,7 +166,7 @@ traderDetails.actingRepresentative.title = Are you acting as a representative?
 traderDetails.actingRepresentative.heading = Are you acting as a representative?
 traderDetails.actingRepresentative.checkYourAnswersLabel = Are you acting as a representative?
 traderDetails.actingRepresentative.error.required = Select yes if you are acting as a representative
-traderDetails.actingRepresentative.hint = You are a representative if you are moving the goods for someone else or you are completing the declaration on behalf of a transit holder.
+traderDetails.actingRepresentative.paragraph = This means moving the goods for someone else or completing the declaration on behalf of a transit holder.
 traderDetails.actingRepresentative.change.hidden = if you are acting as a representative
 
 traderDetails.checkYourAnswers.heading = Check your answers
