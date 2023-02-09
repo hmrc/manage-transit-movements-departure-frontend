@@ -801,7 +801,6 @@ const addAnotherTransportSeal = (lrn, data) => {
 
 const transportGoodsItem = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/transport-equipment/1/goods-item-numbers/1/goods-item-number`)){
-        //toggleTransportDetailsButtonsOff() // Update as journey progresses
         document.getElementById('value').value = data
         document.getElementsByClassName('govuk-button')[0].click()
     }
@@ -809,6 +808,7 @@ const transportGoodsItem = (lrn, data) => {
 
 const addAnotherGoodsItem = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/transport-equipment/1/goods-item-numbers/add-another`)){
+        toggleTransportDetailsButtonsOff() // Update as journey progresses
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
