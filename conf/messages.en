@@ -1394,8 +1394,8 @@ transport.carrierDetails.contact.telephoneNumber.error.minLength = {0}’s telep
 # Transport equipment
 
 transport.equipment.caption = Transport details - Transport equipment
-transport.equipment.container.value = Transport equipment {0} - container {1}
-transport.equipment.value = Transport equipment {0}
+transport.equipment.value.withContainer = Transport equipment {0} - container {1}
+transport.equipment.value.withoutContainer = Transport equipment {0}
 
 transport.equipment.addTransportEquipmentYesNo.title = Do you need to add any transport equipment?
 transport.equipment.addTransportEquipmentYesNo.heading = Do you need to add any transport equipment?
