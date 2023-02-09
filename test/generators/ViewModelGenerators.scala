@@ -28,7 +28,7 @@ import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import viewModels.sections.Section
 import viewModels.taskList.{TaskListTask, TaskStatus}
 import viewModels.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationViewModel
-import viewModels.transport.equipment.AddAnotherSealViewModel
+import viewModels.transport.equipment.{AddAnotherEquipmentViewModel, AddAnotherSealViewModel}
 import viewModels.transport.equipment.index.AddAnotherGoodsItemNumberViewModel
 import viewModels.transport.supplyChainActors.AddAnotherSupplyChainActorViewModel
 import viewModels.transport.transportMeans.active.AddAnotherBorderTransportViewModel
@@ -258,5 +258,12 @@ trait ViewModelGenerators {
       listItems    <- arbitrary[Seq[ListItem]]
       onSubmitCall <- arbitrary[Call]
     } yield AddAnotherGoodsItemNumberViewModel(listItems, onSubmitCall)
+  }
+
+  implicit lazy val arbitraryAddAnotherEquipmentViewModel: Arbitrary[AddAnotherEquipmentViewModel] = Arbitrary {
+    for {
+      listItems    <- arbitrary[Seq[ListItem]]
+      onSubmitCall <- arbitrary[Call]
+    } yield AddAnotherEquipmentViewModel(listItems, onSubmitCall)
   }
 }
