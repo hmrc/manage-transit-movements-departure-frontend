@@ -24,18 +24,22 @@ import views.html.transport.equipment.index.RemoveTransportEquipmentView
 
 class RemoveTransportEquipmentViewSpec extends YesNoViewBehaviours {
 
+  private val equipmentIdNumber = equipmentIndex.display
+
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-    injector.instanceOf[RemoveTransportEquipmentView].apply(form, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[RemoveTransportEquipmentView].apply(form, lrn, NormalMode, equipmentIndex)(fakeRequest, messages)
 
   override val prefix: String = "transport.equipment.index.removeTransportEquipment"
 
-  behave like pageWithTitle()
+  behave like pageWithTitle(equipmentIdNumber)
 
   behave like pageWithBackLink()
 
-  behave like pageWithHeading()
+  behave like pageWithSectionCaption("Transport details - Transport equipment")
 
-  behave like pageWithRadioItems()
+  behave like pageWithHeading(equipmentIdNumber)
+
+  behave like pageWithRadioItems(args = Seq(equipmentIdNumber))
 
   behave like pageWithSubmitButton("Save and continue")
 }

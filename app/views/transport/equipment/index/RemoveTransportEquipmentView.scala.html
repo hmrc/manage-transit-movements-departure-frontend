@@ -27,22 +27,23 @@
     button: Button
 )
 
-@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("transport.equipment.index.removeTransportEquipment.title"),
+    title = messages("transport.equipment.index.removeTransportEquipment.title", equipmentIndex.display),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
 
-    @formHelper(action = routes.RemoveTransportEquipmentController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.RemoveTransportEquipmentController.onSubmit(lrn, mode, equipmentIndex), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
         @inputYesNo(
             field = form("value"),
             yesNoType = OrdinaryYesNo(
-                heading = messages("transport.equipment.index.removeTransportEquipment.heading")
+                heading = messages("transport.equipment.index.removeTransportEquipment.heading", equipmentIndex.display),
+                caption = Some(messages("transport.equipment.caption"))
             )
         )
 

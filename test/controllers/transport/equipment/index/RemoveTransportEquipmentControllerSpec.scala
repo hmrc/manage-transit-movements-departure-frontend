@@ -18,31 +18,27 @@ package controllers.transport.equipment.index
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
-import models.NormalMode
-import navigation.transport.EquipmentNavigatorProvider
+import generators.Generators
+import models.{NormalMode, UserAnswers}
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
-import pages.transport.equipment.index.RemoveTransportEquipmentPage
-import play.api.inject.bind
-import play.api.inject.guice.GuiceApplicationBuilder
+import org.mockito.Mockito.{never, verify, when}
+import pages.sections.transport.equipment.EquipmentSection
+import pages.transport.equipment.index.ContainerIdentificationNumberPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.transport.equipment.index.RemoveTransportEquipmentView
 
 import scala.concurrent.Future
 
-class RemoveTransportEquipmentControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar {
+class RemoveTransportEquipmentControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
+  private val containerIdNumber                  = nonEmptyString.sample.value
+  private val equipmentIdNumber                  = equipmentIndex.display
   private val formProvider                       = new YesNoFormProvider()
-  private val form                               = formProvider("transport.equipment.index.removeTransportEquipment")
+  private val form                               = formProvider("transport.equipment.index.removeTransportEquipment", equipmentIdNumber)
   private val mode                               = NormalMode
-  private lazy val removeTransportEquipmentRoute = routes.RemoveTransportEquipmentController.onPageLoad(lrn, mode).url
-
-  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
-    super
-      .guiceApplicationBuilder()
-      .overrides(bind(classOf[EquipmentNavigatorProvider]).toInstance(fakeEquipmentNavigatorProvider))
+  private lazy val removeTransportEquipmentRoute = routes.RemoveTransportEquipmentController.onPageLoad(lrn, mode, equipmentIndex).url
 
   "RemoveTransportEquipment Controller" - {
 
@@ -58,42 +54,52 @@ class RemoveTransportEquipmentControllerSpec extends SpecBase with AppWithDefaul
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, mode)(request, messages).toString
+        view(form, lrn, mode, equipmentIndex)(request, messages).toString
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must redirect to the next page" - {
+      "when yes is submitted" in {
 
-      val userAnswers = emptyUserAnswers.setValue(RemoveTransportEquipmentPage, true)
-      setExistingUserAnswers(userAnswers)
+        when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      val request = FakeRequest(GET, removeTransportEquipmentRoute)
+        val userAnswers = emptyUserAnswers.setValue(ContainerIdentificationNumberPage(equipmentIndex), containerIdNumber)
 
-      val result = route(app, request).value
+        setExistingUserAnswers(userAnswers)
 
-      val filledForm = form.bind(Map("value" -> "true"))
+        val request = FakeRequest(POST, removeTransportEquipmentRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
-      val view = injector.instanceOf[RemoveTransportEquipmentView]
+        val result = route(app, request).value
 
-      status(result) mustEqual OK
+        status(result) mustEqual SEE_OTHER
 
-      contentAsString(result) mustEqual
-        view(filledForm, lrn, mode)(request, messages).toString
-    }
+        redirectLocation(result).value mustEqual "#" //TODO: update to add another page
 
-    "must redirect to the next page when valid data is submitted" in {
+        val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
+        userAnswersCaptor.getValue.get(EquipmentSection(equipmentIndex)) mustNot be(defined)
 
-      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+      }
 
-      setExistingUserAnswers(emptyUserAnswers)
+      "when no is submitted" in {
 
-      val request = FakeRequest(POST, removeTransportEquipmentRoute)
-        .withFormUrlEncodedBody(("value", "true"))
+        when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      val result = route(app, request).value
+        val userAnswers = emptyUserAnswers.setValue(ContainerIdentificationNumberPage(equipmentIndex), containerIdNumber)
 
-      status(result) mustEqual SEE_OTHER
+        setExistingUserAnswers(userAnswers)
 
-      redirectLocation(result).value mustEqual onwardRoute.url
+        val request = FakeRequest(POST, removeTransportEquipmentRoute)
+          .withFormUrlEncodedBody(("value", "false"))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual "#" //TODO: update to add another page
+
+        verify(mockSessionRepository, never()).set(any())(any())
+      }
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
@@ -110,7 +116,7 @@ class RemoveTransportEquipmentControllerSpec extends SpecBase with AppWithDefaul
       val view = injector.instanceOf[RemoveTransportEquipmentView]
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, mode)(request, messages).toString
+        view(boundForm, lrn, mode, equipmentIndex)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

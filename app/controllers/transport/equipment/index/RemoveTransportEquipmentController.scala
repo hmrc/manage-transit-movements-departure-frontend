@@ -19,13 +19,12 @@ package controllers.transport.equipment.index
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
-import models.journeyDomain.transport.equipment.EquipmentDomain
-import models.{LocalReferenceNumber, Mode}
-import navigation.UserAnswersNavigator
-import navigation.transport.EquipmentNavigatorProvider
-import pages.transport.equipment.index.RemoveTransportEquipmentPage
+import models.journeyDomain.transport.TransportDomain
+import models.{Index, LocalReferenceNumber, Mode}
+import pages.sections.transport.equipment.EquipmentSection
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.transport.equipment.index.RemoveTransportEquipmentView
@@ -36,7 +35,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class RemoveTransportEquipmentController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: EquipmentNavigatorProvider,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -45,27 +43,29 @@ class RemoveTransportEquipmentController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("transport.equipment.index.removeTransportEquipment")
+  private def form(equipmentIndex: Index): Form[Boolean] = formProvider("transport.equipment.index.removeTransportEquipment", equipmentIndex.display)
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(RemoveTransportEquipmentPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, lrn, mode))
+      Ok(view(form(equipmentIndex), lrn, mode, equipmentIndex))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      form
+      lazy val redirect = Call("GET", "#") //TODO: update to add another page
+      form(equipmentIndex)
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
-          value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            RemoveTransportEquipmentPage.writeToUserAnswers(value).updateTask[EquipmentDomain]().writeToSession().navigate()
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, equipmentIndex))),
+          {
+            case true =>
+              EquipmentSection(equipmentIndex)
+                .removeFromUserAnswers()
+                .updateTask[TransportDomain]()
+                .writeToSession()
+                .navigateTo(redirect)
+            case false =>
+              Future.successful(Redirect(redirect))
           }
         )
   }
