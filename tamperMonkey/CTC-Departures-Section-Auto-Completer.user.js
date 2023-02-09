@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CTC-Departures Section Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      8.0
+// @version      9.0
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @match        http*://*/manage-transit-movements/departures/*/task-list
@@ -217,7 +217,7 @@ function createTransportDetailsButton() {
     }
 
     button.style.margin = '1px'
-    button.innerHTML = 'Complete Transport Details (Up to Seal Identification)'
+    button.innerHTML = 'Complete Transport Details (Up to Transport Equipment CYA)'
     button.addEventListener("click", function handleClick() {
         GM_setValue('transportDetailsToggle',true)
         transportDetails()
@@ -337,7 +337,7 @@ function createPanicButton() {
 
 const startTraderDetails = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
-        location.href = `/manage-transit-movements/departures/${lrn}/trader-details/transit-holder/add-eori-tin`
+        location.href = `/manage-transit-movements/departures/${lrn}/trader-details/`
     }
 }
 
@@ -484,8 +484,7 @@ const traderDetailsCYA = (lrn) => {
 
 const startRouteDetails = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
-        let url = document.querySelectorAll(`[href="/manage-transit-movements/departures/${lrn}/route-details"]`)
-        url[0].click()
+        location.href = `/manage-transit-movements/departures/${lrn}/route-details`
     }
 }
 
@@ -737,8 +736,6 @@ const addSupplyChainActor = (lrn, data) => {
     }
 }
 
-// Uncomment transport details code once authorisation type navigation has been tested
-
 const addAuth = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/authorisations/add`)){
         document.getElementById(data).click()
@@ -783,11 +780,46 @@ const addTransportEquipment = (lrn, data) => {
 
 const addTransportSeal = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/transport-equipment/1/seals/add`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const transportSealNumber = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/transport-equipment/1/seals/1/identification-number`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const addAnotherTransportSeal = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/transport-equipment/1/seals/add-another`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const transportGoodsItem = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/transport-equipment/1/goods-item-numbers/1/goods-item-number`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const addAnotherGoodsItem = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/transport-equipment/1/goods-item-numbers/add-another`)){
         toggleTransportDetailsButtonsOff() // Update as journey progresses
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
+
+// const transportSealCYA= (lrn) => {
+//     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/transport-equipment/1/check-answers`)){
+//         toggleTransportDetailsButtonsOff() // Update as journey progresses
+//         document.getElementsByClassName('govuk-button')[0].click()
+//     }
+// }
 
 
 /* #### Guarantee Details #### */
@@ -795,9 +827,7 @@ const addTransportSeal = (lrn, data) => {
 
 const startGuaranteeDetails = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
-        let url = document.querySelectorAll(`[href="/manage-transit-movements/departures/${lrn}/guarantee-details"]`)[0].click()
-        url[0].click()
-
+        location.href = `/manage-transit-movements/departures/${lrn}/guarantee-details`
     }
 }
 
@@ -938,6 +968,11 @@ function transportDetails() {
     addCarrierContact(getLRN(), 'value-no')
     addTransportEquipment(getLRN(), 'value')
     addTransportSeal(getLRN(), 'value')
+    transportSealNumber(getLRN(), 'TransportSeal1')
+    addAnotherTransportSeal(getLRN(), 'value-no')
+    transportGoodsItem(getLRN(), '1234')
+    addAnotherGoodsItem(getLRN(), 'value-no')
+    // transportSealCYA(getLRN())
 }
 
 /* ## Guarantee Details ## */
