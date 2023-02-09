@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
 @import controllers.transport.equipment.routes
 @import models.LocalReferenceNumber
 @import viewModels.components.InputYesNoViewModel._
@@ -30,7 +31,7 @@
     button: Button
 )
 
-@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, viewModel: AddAnotherEquipmentViewModel, allowMoreEquipments: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, viewModel: AddAnotherEquipmentViewModel)(implicit request: Request[_], messages: Messages, config: FrontendAppConfig)
 
 @mainTemplate(
     title = viewModel.title,
@@ -49,7 +50,7 @@
 
     @formHelper(action = routes.AddAnotherEquipmentController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
-        @if(allowMoreEquipments) {
+        @if(viewModel.allowMore) {
             @inputYesNo(
                 field = form("value"),
                 yesNoType = YesNoWithLegend(

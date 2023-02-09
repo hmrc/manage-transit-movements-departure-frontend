@@ -33,7 +33,7 @@ class AddAnotherSealViewSpec extends ListWithActionsViewBehaviours {
   override def maxNumber: Int = frontendAppConfig.maxSeals
 
   private def formProvider(viewModel: AddAnotherSealViewModel) =
-    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMoreSeals)
+    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMore)
 
   private val viewModel                     = arbitrary[AddAnotherSealViewModel].sample.value
   private val viewModelWithItemsNotMaxedOut = viewModel.copy(listItems = listItems)
@@ -46,12 +46,12 @@ class AddAnotherSealViewSpec extends ListWithActionsViewBehaviours {
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherSealView]
-      .apply(form, lrn, mode, viewModelWithItemsNotMaxedOut, true, equipmentIndex)(fakeRequest, messages)
+      .apply(form, lrn, mode, viewModelWithItemsNotMaxedOut, equipmentIndex)(fakeRequest, messages, frontendAppConfig)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherSealView]
-      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut, false, equipmentIndex)(fakeRequest, messages)
+      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut, equipmentIndex)(fakeRequest, messages, frontendAppConfig)
 
   override val prefix: String = "transport.equipment.index.addAnotherSeal"
 
@@ -59,9 +59,9 @@ class AddAnotherSealViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Transport details - Transport equipment")
 
-  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.numberOfSeals)()
+  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.count)()
 
-  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.numberOfSeals)
+  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.count)
 
   behave like pageWithSubmitButton("Save and continue")
 }

@@ -33,7 +33,7 @@ class AddAnotherGoodsItemNumberViewSpec extends ListWithActionsViewBehaviours {
   override def maxNumber: Int = frontendAppConfig.maxGoodsItemNumbers
 
   private def formProvider(viewModel: AddAnotherGoodsItemNumberViewModel) =
-    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMoreGoodsItemNumbers)
+    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMore)
 
   private val viewModel                     = arbitrary[AddAnotherGoodsItemNumberViewModel].sample.value
   private val viewModelWithItemsNotMaxedOut = viewModel.copy(listItems = listItems)
@@ -46,14 +46,12 @@ class AddAnotherGoodsItemNumberViewSpec extends ListWithActionsViewBehaviours {
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherGoodsItemNumberView]
-      .apply(form, lrn, mode, equipmentIndex, viewModelWithItemsNotMaxedOut, allowMoreGoodsItemNumbers = true)(fakeRequest, messages)
+      .apply(form, lrn, mode, equipmentIndex, viewModelWithItemsNotMaxedOut)(fakeRequest, messages, frontendAppConfig)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherGoodsItemNumberView]
-      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, mode, equipmentIndex, viewModelWithItemsMaxedOut, allowMoreGoodsItemNumbers = false)(fakeRequest,
-                                                                                                                                                 messages
-      )
+      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, mode, equipmentIndex, viewModelWithItemsMaxedOut)(fakeRequest, messages, frontendAppConfig)
 
   override val prefix: String = "transport.equipment.index.addAnotherGoodsItemNumber"
 
@@ -61,9 +59,9 @@ class AddAnotherGoodsItemNumberViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Transport details - Transport equipment")
 
-  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.goodsItemNumbersCount)()
+  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.count)()
 
-  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.goodsItemNumbersCount)
+  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.count)
 
   behave like pageWithSubmitButton("Save and continue")
 }

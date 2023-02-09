@@ -16,9 +16,9 @@
 
 package views.transport.transportMeans.active
 
+import config.FrontendAppConfig
 import forms.AddAnotherFormProvider
 import models.Mode
-import config.FrontendAppConfig
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -33,7 +33,7 @@ class AddAnotherBorderTransportViewSpec extends ListWithActionsViewBehaviours {
   override def maxNumber: Int = frontendAppConfig.maxActiveBorderTransports
 
   private def formProvider(viewModel: AddAnotherBorderTransportViewModel) =
-    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMoreActiveBorderTransports)
+    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMore)
 
   private val viewModel                     = arbitrary[AddAnotherBorderTransportViewModel].sample.value
   private val viewModelWithItemsNotMaxedOut = viewModel.copy(listItems = listItems)
@@ -63,9 +63,9 @@ class AddAnotherBorderTransportViewSpec extends ListWithActionsViewBehaviours {
     "Only include vehicles that cross into another CTC country. As the EU is one CTC country, you don’t need to provide vehicle changes that stay within the EU."
   )
 
-  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.activeBorderTransports)()
+  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.count)()
 
-  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.activeBorderTransports)
+  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.count)
 
   behave like pageWithSubmitButton("Save and continue")
 }

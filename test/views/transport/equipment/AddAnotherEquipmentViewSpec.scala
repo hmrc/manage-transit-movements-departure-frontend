@@ -33,7 +33,7 @@ class AddAnotherEquipmentViewSpec extends ListWithActionsViewBehaviours {
   override def maxNumber: Int = frontendAppConfig.maxEquipmentNumbers
 
   private def formProvider(viewModel: AddAnotherEquipmentViewModel) =
-    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMoreEquipments)
+    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMore)
 
   private val viewModel                     = arbitrary[AddAnotherEquipmentViewModel].sample.value
   private val viewModelWithItemsNotMaxedOut = viewModel.copy(listItems = listItems)
@@ -46,12 +46,12 @@ class AddAnotherEquipmentViewSpec extends ListWithActionsViewBehaviours {
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherEquipmentView]
-      .apply(form, lrn, mode, viewModelWithItemsNotMaxedOut, allowMoreEquipments = true)(fakeRequest, messages)
+      .apply(form, lrn, mode, viewModelWithItemsNotMaxedOut)(fakeRequest, messages, frontendAppConfig)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherEquipmentView]
-      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut, allowMoreEquipments = false)(fakeRequest, messages)
+      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut)(fakeRequest, messages, frontendAppConfig)
 
   override val prefix: String = "transport.equipment.addAnotherEquipment"
 
@@ -59,9 +59,9 @@ class AddAnotherEquipmentViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Transport details - Transport equipment")
 
-  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.equipmentsCount)()
+  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.count)()
 
-  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.equipmentsCount)
+  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.count)
 
   behave like pageWithSubmitButton("Save and continue")
 }

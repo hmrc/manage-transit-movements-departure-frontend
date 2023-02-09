@@ -40,7 +40,7 @@ class AddAnotherSealControllerSpec extends SpecBase with AppWithDefaultMockFixtu
   private val formProvider = new AddAnotherFormProvider()
 
   private def form(viewModel: AddAnotherSealViewModel) =
-    formProvider(viewModel.prefix, viewModel.allowMoreSeals(frontendAppConfig))
+    formProvider(viewModel.prefix, viewModel.allowMore(frontendAppConfig))
 
   private val mode = NormalMode
 
@@ -106,7 +106,7 @@ class AddAnotherSealControllerSpec extends SpecBase with AppWithDefaultMockFixtu
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(viewModelWithSealsNotMaxedOut), lrn, mode, viewModelWithSealsNotMaxedOut, allowMoreSeals = true, equipmentIndex)(request, messages).toString
+          view(form(viewModelWithSealsNotMaxedOut), lrn, mode, viewModelWithSealsNotMaxedOut, equipmentIndex)(request, messages, frontendAppConfig).toString
       }
 
       "when max limit reached" in {
@@ -124,7 +124,7 @@ class AddAnotherSealControllerSpec extends SpecBase with AppWithDefaultMockFixtu
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(viewModelWithSealsMaxedOut), lrn, mode, viewModelWithSealsMaxedOut, allowMoreSeals = false, equipmentIndex)(request, messages).toString
+          view(form(viewModelWithSealsMaxedOut), lrn, mode, viewModelWithSealsMaxedOut, equipmentIndex)(request, messages, frontendAppConfig).toString
       }
     }
 
@@ -204,7 +204,7 @@ class AddAnotherSealControllerSpec extends SpecBase with AppWithDefaultMockFixtu
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, lrn, mode, viewModelWithSealsNotMaxedOut, allowMoreSeals = true, equipmentIndex)(request, messages).toString
+          view(boundForm, lrn, mode, viewModelWithSealsNotMaxedOut, equipmentIndex)(request, messages, frontendAppConfig).toString
       }
     }
 

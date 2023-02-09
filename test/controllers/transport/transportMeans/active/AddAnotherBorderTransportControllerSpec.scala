@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import config.FrontendAppConfig
 import forms.AddAnotherFormProvider
 import generators.Generators
-import models.{Index, NormalMode}
+import models.NormalMode
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -42,7 +42,7 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
   implicit override def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
 
   private def form(viewModel: AddAnotherBorderTransportViewModel) =
-    formProvider(viewModel.prefix, viewModel.allowMoreActiveBorderTransports)
+    formProvider(viewModel.prefix, viewModel.allowMore)
 
   private val mode                                = NormalMode
   private lazy val addAnotherBorderTransportRoute = routes.AddAnotherBorderTransportController.onPageLoad(lrn, mode).url
@@ -146,7 +146,7 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            routes.IdentificationController.onPageLoad(lrn, NormalMode, Index(viewModelWithItemsNotMaxedOut.activeBorderTransports)).url
+            routes.IdentificationController.onPageLoad(lrn, NormalMode, viewModelWithItemsNotMaxedOut.nextIndex).url
         }
       }
 

@@ -19,7 +19,7 @@ package controllers.transport.transportMeans.active
 import config.FrontendAppConfig
 import controllers.actions._
 import forms.AddAnotherFormProvider
-import models.{Index, LocalReferenceNumber, Mode, NormalMode}
+import models.{LocalReferenceNumber, Mode}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -44,12 +44,12 @@ class AddAnotherBorderTransportController @Inject() (
     with I18nSupport {
 
   private def form(viewModel: AddAnotherBorderTransportViewModel): Form[Boolean] =
-    formProvider(viewModel.prefix, viewModel.allowMoreActiveBorderTransports)
+    formProvider(viewModel.prefix, viewModel.allowMore)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
       val viewModel = viewModelProvider(request.userAnswers, mode)
-      viewModel.activeBorderTransports match {
+      viewModel.count match {
         case 0 => Redirect(controllers.transport.transportMeans.routes.AnotherVehicleCrossingYesNoController.onPageLoad(lrn, mode))
         case _ => Ok(view(form(viewModel), lrn, mode, viewModel))
       }
@@ -63,7 +63,7 @@ class AddAnotherBorderTransportController @Inject() (
         .fold(
           formWithErrors => BadRequest(view(formWithErrors, lrn, mode, viewModel)),
           {
-            case true  => Redirect(routes.IdentificationController.onPageLoad(lrn, NormalMode, Index(viewModel.activeBorderTransports)))
+            case true  => Redirect(routes.IdentificationController.onPageLoad(lrn, mode, viewModel.nextIndex))
             case false => Redirect(controllers.transport.transportMeans.routes.TransportMeansCheckYourAnswersController.onPageLoad(lrn, mode))
           }
         )

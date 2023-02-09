@@ -42,7 +42,7 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
   private val formProvider = new AddAnotherFormProvider()
 
   private def form(viewModel: AddAnotherEquipmentViewModel) =
-    formProvider(viewModel.prefix, viewModel.allowMoreEquipments(frontendAppConfig))
+    formProvider(viewModel.prefix, viewModel.allowMore(frontendAppConfig))
 
   private val mode = NormalMode
 
@@ -111,7 +111,7 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(viewModelWithEquipmentsNotMaxedOut), lrn, mode, viewModelWithEquipmentsNotMaxedOut, allowMoreEquipments = true)(request, messages).toString
+          view(form(viewModelWithEquipmentsNotMaxedOut), lrn, mode, viewModelWithEquipmentsNotMaxedOut)(request, messages, frontendAppConfig).toString
       }
 
       "when max limit reached" in {
@@ -132,7 +132,7 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(viewModelWithEquipmentsMaxedOut), lrn, mode, viewModelWithEquipmentsMaxedOut, allowMoreEquipments = false)(request, messages).toString
+          view(form(viewModelWithEquipmentsMaxedOut), lrn, mode, viewModelWithEquipmentsMaxedOut)(request, messages, frontendAppConfig).toString
       }
     }
 
@@ -217,7 +217,7 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, lrn, mode, viewModelWithEquipmentsNotMaxedOut, allowMoreEquipments = true)(request, messages).toString
+          view(boundForm, lrn, mode, viewModelWithEquipmentsNotMaxedOut)(request, messages, frontendAppConfig).toString
       }
     }
 

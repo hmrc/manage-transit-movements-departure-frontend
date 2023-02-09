@@ -14,10 +14,10 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
 @import controllers.transport.transportMeans.active.routes
 @import models.LocalReferenceNumber
 @import viewModels.components.InputYesNoViewModel._
-@import config.FrontendAppConfig
 @import views.html.components.{Button, ErrorSummary, InputYesNo, ListWithActions}
 @import views.html.components.Heading
 @import viewModels.transport.transportMeans.active.AddAnotherBorderTransportViewModel
@@ -25,8 +25,8 @@
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
-        heading: Heading,
-        listWithActions: ListWithActions,
+    heading: Heading,
+    listWithActions: ListWithActions,
     inputYesNo: InputYesNo,
     errorSummary: ErrorSummary,
     button: Button
@@ -51,14 +51,14 @@
 
     @formHelper(action = viewModel.onSubmitCall, Symbol("autoComplete") -> "off") {
 
-        @if(viewModel.allowMoreActiveBorderTransports) {
+        @if(viewModel.allowMore) {
             @inputYesNo(
                 field = form("value"),
                 hint = Some(viewModel.hint),
                 yesNoType = YesNoWithLegend(
                     legend = viewModel.legend
-                    )
                 )
+            )
         } else {
             <p class="govuk-body" data-testId="maxLimit">@viewModel.maxLimitLabel</p>
         }

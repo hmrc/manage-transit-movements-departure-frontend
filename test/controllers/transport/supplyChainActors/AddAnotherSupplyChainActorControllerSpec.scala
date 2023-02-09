@@ -19,7 +19,7 @@ package controllers.transport.supplyChainActors
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.AddAnotherFormProvider
 import generators.Generators
-import models.{Index, NormalMode}
+import models.NormalMode
 import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
@@ -42,7 +42,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
   private lazy val addAnotherSupplyChainActorRoute = routes.AddAnotherSupplyChainActorController.onPageLoad(lrn, mode).url
 
   private def form(viewModel: AddAnotherSupplyChainActorViewModel) =
-    formProvider(viewModel.prefix, viewModel.allowMoreSupplyChainActors(frontendAppConfig))
+    formProvider(viewModel.prefix, viewModel.allowMore(frontendAppConfig))
 
   private val mockViewModelProvider = mock[AddAnotherSupplyChainActorViewModelProvider]
 
@@ -106,7 +106,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut, false)(request, messages).toString
+            view(form(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut)(request, messages, frontendAppConfig).toString
         }
       }
 
@@ -127,7 +127,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(viewModelWithItemsNotMaxedOut), lrn, mode, viewModelWithItemsNotMaxedOut, true)(request, messages).toString
+            view(form(viewModelWithItemsNotMaxedOut), lrn, mode, viewModelWithItemsNotMaxedOut)(request, messages, frontendAppConfig).toString
         }
       }
 
@@ -188,7 +188,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
 
             redirectLocation(result).value mustEqual
               controllers.transport.supplyChainActors.index.routes.SupplyChainActorTypeController
-                .onPageLoad(lrn, mode, Index(viewModelWithItemsNotMaxedOut.supplyChainActors))
+                .onPageLoad(lrn, mode, viewModelWithItemsNotMaxedOut.nextIndex)
                 .url
 
           }
@@ -236,7 +236,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
           status(result) mustEqual BAD_REQUEST
 
           contentAsString(result) mustEqual
-            view(boundForm, lrn, mode, viewModelWithItemsNotMaxedOut, true)(request, messages).toString
+            view(boundForm, lrn, mode, viewModelWithItemsNotMaxedOut)(request, messages, frontendAppConfig).toString
         }
 
         "must redirect to session expired when no data is found" in {

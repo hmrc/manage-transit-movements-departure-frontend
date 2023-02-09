@@ -33,7 +33,7 @@ class AddAnotherSupplyChainActorViewSpec extends ListWithActionsViewBehaviours {
   override def maxNumber: Int = frontendAppConfig.maxSupplyChainActors
 
   private def formProvider(viewModel: AddAnotherSupplyChainActorViewModel) =
-    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMoreSupplyChainActors)
+    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMore)
 
   private val viewModel                     = arbitrary[AddAnotherSupplyChainActorViewModel].sample.value
   private val viewModelWithItemsNotMaxedOut = viewModel.copy(listItems = listItems)
@@ -46,12 +46,12 @@ class AddAnotherSupplyChainActorViewSpec extends ListWithActionsViewBehaviours {
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherSupplyChainActorView]
-      .apply(form, lrn, mode, viewModelWithItemsNotMaxedOut, true)(fakeRequest, messages)
+      .apply(form, lrn, mode, viewModelWithItemsNotMaxedOut)(fakeRequest, messages, frontendAppConfig)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherSupplyChainActorView]
-      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut, false)(fakeRequest, messages)
+      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut)(fakeRequest, messages, frontendAppConfig)
 
   override val prefix: String = "transport.supplyChainActors.addAnotherSupplyChainActor"
 
@@ -59,9 +59,9 @@ class AddAnotherSupplyChainActorViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Transport details - Supply chain actor")
 
-  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.supplyChainActors)()
+  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.count)()
 
-  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.supplyChainActors)
+  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.count)
 
   behave like pageWithSubmitButton("Save and continue")
 }

@@ -21,27 +21,17 @@ import models.{Index, Mode, UserAnswers}
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import utils.cyaHelpers.transport.equipment.SealsAnswersHelper
-import viewModels.ListItem
+import viewModels.{AddAnotherViewModel, ListItem}
 
 import javax.inject.Inject
 
 case class AddAnotherSealViewModel(
-  listItems: Seq[ListItem],
+  override val listItems: Seq[ListItem],
   onSubmitCall: Call
-) {
+) extends AddAnotherViewModel {
+  override val prefix: String = "transport.equipment.index.addAnotherSeal"
 
-  val numberOfSeals: Int       = listItems.length
-  val singularOrPlural: String = if (numberOfSeals == 1) "singular" else "plural"
-
-  val prefix: String = "transport.equipment.index.addAnotherSeal"
-
-  def title(implicit messages: Messages): String         = messages(s"$prefix.$singularOrPlural.title", numberOfSeals)
-  def heading(implicit messages: Messages): String       = messages(s"$prefix.$singularOrPlural.heading", numberOfSeals)
-  def legend(implicit messages: Messages): String        = messages(s"$prefix.label")
-  def maxLimitLabel(implicit messages: Messages): String = messages(s"$prefix.maxLimit.label")
-
-  def allowMoreSeals(implicit config: FrontendAppConfig): Boolean =
-    numberOfSeals < config.maxSeals
+  override def maxCount(implicit config: FrontendAppConfig): Int = config.maxSeals
 }
 
 object AddAnotherSealViewModel {

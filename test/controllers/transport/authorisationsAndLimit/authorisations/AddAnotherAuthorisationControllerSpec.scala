@@ -19,7 +19,7 @@ package controllers.transport.authorisationsAndLimit.authorisations
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.AddAnotherFormProvider
 import generators.Generators
-import models.{Index, NormalMode}
+import models.NormalMode
 import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
@@ -43,7 +43,7 @@ class AddAnotherAuthorisationControllerSpec extends SpecBase with AppWithDefault
   private lazy val addAnotherAuthorisationRoute = routes.AddAnotherAuthorisationController.onPageLoad(lrn, mode).url
 
   private def form(viewModel: AddAnotherAuthorisationViewModel) =
-    formProvider(viewModel.prefix, viewModel.allowMoreAuthorisations(frontendAppConfig))
+    formProvider(viewModel.prefix, viewModel.allowMore(frontendAppConfig))
 
   private val mockViewModelProvider = mock[AddAnotherAuthorisationViewModelProvider]
 
@@ -106,7 +106,7 @@ class AddAnotherAuthorisationControllerSpec extends SpecBase with AppWithDefault
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut, false)(request, messages).toString
+            view(form(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut)(request, messages, frontendAppConfig).toString
         }
       }
 
@@ -127,7 +127,7 @@ class AddAnotherAuthorisationControllerSpec extends SpecBase with AppWithDefault
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(viewModelWithItemsNotMaxedOut), lrn, mode, viewModelWithItemsNotMaxedOut, true)(request, messages).toString
+            view(form(viewModelWithItemsNotMaxedOut), lrn, mode, viewModelWithItemsNotMaxedOut)(request, messages, frontendAppConfig).toString
         }
       }
 
@@ -188,7 +188,7 @@ class AddAnotherAuthorisationControllerSpec extends SpecBase with AppWithDefault
 
             redirectLocation(result).value mustEqual
               controllers.transport.authorisationsAndLimit.authorisations.index.routes.AuthorisationTypeController
-                .onPageLoad(lrn, mode, Index(viewModelWithItemsNotMaxedOut.authorisations))
+                .onPageLoad(lrn, mode, viewModelWithItemsNotMaxedOut.nextIndex)
                 .url
 
           }
@@ -235,7 +235,7 @@ class AddAnotherAuthorisationControllerSpec extends SpecBase with AppWithDefault
           status(result) mustEqual BAD_REQUEST
 
           contentAsString(result) mustEqual
-            view(boundForm, lrn, mode, viewModelWithItemsNotMaxedOut, true)(request, messages).toString
+            view(boundForm, lrn, mode, viewModelWithItemsNotMaxedOut)(request, messages, frontendAppConfig).toString
         }
 
         "must redirect to session expired when no data is found" in {

@@ -41,7 +41,7 @@ class AddAnotherGoodsItemNumberControllerSpec extends SpecBase with AppWithDefau
   private val formProvider = new AddAnotherFormProvider()
 
   private def form(viewModel: AddAnotherGoodsItemNumberViewModel) =
-    formProvider(viewModel.prefix, viewModel.allowMoreGoodsItemNumbers(frontendAppConfig))
+    formProvider(viewModel.prefix, viewModel.allowMore(frontendAppConfig))
 
   private val mode = NormalMode
 
@@ -107,13 +107,10 @@ class AddAnotherGoodsItemNumberControllerSpec extends SpecBase with AppWithDefau
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(viewModelWithGoodsItemNumbersNotMaxedOut),
-               lrn,
-               mode,
-               equipmentIndex,
-               viewModelWithGoodsItemNumbersNotMaxedOut,
-               allowMoreGoodsItemNumbers = true
-          )(request, messages).toString
+          view(form(viewModelWithGoodsItemNumbersNotMaxedOut), lrn, mode, equipmentIndex, viewModelWithGoodsItemNumbersNotMaxedOut)(request,
+                                                                                                                                    messages,
+                                                                                                                                    frontendAppConfig
+          ).toString
       }
 
       "when max limit reached" in {
@@ -131,13 +128,10 @@ class AddAnotherGoodsItemNumberControllerSpec extends SpecBase with AppWithDefau
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(viewModelWithGoodsItemNumbersMaxedOut),
-               lrn,
-               mode,
-               equipmentIndex,
-               viewModelWithGoodsItemNumbersMaxedOut,
-               allowMoreGoodsItemNumbers = false
-          )(request, messages).toString
+          view(form(viewModelWithGoodsItemNumbersMaxedOut), lrn, mode, equipmentIndex, viewModelWithGoodsItemNumbersMaxedOut)(request,
+                                                                                                                              messages,
+                                                                                                                              frontendAppConfig
+          ).toString
       }
     }
 
@@ -217,7 +211,7 @@ class AddAnotherGoodsItemNumberControllerSpec extends SpecBase with AppWithDefau
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, lrn, mode, equipmentIndex, viewModelWithGoodsItemNumbersNotMaxedOut, allowMoreGoodsItemNumbers = true)(request, messages).toString
+          view(boundForm, lrn, mode, equipmentIndex, viewModelWithGoodsItemNumbersNotMaxedOut)(request, messages, frontendAppConfig).toString
       }
     }
 

@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
 @import controllers.transport.supplyChainActors.routes
 @import models.LocalReferenceNumber
 @import viewModels.components.InputYesNoViewModel._
@@ -30,7 +31,7 @@
     button: Button
 )
 
-@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, viewModel: AddAnotherSupplyChainActorViewModel, allowMoreSupplyChainActors: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, viewModel: AddAnotherSupplyChainActorViewModel)(implicit request: Request[_], messages: Messages, config: FrontendAppConfig)
 
 @mainTemplate(
     title = viewModel.title,
@@ -49,7 +50,7 @@
 
     @formHelper(action = routes.AddAnotherSupplyChainActorController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
 
-        @if(allowMoreSupplyChainActors) {
+        @if(viewModel.allowMore) {
             @inputYesNo(
                 field = form("value"),
                 yesNoType = YesNoWithLegend(

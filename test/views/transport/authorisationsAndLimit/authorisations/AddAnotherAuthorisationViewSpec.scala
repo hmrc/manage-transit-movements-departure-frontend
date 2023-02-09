@@ -33,7 +33,7 @@ class AddAnotherAuthorisationViewSpec extends ListWithActionsViewBehaviours {
   override def maxNumber: Int = frontendAppConfig.maxAuthorisations
 
   private def formProvider(viewModel: AddAnotherAuthorisationViewModel) =
-    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMoreAuthorisations)
+    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMore)
 
   private val viewModel                     = arbitrary[AddAnotherAuthorisationViewModel].sample.value
   private val viewModelWithItemsNotMaxedOut = viewModel.copy(listItems = listItems)
@@ -46,12 +46,12 @@ class AddAnotherAuthorisationViewSpec extends ListWithActionsViewBehaviours {
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherAuthorisationView]
-      .apply(form, lrn, mode, viewModelWithItemsNotMaxedOut, true)(fakeRequest, messages)
+      .apply(form, lrn, mode, viewModelWithItemsNotMaxedOut)(fakeRequest, messages, frontendAppConfig)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherAuthorisationView]
-      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut, false)(fakeRequest, messages)
+      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut)(fakeRequest, messages, frontendAppConfig)
 
   override val prefix: String = "transport.authorisations.addAnotherAuthorisation"
 
@@ -59,9 +59,9 @@ class AddAnotherAuthorisationViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Transport details - Authorisations")
 
-  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.authorisations)()
+  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.count)()
 
-  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.authorisations)
+  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.count)
 
   behave like pageWithSubmitButton("Save and continue")
 }
