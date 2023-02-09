@@ -17,6 +17,7 @@
 package controllers.transport.equipment.index
 
 import controllers.actions._
+import controllers.transport.equipment.routes
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.journeyDomain.transport.TransportDomain
@@ -24,7 +25,7 @@ import models.{Index, LocalReferenceNumber, Mode}
 import pages.sections.transport.equipment.EquipmentSection
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.transport.equipment.index.RemoveTransportEquipmentView
@@ -52,7 +53,7 @@ class RemoveTransportEquipmentController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      lazy val redirect = Call("GET", "#") //TODO: update to add another page
+      lazy val redirect = routes.AddAnotherEquipmentController.onPageLoad(lrn, mode)
       form(equipmentIndex)
         .bindFromRequest()
         .fold(

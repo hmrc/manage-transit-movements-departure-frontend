@@ -73,7 +73,8 @@ class RemoveTransportEquipmentControllerSpec extends SpecBase with AppWithDefaul
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual "#" //TODO: update to add another page
+        redirectLocation(result).value mustEqual
+          controllers.transport.equipment.routes.AddAnotherEquipmentController.onPageLoad(lrn, mode).url
 
         val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
@@ -96,7 +97,8 @@ class RemoveTransportEquipmentControllerSpec extends SpecBase with AppWithDefaul
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual "#" //TODO: update to add another page
+        redirectLocation(result).value mustEqual
+          controllers.transport.equipment.routes.AddAnotherEquipmentController.onPageLoad(lrn, mode).url
 
         verify(mockSessionRepository, never()).set(any())(any())
       }
