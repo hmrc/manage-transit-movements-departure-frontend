@@ -29,6 +29,7 @@ import pages.sections.transport.authorisationsAndLimit.AuthorisationsSection
 import pages.transport.authorisationsAndLimit.authorisations.index.AuthorisationTypePage
 import pages.transport.equipment.index._
 import pages.transport.preRequisites.ContainerIndicatorPage
+import play.api.i18n.Messages
 import play.api.mvc.Call
 
 case class EquipmentDomain(
@@ -38,11 +39,21 @@ case class EquipmentDomain(
 )(index: Index)
     extends JourneyDomainModel {
 
+  def asString(implicit messages: Messages): String =
+    EquipmentDomain.asString(index, containerId)
+
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
     Some(routes.EquipmentAnswersController.onPageLoad(userAnswers.lrn, mode, index))
 }
 
 object EquipmentDomain {
+
+  def asString(index: Index, containerId: Option[String])(implicit messages: Messages): String =
+    containerId.fold(
+      messages("transport.equipment.value.withoutContainer", index.display)
+    )(
+      messages("transport.equipment.value.withContainer", index.display, _)
+    )
 
   implicit def userAnswersReader(equipmentIndex: Index): UserAnswersReader[EquipmentDomain] = for {
     containerId      <- containerIdReads(equipmentIndex)

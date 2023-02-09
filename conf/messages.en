@@ -1394,6 +1394,8 @@ transport.carrierDetails.contact.telephoneNumber.error.minLength = {0}’s telep
 # Transport equipment
 
 transport.equipment.caption = Transport details - Transport equipment
+transport.equipment.value.withContainer = Transport equipment {0} - container {1}
+transport.equipment.value.withoutContainer = Transport equipment {0}
 transport.charges.caption = Transport details - Transport charges
 
 transport.equipment.addTransportEquipmentYesNo.title = Do you want to add any transport equipment?
@@ -1482,6 +1484,14 @@ transport.equipment.index.addAnotherGoodsItemNumber.plural.heading = You have ad
 transport.equipment.index.addAnotherGoodsItemNumber.label = Do you want to add another goods item number?
 transport.equipment.index.addAnotherGoodsItemNumber.maxLimit.label = You cannot add any more goods item numbers. To add another, you need to remove one first.
 transport.equipment.index.addAnotherGoodsItemNumber.error.required = Select yes if you want to add another goods item number
+
+transport.equipment.addAnotherEquipment.singular.title = You have added 1 transport equipment
+transport.equipment.addAnotherEquipment.plural.title = You have added {0} transport equipment
+transport.equipment.addAnotherEquipment.singular.heading = You have added 1 transport equipment
+transport.equipment.addAnotherEquipment.plural.heading = You have added {0} transport equipment
+transport.equipment.addAnotherEquipment.label = Do you want to add any other transport equipment?
+transport.equipment.addAnotherEquipment.maxLimit.label = You cannot add any more transport equipment. To add another, you need to remove one first.
+transport.equipment.addAnotherEquipment.error.required = Select yes if you want to add any other transport equipment
 
 transport.equipment.index.removeTransportEquipment.title = Are you sure you want to remove transport equipment {0}?
 transport.equipment.index.removeTransportEquipment.heading = Are you sure you want to remove transport equipment {0}?
