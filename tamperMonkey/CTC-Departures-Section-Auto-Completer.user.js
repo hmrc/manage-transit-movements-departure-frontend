@@ -337,7 +337,7 @@ function createPanicButton() {
 
 const startTraderDetails = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
-        location.href = `/manage-transit-movements/departures/${lrn}/trader-details/transit-holder/add-eori-tin`
+        location.href = `/manage-transit-movements/departures/${lrn}/trader-details/`
     }
 }
 
@@ -484,8 +484,7 @@ const traderDetailsCYA = (lrn) => {
 
 const startRouteDetails = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
-        let url = document.querySelectorAll(`[href="/manage-transit-movements/departures/${lrn}/route-details"]`)
-        url[0].click()
+        location.href = `/manage-transit-movements/departures/${lrn}/route-details`
     }
 }
 
@@ -795,9 +794,7 @@ const addTransportSeal = (lrn, data) => {
 
 const startGuaranteeDetails = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
-        let url = document.querySelectorAll(`[href="/manage-transit-movements/departures/${lrn}/guarantee-details"]`)[0].click()
-        url[0].click()
-
+        location.href = `/manage-transit-movements/departures/${lrn}/guarantee-details`
     }
 }
 
