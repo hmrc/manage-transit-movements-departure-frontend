@@ -42,9 +42,9 @@ class EquipmentsAnswersHelper(
         }
 
         buildListItem[EquipmentDomain](
-                                        nameWhenComplete = _.asString,
-                                        nameWhenInProgress = ???,
-                                        removeRoute = removeRoute
+          nameWhenComplete = _.asString,
+          nameWhenInProgress = ???,
+          removeRoute = removeRoute
         )(EquipmentDomain.userAnswersReader(equipmentIndex))
     }
 }
