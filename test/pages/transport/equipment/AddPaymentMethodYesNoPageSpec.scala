@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package pages.sections.transport.equipment
+package pages.transport.equipment
 
-import pages.sections.Section
-import play.api.libs.json.{JsArray, JsPath}
+import pages.behaviours.PageBehaviours
 
-case object EquipmentsSection extends Section[JsArray] {
+class AddPaymentMethodYesNoPageSpec extends PageBehaviours {
 
-  override def path: JsPath = EquipmentsAndChargesSection.path \ toString
+  "AddPaymentMethodYesNoPage" - {
 
-  override def toString: String = "equipments"
+    beRetrievable[Boolean](AddPaymentMethodYesNoPage)
+
+    beSettable[Boolean](AddPaymentMethodYesNoPage)
+
+    beRemovable[Boolean](AddPaymentMethodYesNoPage)
+  }
 }

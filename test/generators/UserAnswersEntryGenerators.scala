@@ -29,6 +29,7 @@ import queries.Gettable
 
 import java.time.LocalDate
 
+// scalastyle:off number.of.methods
 trait UserAnswersEntryGenerators {
   self: Generators =>
 
@@ -261,7 +262,7 @@ trait UserAnswersEntryGenerators {
       generateAuthorisationAnswers orElse
       generateLimitAnswers orElse
       generateCarrierDetailsAnswers orElse
-      generateEquipmentAnswers
+      generateEquipmentsAndChargesAnswers
 
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.preRequisites._
@@ -354,12 +355,21 @@ trait UserAnswersEntryGenerators {
     }
   }
 
-  private def generateEquipmentAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+  private def generateEquipmentsAndChargesAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.equipment._
+    val pf: PartialFunction[Gettable[_], Gen[JsValue]] = {
+      case AddTransportEquipmentYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case AddPaymentMethodYesNoPage      => arbitrary[Boolean].map(JsBoolean)
+    }
+
+    pf orElse
+      generateEquipmentAnswers
+  }
+
+  private def generateEquipmentAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.equipment.index._
 
     val pf: PartialFunction[Gettable[_], Gen[JsValue]] = {
-      case AddTransportEquipmentYesNoPage               => arbitrary[Boolean].map(JsBoolean)
       case AddContainerIdentificationNumberYesNoPage(_) => arbitrary[Boolean].map(JsBoolean)
       case ContainerIdentificationNumberPage(_)         => Gen.alphaNumStr.map(JsString)
       case AddSealYesNoPage(_)                          => arbitrary[Boolean].map(JsBoolean)
@@ -385,3 +395,4 @@ trait UserAnswersEntryGenerators {
     }
   }
 }
+// scalastyle:on number.of.methods
