@@ -17,8 +17,8 @@
 package pages.transport.equipment
 
 import pages.behaviours.PageBehaviours
-import pages.sections.transport.equipment.EquipmentsSection
-import play.api.libs.json.{JsArray, Json}
+import pages.sections.transport.equipment.EquipmentsAndChargesSection
+import play.api.libs.json.Json
 
 class AddTransportEquipmentYesNoPageSpec extends PageBehaviours {
 
@@ -34,11 +34,11 @@ class AddTransportEquipmentYesNoPageSpec extends PageBehaviours {
       "when no selected" - {
         "must remove all transport equipments" in {
           val userAnswers = emptyUserAnswers
-            .setValue(EquipmentsSection, JsArray(Seq(Json.obj("foo" -> "bar"))))
+            .setValue(EquipmentsAndChargesSection, Json.obj("foo" -> "bar"))
 
           val result = userAnswers.setValue(AddTransportEquipmentYesNoPage, false)
 
-          result.get(EquipmentsSection) must not be defined
+          result.get(EquipmentsAndChargesSection) must not be defined
         }
       }
     }

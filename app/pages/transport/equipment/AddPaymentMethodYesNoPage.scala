@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package pages.sections.transport.equipment
+package pages.transport.equipment
 
-import pages.sections.Section
-import play.api.libs.json.{JsArray, JsPath}
+import controllers.transport.equipment.routes
+import models.{Mode, UserAnswers}
+import pages.QuestionPage
+import pages.sections.transport.equipment.EquipmentsAndChargesSection
+import play.api.libs.json.JsPath
+import play.api.mvc.Call
 
-case object EquipmentsSection extends Section[JsArray] {
+case object AddPaymentMethodYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = EquipmentsAndChargesSection.path \ toString
 
-  override def toString: String = "equipments"
+  override def toString: String = "addPaymentMethodYesNo"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.AddPaymentMethodYesNoController.onPageLoad(userAnswers.lrn, mode))
 }

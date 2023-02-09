@@ -20,7 +20,7 @@ import controllers.transport.equipment.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.transport.TransportSection
-import pages.sections.transport.equipment.EquipmentsSection
+import pages.sections.transport.equipment.EquipmentsAndChargesSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
@@ -37,7 +37,7 @@ case object AddTransportEquipmentYesNoPage extends QuestionPage[Boolean] {
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) => userAnswers.remove(EquipmentsSection)
+      case Some(false) => userAnswers.remove(EquipmentsAndChargesSection)
       case _           => super.cleanup(value, userAnswers)
     }
 }
