@@ -16,6 +16,8 @@
 
 package pages.transport.equipment
 
+import models.transport.equipment.PaymentMethod
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class AddPaymentMethodYesNoPageSpec extends PageBehaviours {
@@ -27,5 +29,22 @@ class AddPaymentMethodYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](AddPaymentMethodYesNoPage)
 
     beRemovable[Boolean](AddPaymentMethodYesNoPage)
+
+    "cleanup" - {
+      "when no selected" - {
+        "must remove payment method" in {
+          forAll(arbitrary[PaymentMethod]) {
+            paymentMethod =>
+              val userAnswers = emptyUserAnswers
+                .setValue(AddPaymentMethodYesNoPage, true)
+                .setValue(PaymentMethodPage, paymentMethod)
+
+              val result = userAnswers.setValue(AddPaymentMethodYesNoPage, false)
+
+              result.get(PaymentMethodPage) must not be defined
+          }
+        }
+      }
+    }
   }
 }

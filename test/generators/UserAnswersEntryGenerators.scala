@@ -19,6 +19,7 @@ package generators
 import models._
 import models.reference._
 import models.transport.authorisations.AuthorisationType
+import models.transport.equipment.PaymentMethod
 import models.transport.supplyChainActors.SupplyChainActorType
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.departure.{Identification, InlandMode}
@@ -360,6 +361,7 @@ trait UserAnswersEntryGenerators {
     val pf: PartialFunction[Gettable[_], Gen[JsValue]] = {
       case AddTransportEquipmentYesNoPage => arbitrary[Boolean].map(JsBoolean)
       case AddPaymentMethodYesNoPage      => arbitrary[Boolean].map(JsBoolean)
+      case PaymentMethodPage              => arbitrary[PaymentMethod].map(Json.toJson(_))
     }
 
     pf orElse
