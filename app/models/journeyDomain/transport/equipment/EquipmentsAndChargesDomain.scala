@@ -19,6 +19,7 @@ package models.journeyDomain.transport.equipment
 import cats.implicits._
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{GettableAsFilterForNextReaderOps, GettableAsReaderOps, UserAnswersReader}
+import models.journeyDomain.JourneyDomainModel
 import models.transport.equipment.PaymentMethod
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.transport.equipment._
@@ -27,7 +28,7 @@ import pages.transport.preRequisites.ContainerIndicatorPage
 case class EquipmentsAndChargesDomain(
   equipments: Option[EquipmentsDomain],
   paymentMethod: Option[PaymentMethod]
-)
+) extends JourneyDomainModel
 
 object EquipmentsAndChargesDomain {
 

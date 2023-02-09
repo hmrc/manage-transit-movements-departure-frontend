@@ -21,6 +21,7 @@ import models.journeyDomain.transport.equipment.EquipmentDomain
 import models.{Mode, UserAnswers}
 import pages.sections.transport.equipment.EquipmentsSection
 import pages.transport.equipment.AddTransportEquipmentYesNoPage
+import pages.transport.equipment.index.ContainerIdentificationNumberPage
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import utils.cyaHelpers.AnswersHelper
@@ -43,7 +44,7 @@ class EquipmentsAnswersHelper(
 
         buildListItem[EquipmentDomain](
           nameWhenComplete = _.asString,
-          nameWhenInProgress = ???,
+          nameWhenInProgress = Some(EquipmentDomain.asString(equipmentIndex, userAnswers.get(ContainerIdentificationNumberPage(equipmentIndex)))),
           removeRoute = removeRoute
         )(EquipmentDomain.userAnswersReader(equipmentIndex))
     }

@@ -28,7 +28,7 @@ class AddAnotherEquipmentViewModelSpec extends SpecBase with Generators with Sca
 
   "must get list items" - {
 
-    "when there is one equipment" ignore { // TODO Associated helper need to be sorted out
+    "when there is one equipment" in {
       forAll(arbitrary[Mode]) {
         mode =>
           val userAnswers = arbitraryEquipmentAnswers(emptyUserAnswers, equipmentIndex).sample.value
@@ -43,7 +43,7 @@ class AddAnotherEquipmentViewModelSpec extends SpecBase with Generators with Sca
       }
     }
 
-    "when there are multiple equipments" ignore {
+    "when there are multiple equipments" in {
       val formatter = java.text.NumberFormat.getIntegerInstance
 
       forAll(arbitrary[Mode], Gen.choose(2, frontendAppConfig.maxEquipmentNumbers)) {

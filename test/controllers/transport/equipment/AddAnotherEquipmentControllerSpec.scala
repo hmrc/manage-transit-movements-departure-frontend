@@ -17,24 +17,25 @@
 package controllers.transport.equipment
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import controllers.transport.equipment.index.{routes => indexRoutes}
 import forms.AddAnotherFormProvider
-import models.NormalMode
 import generators.Generators
+import models.{Index, NormalMode}
+import navigation.transport.TransportNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
 import pages.transport.preRequisites.ContainerIndicatorPage
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.api.inject.bind
 import viewModels.ListItem
-import play.api.inject.guice.GuiceApplicationBuilder
 import viewModels.transport.equipment.AddAnotherEquipmentViewModel
 import viewModels.transport.equipment.AddAnotherEquipmentViewModel.AddAnotherEquipmentViewModelProvider
 import views.html.transport.equipment.AddAnotherEquipmentView
-import controllers.transport.equipment.index.{routes => indexRoutes}
 
 class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with Generators {
 
@@ -53,7 +54,7 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[AddAnotherEquipmentViewModelProvider]).toInstance(mockViewModelProvider))
-  // TODO bind appropriate navigator provider
+      .overrides(bind(classOf[TransportNavigatorProvider]).toInstance(fakeTransportNavigatorProvider))
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -73,35 +74,11 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
   "AddAnotherEquipment Controller" - {
 
     "when 0 equipment" - {
-      "redirect to containerIdentification controller" - {
-
+      "must redirect to add equipment yes/no page" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(viewModelWithNoEquipments)
 
-        val userAnswers = emptyUserAnswers
-          .setValue(ContainerIndicatorPage, true)
-
-        setExistingUserAnswers(userAnswers)
-
-        val request = FakeRequest(GET, addAnotherEquipmentRoute)
-          .withFormUrlEncodedBody(("value", "true"))
-
-        val result = route(app, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual
-          indexRoutes.ContainerIdentificationNumberController.onPageLoad(lrn, mode, equipmentIndex).url
-      }
-
-      "redirect to add equipment yes/no page" - {
-        when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(viewModelWithNoEquipments)
-
-        val userAnswers = emptyUserAnswers
-          .setValue(ContainerIndicatorPage, false)
-
-        setExistingUserAnswers(userAnswers)
+        setExistingUserAnswers(emptyUserAnswers)
 
         val request = FakeRequest(GET, addAnotherEquipmentRoute)
           .withFormUrlEncodedBody(("value", "true"))
@@ -160,12 +137,32 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
     }
 
     "when max limit not reached" - {
-      "when yes submitted" ignore {
-        // TODO Add tests based on different outcome of pages to redirect to
+      "when yes submitted" - {
+        "must redirect to first page in journey at next index" in {
+          val nextIndex = Index(viewModelWithEquipmentsNotMaxedOut.listItems.length)
+
+          when(mockViewModelProvider.apply(any(), any())(any()))
+            .thenReturn(viewModelWithEquipmentsNotMaxedOut)
+
+          val userAnswers = emptyUserAnswers
+            .setValue(ContainerIndicatorPage, true)
+
+          setExistingUserAnswers(userAnswers)
+
+          val request = FakeRequest(POST, addAnotherEquipmentRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+          val result = route(app, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            indexRoutes.AddContainerIdentificationNumberYesNoController.onPageLoad(lrn, mode, nextIndex).url
+        }
       }
 
       "when no submitted" - {
-        "must redirect to next page" ignore {
+        "must redirect to next page" in {
           when(mockViewModelProvider.apply(any(), any())(any()))
             .thenReturn(viewModelWithEquipmentsNotMaxedOut)
 
@@ -178,13 +175,13 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
 
           status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual onwardRoute.url // TODO update controller with appropriate navigator
+          redirectLocation(result).value mustEqual onwardRoute.url
         }
       }
     }
 
     "when max limit reached" - {
-      "must redirect to next page" ignore {
+      "must redirect to next page" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
           .thenReturn(viewModelWithEquipmentsMaxedOut)
 

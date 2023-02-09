@@ -19,18 +19,17 @@ package controllers.transport.equipment
 import config.FrontendAppConfig
 import controllers.actions._
 import forms.AddAnotherFormProvider
-import controllers.transport.equipment.index.{routes => indexRoutes}
 import models.journeyDomain.transport.equipment.EquipmentDomain
-import javax.inject.Inject
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
-import pages.transport.preRequisites.ContainerIndicatorPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.transport.equipment.AddAnotherEquipmentViewModel.AddAnotherEquipmentViewModelProvider
 import views.html.transport.equipment.AddAnotherEquipmentView
+
+import javax.inject.Inject
 
 class AddAnotherEquipmentController @Inject() (
   override val messagesApi: MessagesApi,
@@ -38,29 +37,21 @@ class AddAnotherEquipmentController @Inject() (
   formProvider: AddAnotherFormProvider,
   navigatorProvider: TransportNavigatorProvider,
   val controllerComponents: MessagesControllerComponents,
-  getMandatoryPage: SpecificDataRequiredActionProvider,
   view: AddAnotherEquipmentView,
   viewModelProvider: AddAnotherEquipmentViewModelProvider
 )(implicit config: FrontendAppConfig)
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
-    .requireData(lrn)
-    .andThen(getMandatoryPage(ContainerIndicatorPage)) {
-      implicit request =>
-        val viewModel = viewModelProvider(request.userAnswers, mode)
-        val form      = formProvider(viewModel.prefix, viewModel.allowMoreEquipments)
-        viewModel.equipmentsCount match {
-          case 0 =>
-            if (request.arg) {
-              Redirect(indexRoutes.ContainerIdentificationNumberController.onPageLoad(lrn, mode, Index(0)))
-            } else {
-              Redirect(routes.AddTransportEquipmentYesNoController.onPageLoad(lrn, mode))
-            }
-          case _ => Ok(view(form, lrn, mode, viewModel, viewModel.allowMoreEquipments))
-        }
-    }
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
+    implicit request =>
+      val viewModel = viewModelProvider(request.userAnswers, mode)
+      val form      = formProvider(viewModel.prefix, viewModel.allowMoreEquipments)
+      viewModel.equipmentsCount match {
+        case 0 => Redirect(routes.AddTransportEquipmentYesNoController.onPageLoad(lrn, mode))
+        case _ => Ok(view(form, lrn, mode, viewModel, viewModel.allowMoreEquipments))
+      }
+  }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
