@@ -19,6 +19,7 @@ package utils.cyaHelpers.transport.equipment
 import models.journeyDomain.transport.equipment.EquipmentDomain
 import models.{Mode, UserAnswers}
 import pages.sections.transport.equipment.EquipmentsSection
+import pages.transport.equipment.AddTransportEquipmentYesNoPage
 import pages.transport.preRequisites.ContainerIndicatorPage
 import play.api.i18n.Messages
 import play.api.mvc.Call
@@ -34,7 +35,7 @@ class EquipmentsAnswersHelper(
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(EquipmentsSection) {
       equipmentIndex =>
-        val removeRoute: Option[Call] = if (userAnswers.get(ContainerIndicatorPage).get && equipmentIndex.isFirst) {
+        val removeRoute: Option[Call] = if (equipmentIndex.isFirst && userAnswers.get(AddTransportEquipmentYesNoPage).isEmpty) {
           None
         } else {
           Some(Call("GET", "#")) // TODO should point to remove equipment controller when built

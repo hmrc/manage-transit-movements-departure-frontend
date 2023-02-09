@@ -20,8 +20,11 @@ import config.FrontendAppConfig
 import controllers.actions._
 import forms.AddAnotherFormProvider
 import controllers.transport.equipment.index.{routes => indexRoutes}
+import models.journeyDomain.transport.equipment.EquipmentDomain
 import javax.inject.Inject
 import models.{Index, LocalReferenceNumber, Mode}
+import navigation.UserAnswersNavigator
+import navigation.transport.TransportNavigatorProvider
 import pages.transport.preRequisites.ContainerIndicatorPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -33,6 +36,7 @@ class AddAnotherEquipmentController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
   formProvider: AddAnotherFormProvider,
+  navigatorProvider: TransportNavigatorProvider,
   val controllerComponents: MessagesControllerComponents,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   view: AddAnotherEquipmentView,
@@ -46,7 +50,7 @@ class AddAnotherEquipmentController @Inject() (
     .andThen(getMandatoryPage(ContainerIndicatorPage)) {
       implicit request =>
         val viewModel = viewModelProvider(request.userAnswers, mode)
-        val form      = formProvider("transport.equipment.addAnotherEquipment", viewModel.allowMoreEquipments)
+        val form      = formProvider(viewModel.prefix, viewModel.allowMoreEquipments)
         viewModel.equipmentsCount match {
           case 0 =>
             if (request.arg) {
@@ -61,16 +65,18 @@ class AddAnotherEquipmentController @Inject() (
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
       val viewModel = viewModelProvider(request.userAnswers, mode)
-      val form      = formProvider("transport.equipment.addAnotherEquipment", viewModel.allowMoreEquipments)
+      val form      = formProvider(viewModel.prefix, viewModel.allowMoreEquipments)
       form
         .bindFromRequest()
         .fold(
           formWithErrors => BadRequest(view(formWithErrors, lrn, mode, viewModel, viewModel.allowMoreEquipments)),
           {
-            case true => // TODO Sort out redirection logic
-              Redirect(indexRoutes.ContainerIdentificationNumberController.onPageLoad(lrn, mode, Index(viewModel.equipmentsCount)))
+            case true =>
+              Redirect(
+                UserAnswersNavigator.nextPage[EquipmentDomain](request.userAnswers, mode)(EquipmentDomain.userAnswersReader(Index(viewModel.equipmentsCount)))
+              )
             case false =>
-              Redirect(???) // TODO Use the correct navigator provider to redirect
+              Redirect(navigatorProvider(mode).nextPage(request.userAnswers))
           }
         )
   }
