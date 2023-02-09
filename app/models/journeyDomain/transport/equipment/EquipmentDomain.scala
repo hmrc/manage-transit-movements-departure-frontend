@@ -47,12 +47,12 @@ case class EquipmentDomain(
 }
 
 object EquipmentDomain {
-  def asString(index: Index, containerId: Option[String])(implicit messages: Messages): String = {
+
+  def asString(index: Index, containerId: Option[String])(implicit messages: Messages): String =
     containerId match {
-      case Some(containerId) => messages("equipment.container.value", index.display, containerId)
-      case _ => messages("equipment.value", index.display)
+      case Some(containerId) => messages("transport.equipment.container.value", index.display, containerId)
+      case _                 => messages("transport.equipment.value", index.display)
     }
-  }
 
   implicit def userAnswersReader(equipmentIndex: Index): UserAnswersReader[EquipmentDomain] = for {
     containerId      <- containerIdReads(equipmentIndex)

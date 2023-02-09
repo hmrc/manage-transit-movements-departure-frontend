@@ -16,11 +16,11 @@
 
 package utils.cyaHelpers.transport.equipment
 
+import controllers.transport.equipment.index.routes
 import models.journeyDomain.transport.equipment.EquipmentDomain
 import models.{Mode, UserAnswers}
 import pages.sections.transport.equipment.EquipmentsSection
 import pages.transport.equipment.AddTransportEquipmentYesNoPage
-import pages.transport.preRequisites.ContainerIndicatorPage
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import utils.cyaHelpers.AnswersHelper
@@ -38,11 +38,11 @@ class EquipmentsAnswersHelper(
         val removeRoute: Option[Call] = if (equipmentIndex.isFirst && userAnswers.get(AddTransportEquipmentYesNoPage).isEmpty) {
           None
         } else {
-          Some(Call("GET", "#")) // TODO should point to remove equipment controller when built
+          Some(routes.RemoveTransportEquipmentController.onPageLoad(lrn, mode, equipmentIndex))
         }
 
-        buildListItem[EquipmentDomain]( // TODO sort out helper
-                                        nameWhenComplete = ???,
+        buildListItem[EquipmentDomain](
+                                        nameWhenComplete = _.asString,
                                         nameWhenInProgress = ???,
                                         removeRoute = removeRoute
         )(EquipmentDomain.userAnswersReader(equipmentIndex))
