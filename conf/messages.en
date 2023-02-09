@@ -1500,3 +1500,15 @@ transport.equipment.addPaymentMethodYesNo.title = Do you want to add a method of
 transport.equipment.addPaymentMethodYesNo.heading = Do you want to add a method of payment for transport charges?
 transport.equipment.addPaymentMethodYesNo.checkYourAnswersLabel = Do you want to add a method of payment for transport charges?
 transport.equipment.addPaymentMethodYesNo.error.required = Select yes if you want to add a method of payment for transport charges
+
+transport.equipment.paymentMethod.title = Which method of payment do you want to use for transport charges?
+transport.equipment.paymentMethod.heading = Which method of payment do you want to use for transport charges?
+transport.equipment.paymentMethod.cash = Cash
+transport.equipment.paymentMethod.creditCard = Credit card
+transport.equipment.paymentMethod.cheque = Cheque
+transport.equipment.paymentMethod.electronicCreditTransfer = Electronic credit transfer
+transport.equipment.paymentMethod.accountHolderWithCarrier = Account holder with carrier
+transport.equipment.paymentMethod.notPrePaid = Not pre-paid
+transport.equipment.paymentMethod.other = Other
+transport.equipment.paymentMethod.checkYourAnswersLabel = Payment method
+transport.equipment.paymentMethod.error.required = Select which method of payment you want to use for transport charges
