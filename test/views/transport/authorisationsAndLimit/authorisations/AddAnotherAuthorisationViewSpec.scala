@@ -18,7 +18,6 @@ package views.transport.authorisationsAndLimit.authorisations
 
 import config.FrontendAppConfig
 import forms.AddAnotherFormProvider
-import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -41,17 +40,15 @@ class AddAnotherAuthorisationViewSpec extends ListWithActionsViewBehaviours {
 
   override def form: Form[Boolean] = formProvider(viewModelWithItemsNotMaxedOut)
 
-  private val mode = arbitrary[Mode].sample.value
-
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherAuthorisationView]
-      .apply(form, lrn, mode, viewModelWithItemsNotMaxedOut)(fakeRequest, messages, frontendAppConfig)
+      .apply(form, lrn, viewModelWithItemsNotMaxedOut)(fakeRequest, messages, frontendAppConfig)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherAuthorisationView]
-      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut)(fakeRequest, messages, frontendAppConfig)
+      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, viewModelWithItemsMaxedOut)(fakeRequest, messages, frontendAppConfig)
 
   override val prefix: String = "transport.authorisations.addAnotherAuthorisation"
 

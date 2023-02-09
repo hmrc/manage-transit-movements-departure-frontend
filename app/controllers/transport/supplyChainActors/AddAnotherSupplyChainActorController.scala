@@ -55,7 +55,7 @@ class AddAnotherSupplyChainActorController @Inject() (
       val viewModel = viewModelProvider(request.userAnswers, mode)
       viewModel.count match {
         case 0 => Redirect(supplyChainActorsRoutes.SupplyChainActorYesNoController.onPageLoad(lrn, mode))
-        case _ => Ok(view(form(viewModel), lrn, mode, viewModel))
+        case _ => Ok(view(form(viewModel), lrn, viewModel))
       }
   }
 
@@ -65,7 +65,7 @@ class AddAnotherSupplyChainActorController @Inject() (
       form(viewModel)
         .bindFromRequest()
         .fold(
-          formWithErrors => BadRequest(view(formWithErrors, lrn, mode, viewModel)),
+          formWithErrors => BadRequest(view(formWithErrors, lrn, viewModel)),
           {
             case true =>
               Redirect(supplyChainActorRoutes.SupplyChainActorTypeController.onPageLoad(lrn, mode, viewModel.nextIndex))

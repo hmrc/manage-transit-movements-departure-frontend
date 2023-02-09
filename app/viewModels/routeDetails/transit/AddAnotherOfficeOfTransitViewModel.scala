@@ -16,14 +16,24 @@
 
 package viewModels.routeDetails.transit
 
+import config.FrontendAppConfig
+import controllers.routeDetails.transit.routes
 import models.{CountryList, Mode, UserAnswers}
 import play.api.i18n.Messages
+import play.api.mvc.Call
 import utils.cyaHelpers.routeDetails.transit.TransitCheckYourAnswersHelper
-import viewModels.ListItem
+import viewModels.{AddAnotherViewModel, ListItem}
 
 import javax.inject.Inject
 
-case class AddAnotherOfficeOfTransitViewModel(listItems: Seq[ListItem])
+case class AddAnotherOfficeOfTransitViewModel(
+  override val listItems: Seq[ListItem],
+  onSubmitCall: Call
+) extends AddAnotherViewModel {
+  override val prefix: String = "routeDetails.transit.addAnotherOfficeOfTransit"
+
+  override def maxCount(implicit config: FrontendAppConfig): Int = config.maxOfficesOfTransit
+}
 
 object AddAnotherOfficeOfTransitViewModel {
 
@@ -45,7 +55,10 @@ object AddAnotherOfficeOfTransitViewModel {
         case Right(value) => value
       }
 
-      new AddAnotherOfficeOfTransitViewModel(listItems)
+      new AddAnotherOfficeOfTransitViewModel(
+        listItems,
+        onSubmitCall = routes.AddAnotherOfficeOfTransitController.onSubmit(userAnswers.lrn, mode)
+      )
     }
   }
 }

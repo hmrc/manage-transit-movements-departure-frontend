@@ -107,7 +107,7 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(viewModelWithItemsNotMaxedOut), lrn, mode, viewModelWithItemsNotMaxedOut)(request, messages, frontendAppConfig).toString
+          view(form(viewModelWithItemsNotMaxedOut), lrn, viewModelWithItemsNotMaxedOut)(request, messages, frontendAppConfig).toString
       }
 
       "when max limit reached" in {
@@ -126,7 +126,7 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut)(request, messages, frontendAppConfig).toString
+          view(form(viewModelWithItemsMaxedOut), lrn, viewModelWithItemsMaxedOut)(request, messages, frontendAppConfig).toString
       }
     }
 
@@ -146,7 +146,7 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            routes.IdentificationController.onPageLoad(lrn, NormalMode, viewModelWithItemsNotMaxedOut.nextIndex).url
+            routes.IdentificationController.onPageLoad(lrn, mode, viewModelWithItemsNotMaxedOut.nextIndex).url
         }
       }
 
@@ -208,7 +208,7 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, lrn, mode, viewModelWithItemsNotMaxedOut)(request, messages, frontendAppConfig).toString
+          view(boundForm, lrn, viewModelWithItemsNotMaxedOut)(request, messages, frontendAppConfig).toString
       }
     }
 

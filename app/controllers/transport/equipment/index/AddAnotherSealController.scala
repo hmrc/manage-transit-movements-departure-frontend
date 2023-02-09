@@ -53,7 +53,7 @@ class AddAnotherSealController @Inject() (
       val viewModel = viewModelProvider(request.userAnswers, mode, equipmentIndex)
       viewModel.count match {
         case 0 => Redirect(controllers.transport.equipment.index.routes.AddSealYesNoController.onPageLoad(lrn, mode, equipmentIndex))
-        case _ => Ok(view(form(viewModel), lrn, mode, viewModel, equipmentIndex))
+        case _ => Ok(view(form(viewModel), lrn, viewModel))
       }
   }
 
@@ -63,7 +63,7 @@ class AddAnotherSealController @Inject() (
       form(viewModel)
         .bindFromRequest()
         .fold(
-          formWithErrors => BadRequest(view(formWithErrors, lrn, mode, viewModel, equipmentIndex)),
+          formWithErrors => BadRequest(view(formWithErrors, lrn, viewModel)),
           {
             case true =>
               Redirect(

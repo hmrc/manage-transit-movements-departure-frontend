@@ -54,7 +54,7 @@ class AddAnotherAuthorisationController @Inject() (
       val viewModel = viewModelProvider(request.userAnswers, mode)
       viewModel.count match {
         case 0 => Redirect(navigatorProvider(mode).nextPage(request.userAnswers))
-        case _ => Ok(view(form(viewModel), lrn, mode, viewModel))
+        case _ => Ok(view(form(viewModel), lrn, viewModel))
       }
   }
 
@@ -64,7 +64,7 @@ class AddAnotherAuthorisationController @Inject() (
       form(viewModel)
         .bindFromRequest()
         .fold(
-          formWithErrors => BadRequest(view(formWithErrors, lrn, mode, viewModel)),
+          formWithErrors => BadRequest(view(formWithErrors, lrn, viewModel)),
           {
             case true =>
               Redirect(authorisationRoutes.AuthorisationTypeController.onPageLoad(lrn, mode, viewModel.nextIndex))

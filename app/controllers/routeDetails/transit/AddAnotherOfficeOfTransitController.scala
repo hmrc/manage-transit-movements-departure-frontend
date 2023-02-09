@@ -20,8 +20,7 @@ import config.FrontendAppConfig
 import controllers.actions._
 import controllers.routeDetails.transit.index.{routes => indexRoutes}
 import forms.AddAnotherFormProvider
-import models.requests.DataRequest
-import models.{CountryList, Index, LocalReferenceNumber, Mode}
+import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.routeDetails.RouteDetailsNavigatorProvider
 import play.api.data.Form
@@ -30,7 +29,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.ListItem
+import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel
 import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel.AddAnotherOfficeOfTransitViewModelProvider
 import views.html.routeDetails.transit.AddAnotherOfficeOfTransitView
 
@@ -43,32 +42,31 @@ class AddAnotherOfficeOfTransitController @Inject() (
   navigatorProvider: RouteDetailsNavigatorProvider,
   actions: Actions,
   formProvider: AddAnotherFormProvider,
-  config: FrontendAppConfig,
   viewModelProvider: AddAnotherOfficeOfTransitViewModelProvider,
   val controllerComponents: MessagesControllerComponents,
   view: AddAnotherOfficeOfTransitView,
   countriesService: CountriesService
-)(implicit ec: ExecutionContext)
+)(implicit ec: ExecutionContext, config: FrontendAppConfig)
     extends FrontendBaseController
     with I18nSupport {
 
-  private def form(allowMoreOfficesOfTransit: Boolean): Form[Boolean] =
-    formProvider("routeDetails.transit.addAnotherOfficeOfTransit", allowMoreOfficesOfTransit)
+  private def form(viewModel: AddAnotherOfficeOfTransitViewModel): Form[Boolean] =
+    formProvider(viewModel.prefix, viewModel.allowMore)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       for {
         ctcCountries                          <- countriesService.getCountryCodesCTC()
         customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
-      } yield viewData(mode, ctcCountries, customsSecurityAgreementAreaCountries) match {
-        case (officesOfTransit, numberOfOfficesOfTransit, allowMoreOfficesOfTransit) =>
-          numberOfOfficesOfTransit match {
-            case 0 =>
-              val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
-              Redirect(navigator.nextPage(request.userAnswers))
-            case _ =>
-              Ok(view(form(allowMoreOfficesOfTransit), lrn, mode, officesOfTransit, allowMoreOfficesOfTransit))
-          }
+      } yield {
+        val viewModel = viewModelProvider(request.userAnswers, mode, ctcCountries, customsSecurityAgreementAreaCountries)
+        viewModel.count match {
+          case 0 =>
+            val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+            Redirect(navigator.nextPage(request.userAnswers))
+          case _ =>
+            Ok(view(form(viewModel), lrn, viewModel))
+        }
       }
   }
 
@@ -77,30 +75,19 @@ class AddAnotherOfficeOfTransitController @Inject() (
       for {
         ctcCountries                          <- countriesService.getCountryCodesCTC()
         customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
-      } yield viewData(mode, ctcCountries, customsSecurityAgreementAreaCountries) match {
-        case (officesOfTransit, numberOfOfficesOfTransit, allowMoreOfficesOfTransit) =>
-          form(allowMoreOfficesOfTransit)
-            .bindFromRequest()
-            .fold(
-              formWithErrors => BadRequest(view(formWithErrors, lrn, mode, officesOfTransit, allowMoreOfficesOfTransit)),
-              {
-                case true => Redirect(indexRoutes.OfficeOfTransitCountryController.onPageLoad(lrn, mode, Index(numberOfOfficesOfTransit)))
-                case false =>
-                  val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
-                  Redirect(navigator.nextPage(request.userAnswers))
-              }
-            )
+      } yield {
+        val viewModel = viewModelProvider(request.userAnswers, mode, ctcCountries, customsSecurityAgreementAreaCountries)
+        form(viewModel)
+          .bindFromRequest()
+          .fold(
+            formWithErrors => BadRequest(view(formWithErrors, lrn, viewModel)),
+            {
+              case true => Redirect(indexRoutes.OfficeOfTransitCountryController.onPageLoad(lrn, mode, viewModel.nextIndex))
+              case false =>
+                val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
+                Redirect(navigator.nextPage(request.userAnswers))
+            }
+          )
       }
-  }
-
-  private def viewData(
-    mode: Mode,
-    ctcCountries: CountryList,
-    customsSecurityAgreementAreaCountries: CountryList
-  )(implicit request: DataRequest[_]): (Seq[ListItem], Int, Boolean) = {
-    val viewModel                = viewModelProvider(request.userAnswers, mode, ctcCountries, customsSecurityAgreementAreaCountries)
-    val officesOfTransit         = viewModel.listItems
-    val numberOfOfficesOfTransit = officesOfTransit.length
-    (officesOfTransit, numberOfOfficesOfTransit, numberOfOfficesOfTransit < config.maxOfficesOfTransit)
   }
 }

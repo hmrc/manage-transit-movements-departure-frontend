@@ -65,16 +65,16 @@ class AddAnotherSealControllerSpec extends SpecBase with AppWithDefaultMockFixtu
 
   private val viewModel = arbitrary[AddAnotherSealViewModel].sample.value
 
-  private val viewModelWithNoSeals          = viewModel.copy(listItems = Nil)
-  private val viewModelWithSealsNotMaxedOut = viewModel.copy(listItems = listItems)
-  private val viewModelWithSealsMaxedOut    = viewModel.copy(listItems = maxedOutListItems)
+  private val emptyViewModel       = viewModel.copy(listItems = Nil)
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
 
   "AddAnotherSeal Controller" - {
 
     "redirect to add seal yes/no page" - {
       "when 0 seals" in {
         when(mockViewModelProvider.apply(any(), any(), any())(any()))
-          .thenReturn(viewModelWithNoSeals)
+          .thenReturn(emptyViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -93,7 +93,7 @@ class AddAnotherSealControllerSpec extends SpecBase with AppWithDefaultMockFixtu
     "must return OK and the correct view for a GET" - {
       "when max limit not reached" in {
         when(mockViewModelProvider.apply(any(), any(), any())(any()))
-          .thenReturn(viewModelWithSealsNotMaxedOut)
+          .thenReturn(notMaxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -106,12 +106,12 @@ class AddAnotherSealControllerSpec extends SpecBase with AppWithDefaultMockFixtu
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(viewModelWithSealsNotMaxedOut), lrn, mode, viewModelWithSealsNotMaxedOut, equipmentIndex)(request, messages, frontendAppConfig).toString
+          view(form(notMaxedOutViewModel), lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
 
       "when max limit reached" in {
         when(mockViewModelProvider.apply(any(), any(), any())(any()))
-          .thenReturn(viewModelWithSealsMaxedOut)
+          .thenReturn(maxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -124,7 +124,7 @@ class AddAnotherSealControllerSpec extends SpecBase with AppWithDefaultMockFixtu
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(viewModelWithSealsMaxedOut), lrn, mode, viewModelWithSealsMaxedOut, equipmentIndex)(request, messages, frontendAppConfig).toString
+          view(form(maxedOutViewModel), lrn, maxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
     }
 
@@ -132,7 +132,7 @@ class AddAnotherSealControllerSpec extends SpecBase with AppWithDefaultMockFixtu
       "when yes submitted" - {
         "must redirect to seal id number page at next index" in {
           when(mockViewModelProvider.apply(any(), any(), any())(any()))
-            .thenReturn(viewModelWithSealsNotMaxedOut)
+            .thenReturn(notMaxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -151,7 +151,7 @@ class AddAnotherSealControllerSpec extends SpecBase with AppWithDefaultMockFixtu
       "when no submitted" - {
         "must redirect to next page" in {
           when(mockViewModelProvider.apply(any(), any(), any())(any()))
-            .thenReturn(viewModelWithSealsNotMaxedOut)
+            .thenReturn(notMaxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -170,7 +170,7 @@ class AddAnotherSealControllerSpec extends SpecBase with AppWithDefaultMockFixtu
     "when max limit reached" - {
       "must redirect to next page" in {
         when(mockViewModelProvider.apply(any(), any(), any())(any()))
-          .thenReturn(viewModelWithSealsMaxedOut)
+          .thenReturn(maxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -188,14 +188,14 @@ class AddAnotherSealControllerSpec extends SpecBase with AppWithDefaultMockFixtu
     "must return a Bad Request and errors" - {
       "when invalid data is submitted and max limit not reached" in {
         when(mockViewModelProvider.apply(any(), any(), any())(any()))
-          .thenReturn(viewModelWithSealsNotMaxedOut)
+          .thenReturn(notMaxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
         val request = FakeRequest(POST, addAnotherSealRoute)
           .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form(viewModelWithSealsNotMaxedOut).bind(Map("value" -> ""))
+        val boundForm = form(notMaxedOutViewModel).bind(Map("value" -> ""))
 
         val result = route(app, request).value
 
@@ -204,7 +204,7 @@ class AddAnotherSealControllerSpec extends SpecBase with AppWithDefaultMockFixtu
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, lrn, mode, viewModelWithSealsNotMaxedOut, equipmentIndex)(request, messages, frontendAppConfig).toString
+          view(boundForm, lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
     }
 

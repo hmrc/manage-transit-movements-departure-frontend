@@ -106,7 +106,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut)(request, messages, frontendAppConfig).toString
+            view(form(viewModelWithItemsMaxedOut), lrn, viewModelWithItemsMaxedOut)(request, messages, frontendAppConfig).toString
         }
       }
 
@@ -127,7 +127,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(viewModelWithItemsNotMaxedOut), lrn, mode, viewModelWithItemsNotMaxedOut)(request, messages, frontendAppConfig).toString
+            view(form(viewModelWithItemsNotMaxedOut), lrn, viewModelWithItemsNotMaxedOut)(request, messages, frontendAppConfig).toString
         }
       }
 
@@ -236,7 +236,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
           status(result) mustEqual BAD_REQUEST
 
           contentAsString(result) mustEqual
-            view(boundForm, lrn, mode, viewModelWithItemsNotMaxedOut)(request, messages, frontendAppConfig).toString
+            view(boundForm, lrn, viewModelWithItemsNotMaxedOut)(request, messages, frontendAppConfig).toString
         }
 
         "must redirect to session expired when no data is found" in {

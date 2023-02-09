@@ -51,7 +51,7 @@ class AddAnotherBorderTransportController @Inject() (
       val viewModel = viewModelProvider(request.userAnswers, mode)
       viewModel.count match {
         case 0 => Redirect(controllers.transport.transportMeans.routes.AnotherVehicleCrossingYesNoController.onPageLoad(lrn, mode))
-        case _ => Ok(view(form(viewModel), lrn, mode, viewModel))
+        case _ => Ok(view(form(viewModel), lrn, viewModel))
       }
   }
 
@@ -61,7 +61,7 @@ class AddAnotherBorderTransportController @Inject() (
       form(viewModel)
         .bindFromRequest()
         .fold(
-          formWithErrors => BadRequest(view(formWithErrors, lrn, mode, viewModel)),
+          formWithErrors => BadRequest(view(formWithErrors, lrn, viewModel)),
           {
             case true  => Redirect(routes.IdentificationController.onPageLoad(lrn, mode, viewModel.nextIndex))
             case false => Redirect(controllers.transport.transportMeans.routes.TransportMeansCheckYourAnswersController.onPageLoad(lrn, mode))

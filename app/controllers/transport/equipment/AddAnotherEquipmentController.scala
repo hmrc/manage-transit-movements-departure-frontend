@@ -53,7 +53,7 @@ class AddAnotherEquipmentController @Inject() (
       val viewModel = viewModelProvider(request.userAnswers, mode)
       viewModel.count match {
         case 0 => Redirect(routes.AddTransportEquipmentYesNoController.onPageLoad(lrn, mode))
-        case _ => Ok(view(form(viewModel), lrn, mode, viewModel))
+        case _ => Ok(view(form(viewModel), lrn, viewModel))
       }
   }
 
@@ -63,7 +63,7 @@ class AddAnotherEquipmentController @Inject() (
       form(viewModel)
         .bindFromRequest()
         .fold(
-          formWithErrors => BadRequest(view(formWithErrors, lrn, mode, viewModel)),
+          formWithErrors => BadRequest(view(formWithErrors, lrn, viewModel)),
           {
             case true =>
               Redirect(

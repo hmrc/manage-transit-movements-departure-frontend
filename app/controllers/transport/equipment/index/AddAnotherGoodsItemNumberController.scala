@@ -54,7 +54,7 @@ class AddAnotherGoodsItemNumberController @Inject() (
       val viewModel = viewModelProvider(request.userAnswers, mode, equipmentIndex)
       viewModel.count match {
         case 0 => Redirect(routes.AddGoodsItemNumberYesNoController.onPageLoad(lrn, mode, equipmentIndex))
-        case _ => Ok(view(form(viewModel), lrn, mode, equipmentIndex, viewModel))
+        case _ => Ok(view(form(viewModel), lrn, viewModel))
       }
   }
 
@@ -64,7 +64,7 @@ class AddAnotherGoodsItemNumberController @Inject() (
       form(viewModel)
         .bindFromRequest()
         .fold(
-          formWithErrors => BadRequest(view(formWithErrors, lrn, mode, equipmentIndex, viewModel)),
+          formWithErrors => BadRequest(view(formWithErrors, lrn, viewModel)),
           {
             case true =>
               Redirect(itemNumberRoutes.ItemNumberController.onPageLoad(lrn, mode, equipmentIndex, viewModel.nextIndex))

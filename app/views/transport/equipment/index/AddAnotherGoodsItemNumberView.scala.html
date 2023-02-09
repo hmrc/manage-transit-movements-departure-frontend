@@ -15,7 +15,6 @@
  *@
 
 @import config.FrontendAppConfig
-@import controllers.transport.equipment.index.routes
 @import models.LocalReferenceNumber
 @import viewModels.components.InputYesNoViewModel._
 @import views.html.components.{Button, ErrorSummary, Heading, InputYesNo, ListWithActions}
@@ -32,7 +31,7 @@
     button: Button
 )
 
-@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, viewModel: AddAnotherGoodsItemNumberViewModel)(implicit request: Request[_], messages: Messages, config: FrontendAppConfig)
+@(form: Form[Boolean], lrn: LocalReferenceNumber, viewModel: AddAnotherGoodsItemNumberViewModel)(implicit request: Request[_], messages: Messages, config: FrontendAppConfig)
 
 @mainTemplate(
     title = viewModel.title,
@@ -49,7 +48,7 @@
 
     @listWithActions(viewModel.listItems)
 
-    @formHelper(action = routes.AddAnotherGoodsItemNumberController.onSubmit(lrn, mode, equipmentIndex), Symbol("autoComplete") -> "off") {
+    @formHelper(action = viewModel.onSubmitCall, Symbol("autoComplete") -> "off") {
 
         @if(viewModel.allowMore) {
             @inputYesNo(
