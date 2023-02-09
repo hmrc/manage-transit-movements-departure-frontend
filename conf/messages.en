@@ -1489,3 +1489,12 @@ transport.equipment.addAnotherEquipment.plural.heading = You have added {0} tran
 transport.equipment.addAnotherEquipment.label = Do you want to add any other transport equipment?
 transport.equipment.addAnotherEquipment.maxLimit.label = You cannot add any more transport equipment. To add another, you need to remove one first.
 transport.equipment.addAnotherEquipment.error.required = Select yes if you want to add any other transport equipment
+
+transport.equipment.index.removeTransportEquipment.title = Are you sure you want to remove transport equipment {0}?
+transport.equipment.index.removeTransportEquipment.heading = Are you sure you want to remove transport equipment {0}?
+transport.equipment.index.removeTransportEquipment.error.required = Select yes if you want to remove transport equipment {0}
+
+transport.equipment.addPaymentMethodYesNo.title = Do you want to add a method of payment for transport charges?
+transport.equipment.addPaymentMethodYesNo.heading = Do you want to add a method of payment for transport charges?
+transport.equipment.addPaymentMethodYesNo.checkYourAnswersLabel = Do you want to add a method of payment for transport charges?
+transport.equipment.addPaymentMethodYesNo.error.required = Select yes if you want to add a method of payment for transport charges
