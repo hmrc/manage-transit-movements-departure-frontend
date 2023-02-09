@@ -35,11 +35,6 @@ class ContainerIndicatorViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithSectionCaption("Transport details")
 
-  behave like pageWithContent(
-    "p",
-    "This can be any container used to transport goods in CTC transit. For example, a swap body, articulated lorry or shipping container."
-  )
-
   behave like pageWithHeading()
 
   behave like pageWithRadioItems()

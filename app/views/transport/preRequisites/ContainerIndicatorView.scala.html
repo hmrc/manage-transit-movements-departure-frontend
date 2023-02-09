@@ -41,10 +41,9 @@
 
         @inputYesNo(
             field = form("value"),
-            yesNoType = YesNoWithAdditionalHtml(
+            yesNoType = OrdinaryYesNo(
                 heading = messages("transport.preRequisites.containerIndicator.heading"),
-                caption = Some(messages("transport.caption")),
-                additionalHtml = messages("transport.preRequisites.containerIndicator.paragraph").toParagraph
+                caption = Some(messages("transport.caption"))
             )
         )
 
