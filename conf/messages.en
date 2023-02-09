@@ -1485,3 +1485,8 @@ transport.equipment.index.addAnotherGoodsItemNumber.error.required = Select yes 
 transport.equipment.index.removeTransportEquipment.title = Are you sure you want to remove transport equipment {0}?
 transport.equipment.index.removeTransportEquipment.heading = Are you sure you want to remove transport equipment {0}?
 transport.equipment.index.removeTransportEquipment.error.required = Select yes if you want to remove transport equipment {0}
+
+transport.equipment.addPaymentMethodYesNo.title = Do you want to add a method of payment for transport charges?
+transport.equipment.addPaymentMethodYesNo.heading = Do you want to add a method of payment for transport charges?
+transport.equipment.addPaymentMethodYesNo.checkYourAnswersLabel = Do you want to add a method of payment for transport charges?
+transport.equipment.addPaymentMethodYesNo.error.required = Select yes if you want to add a method of payment for transport charges
