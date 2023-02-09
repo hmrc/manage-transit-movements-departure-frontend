@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CTC-Departures Section Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      7.0
+// @version      8.0
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @match        http*://*/manage-transit-movements/departures/*/task-list
@@ -23,6 +23,7 @@
 
 window.addEventListener('load', function() {
     saveLRN()
+    displayPanicButton()
     isAButtonToggled()
     isSectionCompleted()
 }, false);
@@ -54,6 +55,19 @@ function isAButtonToggled() {
             document.body.appendChild(setupGUI())
         }
     }
+}
+
+function displayPanicButton() {
+    const panicPanel = document.createElement('div')
+    if(!onLandingPage()){
+        GM_addStyle(' .panicStyle { position: absolute; top: 50px; display: grid; grid-template-rows: repeat(1, 1fr);')
+        panicPanel.classList.add('panicStyle')
+    }else{
+        GM_addStyle(' .panicStyle { position: absolute; top: 325px; display: grid; grid-template-rows: repeat(1, 1fr);')
+        panicPanel.classList.add('panicStyle')
+    }
+    panicPanel.appendChild(createPanicButton())
+    document.body.appendChild(panicPanel)
 }
 
 function toggleTraderDetailsButtonsOff() {
@@ -203,7 +217,7 @@ function createTransportDetailsButton() {
     }
 
     button.style.margin = '1px'
-    button.innerHTML = 'Complete Transport Details (Up to Authorisations)'
+    button.innerHTML = 'Complete Transport Details (Up to Seal Identification)'
     button.addEventListener("click", function handleClick() {
         GM_setValue('transportDetailsToggle',true)
         transportDetails()
@@ -295,6 +309,30 @@ function createCompleteAllButton() {
     return button
 }
 
+function createPanicButton() {
+    let button = document.createElement('button')
+    button.id='panicButton'
+
+    if (!!document.getElementById('global-header')) {
+        button.classList.add('button-start', 'govuk-!-display-none-print')
+    } else {
+        button.classList.add('govuk-button','govuk-!-display-none-print')
+    }
+
+    button.style.position = 'absolute'
+    button.style.margin = '1px'
+    button.innerHTML = 'STOP SCRIPTS'
+    button.style.backgroundColor = '#d13b3b'
+    button.addEventListener("click", function handleClick() {
+        GM_setValue('traderDetailsReducedDataSetToggle',false)
+        GM_setValue('routeDetailsAuthorisedToggle',false)
+        GM_setValue('transportDetailsToggle',false)
+        GM_setValue('guaranteeDetailsWaiverToggle',false)
+    })
+
+    return button
+}
+
 /* #### Trader Details Pages #### */
 
 const startTraderDetails = (lrn) => {
@@ -318,7 +356,7 @@ const addEoriTin = (lrn, data) => {
 }
 
 const transitHolderName = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/holder-of-transit/name`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/transit-holder/name`)){
         document.getElementById('value').value = data
         document.getElementsByClassName('govuk-button')[0].click()
     }
@@ -341,21 +379,21 @@ const transitHolderAddress = (lrn, data, data2, data3) => {
 }
 
 const addContact = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/holder-of-transit/add-contact`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/transit-holder/add-contact`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const actingRepresentative = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/acting-as-representative`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/representative/acting`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const reducedDataSet = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/consignment/reduced-data-set`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/reduced-data-set`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
@@ -369,7 +407,7 @@ const consignorEoriTin = (lrn, data) => {
 }
 
 const consignorName = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/consignment/consignor/name`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/consignor/name`)){
         document.getElementById('value').value = data
         document.getElementsByClassName('govuk-button')[0].click()
     }
@@ -392,14 +430,14 @@ const consignorAddress = (lrn, data, data2, data3) => {
 }
 
 const consignorContact = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/consignment/consignor/add-contact`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/consignor/add-contact`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const moreThanOneConsignee = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/consignment/more-than-one-consignee`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/consignee/multiple`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
@@ -413,7 +451,7 @@ const consigneeEoriTin = (lrn, data) => {
 }
 
 const consigneeName = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/consignment/consignee/name`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/trader-details/consignee/name`)){
         document.getElementById('value').value = data
         document.getElementsByClassName('govuk-button')[0].click()
     }
@@ -446,12 +484,13 @@ const traderDetailsCYA = (lrn) => {
 
 const startRouteDetails = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
-        location.href = `/manage-transit-movements/departures/${lrn}/route-details/routing/country-of-destination`
+        let url = document.querySelectorAll(`[href="/manage-transit-movements/departures/${lrn}/route-details"]`)
+        url[0].click()
     }
 }
 
 const countryOfDestination = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/routing/country-of-destination`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/transit-route/country-of-destination`)){
         document.getElementById('value-select').value = data
         document.getElementsByClassName('govuk-button')[0].click()
     }
@@ -465,89 +504,89 @@ const addLocationOfGoods = (lrn, data) => {
 }
 
 const officeOfDestination = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/routing/office-of-destination`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/transit-route/office-of-destination`)){
         document.getElementById('value-select').value = data
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const bindingItinerary = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/routing/binding-itinerary`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/transit-route/binding-itinerary`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const transitRouteAddCountry = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/routing/transit-route-add-country`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/transit-route/add-country`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const transitRouteCountry = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/routing/1/transit-route-country`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/transit-route/1/country`)){
         document.getElementById('value-select').value = data
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const transitRouteAddAnother = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/routing/transit-route-add-another-country`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/transit-route/add-another-country`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const routingCYA = (lrn) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/routing/check-answers`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/transit-route/check-answers`)){
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const officeOfTransitCountry = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/transit/1/office-of-transit-country`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/office-of-transit/1/country`)){
         document.getElementById('value-select').value = data
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const officeOfTransit = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/transit/1/office-of-transit`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/office-of-transit/1/office`)){
         document.getElementById('value-select').value = data
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const officeOfTransitETA = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/transit/1/office-of-transit-add-eta`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/office-of-transit/1/add-eta`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const officeOfTransitLoopCYA = (lrn) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/transit/1/office-of-transit-check-answers`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/office-of-transit/1/check-answers`)){
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const officeOfTransitAddAnother = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/transit/add-another-office-of-transit`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/office-of-transit/add-another`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const locationOfGoodsType = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/location-of-goods/location-of-goods-type`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/location-of-goods/type`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const locationOfGoodsIdentification = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/location-of-goods/location-of-goods-identification`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/location-of-goods/identification`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
@@ -561,48 +600,48 @@ const locationOfGoodsEORI = (lrn, data) => {
 }
 
 const locationOfGoodsAddAnotherIdentifier = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/location-of-goods/location-of-goods-add-identifier`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/location-of-goods/add-identifier`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const locationOfGoodsAddContact = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/location-of-goods/location-of-goods-add-contact`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/location-of-goods/add-contact`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const locationOfGoodsCYA = (lrn) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/location-of-goods/location-of-goods-check-answers`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/location-of-goods/check-answers`)){
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const placeOfLoadingUNLOCODE = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/loading/place-of-loading-add-un-locode`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/place-of-loading/add-un-locode`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const placeOfLoadingCountry = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/loading/place-of-loading-country`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/place-of-loading/country`)){
         document.getElementById('value-select').value = data
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const placeOfLoadingLocation = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/loading/place-of-loading-location`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/place-of-loading/location`)){
         document.getElementById('value').value = data
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const loadingCYA = (lrn) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/loading-and-unloading/check-answers`)){
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/route-details/place-of-loading-unloading/check-answers`)){
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
@@ -702,53 +741,63 @@ const addSupplyChainActor = (lrn, data) => {
 
 const addAuth = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/authorisations/add`)){
-        toggleTransportDetailsButtonsOff() // Will need changed once journey develops
-        // document.getElementById(data).click()
-        // document.getElementsByClassName('govuk-button')[0].click()
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
 const authRefNumber = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/authorisations/1/reference-number`)){
-        toggleTransportDetailsButtonsOff() // Will need changed once journey develops
-        // document.getElementById('value').value = data
-        // document.getElementsByClassName('govuk-button')[0].click()
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
-//
-// const addAnotherAuthType = (lrn, data) => {
-//     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/authorisations/add-another`)){
-//         document.getElementById(data).click()
-//         document.getElementsByClassName('govuk-button')[0].click()
-//     }
-// }
-//
-// const carrierEORI = (lrn, data) => {
-//     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/carrier/eori-tin`)){
-//         document.getElementById('value').value = data
-//         document.getElementsByClassName('govuk-button')[0].click()
-//     }
-// }
-//
-// const addCarrierContact = (lrn, data) => {
-//     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/carrier/add-contact`)){
-//         document.getElementById(data).click()
-//         document.getElementsByClassName('govuk-button')[0].click()
-//     }
-// }
+const addAnotherAuthType = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/authorisations/add-another`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const carrierEORI = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/carrier/eori-tin`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const addCarrierContact = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/carrier/add-contact`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const addTransportEquipment = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/equipment/add-transport-equipment`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const addTransportSeal = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/transport-equipment/1/seals/add`)){
+        toggleTransportDetailsButtonsOff() // Update as journey progresses
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
 
 /* #### Guarantee Details #### */
 
 
 const startGuaranteeDetails = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
-        let url = document.querySelectorAll(`[href="/manage-transit-movements/departures/${lrn}/guarantee-details/guarantee-added-tir"]`)
-        if(url.length != 0){
-            url[0].click()
-        }else{
-            document.querySelectorAll(`[href="/manage-transit-movements/departures/${lrn}/guarantee-details/1/guarantee-type"]`)[0].click()
-        }
+        let url = document.querySelectorAll(`[href="/manage-transit-movements/departures/${lrn}/guarantee-details"]`)[0].click()
+        url[0].click()
+
     }
 }
 
@@ -776,6 +825,13 @@ const guaranteeNumber = (lrn, data) => {
 const accessCode = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/guarantee-details/1/access-code`)){
         document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const liabilityCurrency = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/guarantee-details/1/liability-currency`)){
+        document.getElementById('value-select').value = data
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
@@ -877,10 +933,11 @@ function transportDetails() {
     addSupplyChainActor(getLRN(), 'value-no')
     addAuth(getLRN(), 'value-no')
     authRefNumber(getLRN(), 'TRD123')
-    // addAnotherAuthType(getLRN(), 'value-no')
-    // carrierEORI(getLRN(), 'carrierEORI123')
-    // addCarrierContact(getLRN(), 'value-no')
-    /* Update when more of the journey has been developed */
+    addAnotherAuthType(getLRN(), 'value-no')
+    carrierEORI(getLRN(), 'carrierEORI123')
+    addCarrierContact(getLRN(), 'value-no')
+    addTransportEquipment(getLRN(), 'value')
+    addTransportSeal(getLRN(), 'value')
 }
 
 /* ## Guarantee Details ## */
@@ -891,6 +948,7 @@ function guaranteeDetailsWaiver() {
     tirDeclaration(getLRN())
     guaranteeNumber(getLRN(), '01GB1234567890120A123456')
     accessCode(getLRN(), '1234')
+    liabilityCurrency(getLRN(), 'GBP')
     liabilityAmount(getLRN(), '1234')
     guaranteeLoopCYA(getLRN())
     guaranteeAddAnother(getLRN(), 'value-no')
