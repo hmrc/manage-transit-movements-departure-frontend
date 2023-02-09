@@ -31,6 +31,11 @@ import wolfendale.scalacheck.regexp.RegexpGen
 trait ModelGenerators {
   self: Generators =>
 
+  implicit lazy val arbitraryPaymentMethod: Arbitrary[models.transport.equipment.PaymentMethod] =
+    Arbitrary {
+      Gen.oneOf(models.transport.equipment.PaymentMethod.values)
+    }
+
   implicit lazy val arbitraryAuthorisationType: Arbitrary[models.transport.authorisations.AuthorisationType] =
     Arbitrary {
       Gen.oneOf(models.transport.authorisations.AuthorisationType.values)
