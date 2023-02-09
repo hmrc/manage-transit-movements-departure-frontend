@@ -18,17 +18,39 @@ package models.transport.equipment
 
 import models.{RadioModel, WithName}
 
-sealed trait PaymentMethod
+sealed trait PaymentMethod {
+  val code: String
+}
 
 object PaymentMethod extends RadioModel[PaymentMethod] {
 
-  case object Cash extends WithName("cash") with PaymentMethod
-  case object CreditCard extends WithName("creditCard") with PaymentMethod
-  case object Cheque extends WithName("cheque") with PaymentMethod
-  case object ElectronicCreditTransfer extends WithName("electronicCreditTransfer") with PaymentMethod
-  case object AccountHolderWithCarrier extends WithName("accountHolderWithCarrier") with PaymentMethod
-  case object NotPrePaid extends WithName("notPrePaid") with PaymentMethod
-  case object Other extends WithName("other") with PaymentMethod
+  case object Cash extends WithName("cash") with PaymentMethod {
+    override val code: String = "A"
+  }
+
+  case object CreditCard extends WithName("creditCard") with PaymentMethod {
+    override val code: String = "B"
+  }
+
+  case object Cheque extends WithName("cheque") with PaymentMethod {
+    override val code: String = "C"
+  }
+
+  case object ElectronicCreditTransfer extends WithName("electronicCreditTransfer") with PaymentMethod {
+    override val code: String = "D"
+  }
+
+  case object AccountHolderWithCarrier extends WithName("accountHolderWithCarrier") with PaymentMethod {
+    override val code: String = "H"
+  }
+
+  case object NotPrePaid extends WithName("notPrePaid") with PaymentMethod {
+    override val code: String = "Y"
+  }
+
+  case object Other extends WithName("other") with PaymentMethod {
+    override val code: String = "Z"
+  }
 
   override val messageKeyPrefix: String = "transport.equipment.paymentMethod"
 
