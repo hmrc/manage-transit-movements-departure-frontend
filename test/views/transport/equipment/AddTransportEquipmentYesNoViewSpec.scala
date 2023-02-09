@@ -39,7 +39,7 @@ class AddTransportEquipmentYesNoViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithContent(
     "p",
-    "This includes any containers or seals."
+    "This means anything used to transport goods in CTC transit. For example, a swap body, articulated lorry or trailer."
   )
 
   behave like pageWithRadioItems()
