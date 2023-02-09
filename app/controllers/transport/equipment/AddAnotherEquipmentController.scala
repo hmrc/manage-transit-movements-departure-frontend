@@ -20,12 +20,14 @@ import config.FrontendAppConfig
 import controllers.actions._
 import forms.AddAnotherFormProvider
 import models.journeyDomain.transport.equipment.EquipmentDomain
-import models.{Index, LocalReferenceNumber, Mode}
+import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.transport.TransportNavigatorProvider
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewModels.transport.equipment.AddAnotherEquipmentViewModel
 import viewModels.transport.equipment.AddAnotherEquipmentViewModel.AddAnotherEquipmentViewModelProvider
 import views.html.transport.equipment.AddAnotherEquipmentView
 
@@ -43,28 +45,29 @@ class AddAnotherEquipmentController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  private def form(viewModel: AddAnotherEquipmentViewModel): Form[Boolean] =
+    formProvider(viewModel.prefix, viewModel.allowMore)
+
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
       val viewModel = viewModelProvider(request.userAnswers, mode)
-      val form      = formProvider(viewModel.prefix, viewModel.allowMoreEquipments)
-      viewModel.equipmentsCount match {
+      viewModel.count match {
         case 0 => Redirect(routes.AddTransportEquipmentYesNoController.onPageLoad(lrn, mode))
-        case _ => Ok(view(form, lrn, mode, viewModel, viewModel.allowMoreEquipments))
+        case _ => Ok(view(form(viewModel), lrn, viewModel))
       }
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
       val viewModel = viewModelProvider(request.userAnswers, mode)
-      val form      = formProvider(viewModel.prefix, viewModel.allowMoreEquipments)
-      form
+      form(viewModel)
         .bindFromRequest()
         .fold(
-          formWithErrors => BadRequest(view(formWithErrors, lrn, mode, viewModel, viewModel.allowMoreEquipments)),
+          formWithErrors => BadRequest(view(formWithErrors, lrn, viewModel)),
           {
             case true =>
               Redirect(
-                UserAnswersNavigator.nextPage[EquipmentDomain](request.userAnswers, mode)(EquipmentDomain.userAnswersReader(Index(viewModel.equipmentsCount)))
+                UserAnswersNavigator.nextPage[EquipmentDomain](request.userAnswers, mode)(EquipmentDomain.userAnswersReader(viewModel.nextIndex))
               )
             case false =>
               Redirect(navigatorProvider(mode).nextPage(request.userAnswers))

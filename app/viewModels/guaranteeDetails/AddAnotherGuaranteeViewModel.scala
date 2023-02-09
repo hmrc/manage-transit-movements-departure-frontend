@@ -16,14 +16,24 @@
 
 package viewModels.guaranteeDetails
 
+import config.FrontendAppConfig
+import controllers.guaranteeDetails.routes
 import models.{NormalMode, UserAnswers}
 import play.api.i18n.Messages
+import play.api.mvc.Call
 import utils.cyaHelpers.guaranteeDetails.GuaranteeDetailsCheckYourAnswersHelper
-import viewModels.ListItem
+import viewModels.{AddAnotherViewModel, ListItem}
 
 import javax.inject.Inject
 
-case class AddAnotherGuaranteeViewModel(listItems: Seq[ListItem])
+case class AddAnotherGuaranteeViewModel(
+  override val listItems: Seq[ListItem],
+  onSubmitCall: Call
+) extends AddAnotherViewModel {
+  override val prefix: String = "guaranteeDetails.addAnotherGuarantee"
+
+  override def maxCount(implicit config: FrontendAppConfig): Int = config.maxGuarantees
+}
 
 object AddAnotherGuaranteeViewModel {
 
@@ -41,7 +51,10 @@ object AddAnotherGuaranteeViewModel {
         case Right(value) => value
       }
 
-      new AddAnotherGuaranteeViewModel(listItems)
+      new AddAnotherGuaranteeViewModel(
+        listItems,
+        onSubmitCall = routes.AddAnotherGuaranteeController.onSubmit(userAnswers.lrn)
+      )
     }
   }
 }

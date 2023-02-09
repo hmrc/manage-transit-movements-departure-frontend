@@ -21,12 +21,14 @@ import controllers.actions._
 import controllers.transport.supplyChainActors.index.{routes => supplyChainActorRoutes}
 import controllers.transport.supplyChainActors.{routes => supplyChainActorsRoutes}
 import forms.AddAnotherFormProvider
-import models.{Index, LocalReferenceNumber, Mode}
+import models.{LocalReferenceNumber, Mode}
 import navigation.transport.TransportNavigatorProvider
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewModels.transport.supplyChainActors.AddAnotherSupplyChainActorViewModel
 import viewModels.transport.supplyChainActors.AddAnotherSupplyChainActorViewModel.AddAnotherSupplyChainActorViewModelProvider
 import views.html.transport.supplyChainActors.AddAnotherSupplyChainActorView
 
@@ -45,27 +47,28 @@ class AddAnotherSupplyChainActorController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  private def form(viewModel: AddAnotherSupplyChainActorViewModel): Form[Boolean] =
+    formProvider(viewModel.prefix, viewModel.allowMore)
+
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
       val viewModel = viewModelProvider(request.userAnswers, mode)
-      val form      = formProvider("transport.supplyChainActors.addAnotherSupplyChainActor", viewModel.allowMoreSupplyChainActors)
-      viewModel.supplyChainActors match {
+      viewModel.count match {
         case 0 => Redirect(supplyChainActorsRoutes.SupplyChainActorYesNoController.onPageLoad(lrn, mode))
-        case _ => Ok(view(form, lrn, mode, viewModel, viewModel.allowMoreSupplyChainActors))
+        case _ => Ok(view(form(viewModel), lrn, viewModel))
       }
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
       val viewModel = viewModelProvider(request.userAnswers, mode)
-      val form      = formProvider("transport.supplyChainActors.addAnotherSupplyChainActor", viewModel.allowMoreSupplyChainActors)
-      form
+      form(viewModel)
         .bindFromRequest()
         .fold(
-          formWithErrors => BadRequest(view(formWithErrors, lrn, mode, viewModel, viewModel.allowMoreSupplyChainActors)),
+          formWithErrors => BadRequest(view(formWithErrors, lrn, viewModel)),
           {
             case true =>
-              Redirect(supplyChainActorRoutes.SupplyChainActorTypeController.onPageLoad(lrn, mode, Index(viewModel.supplyChainActors)))
+              Redirect(supplyChainActorRoutes.SupplyChainActorTypeController.onPageLoad(lrn, mode, viewModel.nextIndex))
             case false =>
               Redirect(navigatorProvider(mode).nextPage(request.userAnswers))
           }

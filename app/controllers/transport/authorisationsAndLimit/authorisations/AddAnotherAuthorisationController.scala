@@ -20,12 +20,14 @@ import config.FrontendAppConfig
 import controllers.actions._
 import controllers.transport.authorisationsAndLimit.authorisations.index.{routes => authorisationRoutes}
 import forms.AddAnotherFormProvider
-import models.{Index, LocalReferenceNumber, Mode}
+import models.{LocalReferenceNumber, Mode}
 import navigation.transport.TransportNavigatorProvider
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewModels.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationViewModel
 import viewModels.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationViewModel.AddAnotherAuthorisationViewModelProvider
 import views.html.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationView
 
@@ -44,27 +46,28 @@ class AddAnotherAuthorisationController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  private def form(viewModel: AddAnotherAuthorisationViewModel): Form[Boolean] =
+    formProvider(viewModel.prefix, viewModel.allowMore)
+
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
       val viewModel = viewModelProvider(request.userAnswers, mode)
-      val form      = formProvider("transport.authorisations.addAnotherAuthorisation", viewModel.allowMoreAuthorisations)
-      viewModel.authorisations match {
+      viewModel.count match {
         case 0 => Redirect(navigatorProvider(mode).nextPage(request.userAnswers))
-        case _ => Ok(view(form, lrn, mode, viewModel, viewModel.allowMoreAuthorisations))
+        case _ => Ok(view(form(viewModel), lrn, viewModel))
       }
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
       val viewModel = viewModelProvider(request.userAnswers, mode)
-      val form      = formProvider("transport.authorisations.addAnotherAuthorisation", viewModel.allowMoreAuthorisations)
-      form
+      form(viewModel)
         .bindFromRequest()
         .fold(
-          formWithErrors => BadRequest(view(formWithErrors, lrn, mode, viewModel, viewModel.allowMoreAuthorisations)),
+          formWithErrors => BadRequest(view(formWithErrors, lrn, viewModel)),
           {
             case true =>
-              Redirect(authorisationRoutes.AuthorisationTypeController.onPageLoad(lrn, mode, Index(viewModel.authorisations)))
+              Redirect(authorisationRoutes.AuthorisationTypeController.onPageLoad(lrn, mode, viewModel.nextIndex))
             case false =>
               Redirect(navigatorProvider(mode).nextPage(request.userAnswers))
           }

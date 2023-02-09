@@ -16,9 +16,7 @@
 
 package views.transport.equipment
 
-import config.FrontendAppConfig
 import forms.AddAnotherFormProvider
-import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -28,30 +26,26 @@ import views.html.transport.equipment.AddAnotherEquipmentView
 
 class AddAnotherEquipmentViewSpec extends ListWithActionsViewBehaviours {
 
-  implicit override def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
-
   override def maxNumber: Int = frontendAppConfig.maxEquipmentNumbers
 
   private def formProvider(viewModel: AddAnotherEquipmentViewModel) =
-    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMoreEquipments)
+    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMore)
 
-  private val viewModel                     = arbitrary[AddAnotherEquipmentViewModel].sample.value
-  private val viewModelWithItemsNotMaxedOut = viewModel.copy(listItems = listItems)
-  private val viewModelWithItemsMaxedOut    = viewModel.copy(listItems = maxedOutListItems)
+  private val viewModel            = arbitrary[AddAnotherEquipmentViewModel].sample.value
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
 
-  override def form: Form[Boolean] = formProvider(viewModelWithItemsNotMaxedOut)
-
-  private val mode = arbitrary[Mode].sample.value
+  override def form: Form[Boolean] = formProvider(notMaxedOutViewModel)
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherEquipmentView]
-      .apply(form, lrn, mode, viewModelWithItemsNotMaxedOut, allowMoreEquipments = true)(fakeRequest, messages)
+      .apply(form, lrn, notMaxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherEquipmentView]
-      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut, allowMoreEquipments = false)(fakeRequest, messages)
+      .apply(formProvider(maxedOutViewModel), lrn, maxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override val prefix: String = "transport.equipment.addAnotherEquipment"
 
@@ -59,9 +53,9 @@ class AddAnotherEquipmentViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Transport details - Transport equipment")
 
-  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.equipmentsCount)()
+  behave like pageWithMoreItemsAllowed(notMaxedOutViewModel.count)()
 
-  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.equipmentsCount)
+  behave like pageWithItemsMaxedOut(maxedOutViewModel.count)
 
   behave like pageWithSubmitButton("Save and continue")
 }

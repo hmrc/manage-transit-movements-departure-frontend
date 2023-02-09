@@ -14,9 +14,10 @@
  * limitations under the License.
  *@
 
-@import controllers.routeDetails.transit.routes
+@import config.FrontendAppConfig
 @import models.LocalReferenceNumber
 @import viewModels.components.InputYesNoViewModel._
+@import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel
 @import viewModels.ListItem
 @import views.html.components.{Button, ErrorSummary, Heading, InputYesNo, ListWithActions}
 
@@ -30,14 +31,10 @@
     button: Button
 )
 
-@(form: Form[_], lrn: LocalReferenceNumber, mode: Mode, officesOfTransit: Seq[ListItem], allowMoreOfficesOfTransit: Boolean)(implicit request: Request[_], messages: Messages)
-
-@singularOrPlural = @{
-    if (officesOfTransit.length == 1) "singular" else "plural"
-}
+@(form: Form[_], lrn: LocalReferenceNumber, viewModel: AddAnotherOfficeOfTransitViewModel)(implicit request: Request[_], messages: Messages, config: FrontendAppConfig)
 
 @mainTemplate(
-    title = messages(s"routeDetails.transit.addAnotherOfficeOfTransit.$singularOrPlural.title", officesOfTransit.length),
+    title = viewModel.title,
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -45,23 +42,23 @@
     @errorSummary(form.errors)
 
     @heading(
-        heading = messages(s"routeDetails.transit.addAnotherOfficeOfTransit.$singularOrPlural.heading", officesOfTransit.length),
+        heading = viewModel.heading,
         caption = Some(messages("routeDetails.transit.caption"))
     )
 
-    @listWithActions(officesOfTransit)
+    @listWithActions(viewModel.listItems)
 
-    @formHelper(action = routes.AddAnotherOfficeOfTransitController.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = viewModel.onSubmitCall, Symbol("autoComplete") -> "off") {
 
-        @if(allowMoreOfficesOfTransit) {
+        @if(viewModel.allowMore) {
             @inputYesNo(
                 field = form("value"),
                 yesNoType = YesNoWithLegend(
-                    legend = messages("routeDetails.transit.addAnotherOfficeOfTransit.label")
+                    legend = viewModel.legend
                 )
             )
         } else {
-            <p class="govuk-body" data-testId="maxLimit">@messages("routeDetails.transit.addAnotherOfficeOfTransit.maxLimit.label")</p>
+            <p class="govuk-body" data-testId="maxLimit">@viewModel.maxLimitLabel</p>
         }
 
         @button(

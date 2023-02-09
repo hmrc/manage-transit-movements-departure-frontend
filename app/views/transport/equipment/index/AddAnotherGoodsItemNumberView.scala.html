@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.transport.equipment.index.routes
+@import config.FrontendAppConfig
 @import models.LocalReferenceNumber
 @import viewModels.components.InputYesNoViewModel._
 @import views.html.components.{Button, ErrorSummary, Heading, InputYesNo, ListWithActions}
@@ -31,7 +31,7 @@
     button: Button
 )
 
-@(form: Form[Boolean], lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index, viewModel: AddAnotherGoodsItemNumberViewModel, allowMoreGoodsItemNumbers: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], lrn: LocalReferenceNumber, viewModel: AddAnotherGoodsItemNumberViewModel)(implicit request: Request[_], messages: Messages, config: FrontendAppConfig)
 
 @mainTemplate(
     title = viewModel.title,
@@ -48,9 +48,9 @@
 
     @listWithActions(viewModel.listItems)
 
-    @formHelper(action = routes.AddAnotherGoodsItemNumberController.onSubmit(lrn, mode, equipmentIndex), Symbol("autoComplete") -> "off") {
+    @formHelper(action = viewModel.onSubmitCall, Symbol("autoComplete") -> "off") {
 
-        @if(allowMoreGoodsItemNumbers) {
+        @if(viewModel.allowMore) {
             @inputYesNo(
                 field = form("value"),
                 yesNoType = YesNoWithLegend(

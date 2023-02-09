@@ -42,7 +42,7 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
   private val formProvider = new AddAnotherFormProvider()
 
   private def form(viewModel: AddAnotherEquipmentViewModel) =
-    formProvider(viewModel.prefix, viewModel.allowMoreEquipments(frontendAppConfig))
+    formProvider(viewModel.prefix, viewModel.allowMore(frontendAppConfig))
 
   private val mode = NormalMode
 
@@ -67,16 +67,16 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
 
   private val viewModel = arbitrary[AddAnotherEquipmentViewModel].sample.value
 
-  private val viewModelWithNoEquipments          = viewModel.copy(listItems = Nil)
-  private val viewModelWithEquipmentsNotMaxedOut = viewModel.copy(listItems = listItems)
-  private val viewModelWithEquipmentsMaxedOut    = viewModel.copy(listItems = maxedOutListItems)
+  private val emptyViewModel       = viewModel.copy(listItems = Nil)
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
 
   "AddAnotherEquipment Controller" - {
 
     "when 0 equipment" - {
       "must redirect to add equipment yes/no page" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(viewModelWithNoEquipments)
+          .thenReturn(emptyViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -95,7 +95,7 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
     "must return OK and the correct view for a GET" - {
       "when max limit not reached" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(viewModelWithEquipmentsNotMaxedOut)
+          .thenReturn(notMaxedOutViewModel)
 
         val userAnswers = emptyUserAnswers
           .setValue(ContainerIndicatorPage, true)
@@ -111,12 +111,12 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(viewModelWithEquipmentsNotMaxedOut), lrn, mode, viewModelWithEquipmentsNotMaxedOut, allowMoreEquipments = true)(request, messages).toString
+          view(form(notMaxedOutViewModel), lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
 
       "when max limit reached" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(viewModelWithEquipmentsMaxedOut)
+          .thenReturn(maxedOutViewModel)
 
         val userAnswers = emptyUserAnswers
           .setValue(ContainerIndicatorPage, true)
@@ -132,17 +132,17 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(viewModelWithEquipmentsMaxedOut), lrn, mode, viewModelWithEquipmentsMaxedOut, allowMoreEquipments = false)(request, messages).toString
+          view(form(maxedOutViewModel), lrn, maxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
     }
 
     "when max limit not reached" - {
       "when yes submitted" - {
         "must redirect to first page in journey at next index" in {
-          val nextIndex = Index(viewModelWithEquipmentsNotMaxedOut.listItems.length)
+          val nextIndex = Index(notMaxedOutViewModel.listItems.length)
 
           when(mockViewModelProvider.apply(any(), any())(any()))
-            .thenReturn(viewModelWithEquipmentsNotMaxedOut)
+            .thenReturn(notMaxedOutViewModel)
 
           val userAnswers = emptyUserAnswers
             .setValue(ContainerIndicatorPage, true)
@@ -164,7 +164,7 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
       "when no submitted" - {
         "must redirect to next page" in {
           when(mockViewModelProvider.apply(any(), any())(any()))
-            .thenReturn(viewModelWithEquipmentsNotMaxedOut)
+            .thenReturn(notMaxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -183,7 +183,7 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
     "when max limit reached" - {
       "must redirect to next page" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(viewModelWithEquipmentsMaxedOut)
+          .thenReturn(maxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -201,14 +201,14 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
     "must return a Bad Request and errors" - {
       "when invalid data is submitted and max limit not reached" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(viewModelWithEquipmentsNotMaxedOut)
+          .thenReturn(notMaxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
         val request = FakeRequest(POST, addAnotherEquipmentRoute)
           .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form(viewModelWithEquipmentsNotMaxedOut).bind(Map("value" -> ""))
+        val boundForm = form(notMaxedOutViewModel).bind(Map("value" -> ""))
 
         val result = route(app, request).value
 
@@ -217,7 +217,7 @@ class AddAnotherEquipmentControllerSpec extends SpecBase with AppWithDefaultMock
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, lrn, mode, viewModelWithEquipmentsNotMaxedOut, allowMoreEquipments = true)(request, messages).toString
+          view(boundForm, lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
     }
 

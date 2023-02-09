@@ -17,8 +17,6 @@
 package views.transport.transportMeans.active
 
 import forms.AddAnotherFormProvider
-import models.Mode
-import config.FrontendAppConfig
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -28,30 +26,26 @@ import views.html.transport.transportMeans.active.AddAnotherBorderTransportView
 
 class AddAnotherBorderTransportViewSpec extends ListWithActionsViewBehaviours {
 
-  implicit override def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
-
   override def maxNumber: Int = frontendAppConfig.maxActiveBorderTransports
 
   private def formProvider(viewModel: AddAnotherBorderTransportViewModel) =
-    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMoreActiveBorderTransports)
+    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMore)
 
-  private val viewModel                     = arbitrary[AddAnotherBorderTransportViewModel].sample.value
-  private val viewModelWithItemsNotMaxedOut = viewModel.copy(listItems = listItems)
-  private val viewModelWithItemsMaxedOut    = viewModel.copy(listItems = maxedOutListItems)
+  private val viewModel            = arbitrary[AddAnotherBorderTransportViewModel].sample.value
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
 
-  override def form: Form[Boolean] = formProvider(viewModelWithItemsNotMaxedOut)
-
-  private val mode = arbitrary[Mode].sample.value
+  override def form: Form[Boolean] = formProvider(notMaxedOutViewModel)
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherBorderTransportView]
-      .apply(form, lrn, mode, viewModelWithItemsNotMaxedOut)(fakeRequest, messages, frontendAppConfig)
+      .apply(form, lrn, notMaxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherBorderTransportView]
-      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut)(fakeRequest, messages, frontendAppConfig)
+      .apply(formProvider(maxedOutViewModel), lrn, maxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override val prefix: String = "transport.transportMeans.active.addAnotherBorderTransport"
 
@@ -63,9 +57,9 @@ class AddAnotherBorderTransportViewSpec extends ListWithActionsViewBehaviours {
     "Only include vehicles that cross into another CTC country. As the EU is one CTC country, you don’t need to provide vehicle changes that stay within the EU."
   )
 
-  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.activeBorderTransports)()
+  behave like pageWithMoreItemsAllowed(notMaxedOutViewModel.count)()
 
-  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.activeBorderTransports)
+  behave like pageWithItemsMaxedOut(maxedOutViewModel.count)
 
   behave like pageWithSubmitButton("Save and continue")
 }

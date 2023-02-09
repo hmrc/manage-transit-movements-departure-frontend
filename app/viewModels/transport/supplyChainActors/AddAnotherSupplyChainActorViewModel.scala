@@ -21,27 +21,17 @@ import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import utils.cyaHelpers.transport.supplyChainActors.SupplyChainActorsAnswersHelper
-import viewModels.ListItem
+import viewModels.{AddAnotherViewModel, ListItem}
 
 import javax.inject.Inject
 
 case class AddAnotherSupplyChainActorViewModel(
   listItems: Seq[ListItem],
   onSubmitCall: Call
-) {
+) extends AddAnotherViewModel {
+  override val prefix: String = "transport.supplyChainActors.addAnotherSupplyChainActor"
 
-  val supplyChainActors: Int   = listItems.length
-  val singularOrPlural: String = if (supplyChainActors == 1) "singular" else "plural"
-
-  val prefix: String = "transport.supplyChainActors.addAnotherSupplyChainActor"
-
-  def title(implicit messages: Messages): String         = messages(s"$prefix.$singularOrPlural.title", supplyChainActors)
-  def heading(implicit messages: Messages): String       = messages(s"$prefix.$singularOrPlural.heading", supplyChainActors)
-  def legend(implicit messages: Messages): String        = messages(s"$prefix.label")
-  def maxLimitLabel(implicit messages: Messages): String = messages(s"$prefix.maxLimit.label")
-
-  def allowMoreSupplyChainActors(implicit config: FrontendAppConfig): Boolean =
-    supplyChainActors < config.maxSupplyChainActors
+  override def maxCount(implicit config: FrontendAppConfig): Int = config.maxSupplyChainActors
 }
 
 object AddAnotherSupplyChainActorViewModel {

@@ -37,8 +37,10 @@ import views.html.routeDetails.transit.AddAnotherOfficeOfTransitView
 
 class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
-  private val formProvider                            = new AddAnotherFormProvider()
-  private def form(allowMoreOfficeOfTransit: Boolean) = formProvider("routeDetails.transit.addAnotherOfficeOfTransit", allowMoreOfficeOfTransit)
+  private val formProvider = new AddAnotherFormProvider()
+
+  private def form(viewModel: AddAnotherOfficeOfTransitViewModel) =
+    formProvider(viewModel.prefix, viewModel.allowMore(frontendAppConfig))
 
   private val mode = NormalMode
 
@@ -61,12 +63,18 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
   private val listItems         = Seq.fill(Gen.choose(1, frontendAppConfig.maxOfficesOfTransit - 1).sample.value)(listItem)
   private val maxedOutListItems = Seq.fill(frontendAppConfig.maxOfficesOfTransit)(listItem)
 
+  private val viewModel = arbitrary[AddAnotherOfficeOfTransitViewModel].sample.value
+
+  private val emptyViewModel       = viewModel.copy(listItems = Nil)
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
+
   "AddAnotherOfficeOfTransitController" - {
 
     "redirect to correct start page in this sub-section" - {
       "when 0 offices of transit" in {
         when(mockViewModelProvider.apply(any(), any(), any(), any())(any()))
-          .thenReturn(AddAnotherOfficeOfTransitViewModel(Nil))
+          .thenReturn(emptyViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -84,10 +92,8 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
     "must return OK and the correct view for a GET" - {
       "when max limit not reached" in {
 
-        val allowMoreOfficesOfTransit = true
-
         when(mockViewModelProvider.apply(any(), any(), any(), any())(any()))
-          .thenReturn(AddAnotherOfficeOfTransitViewModel(listItems))
+          .thenReturn(notMaxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -100,17 +106,13 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(allowMoreOfficesOfTransit), lrn, mode, listItems, allowMoreOfficesOfTransit)(request, messages).toString
+          view(form(notMaxedOutViewModel), lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
 
       "when max limit reached" in {
 
-        val allowMoreOfficesOfTransit = false
-
-        val listItems = maxedOutListItems
-
         when(mockViewModelProvider.apply(any(), any(), any(), any())(any()))
-          .thenReturn(AddAnotherOfficeOfTransitViewModel(listItems))
+          .thenReturn(maxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -123,7 +125,7 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(allowMoreOfficesOfTransit), lrn, mode, listItems, allowMoreOfficesOfTransit)(request, messages).toString
+          view(form(maxedOutViewModel), lrn, maxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
     }
 
@@ -131,7 +133,7 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
       "when yes submitted" - {
         "must redirect to office of transit country page at next index" in {
           when(mockViewModelProvider.apply(any(), any(), any(), any())(any()))
-            .thenReturn(AddAnotherOfficeOfTransitViewModel(listItems))
+            .thenReturn(notMaxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -150,7 +152,7 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
       "when no submitted" - {
         "must redirect to the next page" in {
           when(mockViewModelProvider.apply(any(), any(), any(), any())(any()))
-            .thenReturn(AddAnotherOfficeOfTransitViewModel(listItems))
+            .thenReturn(notMaxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -169,7 +171,7 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
     "when max limit reached" - {
       "must redirect to the next page" in {
         when(mockViewModelProvider.apply(any(), any(), any(), any())(any()))
-          .thenReturn(AddAnotherOfficeOfTransitViewModel(maxedOutListItems))
+          .thenReturn(maxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -187,16 +189,14 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
     "must return a Bad Request and errors" - {
       "when invalid data is submitted and max limit not reached" in {
         when(mockViewModelProvider.apply(any(), any(), any(), any())(any()))
-          .thenReturn(AddAnotherOfficeOfTransitViewModel(listItems))
-
-        val allowMoreOfficesOfTransit = true
+          .thenReturn(notMaxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
         val request = FakeRequest(POST, addAnotherRoute)
           .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form(allowMoreOfficesOfTransit).bind(Map("value" -> ""))
+        val boundForm = form(notMaxedOutViewModel).bind(Map("value" -> ""))
 
         val result = route(app, request).value
 
@@ -205,7 +205,7 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, lrn, mode, listItems, allowMoreOfficesOfTransit)(request, messages).toString
+          view(boundForm, lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
     }
 

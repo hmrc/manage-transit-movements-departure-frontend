@@ -44,8 +44,10 @@ import scala.concurrent.Future
 
 class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
-  private val formProvider                      = new AddAnotherFormProvider()
-  private def form(allowMoreCountries: Boolean) = formProvider("routeDetails.routing.addAnotherCountryOfRouting", allowMoreCountries)
+  private val formProvider = new AddAnotherFormProvider()
+
+  private def form(viewModel: AddAnotherCountryOfRoutingViewModel) =
+    formProvider(viewModel.prefix, viewModel.allowMore(frontendAppConfig))
 
   private val mode = NormalMode
 
@@ -68,12 +70,18 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
   private val listItems         = Seq.fill(Gen.choose(1, frontendAppConfig.maxCountriesOfRouting - 1).sample.value)(listItem)
   private val maxedOutListItems = Seq.fill(frontendAppConfig.maxCountriesOfRouting)(listItem)
 
+  private val viewModel = arbitrary[AddAnotherCountryOfRoutingViewModel].sample.value
+
+  private val emptyViewModel       = viewModel.copy(listItems = Nil)
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
+
   "AddAnotherCountryOfRoutingController" - {
 
     "redirect to binding itinerary page" - {
       "when 0 countries" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(AddAnotherCountryOfRoutingViewModel(Nil))
+          .thenReturn(emptyViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -92,10 +100,8 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
     "must return OK and the correct view for a GET" - {
       "when max limit not reached" in {
 
-        val allowMoreCountries = true
-
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
+          .thenReturn(notMaxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -108,17 +114,13 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(allowMoreCountries), lrn, mode, listItems, allowMoreCountries)(request, messages).toString
+          view(form(notMaxedOutViewModel), lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
 
       "when max limit reached" in {
 
-        val allowMoreCountries = false
-
-        val listItems = maxedOutListItems
-
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
+          .thenReturn(maxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -131,7 +133,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(allowMoreCountries), lrn, mode, listItems, allowMoreCountries)(request, messages).toString
+          view(form(maxedOutViewModel), lrn, maxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
     }
 
@@ -139,7 +141,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
       "when yes submitted" - {
         "must redirect to guarantee type page at next index" in {
           when(mockViewModelProvider.apply(any(), any())(any()))
-            .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
+            .thenReturn(notMaxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -158,7 +160,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
       "when no submitted" - {
         "must redirect to check your answers" in {
           when(mockViewModelProvider.apply(any(), any())(any()))
-            .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
+            .thenReturn(notMaxedOutViewModel)
 
           when(mockSessionRepository.set(any())(any()))
             .thenReturn(Future.successful(true))
@@ -185,7 +187,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
     "when max limit reached" - {
       "must redirect to check your answers" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(AddAnotherCountryOfRoutingViewModel(maxedOutListItems))
+          .thenReturn(maxedOutViewModel)
 
         when(mockSessionRepository.set(any())(any()))
           .thenReturn(Future.successful(true))
@@ -211,7 +213,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
     "must return a Bad Request and errors" - {
       "when invalid data is submitted and max limit not reached" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(AddAnotherCountryOfRoutingViewModel(listItems))
+          .thenReturn(notMaxedOutViewModel)
 
         when(mockSessionRepository.set(any())(any()))
           .thenReturn(Future.successful(true))
@@ -223,12 +225,10 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
 
         setExistingUserAnswers(ua)
 
-        val allowMoreCountries = true
-
         val request = FakeRequest(POST, addAnotherCountryOfRoutingRoute)
           .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form(allowMoreCountries).bind(Map("value" -> ""))
+        val boundForm = form(notMaxedOutViewModel).bind(Map("value" -> ""))
 
         val result = route(app, request).value
 
@@ -237,7 +237,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, lrn, mode, listItems, allowMoreCountries)(request, messages).toString
+          view(boundForm, lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
     }
 

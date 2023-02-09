@@ -21,7 +21,7 @@ import controllers.actions._
 import controllers.routeDetails.exit.index.{routes => indexRoutes}
 import forms.AddAnotherFormProvider
 import models.requests.DataRequest
-import models.{Index, LocalReferenceNumber, Mode}
+import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
 import navigation.routeDetails.RouteDetailsNavigatorProvider
 import play.api.data.Form
@@ -30,7 +30,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.ListItem
+import viewModels.routeDetails.exit.AddAnotherOfficeOfExitViewModel
 import viewModels.routeDetails.exit.AddAnotherOfficeOfExitViewModel.AddAnotherOfficeOfExitViewModelProvider
 import views.html.routeDetails.exit.AddAnotherOfficeOfExitView
 
@@ -43,38 +43,37 @@ class AddAnotherOfficeOfExitController @Inject() (
   navigatorProvider: RouteDetailsNavigatorProvider,
   actions: Actions,
   formProvider: AddAnotherFormProvider,
-  config: FrontendAppConfig,
   viewModelProvider: AddAnotherOfficeOfExitViewModelProvider,
   val controllerComponents: MessagesControllerComponents,
   view: AddAnotherOfficeOfExitView,
   countriesService: CountriesService
-)(implicit ec: ExecutionContext)
+)(implicit ec: ExecutionContext, config: FrontendAppConfig)
     extends FrontendBaseController
     with I18nSupport {
 
-  private def form(allowMoreOfficesOfExit: Boolean): Form[Boolean] =
-    formProvider("routeDetails.exit.addAnotherOfficeOfExit", allowMoreOfficesOfExit)
+  private def form(viewModel: AddAnotherOfficeOfExitViewModel): Form[Boolean] =
+    formProvider(viewModel.prefix, viewModel.allowMore)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      lazy val (officesOfExit, numberOfOfficesOfExit, allowMoreOfficesOfExit) = viewData(mode)
-      numberOfOfficesOfExit match {
+      val viewModel = viewModelProvider(request.userAnswers, mode)
+      viewModel.count match {
         case 0 => redirectToNextPage(mode)
-        case _ => Future.successful(Ok(view(form(allowMoreOfficesOfExit), lrn, mode, officesOfExit, allowMoreOfficesOfExit)))
+        case _ => Future.successful(Ok(view(form(viewModel), lrn, viewModel)))
       }
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      lazy val (officesOfExit, numberOfOfficesOfExit, allowMoreOfficesOfExit) = viewData(mode)
-      form(allowMoreOfficesOfExit)
+      val viewModel = viewModelProvider(request.userAnswers, mode)
+      form(viewModel)
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, officesOfExit, allowMoreOfficesOfExit))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, viewModel))),
           {
             case true =>
               Future.successful(
-                Redirect(indexRoutes.OfficeOfExitCountryController.onPageLoad(lrn, Index(numberOfOfficesOfExit), mode))
+                Redirect(indexRoutes.OfficeOfExitCountryController.onPageLoad(lrn, viewModel.nextIndex, mode))
               )
             case false => redirectToNextPage(mode)
           }
@@ -89,10 +88,4 @@ class AddAnotherOfficeOfExitController @Inject() (
       val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
       Redirect(navigator.nextPage(request.userAnswers))
     }
-
-  private def viewData(mode: Mode)(implicit request: DataRequest[_]): (Seq[ListItem], Int, Boolean) = {
-    val officesOfExit         = viewModelProvider.apply(request.userAnswers, mode).listItems
-    val numberOfOfficesOfExit = officesOfExit.length
-    (officesOfExit, numberOfOfficesOfExit, numberOfOfficesOfExit < config.maxOfficesOfExit)
-  }
 }
