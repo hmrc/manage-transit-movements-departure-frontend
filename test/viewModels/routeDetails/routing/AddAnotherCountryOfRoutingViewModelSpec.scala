@@ -18,29 +18,50 @@ package viewModels.routeDetails.routing
 
 import base.SpecBase
 import generators.Generators
-import models.reference.Country
 import models.{Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.routeDetails.routing.index.CountryOfRoutingPage
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel.AddAnotherCountryOfRoutingViewModelProvider
 
-class AddAnotherCountryOfRoutingViewModelSpec extends SpecBase with Generators {
+class AddAnotherCountryOfRoutingViewModelSpec extends SpecBase with Generators with ScalaCheckPropertyChecks {
 
-  "must get list items" in {
+  "must get list items" - {
 
-    val numberOfCountries = Gen.choose(1, frontendAppConfig.maxCountriesOfRouting).sample.value
-    def country           = arbitrary[Country].sample.value
-    val mode              = arbitrary[Mode].sample.value
+    "when there is one country of routing" in {
+      forAll(arbitrary[Mode]) {
+        mode =>
+          val userAnswers = arbitraryCountryOfRoutingAnswers(emptyUserAnswers, index).sample.value
 
-    val userAnswers = (0 until numberOfCountries).foldLeft(emptyUserAnswers) {
-      (acc, i) =>
-        acc.setValue(CountryOfRoutingPage(Index(i)), country)
+          val result = new AddAnotherCountryOfRoutingViewModelProvider()(userAnswers, mode)
+
+          result.listItems.length mustBe 1
+          result.title mustBe "You have added 1 country to the transit route"
+          result.heading mustBe "You have added 1 country to the transit route"
+          result.legend mustBe "Do you want to add another country to the transit route?"
+          result.maxLimitLabel mustBe "You cannot add any more countries to the transit route. To add another country, you need to remove one first."
+      }
     }
 
-    val viewModelProvider = injector.instanceOf[AddAnotherCountryOfRoutingViewModelProvider]
-    val result            = viewModelProvider.apply(userAnswers, mode)
-    result.listItems.length mustBe numberOfCountries
+    "when there are multiple countries of routing" in {
+      val formatter = java.text.NumberFormat.getIntegerInstance
+
+      forAll(arbitrary[Mode], Gen.choose(2, frontendAppConfig.maxCountriesOfRouting)) {
+        (mode, count) =>
+          val userAnswers = (0 until count).foldLeft(emptyUserAnswers) {
+            (acc, i) =>
+              arbitraryCountryOfRoutingAnswers(acc, Index(i)).sample.value
+          }
+
+          val result = new AddAnotherCountryOfRoutingViewModelProvider()(userAnswers, mode)
+
+          result.listItems.length mustBe count
+          result.title mustBe s"You have added ${formatter.format(count)} countries to the transit route"
+          result.heading mustBe s"You have added ${formatter.format(count)} countries to the transit route"
+          result.legend mustBe "Do you want to add another country to the transit route?"
+          result.maxLimitLabel mustBe "You cannot add any more countries to the transit route. To add another country, you need to remove one first."
+      }
+    }
   }
 
 }

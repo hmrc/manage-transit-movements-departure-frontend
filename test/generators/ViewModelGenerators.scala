@@ -25,6 +25,9 @@ import play.api.mvc.Call
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+import viewModels.guaranteeDetails.AddAnotherGuaranteeViewModel
+import viewModels.routeDetails.exit.AddAnotherOfficeOfExitViewModel
+import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel
 import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel
 import viewModels.sections.Section
 import viewModels.taskList.{TaskListTask, TaskStatus}
@@ -273,5 +276,26 @@ trait ViewModelGenerators {
       listItems    <- arbitrary[Seq[ListItem]]
       onSubmitCall <- arbitrary[Call]
     } yield AddAnotherOfficeOfTransitViewModel(listItems, onSubmitCall)
+  }
+
+  implicit lazy val arbitraryAddAnotherOfficeOfExitViewModel: Arbitrary[AddAnotherOfficeOfExitViewModel] = Arbitrary {
+    for {
+      listItems    <- arbitrary[Seq[ListItem]]
+      onSubmitCall <- arbitrary[Call]
+    } yield AddAnotherOfficeOfExitViewModel(listItems, onSubmitCall)
+  }
+
+  implicit lazy val arbitraryAddAnotherCountryOfROutingViewModel: Arbitrary[AddAnotherCountryOfRoutingViewModel] = Arbitrary {
+    for {
+      listItems    <- arbitrary[Seq[ListItem]]
+      onSubmitCall <- arbitrary[Call]
+    } yield AddAnotherCountryOfRoutingViewModel(listItems, onSubmitCall)
+  }
+
+  implicit lazy val arbitraryAddAnotherGuaranteeViewModel: Arbitrary[AddAnotherGuaranteeViewModel] = Arbitrary {
+    for {
+      listItems    <- arbitrary[Seq[ListItem]]
+      onSubmitCall <- arbitrary[Call]
+    } yield AddAnotherGuaranteeViewModel(listItems, onSubmitCall)
   }
 }

@@ -21,13 +21,12 @@ import controllers.actions._
 import controllers.guaranteeDetails.guarantee.routes._
 import controllers.routes._
 import forms.AddAnotherFormProvider
-import models.requests.DataRequest
-import models.{Index, LocalReferenceNumber, NormalMode}
+import models.{LocalReferenceNumber, NormalMode}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.ListItem
+import viewModels.guaranteeDetails.AddAnotherGuaranteeViewModel
 import viewModels.guaranteeDetails.AddAnotherGuaranteeViewModel.AddAnotherGuaranteeViewModelProvider
 import views.html.guaranteeDetails.AddAnotherGuaranteeView
 
@@ -38,41 +37,35 @@ class AddAnotherGuaranteeController @Inject() (
   actions: Actions,
   formProvider: AddAnotherFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  config: FrontendAppConfig,
   viewModelProvider: AddAnotherGuaranteeViewModelProvider,
   view: AddAnotherGuaranteeView
-) extends FrontendBaseController
+)(implicit config: FrontendAppConfig)
+    extends FrontendBaseController
     with I18nSupport {
 
-  private def form(allowMoreGuarantees: Boolean): Form[Boolean] =
-    formProvider("guaranteeDetails.addAnotherGuarantee", allowMoreGuarantees)
+  private def form(viewModel: AddAnotherGuaranteeViewModel): Form[Boolean] =
+    formProvider(viewModel.prefix, viewModel.allowMore)
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      val (guarantees, numberOfGuarantees, allowMoreGuarantees) = viewData
-      numberOfGuarantees match {
+      val viewModel = viewModelProvider(request.userAnswers)
+      viewModel.count match {
         case 0 => Redirect(routes.AddGuaranteeYesNoController.onPageLoad(lrn))
-        case _ => Ok(view(form(allowMoreGuarantees), lrn, guarantees, allowMoreGuarantees))
+        case _ => Ok(view(form(viewModel), lrn, viewModel))
       }
   }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      lazy val (guarantees, numberOfGuarantees, allowMoreGuarantees) = viewData
-      form(allowMoreGuarantees)
+      val viewModel = viewModelProvider(request.userAnswers)
+      form(viewModel)
         .bindFromRequest()
         .fold(
-          formWithErrors => BadRequest(view(formWithErrors, lrn, guarantees, allowMoreGuarantees)),
+          formWithErrors => BadRequest(view(formWithErrors, lrn, viewModel)),
           {
-            case true  => Redirect(GuaranteeTypeController.onPageLoad(lrn, NormalMode, Index(numberOfGuarantees)))
+            case true  => Redirect(GuaranteeTypeController.onPageLoad(lrn, NormalMode, viewModel.nextIndex))
             case false => Redirect(TaskListController.onPageLoad(lrn))
           }
         )
-  }
-
-  private def viewData(implicit request: DataRequest[_]): (Seq[ListItem], Int, Boolean) = {
-    val guarantees         = viewModelProvider.apply(request.userAnswers).listItems
-    val numberOfGuarantees = guarantees.length
-    (guarantees, numberOfGuarantees, numberOfGuarantees < config.maxGuarantees)
   }
 }

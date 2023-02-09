@@ -37,16 +37,16 @@ import views.html.routeDetails.exit.AddAnotherOfficeOfExitView
 
 class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
-  private val formProvider                          = new AddAnotherFormProvider()
-  private def form(allowMoreOfficesOfExit: Boolean) = formProvider("routeDetails.exit.addAnotherOfficeOfExit", allowMoreOfficesOfExit)
+  private val formProvider = new AddAnotherFormProvider()
+
+  private def form(viewModel: AddAnotherOfficeOfExitViewModel) =
+    formProvider(viewModel.prefix, viewModel.allowMore(frontendAppConfig))
 
   private val mode = NormalMode
 
   private lazy val addAnotherOfficeOfExitRoute = routes.AddAnotherOfficeOfExitController.onPageLoad(lrn, mode).url
-  private val mockViewModelProvider            = mock[AddAnotherOfficeOfExitViewModelProvider]
-  private val listItem                         = arbitrary[ListItem].sample.value
-  private val listItems                        = Seq.fill(Gen.choose(1, frontendAppConfig.maxOfficesOfExit - 1).sample.value)(listItem)
-  private val maxedOutListItems                = Seq.fill(frontendAppConfig.maxOfficesOfExit)(listItem)
+
+  private val mockViewModelProvider = mock[AddAnotherOfficeOfExitViewModelProvider]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -59,12 +59,22 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
     reset(mockViewModelProvider)
   }
 
+  private val listItem          = arbitrary[ListItem].sample.value
+  private val listItems         = Seq.fill(Gen.choose(1, frontendAppConfig.maxOfficesOfExit - 1).sample.value)(listItem)
+  private val maxedOutListItems = Seq.fill(frontendAppConfig.maxOfficesOfExit)(listItem)
+
+  private val viewModel = arbitrary[AddAnotherOfficeOfExitViewModel].sample.value
+
+  private val emptyViewModel       = viewModel.copy(listItems = Nil)
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
+
   "AddAnotherOfficeOfExitController" - {
 
     "redirect to correct start page in this sub-section" - {
       "when 0 offices of exit" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(AddAnotherOfficeOfExitViewModel(Nil))
+          .thenReturn(emptyViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -81,11 +91,8 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
 
     "must return OK and the correct view for a GET" - {
       "when max limit not reached" in {
-
-        val allowMoreOfficesOfExit = true
-
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(AddAnotherOfficeOfExitViewModel(listItems))
+          .thenReturn(notMaxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -98,17 +105,12 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(allowMoreOfficesOfExit), lrn, mode, listItems, allowMoreOfficesOfExit)(request, messages).toString
+          view(form(notMaxedOutViewModel), lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
 
       "when max limit reached" in {
-
-        val allowMoreOfficesOfExit = false
-
-        val listItems = maxedOutListItems
-
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(AddAnotherOfficeOfExitViewModel(listItems))
+          .thenReturn(maxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -121,7 +123,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(allowMoreOfficesOfExit), lrn, mode, listItems, allowMoreOfficesOfExit)(request, messages).toString
+          view(form(maxedOutViewModel), lrn, maxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
     }
 
@@ -129,7 +131,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
       "when yes submitted" - {
         "must redirect to office of exit country page at next index" in {
           when(mockViewModelProvider.apply(any(), any())(any()))
-            .thenReturn(AddAnotherOfficeOfExitViewModel(listItems))
+            .thenReturn(notMaxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -148,7 +150,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
       "when no submitted" - {
         "must redirect to the next page" in {
           when(mockViewModelProvider.apply(any(), any())(any()))
-            .thenReturn(AddAnotherOfficeOfExitViewModel(listItems))
+            .thenReturn(notMaxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -167,7 +169,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
     "when max limit reached" - {
       "must redirect to the next page" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(AddAnotherOfficeOfExitViewModel(maxedOutListItems))
+          .thenReturn(maxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -185,16 +187,14 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
     "must return a Bad Request and errors" - {
       "when invalid data is submitted and max limit not reached" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(AddAnotherOfficeOfExitViewModel(listItems))
-
-        val allowMoreOfficesOfExit = true
+          .thenReturn(notMaxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
         val request = FakeRequest(POST, addAnotherOfficeOfExitRoute)
           .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form(allowMoreOfficesOfExit).bind(Map("value" -> ""))
+        val boundForm = form(notMaxedOutViewModel).bind(Map("value" -> ""))
 
         val result = route(app, request).value
 
@@ -203,7 +203,7 @@ class AddAnotherOfficeOfExitControllerSpec extends SpecBase with AppWithDefaultM
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, lrn, mode, listItems, allowMoreOfficesOfExit)(request, messages).toString
+          view(boundForm, lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
     }
 

@@ -63,9 +63,9 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
 
   private val viewModel = arbitrary[AddAnotherSupplyChainActorViewModel].sample.value
 
-  private val viewModelWithNoItems          = viewModel.copy(listItems = Nil)
-  private val viewModelWithItemsNotMaxedOut = viewModel.copy(listItems = listItems)
-  private val viewModelWithItemsMaxedOut    = viewModel.copy(listItems = maxedOutListItems)
+  private val viewModelWithNoItems = viewModel.copy(listItems = Nil)
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
 
   "AddAnotherSupplyChainActor Controller" - {
 
@@ -93,7 +93,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
         "must return OK and the correct view" in {
 
           when(mockViewModelProvider.apply(any(), any())(any()))
-            .thenReturn(viewModelWithItemsMaxedOut)
+            .thenReturn(maxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -106,7 +106,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(viewModelWithItemsMaxedOut), lrn, viewModelWithItemsMaxedOut)(request, messages, frontendAppConfig).toString
+            view(form(maxedOutViewModel), lrn, maxedOutViewModel)(request, messages, frontendAppConfig).toString
         }
       }
 
@@ -114,7 +114,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
         "must return OK and the correct view" in {
 
           when(mockViewModelProvider.apply(any(), any())(any()))
-            .thenReturn(viewModelWithItemsNotMaxedOut)
+            .thenReturn(notMaxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -127,7 +127,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(viewModelWithItemsNotMaxedOut), lrn, viewModelWithItemsNotMaxedOut)(request, messages, frontendAppConfig).toString
+            view(form(notMaxedOutViewModel), lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
         }
       }
 
@@ -154,7 +154,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
         "must redirect to authorisations section" in {
 
           when(mockViewModelProvider.apply(any(), any())(any()))
-            .thenReturn(viewModelWithItemsMaxedOut)
+            .thenReturn(maxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -175,7 +175,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
           "must redirect to supply chain actor type with next index" in {
 
             when(mockViewModelProvider.apply(any(), any())(any()))
-              .thenReturn(viewModelWithItemsNotMaxedOut)
+              .thenReturn(notMaxedOutViewModel)
 
             setExistingUserAnswers(emptyUserAnswers)
 
@@ -188,7 +188,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
 
             redirectLocation(result).value mustEqual
               controllers.transport.supplyChainActors.index.routes.SupplyChainActorTypeController
-                .onPageLoad(lrn, mode, viewModelWithItemsNotMaxedOut.nextIndex)
+                .onPageLoad(lrn, mode, notMaxedOutViewModel.nextIndex)
                 .url
 
           }
@@ -198,7 +198,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
           "must redirect to authorisations section" in {
 
             when(mockViewModelProvider.apply(any(), any())(any()))
-              .thenReturn(viewModelWithItemsNotMaxedOut)
+              .thenReturn(notMaxedOutViewModel)
 
             setExistingUserAnswers(emptyUserAnswers)
 
@@ -220,14 +220,14 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
         "must return bad request when invalid data is submitted" in {
 
           when(mockViewModelProvider.apply(any(), any())(any()))
-            .thenReturn(viewModelWithItemsNotMaxedOut)
+            .thenReturn(notMaxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
           val request = FakeRequest(POST, addAnotherSupplyChainActorRoute)
             .withFormUrlEncodedBody(("value", ""))
 
-          val boundForm = form(viewModelWithItemsNotMaxedOut).bind(Map("value" -> ""))
+          val boundForm = form(notMaxedOutViewModel).bind(Map("value" -> ""))
 
           val result = route(app, request).value
 
@@ -236,7 +236,7 @@ class AddAnotherSupplyChainActorControllerSpec extends SpecBase with AppWithDefa
           status(result) mustEqual BAD_REQUEST
 
           contentAsString(result) mustEqual
-            view(boundForm, lrn, viewModelWithItemsNotMaxedOut)(request, messages, frontendAppConfig).toString
+            view(boundForm, lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
         }
 
         "must redirect to session expired when no data is found" in {

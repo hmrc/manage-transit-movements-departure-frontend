@@ -16,7 +16,6 @@
 
 package views.transport.supplyChainActors
 
-import config.FrontendAppConfig
 import forms.AddAnotherFormProvider
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
@@ -27,28 +26,26 @@ import views.html.transport.supplyChainActors.AddAnotherSupplyChainActorView
 
 class AddAnotherSupplyChainActorViewSpec extends ListWithActionsViewBehaviours {
 
-  implicit override def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
-
   override def maxNumber: Int = frontendAppConfig.maxSupplyChainActors
 
   private def formProvider(viewModel: AddAnotherSupplyChainActorViewModel) =
     new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMore)
 
-  private val viewModel                     = arbitrary[AddAnotherSupplyChainActorViewModel].sample.value
-  private val viewModelWithItemsNotMaxedOut = viewModel.copy(listItems = listItems)
-  private val viewModelWithItemsMaxedOut    = viewModel.copy(listItems = maxedOutListItems)
+  private val viewModel            = arbitrary[AddAnotherSupplyChainActorViewModel].sample.value
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
 
-  override def form: Form[Boolean] = formProvider(viewModelWithItemsNotMaxedOut)
+  override def form: Form[Boolean] = formProvider(notMaxedOutViewModel)
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherSupplyChainActorView]
-      .apply(form, lrn, viewModelWithItemsNotMaxedOut)(fakeRequest, messages, frontendAppConfig)
+      .apply(form, lrn, notMaxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherSupplyChainActorView]
-      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, viewModelWithItemsMaxedOut)(fakeRequest, messages, frontendAppConfig)
+      .apply(formProvider(maxedOutViewModel), lrn, maxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override val prefix: String = "transport.supplyChainActors.addAnotherSupplyChainActor"
 
@@ -56,9 +53,9 @@ class AddAnotherSupplyChainActorViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Transport details - Supply chain actor")
 
-  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.count)()
+  behave like pageWithMoreItemsAllowed(notMaxedOutViewModel.count)()
 
-  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.count)
+  behave like pageWithItemsMaxedOut(maxedOutViewModel.count)
 
   behave like pageWithSubmitButton("Save and continue")
 }

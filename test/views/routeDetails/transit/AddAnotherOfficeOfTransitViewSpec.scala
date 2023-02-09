@@ -16,7 +16,6 @@
 
 package views.routeDetails.transit
 
-import config.FrontendAppConfig
 import forms.AddAnotherFormProvider
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
@@ -26,8 +25,6 @@ import views.behaviours.ListWithActionsViewBehaviours
 import views.html.routeDetails.transit.AddAnotherOfficeOfTransitView
 
 class AddAnotherOfficeOfTransitViewSpec extends ListWithActionsViewBehaviours {
-
-  implicit override def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
 
   override def maxNumber: Int = frontendAppConfig.maxOfficesOfTransit
 
