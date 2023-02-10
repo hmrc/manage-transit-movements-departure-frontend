@@ -35,6 +35,7 @@ object LocationOfGoodsAnswersViewModel {
       val section = Section(
         sectionTitle = messages("routeDetails.locationOfGoods.checkYourAnswers.subHeading"),
         rows = Seq(
+          helper.addLocationOfGoods,
           helper.locationType,
           helper.locationOfGoodsIdentification,
           helper.customsOfficeIdentifier,

@@ -765,6 +765,7 @@ routeDetails.locationOfGoods.addLocationOfGoods.heading = Do you want to add a l
 routeDetails.locationOfGoods.addLocationOfGoods.paragraph1 = This is where Customs will carry out any physical checks.
 routeDetails.locationOfGoods.addLocationOfGoods.paragraph2 = For goods not present at a customs office, this is their location at the time they’re declared.
 routeDetails.locationOfGoods.addLocationOfGoods.checkYourAnswersLabel = Do you want to add a location of goods?
+routeDetails.locationOfGoods.addLocationOfGoods.change.hidden = if you want to add a location of goods
 routeDetails.locationOfGoods.addLocationOfGoods.error.required = Select yes if you want to add a location of goods
 
 routeDetails.locationOfGoods.locationType.title = Which type of location is it?
