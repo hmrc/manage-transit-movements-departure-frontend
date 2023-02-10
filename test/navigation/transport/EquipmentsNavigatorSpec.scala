@@ -28,16 +28,16 @@ class EquipmentsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wit
     "when in NormalMode" - {
 
       val mode              = NormalMode
-      val navigatorProvider = new EquipmentNavigatorProviderImpl
-      val navigator         = navigatorProvider.apply(mode, equipmentIndex)
+      val navigatorProvider = new EquipmentsNavigatorProviderImpl
+      val navigator         = navigatorProvider.apply(mode)
 
       "when answers complete" - {
-        "must redirect to add another transport equipment page" ignore {
+        "must redirect to add another transport equipment page" in {
           forAll(arbitraryEquipmentsAnswers(emptyUserAnswers)) {
             answers =>
               navigator
                 .nextPage(answers)
-                .mustBe(???) // TODO: Add another transport equipment page
+                .mustBe(controllers.transport.equipment.routes.AddAnotherEquipmentController.onPageLoad(answers.lrn, mode))
           }
         }
       }
@@ -46,16 +46,16 @@ class EquipmentsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wit
     "when in CheckMode" - {
 
       val mode              = CheckMode
-      val navigatorProvider = new EquipmentNavigatorProviderImpl
-      val navigator         = navigatorProvider.apply(mode, equipmentIndex)
+      val navigatorProvider = new EquipmentsNavigatorProviderImpl
+      val navigator         = navigatorProvider.apply(mode)
 
       "when answers complete" - {
-        "must redirect to transport answers" ignore {
-          forAll(arbitraryEquipmentsAnswers(emptyUserAnswers)) {
+        "must redirect to transport answers" in {
+          forAll(arbitraryTransportAnswers(emptyUserAnswers)) {
             answers =>
               navigator
                 .nextPage(answers)
-                .mustBe(???) // TODO: Transport CYA page
+                .mustBe(controllers.transport.routes.TransportAnswersController.onPageLoad(answers.lrn))
           }
         }
       }

@@ -50,12 +50,12 @@ class SupplyChainActorNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
       val navigator         = navigatorProvider.apply(mode, actorIndex)
 
       "when answers complete" - {
-        "must redirect to transport check your answers" ignore {
-          forAll(arbitrarySupplyChainActorAnswers(emptyUserAnswers, actorIndex)) {
+        "must redirect to transport check your answers" in {
+          forAll(arbitraryTransportAnswers(emptyUserAnswers)) {
             answers =>
               navigator
                 .nextPage(answers)
-                .mustBe(???) //TODO: Add Transport CYA when page is added
+                .mustBe(controllers.transport.routes.TransportAnswersController.onPageLoad(answers.lrn))
           }
         }
       }
