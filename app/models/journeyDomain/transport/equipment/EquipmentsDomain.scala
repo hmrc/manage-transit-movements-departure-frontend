@@ -25,7 +25,7 @@ import play.api.mvc.Call
 case class EquipmentsDomain(value: Seq[EquipmentDomain]) extends JourneyDomainModel {
 
   override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
-    super.routeIfCompleted(userAnswers, mode, stage) // TODO - add another transport equipment page
+    Some(controllers.transport.equipment.routes.AddAnotherEquipmentController.onPageLoad(userAnswers.lrn, mode))
 }
 
 object EquipmentsDomain {

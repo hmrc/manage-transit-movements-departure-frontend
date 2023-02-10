@@ -23,3 +23,6 @@ GET        /:lrn/transport-details/modes-means-of-transport/check-answers       
 POST       /:lrn/transport-details/modes-means-of-transport/check-answers                                  controllers.transport.transportMeans.TransportMeansCheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/transport-details/modes-means-of-transport/change-check-answers                           controllers.transport.transportMeans.TransportMeansCheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/transport-details/modes-means-of-transport/change-check-answers                           controllers.transport.transportMeans.TransportMeansCheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/transport-details/check-answers                                                           controllers.transport.TransportAnswersController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/transport-details/check-answers                                                           controllers.transport.TransportAnswersController.onSubmit(lrn: LocalReferenceNumber)

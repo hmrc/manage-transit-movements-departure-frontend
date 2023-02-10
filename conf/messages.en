@@ -1028,6 +1028,9 @@ routeDetails.loadingAndUnloading.unloading.location.error.invalid = The place of
 
 transport.caption = Transport details
 
+transport.checkYourAnswers.heading = Check your answers
+transport.checkYourAnswers.title = Check your answers
+
 transport.preRequisites.sameUcrYesNo.title = Do you want to use the same Unique Consignment Reference (UCR) for all items?
 transport.preRequisites.sameUcrYesNo.heading = Do you want to use the same Unique Consignment Reference (UCR) for all items?
 transport.preRequisites.sameUcrYesNo.checkYourAnswersLabel = Same UCR for all items

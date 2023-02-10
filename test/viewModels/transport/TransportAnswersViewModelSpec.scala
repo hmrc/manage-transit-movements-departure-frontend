@@ -14,29 +14,23 @@
  * limitations under the License.
  */
 
-package navigation.transport
+package viewModels.transport
 
 import base.SpecBase
 import generators.Generators
-import models._
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import viewModels.transport.TransportAnswersViewModel.TransportAnswersViewModelProvider
 
-class TransportNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class TransportAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
-  "Transport Navigator" - {
+  "apply" - {
+    "must return all sections" in {
+      forAll(arbitraryTransportAnswers(emptyUserAnswers)) {
+        answers =>
+          val viewModelProvider = injector.instanceOf[TransportAnswersViewModelProvider]
+          val sections          = viewModelProvider.apply(answers).sections
 
-    "when answers complete" - {
-      "must redirect to transport check your answers" in {
-        forAll(arbitraryTransportAnswers(emptyUserAnswers), arbitrary[Mode]) {
-          (answers, mode) =>
-            val navigatorProvider = new TransportNavigatorProviderImpl()
-            val navigator         = navigatorProvider.apply(mode)
-
-            navigator
-              .nextPage(answers)
-              .mustBe(controllers.transport.routes.TransportAnswersController.onPageLoad(answers.lrn))
-        }
+          sections.size mustBe 0
       }
     }
   }
