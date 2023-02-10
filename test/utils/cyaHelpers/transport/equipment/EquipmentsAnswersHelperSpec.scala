@@ -68,7 +68,7 @@ class EquipmentsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks
           }
         }
 
-        "and add goodsItemNumber yes/no page is undefined" - {
+        "and add equipment yes/no page is undefined" - {
           "must return one list item with no remove link" in {
             forAll(arbitrary[Mode], arbitraryEquipmentAnswers(emptyUserAnswers, equipmentIndex)) {
               (mode, userAnswers) =>

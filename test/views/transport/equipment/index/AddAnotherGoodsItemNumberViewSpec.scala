@@ -16,9 +16,7 @@
 
 package views.transport.equipment.index
 
-import config.FrontendAppConfig
 import forms.AddAnotherFormProvider
-import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -28,32 +26,26 @@ import views.html.transport.equipment.index.AddAnotherGoodsItemNumberView
 
 class AddAnotherGoodsItemNumberViewSpec extends ListWithActionsViewBehaviours {
 
-  implicit override def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
-
   override def maxNumber: Int = frontendAppConfig.maxGoodsItemNumbers
 
   private def formProvider(viewModel: AddAnotherGoodsItemNumberViewModel) =
-    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMoreGoodsItemNumbers)
+    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMore)
 
-  private val viewModel                     = arbitrary[AddAnotherGoodsItemNumberViewModel].sample.value
-  private val viewModelWithItemsNotMaxedOut = viewModel.copy(listItems = listItems)
-  private val viewModelWithItemsMaxedOut    = viewModel.copy(listItems = maxedOutListItems)
+  private val viewModel            = arbitrary[AddAnotherGoodsItemNumberViewModel].sample.value
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
 
-  override def form: Form[Boolean] = formProvider(viewModelWithItemsNotMaxedOut)
-
-  private val mode = arbitrary[Mode].sample.value
+  override def form: Form[Boolean] = formProvider(notMaxedOutViewModel)
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherGoodsItemNumberView]
-      .apply(form, lrn, mode, equipmentIndex, viewModelWithItemsNotMaxedOut, allowMoreGoodsItemNumbers = true)(fakeRequest, messages)
+      .apply(form, lrn, notMaxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherGoodsItemNumberView]
-      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, mode, equipmentIndex, viewModelWithItemsMaxedOut, allowMoreGoodsItemNumbers = false)(fakeRequest,
-                                                                                                                                                 messages
-      )
+      .apply(formProvider(maxedOutViewModel), lrn, maxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override val prefix: String = "transport.equipment.index.addAnotherGoodsItemNumber"
 
@@ -61,9 +53,9 @@ class AddAnotherGoodsItemNumberViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Transport details - Transport equipment")
 
-  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.goodsItemNumbersCount)()
+  behave like pageWithMoreItemsAllowed(notMaxedOutViewModel.count)()
 
-  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.goodsItemNumbersCount)
+  behave like pageWithItemsMaxedOut(maxedOutViewModel.count)
 
   behave like pageWithSubmitButton("Save and continue")
 }

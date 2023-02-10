@@ -22,27 +22,17 @@ import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import utils.cyaHelpers.transport.equipment.EquipmentsAnswersHelper
-import viewModels.ListItem
+import viewModels.{AddAnotherViewModel, ListItem}
 
 import javax.inject.Inject
 
 case class AddAnotherEquipmentViewModel(
-  listItems: Seq[ListItem],
+  override val listItems: Seq[ListItem],
   onSubmitCall: Call
-) {
+) extends AddAnotherViewModel {
+  override val prefix: String = "transport.equipment.addAnotherEquipment"
 
-  val equipmentsCount: Int     = listItems.length
-  val singularOrPlural: String = if (equipmentsCount == 1) "singular" else "plural"
-
-  val prefix: String = "transport.equipment.addAnotherEquipment"
-
-  def title(implicit messages: Messages): String         = messages(s"$prefix.$singularOrPlural.title", equipmentsCount)
-  def heading(implicit messages: Messages): String       = messages(s"$prefix.$singularOrPlural.heading", equipmentsCount)
-  def legend(implicit messages: Messages): String        = messages(s"$prefix.label")
-  def maxLimitLabel(implicit messages: Messages): String = messages(s"$prefix.maxLimit.label")
-
-  def allowMoreEquipments(implicit config: FrontendAppConfig): Boolean =
-    equipmentsCount < config.maxEquipmentNumbers
+  override def maxCount(implicit config: FrontendAppConfig): Int = config.maxEquipmentNumbers
 }
 
 object AddAnotherEquipmentViewModel {

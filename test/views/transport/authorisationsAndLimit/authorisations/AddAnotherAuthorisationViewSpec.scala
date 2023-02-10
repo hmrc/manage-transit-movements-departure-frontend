@@ -16,9 +16,7 @@
 
 package views.transport.authorisationsAndLimit.authorisations
 
-import config.FrontendAppConfig
 import forms.AddAnotherFormProvider
-import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -28,30 +26,26 @@ import views.html.transport.authorisationsAndLimit.authorisations.AddAnotherAuth
 
 class AddAnotherAuthorisationViewSpec extends ListWithActionsViewBehaviours {
 
-  implicit override def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
-
   override def maxNumber: Int = frontendAppConfig.maxAuthorisations
 
   private def formProvider(viewModel: AddAnotherAuthorisationViewModel) =
-    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMoreAuthorisations)
+    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMore)
 
-  private val viewModel                     = arbitrary[AddAnotherAuthorisationViewModel].sample.value
-  private val viewModelWithItemsNotMaxedOut = viewModel.copy(listItems = listItems)
-  private val viewModelWithItemsMaxedOut    = viewModel.copy(listItems = maxedOutListItems)
+  private val viewModel            = arbitrary[AddAnotherAuthorisationViewModel].sample.value
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
 
-  override def form: Form[Boolean] = formProvider(viewModelWithItemsNotMaxedOut)
-
-  private val mode = arbitrary[Mode].sample.value
+  override def form: Form[Boolean] = formProvider(notMaxedOutViewModel)
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherAuthorisationView]
-      .apply(form, lrn, mode, viewModelWithItemsNotMaxedOut, true)(fakeRequest, messages)
+      .apply(form, lrn, notMaxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherAuthorisationView]
-      .apply(formProvider(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut, false)(fakeRequest, messages)
+      .apply(formProvider(maxedOutViewModel), lrn, maxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override val prefix: String = "transport.authorisations.addAnotherAuthorisation"
 
@@ -59,9 +53,9 @@ class AddAnotherAuthorisationViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Transport details - Authorisations")
 
-  behave like pageWithMoreItemsAllowed(viewModelWithItemsNotMaxedOut.authorisations)()
+  behave like pageWithMoreItemsAllowed(notMaxedOutViewModel.count)()
 
-  behave like pageWithItemsMaxedOut(viewModelWithItemsMaxedOut.authorisations)
+  behave like pageWithItemsMaxedOut(maxedOutViewModel.count)
 
   behave like pageWithSubmitButton("Save and continue")
 }

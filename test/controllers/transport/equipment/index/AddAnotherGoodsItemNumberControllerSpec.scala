@@ -41,7 +41,7 @@ class AddAnotherGoodsItemNumberControllerSpec extends SpecBase with AppWithDefau
   private val formProvider = new AddAnotherFormProvider()
 
   private def form(viewModel: AddAnotherGoodsItemNumberViewModel) =
-    formProvider(viewModel.prefix, viewModel.allowMoreGoodsItemNumbers(frontendAppConfig))
+    formProvider(viewModel.prefix, viewModel.allowMore(frontendAppConfig))
 
   private val mode = NormalMode
 
@@ -66,16 +66,16 @@ class AddAnotherGoodsItemNumberControllerSpec extends SpecBase with AppWithDefau
 
   private val viewModel = arbitrary[AddAnotherGoodsItemNumberViewModel].sample.value
 
-  private val viewModelWithNoGoodsItemNumbers          = viewModel.copy(listItems = Nil)
-  private val viewModelWithGoodsItemNumbersNotMaxedOut = viewModel.copy(listItems = listItems)
-  private val viewModelWithGoodsItemNumbersMaxedOut    = viewModel.copy(listItems = maxedOutListItems)
+  private val emptyViewModel       = viewModel.copy(listItems = Nil)
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
 
   "AddAnotherGoodsItemNumber Controller" - {
 
     "redirect to add goodsItemNumber yes/no page" - {
       "when 0 goodsItemNumber" in {
         when(mockViewModelProvider.apply(any(), any(), any())(any()))
-          .thenReturn(viewModelWithNoGoodsItemNumbers)
+          .thenReturn(emptyViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -94,7 +94,7 @@ class AddAnotherGoodsItemNumberControllerSpec extends SpecBase with AppWithDefau
     "must return OK and the correct view for a GET" - {
       "when max limit not reached" in {
         when(mockViewModelProvider.apply(any(), any(), any())(any()))
-          .thenReturn(viewModelWithGoodsItemNumbersNotMaxedOut)
+          .thenReturn(notMaxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -107,18 +107,16 @@ class AddAnotherGoodsItemNumberControllerSpec extends SpecBase with AppWithDefau
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(viewModelWithGoodsItemNumbersNotMaxedOut),
-               lrn,
-               mode,
-               equipmentIndex,
-               viewModelWithGoodsItemNumbersNotMaxedOut,
-               allowMoreGoodsItemNumbers = true
-          )(request, messages).toString
+          view(form(notMaxedOutViewModel), lrn, notMaxedOutViewModel)(
+            request,
+            messages,
+            frontendAppConfig
+          ).toString
       }
 
       "when max limit reached" in {
         when(mockViewModelProvider.apply(any(), any(), any())(any()))
-          .thenReturn(viewModelWithGoodsItemNumbersMaxedOut)
+          .thenReturn(maxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -131,13 +129,11 @@ class AddAnotherGoodsItemNumberControllerSpec extends SpecBase with AppWithDefau
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(viewModelWithGoodsItemNumbersMaxedOut),
-               lrn,
-               mode,
-               equipmentIndex,
-               viewModelWithGoodsItemNumbersMaxedOut,
-               allowMoreGoodsItemNumbers = false
-          )(request, messages).toString
+          view(form(maxedOutViewModel), lrn, maxedOutViewModel)(
+            request,
+            messages,
+            frontendAppConfig
+          ).toString
       }
     }
 
@@ -145,7 +141,7 @@ class AddAnotherGoodsItemNumberControllerSpec extends SpecBase with AppWithDefau
       "when yes submitted" - {
         "must redirect to goods item number page at next index" in {
           when(mockViewModelProvider.apply(any(), any(), any())(any()))
-            .thenReturn(viewModelWithGoodsItemNumbersNotMaxedOut)
+            .thenReturn(notMaxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -164,7 +160,7 @@ class AddAnotherGoodsItemNumberControllerSpec extends SpecBase with AppWithDefau
       "when no submitted" - {
         "must redirect to next page" in {
           when(mockViewModelProvider.apply(any(), any(), any())(any()))
-            .thenReturn(viewModelWithGoodsItemNumbersNotMaxedOut)
+            .thenReturn(notMaxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -183,7 +179,7 @@ class AddAnotherGoodsItemNumberControllerSpec extends SpecBase with AppWithDefau
     "when max limit reached" - {
       "must redirect to next page" in {
         when(mockViewModelProvider.apply(any(), any(), any())(any()))
-          .thenReturn(viewModelWithGoodsItemNumbersMaxedOut)
+          .thenReturn(maxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -201,14 +197,14 @@ class AddAnotherGoodsItemNumberControllerSpec extends SpecBase with AppWithDefau
     "must return a Bad Request and errors" - {
       "when invalid data is submitted and max limit not reached" in {
         when(mockViewModelProvider.apply(any(), any(), any())(any()))
-          .thenReturn(viewModelWithGoodsItemNumbersNotMaxedOut)
+          .thenReturn(notMaxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
         val request = FakeRequest(POST, addAnotherGoodsItemNumberRoute)
           .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form(viewModelWithGoodsItemNumbersNotMaxedOut).bind(Map("value" -> ""))
+        val boundForm = form(notMaxedOutViewModel).bind(Map("value" -> ""))
 
         val result = route(app, request).value
 
@@ -217,7 +213,7 @@ class AddAnotherGoodsItemNumberControllerSpec extends SpecBase with AppWithDefau
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, lrn, mode, equipmentIndex, viewModelWithGoodsItemNumbersNotMaxedOut, allowMoreGoodsItemNumbers = true)(request, messages).toString
+          view(boundForm, lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
     }
 

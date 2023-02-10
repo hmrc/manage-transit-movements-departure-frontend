@@ -17,8 +17,10 @@
 package views.guaranteeDetails
 
 import forms.AddAnotherFormProvider
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
+import viewModels.guaranteeDetails.AddAnotherGuaranteeViewModel
 import views.behaviours.ListWithActionsViewBehaviours
 import views.html.guaranteeDetails.AddAnotherGuaranteeView
 
@@ -26,19 +28,22 @@ class AddAnotherGuaranteeViewSpec extends ListWithActionsViewBehaviours {
 
   override def maxNumber: Int = frontendAppConfig.maxGuarantees
 
-  private def formProvider = new AddAnotherFormProvider()
+  private def formProvider(viewModel: AddAnotherGuaranteeViewModel) =
+    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMore)
 
-  override def form: Form[Boolean] = formProvider(prefix, allowMore = true)
+  private val viewModel            = arbitrary[AddAnotherGuaranteeViewModel].sample.value
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherGuaranteeView]
-      .apply(form, lrn, listItems, allowMoreGuarantees = true)(fakeRequest, messages)
+      .apply(form, lrn, notMaxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherGuaranteeView]
-      .apply(formProvider(prefix, allowMore = false), lrn, maxedOutListItems, allowMoreGuarantees = false)(fakeRequest, messages)
+      .apply(formProvider(maxedOutViewModel), lrn, maxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override val prefix: String = "guaranteeDetails.addAnotherGuarantee"
 
@@ -46,9 +51,9 @@ class AddAnotherGuaranteeViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Guarantee details")
 
-  behave like pageWithMoreItemsAllowed(listItems.length)()
+  behave like pageWithMoreItemsAllowed(notMaxedOutViewModel.count)()
 
-  behave like pageWithItemsMaxedOut(maxedOutListItems.length)
+  behave like pageWithItemsMaxedOut(maxedOutViewModel.count)
 
   behave like pageWithSubmitButton("Save and continue")
 }

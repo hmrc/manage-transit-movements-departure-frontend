@@ -18,33 +18,50 @@ package viewModels.routeDetails.exit
 
 import base.SpecBase
 import generators.Generators
-import models.reference.{Country, CustomsOffice}
 import models.{Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import viewModels.routeDetails.exit.AddAnotherOfficeOfExitViewModel.AddAnotherOfficeOfExitViewModelProvider
 
-class AddAnotherOfficeOfExitViewModelSpec extends SpecBase with Generators {
+class AddAnotherOfficeOfExitViewModelSpec extends SpecBase with Generators with ScalaCheckPropertyChecks {
 
-  "must get list items" in {
+  "must get list items" - {
 
-    val mode = arbitrary[Mode].sample.value
+    "when there is one office of exit" in {
+      forAll(arbitrary[Mode]) {
+        mode =>
+          val userAnswers = arbitraryOfficeOfExitAnswers(emptyUserAnswers, index).sample.value
 
-    val noOfOfficesOfExit = Gen.choose(1, frontendAppConfig.maxOfficesOfExit).sample.value
-    val country           = arbitrary[Country].sample.value
-    val customsOffice     = arbitrary[CustomsOffice].sample.value
+          val result = new AddAnotherOfficeOfExitViewModelProvider()(userAnswers, mode)
 
-    val userAnswers = (0 until noOfOfficesOfExit).foldLeft(emptyUserAnswers) {
-      (acc, i) =>
-        acc
-          .setValue(OfficeOfExitCountryPage(Index(i)), country)
-          .setValue(OfficeOfExitPage(Index(i)), customsOffice)
+          result.listItems.length mustBe 1
+          result.title mustBe "You have added 1 office of exit"
+          result.heading mustBe "You have added 1 office of exit"
+          result.legend mustBe "Do you want to add another office of exit?"
+          result.maxLimitLabel mustBe "You cannot add any more offices of exit. To add another office, you need to remove one first."
+      }
     }
 
-    val viewModelProvider = new AddAnotherOfficeOfExitViewModelProvider()
-    val result            = viewModelProvider.apply(userAnswers, mode)
-    result.listItems.length mustBe noOfOfficesOfExit
+    "when there are multiple offices of exit" in {
+      val formatter = java.text.NumberFormat.getIntegerInstance
+
+      forAll(arbitrary[Mode], Gen.choose(2, frontendAppConfig.maxOfficesOfExit)) {
+        (mode, count) =>
+          val userAnswers = (0 until count).foldLeft(emptyUserAnswers) {
+            (acc, i) =>
+              arbitraryOfficeOfExitAnswers(acc, Index(i)).sample.value
+          }
+
+          val result = new AddAnotherOfficeOfExitViewModelProvider()(userAnswers, mode)
+
+          result.listItems.length mustBe count
+          result.title mustBe s"You have added ${formatter.format(count)} offices of exit"
+          result.heading mustBe s"You have added ${formatter.format(count)} offices of exit"
+          result.legend mustBe "Do you want to add another office of exit?"
+          result.maxLimitLabel mustBe "You cannot add any more offices of exit. To add another office, you need to remove one first."
+      }
+    }
   }
 
 }

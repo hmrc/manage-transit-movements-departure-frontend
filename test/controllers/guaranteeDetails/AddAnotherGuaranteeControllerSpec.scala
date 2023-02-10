@@ -36,8 +36,10 @@ import views.html.guaranteeDetails.AddAnotherGuaranteeView
 
 class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
-  private val formProvider                       = new AddAnotherFormProvider()
-  private def form(allowMoreGuarantees: Boolean) = formProvider("guaranteeDetails.addAnotherGuarantee", allowMoreGuarantees)
+  private val formProvider = new AddAnotherFormProvider()
+
+  private def form(viewModel: AddAnotherGuaranteeViewModel) =
+    formProvider(viewModel.prefix, viewModel.allowMore(frontendAppConfig))
 
   private lazy val addAnotherGuaranteeRoute = routes.AddAnotherGuaranteeController.onPageLoad(lrn).url
 
@@ -57,12 +59,18 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
   private val listItems         = Seq.fill(Gen.choose(1, frontendAppConfig.maxGuarantees - 1).sample.value)(listItem)
   private val maxedOutListItems = Seq.fill(frontendAppConfig.maxGuarantees)(listItem)
 
+  private val viewModel = arbitrary[AddAnotherGuaranteeViewModel].sample.value
+
+  private val emptyViewModel       = viewModel.copy(listItems = Nil)
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
+
   "AddAnotherGuaranteeController" - {
 
     "redirect to add guarantee yes/no page" - {
       "when 0 guarantees" in {
         when(mockViewModelProvider.apply(any())(any()))
-          .thenReturn(AddAnotherGuaranteeViewModel(Nil))
+          .thenReturn(emptyViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -81,10 +89,8 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
     "must return OK and the correct view for a GET" - {
       "when max limit not reached" in {
 
-        val allowMoreGuarantees = true
-
         when(mockViewModelProvider.apply(any())(any()))
-          .thenReturn(AddAnotherGuaranteeViewModel(listItems))
+          .thenReturn(notMaxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -97,17 +103,13 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(allowMoreGuarantees), lrn, listItems, allowMoreGuarantees)(request, messages).toString
+          view(form(notMaxedOutViewModel), lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
 
       "when max limit reached" in {
 
-        val allowMoreGuarantees = false
-
-        val listItems = maxedOutListItems
-
         when(mockViewModelProvider.apply(any())(any()))
-          .thenReturn(AddAnotherGuaranteeViewModel(listItems))
+          .thenReturn(maxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -120,7 +122,7 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(allowMoreGuarantees), lrn, listItems, allowMoreGuarantees)(request, messages).toString
+          view(form(maxedOutViewModel), lrn, maxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
     }
 
@@ -128,7 +130,7 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
       "when yes submitted" - {
         "must redirect to guarantee type page at next index" in {
           when(mockViewModelProvider.apply(any())(any()))
-            .thenReturn(AddAnotherGuaranteeViewModel(listItems))
+            .thenReturn(notMaxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -147,7 +149,7 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
       "when no submitted" - {
         "must redirect to task list" in {
           when(mockViewModelProvider.apply(any())(any()))
-            .thenReturn(AddAnotherGuaranteeViewModel(listItems))
+            .thenReturn(notMaxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -167,7 +169,7 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
     "when max limit reached" - {
       "must redirect to task list" in {
         when(mockViewModelProvider.apply(any())(any()))
-          .thenReturn(AddAnotherGuaranteeViewModel(maxedOutListItems))
+          .thenReturn(maxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -186,16 +188,14 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
     "must return a Bad Request and errors" - {
       "when invalid data is submitted and max limit not reached" in {
         when(mockViewModelProvider.apply(any())(any()))
-          .thenReturn(AddAnotherGuaranteeViewModel(listItems))
-
-        val allowMoreGuarantees = true
+          .thenReturn(notMaxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
         val request = FakeRequest(POST, addAnotherGuaranteeRoute)
           .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form(allowMoreGuarantees).bind(Map("value" -> ""))
+        val boundForm = form(notMaxedOutViewModel).bind(Map("value" -> ""))
 
         val result = route(app, request).value
 
@@ -204,7 +204,7 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMock
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, lrn, listItems, allowMoreGuarantees)(request, messages).toString
+          view(boundForm, lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
     }
 

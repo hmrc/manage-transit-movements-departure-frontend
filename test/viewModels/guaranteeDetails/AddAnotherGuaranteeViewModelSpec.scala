@@ -18,25 +18,46 @@ package viewModels.guaranteeDetails
 
 import base.SpecBase
 import generators.Generators
-import models.GuaranteeType._
-import models.{DeclarationType, Index}
-import org.scalacheck.Arbitrary.arbitrary
-import pages.guaranteeDetails.guarantee.{GuaranteeTypePage, OtherReferenceYesNoPage}
-import pages.preTaskList.DeclarationTypePage
+import models.Index
+import org.scalacheck.Gen
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import viewModels.guaranteeDetails.AddAnotherGuaranteeViewModel.AddAnotherGuaranteeViewModelProvider
 
-class AddAnotherGuaranteeViewModelSpec extends SpecBase with Generators {
+class AddAnotherGuaranteeViewModelSpec extends SpecBase with Generators with ScalaCheckPropertyChecks {
 
-  "must get list items" in {
+  "must get list items" - {
 
-    val declarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
-    val userAnswers = emptyUserAnswers
-      .setValue(DeclarationTypePage, declarationType)
-      .setValue(GuaranteeTypePage(Index(0)), CashDepositGuarantee)
-      .setValue(OtherReferenceYesNoPage(Index(0)), false)
-      .setValue(GuaranteeTypePage(Index(1)), GuaranteeWaiver)
+    "when there is one guarantee" in {
+      val userAnswers = arbitraryGuaranteeAnswers(emptyUserAnswers, index).sample.value
 
-    val result = AddAnotherGuaranteeViewModel(userAnswers)
-    result.listItems.length mustBe 2
+      val result = new AddAnotherGuaranteeViewModelProvider()(userAnswers)
+
+      result.listItems.length mustBe 1
+      result.title mustBe "You have added 1 guarantee"
+      result.heading mustBe "You have added 1 guarantee"
+      result.legend mustBe "Do you want to add another guarantee?"
+      result.maxLimitLabel mustBe "You cannot add any more guarantees. To add another guarantee, you need to remove one first."
+    }
+
+    "when there are multiple guarantees" in {
+      val formatter = java.text.NumberFormat.getIntegerInstance
+
+      forAll(Gen.choose(2, frontendAppConfig.maxGuarantees)) {
+        count =>
+          val userAnswers = (0 until count).foldLeft(emptyUserAnswers) {
+            (acc, i) =>
+              arbitraryGuaranteeAnswers(acc, Index(i)).sample.value
+          }
+
+          val result = new AddAnotherGuaranteeViewModelProvider()(userAnswers)
+
+          result.listItems.length mustBe count
+          result.title mustBe s"You have added ${formatter.format(count)} guarantees"
+          result.heading mustBe s"You have added ${formatter.format(count)} guarantees"
+          result.legend mustBe "Do you want to add another guarantee?"
+          result.maxLimitLabel mustBe "You cannot add any more guarantees. To add another guarantee, you need to remove one first."
+      }
+    }
   }
 
 }

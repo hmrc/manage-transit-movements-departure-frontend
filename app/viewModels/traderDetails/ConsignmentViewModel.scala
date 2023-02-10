@@ -33,7 +33,7 @@ object ConsignmentViewModel {
       val helper = new ConsignmentCheckYourAnswersHelper(userAnswers, mode)
 
       val consignorSection = Section(
-        sectionTitle = messages("traderDetails.consignment.checkYourAnswers.consignor"),
+        sectionTitle = messages("traderDetails.checkYourAnswers.consignor"),
         rows = Seq(
           helper.approvedOperator,
           helper.consignorEoriYesNo,
@@ -45,7 +45,7 @@ object ConsignmentViewModel {
       )
 
       val consignorContactSection = Section(
-        sectionTitle = messages("traderDetails.consignment.checkYourAnswers.consignorContact"),
+        sectionTitle = messages("traderDetails.checkYourAnswers.consignorContact"),
         rows = Seq(
           helper.addConsignorContact,
           helper.consignorContactName,
@@ -54,7 +54,7 @@ object ConsignmentViewModel {
       )
 
       val consigneeSection = Section(
-        sectionTitle = messages("traderDetails.consignment.checkYourAnswers.consignee"),
+        sectionTitle = messages("traderDetails.checkYourAnswers.consignee"),
         rows = Seq(
           helper.moreThanOneConsignee,
           helper.consigneeEoriYesNo,

@@ -50,12 +50,12 @@ class SealNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
       val navigator         = navigatorProvider.apply(mode, equipmentIndex, sealIndex)
 
       "when answers complete" - {
-        "must redirect to transport answers" ignore {
-          forAll(arbitrarySealAnswers(emptyUserAnswers, equipmentIndex, sealIndex)) {
+        "must redirect to transport equipment answers" in {
+          forAll(arbitraryEquipmentAnswers(emptyUserAnswers, equipmentIndex)) {
             answers =>
               navigator
                 .nextPage(answers)
-                .mustBe(???) // TODO: Transport CYA page
+                .mustBe(controllers.transport.equipment.index.routes.EquipmentAnswersController.onPageLoad(answers.lrn, mode, equipmentIndex))
           }
         }
       }

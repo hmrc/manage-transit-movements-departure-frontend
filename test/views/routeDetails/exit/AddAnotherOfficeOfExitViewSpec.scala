@@ -17,10 +17,10 @@
 package views.routeDetails.exit
 
 import forms.AddAnotherFormProvider
-import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
+import viewModels.routeDetails.exit.AddAnotherOfficeOfExitViewModel
 import views.behaviours.ListWithActionsViewBehaviours
 import views.html.routeDetails.exit.AddAnotherOfficeOfExitView
 
@@ -28,21 +28,26 @@ class AddAnotherOfficeOfExitViewSpec extends ListWithActionsViewBehaviours {
 
   override def maxNumber: Int = frontendAppConfig.maxOfficesOfExit
 
+  private def formProvider(viewModel: AddAnotherOfficeOfExitViewModel) =
+    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMore)
+
+  private val viewModel            = arbitrary[AddAnotherOfficeOfExitViewModel].sample.value
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
+
   private def formProvider = new AddAnotherFormProvider()
 
   override def form: Form[Boolean] = formProvider(prefix, allowMore = true)
 
-  private val mode = arbitrary[Mode].sample.value
-
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherOfficeOfExitView]
-      .apply(form, lrn, mode, listItems, allowMoreOfficesOfExit = true)(fakeRequest, messages)
+      .apply(form, lrn, notMaxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherOfficeOfExitView]
-      .apply(formProvider(prefix, allowMore = false), lrn, mode, maxedOutListItems, allowMoreOfficesOfExit = false)(fakeRequest, messages)
+      .apply(formProvider(maxedOutViewModel), lrn, maxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override val prefix: String = "routeDetails.exit.addAnotherOfficeOfExit"
 
@@ -52,9 +57,9 @@ class AddAnotherOfficeOfExitViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithHint("You can add up to 9 offices.")
 
-  behave like pageWithMoreItemsAllowed(listItems.length)()
+  behave like pageWithMoreItemsAllowed(notMaxedOutViewModel.count)()
 
-  behave like pageWithItemsMaxedOut(maxedOutListItems.length)
+  behave like pageWithItemsMaxedOut(maxedOutViewModel.count)
 
   behave like pageWithSubmitButton("Continue")
 }

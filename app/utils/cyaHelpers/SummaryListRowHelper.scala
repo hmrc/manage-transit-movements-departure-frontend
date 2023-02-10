@@ -22,9 +22,10 @@ import play.api.i18n.Messages
 import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.html.components._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-import utils.Format.RichDateTime
+import utils.Format.{RichDateTime, RichLocalDate}
 
 import java.text.NumberFormat
+import java.time.LocalDate
 import java.util.Currency
 
 private[utils] class SummaryListRowHelper(implicit messages: Messages) {
@@ -38,6 +39,8 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
 
   def formatAsDateTime(answer: DateTime): Content =
     answer.formatAsString.toText
+
+  def formatAsDate(answer: LocalDate): Content = answer.formatAsString.toText
 
   protected def formatAsDynamicAddress(address: DynamicAddress): Content =
     HtmlContent(address.toString)

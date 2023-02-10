@@ -50,12 +50,12 @@ class TransportMeansNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
         val navigator         = navigatorProvider.apply(mode)
 
         "when answers complete" - {
-          "must redirect to transport check your answers" ignore {
+          "must redirect to transport check your answers" in {
             forAll(arbitraryTransportAnswers(emptyUserAnswers)) {
               answers =>
                 navigator
                   .nextPage(answers)
-                  .mustBe(???)
+                  .mustBe(controllers.transport.routes.TransportAnswersController.onPageLoad(answers.lrn))
             }
           }
         }

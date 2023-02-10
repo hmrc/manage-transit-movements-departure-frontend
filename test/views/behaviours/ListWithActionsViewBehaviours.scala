@@ -16,6 +16,7 @@
 
 package views.behaviours
 
+import config.FrontendAppConfig
 import generators.Generators
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
@@ -26,6 +27,8 @@ import viewModels.ListItem
 import scala.jdk.CollectionConverters._
 
 trait ListWithActionsViewBehaviours extends YesNoViewBehaviours with Generators {
+
+  implicit override def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
 
   def maxNumber: Int
 

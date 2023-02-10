@@ -16,14 +16,24 @@
 
 package viewModels.routeDetails.routing
 
+import config.FrontendAppConfig
+import controllers.routeDetails.routing.routes
 import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
+import play.api.mvc.Call
 import utils.cyaHelpers.routeDetails.routing.RoutingCheckYourAnswersHelper
-import viewModels.ListItem
+import viewModels.{AddAnotherViewModel, ListItem}
 
 import javax.inject.Inject
 
-case class AddAnotherCountryOfRoutingViewModel(listItems: Seq[ListItem])
+case class AddAnotherCountryOfRoutingViewModel(
+  override val listItems: Seq[ListItem],
+  onSubmitCall: Call
+) extends AddAnotherViewModel {
+  override val prefix: String = "routeDetails.routing.addAnotherCountryOfRouting"
+
+  override def maxCount(implicit config: FrontendAppConfig): Int = config.maxCountriesOfRouting
+}
 
 object AddAnotherCountryOfRoutingViewModel {
 
@@ -36,7 +46,10 @@ object AddAnotherCountryOfRoutingViewModel {
         case Right(value) => value
       }
 
-      new AddAnotherCountryOfRoutingViewModel(listItems)
+      new AddAnotherCountryOfRoutingViewModel(
+        listItems,
+        onSubmitCall = routes.AddAnotherCountryOfRoutingController.onSubmit(userAnswers.lrn, mode)
+      )
     }
   }
 }

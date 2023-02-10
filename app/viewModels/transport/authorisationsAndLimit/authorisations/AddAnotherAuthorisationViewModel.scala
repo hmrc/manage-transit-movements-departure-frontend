@@ -22,27 +22,18 @@ import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import utils.cyaHelpers.transport.authorisations.AuthorisationsAnswersHelper
-import viewModels.ListItem
+import viewModels.{AddAnotherViewModel, ListItem}
 
 import javax.inject.Inject
 
 case class AddAnotherAuthorisationViewModel(
-  listItems: Seq[ListItem],
+  override val listItems: Seq[ListItem],
   onSubmitCall: Call
-) {
+) extends AddAnotherViewModel {
 
-  val authorisations: Int      = listItems.length
-  val singularOrPlural: String = if (authorisations == 1) "singular" else "plural"
+  override val prefix: String = "transport.authorisations.addAnotherAuthorisation"
 
-  val prefix: String = "transport.authorisations.addAnotherAuthorisation"
-
-  def title(implicit messages: Messages): String         = messages(s"$prefix.$singularOrPlural.title", authorisations)
-  def heading(implicit messages: Messages): String       = messages(s"$prefix.$singularOrPlural.heading", authorisations)
-  def legend(implicit messages: Messages): String        = messages(s"$prefix.label")
-  def maxLimitLabel(implicit messages: Messages): String = messages(s"$prefix.maxLimit.label")
-
-  def allowMoreAuthorisations(implicit config: FrontendAppConfig): Boolean =
-    authorisations < config.maxAuthorisations
+  override def maxCount(implicit config: FrontendAppConfig): Int = config.maxAuthorisations
 }
 
 object AddAnotherAuthorisationViewModel {

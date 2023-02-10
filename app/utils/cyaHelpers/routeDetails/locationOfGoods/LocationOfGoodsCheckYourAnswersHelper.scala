@@ -26,6 +26,13 @@ import utils.cyaHelpers.AnswersHelper
 
 class LocationOfGoodsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
+  def addLocationOfGoods: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+    page = AddLocationOfGoodsPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "routeDetails.locationOfGoods.addLocationOfGoods",
+    id = Some("change-add-location-of-goods")
+  )
+
   def locationType: Option[SummaryListRow] = getAnswerAndBuildRow[LocationType](
     page = LocationTypePage,
     formatAnswer = formatEnumAsText(LocationType.messageKeyPrefix),

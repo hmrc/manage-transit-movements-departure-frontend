@@ -18,34 +18,50 @@ package viewModels.routeDetails.transit
 
 import base.SpecBase
 import generators.Generators
-import models.reference.{Country, CustomsOffice}
-import models.{CountryList, Index, Mode}
+import models.{Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitPage}
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel.AddAnotherOfficeOfTransitViewModelProvider
 
-class AddAnotherOfficeOfTransitViewModelSpec extends SpecBase with Generators {
+class AddAnotherOfficeOfTransitViewModelSpec extends SpecBase with Generators with ScalaCheckPropertyChecks {
 
-  "must get list items" in {
+  "must get list items" - {
 
-    val mode = arbitrary[Mode].sample.value
+    "when there is one office of transit" in {
+      forAll(arbitrary[Mode]) {
+        mode =>
+          val userAnswers = arbitraryOfficeOfTransitAnswers(emptyUserAnswers, index).sample.value
 
-    val noOfOfficesOfTransit = Gen.choose(1, frontendAppConfig.maxOfficesOfTransit).sample.value
-    val country              = arbitrary[Country].sample.value
-    val customsOffice        = arbitrary[CustomsOffice].sample.value
+          val result = new AddAnotherOfficeOfTransitViewModelProvider()(userAnswers, mode, ctcCountriesList, customsSecurityAgreementAreaCountriesList)
 
-    val userAnswers = (0 until noOfOfficesOfTransit).foldLeft(emptyUserAnswers) {
-      (acc, i) =>
-        acc
-          .setValue(OfficeOfTransitCountryPage(Index(i)), country)
-          .setValue(OfficeOfTransitPage(Index(i)), customsOffice)
-          .setValue(AddOfficeOfTransitETAYesNoPage(Index(i)), false)
+          result.listItems.length mustBe 1
+          result.title mustBe "You have added 1 office of transit"
+          result.heading mustBe "You have added 1 office of transit"
+          result.legend mustBe "Do you want to add another office of transit?"
+          result.maxLimitLabel mustBe "You cannot add any more offices of transit. To add another office, you need to remove one first."
+      }
     }
 
-    val viewModelProvider = new AddAnotherOfficeOfTransitViewModelProvider()
-    val result            = viewModelProvider.apply(userAnswers, mode, CountryList(Nil), CountryList(Nil))
-    result.listItems.length mustBe noOfOfficesOfTransit
+    "when there are multiple offices of transit" in {
+      val formatter = java.text.NumberFormat.getIntegerInstance
+
+      forAll(arbitrary[Mode], Gen.choose(2, frontendAppConfig.maxOfficesOfTransit)) {
+        (mode, count) =>
+          val userAnswers = (0 until count).foldLeft(emptyUserAnswers) {
+            (acc, i) =>
+              arbitraryOfficeOfTransitAnswers(acc, Index(i)).sample.value
+          }
+
+          val result = new AddAnotherOfficeOfTransitViewModelProvider()(userAnswers, mode, ctcCountriesList, customsSecurityAgreementAreaCountriesList)
+
+          result.listItems.length mustBe count
+          result.title mustBe s"You have added ${formatter.format(count)} offices of transit"
+          result.heading mustBe s"You have added ${formatter.format(count)} offices of transit"
+          result.legend mustBe "Do you want to add another office of transit?"
+          result.maxLimitLabel mustBe "You cannot add any more offices of transit. To add another office, you need to remove one first."
+      }
+    }
   }
 
 }
