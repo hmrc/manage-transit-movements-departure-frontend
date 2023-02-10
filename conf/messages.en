@@ -1072,7 +1072,6 @@ transport.preRequisites.containerIndicator.title = Are you using any containers?
 transport.preRequisites.containerIndicator.heading = Are you using any containers?
 transport.preRequisites.containerIndicator.checkYourAnswersLabel = Are you using any containers?
 transport.preRequisites.containerIndicator.error.required = Select yes if you’re using any containers
-transport.preRequisites.containerIndicator.paragraph = This can be any container used to transport goods in CTC transit. For example, a swap body, articulated lorry or shipping container.
 
 transport.transportMeans.active.label = Active border transport means {0}
 transport.transportMeans.active.change.hidden = active border transport means {0}
