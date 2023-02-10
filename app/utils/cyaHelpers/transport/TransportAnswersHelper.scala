@@ -16,13 +16,17 @@
 
 package utils.cyaHelpers.transport
 
+import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationDomain
 import models.journeyDomain.transport.equipment.EquipmentDomain
+import models.journeyDomain.transport.supplyChainActors.SupplyChainActorDomain
 import models.transport.equipment.PaymentMethod
 import models.{Index, Mode, UserAnswers}
+import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import pages.transport.authorisationsAndLimit.limit.LimitDatePage
 import pages.transport.carrierDetails.contact.{NamePage, TelephoneNumberPage}
 import pages.transport.carrierDetails.{AddContactYesNoPage, IdentificationNumberPage}
 import pages.transport.equipment.{AddPaymentMethodYesNoPage, AddTransportEquipmentYesNoPage, PaymentMethodPage}
+import pages.transport.supplyChainActors.SupplyChainActorYesNoPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
@@ -31,6 +35,34 @@ import utils.cyaHelpers.AnswersHelper
 import java.time.LocalDate
 
 class TransportAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
+
+  def addAuthorisation: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+    page = AddAuthorisationsYesNoPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "transport.authorisations.addAuthorisationsYesNo",
+    id = Some("change-add-authorisation")
+  )
+
+  def authorisation(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[AuthorisationDomain](
+    formatAnswer = _.asString.toText,
+    prefix = "transport.checkYourAnswers.authorisation",
+    id = Some(s"change-authorisation-${index.display}"),
+    args = index.display
+  )(AuthorisationDomain.userAnswersReader(index))
+
+  def addSupplyChainActor: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+    page = SupplyChainActorYesNoPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "transport.supplyChainActors.supplyChainActorYesNo",
+    id = Some("change-add-supply-chain-actor")
+  )
+
+  def supplyChainActor(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[SupplyChainActorDomain](
+    formatAnswer = _.asString.toText,
+    prefix = "transport.checkYourAnswers.supplyChainActor",
+    id = Some(s"change-supply-chain-actor-${index.display}"),
+    args = index.display
+  )(SupplyChainActorDomain.userAnswersReader(index))
 
   def limitDate: Option[SummaryListRow] = getAnswerAndBuildRow[LocalDate](
     page = LimitDatePage,

@@ -17,29 +17,173 @@
 package utils.cyaHelpers.transport
 
 import base.SpecBase
+import controllers.transport.authorisationsAndLimit.authorisations.index.{routes => authorisationRoutes}
 import controllers.transport.authorisationsAndLimit.limit.{routes => limitRoutes}
-import controllers.transport.carrierDetails.{routes => carrierDetailsRoutes}
+import controllers.transport.authorisationsAndLimit.{routes => authorisationsRoutes}
 import controllers.transport.carrierDetails.contact.{routes => carrierDetailsContactRoutes}
+import controllers.transport.carrierDetails.{routes => carrierDetailsRoutes}
 import controllers.transport.equipment.index.{routes => equipmentRoutes}
 import controllers.transport.equipment.{routes => equipmentsRoutes}
+import controllers.transport.supplyChainActors.index.{routes => supplyChainActorRoutes}
+import controllers.transport.supplyChainActors.{routes => supplyChainActorsRoutes}
 import generators.Generators
 import models.Mode
 import models.domain.UserAnswersReader
+import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationDomain
 import models.journeyDomain.transport.equipment.EquipmentDomain
+import models.journeyDomain.transport.supplyChainActors.SupplyChainActorDomain
 import models.transport.equipment.PaymentMethod
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import pages.transport.authorisationsAndLimit.limit.LimitDatePage
 import pages.transport.carrierDetails.contact.{NamePage, TelephoneNumberPage}
 import pages.transport.carrierDetails.{AddContactYesNoPage, IdentificationNumberPage}
 import pages.transport.equipment.{AddPaymentMethodYesNoPage, AddTransportEquipmentYesNoPage, PaymentMethodPage}
 import pages.transport.preRequisites.ContainerIndicatorPage
+import pages.transport.supplyChainActors.SupplyChainActorYesNoPage
 
 import java.time.LocalDate
 
 class TransportAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "TransportAnswersHelper" - {
+
+    "addSupplyChainActor" - {
+      "must return None" - {
+        s"when $SupplyChainActorYesNoPage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.addSupplyChainActor
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        s"when $SupplyChainActorYesNoPage defined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(SupplyChainActorYesNoPage, true)
+              val helper  = new TransportAnswersHelper(answers, mode)
+              val result  = helper.addSupplyChainActor.get
+
+              result.key.value mustBe "Do you want to add a supply chain actor?"
+              result.value.value mustBe "Yes"
+              val actions = result.actions.get.items
+              actions.size mustBe 1
+              val action = actions.head
+              action.content.value mustBe "Change"
+              action.href mustBe supplyChainActorsRoutes.SupplyChainActorYesNoController.onPageLoad(answers.lrn, mode).url
+              action.visuallyHiddenText.get mustBe "if you want to add a supply chain actor"
+              action.id mustBe "change-add-supply-chain-actor"
+          }
+        }
+      }
+    }
+
+    "supplyChainActor" - {
+      "must return None" - {
+        "when supply chain actor is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.supplyChainActor(index)
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when supply chain actor is defined" in {
+          forAll(arbitrarySupplyChainActorAnswers(emptyUserAnswers, index), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val supplyChainActor = UserAnswersReader[SupplyChainActorDomain](SupplyChainActorDomain.userAnswersReader(index)).run(userAnswers).value
+              val helper           = new TransportAnswersHelper(userAnswers, mode)
+              val result           = helper.supplyChainActor(index).get
+
+              result.key.value mustBe "Supply chain actor 1"
+              result.value.value mustBe supplyChainActor.asString
+              val actions = result.actions.get.items
+              actions.size mustBe 1
+              val action = actions.head
+              action.content.value mustBe "Change"
+              action.href mustBe supplyChainActorRoutes.SupplyChainActorTypeController.onPageLoad(userAnswers.lrn, mode, index).url
+              action.visuallyHiddenText.get mustBe "supply chain actor 1"
+              action.id mustBe "change-supply-chain-actor-1"
+          }
+        }
+      }
+    }
+
+    "addAuthorisation" - {
+      "must return None" - {
+        s"when $AddAuthorisationsYesNoPage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.addAuthorisation
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        s"when $AddAuthorisationsYesNoPage defined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(AddAuthorisationsYesNoPage, true)
+              val helper  = new TransportAnswersHelper(answers, mode)
+              val result  = helper.addAuthorisation.get
+
+              result.key.value mustBe "Do you want to add an authorisation?"
+              result.value.value mustBe "Yes"
+              val actions = result.actions.get.items
+              actions.size mustBe 1
+              val action = actions.head
+              action.content.value mustBe "Change"
+              action.href mustBe authorisationsRoutes.AddAuthorisationsYesNoController.onPageLoad(answers.lrn, mode).url
+              action.visuallyHiddenText.get mustBe "if you want to add an authorisation"
+              action.id mustBe "change-add-authorisation"
+          }
+        }
+      }
+    }
+
+    "authorisation" - {
+      "must return None" - {
+        "when authorisation is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.authorisation(index)
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when authorisation is defined" in {
+          forAll(arbitraryAuthorisationAnswers(emptyUserAnswers, index), arbitrary[Mode]) {
+            (userAnswers, mode) =>
+              val authorisation = UserAnswersReader[AuthorisationDomain](AuthorisationDomain.userAnswersReader(index)).run(userAnswers).value
+              val helper        = new TransportAnswersHelper(userAnswers, mode)
+              val result        = helper.authorisation(index).get
+
+              result.key.value mustBe "Authorisation 1"
+              result.value.value mustBe authorisation.asString
+              val actions = result.actions.get.items
+              actions.size mustBe 1
+              val action = actions.head
+              action.content.value mustBe "Change"
+              action.href mustBe authorisationRoutes.AuthorisationReferenceNumberController.onPageLoad(userAnswers.lrn, mode, index).url
+              action.visuallyHiddenText.get mustBe "authorisation 1"
+              action.id mustBe "change-authorisation-1"
+          }
+        }
+      }
+    }
 
     "limitDate" - {
       "must return None" - {
@@ -259,7 +403,7 @@ class TransportAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
 
       "must return Some(Row)" - {
-        "when equipment is  defined and container id is undefined" in {
+        "when equipment is defined and container id is undefined" in {
           val initialUserAnswers = emptyUserAnswers
             .setValue(ContainerIndicatorPage, false)
 
