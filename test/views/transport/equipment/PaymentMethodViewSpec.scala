@@ -43,7 +43,7 @@ class PaymentMethodViewSpec extends RadioViewBehaviours[PaymentMethod] {
 
   behave like pageWithBackLink()
 
-  behave like pageWithSectionCaption("Transport details - Transport equipment")
+  behave like pageWithSectionCaption("Transport details - Transport charges")
 
   behave like pageWithHeading()
 
