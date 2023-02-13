@@ -1025,8 +1025,16 @@ transport.checkYourAnswers.equipment.label = Transport equipment {0}
 transport.checkYourAnswers.equipment.change.hidden = transport equipment {0}
 transport.checkYourAnswers.supplyChainActor.label = Supply chain actor {0}
 transport.checkYourAnswers.supplyChainActor.change.hidden = supply chain actor {0}
+transport.checkYourAnswers.supplyChainActors = Supply chain actors
+transport.checkYourAnswers.supplyChainActors.addOrRemove = Add or remove supply chain actors
 transport.checkYourAnswers.authorisation.label = Authorisation {0}
 transport.checkYourAnswers.authorisation.change.hidden = authorisation {0}
+transport.checkYourAnswers.authorisations = Authorisation
+transport.checkYourAnswers.authorisations.addOrRemove = Add or remove an authorisation
+transport.checkYourAnswers.carrierDetails = Carrier details
+transport.checkYourAnswers.transportEquipment = Transport equipment
+transport.checkYourAnswers.transportEquipment.addOrRemove = Add or remove transport equipment
+transport.checkYourAnswers.transportCharges = Transport charges
 
 # Transport details - Pre-requisites
 

@@ -20,7 +20,7 @@ import models.journeyDomain.transport.supplyChainActors.SupplyChainActorDomain
 import models.{Mode, UserAnswers}
 import pages.transport.supplyChainActors.index.SupplyChainActorTypePage
 import controllers.transport.supplyChainActors.index.routes
-import pages.sections.transport.supplyChainActors.SupplyChainActorListSection
+import pages.sections.transport.supplyChainActors.SupplyChainActorsSection
 import play.api.i18n.Messages
 import utils.cyaHelpers.AnswersHelper
 import viewModels.ListItem
@@ -28,7 +28,7 @@ import viewModels.ListItem
 class SupplyChainActorsAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
   def listItems: Seq[Either[ListItem, ListItem]] =
-    buildListItems(SupplyChainActorListSection) {
+    buildListItems(SupplyChainActorsSection) {
       index =>
         buildListItem[SupplyChainActorDomain](
           nameWhenComplete = _.asString,

@@ -18,7 +18,7 @@ package pages.transport.supplyChainActors
 
 import org.scalacheck.Arbitrary._
 import pages.behaviours.PageBehaviours
-import pages.sections.transport.supplyChainActors.SupplyChainActorListSection
+import pages.sections.transport.supplyChainActors.SupplyChainActorsSection
 import play.api.libs.json.{JsArray, Json}
 
 class SupplyChainActorYesNoPageSpec extends PageBehaviours {
@@ -36,11 +36,11 @@ class SupplyChainActorYesNoPageSpec extends PageBehaviours {
     "when no is selected" - {
       "must remove supply chain actors section" in {
         val userAnswers = emptyUserAnswers
-          .setValue(SupplyChainActorListSection, JsArray(Seq(Json.obj("foo" -> "bar"))))
+          .setValue(SupplyChainActorsSection, JsArray(Seq(Json.obj("foo" -> "bar"))))
 
         val result = userAnswers.setValue(SupplyChainActorYesNoPage, false)
 
-        result.get(SupplyChainActorListSection) mustNot be(defined)
+        result.get(SupplyChainActorsSection) mustNot be(defined)
       }
     }
   }

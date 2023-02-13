@@ -22,6 +22,6 @@ import play.api.libs.json.{JsObject, JsPath}
 
 case class SupplyChainActorSection(index: Index) extends Section[JsObject] {
 
-  override def path: JsPath = SupplyChainActorListSection.path \ index.position
+  override def path: JsPath = SupplyChainActorsSection.path \ index.position
 
 }

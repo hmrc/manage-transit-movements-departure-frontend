@@ -20,7 +20,7 @@ import controllers.transport.supplyChainActors.routes
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.transport.TransportSection
-import pages.sections.transport.supplyChainActors.SupplyChainActorListSection
+import pages.sections.transport.supplyChainActors.SupplyChainActorsSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
@@ -37,7 +37,7 @@ case object SupplyChainActorYesNoPage extends QuestionPage[Boolean] {
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) => userAnswers.remove(SupplyChainActorListSection)
+      case Some(false) => userAnswers.remove(SupplyChainActorsSection)
       case _           => super.cleanup(value, userAnswers)
     }
 }
