@@ -55,11 +55,12 @@ object EquipmentDomain {
       messages("transport.equipment.value.withContainer", index.display, _)
     )
 
-  implicit def userAnswersReader(equipmentIndex: Index): UserAnswersReader[EquipmentDomain] = for {
-    containerId      <- containerIdReads(equipmentIndex)
-    seals            <- sealsReads(equipmentIndex)
-    goodsItemNumbers <- if (seals.isDefined) goodsItemNumbersReads(equipmentIndex) else none[ItemNumbersDomain].pure[UserAnswersReader]
-  } yield EquipmentDomain(containerId, seals, goodsItemNumbers)(equipmentIndex)
+  implicit def userAnswersReader(equipmentIndex: Index): UserAnswersReader[EquipmentDomain] =
+    (
+      containerIdReads(equipmentIndex),
+      sealsReads(equipmentIndex),
+      goodsItemNumbersReads(equipmentIndex)
+    ).tupled.map((EquipmentDomain.apply _).tupled).map(_(equipmentIndex))
 
   def containerIdReads(equipmentIndex: Index): UserAnswersReader[Option[String]] =
     ContainerIndicatorPage.reader.flatMap {
