@@ -19,7 +19,7 @@ package pages.transport.equipment.index
 import controllers.transport.equipment.index.routes
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.transport.equipment.{EquipmentSection, SealsSection}
+import pages.sections.transport.equipment.{EquipmentSection, ItemNumbersSection, SealsSection}
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
@@ -35,7 +35,7 @@ case class AddSealYesNoPage(equipmentIndex: Index) extends QuestionPage[Boolean]
     Some(routes.AddSealYesNoController.onPageLoad(userAnswers.lrn, mode, equipmentIndex))
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = value match {
-    case Some(false) => userAnswers.remove(SealsSection(equipmentIndex))
+    case Some(false) => userAnswers.remove(SealsSection(equipmentIndex)).flatMap(_.remove(ItemNumbersSection(equipmentIndex)))
     case _           => super.cleanup(value, userAnswers)
   }
 }
