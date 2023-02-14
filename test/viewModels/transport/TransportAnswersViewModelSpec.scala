@@ -45,34 +45,38 @@ class TransportAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChec
           val viewModelProvider = new TransportAnswersViewModelProvider(mockTransportMeansAnswersViewModelProvider)
           val sections          = viewModelProvider.apply(answers).sections
 
-          sections.size mustBe 5
+          sections.size mustBe 6
 
-          sections.head.sectionTitle.get mustBe "Supply chain actors"
-          sections.head.addAnotherLink.get mustBe Link(
+          sections.head.sectionTitle must not be defined
+          sections.head.rows must not be empty
+          sections.head.addAnotherLink must not be defined
+
+          sections(1).sectionTitle.get mustBe "Supply chain actors"
+          sections(1).addAnotherLink.get mustBe Link(
             "add-or-remove-supply-chain-actors",
             "Add or remove supply chain actors",
             supplyChainActorsRoutes.AddAnotherSupplyChainActorController.onPageLoad(answers.lrn, mode).url
           )
 
-          sections(1).sectionTitle.get mustBe "Authorisation"
-          sections(1).addAnotherLink.get mustBe Link(
+          sections(2).sectionTitle.get mustBe "Authorisation"
+          sections(2).addAnotherLink.get mustBe Link(
             "add-or-remove-an-authorisation",
             "Add or remove an authorisation",
             authorisationsRoutes.AddAnotherAuthorisationController.onPageLoad(answers.lrn, mode).url
           )
 
-          sections(2).sectionTitle.get mustBe "Carrier details"
-          sections(2).addAnotherLink must not be defined
+          sections(3).sectionTitle.get mustBe "Carrier details"
+          sections(3).addAnotherLink must not be defined
 
-          sections(3).sectionTitle.get mustBe "Transport equipment"
-          sections(3).addAnotherLink.get mustBe Link(
+          sections(4: Int).sectionTitle.get mustBe "Transport equipment"
+          sections(4: Int).addAnotherLink.get mustBe Link(
             "add-or-remove-transport-equipment",
             "Add or remove transport equipment",
             equipmentsRoutes.AddAnotherEquipmentController.onPageLoad(answers.lrn, mode).url
           )
 
-          sections(4).sectionTitle.get mustBe "Transport charges"
-          sections(4).addAnotherLink must not be defined
+          sections(5: Int).sectionTitle.get mustBe "Transport charges"
+          sections(5: Int).addAnotherLink must not be defined
 
           verify(mockTransportMeansAnswersViewModelProvider).apply(eqTo(answers), eqTo(mode))(any())
       }

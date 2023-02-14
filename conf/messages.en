@@ -1040,15 +1040,21 @@ transport.checkYourAnswers.transportCharges = Transport charges
 
 transport.preRequisites.sameUcrYesNo.title = Do you want to use the same Unique Consignment Reference (UCR) for all items?
 transport.preRequisites.sameUcrYesNo.heading = Do you want to use the same Unique Consignment Reference (UCR) for all items?
+transport.preRequisites.sameUcrYesNo.checkYourAnswersLabel = Do you want to use the same Unique Consignment Reference (UCR) for all items?
+transport.preRequisites.sameUcrYesNo.change.hidden = if you want to use the same Unique Consignment Reference (UCR) for all items
 transport.preRequisites.sameUcrYesNo.error.required = Select yes if you want to use the same UCR for all items
 
 transport.preRequisites.transportedToSameCountryYesNo.title = Are all the items being transported to the same country?
 transport.preRequisites.transportedToSameCountryYesNo.heading = Are all the items being transported to the same country?
+transport.preRequisites.transportedToSameCountryYesNo.checkYourAnswersLabel = Are all the items being transported to the same country?
+transport.preRequisites.transportedToSameCountryYesNo.change.hidden = if all the items are being transported to the same country
 transport.preRequisites.transportedToSameCountryYesNo.error.required = Select yes if all the items are being transported to the same country
 
 transport.preRequisites.uniqueConsignmentReference.title = What is the Unique Consignment Reference (UCR)?
 transport.preRequisites.uniqueConsignmentReference.heading = What is the Unique Consignment Reference (UCR)?
 transport.preRequisites.uniqueConsignmentReference.hint = This can be up to 35 characters long and include both letters and numbers.
+transport.preRequisites.uniqueConsignmentReference.checkYourAnswersLabel = Unique Consignment Reference (UCR)
+transport.preRequisites.uniqueConsignmentReference.change.hidden = Unique Consignment Reference (UCR)
 transport.preRequisites.uniqueConsignmentReference.error.required = Enter the Unique Consignment Reference
 transport.preRequisites.uniqueConsignmentReference.error.length = The Unique Consignment Reference must be 35 characters or less
 transport.preRequisites.uniqueConsignmentReference.error.invalid = The Unique Consignment Reference must only include letters a to z and numbers 0 to 9
@@ -1056,22 +1062,24 @@ transport.preRequisites.uniqueConsignmentReference.error.invalid = The Unique Co
 transport.preRequisites.countryOfDispatch.title = What is the country of dispatch?
 transport.preRequisites.countryOfDispatch.heading = What is the country of dispatch?
 transport.preRequisites.countryOfDispatch.hint = Enter the country, like France or Portugal.
+transport.preRequisites.countryOfDispatch.checkYourAnswersLabel = Country of dispatch
+transport.preRequisites.countryOfDispatch.change.hidden = country of dispatch
 transport.preRequisites.countryOfDispatch.placeholder = Select a country
 transport.preRequisites.countryOfDispatch.error.required = Enter the country of dispatch
 transport.preRequisites.countryOfDispatch.paragraph = This is the country where the CTC transit begins.
 
-transport.preRequisites.transportedToSameCountryYesNo.title = Are all the items being transported to the same country?
-transport.preRequisites.transportedToSameCountryYesNo.heading = Are all the items being transported to the same country?
-transport.preRequisites.transportedToSameCountryYesNo.error.required = Select yes if all the items are being transported to the same country
-
 transport.preRequisites.itemsDestinationCountry.title = What country are the items being transported to?
 transport.preRequisites.itemsDestinationCountry.heading = What country are the items being transported to?
 transport.preRequisites.itemsDestinationCountry.hint = Enter the country, like France or Portugal.
+transport.preRequisites.itemsDestinationCountry.checkYourAnswersLabel = Country of destination
+transport.preRequisites.itemsDestinationCountry.change.hidden = country of destination
 transport.preRequisites.itemsDestinationCountry.placeholder = Select a country
 transport.preRequisites.itemsDestinationCountry.error.required = Enter the country the items are being transported to
 
 transport.preRequisites.containerIndicator.title = Are you using any containers?
 transport.preRequisites.containerIndicator.heading = Are you using any containers?
+transport.preRequisites.containerIndicator.checkYourAnswersLabel = Are you using any containers?
+transport.preRequisites.containerIndicator.change.hidden = if you are using any containers
 transport.preRequisites.containerIndicator.error.required = Select yes if you’re using any containers
 transport.preRequisites.containerIndicator.paragraph = This can be any container used to transport goods in CTC transit. For example, a swap body, articulated lorry or shipping container.
 

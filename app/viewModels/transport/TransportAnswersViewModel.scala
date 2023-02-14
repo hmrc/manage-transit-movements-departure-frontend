@@ -40,11 +40,20 @@ object TransportAnswersViewModel {
     def apply(userAnswers: UserAnswers)(implicit messages: Messages): TransportAnswersViewModel = {
       val mode = CheckMode
 
-      // TODO - pre-requisites section
+      val helper = new TransportAnswersHelper(userAnswers, mode)
+
+      val preRequisitesSection = Section(
+        rows = Seq(
+          helper.usingSameUcr,
+          helper.ucr,
+          helper.countryOfDispatch,
+          helper.transportedToSameCountry,
+          helper.countryOfDestination,
+          helper.usingContainersYesNo
+        ).flatten
+      )
 
       val transportMeansSections = transportMeansAnswersViewModelProvider.apply(userAnswers, mode).sections
-
-      val helper = new TransportAnswersHelper(userAnswers, mode)
 
       val supplyChainActorsSection = Section(
         sectionTitle = messages("transport.checkYourAnswers.supplyChainActors"),
@@ -94,7 +103,8 @@ object TransportAnswersViewModel {
         ).flatten
       )
 
-      val sections = transportMeansSections ++
+      val sections = preRequisitesSection.toSeq ++
+        transportMeansSections ++
         supplyChainActorsSection.toSeq ++
         authorisationsSection.toSeq ++
         carrierDetailsSection.toSeq ++
