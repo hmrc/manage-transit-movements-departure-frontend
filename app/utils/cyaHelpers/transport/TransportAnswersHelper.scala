@@ -21,6 +21,9 @@ import models.journeyDomain.transport.equipment.EquipmentDomain
 import models.journeyDomain.transport.supplyChainActors.SupplyChainActorDomain
 import models.transport.equipment.PaymentMethod
 import models.{Index, Mode, UserAnswers}
+import pages.sections.transport.authorisationsAndLimit.AuthorisationsSection
+import pages.sections.transport.equipment.EquipmentsSection
+import pages.sections.transport.supplyChainActors.SupplyChainActorsSection
 import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import pages.transport.authorisationsAndLimit.limit.LimitDatePage
 import pages.transport.carrierDetails.contact.{NamePage, TelephoneNumberPage}
@@ -43,6 +46,9 @@ class TransportAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit mess
     id = Some("change-add-authorisation")
   )
 
+  def authorisations: Seq[SummaryListRow] =
+    getAnswersAndBuildSectionRows(AuthorisationsSection)(authorisation)
+
   def authorisation(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[AuthorisationDomain](
     formatAnswer = _.asString.toText,
     prefix = "transport.checkYourAnswers.authorisation",
@@ -56,6 +62,9 @@ class TransportAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit mess
     prefix = "transport.supplyChainActors.supplyChainActorYesNo",
     id = Some("change-add-supply-chain-actor")
   )
+
+  def supplyChainActors: Seq[SummaryListRow] =
+    getAnswersAndBuildSectionRows(SupplyChainActorsSection)(supplyChainActor)
 
   def supplyChainActor(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[SupplyChainActorDomain](
     formatAnswer = _.asString.toText,
@@ -105,6 +114,9 @@ class TransportAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit mess
     prefix = "transport.equipment.addTransportEquipmentYesNo",
     id = Some("change-add-equipment")
   )
+
+  def equipments: Seq[SummaryListRow] =
+    getAnswersAndBuildSectionRows(EquipmentsSection)(equipment)
 
   def equipment(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[EquipmentDomain](
     formatAnswer = _.asString.toText,

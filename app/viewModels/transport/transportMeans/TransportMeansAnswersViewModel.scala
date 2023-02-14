@@ -17,9 +17,8 @@
 package viewModels.transport.transportMeans
 
 import controllers.transport.transportMeans.active.routes
-import models.{Index, Mode, RichOptionalJsArray, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import pages.sections.routeDetails.transit.OfficesOfTransitSection
-import pages.sections.transport.transportMeans.TransportMeansActiveListSection
 import play.api.i18n.Messages
 import utils.cyaHelpers.transport.transportMeans.TransportMeansCheckYourAnswersHelper
 import utils.cyaHelpers.transport.transportMeans.active.ActiveBorderTransportAnswersHelper
@@ -58,15 +57,9 @@ object TransportMeansAnswersViewModel {
 
       val borderMeansSection = {
         if (userAnswers.get(OfficesOfTransitSection).isDefined) {
-          val rows = userAnswers
-            .get(TransportMeansActiveListSection)
-            .mapWithIndex {
-              (_, index) => helper.activeBorderTransportMeans(index)
-            }
-
           Section(
             sectionTitle = messages("transport.transportMeans.borderMeans.subheading"),
-            rows = rows,
+            rows = helper.activeBorderTransportsMeans,
             addAnotherLink = Link(
               id = "add-or-remove-border-means-of-transport",
               text = messages("transport.transportMeans.borderMeans.addOrRemove"),

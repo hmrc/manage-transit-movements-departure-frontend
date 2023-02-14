@@ -19,10 +19,7 @@ package viewModels.transport
 import controllers.transport.authorisationsAndLimit.authorisations.{routes => authorisationsRoutes}
 import controllers.transport.equipment.{routes => equipmentsRoutes}
 import controllers.transport.supplyChainActors.{routes => supplyChainActorsRoutes}
-import models.{CheckMode, RichOptionalJsArray, UserAnswers}
-import pages.sections.transport.authorisationsAndLimit.AuthorisationsSection
-import pages.sections.transport.equipment.EquipmentsSection
-import pages.sections.transport.supplyChainActors.SupplyChainActorsSection
+import models.{CheckMode, UserAnswers}
 import play.api.i18n.Messages
 import utils.cyaHelpers.transport.TransportAnswersHelper
 import viewModels.Link
@@ -51,11 +48,7 @@ object TransportAnswersViewModel {
 
       val supplyChainActorsSection = Section(
         sectionTitle = messages("transport.checkYourAnswers.supplyChainActors"),
-        rows = helper.addSupplyChainActor.toList ++ userAnswers
-          .get(SupplyChainActorsSection)
-          .mapWithIndex {
-            (_, index) => helper.supplyChainActor(index)
-          },
+        rows = helper.addSupplyChainActor.toList ++ helper.supplyChainActors,
         addAnotherLink = Link(
           id = "add-or-remove-supply-chain-actors",
           text = messages("transport.checkYourAnswers.supplyChainActors.addOrRemove"),
@@ -65,11 +58,7 @@ object TransportAnswersViewModel {
 
       val authorisationsSection = Section(
         sectionTitle = messages("transport.checkYourAnswers.authorisations"),
-        rows = helper.addAuthorisation.toList ++ userAnswers
-          .get(AuthorisationsSection)
-          .mapWithIndex {
-            (_, index) => helper.authorisation(index)
-          } ++ helper.limitDate.toList,
+        rows = helper.addAuthorisation.toList ++ helper.authorisations ++ helper.limitDate.toList,
         addAnotherLink = Link(
           id = "add-or-remove-an-authorisation",
           text = messages("transport.checkYourAnswers.authorisations.addOrRemove"),
@@ -89,11 +78,7 @@ object TransportAnswersViewModel {
 
       val transportEquipmentSection = Section(
         sectionTitle = messages("transport.checkYourAnswers.transportEquipment"),
-        rows = helper.addEquipment.toList ++ userAnswers
-          .get(EquipmentsSection)
-          .mapWithIndex {
-            (_, index) => helper.equipment(index)
-          },
+        rows = helper.addEquipment.toList ++ helper.equipments,
         addAnotherLink = Link(
           id = "add-or-remove-transport-equipment",
           text = messages("transport.checkYourAnswers.transportEquipment.addOrRemove"),
