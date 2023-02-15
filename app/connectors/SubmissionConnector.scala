@@ -14,17 +14,29 @@
  * limitations under the License.
  */
 
-package services
+package connectors
 
-import connectors.ApiConnector
-import models.UserAnswers
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import config.FrontendAppConfig
+import play.api.Logging
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.Inject
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class ApiService @Inject() (apiConnector: ApiConnector) {
+class SubmissionConnector @Inject() (
+  config: FrontendAppConfig,
+  http: HttpClient
+)(implicit ec: ExecutionContext)
+    extends Logging {
 
-  def submitDeclaration(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[HttpResponse] =
-    apiConnector.submitDeclaration(userAnswers)
+  private val baseUrl = s"${config.cacheUrl}"
+
+  def post(lrn: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+
+    val url = s"$baseUrl/declaration/submit"
+
+    http.POST[String, HttpResponse](url, lrn)
+
+  }
 }

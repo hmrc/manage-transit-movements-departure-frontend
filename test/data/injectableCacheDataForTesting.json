@@ -190,6 +190,9 @@
       "supplyChainActorYesNo" : false,
       "addAuthorisationsYesNo" : true,
       "authorisationsAndLimit" : {
+        "limit": {
+          "limitDate": ISODate("2023-01-26T15:39:32.578+0000")
+        },
         "authorisations" : [
           {
             "authorisationType" : "TRD",

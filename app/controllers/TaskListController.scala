@@ -17,11 +17,11 @@
 package controllers
 
 import com.google.inject.Inject
+import connectors.SubmissionConnector
 import controllers.actions.{Actions, DependentTasksCompletedActionProvider}
 import models.LocalReferenceNumber
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.ApiService
 import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.{PreTaskListTask, TaskListViewModel}
@@ -36,7 +36,7 @@ class TaskListController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: TaskListView,
   viewModel: TaskListViewModel,
-  apiService: ApiService
+  submissionConnector: SubmissionConnector
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -54,7 +54,7 @@ class TaskListController @Inject() (
     .andThen(checkDependentTasksCompleted(PreTaskListTask.section))
     .async {
       implicit request =>
-        apiService.submitDeclaration(request.userAnswers).map {
+        submissionConnector.post(lrn.value).map {
           case response if is2xx(response.status) =>
             Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad())
           case response if is4xx(response.status) =>
