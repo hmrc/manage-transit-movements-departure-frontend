@@ -23,7 +23,7 @@ import java.time.{LocalDate, LocalDateTime}
 
 object Format {
 
-  private val dateTimeFormatIE015: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HH:mm:ss")
+  private val dateTimeFormatIE015: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
 
   implicit class RichLocalDate(localDate: LocalDate) {
     def formatAsString: String = localDate.format(DateTimeFormatter.ofPattern("d MMMM yyyy"))
