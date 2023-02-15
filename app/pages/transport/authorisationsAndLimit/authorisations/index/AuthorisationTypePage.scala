@@ -21,7 +21,7 @@ import models.ProcedureType.Simplified
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.transport.authorisations.AuthorisationType
 import models.transport.authorisations.AuthorisationType.{ACR, TRD}
-import models.transport.transportMeans.departure.InlandMode.{Air, Maritime, Rail}
+import models.transport.transportMeans.departure.InlandMode._
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.preTaskList.ProcedureTypePage
@@ -49,27 +49,20 @@ case class AuthorisationTypePage(authorisationIndex: Index) extends QuestionPage
       case _       => super.cleanup(value, userAnswers)
     }
 
-  def inferredReader: UserAnswersReader[AuthorisationType] = {
-    lazy val defaultReader = AuthorisationTypePage(authorisationIndex).reader
-
+  def inferredReader: UserAnswersReader[AuthorisationType] =
     if (authorisationIndex.isFirst) {
       for {
         procedureType           <- ProcedureTypePage.reader
         reducedDataSetIndicator <- ApprovedOperatorPage.inferredReader
         inlandMode              <- InlandModePage.reader
-        reader <-
-          if (reducedDataSetIndicator) {
-            (inlandMode, procedureType) match {
-              case (Maritime | Rail | Air, _) => UserAnswersReader.apply(TRD)
-              case (_, Simplified)            => UserAnswersReader.apply(ACR)
-              case _                          => defaultReader
-            }
-          } else {
-            defaultReader
-          }
+
+        reader <- (reducedDataSetIndicator, inlandMode, procedureType) match {
+          case (true, Maritime | Rail | Air, _) => UserAnswersReader.apply(TRD)
+          case (true, _, Simplified)            => UserAnswersReader.apply(ACR)
+          case _                                => AuthorisationTypePage(authorisationIndex).reader
+        }
       } yield reader
     } else {
-      defaultReader
+      AuthorisationTypePage(authorisationIndex).reader
     }
-  }
 }
