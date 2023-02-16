@@ -1081,7 +1081,6 @@ transport.preRequisites.containerIndicator.heading = Are you using any container
 transport.preRequisites.containerIndicator.checkYourAnswersLabel = Are you using any containers?
 transport.preRequisites.containerIndicator.change.hidden = if you are using any containers
 transport.preRequisites.containerIndicator.error.required = Select yes if you’re using any containers
-transport.preRequisites.containerIndicator.paragraph = This can be any container used to transport goods in CTC transit. For example, a swap body, articulated lorry or shipping container.
 
 # Transport details - Transport means
 
@@ -1404,10 +1403,11 @@ transport.carrierDetails.contact.telephoneNumber.error.minLength = {0}’s telep
 transport.equipment.caption = Transport details - Transport equipment
 transport.equipment.value.withContainer = Transport equipment {0} - container {1}
 transport.equipment.value.withoutContainer = Transport equipment {0}
+transport.charges.caption = Transport details - Transport charges
 
-transport.equipment.addTransportEquipmentYesNo.title = Do you need to add any transport equipment?
-transport.equipment.addTransportEquipmentYesNo.heading = Do you need to add any transport equipment?
-transport.equipment.addTransportEquipmentYesNo.paragraph = This includes any containers or seals.
+transport.equipment.addTransportEquipmentYesNo.title = Do you want to add any transport equipment?
+transport.equipment.addTransportEquipmentYesNo.heading = Do you want to add any transport equipment?
+transport.equipment.addTransportEquipmentYesNo.paragraph = This means anything used to transport goods in CTC transit. For example, a swap body, articulated lorry or trailer.
 transport.equipment.addTransportEquipmentYesNo.checkYourAnswersLabel = Do you want to add any transport equipment?
 transport.equipment.addTransportEquipmentYesNo.change.hidden = if you want to add any transport equipment
 transport.equipment.addTransportEquipmentYesNo.error.required = Select yes if you want to add any transport equipment

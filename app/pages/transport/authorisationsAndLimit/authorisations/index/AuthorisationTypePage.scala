@@ -21,7 +21,7 @@ import models.ProcedureType.Simplified
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import models.transport.authorisations.AuthorisationType
 import models.transport.authorisations.AuthorisationType.{ACR, TRD}
-import models.transport.transportMeans.departure.InlandMode.{Air, Fixed, Mail, Maritime, Rail, Road, Unknown, Waterway}
+import models.transport.transportMeans.departure.InlandMode._
 import models.{Index, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.preTaskList.ProcedureTypePage
@@ -57,9 +57,9 @@ case class AuthorisationTypePage(authorisationIndex: Index) extends QuestionPage
         inlandMode              <- InlandModePage.reader
 
         reader <- (reducedDataSetIndicator, inlandMode, procedureType) match {
-          case (true, Maritime | Rail | Air, _)                             => UserAnswersReader.apply(TRD)
-          case (true, Road | Mail | Fixed | Unknown | Waterway, Simplified) => UserAnswersReader.apply(ACR)
-          case _                                                            => AuthorisationTypePage(authorisationIndex).reader
+          case (true, Maritime | Rail | Air, _) => UserAnswersReader.apply(TRD)
+          case (true, _, Simplified)            => UserAnswersReader.apply(ACR)
+          case _                                => AuthorisationTypePage(authorisationIndex).reader
         }
       } yield reader
     } else {
