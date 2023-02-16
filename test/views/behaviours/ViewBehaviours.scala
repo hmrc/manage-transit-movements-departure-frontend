@@ -45,7 +45,11 @@ trait ViewBehaviours extends SpecBase with ViewSpecAssertions {
       assertElementContainsText(link, "Sign out")
       assertElementContainsHref(
         link,
-        "http://localhost:9553/bas-gateway/sign-out-without-state?continue=http://localhost:9514/feedback/manage-transit-departures"
+        if (urlContainsLrn) {
+          controllers.routes.DeleteLockController.delete(lrn).url
+        } else {
+          "http://localhost:9553/bas-gateway/sign-out-without-state?continue=http://localhost:9514/feedback/manage-transit-departures"
+        }
       )
     }
 

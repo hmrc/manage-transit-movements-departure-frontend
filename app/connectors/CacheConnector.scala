@@ -20,7 +20,6 @@ import config.FrontendAppConfig
 import models.{LocalReferenceNumber, UserAnswers}
 import play.api.Logging
 import play.api.http.Status._
-import play.api.mvc.Results.Ok
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse, UpstreamErrorResponse}
 

@@ -48,7 +48,7 @@
             timeout = Some(renderConfig.timeoutSeconds),
             countdown = Some(renderConfig.countdownSeconds),
             keepAliveUrl = Some(routes.KeepAliveController.keepAlive(lrn).url),
-            signOutUrl = Some(renderConfig.signOutUrl)
+            signOutUrl = Some(lrn.map(x => routes.DeleteLockController.delete(x).url).getOrElse(renderConfig.signOutUrl))
         ))
     }
 
