@@ -22,10 +22,8 @@ import controllers.actions.{Actions, DependentTasksCompletedActionProvider}
 import models.LocalReferenceNumber
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.Results.{BadRequest, InternalServerError}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
-import uk.gov.hmrc.http.UpstreamErrorResponse
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.{PreTaskListTask, TaskListViewModel}
 import views.html.TaskListView
