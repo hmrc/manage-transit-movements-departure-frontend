@@ -19,6 +19,7 @@ package utils.cyaHelpers.transport.equipment
 import models.journeyDomain.transport.equipment.index.itemNumber.ItemNumberDomain
 import models.journeyDomain.transport.equipment.seal.SealDomain
 import models.{Index, Mode, UserAnswers}
+import pages.sections.transport.equipment.{ItemNumbersSection, SealsSection}
 import pages.transport.equipment.index._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -52,6 +53,9 @@ class EquipmentAnswersHelper(
     id = Some("change-add-seals")
   )
 
+  def seals: Seq[SummaryListRow] =
+    getAnswersAndBuildSectionRows(SealsSection(equipmentIndex))(seal)
+
   def seal(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[SealDomain](
     formatAnswer = formatAsText,
     prefix = "transport.equipment.index.checkYourAnswers.seal",
@@ -65,6 +69,9 @@ class EquipmentAnswersHelper(
     prefix = "transport.equipment.index.addGoodsItemNumberYesNo",
     id = Some("change-add-item-numbers")
   )
+
+  def itemNumbers: Seq[SummaryListRow] =
+    getAnswersAndBuildSectionRows(ItemNumbersSection(equipmentIndex))(itemNumber)
 
   def itemNumber(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[ItemNumberDomain](
     formatAnswer = formatAsText,

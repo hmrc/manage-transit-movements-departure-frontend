@@ -21,6 +21,7 @@ import models.reference.Nationality
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.departure.{Identification, InlandMode}
 import models.{Index, Mode, UserAnswers}
+import pages.sections.transport.transportMeans.TransportMeansActiveListSection
 import pages.transport.transportMeans._
 import pages.transport.transportMeans.departure._
 import play.api.i18n.Messages
@@ -29,6 +30,9 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
 
 class TransportMeansCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
+
+  def activeBorderTransportsMeans: Seq[SummaryListRow] =
+    getAnswersAndBuildSectionRows(TransportMeansActiveListSection)(activeBorderTransportMeans)
 
   def activeBorderTransportMeans(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[TransportMeansActiveDomain](
     formatAnswer = _.asString.toText,

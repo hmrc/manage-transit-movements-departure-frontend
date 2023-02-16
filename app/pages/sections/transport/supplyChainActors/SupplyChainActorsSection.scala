@@ -20,9 +20,9 @@ import pages.sections.Section
 import pages.sections.transport.TransportSection
 import play.api.libs.json.{JsArray, JsPath}
 
-case object SupplyChainActorListSection extends Section[JsArray] {
+case object SupplyChainActorsSection extends Section[JsArray] {
 
   override def path: JsPath = TransportSection.path \ toString
 
-  override def toString: String = "supplyChainActorList"
+  override def toString: String = "supplyChainActors"
 }

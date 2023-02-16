@@ -19,13 +19,18 @@ package utils.cyaHelpers.transport
 import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationDomain
 import models.journeyDomain.transport.equipment.EquipmentDomain
 import models.journeyDomain.transport.supplyChainActors.SupplyChainActorDomain
+import models.reference.Country
 import models.transport.equipment.PaymentMethod
 import models.{Index, Mode, UserAnswers}
+import pages.sections.transport.authorisationsAndLimit.AuthorisationsSection
+import pages.sections.transport.equipment.EquipmentsSection
+import pages.sections.transport.supplyChainActors.SupplyChainActorsSection
 import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import pages.transport.authorisationsAndLimit.limit.LimitDatePage
 import pages.transport.carrierDetails.contact.{NamePage, TelephoneNumberPage}
 import pages.transport.carrierDetails.{AddContactYesNoPage, IdentificationNumberPage}
 import pages.transport.equipment.{AddPaymentMethodYesNoPage, AddTransportEquipmentYesNoPage, PaymentMethodPage}
+import pages.transport.preRequisites._
 import pages.transport.supplyChainActors.SupplyChainActorYesNoPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
@@ -36,12 +41,57 @@ import java.time.LocalDate
 
 class TransportAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
+  def usingSameUcr: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+    page = SameUcrYesNoPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "transport.preRequisites.sameUcrYesNo",
+    id = Some("change-using-same-ucr")
+  )
+
+  def ucr: Option[SummaryListRow] = getAnswerAndBuildRow[String](
+    page = UniqueConsignmentReferencePage,
+    formatAnswer = formatAsText,
+    prefix = "transport.preRequisites.uniqueConsignmentReference",
+    id = Some("change-ucr")
+  )
+
+  def countryOfDispatch: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
+    page = CountryOfDispatchPage,
+    formatAnswer = formatAsText,
+    prefix = "transport.preRequisites.countryOfDispatch",
+    id = Some("change-country-of-dispatch")
+  )
+
+  def transportedToSameCountry: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+    page = TransportedToSameCountryYesNoPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "transport.preRequisites.transportedToSameCountryYesNo",
+    id = Some("change-transported-to-same-country")
+  )
+
+  def countryOfDestination: Option[SummaryListRow] = getAnswerAndBuildRow[Country](
+    page = ItemsDestinationCountryPage,
+    formatAnswer = formatAsText,
+    prefix = "transport.preRequisites.itemsDestinationCountry",
+    id = Some("change-country-of-destination")
+  )
+
+  def usingContainersYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
+    page = ContainerIndicatorPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "transport.preRequisites.containerIndicator",
+    id = Some("change-using-containers")
+  )
+
   def addAuthorisation: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = AddAuthorisationsYesNoPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "transport.authorisations.addAuthorisationsYesNo",
     id = Some("change-add-authorisation")
   )
+
+  def authorisations: Seq[SummaryListRow] =
+    getAnswersAndBuildSectionRows(AuthorisationsSection)(authorisation)
 
   def authorisation(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[AuthorisationDomain](
     formatAnswer = _.asString.toText,
@@ -56,6 +106,9 @@ class TransportAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit mess
     prefix = "transport.supplyChainActors.supplyChainActorYesNo",
     id = Some("change-add-supply-chain-actor")
   )
+
+  def supplyChainActors: Seq[SummaryListRow] =
+    getAnswersAndBuildSectionRows(SupplyChainActorsSection)(supplyChainActor)
 
   def supplyChainActor(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[SupplyChainActorDomain](
     formatAnswer = _.asString.toText,
@@ -105,6 +158,9 @@ class TransportAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit mess
     prefix = "transport.equipment.addTransportEquipmentYesNo",
     id = Some("change-add-equipment")
   )
+
+  def equipments: Seq[SummaryListRow] =
+    getAnswersAndBuildSectionRows(EquipmentsSection)(equipment)
 
   def equipment(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[EquipmentDomain](
     formatAnswer = _.asString.toText,
