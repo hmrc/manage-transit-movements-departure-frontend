@@ -31,3 +31,5 @@ GET        /:lrn/task-list                                controllers.TaskListCo
 POST       /:lrn/task-list                                controllers.TaskListController.onSubmit(lrn: LocalReferenceNumber)
 
 GET        /declaration-submitted                         controllers.DeclarationSubmittedController.onPageLoad()
+
+GET        /:lrn/delete-lock                              controllers.DeleteLockController.delete(lrn: LocalReferenceNumber)

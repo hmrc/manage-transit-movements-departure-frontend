@@ -87,9 +87,10 @@ package object controllers {
         case Right(value) =>
           sessionRepository
             .set(value._2)
-            .map(
-              _ => value
-            )
+            .flatMap {
+              case true  => Future.successful(value)
+              case false => Future.failed(new Exception(s"Lock already in place"))
+            }
       }
 
     def writeToSession()(implicit

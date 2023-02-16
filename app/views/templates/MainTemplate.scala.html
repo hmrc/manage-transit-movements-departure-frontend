@@ -14,13 +14,12 @@
  * limitations under the License.
  *@
 
-@import config.{RenderConfig, FrontendAppConfig}
+@import config.{FrontendAppConfig, RenderConfig}
+@import models.LocalReferenceNumber
+@import resources._
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.timeoutdialog.TimeoutDialog
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.footer.{Footer, FooterItem, Meta}
-@import resources._
 @import views.utils.ViewUtils._
-@import models.LocalReferenceNumber
 
 @this(
     renderConfig: RenderConfig,
@@ -62,7 +61,6 @@
     @mainContent
     @hmrcReportTechnicalIssueHelper()
 }
-
 @hmrcLayout(
     pageTitle = Some(breadCrumbTitle(title, mainContent)),
     additionalHeadBlock = Some(hmrcInternalHead(
@@ -72,7 +70,7 @@
     userResearchBannerUrl = if (renderConfig.showUserResearchBanner) Some(renderConfig.userResearchUrl) else None,
     serviceName = Some(messages("site.service_name")),
     serviceUrl = Some(appConfig.serviceUrl),
-    signOutUrl = if (canSignOut) Some(renderConfig.signOutUrl) else None,
+    signOutUrl = if (canSignOut) Some(lrn.map(x => routes.DeleteLockController.delete(x).url).getOrElse(renderConfig.signOutUrl)) else None,
     phaseBanner = Some(standardBetaBanner(url = renderConfig.feedbackUrl)),
     backLinkUrl = if (showBackLink) Some("#") else None, // This is overridden in ctc.js
     nonce = CSPNonce.get,
