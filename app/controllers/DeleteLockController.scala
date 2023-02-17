@@ -25,13 +25,15 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class DeleteLockController @Inject() (
   actions: Actions,
   cc: MessagesControllerComponents,
   cacheConnector: CacheConnector,
   renderConfig: RenderConfig
-) extends FrontendController(cc)
+)(implicit ec: ExecutionContext)
+    extends FrontendController(cc)
     with I18nSupport {
 
   def delete(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {

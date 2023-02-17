@@ -16,7 +16,7 @@
 
 package base
 
-import config.FrontendAppConfig
+import config.{FrontendAppConfig, RenderConfig}
 import models.{EoriNumber, Index, LocalReferenceNumber, UserAnswers}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
@@ -74,6 +74,7 @@ trait SpecBase
   implicit def messages: Messages = messagesApi.preferred(fakeRequest)
 
   def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
+  def renderConfig: RenderConfig           = injector.instanceOf[RenderConfig]
 
   implicit class RichUserAnswers(userAnswers: UserAnswers) {
 
