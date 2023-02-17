@@ -74,7 +74,7 @@ class LockActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       when(cacheConnector.checkLock(any())(any())).thenReturn(Future(false))
 
-      harness() mustBe Results.SeeOther(controllers.routes.SessionExpiredController.onPageLoad().url)
+      harness() mustBe Results.SeeOther(controllers.routes.LockedController.onPageLoad().url)
     }
   }
 
