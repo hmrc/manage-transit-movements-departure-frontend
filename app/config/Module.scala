@@ -59,7 +59,6 @@ class Module extends AbstractModule {
     bind(classOf[ItemNumberNavigatorProvider]).to(classOf[ItemNumberNavigatorProviderImpl])
 
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
-    bind(classOf[LockAction]).to(classOf[LockActionImpl])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])
     bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl])
     bind(classOf[PreTaskListCompletedAction]).to(classOf[PreTaskListCompletedActionImpl])

@@ -26,12 +26,12 @@ class Actions @Inject() (
   identifierAction: IdentifierAction,
   dataRetrievalActionProvider: DataRetrievalActionProvider,
   dataRequiredAction: DataRequiredAction,
-  lockAction: LockAction
+  lockAction: LockActionProvider
 ) {
 
   def getData(lrn: LocalReferenceNumber): ActionBuilder[OptionalDataRequest, AnyContent] =
     identifierAction andThen dataRetrievalActionProvider(lrn)
 
   def requireData(lrn: LocalReferenceNumber): ActionBuilder[DataRequest, AnyContent] =
-    getData(lrn) andThen dataRequiredAction andThen lockAction
+    getData(lrn) andThen dataRequiredAction andThen lockAction()
 }

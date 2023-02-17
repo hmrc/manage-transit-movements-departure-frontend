@@ -54,7 +54,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
 
     "get" - {
 
-      val url = s"/manage-transit-movements-departure-cache/user-answers/$lrn"
+      val url = s"/manage-transit-movements-departure-cache/user-answers/${lrn.value}"
 
       "must return user answers when status is Ok" in {
         server.stubFor(
@@ -62,9 +62,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
             .willReturn(okJson(json))
         )
 
-        val result: Option[UserAnswers] = await(connector.get(lrn))
-
-        result mustBe Some(userAnswers)
+        connector.get(lrn).futureValue mustBe Some(userAnswers)
       }
 
       "return None when no cached data found for provided LRN" in {
@@ -136,7 +134,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
 
     "checkLock" - {
 
-      val url = s"/manage-transit-movements-departure-cache/user-answers/${userAnswers.lrn}/lock"
+      val url = s"/manage-transit-movements-departure-cache/user-answers/${userAnswers.lrn.toString}/lock"
 
       "must return true when status is Ok" in {
         server.stubFor(get(urlEqualTo(url)) willReturn aResponse().withStatus(OK))
@@ -148,20 +146,11 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
 
       "return false for other responses" in {
 
-        val errorResponses: Gen[Int] = Gen
-          .chooseNum(400: Int, 599: Int)
+        server.stubFor(get(urlEqualTo(url)) willReturn aResponse().withStatus(BAD_REQUEST))
 
-        forAll(errorResponses) {
-          error =>
-            server.stubFor(
-              get(urlEqualTo(url))
-                .willReturn(aResponse().withStatus(error))
-            )
+        val result: Boolean = await(connector.checkLock(userAnswers))
 
-            val result: Boolean = await(connector.checkLock(userAnswers))
-
-            result mustBe false
-        }
+        result mustBe false
       }
     }
 

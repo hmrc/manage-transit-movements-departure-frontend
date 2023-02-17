@@ -16,27 +16,31 @@
 
 package controllers.actions
 
-import connectors.CacheConnector
+import com.google.inject.Inject
+import controllers.routes
 import models.requests.DataRequest
+import play.api.Logging
 import play.api.mvc.Results.Redirect
-import play.api.mvc.{ActionRefiner, Result}
+import play.api.mvc.{ActionFilter, Result}
+import services.LockService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
-import com.google.inject.{Inject, Singleton}
-import controllers.routes
 
 import scala.concurrent.{ExecutionContext, Future}
 
-@Singleton
-class LockActionImpl @Inject() (connector: CacheConnector)(implicit val executionContext: ExecutionContext) extends LockAction {
+class LockActionProvider @Inject() (lockService: LockService)(implicit ec: ExecutionContext) {
 
-  override protected def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
+  def apply(): ActionFilter[DataRequest] =
+    new LockAction(lockService)
+}
+
+class LockAction(lockService: LockService)(implicit val executionContext: ExecutionContext) extends ActionFilter[DataRequest] with Logging {
+
+  override protected def filter[A](request: DataRequest[A]): Future[Option[Result]] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-    connector.checkLock(request.userAnswers).map {
-      case true  => Right(request)
-      case false => Left(Redirect(routes.LockedController.onPageLoad()))
+    lockService.checkLock(request.userAnswers).map {
+      case true  => None
+      case false => Some(Redirect(routes.LockedController.onPageLoad()))
     }
   }
 }
-
-trait LockAction extends ActionRefiner[DataRequest, DataRequest]

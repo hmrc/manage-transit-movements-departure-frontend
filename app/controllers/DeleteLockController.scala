@@ -17,11 +17,12 @@
 package controllers
 
 import config.RenderConfig
-import connectors.CacheConnector
 import controllers.actions.Actions
 import models.LocalReferenceNumber
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.LockService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
@@ -30,15 +31,22 @@ import scala.concurrent.ExecutionContext
 class DeleteLockController @Inject() (
   actions: Actions,
   cc: MessagesControllerComponents,
-  cacheConnector: CacheConnector,
+  lockService: LockService,
   renderConfig: RenderConfig
 )(implicit ec: ExecutionContext)
     extends FrontendController(cc)
-    with I18nSupport {
+    with I18nSupport
+    with Logging {
 
-  def delete(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
+  def delete(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      cacheConnector.deleteLock(request.userAnswers)
-      Redirect(renderConfig.signOutUrl)
+      lockService.deleteLock(request.userAnswers).map {
+        _ =>
+          Redirect(renderConfig.signOutUrl)
+      } recover {
+        case exception =>
+          logger.info("Failed to unlock session", exception)
+          Redirect(renderConfig.signOutUrl)
+      }
   }
 }

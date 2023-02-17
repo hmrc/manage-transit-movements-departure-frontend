@@ -17,11 +17,8 @@
 package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.CacheConnector
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
-import play.api.inject.bind
-import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{GET, route, status, _}
 
@@ -29,16 +26,9 @@ import scala.concurrent.Future
 
 class DeleteLockControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val mockCacheConnector = mock[CacheConnector]
-
-  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
-    super
-      .guiceApplicationBuilder()
-      .overrides(bind[CacheConnector].toInstance(mockCacheConnector))
-
   override def beforeEach(): Unit = {
     super.beforeEach()
-    reset(mockCacheConnector)
+    reset(mockLockService)
   }
 
   "DeleteLockController" - {
@@ -46,42 +36,42 @@ class DeleteLockControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      when(mockCacheConnector.deleteLock(any())(any())).thenReturn(Future.successful(true))
+      when(mockLockService.deleteLock(any())(any())).thenReturn(Future.successful(true))
 
       val result = route(app, FakeRequest(GET, routes.DeleteLockController.delete(lrn).url)).value
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result).value mustBe renderConfig.signOutUrl
 
-      verify(mockCacheConnector, times(1)).deleteLock(any())(any())
+      verify(mockLockService, times(1)).deleteLock(any())(any())
     }
 
     "must redirect to logout url when lock is not deleted" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      when(mockCacheConnector.deleteLock(any())(any())).thenReturn(Future.successful(false))
+      when(mockLockService.deleteLock(any())(any())).thenReturn(Future.successful(false))
 
       val result = route(app, FakeRequest(GET, routes.DeleteLockController.delete(lrn).url)).value
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result).value mustBe renderConfig.signOutUrl
 
-      verify(mockCacheConnector, times(1)).deleteLock(any())(any())
+      verify(mockLockService, times(1)).deleteLock(any())(any())
     }
 
     "must redirect to logout url when delete lock fails" in {
 
       setExistingUserAnswers(emptyUserAnswers)
 
-      when(mockCacheConnector.deleteLock(any())(any())).thenReturn(Future.failed(new Exception))
+      when(mockLockService.deleteLock(any())(any())).thenReturn(Future.failed(new Exception))
 
       val result = route(app, FakeRequest(GET, routes.DeleteLockController.delete(lrn).url)).value
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result).value mustBe renderConfig.signOutUrl
 
-      verify(mockCacheConnector, times(1)).deleteLock(any())(any())
+      verify(mockLockService, times(1)).deleteLock(any())(any())
     }
   }
 }
