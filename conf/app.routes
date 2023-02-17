@@ -33,3 +33,5 @@ POST       /:lrn/task-list                                controllers.TaskListCo
 GET        /declaration-submitted                         controllers.DeclarationSubmittedController.onPageLoad()
 
 GET        /:lrn/delete-lock                              controllers.DeleteLockController.delete(lrn: LocalReferenceNumber)
+
+GET        /cannot-open                                   controllers.LockedController.onPageLoad()

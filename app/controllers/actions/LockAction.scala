@@ -23,6 +23,7 @@ import play.api.mvc.{ActionRefiner, Result}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import com.google.inject.{Inject, Singleton}
+import controllers.routes
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -33,7 +34,7 @@ class LockActionImpl @Inject() (connector: CacheConnector)(implicit val executio
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
     connector.checkLock(request.userAnswers).map {
       case true  => Right(request)
-      case false => Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad())) // TODO replace with lock page
+      case false => Left(Redirect(routes.LockedController.onPageLoad()))
     }
   }
 }
