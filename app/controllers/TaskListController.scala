@@ -17,11 +17,12 @@
 package controllers
 
 import com.google.inject.Inject
+import connectors.SubmissionConnector
 import controllers.actions.{Actions, DependentTasksCompletedActionProvider}
 import models.LocalReferenceNumber
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.ApiService
 import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.{PreTaskListTask, TaskListViewModel}
@@ -36,10 +37,11 @@ class TaskListController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: TaskListView,
   viewModel: TaskListViewModel,
-  apiService: ApiService
+  submissionConnector: SubmissionConnector
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
-    with I18nSupport {
+    with I18nSupport
+    with Logging {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions
     .requireData(lrn)
@@ -54,15 +56,16 @@ class TaskListController @Inject() (
     .andThen(checkDependentTasksCompleted(PreTaskListTask.section))
     .async {
       implicit request =>
-        apiService.submitDeclaration(request.userAnswers).map {
+        submissionConnector.post(lrn.value).map {
           case response if is2xx(response.status) =>
+            logger.debug(s"TaskListController:onSubmit: success ${response.status}: ${response.body}")
             Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad())
           case response if is4xx(response.status) =>
-            // TODO - log and audit fail. How to handle this?
-            BadRequest
-          case _ =>
-            // TODO - log and audit fail. How to handle this?
-            InternalServerError("Something went wrong")
+            logger.warn(s"TaskListController:onSubmit: bad request: ${response.status}: ${response.body}")
+            BadRequest(response.body)
+          case e =>
+            logger.warn(s"TaskListController:onSubmit: something went wrong: ${e.status}-${e.body}")
+            InternalServerError(e.body)
         }
     }
 }

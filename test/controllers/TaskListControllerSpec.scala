@@ -17,6 +17,7 @@
 package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import connectors.SubmissionConnector
 import generators.{Generators, UserAnswersGenerator}
 import models.UserAnswers
 import org.mockito.ArgumentMatchers.any
@@ -26,23 +27,22 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.ApiService
 import viewModels.taskList.{PreTaskListTask, TaskListTask, TaskListViewModel, TaskStatus}
 import views.html.TaskListView
 
 class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators with UserAnswersGenerator {
 
-  private lazy val mockViewModel         = mock[TaskListViewModel]
-  private val mockApiService: ApiService = mock[ApiService]
+  private lazy val mockViewModel: TaskListViewModel        = mock[TaskListViewModel]
+  private val mockSubmissionConnector: SubmissionConnector = mock[SubmissionConnector]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind[TaskListViewModel].toInstance(mockViewModel))
-      .overrides(bind(classOf[ApiService]).toInstance(mockApiService))
+      .overrides(bind(classOf[SubmissionConnector]).toInstance(mockSubmissionConnector))
 
   override def beforeEach(): Unit = {
-    reset(mockViewModel); reset(mockApiService)
+    reset(mockViewModel); reset(mockSubmissionConnector)
     super.beforeEach()
   }
 
@@ -93,7 +93,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
     }
 
     "must redirect to confirmation page when submission success" in {
-      when(mockApiService.submitDeclaration(any())(any()))
+      when(mockSubmissionConnector.post(any())(any()))
         .thenReturn(response(OK))
 
       val initialAnswers           = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
@@ -111,7 +111,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
     }
 
     "must return a bad request for a 400" in {
-      when(mockApiService.submitDeclaration(any())(any()))
+      when(mockSubmissionConnector.post(any())(any()))
         .thenReturn(response(BAD_REQUEST))
 
       val initialAnswers           = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
@@ -127,7 +127,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
     }
 
     "must return a internal server error for a 500" in {
-      when(mockApiService.submitDeclaration(any())(any()))
+      when(mockSubmissionConnector.post(any())(any()))
         .thenReturn(response(INTERNAL_SERVER_ERROR))
 
       val initialAnswers           = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
