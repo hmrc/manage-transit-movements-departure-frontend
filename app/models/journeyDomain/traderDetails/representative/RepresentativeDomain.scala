@@ -14,30 +14,24 @@
  * limitations under the License.
  */
 
-package models.journeyDomain.traderDetails
+package models.journeyDomain.traderDetails.representative
 
 import cats.implicits._
 import models.EoriNumber
 import models.domain._
 import models.journeyDomain.JourneyDomainModel
-import models.traderDetails.representative.RepresentativeCapacity
-import models.traderDetails.representative.RepresentativeCapacity.Direct
 import pages.traderDetails.representative._
 
 case class RepresentativeDomain(
   eori: EoriNumber,
-  name: String,
-  phone: String
-) extends JourneyDomainModel {
-  val capacity: RepresentativeCapacity = Direct
-}
+  representativeDetails: Option[RepresentativeDetailsDomain]
+) extends JourneyDomainModel
 
 object RepresentativeDomain {
 
   implicit val userAnswersReader: UserAnswersReader[RepresentativeDomain] =
     (
       EoriPage.reader.map(EoriNumber(_)),
-      NamePage.reader,
-      TelephoneNumberPage.reader
+      AddDetailsPage.filterOptionalDependent(identity)(UserAnswersReader[RepresentativeDetailsDomain])
     ).tupled.map((RepresentativeDomain.apply _).tupled)
 }

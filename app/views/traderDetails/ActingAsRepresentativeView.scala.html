@@ -41,10 +41,10 @@
 
         @inputYesNo(
             field = form("value"),
-            hint = Some(HtmlContent(messages("traderDetails.actingRepresentative.hint"))),
-            yesNoType = OrdinaryYesNo(
+            yesNoType = YesNoWithAdditionalHtml(
                 heading = messages("traderDetails.actingRepresentative.heading"),
-                caption = Some(messages("traderDetails.representative.caption"))
+                caption = Some(messages("traderDetails.representative.caption")),
+                additionalHtml = messages("traderDetails.actingRepresentative.paragraph").toParagraph
             )
         )
 

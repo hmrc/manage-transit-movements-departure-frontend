@@ -16,8 +16,7 @@
 
 package viewModels.routeDetails.transit
 
-import models.{Mode, RichOptionalJsArray, UserAnswers}
-import pages.sections.routeDetails.transit.OfficesOfTransitSection
+import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
 import utils.cyaHelpers.routeDetails.transit.TransitCheckYourAnswersHelper
 import viewModels.Link
@@ -47,11 +46,7 @@ object TransitAnswersViewModel {
 
       val officesOfTransitSection = Section(
         sectionTitle = messages("routeDetails.checkYourAnswers.transit.subheading"),
-        rows = userAnswers
-          .get(OfficesOfTransitSection)
-          .mapWithIndex {
-            (_, index) => helper.officeOfTransit(index)
-          },
+        rows = helper.officesOfTransit,
         addAnotherLink = Link(
           id = "add-or-remove-offices-of-transit",
           text = messages("routeDetails.checkYourAnswers.transit.addOrRemove"),

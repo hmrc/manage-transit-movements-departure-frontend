@@ -44,7 +44,7 @@
             yesNoType = YesNoWithAdditionalHtml(
                 heading = messages("routeDetails.loadingAndUnloading.unloading.addUnLocodeYesNo.heading"),
                 caption = Some(messages("routeDetails.loadingAndUnloading.unloading.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.loadingAndUnloading.unloading.addUnLocodeYesNo.paragraph")}</p>""")
+                additionalHtml = messages("routeDetails.loadingAndUnloading.unloading.addUnLocodeYesNo.paragraph").toParagraph
             )
         )
 

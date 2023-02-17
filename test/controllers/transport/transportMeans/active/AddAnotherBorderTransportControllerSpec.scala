@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import config.FrontendAppConfig
 import forms.AddAnotherFormProvider
 import generators.Generators
-import models.{Index, NormalMode}
+import models.NormalMode
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -42,7 +42,7 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
   implicit override def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
 
   private def form(viewModel: AddAnotherBorderTransportViewModel) =
-    formProvider(viewModel.prefix, viewModel.allowMoreActiveBorderTransports)
+    formProvider(viewModel.prefix, viewModel.allowMore)
 
   private val mode                                = NormalMode
   private lazy val addAnotherBorderTransportRoute = routes.AddAnotherBorderTransportController.onPageLoad(lrn, mode).url
@@ -65,9 +65,9 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
 
   private val viewModel = arbitrary[AddAnotherBorderTransportViewModel].sample.value
 
-  private val viewModelWithNoItems          = viewModel.copy(listItems = Nil)
-  private val viewModelWithItemsNotMaxedOut = viewModel.copy(listItems = listItems)
-  private val viewModelWithItemsMaxedOut    = viewModel.copy(listItems = maxedOutListItems)
+  private val viewModelWithNoItems = viewModel.copy(listItems = Nil)
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
 
   "AddAnotherBorderTransport Controller" - {
 
@@ -94,7 +94,7 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
       "when max limit not reached" in {
 
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(viewModelWithItemsNotMaxedOut)
+          .thenReturn(notMaxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -107,13 +107,13 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(viewModelWithItemsNotMaxedOut), lrn, mode, viewModelWithItemsNotMaxedOut)(request, messages, frontendAppConfig).toString
+          view(form(notMaxedOutViewModel), lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
 
       "when max limit reached" in {
 
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(viewModelWithItemsMaxedOut)
+          .thenReturn(maxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -126,7 +126,7 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(viewModelWithItemsMaxedOut), lrn, mode, viewModelWithItemsMaxedOut)(request, messages, frontendAppConfig).toString
+          view(form(maxedOutViewModel), lrn, maxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
     }
 
@@ -134,7 +134,7 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
       "when yes submitted" - {
         "must redirect to identification type page at next index" in {
           when(mockViewModelProvider.apply(any(), any())(any()))
-            .thenReturn(viewModelWithItemsNotMaxedOut)
+            .thenReturn(notMaxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -146,14 +146,14 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            routes.IdentificationController.onPageLoad(lrn, NormalMode, Index(viewModelWithItemsNotMaxedOut.activeBorderTransports)).url
+            routes.IdentificationController.onPageLoad(lrn, mode, notMaxedOutViewModel.nextIndex).url
         }
       }
 
       "when no submitted" - {
         "must redirect to CYA" in {
           when(mockViewModelProvider.apply(any(), any())(any()))
-            .thenReturn(viewModelWithItemsNotMaxedOut)
+            .thenReturn(notMaxedOutViewModel)
 
           setExistingUserAnswers(emptyUserAnswers)
 
@@ -173,7 +173,7 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
     "when max limit reached" - {
       "must redirect to CYA" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(viewModelWithItemsMaxedOut)
+          .thenReturn(maxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -192,14 +192,14 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
     "must return a Bad Request and errors" - {
       "when invalid data is submitted and max limit not reached" in {
         when(mockViewModelProvider.apply(any(), any())(any()))
-          .thenReturn(viewModelWithItemsNotMaxedOut)
+          .thenReturn(notMaxedOutViewModel)
 
         setExistingUserAnswers(emptyUserAnswers)
 
         val request = FakeRequest(POST, addAnotherBorderTransportRoute)
           .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form(viewModelWithItemsNotMaxedOut).bind(Map("value" -> ""))
+        val boundForm = form(notMaxedOutViewModel).bind(Map("value" -> ""))
 
         val result = route(app, request).value
 
@@ -208,7 +208,7 @@ class AddAnotherBorderTransportControllerSpec extends SpecBase with AppWithDefau
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, lrn, mode, viewModelWithItemsNotMaxedOut)(request, messages, frontendAppConfig).toString
+          view(boundForm, lrn, notMaxedOutViewModel)(request, messages, frontendAppConfig).toString
       }
     }
 

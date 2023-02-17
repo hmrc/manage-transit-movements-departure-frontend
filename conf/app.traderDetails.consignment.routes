@@ -2,13 +2,12 @@
 ->         /                   app.traderDetails.consignment.consignor.Routes
 ->         /                   app.traderDetails.consignment.consignee.Routes
 
-GET        /:lrn/trader-details/consignment/reduced-data-set                         controllers.traderDetails.consignment.ApprovedOperatorController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/trader-details/consignment/reduced-data-set                         controllers.traderDetails.consignment.ApprovedOperatorController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/trader-details/consignment/change-reduced-data-set                  controllers.traderDetails.consignment.ApprovedOperatorController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/trader-details/consignment/change-reduced-data-set                  controllers.traderDetails.consignment.ApprovedOperatorController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/trader-details/reduced-data-set                            controllers.traderDetails.consignment.ApprovedOperatorController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/reduced-data-set                            controllers.traderDetails.consignment.ApprovedOperatorController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/change-reduced-data-set                     controllers.traderDetails.consignment.ApprovedOperatorController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/change-reduced-data-set                     controllers.traderDetails.consignment.ApprovedOperatorController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/trader-details/consignment/more-than-one-consignee                  controllers.traderDetails.consignment.MoreThanOneConsigneeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/trader-details/consignment/more-than-one-consignee                  controllers.traderDetails.consignment.MoreThanOneConsigneeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/trader-details/consignment/change-more-than-one-consignee           controllers.traderDetails.consignment.MoreThanOneConsigneeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/trader-details/consignment/change-more-than-one-consignee           controllers.traderDetails.consignment.MoreThanOneConsigneeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-
+GET        /:lrn/trader-details/consignee/multiple                          controllers.traderDetails.consignment.MoreThanOneConsigneeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/trader-details/consignee/multiple                          controllers.traderDetails.consignment.MoreThanOneConsigneeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/trader-details/consignee/change-multiple                   controllers.traderDetails.consignment.MoreThanOneConsigneeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/trader-details/consignee/change-multiple                   controllers.traderDetails.consignment.MoreThanOneConsigneeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

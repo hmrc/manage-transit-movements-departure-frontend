@@ -17,12 +17,11 @@
 package pages.sections.transport.equipment
 
 import pages.sections.Section
-import pages.sections.transport.TransportSection
 import play.api.libs.json.{JsArray, JsPath}
 
 case object EquipmentsSection extends Section[JsArray] {
 
-  override def path: JsPath = TransportSection.path \ toString
+  override def path: JsPath = EquipmentsAndChargesSection.path \ toString
 
   override def toString: String = "equipments"
 }

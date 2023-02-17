@@ -51,6 +51,9 @@ class TransitCheckYourAnswersHelper(
     id = Some("change-add-office-of-transit")
   )
 
+  def officesOfTransit: Seq[SummaryListRow] =
+    getAnswersAndBuildSectionRows(OfficesOfTransitSection)(officeOfTransit)
+
   def officeOfTransit(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[OfficeOfTransitDomain](
     formatAnswer = _.label.toText,
     prefix = "routeDetails.checkYourAnswers.transit.officeOfTransit",

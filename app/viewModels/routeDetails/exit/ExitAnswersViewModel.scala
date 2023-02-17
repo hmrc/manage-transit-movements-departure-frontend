@@ -16,8 +16,7 @@
 
 package viewModels.routeDetails.exit
 
-import models.{Mode, RichOptionalJsArray, UserAnswers}
-import pages.sections.routeDetails.exit.OfficesOfExitSection
+import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
 import utils.cyaHelpers.routeDetails.exit.ExitCheckYourAnswersHelper
 import viewModels.Link
@@ -37,11 +36,7 @@ object ExitAnswersViewModel {
 
       val officesOfExitSection = Section(
         sectionTitle = messages("routeDetails.checkYourAnswers.exit.subheading"),
-        rows = userAnswers
-          .get(OfficesOfExitSection)
-          .mapWithIndex {
-            (_, index) => helper.officeOfExit(index)
-          },
+        rows = helper.officesOfExit,
         addAnotherLink = Link(
           id = "add-or-remove-offices-of-exit",
           text = messages("routeDetails.checkYourAnswers.exit.addOrRemove"),

@@ -17,10 +17,10 @@
 package views.routeDetails.routing
 
 import forms.AddAnotherFormProvider
-import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
+import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel
 import views.behaviours.ListWithActionsViewBehaviours
 import views.html.routeDetails.routing.AddAnotherCountryOfRoutingView
 
@@ -28,21 +28,22 @@ class AddAnotherCountryOfRoutingViewSpec extends ListWithActionsViewBehaviours {
 
   override def maxNumber: Int = frontendAppConfig.maxCountriesOfRouting
 
-  private def formProvider = new AddAnotherFormProvider()
+  private def formProvider(viewModel: AddAnotherCountryOfRoutingViewModel) =
+    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMore)
 
-  override def form: Form[Boolean] = formProvider(prefix, allowMore = true)
-
-  private val mode = arbitrary[Mode].sample.value
+  private val viewModel            = arbitrary[AddAnotherCountryOfRoutingViewModel].sample.value
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherCountryOfRoutingView]
-      .apply(form, lrn, mode, listItems, allowMoreCountries = true)(fakeRequest, messages)
+      .apply(form, lrn, notMaxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherCountryOfRoutingView]
-      .apply(formProvider(prefix, allowMore = false), lrn, mode, maxedOutListItems, allowMoreCountries = false)(fakeRequest, messages)
+      .apply(formProvider(maxedOutViewModel), lrn, maxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override val prefix: String = "routeDetails.routing.addAnotherCountryOfRouting"
 
@@ -50,9 +51,9 @@ class AddAnotherCountryOfRoutingViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Route details - Transit route")
 
-  behave like pageWithMoreItemsAllowed(listItems.length)()
+  behave like pageWithMoreItemsAllowed(notMaxedOutViewModel.count)()
 
-  behave like pageWithItemsMaxedOut(maxedOutListItems.length)
+  behave like pageWithItemsMaxedOut(maxedOutViewModel.count)
 
   behave like pageWithSubmitButton("Save and continue")
 }

@@ -31,6 +31,11 @@ import wolfendale.scalacheck.regexp.RegexpGen
 trait ModelGenerators {
   self: Generators =>
 
+  implicit lazy val arbitraryPaymentMethod: Arbitrary[models.transport.equipment.PaymentMethod] =
+    Arbitrary {
+      Gen.oneOf(models.transport.equipment.PaymentMethod.values)
+    }
+
   implicit lazy val arbitraryAuthorisationType: Arbitrary[models.transport.authorisations.AuthorisationType] =
     Arbitrary {
       Gen.oneOf(models.transport.authorisations.AuthorisationType.values)
@@ -130,11 +135,6 @@ trait ModelGenerators {
         GuaranteeNotRequiredExemptPublicBody,
         IndividualGuaranteeMultiple
       )
-    }
-
-  implicit lazy val arbitraryRepresentativeCapacity: Arbitrary[models.traderDetails.representative.RepresentativeCapacity] =
-    Arbitrary {
-      Gen.oneOf(models.traderDetails.representative.RepresentativeCapacity.values)
     }
 
   implicit lazy val arbitraryCountryCode: Arbitrary[CountryCode] =
@@ -310,7 +310,7 @@ trait ModelGenerators {
     Arbitrary {
       for {
         currency <- nonEmptyString
-        desc     <- nonEmptyString
+        desc     <- Gen.option(nonEmptyString)
       } yield CurrencyCode(currency, desc)
     }
 

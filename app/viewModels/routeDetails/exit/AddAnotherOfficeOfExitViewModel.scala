@@ -16,14 +16,28 @@
 
 package viewModels.routeDetails.exit
 
+import config.FrontendAppConfig
+import controllers.routeDetails.exit.routes
 import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
+import play.api.mvc.Call
+import uk.gov.hmrc.govukfrontend.views.Aliases.Content
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import utils.cyaHelpers.routeDetails.exit.ExitCheckYourAnswersHelper
-import viewModels.ListItem
+import viewModels.{AddAnotherViewModel, ListItem}
 
 import javax.inject.Inject
 
-case class AddAnotherOfficeOfExitViewModel(listItems: Seq[ListItem])
+case class AddAnotherOfficeOfExitViewModel(
+  override val listItems: Seq[ListItem],
+  onSubmitCall: Call
+) extends AddAnotherViewModel {
+  override val prefix: String = "routeDetails.exit.addAnotherOfficeOfExit"
+
+  override def maxCount(implicit config: FrontendAppConfig): Int = config.maxOfficesOfExit
+
+  def hint(implicit messages: Messages): Content = messages(s"$prefix.hint").toText
+}
 
 object AddAnotherOfficeOfExitViewModel {
 
@@ -37,7 +51,10 @@ object AddAnotherOfficeOfExitViewModel {
         case Right(value) => value
       }
 
-      new AddAnotherOfficeOfExitViewModel(listItems)
+      new AddAnotherOfficeOfExitViewModel(
+        listItems,
+        onSubmitCall = routes.AddAnotherOfficeOfExitController.onSubmit(userAnswers.lrn, mode)
+      )
     }
   }
 }

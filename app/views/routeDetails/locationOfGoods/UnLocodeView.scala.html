@@ -48,7 +48,7 @@
             selectType = SelectWithAdditionalHtml(
                 heading = messages("routeDetails.locationOfGoods.unLocode.heading"),
                 caption = Some(messages("routeDetails.locationOfGoods.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.locationOfGoods.unLocode.paragraph")}</p>""")
+                additionalHtml = messages("routeDetails.locationOfGoods.unLocode.paragraph").toParagraph
             ),
             hint = Some(messages("routeDetails.locationOfGoods.unLocode.hint")),
             selectItems = unLocodes.toSelectItems(form.value),

@@ -59,6 +59,9 @@ class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
     id = Some("change-add-country-of-routing")
   )
 
+  def countriesOfRouting: Seq[SummaryListRow] =
+    getAnswersAndBuildSectionRows(CountriesOfRoutingSection)(countryOfRouting)
+
   def countryOfRouting(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[CountryOfRoutingDomain](
     formatAnswer = _.country.toString.toText,
     prefix = "routeDetails.checkYourAnswers.routing.countryOfRouting",

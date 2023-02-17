@@ -37,7 +37,7 @@ class ItemNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
   private val form                 = formProvider("transport.equipment.index.itemNumber")
   private val mode                 = NormalMode
   private lazy val itemNumberRoute = routes.ItemNumberController.onPageLoad(lrn, mode, equipmentIndex, itemNumberIndex).url
-  private val validAnswer          = "12345"
+  private val validAnswer          = "1234"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

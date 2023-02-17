@@ -16,6 +16,7 @@
 
 package utils.cyaHelpers.transport.equipment
 
+import controllers.transport.equipment.index.seals.routes
 import models.journeyDomain.transport.equipment.seal.SealDomain
 import models.{Index, Mode, UserAnswers}
 import pages.sections.transport.equipment.SealsSection
@@ -30,19 +31,17 @@ class SealsAnswersHelper(userAnswers: UserAnswers, mode: Mode, equipmentIndex: I
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(SealsSection(equipmentIndex)) {
-      index =>
-        val removeRoute: Option[Call] = if (userAnswers.get(AddSealYesNoPage(equipmentIndex)).isEmpty && index == Index(0)) {
+      sealIndex =>
+        val removeRoute: Option[Call] = if (userAnswers.get(AddSealYesNoPage(equipmentIndex)).isEmpty && sealIndex.isFirst) {
           None
         } else {
-          Some(
-            controllers.transport.equipment.index.seals.routes.RemoveSealYesNoController.onPageLoad(lrn, mode, equipmentIndex, index)
-          )
+          Some(routes.RemoveSealYesNoController.onPageLoad(lrn, mode, equipmentIndex, sealIndex))
         }
         buildListItem[SealDomain](
           nameWhenComplete = _.identificationNumber,
-          nameWhenInProgress = userAnswers.get(IdentificationNumberPage(equipmentIndex, index)),
+          nameWhenInProgress = userAnswers.get(IdentificationNumberPage(equipmentIndex, sealIndex)),
           removeRoute = removeRoute
-        )(SealDomain.userAnswersReader(equipmentIndex, index))
+        )(SealDomain.userAnswersReader(equipmentIndex, sealIndex))
     }
 
 }

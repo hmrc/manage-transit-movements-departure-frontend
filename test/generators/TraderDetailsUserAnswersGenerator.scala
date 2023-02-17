@@ -20,6 +20,7 @@ import models.UserAnswers
 import models.journeyDomain.traderDetails._
 import models.journeyDomain.traderDetails.consignment.{ConsignmentConsigneeDomain, ConsignmentConsignorDomain, ConsignmentDomain}
 import models.journeyDomain.traderDetails.holderOfTransit.HolderOfTransitDomain
+import models.journeyDomain.traderDetails.representative.RepresentativeDomain
 import org.scalacheck.Gen
 
 trait TraderDetailsUserAnswersGenerator {

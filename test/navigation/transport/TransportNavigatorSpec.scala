@@ -27,7 +27,7 @@ class TransportNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with
   "Transport Navigator" - {
 
     "when answers complete" - {
-      "must redirect to check your answers" ignore {
+      "must redirect to transport check your answers" in {
         forAll(arbitraryTransportAnswers(emptyUserAnswers), arbitrary[Mode]) {
           (answers, mode) =>
             val navigatorProvider = new TransportNavigatorProviderImpl()
@@ -35,7 +35,7 @@ class TransportNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with
 
             navigator
               .nextPage(answers)
-              .mustBe(???)
+              .mustBe(controllers.transport.routes.TransportAnswersController.onPageLoad(answers.lrn))
         }
       }
     }

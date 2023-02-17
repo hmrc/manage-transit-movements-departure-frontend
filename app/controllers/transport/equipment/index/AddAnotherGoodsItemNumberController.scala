@@ -22,10 +22,12 @@ import controllers.transport.equipment.index.itemNumber.{routes => itemNumberRou
 import forms.AddAnotherFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.transport.EquipmentNavigatorProvider
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewModels.transport.equipment.index.AddAnotherGoodsItemNumberViewModel
 import viewModels.transport.equipment.index.AddAnotherGoodsItemNumberViewModel.AddAnotherGoodsItemNumberViewModelProvider
 import views.html.transport.equipment.index.AddAnotherGoodsItemNumberView
 
@@ -44,27 +46,28 @@ class AddAnotherGoodsItemNumberController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  private def form(viewModel: AddAnotherGoodsItemNumberViewModel): Form[Boolean] =
+    formProvider(viewModel.prefix, viewModel.allowMore)
+
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
       val viewModel = viewModelProvider(request.userAnswers, mode, equipmentIndex)
-      val form      = formProvider("transport.equipment.index.addAnotherGoodsItemNumber", viewModel.allowMoreGoodsItemNumbers)
-      viewModel.goodsItemNumbersCount match {
+      viewModel.count match {
         case 0 => Redirect(routes.AddGoodsItemNumberYesNoController.onPageLoad(lrn, mode, equipmentIndex))
-        case _ => Ok(view(form, lrn, mode, equipmentIndex, viewModel, viewModel.allowMoreGoodsItemNumbers))
+        case _ => Ok(view(form(viewModel), lrn, viewModel))
       }
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode, equipmentIndex: Index): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
       val viewModel = viewModelProvider(request.userAnswers, mode, equipmentIndex)
-      val form      = formProvider("transport.equipment.index.addAnotherGoodsItemNumber", viewModel.allowMoreGoodsItemNumbers)
-      form
+      form(viewModel)
         .bindFromRequest()
         .fold(
-          formWithErrors => BadRequest(view(formWithErrors, lrn, mode, equipmentIndex, viewModel, viewModel.allowMoreGoodsItemNumbers)),
+          formWithErrors => BadRequest(view(formWithErrors, lrn, viewModel)),
           {
             case true =>
-              Redirect(itemNumberRoutes.ItemNumberController.onPageLoad(lrn, mode, equipmentIndex, Index(viewModel.goodsItemNumbersCount)))
+              Redirect(itemNumberRoutes.ItemNumberController.onPageLoad(lrn, mode, equipmentIndex, viewModel.nextIndex))
             case false =>
               Redirect(navigatorProvider(mode, equipmentIndex).nextPage(request.userAnswers))
           }

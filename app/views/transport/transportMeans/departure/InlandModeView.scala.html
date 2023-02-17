@@ -46,7 +46,7 @@
             radioType = RadioWithAdditionalHtml(
                 heading = messages("transport.transportMeans.departure.inlandMode.heading"),
                 caption = Some(messages("transport.inlandMode.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("transport.transportMeans.departure.inlandMode.paragraph")}</p>""")
+                additionalHtml = messages("transport.transportMeans.departure.inlandMode.paragraph").toParagraph
             ),
             radioItems = fieldId => radios(fieldId, form.value)
         )

@@ -34,6 +34,40 @@ class LocationOfGoodsCheckYourAnswersHelperSpec extends SpecBase with ScalaCheck
 
   "LocationOfGoodsCheckYourAnswersHelper" - {
 
+    "addLocationOfGoods" - {
+      "must return None" - {
+        "when AddLocationOfGoodsPage is undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new LocationOfGoodsCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.addLocationOfGoods
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        "when AddLocationOfGoodsPage is defined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(AddLocationOfGoodsPage, true)
+              val helper  = new LocationOfGoodsCheckYourAnswersHelper(answers, mode)
+              val result  = helper.addLocationOfGoods.get
+
+              result.key.value mustBe "Do you want to add a location of goods?"
+              result.value.value mustBe "Yes"
+              val actions = result.actions.get.items
+              actions.size mustBe 1
+              val action = actions.head
+              action.content.value mustBe "Change"
+              action.href mustBe routes.AddLocationOfGoodsController.onPageLoad(answers.lrn, mode).url
+              action.visuallyHiddenText.get mustBe "if you want to add a location of goods"
+              action.id mustBe "change-add-location-of-goods"
+          }
+        }
+      }
+    }
+
     "locationType" - {
       "must return None" - {
         "when locationTypePage undefined" in {

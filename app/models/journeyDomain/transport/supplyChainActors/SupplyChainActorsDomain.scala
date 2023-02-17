@@ -20,7 +20,7 @@ import cats.implicits._
 import models.domain.{JsArrayGettableAsReaderOps, UserAnswersReader}
 import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.{Index, Mode, RichJsArray, UserAnswers}
-import pages.sections.transport.supplyChainActors.SupplyChainActorListSection
+import pages.sections.transport.supplyChainActors.SupplyChainActorsSection
 import play.api.mvc.Call
 
 case class SupplyChainActorsDomain(
@@ -36,7 +36,7 @@ object SupplyChainActorsDomain {
   implicit val userAnswersReader: UserAnswersReader[SupplyChainActorsDomain] = {
 
     val actorsReader: UserAnswersReader[Seq[SupplyChainActorDomain]] =
-      SupplyChainActorListSection.arrayReader.flatMap {
+      SupplyChainActorsSection.arrayReader.flatMap {
         case x if x.isEmpty =>
           UserAnswersReader[SupplyChainActorDomain](
             SupplyChainActorDomain.userAnswersReader(Index(0))

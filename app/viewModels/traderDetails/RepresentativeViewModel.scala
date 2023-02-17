@@ -33,7 +33,7 @@ object RepresentativeViewModel {
       val helper = new RepresentativeCheckYourAnswersHelper(userAnswers, mode)
 
       val section = Section(
-        sectionTitle = messages("traderDetails.representative.checkYourAnswers.representative"),
+        sectionTitle = messages("traderDetails.checkYourAnswers.representative"),
         rows = Seq(
           helper.actingAsRepresentative,
           helper.eori,

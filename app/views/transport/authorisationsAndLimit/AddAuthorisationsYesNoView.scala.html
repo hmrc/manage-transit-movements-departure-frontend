@@ -44,7 +44,7 @@
             yesNoType = YesNoWithAdditionalHtml(
                 heading = messages("transport.authorisations.addAuthorisationsYesNo.heading"),
                 caption = Some(messages("transport.authorisations.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("transport.authorisations.addAuthorisationsYesNo.paragraph")}</p>""")
+                additionalHtml = messages("transport.authorisations.addAuthorisationsYesNo.paragraph").toParagraph
             )
         )
 

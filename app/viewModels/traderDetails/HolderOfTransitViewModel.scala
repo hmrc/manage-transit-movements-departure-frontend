@@ -33,7 +33,7 @@ object HolderOfTransitViewModel {
       val helper = new HolderOfTransitCheckYourAnswersHelper(userAnswers, mode)
 
       val holderOfTransitSection = Section(
-        sectionTitle = messages("traderDetails.holderOfTransit.checkYourAnswers.transitHolder"),
+        sectionTitle = messages("traderDetails.checkYourAnswers.transitHolder"),
         rows = Seq(
           helper.eoriYesNo,
           helper.eori,
@@ -46,7 +46,7 @@ object HolderOfTransitViewModel {
       )
 
       val additionalContactSection = Section(
-        sectionTitle = messages("traderDetails.holderOfTransit.checkYourAnswers.additionalContact"),
+        sectionTitle = messages("traderDetails.checkYourAnswers.additionalContact"),
         rows = Seq(
           helper.addContact,
           helper.contactName,

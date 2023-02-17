@@ -33,6 +33,9 @@ class ExitCheckYourAnswersHelper(
 )(implicit messages: Messages)
     extends AnswersHelper(userAnswers, mode) {
 
+  def officesOfExit: Seq[SummaryListRow] =
+    getAnswersAndBuildSectionRows(OfficesOfExitSection)(officeOfExit)
+
   def officeOfExit(index: Index): Option[SummaryListRow] = getAnswerAndBuildSectionRow[OfficeOfExitDomain](
     formatAnswer = _.label.toText,
     prefix = "routeDetails.checkYourAnswers.exit.officeOfExit",

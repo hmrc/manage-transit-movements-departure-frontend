@@ -20,12 +20,18 @@ import forms.behaviours.StringFieldBehaviours
 import org.scalacheck.Gen
 import play.api.data.FormError
 
+import scala.collection.immutable.ArraySeq
+
 class ItemNumberFormProviderSpec extends StringFieldBehaviours {
 
   private val prefix = Gen.alphaNumStr.sample.value
   val requiredKey    = s"$prefix.error.required"
   val lengthKey      = s"$prefix.error.length"
-  val maxLength      = 5
+  val rangeKey       = s"$prefix.error.range"
+  val maxLength      = 4
+  val maxLengthValue = 9999
+  val maxValue       = 1999
+  val minValue       = 1
 
   val form = new ItemNumberFormProvider()(prefix)
 
@@ -51,6 +57,21 @@ class ItemNumberFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
+    )
+
+    behave like stringFieldWithMaximumIntValue(
+      form,
+      fieldName,
+      maxValue,
+      maxLengthValue,
+      FormError(fieldName, rangeKey, ArraySeq(maxValue))
+    )
+
+    behave like stringFieldWithMinimumIntValue(
+      form,
+      fieldName,
+      minValue,
+      FormError(fieldName, rangeKey, ArraySeq(minValue - 1))
     )
 
     "when value breaks multiple validation rules" - {

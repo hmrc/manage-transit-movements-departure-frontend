@@ -45,7 +45,7 @@
             inputTextType = TextInputWithHiddenLabel(
                 heading = messages("guaranteeDetails.guarantee.accessCode.heading"),
                 caption = Some(messages("guaranteeDetails.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("guaranteeDetails.guarantee.accessCode.paragraph")}</p>""")
+                additionalHtml = messages("guaranteeDetails.guarantee.accessCode.paragraph").toParagraph
             ),
             hint = Some(messages("guaranteeDetails.guarantee.accessCode.hint")),
             inputClass = InputSize.Width5

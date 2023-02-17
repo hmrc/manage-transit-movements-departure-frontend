@@ -17,15 +17,17 @@
 package models.journeyDomain.transport
 
 import models.domain.{GettableAsFilterForNextReaderOps, UserAnswersReader}
-import models.journeyDomain.JourneyDomainModel
 import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationsAndLimitDomain
 import models.journeyDomain.transport.carrierDetails.CarrierDetailsDomain
 import models.journeyDomain.transport.equipment.EquipmentsAndChargesDomain
 import models.journeyDomain.transport.supplyChainActors.SupplyChainActorsDomain
 import models.journeyDomain.transport.transportMeans.TransportMeansDomain
+import models.journeyDomain.{JourneyDomainModel, Stage}
+import models.{Mode, UserAnswers}
 import pages.traderDetails.consignment.ApprovedOperatorPage
 import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import pages.transport.supplyChainActors.SupplyChainActorYesNoPage
+import play.api.mvc.Call
 
 case class TransportDomain(
   preRequisites: PreRequisitesDomain,
@@ -34,7 +36,11 @@ case class TransportDomain(
   authorisationsAndLimit: Option[AuthorisationsAndLimitDomain],
   carrierDetails: CarrierDetailsDomain,
   equipmentsAndCharges: EquipmentsAndChargesDomain
-) extends JourneyDomainModel
+) extends JourneyDomainModel {
+
+  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
+    Some(controllers.transport.routes.TransportAnswersController.onPageLoad(userAnswers.lrn))
+}
 
 object TransportDomain {
 

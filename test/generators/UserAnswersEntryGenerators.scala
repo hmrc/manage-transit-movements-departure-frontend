@@ -19,6 +19,7 @@ package generators
 import models._
 import models.reference._
 import models.transport.authorisations.AuthorisationType
+import models.transport.equipment.PaymentMethod
 import models.transport.supplyChainActors.SupplyChainActorType
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.departure.{Identification, InlandMode}
@@ -29,6 +30,7 @@ import queries.Gettable
 
 import java.time.LocalDate
 
+// scalastyle:off number.of.methods
 trait UserAnswersEntryGenerators {
   self: Generators =>
 
@@ -81,6 +83,7 @@ trait UserAnswersEntryGenerators {
   private def generateRepresentativeAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.traderDetails.representative._
     {
+      case AddDetailsPage      => arbitrary[Boolean].map(JsBoolean)
       case EoriPage            => Gen.alphaNumStr.map(JsString)
       case NamePage            => Gen.alphaNumStr.map(JsString)
       case TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
@@ -260,7 +263,7 @@ trait UserAnswersEntryGenerators {
       generateAuthorisationAnswers orElse
       generateLimitAnswers orElse
       generateCarrierDetailsAnswers orElse
-      generateEquipmentAnswers
+      generateEquipmentsAndChargesAnswers
 
   private def generatePreRequisitesAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.preRequisites._
@@ -353,12 +356,22 @@ trait UserAnswersEntryGenerators {
     }
   }
 
-  private def generateEquipmentAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
+  private def generateEquipmentsAndChargesAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.equipment._
+    val pf: PartialFunction[Gettable[_], Gen[JsValue]] = {
+      case AddTransportEquipmentYesNoPage => arbitrary[Boolean].map(JsBoolean)
+      case AddPaymentMethodYesNoPage      => arbitrary[Boolean].map(JsBoolean)
+      case PaymentMethodPage              => arbitrary[PaymentMethod].map(Json.toJson(_))
+    }
+
+    pf orElse
+      generateEquipmentAnswers
+  }
+
+  private def generateEquipmentAnswers: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.transport.equipment.index._
 
     val pf: PartialFunction[Gettable[_], Gen[JsValue]] = {
-      case AddTransportEquipmentYesNoPage               => arbitrary[Boolean].map(JsBoolean)
       case AddContainerIdentificationNumberYesNoPage(_) => arbitrary[Boolean].map(JsBoolean)
       case ContainerIdentificationNumberPage(_)         => Gen.alphaNumStr.map(JsString)
       case AddSealYesNoPage(_)                          => arbitrary[Boolean].map(JsBoolean)
@@ -384,3 +397,4 @@ trait UserAnswersEntryGenerators {
     }
   }
 }
+// scalastyle:on number.of.methods

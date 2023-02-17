@@ -17,10 +17,10 @@
 package views.routeDetails.transit
 
 import forms.AddAnotherFormProvider
-import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
+import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel
 import views.behaviours.ListWithActionsViewBehaviours
 import views.html.routeDetails.transit.AddAnotherOfficeOfTransitView
 
@@ -28,21 +28,22 @@ class AddAnotherOfficeOfTransitViewSpec extends ListWithActionsViewBehaviours {
 
   override def maxNumber: Int = frontendAppConfig.maxOfficesOfTransit
 
-  private def formProvider = new AddAnotherFormProvider()
+  private def formProvider(viewModel: AddAnotherOfficeOfTransitViewModel) =
+    new AddAnotherFormProvider()(viewModel.prefix, viewModel.allowMore)
 
-  override def form: Form[Boolean] = formProvider(prefix, allowMore = true)
-
-  private val mode = arbitrary[Mode].sample.value
+  private val viewModel            = arbitrary[AddAnotherOfficeOfTransitViewModel].sample.value
+  private val notMaxedOutViewModel = viewModel.copy(listItems = listItems)
+  private val maxedOutViewModel    = viewModel.copy(listItems = maxedOutListItems)
 
   override def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherOfficeOfTransitView]
-      .apply(form, lrn, mode, listItems, allowMoreOfficesOfTransit = true)(fakeRequest, messages)
+      .apply(form, lrn, notMaxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override def applyMaxedOutView: HtmlFormat.Appendable =
     injector
       .instanceOf[AddAnotherOfficeOfTransitView]
-      .apply(formProvider(prefix, allowMore = false), lrn, mode, maxedOutListItems, allowMoreOfficesOfTransit = false)(fakeRequest, messages)
+      .apply(formProvider(maxedOutViewModel), lrn, maxedOutViewModel)(fakeRequest, messages, frontendAppConfig)
 
   override val prefix: String = "routeDetails.transit.addAnotherOfficeOfTransit"
 
@@ -50,9 +51,9 @@ class AddAnotherOfficeOfTransitViewSpec extends ListWithActionsViewBehaviours {
 
   behave like pageWithSectionCaption("Route details - Office of transit")
 
-  behave like pageWithMoreItemsAllowed(listItems.length)()
+  behave like pageWithMoreItemsAllowed(notMaxedOutViewModel.count)()
 
-  behave like pageWithItemsMaxedOut(maxedOutListItems.length)
+  behave like pageWithItemsMaxedOut(maxedOutViewModel.count)
 
   behave like pageWithSubmitButton("Continue")
 }

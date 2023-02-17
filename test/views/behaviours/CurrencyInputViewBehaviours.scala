@@ -20,6 +20,8 @@ import viewModels.InputSize
 
 trait CurrencyInputViewBehaviours extends InputTextViewBehaviours[BigDecimal] {
 
+  val currencySymbol: String = nonEmptyString.sample.value
+
   def pageWithCurrencyInput(): Unit = {
 
     behave like pageWithInputText(Some(InputSize.Width10))
@@ -34,7 +36,7 @@ trait CurrencyInputViewBehaviours extends InputTextViewBehaviours[BigDecimal] {
       }
 
       "must have correct prefix" in {
-        assert(getElementByClass(doc, "govuk-input__prefix").text() == "£")
+        assert(getElementByClass(doc, "govuk-input__prefix").text() == currencySymbol)
       }
     }
   }

@@ -27,7 +27,7 @@
     button: Button
 )
 
-@(form: Form[_], lrn: LocalReferenceNumber, mode: Mode, index: Index)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], lrn: LocalReferenceNumber, mode: Mode, index: Index, currency: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("guaranteeDetails.guarantee.liabilityAmount.title"),
@@ -47,7 +47,7 @@
             ),
             hint = Some(messages("guaranteeDetails.guarantee.liabilityAmount.hint")),
             inputClass = InputSize.Width10,
-            prefix = Some("£"),
+            prefix = Some(currency),
             pattern = Some("[0-9]*"),
             inputMode = Some("numeric")
         )

@@ -48,7 +48,7 @@
             selectType = SelectWithAdditionalHtml(
                 heading = messages("transport.transportMeans.active.customsOfficeActiveBorder.heading"),
                 caption = Some(messages("transport.activeBorderMeansOfTransport.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("transport.transportMeans.active.customsOfficeActiveBorder.paragraph")}</p>""")
+                additionalHtml = messages("transport.transportMeans.active.customsOfficeActiveBorder.paragraph").toParagraph
             ),
             hint = Some(messages("transport.transportMeans.active.customsOfficeActiveBorder.hint")),
             selectItems = customsOfficeList.customsOffices.toSelectItems(form.value),

@@ -27,47 +27,111 @@ class CurrencyCodeSpec extends SpecBase with ScalaCheckPropertyChecks {
 
   "CurrencyCode" - {
 
-    "must serialise" in {
-      forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
-        (currency, description) =>
-          val currencyCode = CurrencyCode(currency, description)
-          Json.toJson(currencyCode) mustBe Json.parse(s"""
-                |{
-                |  "currency": "$currency",
-                |  "description": "$description"
-                |}
-                |""".stripMargin)
+    "must serialise" - {
+      "when description defined" in {
+        forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
+          (currency, description) =>
+            val currencyCode = CurrencyCode(currency, Some(description))
+            Json.toJson(currencyCode) mustBe Json.parse(s"""
+              |{
+              |  "currency": "$currency",
+              |  "description": "$description"
+              |}
+              |""".stripMargin)
+        }
+      }
+
+      "when description undefined" in {
+        forAll(Gen.alphaNumStr) {
+          currency =>
+            val currencyCode = CurrencyCode(currency, None)
+            Json.toJson(currencyCode) mustBe Json.parse(s"""
+              |{
+              |  "currency": "$currency"
+              |}
+              |""".stripMargin)
+        }
+      }
+
+    }
+
+    "must deserialise" - {
+      "when description defined" in {
+        forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
+          (currency, description) =>
+            val json = Json.parse(s"""
+              |{
+              |  "currency": "$currency",
+              |  "description": "$description"
+              |}
+              |""".stripMargin)
+            json.as[CurrencyCode] mustBe CurrencyCode(currency, Some(description))
+        }
+      }
+
+      "when description undefined" in {
+        forAll(Gen.alphaNumStr) {
+          currency =>
+            val json = Json.parse(s"""
+              |{
+              |  "currency": "$currency"
+              |}
+              |""".stripMargin)
+            json.as[CurrencyCode] mustBe CurrencyCode(currency, None)
+        }
       }
     }
 
-    "must deserialise" in {
-      forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
-        (currency, description) =>
-          val currencyCode = CurrencyCode(currency, description)
-          Json
-            .parse(s"""
-                        |{
-                        |  "currency": "$currency",
-                        |  "description": "$description"
-                        |}
-                        |""".stripMargin)
-            .as[CurrencyCode] mustBe currencyCode
+    "must convert to select item" - {
+      "when description defined" in {
+        forAll(Gen.alphaNumStr, Gen.alphaNumStr, arbitrary[Boolean]) {
+          (currency, description, selected) =>
+            val currencyCode = CurrencyCode(currency, Some(description))
+            currencyCode.toSelectItem(selected) mustBe SelectItem(Some(currency), s"$currency - $description", selected)
+        }
+      }
+
+      "when description undefined" in {
+        forAll(Gen.alphaNumStr, arbitrary[Boolean]) {
+          (currency, selected) =>
+            val currencyCode = CurrencyCode(currency, None)
+            currencyCode.toSelectItem(selected) mustBe SelectItem(Some(currency), currency, selected)
+        }
       }
     }
 
-    "must convert to select item" in {
-      forAll(Gen.alphaNumStr, Gen.alphaNumStr, arbitrary[Boolean]) {
-        (currency, description, selected) =>
-          val currencyCode = CurrencyCode(currency, description)
-          currencyCode.toSelectItem(selected) mustBe SelectItem(Some(currency), s"$currency", selected)
+    "must format as string" - {
+      "when description defined" in {
+        forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
+          (currency, description) =>
+            val currencyCode = CurrencyCode(currency, Some(description))
+            currencyCode.toString mustBe s"$currency - $description"
+        }
+      }
+
+      "when description undefined" in {
+        forAll(Gen.alphaNumStr) {
+          currency =>
+            val currencyCode = CurrencyCode(currency, None)
+            currencyCode.toString mustBe currency
+        }
       }
     }
 
-    "must format as string" in {
-      forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
-        (currency, description) =>
-          val currencyCode = CurrencyCode(currency, description)
-          currencyCode.toString mustBe s"$currency"
+    "must convert currency code to a symbol" - {
+      "when EUR must return €" in {
+        val currencyCode = CurrencyCode("EUR", None)
+        currencyCode.symbol mustBe "€"
+      }
+
+      "when GBP must return £" in {
+        val currencyCode = CurrencyCode("GBP", None)
+        currencyCode.symbol mustBe "£"
+      }
+
+      "when unknown must return code" in {
+        val currencyCode = CurrencyCode("blah", None)
+        currencyCode.symbol mustBe "blah"
       }
     }
   }

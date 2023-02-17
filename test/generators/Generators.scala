@@ -100,6 +100,8 @@ trait Generators extends UserAnswersGenerator with ModelGenerators with ViewMode
 
   def positiveInts: Gen[Int] = Gen.choose(0, Int.MaxValue)
 
+  def positiveIntsMinMax(min: Int, max: Int): Gen[Int] = Gen.choose(min, max)
+
   def intsOutsideRange(min: Int, max: Int): Gen[Int] =
     arbitrary[Int] retryUntil (
       x => x < min || x > max

@@ -50,12 +50,12 @@ class ItemNumberNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wit
       val navigator         = navigatorProvider.apply(mode, equipmentIndex, itemNumberIndex)
 
       "when answers complete" - {
-        "must redirect to transport answers" ignore {
-          forAll(arbitraryGoodsItemNumberAnswers(emptyUserAnswers, equipmentIndex, itemNumberIndex)) {
+        "must redirect to transport equipment answers" in {
+          forAll(arbitraryEquipmentAnswers(emptyUserAnswers, equipmentIndex)) {
             answers =>
               navigator
                 .nextPage(answers)
-                .mustBe(???) // TODO: Transport CYA page
+                .mustBe(controllers.transport.equipment.index.routes.EquipmentAnswersController.onPageLoad(answers.lrn, mode, equipmentIndex))
           }
         }
       }

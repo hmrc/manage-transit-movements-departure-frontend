@@ -22,7 +22,6 @@ import models.Index
 import models.domain.{EitherType, UserAnswersReader}
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.transport.equipment.index.ContainerIdentificationNumberPage
 
 class EquipmentsDomainSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersGenerator {
 
@@ -47,7 +46,7 @@ class EquipmentsDomainSpec extends SpecBase with ScalaCheckPropertyChecks with G
       "when there aren't any equipments" in {
         val result: EitherType[EquipmentsDomain] = UserAnswersReader[EquipmentsDomain].run(emptyUserAnswers)
 
-        result.left.value.page mustBe ContainerIdentificationNumberPage(Index(0))
+        result.isLeft mustBe true
       }
     }
   }

@@ -25,7 +25,6 @@ import models.journeyDomain.{JourneyDomainModel, Stage}
 import models.reference.{CustomsOffice, Nationality}
 import models.transport.transportMeans.BorderModeOfTransport._
 import models.transport.transportMeans.active.Identification
-import models.transport.transportMeans.active.Identification.{RegNumberRoadVehicle, TrainNumber}
 import models.{Index, Mode, UserAnswers}
 import pages.preTaskList.SecurityDetailsTypePage
 import pages.sections.routeDetails.transit.OfficesOfTransitSection
@@ -60,18 +59,6 @@ object TransportMeansActiveDomain {
     s"${identification.asString} - $identificationNumber"
 
   def userAnswersReader(index: Index): UserAnswersReader[TransportMeansActiveDomain] = {
-    val identificationReads: UserAnswersReader[Identification] = {
-      if (index.isFirst) {
-        BorderModeOfTransportPage.reader.flatMap {
-          case Rail => UserAnswersReader.apply(TrainNumber)
-          case Road => UserAnswersReader.apply(RegNumberRoadVehicle)
-          case _    => IdentificationPage(index).reader
-        }
-      } else {
-        IdentificationPage(index).reader
-      }
-    }
-
     val conveyanceReads: UserAnswersReader[Option[String]] =
       for {
         securityDetails <- SecurityDetailsTypePage.reader
@@ -85,7 +72,7 @@ object TransportMeansActiveDomain {
       } yield reader
 
     (
-      identificationReads,
+      IdentificationPage(index).inferredReader,
       IdentificationNumberPage(index).reader,
       AddNationalityYesNoPage(index).filterOptionalDependent(identity)(NationalityPage(index).reader),
       CustomsOfficeActiveBorderPage(index).reader,

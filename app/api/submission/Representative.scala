@@ -26,8 +26,10 @@ object Representative {
       r =>
         RepresentativeType05(
           r.eori.value,
-          r.capacity.code,
-          Some(ContactPersonType05(r.name, r.phone, None))
+          "2",
+          r.representativeDetails.map(
+            x => ContactPersonType05(x.name, x.telephoneNumber, None)
+          )
         )
     }
 }

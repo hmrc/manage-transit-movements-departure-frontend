@@ -17,6 +17,7 @@
 package controllers.transport.equipment.index.itemNumber
 
 import controllers.actions._
+import controllers.transport.equipment.index.routes
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.YesNoFormProvider
 import models.journeyDomain.transport.TransportDomain
@@ -26,7 +27,7 @@ import pages.sections.transport.equipment.ItemNumberSection
 import pages.transport.equipment.index.itemNumber.ItemNumberPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.transport.equipment.index.itemNumber.RemoveItemNumberYesNoView
@@ -63,7 +64,7 @@ class RemoveItemNumberYesNoController @Inject() (
     .andThen(getMandatoryPage(ItemNumberPage(equipmentIndex, itemNumberIndex)))
     .async {
       implicit request =>
-        lazy val redirect = Call("GET", "#") // TODO - change to add-another page
+        lazy val redirect = routes.AddAnotherGoodsItemNumberController.onPageLoad(lrn, mode, equipmentIndex)
         form
           .bindFromRequest()
           .fold(

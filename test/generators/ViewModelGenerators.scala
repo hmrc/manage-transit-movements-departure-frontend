@@ -25,11 +25,15 @@ import play.api.mvc.Call
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+import viewModels.guaranteeDetails.AddAnotherGuaranteeViewModel
+import viewModels.routeDetails.exit.AddAnotherOfficeOfExitViewModel
+import viewModels.routeDetails.routing.AddAnotherCountryOfRoutingViewModel
+import viewModels.routeDetails.transit.AddAnotherOfficeOfTransitViewModel
 import viewModels.sections.Section
 import viewModels.taskList.{TaskListTask, TaskStatus}
 import viewModels.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationViewModel
-import viewModels.transport.equipment.AddAnotherSealViewModel
 import viewModels.transport.equipment.index.AddAnotherGoodsItemNumberViewModel
+import viewModels.transport.equipment.{AddAnotherEquipmentViewModel, AddAnotherSealViewModel}
 import viewModels.transport.supplyChainActors.AddAnotherSupplyChainActorViewModel
 import viewModels.transport.transportMeans.active.AddAnotherBorderTransportViewModel
 import viewModels.{Link, ListItem}
@@ -258,5 +262,40 @@ trait ViewModelGenerators {
       listItems    <- arbitrary[Seq[ListItem]]
       onSubmitCall <- arbitrary[Call]
     } yield AddAnotherGoodsItemNumberViewModel(listItems, onSubmitCall)
+  }
+
+  implicit lazy val arbitraryAddAnotherEquipmentViewModel: Arbitrary[AddAnotherEquipmentViewModel] = Arbitrary {
+    for {
+      listItems    <- arbitrary[Seq[ListItem]]
+      onSubmitCall <- arbitrary[Call]
+    } yield AddAnotherEquipmentViewModel(listItems, onSubmitCall)
+  }
+
+  implicit lazy val arbitraryAddAnotherOfficeOfTransitViewModel: Arbitrary[AddAnotherOfficeOfTransitViewModel] = Arbitrary {
+    for {
+      listItems    <- arbitrary[Seq[ListItem]]
+      onSubmitCall <- arbitrary[Call]
+    } yield AddAnotherOfficeOfTransitViewModel(listItems, onSubmitCall)
+  }
+
+  implicit lazy val arbitraryAddAnotherOfficeOfExitViewModel: Arbitrary[AddAnotherOfficeOfExitViewModel] = Arbitrary {
+    for {
+      listItems    <- arbitrary[Seq[ListItem]]
+      onSubmitCall <- arbitrary[Call]
+    } yield AddAnotherOfficeOfExitViewModel(listItems, onSubmitCall)
+  }
+
+  implicit lazy val arbitraryAddAnotherCountryOfROutingViewModel: Arbitrary[AddAnotherCountryOfRoutingViewModel] = Arbitrary {
+    for {
+      listItems    <- arbitrary[Seq[ListItem]]
+      onSubmitCall <- arbitrary[Call]
+    } yield AddAnotherCountryOfRoutingViewModel(listItems, onSubmitCall)
+  }
+
+  implicit lazy val arbitraryAddAnotherGuaranteeViewModel: Arbitrary[AddAnotherGuaranteeViewModel] = Arbitrary {
+    for {
+      listItems    <- arbitrary[Seq[ListItem]]
+      onSubmitCall <- arbitrary[Call]
+    } yield AddAnotherGuaranteeViewModel(listItems, onSubmitCall)
   }
 }

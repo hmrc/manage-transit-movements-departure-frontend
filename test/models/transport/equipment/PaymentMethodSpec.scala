@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.traderDetails.representative
+package models.transport.equipment
 
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -24,37 +24,37 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.OptionValues
 import play.api.libs.json.{JsError, JsString, Json}
 
-class RepresentativeCapacitySpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
+class PaymentMethodSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
 
-  "RepresentativeCapacity" - {
+  "PaymentMethod" - {
 
     "must deserialise valid values" in {
 
-      val gen = Gen.oneOf(RepresentativeCapacity.values)
+      val gen = Gen.oneOf(PaymentMethod.values)
 
       forAll(gen) {
-        representativeCapacity =>
-          JsString(representativeCapacity.toString).validate[RepresentativeCapacity].asOpt.value mustEqual representativeCapacity
+        paymentMethod =>
+          JsString(paymentMethod.toString).validate[PaymentMethod].asOpt.value mustEqual paymentMethod
       }
     }
 
     "must fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!RepresentativeCapacity.values.map(_.toString).contains(_))
+      val gen = arbitrary[String] suchThat (!PaymentMethod.values.map(_.toString).contains(_))
 
       forAll(gen) {
         invalidValue =>
-          JsString(invalidValue).validate[RepresentativeCapacity] mustEqual JsError("error.invalid")
+          JsString(invalidValue).validate[PaymentMethod] mustEqual JsError("error.invalid")
       }
     }
 
     "must serialise" in {
 
-      val gen = Gen.oneOf(RepresentativeCapacity.values)
+      val gen = Gen.oneOf(PaymentMethod.values)
 
       forAll(gen) {
-        representativeCapacity =>
-          Json.toJson(representativeCapacity) mustEqual JsString(representativeCapacity.toString)
+        paymentMethod =>
+          Json.toJson(paymentMethod) mustEqual JsString(paymentMethod.toString)
       }
     }
   }

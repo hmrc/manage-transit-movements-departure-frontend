@@ -42,7 +42,7 @@
             field = form("value"),
             inputTextType = TextInputWithHiddenLabel(
                 heading = messages("localReferenceNumber.heading"),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("localReferenceNumber.paragraph")}</p>""")
+                additionalHtml = messages("localReferenceNumber.paragraph").toParagraph
             ),
             hint = Some(messages("localReferenceNumber.hint")),
             inputClass = InputSize.Width20

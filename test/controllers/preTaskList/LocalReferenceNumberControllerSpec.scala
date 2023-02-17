@@ -19,13 +19,12 @@ package controllers.preTaskList
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.preTaskList.LocalReferenceNumberFormProvider
 import navigation.PreTaskListNavigatorProvider
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.Mockito.{times, verify, when}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.UserAnswersService
 import views.html.preTaskList.LocalReferenceNumberView
 
 import scala.concurrent.Future
@@ -35,26 +34,16 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
   private val formProvider = new LocalReferenceNumberFormProvider()
   private val form         = formProvider()
 
-  private lazy val mockUserAnswersService = mock[UserAnswersService]
-
   private lazy val localReferenceNumberRoute: String = routes.LocalReferenceNumberController.onPageLoad().url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
-      .overrides(bind[UserAnswersService].toInstance(mockUserAnswersService))
-
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    reset(mockUserAnswersService)
-  }
 
   "LocalReferenceNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      setNoExistingUserAnswers()
-
       val request = FakeRequest(GET, localReferenceNumberRoute)
 
       val result = route(app, request).value
@@ -67,24 +56,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
         view(form)(request, messages).toString
     }
 
-    "must redirect to the next page when valid data is submitted" in {
-      setNoExistingUserAnswers()
-
-      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
-      when(mockUserAnswersService.getOrCreateUserAnswers(any(), any())(any())) thenReturn Future.successful(emptyUserAnswers)
-
-      val request = FakeRequest(POST, localReferenceNumberRoute)
-        .withFormUrlEncodedBody(("value", lrn.toString))
-
-      val result = route(app, request).value
-
-      status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual onwardRoute.url
-    }
-
     "must return a Bad Request and errors when invalid data is submitted" in {
-      setExistingUserAnswers(emptyUserAnswers)
-
       val invalidAnswer = ""
 
       val request = FakeRequest(POST, localReferenceNumberRoute)
@@ -100,6 +72,58 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
       contentAsString(result) mustEqual
         view(filledForm)(request, messages).toString
+    }
+
+    "must create new user answers" - {
+      "when there are no existing user answers" in {
+        when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(None) thenReturn Future.successful(Some(emptyUserAnswers))
+        when(mockSessionRepository.put(any())(any())) thenReturn Future.successful(true)
+
+        val request = FakeRequest(POST, localReferenceNumberRoute)
+          .withFormUrlEncodedBody(("value", lrn.toString))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+
+        verify(mockSessionRepository, times(2)).get(eqTo(lrn))(any())
+        verify(mockSessionRepository, times(1)).put(eqTo(lrn))(any())
+      }
+    }
+
+    "must not create user answers" - {
+      "when there are existing user answers" in {
+        when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(Some(emptyUserAnswers))
+
+        val request = FakeRequest(POST, localReferenceNumberRoute)
+          .withFormUrlEncodedBody(("value", lrn.toString))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+
+        verify(mockSessionRepository, times(1)).get(eqTo(lrn))(any())
+      }
+    }
+
+    "must redirect to technical difficulties" - {
+      "when both GETs return a None" in {
+        when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(None) thenReturn Future.successful(None)
+        when(mockSessionRepository.put(any())(any())) thenReturn Future.successful(true)
+
+        val request = FakeRequest(POST, localReferenceNumberRoute)
+          .withFormUrlEncodedBody(("value", lrn.toString))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
+
+        verify(mockSessionRepository, times(2)).get(eqTo(lrn))(any())
+        verify(mockSessionRepository, times(1)).put(eqTo(lrn))(any())
+      }
     }
   }
 }

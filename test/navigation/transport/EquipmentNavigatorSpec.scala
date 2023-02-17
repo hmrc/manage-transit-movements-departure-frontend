@@ -37,7 +37,7 @@ class EquipmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with
             answers =>
               navigator
                 .nextPage(answers)
-                .mustBe(controllers.transport.equipment.index.routes.EquipmentAnswersController.onPageLoad(lrn, mode, equipmentIndex))
+                .mustBe(controllers.transport.equipment.index.routes.EquipmentAnswersController.onPageLoad(answers.lrn, mode, equipmentIndex))
           }
         }
       }
@@ -50,12 +50,12 @@ class EquipmentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with
       val navigator         = navigatorProvider.apply(mode, equipmentIndex)
 
       "when answers complete" - {
-        "must redirect to transport answers" ignore {
-          forAll(arbitraryEquipmentAnswers(emptyUserAnswers, equipmentIndex)) {
+        "must redirect to transport answers" in {
+          forAll(arbitraryTransportAnswers(emptyUserAnswers)) {
             answers =>
               navigator
                 .nextPage(answers)
-                .mustBe(???) //TODO: Add Transport CYA when page is added
+                .mustBe(controllers.transport.routes.TransportAnswersController.onPageLoad(answers.lrn))
           }
         }
       }

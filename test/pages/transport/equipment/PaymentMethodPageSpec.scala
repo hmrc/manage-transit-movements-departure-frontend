@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package pages.sections.transport.supplyChainActors
+package pages.transport.equipment
 
-import pages.sections.Section
-import pages.sections.transport.TransportSection
-import play.api.libs.json.{JsArray, JsPath}
+import models.transport.equipment.PaymentMethod
+import pages.behaviours.PageBehaviours
 
-case object SupplyChainActorListSection extends Section[JsArray] {
+class PaymentMethodPageSpec extends PageBehaviours {
 
-  override def path: JsPath = TransportSection.path \ toString
+  "PaymentMethodPage" - {
 
-  override def toString: String = "supplyChainActorList"
+    beRetrievable[PaymentMethod](PaymentMethodPage)
+
+    beSettable[PaymentMethod](PaymentMethodPage)
+
+    beRemovable[PaymentMethod](PaymentMethodPage)
+  }
 }

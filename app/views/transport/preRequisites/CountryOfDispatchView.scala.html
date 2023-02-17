@@ -48,7 +48,7 @@
             selectType = SelectWithAdditionalHtml(
                 heading = messages("transport.preRequisites.countryOfDispatch.heading"),
                 caption = Some(messages("transport.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("transport.preRequisites.countryOfDispatch.paragraph")}</p>""")
+                additionalHtml = messages("transport.preRequisites.countryOfDispatch.paragraph").toParagraph
             ),
             hint = Some(messages("transport.preRequisites.countryOfDispatch.hint")),
             selectItems = countries.toSelectItems(form.value),

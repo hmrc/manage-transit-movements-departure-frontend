@@ -48,7 +48,7 @@
             selectType = SelectWithAdditionalHtml(
                 heading = messages("routeDetails.exit.index.officeOfExitCountry.heading"),
                 caption = Some(messages("routeDetails.exit.caption")),
-                additionalHtml = Html(s"""<p class="govuk-body">${messages("routeDetails.exit.index.officeOfExitCountry.paragraph")}</p>""")
+                additionalHtml = messages("routeDetails.exit.index.officeOfExitCountry.paragraph").toParagraph
             ),
             hint = Some(messages("routeDetails.exit.index.officeOfExitCountry.hint")),
             selectItems = countries.toSelectItems(form.value),

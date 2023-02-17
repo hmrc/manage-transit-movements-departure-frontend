@@ -34,10 +34,8 @@ POST       /:lrn/guarantee-details/:index/liability-currency                    
 GET        /:lrn/guarantee-details/:index/change-liability-currency                 controllers.guaranteeDetails.guarantee.CurrencyController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
 POST       /:lrn/guarantee-details/:index/change-liability-currency                 controllers.guaranteeDetails.guarantee.CurrencyController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode, index: Index)
 
-GET        /:lrn/guarantee-details/:index/confirm-remove-guarantee                  controllers.guaranteeDetails.guarantee.RemoveGuaranteeYesNoController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
-POST       /:lrn/guarantee-details/:index/confirm-remove-guarantee                  controllers.guaranteeDetails.guarantee.RemoveGuaranteeYesNoController.onSubmit(lrn: LocalReferenceNumber, index: Index)
+GET        /:lrn/guarantee-details/:index/remove-guarantee                          controllers.guaranteeDetails.guarantee.RemoveGuaranteeYesNoController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
+POST       /:lrn/guarantee-details/:index/remove-guarantee                          controllers.guaranteeDetails.guarantee.RemoveGuaranteeYesNoController.onSubmit(lrn: LocalReferenceNumber, index: Index)
 
 GET        /:lrn/guarantee-details/:index/check-answers                             controllers.guaranteeDetails.guarantee.CheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
 POST       /:lrn/guarantee-details/:index/check-answers                             controllers.guaranteeDetails.guarantee.CheckYourAnswersController.onSubmit(lrn: LocalReferenceNumber, index: Index)
-
-
