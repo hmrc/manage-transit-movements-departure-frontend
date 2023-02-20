@@ -17,6 +17,8 @@
 package config
 
 import com.google.inject.{Inject, Singleton}
+import controllers.routes
+import models.LocalReferenceNumber
 import play.api.Configuration
 import play.api.mvc.RequestHeader
 import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
@@ -39,10 +41,13 @@ class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderCo
 
   override val showUserResearchBanner: Boolean = configuration.get[Boolean]("banners.showUserResearch")
   override val userResearchUrl: String         = configuration.get[String]("urls.userResearch")
+
+  override def signOutAndUnlockUrl(lrn: Option[LocalReferenceNumber]): String = lrn.map(routes.DeleteLockController.delete(_).url).getOrElse(signOutUrl)
 }
 
 trait RenderConfig {
   def feedbackUrl(implicit request: RequestHeader): String
+  def signOutAndUnlockUrl(lrn: Option[LocalReferenceNumber]): String
   val signOutUrl: String
   val timeoutSeconds: Int
   val countdownSeconds: Int
