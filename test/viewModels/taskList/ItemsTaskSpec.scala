@@ -67,7 +67,7 @@ class ItemsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val task = ItemsTask(taskStatus)
-          task.href(lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
+          task.href(lrn)(frontendAppConfig) must endWith(s"/$lrn/items")
       }
     }
   }

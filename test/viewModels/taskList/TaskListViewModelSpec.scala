@@ -46,7 +46,7 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
         tasks(3).name mustBe "Items"
         tasks(3).status mustBe TaskStatus.CannotStartYet
-        tasks(3).href(answers.lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
+        tasks(3).href(answers.lrn)(frontendAppConfig) must endWith(s"/$lrn/items")
 
         tasks(4).name mustBe "Add guarantee details"
         tasks(4).status mustBe TaskStatus.NotStarted
@@ -83,7 +83,7 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
     }
 
     "when pre task list, trader details, route details and transport details completed" - {
-      "transport details must be 'not started'" in {
+      "items must be 'not started'" in {
         val tasks = Map(
           PreTaskListTask.section   -> TaskStatus.Completed,
           TraderDetailsTask.section -> TaskStatus.Completed,
@@ -95,7 +95,7 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
         result(3).name mustBe "Add items"
         result(3).status mustBe TaskStatus.NotStarted
-        result(3).href(answers.lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
+        result(3).href(answers.lrn)(frontendAppConfig) must endWith(s"/$lrn/items")
       }
     }
   }
