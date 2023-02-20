@@ -66,7 +66,7 @@ trait SpecBase
 
   val emptyUserAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj())
 
-  implicit val hc: HeaderCarrier = HeaderCarrier(Some(Authorization("BearerToken")))
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   def injector: Injector = app.injector
 
