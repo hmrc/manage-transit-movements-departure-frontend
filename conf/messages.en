@@ -1527,3 +1527,8 @@ transport.equipment.paymentMethod.error.required = Select which method of paymen
 declarationSubmitted.title = Declaration Submitted
 declarationSubmitted.heading = Declaration Submitted
 declarationSubmitted.paragraph1 = You have submitted your declaration.
+
+locked.title = You cannot open this declaration right now
+locked.heading = You cannot open this declaration right now
+locked.paragraph = Another person from your organisation is currently working on this declaration. You cannot open it until they’re finished.
+locked.button = Return to drafts

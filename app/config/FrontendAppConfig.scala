@@ -53,9 +53,10 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val newEnrolmentIdentifierKey: String    = configuration.get[String]("keys.enrolmentIdentifierKey")
   lazy val eccEnrolmentSplashPage: String       = configuration.get[String]("urls.eccEnrolmentSplashPage")
 
-  lazy val manageTransitMovementsUrl: String               = configuration.get[String]("urls.manageTransitMovementsFrontend")
-  lazy val serviceUrl: String                              = s"$manageTransitMovementsUrl/what-do-you-want-to-do"
-  lazy val manageTransitMovementsViewDeparturesUrl: String = s"$manageTransitMovementsUrl/view-departures"
+  lazy val manageTransitMovementsUrl: String                = configuration.get[String]("urls.manageTransitMovementsFrontend")
+  lazy val serviceUrl: String                               = s"$manageTransitMovementsUrl/what-do-you-want-to-do"
+  lazy val manageTransitMovementsViewDeparturesUrl: String  = s"$manageTransitMovementsUrl/view-departures"
+  lazy val manageTransitMovementsDraftDeparturesUrl: String = s"$manageTransitMovementsUrl/draft-declarations"
 
   lazy val enrolmentProxyUrl: String = configuration.get[Service]("microservice.services.enrolment-store-proxy").fullServiceUrl
 

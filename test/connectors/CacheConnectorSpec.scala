@@ -21,6 +21,7 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import helper.WireMockServerHandler
 import models.UserAnswers
 import org.scalacheck.Gen
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.test.Helpers._
@@ -53,7 +54,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
 
     "get" - {
 
-      val url = s"/manage-transit-movements-departure-cache/user-answers/$lrn"
+      val url = s"/manage-transit-movements-departure-cache/user-answers/${lrn.value}"
 
       "must return user answers when status is Ok" in {
         server.stubFor(
@@ -61,9 +62,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
             .willReturn(okJson(json))
         )
 
-        val result: Option[UserAnswers] = await(connector.get(lrn))
-
-        result mustBe Some(userAnswers)
+        connector.get(lrn).futureValue mustBe Some(userAnswers)
       }
 
       "return None when no cached data found for provided LRN" in {
@@ -80,13 +79,10 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
 
     "post" - {
 
-      val url = s"/manage-transit-movements-departure-cache/user-answers"
+      val url = s"/manage-transit-movements-departure-cache/user-answers/${userAnswers.lrn}"
 
       "must return true when status is Ok" in {
-        server.stubFor(
-          post(urlEqualTo(url))
-            .willReturn(aResponse().withStatus(OK))
-        )
+        server.stubFor(post(urlEqualTo(url)) willReturn aResponse().withStatus(OK))
 
         val result: Boolean = await(connector.post(userAnswers))
 
@@ -133,6 +129,59 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
         val result: Boolean = await(connector.put(lrn))
 
         result mustBe false
+      }
+    }
+
+    "checkLock" - {
+
+      val url = s"/manage-transit-movements-departure-cache/user-answers/${userAnswers.lrn.toString}/lock"
+
+      "must return true when status is Ok" in {
+        server.stubFor(get(urlEqualTo(url)) willReturn aResponse().withStatus(OK))
+
+        val result: Boolean = await(connector.checkLock(userAnswers))
+
+        result mustBe true
+      }
+
+      "return false for other responses" in {
+
+        server.stubFor(get(urlEqualTo(url)) willReturn aResponse().withStatus(BAD_REQUEST))
+
+        val result: Boolean = await(connector.checkLock(userAnswers))
+
+        result mustBe false
+      }
+    }
+
+    "deleteLock" - {
+
+      val url = s"/manage-transit-movements-departure-cache/user-answers/${userAnswers.lrn}/lock"
+
+      "must return true when status is Ok" in {
+        server.stubFor(delete(urlEqualTo(url)) willReturn aResponse().withStatus(OK))
+
+        val result: Boolean = await(connector.deleteLock(userAnswers))
+
+        result mustBe true
+      }
+
+      "return false for other responses" in {
+
+        val errorResponses: Gen[Int] = Gen
+          .chooseNum(400: Int, 599: Int)
+
+        forAll(errorResponses) {
+          error =>
+            server.stubFor(
+              delete(urlEqualTo(url))
+                .willReturn(aResponse().withStatus(error))
+            )
+
+            val result: Boolean = await(connector.deleteLock(userAnswers))
+
+            result mustBe false
+        }
       }
     }
   }

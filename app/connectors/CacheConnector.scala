@@ -45,11 +45,29 @@ class CacheConnector @Inject() (
   }
 
   def post(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    val url = s"$baseUrl/user-answers"
+    val url = s"$baseUrl/user-answers/${userAnswers.lrn}"
 
-    http.POST[UserAnswers, HttpResponse](url, userAnswers).map {
-      _.status == OK
-    }
+    http.POST[UserAnswers, HttpResponse](url, userAnswers).map(_.status == OK)
+  }
+
+  def checkLock(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Boolean] = {
+
+    val url = s"$baseUrl/user-answers/${userAnswers.lrn}/lock"
+    http
+      .GET[HttpResponse](url)
+      .map {
+        _.status == OK
+      }
+  }
+
+  def deleteLock(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Boolean] = {
+
+    val url = s"$baseUrl/user-answers/${userAnswers.lrn}/lock"
+    http
+      .DELETE[HttpResponse](url)
+      .map {
+        _.status == OK
+      }
   }
 
   def put(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
@@ -59,4 +77,5 @@ class CacheConnector @Inject() (
       _.status == OK
     }
   }
+
 }
