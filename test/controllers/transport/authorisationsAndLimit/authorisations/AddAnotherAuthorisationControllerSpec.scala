@@ -86,7 +86,8 @@ class AddAnotherAuthorisationControllerSpec extends SpecBase with AppWithDefault
 
           status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual onwardRoute.url
+          redirectLocation(result).value mustEqual
+            controllers.transport.authorisationsAndLimit.routes.AddAuthorisationsYesNoController.onPageLoad(lrn, mode).url
         }
       }
 

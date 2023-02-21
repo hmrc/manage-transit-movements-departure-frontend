@@ -23,12 +23,14 @@ import generators.Generators
 import models.ProcedureType.{Normal, Simplified}
 import models.transport.authorisations.AuthorisationType
 import models.transport.transportMeans.departure.InlandMode
+import models.transport.transportMeans.departure.InlandMode.Road
 import models.{DeclarationType, Index, Mode, NormalMode, ProcedureType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage}
 import pages.traderDetails.consignment.ApprovedOperatorPage
+import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import pages.transport.authorisationsAndLimit.authorisations.index.{AuthorisationReferenceNumberPage, AuthorisationTypePage}
 import pages.transport.transportMeans.departure.InlandModePage
 import utils.cyaHelpers.transport.authorisations.AuthorisationsAnswersHelper
@@ -81,7 +83,6 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
         }
 
         "and inland mode is not 1, 2 or 4" - {
-
           val inlandModeGen = Gen.oneOf(InlandMode.values.diff(authorisationTypeInlandModes))
 
           "and procedure type is simplified" in {
@@ -124,7 +125,7 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
                     ListItem(
                       name = s"${authorisationType.forDisplay} - $referenceNumber",
                       changeUrl = routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, authorisationIndex).url,
-                      removeUrl = Some(routes.RemoveAuthorisationYesNoController.onPageLoad(lrn, mode, authorisationIndex).url)
+                      removeUrl = None
                     )
                   )
                 )
@@ -132,29 +133,80 @@ class AuthorisationsAnswersHelperSpec extends SpecBase with ScalaCheckPropertyCh
           }
         }
       }
-    }
 
-    "when user answers populated with an in progress authorisation" in {
-      val inlandModeGen = Gen.oneOf(InlandMode.values.diff(authorisationTypeInlandModes))
-      forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType), inlandModeGen, arbitrary[AuthorisationType]) {
-        (declarationType, inlandMode, authorisationType) =>
-          val answers = emptyUserAnswers
-            .setValue(ProcedureTypePage, Normal)
-            .setValue(DeclarationTypePage, declarationType)
-            .setValue(ApprovedOperatorPage, true)
-            .setValue(InlandModePage, inlandMode)
-            .setValue(AuthorisationTypePage(Index(0)), authorisationType)
+      "and reduced data set indicator is 0" in {
+        forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType), arbitrary[AuthorisationType]) {
+          (declarationType, authorisationType) =>
+            val answers = emptyUserAnswers
+              .setValue(ProcedureTypePage, Normal)
+              .setValue(DeclarationTypePage, declarationType)
+              .setValue(ApprovedOperatorPage, false)
+              .setValue(InlandModePage, Road)
+              .setValue(AddAuthorisationsYesNoPage, true)
+              .setValue(AuthorisationTypePage(Index(0)), authorisationType)
+              .setValue(AuthorisationReferenceNumberPage(Index(0)), referenceNumber)
 
-          val helper = new AuthorisationsAnswersHelper(answers, mode)
-          helper.listItems mustBe Seq(
-            Left(
-              ListItem(
-                name = authorisationType.forDisplay,
-                changeUrl = routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, authorisationIndex).url,
-                removeUrl = Some(routes.RemoveAuthorisationYesNoController.onPageLoad(lrn, mode, authorisationIndex).url)
+            val helper = new AuthorisationsAnswersHelper(answers, mode)
+            helper.listItems mustBe Seq(
+              Right(
+                ListItem(
+                  name = s"${authorisationType.forDisplay} - $referenceNumber",
+                  changeUrl = routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, authorisationIndex).url,
+                  removeUrl = Some(routes.RemoveAuthorisationYesNoController.onPageLoad(lrn, mode, authorisationIndex).url)
+                )
               )
             )
-          )
+        }
+      }
+    }
+
+    "when user answers populated with an in progress authorisation" - {
+      "when remove route undefined" in {
+        val inlandModeGen = Gen.oneOf(InlandMode.values.diff(authorisationTypeInlandModes))
+        forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType), inlandModeGen, arbitrary[AuthorisationType]) {
+          (declarationType, inlandMode, authorisationType) =>
+            val answers = emptyUserAnswers
+              .setValue(ProcedureTypePage, Normal)
+              .setValue(DeclarationTypePage, declarationType)
+              .setValue(ApprovedOperatorPage, true)
+              .setValue(InlandModePage, inlandMode)
+              .setValue(AuthorisationTypePage(Index(0)), authorisationType)
+
+            val helper = new AuthorisationsAnswersHelper(answers, mode)
+            helper.listItems mustBe Seq(
+              Left(
+                ListItem(
+                  name = authorisationType.forDisplay,
+                  changeUrl = routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, authorisationIndex).url,
+                  removeUrl = None
+                )
+              )
+            )
+        }
+      }
+
+      "when remove route defined" in {
+        forAll(arbitrary[DeclarationType](arbitraryNonOption4DeclarationType), arbitrary[AuthorisationType]) {
+          (declarationType, authorisationType) =>
+            val answers = emptyUserAnswers
+              .setValue(ProcedureTypePage, Normal)
+              .setValue(DeclarationTypePage, declarationType)
+              .setValue(ApprovedOperatorPage, false)
+              .setValue(InlandModePage, Road)
+              .setValue(AddAuthorisationsYesNoPage, true)
+              .setValue(AuthorisationTypePage(Index(0)), authorisationType)
+
+            val helper = new AuthorisationsAnswersHelper(answers, mode)
+            helper.listItems mustBe Seq(
+              Left(
+                ListItem(
+                  name = authorisationType.forDisplay,
+                  changeUrl = routes.AuthorisationReferenceNumberController.onPageLoad(lrn, mode, authorisationIndex).url,
+                  removeUrl = Some(routes.RemoveAuthorisationYesNoController.onPageLoad(lrn, mode, authorisationIndex).url)
+                )
+              )
+            )
+        }
       }
     }
   }

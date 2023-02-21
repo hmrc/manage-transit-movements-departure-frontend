@@ -20,6 +20,7 @@ import controllers.transport.authorisationsAndLimit.authorisations.index.routes
 import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationDomain
 import models.{Mode, UserAnswers}
 import pages.sections.transport.authorisationsAndLimit.AuthorisationsSection
+import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import pages.transport.authorisationsAndLimit.authorisations.index.AuthorisationTypePage
 import play.api.i18n.Messages
 import play.api.mvc.Call
@@ -31,7 +32,7 @@ class AuthorisationsAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(AuthorisationsSection) {
       index =>
-        val removeRoute: Option[Call] = if (userAnswers.get(AuthorisationTypePage(index)).isEmpty && index.isFirst) {
+        val removeRoute: Option[Call] = if (userAnswers.get(AddAuthorisationsYesNoPage).isEmpty && index.isFirst) {
           None
         } else {
           Some(routes.RemoveAuthorisationYesNoController.onPageLoad(lrn, mode, index))
