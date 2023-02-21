@@ -26,7 +26,7 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import utils.cyaHelpers.AnswersHelper
-import viewModels.ListItem
+import viewModels.{Link, ListItem}
 
 class TransitCheckYourAnswersHelper(
   userAnswers: UserAnswers,
@@ -60,6 +60,14 @@ class TransitCheckYourAnswersHelper(
     id = Some(s"change-office-of-transit-${index.display}"),
     args = index.display
   )(OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
+
+  def addOrRemoveOfficesOfTransit: Option[Link] = buildLink(OfficesOfTransitSection) {
+    Link(
+      id = "add-or-remove-offices-of-transit",
+      text = messages("routeDetails.checkYourAnswers.transit.addOrRemove"),
+      href = controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(userAnswers.lrn, mode).url
+    )
+  }
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(OfficesOfTransitSection) {

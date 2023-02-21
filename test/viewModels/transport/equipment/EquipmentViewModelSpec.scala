@@ -17,13 +17,11 @@
 package viewModels.transport.equipment
 
 import base.SpecBase
-import controllers.transport.equipment.index.routes
 import generators.Generators
 import models.{Index, Mode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.transport.equipment.index._
-import viewModels.Link
 import viewModels.transport.equipment.EquipmentViewModel.EquipmentViewModelProvider
 
 class EquipmentViewModelSpec extends SpecBase with Generators {
@@ -44,19 +42,11 @@ class EquipmentViewModelSpec extends SpecBase with Generators {
 
         sections(1).sectionTitle.get mustBe "Seals"
         sections(1).rows must be(empty)
-        sections(1).addAnotherLink.get mustBe Link(
-          "add-or-remove-seals",
-          "Add or remove seals",
-          routes.AddAnotherSealController.onPageLoad(answers.lrn, mode, index).url
-        )
+        sections(1).addAnotherLink must not be defined
 
         sections(2).sectionTitle.get mustBe "Goods item numbers"
         sections(2).rows must be(empty)
-        sections(2).addAnotherLink.get mustBe Link(
-          "add-or-remove-goods-item-numbers",
-          "Add or remove goods item numbers",
-          routes.AddAnotherGoodsItemNumberController.onPageLoad(answers.lrn, mode, index).url
-        )
+        sections(2).addAnotherLink must not be defined
       }
     }
 
@@ -105,20 +95,12 @@ class EquipmentViewModelSpec extends SpecBase with Generators {
         sections(1).sectionTitle.get mustBe "Seals"
         sections(1).rows.size mustBe 1 + numberOfSeals
         sections(1).rows.head.value.value mustBe "Yes"
-        sections(1).addAnotherLink.get mustBe Link(
-          "add-or-remove-seals",
-          "Add or remove seals",
-          routes.AddAnotherSealController.onPageLoad(answers.lrn, mode, index).url
-        )
+        sections(1).addAnotherLink must be(defined)
 
         sections(2).sectionTitle.get mustBe "Goods item numbers"
         sections(2).rows.size mustBe 1 + numberOfGoodsItemNumbers
         sections(2).rows.head.value.value mustBe "Yes"
-        sections(2).addAnotherLink.get mustBe Link(
-          "add-or-remove-goods-item-numbers",
-          "Add or remove goods item numbers",
-          routes.AddAnotherGoodsItemNumberController.onPageLoad(answers.lrn, mode, index).url
-        )
+        sections(2).addAnotherLink must be(defined)
       }
     }
   }

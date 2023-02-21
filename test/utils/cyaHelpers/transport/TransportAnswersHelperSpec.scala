@@ -330,7 +330,7 @@ class TransportAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
 
     "addOrRemoveSupplyChainActors" - {
       "must return None" - {
-        "when authorisations array is empty" in {
+        "when supply chain actors array is empty" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new TransportAnswersHelper(emptyUserAnswers, mode)
@@ -341,7 +341,7 @@ class TransportAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
 
       "must return Some(Link)" - {
-        "when authorisations array is non-empty" in {
+        "when supply chain actors array is non-empty" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val answers = emptyUserAnswers.setValue(SupplyChainActorSection(Index(0)), Json.obj("foo" -> "bar"))
@@ -718,7 +718,7 @@ class TransportAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
 
     "addOrRemoveEquipments" - {
       "must return None" - {
-        "when authorisations array is empty" in {
+        "when equipments array is empty" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val helper = new TransportAnswersHelper(emptyUserAnswers, mode)
@@ -729,7 +729,7 @@ class TransportAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
 
       "must return Some(Link)" - {
-        "when authorisations array is non-empty" in {
+        "when equipments array is non-empty" in {
           forAll(arbitrary[Mode]) {
             mode =>
               val answers = emptyUserAnswers.setValue(EquipmentSection(Index(0)), Json.obj("foo" -> "bar"))

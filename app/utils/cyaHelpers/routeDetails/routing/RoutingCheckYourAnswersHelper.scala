@@ -27,7 +27,7 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import utils.cyaHelpers.AnswersHelper
-import viewModels.ListItem
+import viewModels.{Link, ListItem}
 
 class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
@@ -68,6 +68,14 @@ class RoutingCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implic
     id = Some(s"change-country-of-routing-${index.display}"),
     args = index.display
   )(CountryOfRoutingDomain.userAnswersReader(index))
+
+  def addOrRemoveCountriesOfRouting: Option[Link] = buildLink(CountriesOfRoutingSection) {
+    Link(
+      id = "add-or-remove-transit-route-countries",
+      text = messages("routeDetails.checkYourAnswers.routing.addOrRemove"),
+      href = controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(userAnswers.lrn, mode).url
+    )
+  }
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(CountriesOfRoutingSection) {

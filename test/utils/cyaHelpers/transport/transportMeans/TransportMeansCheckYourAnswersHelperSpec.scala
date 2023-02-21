@@ -19,16 +19,18 @@ package utils.cyaHelpers.transport.transportMeans
 import base.SpecBase
 import controllers.transport.transportMeans.active.routes
 import generators.Generators
-import models.Mode
 import models.domain.UserAnswersReader
 import models.journeyDomain.transport.transportMeans.TransportMeansActiveDomain
 import models.reference.Nationality
 import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.departure.{InlandMode, Identification => DepartureIdentification}
+import models.{Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.sections.transport.transportMeans.TransportMeansActiveSection
 import pages.transport.transportMeans.departure._
 import pages.transport.transportMeans.{AnotherVehicleCrossingYesNoPage, BorderModeOfTransportPage}
+import play.api.libs.json.Json
 import uk.gov.hmrc.govukfrontend.views.Aliases.{Key, SummaryListRow, Value}
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions}
@@ -73,6 +75,34 @@ class TransportMeansCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckP
                   action.visuallyHiddenText.get mustBe "active border transport means 1"
                   action.id mustBe "change-active-border-transport-means-1"
               }
+          }
+        }
+      }
+    }
+
+    "addOrRemoveActiveBorderTransportsMeans" - {
+      "must return None" - {
+        "when active border transports means array is empty" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportMeansCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.addOrRemoveActiveBorderTransportsMeans
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Link)" - {
+        "when active border transports means array is non-empty" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(TransportMeansActiveSection(Index(0)), Json.obj("foo" -> "bar"))
+              val helper  = new TransportMeansCheckYourAnswersHelper(answers, mode)
+              val result  = helper.addOrRemoveActiveBorderTransportsMeans.get
+
+              result.id mustBe "add-or-remove-border-means-of-transport"
+              result.text mustBe "Add or remove border means of transport"
+              result.href mustBe routes.AddAnotherBorderTransportController.onPageLoad(answers.lrn, mode).url
           }
         }
       }

@@ -21,7 +21,6 @@ import generators.Generators
 import models.Mode
 import org.scalacheck.Arbitrary.arbitrary
 import pages.routeDetails.transit._
-import viewModels.Link
 import viewModels.routeDetails.transit.TransitAnswersViewModel.TransitAnswersViewModelProvider
 
 class TransitAnswersViewModelSpec extends SpecBase with Generators {
@@ -46,10 +45,6 @@ class TransitAnswersViewModelSpec extends SpecBase with Generators {
 
     sections(1).sectionTitle.get mustBe "Offices of transit"
     sections(1).rows.size mustBe 1
-    sections(1).addAnotherLink.get mustBe Link(
-      "add-or-remove-offices-of-transit",
-      "Add or remove offices of transit",
-      controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(userAnswers.lrn, mode).url
-    )
+    sections(1).addAnotherLink must be(defined)
   }
 }

@@ -28,6 +28,8 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.routing._
 import pages.routeDetails.routing.index.CountryOfRoutingPage
+import pages.sections.routeDetails.routing.CountryOfRoutingSection
+import play.api.libs.json.Json
 import uk.gov.hmrc.govukfrontend.views.Aliases.{Key, SummaryListRow, Value}
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
@@ -246,6 +248,34 @@ class RoutingCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
               action.href mustBe indexRoutes.CountryOfRoutingController.onPageLoad(userAnswers.lrn, mode, index).url
               action.visuallyHiddenText.get mustBe "country of routing 1"
               action.id mustBe "change-country-of-routing-1"
+          }
+        }
+      }
+    }
+
+    "addOrRemoveCountriesOfRouting" - {
+      "must return None" - {
+        "when countries of routing array is empty" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new RoutingCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.addOrRemoveCountriesOfRouting
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Link)" - {
+        "when countries of routing array is non-empty" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(CountryOfRoutingSection(Index(0)), Json.obj("foo" -> "bar"))
+              val helper  = new RoutingCheckYourAnswersHelper(answers, mode)
+              val result  = helper.addOrRemoveCountriesOfRouting.get
+
+              result.id mustBe "add-or-remove-transit-route-countries"
+              result.text mustBe "Add or remove transit route countries"
+              result.href mustBe routingRoutes.AddAnotherCountryOfRoutingController.onPageLoad(answers.lrn, mode).url
           }
         }
       }

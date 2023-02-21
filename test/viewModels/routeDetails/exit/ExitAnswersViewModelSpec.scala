@@ -22,7 +22,6 @@ import models.Mode
 import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
-import viewModels.Link
 import viewModels.routeDetails.exit.ExitAnswersViewModel.ExitAnswersViewModelProvider
 
 class ExitAnswersViewModelSpec extends SpecBase with Generators {
@@ -41,10 +40,6 @@ class ExitAnswersViewModelSpec extends SpecBase with Generators {
 
     sections.head.sectionTitle.get mustBe "Offices of exit"
     sections.head.rows.size mustBe 1
-    sections.head.addAnotherLink.get mustBe Link(
-      "add-or-remove-offices-of-exit",
-      "Add or remove offices of exit",
-      controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(userAnswers.lrn, mode).url
-    )
+    sections.head.addAnotherLink must be(defined)
   }
 }

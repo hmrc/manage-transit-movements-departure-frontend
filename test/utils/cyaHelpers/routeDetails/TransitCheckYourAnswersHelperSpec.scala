@@ -30,6 +30,8 @@ import pages.preTaskList.{OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails.routing.OfficeOfDestinationPage
 import pages.routeDetails.transit._
 import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitPage}
+import pages.sections.routeDetails.transit.OfficeOfTransitSection
+import play.api.libs.json.Json
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import utils.cyaHelpers.routeDetails.transit.TransitCheckYourAnswersHelper
@@ -159,6 +161,34 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
               action.href mustBe indexRoutes.CheckOfficeOfTransitAnswersController.onPageLoad(userAnswers.lrn, mode, index).url
               action.visuallyHiddenText.get mustBe "office of transit 1"
               action.id mustBe "change-office-of-transit-1"
+          }
+        }
+      }
+    }
+
+    "addOrRemoveOfficesOfTransit" - {
+      "must return None" - {
+        "when offices of transit array is empty" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransitCheckYourAnswersHelper(emptyUserAnswers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+              val result = helper.addOrRemoveOfficesOfTransit
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Link)" - {
+        "when offices of transit array is non-empty" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(OfficeOfTransitSection(Index(0)), Json.obj("foo" -> "bar"))
+              val helper  = new TransitCheckYourAnswersHelper(answers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+              val result  = helper.addOrRemoveOfficesOfTransit.get
+
+              result.id mustBe "add-or-remove-offices-of-transit"
+              result.text mustBe "Add or remove offices of transit"
+              result.href mustBe controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(answers.lrn, mode).url
           }
         }
       }

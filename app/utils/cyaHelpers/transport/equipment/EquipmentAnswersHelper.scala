@@ -16,6 +16,7 @@
 
 package utils.cyaHelpers.transport.equipment
 
+import controllers.transport.equipment.index.routes
 import models.journeyDomain.transport.equipment.index.itemNumber.ItemNumberDomain
 import models.journeyDomain.transport.equipment.seal.SealDomain
 import models.{Index, Mode, UserAnswers}
@@ -24,6 +25,7 @@ import pages.transport.equipment.index._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
+import viewModels.Link
 
 class EquipmentAnswersHelper(
   userAnswers: UserAnswers,
@@ -63,6 +65,14 @@ class EquipmentAnswersHelper(
     args = index.display
   )(SealDomain.userAnswersReader(equipmentIndex, index))
 
+  def addOrRemoveSeals: Option[Link] = buildLink(SealsSection(equipmentIndex)) {
+    Link(
+      id = "add-or-remove-seals",
+      text = messages("transport.equipment.index.checkYourAnswers.seals.addOrRemove"),
+      href = routes.AddAnotherSealController.onPageLoad(userAnswers.lrn, mode, equipmentIndex).url
+    )
+  }
+
   def itemNumbersYesNo: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = AddGoodsItemNumberYesNoPage(equipmentIndex),
     formatAnswer = formatAsYesOrNo,
@@ -79,4 +89,12 @@ class EquipmentAnswersHelper(
     id = Some(s"change-goods-item-number-${index.display}"),
     args = index.display
   )(ItemNumberDomain.userAnswersReader(equipmentIndex, index))
+
+  def addOrRemoveItemNumbers: Option[Link] = buildLink(ItemNumbersSection(equipmentIndex)) {
+    Link(
+      id = "add-or-remove-goods-item-numbers",
+      text = messages("transport.equipment.index.checkYourAnswers.itemNumbers.addOrRemove"),
+      href = routes.AddAnotherGoodsItemNumberController.onPageLoad(userAnswers.lrn, mode, equipmentIndex).url
+    )
+  }
 }

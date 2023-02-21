@@ -17,7 +17,6 @@
 package viewModels.transport.transportMeans
 
 import base.SpecBase
-import controllers.transport.transportMeans.active.routes
 import generators.Generators
 import models.reference.Nationality
 import models.transport.transportMeans.BorderModeOfTransport
@@ -25,13 +24,11 @@ import models.transport.transportMeans.departure.{InlandMode, Identification => 
 import models.{Index, Mode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import org.scalatest.Assertion
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import pages.transport.transportMeans.departure.InlandModePage
 import pages.transport.transportMeans.{departure, AnotherVehicleCrossingYesNoPage, BorderModeOfTransportPage}
 import play.api.libs.json.JsArray
-import viewModels.sections.Section
 import viewModels.transport.transportMeans.TransportMeansAnswersViewModel.TransportMeansAnswersViewModelProvider
 
 class TransportMeansAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -93,13 +90,6 @@ class TransportMeansAnswersViewModelSpec extends SpecBase with ScalaCheckPropert
 
         val baseAnswers = emptyUserAnswers.setValue(OfficesOfTransitSection, officesOfTransit _)
 
-        def checkAddAnotherLink(section: Section, userAnswers: UserAnswers, mode: Mode): Assertion = {
-          val addOrRemoveIncidentsLink = section.addAnotherLink.value
-          addOrRemoveIncidentsLink.text mustBe "Add or remove border means of transport"
-          addOrRemoveIncidentsLink.id mustBe "add-or-remove-border-means-of-transport"
-          addOrRemoveIncidentsLink.href mustBe routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode).url
-        }
-
         "when none were added" in {
           val userAnswers       = baseAnswers
           val viewModelProvider = new TransportMeansAnswersViewModelProvider()
@@ -107,7 +97,7 @@ class TransportMeansAnswersViewModelSpec extends SpecBase with ScalaCheckPropert
           val section           = result.sections(3)
           section.sectionTitle.get mustBe sectionTitle
           section.rows.size mustBe 0
-          checkAddAnotherLink(section, userAnswers, mode)
+          section.addAnotherLink must not be defined
         }
 
         "when 1 or more were added" in {
@@ -124,7 +114,7 @@ class TransportMeansAnswersViewModelSpec extends SpecBase with ScalaCheckPropert
                   val section           = result.sections(3)
                   section.sectionTitle.get mustBe sectionTitle
                   section.rows.size mustBe amount
-                  checkAddAnotherLink(section, userAnswers, mode)
+                  section.addAnotherLink must be(defined)
               }
           }
         }

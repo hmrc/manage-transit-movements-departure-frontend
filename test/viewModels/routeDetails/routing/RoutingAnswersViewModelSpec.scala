@@ -23,7 +23,6 @@ import models.reference.{Country, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.routeDetails.routing._
 import pages.routeDetails.routing.index.CountryOfRoutingPage
-import viewModels.Link
 import viewModels.routeDetails.routing.RoutingAnswersViewModel.RoutingAnswersViewModelProvider
 
 class RoutingAnswersViewModelSpec extends SpecBase with Generators {
@@ -49,10 +48,6 @@ class RoutingAnswersViewModelSpec extends SpecBase with Generators {
 
     sections(1).sectionTitle.get mustBe "Transit route countries"
     sections(1).rows.size mustBe 1
-    sections(1).addAnotherLink.get mustBe Link(
-      "add-or-remove-transit-route-countries",
-      "Add or remove transit route countries",
-      controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(userAnswers.lrn, mode).url
-    )
+    sections(1).addAnotherLink must be(defined)
   }
 }
