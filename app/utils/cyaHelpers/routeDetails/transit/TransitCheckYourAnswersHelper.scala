@@ -23,6 +23,7 @@ import pages.routeDetails.transit._
 import pages.routeDetails.transit.index.OfficeOfTransitCountryPage
 import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import play.api.i18n.Messages
+import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import utils.cyaHelpers.AnswersHelper
@@ -72,10 +73,16 @@ class TransitCheckYourAnswersHelper(
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(OfficesOfTransitSection) {
       index =>
+        val removeRoute: Option[Call] = if (userAnswers.get(AddOfficeOfTransitYesNoPage).isEmpty && index.isFirst) {
+          None
+        } else {
+          Some(routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, mode, index))
+        }
+
         buildListItem[OfficeOfTransitDomain](
           nameWhenComplete = _.label,
           nameWhenInProgress = userAnswers.get(OfficeOfTransitCountryPage(index)).map(_.toString),
-          removeRoute = if (index.isFirst) None else Some(routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, mode, index))
+          removeRoute = removeRoute
         )(OfficeOfTransitDomain.userAnswersReader(index, ctcCountryCodes, customsSecurityAgreementAreaCountryCodes))
     }
 }

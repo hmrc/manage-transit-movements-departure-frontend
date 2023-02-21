@@ -71,7 +71,7 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
 
   "AddAnotherOfficeOfTransitController" - {
 
-    "redirect to correct start page in this sub-section" - {
+    "redirect to add office of transit yes/no" - {
       "when 0 offices of transit" in {
         when(mockViewModelProvider.apply(any(), any(), any(), any())(any()))
           .thenReturn(emptyViewModel)
@@ -85,7 +85,7 @@ class AddAnotherOfficeOfTransitControllerSpec extends SpecBase with AppWithDefau
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual onwardRoute.url
+        redirectLocation(result).value mustEqual routes.AddOfficeOfTransitYesNoController.onPageLoad(lrn, mode).url
       }
     }
 
