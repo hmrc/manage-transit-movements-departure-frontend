@@ -16,13 +16,11 @@
 
 package viewModels.transport.transportMeans
 
-import controllers.transport.transportMeans.active.routes
 import models.{Index, Mode, UserAnswers}
 import pages.sections.routeDetails.transit.OfficesOfTransitSection
 import play.api.i18n.Messages
 import utils.cyaHelpers.transport.transportMeans.TransportMeansCheckYourAnswersHelper
 import utils.cyaHelpers.transport.transportMeans.active.ActiveBorderTransportAnswersHelper
-import viewModels.Link
 import viewModels.sections.Section
 
 import javax.inject.Inject
@@ -60,11 +58,7 @@ object TransportMeansAnswersViewModel {
           Section(
             sectionTitle = messages("transport.transportMeans.borderMeans.subheading"),
             rows = helper.activeBorderTransportsMeans,
-            addAnotherLink = Link(
-              id = "add-or-remove-border-means-of-transport",
-              text = messages("transport.transportMeans.borderMeans.addOrRemove"),
-              href = routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode).url
-            )
+            addAnotherLink = helper.addOrRemoveActiveBorderTransportsMeans
           )
         } else {
           Section(

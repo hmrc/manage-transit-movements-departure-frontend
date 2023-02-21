@@ -16,6 +16,7 @@
 
 package utils.cyaHelpers.transport.transportMeans
 
+import controllers.transport.transportMeans.active.routes
 import models.journeyDomain.transport.transportMeans.TransportMeansActiveDomain
 import models.reference.Nationality
 import models.transport.transportMeans.BorderModeOfTransport
@@ -28,6 +29,7 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import utils.cyaHelpers.AnswersHelper
+import viewModels.Link
 
 class TransportMeansCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Messages) extends AnswersHelper(userAnswers, mode) {
 
@@ -40,6 +42,14 @@ class TransportMeansCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)
     id = Some(s"change-active-border-transport-means-${index.display}"),
     args = index.display
   )(TransportMeansActiveDomain.userAnswersReader(index))
+
+  def addOrRemoveActiveBorderTransportsMeans: Option[Link] = buildLink(TransportMeansActiveListSection) {
+    Link(
+      id = "add-or-remove-border-means-of-transport",
+      text = messages("transport.transportMeans.borderMeans.addOrRemove"),
+      href = routes.AddAnotherBorderTransportController.onPageLoad(userAnswers.lrn, mode).url
+    )
+  }
 
   def anotherVehicleCrossing: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = AnotherVehicleCrossingYesNoPage,

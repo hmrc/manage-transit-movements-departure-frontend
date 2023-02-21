@@ -19,7 +19,6 @@ package viewModels.routeDetails.routing
 import models.{Mode, UserAnswers}
 import play.api.i18n.Messages
 import utils.cyaHelpers.routeDetails.routing.RoutingCheckYourAnswersHelper
-import viewModels.Link
 import viewModels.sections.Section
 
 import javax.inject.Inject
@@ -46,11 +45,7 @@ object RoutingAnswersViewModel {
       val countriesOfRoutingSection = Section(
         sectionTitle = messages("routeDetails.checkYourAnswers.routing.subheading"),
         rows = helper.countriesOfRouting,
-        addAnotherLink = Link(
-          id = "add-or-remove-transit-route-countries",
-          text = messages("routeDetails.checkYourAnswers.routing.addOrRemove"),
-          href = controllers.routeDetails.routing.routes.AddAnotherCountryOfRoutingController.onPageLoad(userAnswers.lrn, mode).url
-        )
+        addAnotherLink = helper.addOrRemoveCountriesOfRouting
       )
 
       new RoutingAnswersViewModel(Seq(preQuestionsSection, countriesOfRoutingSection))

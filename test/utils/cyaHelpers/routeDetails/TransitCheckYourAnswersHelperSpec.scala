@@ -30,6 +30,8 @@ import pages.preTaskList.{OfficeOfDeparturePage, SecurityDetailsTypePage}
 import pages.routeDetails.routing.OfficeOfDestinationPage
 import pages.routeDetails.transit._
 import pages.routeDetails.transit.index.{AddOfficeOfTransitETAYesNoPage, OfficeOfTransitCountryPage, OfficeOfTransitPage}
+import pages.sections.routeDetails.transit.OfficeOfTransitSection
+import play.api.libs.json.Json
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import utils.cyaHelpers.routeDetails.transit.TransitCheckYourAnswersHelper
@@ -164,54 +166,136 @@ class TransitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProperty
       }
     }
 
+    "addOrRemoveOfficesOfTransit" - {
+      "must return None" - {
+        "when offices of transit array is empty" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransitCheckYourAnswersHelper(emptyUserAnswers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+              val result = helper.addOrRemoveOfficesOfTransit
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Link)" - {
+        "when offices of transit array is non-empty" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(OfficeOfTransitSection(Index(0)), Json.obj("foo" -> "bar"))
+              val helper  = new TransitCheckYourAnswersHelper(answers, mode)(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
+              val result  = helper.addOrRemoveOfficesOfTransit.get
+
+              result.id mustBe "add-or-remove-offices-of-transit"
+              result.text mustBe "Add or remove offices of transit"
+              result.href mustBe controllers.routeDetails.transit.routes.AddAnotherOfficeOfTransitController.onPageLoad(answers.lrn, mode).url
+          }
+        }
+      }
+    }
+
     "listItems" - {
-      "must return list items" in {
-        val mode = arbitrary[Mode].sample.value
+      "must return list items" - {
+        "when first cannot be removed" in {
+          val mode = arbitrary[Mode].sample.value
 
-        val country1 = arbitrary[Country].sample.value
-        val country2 = arbitrary[Country].sample.value
-        val country3 = arbitrary[Country].sample.value
+          val country1 = arbitrary[Country].sample.value
+          val country2 = arbitrary[Country].sample.value
+          val country3 = arbitrary[Country].sample.value
 
-        def customsOffice  = arbitrary[CustomsOffice].sample.value
-        val customsOffice1 = customsOffice.copy(id = country1.code.code)
-        val customsOffice2 = customsOffice.copy(id = country2.code.code)
+          def customsOffice = arbitrary[CustomsOffice].sample.value
 
-        val answers = emptyUserAnswers
-          .setValue(OfficeOfDeparturePage, customsOffice)
-          .setValue(SecurityDetailsTypePage, NoSecurityDetails)
-          .setValue(OfficeOfDestinationPage, customsOffice1)
-          .setValue(OfficeOfTransitCountryPage(Index(0)), country1)
-          .setValue(OfficeOfTransitPage(Index(0)), customsOffice1)
-          .setValue(AddOfficeOfTransitETAYesNoPage(Index(0)), false)
-          .setValue(OfficeOfTransitCountryPage(Index(1)), country2)
-          .setValue(OfficeOfTransitPage(Index(1)), customsOffice2)
-          .setValue(AddOfficeOfTransitETAYesNoPage(Index(1)), false)
-          .setValue(OfficeOfTransitCountryPage(Index(2)), country3)
+          val customsOffice1 = customsOffice.copy(id = country1.code.code)
+          val customsOffice2 = customsOffice.copy(id = country2.code.code)
 
-        val helper = new TransitCheckYourAnswersHelper(answers, mode)(Seq(country1.code.code), Nil)
-        helper.listItems mustBe Seq(
-          Right(
-            ListItem(
-              name = s"$customsOffice1",
-              changeUrl = indexRoutes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, mode, Index(0)).url,
-              removeUrl = None
-            )
-          ),
-          Right(
-            ListItem(
-              name = s"$country2 - $customsOffice2",
-              changeUrl = indexRoutes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, mode, Index(1)).url,
-              removeUrl = Some(indexRoutes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, mode, Index(1)).url)
-            )
-          ),
-          Left(
-            ListItem(
-              name = s"$country3",
-              changeUrl = indexRoutes.OfficeOfTransitController.onPageLoad(lrn, mode, Index(2)).url,
-              removeUrl = Some(indexRoutes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, mode, Index(2)).url)
+          val answers = emptyUserAnswers
+            .setValue(OfficeOfDeparturePage, customsOffice)
+            .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+            .setValue(OfficeOfDestinationPage, customsOffice1)
+            .setValue(OfficeOfTransitCountryPage(Index(0)), country1)
+            .setValue(OfficeOfTransitPage(Index(0)), customsOffice1)
+            .setValue(AddOfficeOfTransitETAYesNoPage(Index(0)), false)
+            .setValue(OfficeOfTransitCountryPage(Index(1)), country2)
+            .setValue(OfficeOfTransitPage(Index(1)), customsOffice2)
+            .setValue(AddOfficeOfTransitETAYesNoPage(Index(1)), false)
+            .setValue(OfficeOfTransitCountryPage(Index(2)), country3)
+
+          val helper = new TransitCheckYourAnswersHelper(answers, mode)(Seq(country1.code.code), Nil)
+          helper.listItems mustBe Seq(
+            Right(
+              ListItem(
+                name = s"$customsOffice1",
+                changeUrl = indexRoutes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, mode, Index(0)).url,
+                removeUrl = None
+              )
+            ),
+            Right(
+              ListItem(
+                name = s"$country2 - $customsOffice2",
+                changeUrl = indexRoutes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, mode, Index(1)).url,
+                removeUrl = Some(indexRoutes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, mode, Index(1)).url)
+              )
+            ),
+            Left(
+              ListItem(
+                name = s"$country3",
+                changeUrl = indexRoutes.OfficeOfTransitController.onPageLoad(lrn, mode, Index(2)).url,
+                removeUrl = Some(indexRoutes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, mode, Index(2)).url)
+              )
             )
           )
-        )
+        }
+
+        "when first can be removed" in {
+          val mode = arbitrary[Mode].sample.value
+
+          val country1 = arbitrary[Country].sample.value
+          val country2 = arbitrary[Country].sample.value
+          val country3 = arbitrary[Country].sample.value
+
+          def customsOffice = arbitrary[CustomsOffice].sample.value
+
+          val customsOffice1 = customsOffice.copy(id = country1.code.code)
+          val customsOffice2 = customsOffice.copy(id = country2.code.code)
+
+          val answers = emptyUserAnswers
+            .setValue(OfficeOfDeparturePage, customsOffice1)
+            .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+            .setValue(OfficeOfDestinationPage, customsOffice1)
+            .setValue(AddOfficeOfTransitYesNoPage, true)
+            .setValue(OfficeOfTransitCountryPage(Index(0)), country1)
+            .setValue(OfficeOfTransitPage(Index(0)), customsOffice1)
+            .setValue(AddOfficeOfTransitETAYesNoPage(Index(0)), false)
+            .setValue(OfficeOfTransitCountryPage(Index(1)), country2)
+            .setValue(OfficeOfTransitPage(Index(1)), customsOffice2)
+            .setValue(AddOfficeOfTransitETAYesNoPage(Index(1)), false)
+            .setValue(OfficeOfTransitCountryPage(Index(2)), country3)
+
+          val helper = new TransitCheckYourAnswersHelper(answers, mode)(Seq(country1.code.code), Nil)
+          helper.listItems mustBe Seq(
+            Right(
+              ListItem(
+                name = s"$customsOffice1",
+                changeUrl = indexRoutes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, mode, Index(0)).url,
+                removeUrl = Some(indexRoutes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, mode, Index(0)).url)
+              )
+            ),
+            Right(
+              ListItem(
+                name = s"$country2 - $customsOffice2",
+                changeUrl = indexRoutes.CheckOfficeOfTransitAnswersController.onPageLoad(lrn, mode, Index(1)).url,
+                removeUrl = Some(indexRoutes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, mode, Index(1)).url)
+              )
+            ),
+            Left(
+              ListItem(
+                name = s"$country3",
+                changeUrl = indexRoutes.OfficeOfTransitController.onPageLoad(lrn, mode, Index(2)).url,
+                removeUrl = Some(indexRoutes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, mode, Index(2)).url)
+              )
+            )
+          )
+        }
       }
     }
   }

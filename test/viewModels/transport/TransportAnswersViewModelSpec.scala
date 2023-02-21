@@ -17,15 +17,11 @@
 package viewModels.transport
 
 import base.SpecBase
-import controllers.transport.authorisationsAndLimit.authorisations.{routes => authorisationsRoutes}
-import controllers.transport.equipment.{routes => equipmentsRoutes}
-import controllers.transport.supplyChainActors.{routes => supplyChainActorsRoutes}
 import generators.Generators
 import models.CheckMode
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import viewModels.Link
 import viewModels.transport.TransportAnswersViewModel.TransportAnswersViewModelProvider
 import viewModels.transport.transportMeans.TransportMeansAnswersViewModel
 import viewModels.transport.transportMeans.TransportMeansAnswersViewModel.TransportMeansAnswersViewModelProvider
@@ -52,28 +48,13 @@ class TransportAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChec
           sections.head.addAnotherLink must not be defined
 
           sections(1).sectionTitle.get mustBe "Supply chain actors"
-          sections(1).addAnotherLink.get mustBe Link(
-            "add-or-remove-supply-chain-actors",
-            "Add or remove supply chain actors",
-            supplyChainActorsRoutes.AddAnotherSupplyChainActorController.onPageLoad(answers.lrn, mode).url
-          )
 
           sections(2).sectionTitle.get mustBe "Authorisation"
-          sections(2).addAnotherLink.get mustBe Link(
-            "add-or-remove-an-authorisation",
-            "Add or remove an authorisation",
-            authorisationsRoutes.AddAnotherAuthorisationController.onPageLoad(answers.lrn, mode).url
-          )
 
           sections(3).sectionTitle.get mustBe "Carrier details"
           sections(3).addAnotherLink must not be defined
 
           sections(4: Int).sectionTitle.get mustBe "Transport equipment"
-          sections(4: Int).addAnotherLink.get mustBe Link(
-            "add-or-remove-transport-equipment",
-            "Add or remove transport equipment",
-            equipmentsRoutes.AddAnotherEquipmentController.onPageLoad(answers.lrn, mode).url
-          )
 
           sections(5: Int).sectionTitle.get mustBe "Transport charges"
           sections(5: Int).addAnotherLink must not be defined

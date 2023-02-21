@@ -16,13 +16,9 @@
 
 package viewModels.transport
 
-import controllers.transport.authorisationsAndLimit.authorisations.{routes => authorisationsRoutes}
-import controllers.transport.equipment.{routes => equipmentsRoutes}
-import controllers.transport.supplyChainActors.{routes => supplyChainActorsRoutes}
 import models.{CheckMode, UserAnswers}
 import play.api.i18n.Messages
 import utils.cyaHelpers.transport.TransportAnswersHelper
-import viewModels.Link
 import viewModels.sections.Section
 import viewModels.transport.transportMeans.TransportMeansAnswersViewModel.TransportMeansAnswersViewModelProvider
 
@@ -58,21 +54,13 @@ object TransportAnswersViewModel {
       val supplyChainActorsSection = Section(
         sectionTitle = messages("transport.checkYourAnswers.supplyChainActors"),
         rows = helper.addSupplyChainActor.toList ++ helper.supplyChainActors,
-        addAnotherLink = Link(
-          id = "add-or-remove-supply-chain-actors",
-          text = messages("transport.checkYourAnswers.supplyChainActors.addOrRemove"),
-          href = supplyChainActorsRoutes.AddAnotherSupplyChainActorController.onPageLoad(userAnswers.lrn, mode).url
-        )
+        addAnotherLink = helper.addOrRemoveSupplyChainActors
       )
 
       val authorisationsSection = Section(
         sectionTitle = messages("transport.checkYourAnswers.authorisations"),
         rows = helper.addAuthorisation.toList ++ helper.authorisations ++ helper.limitDate.toList,
-        addAnotherLink = Link(
-          id = "add-or-remove-an-authorisation",
-          text = messages("transport.checkYourAnswers.authorisations.addOrRemove"),
-          href = authorisationsRoutes.AddAnotherAuthorisationController.onPageLoad(userAnswers.lrn, mode).url
-        )
+        addAnotherLink = helper.addOrRemoveAuthorisations
       )
 
       val carrierDetailsSection = Section(
@@ -88,11 +76,7 @@ object TransportAnswersViewModel {
       val transportEquipmentSection = Section(
         sectionTitle = messages("transport.checkYourAnswers.transportEquipment"),
         rows = helper.addEquipment.toList ++ helper.equipments,
-        addAnotherLink = Link(
-          id = "add-or-remove-transport-equipment",
-          text = messages("transport.checkYourAnswers.transportEquipment.addOrRemove"),
-          href = equipmentsRoutes.AddAnotherEquipmentController.onPageLoad(userAnswers.lrn, mode).url
-        )
+        addAnotherLink = helper.addOrRemoveEquipments
       )
 
       val transportChargesSection = Section(

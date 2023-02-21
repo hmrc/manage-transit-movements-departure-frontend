@@ -19,6 +19,7 @@ package controllers.transport.authorisationsAndLimit.authorisations
 import config.FrontendAppConfig
 import controllers.actions._
 import controllers.transport.authorisationsAndLimit.authorisations.index.{routes => authorisationRoutes}
+import controllers.transport.authorisationsAndLimit.{routes => authorisationsRoutes}
 import forms.AddAnotherFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.transport.TransportNavigatorProvider
@@ -53,7 +54,7 @@ class AddAnotherAuthorisationController @Inject() (
     implicit request =>
       val viewModel = viewModelProvider(request.userAnswers, mode)
       viewModel.count match {
-        case 0 => Redirect(navigatorProvider(mode).nextPage(request.userAnswers))
+        case 0 => Redirect(authorisationsRoutes.AddAuthorisationsYesNoController.onPageLoad(lrn, mode))
         case _ => Ok(view(form(viewModel), lrn, viewModel))
       }
   }

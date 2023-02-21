@@ -25,7 +25,7 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import utils.cyaHelpers.AnswersHelper
-import viewModels.ListItem
+import viewModels.{Link, ListItem}
 
 class ExitCheckYourAnswersHelper(
   userAnswers: UserAnswers,
@@ -42,6 +42,14 @@ class ExitCheckYourAnswersHelper(
     id = Some(s"change-office-of-exit-${index.display}"),
     args = index.display
   )(OfficeOfExitDomain.userAnswersReader(index))
+
+  def addOrRemoveOfficesOfExit: Option[Link] = buildLink(OfficesOfExitSection) {
+    Link(
+      id = "add-or-remove-offices-of-exit",
+      text = messages("routeDetails.checkYourAnswers.exit.addOrRemove"),
+      href = controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(userAnswers.lrn, mode).url
+    )
+  }
 
   def listItems: Seq[Either[ListItem, ListItem]] =
     buildListItems(OfficesOfExitSection) {

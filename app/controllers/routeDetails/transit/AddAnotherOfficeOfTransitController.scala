@@ -61,11 +61,8 @@ class AddAnotherOfficeOfTransitController @Inject() (
       } yield {
         val viewModel = viewModelProvider(request.userAnswers, mode, ctcCountries, customsSecurityAgreementAreaCountries)
         viewModel.count match {
-          case 0 =>
-            val navigator: UserAnswersNavigator = navigatorProvider(mode, ctcCountries, customsSecurityAgreementAreaCountries)
-            Redirect(navigator.nextPage(request.userAnswers))
-          case _ =>
-            Ok(view(form(viewModel), lrn, viewModel))
+          case 0 => Redirect(routes.AddOfficeOfTransitYesNoController.onPageLoad(lrn, mode))
+          case _ => Ok(view(form(viewModel), lrn, viewModel))
         }
       }
   }

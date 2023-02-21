@@ -26,6 +26,8 @@ import models.{Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.routeDetails.exit.index.{OfficeOfExitCountryPage, OfficeOfExitPage}
+import pages.sections.routeDetails.exit.OfficeOfExitSection
+import play.api.libs.json.Json
 import utils.cyaHelpers.routeDetails.exit.ExitCheckYourAnswersHelper
 import viewModels.ListItem
 
@@ -65,6 +67,34 @@ class ExitCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChe
               action.href mustBe routes.CheckOfficeOfExitAnswersController.onPageLoad(userAnswers.lrn, index, mode).url
               action.visuallyHiddenText.get mustBe "office of exit 1"
               action.id mustBe "change-office-of-exit-1"
+          }
+        }
+      }
+    }
+
+    "addOrRemoveOfficesOfExit" - {
+      "must return None" - {
+        "when offices of exit array is empty" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new ExitCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.addOrRemoveOfficesOfExit
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Link)" - {
+        "when offices of transit array is non-empty" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(OfficeOfExitSection(Index(0)), Json.obj("foo" -> "bar"))
+              val helper  = new ExitCheckYourAnswersHelper(answers, mode)
+              val result  = helper.addOrRemoveOfficesOfExit.get
+
+              result.id mustBe "add-or-remove-offices-of-exit"
+              result.text mustBe "Add or remove offices of exit"
+              result.href mustBe controllers.routeDetails.exit.routes.AddAnotherOfficeOfExitController.onPageLoad(answers.lrn, mode).url
           }
         }
       }
