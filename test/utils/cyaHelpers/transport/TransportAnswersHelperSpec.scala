@@ -18,8 +18,9 @@ package utils.cyaHelpers.transport
 
 import base.SpecBase
 import controllers.transport.authorisationsAndLimit.authorisations.index.{routes => authorisationRoutes}
+import controllers.transport.authorisationsAndLimit.authorisations.{routes => authorisationsRoutes}
 import controllers.transport.authorisationsAndLimit.limit.{routes => limitRoutes}
-import controllers.transport.authorisationsAndLimit.{routes => authorisationsRoutes}
+import controllers.transport.authorisationsAndLimit.{routes => authorisationsAndLimitRoutes}
 import controllers.transport.carrierDetails.contact.{routes => carrierDetailsContactRoutes}
 import controllers.transport.carrierDetails.{routes => carrierDetailsRoutes}
 import controllers.transport.equipment.index.{routes => equipmentRoutes}
@@ -28,15 +29,18 @@ import controllers.transport.preRequisites.{routes => preRequisitesRoutes}
 import controllers.transport.supplyChainActors.index.{routes => supplyChainActorRoutes}
 import controllers.transport.supplyChainActors.{routes => supplyChainActorsRoutes}
 import generators.Generators
-import models.Mode
 import models.domain.UserAnswersReader
 import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationDomain
 import models.journeyDomain.transport.equipment.EquipmentDomain
 import models.journeyDomain.transport.supplyChainActors.SupplyChainActorDomain
 import models.reference.Country
 import models.transport.equipment.PaymentMethod
+import models.{Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.sections.transport.authorisationsAndLimit.AuthorisationSection
+import pages.sections.transport.equipment.EquipmentSection
+import pages.sections.transport.supplyChainActors.SupplyChainActorSection
 import pages.transport.authorisationsAndLimit.authorisations.AddAuthorisationsYesNoPage
 import pages.transport.authorisationsAndLimit.limit.LimitDatePage
 import pages.transport.carrierDetails.contact.{NamePage, TelephoneNumberPage}
@@ -44,6 +48,7 @@ import pages.transport.carrierDetails.{AddContactYesNoPage, IdentificationNumber
 import pages.transport.equipment.{AddPaymentMethodYesNoPage, AddTransportEquipmentYesNoPage, PaymentMethodPage}
 import pages.transport.preRequisites._
 import pages.transport.supplyChainActors.SupplyChainActorYesNoPage
+import play.api.libs.json.Json
 
 import java.time.LocalDate
 
@@ -323,6 +328,34 @@ class TransportAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
     }
 
+    "addOrRemoveSupplyChainActors" - {
+      "must return None" - {
+        "when authorisations array is empty" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.addOrRemoveSupplyChainActors
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Link)" - {
+        "when authorisations array is non-empty" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(SupplyChainActorSection(Index(0)), Json.obj("foo" -> "bar"))
+              val helper  = new TransportAnswersHelper(answers, mode)
+              val result  = helper.addOrRemoveSupplyChainActors.get
+
+              result.id mustBe "add-or-remove-supply-chain-actors"
+              result.text mustBe "Add or remove supply chain actors"
+              result.href mustBe supplyChainActorsRoutes.AddAnotherSupplyChainActorController.onPageLoad(answers.lrn, mode).url
+          }
+        }
+      }
+    }
+
     "addAuthorisation" - {
       "must return None" - {
         s"when $AddAuthorisationsYesNoPage undefined" in {
@@ -349,7 +382,7 @@ class TransportAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
               actions.size mustBe 1
               val action = actions.head
               action.content.value mustBe "Change"
-              action.href mustBe authorisationsRoutes.AddAuthorisationsYesNoController.onPageLoad(answers.lrn, mode).url
+              action.href mustBe authorisationsAndLimitRoutes.AddAuthorisationsYesNoController.onPageLoad(answers.lrn, mode).url
               action.visuallyHiddenText.get mustBe "if you want to add an authorisation"
               action.id mustBe "change-add-authorisation"
           }
@@ -386,6 +419,34 @@ class TransportAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
               action.href mustBe authorisationRoutes.AuthorisationReferenceNumberController.onPageLoad(userAnswers.lrn, mode, index).url
               action.visuallyHiddenText.get mustBe "authorisation 1"
               action.id mustBe "change-authorisation-1"
+          }
+        }
+      }
+    }
+
+    "addOrRemoveAuthorisations" - {
+      "must return None" - {
+        "when authorisations array is empty" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.addOrRemoveAuthorisations
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Link)" - {
+        "when authorisations array is non-empty" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(AuthorisationSection(Index(0)), Json.obj("foo" -> "bar"))
+              val helper  = new TransportAnswersHelper(answers, mode)
+              val result  = helper.addOrRemoveAuthorisations.get
+
+              result.id mustBe "add-or-remove-an-authorisation"
+              result.text mustBe "Add or remove an authorisation"
+              result.href mustBe authorisationsRoutes.AddAnotherAuthorisationController.onPageLoad(answers.lrn, mode).url
           }
         }
       }
@@ -650,6 +711,34 @@ class TransportAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
               action.href mustBe equipmentRoutes.EquipmentAnswersController.onPageLoad(userAnswers.lrn, mode, index).url
               action.visuallyHiddenText.get mustBe "transport equipment 1"
               action.id mustBe "change-transport-equipment-1"
+          }
+        }
+      }
+    }
+
+    "addOrRemoveEquipments" - {
+      "must return None" - {
+        "when authorisations array is empty" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new TransportAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.addOrRemoveEquipments
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Link)" - {
+        "when authorisations array is non-empty" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val answers = emptyUserAnswers.setValue(EquipmentSection(Index(0)), Json.obj("foo" -> "bar"))
+              val helper  = new TransportAnswersHelper(answers, mode)
+              val result  = helper.addOrRemoveEquipments.get
+
+              result.id mustBe "add-or-remove-transport-equipment"
+              result.text mustBe "Add or remove transport equipment"
+              result.href mustBe equipmentsRoutes.AddAnotherEquipmentController.onPageLoad(answers.lrn, mode).url
           }
         }
       }

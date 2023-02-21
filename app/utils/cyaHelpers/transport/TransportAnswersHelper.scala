@@ -16,6 +16,9 @@
 
 package utils.cyaHelpers.transport
 
+import controllers.transport.authorisationsAndLimit.authorisations.{routes => authorisationsRoutes}
+import controllers.transport.equipment.{routes => equipmentsRoutes}
+import controllers.transport.supplyChainActors.{routes => supplyChainActorsRoutes}
 import models.journeyDomain.transport.authorisationsAndLimit.authorisations.AuthorisationDomain
 import models.journeyDomain.transport.equipment.EquipmentDomain
 import models.journeyDomain.transport.supplyChainActors.SupplyChainActorDomain
@@ -36,6 +39,7 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import utils.cyaHelpers.AnswersHelper
+import viewModels.Link
 
 import java.time.LocalDate
 
@@ -100,6 +104,14 @@ class TransportAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit mess
     args = index.display
   )(AuthorisationDomain.userAnswersReader(index))
 
+  def addOrRemoveAuthorisations: Option[Link] = buildLink(AuthorisationsSection) {
+    Link(
+      id = "add-or-remove-an-authorisation",
+      text = messages("transport.checkYourAnswers.authorisations.addOrRemove"),
+      href = authorisationsRoutes.AddAnotherAuthorisationController.onPageLoad(userAnswers.lrn, mode).url
+    )
+  }
+
   def addSupplyChainActor: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = SupplyChainActorYesNoPage,
     formatAnswer = formatAsYesOrNo,
@@ -116,6 +128,14 @@ class TransportAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit mess
     id = Some(s"change-supply-chain-actor-${index.display}"),
     args = index.display
   )(SupplyChainActorDomain.userAnswersReader(index))
+
+  def addOrRemoveSupplyChainActors: Option[Link] = buildLink(SupplyChainActorsSection) {
+    Link(
+      id = "add-or-remove-supply-chain-actors",
+      text = messages("transport.checkYourAnswers.supplyChainActors.addOrRemove"),
+      href = supplyChainActorsRoutes.AddAnotherSupplyChainActorController.onPageLoad(userAnswers.lrn, mode).url
+    )
+  }
 
   def limitDate: Option[SummaryListRow] = getAnswerAndBuildRow[LocalDate](
     page = LimitDatePage,
@@ -168,6 +188,14 @@ class TransportAnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit mess
     id = Some(s"change-transport-equipment-${index.display}"),
     args = index.display
   )(EquipmentDomain.userAnswersReader(index))
+
+  def addOrRemoveEquipments: Option[Link] = buildLink(EquipmentsSection) {
+    Link(
+      id = "add-or-remove-transport-equipment",
+      text = messages("transport.checkYourAnswers.transportEquipment.addOrRemove"),
+      href = equipmentsRoutes.AddAnotherEquipmentController.onPageLoad(userAnswers.lrn, mode).url
+    )
+  }
 
   def addPaymentMethod: Option[SummaryListRow] = getAnswerAndBuildRow[Boolean](
     page = AddPaymentMethodYesNoPage,

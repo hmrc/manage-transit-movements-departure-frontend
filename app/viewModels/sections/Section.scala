@@ -25,9 +25,16 @@ case class Section(sectionTitle: Option[String], rows: Seq[SummaryListRow], addA
 }
 
 object Section {
-  def apply(sectionTitle: String, rows: Seq[SummaryListRow]): Section = new Section(Some(sectionTitle), rows, None)
-  def apply(rows: Seq[SummaryListRow]): Section                       = new Section(None, rows, None)
+
+  def apply(sectionTitle: String, rows: Seq[SummaryListRow]): Section =
+    new Section(Some(sectionTitle), rows, None)
+
+  def apply(rows: Seq[SummaryListRow]): Section =
+    new Section(None, rows, None)
 
   def apply(sectionTitle: String, rows: Seq[SummaryListRow], addAnotherLink: Link): Section =
     new Section(Some(sectionTitle), rows, Some(addAnotherLink))
+
+  def apply(sectionTitle: String, rows: Seq[SummaryListRow], addAnotherLink: Option[Link]): Section =
+    new Section(Some(sectionTitle), rows, addAnotherLink)
 }
