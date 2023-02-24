@@ -21,11 +21,11 @@ import models.UserAnswers
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 class LockService @Inject() (
   cacheConnector: CacheConnector
-)(implicit ec: ExecutionContext) {
+) {
 
   def checkLock(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Boolean] =
     cacheConnector.checkLock(userAnswers)
