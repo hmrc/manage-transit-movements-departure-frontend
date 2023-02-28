@@ -16,11 +16,9 @@
 
 package base
 
-import connectors.CacheConnector
 import controllers.actions._
 import models.{CountryList, Index, Mode, UserAnswers}
 import navigation._
-import navigation.guaranteeDetails.{GuaranteeDetailsNavigatorProvider, GuaranteeNavigatorProvider}
 import navigation.routeDetails._
 import navigation.traderDetails.TraderDetailsNavigatorProvider
 import navigation.transport._
@@ -78,12 +76,6 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
 
   protected val fakePreTaskListNavigatorProvider: PreTaskListNavigatorProvider =
     (mode: Mode) => new FakePreTaskListNavigator(onwardRoute, mode)
-
-  protected val fakeGuaranteeDetailsNavigatorProvider: GuaranteeDetailsNavigatorProvider =
-    (mode: Mode) => new FakeGuaranteeDetailsNavigator(onwardRoute, mode)
-
-  protected val fakeGuaranteeNavigatorProvider: GuaranteeNavigatorProvider =
-    (mode: Mode, index: Index) => new FakeGuaranteeNavigator(onwardRoute, mode, index)
 
   protected val fakeTraderDetailsNavigatorProvider: TraderDetailsNavigatorProvider =
     (mode: Mode) => new FakeTraderDetailsNavigator(onwardRoute, mode)

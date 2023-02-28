@@ -37,7 +37,6 @@ trait UserAnswersEntryGenerators {
   def generateAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
     generatePreTaskListAnswer orElse
       generateTraderDetailsAnswer orElse
-      generateGuaranteeDetailsAnswer orElse
       generateRouteDetailsAnswer orElse
       generateTransportAnswer
 
@@ -123,19 +122,6 @@ trait UserAnswersEntryGenerators {
       case NamePage       => Gen.alphaNumStr.map(JsString)
       case CountryPage    => arbitrary[Country].map(Json.toJson(_))
       case AddressPage    => arbitrary[DynamicAddress].map(Json.toJson(_))
-    }
-  }
-
-  private def generateGuaranteeDetailsAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.guaranteeDetails.guarantee._
-    {
-      case GuaranteeTypePage(_)       => arbitrary[GuaranteeType].map(Json.toJson(_))
-      case ReferenceNumberPage(_)     => Gen.alphaNumStr.map(JsString)
-      case OtherReferenceYesNoPage(_) => arbitrary[Boolean].map(JsBoolean)
-      case OtherReferencePage(_)      => Gen.alphaNumStr.map(JsString)
-      case AccessCodePage(_)          => Gen.alphaNumStr.map(JsString)
-      case LiabilityAmountPage(_)     => Gen.choose(BigDecimal("0"), BigDecimal("9999999999999999.99")).map(Json.toJson(_))
-      case CurrencyPage(_)            => arbitrary[CurrencyCode].map(Json.toJson(_))
     }
   }
 

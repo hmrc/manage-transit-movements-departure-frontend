@@ -28,8 +28,7 @@ trait UserAnswersGenerator
     with PreTaskListUserAnswersGenerator
     with TraderDetailsUserAnswersGenerator
     with RouteDetailsUserAnswersGenerator
-    with TransportUserAnswersGenerator
-    with GuaranteeDetailsUserAnswersGenerator {
+    with TransportUserAnswersGenerator {
   self: Generators =>
 
   val ctcCountries: Seq[Country]                             = listWithMaxLength[Country]().sample.get

@@ -2,7 +2,6 @@
 
 ->         /                                              app.preTaskList.Routes
 ->         /                                              app.traderDetails.Routes
-->         /                                              app.guaranteeDetails.Routes
 ->         /                                              app.routeDetails.Routes
 ->         /                                              app.transport.Routes
 

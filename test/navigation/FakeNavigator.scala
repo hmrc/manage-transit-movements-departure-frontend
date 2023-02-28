@@ -17,7 +17,6 @@
 package navigation
 
 import models.{CountryList, Index, Mode, UserAnswers}
-import navigation.guaranteeDetails.{GuaranteeDetailsNavigator, GuaranteeNavigator}
 import navigation.routeDetails._
 import navigation.traderDetails.TraderDetailsNavigator
 import navigation.transport._
@@ -28,14 +27,6 @@ class FakeNavigator(desiredRoute: Call) extends Navigator {
 }
 
 class FakePreTaskListNavigator(desiredRoute: Call, mode: Mode) extends PreTaskListNavigator(mode) {
-  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
-}
-
-class FakeGuaranteeDetailsNavigator(desiredRoute: Call, mode: Mode) extends GuaranteeDetailsNavigator(mode) {
-  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
-}
-
-class FakeGuaranteeNavigator(desiredRoute: Call, mode: Mode, index: Index) extends GuaranteeNavigator(mode, index) {
   override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
