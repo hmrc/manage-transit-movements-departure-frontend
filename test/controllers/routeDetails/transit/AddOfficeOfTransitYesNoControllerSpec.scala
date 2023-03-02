@@ -19,7 +19,7 @@ package controllers.routeDetails.transit
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.YesNoFormProvider
 import models.NormalMode
-import navigation.routeDetails.TransitNavigatorProvider
+import navigation.routeDetails.RouteDetailsNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -42,7 +42,7 @@ class AddOfficeOfTransitYesNoControllerSpec extends SpecBase with AppWithDefault
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[TransitNavigatorProvider]).toInstance(fakeTransitNavigatorProvider))
+      .overrides(bind(classOf[RouteDetailsNavigatorProvider]).toInstance(fakeRouteDetailsNavigatorProvider))
 
   "AddOfficeOfTransitYesNo Controller" - {
 
