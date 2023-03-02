@@ -22,7 +22,7 @@ import forms.YesNoFormProvider
 import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.{LocalReferenceNumber, Mode}
 import navigation.UserAnswersNavigator
-import navigation.routeDetails.TransitNavigatorProvider
+import navigation.routeDetails.RouteDetailsNavigatorProvider
 import pages.routeDetails.transit.AddOfficeOfTransitYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -37,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddOfficeOfTransitYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
-  navigatorProvider: TransitNavigatorProvider,
+  navigatorProvider: RouteDetailsNavigatorProvider,
   actions: Actions,
   formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
