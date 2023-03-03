@@ -1,9 +1,0 @@
-GET        /:lrn/trader-details/transit-holder/contact-name                                 controllers.traderDetails.holderOfTransit.contact.NameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/trader-details/transit-holder/contact-name                                 controllers.traderDetails.holderOfTransit.contact.NameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/trader-details/transit-holder/change-contact-name                          controllers.traderDetails.holderOfTransit.contact.NameController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/trader-details/transit-holder/change-contact-name                          controllers.traderDetails.holderOfTransit.contact.NameController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-
-GET        /:lrn/trader-details/transit-holder/contact-telephone-number                     controllers.traderDetails.holderOfTransit.contact.TelephoneNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/trader-details/transit-holder/contact-telephone-number                     controllers.traderDetails.holderOfTransit.contact.TelephoneNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/trader-details/transit-holder/change-contact-telephone-number              controllers.traderDetails.holderOfTransit.contact.TelephoneNumberController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/trader-details/transit-holder/change-contact-telephone-number              controllers.traderDetails.holderOfTransit.contact.TelephoneNumberController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

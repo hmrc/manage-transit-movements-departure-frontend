@@ -16,13 +16,11 @@
 
 package base
 
-import connectors.CacheConnector
 import controllers.actions._
 import models.{CountryList, Index, Mode, UserAnswers}
 import navigation._
 import navigation.guaranteeDetails.{GuaranteeDetailsNavigatorProvider, GuaranteeNavigatorProvider}
 import navigation.routeDetails._
-import navigation.traderDetails.TraderDetailsNavigatorProvider
 import navigation.transport._
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
@@ -84,9 +82,6 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
 
   protected val fakeGuaranteeNavigatorProvider: GuaranteeNavigatorProvider =
     (mode: Mode, index: Index) => new FakeGuaranteeNavigator(onwardRoute, mode, index)
-
-  protected val fakeTraderDetailsNavigatorProvider: TraderDetailsNavigatorProvider =
-    (mode: Mode) => new FakeTraderDetailsNavigator(onwardRoute, mode)
 
   protected val fakeRouteDetailsNavigatorProvider: RouteDetailsNavigatorProvider =
     (mode: Mode, _: CountryList, _: CountryList) => new FakeRouteDetailsNavigator(onwardRoute, mode)

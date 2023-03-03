@@ -19,12 +19,10 @@ package models.journeyDomain
 import models.domain.UserAnswersReader
 import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
 import models.journeyDomain.routeDetails.RouteDetailsDomain
-import models.journeyDomain.traderDetails.TraderDetailsDomain
 import models.journeyDomain.transport.TransportDomain
 
 case class DepartureDomain(
   preTaskList: PreTaskListDomain,
-  traderDetails: TraderDetailsDomain,
   routeDetails: RouteDetailsDomain,
   guaranteeDetails: GuaranteeDetailsDomain,
   transportDetails: TransportDomain
@@ -34,10 +32,9 @@ object DepartureDomain {
 
   def userAnswersReader(ctcCountryCode: Seq[String], customsSecurityAgreement: Seq[String]): UserAnswersReader[DepartureDomain] =
     for {
-      preTaskListDomain   <- UserAnswersReader[PreTaskListDomain]
-      routeDetailsDomain  <- RouteDetailsDomain.userAnswersReader(ctcCountryCode, customsSecurityAgreement)
-      traderDetailsDomain <- UserAnswersReader[TraderDetailsDomain]
-      guaranteeDomain     <- UserAnswersReader[GuaranteeDetailsDomain]
-      transportDomain     <- UserAnswersReader[TransportDomain]
-    } yield DepartureDomain(preTaskListDomain, traderDetailsDomain, routeDetailsDomain, guaranteeDomain, transportDomain)
+      preTaskListDomain  <- UserAnswersReader[PreTaskListDomain]
+      routeDetailsDomain <- RouteDetailsDomain.userAnswersReader(ctcCountryCode, customsSecurityAgreement)
+      guaranteeDomain    <- UserAnswersReader[GuaranteeDetailsDomain]
+      transportDomain    <- UserAnswersReader[TransportDomain]
+    } yield DepartureDomain(preTaskListDomain, routeDetailsDomain, guaranteeDomain, transportDomain)
 }

@@ -25,6 +25,7 @@ import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.departure.{Identification, InlandMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
+import pages.traderDetails.consignment.ApprovedOperatorPage
 import play.api.libs.json._
 import queries.Gettable
 
@@ -36,7 +37,6 @@ trait UserAnswersEntryGenerators {
 
   def generateAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
     generatePreTaskListAnswer orElse
-      generateTraderDetailsAnswer orElse
       generateGuaranteeDetailsAnswer orElse
       generateRouteDetailsAnswer orElse
       generateTransportAnswer
@@ -50,79 +50,7 @@ trait UserAnswersEntryGenerators {
       case TIRCarnetReferencePage  => Gen.alphaNumStr.map(JsString)
       case SecurityDetailsTypePage => arbitrary[SecurityDetailsType].map(Json.toJson(_))
       case DetailsConfirmedPage    => Gen.const(true).map(JsBoolean)
-    }
-  }
-
-  private def generateTraderDetailsAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.traderDetails._
-    {
-      generateHolderOfTransitAnswer orElse
-        generateRepresentativeAnswer orElse
-        generateConsignmentAnswer orElse {
-          case ActingAsRepresentativePage => arbitrary[Boolean].map(JsBoolean)
-        }
-    }
-  }
-
-  private def generateHolderOfTransitAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.traderDetails.holderOfTransit._
-    {
-      case EoriYesNoPage               => arbitrary[Boolean].map(JsBoolean)
-      case EoriPage                    => Gen.alphaNumStr.map(JsString)
-      case TirIdentificationYesNoPage  => arbitrary[Boolean].map(JsBoolean)
-      case TirIdentificationPage       => Gen.alphaNumStr.map(JsString)
-      case NamePage                    => Gen.alphaNumStr.map(JsString)
-      case CountryPage                 => arbitrary[Country].map(Json.toJson(_))
-      case AddressPage                 => arbitrary[DynamicAddress].map(Json.toJson(_))
-      case AddContactPage              => arbitrary[Boolean].map(JsBoolean)
-      case contact.NamePage            => Gen.alphaNumStr.map(JsString)
-      case contact.TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
-    }
-  }
-
-  private def generateRepresentativeAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.traderDetails.representative._
-    {
-      case AddDetailsPage      => arbitrary[Boolean].map(JsBoolean)
-      case EoriPage            => Gen.alphaNumStr.map(JsString)
-      case NamePage            => Gen.alphaNumStr.map(JsString)
-      case TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
-    }
-  }
-
-  private def generateConsignmentAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.traderDetails.consignment._
-    {
-      generateConsignorAnswer orElse
-        generateConsigneeAnswer orElse {
-          case ApprovedOperatorPage     => arbitrary[Boolean].map(JsBoolean)
-          case MoreThanOneConsigneePage => arbitrary[Boolean].map(JsBoolean)
-        }
-    }
-  }
-
-  private def generateConsignorAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.traderDetails.consignment.consignor._
-    {
-      case EoriYesNoPage               => arbitrary[Boolean].map(JsBoolean)
-      case EoriPage                    => Gen.alphaNumStr.map(JsString)
-      case NamePage                    => Gen.alphaNumStr.map(JsString)
-      case CountryPage                 => arbitrary[Country].map(Json.toJson(_))
-      case AddressPage                 => arbitrary[DynamicAddress].map(Json.toJson(_))
-      case AddContactPage              => arbitrary[Boolean].map(JsBoolean)
-      case contact.NamePage            => Gen.alphaNumStr.map(JsString)
-      case contact.TelephoneNumberPage => Gen.alphaNumStr.map(JsString)
-    }
-  }
-
-  private def generateConsigneeAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
-    import pages.traderDetails.consignment.consignee._
-    {
-      case EoriYesNoPage  => arbitrary[Boolean].map(JsBoolean)
-      case EoriNumberPage => Gen.alphaNumStr.map(JsString)
-      case NamePage       => Gen.alphaNumStr.map(JsString)
-      case CountryPage    => arbitrary[Country].map(Json.toJson(_))
-      case AddressPage    => arbitrary[DynamicAddress].map(Json.toJson(_))
+      case ApprovedOperatorPage    => arbitrary[Boolean].map(JsBoolean)
     }
   }
 

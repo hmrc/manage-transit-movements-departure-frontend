@@ -26,7 +26,6 @@ import org.scalacheck.{Arbitrary, Gen}
 trait UserAnswersGenerator
     extends UserAnswersEntryGenerators
     with PreTaskListUserAnswersGenerator
-    with TraderDetailsUserAnswersGenerator
     with RouteDetailsUserAnswersGenerator
     with TransportUserAnswersGenerator
     with GuaranteeDetailsUserAnswersGenerator {

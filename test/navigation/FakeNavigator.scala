@@ -19,7 +19,6 @@ package navigation
 import models.{CountryList, Index, Mode, UserAnswers}
 import navigation.guaranteeDetails.{GuaranteeDetailsNavigator, GuaranteeNavigator}
 import navigation.routeDetails._
-import navigation.traderDetails.TraderDetailsNavigator
 import navigation.transport._
 import play.api.mvc.Call
 
@@ -36,10 +35,6 @@ class FakeGuaranteeDetailsNavigator(desiredRoute: Call, mode: Mode) extends Guar
 }
 
 class FakeGuaranteeNavigator(desiredRoute: Call, mode: Mode, index: Index) extends GuaranteeNavigator(mode, index) {
-  override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
-}
-
-class FakeTraderDetailsNavigator(desiredRoute: Call, mode: Mode) extends TraderDetailsNavigator(mode) {
   override def nextPage(userAnswers: UserAnswers): Call = desiredRoute
 }
 
