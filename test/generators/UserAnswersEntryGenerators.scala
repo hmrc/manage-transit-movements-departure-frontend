@@ -25,7 +25,6 @@ import models.transport.transportMeans.BorderModeOfTransport
 import models.transport.transportMeans.departure.{Identification, InlandMode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.traderDetails.consignment.ApprovedOperatorPage
 import play.api.libs.json._
 import queries.Gettable
 
@@ -37,6 +36,7 @@ trait UserAnswersEntryGenerators {
 
   def generateAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
     generatePreTaskListAnswer orElse
+      generateTraderDetailsAnswer orElse
       generateGuaranteeDetailsAnswer orElse
       generateRouteDetailsAnswer orElse
       generateTransportAnswer
@@ -50,7 +50,16 @@ trait UserAnswersEntryGenerators {
       case TIRCarnetReferencePage  => Gen.alphaNumStr.map(JsString)
       case SecurityDetailsTypePage => arbitrary[SecurityDetailsType].map(Json.toJson(_))
       case DetailsConfirmedPage    => Gen.const(true).map(JsBoolean)
-      case ApprovedOperatorPage    => arbitrary[Boolean].map(JsBoolean)
+    }
+  }
+
+  private def generateTraderDetailsAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
+    generateConsignmentAnswer
+
+  private def generateConsignmentAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+    import pages.traderDetails.consignment._
+    {
+      case ApprovedOperatorPage => arbitrary[Boolean].map(JsBoolean)
     }
   }
 

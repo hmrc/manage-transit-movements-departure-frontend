@@ -20,12 +20,12 @@ import models.DeclarationType.Option4
 import models.domain.{GettableAsReaderOps, UserAnswersReader}
 import pages.QuestionPage
 import pages.preTaskList.DeclarationTypePage
-import pages.sections.PreTaskListSection
+import pages.sections.traderDetails.TraderDetailsConsignmentSection
 import play.api.libs.json.JsPath
 
 case object ApprovedOperatorPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = PreTaskListSection.path \ toString
+  override def path: JsPath = TraderDetailsConsignmentSection.path \ toString
 
   override def toString: String = "approvedOperator"
 
