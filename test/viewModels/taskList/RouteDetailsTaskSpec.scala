@@ -67,7 +67,7 @@ class RouteDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with G
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val task = RouteDetailsTask(taskStatus)
-          task.href(lrn)(frontendAppConfig) must endWith(s"/$lrn/route-details")
+          task.href(lrn)(frontendAppConfig) must endWith(s"/route-details/$lrn")
       }
     }
   }

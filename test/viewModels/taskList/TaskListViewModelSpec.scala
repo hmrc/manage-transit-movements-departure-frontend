@@ -38,11 +38,11 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
         tasks(1).name mustBe "Add route details"
         tasks(1).status mustBe TaskStatus.NotStarted
-        tasks(1).href(answers.lrn)(frontendAppConfig) must endWith(s"/$lrn/route-details")
+        tasks(1).href(answers.lrn)(frontendAppConfig) must endWith(s"/route-details/$lrn")
 
         tasks(2).name mustBe "Transport details"
         tasks(2).status mustBe TaskStatus.CannotStartYet
-        tasks(2).href(answers.lrn)(frontendAppConfig) must endWith(s"/$lrn/transport-details")
+        tasks(2).href(answers.lrn)(frontendAppConfig) must endWith(s"/transport-details/$lrn")
 
         tasks(3).name mustBe "Items"
         tasks(3).status mustBe TaskStatus.CannotStartYet
@@ -78,7 +78,7 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
         result(2).name mustBe "Add transport details"
         result(2).status mustBe TaskStatus.NotStarted
-        result(2).href(answers.lrn)(frontendAppConfig) must endWith(s"/$lrn/transport-details")
+        result(2).href(answers.lrn)(frontendAppConfig) must endWith(s"/transport-details/$lrn")
       }
     }
 
