@@ -67,7 +67,7 @@ class TransportTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val task = TransportTask(taskStatus)
-          task.href(lrn)(frontendAppConfig) must endWith(s"/$lrn/transport-details")
+          task.href(lrn)(frontendAppConfig) must endWith(s"/transport-details/$lrn")
       }
     }
   }
