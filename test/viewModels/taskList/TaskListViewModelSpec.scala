@@ -34,7 +34,7 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
         tasks.head.name mustBe "Add trader details"
         tasks.head.status mustBe TaskStatus.NotStarted
-        tasks.head.href(answers.lrn)(frontendAppConfig) must endWith(s"/$lrn/trader-details")
+        tasks.head.href(answers.lrn)(frontendAppConfig) must endWith(s"/trader-details/$lrn")
 
         tasks(1).name mustBe "Add route details"
         tasks(1).status mustBe TaskStatus.NotStarted
@@ -50,7 +50,7 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
         tasks(4).name mustBe "Add guarantee details"
         tasks(4).status mustBe TaskStatus.NotStarted
-        tasks(4).href(answers.lrn)(frontendAppConfig) must endWith(s"/$lrn/guarantee-details")
+        tasks(4).href(answers.lrn)(frontendAppConfig) must endWith(s"/guarantee-details/$lrn")
       }
     }
 
