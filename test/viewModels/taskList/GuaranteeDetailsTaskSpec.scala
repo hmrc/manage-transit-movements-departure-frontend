@@ -67,7 +67,7 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val task = GuaranteeDetailsTask(taskStatus)
-          task.href(lrn)(frontendAppConfig) must endWith(s"/$lrn/guarantee-details")
+          task.href(lrn)(frontendAppConfig) must endWith(s"/guarantee-details/$lrn")
       }
     }
   }

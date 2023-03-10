@@ -67,7 +67,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val task = TraderDetailsTask(taskStatus)
-          task.href(lrn)(frontendAppConfig) must endWith(s"/$lrn/trader-details")
+          task.href(lrn)(frontendAppConfig) must endWith(s"/trader-details/$lrn")
       }
     }
   }
