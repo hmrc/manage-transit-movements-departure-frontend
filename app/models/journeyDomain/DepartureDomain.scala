@@ -17,7 +17,6 @@
 package models.journeyDomain
 
 import models.domain.UserAnswersReader
-import models.journeyDomain.guaranteeDetails.GuaranteeDetailsDomain
 import models.journeyDomain.routeDetails.RouteDetailsDomain
 import models.journeyDomain.traderDetails.TraderDetailsDomain
 import models.journeyDomain.transport.TransportDomain
@@ -26,7 +25,6 @@ case class DepartureDomain(
   preTaskList: PreTaskListDomain,
   traderDetails: TraderDetailsDomain,
   routeDetails: RouteDetailsDomain,
-  guaranteeDetails: GuaranteeDetailsDomain,
   transportDetails: TransportDomain
 )
 
@@ -37,7 +35,6 @@ object DepartureDomain {
       preTaskListDomain   <- UserAnswersReader[PreTaskListDomain]
       routeDetailsDomain  <- RouteDetailsDomain.userAnswersReader(ctcCountryCode, customsSecurityAgreement)
       traderDetailsDomain <- UserAnswersReader[TraderDetailsDomain]
-      guaranteeDomain     <- UserAnswersReader[GuaranteeDetailsDomain]
       transportDomain     <- UserAnswersReader[TransportDomain]
-    } yield DepartureDomain(preTaskListDomain, traderDetailsDomain, routeDetailsDomain, guaranteeDomain, transportDomain)
+    } yield DepartureDomain(preTaskListDomain, traderDetailsDomain, routeDetailsDomain, transportDomain)
 }
