@@ -16,13 +16,11 @@
 
 package forms.mappings
 
-import models.reference.{Country, CurrencyCode, CustomsOffice, Nationality, UnLocode}
-import models.{CountryList, CurrencyCodeList, CustomsOfficeList, Enumerable, LocalReferenceNumber, NationalityList, UnLocodeList}
+import models.reference.CustomsOffice
+import models.{CustomsOfficeList, Enumerable, LocalReferenceNumber}
 import play.api.data.FieldMapping
 import play.api.data.Forms.of
 import play.api.data.format.Formats.ignoredFormat
-
-import java.time.{LocalDate, LocalTime}
 
 trait Mappings extends Formatters with Constraints {
 
@@ -63,63 +61,10 @@ trait Mappings extends Formatters with Constraints {
   ): FieldMapping[LocalReferenceNumber] =
     of(lrnFormatter(requiredKey, lengthKey, invalidCharactersKey, invalidFormatKey))
 
-  protected def localDate(
-    invalidKey: String,
-    allRequiredKey: String,
-    twoRequiredKey: String,
-    requiredKey: String,
-    args: Seq[String] = Seq.empty
-  ): FieldMapping[LocalDate] =
-    of(new LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey, args))
-
-  protected def localTime(
-    invalidKey: String,
-    allRequiredKey: String,
-    requiredKey: String,
-    args: Seq[String] = Seq.empty
-  ): FieldMapping[LocalTime] =
-    of(new LocalTimeFormatter(invalidKey, allRequiredKey, requiredKey, args))
-
-  protected def country(
-    countryList: CountryList,
-    errorKey: String = "error.required",
-    args: Seq[Any] = Seq.empty
-  ): FieldMapping[Country] =
-    of(countryFormatter(countryList, errorKey, args))
-
   protected def customsOffice(
     customsOfficeList: CustomsOfficeList,
     errorKey: String = "error.required",
     args: Seq[Any] = Seq.empty
   ): FieldMapping[CustomsOffice] =
     of(customsOfficeFormatter(customsOfficeList, errorKey, args))
-
-  protected def unLocode(
-    unLocodeList: UnLocodeList,
-    errorKey: String = "error.required",
-    args: Seq[Any] = Seq.empty
-  ): FieldMapping[UnLocode] =
-    of(unLocodeFormatter(unLocodeList, errorKey, args))
-
-  protected def currency(
-    requiredKey: String = "error.required",
-    invalidCharactersKey: String = "error.invalidCharacters",
-    invalidFormatKey: String = "error.invalidFormat",
-    invalidValueKey: String = "error.invalidValue"
-  ): FieldMapping[BigDecimal] =
-    of(currencyFormatter(requiredKey, invalidCharactersKey, invalidFormatKey, invalidValueKey))
-
-  protected def currencyCode(
-    currencyCodeList: CurrencyCodeList,
-    errorKey: String = "error.required",
-    args: Seq[Any] = Seq.empty
-  ): FieldMapping[CurrencyCode] =
-    of(currencyCodeFormatter(currencyCodeList, errorKey, args))
-
-  protected def nationality(
-    nationalityList: NationalityList,
-    errorKey: String = "error.required",
-    args: Seq[Any] = Seq.empty
-  ): FieldMapping[Nationality] =
-    of(nationalityFormatter(nationalityList, errorKey, args))
 }

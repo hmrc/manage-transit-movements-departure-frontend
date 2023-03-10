@@ -16,17 +16,10 @@
 
 package utils.cyaHelpers
 
-import models.reference.{Country, CurrencyCode}
-import models.{DateTime, DynamicAddress, PostalCodeAddress}
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.html.components._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-import utils.Format.{RichDateTime, RichLocalDate}
-
-import java.text.NumberFormat
-import java.time.LocalDate
-import java.util.Currency
 
 private[utils] class SummaryListRowHelper(implicit messages: Messages) {
 
@@ -37,42 +30,15 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
       messages("site.no").toText
     }
 
-  def formatAsDateTime(answer: DateTime): Content =
-    answer.formatAsString.toText
-
-  def formatAsDate(answer: LocalDate): Content = answer.formatAsString.toText
-
-  protected def formatAsDynamicAddress(address: DynamicAddress): Content =
-    HtmlContent(address.toString)
-
-  protected def formatAsPostalCodeAddress(address: PostalCodeAddress): Content =
-    HtmlContent(address.toString)
-
   protected def formatAsText[T](answer: T): Content = s"$answer".toText
 
   protected def formatAsPassword(answer: String): Content = ("•" * answer.length).toText
-
-  protected def formatAsCurrency(answer: BigDecimal, currencyCode: CurrencyCode): Content = {
-    val str =
-      try {
-        val format   = NumberFormat.getCurrencyInstance()
-        val currency = Currency.getInstance(currencyCode.currency)
-        format.setCurrency(currency)
-        format.format(answer)
-      } catch {
-        case _: Throwable => s"$answer ${currencyCode.currency}"
-      }
-
-    str.toText
-  }
 
   protected def formatEnumAsText[T](messageKeyPrefix: String)(answer: T): Content =
     formatEnumAsString(messageKeyPrefix)(answer).toText
 
   protected def formatEnumAsString[T](messageKeyPrefix: String)(answer: T): String =
     messages(s"$messageKeyPrefix.$answer")
-
-  protected def formatAsCountry(country: Country): Content = country.description.toText
 
   protected def buildRow(
     prefix: String,

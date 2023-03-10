@@ -1,8 +1,0 @@
-
-->         /                                                                                             app.transport.authorisationsAndLimit.authorisations.index.Routes
-
-GET        /:lrn/transport-details/authorisations/add-another                           controllers.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/transport-details/authorisations/add-another                           controllers.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/transport-details/authorisations/change-add-another                    controllers.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/transport-details/authorisations/change-add-another                    controllers.transport.authorisationsAndLimit.authorisations.AddAnotherAuthorisationController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-

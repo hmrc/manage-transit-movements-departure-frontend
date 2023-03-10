@@ -17,7 +17,7 @@
 package base
 
 import config.{FrontendAppConfig, RenderConfig}
-import models.{EoriNumber, Index, LocalReferenceNumber, UserAnswers}
+import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -48,19 +48,6 @@ trait SpecBase
 
   val eoriNumber: EoriNumber    = EoriNumber("GB1234567891234")
   val lrn: LocalReferenceNumber = LocalReferenceNumber("ABCD1234567890123").get
-
-  val index: Index              = Index(0)
-  val referenceIndex: Index     = Index(0)
-  val documentIndex: Index      = Index(0)
-  val itemIndex: Index          = Index(0)
-  val packageIndex: Index       = Index(0)
-  val containerIndex: Index     = Index(0)
-  val activeIndex: Index        = Index(0)
-  val actorIndex: Index         = Index(0)
-  val authorisationIndex: Index = Index(0)
-  val equipmentIndex: Index     = Index(0)
-  val sealIndex: Index          = Index(0)
-  val itemNumberIndex: Index    = Index(0)
 
   def fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
 

@@ -19,9 +19,6 @@ package config
 import com.google.inject.AbstractModule
 import controllers.actions._
 import navigation._
-import navigation.routeDetails._
-import navigation.traderDetails._
-import navigation.transport._
 
 import java.time.Clock
 
@@ -31,34 +28,11 @@ class Module extends AbstractModule {
 
     bind(classOf[PreTaskListNavigatorProvider]).to(classOf[PreTaskListNavigatorProviderImpl])
 
-    bind(classOf[TraderDetailsNavigatorProvider]).to(classOf[TraderDetailsNavigatorProviderImpl])
-
-    bind(classOf[RouteDetailsNavigatorProvider]).to(classOf[RouteDetailsNavigatorProviderImpl])
-    bind(classOf[RoutingNavigatorProvider]).to(classOf[RoutingNavigatorProviderImpl])
-    bind(classOf[CountryOfRoutingNavigatorProvider]).to(classOf[CountryOfRoutingNavigatorProviderImpl])
-    bind(classOf[TransitNavigatorProvider]).to(classOf[TransitNavigatorProviderImpl])
-    bind(classOf[OfficeOfTransitNavigatorProvider]).to(classOf[OfficeOfTransitNavigatorProviderImpl])
-    bind(classOf[ExitNavigatorProvider]).to(classOf[ExitNavigatorProviderImpl])
-    bind(classOf[OfficeOfExitNavigatorProvider]).to(classOf[OfficeOfExitNavigatorProviderImpl])
-    bind(classOf[LocationOfGoodsNavigatorProvider]).to(classOf[LocationOfGoodsNavigatorProviderImpl])
-    bind(classOf[LoadingAndUnloadingNavigatorProvider]).to(classOf[LoadingAndUnloadingNavigatorProviderImpl])
-
-    bind(classOf[TransportNavigatorProvider]).to(classOf[TransportNavigatorProviderImpl])
-    bind(classOf[TransportMeansNavigatorProvider]).to(classOf[TransportMeansNavigatorProviderImpl])
-    bind(classOf[TransportMeansActiveNavigatorProvider]).to(classOf[TransportMeansActiveNavigatorProviderImpl])
-    bind(classOf[TransportMeansActiveListNavigatorProvider]).to(classOf[TransportMeansActiveListNavigatorProviderImpl])
-    bind(classOf[SupplyChainActorNavigatorProvider]).to(classOf[SupplyChainActorNavigatorProviderImpl])
-    bind(classOf[AuthorisationNavigatorProvider]).to(classOf[AuthorisationNavigatorProviderImpl])
-    bind(classOf[EquipmentsNavigatorProvider]).to(classOf[EquipmentsNavigatorProviderImpl])
-    bind(classOf[EquipmentNavigatorProvider]).to(classOf[EquipmentNavigatorProviderImpl])
-    bind(classOf[SealNavigatorProvider]).to(classOf[SealNavigatorProviderImpl])
-    bind(classOf[ItemNumberNavigatorProvider]).to(classOf[ItemNumberNavigatorProviderImpl])
-
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])
     bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl])
     bind(classOf[PreTaskListCompletedAction]).to(classOf[PreTaskListCompletedActionImpl])
-    bind(classOf[DependentTasksCompletedActionProvider]).to(classOf[DependentTasksCompletedActionProviderImpl])
+    bind(classOf[DependentTaskAction]).to(classOf[DependentTaskActionImpl])
     bind(classOf[SpecificDataRequiredActionProvider]).to(classOf[SpecificDataRequiredActionImpl]).asEagerSingleton()
 
     bind(classOf[RenderConfig]).to(classOf[RenderConfigImpl]).asEagerSingleton()
