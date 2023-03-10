@@ -16,7 +16,6 @@
 
 package base
 
-import connectors.CacheConnector
 import controllers.actions._
 import models.{CountryList, Index, Mode, UserAnswers}
 import navigation._
