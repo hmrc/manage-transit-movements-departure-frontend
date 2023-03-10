@@ -35,7 +35,6 @@ class TaskListViewModel {
       task(TraderDetailsTask.section),
       task(RouteDetailsTask.section),
       task(TransportTask.section, Seq(TraderDetailsTask.section, RouteDetailsTask.section)),
-      task(DocumentsTask.section),
       task(ItemsTask.section, Seq(TraderDetailsTask.section, RouteDetailsTask.section, TransportTask.section)),
       task(GuaranteeDetailsTask.section)
     ).flatten.collect {

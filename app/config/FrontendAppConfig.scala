@@ -81,7 +81,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   def routeDetailsFrontendUrl(lrn: LocalReferenceNumber): String     = frontendUrl(lrn, "routeDetails")
   def transportDetailsFrontendUrl(lrn: LocalReferenceNumber): String = frontendUrl(lrn, "transportDetails")
   def guaranteeDetailsFrontendUrl(lrn: LocalReferenceNumber): String = frontendUrl(lrn, "guaranteeDetails")
-  def documentsFrontendUrl(lrn: LocalReferenceNumber): String        = frontendUrl(lrn, "documents")
   def itemsFrontendUrl(lrn: LocalReferenceNumber): String            = frontendUrl(lrn, "items")
 
   private def frontendUrl(lrn: LocalReferenceNumber, section: String): String = {

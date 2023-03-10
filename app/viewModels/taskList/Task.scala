@@ -49,7 +49,6 @@ object Task {
     case TraderDetailsTask.section    => Some(TraderDetailsTask(status))
     case RouteDetailsTask.section     => Some(RouteDetailsTask(status))
     case TransportTask.section        => Some(TransportTask(status))
-    case DocumentsTask.section        => Some(DocumentsTask(status))
     case ItemsTask.section            => Some(ItemsTask(status))
     case GuaranteeDetailsTask.section => Some(GuaranteeDetailsTask(status))
     case _                            => None
