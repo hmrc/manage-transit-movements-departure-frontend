@@ -30,7 +30,7 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
         val tasks = new TaskListViewModel().apply(answers)
 
-        tasks.size mustBe 5
+        tasks.size mustBe 6
 
         tasks.head.name mustBe "Add trader details"
         tasks.head.status mustBe TaskStatus.NotStarted
@@ -44,13 +44,17 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
         tasks(2).status mustBe TaskStatus.CannotStartYet
         tasks(2).href(answers.lrn)(frontendAppConfig) must endWith(s"/transport-details/$lrn")
 
-        tasks(3).name mustBe "Items"
-        tasks(3).status mustBe TaskStatus.CannotStartYet
-        tasks(3).href(answers.lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
+        tasks(3).name mustBe "Add documents"
+        tasks(3).status mustBe TaskStatus.NotStarted
+        tasks(3).href(answers.lrn)(frontendAppConfig) must endWith(s"/documents/$lrn")
 
-        tasks(4).name mustBe "Add guarantee details"
-        tasks(4).status mustBe TaskStatus.NotStarted
-        tasks(4).href(answers.lrn)(frontendAppConfig) must endWith(s"/guarantee-details/$lrn")
+        tasks(4).name mustBe "Items"
+        tasks(4).status mustBe TaskStatus.CannotStartYet
+        tasks(4).href(answers.lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
+
+        tasks(5).name mustBe "Add guarantee details"
+        tasks(5).status mustBe TaskStatus.NotStarted
+        tasks(5).href(answers.lrn)(frontendAppConfig) must endWith(s"/guarantee-details/$lrn")
       }
     }
 
@@ -93,9 +97,9 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
         val answers = emptyUserAnswers.copy(tasks = tasks)
         val result  = new TaskListViewModel().apply(answers)
 
-        result(3).name mustBe "Add items"
-        result(3).status mustBe TaskStatus.NotStarted
-        result(3).href(answers.lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
+        result(4).name mustBe "Add items"
+        result(4).status mustBe TaskStatus.NotStarted
+        result(4).href(answers.lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
       }
     }
   }
