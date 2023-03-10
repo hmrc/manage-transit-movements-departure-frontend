@@ -14,26 +14,19 @@
  * limitations under the License.
  */
 
-package connectors
+package controllers.actions
 
-import config.FrontendAppConfig
-import models._
-import sttp.model.HeaderNames
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import models.requests.DataRequest
+import play.api.mvc._
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpClient) {
+class FakeDependentTaskAction @Inject() () extends DependentTaskAction {
 
-  def getCustomsOfficesOfDepartureForCountry(
-    countryCode: String
-  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
-    val serviceUrl = s"${config.referenceDataUrl}/customs-offices/$countryCode?role=DEP"
-    http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
-  }
+  override protected def filter[A](request: DataRequest[A]): Future[Option[Result]] =
+    Future.successful(None)
 
-  private def version2Header: Seq[(String, String)] = Seq(
-    HeaderNames.Accept -> "application/vnd.hmrc.2.0+json"
-  )
+  override protected def executionContext: ExecutionContext =
+    scala.concurrent.ExecutionContext.Implicits.global
 }

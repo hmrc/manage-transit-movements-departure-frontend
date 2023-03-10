@@ -1,10 +1,6 @@
 # microservice specific routes
 
 ->         /                                              app.preTaskList.Routes
-->         /                                              app.traderDetails.Routes
-->         /                                              app.guaranteeDetails.Routes
-->         /                                              app.routeDetails.Routes
-->         /                                              app.transport.Routes
 
 GET        /drafts/:lrn                                    controllers.DraftController.draftRedirect(lrn: models.LocalReferenceNumber)
 

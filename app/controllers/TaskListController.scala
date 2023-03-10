@@ -18,14 +18,14 @@ package controllers
 
 import com.google.inject.Inject
 import connectors.SubmissionConnector
-import controllers.actions.{Actions, DependentTasksCompletedActionProvider}
+import controllers.actions.{Actions, DependentTaskAction}
 import models.LocalReferenceNumber
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.taskList.{PreTaskListTask, TaskListViewModel}
+import viewModels.taskList.TaskListViewModel
 import views.html.TaskListView
 
 import scala.concurrent.ExecutionContext
@@ -33,7 +33,7 @@ import scala.concurrent.ExecutionContext
 class TaskListController @Inject() (
   override val messagesApi: MessagesApi,
   actions: Actions,
-  checkDependentTasksCompleted: DependentTasksCompletedActionProvider,
+  checkPreTaskListCompleted: DependentTaskAction,
   val controllerComponents: MessagesControllerComponents,
   view: TaskListView,
   viewModel: TaskListViewModel,
@@ -45,7 +45,7 @@ class TaskListController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkDependentTasksCompleted(PreTaskListTask.section)) {
+    .andThen(checkPreTaskListCompleted) {
       implicit request =>
         val tasks = viewModel(request.userAnswers)
         Ok(view(lrn, tasks))
@@ -53,7 +53,7 @@ class TaskListController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkDependentTasksCompleted(PreTaskListTask.section))
+    .andThen(checkPreTaskListCompleted)
     .async {
       implicit request =>
         submissionConnector.post(lrn.value).map {

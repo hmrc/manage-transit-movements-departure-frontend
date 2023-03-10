@@ -19,7 +19,6 @@ package controllers
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.SubmissionConnector
 import generators.{Generators, UserAnswersGenerator}
-import models.UserAnswers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -68,18 +67,6 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
         view(lrn, sampleTasks)(request, messages).toString
     }
 
-    "must redirect to LRN page if pre- task list section is incomplete" in {
-      setExistingUserAnswers(emptyUserAnswers)
-
-      val request = FakeRequest(GET, routes.TaskListController.onPageLoad(lrn).url)
-
-      val result = route(app, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad().url
-    }
-
     "must redirect to Session Expired for a GET if no existing data is found" in {
       setNoExistingUserAnswers()
 
@@ -96,10 +83,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       when(mockSubmissionConnector.post(any())(any()))
         .thenReturn(response(OK))
 
-      val initialAnswers           = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
-      val userAnswers: UserAnswers = arbitraryDepartureAnswers(initialAnswers).sample.value
-
-      setExistingUserAnswers(userAnswers)
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
 
@@ -114,10 +98,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       when(mockSubmissionConnector.post(any())(any()))
         .thenReturn(response(BAD_REQUEST))
 
-      val initialAnswers           = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
-      val userAnswers: UserAnswers = arbitraryDepartureAnswers(initialAnswers).sample.value
-
-      setExistingUserAnswers(userAnswers)
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
 
@@ -130,10 +111,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       when(mockSubmissionConnector.post(any())(any()))
         .thenReturn(response(INTERNAL_SERVER_ERROR))
 
-      val initialAnswers           = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
-      val userAnswers: UserAnswers = arbitraryDepartureAnswers(initialAnswers).sample.value
-
-      setExistingUserAnswers(userAnswers)
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
 

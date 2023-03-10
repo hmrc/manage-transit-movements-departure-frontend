@@ -16,8 +16,8 @@
 
 package forms.mappings
 
-import models.reference.{Country, CountryCode, CustomsOffice}
-import models.{CountryList, CustomsOfficeList, Enumerable}
+import models.reference.CustomsOffice
+import models.{CustomsOfficeList, Enumerable}
 import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -243,42 +243,6 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
     "must not bind an empty map" in {
       val result = testForm.bind(Map.empty[String, String])
       result.errors must contain(FormError("value", "error.required"))
-    }
-  }
-
-  "country" - {
-
-    val spain       = Country(CountryCode("ES"), "Spain")
-    val countryList = CountryList(Seq(spain))
-
-    val testForm: Form[Country] =
-      Form(
-        "value" -> country(countryList)
-      )
-
-    "must bind a valid string" in {
-      val result = testForm.bind(Map("value" -> "ES"))
-      result.get mustEqual spain
-    }
-
-    "must not bind an empty string" in {
-      val result = testForm.bind(Map("value" -> ""))
-      result.errors must contain(FormError("value", "error.required"))
-    }
-
-    "must not bind an empty map" in {
-      val result = testForm.bind(Map.empty[String, String])
-      result.errors must contain(FormError("value", "error.required"))
-    }
-
-    "must not bind a country not in the list" in {
-      val result = testForm.bind(Map("value" -> "FR"))
-      result.errors must contain(FormError("value", "error.required"))
-    }
-
-    "must unbind a valid value" in {
-      val result = testForm.fill(spain)
-      result.apply("value").value.value mustEqual "ES"
     }
   }
 

@@ -16,8 +16,8 @@
 
 package forms.mappings
 
-import models.reference.{Country, CurrencyCode, CustomsOffice, Nationality, UnLocode}
-import models.{CountryList, CurrencyCodeList, CustomsOfficeList, Enumerable, LocalReferenceNumber, NationalityList, RichString, UnLocodeList}
+import models.reference.CustomsOffice
+import models.{CustomsOfficeList, Enumerable, LocalReferenceNumber, RichString}
 import play.api.data.FormError
 import play.api.data.format.Formatter
 
@@ -170,28 +170,6 @@ trait Formatters {
         Map(key -> value.toString)
     }
 
-  private[mappings] def countryFormatter(
-    countryList: CountryList,
-    errorKey: String,
-    args: Seq[Any] = Seq.empty
-  ): Formatter[Country] = new Formatter[Country] {
-
-    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Country] = {
-      lazy val error = Left(Seq(FormError(key, errorKey, args)))
-      data.get(key) match {
-        case None => error
-        case Some(code) =>
-          countryList.countries.find(_.code.code == code) match {
-            case Some(country) => Right(country)
-            case None          => error
-          }
-      }
-    }
-
-    override def unbind(key: String, country: Country): Map[String, String] =
-      Map(key -> country.code.code)
-  }
-
   private[mappings] def customsOfficeFormatter(
     customsOfficeList: CustomsOfficeList,
     errorKey: String,
@@ -212,101 +190,5 @@ trait Formatters {
 
     override def unbind(key: String, customsOffice: CustomsOffice): Map[String, String] =
       Map(key -> customsOffice.id)
-  }
-
-  private[mappings] def currencyFormatter(
-    requiredKey: String = "error.required",
-    invalidCharactersKey: String = "error.invalidCharacters",
-    invalidFormatKey: String = "error.invalidFormat",
-    invalidValueKey: String = "error.invalidValue"
-  ): Formatter[BigDecimal] =
-    new Formatter[BigDecimal] {
-
-      private val invalidCharactersRegex = """^[0-9.]*$"""
-      private val invalidFormatRegex     = """^[0-9]*(\.[0-9]{1,2})?$"""
-      private val invalidValueRegex      = """^[0-9]{0,16}(\.[0-9]{1,2})?$"""
-
-      private val baseFormatter = stringFormatter(requiredKey)
-
-      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], BigDecimal] =
-        baseFormatter
-          .bind(key, data)
-          .map(_.replace(",", ""))
-          .map(_.replace(" ", ""))
-          .flatMap {
-            case s if !s.matches(invalidCharactersRegex) => Left(Seq(FormError(key, invalidCharactersKey)))
-            case s if !s.matches(invalidFormatRegex)     => Left(Seq(FormError(key, invalidFormatKey)))
-            case s if !s.matches(invalidValueRegex)      => Left(Seq(FormError(key, invalidValueKey)))
-            case s                                       => Right(BigDecimal(s))
-          }
-
-      override def unbind(key: String, value: BigDecimal): Map[String, String] =
-        baseFormatter.unbind(key, value.toString())
-    }
-
-  private[mappings] def unLocodeFormatter(
-    unLocodeList: UnLocodeList,
-    errorKey: String,
-    args: Seq[Any] = Seq.empty
-  ): Formatter[UnLocode] = new Formatter[UnLocode] {
-
-    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], UnLocode] = {
-      lazy val error = Left(Seq(FormError(key, errorKey, args)))
-      data.get(key) match {
-        case None => error
-        case Some(unLocodeExtendedCode) =>
-          unLocodeList.getUnLocode(unLocodeExtendedCode) match {
-            case Some(unLocode: UnLocode) => Right(unLocode)
-            case None                     => error
-          }
-      }
-    }
-
-    override def unbind(key: String, unLocode: UnLocode): Map[String, String] =
-      Map(key -> unLocode.unLocodeExtendedCode)
-  }
-
-  private[mappings] def currencyCodeFormatter(
-    currencyCodeList: CurrencyCodeList,
-    errorKey: String,
-    args: Seq[Any] = Seq.empty
-  ): Formatter[CurrencyCode] = new Formatter[CurrencyCode] {
-
-    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], CurrencyCode] = {
-      lazy val error = Left(Seq(FormError(key, errorKey, args)))
-      data.get(key) match {
-        case None => error
-        case Some(currency) =>
-          currencyCodeList.getCurrencyCode(currency) match {
-            case Some(currencyCode: CurrencyCode) => Right(currencyCode)
-            case None                             => error
-          }
-      }
-    }
-
-    override def unbind(key: String, currencyCode: CurrencyCode): Map[String, String] =
-      Map(key -> currencyCode.currency)
-  }
-
-  private[mappings] def nationalityFormatter(
-    nationalityList: NationalityList,
-    errorKey: String,
-    args: Seq[Any] = Seq.empty
-  ): Formatter[Nationality] = new Formatter[Nationality] {
-
-    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Nationality] = {
-      lazy val error = Left(Seq(FormError(key, errorKey, args)))
-      data.get(key) match {
-        case None => error
-        case Some(code) =>
-          nationalityList.getNationality(code) match {
-            case Some(nationality: Nationality) => Right(nationality)
-            case None                           => error
-          }
-      }
-    }
-
-    override def unbind(key: String, nationality: Nationality): Map[String, String] =
-      Map(key -> nationality.code)
   }
 }

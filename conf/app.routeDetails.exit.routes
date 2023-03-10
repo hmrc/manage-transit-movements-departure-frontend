@@ -1,7 +1,0 @@
-
-->         /                                                                             app.routeDetails.exit.index.Routes
-
-GET        /:lrn/route-details/office-of-exit/add-another                           controllers.routeDetails.exit.AddAnotherOfficeOfExitController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/route-details/office-of-exit/add-another                           controllers.routeDetails.exit.AddAnotherOfficeOfExitController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/route-details/office-of-exit/change-add-another                    controllers.routeDetails.exit.AddAnotherOfficeOfExitController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/route-details/office-of-exit/change-add-another                    controllers.routeDetails.exit.AddAnotherOfficeOfExitController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

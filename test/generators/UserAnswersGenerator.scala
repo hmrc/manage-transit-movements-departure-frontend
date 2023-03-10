@@ -17,32 +17,13 @@
 package generators
 
 import models.domain.UserAnswersReader
-import models.journeyDomain.{DepartureDomain, ReaderError}
-import models.reference.Country
-import models.{CountryList, EoriNumber, LocalReferenceNumber, RichJsObject, UserAnswers}
+import models.journeyDomain.ReaderError
+import models.{EoriNumber, LocalReferenceNumber, RichJsObject, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
-trait UserAnswersGenerator
-    extends UserAnswersEntryGenerators
-    with PreTaskListUserAnswersGenerator
-    with TraderDetailsUserAnswersGenerator
-    with RouteDetailsUserAnswersGenerator
-    with TransportUserAnswersGenerator
-    with GuaranteeDetailsUserAnswersGenerator {
+trait UserAnswersGenerator extends UserAnswersEntryGenerators with PreTaskListUserAnswersGenerator {
   self: Generators =>
-
-  val ctcCountries: Seq[Country]                             = listWithMaxLength[Country]().sample.get
-  val ctcCountriesList: CountryList                          = CountryList(ctcCountries)
-  val ctcCountryCodes: Seq[String]                           = ctcCountries.map(_.code.code)
-  val customsSecurityAgreementAreaCountries: Seq[Country]    = listWithMaxLength[Country]().sample.get
-  val customsSecurityAgreementAreaCountriesList: CountryList = CountryList(customsSecurityAgreementAreaCountries)
-  val customsSecurityAgreementAreaCountryCodes: Seq[String]  = customsSecurityAgreementAreaCountries.map(_.code.code)
-
-  def arbitraryDepartureAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
-    buildUserAnswers[DepartureDomain](userAnswers)(
-      DepartureDomain.userAnswersReader(ctcCountryCodes, customsSecurityAgreementAreaCountryCodes)
-    )
 
   implicit lazy val arbitraryUserAnswers: Arbitrary[UserAnswers] =
     Arbitrary {
@@ -50,7 +31,7 @@ trait UserAnswersGenerator
         lrn        <- arbitrary[LocalReferenceNumber]
         eoriNumber <- arbitrary[EoriNumber]
         initialAnswers = UserAnswers(lrn, eoriNumber)
-        answers <- arbitraryDepartureAnswers(initialAnswers)
+        answers <- arbitraryPreTaskListAnswers(initialAnswers)
       } yield answers
     }
 
