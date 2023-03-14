@@ -16,12 +16,13 @@
 
 package models
 
-sealed trait SecurityDetailsType {
+sealed trait SecurityDetailsType extends Radioable[SecurityDetailsType] {
+  override val messageKeyPrefix: String = SecurityDetailsType.messageKeyPrefix
   val requiresSecurityDetails: Boolean
   val securityContentType: Int
 }
 
-object SecurityDetailsType extends RadioModel[SecurityDetailsType] {
+object SecurityDetailsType extends EnumerableType[SecurityDetailsType] {
 
   sealed trait SecurityDetailsNeededType extends SecurityDetailsType {
     override val requiresSecurityDetails: Boolean = true
@@ -44,16 +45,10 @@ object SecurityDetailsType extends RadioModel[SecurityDetailsType] {
     override val securityContentType: Int = 3
   }
 
-  override val messageKeyPrefix: String = "securityDetailsType"
+  val messageKeyPrefix: String = "securityDetailsType"
 
   override val values: Seq[SecurityDetailsType] = Seq(
     NoSecurityDetails,
-    EntrySummaryDeclarationSecurityDetails,
-    ExitSummaryDeclarationSecurityDetails,
-    EntryAndExitSummaryDeclarationSecurityDetails
-  )
-
-  val securityValues: Seq[SecurityDetailsType] = Seq(
     EntrySummaryDeclarationSecurityDetails,
     ExitSummaryDeclarationSecurityDetails,
     EntryAndExitSummaryDeclarationSecurityDetails

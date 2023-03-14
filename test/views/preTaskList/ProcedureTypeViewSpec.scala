@@ -29,12 +29,12 @@ class ProcedureTypeViewSpec extends RadioViewBehaviours[ProcedureType] {
   override def form: Form[ProcedureType] = new EnumerableFormProvider()(prefix)
 
   override def applyView(form: Form[ProcedureType]): HtmlFormat.Appendable =
-    injector.instanceOf[ProcedureTypeView].apply(form, radioItems, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[ProcedureTypeView].apply(form, values, lrn, NormalMode)(fakeRequest, messages)
 
   override val prefix: String = "procedureType"
 
-  override def radioItems(fieldId: String, checkedValue: Option[ProcedureType] = None): Seq[RadioItem] =
-    ProcedureType.radioItems(fieldId, checkedValue)
+  override def values(fieldId: String, checkedValue: Option[ProcedureType] = None): Seq[RadioItem] =
+    values.toRadioItems(fieldId, checkedValue)
 
   override def values: Seq[ProcedureType] = ProcedureType.values
 
@@ -44,7 +44,7 @@ class ProcedureTypeViewSpec extends RadioViewBehaviours[ProcedureType] {
 
   behave like pageWithHeading()
 
-  behave like pageWithRadioItems()
+  behave like pageWithvalues()
 
   behave like pageWithSubmitButton("Continue")
 }

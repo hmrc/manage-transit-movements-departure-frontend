@@ -56,7 +56,7 @@ class ProcedureTypeController @Inject() (
           case Some(value) => form.fill(value)
         }
 
-        Ok(view(preparedForm, ProcedureType.radioItems, lrn, mode))
+        Ok(view(preparedForm, ProcedureType.values, lrn, mode))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
@@ -67,7 +67,7 @@ class ProcedureTypeController @Inject() (
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, ProcedureType.radioItems, lrn, mode))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, ProcedureType.values, lrn, mode))),
             value => {
               implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
               ProcedureTypePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()

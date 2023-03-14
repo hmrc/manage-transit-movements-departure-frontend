@@ -56,7 +56,7 @@ class SecurityDetailsTypeController @Inject() (
           case Some(value) => form.fill(value)
         }
 
-        Ok(view(preparedForm, SecurityDetailsType.radioItems, lrn, mode))
+        Ok(view(preparedForm, SecurityDetailsType.values, lrn, mode))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
@@ -67,7 +67,7 @@ class SecurityDetailsTypeController @Inject() (
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, SecurityDetailsType.radioItems, lrn, mode))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, SecurityDetailsType.values, lrn, mode))),
             value => {
               implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
               SecurityDetailsTypePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()

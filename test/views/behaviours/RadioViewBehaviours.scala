@@ -23,11 +23,11 @@ trait RadioViewBehaviours[T] extends QuestionViewBehaviours[T] {
 
   val fieldId: String = "value"
 
-  def radioItems(fieldId: String, checkedValue: Option[T] = None): Seq[RadioItem]
+  def values(fieldId: String, checkedValue: Option[T] = None): Seq[RadioItem]
   def values: Seq[T]
 
   // scalastyle:off method.length
-  def pageWithRadioItems(
+  def pageWithvalues(
     legendIsHeading: Boolean = true,
     hintTextPrefix: Option[String] = None,
     args: Seq[Any] = Nil,
@@ -53,7 +53,7 @@ trait RadioViewBehaviours[T] extends QuestionViewBehaviours[T] {
           }
         }
 
-        radioItems(fieldId).zipWithIndex.foreach {
+        values(fieldId).zipWithIndex.foreach {
           case (radioItem, index) =>
             s"must contain an input for the value ${radioItem.value.get}" in {
               assertRenderedById(doc, radioItem.id.get)
@@ -94,7 +94,7 @@ trait RadioViewBehaviours[T] extends QuestionViewBehaviours[T] {
     val filledForm = form.fill(answer)
     val doc        = parseView(applyView(filledForm))
 
-    radioItems(fieldId, Some(answer)) foreach {
+    values(fieldId, Some(answer)) foreach {
       radioItem =>
         if (radioItem.value.get == answer.toString) {
           s"must have ${radioItem.value.get} checked" in {
@@ -110,7 +110,7 @@ trait RadioViewBehaviours[T] extends QuestionViewBehaviours[T] {
     behave like pageWithoutErrorSummary()
   }
 
-  def pageWithoutRadioItems(doc: Document): Unit =
+  def pageWithoutvalues(doc: Document): Unit =
     "page without radio items" - {
       "must not render radio inputs" in {
         assertElementDoesNotExist(doc, "govuk-radios__input")

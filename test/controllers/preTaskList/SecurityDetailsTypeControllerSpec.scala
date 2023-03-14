@@ -57,7 +57,7 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, SecurityDetailsType.radioItems, lrn, mode)(request, messages).toString
+        view(form, SecurityDetailsType.values, lrn, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
@@ -74,7 +74,7 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, SecurityDetailsType.radioItems, lrn, mode)(request, messages).toString
+        view(filledForm, SecurityDetailsType.values, lrn, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -103,7 +103,7 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
       val view = injector.instanceOf[SecurityDetailsTypeView]
 
       contentAsString(result) mustEqual
-        view(boundForm, SecurityDetailsType.radioItems, lrn, mode)(request, messages).toString
+        view(boundForm, SecurityDetailsType.values, lrn, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

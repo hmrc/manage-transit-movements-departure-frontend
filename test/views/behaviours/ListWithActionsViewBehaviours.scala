@@ -49,7 +49,7 @@ trait ListWithActionsViewBehaviours extends YesNoViewBehaviours with Generators 
 
       behave like pageWithListWithActions(doc, listItems)
 
-      behave like pageWithRadioItems(legendIsHeading = false, args = h2Args)
+      behave like pageWithvalues(legendIsHeading = false, args = h2Args)
 
     }
 
@@ -64,7 +64,7 @@ trait ListWithActionsViewBehaviours extends YesNoViewBehaviours with Generators 
 
       behave like pageWithListWithActions(doc, maxedOutListItems)
 
-      behave like pageWithoutRadioItems(doc)
+      behave like pageWithoutvalues(doc)
 
       behave like pageWithContent(doc, "p", messages(s"$prefix.maxLimit.label"))
     }

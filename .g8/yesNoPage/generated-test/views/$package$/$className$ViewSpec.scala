@@ -19,7 +19,7 @@ class $className$ViewSpec extends YesNoViewBehaviours {
 
   behave like pageWithHeading()
 
-  behave like pageWithRadioItems()
+  behave like pageWithvalues()
 
   behave like pageWithSubmitButton("Save and continue")
 }

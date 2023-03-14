@@ -57,7 +57,7 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, DeclarationType.radioItemsU(emptyUserAnswers), lrn, mode)(request, messages).toString
+        view(form, DeclarationType.values(emptyUserAnswers), lrn, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
@@ -75,7 +75,7 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
       val view = injector.instanceOf[DeclarationTypeView]
 
       contentAsString(result) mustEqual
-        view(filledForm, DeclarationType.radioItemsU(emptyUserAnswers), lrn, mode)(request, messages).toString
+        view(filledForm, DeclarationType.values(emptyUserAnswers), lrn, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -107,7 +107,7 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
       val view = injector.instanceOf[DeclarationTypeView]
 
       contentAsString(result) mustEqual
-        view(boundForm, DeclarationType.radioItemsU(emptyUserAnswers), lrn, mode)(request, messages).toString
+        view(boundForm, DeclarationType.values(emptyUserAnswers), lrn, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

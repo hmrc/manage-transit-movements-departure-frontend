@@ -29,12 +29,12 @@ class SecurityDetailsTypeViewSpec extends RadioViewBehaviours[SecurityDetailsTyp
   override def form: Form[SecurityDetailsType] = new EnumerableFormProvider()(prefix)
 
   override def applyView(form: Form[SecurityDetailsType]): HtmlFormat.Appendable =
-    injector.instanceOf[SecurityDetailsTypeView].apply(form, radioItems, lrn, NormalMode)(fakeRequest, messages)
+    injector.instanceOf[SecurityDetailsTypeView].apply(form, values, lrn, NormalMode)(fakeRequest, messages)
 
   override val prefix: String = "securityDetailsType"
 
-  override def radioItems(fieldId: String, checkedValue: Option[SecurityDetailsType] = None): Seq[RadioItem] =
-    SecurityDetailsType.radioItems(fieldId, checkedValue)
+  override def values(fieldId: String, checkedValue: Option[SecurityDetailsType] = None): Seq[RadioItem] =
+    values.toRadioItems(fieldId, checkedValue)
 
   override def values: Seq[SecurityDetailsType] = SecurityDetailsType.values
 
@@ -46,7 +46,7 @@ class SecurityDetailsTypeViewSpec extends RadioViewBehaviours[SecurityDetailsTyp
 
   behave like pageWithHeading()
 
-  behave like pageWithRadioItems()
+  behave like pageWithvalues()
 
   behave like pageWithSubmitButton("Continue")
 }

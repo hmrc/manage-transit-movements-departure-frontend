@@ -20,11 +20,13 @@ import config.Constants.XI
 import models.ProcedureType.Normal
 import pages.preTaskList.{OfficeOfDeparturePage, ProcedureTypePage}
 
-sealed trait DeclarationType
+sealed trait DeclarationType extends Radioable[DeclarationType] {
+  override val messageKeyPrefix: String = DeclarationType.messageKeyPrefix
+}
 
-object DeclarationType extends RadioModelU[DeclarationType] {
+object DeclarationType extends EnumerableType[DeclarationType] {
 
-  override val messageKeyPrefix = "declarationType"
+  val messageKeyPrefix: String = "declarationType"
 
   case object Option1 extends WithName("T1") with DeclarationType
   case object Option2 extends WithName("T2") with DeclarationType
@@ -42,7 +44,7 @@ object DeclarationType extends RadioModelU[DeclarationType] {
     Option5
   )
 
-  override def valuesU(userAnswers: UserAnswers): Seq[DeclarationType] =
+  def values(userAnswers: UserAnswers): Seq[DeclarationType] =
     (
       userAnswers.get(OfficeOfDeparturePage).map(_.countryCode),
       userAnswers.get(ProcedureTypePage)
