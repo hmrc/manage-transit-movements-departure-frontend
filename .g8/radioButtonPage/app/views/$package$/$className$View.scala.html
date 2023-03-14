@@ -47,7 +47,7 @@
                 caption = None,
                 heading = messages("$package$.$className;format="decap"$.heading")
             ),
-            values = fieldId => values.toRadioItems(fieldId, form.value)
+            radioItems = fieldId => values.toRadioItems(fieldId, form.value)
         )
 
         @button(attributes = Map("id" -> "submit"))

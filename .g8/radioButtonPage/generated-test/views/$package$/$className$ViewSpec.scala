@@ -29,7 +29,7 @@ class $className$ViewSpec extends RadioViewBehaviours[$className$] {
 
   behave like pageWithHeading()
 
-  behave like pageWithvalues()
+  behave like pageWithRadioItems()
 
   behave like pageWithSubmitButton("Save and continue")
 }
