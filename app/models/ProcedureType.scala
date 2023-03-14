@@ -16,14 +16,16 @@
 
 package models
 
-sealed trait ProcedureType
+sealed trait ProcedureType extends Radioable[ProcedureType] {
+  override val messageKeyPrefix: String = ProcedureType.messageKeyPrefix
+}
 
-object ProcedureType extends RadioModel[ProcedureType] {
+object ProcedureType extends EnumerableType[ProcedureType] {
 
   case object Normal extends WithName("normal") with ProcedureType
   case object Simplified extends WithName("simplified") with ProcedureType
 
-  override val messageKeyPrefix: String = "procedureType"
+  val messageKeyPrefix: String = "procedureType"
 
   override val values: Seq[ProcedureType] = Seq(
     Normal,

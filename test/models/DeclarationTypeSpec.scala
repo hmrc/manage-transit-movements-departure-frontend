@@ -61,7 +61,7 @@ class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Ge
             .setValue(OfficeOfDeparturePage, CustomsOffice("XI343", "name", None))
             .setValue(ProcedureTypePage, ProcedureType.Normal)
 
-          val radios   = DeclarationType.valuesU(answers)
+          val radios   = DeclarationType.values(answers)
           val expected = Seq(Option1, Option2, Option3, Option4, Option5)
           radios mustBe expected
         }
@@ -70,7 +70,7 @@ class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Ge
           val answers = emptyUserAnswers
             .setValue(OfficeOfDeparturePage, CustomsOffice("GB24R", "name", None))
 
-          val radios   = DeclarationType.valuesU(answers)
+          val radios   = DeclarationType.values(answers)
           val expected = Seq(Option1, Option2, Option3, Option5)
           radios mustBe expected
         }
@@ -80,7 +80,7 @@ class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Ge
             .setValue(OfficeOfDeparturePage, CustomsOffice("XI93F", "name", None))
             .setValue(ProcedureTypePage, ProcedureType.Simplified)
 
-          val radios   = DeclarationType.valuesU(answers)
+          val radios   = DeclarationType.values(answers)
           val expected = Seq(Option1, Option2, Option3, Option5)
           radios mustBe expected
         }

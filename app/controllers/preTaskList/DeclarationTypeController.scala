@@ -57,7 +57,7 @@ class DeclarationTypeController @Inject() (
           case Some(value) => form.fill(value)
         }
 
-        Ok(view(preparedForm, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))
+        Ok(view(preparedForm, DeclarationType.values(request.userAnswers), lrn, mode))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
@@ -68,7 +68,7 @@ class DeclarationTypeController @Inject() (
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.radioItemsU(request.userAnswers), lrn, mode))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.values(request.userAnswers), lrn, mode))),
             value => {
               implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
               DeclarationTypePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
