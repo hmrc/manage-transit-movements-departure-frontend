@@ -18,7 +18,7 @@ class $className$ViewSpec extends RadioViewBehaviours[$className$] {
 
   override val prefix: String = "$package$.$className;format="decap"$"
 
-  override def values(fieldId: String, checkedValue: Option[$className$] = None): Seq[RadioItem] =
+  override def radioItems(fieldId: String, checkedValue: Option[$className$] = None): Seq[RadioItem] =
     values.toRadioItems(fieldId, checkedValue)
 
   override def values: Seq[$className$] = $className$.values
