@@ -24,7 +24,7 @@
     field: Field,
     radioType: InputRadioViewModel,
     hint: Option[String] = None,
-    values: String => Seq[RadioItem],
+    radioItems: String => Seq[RadioItem],
     inline: Boolean = false
 )(implicit messages: Messages)
 
@@ -37,7 +37,7 @@
             ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(e.message, e.args: _*)))
         },
         hint = hint.map(x => Hint(content = Text(x))),
-        items = values(field.id)
+        items = radioItems(field.id)
     )
 }
 
