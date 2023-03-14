@@ -33,7 +33,7 @@ class ProcedureTypeViewSpec extends RadioViewBehaviours[ProcedureType] {
 
   override val prefix: String = "procedureType"
 
-  override def values(fieldId: String, checkedValue: Option[ProcedureType] = None): Seq[RadioItem] =
+  override def radioItems(fieldId: String, checkedValue: Option[ProcedureType] = None): Seq[RadioItem] =
     values.toRadioItems(fieldId, checkedValue)
 
   override def values: Seq[ProcedureType] = ProcedureType.values
@@ -44,7 +44,7 @@ class ProcedureTypeViewSpec extends RadioViewBehaviours[ProcedureType] {
 
   behave like pageWithHeading()
 
-  behave like pageWithvalues()
+  behave like pageWithRadioItems()
 
   behave like pageWithSubmitButton("Continue")
 }

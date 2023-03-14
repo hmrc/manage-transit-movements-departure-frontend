@@ -25,7 +25,7 @@ trait YesNoViewBehaviours extends RadioViewBehaviours[Boolean] {
 
   override def form: Form[Boolean] = new YesNoFormProvider()(prefix)
 
-  override def values(fieldId: String, checkedValue: Option[Boolean]): Seq[RadioItem] =
+  override def radioItems(fieldId: String, checkedValue: Option[Boolean]): Seq[RadioItem] =
     Seq(
       RadioItem(
         content = Text(messages("site.yes")),

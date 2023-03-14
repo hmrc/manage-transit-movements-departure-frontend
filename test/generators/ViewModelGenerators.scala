@@ -202,11 +202,11 @@ trait ViewModelGenerators {
     } yield RadioItem(content, id, value, label, hint, divider, checked, conditionalHtml, disabled, attributes)
   }
 
-  implicit lazy val arbitraryvalues: Arbitrary[List[RadioItem]] = Arbitrary {
+  implicit lazy val arbitraryRadioItems: Arbitrary[List[RadioItem]] = Arbitrary {
     for {
-      values       <- listWithMaxLength[RadioItem]()
-      checkedIndex <- Gen.choose(0, values.length - 1)
-    } yield values.zipWithIndex.map {
+      radioItems   <- listWithMaxLength[RadioItem]()
+      checkedIndex <- Gen.choose(0, radioItems.length - 1)
+    } yield radioItems.zipWithIndex.map {
       case (radioItem, index) => radioItem.copy(checked = index == checkedIndex)
     }
   }

@@ -35,7 +35,7 @@ class DeclarationTypeViewSpec extends RadioViewBehaviours[DeclarationType] {
 
   private val userAnswers = emptyUserAnswers
 
-  override def values(fieldId: String, checkedValue: Option[DeclarationType] = None): Seq[RadioItem] =
+  override def radioItems(fieldId: String, checkedValue: Option[DeclarationType] = None): Seq[RadioItem] =
     values.toRadioItems(fieldId, checkedValue)
 
   override def values: Seq[DeclarationType] = DeclarationType.values(userAnswers)
@@ -46,7 +46,7 @@ class DeclarationTypeViewSpec extends RadioViewBehaviours[DeclarationType] {
 
   behave like pageWithHeading()
 
-  behave like pageWithvalues()
+  behave like pageWithRadioItems()
 
   behave like pageWithSubmitButton("Continue")
 }

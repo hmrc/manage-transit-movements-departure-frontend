@@ -33,7 +33,7 @@ class SecurityDetailsTypeViewSpec extends RadioViewBehaviours[SecurityDetailsTyp
 
   override val prefix: String = "securityDetailsType"
 
-  override def values(fieldId: String, checkedValue: Option[SecurityDetailsType] = None): Seq[RadioItem] =
+  override def radioItems(fieldId: String, checkedValue: Option[SecurityDetailsType] = None): Seq[RadioItem] =
     values.toRadioItems(fieldId, checkedValue)
 
   override def values: Seq[SecurityDetailsType] = SecurityDetailsType.values
@@ -46,7 +46,7 @@ class SecurityDetailsTypeViewSpec extends RadioViewBehaviours[SecurityDetailsTyp
 
   behave like pageWithHeading()
 
-  behave like pageWithvalues()
+  behave like pageWithRadioItems()
 
   behave like pageWithSubmitButton("Continue")
 }
