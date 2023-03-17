@@ -337,7 +337,12 @@ function createPanicButton() {
 
 const startTraderDetails = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
-        location.href = `/manage-transit-movements/departures/trader-details/${lrn}`
+        if (location.hostname === "localhost") {
+            location.href = `http:\/\/localhost:10130/manage-transit-movements/departures/trader-details/${lrn}`
+        } else {
+            location.href = `/manage-transit-movements/departures/trader-details/${lrn}`
+        }
+
     }
 }
 
@@ -484,7 +489,12 @@ const traderDetailsCYA = (lrn) => {
 
 const startRouteDetails = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
-        location.href = `/manage-transit-movements/departures/route-details/${lrn}`
+        if (location.hostname === "localhost") {
+            location.href = `http:\/\/localhost:10129/manage-transit-movements/departures/route-details/${lrn}`
+        } else {
+            location.href = `/manage-transit-movements/departures/route-details/${lrn}`
+        }
+
     }
 }
 
@@ -656,7 +666,12 @@ const routeDetailsCYA = (lrn) => {
 
 const startTransportDetails = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
-        location.href = `/manage-transit-movements/departures/transport-details/apply-ucr-to-all-items/${lrn}`
+        if (location.hostname === "localhost") {
+            location.href = `http:\/\/localhost:10131/manage-transit-movements/departures/transport-details/apply-ucr-to-all-items/${lrn}`
+        } else {
+            location.href = `/manage-transit-movements/departures/transport-details/apply-ucr-to-all-items/${lrn}`
+        }
+
     }
 }
 
@@ -824,10 +839,14 @@ const addAnotherGoodsItem = (lrn, data) => {
 
 /* #### Guarantee Details #### */
 
-
 const startGuaranteeDetails = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
-        location.href = `/manage-transit-movements/departures/guarantee-details/${lrn}`
+        if (location.hostname === "localhost") {
+            location.href = `http:\/\/localhost:10128/manage-transit-movements/departures/guarantee-details/${lrn}`
+        } else {
+            location.href = `/manage-transit-movements/departures/guarantee-details/${lrn}`
+        }
+
     }
 }
 
