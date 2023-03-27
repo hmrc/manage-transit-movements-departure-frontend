@@ -9,6 +9,8 @@
 // @match        http*://*/manage-transit-movements/departures/trader-details/*
 // @match        http*://*/manage-transit-movements/departures/transport-details/*
 // @match        http*://*/manage-transit-movements/departures/guarantee-details/*
+// @match        http*://*/manage-transit-movements/departures/documents/*
+// Add the URL to the match statement so the script knows to run on the new pages (This is why it wasn't working in the demo - forgot to do this!)
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -45,6 +47,9 @@ function isAButtonToggled() {
         } else{
             transportDetails()
         }
+    }
+    else if(GM_getValue('addDocumentsToggle',false)){ // Check if the toggle is active, if it is go to the journey method
+        addDocuments()
     }
     else if(GM_getValue('guaranteeDetailsWaiverToggle',false)){
         guaranteeDetailsWaiver()
@@ -83,15 +88,20 @@ function toggleGuaranteeDetailsButtonsOff() {
     GM_setValue('guaranteeDetailsWaiverToggle',false)
 }
 
+function toggleAddDocumentButtonOff() { // Helper function for toggling the journey toggle off
+    GM_setValue('addDocumentsToggle',false)
+}
+
 
 function setupGUI() {
     const panel = document.createElement('div');
-    GM_addStyle(' .guiStyle { position: absolute; top: 50px; display: grid; grid-template-rows: repeat(5, 1fr);')
+    GM_addStyle(' .guiStyle { position: absolute; top: 50px; display: grid; grid-template-rows: repeat(6, 1fr);') // Bump the repeat number up by 1 when adding a new button so there is space for it
     panel.classList.add('guiStyle')
     panel.appendChild(createTraderDetailsButton())
     panel.appendChild(createRouteDetailsAuthorisedButton())
     panel.appendChild(createTransportDetailsButton())
     panel.appendChild(createGuaranteeDetailsWaiverButton())
+    panel.appendChild(createAddDocumentsButton()) // Add the button to the panel to be displayed
     panel.appendChild(createReducedDataSetSwitch())
     panel.appendChild(createCompleteAllButton())
     return panel
@@ -201,6 +211,26 @@ function createRouteDetailsAuthorisedButton() {
     button.addEventListener("click", function handleClick() {
         GM_setValue('routeDetailsAuthorisedToggle',true)
         routeDetailsAuthorised()
+    })
+
+    return button
+}
+
+function createAddDocumentsButton() { // To create a button copy and paste one of the above methods and change the fields
+    let button = document.createElement('button')
+    button.id='addDocumentsButton'
+
+    if (!!document.getElementById('global-header')) {
+        button.classList.add('button-start', 'govuk-!-display-none-print')
+    } else {
+        button.classList.add('govuk-button','govuk-!-display-none-print')
+    }
+
+    button.style.margin = '1px'
+    button.innerHTML = 'Complete Add Documents'
+    button.addEventListener("click", function handleClick() {
+        GM_setValue('createAddDocumentButton',true) // Set this to the toggle name you created
+        addDocuments() // Set this to the name of the method that contains the journeys
     })
 
     return button
@@ -662,6 +692,26 @@ const routeDetailsCYA = (lrn) => {
     }
 }
 
+/* #### Add Documents Pages #### */
+
+const startAddDocuments = (lrn) => { // To start a new journey you need to do a manual URL redirect.
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
+        if (location.hostname === "localhost") { // Find what port it uses locally and put it below
+            location.href = `http:\/\/localhost:10132/manage-transit-movements/departures/documents/${lrn}`
+        } else { // For staging just copy the URL in
+            location.href = `/manage-transit-movements/departures/documents/${lrn}`
+        }
+    }
+}
+
+const documentType = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/type/${lrn}`)){
+        toggleAddDocumentButtonOff()
+        document.getElementById('value-select').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
 /* #### Transport Details - UPDATE as journey develops #### */
 
 const startTransportDetails = (lrn) => {
@@ -963,6 +1013,15 @@ function routeDetailsAuthorised() {
     placeOfLoadingLocation(getLRN(), 'locid1234')
     loadingCYA(getLRN())
     routeDetailsCYA(getLRN())
+}
+
+/* ## Add documents journey ## */
+
+function addDocuments() { // Place each page of the journey here
+    startAddDocuments(getLRN()) // For starting the journey you just need the getLRN() method passed to the function
+    documentType(getLRN(), '705') // Input and value select pages you will have to pass the data in like so
+    // For yes no pages the data value will be either 'value' for yes or 'value-no' for no
+
 }
 
 /* ## Transport Details journey ## */
