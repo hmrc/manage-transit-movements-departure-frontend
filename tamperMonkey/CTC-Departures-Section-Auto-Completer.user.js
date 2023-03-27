@@ -704,6 +704,13 @@ const startAddDocuments = (lrn) => { // To start a new journey you need to do a 
     }
 }
 
+const exampleYesNoPage = (lrn, data) => { // Data will be either 'value' for yes or 'value-no' for no
+    if(currentPageIs(`/manage-transit-movements/departures/test/yesno/${lrn}`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
 const documentType = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/documents/1/type/${lrn}`)){
         toggleAddDocumentButtonOff()
