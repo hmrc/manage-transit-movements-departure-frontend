@@ -1,14 +1,16 @@
 // ==UserScript==
 // @name         CTC-Departures Section Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      10.0
+// @version      11.0
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
+// @author       Tega-Okeremeta
 // @match        http*://*/manage-transit-movements/departures/*/task-list
 // @match        http*://*/manage-transit-movements/departures/route-details/*
 // @match        http*://*/manage-transit-movements/departures/trader-details/*
 // @match        http*://*/manage-transit-movements/departures/transport-details/*
 // @match        http*://*/manage-transit-movements/departures/guarantee-details/*
+// @match        http*://*/manage-transit-movements/departures/documents/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -46,6 +48,9 @@ function isAButtonToggled() {
             transportDetails()
         }
     }
+    else if(GM_getValue('addDocumentsToggle',false)) {
+        addDocuments()
+    }
     else if(GM_getValue('guaranteeDetailsWaiverToggle',false)){
         guaranteeDetailsWaiver()
     }
@@ -82,16 +87,20 @@ function toggleTransportDetailsButtonsOff() {
 function toggleGuaranteeDetailsButtonsOff() {
     GM_setValue('guaranteeDetailsWaiverToggle',false)
 }
+function toggleAddDocumentButtonOff() {
+    GM_setValue('addDocumentsToggle',false)
+}
 
 
 function setupGUI() {
     const panel = document.createElement('div');
-    GM_addStyle(' .guiStyle { position: absolute; top: 50px; display: grid; grid-template-rows: repeat(5, 1fr);')
+    GM_addStyle(' .guiStyle { position: absolute; top: 50px; display: grid; grid-template-rows: repeat(6, 1fr);')
     panel.classList.add('guiStyle')
     panel.appendChild(createTraderDetailsButton())
     panel.appendChild(createRouteDetailsAuthorisedButton())
     panel.appendChild(createTransportDetailsButton())
     panel.appendChild(createGuaranteeDetailsWaiverButton())
+    panel.appendChild(createAddDocumentsButton())
     panel.appendChild(createReducedDataSetSwitch())
     panel.appendChild(createCompleteAllButton())
     return panel
@@ -217,7 +226,7 @@ function createTransportDetailsButton() {
     }
 
     button.style.margin = '1px'
-    button.innerHTML = 'Complete Transport Details (Up to Transport Equipment CYA)'
+    button.innerHTML = 'Complete Transport Details'
     button.addEventListener("click", function handleClick() {
         GM_setValue('transportDetailsToggle',true)
         transportDetails()
@@ -241,6 +250,26 @@ function createGuaranteeDetailsWaiverButton() {
     button.addEventListener("click", function handleClick() {
         GM_setValue('guaranteeDetailsWaiverToggle',true)
         guaranteeDetailsWaiver()
+    })
+
+    return button
+}
+
+function createAddDocumentsButton() {
+    let button = document.createElement('button')
+    button.id='addDocumentsButton'
+
+    if (!!document.getElementById('global-header')) {
+        button.classList.add('button-start', 'govuk-!-display-none-print')
+    } else {
+        button.classList.add('govuk-button','govuk-!-display-none-print')
+    }
+
+    button.style.margin = '1px'
+    button.innerHTML = 'Complete Add Documents'
+    button.addEventListener("click", function handleClick() {
+        GM_setValue('addDocumentsToggle',true)
+        addDocuments()
     })
 
     return button
@@ -301,7 +330,7 @@ function createCompleteAllButton() {
     button.addEventListener("click", function handleClick() {
         GM_setValue('traderDetailsReducedDataSetToggle',true)
         GM_setValue('routeDetailsAuthorisedToggle',true)
-        // GM_setValue('transportDetailsToggle',true) - uncomment when transport details is complete
+        GM_setValue('transportDetailsToggle',true)
         GM_setValue('guaranteeDetailsWaiverToggle',true)
         traderDetails()
     })
@@ -328,6 +357,7 @@ function createPanicButton() {
         GM_setValue('routeDetailsAuthorisedToggle',false)
         GM_setValue('transportDetailsToggle',false)
         GM_setValue('guaranteeDetailsWaiverToggle',false)
+        GM_setValue('addDocumentsToggle',false)
     })
 
     return button
@@ -601,6 +631,13 @@ const locationOfGoodsIdentification = (lrn, data) => {
     }
 }
 
+const locationOfGoodsAuthorisationNumber = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/route-details/location-of-goods/authorisation-number/${lrn}`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
 const locationOfGoodsEORI = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/route-details/location-of-goods/eori-tin/${lrn}`)){
         document.getElementById('value').value = data
@@ -731,6 +768,61 @@ const meansCountry = (lrn, data) => {
     }
 }
 
+const borderModeOfTransport = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/transport-details/border-mode-of-transport/${lrn}`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const borderMeansOfTransportIdentification = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/transport-details/border-means-of-transport/1/identification/${lrn}`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const borderMeansOfTransportIdentificationNumber = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/transport-details/border-means-of-transport/1/identification-number/${lrn}`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const borderMeansOfTransportAddCountry = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/transport-details/border-means-of-transport/1/add-country/${lrn}`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const borderMeansOfTransportOfficeOfTransit = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/transport-details/border-means-of-transport/1/office-of-transit/${lrn}`)){
+        document.getElementById('value-select').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const borderMeansOfTransportAddConveyanceReferenceNumber = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/transport-details/border-means-of-transport/1/add-conveyance-reference-number/${lrn}`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const borderMeansOfTransportCYA = (lrn) => {
+    if(currentPageIs(`/manage-transit-movements/departures/transport-details/border-means-of-transport/1/check-your-answers/${lrn}`)){
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const borderMeansOfTransportAddAnother = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/transport-details/border-means-of-transport/add-another/${lrn}`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
 const anotherVehicleCrossing = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/transport-details/border-mode-of-transport/add/${lrn}`)){
         document.getElementById(data).click()
@@ -787,7 +879,7 @@ const addCarrierContact = (lrn, data) => {
 }
 
 const addTransportEquipment = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/transport-details/equipment/add-transport-equipment/${lrn}`)){
+    if(currentPageIs(`/manage-transit-movements/departures/transport-details/transport-equipment/add-transport-equipment/${lrn}`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
@@ -823,18 +915,30 @@ const transportGoodsItem = (lrn, data) => {
 
 const addAnotherGoodsItem = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/transport-details/transport-equipment/1/goods-item-numbers/add-another/${lrn}`)){
-        toggleTransportDetailsButtonsOff() // Update as journey progresses
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
-// const transportSealCYA= (lrn) => {
-//     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/transport-details/transport-equipment/1/check-answers`)){
-//         toggleTransportDetailsButtonsOff() // Update as journey progresses
-//         document.getElementsByClassName('govuk-button')[0].click()
-//     }
-// }
+const transportEquipmentCYA= (lrn) => {
+     if(currentPageIs(`/manage-transit-movements/departures/transport-details/transport-equipment/1/check-answers/${lrn}`)){
+         document.getElementsByClassName('govuk-button')[0].click()
+     }
+}
+
+const addAnotherTransportEquipment = (lrn, data) => {
+      if(currentPageIs(`/manage-transit-movements/departures/transport-details/transport-equipment/add-another/${lrn}`)){
+          document.getElementById(data).click()
+          document.getElementsByClassName('govuk-button')[0].click()
+      }
+}
+
+const transportDetailsCYA= (lrn) => {
+     if(currentPageIs(`/manage-transit-movements/departures/transport-details/check-answers/${lrn}`)){
+         toggleTransportDetailsButtonsOff()
+         document.getElementsByClassName('govuk-button')[0].click()
+     }
+}
 
 
 /* #### Guarantee Details #### */
@@ -906,6 +1010,116 @@ const guaranteeAddAnother = (lrn, data) => {
     }
 }
 
+/* #### Add Documents Pages #### */
+
+const startAddDocuments = (lrn) => {
+    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
+        if (location.hostname === "localhost") {
+            location.href = `http:\/\/localhost:10132/manage-transit-movements/departures/documents/${lrn}`
+        } else {
+            location.href = `/manage-transit-movements/departures/documents/${lrn}`
+        }
+    }
+}
+
+const documentType = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/type/${lrn}`)){
+        document.getElementById('value-select').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const previousDocumentType = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/type-previous/${lrn}`)){
+        document.getElementById('value-select').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const referenceNumber = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/reference-number/${lrn}`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const addGoodsItemNumber = (lrn, data) => {
+      if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/goods-item-number/add/${lrn}`)){
+          document.getElementById(data).click()
+          document.getElementsByClassName('govuk-button')[0].click()
+      }
+}
+
+const goodsItemNumber = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/goods-item-number/${lrn}`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const addPackageType = (lrn, data) => {
+      if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/add-package/${lrn}`)){
+          document.getElementById(data).click()
+          document.getElementsByClassName('govuk-button')[0].click()
+      }
+}
+
+const packageType = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/package/${lrn}`)){
+        document.getElementById('value-select').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const addPackageQuantity = (lrn, data) => {
+      if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/add-package-quantity/${lrn}`)){
+          document.getElementById(data).click()
+          document.getElementsByClassName('govuk-button')[0].click()
+      }
+}
+
+const packageQuantity = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/package-quantity/${lrn}`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const addQuantity = (lrn, data) => {
+      if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/quantity/add/${lrn}`)){
+          document.getElementById(data).click()
+          document.getElementsByClassName('govuk-button')[0].click()
+      }
+}
+
+const quantityMetric = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/quantity/metric/${lrn}`)){
+        document.getElementById('value-select').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const quantity = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/quantity/${lrn}`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const documentLoopCYA = (lrn) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/check-answers/${lrn}`)){
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const documentAddAnother = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/add-another/${lrn}`)){
+        toggleAddDocumentButtonOff()
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
 /* #### Journeys #### */
 
 /* Trader Details Journey */
@@ -954,6 +1168,7 @@ function routeDetailsAuthorised() {
     officeOfTransitAddAnother(getLRN(), 'value-no')
     locationOfGoodsType(getLRN(), 'value')
     locationOfGoodsIdentification(getLRN(), 'value_1')
+    locationOfGoodsAuthorisationNumber(getLRN(), '89BE99')
     locationOfGoodsEORI(getLRN(), 'eori1234')
     locationOfGoodsAddAnotherIdentifier(getLRN(), 'value-no')
     locationOfGoodsAddContact(getLRN(), 'value-no')
@@ -974,6 +1189,14 @@ function transportDetails() {
     sameCountry(getLRN(),'value-no')
     anyContainers(getLRN(),'value-no')
     inlandMode(getLRN(), 'value_1')
+    borderModeOfTransport(getLRN(), 'value')
+    borderMeansOfTransportIdentification(getLRN(), 'value_1')
+    borderMeansOfTransportIdentificationNumber(getLRN(), 'JazzPlay')
+    borderMeansOfTransportAddCountry(getLRN(), 'value-no')
+    borderMeansOfTransportOfficeOfTransit(getLRN(), 'DE004058')
+    borderMeansOfTransportAddConveyanceReferenceNumber(getLRN(), 'value-no')
+    borderMeansOfTransportCYA(getLRN())
+    borderMeansOfTransportAddAnother(getLRN(), 'value-no')
     meansIdentification(getLRN(),'value')
     meansIdentificationNumber(getLRN(),'wagon12')
     meansCountry(getLRN(),'GB')
@@ -991,7 +1214,9 @@ function transportDetails() {
     addAnotherTransportSeal(getLRN(), 'value-no')
     transportGoodsItem(getLRN(), '1234')
     addAnotherGoodsItem(getLRN(), 'value-no')
-    // transportSealCYA(getLRN())
+    transportEquipmentCYA(getLRN())
+    addAnotherTransportEquipment(getLRN(), 'value-no')
+    transportDetailsCYA(getLRN())
 }
 
 /* ## Guarantee Details ## */
@@ -1008,3 +1233,22 @@ function guaranteeDetailsWaiver() {
     guaranteeAddAnother(getLRN(), 'value-no')
 }
 
+/* ## Add documents journey ## */
+
+function addDocuments() {
+    startAddDocuments(getLRN())
+    documentType(getLRN(), "CodeOnly")
+    previousDocumentType(getLRN(), "CodeOnly")
+    referenceNumber(getLRN(), "9078GH87")
+    addGoodsItemNumber(getLRN(), "value")
+    goodsItemNumber(getLRN(), "12345")
+    addPackageType(getLRN(), "value")
+    packageType(getLRN(), "BG")
+    addPackageQuantity(getLRN(), "value")
+    packageQuantity(getLRN(), '45')
+    addQuantity(getLRN(), 'value')
+    quantityMetric(getLRN(), 'KLT')
+    quantity(getLRN(), '1000')
+    documentLoopCYA(getLRN())
+    documentAddAnother(getLRN(), 'value-no')
+}
