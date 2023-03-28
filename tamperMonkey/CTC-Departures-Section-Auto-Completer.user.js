@@ -749,7 +749,6 @@ const startAddDocuments = (lrn) => { // To start a new journey you need to do a 
 
 const documentType = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/documents/1/type/${lrn}`)){
-        console.log("Iam ehre")
         document.getElementById('value-select').value = data
         document.getElementsByClassName('govuk-button')[0].click()
     }
