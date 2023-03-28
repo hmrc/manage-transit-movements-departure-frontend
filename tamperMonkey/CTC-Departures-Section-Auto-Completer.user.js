@@ -4,6 +4,7 @@
 // @version      11.0
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
+// @author       Tega-Okeremeta
 // @match        http*://*/manage-transit-movements/departures/*/task-list
 // @match        http*://*/manage-transit-movements/departures/route-details/*
 // @match        http*://*/manage-transit-movements/departures/trader-details/*
@@ -737,11 +738,11 @@ const routeDetailsCYA = (lrn) => {
 
 /* #### Add Documents Pages #### */
 
-const startAddDocuments = (lrn) => { // To start a new journey you need to do a manual URL redirect.
+const startAddDocuments = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
-        if (location.hostname === "localhost") { // Find what port it uses locally and put it below
+        if (location.hostname === "localhost") {
             location.href = `http:\/\/localhost:10132/manage-transit-movements/departures/documents/${lrn}`
-        } else { // For staging just copy the URL in
+        } else {
             location.href = `/manage-transit-movements/departures/documents/${lrn}`
         }
     }
@@ -754,21 +755,90 @@ const documentType = (lrn, data) => {
     }
 }
 
+const previousDocumentType = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/type-previous/${lrn}`)){
+        document.getElementById('value-select').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
 
-const documentReferenceNumber = (lrn, data) => {
+const referenceNumber = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/documents/1/reference-number/${lrn}`)){
         document.getElementById('value').value = data
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
-const documentCYA = (lrn) => {
+const addGoodsItemNumber = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/goods-item-number/add/${lrn}`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const goodsItemNumber = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/goods-item-number/${lrn}`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const addPackageType = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/add-package/${lrn}`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const packageType = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/package/${lrn}`)){
+        document.getElementById('value-select').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const addPackageQuantity = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/add-package-quantity/${lrn}`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const packageQuantity = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/package-quantity/${lrn}`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const addQuantity = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/quantity/add/${lrn}`)){
+        document.getElementById(data).click()
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const quantityMetric = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/quantity/metric/${lrn}`)){
+        document.getElementById('value-select').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const quantity = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/documents/1/previous/quantity/${lrn}`)){
+        document.getElementById('value').value = data
+        document.getElementsByClassName('govuk-button')[0].click()
+    }
+}
+
+const documentLoopCYA = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/documents/1/check-answers/${lrn}`)){
         document.getElementsByClassName('govuk-button')[0].click()
     }
 }
 
-const addAnotherDocument = (lrn, data) => {
+const documentAddAnother = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/documents/add-another/${lrn}`)){
         toggleAddDocumentButtonOff()
         document.getElementById(data).click()
@@ -1186,10 +1256,20 @@ function routeDetailsAuthorised() {
 
 function addDocuments() {
     startAddDocuments(getLRN())
-    documentType(getLRN(), '705')
-    documentReferenceNumber(getLRN(),'1234')
-    documentCYA(getLRN())
-    addAnotherDocument(getLRN(),'value-no')
+    documentType(getLRN(), "CodeOnly")
+    previousDocumentType(getLRN(), "CodeOnly")
+    referenceNumber(getLRN(), "9078GH87")
+    addGoodsItemNumber(getLRN(), "value")
+    goodsItemNumber(getLRN(), "12345")
+    addPackageType(getLRN(), "value")
+    packageType(getLRN(), "BG")
+    addPackageQuantity(getLRN(), "value")
+    packageQuantity(getLRN(), '45')
+    addQuantity(getLRN(), 'value')
+    quantityMetric(getLRN(), 'KLT')
+    quantity(getLRN(), '1000')
+    documentLoopCYA(getLRN())
+    documentAddAnother(getLRN(), 'value-no')
 }
 
 /* ## Transport Details journey ## */
