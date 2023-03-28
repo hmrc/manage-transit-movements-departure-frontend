@@ -1091,7 +1091,7 @@ const guaranteeAddAnother = (lrn, data) => {
 const startItems = (lrn) => {
     if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
         if (location.hostname === "localhost") {
-            location.href = `http:\/\/localhost:10127/manage-transit-movements/departures/transport-details/apply-ucr-to-all-items/${lrn}`
+            location.href = `http:\/\/localhost:10127/manage-transit-movements/departures/items/${lrn}`
         } else {
             location.href = `/manage-transit-movements/departures/items/${lrn}`
         }
