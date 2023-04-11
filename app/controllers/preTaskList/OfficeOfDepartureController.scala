@@ -26,9 +26,10 @@ import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
 import pages.preTaskList.OfficeOfDeparturePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.__
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.CustomsOfficesService
+import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.OfficeOfDepartureView
 
@@ -43,6 +44,7 @@ class OfficeOfDepartureController @Inject() (
   checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
   formProvider: CustomsOfficeFormProvider,
   customsOfficesService: CustomsOfficesService,
+  countriesService: CountriesService,
   val controllerComponents: MessagesControllerComponents,
   view: OfficeOfDepartureView
 )(implicit ec: ExecutionContext)
@@ -83,7 +85,16 @@ class OfficeOfDepartureController @Inject() (
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.customsOffices, mode))),
                 value => {
                   implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-                  OfficeOfDeparturePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
+                  for {
+                    countryCodesCTC <- countriesService.getCountryCodesCTC()
+                    isInCL112 = countryCodesCTC.map(_.code).contains(value.countryCode)
+                    result <- OfficeOfDeparturePage
+                      .writeToUserAnswers(value)
+                      .appendValue(__ \ "isInCL112", isInCL112)
+                      .updateTask[PreTaskListDomain]()
+                      .writeToSession()
+                      .navigate()
+                  } yield result
                 }
               )
         }

@@ -58,6 +58,20 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       |]
       |""".stripMargin
 
+  private val countriesResponseJson: String =
+    """
+      |[
+      | {
+      |   "code":"GB",
+      |   "description":"United Kingdom"
+      | },
+      | {
+      |   "code":"AD",
+      |   "description":"Andorra"
+      | }
+      |]
+      |""".stripMargin
+
   "Reference Data" - {
 
     "getCustomsOfficesOfDepartureForCountry" - {
@@ -95,6 +109,26 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
       "must return an exception when an error response is returned" in {
         checkErrorResponse(s"/$baseUrl/customs-offices/GB?role=DEP", connector.getCustomsOfficesOfDepartureForCountry("GB"))
+      }
+    }
+
+    "getCountryCodesCTC" - {
+      "must return Seq of Country when successful" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$baseUrl/country-codes-ctc"))
+            .willReturn(okJson(countriesResponseJson))
+        )
+
+        val expectedResult: Seq[Country] = Seq(
+          Country("GB"),
+          Country("AD")
+        )
+
+        connector.getCountryCodesCTC().futureValue mustEqual expectedResult
+      }
+
+      "must return an exception when an error response is returned" in {
+        checkErrorResponse(s"/$baseUrl/country-codes-ctc", connector.getCountryCodesCTC())
       }
     }
   }

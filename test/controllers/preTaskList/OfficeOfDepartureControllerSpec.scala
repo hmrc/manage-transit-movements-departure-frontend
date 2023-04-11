@@ -19,18 +19,20 @@ package controllers.preTaskList
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.CustomsOfficeFormProvider
-import models.reference.CustomsOffice
-import models.{CustomsOfficeList, NormalMode}
+import models.reference.{Country, CustomsOffice}
+import models.{CustomsOfficeList, NormalMode, UserAnswers}
 import navigation.PreTaskListNavigatorProvider
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.{reset, verify, when}
 import pages.preTaskList.OfficeOfDeparturePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.libs.json.Json
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.CustomsOfficesService
+import services.{CountriesService, CustomsOfficesService}
 import views.html.preTaskList.OfficeOfDepartureView
 
 import scala.concurrent.Future
@@ -45,10 +47,11 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
   private val mode   = NormalMode
 
   private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
+  private val mockCountriesService: CountriesService           = mock[CountriesService]
   private lazy val officeOfDepartureRoute: String              = routes.OfficeOfDepartureController.onPageLoad(lrn, mode).url
 
   override def beforeEach(): Unit = {
-    reset(mockCustomsOfficesService)
+    reset(mockCustomsOfficesService); reset(mockCountriesService)
     super.beforeEach()
   }
 
@@ -57,6 +60,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
       .guiceApplicationBuilder()
       .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
       .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
+      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "OfficeOfDeparture Controller" - {
 
@@ -96,18 +100,64 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
         view(filledForm, lrn, customsOffices.customsOffices, mode)(request, messages).toString
     }
 
-    "must redirect to the next page when valid data is submitted" in {
-      setExistingUserAnswers(emptyUserAnswers)
-      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
-      when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
+    "must redirect to the next page when valid data is submitted" - {
+      "and office is in CL112" in {
+        setExistingUserAnswers(emptyUserAnswers)
+        when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+        when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
+        when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(Seq(Country("GB"))))
 
-      val request = FakeRequest(POST, officeOfDepartureRoute)
-        .withFormUrlEncodedBody(("value", "GB1"))
+        val request = FakeRequest(POST, officeOfDepartureRoute)
+          .withFormUrlEncodedBody(("value", "GB1"))
 
-      val result: Future[Result] = route(app, request).value
+        val result: Future[Result] = route(app, request).value
 
-      status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual onwardRoute.url
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+
+        val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
+        userAnswersCaptor.getValue.data mustBe Json.parse("""
+            |{
+            |  "preTaskList" : {
+            |    "officeOfDeparture" : {
+            |      "id" : "GB1",
+            |      "name" : "someName",
+            |      "isInCL112" : true
+            |    }
+            |  }
+            |}
+            |""".stripMargin)
+      }
+
+      "and office is not in CL112" in {
+        setExistingUserAnswers(emptyUserAnswers)
+        when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+        when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
+        when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(Seq(Country("FR"))))
+
+        val request = FakeRequest(POST, officeOfDepartureRoute)
+          .withFormUrlEncodedBody(("value", "GB1"))
+
+        val result: Future[Result] = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+
+        val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
+        userAnswersCaptor.getValue.data mustBe Json.parse("""
+            |{
+            |  "preTaskList" : {
+            |    "officeOfDeparture" : {
+            |      "id" : "GB1",
+            |      "name" : "someName",
+            |      "isInCL112" : false
+            |    }
+            |  }
+            |}
+            |""".stripMargin)
+      }
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
