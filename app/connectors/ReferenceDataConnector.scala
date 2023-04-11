@@ -18,7 +18,9 @@ package connectors
 
 import config.FrontendAppConfig
 import models._
+import models.reference.Country
 import sttp.model.HeaderNames
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import javax.inject.Inject
@@ -31,6 +33,11 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
     val serviceUrl = s"${config.referenceDataUrl}/customs-offices/$countryCode?role=DEP"
     http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
+  }
+
+  def getCountryCodesCTC()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
+    val serviceUrl = s"${config.referenceDataUrl}/country-codes-ctc"
+    http.GET[Seq[Country]](serviceUrl, headers = version2Header)
   }
 
   private def version2Header: Seq[(String, String)] = Seq(

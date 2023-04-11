@@ -21,7 +21,7 @@ import models.journeyDomain.{JourneyDomainModel, WriterError}
 import models.requests.MandatoryDataRequest
 import navigation.UserAnswersNavigator
 import pages.QuestionPage
-import play.api.libs.json.Format
+import play.api.libs.json._
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{Call, Result}
 import repositories.SessionRepository
@@ -60,6 +60,16 @@ package object controllers {
   }
 
   implicit class SettableOpsRunner[A](userAnswersWriter: UserAnswersWriter[Write[A]]) {
+
+    def appendValue[B](path: JsPath, value: B)(implicit format: Format[B]): UserAnswersWriter[Write[A]] =
+      userAnswersWriter.flatMapF {
+        case (page, userAnswers) =>
+          val reads = page.path.json.update(path.json.put(Json.toJson(value)))
+          userAnswers.data.transform(reads) match {
+            case JsSuccess(data, _) => Right((page, userAnswers.copy(data = data)))
+            case JsError(errors)    => Left(WriterError(page, Some(s"Failed to append value to answer: $errors")))
+          }
+      }
 
     def updateTask[T <: JourneyDomainModel]()(implicit reads: UserAnswersReader[T]): UserAnswersWriter[Write[A]] =
       userAnswersWriter.flatMapF {
