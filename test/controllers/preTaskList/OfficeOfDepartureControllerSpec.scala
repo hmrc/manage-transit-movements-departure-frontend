@@ -101,11 +101,12 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must redirect to the next page when valid data is submitted" - {
-      "and office is in CL112" in {
+      "and office is in CL112 but not CL147" in {
         setExistingUserAnswers(emptyUserAnswers)
         when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
         when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
         when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(Seq(Country("GB"))))
+        when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(Seq(Country("FR"))))
 
         val request = FakeRequest(POST, officeOfDepartureRoute)
           .withFormUrlEncodedBody(("value", "GB1"))
@@ -123,18 +124,20 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
             |    "officeOfDeparture" : {
             |      "id" : "GB1",
             |      "name" : "someName",
-            |      "isInCL112" : true
+            |      "isInCL112" : true,
+            |      "isInCL147" : false
             |    }
             |  }
             |}
             |""".stripMargin)
       }
 
-      "and office is not in CL112" in {
+      "and office is not in CL112 but is in CL147" in {
         setExistingUserAnswers(emptyUserAnswers)
         when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
         when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
         when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(Seq(Country("FR"))))
+        when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(Seq(Country("GB"))))
 
         val request = FakeRequest(POST, officeOfDepartureRoute)
           .withFormUrlEncodedBody(("value", "GB1"))
@@ -152,7 +155,8 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
             |    "officeOfDeparture" : {
             |      "id" : "GB1",
             |      "name" : "someName",
-            |      "isInCL112" : false
+            |      "isInCL112" : false,
+            |      "isInCL147" : true
             |    }
             |  }
             |}

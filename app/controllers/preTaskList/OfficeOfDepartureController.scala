@@ -88,9 +88,12 @@ class OfficeOfDepartureController @Inject() (
                   for {
                     countryCodesCTC <- countriesService.getCountryCodesCTC()
                     isInCL112 = countryCodesCTC.map(_.code).contains(value.countryCode)
+                    customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
+                    isInCL147 = customsSecurityAgreementAreaCountries.map(_.code).contains(value.countryCode)
                     result <- OfficeOfDeparturePage
                       .writeToUserAnswers(value)
                       .appendValue(__ \ "isInCL112", isInCL112)
+                      .appendValue(__ \ "isInCL147", isInCL147)
                       .updateTask[PreTaskListDomain]()
                       .writeToSession()
                       .navigate()
