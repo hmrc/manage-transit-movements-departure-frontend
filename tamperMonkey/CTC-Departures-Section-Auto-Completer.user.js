@@ -280,7 +280,7 @@ function createItemsButton() {
     }
 
     button.style.margin = '1px'
-    button.innerHTML = 'Complete Items (Up to UCR)'
+    button.innerHTML = 'Complete Items (Up to Documents)'
     button.addEventListener("click", function handleClick() {
         GM_setValue('itemsToggle',true)
         items()
@@ -366,7 +366,7 @@ function createCompleteAllButton() {
         GM_setValue('routeDetailsAuthorisedToggle',true)
         GM_setValue('addDocumentsToggle',true)
         GM_setValue('transportDetailsToggle',true)
-        // GM_setValue('itemsToggle',true)
+//        GM_setValue('itemsToggle',true)
         GM_setValue('guaranteeDetailsWaiverToggle',true)
         traderDetails()
     })
@@ -413,7 +413,7 @@ const startTraderDetails = (lrn) => {
     }
 }
 
-const tirIdentificaitonKnown = (lrn, data) => {
+const tirIdentificationKnown = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/trader-details/holder-of-transit/is-tir-id-known/${lrn}`)){
         document.getElementById(data).click()
         document.getElementsByClassName('govuk-button')[0].click()
@@ -1172,25 +1172,129 @@ const startItems = (lrn) => {
 const itemDescription = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/items/1/description/${lrn}`)){
         document.getElementById('value').value = data
-        document.getElementsByClassName('govuk-button')[0].click()
+        document.getElementById('submit').click()
     }
 }
 
 const itemCountry = (lrn, data) => {
     if(currentPageIs(`/manage-transit-movements/departures/items/1/country-of-destination/${lrn}`)){
-        toggleItemsButtonOff()
         document.getElementById('value-select').value = data
-        document.getElementsByClassName('govuk-button')[0].click()
+        document.getElementById('submit').click()
     }
 }
 
-// const itemUCR = (lrn, data) => {
-//     if(currentPageIs(`/manage-transit-movements/departures/items/1/ucr/${lrn}`)){
-//         document.getElementById('value').value = data
-//         document.getElementsByClassName('govuk-button')[0].click()
-//     }
-// }
+const itemUCR = (lrn, data) => {
+     if(currentPageIs(`/manage-transit-movements/departures/items/1/ucr/${lrn}`)){
+         document.getElementById('value').value = data
+         document.getElementById('submit').click()
+     }
+}
 
+const addCUSCode = (lrn, data) => {
+     if(currentPageIs(`/manage-transit-movements/departures/items/1/cus-code/add/${lrn}`)){
+         document.getElementById(data).click()
+         document.getElementById('submit').click()
+     }
+}
+
+const itemCUSCode = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/items/1/cus-code/${lrn}`)){
+         document.getElementById('value').value = data
+         document.getElementById('submit').click()
+    }
+}
+
+const addCommodityCode = (lrn, data) => {
+     if(currentPageIs(`/manage-transit-movements/departures/items/1/commodity-code/add/${lrn}`)){
+         document.getElementById(data).click()
+         document.getElementById('submit').click()
+     }
+}
+
+const itemCommodityCode = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/items/1/commodity-code/${lrn}`)){
+         document.getElementById('value').value = data
+         document.getElementById('submit').click()
+    }
+}
+
+const addDangerousGoods = (lrn, data) => {
+     if(currentPageIs(`/manage-transit-movements/departures/items/1/dangerous-goods/add/${lrn}`)){
+         document.getElementById(data).click()
+         document.getElementById('submit').click()
+     }
+}
+
+const itemUNNumber = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/items/1/dangerous-goods/1/un-number/${lrn}`)){
+         document.getElementById('value').value = data
+         document.getElementById('submit').click()
+    }
+}
+
+const addAnotherDangerousGood = (lrn, data) => {
+     if(currentPageIs(`/manage-transit-movements/departures/items/1/dangerous-goods/add-another/${lrn}`)){
+         document.getElementById(data).click()
+         document.getElementById('submit').click()
+     }
+}
+
+const itemGrossWeight = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/items/1/measurement/gross-weight/${lrn}`)){
+         document.getElementById('value').value = data
+         document.getElementById('submit').click()
+    }
+}
+
+const addSupplementaryUnits = (lrn, data) => {
+     if(currentPageIs(`/manage-transit-movements/departures/items/1/measurement/add-supplementary-units/${lrn}`)){
+         document.getElementById(data).click()
+         document.getElementById('submit').click()
+     }
+}
+
+const itemSupplementaryUnit = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/items/1/measurement/supplementary-units/${lrn}`)){
+         document.getElementById('value').value = data
+         document.getElementById('submit').click()
+    }
+}
+
+const itemPackageType = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/items/1/packages/1/type/${lrn}`)){
+        document.getElementById('value-select').value = data
+        document.getElementById('submit').click()
+    }
+}
+
+const itemPackageQuantity = (lrn, data) => {
+    if(currentPageIs(`/manage-transit-movements/departures/items/1/packages/1/type-quantity/${lrn}`)){
+         document.getElementById('value').value = data
+         document.getElementById('submit').click()
+    }
+}
+
+const addShippingMark = (lrn, data) => {
+     if(currentPageIs(`/manage-transit-movements/departures/items/1/packages/1/add-shipping-mark/${lrn}`)){
+         document.getElementById(data).click()
+         document.getElementById('submit').click()
+     }
+}
+
+const itemShippingMark = (lrn, data) => {
+     if(currentPageIs(`/manage-transit-movements/departures/items/1/packages/1/shipping-mark/${lrn}`)){
+         document.getElementById('value').value = data
+         document.getElementById('submit').click()
+     }
+}
+
+const addAnotherPackage = (lrn, data) => {
+     if(currentPageIs(`/manage-transit-movements/departures/items/1/packages/add-another/${lrn}`)){
+         toggleItemsButtonOff()
+         document.getElementById(data).click()
+         document.getElementById('submit').click()
+     }
+}
 
 /* #### Journeys #### */
 
@@ -1205,7 +1309,7 @@ function traderDetails(){
         consignorContact(getLRN(), 'value-no')
     }
     startTraderDetails(getLRN())
-    tirIdentificaitonKnown(getLRN(),'value-no')
+    tirIdentificationKnown(getLRN(),'value-no')
     addEoriTin(getLRN(), 'value-no')
     transitHolderName(getLRN(), 'Person')
     transitHolderCountry(getLRN(), 'IT')
@@ -1317,7 +1421,22 @@ function items() {
     startItems(getLRN())
     itemDescription(getLRN(), 'Item description')
     itemCountry(getLRN(), 'IT')
-    // itemUCR(getLRN(), 'UCR')
+    itemUCR(getLRN(), 'UCR')
+    addCUSCode(getLRN(), 'value')
+    itemCUSCode(getLRN(), '123ABC789')
+    addCommodityCode(getLRN(), 'value')
+    itemCommodityCode(getLRN(), '123ABC')
+    addDangerousGoods(getLRN(), 'value')
+    itemUNNumber(getLRN(), 'AB12')
+    addAnotherDangerousGood(getLRN(), 'value-no')
+    itemGrossWeight(getLRN(), '12.345')
+    addSupplementaryUnits(getLRN(), 'value')
+    itemSupplementaryUnit(getLRN(), '12.345')
+    itemPackageType(getLRN(), 'NE')
+    itemPackageQuantity(getLRN(), '65')
+    addShippingMark(getLRN(), 'value')
+    itemShippingMark(getLRN(), "The shipping mark")
+    addAnotherPackage(getLRN(), 'value-no')
 }
 
 /* ## Guarantee Details ## */
