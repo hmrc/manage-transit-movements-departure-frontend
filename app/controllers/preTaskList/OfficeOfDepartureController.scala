@@ -23,10 +23,9 @@ import models.journeyDomain.PreTaskListDomain
 import models.reference.CustomsOffice
 import models.{CustomsOfficeList, LocalReferenceNumber, Mode}
 import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
-import pages.preTaskList.OfficeOfDeparturePage
+import pages.preTaskList.{OfficeOfDepartureInCL112Page, OfficeOfDepartureInCL147Page, OfficeOfDeparturePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.__
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.{CountriesService, CustomsOfficesService}
@@ -92,8 +91,8 @@ class OfficeOfDepartureController @Inject() (
                     isInCL147 = customsSecurityAgreementAreaCountries.map(_.code).contains(value.countryCode)
                     result <- OfficeOfDeparturePage
                       .writeToUserAnswers(value)
-                      .appendValue(__ \ "isInCL112", isInCL112)
-                      .appendValue(__ \ "isInCL147", isInCL147)
+                      .appendValue(OfficeOfDepartureInCL112Page, isInCL112)
+                      .appendValue(OfficeOfDepartureInCL147Page, isInCL147)
                       .updateTask[PreTaskListDomain]()
                       .writeToSession()
                       .navigate()

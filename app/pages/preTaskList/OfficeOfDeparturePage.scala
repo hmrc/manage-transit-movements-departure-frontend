@@ -42,3 +42,17 @@ case object OfficeOfDeparturePage extends QuestionPage[CustomsOffice] {
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(controllers.preTaskList.routes.OfficeOfDepartureController.onPageLoad(userAnswers.lrn, mode))
 }
+
+case object OfficeOfDepartureInCL112Page extends QuestionPage[Boolean] {
+
+  override def path: JsPath = OfficeOfDeparturePage.path \ toString
+
+  override def toString: String = "isInCL112"
+}
+
+case object OfficeOfDepartureInCL147Page extends QuestionPage[Boolean] {
+
+  override def path: JsPath = OfficeOfDeparturePage.path \ toString
+
+  override def toString: String = "isInCL147"
+}
