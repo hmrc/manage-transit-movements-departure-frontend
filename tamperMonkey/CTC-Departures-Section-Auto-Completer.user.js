@@ -24,8 +24,6 @@
     'use strict'
 })()
 
-// Task left to do: Add complete all button, write up maintain documentation
-
 function initialiseJourneys() {
     function traderDetailsReducedDataSetJourney() {
         let journey = new Journey("traderDetailsReducedDataSetJourney", "Trader Details (Reduced Data Set)", "/manage-transit-movements/departures/trader-details/", "10130", "trader-details-status")
