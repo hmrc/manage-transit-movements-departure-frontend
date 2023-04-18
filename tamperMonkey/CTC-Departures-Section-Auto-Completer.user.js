@@ -346,7 +346,7 @@ function displayButtons(journeys) {
     })
     let journeyIds = getJourneyIDs(journeys)
     if(!journeysComplete(journeys)) {
-        panel.appendChild(new CompleteAllButton("Complete All (Excluding Items)", journeys[0]._button.id, journeys[0].journeyStartUrl, journeys[0].localHostPort).button)
+        panel.appendChild(new CompleteAllButton("Complete All (Excluding Items)", journeys).button)
     }
     panel.appendChild(new StopScriptsButton(journeyIds).button)
     return panel
@@ -608,18 +608,19 @@ class CompleteAllButton {
         this._id = id
     }
 
-    constructor(buttonText, firstJourneyId, firstJourneyUrl, firstJourneyPort) {
+    constructor(buttonText, journeys) {
         this._id = "completeAll"
-        this.firstJourneyId = firstJourneyId
+        this.firstJourneyId = journeys[0]._button.id
         this.buttonText = buttonText
-        this.firstJourneyUrl = firstJourneyUrl
-        this.firstJourneyPort = firstJourneyPort
+        this.firstJourneyUrl = journeys[0].journeyStartUrl
+        this.firstJourneyPort = journeys[0].localHostPort
+        this.journeys = journeys
 
-        this._button = this.createButton(this.id, this.firstJourneyId, this.buttonText, this.firstJourneyUrl, this.firstJourneyPort)
+        this._button = this.createButton(this.id, this.firstJourneyId, this.buttonText, this.firstJourneyUrl, this.firstJourneyPort, this.journeys)
 
     }
 
-    createButton(id, firstJourneyId, buttonText, firstJourneyUrl, firstJourneyPort) {
+    createButton(id, firstJourneyId, buttonText, firstJourneyUrl, firstJourneyPort, journeys) {
 
         let button = document.createElement('button')
         button.id = id
@@ -632,6 +633,7 @@ class CompleteAllButton {
         button.style.margin = '1px'
         button.innerHTML = buttonText
         button.addEventListener("click", function handleClick() {
+            journeys.forEach(journey => GM_setValue(journey._button.id,false))
             GM_setValue(id, true)
             GM_setValue(firstJourneyId, true)
             if (currentPageIs(`/manage-transit-movements/departures/${getLRN()}/task-list`)) {
