@@ -178,7 +178,7 @@ function initialiseJourneys() {
     }
 
     function itemsJourney() {
-        let journey = new Journey("itemsJourney", "Items", "/manage-transit-movements/departures/items/", "10127", "documents-status")
+        let journey = new Journey("itemsJourney", "Items", "/manage-transit-movements/departures/items/", "10127", "items-status")
         journey.addPages(
             [
                 new InputPage("/manage-transit-movements/departures/items/1/description/", "Item description"),
@@ -239,12 +239,64 @@ window.addEventListener('load', function () {
     if (!onLandingPage()) {
         document.body.appendChild(displayPanicButton(journeys))
     }
-    isAJourneyToggled(journeys)
-    if (onLandingPage()) {
-        document.body.appendChild(displayButtons(journeys))
+    if (GM_getValue("completeAll", null)) {
+        completeAllJourneys(journeys)
+    } else {
+        isAJourneyToggled(journeys)
+        if (onLandingPage()) {
+            document.body.appendChild(displayButtons(journeys))
+        }
     }
 }, false)
 
+function completeAllJourneys(journeys) { // Manually do the journeys for complete all until all are fully complete
+    if (!journeysComplete(journeys)) {
+        if (!isJourneyComplete(journeys[0]) && GM_getValue(journeys[0]._button.id, null) !== "Complete") {
+            completeJourney(journeys[0])
+        } else if (!isJourneyComplete(journeys[2]) && GM_getValue(journeys[2]._button.id, null) !== "Complete") {
+            completeJourney(journeys[2])
+        } else if (!isJourneyComplete(journeys[3]) && GM_getValue(journeys[3]._button.id, null) !== "Complete") {
+            completeJourney(journeys[3])
+        } else if (!isJourneyComplete(journeys[4]) && GM_getValue(journeys[4]._button.id, null) !== "Complete") {
+            completeJourney(journeys[4])
+        } else {
+            completeJourney(journeys[6])
+        }
+    }else {
+        location.reload()
+    }
+}
+
+function completeJourney(journey) {
+    if (onLandingPage()) {
+        GM_setValue(journey._button.id, true)
+        if (currentPageIs(`/manage-transit-movements/departures/${getLRN()}/task-list`)) {
+            if (location.hostname === "localhost") {
+                location.href = `http:\/\/localhost:${journey.localHostPort}${journey.journeyStartUrl}${getLRN()}`
+            } else {
+                location.href = `${journey.journeyStartUrl}/${getLRN()}`
+            }
+        }
+    } else {
+        journey.isToggled()
+    }
+}
+
+function journeysComplete(journeys) {
+    let count = 0
+    let countToReach = journeys.length - 1 // Take away items journey from count and the additional trader details full data section journey
+    journeys.forEach(journey => {
+        if (isJourneyComplete(journey)) {
+            count += 1
+        }
+    })
+    if (count === countToReach) {
+        GM_setValue("completeAll", false)
+        return true
+    } else {
+        return false;
+    }
+}
 
 const currentPageIs = (path) => {
     if (path.includes("*")) {
@@ -267,7 +319,12 @@ function getJourneyIDs(journeys) {
 
 function isJourneyComplete(journey) {
     try {
-        return document.getElementById(journey.statusId).innerText === "COMPLETED"
+        if (document.getElementById(journey.statusId).innerText === "COMPLETED") {
+            GM_setValue(journey._button.id, "Complete")
+            return true
+        } else {
+            return false
+        }
     } catch (err) {
         return false
     }
@@ -283,6 +340,9 @@ function displayButtons(journeys) {
         }
     })
     let journeyIds = getJourneyIDs(journeys)
+    if(!journeysComplete(journeys)) {
+        panel.appendChild(new CompleteAllButton("Complete All (Excluding Items)", journeys[0]._button.id, journeys[0].journeyStartUrl, journeys[0].localHostPort).button)
+    }
     panel.appendChild(new StopScriptsButton(journeyIds).button)
     return panel
 }
@@ -360,7 +420,7 @@ class Journey {
 
     isToggled() {
         if (GM_getValue(this._button.id, null)) {
-            this._pages.runThroughJourney(this._journeyStartUrl, this._localHostPort)
+            this._pages.runThroughJourney()
         }
     }
 
@@ -526,6 +586,62 @@ class Button {
     }
 }
 
+class CompleteAllButton {
+    get button() {
+        return this._button
+    }
+
+    set button(button) {
+        this._button = button
+    }
+
+    get id() {
+        return this._id
+    }
+
+    set id(id) {
+        this._id = id
+    }
+
+    constructor(buttonText, firstJourneyId, firstJourneyUrl, firstJourneyPort) {
+        this._id = "completeAll"
+        this.firstJourneyId = firstJourneyId
+        this.buttonText = buttonText
+        this.firstJourneyUrl = firstJourneyUrl
+        this.firstJourneyPort = firstJourneyPort
+
+        this._button = this.createButton(this.id, this.firstJourneyId, this.buttonText, this.firstJourneyUrl, this.firstJourneyPort)
+
+    }
+
+    createButton(id, firstJourneyId, buttonText, firstJourneyUrl, firstJourneyPort) {
+
+        let button = document.createElement('button')
+        button.id = id
+
+        if (!!document.getElementById('global-header')) {
+            button.classList.add('button-start', 'govuk-!-display-none-print')
+        } else {
+            button.classList.add('govuk-button', 'govuk-!-display-none-print')
+        }
+        button.style.margin = '1px'
+        button.innerHTML = buttonText
+        button.addEventListener("click", function handleClick() {
+            GM_setValue(id, true)
+            GM_setValue(firstJourneyId, true)
+            if (currentPageIs(`/manage-transit-movements/departures/${getLRN()}/task-list`)) {
+                if (location.hostname === "localhost") {
+                    location.href = `http:\/\/localhost:${firstJourneyPort}${firstJourneyUrl}${getLRN()}`
+                } else {
+                    location.href = `${firstJourneyUrl}/${getLRN()}`
+                }
+            }
+        })
+
+        return button
+    }
+}
+
 class StopScriptsButton {
     get button() {
         return this._button
@@ -567,6 +683,7 @@ class StopScriptsButton {
         button.innerHTML = buttonText
         button.addEventListener("click", function handleClick() {
             journeyIds.forEach(journeyId => GM_setValue(journeyId, false))
+            GM_setValue("completeAll", false)
         })
 
         return button
