@@ -261,8 +261,15 @@ function completeAllJourneys(journeys) { // Manually do the journeys for complet
             completeJourney(journeys[6])
         }
     }else {
+        resetStates(journeys)
         location.reload()
     }
+}
+
+function resetStates(journeys) {
+    console.log(journeys[0]._button.id)
+    journeys.forEach(journey => GM_setValue(journey._button.id, false))
+    GM_setValue("completeAll", false)
 }
 
 function completeJourney(journey) {
