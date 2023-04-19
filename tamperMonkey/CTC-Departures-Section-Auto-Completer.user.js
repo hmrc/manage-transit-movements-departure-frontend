@@ -267,7 +267,6 @@ function completeAllJourneys(journeys) { // Manually do the journeys for complet
 }
 
 function resetStates(journeys) {
-    console.log(journeys[0]._button.id)
     journeys.forEach(journey => GM_setValue(journey._button.id, false))
     GM_setValue("completeAll", false)
 }
