@@ -17,8 +17,9 @@
 package components
 
 import a11ySpecBase.A11ySpecBase
-import forms.CustomsOfficeFormProvider
-import models.CustomsOfficeList
+import forms.SelectableFormProvider
+import models.SelectableList
+import models.reference.CustomsOffice
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import play.twirl.api.Html
@@ -35,14 +36,14 @@ class InputSelectSpec extends A11ySpecBase {
     val prefix         = Gen.alphaNumStr.sample.value
     val title          = nonEmptyString.sample.value
     val caption        = Gen.option(nonEmptyString).sample.value
-    val customsOffices = arbitrary[CustomsOfficeList].sample.value
+    val customsOffices = arbitrary[SelectableList[CustomsOffice]].sample.value
     val label          = nonEmptyString.sample.value
     val hint           = Gen.option(nonEmptyString).sample.value
     val placeholder    = nonEmptyString.sample.value
-    val selectedValue  = Gen.oneOf(None, Some(customsOffices.customsOffices.head)).sample.value
-    val selectItems    = customsOffices.customsOffices.toSelectItems(selectedValue)
+    val selectedValue  = Gen.oneOf(None, Some(customsOffices.values.head)).sample.value
+    val selectItems    = customsOffices.values.toSelectItems(selectedValue)
     val additionalHtml = arbitrary[Html].sample.value
-    val form           = new CustomsOfficeFormProvider()(prefix, customsOffices)
+    val form           = new SelectableFormProvider()(prefix, customsOffices)
     val preparedForm = selectedValue match {
       case Some(customsOffice) => form.fill(customsOffice)
       case None                => form

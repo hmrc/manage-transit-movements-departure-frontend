@@ -19,7 +19,6 @@ package connectors
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, okJson, urlEqualTo}
 import helper.WireMockServerHandler
-import models.CustomsOfficeList
 import models.reference._
 import org.scalacheck.Gen
 import org.scalatest.Assertion
@@ -81,13 +80,10 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
             .willReturn(okJson(customsOfficeDestinationResponseJson))
         )
 
-        val expectedResult =
-          CustomsOfficeList(
-            Seq(
-              CustomsOffice("GB1", "testName1", None),
-              CustomsOffice("GB2", "testName2", None)
-            )
-          )
+        val expectedResult = Seq(
+          CustomsOffice("GB1", "testName1", None),
+          CustomsOffice("GB2", "testName2", None)
+        )
 
         connector.getCustomsOfficesOfDepartureForCountry("GB").futureValue mustBe expectedResult
       }
@@ -101,8 +97,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
           )
         )
 
-        val expectedResult =
-          CustomsOfficeList(Nil)
+        val expectedResult = Nil
 
         connector.getCustomsOfficesOfDepartureForCountry("AR").futureValue mustBe expectedResult
       }

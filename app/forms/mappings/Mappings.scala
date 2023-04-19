@@ -16,8 +16,7 @@
 
 package forms.mappings
 
-import models.reference.CustomsOffice
-import models.{CustomsOfficeList, Enumerable, LocalReferenceNumber}
+import models.{Enumerable, LocalReferenceNumber, Selectable, SelectableList}
 import play.api.data.FieldMapping
 import play.api.data.Forms.of
 import play.api.data.format.Formats.ignoredFormat
@@ -61,10 +60,10 @@ trait Mappings extends Formatters with Constraints {
   ): FieldMapping[LocalReferenceNumber] =
     of(lrnFormatter(requiredKey, lengthKey, invalidCharactersKey, invalidFormatKey))
 
-  protected def customsOffice(
-    customsOfficeList: CustomsOfficeList,
+  protected def selectable[T <: Selectable](
+    selectableList: SelectableList[T],
     errorKey: String = "error.required",
     args: Seq[Any] = Seq.empty
-  ): FieldMapping[CustomsOffice] =
-    of(customsOfficeFormatter(customsOfficeList, errorKey, args))
+  ): FieldMapping[T] =
+    of(selectableFormatter[T](selectableList, errorKey, args))
 }
