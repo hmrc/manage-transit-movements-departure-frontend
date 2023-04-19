@@ -18,9 +18,9 @@ package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.CustomsOfficeFormProvider
+import forms.SelectableFormProvider
 import models.reference.{Country, CustomsOffice}
-import models.{CustomsOfficeList, NormalMode, UserAnswers}
+import models.{NormalMode, SelectableList, UserAnswers}
 import navigation.PreTaskListNavigatorProvider
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -39,11 +39,11 @@ import scala.concurrent.Future
 
 class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val customsOffice1: CustomsOffice     = CustomsOffice("GB1", "someName", None)
-  private val customsOffice2: CustomsOffice     = CustomsOffice("GB2", "name", None)
-  private val customsOffices: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
+  private val customsOffice1: CustomsOffice                 = CustomsOffice("GB1", "someName", None)
+  private val customsOffice2: CustomsOffice                 = CustomsOffice("GB2", "name", None)
+  private val customsOffices: SelectableList[CustomsOffice] = SelectableList(Seq(customsOffice1, customsOffice2))
 
-  private val gbForm = new CustomsOfficeFormProvider()("officeOfDeparture", customsOffices)
+  private val gbForm = new SelectableFormProvider()("officeOfDeparture", customsOffices)
   private val mode   = NormalMode
 
   private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
@@ -77,7 +77,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(gbForm, lrn, customsOffices.customsOffices, mode)(request, messages).toString
+        view(gbForm, lrn, customsOffices.values, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
@@ -97,7 +97,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
       val filledForm = gbForm.bind(Map("value" -> "GB1"))
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, customsOffices.customsOffices, mode)(request, messages).toString
+        view(filledForm, lrn, customsOffices.values, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" - {
@@ -178,7 +178,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, customsOffices.customsOffices, mode)(request, messages).toString
+        view(boundForm, lrn, customsOffices.values, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

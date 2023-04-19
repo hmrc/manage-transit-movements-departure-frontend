@@ -16,9 +16,9 @@
 
 package views.preTaskList
 
-import forms.CustomsOfficeFormProvider
+import forms.SelectableFormProvider
 import models.reference.CustomsOffice
-import models.{CustomsOfficeList, NormalMode}
+import models.{NormalMode, SelectableList}
 import org.scalacheck.Arbitrary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -27,7 +27,7 @@ import views.html.preTaskList.OfficeOfDepartureView
 
 class OfficeOfDepartureViewSpec extends InputSelectViewBehaviours[CustomsOffice] {
 
-  override def form: Form[CustomsOffice] = new CustomsOfficeFormProvider()(prefix, CustomsOfficeList(Nil))
+  override def form: Form[CustomsOffice] = new SelectableFormProvider()(prefix, SelectableList(Nil))
 
   override def applyView(form: Form[CustomsOffice]): HtmlFormat.Appendable =
     injector.instanceOf[OfficeOfDepartureView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)

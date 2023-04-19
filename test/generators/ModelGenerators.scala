@@ -96,12 +96,11 @@ trait ModelGenerators {
       Gen.oneOf(arbitraryGbCustomsOffice.arbitrary, arbitraryXiCustomsOffice.arbitrary)
     }
 
-  implicit lazy val arbitraryCustomsOfficeList: Arbitrary[CustomsOfficeList] =
-    Arbitrary {
-      for {
-        customsOffices <- listWithMaxLength[CustomsOffice]()
-      } yield CustomsOfficeList(customsOffices)
-    }
+  implicit def arbitrarySelectableList[T <: Selectable](implicit arbitrary: Arbitrary[T]): Arbitrary[SelectableList[T]] = Arbitrary {
+    for {
+      values <- listWithMaxLength[T]()
+    } yield SelectableList(values.distinctBy(_.value))
+  }
 
   implicit lazy val arbitraryMode: Arbitrary[Mode] = Arbitrary {
     Gen.oneOf(NormalMode, CheckMode)

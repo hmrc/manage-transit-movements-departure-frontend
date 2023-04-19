@@ -18,7 +18,7 @@ package services
 
 import base.SpecBase
 import connectors.ReferenceDataConnector
-import models.CustomsOfficeList
+import models.SelectableList
 import models.reference.CustomsOffice
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, when}
@@ -32,12 +32,11 @@ class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
   val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   val service                                      = new CustomsOfficesService(mockRefDataConnector)
 
-  val gbCustomsOffice1: CustomsOffice     = CustomsOffice("GB1", "BOSTON", None)
-  val gbCustomsOffice2: CustomsOffice     = CustomsOffice("GB2", "Appledore", None)
-  val xiCustomsOffice1: CustomsOffice     = CustomsOffice("XI1", "Belfast", None)
-  val gbCustomsOffices: CustomsOfficeList = CustomsOfficeList(Seq(gbCustomsOffice1, gbCustomsOffice2))
-  val xiCustomsOffices: CustomsOfficeList = CustomsOfficeList(Seq(xiCustomsOffice1))
-  val customsOffices: CustomsOfficeList   = CustomsOfficeList(gbCustomsOffices.getAll ++ xiCustomsOffices.getAll)
+  val gbCustomsOffice1: CustomsOffice      = CustomsOffice("GB1", "BOSTON", None)
+  val gbCustomsOffice2: CustomsOffice      = CustomsOffice("GB2", "Appledore", None)
+  val xiCustomsOffice1: CustomsOffice      = CustomsOffice("XI1", "Belfast", None)
+  val gbCustomsOffices: Seq[CustomsOffice] = Seq(gbCustomsOffice1, gbCustomsOffice2)
+  val xiCustomsOffices: Seq[CustomsOffice] = Seq(xiCustomsOffice1)
 
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)
@@ -55,8 +54,8 @@ class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
         when(mockRefDataConnector.getCustomsOfficesOfDepartureForCountry(eqTo("GB"))(any(), any()))
           .thenReturn(Future.successful(gbCustomsOffices))
 
-        service.getCustomsOfficesOfDeparture.futureValue.getAll mustBe
-          CustomsOfficeList(Seq(gbCustomsOffice2, xiCustomsOffice1, gbCustomsOffice1)).getAll
+        service.getCustomsOfficesOfDeparture.futureValue mustBe
+          SelectableList(Seq(gbCustomsOffice2, xiCustomsOffice1, gbCustomsOffice1))
 
         verify(mockRefDataConnector).getCustomsOfficesOfDepartureForCountry(eqTo("XI"))(any(), any())
         verify(mockRefDataConnector).getCustomsOfficesOfDepartureForCountry(eqTo("GB"))(any(), any())

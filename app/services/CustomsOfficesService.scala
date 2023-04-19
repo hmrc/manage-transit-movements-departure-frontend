@@ -18,7 +18,7 @@ package services
 
 import config.Constants._
 import connectors.ReferenceDataConnector
-import models.CustomsOfficeList
+import models.SelectableList
 import models.reference.CustomsOffice
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -29,19 +29,19 @@ class CustomsOfficesService @Inject() (
   referenceDataConnector: ReferenceDataConnector
 )(implicit ec: ExecutionContext) {
 
-  def getCustomsOfficesOfDeparture(implicit hc: HeaderCarrier): Future[CustomsOfficeList] = {
+  def getCustomsOfficesOfDeparture(implicit hc: HeaderCarrier): Future[SelectableList[CustomsOffice]] = {
 
-    def getCustomsOffices(countryCode: String): Future[CustomsOfficeList] =
+    def getCustomsOffices(countryCode: String): Future[Seq[CustomsOffice]] =
       referenceDataConnector.getCustomsOfficesOfDepartureForCountry(countryCode)
 
     for {
       gbOffices <- getCustomsOffices(GB)
       niOffices <- getCustomsOffices(XI)
-      offices = sort(gbOffices.getAll ++ niOffices.getAll)
+      offices = sort(gbOffices ++ niOffices)
     } yield offices
   }
 
-  private def sort(customsOffices: Seq[CustomsOffice]): CustomsOfficeList =
-    CustomsOfficeList(customsOffices.sortBy(_.name.toLowerCase))
+  private def sort(customsOffices: Seq[CustomsOffice]): SelectableList[CustomsOffice] =
+    SelectableList(customsOffices.sortBy(_.name.toLowerCase))
 
 }

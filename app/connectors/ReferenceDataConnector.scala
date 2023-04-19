@@ -17,22 +17,23 @@
 package connectors
 
 import config.FrontendAppConfig
-import models._
-import models.reference.Country
+import models.reference.{Country, CustomsOffice}
+import play.api.Logging
+import play.api.http.Status.{NOT_FOUND, OK}
 import sttp.model.HeaderNames
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpClient) {
+class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpClient) extends Logging {
 
   def getCustomsOfficesOfDepartureForCountry(
     countryCode: String
-  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[CustomsOffice]] = {
     val serviceUrl = s"${config.referenceDataUrl}/customs-offices/$countryCode?role=DEP"
-    http.GET[CustomsOfficeList](serviceUrl, headers = version2Header)
+    http.GET[Seq[CustomsOffice]](serviceUrl, headers = version2Header)
   }
 
   def getCountryCodesCTC()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
@@ -48,4 +49,17 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
   private def version2Header: Seq[(String, String)] = Seq(
     HeaderNames.Accept -> "application/vnd.hmrc.2.0+json"
   )
+
+  implicit val responseHandlerCustomsOfficeList: HttpReads[Seq[CustomsOffice]] =
+    (_: String, _: String, response: HttpResponse) =>
+      response.status match {
+        case OK =>
+          response.json
+            .as[Seq[CustomsOffice]]
+        case NOT_FOUND =>
+          Nil
+        case other =>
+          logger.info(s"[ReferenceDataConnector][getCustomsOfficesOfDepartureForCountry] Invalid downstream status $other")
+          throw new IllegalStateException(s"Invalid Downstream Status $other")
+      }
 }
