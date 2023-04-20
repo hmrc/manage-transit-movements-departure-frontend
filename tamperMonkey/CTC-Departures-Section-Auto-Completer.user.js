@@ -247,6 +247,8 @@ window.addEventListener('load', function () {
     }
 }, false)
 
+
+
 function completeAllJourneys(journeys) { // Manually do the journeys for complete all until all are fully complete
     if (!journeysComplete(journeys)) {
         if (!isJourneyComplete(journeys[0]) && GM_getValue(journeys[0]._button.id, null) !== "Complete") {
@@ -334,12 +336,24 @@ function isJourneyComplete(journey) {
     }
 }
 
+function journeyCannotBeStarted(journey) {
+    try {
+        return document.getElementById(journey.statusId).innerText === "CANNOT START YET";
+    } catch (err) {
+        return false
+    }
+}
+
 function displayButtons(journeys) {
     const panel = document.createElement('div')
     GM_addStyle(` .guiStyle { position: absolute; top: 50px; display: grid; grid-template-rows: repeat(${journeys.length + 1}, 1fr);`)
     panel.classList.add('guiStyle')
     journeys.forEach(journey => {
         if (!isJourneyComplete(journey)) {
+            if(journeyCannotBeStarted(journey)) {
+                journey._button._button.disabled = true
+                journey._button._button.backgroundColor = "#757575"
+            }
             panel.appendChild(journey._button._button)
         }
     })
