@@ -86,13 +86,14 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
       }
     }
 
-    "when pre task list, trader details, route details and transport details completed" - {
+    "when pre task list, trader details, route details, transport details and documents completed" - {
       "items must be 'not started'" in {
         val tasks = Map(
           PreTaskListTask.section   -> TaskStatus.Completed,
           TraderDetailsTask.section -> TaskStatus.Completed,
           RouteDetailsTask.section  -> TaskStatus.Completed,
-          TransportTask.section     -> TaskStatus.Completed
+          TransportTask.section     -> TaskStatus.Completed,
+          DocumentsTask.section     -> TaskStatus.Completed
         )
         val answers = emptyUserAnswers.copy(tasks = tasks)
         val result  = new TaskListViewModel().apply(answers)
