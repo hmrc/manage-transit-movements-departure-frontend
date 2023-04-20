@@ -36,7 +36,7 @@ class TaskListViewModel {
       task(RouteDetailsTask.section),
       task(TransportTask.section, Seq(TraderDetailsTask.section, RouteDetailsTask.section)),
       task(DocumentsTask.section),
-      task(ItemsTask.section, Seq(TraderDetailsTask.section, RouteDetailsTask.section, TransportTask.section)),
+      task(ItemsTask.section, Seq(TraderDetailsTask.section, RouteDetailsTask.section, TransportTask.section, DocumentsTask.section)),
       task(GuaranteeDetailsTask.section)
     ).flatten.collect {
       case task: TaskListTask => task
