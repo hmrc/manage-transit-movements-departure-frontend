@@ -12,6 +12,7 @@
 // @match        http*://*/manage-transit-movements/departures/guarantee-details/*
 // @match        http*://*/manage-transit-movements/departures/documents/*
 // @match        http*://*/manage-transit-movements/departures/items/*
+// @match        http*://*/manage-transit-movements/departures/not-found
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -234,6 +235,7 @@ function initialiseJourneys() {
 window.addEventListener('load', function () {
     saveLRN()
     let journeys = initialiseJourneys()
+    stopOnFail(journeys)
     if (!onLandingPage()) {
         document.body.appendChild(displayPanicButton(journeys))
     }
@@ -247,7 +249,11 @@ window.addEventListener('load', function () {
     }
 }, false)
 
-
+function stopOnFail(journeys){
+    if(currentPageIs(`/manage-transit-movements/departures/not-found`)) {
+        resetStates(journeys)
+    }
+}
 
 function completeAllJourneys(journeys) { // Manually do the journeys for complete all until all are fully complete
     if (!journeysComplete(journeys)) {
