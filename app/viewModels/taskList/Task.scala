@@ -33,14 +33,14 @@ abstract class TaskListTask extends Task {
 
   def name(implicit messages: Messages): String = messages {
     status match {
-      case Completed | InProgress => s"task.$messageKey.edit"
-      case NotStarted             => s"task.$messageKey.add"
-      case CannotStartYet         => s"task.$messageKey"
-      case Error                  => s"task.$messageKey"
+      case Completed | InProgress | Error => s"task.$messageKey.edit"
+      case NotStarted                     => s"task.$messageKey.add"
+      case CannotStartYet                 => s"task.$messageKey"
     }
   }
 
   def isCompleted: Boolean = status == Completed
+  def isError: Boolean     = status == Error
 }
 
 object Task {

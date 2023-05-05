@@ -9,6 +9,7 @@ site.continue = Continue
 site.saveAndContinue = Save and continue
 site.confirm = Confirm and continue
 site.send = Confirm and send
+site.resend = Confirm and resend
 site.service_name = Manage your transit movements
 site.section = This section is
 
@@ -127,6 +128,9 @@ taskList.departureDetails = Departure details
 taskList.sendDeclaration = Now send your departure declaration
 taskList.detailsCorrect = By sending this you are confirming that the details you are providing are correct, to the best of your knowledge.
 taskList.backToTransitMovements = Back to transit movements
+
+taskList.paragraph.thereIsAProblem = There is a problem with this departure declaration.
+taskList.paragraph.amendErrors = Amend the errors in the relevant sections and resend the declaration.
 
 taskStatus.completed = Completed
 taskStatus.inProgress = In progress

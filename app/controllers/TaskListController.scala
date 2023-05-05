@@ -47,8 +47,10 @@ class TaskListController @Inject() (
     .requireData(lrn)
     .andThen(checkPreTaskListCompleted) {
       implicit request =>
-        val tasks = viewModel(request.userAnswers)
-        Ok(view(lrn, tasks))
+        val tasks             = viewModel(request.userAnswers)
+        val isErrors: Boolean = tasks.exists(_.isError)
+
+        Ok(view(lrn, tasks, isErrors))
     }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions

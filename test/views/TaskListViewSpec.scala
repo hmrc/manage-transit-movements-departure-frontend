@@ -27,7 +27,7 @@ class TaskListViewSpec extends TaskListViewBehaviours {
   override def view: HtmlFormat.Appendable = applyView(tasks)
 
   private def applyView(tasks: Seq[TaskListTask]): HtmlFormat.Appendable =
-    injector.instanceOf[TaskListView].apply(lrn, tasks)(fakeRequest, messages)
+    injector.instanceOf[TaskListView].apply(lrn, tasks, isErrors = false)(fakeRequest, messages)
 
   override val prefix: String = "taskList"
 
@@ -49,6 +49,20 @@ class TaskListViewSpec extends TaskListViewBehaviours {
     frontendAppConfig.serviceUrl
   )
 
+  "when there are errors" - {
+    val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryErrorTask)).sample.value
+
+    def applyViewWithErrors(tasks: Seq[TaskListTask]): HtmlFormat.Appendable =
+      injector.instanceOf[TaskListView].apply(lrn, tasks, isErrors = true)(fakeRequest, messages)
+
+    val doc = parseView(applyViewWithErrors(tasks))
+
+    behave like pageWithContent(doc, "p", "There is a problem with this departure declaration.")
+    behave like pageWithContent(doc, "p", "Amend the errors in the relevant sections and resend the declaration.")
+    behave like pageWithSubmitButton(doc, "Confirm and resend")
+
+  }
+
   "when all tasks completed" - {
     val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryCompletedTask)).sample.value
     val doc   = parseView(applyView(tasks))
@@ -59,4 +73,5 @@ class TaskListViewSpec extends TaskListViewBehaviours {
 
     behave like pageWithSubmitButton(doc, "Confirm and send")
   }
+
 }

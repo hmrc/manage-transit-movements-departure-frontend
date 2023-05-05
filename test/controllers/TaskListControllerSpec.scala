@@ -48,7 +48,8 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
   "Task List Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val sampleTasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
+      val sampleTasks       = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
+      val isErrors: Boolean = sampleTasks.exists(_.isError)
 
       when(mockViewModel.apply(any())).thenReturn(sampleTasks)
 
@@ -64,7 +65,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(lrn, sampleTasks)(request, messages).toString
+        view(lrn, sampleTasks, isErrors)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
