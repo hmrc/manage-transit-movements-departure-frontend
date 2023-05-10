@@ -37,9 +37,7 @@ class LockedViewSpec extends ViewBehaviours {
 
   behave like pageWithContent("p", "Another person from your organisation is currently working on this declaration. You cannot open it until they’re finished.")
 
-  s"must render button" in {
-    val button = getElementByClass(doc, "govuk-button")
-    assertElementContainsText(button, "Return to drafts")
-    assertElementContainsHref(button, frontendAppConfig.manageTransitMovementsDraftDeparturesUrl)
+  behave like pageWithButton("Return to drafts") {
+    assertElementContainsHref(_, frontendAppConfig.manageTransitMovementsDraftDeparturesUrl)
   }
 }
