@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CTC-Departures Section Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      14.0
+// @version      14.1
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @author       Tega-Okeremeta
