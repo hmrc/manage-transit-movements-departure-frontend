@@ -441,9 +441,9 @@ class Journey {
         let lastPage = pages.slice(-1)[0]
         this._pages.addPage(new StopPage(this._button.id, lastPage))
     }
-
+    
     isToggled() {
-        if (GM_getValue(this._button.id, null)) {
+        if (GM_getValue(this._button.id, null) && GM_getValue(this._button.id, null) != "Complete") {
             this._pages.runThroughJourney()
         }
     }
