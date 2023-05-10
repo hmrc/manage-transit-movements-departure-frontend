@@ -225,4 +225,7 @@ trait ViewBehaviours extends SpecBase with ViewSpecAssertions {
       val caption = getElementByClass(doc, "govuk-inset-text")
       assertElementContainsText(caption, expectedText)
     }
+
+  def pageWithButton(expectedText: String)(additionalAssertions: Element => Assertion*): Unit =
+    pageWithButton(doc, expectedText)(additionalAssertions: _*)
 }
