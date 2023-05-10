@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CTC-Departures Section Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      14.0
+// @version      14.1
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @author       Tega-Okeremeta
@@ -441,9 +441,9 @@ class Journey {
         let lastPage = pages.slice(-1)[0]
         this._pages.addPage(new StopPage(this._button.id, lastPage))
     }
-
+    
     isToggled() {
-        if (GM_getValue(this._button.id, null)) {
+        if (GM_getValue(this._button.id, null) && GM_getValue(this._button.id, null) != "Complete") {
             this._pages.runThroughJourney()
         }
     }
