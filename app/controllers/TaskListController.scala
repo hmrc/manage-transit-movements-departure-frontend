@@ -48,7 +48,7 @@ class TaskListController @Inject() (
     .andThen(checkPreTaskListCompleted) {
       implicit request =>
         val tasks                = viewModel(request.userAnswers)
-        val isSubmitted: Boolean = request.userAnswers.isSubmitted
+        val isSubmitted: Boolean = request.userAnswers.isSubmitted.getOrElse(false)
 
         Ok(view(lrn, tasks, isSubmitted))
     }
