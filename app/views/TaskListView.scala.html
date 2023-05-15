@@ -28,7 +28,7 @@
     button: Button
 )
 
-@(lrn: LocalReferenceNumber, tasks: Seq[TaskListTask])(implicit request: Request[_], messages: Messages)
+@(lrn: LocalReferenceNumber, tasks: Seq[TaskListTask], isSubmitted: Boolean)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("taskList.title"),
@@ -38,17 +38,26 @@
     <span class="govuk-caption-xl">@lrn.toString</span>
     @heading(heading = messages("taskList.heading"))
 
+    @if(isSubmitted) {
+        <p class="govuk-body">@messages("taskList.paragraph.thereIsAProblem")</p>
+        <p class="govuk-body">@messages("taskList.paragraph.amendErrors")</p>
+    }
+
     @taskList("taskList.departureDetails", tasks, lrn)
 
      @if(config.declarationEnabled) {
          @* TODO - @if(tasks.forall(_.isCompleted)) { *@
             @formHelper(action = routes.TaskListController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
 
-                 <h2 class="govuk-heading-m">@messages("taskList.sendDeclaration")</h2>
+                @if(isSubmitted) {
+                    @button(messageKey = "site.resend", attributes = Map("id" -> "submit"))
+                } else {
+                    <h2 class="govuk-heading-m">@messages("taskList.sendDeclaration")</h2>
 
-                 <p class="govuk-body">@messages("taskList.detailsCorrect")</p>
+                    <p class="govuk-body">@messages("taskList.detailsCorrect")</p>
 
-                @button(messageKey = "site.send", attributes = Map("id" -> "submit"))
+                    @button(messageKey = "site.send", attributes = Map("id" -> "submit"))
+                }
             }
         @* } *@
     }

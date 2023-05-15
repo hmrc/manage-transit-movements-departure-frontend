@@ -23,6 +23,7 @@ sealed trait TaskStatus {
   val tag: String
   val jsonString: String
   def isCompleted: Boolean = this == TaskStatus.Completed
+  def isError: Boolean     = this == TaskStatus.Error
 }
 
 object TaskStatus {
@@ -51,12 +52,19 @@ object TaskStatus {
     override val jsonString: String = "cannot-start-yet"
   }
 
+  case object Error extends TaskStatus {
+    override val messageKey: String = "taskStatus.error"
+    override val tag: String        = "govuk-tag--red"
+    override val jsonString: String = "error"
+  }
+
   implicit val reads: Reads[TaskStatus] = (json: JsValue) => {
     json.validate[String].flatMap {
       case Completed.jsonString      => JsSuccess(Completed)
       case InProgress.jsonString     => JsSuccess(InProgress)
       case NotStarted.jsonString     => JsSuccess(NotStarted)
       case CannotStartYet.jsonString => JsSuccess(CannotStartYet)
+      case Error.jsonString          => JsSuccess(Error)
       case x                         => JsError(s"$x is not a valid task status")
     }
   }
