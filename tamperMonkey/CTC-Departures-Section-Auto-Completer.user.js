@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CTC-Departures Section Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      14.1
+// @version      14.2
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @author       Tega-Okeremeta
@@ -198,7 +198,12 @@ function initialiseJourneys() {
                 new InputPage("/manage-transit-movements/departures/items/1/packages/1/type-quantity/", "65"),
                 new SelectPage("/manage-transit-movements/departures/items/1/packages/1/add-shipping-mark/", "value"),
                 new InputPage("/manage-transit-movements/departures/items/1/packages/1/shipping-mark/", "The shipping mark"),
-                // new ButtonPage("/manage-transit-movements/departures/items/1/packages/add-another/", "value-no"),
+                new ButtonPage("/manage-transit-movements/departures/items/1/packages/add-another/", "value-no"),
+                new ButtonPage("/manage-transit-movements/departures/items/1/documents/attach/", "value-no"),
+                new ButtonPage("/manage-transit-movements/departures/items/1/additional-reference/add/", "value-no"),
+                new ButtonPage("/manage-transit-movements/departures/items/1/additional-information/add/", "value-no"),
+                new CheckYourAnswersPage("/manage-transit-movements/departures/items/1/check-answers/"),
+                new ButtonPage("/manage-transit-movements/departures/items/add-another/", "value-no")
             ]
         )
         return journey
@@ -249,8 +254,8 @@ window.addEventListener('load', function () {
     }
 }, false)
 
-function stopOnFail(journeys){
-    if(currentPageIs(`/manage-transit-movements/departures/not-found`)) {
+function stopOnFail(journeys) {
+    if (currentPageIs(`/manage-transit-movements/departures/not-found`)) {
         resetStates(journeys)
     }
 }
@@ -265,10 +270,12 @@ function completeAllJourneys(journeys) { // Manually do the journeys for complet
             completeJourney(journeys[3])
         } else if (!isJourneyComplete(journeys[4]) && GM_getValue(journeys[4]._button.id, null) !== "Complete") {
             completeJourney(journeys[4])
+        } else if (!isJourneyComplete(journeys[5]) && GM_getValue(journeys[5]._button.id, null) !== "Complete") {
+            completeJourney(journeys[5])
         } else {
             completeJourney(journeys[6])
         }
-    }else {
+    } else {
         resetStates(journeys)
         location.reload()
     }
@@ -296,7 +303,7 @@ function completeJourney(journey) {
 
 function journeysComplete(journeys) {
     let count = 0
-    let countToReach = journeys.length - 1 // Take away items journey from count and the additional trader details full data section journey
+    let countToReach = journeys.length
     journeys.forEach(journey => {
         if (isJourneyComplete(journey)) {
             count += 1
@@ -356,7 +363,7 @@ function displayButtons(journeys) {
     panel.classList.add('guiStyle')
     journeys.forEach(journey => {
         if (!isJourneyComplete(journey)) {
-            if(journeyCannotBeStarted(journey)) {
+            if (journeyCannotBeStarted(journey)) {
                 journey._button._button.disabled = true
                 journey._button._button.backgroundColor = "#757575"
             }
@@ -364,8 +371,8 @@ function displayButtons(journeys) {
         }
     })
     let journeyIds = getJourneyIDs(journeys)
-    if(!journeysComplete(journeys)) {
-        panel.appendChild(new CompleteAllButton("Complete All (Excluding Items)", journeys).button)
+    if (!journeysComplete(journeys)) {
+        panel.appendChild(new CompleteAllButton("Complete All", journeys).button)
     }
     panel.appendChild(new StopScriptsButton(journeyIds).button)
     return panel
@@ -441,9 +448,9 @@ class Journey {
         let lastPage = pages.slice(-1)[0]
         this._pages.addPage(new StopPage(this._button.id, lastPage))
     }
-    
+
     isToggled() {
-        if (GM_getValue(this._button.id, null) && GM_getValue(this._button.id, null) != "Complete") {
+        if (GM_getValue(this._button.id, null) && GM_getValue(this._button.id, null) !== "Complete") {
             this._pages.runThroughJourney()
         }
     }
@@ -652,7 +659,7 @@ class CompleteAllButton {
         button.style.margin = '1px'
         button.innerHTML = buttonText
         button.addEventListener("click", function handleClick() {
-            journeys.forEach(journey => GM_setValue(journey._button.id,false))
+            journeys.forEach(journey => GM_setValue(journey._button.id, false))
             GM_setValue(id, true)
             GM_setValue(firstJourneyId, true)
             if (currentPageIs(`/manage-transit-movements/departures/${getLRN()}/task-list`)) {

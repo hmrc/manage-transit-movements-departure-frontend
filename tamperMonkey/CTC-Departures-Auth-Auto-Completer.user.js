@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         CTC-Departures Auth Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      2.0
+// @version      2.1
 // @description  Script to automatically fill out auth details
 // @author       Reece-Carruthers
 // @match        http*://*/auth-login-stub/gg-sign-in*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
-// @grant        none
+// @grant        GM_addStyle
 // @updateURL https://github.com/hmrc/manage-transit-movements-departure-frontend/raw/main/tamperMonkey/CTC-Departures-Auth-Auto-Completer.user.js
 // ==/UserScript==
 
@@ -21,13 +21,19 @@
     document.getElementById("input-0-0-name").value = "EoriNumber";
     document.getElementById("input-0-0-value").value = Math.floor((Math.random() * 10000) + 1000);
 
-    document.querySelector('header').appendChild(createQuickAuthButton())
+    const panel = document.createElement('div')
+    GM_addStyle(` .guiStyle { position: absolute; top: 50px; display: grid; grid-template-rows: repeat(2, 1fr);`)
+    panel.classList.add('guiStyle')
+    panel.appendChild(createRandomAuthButton())
+    panel.appendChild(create1234567AuthButton())
+
+    document.querySelector('header').appendChild(panel)
 
 })();
 
-function createQuickAuthButton() {
+function createRandomAuthButton() {
     let button = document.createElement('button');
-    button.id='quickAuth'
+    button.id='randomAuth'
 
     if (!!document.getElementById('global-header')) {
         button.classList.add('button-start', 'govuk-!-display-none-print')
@@ -35,10 +41,32 @@ function createQuickAuthButton() {
         button.classList.add('govuk-button','govuk-!-display-none-print')
     }
 
-    button.style.position = 'absolute'
-    button.style.top = '50px'
-    button.innerHTML = 'Quick Auth'
-    button.onclick = () => document.getElementById('submit').click();
+    button.style.margin = '4px'
+    button.innerHTML = 'Quick Auth (Random EORI)'
+
+    button.addEventListener("click", function handleClick() {
+        document.getElementById('submit').click();
+    })
+    return button;
+}
+
+function create1234567AuthButton() {
+    let button = document.createElement('button');
+    button.id='quick1234567Auth'
+
+    if (!!document.getElementById('global-header')) {
+        button.classList.add('button-start', 'govuk-!-display-none-print')
+    } else {
+        button.classList.add('govuk-button','govuk-!-display-none-print')
+    }
+
+    button.style.margin = '4px'
+    button.innerHTML = 'Quick Auth (1234567 EORI)'
+
+    button.addEventListener("click", function handleClick() {
+        document.getElementById("input-0-0-value").value = "1234567";
+        document.getElementById('submit').click();
+    })
     return button;
 }
 
